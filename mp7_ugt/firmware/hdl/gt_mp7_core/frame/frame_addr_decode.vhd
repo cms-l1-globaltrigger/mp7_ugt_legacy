@@ -1,0 +1,182 @@
+-------------------------------------------------------------------------------
+-- Synthesizer : ISE 14.6
+-- Platform    : Linux Ubuntu 10.04
+-- Targets     : Synthese
+--------------------------------------------------------------------------------
+-- This work is held in copyright as an unpublished work by HEPHY (Institute
+-- of High Energy Physics) All rights reserved.  This work may not be used
+-- except by authorized licensees of HEPHY. This work is the
+-- confidential information of HEPHY.
+--------------------------------------------------------------------------------
+---Description: Delay Manager
+-- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/trunk/uGT_algos/firmware/hdl/gt_mp7_core/frame/frame_addr_decode.vhd $
+-- $Date: 2015-06-15 15:32:47 +0200 (Mon, 15 Jun 2015) $
+-- $Author: wittmann $
+-- $Revision: 4037 $
+--------------------------------------------------------------------------------
+-- BR:21-11-2014 TOP_SERIAL_VENDOR is not mor relevant, because in future we will read from hardware over ipmi just MAC address
+-- HB 2014-08-26: test version with spy2_algos and spy2_finor instantiated with ipb_dpmem_4096_32 modules, too.
+-- HB 2014-08-20: test version with simspymem instantiated with ipb_dpmem_4096_32 modules.
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+use ieee.numeric_std.all;
+use work.ipbus.all;
+use work.gt_mp7_core_pkg.all;
+
+package frame_addr_decode is
+--
+    constant NR_IPB_SLV_FRAME : positive:= 84;
+
+    constant C_IPB_MODULE_INFO : natural := 0;
+    constant C_IPB_TEST_REGS : natural := 1;
+    constant C_IPB_DEMUX_LANE_ADJ : natural := 2;
+    constant C_IPB_RB : natural := 3;
+
+--    constant C_IPB_SIMSPYMEM : natural := 4;
+-- HB 2014-08-20: test version with simspymem instantiated with ipb_dpmem_4096_32 modules.
+--                60 memory blocks with LHC_DATA_WIDTH = 1920
+
+    type ipb_simspymem_index_array is array (0 to 59) of natural;
+    constant C_IPB_SIMSPYMEM : ipb_simspymem_index_array := (4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                                                             20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+                                                             40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
+															   60, 61, 62, 63);
+
+--     constant C_IPB_SPYMEM2_ALGOS : natural := 64;
+-- HB 2014-08-26: test version with spy2_algos and spy2_finor instantiated with ipb_dpmem_4096_32 modules.
+--                16 memory blocks for 512 algos, 1 block for finor
+
+    type ipb_spy2_algos_index_array is array (0 to 15) of natural;
+    constant C_IPB_SPYMEM2_ALGOS : ipb_spy2_algos_index_array := (64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79);
+
+    constant C_IPB_SPYMEM2_FINOR : natural := 80;
+    constant C_IPB_SPYMEM3 : natural := 81;
+    constant C_IPB_PULSEREG : natural := 82;  --ipbus event - pulse register
+    constant C_IPB_MUX_CONTROL : natural := 83; -- control regs for output mux
+
+
+
+    constant OFFSET_TIMESTAMP: natural := 0; -- 1 x 32 bits
+    constant OFFSET_HOSTNAME: natural := OFFSET_TIMESTAMP + TIMESTAMP'length/32; -- 256 bits = 8 x 32 bits
+    constant OFFSET_USERNAME: natural := OFFSET_HOSTNAME + HOSTNAME'length/32; -- 256 bits = 8 x 32 bits
+    constant OFFSET_MODULE_TYPE: natural := OFFSET_USERNAME + USERNAME'length/32; -- 1 x 32 bits
+    constant OFFSET_FRAME_VERSION: natural := OFFSET_MODULE_TYPE + MODULE_TYPE'length/32; -- 1 x 32 bits
+    constant OFFSET_BUILD_VERSION: natural := OFFSET_FRAME_VERSION + FRAME_VERSION'length/32; -- 1 x 32 bits
+
+    constant C_MODINFO_REGS_ADDR_WIDTH : integer := 5;
+    constant C_MODINFO_REGS_BEGIN_INDEX : integer := OFFSET_TIMESTAMP;
+    constant C_MODINFO_REGS_END_INDEX : integer := OFFSET_BUILD_VERSION;
+
+    constant C_TEST_REGS_ADDR_WIDTH : integer := 4;
+    constant C_TEST_REGS_BEGIN_INDEX : integer := 0;
+    constant C_TEST_REGS_END_INDEX : integer := 14;
+
+-- HB 2014-05-03: C_RB_ADDR_WIDTH fixed to 12 in rb.vhd
+--     constant C_RB_ADDR_WIDTH : integer := 20;
+
+    function frame_addr_sel(signal addr : in std_logic_vector(31 downto 0)) return natural;
+
+end frame_addr_decode;
+
+
+package body frame_addr_decode is
+
+    function frame_addr_sel(signal addr : in std_logic_vector(31 downto 0)) return natural is
+
+        variable sel : natural;
+
+    begin
+        if    std_match(addr, "100000000000000000000000000-----") then sel := C_IPB_MODULE_INFO;    -- 0x80000000
+-- HB 2014-07-10: added test status register addresses
+        elsif std_match(addr, "1000000000000000000000000010----") then sel := C_IPB_TEST_REGS;      -- 0x80000020
+        elsif std_match(addr, "10000000000000000000000001000000") then sel := C_IPB_DEMUX_LANE_ADJ; -- 0x80000040
+        elsif std_match(addr, "10000000000000000000100000000000") then sel := C_IPB_PULSEREG;       -- 0x80000800
+        elsif std_match(addr, "1000000000000000000010010000----") then sel := C_IPB_MUX_CONTROL;    -- 0x80000900
+        elsif std_match(addr, "10000000011100000000------------") then sel := C_IPB_RB;             -- 0x80700000
+--         elsif std_match(addr, "100000000011--------------------") then sel := C_IPB_SIMSPYMEM;   -- 0x80300000
+        elsif std_match(addr, "10000000001100000000------------") then sel := C_IPB_SIMSPYMEM(0);   -- 0x80300000 .. 0x80300FFF
+        elsif std_match(addr, "10000000001100000001------------") then sel := C_IPB_SIMSPYMEM(1);   -- 0x80301000 .. 0x80301FFF
+        elsif std_match(addr, "10000000001100000010------------") then sel := C_IPB_SIMSPYMEM(2);
+        elsif std_match(addr, "10000000001100000011------------") then sel := C_IPB_SIMSPYMEM(3);
+        elsif std_match(addr, "10000000001100000100------------") then sel := C_IPB_SIMSPYMEM(4);
+        elsif std_match(addr, "10000000001100000101------------") then sel := C_IPB_SIMSPYMEM(5);
+        elsif std_match(addr, "10000000001100000110------------") then sel := C_IPB_SIMSPYMEM(6);
+        elsif std_match(addr, "10000000001100000111------------") then sel := C_IPB_SIMSPYMEM(7);
+        elsif std_match(addr, "10000000001100001000------------") then sel := C_IPB_SIMSPYMEM(8);
+        elsif std_match(addr, "10000000001100001001------------") then sel := C_IPB_SIMSPYMEM(9);
+        elsif std_match(addr, "10000000001100001010------------") then sel := C_IPB_SIMSPYMEM(10);
+        elsif std_match(addr, "10000000001100001011------------") then sel := C_IPB_SIMSPYMEM(11);
+        elsif std_match(addr, "10000000001100001100------------") then sel := C_IPB_SIMSPYMEM(12);
+        elsif std_match(addr, "10000000001100001101------------") then sel := C_IPB_SIMSPYMEM(13);
+        elsif std_match(addr, "10000000001100001110------------") then sel := C_IPB_SIMSPYMEM(14);
+        elsif std_match(addr, "10000000001100001111------------") then sel := C_IPB_SIMSPYMEM(15);  -- 0x8030F000 .. 0x8030FFFF
+        elsif std_match(addr, "10000000001100010000------------") then sel := C_IPB_SIMSPYMEM(16);  -- 0x80310000 .. 0x80310FFF
+        elsif std_match(addr, "10000000001100010001------------") then sel := C_IPB_SIMSPYMEM(17);
+        elsif std_match(addr, "10000000001100010010------------") then sel := C_IPB_SIMSPYMEM(18);
+        elsif std_match(addr, "10000000001100010011------------") then sel := C_IPB_SIMSPYMEM(19);
+        elsif std_match(addr, "10000000001100010100------------") then sel := C_IPB_SIMSPYMEM(20);
+        elsif std_match(addr, "10000000001100010101------------") then sel := C_IPB_SIMSPYMEM(21);
+        elsif std_match(addr, "10000000001100010110------------") then sel := C_IPB_SIMSPYMEM(22);
+        elsif std_match(addr, "10000000001100010111------------") then sel := C_IPB_SIMSPYMEM(23);
+        elsif std_match(addr, "10000000001100011000------------") then sel := C_IPB_SIMSPYMEM(24);
+        elsif std_match(addr, "10000000001100011001------------") then sel := C_IPB_SIMSPYMEM(25);
+        elsif std_match(addr, "10000000001100011010------------") then sel := C_IPB_SIMSPYMEM(26);
+        elsif std_match(addr, "10000000001100011011------------") then sel := C_IPB_SIMSPYMEM(27);
+        elsif std_match(addr, "10000000001100011100------------") then sel := C_IPB_SIMSPYMEM(28);
+        elsif std_match(addr, "10000000001100011101------------") then sel := C_IPB_SIMSPYMEM(29);
+        elsif std_match(addr, "10000000001100011110------------") then sel := C_IPB_SIMSPYMEM(30);
+        elsif std_match(addr, "10000000001100011111------------") then sel := C_IPB_SIMSPYMEM(31);  -- 0x8031F000 .. 0x8031FFFF
+        elsif std_match(addr, "10000000001100100000------------") then sel := C_IPB_SIMSPYMEM(32);  -- 0x80320000 .. 0x80320FFF
+        elsif std_match(addr, "10000000001100100001------------") then sel := C_IPB_SIMSPYMEM(33);
+        elsif std_match(addr, "10000000001100100010------------") then sel := C_IPB_SIMSPYMEM(34);
+        elsif std_match(addr, "10000000001100100011------------") then sel := C_IPB_SIMSPYMEM(35);
+        elsif std_match(addr, "10000000001100100100------------") then sel := C_IPB_SIMSPYMEM(36);
+        elsif std_match(addr, "10000000001100100101------------") then sel := C_IPB_SIMSPYMEM(37);
+        elsif std_match(addr, "10000000001100100110------------") then sel := C_IPB_SIMSPYMEM(38);
+        elsif std_match(addr, "10000000001100100111------------") then sel := C_IPB_SIMSPYMEM(39);
+        elsif std_match(addr, "10000000001100101000------------") then sel := C_IPB_SIMSPYMEM(40);
+        elsif std_match(addr, "10000000001100101001------------") then sel := C_IPB_SIMSPYMEM(41);
+        elsif std_match(addr, "10000000001100101010------------") then sel := C_IPB_SIMSPYMEM(42);
+        elsif std_match(addr, "10000000001100101011------------") then sel := C_IPB_SIMSPYMEM(43);
+        elsif std_match(addr, "10000000001100101100------------") then sel := C_IPB_SIMSPYMEM(44);
+        elsif std_match(addr, "10000000001100101101------------") then sel := C_IPB_SIMSPYMEM(45);
+        elsif std_match(addr, "10000000001100101110------------") then sel := C_IPB_SIMSPYMEM(46);
+        elsif std_match(addr, "10000000001100101111------------") then sel := C_IPB_SIMSPYMEM(47);  -- 0x8032F000 .. 0x8032FFFF
+        elsif std_match(addr, "10000000001100110000------------") then sel := C_IPB_SIMSPYMEM(48);  -- 0x80320000 .. 0x80330FFF
+        elsif std_match(addr, "10000000001100110001------------") then sel := C_IPB_SIMSPYMEM(49);
+        elsif std_match(addr, "10000000001100110010------------") then sel := C_IPB_SIMSPYMEM(50);
+        elsif std_match(addr, "10000000001100110011------------") then sel := C_IPB_SIMSPYMEM(51);
+        elsif std_match(addr, "10000000001100110100------------") then sel := C_IPB_SIMSPYMEM(52);
+        elsif std_match(addr, "10000000001100110101------------") then sel := C_IPB_SIMSPYMEM(53);
+        elsif std_match(addr, "10000000001100110110------------") then sel := C_IPB_SIMSPYMEM(54);
+        elsif std_match(addr, "10000000001100110111------------") then sel := C_IPB_SIMSPYMEM(55);
+        elsif std_match(addr, "10000000001100111000------------") then sel := C_IPB_SIMSPYMEM(56);
+        elsif std_match(addr, "10000000001100111001------------") then sel := C_IPB_SIMSPYMEM(57);
+        elsif std_match(addr, "10000000001100111010------------") then sel := C_IPB_SIMSPYMEM(58);
+        elsif std_match(addr, "10000000001100111011------------") then sel := C_IPB_SIMSPYMEM(59);
+        elsif std_match(addr, "10000000001001000000------------") then sel := C_IPB_SPYMEM2_ALGOS(0); -- 0x80240000 .. 0x80240FFF
+        elsif std_match(addr, "10000000001001000001------------") then sel := C_IPB_SPYMEM2_ALGOS(1);
+        elsif std_match(addr, "10000000001001000010------------") then sel := C_IPB_SPYMEM2_ALGOS(2);
+        elsif std_match(addr, "10000000001001000011------------") then sel := C_IPB_SPYMEM2_ALGOS(3);
+        elsif std_match(addr, "10000000001001000100------------") then sel := C_IPB_SPYMEM2_ALGOS(4);
+        elsif std_match(addr, "10000000001001000101------------") then sel := C_IPB_SPYMEM2_ALGOS(5);
+        elsif std_match(addr, "10000000001001000110------------") then sel := C_IPB_SPYMEM2_ALGOS(6);
+        elsif std_match(addr, "10000000001001000111------------") then sel := C_IPB_SPYMEM2_ALGOS(7);
+        elsif std_match(addr, "10000000001001001000------------") then sel := C_IPB_SPYMEM2_ALGOS(8);
+        elsif std_match(addr, "10000000001001001001------------") then sel := C_IPB_SPYMEM2_ALGOS(9);
+        elsif std_match(addr, "10000000001001001010------------") then sel := C_IPB_SPYMEM2_ALGOS(10);
+        elsif std_match(addr, "10000000001001001011------------") then sel := C_IPB_SPYMEM2_ALGOS(11);
+        elsif std_match(addr, "10000000001001001100------------") then sel := C_IPB_SPYMEM2_ALGOS(12);
+        elsif std_match(addr, "10000000001001001101------------") then sel := C_IPB_SPYMEM2_ALGOS(13);
+        elsif std_match(addr, "10000000001001001110------------") then sel := C_IPB_SPYMEM2_ALGOS(14);
+        elsif std_match(addr, "10000000001001001111------------") then sel := C_IPB_SPYMEM2_ALGOS(15);
+        elsif std_match(addr, "10000000001000000000------------") then sel := C_IPB_SPYMEM2_FINOR;  -- 0x80200000
+        elsif std_match(addr, "1000000000101000----------------") then sel := C_IPB_SPYMEM3;        -- 0x80280000
+		else sel := 99;
+		end if;
+		return sel;
+
+	end frame_addr_sel;
+
+end frame_addr_decode;

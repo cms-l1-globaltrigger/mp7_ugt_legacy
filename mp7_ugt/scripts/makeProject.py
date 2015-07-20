@@ -52,8 +52,8 @@ scripts_dir = os.getcwd()
 uGTalgosPath = os.path.abspath(os.path.join(scripts_dir, '..'))
 
 # Target VHDL package and it's template must be defined.
-TARGET_PKG_TPL = os.path.join(uGTalgosPath, 'uGT_algos/firmware/hdl/gt_mp7_top_pkg_tpl.vhd')
-TARGET_PKG = os.path.join(uGTalgosPath, 'uGT_algos/firmware/hdl/gt_mp7_top_pkg.vhd')
+TARGET_PKG_TPL = os.path.join(uGTalgosPath, 'firmware/hdl/gt_mp7_top_pkg_tpl.vhd')
+TARGET_PKG = os.path.join(uGTalgosPath, 'firmware/hdl/gt_mp7_top_pkg.vhd')
 
 def build_t(value):
     """Custom build type validator for argparse."""
@@ -159,7 +159,7 @@ def main():
         # Prepend a line to mp7_null_algo.dep
         with open('mp7_null_algo.dep', 'r') as fi:
             with open('mp7_null_algo.dep.tmp', 'w') as fo:
-                fo.write("include -c components/uGT_algos uGT_algo.dep\n")
+                fo.write("include -c components/mp7_ugt uGT_algo.dep\n")
                 fo.write(fi.read())
         shutil.move('mp7_null_algo.dep.tmp', 'mp7_null_algo.dep')
 
@@ -220,22 +220,22 @@ def main():
 
 
     logging.info("create menu dependencies...")
-    filename = os.path.join(uGTalgosPath, 'uGT_algos/firmware/cfg/uGT_gtl.dep')
+    filename = os.path.join(uGTalgosPath, 'firmware/cfg/uGT_gtl.dep')
     with open(filename, 'w') as f:
         f.write("src {args.menu}/vhdl/module_0/src/algo_mapping_rop.vhd\n".format(**locals()))
         f.write("src {args.menu}/vhdl/module_0/src/gtl_module.vhd\n".format(**locals()))
         f.write("src {args.menu}/vhdl/module_0/src/gtl_pkg.vhd\n".format(**locals()))
 
-    filename = os.path.join(uGTalgosPath, 'uGT_algos/firmware/cfg/uGT_board.dep')
+    filename = os.path.join(uGTalgosPath, 'firmware/cfg/uGT_board.dep')
     with open(filename, 'w') as f:
         f.write("src -c projects/examples/{args.board} top_decl.vhd\n".format(**locals()))
         f.write("src -c boards/mp7/base_fw/{args.board} mp7_brd_decl.vhd\n".format(**locals()))
 
-    logging.info("linking uGT_algos into cactusupgrades/components...")
+    logging.info("linking mp7_ugt into cactusupgrades/components...")
     cwd = os.getcwd()
     os.chdir('cactusupgrades/components/')
-    remove_file("uGT_algos")
-    os.symlink(os.path.join(uGTalgosPath, 'uGT_algos'), "uGT_algos")
+    remove_file("mp7_ugt")
+    os.symlink(os.path.join(uGTalgosPath, 'mp7_ugt'), "mp7_ugt")
 
     os.chdir(cwd)
 
@@ -252,11 +252,11 @@ def main():
         remove_file("runAll.sh")
         os.symlink(os.path.join(uGTalgosPath, 'runAll.sh'),  'runAll.sh')
 
-    logging.info("replacing the original top file with the modified uGT one...")
-    shutil.copyfile(
-        os.path.join(uGTalgosPath, 'uGT_algos/firmware/hdl/{args.board}.vhd'.format(**locals())),
-        os.path.join(mp7currPath, 'cactusupgrades/boards/mp7/base_fw/{args.board}/firmware/hdl/{args.board}.vhd'.format(**locals()))
-    )
+    #logging.info("replacing the original top file with the modified uGT one...")
+    #shutil.copyfile(
+        #os.path.join(uGTalgosPath, 'firmware/hdl/{args.board}.vhd'.format(**locals())),
+        #os.path.join(mp7currPath, 'cactusupgrades/boards/mp7/base_fw/{args.board}/firmware/hdl/{args.board}.vhd'.format(**locals()))
+    #)
 
     # Go to build area root directory.
     os.chdir(mp7path)

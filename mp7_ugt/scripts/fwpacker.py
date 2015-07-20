@@ -52,7 +52,8 @@ def main():
     timestamp = get_timestamp()
 
     basename = "{menu}_v{build}_{board}".format(**locals())
-    filename = "{basename}-{timestamp}.tar.gz".format(**locals())
+    basepath = os.path.dirname(args.config)
+    filename = os.path.join(basepath, "{basename}-{timestamp}.tar.gz".format(**locals()))
 
     tmpdir = tempfile.mkdtemp()
     logging.info("Created temporary dircetory %s", tmpdir)

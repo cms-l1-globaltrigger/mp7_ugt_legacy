@@ -1,6 +1,6 @@
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 14.04
+-- Platform    : Linux Ubuntu 10.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
 -- This work is held in copyright as an unpublished work by HEPHY (Institute
@@ -8,16 +8,14 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description: Read-out Process, complex design, Specification and architecture design/implementation::Babak, output logic scripts, babak 
---              students
---            : ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
+---Description: Read-out Process, complex design, Specification and architecture design/implementation.
+--             ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
 --              AMC13..
 --              Please do not change any part of the design without to cousultate Babak, because the main part of design
 --              will automated produced and you have to know, what do you do.  
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/rop/validity_checker.vhd $
--- $Date: 2015-03-03 19:25:25 +0100 (Tue, 03 Mar 2015) $
+-- $Date: 2015-06-15 $
 -- $Author: rahbaran $
--- $Revision: 3803 $
+-- Warning:  The output dump is not validted systematically based on my .xml concept. If you would like to use the desing, please conatact developer.
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -28,13 +26,12 @@ entity validity_checker is
    generic
    (
       MAX_BX_IN_EVENT : integer := 7;
-      
-      RST_ACT : std_logic := '0'
+      RST_ACT         : std_logic := '1'
    );
    port 
    (
       clk : in  std_logic;
-      rst : in  std_logic;
+      rst : in  std_logic; --with lhc_rst
       
       valid_i : in  std_logic;
       valid_o : out std_logic

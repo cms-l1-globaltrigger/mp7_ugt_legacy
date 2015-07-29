@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 -- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 14.04
+-- Platform    : Linux Ubuntu 10.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
 -- This work is held in copyright as an unpublished work by HEPHY (Institute
@@ -8,16 +8,15 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description: Read-out Process, complex design, Specification and architecture design/implementation::Babak, output logic scripts, babak 
---              students
---            : ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
+---Description: Read-out Process, complex design, Specification and architecture design/implementation.
+--             ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
 --              AMC13..
 --              Please do not change any part of the design without to cousultate Babak, because the main part of design
 --              will automated produced and you have to know, what do you do.  
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/rop/rop.vhd $
--- $Date: 2015-03-03 19:25:25 +0100 (Tue, 03 Mar 2015) $
+-- $Date: 2015-06-15 $
 -- $Author: rahbaran $
--- $Revision: 3803 $
+-- Warning:  The output dump is not validted systematically based on my .xml concept. If you would like to use the desing, please conatact developer.
+--------------------------------------------------------------------------------
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -29,6 +28,7 @@ use work.lhc_data_pkg.all;
 use work.rb_pkg.all;
 
 entity rop is
+
    port 
    ( 
       -- clk and reset signals
@@ -70,7 +70,9 @@ entity rop is
       daq_oe    : out std_logic;
       daq_stop  : out std_logic;
       daq_busy  : in  std_logic
+      
    );
+   
 end rop;
 
 architecture behavioral of rop is
@@ -158,8 +160,7 @@ begin
    assert (MAX_BX_IN_EVENT > 1) and (MAX_BX_IN_EVENT mod 2 = 1)
       report "ROP: MAX_BX_IN_EVENT must be greater than 1 and odd!" severity error;
    
-   
-------------------------------
+ ------------------------------
 -- component instantiations --
 ------------------------------
 
@@ -170,11 +171,11 @@ begin
    sw_sync_inst: entity work.rop_sw_reg_synchronizer
    port map
    (
-      lhc_clk => lhc_clk,
-      lhc_rst => lhc_rst,
+      lhc_clk	=> lhc_clk,
+      lhc_rst	=> lhc_rst,
       
-      daq_clk => daq_clk,
-      daq_rst => daq_rst,
+      daq_clk	=> daq_clk,
+      daq_rst	=> daq_rst,
       
       sw_regs_lhc => sw_reg_in,
       sw_regs_daq => sw_regs_daq
@@ -187,11 +188,12 @@ begin
    addr_manager_inst: entity work.address_manager
    generic map
    (
-      ADDR_WIDTH      => ADDR_WIDTH,
-      MEM_DEPTH       => MEM_DEPTH,
+      ADDR_WIDTH	=> ADDR_WIDTH,
+      MEM_DEPTH		=> MEM_DEPTH,
       
-      MAX_BX_IN_EVENT => MAX_BX_IN_EVENT,
-      RST_ACT         => RST_ACT
+      MAX_BX_IN_EVENT	=> MAX_BX_IN_EVENT,
+      RST_ACT_ROP	=> RST_ACT_ROP,
+      RST_ACT		=> RST_ACT
    )
    port map
    (
@@ -227,27 +229,27 @@ begin
    )
    port map
    (
-      daq_clk => daq_clk,
-      daq_rst => daq_rst,
+      daq_clk			=> daq_clk,
+      daq_rst			=> daq_rst,
       
-      offset_fifo_empty => offset_fifo_empty,
-      offset_fifo_rd    => offset_fifo_rd,
-      offset_fifo_addr  => offset_fifo_addr,
+      offset_fifo_empty		=> offset_fifo_empty,
+      offset_fifo_rd		=> offset_fifo_rd,
+      offset_fifo_addr		=> offset_fifo_addr,
       
-      pkt_buffer_addr => pkt_buffer_addr,
-      pkt_buffer_rd   => pkt_buffer_rd,
-      pkt_buffer_dout => pkt_buffer_dout,
+      pkt_buffer_addr		=> pkt_buffer_addr,
+      pkt_buffer_rd		=> pkt_buffer_rd,
+      pkt_buffer_dout		=> pkt_buffer_dout,
       
-      bx_in_event => bx_in_event,
+      bx_in_event		=> bx_in_event,
       
-      pkt_available => pkt_available,
-      pkt_req       => pkt_req,
+      pkt_available		=> pkt_available,
+      pkt_req			=> pkt_req,
       
-      free_addr => fdb_addr,
-      free => fdb_wr,
+      free_addr			=> fdb_addr,
+      free			=> fdb_wr,
       
-      main_ram_addr => main_ram_rd_addr,
-      main_ram_rd   => main_ram_rd
+      main_ram_addr		=> main_ram_rd_addr,
+      main_ram_rd		=> main_ram_rd
    );
    
 -----------------
@@ -257,25 +259,26 @@ begin
    offset_fifo_inst: entity work.fifo_2c1r1w
    generic map
    (
-      MIN_DEPTH  => MEM_DEPTH,
-		DATA_WIDTH => ADDR_WIDTH
+      MIN_DEPTH 	=> MEM_DEPTH,
+      ADDRESS_MANAGER	=> false,
+      DATA_WIDTH	=> ADDR_WIDTH
    )
    port map
    (
-      wr_clk   => lhc_clk,
-		wr_res_n => lhc_rst,
+      wr_clk	=> lhc_clk,
+      wr_res_n	=> lhc_rst,
+  
+      rd_clk	=> daq_clk,
+      rd_res_n	=> daq_rst,
 
-		rd_clk   => daq_clk,
-		rd_res_n => daq_rst,
+      data_out1	=> offset_fifo_addr,
+      rd1	=> offset_fifo_rd,
 
-		data_out1 => offset_fifo_addr,
-		rd1       => offset_fifo_rd,
+      data_in2	=> lhc_r.pnt_d(MAX_BX_IN_EVENT-1),
+      wr2	=> lhc_r.new_addr(MAX_BX_IN_EVENT-1),
 
-		data_in2 => lhc_r.pnt_d(MAX_BX_IN_EVENT-1),
-		wr2      => lhc_r.new_addr(MAX_BX_IN_EVENT-1),
-
-		empty => offset_fifo_empty,
-		full  => open
+      empty	=> offset_fifo_empty,
+      full	=> open
    );
    
 -------------------
@@ -286,22 +289,21 @@ begin
    generic map
    (
       DATA_WIDTH => ADDR_WIDTH,
-		SIZE       => MEM_DEPTH
+      SIZE       => MEM_DEPTH
    )
    port map
    (
-      wr_clk => lhc_clk,
-		rd_clk => daq_clk,
+      wr_clk	=> lhc_clk,
+      rd_clk	=> daq_clk,
+      wr_en	=> '1',
+      wr	=> process_addr,
+      rd	=> '1',
 		
-		wr_en => '1',
-		wr    => process_addr,
-		rd    => '1',
+    wr_addr	=> lhc_r.pnt,
+    rd_addr	=> pkt_buffer_addr,
 		
-		wr_addr => lhc_r.pnt,
-		rd_addr => pkt_buffer_addr,
-		
-		rd_data => pkt_buffer_dout,
-		wr_data => rd_addr_addr_m
+    rd_data	=> pkt_buffer_dout,
+    wr_data	=> rd_addr_addr_m
    );
    
 ------------------
@@ -365,9 +367,9 @@ begin
    lhc_data_dl : entity work.dynamic_delay_line
    generic map
    (
-      WIDTH => lhc_data_dli'length,
-      MAX_DELAY => 1,
-      STATIC_DELAY => 0
+      WIDTH		=> lhc_data_dli'length,
+      MAX_DELAY		=> 1,
+      STATIC_DELAY	=> 0
    )
    port map
    (
@@ -502,7 +504,8 @@ begin
    lhc_sync: process(lhc_clk,lhc_rst)
    begin
    
-      if lhc_rst = RST_ACT then
+--      if lhc_rst = RST_ACT_ROP then
+	if lhc_rst = RST_ACT then --change to HB Suggestion 
          lhc_r <= lhc_reg_rst;
       elsif rising_edge(lhc_clk) then
          lhc_r <= lhc_r_nxt;

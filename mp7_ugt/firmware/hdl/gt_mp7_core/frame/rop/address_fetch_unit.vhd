@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 -- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 14.04
+-- Platform    : Linux Ubuntu 10.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
 -- This work is held in copyright as an unpublished work by HEPHY (Institute
@@ -8,16 +8,17 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description: Read-out Process, complex design, Specification and architecture design/implementation::Babak, output logic scripts, babak 
---              students
---            : ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
+---Description: Read-out Process, complex design, Specification and architecture design/implementation.
+--             ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
 --              AMC13..
 --              Please do not change any part of the design without to cousultate Babak, because the main part of design
 --              will automated produced and you have to know, what do you do.  
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/rop/address_fetch_unit.vhd $
--- $Date: 2015-03-03 19:25:25 +0100 (Tue, 03 Mar 2015) $
+-- The reset design logic is a bit changed but the reset logic design should be re-newed based on the new concept. 
+-- $Date: 2015-06-15 $
 -- $Author: rahbaran $
--- $Revision: 3803 $
+-- Warning:  The output dump is not validted systematically based on my .xml concept. If you would like to use the desing, please conatact developer.
+
+--------------------------------------------------------------------------------
 
 
 library ieee;
@@ -253,7 +254,7 @@ begin
    sync: process(daq_clk,daq_rst)
    begin
    
-      if daq_rst = RST_ACT then
+      if daq_rst = RST_ACT_ROP then
          r <= reg_rst;
       elsif rising_edge(daq_clk) then
          r <= r_nxt;

@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 -- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 14.04
+-- Platform    : Linux Ubuntu 10.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
 -- This work is held in copyright as an unpublished work by HEPHY (Institute
@@ -8,16 +8,15 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description: Read-out Process, complex design, Specification and architecture design/implementation::Babak, output logic scripts, babak 
---              students
---            : ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
+---Description: Read-out Process, complex design, Specification and architecture design/implementation.
+--             ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
 --              AMC13..
 --              Please do not change any part of the design without to cousultate Babak, because the main part of design
 --              will automated produced and you have to know, what do you do.  
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/rop/address_manager.vhd $
--- $Date: 2015-03-03 19:25:25 +0100 (Tue, 03 Mar 2015) $
+-- $Date: 2015-06-15 $
 -- $Author: rahbaran $
--- $Revision: 3803 $
+-- Warning:  The output dump is not validted systematically based on my .xml concept. If you would like to use the desing, please conatact developer.
+--------------------------------------------------------------------------------
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -27,13 +26,14 @@ use ieee.numeric_std.all;
 entity address_manager is
    generic
    (
-      ADDR_WIDTH      : integer := 3;
-      MEM_DEPTH       : integer := 8;
+      ADDR_WIDTH	: integer := 3;
+      MEM_DEPTH		: integer := 8;
       
-      MAX_BX_IN_EVENT : integer := 7;
+      MAX_BX_IN_EVENT	: integer := 7;
       
-      RST_ACT         : std_logic := '0';
-      SYNC_STAGES     : integer := 2
+      RST_ACT_ROP	: std_logic := '0';
+      RST_ACT		: std_logic := '1';
+      SYNC_STAGES	: integer:= 2
    );
    port 
    (
@@ -114,25 +114,26 @@ begin
    addr_fifo: entity work.fifo_2c1r1w
    generic map
    (
-      MIN_DEPTH  => MEM_DEPTH,
-		DATA_WIDTH => ADDR_WIDTH
+      MIN_DEPTH		=> MEM_DEPTH,
+      ADDRESS_MANAGER	=> true,
+      DATA_WIDTH	=> ADDR_WIDTH
    )
    port map
    (
       wr_clk   => daq_clk,
-		wr_res_n => daq_rst,
+      wr_res_n => daq_rst,
 
-		rd_clk   => lhc_clk,
-		rd_res_n => lhc_rst,
+      rd_clk   => lhc_clk,
+      rd_res_n => lhc_rst,
 
-		data_out1 => addr_fifo_dout,
-		rd1       => addr_fifo_rd,
+      data_out1 => addr_fifo_dout,
+      rd1       => addr_fifo_rd,
 
-		data_in2 => addr_fifo_din,
-		wr2      => addr_fifo_wr,
+      data_in2 => addr_fifo_din,
+      wr2      => addr_fifo_wr,
 
-		empty => addr_fifo_empty,
-		full  => open
+      empty => addr_fifo_empty,
+      full  => open
    );
    
    stretch_unit_inst: entity work.stretch_unit
@@ -154,9 +155,8 @@ begin
    validity_checker_inst: entity work.validity_checker
    generic map
    (
-      MAX_BX_IN_EVENT => MAX_BX_IN_EVENT,
-      
-      RST_ACT => RST_ACT
+      MAX_BX_IN_EVENT	=> MAX_BX_IN_EVENT,
+      RST_ACT		=> RST_ACT
    )
    port map
    (
@@ -253,7 +253,7 @@ begin
    lhc_sync: process(lhc_clk,lhc_rst)
    begin
    
-      if lhc_rst = RST_ACT then
+      if lhc_rst = RST_ACT then 
          lhc_r <= lhc_reg_rst;
       elsif rising_edge(lhc_clk) then
          lhc_r <= lhc_r_nxt;
@@ -264,7 +264,7 @@ begin
    daq_sync: process(daq_clk,daq_rst)
    begin
    
-      if daq_rst = RST_ACT then
+      if daq_rst = RST_ACT_ROP then
          daq_r <= daq_reg_rst;
       elsif rising_edge(daq_clk) then
          daq_r <= daq_r_nxt;

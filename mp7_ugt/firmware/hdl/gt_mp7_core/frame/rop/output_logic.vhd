@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 -- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 14.04
+-- Platform    : Linux Ubuntu 10.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
 -- This work is held in copyright as an unpublished work by HEPHY (Institute
@@ -8,16 +8,16 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description: Read-out Process, complex design, Specification and architecture design/implementation::Babak, output logic scripts, babak 
---              students
---            : ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
+---Description: Read-out Process, complex design, Specification and architecture design/implementation.
+--             ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
 --              AMC13..
 --              Please do not change any part of the design without to cousultate Babak, because the main part of design
 --              will automated produced and you have to know, what do you do.  
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/rop/output_logic.vhd $
--- $Date: 2015-03-03 19:25:25 +0100 (Tue, 03 Mar 2015) $
+-- $Date: 2015-06-15 $
 -- $Author: rahbaran $
--- $Revision: 3803 $
+-- Warning:  The output dump is not validted systematically based on my .xml concept. If you would like to use the desing, please conatact developer.
+-- Output logic is now configured for 32-bit. The 64-bit vesion is not more supported, becuase the input vector of MP7 is fixed to 32-bit
+--------------------------------------------------------------------------------
 
 library ieee;
 use ieee.std_logic_1164.all;

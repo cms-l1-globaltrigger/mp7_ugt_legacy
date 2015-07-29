@@ -235,7 +235,7 @@ def main():
     cwd = os.getcwd()
     os.chdir('cactusupgrades/components/')
     remove_file("mp7_ugt")
-    os.symlink(os.path.join(uGTalgosPath, 'mp7_ugt'), "mp7_ugt")
+    os.symlink(uGTalgosPath, "mp7_ugt")
 
     os.chdir(cwd)
 

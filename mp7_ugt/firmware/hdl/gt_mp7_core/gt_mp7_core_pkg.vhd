@@ -122,6 +122,7 @@ constant BUNCHES_PER_ORBIT : natural range 3564 to 3564 := LHC_BUNCH_COUNT;
 --                because in delay_line_sl.vhd and delay_line_slv.vhd both resets are used !!!
 -- constant RST_ACT : std_logic := '0';
 constant RST_ACT : std_logic := '1';
+constant RST_ACT_ROP : std_logic := '0';
 
 type vec32_array is array (NATURAL RANGE <>) of std_logic_vector(31 downto 0);
 type vec16_array is array (NATURAL RANGE <>) of std_logic_vector(15 downto 0);

@@ -1,3 +1,0 @@
-src -c projects/examples/mp7_690es top_decl.vhd
-src -c boards/mp7/base_fw/mp7_690es mp7_brd_decl.vhd
-src mp7_690es.vhd

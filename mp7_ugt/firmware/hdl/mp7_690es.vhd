@@ -76,9 +76,10 @@ architecture rtl of top is
 	signal rst_loc, clken_loc: std_logic_vector(N_REGION - 1 downto 0);
 
 	-- uGT signals   -------------------------------------------------------
-    signal ser_finor_veto: std_logic; -- to MEZZ
+    signal finor_2_mezz_lemo: std_logic; -- to MEZZ
     signal tp_gt_mp7: std_logic_vector(7 downto 0); -- to MEZZ
     signal mezz, mezz_en: std_logic_vector(29 downto 0) := (others => '0'); -- mezzannine signals
+    signal clk160 : std_logic; --160MHz for FDL
     ------------------------------------------------------------------------
 
 begin
@@ -171,6 +172,7 @@ begin
 			clk40_in_n => clk40_in_n,
 			clk40ish_in => clk40ish,
 			clk40 => clk40,
+            clk160 => clk160, --inserted for uGT
 			rsto40 => rst40,
 			clk_p => clk_p,
 			rst_p => rst_p,
@@ -252,18 +254,18 @@ begin
             ipb_in => ipb_in_payload,
             ipb_out => ipb_out_payload,
             clk240 => clk_p,
-            --clk160 => clk160,  --JW 13.05.2015 not used
+            clk160 => clk160,
             lhc_clk => clk40,
             bc0 => ttc_cmd_dist(0),
             l1a => ttc_l1a,
             tp => tp_gt_mp7,
             lane_data_in => payload_d(15 downto 0),
             lane_data_out => payload_q(15 downto 0),
-            ser_finor_veto => ser_finor_veto
+            finor_2_mezz_lemo => finor_2_mezz_lemo
         );
 -- =======================================
 
-    mezz(0) <= ser_finor_veto;
+    mezz(0) <= finor_2_mezz_lemo;
     mezz_en(0) <= '1';
 
     mezz(1) <= clk40;
@@ -295,6 +297,5 @@ begin
             mezz_n => mezz_n,
             mezz_p => mezz_p
         );
-
 
 end rtl;

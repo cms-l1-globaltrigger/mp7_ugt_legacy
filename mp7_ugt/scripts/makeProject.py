@@ -153,6 +153,7 @@ def main():
 
         os.chdir(mp7currPath)
 
+        # storing mp7_null_algo.dep in mp7_null_algo.dep.orig file and add then uGT dep file to new mp7_null_algo.dep
         logging.info("adding dependency file for the uGT to the null algo dep file...")
         cwd = os.getcwd()
         os.chdir('cactusupgrades/components/mp7_null_algo/firmware/cfg/')
@@ -163,6 +164,42 @@ def main():
                 fo.write("include -c components/mp7_ugt uGT_algo.dep\n")
                 fo.write(fi.read())
         shutil.move('mp7_null_algo.dep.tmp', 'mp7_null_algo.dep')
+
+        os.chdir(cwd)
+
+        # removing 'src mp7xe_690.vhd mp7_brd_decl.vhd' from mp7xe_690.dep to use the local file
+        logging.info("removing link to mp7xe_690.vhd from the mp7xe_690.dep file to use the local file...")
+        cwd = os.getcwd()
+        os.chdir('cactusupgrades/boards/mp7/base_fw/mp7xe_690/firmware/cfg/')
+        shutil.copy('mp7xe_690.dep', 'mp7xe_690.dep.orig')
+        # Remove a line from mp7xe_690.dep
+        with open('mp7xe_690.dep.orig', 'r') as fi:
+            with open('mp7xe_690.dep.tmp', 'w') as fo:
+                for line in fi:
+                    if 'src mp7xe_690.vhd mp7_brd_decl.vhd' in line:
+                        fo.write('# commented this line out, to use the uGT local files:\n')
+                        fo.write('#src mp7xe_690.vhd mp7_brd_decl.vhd\n')
+                    else:
+                        fo.write(line)
+        shutil.move('mp7xe_690.dep.tmp', 'mp7xe_690.dep')
+
+        os.chdir(cwd)
+
+        # removing 'src mp7_ttc.vhd' from mp7_ttc.dep to use the local file
+        logging.info("removing link to mp7_ttc.vhd from the mp7_ttc.dep file to use the local file...")
+        cwd = os.getcwd()
+        os.chdir('cactusupgrades/components/mp7_ttc/firmware/cfg/')
+        shutil.copy('mp7_ttc.dep', 'mp7_ttc.dep.orig')
+        # Remove a line from mp7_ttc.dep
+        with open('mp7_ttc.dep.orig', 'r') as fi:
+            with open('mp7_ttc.dep.tmp', 'w') as fo:
+                for line in fi:
+                    if 'src mp7_ttc.vhd' in line:
+                        fo.write('# commented this line out, to use the uGT local files:\n')
+                        fo.write('#src mp7_ttc.vhd\n')
+                    else:
+                        fo.write(line)
+        shutil.move('mp7_ttc.dep.tmp', 'mp7_ttc.dep')
 
         os.chdir(cwd)
 
@@ -180,7 +217,7 @@ def main():
 
         os.chdir(mp7currPath)
 
-
+        # add the uGT dep file to mp7_null_algo.dep
         logging.info("adding dependency file for the uGT to the null algo dep file...")
         cwd = os.getcwd()
         os.chdir('cactusupgrades/components/mp7_null_algo/firmware/cfg/')
@@ -190,6 +227,41 @@ def main():
                 fo.write("include -c components/mp7_ugt uGT_algo.dep\n")
                 fo.write(fi.read())
         shutil.move('mp7_null_algo.dep.tmp', 'mp7_null_algo.dep')
+
+        os.chdir(cwd)
+
+        # removing 'src mp7xe_690.vhd mp7_brd_decl.vhd' from mp7xe_690.dep to use the local file
+        logging.info("removing link to mp7xe_690.vhd fro the mp7xe_690.dep file to use the local file...")
+        cwd = os.getcwd()
+        os.chdir('cactusupgrades/boards/mp7/base_fw/mp7xe_690/firmware/cfg/')
+        # Remove a line from mp7xe_690.dep
+        with open('mp7xe_690.dep.orig', 'r') as fi:
+            with open('mp7xe_690.dep.tmp', 'w') as fo:
+                for line in fi:
+                    if 'src mp7xe_690.vhd mp7_brd_decl.vhd' in line:
+                        fo.write('# commented this line out, to use the uGT local files:\n')
+                        fo.write('#src mp7xe_690.vhd mp7_brd_decl.vhd\n')
+                    else:
+                        fo.write(line)
+        shutil.move('mp7xe_690.dep.tmp', 'mp7xe_690.dep')
+
+        os.chdir(cwd)
+
+
+        # removing 'src mp7_ttc.vhd' from mp7_ttc.dep to use the local file
+        logging.info("removing link to mp7_ttc.vhd from the mp7_ttc.dep file to use the local file...")
+        cwd = os.getcwd()
+        os.chdir('cactusupgrades/components/mp7_ttc/firmware/cfg/')
+        # Remove a line from mp7_ttc.dep
+        with open('mp7_ttc.dep.orig', 'r') as fi:
+            with open('mp7_ttc.dep.tmp', 'w') as fo:
+                for line in fi:
+                    if 'src mp7_ttc.vhd' in line:
+                        fo.write('# commented this line out, to use the uGT local files:\n')
+                        fo.write('#src mp7_ttc.vhd\n')
+                    else:
+                        fo.write(line)
+        shutil.move('mp7_ttc.dep.tmp', 'mp7_ttc.dep')
 
         os.chdir(cwd)
         ######################################################

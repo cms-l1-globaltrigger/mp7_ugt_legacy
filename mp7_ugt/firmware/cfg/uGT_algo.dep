@@ -28,8 +28,7 @@ include ../cfg/uGT_board.dep
 # addrtab -t energy_deserialization.xml
 # addrtab -t uGMT.xml
 # addrtab -t ugmt_serdes.xml
-# Added the MP7 top file and the ttc module from the local dir:
-src mp7xe_690.vhd
+# Added the MP7 ttc module from the local uGT dir:
 src mp7_ttc.vhd
 src lhc_data_pkg.vhd
 src gt_mp7_top_pkg.vhd

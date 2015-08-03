@@ -185,6 +185,24 @@ def main():
 
         os.chdir(cwd)
 
+        # removing 'src mp7_690es.vhd mp7_brd_decl.vhd' from mp7_690es.dep to use the local file
+        logging.info("removing link to mp7_690es.vhd from the mp7_690es.dep file to use the local file...")
+        cwd = os.getcwd()
+        os.chdir('cactusupgrades/boards/mp7/base_fw/mp7_690es/firmware/cfg/')
+        shutil.copy('mp7_690es.dep', 'mp7_690es.dep.orig')
+        # Remove a line from mp7_690es.dep
+        with open('mp7_690es.dep.orig', 'r') as fi:
+            with open('mp7_690es.dep.tmp', 'w') as fo:
+                for line in fi:
+                    if 'src mp7_690es.vhd mp7_brd_decl.vhd' in line:
+                        fo.write('# commented this line out, to use the uGT local files:\n')
+                        fo.write('#src mp7_690es.vhd mp7_brd_decl.vhd\n')
+                    else:
+                        fo.write(line)
+        shutil.move('mp7_690es.dep.tmp', 'mp7_690es.dep')
+
+        os.chdir(cwd)
+
         # removing 'src mp7_ttc.vhd' from mp7_ttc.dep to use the local file
         logging.info("removing link to mp7_ttc.vhd from the mp7_ttc.dep file to use the local file...")
         cwd = os.getcwd()
@@ -247,6 +265,22 @@ def main():
 
         os.chdir(cwd)
 
+        # removing 'src mp7_690es.vhd mp7_brd_decl.vhd' from mp7_690es.dep to use the local file
+        logging.info("removing link to mp7_690es.vhd from the mp7_690es.dep file to use the local file...")
+        cwd = os.getcwd()
+        os.chdir('cactusupgrades/boards/mp7/base_fw/mp7_690es/firmware/cfg/')
+        # Remove a line from mp7_690es.dep
+        with open('mp7_690es.dep.orig', 'r') as fi:
+            with open('mp7_690es.dep.tmp', 'w') as fo:
+                for line in fi:
+                    if 'src mp7_690es.vhd mp7_brd_decl.vhd' in line:
+                        fo.write('# commented this line out, to use the uGT local files:\n')
+                        fo.write('#src mp7_690es.vhd mp7_brd_decl.vhd\n')
+                    else:
+                        fo.write(line)
+        shutil.move('mp7_690es.dep.tmp', 'mp7_690es.dep')
+
+        os.chdir(cwd)
 
         # removing 'src mp7_ttc.vhd' from mp7_ttc.dep to use the local file
         logging.info("removing link to mp7_ttc.vhd from the mp7_ttc.dep file to use the local file...")
@@ -316,6 +350,7 @@ def main():
     with open(filename, 'w') as f:
         f.write("src -c projects/examples/{args.board} top_decl.vhd\n".format(**locals()))
         f.write("src -c boards/mp7/base_fw/{args.board} mp7_brd_decl.vhd\n".format(**locals()))
+        f.write("src {args.board}.vhd\n".format(**locals()))
 
     logging.info("linking mp7_ugt into cactusupgrades/components...")
     cwd = os.getcwd()
@@ -332,7 +367,7 @@ def main():
 
     # Do for every module of the menu...
     for i in range(modules):
-        logging.info("setting up build area for %s of %s...", i, menu_name)
+        logging.info("setting up build area for module %s of %s...", i, menu_name)
         module_dir = os.path.join(build_area_dir, menu_name, 'module_{i}'.format(**locals()))
         os.chdir(module_dir)
         remove_file("runAll.sh")

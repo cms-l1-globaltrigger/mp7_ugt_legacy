@@ -1,5 +1,2 @@
 src -c projects/examples/mp7xe_690 top_decl.vhd
 src -c boards/mp7/base_fw/mp7xe_690 mp7_brd_decl.vhd
-# Added the MP7 top file and the ttc module from the local dir:
-src mp7xe_690.vhd
-src mp7_ttc.vhd

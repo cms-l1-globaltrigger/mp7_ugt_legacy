@@ -156,8 +156,9 @@ def main():
         logging.info("adding dependency file for the uGT to the null algo dep file...")
         cwd = os.getcwd()
         os.chdir('cactusupgrades/components/mp7_null_algo/firmware/cfg/')
+        shutil.copy('mp7_null_algo.dep', 'mp7_null_algo.dep.orig')
         # Prepend a line to mp7_null_algo.dep
-        with open('mp7_null_algo.dep', 'r') as fi:
+        with open('mp7_null_algo.dep.orig', 'r') as fi:
             with open('mp7_null_algo.dep.tmp', 'w') as fo:
                 fo.write("include -c components/mp7_ugt uGT_algo.dep\n")
                 fo.write(fi.read())
@@ -178,6 +179,19 @@ def main():
         mp7currPath = os.path.join(args.path, mp7currDir)
 
         os.chdir(mp7currPath)
+
+
+        logging.info("adding dependency file for the uGT to the null algo dep file...")
+        cwd = os.getcwd()
+        os.chdir('cactusupgrades/components/mp7_null_algo/firmware/cfg/')
+        # Prepend a line to mp7_null_algo.dep
+        with open('mp7_null_algo.dep.orig', 'r') as fi:
+            with open('mp7_null_algo.dep.tmp', 'w') as fo:
+                fo.write("include -c components/mp7_ugt uGT_algo.dep\n")
+                fo.write(fi.read())
+        shutil.move('mp7_null_algo.dep.tmp', 'mp7_null_algo.dep')
+
+        os.chdir(cwd)
         ######################################################
 
 

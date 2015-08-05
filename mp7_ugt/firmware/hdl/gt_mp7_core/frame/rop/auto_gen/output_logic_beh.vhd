@@ -7,7 +7,7 @@
 -- of High Energy Physics) All rights reserved.  This work may not be used
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 ---Description: Read-out Process, complex design, Specification and architecture design/implementation.
 --             ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
 --              AMC13..
@@ -18,8 +18,6 @@
 -- Warning:  Do not touch change anything on this file, any changes has a consequence of discrepance of the hardware dump to Specification. And in 
 -- the such cases zero on output dump
 --------------------------------------------------------------------------------
-
-
 
 library ieee;
 use ieee.std_logic_1164.all;

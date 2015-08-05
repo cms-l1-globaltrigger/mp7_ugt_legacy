@@ -8,15 +8,15 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description: Delay Manager
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/trunk/uGT_algos/firmware/hdl/gt_mp7_core/frame/frame_addr_decode.vhd $
--- $Date: 2015-06-15 15:32:47 +0200 (Mon, 15 Jun 2015) $
--- $Author: wittmann $
--- $Revision: 4037 $
+---Description: ROP
+-- $HeadURL: $
+-- $Date:  $
+-- $Author: Babak $
+--- $Revision: 0.1 $
 --------------------------------------------------------------------------------
--- BR:21-11-2014 TOP_SERIAL_VENDOR is not mor relevant, because in future we will read from hardware over ipmi just MAC address
--- HB 2014-08-26: test version with spy2_algos and spy2_finor instantiated with ipb_dpmem_4096_32 modules, too.
--- HB 2014-08-20: test version with simspymem instantiated with ipb_dpmem_4096_32 modules.
+-- BR:21-05-2015 TOP_SERIAL_VENDOR is not more relevant, because in future we will read from hardware over ipmi just MAC address
+-- BR:21-05-2015: test version with spy2_algos and spy2_finor instantiated with ipb_dpmem_4096_32 modules, too.
+-- BR:21-05-2015: test version with simspymem instantiated with ipb_dpmem_4096_32 modules.
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
@@ -26,7 +26,7 @@ use work.gt_mp7_core_pkg.all;
 
 package frame_addr_decode is
 --
-    constant NR_IPB_SLV_FRAME : positive:= 84;
+    constant NR_IPB_SLV_FRAME : positive:= 85;
 
     constant C_IPB_MODULE_INFO : natural := 0;
     constant C_IPB_TEST_REGS : natural := 1;
@@ -34,7 +34,7 @@ package frame_addr_decode is
     constant C_IPB_RB : natural := 3;
 
 --    constant C_IPB_SIMSPYMEM : natural := 4;
--- HB 2014-08-20: test version with simspymem instantiated with ipb_dpmem_4096_32 modules.
+-- BR:21-05-2015: test version with simspymem instantiated with ipb_dpmem_4096_32 modules.
 --                60 memory blocks with LHC_DATA_WIDTH = 1920
 
     type ipb_simspymem_index_array is array (0 to 59) of natural;
@@ -44,7 +44,7 @@ package frame_addr_decode is
 															   60, 61, 62, 63);
 
 --     constant C_IPB_SPYMEM2_ALGOS : natural := 64;
--- HB 2014-08-26: test version with spy2_algos and spy2_finor instantiated with ipb_dpmem_4096_32 modules.
+-- BR:21-05-2015: test version with spy2_algos and spy2_finor instantiated with ipb_dpmem_4096_32 modules.
 --                16 memory blocks for 512 algos, 1 block for finor
 
     type ipb_spy2_algos_index_array is array (0 to 15) of natural;
@@ -53,26 +53,24 @@ package frame_addr_decode is
     constant C_IPB_SPYMEM2_FINOR : natural := 80;
     constant C_IPB_SPYMEM3 : natural := 81;
     constant C_IPB_PULSEREG : natural := 82;  --ipbus event - pulse register
-    constant C_IPB_MUX_CONTROL : natural := 83; -- control regs for output mux
-
-
+    constant C_IPB_MUX_CONTROL : natural := 83;  --output_mux ipbus control register
+     constant C_IPB_SPYMEM3_P : natural := 84;
 
     constant OFFSET_TIMESTAMP: natural := 0; -- 1 x 32 bits
     constant OFFSET_HOSTNAME: natural := OFFSET_TIMESTAMP + TIMESTAMP'length/32; -- 256 bits = 8 x 32 bits
     constant OFFSET_USERNAME: natural := OFFSET_HOSTNAME + HOSTNAME'length/32; -- 256 bits = 8 x 32 bits
     constant OFFSET_MODULE_TYPE: natural := OFFSET_USERNAME + USERNAME'length/32; -- 1 x 32 bits
     constant OFFSET_FRAME_VERSION: natural := OFFSET_MODULE_TYPE + MODULE_TYPE'length/32; -- 1 x 32 bits
-    constant OFFSET_BUILD_VERSION: natural := OFFSET_FRAME_VERSION + FRAME_VERSION'length/32; -- 1 x 32 bits
 
     constant C_MODINFO_REGS_ADDR_WIDTH : integer := 5;
     constant C_MODINFO_REGS_BEGIN_INDEX : integer := OFFSET_TIMESTAMP;
-    constant C_MODINFO_REGS_END_INDEX : integer := OFFSET_BUILD_VERSION;
+    constant C_MODINFO_REGS_END_INDEX : integer := OFFSET_FRAME_VERSION;
 
     constant C_TEST_REGS_ADDR_WIDTH : integer := 4;
     constant C_TEST_REGS_BEGIN_INDEX : integer := 0;
     constant C_TEST_REGS_END_INDEX : integer := 14;
 
--- HB 2014-05-03: C_RB_ADDR_WIDTH fixed to 12 in rb.vhd
+-- BR:21-05-2015: C_RB_ADDR_WIDTH fixed to 12 in rb.vhd
 --     constant C_RB_ADDR_WIDTH : integer := 20;
 
     function frame_addr_sel(signal addr : in std_logic_vector(31 downto 0)) return natural;
@@ -88,11 +86,11 @@ package body frame_addr_decode is
 
     begin
         if    std_match(addr, "100000000000000000000000000-----") then sel := C_IPB_MODULE_INFO;    -- 0x80000000
--- HB 2014-07-10: added test status register addresses
+--BR:21-05-2015: added test status register addresses
         elsif std_match(addr, "1000000000000000000000000010----") then sel := C_IPB_TEST_REGS;      -- 0x80000020
         elsif std_match(addr, "10000000000000000000000001000000") then sel := C_IPB_DEMUX_LANE_ADJ; -- 0x80000040
         elsif std_match(addr, "10000000000000000000100000000000") then sel := C_IPB_PULSEREG;       -- 0x80000800
-        elsif std_match(addr, "1000000000000000000010010000----") then sel := C_IPB_MUX_CONTROL;    -- 0x80000900
+        elsif std_match(addr, "1000000000000000000010010000----") then sel := C_IPB_MUX_CONTROL;    -- 0x80000900 .. 0x8000090F
         elsif std_match(addr, "10000000011100000000------------") then sel := C_IPB_RB;             -- 0x80700000
 --         elsif std_match(addr, "100000000011--------------------") then sel := C_IPB_SIMSPYMEM;   -- 0x80300000
         elsif std_match(addr, "10000000001100000000------------") then sel := C_IPB_SIMSPYMEM(0);   -- 0x80300000 .. 0x80300FFF
@@ -173,6 +171,7 @@ package body frame_addr_decode is
         elsif std_match(addr, "10000000001001001111------------") then sel := C_IPB_SPYMEM2_ALGOS(15);
         elsif std_match(addr, "10000000001000000000------------") then sel := C_IPB_SPYMEM2_FINOR;  -- 0x80200000
         elsif std_match(addr, "1000000000101000----------------") then sel := C_IPB_SPYMEM3;        -- 0x80280000
+        elsif std_match(addr, "1000000001000000----------------") then sel := C_IPB_SPYMEM3_P;      -- 0x80400000
 		else sel := 99;
 		end if;
 		return sel;

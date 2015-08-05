@@ -1,6 +1,6 @@
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
+-- Platform    : Linux Ubuntu 14.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
 -- This work is held in copyright as an unpublished work by HEPHY (Institute
@@ -8,21 +8,21 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description: Delay Manager
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/dm/delay_element.vhd $
--- $Date: 2015-02-18 12:36:41 +0100 (Wed, 18 Feb 2015) $
--- $Author: rahbaran $
--- $Revision: 3764 $
+-- $HeadURL:  $
+-- $Date:  $
+-- $Author: Florian $
+-- Modification : Babak
+-- 		1) lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
+--              2) changed logic for address calculation based on bug as follows:
+ --                if the MAX_DELAY is smaller than the whole instanciated ram, we have to take care,
+ --                that the read pointer does not jump to an unused position when the write pointer is set back to 0
+--              3) changed rd + wr addresses to natural
+--              4) modified the rd address calculation because delay was always 1bx too much
+-- $Revision: 0.1  $
 --------------------------------------------------------------------------------
- --JW 17.02.2015 - modified rd address calculation because delay was always 1bx too much
- --JW 16.02.2015 - changed rd + wr addresses to natural
- --JW 16.02.2015 - changed logic for address calculation, because an bug was found:
- --  instead of r.xxx, r_nxt.xxx was used
- --JW 11.02.2015 - changed logic for address calculation, because an bug was found:
- --  if the MAX_DELAY is smaller than the whole instanciated ram, we have to take care,
- --  that the read pointer does not jump to an unused position when the write pointer is set back to 0
---BR: 04.02.2015 Delay Manager out put was zero, becaue lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
 
+--------------------------------------------------------------------------------
+ 
 library ieee;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;

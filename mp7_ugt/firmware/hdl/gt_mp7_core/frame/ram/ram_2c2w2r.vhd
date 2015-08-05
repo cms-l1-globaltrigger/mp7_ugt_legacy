@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Synthesizer : ISE 13.2
+-- Synthesizer : ISE 14.6
 -- Platform    : Linux Ubuntu 10.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
@@ -8,11 +8,12 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description:RAM Spec:babak, implementaion: stefan, Babak
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/ram/ram_2c2w2r.vhd $
--- $Date: 2014-07-02 14:05:41 +0200 (Wed, 02 Jul 2014) $
--- $Author: bergauer $
--- $Revision: 3006 $
+---Description:RTL RAM design for ROP. It could be used for any design. It should be adjusted for changing the technology
+-- $HeadURL: $
+-- $Date:  $
+-- $Author:  Babak$
+-- $Revision: 0.1 $
+--------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;

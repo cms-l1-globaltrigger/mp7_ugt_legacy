@@ -1,6 +1,6 @@
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 14.04
+-- Platform    : Linux Ubuntu 10.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
 -- This work is held in copyright as an unpublished work by HEPHY (Institute
@@ -30,18 +30,18 @@ entity output_mux is
         NR_LANES: positive
     );
 	port
-	(   lhc_clk     : in std_logic;
+	(   
+	lhc_clk     : in std_logic;
         lhc_rst     : in std_logic;
         clk240      : in std_logic;
         bx_nr       : in std_logic_vector(11 downto 0);
         algo_in     : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         finor_in    : in std_logic;
-        --daq_in      : in std_logic_vector(DAQ_INPUT_WIDTH-1 downto 0);
         valid_lo    : in std_logic_vector(15 downto 0);
         valid_hi    : in std_logic_vector(15 downto 0);
         start       : in std_logic;
         strobe      : in std_logic;
-		lane_out    : out ldata(NR_LANES-1 downto 0)
+	lane_out    : out ldata(NR_LANES-1 downto 0)
 	);
 end output_mux;
 
@@ -49,30 +49,15 @@ architecture arch of output_mux is
 
     signal sValid : std_logic := '0';
 
-    signal s_m0in0 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m0in1 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m0in2 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m0in3 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m0in4 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m0in5 : lword := ((others => '0'), '0', '0', '0');
+                                            
+    signal s_in0_mux0,s_in0_mux1,s_in0_mux2,s_in0_mux3 : lword;
+    signal s_in1_mux0,s_in1_mux1,s_in1_mux2,s_in1_mux3 : lword;
+    signal s_in2_mux0,s_in2_mux1,s_in2_mux2,s_in2_mux3 : lword;
+    signal s_in3_mux0,s_in3_mux1,s_in3_mux2,s_in3_mux3 : lword;
+    signal s_in4_mux0,s_in4_mux1,s_in4_mux2,s_in4_mux3 : lword;
+    signal s_in5_mux0,s_in5_mux1,s_in5_mux2,s_in5_mux3 : lword;
 
-
-    signal s_m1in0 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m1in1 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m1in2 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m1in3 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m1in4 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m1in5 : lword := ((others => '0'), '0', '0', '0');
-
-
-    signal s_m2in0 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m2in1 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m2in2 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m2in3 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m2in4 : lword := ((others => '0'), '0', '0', '0');
-    signal s_m2in5 : lword := ((others => '0'), '0', '0', '0');
-
-
+  
 begin
 
     -- set sValid process
@@ -87,77 +72,85 @@ begin
         end if;
 --      end if;
     end process p_sValid;
+   
 
-    s_m0in0   <=     (algo_in(31 downto 0), sValid, start, strobe);
-    s_m0in1   <=     (algo_in(63 downto 32), sValid, start, strobe);
-    s_m0in2   <=     (algo_in(95 downto 64), sValid, start, strobe);
-    s_m0in3   <=     (algo_in(127 downto 96), sValid, start, strobe);
-    s_m0in4   <=     (algo_in(159 downto 128), sValid, start, strobe);
-    s_m0in5   <=     (algo_in(191 downto 160), sValid, start, strobe);
 
     -- algo 0-191 mux
+    
+    s_in0_mux0   <=     (algo_in(31 downto 0), sValid, start, strobe);
+    s_in1_mux0   <=     (algo_in(63 downto 32), sValid, start, strobe);
+    s_in2_mux0   <=    	(algo_in(95 downto 64), sValid, start, strobe);
+    s_in3_mux0   <=     (algo_in(127 downto 96), sValid, start, strobe);
+    s_in4_mux0   <=     (algo_in(159 downto 128), sValid, start, strobe);
+    s_in5_mux0   <=    	(algo_in(191 downto 160), sValid, start, strobe);
+    
     mux0_i: entity work.mux
         port map
         (
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  '0',
-            in0     =>  s_m0in0,   -- frame 0   -> algo 0-31
-            in1     =>  s_m0in1,   -- frame 1   -> algo 32-63
-            in2     =>  s_m0in2,   -- frame 2   -> algo 64-95
-            in3     =>  s_m0in3,   -- frame 3   -> algo 96-127
-            in4     =>  s_m0in4,   -- frame 4   -> algo 128-159
-            in5     =>  s_m0in5,   -- frame 5   -> algo 160-191
+            in0     =>  s_in0_mux0,   -- frame 0   -> algo 0-31
+            in1     =>  s_in1_mux0,   -- frame 1   -> algo 32-63
+            in2     =>  s_in2_mux0,   -- frame 2   -> algo 64-95
+            in3     =>  s_in3_mux0,   -- frame 3   -> algo 96-127
+            in4     =>  s_in4_mux0,   -- frame 4   -> algo 128-159
+            in5     =>  s_in5_mux0,   -- frame 5   -> algo 160-191
             mux_out =>  lane_out(0)
-        );
-
-
-    s_m1in0   <=     (algo_in(223 downto 192), sValid, start, strobe);
-    s_m1in1   <=     (algo_in(255 downto 224), sValid, start, strobe);
-    s_m1in2   <=     (algo_in(287 downto 256), sValid, start, strobe);
-    s_m1in3   <=     (algo_in(319 downto 288), sValid, start, strobe);
-    s_m1in4   <=     (algo_in(351 downto 320), sValid, start, strobe);
-    s_m1in5   <=     (algo_in(383 downto 352), sValid, start, strobe);
-
+        ); 
+ 
+ 
     -- algo 192-383 mux
-    mux1_i: entity work.mux
+    s_in0_mux1   <=    (algo_in(223 downto 192), sValid, start, strobe);    -- frame 0   -> algo 192-223
+    s_in1_mux1   <=    (algo_in(255 downto 224), sValid, start, strobe);    -- frame 1   -> algo 224-255
+    s_in2_mux1   <=    (algo_in(287 downto 256), sValid, start, strobe);    -- frame 2   -> algo 256-287
+    s_in3_mux1   <=    (algo_in(319 downto 288), sValid, start, strobe);    -- frame 3   -> algo 288-319
+    s_in4_mux1   <=    (algo_in(351 downto 320), sValid, start, strobe);    -- frame 4   -> algo 320-351
+    s_in5_mux1   <=    (algo_in(383 downto 352), sValid, start, strobe);    -- frame 5   -> algo 352-383
+   
+   mux1_i: entity work.mux
         port map
         (
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  '0',
-            in0     =>  s_m1in0,    -- frame 0   -> algo 192-223
-            in1     =>  s_m1in1,    -- frame 1   -> algo 224-255
-            in2     =>  s_m1in2,    -- frame 2   -> algo 256-287
-            in3     =>  s_m1in3,    -- frame 3   -> algo 288-319
-            in4     =>  s_m1in4,    -- frame 4   -> algo 320-351
-            in5     =>  s_m1in5,    -- frame 5   -> algo 352-383
+            in0     =>  s_in0_mux1,    -- frame 0   -> algo 192-223
+            in1     =>  s_in1_mux1,    -- frame 1   -> algo 224-255
+            in2     =>  s_in2_mux1,    -- frame 2   -> algo 256-287
+            in3     =>  s_in3_mux1,    -- frame 3   -> algo 288-319
+            in4     =>  s_in4_mux1,    -- frame 4   -> algo 320-351
+            in5     =>  s_in5_mux1,    -- frame 5   -> algo 352-383
             mux_out =>  lane_out(1)
         );
 
 
-    s_m2in0   <=     (algo_in(415 downto 384), sValid, start, strobe);
-    s_m2in1   <=     (algo_in(447 downto 416), sValid, start, strobe);
-    s_m2in2   <=     (algo_in(479 downto 448), sValid, start, strobe);
-    s_m2in3   <=     (algo_in(511 downto 480), sValid, start, strobe);
-    s_m2in4   <=     ("0000000000000000000000000000000" & finor_in, sValid, start, strobe);
-    s_m2in5   <=     ((others => '0'), sValid, start, strobe);
-
+                         
     -- algo 384-511 + finor mux
-    mux2_i: entity work.mux
+    
+    s_in0_mux2   <=   (algo_in(415 downto 384), sValid, start, strobe);    -- frame 0   -> algo 384-415
+    s_in1_mux2   <=   (algo_in(447 downto 416), sValid, start, strobe);    -- frame 1   -> algo 416-447
+    s_in2_mux2   <=   (algo_in(479 downto 448), sValid, start, strobe);    -- frame 2   -> algo 448-479
+    s_in3_mux2   <=   (algo_in(511 downto 480), sValid, start, strobe);    -- frame 3   -> algo 480-511
+    s_in4_mux2   <=   ("0000000000000000000000000000000" & finor_in, sValid, start, strobe);     -- frame 4   -> finor
+    s_in5_mux2   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
+  
+  mux2_i: entity work.mux
         port map
         (
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   => '0',
-            in0     =>  s_m2in0,    -- frame 0   -> algo 384-415
-            in1     =>  s_m2in1,    -- frame 1   -> algo 416-447
-            in2     =>  s_m2in2,    -- frame 2   -> algo 448-479
-            in3     =>  s_m2in3,    -- frame 3   -> algo 480-511
-            in4     =>  s_m2in4,    -- frame 4   -> finor
-            in5     =>  s_m2in5,    -- frame 5   -> free
+            in0     =>  s_in0_mux2,    -- frame 0   -> algo 384-415
+            in1     =>  s_in1_mux2,    -- frame 1   -> algo 416-447
+            in2     =>  s_in2_mux2,    -- frame 2   -> algo 448-479
+            in3     =>  s_in3_mux2,    -- frame 3   -> algo 480-511
+            in4     =>  s_in4_mux2,     -- frame 4   -> finor
+            in5     =>  s_in5_mux2,      -- frame 5   -> free
+            -- sel     =>  frame_cntr,
             mux_out =>  lane_out(2)
         );
+
+ 
 
 end architecture;
 

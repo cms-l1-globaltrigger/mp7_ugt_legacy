@@ -9,10 +9,10 @@
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
 ---Description: DSMUX
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/dsmux/dsmux.vhd $
--- $Date: 2014-07-15 12:31:21 +0200 (Tue, 15 Jul 2014) $
--- $Author: rahbaran $
--- $Revision: 3050 $
+-- $HeadURL: s $
+-- $Date: $
+-- $Author: Babak $
+-- $Revision: 0.1 $
 --------------------------------------------------------------------------------
 library ieee;
 use IEEE.std_logic_1164.all;
@@ -112,10 +112,10 @@ begin
 	
 	
 	GEN_SIMMEM_IN_USE_OUTPUT_REGISTER : if USE_SIMMEM_IN_USE_OUTPUT_REGISTER = true generate
-	
+--BR changed the Rest logic	
 		process (lhc_clk, lhc_rst)
 		begin
-			if lhc_rst = RST_ACT then
+			if lhc_rst = RST_ACT_ROP then
 				simmem_in_use_o <= '0';
 			elsif rising_edge(lhc_clk) then
 				simmem_in_use_o <= simmem_in_use_internal;
@@ -128,11 +128,11 @@ begin
 		simmem_in_use_o <= simmem_in_use_internal;
 	end generate;
 	
-	
+--BR changed the Rest logic	
 	GEN_SW_INPUT_REGISTER : if USE_SW_INPUT_REGISTER = true generate
 		process (lhc_clk, lhc_rst)
 		begin
-			if lhc_rst = RST_ACT then
+			if lhc_rst = RST_ACT_ROP then
 				src_bits_array_internal <= (others => '0');
 			elsif rising_edge(lhc_clk) then
 				src_bits_array_internal <= src_bits_array_in;

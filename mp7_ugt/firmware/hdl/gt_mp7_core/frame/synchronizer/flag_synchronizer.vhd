@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Synthesizer : ISE 14.2
+-- Synthesizer : ISE 14.6
 -- Platform    : Linux Ubuntu 10.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
@@ -8,11 +8,13 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description: flag synchronizer
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/synchronizer/flag_synchronizer.vhd $
--- $Date: 2014-07-02 14:05:41 +0200 (Wed, 02 Jul 2014) $
--- $Author: bergauer $
--- $Revision: 3006 $
+---Description: ROP
+-- $HeadURL: $
+-- $Date:  $
+-- $Author: Markus $
+-- Modification : I am not sure, if it is working correctly. 
+-- $Revision: 0.1 $
+--------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -21,14 +23,15 @@ use IEEE.NUMERIC_STD.ALL;
 entity flag_synchronizer is
    generic
    (
-      RST_ACTIVE : std_logic := '0'
+      RST_ACTIVE_LHC : std_logic := '1';
+      RST_ACTIVE_ROP :std_logic  := '0'
    );
    port 
    (
       wr_clk : in  std_logic;
-      wr_rst : in  std_logic;
+      wr_rst : in  std_logic; -- with lhc_rst
       rd_clk : in  std_logic;
-      rd_rst : in  std_logic;
+      rd_rst : in  std_logic; --with daq_rst
       
       flagi  : in  std_logic;
       busy   : out std_logic;
@@ -50,7 +53,7 @@ begin
    process(wr_clk,wr_rst)
    begin
    
-      if wr_rst = RST_ACTIVE then
+      if wr_rst = RST_ACTIVE_LHC then
          flag_toggle <= '0';
          backward_synchronizer <= (others => '0');
       elsif rising_edge(wr_clk) then
@@ -66,7 +69,7 @@ begin
    process(rd_clk,rd_rst)
    begin
    
-      if rd_rst = RST_ACTIVE then
+      if rd_rst = RST_ACTIVE_ROP then
          toggle_synchronizer <= (others => '0');
       elsif rising_edge(rd_clk) then
          toggle_synchronizer(0) <= flag_toggle;

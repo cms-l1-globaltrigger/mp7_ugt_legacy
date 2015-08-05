@@ -1,6 +1,6 @@
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 14.04
+-- Platform    : Linux Ubuntu 10.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
 -- This work is held in copyright as an unpublished work by HEPHY (Institute
@@ -9,10 +9,10 @@
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
 ---Description: Read-out Process, complex design, Specification and architecture design/implementation.
---             ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
+--             ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to
 --              AMC13..
 --              Please do not change any part of the design without to cousultate Babak, because the main part of design
---              will automated produced and you have to know, what do you do.  
+--              will automated produced and you have to know, what do you do. 
 -- $Date: 2015-06-15 $
 -- $Author: rahbaran $
 -- Warning:  The output dump is not validted systematically based on my .xml concept. If you would like to use the desing, please conatact developer.
@@ -232,7 +232,7 @@ begin
    sync: process(daq_clk,daq_rst)
    begin
    
-      if daq_rst = RST_ACT then
+      if daq_rst = RST_ACT_ROP then
          r <= reg_rst;
          bx_in_event_array <= (others => (others => '0'));
          bx_in_event_0 <= (others => '0');

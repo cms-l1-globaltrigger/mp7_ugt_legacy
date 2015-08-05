@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Synthesizer : ISE 14.2
+-- Synthesizer : ISE 14.6
 -- Platform    : Linux Ubuntu 10.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
@@ -8,11 +8,16 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description:Memory, Specification : Babak, Devopler: Babak, Flo
--- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_amc514/trunk/src/mem/spymem3.vhd $
--- $Date: 2013-10-11 16:00:52 +0200 (Fri, 11 Oct 2013) $
--- $Author: rahbaran $
--- $Revision: 2342 $
+---Description:SPYMEM3 
+-- $HeadURL: $
+-- $Date:  $
+-- $Author: Babak $
+-- Modification : Babak, the bug in the state machine is fixed, generally the memory is working. Please use the validation concept workflow version 0.1 to validate the correct behavior of 
+-- the Design 
+-- 
+-- $Revision: 0.1 $
+--------------------------------------------------------------------------------
+
 
 library ieee;
 use IEEE.std_logic_1164.all;
@@ -27,23 +32,23 @@ use work.gt_mp7_core_pkg.all;
 --use work.rb_pkg.all;
 
 entity spymem3 is
-	generic
+	generic 
 	(
-		SIZE_IN_BYTES : integer := 4096;
-		INPUT_DATA_WIDTH : integer := 16
+	SIZE_IN_BYTES : integer    := 4096;
+	INPUT_DATA_WIDTH : integer := 16
 	);
 	port
 	(
-        ipbus_clk   : in    std_logic;
-        ipbus_rst   : in    std_logic;
-        ipbus_in    : in    ipb_wbus;
-        ipbus_out   : out   ipb_rbus;
-        ------------
+		ipbus_clk   : in    std_logic;
+		ipbus_rst   : in    std_logic;
+		ipbus_in    : in    ipb_wbus;
+		ipbus_out   : out   ipb_rbus;
+
 		lhc_clk          : in std_logic;
 		lhc_rst          : in std_logic;
 		spy_i            : in std_logic;
 		spy_ack_o        : out std_logic;
-
+		
 		rop_clk          : in std_logic;
 		rop_rst          : in std_logic;
 		rop_data_i       : in std_logic_vector(INPUT_DATA_WIDTH-1 downto 0);
@@ -53,25 +58,19 @@ entity spymem3 is
 begin
 	assert(ipbus_in.ipb_wdata'length = 32 )
 		report "Software data width NOT supported!"
-		severity error;
+		severity error; 
 	assert(INPUT_DATA_WIDTH = 16 or INPUT_DATA_WIDTH = 32 or INPUT_DATA_WIDTH = 64)
 		report "Input data width NOT supported!"
-		severity error;
+		severity error; 
 end;
 
 
 architecture arch of spymem3 is
-
+	
 	constant SW_DATA_WIDTH : integer := ipbus_in.ipb_wdata'length;
-	constant SW_ADDR_WIDTH : integer := log2c(SIZE_IN_BYTES/(SW_DATA_WIDTH/8));
-
-	constant INPUT_ADDR_WIDTH : integer := log2c(SIZE_IN_BYTES/(INPUT_DATA_WIDTH/8));
-
--- HB 2014-07-10: changed, because memory wr/rd not ok
--- 	constant READ_LATENCY : integer := 2; -- read latency of the internal ram
--- 	constant READ_LATENCY : integer := 0; -- read latency of the internal ram
--- HB 2014-07-10: READ_LATENCY = 0 => error in synthesis, because of line 351:
--- 			      ipbus_out.ipb_rdata <= data_out(0) when mem_sel_delay_line(READ_LATENCY-1) = '0' else data_out(1);
+	constant SW_ADDR_WIDTH : integer := log2c(SIZE_IN_BYTES/(SW_DATA_WIDTH/8)); 
+	
+	constant INPUT_ADDR_WIDTH : integer := log2c(SIZE_IN_BYTES/(INPUT_DATA_WIDTH/8)); 
 
 	constant READ_LATENCY : integer := 2; -- read latency of the internal ram
 
@@ -83,12 +82,12 @@ architecture arch of spymem3 is
 	signal rec : std_logic;
 	signal rec_addr : std_logic_vector(INPUT_ADDR_WIDTH-1 downto 0);
 	signal rec_addr_nxt : std_logic_vector(INPUT_ADDR_WIDTH-1 downto 0);
-
-	constant SYNC_STAGES : integer := 0;
+	
+	constant SYNC_STAGES : integer := 2;
 
 	signal spy_i_sync : std_logic;
 	signal spy_ack_internal : std_logic;
-
+	
 -- 	signal rd_ack_internal   : std_logic;
 	signal dl_in_rd_ack : std_logic;
 
@@ -98,22 +97,21 @@ begin
 
 	sync_rop_clk : process (rop_clk, rop_rst)
 	begin
--- 		if rop_rst = '0' then
-		if rop_rst = RST_ACT then
-			state <= IDLE;
+		if rop_rst = RST_ACT_ROP then
+			state <= IDLE;	
 			rec_addr <= (others=>'0');
 		elsif rising_edge(rop_clk) then
 			state <= state_nxt;
 			rec_addr <= rec_addr_nxt;
 		end if;
 	end process;
-
-
-
+	
+	
 	spy_i_syncronizer : entity work.delay_line_sl
 		generic map
-		(
-			DELAY => SYNC_STAGES
+		( 
+			DELAY	=> SYNC_STAGES,
+			SPY_IN	=> true
 		)
 		port map
 		(
@@ -123,11 +121,12 @@ begin
 			sig_o => spy_i_sync
 		);
 
-
+	
 	spy_ack_o_syncronizer : entity work.delay_line_sl
 		generic map
-		(
-			DELAY => SYNC_STAGES
+		( 
+			DELAY	=> SYNC_STAGES,
+			SPY_IN	=> false
 		)
 		port map
 		(
@@ -136,107 +135,77 @@ begin
 			sig_i => spy_ack_internal,
 			sig_o => spy_ack_o
 		);
+	
 
-
--- HB 2014-06-25: Generation of "error" for IPBus
     ipbus_out.ipb_err <= '0';
 
--- -- HB 2014-06-25: Generation of "acknowledge" for IPBus
---     process(ipbus_rst, ipbus_clk)
---         variable ack_ctrl : std_logic_vector(1 downto 0);
---     begin
---     if ipbus_rst='1' then
---         ack <= '0';
---         ack_ctrl := "00";
---     elsif rising_edge(ipbus_clk) then
--- --      if ((sel <= 4096) and (sel >= 0)) then  --
---         if ipbus_in.ipb_strobe='1' and ipbus_in.ipb_write='1' then
---             ack <= ipbus_in.ipb_strobe;
---         else
---             case ack_ctrl is
---                 when "00" => ack <= '0';
---                     if ipbus_in.ipb_strobe='1' then
---                         ack <= '1'; ack_ctrl := "01";
---                     end if;
---                 when "01" => ack <= '0'; ack_ctrl := "10";
---                 when "10" => ack <= '0'; ack_ctrl := "11";
---                 when "11" => ack <= '0'; ack_ctrl := "00";
---                 when others =>
---             end case;
---         end if;
---     end if;
---     end process;
---
---     dl_in_rd_ack <= ack;
---
--- 	dl_in_rd_ack <= sw_i.rd_req and sw_i.sel;
     dl_in_rd_ack <= ipbus_in.ipb_strobe;
-
-	dl_rd_ack : entity work.delay_line_sl
+	
+	dl_rd_ack : entity work.delay_line_sl 
 		generic map
 		(
-			DELAY => READ_LATENCY
+			DELAY	=> READ_LATENCY,
+			SPY_IN	=> false
 		)
 		port map
 		(
-            clk => ipbus_clk,
-            rst => ipbus_rst,
-			sig_i => dl_in_rd_ack,
-			sig_o => ipbus_out.ipb_ack
+			clk	=> ipbus_clk,
+			rst	=> ipbus_rst,
+			sig_i	=> dl_in_rd_ack,
+			sig_o	=> ipbus_out.ipb_ack
 		);
-
-	next_state : process(state, rec_addr, spy_i_sync, rop_en_i, rop_packet_end_i)
+	
+	next_state : process(state, rec_addr, spy_i_sync, rop_en_i, rop_packet_end_i, spy_ack_internal) 
 	begin
-		state_nxt <= state;
-		rec_addr_nxt <= rec_addr;
-		rec <= '0';
-		spy_ack_internal <= '0';
-
+-- 		state_nxt <= state; --this is a bug, which occurs a problem with ipbus data out.
+ 		rec_addr_nxt <= rec_addr;
+ 		rec <= '0';
+ 		spy_ack_internal <= '0';
+		
 		case state is
 			when IDLE =>
 				rec_addr_nxt <= (others=>'0');
 				if spy_i_sync = '1' then
-					if rop_en_i = '1' and rop_packet_end_i = '0' then -- there is currently a packet being sent --> wait for it to finish
+					if rop_en_i = '1' and rop_packet_end_i = '0' then -- there is currently a packet being sent --> wait for it to finish 
 						state_nxt <= WAIT_REMAINING_PACKET;
 					else
 						state_nxt <= WAIT_NEW_PACKET;
 					end if;
 				end if;
-
+			
 			when WAIT_REMAINING_PACKET =>
 				if rop_packet_end_i = '1' then -- last packet was sent completely --> wait for new packet (to record)
-					state_nxt <= WAIT_NEW_PACKET;
+					state_nxt <= WAIT_NEW_PACKET; 
 				end if;
-
+				
 			when WAIT_NEW_PACKET =>
 				if rop_en_i = '1' then
 					rec_addr_nxt <= std_logic_vector(unsigned(rec_addr) + 1);
 					rec <= '1';
 					state_nxt <= RECORD_PACKET;
 				end if;
-
-			when RECORD_PACKET =>
+		
+			when RECORD_PACKET => 
 				if rop_en_i = '1' then
 					rec_addr_nxt <= std_logic_vector(unsigned(rec_addr) + 1);
-					rec <= '1';
+					rec <= '1';	
 				end if;
-
+					
 				if rop_packet_end_i = '1' then
 					state_nxt <= COMPLETE;
 				end if;
-
+			
 			when COMPLETE =>
 				spy_ack_internal <= '1';
 				if spy_i_sync = '0' then
 					state_nxt <= IDLE;
 				end if;
-
-			--when others => --case statement is complete
-				--null;
+				
+			when others => 
+			  state_nxt <= IDLE;
 		end case;
 	end process;
-
-
+	
 	INPUT_DATA_WIDTH_16 : if INPUT_DATA_WIDTH = 16 generate
 		asym_ram_16_32 : entity work.ram_asym_2c2w2r
 			generic map
@@ -256,8 +225,8 @@ begin
 				a_addr    => rec_addr,
 				a_wr_data => rop_data_i,
 				a_rd_data => open,
-
-				b_clk   => ipbus_clk,
+				
+				b_clk   => ipbus_clk,	
 				b_en    => '1',
 				b_we    => '0',
 				b_addr  => ipbus_in.ipb_addr(SW_ADDR_WIDTH-1 downto 0),
@@ -265,11 +234,11 @@ begin
 				b_rd_data => ipbus_out.ipb_rdata
 			);
 	end generate;
-
-
-	INPUT_DATA_WIDTH_32 : if INPUT_DATA_WIDTH = 32 generate
+	
+	
+	INPUT_DATA_WIDTH_32 : if INPUT_DATA_WIDTH = 32 generate 
 		ram32 : entity work.ram_2c1w1r
-			generic map
+			generic map 
 			(
 				DATA_WIDTH => 32,
 				SIZE       => 2**SW_ADDR_WIDTH,
@@ -282,22 +251,22 @@ begin
 				wr      => rec,
 				wr_addr => rec_addr,
 				wr_data => rop_data_i,
-
+				
 				rd_clk  => ipbus_clk,
 				rd      => '1',
 				rd_addr => ipbus_in.ipb_addr(SW_ADDR_WIDTH-1 downto 0),
 				rd_data => ipbus_out.ipb_rdata
 			);
 	end generate;
-
-	INPUT_DATA_WIDTH_64 : if INPUT_DATA_WIDTH = 64 generate
+	
+	INPUT_DATA_WIDTH_64 : if INPUT_DATA_WIDTH = 64 generate 
 		--signal mem_sel : std_logic;
 		signal mem_sel_delay_line : std_logic_vector(READ_LATENCY-1 downto 0);
 		type data_out_t is array(0 to 1) of std_logic_vector(31 downto 0);
 		signal data_out : data_out_t;
 	begin
 		ram32_1 : entity work.ram_2c1w1r
-			generic map
+			generic map 
 			(
 				DATA_WIDTH => 32,
 				SIZE       => 2**(SW_ADDR_WIDTH-1),
@@ -310,15 +279,15 @@ begin
 				wr      => rec,
 				wr_addr => rec_addr,
 				wr_data => rop_data_i(31 downto 0),
-
+				
 				rd_clk  => ipbus_clk,
 				rd      => '1',
 				rd_addr => ipbus_in.ipb_addr(SW_ADDR_WIDTH-1 downto 1),
 				rd_data => data_out(0)
 			);
-
+			
 		ram32_2 : entity work.ram_2c1w1r
-			generic map
+			generic map 
 			(
 				DATA_WIDTH => 32,
 				SIZE       => 2**(SW_ADDR_WIDTH-1),
@@ -331,14 +300,14 @@ begin
 				wr      => rec,
 				wr_addr => rec_addr,
 				wr_data => rop_data_i(63 downto 32),
-
+				
 				rd_clk  => ipbus_clk,
 				rd      => '1',
 				rd_addr => ipbus_in.ipb_addr(SW_ADDR_WIDTH-1 downto 1),
 				rd_data => data_out(1)
 			);
-
-
+			
+				
 			mem_sel : process (ipbus_clk, ipbus_rst)
 			begin
 				if ipbus_rst = '1' then
@@ -347,12 +316,12 @@ begin
 					mem_sel_delay_line <= mem_sel_delay_line(READ_LATENCY-2  downto 0) & ipbus_in.ipb_addr(0);
 				end if;
 			end process;
-
+			
 			ipbus_out.ipb_rdata <= data_out(0) when mem_sel_delay_line(READ_LATENCY-1) = '0' else data_out(1);
-
+			
 	end generate;
 
-
+		
 
 end architecture;
 

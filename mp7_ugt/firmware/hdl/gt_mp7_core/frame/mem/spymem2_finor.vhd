@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Synthesizer : ISE 14.2
+-- Synthesizer : ISE 14.6
 -- Platform    : Linux Ubuntu 10.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
@@ -8,11 +8,15 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description:Memory, Specification : Babak, Devopler: Babak, Flo
--- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_amc514/trunk/src/mem/spymem2_finor.vhd $
--- $Date: 2013-10-11 16:00:52 +0200 (Fri, 11 Oct 2013) $
--- $Author: rahbaran $
--- $Revision: 2342 $
+---Description:SPYMEM 2 FINOR
+-- $HeadURL: $
+-- $Date:  $
+-- $Author: Babak $
+-- Modification : Babak, the deisgn has a bug and it does not working correctly at hardware. The problem is fixed, but it is decided to use coregenerator version 
+-- 
+-- $Revision: 0.1 $
+--------------------------------------------------------------------------------
+
 
 library ieee;
 use IEEE.std_logic_1164.all;
@@ -61,13 +65,11 @@ architecture arch of spymem2_finor is
 	signal spy_we      : std_logic;
 	signal finor_i_slv : std_logic_vector (0 downto 0);
 		
--- HB 2014-07-10: changed, because memory wr/rd not ok
 -- 	constant READ_LATENCY : integer := 2; -- read latency of the internal ram
 	constant READ_LATENCY : integer := 0; -- read latency of the internal ram
 
 	signal dl_in_rd_ack : std_logic;
 
--- 	signal ack : std_logic;
 
 begin
 
@@ -109,34 +111,9 @@ begin
 		  b_rd_data => ipbus_out.ipb_rdata
 		);
 	
--- HB 2014-06-25: Generation of "error" for IPBus
     ipbus_out.ipb_err <= '0';
 
--- -- HB 2014-06-25: Generation of "acknowledge" for IPBus
---     process(ipbus_rst, ipbus_clk)
---         variable ack_ctrl : std_logic_vector(1 downto 0);
---     begin
---     if ipbus_rst='1' then
---         ack <= '0';
---         ack_ctrl := "00";
---     elsif rising_edge(ipbus_clk) then
--- --      if ((sel <= 4096) and (sel >= 0)) then  --
---         if ipbus_in.ipb_strobe='1' and ipbus_in.ipb_write='1' then
---             ack <= ipbus_in.ipb_strobe;
---         else
---             case ack_ctrl is
---                 when "00" => ack <= '0';
---                     if ipbus_in.ipb_strobe='1' then
---                         ack <= '1'; ack_ctrl := "01";
---                     end if;
---                 when "01" => ack <= '0'; ack_ctrl := "10";
---                 when "10" => ack <= '0'; ack_ctrl := "11";
---                 when "11" => ack <= '0'; ack_ctrl := "00";
---                 when others =>
---             end case;
---         end if;
---     end if;
---     end process;
+
 -- 
 	gen_bx_addr : process (bx_nr, spy_we, bx_addr)
 	begin 

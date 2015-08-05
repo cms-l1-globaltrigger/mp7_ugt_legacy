@@ -8,13 +8,13 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description: Register Bank, Thomas
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/firmware/hdl/gt_mp7_core/frame/rb/rb.vhd $
--- $Date: 2015-05-13 12:29:43 +0200 (Wed, 13 May 2015) $
--- $Author: wittmann $
--- $Revision: 3937 $
-
--- HB 2014-05-26: changed to IPBus
+---Description:Lane Mapping Process, Developer Babak, Markus
+-- $HeadURL: $
+-- $Date:  $
+-- $Author: ?$
+-- Modification : Babak
+-- $Revision: 0.1 $
+--------------------------------------------------------------------------------
 
 library ieee;
 use IEEE.std_logic_1164.all;
@@ -31,7 +31,7 @@ entity rb is
 --     generic(
 --         addr_width : natural := 12
 --     );
-	port
+	port 
 	(
 		sys_clk           : in std_logic;
 		lhc_clk           : in std_logic;
@@ -45,7 +45,7 @@ entity rb is
 		-- data interface for fpga access
 		sw_regs_in  : out sw_regs_in_t; -- sw registers written via software(uhal) and read by the fpga(Ipbus:frame_fabric)
 		sw_regs_out : in sw_regs_out_t  -- sw registers read via software(uhal) and written by the fpga(Ipbus:frame_fabric)
-	);
+	); 
 end;
 
 architecture arch of rb is
@@ -100,23 +100,9 @@ architecture arch of rb is
 	constant OFFSET_ROP_BUSY_RESET_EVENT : std_logic_vector(rb_addr_width-1 downto 0) := X"22C";
 	constant OFFSET_ROP_PAYLOAD : std_logic_vector(rb_addr_width-1 downto 0) := X"230";
 
--- STAT registers
--- 	constant OFFSET_SPYTRIGGER_STATUS : std_logic_vector(rb_addr_width-1 downto 0) := X"b08"; -- address (X"308" or X"800") - X"800" top part of address range
--- 	constant OFFSET_DM_STATUS : std_logic_vector(rb_addr_width-1 downto 0) := X"840"; -- address (X"040" or X"800") - X"800" top part of address range
--- 	constant OFFSET_TCM_STATUS_BX_NR : std_logic_vector(rb_addr_width-1 downto 0) := X"90c"; -- address (X"10c" or X"800") - X"800" top part of address range
--- 	constant OFFSET_TCM_STATUS_EVENT_NR : std_logic_vector(rb_addr_width-1 downto 0) := X"918";
--- 	constant OFFSET_TCM_STATUS_TRIGGER_NR_L : std_logic_vector(rb_addr_width-1 downto 0) := X"930";
--- 	constant OFFSET_TCM_STATUS_TRIGGER_NR_H : std_logic_vector(rb_addr_width-1 downto 0) := X"934";
--- 	constant OFFSET_TCM_STATUS_ORBIT_NR_L : std_logic_vector(rb_addr_width-1 downto 0) := X"910";
--- 	constant OFFSET_TCM_STATUS_ORBIT_NR_H : std_logic_vector(rb_addr_width-1 downto 0) := X"914";
--- 	constant OFFSET_TCM_STATUS_BX_NR_CHK : std_logic_vector(rb_addr_width-1 downto 0) := X"91c";
--- 	constant OFFSET_TCM_STATUS_BX_NR_MAX : std_logic_vector(rb_addr_width-1 downto 0) := X"920";
--- 	constant OFFSET_TCM_STATUS_ERR_DET : std_logic_vector(rb_addr_width-1 downto 0) := X"924";
--- 	constant OFFSET_TCM_STATUS_BX_NR_D_FDL : std_logic_vector(rb_addr_width-1 downto 0) := X"92c";
--- 	constant OFFSET_TCM_LIMINOSITY_SEG_NR : std_logic_vector(rb_addr_width-1 downto 0) := X"904";
--- 	constant OFFSET_ROP_STATUS : std_logic_vector(rb_addr_width-1 downto 0) := X"A28";
 
--- HB 2014-07-10: changed status register addresses
+
+-- BR 2015-05-10: changed status register addresses
 	constant OFFSET_SPYTRIGGER_STATUS : std_logic_vector(rb_addr_width-1 downto 0) := X"000";
 	constant OFFSET_DM_STATUS : std_logic_vector(rb_addr_width-1 downto 0) := X"001";
 	constant OFFSET_TCM_STATUS_BX_NR : std_logic_vector(rb_addr_width-1 downto 0) := X"002";
@@ -138,19 +124,6 @@ architecture arch of rb is
 -- 	signal stat_reg: ipb_reg_v(2 ** rb_addr_width - 1 downto 0);
 -- 	signal ctrl_reg: ipb_reg_v(2 ** rb_addr_width - 1 downto 0);
 
- -- signals for event registers
--- HB 2014-07-09: changed event register (not working) to "in-register"
--- 	signal l1asim_fire_once_event_int : std_logic;
--- 	signal spytrigger_spy12_once_event_int : std_logic;
--- 	signal spytrigger_spy12_next_event_int : std_logic;
--- 	signal spytrigger_spy3_event_int : std_logic;
--- 	signal spytrigger_clear_spy12_ready_event_int : std_logic;
--- 	signal spytrigger_clear_spy3_ready_event_int : std_logic;
--- 	signal spytrigger_clear_spy12_error_event_int : std_logic;
--- 	signal tcm_err_det_reset_event_int : std_logic;
--- 	signal tcm_bgos_event_int : std_logic;
--- 	signal rop_busy_reset_event_int : std_logic;
--- 	signal sw_reset_reset_event_int : std_logic;
 
 begin
 
@@ -170,11 +143,11 @@ begin
 
 	rb_i: entity work.ipbus_syncreg_v
 		generic map(
----- HB 2014-07-04: bug fixed region for status register
+---- BR 2015-05-04: bug fixed region for status register 
 -- 			N_CTRL => 2 ** rb_addr_width,
 -- 			N_STAT => 2 ** rb_addr_width
 			N_CTRL => 2 ** (rb_addr_width-1),
--- HB 2014-07-10: changed status register addresses
+-- BR 2015-05-04:: changed status register addresses
 -- 			N_STAT => 2 ** (rb_addr_width-1)
 			N_STAT => 14
 		)
@@ -183,8 +156,8 @@ begin
 			rst => sys_rst,
 			ipb_in => data_acc_in,
 			ipb_out => data_acc_out,
-			slv_clk => lhc_clk,
----- HB 2014-07-04: bug fixed region for status register
+			slv_clk => lhc_clk, 
+---- BR 2015-05-04:: bug fixed region for status register 
 -- 			d => stat_reg(2 ** rb_addr_width - 1 downto 0),
 -- 			q => ctrl_reg(2 ** rb_addr_width - 1 downto 0)
 			d => stat_reg(13 downto 0),
@@ -206,11 +179,11 @@ begin
 -- l1asim
 	sw_regs_in.l1asim.enable_l1a_sim <= ctrl_reg(to_integer(unsigned(OFFSET_L1ASIM_CONFIG)))(0);
 -- **********************
--- HB 2014-06-26: event register implementation - has to be checked in HW !!!
+-- BR 2015-05-04:: event register implementation - has to be checked in HW !!!
 -- 	l1asim_fire_once_event_int <= not l1asim_fire_once_event_int when ctrl_reg(to_integer(unsigned(OFFSET_L1ASIM_CONFIG)))(1) = '1' else l1asim_fire_once_event_int;
 -- 	sw_regs_in.l1asim.fire_once_event <= l1asim_fire_once_event_int;
 
--- HB 2014-07-09: changed event register (not working) to "in-register"
+--BR 2015-05-04:: changed event register (not working) to "in-register"
 	sw_regs_in.l1asim.fire_once_event <= ctrl_reg(to_integer(unsigned(OFFSET_L1ASIM_CONFIG)))(1);
 -- **********************
 	sw_regs_in.l1asim.cntrl <= ctrl_reg(to_integer(unsigned(OFFSET_L1ASIM_CONFIG)))(3 downto 2);
@@ -246,7 +219,7 @@ begin
 -- 	spytrigger_clear_spy12_error_event_int <= not spytrigger_clear_spy12_error_event_int when ctrl_reg(to_integer(unsigned(OFFSET_SPYTRIGGER_CONTROL)))(5) = '1' else spytrigger_clear_spy12_error_event_int;
 -- 	sw_regs_in.spytrigger.clear_spy12_error_event <= spytrigger_clear_spy12_error_event_int;
 
--- HB 2014-07-09: changed event register (not working) to "in-register"
+-- BR 2015-05-04:: changed event register (not working) to "in-register"
 	sw_regs_in.spytrigger.spy12_once_event <= ctrl_reg(to_integer(unsigned(OFFSET_SPYTRIGGER_CONTROL)))(0);
 	sw_regs_in.spytrigger.spy12_next_event <= ctrl_reg(to_integer(unsigned(OFFSET_SPYTRIGGER_CONTROL)))(1);
 	sw_regs_in.spytrigger.spy3_event <= ctrl_reg(to_integer(unsigned(OFFSET_SPYTRIGGER_CONTROL)))(2);
@@ -259,7 +232,7 @@ begin
 -- 	sw_reset_reset_event_int <= not sw_reset_reset_event_int when ctrl_reg(to_integer(unsigned(OFFSET_SW_RESET_RESET_EVENT)))(0) = '1' else sw_reset_reset_event_int;
 -- 	sw_regs_in.sw_reset.reset_event <= sw_reset_reset_event_int;
 
--- HB 2014-07-09: changed event register (not working) to "in-register"
+-- BR 2015-05-04: changed event register (not working) to "in-register"
 	sw_regs_in.sw_reset.reset_event <= ctrl_reg(to_integer(unsigned(OFFSET_SW_RESET_RESET_EVENT)))(0);
 
 -- dm
@@ -284,7 +257,7 @@ begin
 -- 	tcm_bgos_event_int <= not tcm_bgos_event_int when ctrl_reg(to_integer(unsigned(OFFSET_TCM_BGOS_EVENT)))(0) = '1' else tcm_bgos_event_int;
 -- 	sw_regs_in.tcm.bgos_event <= tcm_bgos_event_int;
 
--- HB 2014-07-09: changed event register (not working) to "in-register"
+-- BR 2015-05-04: changed event register (not working) to "in-register"
 	sw_regs_in.tcm.err_det_reset_event <= ctrl_reg(to_integer(unsigned(OFFSET_TCM_ERR_DET_RESET_EVENT)))(0);
 	sw_regs_in.tcm.bgos_event <= ctrl_reg(to_integer(unsigned(OFFSET_TCM_BGOS_EVENT)))(0);
 -- **********************
@@ -294,7 +267,7 @@ begin
 
 -- rop
 	sw_regs_in.rop.version <= ctrl_reg(to_integer(unsigned(OFFSET_ROP_VERSION)))(31 downto 0);
-	sw_regs_in.rop.module_id <= ctrl_reg(to_integer(unsigned(OFFSET_ROP_BOARDID)))(15 downto 0);
+	sw_regs_in.rop.BoardID <= ctrl_reg(to_integer(unsigned(OFFSET_ROP_BOARDID)))(15 downto 0);
 	sw_regs_in.rop.total_bx_in_event_decision <= ctrl_reg(to_integer(unsigned(OFFSET_ROP_TOTAL_BX_IN_EVENT_DECISION)))(3 downto 0);
 	sw_regs_in.rop.total_bx_in_event_ext_cond <= ctrl_reg(to_integer(unsigned(OFFSET_ROP_TOTAL_BX_IN_EVENT_EXT_COND)))(3 downto 0);
 	sw_regs_in.rop.total_bx_in_event_gmt <= ctrl_reg(to_integer(unsigned(OFFSET_ROP_TOTAL_BX_IN_EVENT_GMT)))(3 downto 0);
@@ -308,7 +281,7 @@ begin
 -- 	rop_busy_reset_event_int <= not rop_busy_reset_event_int when ctrl_reg(to_integer(unsigned(OFFSET_ROP_BUSY_RESET_EVENT)))(0) = '1' else rop_busy_reset_event_int;
 -- 	sw_regs_in.rop.busy_reset_event <= tcm_bgos_event_int;
 
--- HB 2014-07-09: changed event register (not working) to "in-register"
+-- BR 2015-05-04:: changed event register (not working) to "in-register"
 	sw_regs_in.rop.busy_reset_event <= ctrl_reg(to_integer(unsigned(OFFSET_ROP_BUSY_RESET_EVENT)))(0);
 -- **********************
 	sw_regs_in.rop.Payload <= ctrl_reg(to_integer(unsigned(OFFSET_ROP_PAYLOAD)))(19 downto 0);

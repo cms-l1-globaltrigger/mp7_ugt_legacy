@@ -8,13 +8,14 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description:Memory, Specification : Babak, Devopler: Babak, Flo
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/mem/delay_line_sl.vhd $
--- $Date: 2014-07-02 14:05:41 +0200 (Wed, 02 Jul 2014) $
--- $Author: bergauer $
--- $Revision: 3006 $
-
--- HB 2014-05-07: changed code (from gt_amc514) for use with IPBus in MP7
+---Description:Lane Mapping Process, Developer Babak, Markus
+-- $HeadURL: $
+-- $Date:  $
+-- $Author: Babak $
+-- Modification :  
+--    1) modification for different reset, lhc reset as well as IPbus reset is active high, and the reset is active low.
+-- $Revision: 0.1 $
+--------------------------------------------------------------------------------
 
 library ieee;
 use IEEE.std_logic_1164.all;
@@ -28,12 +29,13 @@ use work.math_pkg.all;
 entity delay_line_sl is
 	generic
 	(
-		DELAY : integer := 0
+		DELAY : integer := 0;
+		SPY_IN: boolean := false
 	);
 	port
 	(
 		clk   : in  std_logic;
-		rst   : in  std_logic;
+		rst   : in  std_logic; --with rst   => rop_rst in spymem3
 		sig_i : in  std_logic;
 		sig_o : out std_logic
 	);
@@ -46,7 +48,47 @@ begin
 		sig_o <= sig_i;
 	end generate;
 	
-	DELAY_1 : if DELAY = 1 generate
+  FOR_SPY_IN_i: if SPY_IN = true generate 
+  -- for SYP_i   rst   => rop_rst
+  begin
+  
+  	DELAY_1 : if DELAY = 1 generate
+		signal reg : std_logic;
+	begin
+		gen_DELAY : process(clk, rst)
+		begin
+			if rst = RST_ACT_ROP then
+				reg <= '0';
+			elsif rising_edge(clk) then
+				reg <= sig_i;
+			end if;
+		end process;
+		sig_o  <= reg;
+	end generate;
+	
+	DELAY_GR_1 : if DELAY > 1 generate
+		signal delay_line : std_logic_vector(DELAY-1 downto 0); 
+	begin
+		gen_DELAY : process(clk, rst)
+		begin
+			if rst = RST_ACT_ROP then
+				delay_line <= (others=>'0');
+			elsif rising_edge(clk) then
+				delay_line <= delay_line(DELAY-2 downto 0) & sig_i;
+			end if;
+		end process;
+	
+		sig_o  <= delay_line(DELAY-1);
+	end generate;
+
+  
+  end generate  FOR_SPY_IN_i;
+  
+  FOR_SPY_ACK_i: if SPY_IN = false generate 
+  -- for SPY_ACK  rst   => lhc_rst,
+    
+  begin
+     	DELAY_1 : if DELAY = 1 generate
 		signal reg : std_logic;
 	begin
 		gen_DELAY : process(clk, rst)
@@ -73,7 +115,9 @@ begin
 		end process;
 	
 		sig_o  <= delay_line(DELAY-1);
-	end generate;
+	end generate; 
+  end generate  FOR_SPY_ACK_i;
+	
 
 end architecture;
 

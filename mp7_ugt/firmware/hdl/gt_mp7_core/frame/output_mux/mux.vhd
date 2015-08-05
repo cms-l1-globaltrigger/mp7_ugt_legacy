@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 -- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 14.04
+-- Platform    : Linux Ubuntu 10.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
 -- This work is held in copyright as an unpublished work by HEPHY (Institute
@@ -8,11 +8,12 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description: Mux
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/tdf_mp7/trunk/src/tdf_mp7_core/mux/mux.vhd $
--- $Date: 2014-11-17 18:19:16 +0100 (Mon, 17 Nov 2014) $
--- $Author: wittmann $
--- $Revision: 3435 $
+---Description:Lane Mapping Process, Developer Babak, Markus
+-- $HeadURL: $
+-- $Date:  $
+-- $Author:Babak  $
+-- $Revision: 0.1 $
+--------------------------------------------------------------------------------
 
 library ieee;
 use IEEE.std_logic_1164.all;
@@ -34,10 +35,9 @@ entity mux is
         in4    : in lword;
         in5    : in lword;
         -- select signal
---      JW - 18.12.2014 put frame_counter code into mux
 --      sel    : in std_logic_vector(2 downto 0);
 		-- output
-		mux_out   : out lword
+	mux_out   : out lword
 	);
 end mux;
 
@@ -89,7 +89,7 @@ begin
 	sync : process(clk)
 	begin
 		if rising_edge(clk) then
-			mux_out <= s_out;
+		mux_out <= s_out;
 		end if;
 	end process;
 

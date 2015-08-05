@@ -8,14 +8,15 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description:Memory, Specification : Babak, Devopler: Babak, Flo
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/mem/spymem2_algos.vhd $
--- $Date: 2014-07-15 12:31:21 +0200 (Tue, 15 Jul 2014) $
--- $Author: rahbaran $
--- $Revision: 3050 $
+---Description:SPYMEM 2 for algos.
+-- $HeadURL: $
+-- $Date:  $
+-- $Author: Babak $
+-- Modification : Babak, the deisgn has a bug and it does not working correctly at hardware. The problem is fixed, but it is decided to use coregenerator version 
+-- 
+-- $Revision: 0.1 $
+--------------------------------------------------------------------------------
 
--- HB 2014-07-08: ipbus_rst is high active, therefore changed in processes
--- HB 2014-05-07: changed code (from gt_amc514) for use with IPBus in MP7
 
 library ieee;
 use IEEE.std_logic_1164.all;
@@ -60,7 +61,6 @@ architecture arch of spymem2_algos is
 	
 	constant SW_DATA_WIDTH : integer := 32;
 	constant MEMORY_BLOCKS : integer := MAX_NR_ALGOS/SW_DATA_WIDTH;
--- HB 2014-07-10: changed, because memory wr/rd not ok
 -- 	constant READ_LATENCY : integer := 2; -- read latency of the internal ram
 	constant READ_LATENCY : integer := 0; -- read latency of the internal ram
 	
@@ -101,7 +101,7 @@ begin
 			generic map 
 			(
 				DATA_WIDTH => SW_DATA_WIDTH,
--- HB 2014-06-11: what's that ???
+--  what's that ???
 				SIZE       => 2**log2c(BUNCHES_PER_ORBIT),
 				USE_OUTPUT_REGISTER => true
 			)
@@ -149,34 +149,7 @@ begin
 -- Generation of "error" for IPBus
     ipbus_out.ipb_err <= '0';
 
--- -- HB 2014-05-07: Generation of "acknowledge" for IPBus
---     process(ipbus_rst, ipbus_clk)
---         variable ack_ctrl : std_logic_vector(1 downto 0);
---     begin
---     if ipbus_rst='1' then
---         ack <= '0';
---         ack_ctrl := "00";
---     elsif rising_edge(ipbus_clk) then
--- --      if ((sel <= 4096) and (sel >= 0)) then  --
---         if ipbus_in.ipb_strobe='1' and ipbus_in.ipb_write='1' then
---             ack <= ipbus_in.ipb_strobe;
---         else
---             case ack_ctrl is
---                 when "00" => ack <= '0';
---                     if ipbus_in.ipb_strobe='1' then
---                         ack <= '1'; ack_ctrl := "01";
---                     end if;
---                 when "01" => ack <= '0'; ack_ctrl := "10";
---                 when "10" => ack <= '0'; ack_ctrl := "11";
---                 when "11" => ack <= '0'; ack_ctrl := "00";
---                 when others =>
---             end case;
---         end if;
---     end if;
---     end process;
--- 
---     dl_in_rd_ack <= ack;
---     
+
     dl_in_rd_ack <= ipbus_in.ipb_strobe;
 	
 	dl_rd_ack : entity work.delay_line_sl 
@@ -206,8 +179,6 @@ begin
 			sig_o => mem_sel
 		);
 	
--- HB 2014-06-11: removed ipbus_clk from list - not used in process
--- 	data_out_mux : process (mem_sel, data_out_array, ipbus_clk)
 	data_out_mux : process (mem_sel, data_out_array)
 	begin
 
@@ -226,7 +197,6 @@ begin
 	begin
 		sync_ipbus_clk : process (ipbus_clk, ipbus_rst)
 		begin
--- HB 2014-07-08: ipbus_rst is high active, therefore changed in processes
 -- 			if ipbus_rst = '0' then
             if ipbus_rst = '1' then
                 ipbus_out.ipb_rdata <= (others=>'0');

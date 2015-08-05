@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
 -- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
+-- Platform    : Linux Ubuntu 14.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
 -- This work is held in copyright as an unpublished work by HEPHY (Institute
@@ -8,59 +8,22 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/trunk/uGT_algos/firmware/hdl/gt_mp7_core/frame/frame.vhd $
--- $Date: 2015-06-15 17:07:35 +0200 (Mon, 15 Jun 2015) $
--- $Author: wittmann $
--- $Revision: 4039 $
+-- $HeadURL: s $
+-- $Date: 2015-02-27 10:46:07 +0100 (Fri, 27 Feb 2015) $
+-- $Author: Babak $
+-- $Revision:  $
 --------------------------------------------------------------------------------
 
 -- Description: contains the "framework" of GT-logic (all parts, except GTL and FDL)
--- JW 2015-02-24: v0.0.16 - based on v0.0.15, but added a pulse reg and connected its output to reset logic
+-- BR 2015-06-11: v0.1.4  changed ROP for 32-bits and usage of 40Mhz clock domain for calculation the data
+-- BR 2015-05-07: new concpept for simulation the design and especially for ROP. The concept is based on modularity by using new input ports. The case now is for ROP, which is should be extended for ugt payload.
+-- BR 2015-05-29: changed the ports for simulation desing concept
+-- BR 2015-05-19: v0.0.17 - based on v0.0.16, but an output_mux for sending algo & finor data to tx buffer and to the links
+-- BR 2015-05-24: v0.0.16 - based on v0.0.15, but added a pulse reg and connected its output to reset logic
+-- BR 2015-05-1 :"Milestone" : lhc_rst is for doing the reset the counter in tcm module. It is implmented as resgister, which later should be re-implemented as event register.
 -- HB 2015-02-05: v0.0.13 - based on v0.0.12, but cleaned up the code and changed demux_lane_data (removed port del_a).
 -- BR: 04.02.2015 Delay Manager out put was zero, becaue lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package. frame version 0.0.12
 -- BR 2015-02-03: "bcres_d" is used, which commes from DM, frame version 0.0.11
--- HB 2015-01-19: v0.0.10 - based on v0.0.24 from ../branches/hb_dev_1_4_1_r1, but merged to trunk
-
--- ******************************************
--- Development in ../branches/hb_dev_1_4_1_r1
--- HB 2014-12-12: v0.0.24: based on v0.0.21 and v0.0.8, used demux_lane_data from frame v0.0.8.
--- HB 2014-11-25: v0.0.21: based on v0.0.18, but used lmp.vhd for adapted muon lane data.
--- HB 2014-11-18: v0.0.20: based on v0.0.18, but gt_mp7.ucf not used in makefile. 16 lanes used, N_REGION = 9 (in top_decl.vhd) used for tests, because of timing errors. UCF file, mp7.ucf
---                         in customized_mp7_1_4_0 changed for N_REGION = 9 and for "align".
--- HB 2014-11-12: v0.0.19: based on v0.0.18, but new assignment for lanes (because of timing and placing problems).
--- HB 2014-10-30: v0.0.18: based on v0.0.16, but bug fixed at SPY2_FINOR input (used local_finor_with_veto_2_spy2 in this version). FDL v0.0.4 used.
---                         Added gt_mp7.ucf to makefile. Edited gt_mp7.ucf and inserted AREA_GROUP constraints for demux_lane_data.
--- HB 2014-10-30: v0.0.17: DO NOT USE !!! created only for tests - based on v0.0.16, but bug fixed at SPY2_FINOR input (used local_finor_with_veto_2_spy2 in this version) and
---                         implemented new data structure (lhc_data_2_spy1) to SPY1 (bypassed dm.vhd) to find ext-cond error (in SPY1). FDL v0.0.4 used.
--- HB 2014-10-29: v0.0.16: based on v0.0.15, but changed demux_lane_data.vhd logic and the implemantation for the lanes (and demux_lane_adjust_regs) in frame.vhd.
--- HB 2014-10-23: v0.0.15: based on v0.0.14, but "local_veto_rop" added ("finor_rop" = '0', not used anymore). Removed status test register.
--- HB 2014-10-07: v0.0.14: based on v0.0.13, but used output register (LHC clock domain) in demux_lane_data.vhd.
--- HB 2014-09-26: v0.0.13: based on v0.0.12, but used fix value of 16 instead of NR_LANES for demux_lane_data loop and lmp.
--- HB 2014-09-24: v0.0.12: based on v0.0.8, but extended demux_lane_adjust for 16 lanes and implemented data suppression in demux_lane_data.vhd.
--- HB 2014-09-23: v0.0.11: based on v0.0.8, but changed code of demux_lane_data.vhd - DID NOT WORK!!!
--- [HB 2014-09-23: v0.0.10 (BR) demux_lane_data.vhd without adjust]
--- [HB 2014-09-23: v0.0.9 (HB) did not work!!!]
--- ******************************************
-
--- ******************************************
--- Development in ../branches/1_4_1
--- BR 2014-12-09: v0.0.9 - changed demux_lane_data to data_demux.
--- BR:21-11-2014 TOP_SERIAL_VENDOR is not mor relevant, because in future we will read from hardware over ipmi just MAC address
--- ******************************************
-
--- HB 2014-09-09: v0.0.8: based on v0.0.7, but GTL and FDL firmware major, minor and revision versions moved to gt_mp7_core_pkg.vhd (GTL_FW_MAJOR_VERSION, etc.)
---                for creating a tag name by a script independent from L1Menu.
--- HB 2014-09-02: v0.0.7: based on v0.0.4, but added external-conditions data in lmp. Added bcres_d_FDL_int to tp.
--- HB 2014-08-28: v0.0.6: same as v0.0.5, but used bx_nr_d_spy2 for generating of spy2 in spytrigger.vhd - ATTENTION: this is only for tests with spy2, for tests with spy1 this delay might be different!!!
---                DO NOT USE, did not work porperly!
--- HB 2014-08-27: v0.0.5: test version with register for delay for spy-address of spy2 (see also: dm.vhd, rb.vhd, rb_pkg.vhd and tcm.vhd).
---                DO NOT USE, did not work porperly!
--- HB 2014-08-26: v0.0.4: test version with spy2_algos and spy2_finor instantiated with ipb_dpmem_4096_32 modules, too.
--- HB 2014-08-21: v0.0.3: test version with simspymem instantiated with ipb_dpmem_4096_32 modules
--- HB 2014-07-08: ipbus_rst is high active, RST_ACT changed to '1' (for lhc_rst [in gt_mp7_core_pkg.vhd]) to get proper reset-conditions,
---                because in delay_line_sl.vhd and delay_line_slv.vhd both resets are used !!!
--- BR 2014-07-16 :"Milestone" : lhc_rst is for doing the reset the counter in tcm module. It is implmented as resgister, which later should be re-implemented as event register.
---               :Framework version v0.0.2
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -76,36 +39,53 @@ use work.rb_pkg.all;
 
 entity frame is
     generic(
-        NR_LANES: positive
-    );
+        NR_LANES			: positive;
+        SIMULATE_DATAPATH	        : boolean := false
+     );
     port(
-        ipb_clk: in std_logic;
-        ipb_rst: in std_logic;
-        ipb_in: in ipb_wbus;
-        ipb_out: out ipb_rbus;
--- ==========================================================================
-        clk240: in std_logic;
-        lhc_clk: in std_logic;
-        lhc_rst_o: out std_logic;
-        bc0: in std_logic;
-        l1a: in std_logic;
--- HB 2014-06-05: to get bgo_cmd, mp7_ttc must be changed ("cmd" as outputs)
--- 		bgo_cmd: in std_logic_vector(7 downto 0);
-        bcres_d_FDL: out std_logic;
-        bx_nr_d_FDL: out std_logic_vector (11 downto 0);
-		start_lumisection : out std_logic;
-		tp: out std_logic_vector (3 downto 0);
-        lane_data_in:  in  ldata(NR_LANES-1 downto 0);
-        lane_data_out: out ldata(NR_LANES-1 downto 0);
-        dsmux_lhc_data_o: out lhc_data_t;
-        fdl_status          : in std_logic_vector(3 downto 0);
+        ipb_clk			: in std_logic;
+        ipb_rst			: in std_logic;
+        ipb_in			: in ipb_wbus;
+        ipb_out			: out ipb_rbus;
+-- ====================Simulator interface===============================
+        lane_data_in_sim	: in lhc_data_t;
+        lhc_rst_sim		: in std_logic;
+        rop_rst_sim		: in std_logic;
+      -- tcm interface
+      	trigger_nr_sim		: in  trigger_nr_t;
+      	orbit_nr_sim		: in  orbit_nr_t;
+      	bx_nr_sim		: in  bx_nr_t;
+      	luminosity_seg_nr_sim	: in  luminosity_seg_nr_t;
+      	event_nr_sim		: in  event_nr_t;
+	-- L1A
+	l1a_sim   		: in  std_logic;
+	--DAQ
+	daq_oe_sim    		: out std_logic;
+      	daq_stop_sim  		: out std_logic;
+      	daq_data_sim            : out std_logic_vector(DAQ_INPUT_WIDTH-1 downto 0);
+
+-- ====================end of Simulator interface========================   
+        clk240			: in std_logic;
+        lhc_clk			: in std_logic;
+        lhc_rst_o		: out std_logic;
+        bc0			: in std_logic;
+        l1a			: in std_logic;
+-- 	bgo_cmd: in std_logic_vector(7 downto 0);
+        bcres_d_FDL		: out std_logic;
+        bx_nr_d_FDL		: out std_logic_vector (11 downto 0);
+	start_lumisection 	: out std_logic;
+	tp			: out std_logic_vector (3 downto 0);
+        lane_data_in		: in ldata(NR_LANES-1 downto 0);
+        lane_data_out		: out ldata(NR_LANES-1 downto 0);
+        dsmux_lhc_data_o	: out lhc_data_t;
+        fdl_status          	: in std_logic_vector(3 downto 0);
         prescale_factor_set_index_rop : in std_logic_vector(7 downto 0);
         algo_before_prescaler_rop     : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_finor_mask_rop     : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-        local_finor_rop     : in std_logic;
-        local_veto_rop      : in std_logic;
-        finor_rop           : in std_logic;
+        local_finor_rop     	: in std_logic;
+        local_veto_rop      	: in std_logic;
+        finor_rop           	: in std_logic;
         local_finor_with_veto_2_spy2 : in std_logic
     );
 
@@ -114,7 +94,6 @@ end frame;
 architecture rtl of frame is
 
 -- ================================================================================================
--- HB 2014-05-30: "1" means NO reset - STRANGE !!! (See rb.vhd ==> "lhc2sys_in_sync : process ...")
 -- insert reset logic similar to gt_amc514 to get proper reset conditions !!!
 --     signal lhc_rst : std_logic := '1';
     signal lhc_rst : std_logic;
@@ -157,30 +136,30 @@ architecture rtl of frame is
     signal lmp_lhc_data_o   : lhc_data_t; -- lhc_data output of lane mapping process
     signal dm_lhc_data_o    : lhc_data_t; -- lhc_data output of delay manager
     signal dsmux_lhc_data_int : lhc_data_t; -- lhc_data output of dsmux
-	signal dsmux_lhc_data_valid : std_logic;
+    signal dsmux_lhc_data_valid : std_logic;
     signal lmp_lhc_data_valid_o   : std_logic;
     signal dm_lhc_data_valid_o   : std_logic;
 
-	signal bcres             : std_logic; -- NOT USED, "bc0" of mp7_ttc is used instead of "bcres"
-	signal bcres_d           : std_logic; -- delayed version of bcres NOT USED
-	signal bcres_d_FDL_int   : std_logic; -- delayed version of bcres for FDL
+    signal bcres             : std_logic; -- NOT USED, "bc0" of mp7_ttc is used instead of "bcres"
+    signal bcres_d           : std_logic; -- delayed version of bcres NOT USED
+    signal bcres_d_FDL_int   : std_logic; -- delayed version of bcres for FDL
 
-	signal rop_clk : std_logic; --! clock signal for the ROP --> DAQ interface
-	signal rop_rst : std_logic; --! reset signal for the rop_clk
+    signal rop_clk : std_logic; --! clock signal for the ROP --> DAQ interface
+    signal rop_rst : std_logic; --! reset signal for the rop_clk
 
-	signal rop_data       : std_logic_vector(DAQ_INPUT_WIDTH-1 downto 0);
-	signal rop_en         : std_logic;
-	signal rop_packet_end : std_logic;
+    signal rop_data       : std_logic_vector(DAQ_INPUT_WIDTH-1 downto 0);
+    signal rop_en         : std_logic;
+    signal rop_packet_end : std_logic;
 
 	--TCM signals
-	signal bx_nr             : bx_nr_t;
+    signal bx_nr             : bx_nr_t;
 -- 	signal bx_nr_d_FDL       : bx_nr_t;
-	signal event_nr          : event_nr_t;
-	signal trigger_nr        : trigger_nr_t;
-	signal orbit_nr          : orbit_nr_t;
-	signal luminosity_seg_nr : luminosity_seg_nr_t;
--- 	signal start_lumisection : std_logic;
-	signal bgos              : bgos_t;
+    signal event_nr          : event_nr_t;
+    signal trigger_nr        : trigger_nr_t;
+    signal orbit_nr          : orbit_nr_t;
+    signal luminosity_seg_nr : luminosity_seg_nr_t;
+--  signal start_lumisection : std_logic;
+    signal bgos              : bgos_t;
 
 	-- sim/spy mem
 	signal spy1 : std_logic;
@@ -189,10 +168,7 @@ architecture rtl of frame is
 	signal spy3_ack : std_logic;
 	signal simmem_in_use : std_logic;
 
--- HB 2014-10-23: Removed status test register.
---     signal test_regs_2_ipb: ipb_regs_array(C_TEST_REGS_BEGIN_INDEX to C_TEST_REGS_END_INDEX);
-
--- HB 2014-05-30: demux_lane_adjust: default value (input to demux_lane_data.vhd [del_a] -
+-- demux_lane_adjust: default value (input to demux_lane_data.vhd [del_a] -
 -- for generating a phase shifted LHC-clock to get pipeline data into a shifted LHC-clock domain.
 -- Shifting is done by the inverted 240MHz clock, to prevent multistabability)
     constant INIT_DEMUX_LANE_ADJ_REG : ipb_regs_array(0 downto 0) := (others => X"00000005");
@@ -203,38 +179,55 @@ architecture rtl of frame is
 
 	signal l1a_int : std_logic; -- internal L1A (output of l1asim), signal (port) "l1a" input from mp7_ttc.vhd
 
--- HB 2014-08-20: for simspy memory (test with ipb_dpmem_4096_32)
+--  for simspy memory (test with ipb_dpmem_4096_32)
 	constant SW_DATA_WIDTH : integer := 32;
 
 	constant MEMORY_BLOCKS : integer := LHC_DATA_WIDTH/SW_DATA_WIDTH;
 
 	signal lhc_data_slv_o : std_logic_vector(LHC_DATA_WIDTH-1 downto 0);
 	signal lhc_data_slv_i : std_logic_vector(LHC_DATA_WIDTH-1 downto 0);
+--  solving the error message :Actual expression (infix expression) of formal "dinb" is not globally static
+	signal lhc_data_slv_i_simulator 		: std_logic_vector(LHC_DATA_WIDTH-1 downto 0);
+	signal algo_after_finor_mask_rop_simulator	: std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+	signal local_finor_with_veto_2_spy2_simulator   : std_logic_vector (31 downto 0);
 
--- JW 24.02.2015 - signal for pulse regs
 	signal pulse           : std_logic_vector(31 downto 0);
-	-- signal for outpur mux control
-	signal mux_ctrl_regs : ipb_regs_array(0 to 3);
-    constant MUX_CTRL_REGS_1_INIT  : ipb_regs_array(0 to 3) := (X"00000bb8", X"00000c80", X"00000000", X"00000001"); -- bb8 =^ 3000, c80 =^ 3200
 
-begin
-
--- HB 2014-05-30:
-	--------------------------------------------------------------------------
-	--                        BCRES GENERATION                              --
-	--------------------------------------------------------------------------
--- DO WE NEED BCRES GENERATION ??? Is done in mp7_ttc.vhd !!!
--- BGo commands from mp7_ttc.vhd needed ???
-
-	--------------------------------------------------------------------------
-	--                           SCRATCH                                    --
-	--------------------------------------------------------------------------
--- DO WE NEED SCRATCH ???
-
+    signal mux_ctrl_regs_1 : ipb_regs_array(0 to 3);
+-- BR 25.05.2015 - change to constant for avoiding the metastability and warning in simulator as well as in syntheseis process
+    constant  mux_ctrl_regs_1_init  : ipb_regs_array(0 to 3) := (X"00000bb8", X"00000c80", X"00000000", X"00000001"); -- bb8 =^ 3000, c80 =^ 3200
 --===============================================================================================--
-	--------------------------------------------------------------------------
-	--                           RESET LOGIC                                --
-	--------------------------------------------------------------------------
+-- 	                     Deceiding between simulation and synthesize signals               
+--===============================================================================================--    
+ 
+    signal dsmux_lhc_data_int_sim : lhc_data_t; -- lhc_data output of dsmux   
+    signal dsmux_lhc_data_int_rop : lhc_data_t; --simulation data for ROP
+    signal lhc_rst_internal       : std_logic;
+    signal rop_rst_internal       :std_logic;
+    
+--TCM signals
+    signal bx_nr_internal	: bx_nr_t;
+-- 	signal bx_nr_d_FDL	: bx_nr_t;
+    signal event_nr_internal	: event_nr_t;
+    signal trigger_nr_internal	: trigger_nr_t;
+    signal orbit_nr_internal	: orbit_nr_t;
+    signal luminosity_seg_nr_internal	: luminosity_seg_nr_t;
+--  signal start_lumisection	: std_logic;
+--    signal bgos			: bgos_t;
+    signal l1a_internal		:std_logic;
+    
+--     signal	daq_oe_sim	: std_logic;
+--     signal 	daq_stop_sim 	: std_logic;
+--     signal 	daq_data_sim	:std_logic_vector(DAQ_INPUT_WIDTH-1 downto 0);
+--     
+    
+    begin
+    
+      
+--===============================================================================================--
+-- 	                    RESET LOGIC                               
+--===============================================================================================-- 
+
 -- similar to gt_amc514
 	-- provides the possibility for a sw-reset
 	sw_reset_inst : entity work.sw_reset
@@ -248,21 +241,40 @@ begin
 	lhc40mhz_rst0: entity work.slow_cd_reset
 		port map
 		(
-			sys_rst => ipb_rst,
-			sys_clk => ipb_clk,
+			sys_rst => ipb_rst, 
+			sys_clk => ipb_clk, 
 			slow_clk => lhc_clk,
 			slow_rst => ipbus_triggered_reset
 		);
 
--- HB 2014-07-08: lhc_rst = RST_ACT (= '1' in this version) and ipb_rst => high active !!!
+--  lhc_rst = RST_ACT (= '1' in this version) and ipb_rst => high active !!!
 -- 				   sw_reset = low active !!!
 -- 	lhc_rst <= sw_reset and ipbus_triggered_reset; -- old !!!
--- BR 2014-07-16 :"Milestone" : lhc_rst is for doing the reset the counter in tcm module. It is implmented as resgister, which later should be re-implemented as event register.
--- JW 2015-02-24: added pulse reg output to reset logic
- 	lhc_rst <= not sw_reset or ipbus_triggered_reset or pulse(0);
--- HB 2014-10-22: Added "lhc_rst_o".
- 	lhc_rst_o <= lhc_rst;
+-- BR "Milestone" : lhc_rst is for doing the reset the counter in tcm module. It is implmented as resgister, which later should be re-implemented as event register.
+--  added pulse reg output to reset logic
 
+--===============================================================================================--
+-- 	                     Deceiding between simulation and synthesize  for RST                       
+--===============================================================================================-- 
+  SIMULATE_RST_i: if SIMULATE_DATAPATH = true generate 
+      
+      begin
+       lhc_rst_o        <= lhc_rst_sim;  --rest singal will be produced by testbench
+       lhc_rst_internal <= lhc_rst_sim;
+       rop_rst_internal <= rop_rst_sim;  --ROP rest will be produced by testbench
+       
+      end generate SIMULATE_RST_i;
+    
+    synthesize_RST_i: if SIMULATE_DATAPATH = false generate 
+      
+      begin
+      	lhc_rst <= not sw_reset or ipbus_triggered_reset or pulse(0);
+ 	lhc_rst_o <= lhc_rst;
+        lhc_rst_internal <= lhc_rst;
+        rop_rst_internal <= not(not sw_reset or ipbus_triggered_reset or pulse(0));
+      end generate synthesize_RST_i;	
+ 	
+ 	
 --===============================================================================================--
     fabric_i: entity work.frame_fabric
         generic map(NSLV => NR_IPB_SLV_FRAME)
@@ -287,7 +299,8 @@ begin
 
 
 --===============================================================================================--
--- JW 24.02.2015 - added ipb event register
+-- BR 24.05.2015 - added ipb event register
+-- IPBus pulse registger (sw_reset)
     pulse_reg_i: entity work.ipb_pulse_regs
     port map(
         ipb_clk => ipb_clk,
@@ -298,10 +311,11 @@ begin
         pulse_o             => pulse
     );
 
+--===============================================================================================--
 -- MUX ctrl register
     tdf_control_i: entity work.ipb_write_regs
     generic map(
-        init_value => MUX_CTRL_REGS_1_INIT,
+        init_value => mux_ctrl_regs_1_init,
         addr_width => 4,
         regs_beg_index => 0,
         regs_end_index => 3
@@ -311,20 +325,16 @@ begin
         reset => ipb_rst,
         ipbus_in => ipb_to_slaves(C_IPB_MUX_CONTROL),
         ipbus_out => ipb_from_slaves(C_IPB_MUX_CONTROL),
-        regs_o => mux_ctrl_regs
+        regs_o => mux_ctrl_regs_1
     );
---===============================================================================================--
--- HB 2014-10-29: removed test register (0x80000020)
+
 
 --===============================================================================================--
--- HB 2014-05-30: removed demux lane adjust register (0x80000040)
+--                        REGISTER BANK        
 --===============================================================================================--
-	--------------------------------------------------------------------------
-	--                        REGISTER BANK                                 --
-	--------------------------------------------------------------------------
+
 
 	register_bank : entity work.rb
--- HB 2014-05-03: C_RB_ADDR_WIDTH fixed to 12 in rb.vhd
 --         generic map(addr_width => C_RB_ADDR_WIDTH) -- C_IPB_RB definition in frame_addr_decode.vhd
 		port map
 		(
@@ -355,10 +365,11 @@ begin
 	sw_regs_out.tcm        <= tcm2rb;
 	sw_regs_out.rop        <= rop2rb;
 
--- 	--------------------------------------------------------------------------
--- 	--                     TIMER COUNTER MODULE                             --
--- 	--------------------------------------------------------------------------
---
+	
+--===============================================================================================--
+-- 	                     TIMER COUNTER MODULE                             --
+--===============================================================================================--
+
 	bgos <= BGOS_NOP;
 	tcm_inst : entity work.tcm
 		port map(
@@ -366,7 +377,7 @@ begin
 			lhc_rst           => lhc_rst,
 			bgos              => bgos,
 			l1a_sync          => l1a_int,
- -- HB 2014-06-05: "bcres" NOT USED, "bc0" of mp7_ttc is used instead
+ --  "bcres" NOT USED, "bc0" of mp7_ttc is used instead
 -- 			bcres_d           => bcres,
  -- BR 2015-02-03: "bcres_d" is used, which commes from DM
 --			bcres_d           => bc0,
@@ -383,9 +394,35 @@ begin
 			start_lumisection => start_lumisection
 		);
 
+		
+		
 --===============================================================================================--
--- Proposed structure of lanes:
--- =======================================================
+-- 	                     Deceiding between simulation and synthesize  for TCM                       
+--===============================================================================================-- 
+  SIMULATE_TCM_i: if SIMULATE_DATAPATH = true generate 
+      
+      begin
+       trigger_nr_internal		<= trigger_nr_sim;  
+       orbit_nr_internal 		<= orbit_nr_sim;
+       luminosity_seg_nr_internal 	<= luminosity_seg_nr_sim;  
+       event_nr_internal		<= event_nr_sim;
+       bx_nr_internal			<= bx_nr_sim;
+      end generate SIMULATE_TCM_i;
+    
+    synthesize_TCM_i: if SIMULATE_DATAPATH = false generate 
+      
+      begin
+       trigger_nr_internal  		<= trigger_nr;  
+       orbit_nr_internal		<= orbit_nr;
+       luminosity_seg_nr_internal  	<= luminosity_seg_nr;  
+       event_nr_internal		<= event_nr;	
+       bx_nr_internal			<= bx_nr;
+
+      end generate synthesize_TCM_i;	
+ 
+--===============================================================================================--
+--                             Proposed structure of lanes:
+-- ===============================================================================================
 -- Object types/Objects from Layer 2 to UGT:
 -- protocol : 192 bits/lane, one object has 32-bits.
 -- =======================================================
@@ -448,8 +485,8 @@ begin
 --===============================================================================================--
 
 --===============================================================================================--
--- BEGIN OF DATA-PATH
-
+--                                     BEGIN OF DATA-PATH
+--================================================================================================
 -- DEMUX LANES
     demux_lane_data_l: for i in 0 to NR_LANES-1 generate
         demux_lane_data_i: entity work.demux_lane_data
@@ -461,7 +498,6 @@ begin
     end generate;
 
 -- LMP (containt to be checked)
--- HB 2014-09-26: only 16 lanes
     lmp_i: entity work.lmp
         generic map(NR_LANES => NR_LANES)
         port map(
@@ -471,6 +507,8 @@ begin
             lhc_data_valid_o => lmp_lhc_data_valid_o
         );
 
+        
+  
 -- DM
     dm_i: entity work.dm
         port map(
@@ -489,9 +527,11 @@ begin
 
 	bcres_d_FDL <= bcres_d_FDL_int;
 
-	--------------------------------------------------------------------------
-	--                      SIM/SPY MEMORY                                  --
-	--------------------------------------------------------------------------
+	
+--===============================================================================================--
+-- 	                      SIM/SPY MEMORY                                 
+--===============================================================================================--
+	
 
 	spytrig_inst : entity work.spytrig
 		port map
@@ -511,40 +551,49 @@ begin
 			simmem_in_use_i => simmem_in_use
 		);
 
--- SIMSPYMEM
--- HB 2014-08-20: test version with simspymem instantiated with ipb_dpmem_4096_32 modules
 
+--===============================================================================================--
+-- 	                           SIMSPYMEM          lhc_data_slv_i_simulator          
+--===============================================================================================-- 
 --     simspy_mem_l: for i in 0 to MEMORY_BLOCKS-1 generate
-     simspy_mem_l: for i in 0 to 59 generate -- 60 memory blocks with LHC_DATA_WIDTH = 1920
-        simspy_mem_i: entity work.ipb_dpmem_4096_32
-        port map
-        (
-            ipbus_clk => ipb_clk,
-            reset     => ipb_rst,
-            ipbus_in  => ipb_to_slaves(C_IPB_SIMSPYMEM(i)),
-            ipbus_out => ipb_from_slaves(C_IPB_SIMSPYMEM(i)),
-            ------------------
-            clk_b     => lhc_clk,
-            enb       => '1',
-            web       => spy1, -- spy1 = 1 => spying, spy1 = 0 => simulation data out
-            addrb     => bx_nr, -- HB 2014-08-18: no write and no read latency
-            dinb      => lhc_data_slv_i( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ),
-            doutb     => lhc_data_slv_o( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH )
-        );
-    end generate simspy_mem_l;
+      simspy_mem_l: for i in 0 to 59 generate -- 60 memory blocks with LHC_DATA_WIDTH = 1920
+      
+      lhc_data_slv_i_simulator( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ) <= lhc_data_slv_i( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH );
+      
+      simspy_mem_i: entity work.ipb_dpmem_4096_32
+         port map
+         (
+             ipbus_clk => ipb_clk,
+             reset     => ipb_rst,
+             ipbus_in  => ipb_to_slaves(C_IPB_SIMSPYMEM(i)),
+             ipbus_out => ipb_from_slaves(C_IPB_SIMSPYMEM(i)),
+             ------------------
+             clk_b     => lhc_clk,
+             enb       => '1',
+             web       => spy1, -- spy1 = 1 => spying, spy1 = 0 => simulation data out
+             addrb     => bx_nr, -- HB 2014-08-18: no write and no read latency
+--             dinb      => lhc_data_slv_i( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ),
+	      dinb      => lhc_data_slv_i_simulator( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ),
+             doutb     	=> lhc_data_slv_o( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH )
+         );
+     end generate simspy_mem_l;
 
 	sim_lhc_data <= std_logic_vector_to_lhc_data_t(lhc_data_slv_o);
 	lhc_data_slv_i <= lhc_data_t_to_std_logic_vector(dm_lhc_data_o);
 
--- DSMUX
+
+--===============================================================================================--
+-- 	                      Data Source Multiplex--DSMUX                               
+--===============================================================================================--
+
     dsmux_i: entity work.dsmux
-        generic map(USE_SW_INPUT_REGISTER => false,
+        generic map(	USE_SW_INPUT_REGISTER => false,
 			USE_SIMMEM_IN_USE_OUTPUT_REGISTER => true
-		)
+		    )
         port map(
             lhc_clk => lhc_clk,
             lhc_rst => lhc_rst,
-			sw_reg_i => rb2dsmux,
+	    sw_reg_i => rb2dsmux,
             lhc_data_sim_i => sim_lhc_data,
             lhc_data_ext_i => dm_lhc_data_o,
             lhc_data_sim_valid_i => '0',
@@ -554,50 +603,81 @@ begin
             simmem_in_use_o => simmem_in_use
         );
 
-    dsmux_lhc_data_o <= dsmux_lhc_data_int; -- data to GTL (gtl_fdl_wrapper.vhd)
-
+--===============================================================================================--
+-- 	                     Deceiding between simulation and synthesize for GTL/ROP                         
+--===============================================================================================-- 
+      SIMULATE_INTERFACE_i: if SIMULATE_DATAPATH = true generate 
+      
+      begin
+       dsmux_lhc_data_o        <= lane_data_in_sim;  -- data coming from testbech goes to GTL
+       dsmux_lhc_data_int_rop  <= lane_data_in_sim;
+		
+      end generate SIMULATE_INTERFACE_i;
+    
+      synthesize_INTERFACE_i: if SIMULATE_DATAPATH = false generate 
+      
+      begin
+       dsmux_lhc_data_o <= dsmux_lhc_data_int;  -- data to GTL (gtl_fdl_wrapper.vhd)
+       dsmux_lhc_data_int_rop <= dsmux_lhc_data_int;
+      end generate synthesize_INTERFACE_i;
+	        
+      
+        
+--===============================================================================================--
+-- 	                            spymem2_algos                     
+--===============================================================================================--       
+    
 -- DATA-PATH: gtl_fdl_wrapper.vhd
-
 -- SPYMEM2 ALGOS
-     spymem2_algos_l: for i in 0 to 15 generate -- 16 memory blocks for 512 algos
-        spymem2_algos_i: entity work.ipb_dpmem_4096_32
-            port map
-            (
-                ipbus_clk => ipb_clk,
-                reset     => ipb_rst,
-                ipbus_in  => ipb_to_slaves(C_IPB_SPYMEM2_ALGOS(i)),
-                ipbus_out => ipb_from_slaves(C_IPB_SPYMEM2_ALGOS(i)),
-                ------------------
-                clk_b     => lhc_clk,
-                enb       => '1',
-                web       => spy2,
-                addrb     => bx_nr, -- HB 2014-08-18: no write and no read latency
-                dinb      => algo_after_finor_mask_rop( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ), -- data from FDL (gtl_fdl_wrapper.vhd)
-                doutb     => open
-            );
-    end generate spymem2_algos_l;
+      spymem2_algos_l: for i in 0 to 15 generate -- 16 memory blocks for 512 algos
+      algo_after_finor_mask_rop_simulator ( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ) <= algo_after_finor_mask_rop( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH );
+         spymem2_algos_i: entity work.ipb_dpmem_4096_32
+             port map
+             (
+                 ipbus_clk => ipb_clk,
+                 reset     => ipb_rst,
+                 ipbus_in  => ipb_to_slaves(C_IPB_SPYMEM2_ALGOS(i)),
+                 ipbus_out => ipb_from_slaves(C_IPB_SPYMEM2_ALGOS(i)),
+                 ------------------
+                 clk_b     => lhc_clk,
+                 enb       => '1',
+                 web       => spy2,
+                 addrb     => bx_nr, -- : no write and no read latency
+--                  dinb      => algo_after_finor_mask_rop( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ), -- data from FDL (gtl_fdl_wrapper.vhd)
+                 dinb      => algo_after_finor_mask_rop_simulator ( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ), -- data from FDL (gtl_fdl_wrapper.vhd)
+                 doutb     => open
+             );
+     end generate spymem2_algos_l;
+--  end generate with_spymem2_algos;
+  
+--===============================================================================================--
+-- 	                          SPYMEM2 FINOR                 
+--===============================================================================================-- 
 
--- -- SPYMEM2 FINOR
-    spymem2_finor_i: entity work.ipb_dpmem_4096_32
-        port map
-        (
-            ipbus_clk => ipb_clk,
-            reset     => ipb_rst,
-            ipbus_in  => ipb_to_slaves(C_IPB_SPYMEM2_FINOR),
-            ipbus_out => ipb_from_slaves(C_IPB_SPYMEM2_FINOR),
-            ------------------
-            clk_b     => lhc_clk,
-            enb       => '1',
-            web       => spy2,
-            addrb     => bx_nr, -- HB 2014-08-18: no write and no read latency
--- HB 2014-10-30: added local_finor_with_veto_2_spy2, which comes from fdl_module.vhd and is the local combination of local_finor with local_veto. Not routed to ROP.
-            dinb      => (X"0000000" & "000" & local_finor_with_veto_2_spy2), -- data from FDL (gtl_fdl_wrapper.vhd) - only bit 0 => local_finor_with_veto_2_spy2
---             dinb      => (X"0000000" & "000" & finor_rop), -- data from FDL (gtl_fdl_wrapper.vhd) - only bit 0 => finor_rop
-            doutb     => open
-        );
+-- BR :[Synth 8-1565] actual for formal port dinb is neither a static name nor a globally static expression. It should be fixed
+    local_finor_with_veto_2_spy2_simulator <= (X"0000000" & "000" & local_finor_with_veto_2_spy2);
+     spymem2_finor_i: entity work.ipb_dpmem_4096_32
+         port map
+         (
+             ipbus_clk => ipb_clk,
+             reset     => ipb_rst,
+             ipbus_in  => ipb_to_slaves(C_IPB_SPYMEM2_FINOR),
+             ipbus_out => ipb_from_slaves(C_IPB_SPYMEM2_FINOR),
+             ------------------
+             clk_b     => lhc_clk,
+             enb       => '1',
+             web       => spy2,
+             addrb     => bx_nr, -- HB 2014-08-18: no write and no read latency
+-- added local_finor_with_veto_2_spy2, which comes from fdl_module.vhd and is the local combination of local_finor with local_veto. Not routed to ROP.
+--              dinb      => (X"0000000" & "000" & local_finor_with_veto_2_spy2), -- data from FDL (gtl_fdl_wrapper.vhd) - only bit 0 => local_finor_with_veto_2_spy2
+	     dinb      => local_finor_with_veto_2_spy2_simulator,
+             doutb     => open
+         );
+ 
 
--- END OF DATA-PATH
-
+--===============================================================================================--
+-- 	                         Output multiplexer -- GTL/FDL data to Tx-buffer                
+--===============================================================================================--   
     output_mux_i: entity work.output_mux
         generic map(
             NR_LANES => NR_LANES
@@ -610,21 +690,28 @@ begin
             bx_nr       => bx_nr,
             algo_in     => algo_after_finor_mask_rop,
             finor_in    => local_finor_with_veto_2_spy2,
-            --daq_in      => X"0000000000000000",
-            valid_lo    => mux_ctrl_regs(0)(15 downto 0),
-            valid_hi    => mux_ctrl_regs(1)(15 downto 0),
-            start       => mux_ctrl_regs(2)(0),
-            strobe      => mux_ctrl_regs(3)(0),
+            valid_lo    => mux_ctrl_regs_1(0)(15 downto 0),
+            valid_hi    => mux_ctrl_regs_1(1)(15 downto 0),
+            start       => mux_ctrl_regs_1(2)(0),
+            strobe      => mux_ctrl_regs_1(3)(0),
             lane_out     => lane_data_out
         );
 
+-- END OF DATA-PATH
 --===============================================================================================--
-
-	--------------------------------------------------------------------------
-	--                          L1A LOGIC                                   --
-	--------------------------------------------------------------------------
-
-	l1asim : entity work.l1asim
+-- 	                     Deceiding between simulation and synthesize for L1A             
+--===============================================================================================-- 
+      SIMULATE_L1A_i: if SIMULATE_DATAPATH = true generate 
+            
+	  l1a_int <= l1a_sim;
+      		
+      end generate SIMULATE_L1A_i;
+    
+      synthesize_L1A_i: if SIMULATE_DATAPATH = false generate 
+      
+      begin
+     
+        	l1asim : entity work.l1asim
 		port map
 		(
 			lhc_clk    => lhc_clk,
@@ -636,102 +723,111 @@ begin
 			sw_reg_i   => rb2l1asim,
 
 			l1a_real_i => l1a,
+
 			l1a_o      => l1a_int
 		);
 
-	--------------------------------------------------------------------------
-	--                      READ OUT PROCESS                                --
-	--------------------------------------------------------------------------
+      end generate synthesize_L1A_i;
+	        
+      	
+		
+		
+--===============================================================================================--
+-- 	                           READ OUT PROCESS-- ROP             
+--===============================================================================================--  		
 
 	-- required signals:
 	-- l1a
-	rop_clk <= lhc_clk; -- should be connected to the clock that is used for the output of the ROP
-	rop_rst <= lhc_rst;
-
+	--rop_clk <= clk240; -- should be connected to the clock that is used for the output of the ROP
+	rop_clk <= lhc_clk;
 	finors_rop(0) <= local_finor_rop; -- to be defined !!!
--- HB 2014-10-22: added local_veto_rop for ROP
 	finors_rop(1) <= local_veto_rop; -- to be defined !!!
--- HB 2014-10-30: finor_rop is '0' in this version (see gt_mp7_core.vhd).
 	finors_rop(FINOR_WIDTH-1) <= finor_rop; -- to be defined !!!
 
-	-- here123
---	rop_inst : entity work.rop
---		port map
---		(
---			lhc_clk => lhc_clk,
---			lhc_rst => lhc_rst,
---			daq_clk => rop_clk,
---			daq_rst => rop_rst,
---
---			sw_reg_in  => rb2rop,
---			sw_reg_out => rop2rb,
---
---			trigger_nr        => trigger_nr,
---			orbit_nr          => orbit_nr,
---			bx_nr             => bx_nr,
---			luminosity_seg_nr => luminosity_seg_nr,
---			event_nr          => event_nr,
---
---			lhc_data  => dsmux_lhc_data_int,
---			lhc_valid => dsmux_lhc_data_valid,
---
--- 			prescale_factor_set_index => prescale_factor_set_index_rop, -- not implemented in ROP now !!!
---			algo_before_pre => algo_before_prescaler_rop,
---			algo_after_pre  => algo_after_prescaler_rop,
---			algo_after_mask => algo_after_finor_mask_rop,
---
--- 			finors => (others => '0'),
---			finors => finors_rop,
---
---			l1a   => l1a_int,
---			ready => open,
---
---			daq_data => rop_data,
---			daq_oe   => rop_en,
---			daq_stop => rop_packet_end,
---			daq_busy => '0'
---		);
+	rop_inst : entity work.rop
+		port map
+		(
+			lhc_clk 	  => lhc_clk,
+ 			lhc_rst 	  => lhc_rst_internal,
 
--- SPYMEM3
--- 	spymem3 : entity work.spymem3
--- 		generic map
--- 		(
--- 			SIZE_IN_BYTES => 4096,
--- 			INPUT_DATA_WIDTH => DAQ_INPUT_WIDTH
--- 		)
--- 		port map
--- 		(
---             ipbus_clk => ipb_clk,
---             ipbus_rst => ipb_rst,
---             ipbus_in => ipb_to_slaves(C_IPB_SPYMEM3),
---             ipbus_out => ipb_from_slaves(C_IPB_SPYMEM3),
---             ------------
--- 			lhc_clk          => lhc_clk,
--- 			lhc_rst          => lhc_rst,
--- 			spy_i            => spy3,
--- 			spy_ack_o        => spy3_ack,
---
--- 			rop_clk          => rop_clk,
--- 			rop_rst          => rop_rst,
--- 			rop_data_i       => rop_data,
--- 			rop_en_i         => rop_en,
--- 			rop_packet_end_i => rop_packet_end
--- 		);
-    spymem3_rop_i: entity work.ipb_dpmem_4096_32
-        port map
-        (
-            ipbus_clk => ipb_clk,
-            reset     => ipb_rst,
-            ipbus_in  => ipb_to_slaves(C_IPB_SPYMEM3),
-            ipbus_out => ipb_from_slaves(C_IPB_SPYMEM3),
-            ------------------
-            clk_b     => rop_clk,
-            enb       => '1',
-            web       => spy3,
-            addrb     => bx_nr,
-            dinb      => rop_data(31 downto 0),
-            doutb     => open
-        );
+			daq_clk		  => rop_clk,
+ 			daq_rst		  => rop_rst_internal,
+
+
+			sw_reg_in	  => rb2rop,
+			sw_reg_out	  => rop2rb,
+
+			trigger_nr        => trigger_nr_internal,
+			orbit_nr          => orbit_nr_internal,
+			bx_nr             => bx_nr_internal,
+			luminosity_seg_nr => luminosity_seg_nr_internal,
+			event_nr	  => event_nr_internal,
+
+			lhc_data	  => dsmux_lhc_data_int_rop,
+			lhc_valid 	  => dsmux_lhc_data_valid,
+
+-- 			prescale_factor_set_index => prescale_factor_set_index_rop, -- not implemented in ROP now !!!
+			algo_before_pre   => algo_before_prescaler_rop,
+			algo_after_pre    => algo_after_prescaler_rop,
+			algo_after_mask   => algo_after_finor_mask_rop,
+
+-- 			finors => (others => '0'),
+			finors 		  => finors_rop,
+
+			l1a		  => l1a_int,
+			ready		  => open,
+
+			daq_data 	  => rop_data,
+			daq_oe   	  => rop_en,
+			daq_stop 	  => rop_packet_end,
+			daq_busy 	  => '0'
+		);
+
+
+		
+--===============================================================================================--
+-- 	                     sending the data to testbench for simulaiotn              
+--===============================================================================================-- 
+      SIMULATE_DAQ_i: if SIMULATE_DATAPATH = true generate 
+      
+      begin
+	daq_oe_sim	<= rop_en;
+	daq_stop_sim 	<= rop_packet_end;
+	daq_data_sim	<= rop_data;	
+		
+      end generate SIMULATE_DAQ_i;
+    
+		
+--===============================================================================================--
+-- 	                         SPYMEM 3            
+--===============================================================================================--  			
+		
+	spymem3 : entity work.spymem3
+		generic map
+		(
+			SIZE_IN_BYTES => 4096,
+			INPUT_DATA_WIDTH => DAQ_INPUT_WIDTH
+		)
+		port map
+		(
+		      ipbus_clk => ipb_clk,
+		      ipbus_rst => ipb_rst,
+		      ipbus_in => ipb_to_slaves(C_IPB_SPYMEM3),
+		      ipbus_out => ipb_from_slaves(C_IPB_SPYMEM3),
+
+		      lhc_clk          => lhc_clk,
+		      lhc_rst          => lhc_rst_internal,
+
+		      spy_i            => spy3,
+		      spy_ack_o        => spy3_ack,
+
+		      rop_clk          => rop_clk,
+		      rop_rst          => rop_rst_internal,
+		      rop_data_i       => rop_data,
+		      rop_en_i         => rop_en,
+		      rop_packet_end_i => rop_packet_end
+		);
+
 
 --===============================================================================================--
 -- Testpoints to mezzanine-board

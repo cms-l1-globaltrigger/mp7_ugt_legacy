@@ -9,12 +9,12 @@
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
 ---Description: TCM
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/tcm/tcm.vhd $
--- $Date: 2014-07-15 12:31:21 +0200 (Tue, 15 Jul 2014) $
--- $Author: rahbaran $
--- $Revision: 3050 $
+-- $HeadURL: $
+-- $Date: $
+-- $Author: ? 
+-- $Revision: 3796 $
 
--- HB 2014-07-08: done lhc_rst = RST_ACT in processes
+-- BR 2015-05-08: done lhc_rst = RST_ACT in processes
 
 library ieee;
 use IEEE.std_logic_1164.all;
@@ -61,7 +61,6 @@ architecture beh of tcm is
 
 		started_bx         : std_logic;
 		started_bx_FDL     : std_logic;
--- HB 2014-06-11: changed
 -- 		bx_nr_chk          : std_logic_vector(PCIE_DATA_WIDTH-1 downto 0); -- the highest value bx_nr ever reached is stored into a sw register for debug purposes
 -- 		bx_nr_max          : std_logic_vector(PCIE_DATA_WIDTH-1 downto 0); -- the highest value bx_nr ever reached is stored into a sw register for debug purposes
 		bx_nr_chk          : std_logic_vector(31 downto 0); -- the highest value bx_nr ever reached is stored into a sw register for debug purposes
@@ -182,7 +181,6 @@ begin
 		end case;
 
 		-- reset
--- HB 2014-07-08: done lhc_rst = RST_ACT in processes
 -- 		if lhc_rst = '0' then
 		if lhc_rst = RST_ACT then
 			v.bgos_event_old := sw_reg_in.bgos_event; -- a reset should not trigger bgos

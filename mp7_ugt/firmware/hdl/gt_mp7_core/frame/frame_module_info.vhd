@@ -8,10 +8,10 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_tests/src/gt_mp7_core/frame/frame.vhd $
--- $Date: 2014-05-13 17:16:28 +0200 (Tue, 13 May 2014) $
--- $Author: bergauer $
--- $Revision: 2919 $
+-- $HeadURL: $
+-- $Date: $
+-- $Author: rahbaran $
+-- $Revision:  $
 --------------------------------------------------------------------------------
 
 -- Description: this module contains the "frame module info"
@@ -64,25 +64,23 @@ begin
 
     hostname_l: for i in 0 to HOSTNAME'length/32-1 generate
 		module_info_2_ipb(i+OFFSET_HOSTNAME) <= HOSTNAME(i*32+31 downto i*32);
-    end generate hostname_l;
+    end generate hostname_l;                        
 
 --     hostname_l: for i in OFFSET_HOSTNAME to OFFSET_HOSTNAME+HOSTNAME'length/32-1 generate
 -- 		module_info_2_ipb(i-OFFSET_HOSTNAME) <= HOSTNAME((i-OFFSET_HOSTNAME)*32+31 downto (i-OFFSET_HOSTNAME)*32);
---     end generate hostname_l;
---
+--     end generate hostname_l;                        
+-- 
     username_l: for i in 0 to USERNAME'length/32-1 generate
 		module_info_2_ipb(i+OFFSET_USERNAME) <= USERNAME(i*32+31 downto i*32);
-    end generate username_l;
+    end generate username_l;                        
 
 --     username_l: for i in OFFSET_USERNAME to OFFSET_USERNAME+USERNAME'length/32-1 generate
 -- 		module_info_2_ipb(i-OFFSET_USERNAME) <= USERNAME((i-OFFSET_USERNAME)*32+31 downto (i-OFFSET_USERNAME)*32);
---     end generate username_l;
---
+--     end generate username_l;                        
+-- 
     module_info_2_ipb(OFFSET_MODULE_TYPE) <= MODULE_TYPE;
 
     module_info_2_ipb(OFFSET_FRAME_VERSION) <= FRAME_VERSION;
-
-    module_info_2_ipb(OFFSET_BUILD_VERSION) <= BUILD_VERSION;
 
 end rtl;
 

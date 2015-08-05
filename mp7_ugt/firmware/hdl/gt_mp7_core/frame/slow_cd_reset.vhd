@@ -8,13 +8,13 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/slow_cd_reset.vhd $
--- $Date: 2014-07-15 12:31:21 +0200 (Tue, 15 Jul 2014) $
--- $Author: rahbaran $
--- $Revision: 3050 $
+-- $HeadURL: $
+-- $Date:  $
+-- $Author:  $
+-- $Revision:  $
 --------------------------------------------------------------------------------
 
--- HB 2014-07-08: ipbus_rst (sys_rst) is high active, therefore changed in processes
+-- BR 2015-06-01: ipbus_rst (sys_rst) is high active, therefore changed in processes
 
 library ieee;
 use ieee.std_logic_1164.all;

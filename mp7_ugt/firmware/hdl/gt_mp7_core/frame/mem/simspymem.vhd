@@ -8,14 +8,15 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description:Memory, Specification : Babak, Devopler: Babak, Flo
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/mem/simspymem.vhd $
--- $Date: 2014-10-21 11:19:00 +0200 (Tue, 21 Oct 2014) $
--- $Author: wittmann $
--- $Revision: 3307 $
+---Description:Lane Mapping Process, Developer Babak, Markus
+-- $HeadURL: $
+-- $Date:  $
+-- $Author: Florian $
+-- Modification : Babak, the deisgn has a bug and it does not working correctly at hardware, I do not have a time to take care on it. I exchanged it to one from coregenerator, which coudl be found in frame.vhd
+-- 
+-- $Revision: 0.1 $
+--------------------------------------------------------------------------------
 
--- HB 2014-07-08: ipbus_rst is high active, therefore chaged in processes
--- HB 2014-05-07: changed code (from gt_amc514) for use with IPBus in MP7
 
 library ieee;
 use IEEE.std_logic_1164.all;
@@ -58,10 +59,9 @@ end;
 
 architecture arch of simspymem is
 
--- HB 2014-06-11: changed
 -- 	constant SW_DATA_WIDTH : integer := ipbus_in.ipb_wdata'length; 
 	constant SW_DATA_WIDTH : integer := 32; 
--- HB 2014-07-10: changed, because memory wr/rd not ok
+-- changed, because memory wr/rd not ok
 -- 	constant READ_LATENCY : integer := 2; -- read latency of the internal ram
 	constant READ_LATENCY : integer := 0; -- read latency of the internal ram
 	
@@ -94,28 +94,8 @@ architecture arch of simspymem is
 
 begin
 
--- =================================================================
--- HB 2014-05-07: What's that???
--- 	sync_lhc_clk : process (lhc_clk, lhc_rst)
--- 	begin
--- 		if lhc_rst = '0' then
--- 			null;	
--- 		elsif rising_edge(lhc_clk) then
--- 			null;
--- 		end if;
--- 	end process;
--- 	
--- 	sync_ipbus_clk : process (ipbus_clk, ipbus_rst)
--- 	begin
--- 		if ipbus_rst = '1' then
--- 			null;
--- 		elsif rising_edge(ipbus_clk) then
--- 			null;
--- 		end if;
--- 	end process;
--- =================================================================
+
 	
--- HB 2014-05-07: "Write enable" and address for IPBus
 	wr_internal <= ipbus_in.ipb_write;
 	addr_internal <= ipbus_in.ipb_addr(addr_internal'length-1 downto 0);	 -- use only the required bits
 	
@@ -123,17 +103,15 @@ begin
 		signal mem_wr : std_logic;
 	begin
 		
---        mem_wr <= mem_sel(i) and wr_internal and sw_in_internal.sel;
         mem_wr <= mem_sel(i) and wr_internal and ipbus_in.ipb_strobe;
 		
 		tdp_mem : entity work.ram_2c2w2r 
 			generic map
 			(
 				SIZE => BUNCHES_PER_ORBIT,
--- HB 2014-06-11: changed
 -- 				DATA_WIDTH => PCIE_DATA_WIDTH,
 				DATA_WIDTH => SW_DATA_WIDTH,
--- HB 2014-07-11: changed
+
 -- 				USE_OUTPUT_REGISTER => true
 				USE_OUTPUT_REGISTER => false
 			)
@@ -212,35 +190,7 @@ begin
 		
 -- Generation of "error" and "ack" for IPBus
     ipbus_out.ipb_err <= '0';
--- 	ipbus_out.ipb_ack <= ipbus_in.ipb_strobe;
 
--- -- HB 2014-05-07: Generation of "acknowledge" for IPBus
---     process(ipbus_rst, ipbus_clk)
---         variable ack_ctrl : std_logic_vector(1 downto 0);
---     begin
---     if ipbus_rst='1' then
---         ack <= '0';
---         ack_ctrl := "00";
---     elsif rising_edge(ipbus_clk) then
--- --      if ((sel <= 4096) and (sel >= 0)) then  --
---         if ipbus_in.ipb_strobe='1' and ipbus_in.ipb_write='1' then
---             ack <= ipbus_in.ipb_strobe;
---         else
---             case ack_ctrl is
---                 when "00" => ack <= '0';
---                     if ipbus_in.ipb_strobe='1' then
---                         ack <= '1'; ack_ctrl := "01";
---                     end if;
---                 when "01" => ack <= '0'; ack_ctrl := "10";
---                 when "10" => ack <= '0'; ack_ctrl := "11";
---                 when "11" => ack <= '0'; ack_ctrl := "00";
---                 when others =>
---             end case;
---         end if;
---     end if;
---     end process;
-
---    dl_in_rd_ack <= sw_in_internal.rd_req and sw_in_internal.sel;
     dl_in_rd_ack <= ipbus_in.ipb_strobe;
     
 	dl_rd_ack : entity work.delay_line_sl 
@@ -275,7 +225,6 @@ begin
 	begin
 		sw_out_reg : process (ipbus_clk, ipbus_rst)
 		begin
--- HB 2014-07-08: ipbus_rst is high active, therefore changed in processes
 -- 			if ipbus_rst = '0' then
 			if ipbus_rst = '1' then
 				ipbus_out.ipb_rdata <= (others=>'0');

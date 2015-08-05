@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Synthesizer : ISE 14.2
+-- Synthesizer : ISE 14.6
 -- Platform    : Linux Ubuntu 10.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
@@ -8,11 +8,14 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description: Dual Clock synchronizer
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/synchronizer/dualclock_synchronizer.vhd $
--- $Date: 2014-07-02 14:05:41 +0200 (Wed, 02 Jul 2014) $
--- $Author: bergauer $
--- $Revision: 3006 $
+---Description: ROP
+-- $HeadURL: $
+-- $Date:  $
+-- $Author: Markus $
+-- Modification : I am not sure, if it is working correctly. If we use 40 Mhz clock for rop_data, evey data should be available on bus via rising edge of the clock. If we use 240 Mhz is it should be the same behavior, we do not get in any way 4 times or 5 times zero.
+-- every clock edge new data.
+-- $Revision: 0.1 $
+--------------------------------------------------------------------------------
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -22,7 +25,8 @@ entity dualclock_synchronizer is
    generic
    (
       DATA_WIDTH : integer := 8;
-      RST_ACTIVE : std_logic := '0'
+      RST_ACTIVE_LHC : std_logic := '1';
+      RST_ACTIVE_ROP :std_logic  := '0'
    );
    port 
    (
@@ -54,7 +58,8 @@ begin
    flag_sync: entity work.flag_synchronizer
    generic map
    (
-      RST_ACTIVE => RST_ACTIVE
+      RST_ACTIVE_LHC => RST_ACTIVE_LHC,
+      RST_ACTIVE_ROP => RST_ACTIVE_ROP
    )
    port map
    (
@@ -75,7 +80,7 @@ begin
    process(wr_clk,wr_rst)
    begin
    
-      if wr_rst = RST_ACTIVE then
+      if wr_rst = RST_ACTIVE_LHC then
          in_reg <= (others => '0');
       elsif rising_edge(wr_clk) and in_reg_en = '1' then
          in_reg <= din;
@@ -86,7 +91,7 @@ begin
    process(rd_clk,rd_rst)
    begin
    
-      if rd_rst = RST_ACTIVE then
+      if rd_rst = RST_ACTIVE_ROP then
          dout <= (others => '0');
          dout_ch <= '0';
       elsif rising_edge(rd_clk) then

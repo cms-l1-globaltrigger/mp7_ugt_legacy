@@ -9,13 +9,14 @@
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
 ---Description: Read-out Process, complex design, Specification and architecture design/implementation.
---             ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
+--             ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to
 --              AMC13..
 --              Please do not change any part of the design without to cousultate Babak, because the main part of design
---              will automated produced and you have to know, what do you do.  
+--              will automated produced and you have to know, what do you do. 
 -- $Date: 2015-06-15 $
 -- $Author: rahbaran $
 -- Warning:  Reset logic should be re-designed. The current version is working but reset design should be changed in all sub-modules
+--------------------------------------------------------------------------------
 
 library ieee;
 use ieee.std_logic_1164.all;

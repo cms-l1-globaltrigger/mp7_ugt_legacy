@@ -1,6 +1,6 @@
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
+-- Platform    : Linux Ubuntu 14.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
 -- This work is held in copyright as an unpublished work by HEPHY (Institute
@@ -8,11 +8,10 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description: Dynamic Delay line
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/dyndl/dynamic_delay_line.vhd $
--- $Date: 2014-07-02 14:05:41 +0200 (Wed, 02 Jul 2014) $
--- $Author: bergauer $
--- $Revision: 3006 $
+-- $HeadURL:  $
+-- $Date:  $
+-- $Author:  $
+-- $Revision: 0.1  $
 --------------------------------------------------------------------------------
 library ieee;
 use IEEE.std_logic_1164.all;

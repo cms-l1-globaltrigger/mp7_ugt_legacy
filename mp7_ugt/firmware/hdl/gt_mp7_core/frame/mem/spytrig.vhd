@@ -8,13 +8,14 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description:Memory, Specification : Babak, Devopler: Babak, Flo
--- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_amc514/trunk/src/mem/spytrig.vhd $
--- $Date: 2013-10-11 16:00:52 +0200 (Fri, 11 Oct 2013) $
--- $Author: rahbaran $
--- $Revision: 2342 $
+---Description:SPY trigger concept. Some changes are needed, if you will use it instead of MP7 one. Please follow the ugt spec 0.2 
+-- $HeadURL: $
+-- $Date:  $
+-- $Author:  Babak $
+-- Modification : some part of design is not working bug free. Please follow the elog server for finding out, what should you do.
+-- $Revision: 0.1 $
+--------------------------------------------------------------------------------
 
--- HB 2014-05-07: changed code (from gt_amc514) for use with IPBus in MP7
 
 library ieee;
 use ieee.std_logic_1164.all;

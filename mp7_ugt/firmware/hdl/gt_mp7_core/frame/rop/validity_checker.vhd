@@ -8,11 +8,12 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 ---Description: Read-out Process, complex design, Specification and architecture design/implementation.
---             ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to 
+--             ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to
 --              AMC13..
 --              Please do not change any part of the design without to cousultate Babak, because the main part of design
---              will automated produced and you have to know, what do you do.  
+--              will automated produced and you have to know, what do you do. 
 -- $Date: 2015-06-15 $
 -- $Author: rahbaran $
 -- Warning:  The output dump is not validted systematically based on my .xml concept. If you would like to use the desing, please conatact developer.

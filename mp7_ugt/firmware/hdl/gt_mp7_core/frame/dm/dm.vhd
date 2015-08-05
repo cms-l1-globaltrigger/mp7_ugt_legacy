@@ -1,6 +1,6 @@
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
+-- Platform    : Linux Ubuntu 14.04
 -- Targets     : Synthese
 --------------------------------------------------------------------------------
 -- This work is held in copyright as an unpublished work by HEPHY (Institute
@@ -8,13 +8,13 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description: Delay Manager
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/gt_mp7_core/frame/dm/dm.vhd $
--- $Date: 2015-02-04 12:15:42 +0100 (Wed, 04 Feb 2015) $
--- $Author: rahbaran $
--- $Revision: 3711 $
+-- $HeadURL:  $
+-- $Date:  $
+-- $Author: Florian $
+-- Modification : Babak
+-- 		1) lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
+-- $Revision: 0.1  $
 --------------------------------------------------------------------------------
---BR: 04.02.2015 Delay Manager out put was zero, becaue lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
 
 library ieee;
 use IEEE.std_logic_1164.all;

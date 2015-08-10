@@ -137,7 +137,7 @@ def main():
 
 
         logging.info("checkout MP7 base firmware...")
-        path = os.path.join('tags', 'mp7', 'unstable' if args.unstable else '', 'firmware', args.tag)
+        path = os.path.join('tags', 'mp7', 'unstable' if args.unstable else 'stable', 'firmware', args.tag)
         subprocess.check_call(['python', 'ProjectManager.py', 'checkout', path, '-u', args.user])
 
         #logging.info("fetching project firmware...")

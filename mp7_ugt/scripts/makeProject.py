@@ -128,7 +128,8 @@ def main():
         # Remove existing file.
         remove_file(filename)
         # Download file
-        url = "https://svnweb.cern.ch/trac/cactus/browser/trunk/cactusupgrades/scripts/firmware/ProjectManager.py?format=txt"
+        release_mode = 'unstable' if args.unstable else 'stable'
+        url = "https://svnweb.cern.ch/trac/cactus/browser/tags/mp7/{release_mode}/firmware/{args.tag}/cactusupgrades/scripts/firmware/ProjectManager.py?format=txt".format(**locals())
         logging.info("retrieving %s", url)
         urllib.urlretrieve(url, filename)
         # Make executable

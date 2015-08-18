@@ -203,29 +203,11 @@ def main():
         shutil.move('mp7_690es.dep.tmp', 'mp7_690es.dep')
 
         os.chdir(cwd)
-#BR August 18 2015 : We shoudl use original mp7_ttc.vhd from the tag and not local saved in the ugt directory
-#       # removing 'src mp7_ttc.vhd' from mp7_ttc.dep to use the local file
-#        logging.info("removing link to mp7_ttc.vhd from the mp7_ttc.dep file to use the local file...")
-#        cwd = os.getcwd()
-#        os.chdir('cactusupgrades/components/mp7_ttc/firmware/cfg/')
-#        shutil.copy('mp7_ttc.dep', 'mp7_ttc.dep.orig')
-#        # Remove a line from mp7_ttc.dep
-#        with open('mp7_ttc.dep.orig', 'r') as fi:
-#            with open('mp7_ttc.dep.tmp', 'w') as fo:
-#                for line in fi:
-#                    if 'src mp7_ttc.vhd' in line:
-#                        fo.write('# commented this line out, to use the uGT local files:\n')
-#                        fo.write('#src mp7_ttc.vhd\n')
-#                    else:
-#                        fo.write(line)
-#        shutil.move('mp7_ttc.dep.tmp', 'mp7_ttc.dep')
 
-#        os.chdir(cwd)
-
-#    else:
+    else:
 
         # included in the else, to preserve the path structure
-#        os.chdir(args.path)
+        os.chdir(args.path)
         ######################################################
 
         logging.info("creating link to current tag: mp7fw_current -> %s", mp7path)
@@ -282,23 +264,7 @@ def main():
         shutil.move('mp7_690es.dep.tmp', 'mp7_690es.dep')
 
         os.chdir(cwd)
-#BR
-        # removing 'src mp7_ttc.vhd' from mp7_ttc.dep to use the local file
-#        logging.info("removing link to mp7_ttc.vhd from the mp7_ttc.dep file to use the local file...")
-#        cwd = os.getcwd()
-#        os.chdir('cactusupgrades/components/mp7_ttc/firmware/cfg/')
-#        # Remove a line from mp7_ttc.dep
-#        with open('mp7_ttc.dep.orig', 'r') as fi:
-#            with open('mp7_ttc.dep.tmp', 'w') as fo:
-#                for line in fi:
-#                    if 'src mp7_ttc.vhd' in line:
-#                        fo.write('# commented this line out, to use the uGT local files:\n')
-#                        fo.write('#src mp7_ttc.vhd\n')
-#                    else:
-#                        fo.write(line)
-#        shutil.move('mp7_ttc.dep.tmp', 'mp7_ttc.dep')
 
-#        os.chdir(cwd)
         ######################################################
 
 
@@ -345,12 +311,12 @@ def main():
     with open(filename, 'w') as f:
         f.write("src {args.menu}/vhdl/module_0/src/algo_mapping_rop.vhd\n".format(**locals()))
         f.write("src {args.menu}/vhdl/module_0/src/gtl_module.vhd\n".format(**locals()))
-        f.write("src {args.menu}/vhdl/module_0/src/l1tm_pkg.vhd\n".format(**locals()))
+        f.write("src {args.menu}/vhdl/module_0/src/gtl_pkg.vhd\n".format(**locals())) #until the tmVHDLproducer is released, the gtl_pkg is used
 
     filename = os.path.join(uGTalgosPath, 'firmware/cfg/uGT_board.dep')
     with open(filename, 'w') as f:
-#        f.write("src -c projects/examples/{args.board} top_decl.vhd\n".format(**locals())) # Babak changed based on Dave suggesstion 
-        f.write("src top_decl_ugt_local.vhd\n".format(**locals())) # Babak changed based on Dave suggesstion 
+#        f.write("src -c projects/examples/{args.board} top_decl.vhd\n".format(**locals())) # Babak changed based on Dave suggesstion
+        f.write("src top_decl_ugt_local.vhd\n".format(**locals())) # Babak changed based on Dave suggesstion
         f.write("src -c boards/mp7/base_fw/{args.board} mp7_brd_decl.vhd\n".format(**locals()))
         f.write("src {args.board}.vhd\n".format(**locals()))
 

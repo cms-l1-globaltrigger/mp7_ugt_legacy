@@ -1,7 +1,7 @@
 -- Top-level design for MP7 base firmware
 --
 -- Dave Newbold, July 2012
--- modified for uGT usage Babak, August 2015
+-- Babak, August  13 2015 : modified for uGT usage Tag 1_8_0
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -87,11 +87,12 @@ architecture rtl of top is
 	signal ctrs: ttc_stuff_array(N_REGION - 1 downto 0);
 	signal rst_loc, clken_loc: std_logic_vector(N_REGION - 1 downto 0);
 	
-	    -- uGT signals   -------------------------------------------------------
-    signal finor_2_mezz_lemo: std_logic; -- to MEZZ
-    signal tp_gt_mp7: std_logic_vector(7 downto 0); -- to MEZZ
-    signal mezz, mezz_en: std_logic_vector(29 downto 0) := (others => '0'); -- mezzannine signals
-    signal clk160 : std_logic; --160MHz for FDL
+     -- uGT signals   -------------------------------------------------------
+        signal finor_2_mezz_lemo: std_logic; -- to MEZZ
+        signal veto_2_mezz_lemo: std_logic; -- to MEZZ
+        signal tp_gt_mp7_core: std_logic_vector(7 downto 0); -- to MEZZ
+        signal mezz, mezz_en: std_logic_vector(29 downto 0) := (others => '0'); -- Tristate by default
+        
     ------------------------------------------------------------------------
 	
 begin
@@ -196,7 +197,6 @@ begin
 			clk40_in_n => clk40_in_n,
 			clk40ish_in => clk40ish,
 			clk40 => clk40,
-			clk160 => clk160, --inserted for uGT
 			rsto40 => rst40,
 			clk_p => clk_p,
 			rst_p => rst_p,
@@ -285,12 +285,13 @@ begin
             lhc_clk   => clk40,
             bc0       => ttc_cmd(0), -- cocerrning reaoutout, we should use this signal for synchronization between ttc block and readout
             bc0_to_null_algo => payload_bc0,
-            tp        => tp_gt_mp7,
+            tp        => tp_gt_mp7_core,
             rst_loc   => rst_loc,
 	    clken_loc => clken_loc,
             lane_data_in => payload_d(15 downto 0),
             lane_data_out => payload_q(15 downto 0),
-            finor_2_mezz_lemo => finor_2_mezz_lemo
+            finor_2_mezz_lemo => finor_2_mezz_lemo,
+            veto_2_mezz_lemo => veto_2_mezz_lemo
         );
 
 -- =======================================
@@ -298,17 +299,17 @@ begin
     mezz(0) <= finor_2_mezz_lemo;
     mezz_en(0) <= '1';
 
-    mezz(1) <= clk40;
+    mezz(1) <= veto_2_mezz_lemo; -- LEMO for veto to FINOR-FMC on AMC502
     mezz_en(1) <= '1';
 
-    mezz(2) <= ttc_cmd_dist(0);
+    mezz(2) <= clk40; -- LEMO for test outputs - register for test output selection has to be done!!
     mezz_en(2) <= '1';
 
-    mezz(3) <= tp_gt_mp7(0); -- simmem_in_use_o from frame.vhd
-    mezz_en(3) <= '1';
+--    mezz(3) <= tp_gt_mp7(0); -- simmem_in_use_o from frame.vhd
+--    mezz_en(3) <= '1';
 
-    mezz(4) <= tp_gt_mp7(1); -- bcres_d_FDL_int from frame.vhd
-    mezz_en(4) <= '1';
+--    mezz(4) <= tp_gt_mp7(1); -- bcres_d_FDL_int from frame.vhd
+--    mezz_en(4) <= '1';
 
 -- =======================================
 

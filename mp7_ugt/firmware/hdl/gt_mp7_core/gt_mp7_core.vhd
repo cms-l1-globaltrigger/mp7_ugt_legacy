@@ -11,9 +11,9 @@
 -- $HeadURL:  $
 -- $Date:  $
 -- $Author: Babak $
--- $Revision: 0.1  $ 
+-- $Revision: 0.1  $
 --------------------------------------------------------------------------------
--- TODO: review the core and and modify it
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
@@ -46,7 +46,8 @@ entity gt_mp7_core is
 	clken_loc: in std_logic_vector(N_REGION - 1 downto 0);
         lane_data_in	: in ldata(NR_LANES-1 downto 0);
         lane_data_out	: out ldata(NR_LANES-1 downto 0);
-        finor_2_mezz_lemo: out std_logic
+        finor_2_mezz_lemo: out std_logic;
+        veto_2_mezz_lemo: out std_logic
     );
 
 end gt_mp7_core;
@@ -70,24 +71,25 @@ architecture rtl of gt_mp7_core is
     signal local_veto_rop      : std_logic;
     signal local_finor_with_veto_o      : std_logic;
 
-	signal bcres_d_FDL       : std_logic;
-	signal bx_nr_d_FDL       : bx_nr_t;
-	signal start_lumisection : std_logic;
+    signal bcres_d_FDL       : std_logic;
+    signal bx_nr_d_FDL       : bx_nr_t;
+    signal start_lumisection : std_logic;
 
-	signal lhc_rst           : std_logic;
-        signal bc0_tmp           : std_logic;
-         signal l1a_tmp           : std_logic:='0';
+    signal lhc_rst           : std_logic;
+    signal bc0_tmp           : std_logic;
+    signal l1a_tmp           : std_logic:='0';
+
 begin
 
     fabric_i: entity work.gt_mp7_core_fabric
         generic map(NSLV => NR_IPB_SLV_GT_MP7_CORE)
         port map(
-            ipb_clk => ipb_clk,
-            ipb_rst => ipb_rst,
-            ipb_in => ipb_in,
-            ipb_out => ipb_out,
-            ipb_to_slaves => ipb_to_slaves,
-            ipb_from_slaves => ipb_from_slaves
+            ipb_clk             => ipb_clk,
+            ipb_rst             => ipb_rst,
+            ipb_in              => ipb_in,
+            ipb_out             => ipb_out,
+            ipb_to_slaves       => ipb_to_slaves,
+            ipb_from_slaves     => ipb_from_slaves
     );
     
 
@@ -149,15 +151,15 @@ begin
 
        
         
-    gtl_fdl_wrapper_i : entity work.gtl_fdl_wrapper
-       port map
+     gtl_fdl_wrapper_i : entity work.gtl_fdl_wrapper
+        port map
         (
             ipb_clk            => ipb_clk,
             ipb_rst            => ipb_rst,
             ipb_in             => ipb_to_slaves(C_IPB_GT_MP7_GTLFDL),
             ipb_out            => ipb_from_slaves(C_IPB_GT_MP7_GTLFDL),
 -- ========================================================
-            clk160             => '0', -- dirty solution, should be reviewed after testing 
+--         clk160              : in std_logic; -- dirty solution, should be reviewed after testing 
             lhc_clk            => lhc_clk,
             lhc_rst            => lhc_rst,
             lhc_data           => dsmux_lhc_data,
@@ -167,13 +169,14 @@ begin
             bx_nr              => bx_nr_d_FDL,
             fdl_status         => fdl_status,
             prescale_factor_set_index_rop => prescale_factor_set_index_rop,
-            algo_before_prescaler_rop    => algo_before_prescaler_rop,
-            algo_after_prescaler_rop     => algo_after_prescaler_rop,
-            algo_after_finor_mask_rop    => algo_after_finor_mask_rop,
-	    local_finor_rop 	=> local_finor_rop,
-	    local_veto_rop  	=> local_veto_rop,
-	    finor_2_mezz_lemo  	=> finor_2_mezz_lemo,
-	    local_finor_with_veto_o  => local_finor_with_veto_o
+            algo_before_prescaler_rop     => algo_before_prescaler_rop,
+            algo_after_prescaler_rop      => algo_after_prescaler_rop,
+            algo_after_finor_mask_rop     => algo_after_finor_mask_rop,
+	    local_finor_rop               => local_finor_rop,
+	    local_veto_rop                => local_veto_rop,
+	    finor_2_mezz_lemo             => finor_2_mezz_lemo,
+	    veto_2_mezz_lemo              => veto_2_mezz_lemo,
+	    local_finor_with_veto_o       => local_finor_with_veto_o
         );
 
 	tp <= tp_gtl_fdl & tp_frame;

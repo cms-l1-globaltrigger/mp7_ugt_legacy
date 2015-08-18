@@ -8,14 +8,15 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/trunk/uGT_algos/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd $
--- $Date: 2015-06-17 11:01:46 +0200 (Wed, 17 Jun 2015) $
--- $Author: wittmann $
--- $Revision: 4047 $
+-- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/src/gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd $
+-- $Date: 2015-08-14 10:57:16 +0200 (Fri, 14 Aug 2015) $
+-- $Author: bergauer $
+-- $Revision: 4148 $
 --------------------------------------------------------------------------------
 
 -- Version-history:
--- HB 2015-05-29: renamed port "ser_finor_veto" to "finor_2_mezz_lemo", because of renaming in fdl_module.
+-- HB 2015-06-26: used an additional port "veto_2_mezz_lemo" (in fdl_module), which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
+-- HB 2015-05-29: renamed port "ser_finor_veto" to "finor_2_mezz_lemo", because of renaming in fdl_module. 
 -- HB 2014-12-10: added clk160 for serializer in fdl_module.vhd
 -- HB 2014-10-30: updated for local_finor_with_veto_2_spy2 output - fdl v0.0.4.
 
@@ -33,8 +34,10 @@ use work.lhc_data_pkg.all;
 
 entity gtl_fdl_wrapper is
     generic(
-        SIM_MODE : boolean := false; -- if SIM_MODE = true, "algo_bx_mask" by default = 1.
-	FDL_OUT_MEZZ_2_TCDS : boolean := true -- if FDL_OUT_MEZZ_2_TCDS = true, "local_finor_with_veto" send to LEMO on mezzanine for TCDS.
+        SIM_MODE : boolean := false -- if SIM_MODE = true, "algo_bx_mask" by default = 1.
+-- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
+--                FDL_OUT_MEZZ_2_TCDS not used anymore.
+-- 	FDL_OUT_MEZZ_2_TCDS : boolean := false -- if FDL_OUT_MEZZ_2_TCDS = true, "local_finor_with_veto" send to LEMO on mezzanine for TCDS.
     );
     port
     (
@@ -43,7 +46,6 @@ entity gtl_fdl_wrapper is
         ipb_in              : in ipb_wbus;
         ipb_out             : out ipb_rbus;
 -- ==========================================================================
-        clk160              : in std_logic;
         lhc_clk             : in std_logic;
         lhc_rst             : in std_logic;
         lhc_data            : in lhc_data_t;
@@ -59,6 +61,7 @@ entity gtl_fdl_wrapper is
         local_finor_rop     : out std_logic;
         local_veto_rop      : out std_logic;
         finor_2_mezz_lemo      : out std_logic;
+        veto_2_mezz_lemo      : out std_logic;
         local_finor_with_veto_o      : out std_logic
     );
 end gtl_fdl_wrapper;
@@ -76,7 +79,7 @@ architecture rtl of gtl_fdl_wrapper is
     signal htm_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
     signal muon_temp : muon_objects_array(0 to NR_MUON_OBJECTS-1);
     signal ext_cond_temp : std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
-
+    
 begin
 
     eg_temp_l: for i in 0 to NR_EG_OBJECTS-1 generate
@@ -103,7 +106,7 @@ begin
     ext_cond_temp <= lhc_data.external_conditions(NR_EXTERNAL_CONDITIONS-1 downto 0);
 
 gtl_module_i: entity work.gtl_module
-    port map(
+    port map( 
         lhc_clk         => lhc_clk,
         eg_data         => eg_temp,
         jet_data        => jet_temp,
@@ -117,19 +120,18 @@ gtl_module_i: entity work.gtl_module
         algo_o          => algo
     );
 
-fdl_module_i:entity work.fdl_module
+fdl_module_i: entity work.fdl_module
     generic map(
-        FDL_OUT_MEZZ_2_TCDS => FDL_OUT_MEZZ_2_TCDS,
+        SIM_MODE => SIM_MODE,
         PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT,
         MASKS_INIT => MASKS_INIT
     )
-    port map(
+    port map( 
         ipb_clk         => ipb_clk,
         ipb_rst         => ipb_rst,
         ipb_in          => ipb_in,
         ipb_out         => ipb_out,
 -- ========================================================
-        clk160          => clk160,
         lhc_clk         => lhc_clk,
         lhc_rst         => lhc_rst,
         bcres           => bcres,
@@ -145,6 +147,7 @@ fdl_module_i:entity work.fdl_module
         local_finor_rop => local_finor_rop,
         local_veto_rop  => local_veto_rop,
         finor_2_mezz_lemo  => finor_2_mezz_lemo,
+        veto_2_mezz_lemo  => veto_2_mezz_lemo,
         local_finor_with_veto_o  => local_finor_with_veto_o
     );
 

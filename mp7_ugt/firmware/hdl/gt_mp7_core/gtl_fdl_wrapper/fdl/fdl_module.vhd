@@ -8,22 +8,23 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/trunk/uGT_algos/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd $
--- $Date: 2015-06-17 11:00:37 +0200 (Wed, 17 Jun 2015) $
--- $Author: wittmann $
--- $Revision: 4046 $
+-- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/src/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd $
+-- $Date: 2015-08-14 10:57:16 +0200 (Fre, 14 Aug 2015) $
+-- $Author: bergauer $
+-- $Revision: 4148 $
 --------------------------------------------------------------------------------
 
 -- Desription:
 -- FDL structure
 
 -- Version-history:
--- HB 2015-05-29: v0.0.11 - based on v0.0.10, but renamed port "ser_finor_veto" to "finor_2_mezz_lemo" and inserted FDL_OUT_MEZZ_2_TCDS in generic.
--- HB 2015-05-26: v0.0.10 - based on v0.0.9, but inserted SIM_MODE for algo_bx_mask and instanciated all modules with "entity work.xxx" and used clk160 for "serializer_2_to_1.vhd".
--- HB 2014-12-15: v0.0.9 - based on v0.0.8, but bug fixed at "local_finor_with_veto_o" (removed FF).
--- HB 2014-12-10: v0.0.8 - based on v0.0.7, but removed serializer.
--- HB 2014-12-10: v0.0.7 - based on v0.0.6, but clk160 used for serializer.
--- HB 2014-11-21: v0.0.6 - based on v0.0.5, but implemented "ser_finor_veto_2_to_1" (only"local FINOR" and "local VETO" serialized)
+-- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502. 
+-- HB 2015-05-29: v0.0.11 - based on v0.0.10, but renamed port "ser_finor_veto" to "finor_2_mezz_lemo" and inserted FDL_OUT_MEZZ_2_TCDS in generic. 
+-- HB 2015-05-26: v0.0.10 - based on v0.0.9, but inserted SIM_MODE for algo_bx_mask and instanciated all modules with "entity work.xxx" and used clk160 for "serializer_2_to_1.vhd". 
+-- HB 2014-12-15: v0.0.9 - based on v0.0.8, but bug fixed at "local_finor_with_veto_o" (removed FF). 
+-- HB 2014-12-10: v0.0.8 - based on v0.0.7, but removed serializer. 
+-- HB 2014-12-10: v0.0.7 - based on v0.0.6, but clk160 used for serializer. 
+-- HB 2014-11-21: v0.0.6 - based on v0.0.5, but implemented "ser_finor_veto_2_to_1" (only"local FINOR" and "local VETO" serialized) 
 --                         and "sel_finor_lemo_out" for selection of signal to finor LEMO output (on FINOR-mezzanine).
 -- HB 2014-11-18: v0.0.5 - based on v0.0.4, but "sel_local_finor_with_veto" instead of "sel_ser_finor_veto".
 -- HB 2014-10-30: v0.0.4 - based on v0.0.3, but added local_finor_with_veto_o for SPY2_FINOR.
@@ -46,7 +47,9 @@ use work.fdl_addr_decode.all;
 entity fdl_module is
     generic(
         SIM_MODE : boolean := false; -- if SIM_MODE = true, "algo_bx_mask" by default all '1'.
-        FDL_OUT_MEZZ_2_TCDS : boolean := false; -- if FDL_OUT_MEZZ_2_TCDS = true, "local_finor_with_veto" send to LEMO on mezzanine for TCDS.
+-- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
+--                FDL_OUT_MEZZ_2_TCDS not used anymore.
+--         FDL_OUT_MEZZ_2_TCDS : boolean := false; -- if FDL_OUT_MEZZ_2_TCDS = true, "local_finor_with_veto" send to LEMO on mezzanine for TCDS.
         PRESCALE_FACTOR_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"00000001");
         MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"00000001")
     );
@@ -56,33 +59,25 @@ entity fdl_module is
         ipb_in              : in ipb_wbus;
         ipb_out             : out ipb_rbus;
 -- ==========================================================================
-        clk160              : in std_logic; 
+-- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
+--                clk160 not used anymore.
+--         clk160              : in std_logic;
         lhc_clk             : in std_logic;
--- HB 2014-10-22: lhc_rst for serializer
         lhc_rst             : in std_logic;
         bcres               : in std_logic;
         lhc_gap             : in std_logic;
         begin_lumi_section  : in std_logic;
         bx_nr               : in std_logic_vector(11 downto 0);
         algo_i              : in std_logic_vector(NR_ALGOS-1 downto 0);
---         mezz_board_mounted  : in std_logic;
---         finor_mezz_board    : in std_logic;
---         board_connections   : in std_logic_vector(MAX_NR_GT_BOARDS-1 downto 1);
---         ext_finor_i         : in std_logic_vector(MAX_NR_GT_BOARDS-1 downto 1);
---         ext_veto_i          : in std_logic_vector(MAX_NR_GT_BOARDS-1 downto 1);
         fdl_status          : out std_logic_vector(3 downto 0);
         prescale_factor_set_index_rop : out std_logic_vector(7 downto 0);
         algo_before_prescaler_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_finor_mask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
--- HB 2014-10-22: redesign of FINOR and VETO logic
---         local_finor_o       : out std_logic;
---         local_veto_o        : out std_logic;
         local_finor_rop     : out std_logic;
         local_veto_rop      : out std_logic;
         finor_2_mezz_lemo      : out std_logic;
---         finor_rop           : out std_logic;
---         finor_o             : out std_logic
+        veto_2_mezz_lemo      : out std_logic;
         local_finor_with_veto_o       : out std_logic -- to SPY2_FINOR
     );
 end fdl_module;
@@ -132,10 +127,13 @@ architecture rtl of fdl_module is
     signal request_update_factor_pulse : std_logic;
 
     signal clk_80mhz : std_logic;
-    signal ser_finor_veto_2_to_1_int : std_logic;
+-- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
+--                ser_finor_veto_2_to_1_int not used anymore.
+--     signal ser_finor_veto_2_to_1_int : std_logic;
 
+--                local_finor_with_veto not used anymore.
 -- HB 2014-10-23: local_finor_with_veto for tests
-    signal local_finor_with_veto : std_logic;
+--     signal local_finor_with_veto : std_logic;
 
 begin
 
@@ -155,7 +153,7 @@ begin
 -- fdl_status <= X"2"; -- "error"
 
 -- board_connections_int <= board_connections & '1'; -- board(0) (=FINOR board) always "connected".
---
+-- 
 -- fdl_status <= X"8" when finor_mezz_board = '0' else -- status = "ready", if this board is not a total-FINOR board
 --               X"8" when finor_mezz_board = '1' and (board_connections_int(USED_GT_BOARDS-1 downto 0) = board_connections_check(USED_GT_BOARDS-1 downto 0)) else
 --               X"2";
@@ -199,11 +197,11 @@ begin
 
     l1tm_name_l: for i in 0 to L1TM_NAME'length/32-1 generate
 		versions_to_ipb(i+OFFSET_L1TM_NAME) <= L1TM_NAME(i*32+31 downto i*32);
-    end generate l1tm_name_l;
+    end generate l1tm_name_l;                        
 
     l1tm_uid_l: for i in 0 to L1TM_UID'length/32-1 generate
 		versions_to_ipb(i+OFFSET_L1TM_UID) <= L1TM_UID(i*32+31 downto i*32);
-    end generate l1tm_uid_l;
+    end generate l1tm_uid_l;                        
 
 	versions_to_ipb(OFFSET_L1TM_COMPILER_VERSION) <= L1TM_COMPILER_VERSION;
 	versions_to_ipb(OFFSET_GTL_FW_VERSION) <= GTL_FW_VERSION;
@@ -254,10 +252,13 @@ begin
             web       => '0', -- read
             addrb     => bx_nr(11 downto 0),
             dinb      => X"FFFFFFFF", -- dummy
-            doutb     => algo_bx_mask(32*i+31 downto 32*i)
+            doutb     => algo_bx_mask_mem_out(32*i+31 downto 32*i)
         );
-    end generate algo_bx_mem_l;
+    end generate algo_bx_mem_l;                        
 
+    algo_bx_mask <= algo_bx_mask_mem_out when not SIM_MODE else
+		    algo_bx_mask_default when SIM_MODE else (others => '1');
+    
 --===============================================================================================--
 -- Rate counter before prescaler register
     read_rate_cnt_i: entity work.ipb_read_regs
@@ -332,7 +333,7 @@ begin
 -- Input register for algorithms inputs (used for timing analysis of fdl_module).
     algo_in_ff_p: process(lhc_clk, algo_i)
         begin
-        if (algo_inputs_ff = false) then
+        if (algo_inputs_ff = false) then 
             algo_int <= algo_i;
         elsif (lhc_clk'event and (lhc_clk = '1') and (algo_inputs_ff = true)) then
             algo_int <= algo_i;
@@ -342,12 +343,12 @@ begin
 -- Prescalers and rate counters
     algo_slices_l: for i in 0 to NR_ALGOS-1 generate
         algo_slice_i: entity work.algo_slice
-        generic map(
+        generic map( 
             RATE_COUNTER_WIDTH => RATE_COUNTER_WIDTH,
             PRESCALER_COUNTER_WIDTH => PRESCALER_COUNTER_WIDTH,
             PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT(i)
         )
-        port map(
+        port map( 
             sys_clk => ipb_clk,
             lhc_clk => lhc_clk,
             request_update_factor_pulse => request_update_factor_pulse,
@@ -383,7 +384,7 @@ begin
     --     finor_algo <= or_algo_var;
         local_finor <= or_algo_var;
     end process local_finor_p;
-
+    
 -- HB 2014-10-23: renamed
 -- Finor of vetos
 -- finor_veto_algo_p: process(veto)
@@ -392,13 +393,13 @@ begin
     begin
         or_veto_var := '0';
             for i in 0 to NR_ALGOS-1 loop
-                or_veto_var := or_veto_var or veto(i);
+                or_veto_var := or_veto_var or veto(i); 
             end loop;
 --     finor_veto <= or_veto_var;
 	local_veto <= or_veto_var;
     end process local_veto_or_p;
 
--- One pipeline stages for finor_algo and finor_veto
+-- One pipeline stage for finor and veto to ROP
     local_finor_veto_pipeline_p: process(lhc_clk, local_finor, local_veto)
         begin
         if (lhc_clk'event and (lhc_clk = '1')) then
@@ -409,50 +410,68 @@ begin
 
     local_finor_rop <= local_finor_pipe;
     local_veto_rop <= local_veto_pipe;
-
--- -- HB 2014-12-10: clk80 used for serializer_2_to_1.
+    
+-- -- HB 2014-12-10: clk80 used for serializer_2_to_1. 
 --     pll_inst: entity work.lhc_clk_pll_40_80_160
 --     	port map
 --     	(
 -- 		CLK_IN1  => lhc_clk,
--- 		CLK_OUT1 => open,
+-- 		CLK_OUT1 => open, 
 -- 		CLK_OUT2 => clk_80mhz,
 -- 		CLK_OUT3 => open,
 -- 		LOCKED => open
 -- 	);
 
--- HB 2015-06-01: used for output to FINOR-AMC502 with 160 MHz output cklock (no lhc_clk_pll_40_80_160 needed).
-    serializer_2_to_1_i: entity work.serializer_2_to_1
-	port map(
-            clk160 => clk160,
-            lhc_clk => lhc_clk,
-            local_finor => local_finor_pipe,
-            local_veto => local_veto_pipe,
-            serialized_o => ser_finor_veto_2_to_1_int
-	);
+-- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
+--                ser_finor_veto_2_to_1_int not used anymore.
+
+-- -- HB 2015-06-01: used for output to FINOR-AMC502 with 160 MHz output cklock (no lhc_clk_pll_40_80_160 needed).
+--     serializer_2_to_1_i: entity work.serializer_2_to_1
+-- 	port map( 
+--             clk160 => clk160,
+--             lhc_clk => lhc_clk,
+--             local_finor => local_finor_pipe,
+--             local_veto => local_veto_pipe,
+--             serialized_o => ser_finor_veto_2_to_1_int
+-- 	);
 
 -- ***************************************************
--- HB 2014-10-30:
--- one pipeline delay for total FINOR directly to TCDS without FINOR-AMC502 (for tests)
-    total_finor_p: process(lhc_clk, local_finor_pipe, local_veto_pipe)
-        begin
-        if (lhc_clk'event and (lhc_clk = '1')) then
-            local_finor_with_veto <= local_finor_pipe and not local_veto_pipe;
-        end if;
-    end process;
-
+-- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
+-- -- HB 2014-10-30:
+-- -- one pipeline delay for total FINOR directly to TCDS without FINOR-AMC502 (for tests)
+--     total_finor_p: process(lhc_clk, local_finor_pipe, local_veto_pipe)
+--         begin
+--         if (lhc_clk'event and (lhc_clk = '1')) then
+--             local_finor_with_veto <= local_finor_pipe and not local_veto_pipe;
+--         end if;
+--     end process;
+    
 -- HB 2014-12-15: bug fixed - local_finor_with_veto used for finor_2_mezz_lemo not for SPY2_FINOR !!!
     local_finor_with_veto_o <= local_finor_pipe and not local_veto_pipe;
 
-    finor_2_mezz_lemo <= ser_finor_veto_2_to_1_int when not FDL_OUT_MEZZ_2_TCDS else
-			 local_finor_with_veto when FDL_OUT_MEZZ_2_TCDS;
+-- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
+--     finor_2_mezz_lemo <= ser_finor_veto_2_to_1_int when not FDL_OUT_MEZZ_2_TCDS else
+-- 			 local_finor_with_veto when FDL_OUT_MEZZ_2_TCDS;
+
+-- One pipeline stage for finor and veto to LEMO on mezzanine
+-- Output FFs should be placed in IOBs - to be done in UCF
+    mezz_finor_veto_pipeline_p: process(lhc_clk, local_finor, local_veto)
+        begin
+        if (lhc_clk'event and (lhc_clk = '1')) then
+            finor_2_mezz_lemo <= local_finor;
+            veto_2_mezz_lemo <= local_veto;
+        end if;
+    end process;
+
+--     finor_2_mezz_lemo <= local_finor_pipe;
+--     veto_2_mezz_lemo <= local_veto_pipe;
 
 -- FDL data flow - end
 -- ********************************************
 
 -- Algorithms to ROP
     algo_mapping_rop_i: entity work.algo_mapping_rop
-        port map (
+        port map ( 
             lhc_clk => lhc_clk,
             algo_before_prescaler => algo_before_prescaler,
             algo_after_prescaler => algo_after_prescaler,
@@ -461,6 +480,7 @@ begin
             algo_after_prescaler_rop => algo_after_prescaler_rop,
             algo_after_finor_mask_rop => algo_after_finor_mask_rop
         );
-
+    
 end architecture rtl;
-
+    
+    

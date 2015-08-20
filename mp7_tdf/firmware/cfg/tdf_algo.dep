@@ -1,4 +1,4 @@
-include ../cfg/tdf_board.dep
+#include ../cfg/tdf_board.dep
 ?toolset=="ISE"?    src ../ucf/algo_constraints.ucf
 ?toolset=="Vivado"? src ../ucf/algo_constraints.xdc
 src lhc_data_pkg.vhd
@@ -12,7 +12,6 @@ src tdf_mp7_core/mem_pipe/mem_pipe.vhd
 src tdf_mp7_core/tdf_mp7_core_pkg.vhd
 src tdf_mp7_core/module_info/module_info.vhd
 src tdf_mp7_core/mux/mux.vhd
-src tdf_mp7_core/tdf_mp7_core_fabric.vhd
 src tdf_mp7_core/ipbus_decode_mp7_payload.vhd
 src tdf_mp7_core/mp7_payload.vhd
 src ../ngc/dp_mem_4096x32/dp_mem_4096x32.ngc

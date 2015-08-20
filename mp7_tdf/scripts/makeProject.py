@@ -29,8 +29,8 @@ scripts_dir = os.getcwd()
 TDFalgosPath = os.path.abspath(os.path.join(scripts_dir, '..'))
 
 # Target VHDL package and it's template must be defined.
-TARGET_PKG_TPL = os.path.join(TDFalgosPath, 'tdf_algos/firmware/hdl/tdf_mp7_top_pkg_tpl.vhd')
-TARGET_PKG = os.path.join(TDFalgosPath, 'tdf_algos/firmware/hdl/tdf_mp7_top_pkg.vhd')
+TARGET_PKG_TPL = os.path.join(TDFalgosPath, 'firmware/hdl/tdf_mp7_top_pkg_tpl.vhd')
+TARGET_PKG = os.path.join(TDFalgosPath, 'firmware/hdl/tdf_mp7_top_pkg.vhd')
 
 def build_t(value):
     """Custom build type validator for argparse."""
@@ -94,7 +94,7 @@ def main():
 
 
         logging.info("checkout MP7 base firmware...")
-        ppath = os.path.join('tags', 'mp7', 'unstable' if args.unstable else 'stable', 'firmware', args.tag)
+        path = os.path.join('tags', 'mp7', 'unstable' if args.unstable else 'stable', 'firmware', args.tag)
         subprocess.check_call(['python', 'ProjectManager.py', 'checkout', path, '-u', args.user])
 
         #logging.info("fetching project firmware...")
@@ -110,19 +110,19 @@ def main():
 
         os.chdir(mp7currPath)
 
-        # storing mp7_null_algo.dep in mp7_null_algo.dep.orig file and add then uGT dep file to new mp7_null_algo.dep
-        logging.info("adding dependency file for the uGT to the null algo dep file...")
-        cwd = os.getcwd()
-        os.chdir('cactusupgrades/components/mp7_null_algo/firmware/cfg/')
-        shutil.copy('mp7_null_algo.dep', 'mp7_null_algo.dep.orig')
-        # Prepend a line to mp7_null_algo.dep
-        with open('mp7_null_algo.dep.orig', 'r') as fi:
-            with open('mp7_null_algo.dep.tmp', 'w') as fo:
-                fo.write("include -c components/mp7_ugt uGT_algo.dep\n")
-                fo.write(fi.read())
-        shutil.move('mp7_null_algo.dep.tmp', 'mp7_null_algo.dep')
+        ## storing mp7_null_algo.dep in mp7_null_algo.dep.orig file and add then uGT dep file to new mp7_null_algo.dep
+        #logging.info("adding dependency file for the uGT to the null algo dep file...")
+        #cwd = os.getcwd()
+        #os.chdir('cactusupgrades/components/mp7_null_algo/firmware/cfg/')
+        #shutil.copy('mp7_null_algo.dep', 'mp7_null_algo.dep.orig')
+        ## Prepend a line to mp7_null_algo.dep
+        #with open('mp7_null_algo.dep.orig', 'r') as fi:
+            #with open('mp7_null_algo.dep.tmp', 'w') as fo:
+                #fo.write("include -c components/mp7_ugt uGT_algo.dep\n")
+                #fo.write(fi.read())
+        #shutil.move('mp7_null_algo.dep.tmp', 'mp7_null_algo.dep')
 
-        os.chdir(cwd)
+        #os.chdir(cwd)
 
     else:
 
@@ -138,18 +138,18 @@ def main():
 
         os.chdir(mp7currPath)
 
-        # add the uGT dep file to mp7_null_algo.dep
-        logging.info("adding dependency file for the uGT to the null algo dep file...")
-        cwd = os.getcwd()
-        os.chdir('cactusupgrades/components/mp7_null_algo/firmware/cfg/')
-        # Prepend a line to mp7_null_algo.dep
-        with open('mp7_null_algo.dep.orig', 'r') as fi:
-            with open('mp7_null_algo.dep.tmp', 'w') as fo:
-                fo.write("include -c components/mp7_ugt uGT_algo.dep\n")
-                fo.write(fi.read())
-        shutil.move('mp7_null_algo.dep.tmp', 'mp7_null_algo.dep')
+        ## add the uGT dep file to mp7_null_algo.dep
+        #logging.info("adding dependency file for the uGT to the null algo dep file...")
+        #cwd = os.getcwd()
+        #os.chdir('cactusupgrades/components/mp7_null_algo/firmware/cfg/')
+        ## Prepend a line to mp7_null_algo.dep
+        #with open('mp7_null_algo.dep.orig', 'r') as fi:
+            #with open('mp7_null_algo.dep.tmp', 'w') as fo:
+                #fo.write("include -c components/mp7_ugt uGT_algo.dep\n")
+                #fo.write(fi.read())
+        #shutil.move('mp7_null_algo.dep.tmp', 'mp7_null_algo.dep')
 
-        os.chdir(cwd)
+        #os.chdir(cwd)
         ######################################################
 
 
@@ -161,9 +161,9 @@ def main():
     #
     #print os.path.join("cactusupgrades/projects/examples", args.board)
     #sys.exit()
-    if not os.path.isdir(os.path.join("cactusupgrades/projects/examples", args.board)):
-        logging.info("fetching project firmware...")
-        subprocess.check_call(['python', 'ProjectManager.py', 'fetch', os.path.join('projects/examples', args.board)])
+    #if not os.path.isdir(os.path.join("cactusupgrades/projects/examples", args.board)):
+        #logging.info("fetching project firmware...")
+        #subprocess.check_call(['python', 'ProjectManager.py', 'fetch', os.path.join('projects/examples', args.board)])
 
 
     #
@@ -177,7 +177,7 @@ def main():
     if os.path.isdir(build_area_dir):
         raise RuntimeError("build area alredy exists: {build_area_dir}".format(**locals()))
 
-    subprocess.check_call(['python', 'ProjectManager.py', 'vivado', os.path.join('projects/examples', args.board), '-w', build_area_dir])
+    subprocess.check_call(['python', 'ProjectManager.py', 'vivado', TDFalgosPath, '-w', build_area_dir])
 
     os.chdir(cwd)
 
@@ -189,16 +189,16 @@ def main():
     subprocess.check_call(['python', os.path.join(scripts_dir, 'pkgpatch.py'), '--build', args.build ,TARGET_PKG_TPL, TARGET_PKG])
 
 
-    filename = os.path.join(TDFalgosPath, 'tdf_algos/firmware/cfg/tdf_board.dep')
-    with open(filename, 'w') as f:
-        f.write("src -c projects/examples/{args.board} top_decl.vhd\n".format(**locals()))
-        f.write("src -c boards/mp7/base_fw/{args.board} mp7_brd_decl.vhd\n".format(**locals()))
+    #filename = os.path.join(TDFalgosPath, 'firmware/cfg/tdf_board.dep')
+    #with open(filename, 'w') as f:
+        #f.write("src -c projects/examples/{args.board} top_decl.vhd\n".format(**locals()))
+        #f.write("src -c boards/mp7/base_fw/{args.board} mp7_brd_decl.vhd\n".format(**locals()))
 
-    logging.info("linking tdf_algos into cactusupgrades/components...")
+    logging.info("linking mp7_tdf into cactusupgrades/components...")
     cwd = os.getcwd()
     os.chdir('cactusupgrades/components/')
-    remove_file("tdf_algos")
-    os.symlink(os.path.join(TDFalgosPath, 'tdf_algos'), "tdf_algos")
+    remove_file("mp7_tdf")
+    os.symlink(TDFalgosPath, 'mp7_tdf')
 
     os.chdir(cwd)
 
@@ -215,11 +215,11 @@ def main():
         #remove_file("runAll.sh")
         #os.symlink(os.path.join(TDFalgosPath, 'runAll.sh'),  'runAll.sh')
 
-    logging.info("replacing the original top file with the modified TDF one...")
-    shutil.copyfile(
-        os.path.join(TDFalgosPath, 'tdf_algos/firmware/hdl/{args.board}.vhd'.format(**locals())),
-        os.path.join(mp7currPath, 'cactusupgrades/boards/mp7/base_fw/{args.board}/firmware/hdl/{args.board}.vhd'.format(**locals()))
-    )
+    #logging.info("replacing the original top file with the modified TDF one...")
+    #shutil.copyfile(
+        #os.path.join(TDFalgosPath, 'tdf_algos/firmware/hdl/{args.board}.vhd'.format(**locals())),
+        #os.path.join(mp7currPath, 'cactusupgrades/boards/mp7/base_fw/{args.board}/firmware/hdl/{args.board}.vhd'.format(**locals()))
+    #)
 
     logging.info("finished with success.")
 

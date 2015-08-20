@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
+# optimized for mp7 fw v1.8.2 - JW 20.08.2015
 # modified for TDF usage - JW 25.05.2015
 
 import argparse
@@ -83,7 +84,8 @@ def main():
         # Remove existing file.
         remove_file(filename)
         # Download file
-        url = "https://svnweb.cern.ch/trac/cactus/browser/trunk/cactusupgrades/scripts/firmware/ProjectManager.py?format=txt"
+        release_mode = 'unstable' if args.unstable else 'stable'
+        url = "https://svnweb.cern.ch/trac/cactus/browser/tags/mp7/{release_mode}/firmware/{args.tag}/cactusupgrades/scripts/firmware/ProjectManager.py?format=txt".format(**locals())
         logging.info("retrieving %s", url)
         urllib.urlretrieve(url, filename)
         # Make executable
@@ -92,7 +94,7 @@ def main():
 
 
         logging.info("checkout MP7 base firmware...")
-        path = os.path.join('tags', 'mp7', 'unstable' if args.unstable else '', 'firmware', args.tag)
+        ppath = os.path.join('tags', 'mp7', 'unstable' if args.unstable else 'stable', 'firmware', args.tag)
         subprocess.check_call(['python', 'ProjectManager.py', 'checkout', path, '-u', args.user])
 
         #logging.info("fetching project firmware...")
@@ -108,16 +110,15 @@ def main():
 
         os.chdir(mp7currPath)
 
-        # FOR FUTURE USE: copy original null_algo.dep to a tmp, create new null_algo.dep with current link to algo block (ugt/tdf), so every time, a clean null_algo.dep is generated
-
-        logging.info("adding dependency file for the TDF to the null algo dep file...")
+        # storing mp7_null_algo.dep in mp7_null_algo.dep.orig file and add then uGT dep file to new mp7_null_algo.dep
+        logging.info("adding dependency file for the uGT to the null algo dep file...")
         cwd = os.getcwd()
         os.chdir('cactusupgrades/components/mp7_null_algo/firmware/cfg/')
         shutil.copy('mp7_null_algo.dep', 'mp7_null_algo.dep.orig')
         # Prepend a line to mp7_null_algo.dep
         with open('mp7_null_algo.dep.orig', 'r') as fi:
             with open('mp7_null_algo.dep.tmp', 'w') as fo:
-                fo.write("include -c components/tdf_algos tdf_algo.dep\n")
+                fo.write("include -c components/mp7_ugt uGT_algo.dep\n")
                 fo.write(fi.read())
         shutil.move('mp7_null_algo.dep.tmp', 'mp7_null_algo.dep')
 
@@ -137,18 +138,18 @@ def main():
 
         os.chdir(mp7currPath)
 
-        logging.info("adding dependency file for the TDF to the null algo dep file...")
+        # add the uGT dep file to mp7_null_algo.dep
+        logging.info("adding dependency file for the uGT to the null algo dep file...")
         cwd = os.getcwd()
         os.chdir('cactusupgrades/components/mp7_null_algo/firmware/cfg/')
         # Prepend a line to mp7_null_algo.dep
         with open('mp7_null_algo.dep.orig', 'r') as fi:
             with open('mp7_null_algo.dep.tmp', 'w') as fo:
-                fo.write("include -c components/tdf_algos tdf_algo.dep\n")
+                fo.write("include -c components/mp7_ugt uGT_algo.dep\n")
                 fo.write(fi.read())
         shutil.move('mp7_null_algo.dep.tmp', 'mp7_null_algo.dep')
 
         os.chdir(cwd)
-
         ######################################################
 
 
@@ -192,8 +193,6 @@ def main():
     with open(filename, 'w') as f:
         f.write("src -c projects/examples/{args.board} top_decl.vhd\n".format(**locals()))
         f.write("src -c boards/mp7/base_fw/{args.board} mp7_brd_decl.vhd\n".format(**locals()))
-        f.write("src {args.board}.vhd\n".format(**locals()))
-        f.write("src mp7_ttc.vhd\n".format(**locals()))
 
     logging.info("linking tdf_algos into cactusupgrades/components...")
     cwd = os.getcwd()

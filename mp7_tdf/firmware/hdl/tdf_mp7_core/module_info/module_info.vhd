@@ -22,7 +22,7 @@ use ieee.std_logic_unsigned.all;
 use ieee.numeric_std.all;
 
 use work.ipbus.all;
-use work.tdf_mp7_core_addr_decode.all;
+use work.ipbus_decode_mp7_payload.all;
 use work.tdf_mp7_core_pkg.all;
 
 entity module_info is
@@ -36,7 +36,6 @@ end module_info;
 
 architecture rtl of module_info is
 
-    constant MODULE_INFO_ADDR_WIDTH     :   integer := 5; -- this fits for up to 32 registers
     constant MODULE_INFO_BEGIN_INDEX    :   integer := 0; -- start of module info regs
     constant MODULE_INFO_END_INDEX      :   integer := 21; -- end of module info regs
 
@@ -49,7 +48,7 @@ begin
     module_info_i: entity work.ipb_read_regs
     generic map
     (
-        addr_width => MODULE_INFO_ADDR_WIDTH,
+        addr_width => C_IPB_TDF_MODULE_INFO_SIZE,
         regs_beg_index => MODULE_INFO_BEGIN_INDEX,
         regs_end_index => MODULE_INFO_END_INDEX
     )

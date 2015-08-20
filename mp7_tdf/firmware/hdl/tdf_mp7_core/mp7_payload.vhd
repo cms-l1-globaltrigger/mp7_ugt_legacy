@@ -73,8 +73,8 @@ end mp7_payload;
 architecture rtl of mp7_payload is
 
 
-    signal ipb_to_slaves: ipb_wbus_array(NR_IPB_SLV_TDF-1 downto 0);
-    signal ipb_from_slaves: ipb_rbus_array(NR_IPB_SLV_TDF-1 downto 0);
+    signal ipb_to_slaves: ipb_wbus_array(N_SLAVES-1 downto 0);
+    signal ipb_from_slaves: ipb_rbus_array(N_SLAVES-1 downto 0);
 
     signal dsmux_lhc_data : lhc_data_t;
 
@@ -96,7 +96,7 @@ architecture rtl of mp7_payload is
     signal lhc_rst                          : std_logic;
 
 
-    signal lane                             : ldata(NR_LANES-1 downto 0);
+    signal lane                             : ldata(4 * N_REGION - 1 downto 0);
 
     signal sValid                           : std_logic;
     signal sStart                           : std_logic;
@@ -190,18 +190,18 @@ begin
     sStart          <= tdf_ctrl_regs_1(2)(0);
     sStrobe         <= tdf_ctrl_regs_1(3)(0);
 
-    sbc0(0) <= ctrs.ttc_cmd(0);
+    sbc0(0) <= ctrs(0).ttc_cmd(0);
     bc0 <= piped_bc0(0)(0);
 
 --     frame_rst(0) <= lhc_rst or bc0;
 
 --      JW - 18.12.2014 put frame_counter code into mux
 --     -- frame counter
---     frame_counter: process (clk240, lhc_rst)
+--     frame_counter: process (clk_p, lhc_rst)
 --     begin
 --         if (lhc_rst = '1') then
 --            frame_cntr <= "000";      -- async. res
---         elsif (clk240'event and clk240 = '1') then
+--         elsif (clk_p'event and clk_p = '1') then
 --             if (frame_cntr = "101") then
 --                 frame_cntr <= "000";   -- sync BCReset
 --             else
@@ -221,7 +221,7 @@ begin
     mux0_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(0)(0),
             -- lhc_clk   =>  clk_payload,
@@ -239,7 +239,7 @@ begin
     mux1_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(1)(0),
             -- lhc_clk   =>  clk_payload,
@@ -257,7 +257,7 @@ begin
     mux2_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(2)(0),
             -- lhc_clk   =>  clk_payload,
@@ -275,7 +275,7 @@ begin
     mux3_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(3)(0),
             -- lhc_clk   =>  clk_payload,
@@ -293,7 +293,7 @@ begin
     mux4_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(4)(0),
             -- lhc_clk   =>  clk_payload,
@@ -311,7 +311,7 @@ begin
     mux5_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(5)(0),
             -- lhc_clk   =>  clk_payload,
@@ -329,7 +329,7 @@ begin
     mux6_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(6)(0),
             -- lhc_clk   =>  clk_payload,
@@ -347,7 +347,7 @@ begin
     mux7_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(7)(0),
             -- lhc_clk   =>  clk_payload,
@@ -365,7 +365,7 @@ begin
     mux8_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(8)(0),
             -- lhc_clk   =>  clk_payload,
@@ -383,7 +383,7 @@ begin
     mux9_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(9)(0),
             -- lhc_clk   =>  clk_payload,
@@ -401,7 +401,7 @@ begin
     mux10_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(10)(0),
             -- lhc_clk   =>  clk_payload,
@@ -419,7 +419,7 @@ begin
     mux11_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(11)(0),
             -- lhc_clk   =>  clk_payload,
@@ -437,7 +437,7 @@ begin
     mux12_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(12)(0),
             -- lhc_clk   =>  clk_payload,
@@ -455,7 +455,7 @@ begin
     mux13_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(13)(0),
             -- lhc_clk   =>  clk_payload,
@@ -473,7 +473,7 @@ begin
     mux14_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(14)(0),
             -- lhc_clk   =>  clk_payload,
@@ -491,7 +491,7 @@ begin
     mux15_i: entity work.mux
         port map
         (
-            clk     =>  clk240,
+            clk     =>  clk_p,
             res     =>  lhc_rst,
             bcres   =>  piped_bc0(15)(0),
             -- lhc_clk   =>  clk_payload,
@@ -506,14 +506,14 @@ begin
         );
 
     -- bc counter
-    bc_cntr: process (clk_payload, ctrs.ttc_cmd(0))
+    bc_cntr: process (clk_payload, ctrs(0).ttc_cmd(0))
     begin
 --      if ( internal_reset_i = '1') then
 --            bx_nr <= X"0000";      -- async. clr
 --            bx_length <= X"0000";      -- async. clr
 --      else
         if (clk_payload'event and clk_payload = '1') then
-           if (ctrs.ttc_cmd(0) = '1') then
+           if (ctrs(0).ttc_cmd(0) = '1') then
               bx_length <= bx_nr; -- "store" counter value for reading
               bx_nr <= X"0000";   -- sync BCReset
            else
@@ -592,14 +592,14 @@ begin
 --         clk_temp0 <= '0';
 --         clk_temp1 <= '0';
 --         bcres240 <= '0';
---     elsif rising_edge(clk240) then
---         clk_temp0 <= clk240;
+--     elsif rising_edge(clk_p) then
+--         clk_temp0 <= clk_p;
 --         clk_temp1 <= clk_temp0;
 --         bcres240 <= temp0 and not temp1;
 --     end if;
 --     end process;
 
---     mux_clk <=          clk240     when   regs_from_ipb(WRITE_REGS_BEGIN_INDEX)(15 downto 8)   =   X"00" else    --CONV_00
+--     mux_clk <=          clk_p     when   regs_from_ipb(WRITE_REGS_BEGIN_INDEX)(15 downto 8)   =   X"00" else    --CONV_00
 --                         fmc1_from_pin_to_fabric.la_cmos_n(0)     when   regs_from_ipb(WRITE_REGS_BEGIN_INDEX)(15 downto 8)   =   X"01" else    --CONV_01
 --                         fmc1_from_pin_to_fabric.la_cmos_p(3)     when   regs_from_ipb(WRITE_REGS_BEGIN_INDEX)(15 downto 8)   =   X"02" else    --CONV_02
 --                         fmc1_from_pin_to_fabric.la_cmos_n(3)     when   regs_from_ipb(WRITE_REGS_BEGIN_INDEX)(15 downto 8)   =   X"03" else    --CONV_03

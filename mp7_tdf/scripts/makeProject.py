@@ -9,6 +9,7 @@ import urllib
 import logging
 import shutil
 import subprocess
+import ConfigParser
 import glob
 import sys, stat, os
 

@@ -254,7 +254,7 @@ def main():
     config.set('firmware', 'build', args.build)
     config.set('firmware', 'tag', args.tag)
     config.set('firmware', 'stable', str(not args.unstable))
-    config.set('firmware', 'buildarea', os.path.join(mp7path, build_area_dir, menu_name))
+    config.set('firmware', 'buildarea', os.path.join(mp7path, build_area_dir))
 
     config.add_section('device')
     config.set('device', 'type', args.board)

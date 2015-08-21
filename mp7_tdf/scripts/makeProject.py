@@ -10,6 +10,8 @@ import logging
 import shutil
 import subprocess
 import ConfigParser
+import datetime
+import socket, pwd
 import glob
 import sys, stat, os
 
@@ -83,6 +85,8 @@ def main():
     logging.info("board type: %s", args.board)
 
     mp7path = os.path.join(args.path, args.tag)
+
+    timestamp = get_timestamp()
 
     #
     # Create build area

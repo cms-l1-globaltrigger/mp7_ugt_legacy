@@ -3,16 +3,13 @@
 
 from makeProject import (
     BoardAliases,
-    count_modules,
     get_timestamp,
 )
 
 import tarfile
-import datetime
 import argparse
 import logging
 import shutil
-import glob
 import tempfile
 import ConfigParser
 import sys, stat, os
@@ -45,29 +42,26 @@ def main():
         for option in config.options(section):
             print " ", option, "=", config.get(section, option)
 
-    menu = config.get('menu', 'name')
-    build = config.get('menu', 'build')
+    build = config.get('firmware', 'build')
     board = config.get('device', 'alias')
     buildarea = config.get('firmware', 'buildarea')
     timestamp = get_timestamp()
 
-    basename = "{menu}_v{build}_{board}".format(**locals())
+    basename = "tdf_v{build}_{board}".format(**locals())
     basepath = os.path.dirname(args.config)
     filename = os.path.join(basepath, "{basename}-{timestamp}.tar.gz".format(**locals()))
 
     tmpdir = tempfile.mkdtemp()
     logging.info("Created temporary dircetory %s", tmpdir)
 
-    for i in range(len(glob.glob(os.path.join(buildarea, 'module_*')))):
-        logging.info("collecting data from module %s", i)
-        module_dir = 'module_{i}'.format(**locals())
-        build_dir = os.path.join(tmpdir, module_dir, 'build')
-        log_dir = os.path.join(tmpdir, module_dir, 'log')
-        os.makedirs(build_dir)
-        os.makedirs(log_dir)
-        shutil.copy(os.path.join(buildarea, module_dir, 'top', 'top.runs', 'impl_1', 'top.bit'),
-            os.path.join(build_dir, 'gt_mp7_{board}_v{build}_module_{i}.bit'.format(**locals())))
-        shutil.copy(os.path.join(buildarea, module_dir, 'vivado.log'), log_dir)
+    logging.info("collecting data")
+    build_dir = os.path.join(tmpdir, 'build')
+    log_dir = os.path.join(tmpdir, 'log')
+    os.makedirs(build_dir)
+    os.makedirs(log_dir)
+    shutil.copy(os.path.join(buildarea, 'top', 'top.runs', 'impl_1', 'top.bit'),
+        os.path.join(build_dir, 'tdf_mp7_{board}_v{build}.bit'.format(**locals())))
+    shutil.copy(os.path.join(buildarea, 'vivado.log'), log_dir)
 
     # Copy build configuration file.
     shutil.copy(args.config, tmpdir)

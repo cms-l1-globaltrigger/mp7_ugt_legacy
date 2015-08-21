@@ -15,6 +15,11 @@ import sys, stat, os
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
+BoardAliases = {
+    'mp7_690es': 'r1',
+    'mp7xe_690': 'xe',
+}
+
 def remove_file(filename):
     """Savely remove a file or a symbolic link."""
     if os.path.isfile(filename) or os.path.islink(filename):
@@ -23,6 +28,18 @@ def remove_file(filename):
 def clear_file(filename):
     """Re-Create empty file."""
     open(filename, 'w').close()
+
+def get_timestamp():
+    return datetime.datetime.now().strftime("%Y-%m-%d-T%H-%M-%S")
+
+def hostname():
+    """@returns UNIX machine hostname."""
+    return socket.gethostname()
+
+def username():
+    """@returns UNIX login name."""
+    login = 0
+    return pwd.getpwuid(os.getuid())[login]
 
 # Some other paths.
 scripts_dir = os.getcwd()
@@ -42,7 +59,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--tag', metavar = '<tag>', required = True, help = "mp7fw tag")
     parser.add_argument('--unstable', action = 'store_true', help = "use unstable tag (default is stable)")
-    parser.add_argument('--board', metavar = '<type>', default = 'mp7xe_690', help = "set board type (default is `mp7xe_690')")
+    parser.add_argument('--board', metavar = '<type>', default = 'mp7xe_690', choices = BoardAliases.keys(), help = "set board type (default is `mp7xe_690')")
     parser.add_argument('-u', '--user', metavar = '<username>', required = True, help = "username for SVN")
     parser.add_argument('-p', '--path', metavar = '<path>', required = True, type = os.path.abspath, help = "mp7fw tag")
     parser.add_argument('-b', '--build', metavar = '<version>', required = True, type = build_t, help = 'build version (eg. 0x1001)')
@@ -220,6 +237,32 @@ def main():
         #os.path.join(TDFalgosPath, 'tdf_algos/firmware/hdl/{args.board}.vhd'.format(**locals())),
         #os.path.join(mp7currPath, 'cactusupgrades/boards/mp7/base_fw/{args.board}/firmware/hdl/{args.board}.vhd'.format(**locals()))
     #)
+
+    # Creating configuration file.
+    config = ConfigParser.RawConfigParser()
+    config.add_section('environment')
+    config.set('environment', 'timestamp', timestamp)
+    config.set('environment', 'hostname', hostname())
+    config.set('environment', 'username', username())
+
+    config.add_section('menu')
+    config.set('menu', 'build', args.build)
+    config.set('menu', 'name', menu_name)
+    config.set('menu', 'location', args.menu)
+    config.set('menu', 'modules', modules)
+
+    config.add_section('firmware')
+    config.set('firmware', 'tag', args.tag)
+    config.set('firmware', 'stable', str(not args.unstable))
+    config.set('firmware', 'buildarea', os.path.join(mp7path, build_area_dir, menu_name))
+
+    config.add_section('device')
+    config.set('device', 'type', args.board)
+    config.set('device', 'alias', BoardAliases[args.board])
+
+    # Writing our configuration file to 'example.cfg'
+    with open('.'.join((build_area_dir, 'cfg')), 'wb') as configfile:
+        config.write(configfile)
 
     logging.info("finished with success.")
 

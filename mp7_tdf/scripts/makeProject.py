@@ -250,13 +250,8 @@ def main():
     config.set('environment', 'hostname', hostname())
     config.set('environment', 'username', username())
 
-    config.add_section('menu')
-    config.set('menu', 'build', args.build)
-    config.set('menu', 'name', menu_name)
-    config.set('menu', 'location', args.menu)
-    config.set('menu', 'modules', modules)
-
     config.add_section('firmware')
+    config.set('firmware', 'build', args.build)
     config.set('firmware', 'tag', args.tag)
     config.set('firmware', 'stable', str(not args.unstable))
     config.set('firmware', 'buildarea', os.path.join(mp7path, build_area_dir, menu_name))

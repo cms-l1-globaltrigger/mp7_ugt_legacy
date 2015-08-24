@@ -9,15 +9,17 @@
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
 -- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/src/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd $
--- $Date: 2015-08-14 10:57:16 +0200 (Fre, 14 Aug 2015) $
+-- $Date: 2015-08-24 11:52:20 +0200 (Mon, 24 Aug 2015) $
 -- $Author: bergauer $
--- $Revision: 4148 $
+-- $Revision: 4174 $
 --------------------------------------------------------------------------------
 
 -- Desription:
 -- FDL structure
 
 -- Version-history:
+-- HB 2015-08-14: v0.0.13 - based on v0.0.12, but added algo_bx_mask_sim input for simulation use. Send a delayed "finor_with_veto" (currently assumed 1.5 bx latency over FINOR-AMC502)
+--                          to ports "finor_2_mezz_lemo" and "veto_2_mezz_lemo", which go to MP7-mezzanine to send finor gated with veto to TCDS directly (without AMC502).
 -- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502. 
 -- HB 2015-05-29: v0.0.11 - based on v0.0.10, but renamed port "ser_finor_veto" to "finor_2_mezz_lemo" and inserted FDL_OUT_MEZZ_2_TCDS in generic. 
 -- HB 2015-05-26: v0.0.10 - based on v0.0.9, but inserted SIM_MODE for algo_bx_mask and instanciated all modules with "entity work.xxx" and used clk160 for "serializer_2_to_1.vhd". 
@@ -78,7 +80,9 @@ entity fdl_module is
         local_veto_rop      : out std_logic;
         finor_2_mezz_lemo      : out std_logic;
         veto_2_mezz_lemo      : out std_logic;
-        local_finor_with_veto_o       : out std_logic -- to SPY2_FINOR
+        local_finor_with_veto_o       : out std_logic; -- to SPY2_FINOR
+-- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
+        algo_bx_mask_sim    : in std_logic_vector(NR_ALGOS-1 downto 0)
     );
 end fdl_module;
 
@@ -120,6 +124,7 @@ architecture rtl of fdl_module is
     signal algo_bx_mask : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
     signal algo_bx_mask_mem_out : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
     signal algo_bx_mask_default : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
+    signal algo_bx_mask_sim_internal : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
 
     signal lhc_clk_algo_bx_mem : std_logic := '0';
     signal sync_en_algo_bx_mem : std_logic := '0';
@@ -134,6 +139,9 @@ architecture rtl of fdl_module is
 --                local_finor_with_veto not used anymore.
 -- HB 2014-10-23: local_finor_with_veto for tests
 --     signal local_finor_with_veto : std_logic;
+
+    signal finor_with_veto_temp1 : std_logic;
+    signal finor_with_veto_temp2 : std_logic;
 
 begin
 
@@ -256,8 +264,11 @@ begin
         );
     end generate algo_bx_mem_l;                        
 
+    algo_bx_mask_sim_internal(NR_ALGOS-1 downto 0) <= algo_bx_mask_sim(NR_ALGOS-1 downto 0);
+    
+-- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
     algo_bx_mask <= algo_bx_mask_mem_out when not SIM_MODE else
-		    algo_bx_mask_default when SIM_MODE else (others => '1');
+		    algo_bx_mask_sim_internal when SIM_MODE else (others => '1');
     
 --===============================================================================================--
 -- Rate counter before prescaler register
@@ -410,56 +421,35 @@ begin
 
     local_finor_rop <= local_finor_pipe;
     local_veto_rop <= local_veto_pipe;
-    
--- -- HB 2014-12-10: clk80 used for serializer_2_to_1. 
---     pll_inst: entity work.lhc_clk_pll_40_80_160
---     	port map
---     	(
--- 		CLK_IN1  => lhc_clk,
--- 		CLK_OUT1 => open, 
--- 		CLK_OUT2 => clk_80mhz,
--- 		CLK_OUT3 => open,
--- 		LOCKED => open
--- 	);
-
--- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
---                ser_finor_veto_2_to_1_int not used anymore.
-
--- -- HB 2015-06-01: used for output to FINOR-AMC502 with 160 MHz output cklock (no lhc_clk_pll_40_80_160 needed).
---     serializer_2_to_1_i: entity work.serializer_2_to_1
--- 	port map( 
---             clk160 => clk160,
---             lhc_clk => lhc_clk,
---             local_finor => local_finor_pipe,
---             local_veto => local_veto_pipe,
---             serialized_o => ser_finor_veto_2_to_1_int
--- 	);
-
--- ***************************************************
--- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
--- -- HB 2014-10-30:
--- -- one pipeline delay for total FINOR directly to TCDS without FINOR-AMC502 (for tests)
---     total_finor_p: process(lhc_clk, local_finor_pipe, local_veto_pipe)
---         begin
---         if (lhc_clk'event and (lhc_clk = '1')) then
---             local_finor_with_veto <= local_finor_pipe and not local_veto_pipe;
---         end if;
---     end process;
-    
+        
 -- HB 2014-12-15: bug fixed - local_finor_with_veto used for finor_2_mezz_lemo not for SPY2_FINOR !!!
     local_finor_with_veto_o <= local_finor_pipe and not local_veto_pipe;
 
--- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
---     finor_2_mezz_lemo <= ser_finor_veto_2_to_1_int when not FDL_OUT_MEZZ_2_TCDS else
--- 			 local_finor_with_veto when FDL_OUT_MEZZ_2_TCDS;
+-- Pipeline stages for "simulating" the stages of FINOR-AMC502, to get the same latency for both possibilities of connecting to TCDS.
+-- HB 2015-08-21: currently assumed 1.5 bx latency over FINOR-AMC502
 
--- One pipeline stage for finor and veto to LEMO on mezzanine
--- Output FFs should be placed in IOBs - to be done in UCF
-    mezz_finor_veto_pipeline_p: process(lhc_clk, local_finor, local_veto)
+    stage1_finor_amc502_sim_p: process(lhc_clk, local_finor, local_veto)
         begin
         if (lhc_clk'event and (lhc_clk = '1')) then
-            finor_2_mezz_lemo <= local_finor;
-            veto_2_mezz_lemo <= local_veto;
+            finor_with_veto_temp1 <= local_finor and not local_veto;
+            finor_with_veto_temp2 <= finor_with_veto_temp1;
+        end if;
+    end process;
+
+--     stage2_finor_amc502_sim_p: process(lhc_clk, finor_with_veto_temp2)
+--         begin
+--         if (lhc_clk'event and (lhc_clk = '0')) then
+--             finor_with_veto_2_mezz_lemo <= finor_with_veto_temp2;
+--         end if;
+--     end process;
+
+-- Output FFs should be placed in IOBs - to be done in UCF
+-- HB 2015-08-21: for begin of "Parallel Run" (Sept. 2015), finor_2_mezz_lemo _AND_ veto_2_mezz_lemo send the veto-gated finor to TCDS (without FINOR-AMC502) !!!
+    mezz_finor_veto_pipeline_p: process(lhc_clk, finor_with_veto_temp2)
+        begin
+        if (lhc_clk'event and (lhc_clk = '0')) then
+            finor_2_mezz_lemo <= finor_with_veto_temp2;
+            veto_2_mezz_lemo <= finor_with_veto_temp2;
         end if;
     end process;
 

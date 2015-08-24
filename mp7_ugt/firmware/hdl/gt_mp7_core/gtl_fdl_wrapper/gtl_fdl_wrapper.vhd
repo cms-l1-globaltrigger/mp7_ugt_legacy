@@ -8,13 +8,14 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/src/gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd $
--- $Date: 2015-08-14 10:57:16 +0200 (Fri, 14 Aug 2015) $
+-- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/src/gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd $
+-- $Date: 2015-08-24 11:52:20 +0200 (Mon, 24 Aug 2015) $
 -- $Author: bergauer $
--- $Revision: 4148 $
+-- $Revision: 4174 $
 --------------------------------------------------------------------------------
 
 -- Version-history:
+-- HB 2015-08-24: added algo_bx_mask_sim input for fdl_module (v0.0.13).
 -- HB 2015-06-26: used an additional port "veto_2_mezz_lemo" (in fdl_module), which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
 -- HB 2015-05-29: renamed port "ser_finor_veto" to "finor_2_mezz_lemo", because of renaming in fdl_module. 
 -- HB 2014-12-10: added clk160 for serializer in fdl_module.vhd
@@ -46,6 +47,9 @@ entity gtl_fdl_wrapper is
         ipb_in              : in ipb_wbus;
         ipb_out             : out ipb_rbus;
 -- ==========================================================================
+-- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
+--                clk160 not used anymore.
+--         clk160              : in std_logic;
         lhc_clk             : in std_logic;
         lhc_rst             : in std_logic;
         lhc_data            : in lhc_data_t;
@@ -132,6 +136,9 @@ fdl_module_i: entity work.fdl_module
         ipb_in          => ipb_in,
         ipb_out         => ipb_out,
 -- ========================================================
+-- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
+--                clk160 not used anymore.
+--         clk160              : in std_logic;
         lhc_clk         => lhc_clk,
         lhc_rst         => lhc_rst,
         bcres           => bcres,
@@ -148,7 +155,8 @@ fdl_module_i: entity work.fdl_module
         local_veto_rop  => local_veto_rop,
         finor_2_mezz_lemo  => finor_2_mezz_lemo,
         veto_2_mezz_lemo  => veto_2_mezz_lemo,
-        local_finor_with_veto_o  => local_finor_with_veto_o
+        local_finor_with_veto_o  => local_finor_with_veto_o,
+	algo_bx_mask_sim => (others => '1')  
     );
 
 end architecture rtl;

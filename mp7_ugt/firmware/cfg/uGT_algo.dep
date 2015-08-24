@@ -1,5 +1,3 @@
-include ../cfg/uGT_gtl.dep
-include ../cfg/uGT_board.dep
 ?toolset=="ISE"?    src ../ucf/algo_constraints.ucf
 ?toolset=="Vivado"? src ../ucf/algo_constraints.xdc
 # addrtab -t cancel_out_barrel.xml
@@ -32,7 +30,7 @@ include ../cfg/uGT_board.dep
 #src mp7_ttc.vhd
 src lhc_data_pkg.vhd
 src gt_mp7_top_pkg.vhd
-src gt_mp7_core/gt_mp7_core.vhd
+src gt_mp7_core/mp7_payload.vhd
 src gt_mp7_core/gt_mp7_core_pkg.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_addr_decode.vhd
@@ -72,19 +70,19 @@ src gt_mp7_core/frame/crc/crc16d64.vhd
 src gt_mp7_core/frame/crc/crc16d32.vhd
 src gt_mp7_core/frame/crc/crc16d16_ugt.vhd
 src gt_mp7_core/frame/demux_lane/demux_lane_data.vhd
-src gt_mp7_core/frame/rop/mux_word_generator.vhd
-src gt_mp7_core/frame/rop/auto_gen/output_logic_pkg.vhd
-src gt_mp7_core/frame/rop/auto_gen/output_logic_beh.vhd
-src gt_mp7_core/frame/rop/auto_gen/output_instruction_rom.vhd
-src gt_mp7_core/frame/rop/validity_checker.vhd
-src gt_mp7_core/frame/rop/address_fetch_unit.vhd
-src gt_mp7_core/frame/rop/rop.vhd
-src gt_mp7_core/frame/rop/address_manager.vhd
-src gt_mp7_core/frame/rop/rop_sw_reg_synchronizer.vhd
-src gt_mp7_core/frame/rop/stretch_unit.vhd
-src gt_mp7_core/frame/rop/output_logic.vhd
-src gt_mp7_core/frame/synchronizer/flag_synchronizer.vhd
-src gt_mp7_core/frame/synchronizer/dualclock_synchronizer.vhd
+#src gt_mp7_core/frame/rop/mux_word_generator.vhd
+#src gt_mp7_core/frame/rop/auto_gen/output_logic_pkg.vhd
+#src gt_mp7_core/frame/rop/auto_gen/output_logic_beh.vhd
+#src gt_mp7_core/frame/rop/auto_gen/output_instruction_rom.vhd
+#src gt_mp7_core/frame/rop/validity_checker.vhd
+#src gt_mp7_core/frame/rop/address_fetch_unit.vhd
+#src gt_mp7_core/frame/rop/rop.vhd
+#src gt_mp7_core/frame/rop/address_manager.vhd
+#src gt_mp7_core/frame/rop/rop_sw_reg_synchronizer.vhd
+#src gt_mp7_core/frame/rop/stretch_unit.vhd
+#src gt_mp7_core/frame/rop/output_logic.vhd
+#src gt_mp7_core/frame/synchronizer/flag_synchronizer.vhd
+#src gt_mp7_core/frame/synchronizer/dualclock_synchronizer.vhd
 src gt_mp7_core/frame/frame.vhd
 src gt_mp7_core/frame/rb/rb_pkg.vhd
 src gt_mp7_core/frame/rb/rb.vhd

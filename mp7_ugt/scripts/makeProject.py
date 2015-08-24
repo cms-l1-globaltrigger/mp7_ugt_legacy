@@ -154,56 +154,6 @@ def main():
 
         os.chdir(mp7currPath)
 
-        # storing mp7_null_algo.dep in mp7_null_algo.dep.orig file and add then uGT dep file to new mp7_null_algo.dep
-        logging.info("adding dependency file for the uGT to the null algo dep file...")
-        cwd = os.getcwd()
-        os.chdir('cactusupgrades/components/mp7_null_algo/firmware/cfg/')
-        shutil.copy('mp7_null_algo.dep', 'mp7_null_algo.dep.orig')
-        # Prepend a line to mp7_null_algo.dep
-        with open('mp7_null_algo.dep.orig', 'r') as fi:
-            with open('mp7_null_algo.dep.tmp', 'w') as fo:
-                fo.write("include -c components/mp7_ugt uGT_algo.dep\n")
-                fo.write(fi.read())
-        shutil.move('mp7_null_algo.dep.tmp', 'mp7_null_algo.dep')
-
-        os.chdir(cwd)
-
-        # removing 'src mp7xe_690.vhd mp7_brd_decl.vhd' from mp7xe_690.dep to use the local file
-        logging.info("removing link to mp7xe_690.vhd from the mp7xe_690.dep file to use the local file...")
-        cwd = os.getcwd()
-        os.chdir('cactusupgrades/boards/mp7/base_fw/mp7xe_690/firmware/cfg/')
-        shutil.copy('mp7xe_690.dep', 'mp7xe_690.dep.orig')
-        # Remove a line from mp7xe_690.dep
-        with open('mp7xe_690.dep.orig', 'r') as fi:
-            with open('mp7xe_690.dep.tmp', 'w') as fo:
-                for line in fi:
-                    if 'src mp7xe_690.vhd mp7_brd_decl.vhd' in line:
-                        fo.write('# commented this line out, to use the uGT local files:\n')
-                        fo.write('#src mp7xe_690.vhd mp7_brd_decl.vhd\n')
-                    else:
-                        fo.write(line)
-        shutil.move('mp7xe_690.dep.tmp', 'mp7xe_690.dep')
-
-        os.chdir(cwd)
-
-        # removing 'src mp7_690es.vhd mp7_brd_decl.vhd' from mp7_690es.dep to use the local file
-        logging.info("removing link to mp7_690es.vhd from the mp7_690es.dep file to use the local file...")
-        cwd = os.getcwd()
-        os.chdir('cactusupgrades/boards/mp7/base_fw/mp7_690es/firmware/cfg/')
-        shutil.copy('mp7_690es.dep', 'mp7_690es.dep.orig')
-        # Remove a line from mp7_690es.dep
-        with open('mp7_690es.dep.orig', 'r') as fi:
-            with open('mp7_690es.dep.tmp', 'w') as fo:
-                for line in fi:
-                    if 'src mp7_690es.vhd mp7_brd_decl.vhd' in line:
-                        fo.write('# commented this line out, to use the uGT local files:\n')
-                        fo.write('#src mp7_690es.vhd mp7_brd_decl.vhd\n')
-                    else:
-                        fo.write(line)
-        shutil.move('mp7_690es.dep.tmp', 'mp7_690es.dep')
-
-        os.chdir(cwd)
-
     else:
 
         # included in the else, to preserve the path structure
@@ -218,53 +168,6 @@ def main():
 
         os.chdir(mp7currPath)
 
-        # add the uGT dep file to mp7_null_algo.dep
-        logging.info("adding dependency file for the uGT to the null algo dep file...")
-        cwd = os.getcwd()
-        os.chdir('cactusupgrades/components/mp7_null_algo/firmware/cfg/')
-        # Prepend a line to mp7_null_algo.dep
-        with open('mp7_null_algo.dep.orig', 'r') as fi:
-            with open('mp7_null_algo.dep.tmp', 'w') as fo:
-                fo.write("include -c components/mp7_ugt uGT_algo.dep\n")
-                fo.write(fi.read())
-        shutil.move('mp7_null_algo.dep.tmp', 'mp7_null_algo.dep')
-
-        os.chdir(cwd)
-
-        # removing 'src mp7xe_690.vhd mp7_brd_decl.vhd' from mp7xe_690.dep to use the local file
-        logging.info("removing link to mp7xe_690.vhd fro the mp7xe_690.dep file to use the local file...")
-        cwd = os.getcwd()
-        os.chdir('cactusupgrades/boards/mp7/base_fw/mp7xe_690/firmware/cfg/')
-        # Remove a line from mp7xe_690.dep
-        with open('mp7xe_690.dep.orig', 'r') as fi:
-            with open('mp7xe_690.dep.tmp', 'w') as fo:
-                for line in fi:
-                    if 'src mp7xe_690.vhd mp7_brd_decl.vhd' in line:
-                        fo.write('# commented this line out, to use the uGT local files:\n')
-                        fo.write('#src mp7xe_690.vhd mp7_brd_decl.vhd\n')
-                    else:
-                        fo.write(line)
-        shutil.move('mp7xe_690.dep.tmp', 'mp7xe_690.dep')
-
-        os.chdir(cwd)
-
-        # removing 'src mp7_690es.vhd mp7_brd_decl.vhd' from mp7_690es.dep to use the local file
-        logging.info("removing link to mp7_690es.vhd from the mp7_690es.dep file to use the local file...")
-        cwd = os.getcwd()
-        os.chdir('cactusupgrades/boards/mp7/base_fw/mp7_690es/firmware/cfg/')
-        # Remove a line from mp7_690es.dep
-        with open('mp7_690es.dep.orig', 'r') as fi:
-            with open('mp7_690es.dep.tmp', 'w') as fo:
-                for line in fi:
-                    if 'src mp7_690es.vhd mp7_brd_decl.vhd' in line:
-                        fo.write('# commented this line out, to use the uGT local files:\n')
-                        fo.write('#src mp7_690es.vhd mp7_brd_decl.vhd\n')
-                    else:
-                        fo.write(line)
-        shutil.move('mp7_690es.dep.tmp', 'mp7_690es.dep')
-
-        os.chdir(cwd)
-
         ######################################################
 
 
@@ -276,9 +179,9 @@ def main():
     #
     #print os.path.join("cactusupgrades/projects/examples", args.board)
     #sys.exit()
-    if not os.path.isdir(os.path.join("cactusupgrades/projects/examples", args.board)):
-        logging.info("fetching project firmware...")
-        subprocess.check_call(['python', 'ProjectManager.py', 'fetch', os.path.join('projects/examples', args.board)])
+    #if not os.path.isdir(os.path.join("cactusupgrades/projects/examples", args.board)):
+        #logging.info("fetching project firmware...")
+        #subprocess.check_call(['python', 'ProjectManager.py', 'fetch', os.path.join('projects/examples', args.board)])
 
 
     #
@@ -294,7 +197,7 @@ def main():
     # Do for every module of the menu...
     for i in range(modules):
         module_dir = os.path.join(build_area_dir, menu_name, 'module_{i}'.format(**locals()))
-        subprocess.check_call(['python', 'ProjectManager.py', 'vivado', os.path.join('projects/examples', args.board), '-w', module_dir])
+        subprocess.check_call(['python', 'ProjectManager.py', 'vivado', uGTalgosPath, '-w', module_dir])
 
     os.chdir(cwd)
 
@@ -313,12 +216,12 @@ def main():
         f.write("src {args.menu}/vhdl/module_0/src/gtl_module.vhd\n".format(**locals()))
         f.write("src {args.menu}/vhdl/module_0/src/gtl_pkg.vhd\n".format(**locals())) #until the tmVHDLproducer is released, the gtl_pkg is used
 
-    filename = os.path.join(uGTalgosPath, 'firmware/cfg/uGT_board.dep')
-    with open(filename, 'w') as f:
-#        f.write("src -c projects/examples/{args.board} top_decl.vhd\n".format(**locals())) # Babak changed based on Dave suggesstion
-        f.write("src top_decl_ugt_local.vhd\n".format(**locals())) # Babak changed based on Dave suggesstion
-        f.write("src -c boards/mp7/base_fw/{args.board} mp7_brd_decl.vhd\n".format(**locals()))
-        f.write("src {args.board}.vhd\n".format(**locals()))
+    #filename = os.path.join(uGTalgosPath, 'firmware/cfg/uGT_board.dep')
+    #with open(filename, 'w') as f:
+##        f.write("src -c projects/examples/{args.board} top_decl.vhd\n".format(**locals())) # Babak changed based on Dave suggesstion
+        #f.write("src top_decl_ugt_local.vhd\n".format(**locals())) # Babak changed based on Dave suggesstion
+        #f.write("src -c boards/mp7/base_fw/{args.board} mp7_brd_decl.vhd\n".format(**locals()))
+        #f.write("src {args.board}.vhd\n".format(**locals()))
 
     logging.info("linking mp7_ugt into cactusupgrades/components...")
     cwd = os.getcwd()
@@ -328,10 +231,10 @@ def main():
 
     os.chdir(cwd)
 
-    logging.info("removing constraints for null algo...")
-    filename = 'cactusupgrades/components/mp7_null_algo/firmware/ucf/mp7_null_algo.tcl'
-    # Clear and touch
-    clear_file(filename)
+    #logging.info("removing constraints for null algo...")
+    #filename = 'cactusupgrades/components/mp7_null_algo/firmware/ucf/mp7_null_algo.tcl'
+    ## Clear and touch
+    #clear_file(filename)
 
     # Do for every module of the menu...
     for i in range(modules):

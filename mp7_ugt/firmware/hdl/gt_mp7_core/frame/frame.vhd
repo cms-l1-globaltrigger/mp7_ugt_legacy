@@ -71,7 +71,7 @@ entity frame is
         lhc_clk            : in std_logic;
         lhc_rst_o        : out std_logic;
         bc0            : in std_logic;
-        l1a            : in std_logic;
+        --l1a            : in std_logic;
 --     bgo_cmd: in std_logic_vector(7 downto 0);
         bcres_d_FDL        : out std_logic;
         bx_nr_d_FDL        : out std_logic_vector (11 downto 0);
@@ -725,7 +725,7 @@ architecture rtl of frame is
 
             sw_reg_i   => rb2l1asim,
 
-            l1a_real_i => l1a,
+            l1a_real_i => '0',
 
             l1a_o      => l1a_int
         );

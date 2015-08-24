@@ -93,7 +93,7 @@ begin
     clk240  <= clk_p;
     bc0_in  <= ctrs(0).ttc_cmd(0);
     lane_data_in  <= d;
-    lane_data_out <= q;
+    q <= lane_data_out;
 
     fabric_i: entity work.gt_mp7_core_fabric
         generic map(NSLV => NR_IPB_SLV_GT_MP7_CORE)
@@ -141,7 +141,6 @@ begin
             lhc_clk            => lhc_clk,
             lhc_rst_o          => lhc_rst,
             bc0                => bc0_in,
-            l1a                => l1a_tmp,--not clean modification for putting out the l1a
             -- HB 2014-06-05: to get bgo_cmd, mp7_ttc must be changed ("cmd" as outputs)
             -- bgo_cmd            => bgo_cmd,
             bcres_d_FDL        => bcres_d_FDL,

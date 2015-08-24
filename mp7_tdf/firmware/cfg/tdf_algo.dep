@@ -1,4 +1,3 @@
-#include ../cfg/tdf_board.dep
 ?toolset=="ISE"?    src ../ucf/algo_constraints.ucf
 ?toolset=="Vivado"? src ../ucf/algo_constraints.xdc
 src lhc_data_pkg.vhd

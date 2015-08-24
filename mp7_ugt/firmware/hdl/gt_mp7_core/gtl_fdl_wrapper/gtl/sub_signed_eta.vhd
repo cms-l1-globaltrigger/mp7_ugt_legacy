@@ -8,10 +8,10 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/trunk/uGT_algos/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd $
--- $Date: 2015-06-16 11:48:44 +0200 (Tue, 16 Jun 2015) $
--- $Author: wittmann $
--- $Revision: 4043 $
+-- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/src/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd $
+-- $Date: 2015-08-14 10:57:16 +0200 (Fre, 14 Aug 2015) $
+-- $Author: bergauer $
+-- $Revision: 4148 $
 --------------------------------------------------------------------------------
 
 -- Desription:
@@ -33,7 +33,8 @@ entity sub_signed_eta is
         eta_2 : in std_logic_vector;
         eta_diff_o : out natural;
         eta_1_value_o_sim : out integer;
-        eta_2_value_o_sim : out integer
+        eta_2_value_o_sim : out integer;
+        eta_diff_o_sim : out integer
     );
 end sub_signed_eta;
 
@@ -49,5 +50,6 @@ begin
 
 -- only positive difference in eta
     eta_diff_o <= abs(eta_1_value - eta_2_value);
+    eta_diff_o_sim <= abs(eta_1_value - eta_2_value);
 
 end rtl;

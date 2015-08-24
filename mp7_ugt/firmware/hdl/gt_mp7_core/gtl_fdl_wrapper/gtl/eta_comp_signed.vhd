@@ -8,10 +8,10 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/trunk/uGT_algos/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_comp_signed.vhd $
--- $Date: 2015-05-13 13:07:37 +0200 (Wed, 13 May 2015) $
--- $Author: wittmann $
--- $Revision: 3941 $
+-- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/src/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_comp_signed.vhd $
+-- $Date: 2015-04-30 11:07:09 +0200 (Don, 30 Apr 2015) $
+-- $Author: bergauer $
+-- $Revision: 3879 $
 --------------------------------------------------------------------------------
 
 -- Desription:

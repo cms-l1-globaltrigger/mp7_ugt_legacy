@@ -8,10 +8,10 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/trunk/uGT_algos/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/p_m_2_bx_pipeline.vhd $
--- $Date: 2014-05-13 17:16:28 +0200 (Tue, 13 May 2014) $
+-- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/src/gt_mp7_core/gtl_fdl_wrapper/gtl/p_m_2_bx_pipeline.vhd $
+-- $Date: 2015-04-30 10:46:28 +0200 (Don, 30 Apr 2015) $
 -- $Author: bergauer $
--- $Revision: 2919 $
+-- $Revision: 3878 $
 --------------------------------------------------------------------------------
 
 library ieee;

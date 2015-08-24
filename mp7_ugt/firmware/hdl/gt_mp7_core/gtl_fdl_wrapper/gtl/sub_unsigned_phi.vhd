@@ -8,10 +8,10 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/trunk/uGT_algos/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd $
--- $Date: 2015-06-16 11:48:44 +0200 (Tue, 16 Jun 2015) $
--- $Author: wittmann $
--- $Revision: 4043 $
+-- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/src/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd $
+-- $Date: 2015-06-19 10:59:58 +0200 (Fre, 19 Jun 2015) $
+-- $Author: bergauer $
+-- $Revision: 4054 $
 --------------------------------------------------------------------------------
 
 -- Desription:
@@ -31,7 +31,9 @@ entity sub_unsigned_phi is
 	port(
         phi_1 : in std_logic_vector;
         phi_2 : in std_logic_vector;
-        phi_diff_o : out natural
+        phi_diff_o : out natural;
+        phi_diff_abs : out natural; -- for simulation
+        phi_diff_o_sim : out natural -- for simulation
     );
 end sub_unsigned_phi;
 
@@ -49,6 +51,7 @@ begin
     begin
 -- only positive difference in phi
         phi_diff := abs(phi_1_value - phi_2_value);
+        phi_diff_abs <= phi_diff;
 -- if positive difference is greater than half range of phi, take full range of phi minus positive difference
         if phi_diff < PHI_BINS_DIV2 then
             phi_diff_o <= phi_diff;

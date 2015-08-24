@@ -29,6 +29,8 @@ entity calo_muon_correlation_condition is
         deta_cut: boolean := true;
         dphi_cut: boolean := true;
         dr_cut: boolean := false;
+-- 	ETA_STEP: natural; -- range width of eta * STEP_PRECISION, see gtl_pkg.vhd
+-- 	PHI_STEP: natural; -- range width of phi * STEP_PRECISION, see gtl_pkg.vhd
 --
         nr_calo_objects: positive;
         et_ge_mode_calo: boolean;
@@ -67,23 +69,22 @@ entity calo_muon_correlation_condition is
         qual_lut_muon: std_logic_vector(15 downto 0);
         iso_lut_muon: std_logic_vector(3 downto 0);
 --
-        diff_eta_upper_limit: natural;
-        diff_eta_lower_limit: natural;
+        diff_eta_upper_limit: diff_eta_range_real;
+        diff_eta_lower_limit: diff_eta_range_real;
 --        
-        diff_phi_upper_limit: natural;
-        diff_phi_lower_limit: natural;
+        diff_phi_upper_limit: diff_phi_range_real;
+        diff_phi_lower_limit: diff_phi_range_real;
 --        
-        dr_threshold: dr_squared_range_real
+	dr_upper_limit: dr_squared_range_real;
+        dr_lower_limit: dr_squared_range_real
 
     );
     port(
         clk: in std_logic;
         calo_data_i: in calo_objects_array;
         muon_data_i: in muon_objects_array;
-        diff_eta_bins: in diff_2dim_integer_array; -- for DETA calculation
-        diff_phi_bins: in diff_2dim_integer_array; -- for DPHI calculation
-        diff_eta_real_values: in diff_eta_2dim_real_array; -- for DR calculation, real values
-        diff_phi_real_values: in diff_phi_2dim_real_array; -- for DR calculation, real values
+        diff_eta: in diff_2dim_integer_array;
+        diff_phi: in diff_2dim_integer_array;
         condition_o: out std_logic
     );
 end calo_muon_correlation_condition; 
@@ -100,6 +101,16 @@ architecture rtl of calo_muon_correlation_condition is
     type calo_object_vs_template_array is array (0 to nr_calo_objects-1, 1 to nr_templates) of std_logic;
     type muon_object_vs_template_array is array (0 to nr_muon_objects-1, 1 to nr_templates) of std_logic;
     type diff_comp_array is array (0 to nr_calo_objects-1, 0 to nr_muon_objects-1) of std_logic;
+
+    signal diff_eta_upper_limit_int : integer;
+    signal diff_eta_lower_limit_int : integer;
+    
+    signal diff_eta_bins_values: diff_2dim_integer_array(nr_calo_objects-1 downto 0, nr_muon_objects-1 downto 0);
+
+    signal diff_phi_upper_limit_int : integer;
+    signal diff_phi_lower_limit_int : integer;
+    
+    signal diff_phi_bins_values: diff_2dim_integer_array(nr_calo_objects-1 downto 0, nr_muon_objects-1 downto 0);
 
     signal calo_obj_vs_templ : calo_object_vs_template_array;
     signal calo_obj_vs_templ_pipe : calo_object_vs_template_array;
@@ -180,59 +191,75 @@ begin
             end if;
     end process;
     
-    delta_l_1: for i in 0 to nr_calo_objects-1 generate 
+diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**POSITION_FINAL_PRECISION));
+diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**POSITION_FINAL_PRECISION));
+diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**POSITION_FINAL_PRECISION));
+diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**POSITION_FINAL_PRECISION));
+
+delta_l_1: for i in 0 to nr_calo_objects-1 generate 
 	delta_l_2: for j in 0 to nr_muon_objects-1 generate
 	    deta_diff_i: if deta_cut = true generate
                 -- "windows"-comparator for difference in eta for all object combinations
-                -- differences are interpreted as unsigned values
-                diff_eta_comp(i,j) <= '1' when diff_eta_bins(i,j) >= diff_eta_lower_limit and diff_eta_bins(i,j) <= diff_eta_upper_limit else '0';
+--                 diff_eta_bins_values(i,j) <= diff_eta_bins(i,j)*ETA_STEP;
+--                 diff_eta_comp(i,j) <= '1' when diff_eta_bins_values(i,j) >= diff_eta_lower_limit_int and diff_eta_bins_values(i,j) <= diff_eta_upper_limit_int else '0';
+                diff_eta_comp(i,j) <= '1' when diff_eta(i,j) >= diff_eta_lower_limit_int and diff_eta(i,j) <= diff_eta_upper_limit_int else '0';
             end generate deta_diff_i;
 	    dphi_diff_i: if dphi_cut = true generate
                 -- "windows"-comparator for difference in phi for all object combinations
-                -- differences are interpreted as unsigned values
-                diff_phi_comp(i,j) <= '1' when diff_phi_bins(i,j) >= diff_phi_lower_limit and diff_phi_bins(i,j) <= diff_phi_upper_limit else '0';
+--                 diff_phi_bins_values(i,j) <= diff_phi_bins(i,j)*PHI_STEP;
+--                 diff_phi_comp(i,j) <= '1' when diff_phi_bins_values(i,j) >= diff_phi_lower_limit_int and diff_phi_bins_values(i,j) <= diff_phi_upper_limit_int else '0';
+                diff_phi_comp(i,j) <= '1' when diff_phi(i,j) >= diff_phi_lower_limit_int and diff_phi(i,j) <= diff_phi_upper_limit_int else '0';
             end generate dphi_diff_i;
 	    dr_i: if dr_cut = true generate
 		dr_calculator_i: entity work.dr_calculator
 		    generic map(
-			THRESHOLD_HIGH => dr_threshold
+			dr_upper_limit => dr_upper_limit,
+			dr_lower_limit => dr_lower_limit
+-- 			ETA_STEP => ETA_STEP,
+-- 			PHI_STEP => PHI_STEP
 			)
 		    port map(
-			diff_eta => diff_eta_real_values(i,j),
-			diff_phi => diff_phi_real_values(i,j),
+			diff_eta => diff_eta(i,j),
+			diff_phi => diff_phi(i,j),
 			dr_comp => dr_comp(i,j)
 		    );
 	    end generate dr_i;
         end generate delta_l_2;
     end generate delta_l_1;
 
--- Pipeline stage for diff_eta_comp and diff_phi_comp
-    diff_pipeline_p: process(clk, diff_eta_comp, diff_phi_comp)
+-- Pipeline stage for diff_eta_comp, diff_phi_comp and dr_comp
+    diff_pipeline_p: process(clk, diff_eta_comp, diff_phi_comp, dr_comp)
         begin
             if obj_vs_templ_pipeline_stage = false then 
-                if deta_cut = true then
+                if deta_cut = true and dphi_cut = false and dr_cut = false then
                     diff_eta_comp_pipe <= diff_eta_comp;
-                elsif dphi_cut = true then
+                elsif deta_cut = false and dphi_cut = true and dr_cut = false then
                     diff_phi_comp_pipe <= diff_phi_comp;
-                elsif dr_cut = true then
+                elsif deta_cut = true and dphi_cut = true and dr_cut = false then
+                    diff_eta_comp_pipe <= diff_eta_comp;
+                    diff_phi_comp_pipe <= diff_phi_comp;
+                elsif deta_cut = false and dphi_cut = false and dr_cut = true then
                     dr_comp_pipe <= dr_comp;
                 end if;
             else
                 if (clk'event and clk = '1') then
-		    if deta_cut = true then
-			diff_eta_comp_pipe <= diff_eta_comp;
-		    elsif dphi_cut = true then
-			diff_phi_comp_pipe <= diff_phi_comp;
-		    elsif dr_cut = true then
-			dr_comp_pipe <= dr_comp;
-		    end if;
+                    if deta_cut = true and dphi_cut = false and dr_cut = false then
+                        diff_eta_comp_pipe <= diff_eta_comp;
+                    elsif deta_cut = false and dphi_cut = true and dr_cut = false then
+                        diff_phi_comp_pipe <= diff_phi_comp;
+                    elsif deta_cut = true and dphi_cut = true and dr_cut = false then
+                        diff_eta_comp_pipe <= diff_eta_comp;
+                        diff_phi_comp_pipe <= diff_phi_comp;
+                    elsif deta_cut = false and dphi_cut = false and dr_cut = true then
+                        dr_comp_pipe <= dr_comp;
+                    end if;
                 end if;
             end if;
     end process;
 
 -- "Matrix" of permutations in an and-or-structure.
 
-    matrix_d_eta_phi_p: process(calo_obj_vs_templ_pipe, muon_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe)
+    matrix_deta_dphi_dr_p: process(calo_obj_vs_templ_pipe, muon_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe)
         variable index : integer := 0;
         variable obj_vs_templ_vec : std_logic_vector((nr_calo_objects*nr_muon_objects) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
@@ -255,15 +282,15 @@ begin
                 elsif deta_cut = true and dphi_cut = true and dr_cut = false then
                     index := index + 1;
                     obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j);
-                elsif deta_cut = true and dphi_cut = false and dr_cut = false then
-                    index := index + 1;
-                    obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and dr_comp_pipe(i,j);
-                elsif deta_cut = false and dphi_cut = true and dr_cut = true then
-                    index := index + 1;
-                    obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_phi_comp_pipe(i,j) and dr_comp_pipe(i,j);
-                elsif deta_cut = true and dphi_cut = true and dr_cut = true then
-                    index := index + 1;
-                    obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and dr_comp_pipe(i,j);
+--                 elsif deta_cut = true and dphi_cut = false and dr_cut = true then
+--                     index := index + 1;
+--                     obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and dr_comp_pipe(i,j);
+--                 elsif deta_cut = false and dphi_cut = true and dr_cut = true then
+--                     index := index + 1;
+--                     obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_phi_comp_pipe(i,j) and dr_comp_pipe(i,j);
+--                 elsif deta_cut = true and dphi_cut = true and dr_cut = true then
+--                     index := index + 1;
+--                     obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and dr_comp_pipe(i,j);
 		end if;
             end loop;
         end loop;
@@ -272,7 +299,7 @@ begin
             condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
         end loop;
         condition_and_or <= condition_and_or_tmp;
-    end process matrix_d_eta_phi_p;
+    end process matrix_deta_dphi_dr_p;
 
 -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(clk, condition_and_or)

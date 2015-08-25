@@ -20,6 +20,7 @@
 -- Version-history:
 -- HB 2015-08-14: v0.0.13 - based on v0.0.12, but added algo_bx_mask_sim input for simulation use. Send a delayed "finor_with_veto" (currently assumed 1.5 bx latency over FINOR-AMC502)
 --                          to ports "finor_2_mezz_lemo" and "veto_2_mezz_lemo", which go to MP7-mezzanine to send finor gated with veto to TCDS directly (without AMC502).
+--                          Moved constant "ALGO_INPUTS_FF" from fdl_pkg.vhd to fdl_module.vhd, fdl_pkg.vhd not used anymore.
 -- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502. 
 -- HB 2015-05-29: v0.0.11 - based on v0.0.10, but renamed port "ser_finor_veto" to "finor_2_mezz_lemo" and inserted FDL_OUT_MEZZ_2_TCDS in generic. 
 -- HB 2015-05-26: v0.0.10 - based on v0.0.9, but inserted SIM_MODE for algo_bx_mask and instanciated all modules with "entity work.xxx" and used clk160 for "serializer_2_to_1.vhd". 
@@ -40,7 +41,7 @@ use ieee.std_logic_arith.ALL;
 use ieee.std_logic_unsigned.ALL; -- for function "CONV_INTEGER"
 
 use work.ipbus.all;
-use work.fdl_pkg.ALL;
+-- use work.fdl_pkg.ALL;
 use work.gtl_pkg.ALL;
 
 use work.gt_mp7_core_pkg.ALL;
@@ -91,6 +92,9 @@ architecture rtl of fdl_module is
 -- HB 2015-05-26: "switch" for mux of signal to LEMO on mezzanine board
 -- HB 2015-06-02: FDL_OUT_MEZZ_2_TCDS moved to generic
 --     constant FDL_OUT_MEZZ_2_TCDS : boolean := false;
+
+-- Input flip-flops for algorithms of fdl_module.vhd
+    constant ALGO_INPUTS_FF: boolean := false; -- used for tests of fdl_module.vhd only
 
     constant CNTRL_REG_INIT : ipb_regs_array(0 downto 0) := (others => X"00000000");
 
@@ -344,9 +348,9 @@ begin
 -- Input register for algorithms inputs (used for timing analysis of fdl_module).
     algo_in_ff_p: process(lhc_clk, algo_i)
         begin
-        if (algo_inputs_ff = false) then 
+        if (ALGO_INPUTS_FF = false) then 
             algo_int <= algo_i;
-        elsif (lhc_clk'event and (lhc_clk = '1') and (algo_inputs_ff = true)) then
+        elsif (lhc_clk'event and (lhc_clk = '1') and (ALGO_INPUTS_FF = true)) then
             algo_int <= algo_i;
         end if;
     end process;

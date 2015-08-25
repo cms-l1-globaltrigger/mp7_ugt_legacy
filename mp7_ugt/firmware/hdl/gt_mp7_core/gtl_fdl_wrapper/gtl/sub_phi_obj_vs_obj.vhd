@@ -8,10 +8,10 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/trunk/uGT_algos/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_obj_vs_obj.vhd $
--- $Date: 2015-06-16 11:48:44 +0200 (Tue, 16 Jun 2015) $
--- $Author: wittmann $
--- $Revision: 4043 $
+-- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/src/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_obj_vs_obj.vhd $
+-- $Date: 2015-08-24 11:11:49 +0200 (Mon, 24 Aug 2015) $
+-- $Author: bergauer $
+-- $Revision: 4171 $
 --------------------------------------------------------------------------------
 
 -- Version history:

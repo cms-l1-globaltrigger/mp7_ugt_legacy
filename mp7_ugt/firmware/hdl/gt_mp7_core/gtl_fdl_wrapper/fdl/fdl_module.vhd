@@ -41,6 +41,7 @@ use ieee.std_logic_arith.ALL;
 use ieee.std_logic_unsigned.ALL; -- for function "CONV_INTEGER"
 
 use work.ipbus.all;
+-- HB 2015-08-26: not used anymore
 -- use work.fdl_pkg.ALL;
 use work.gtl_pkg.ALL;
 

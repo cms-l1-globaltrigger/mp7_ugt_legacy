@@ -28,7 +28,9 @@ use ieee.std_logic_arith.all;
 use work.ipbus.all;
 
 use work.gtl_pkg.all;
-use work.fdl_pkg.all;
+
+-- HB 2015-08-26: not used anymore
+-- use work.fdl_pkg.all; 
 
 use work.gt_mp7_core_pkg.all;
 use work.lhc_data_pkg.all;

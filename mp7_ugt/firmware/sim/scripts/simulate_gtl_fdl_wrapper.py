@@ -11,13 +11,13 @@ import sys, os
 
 # Default paths and versions.
 DEFAULT_XILINX_PATH = '/opt/xilinx/14.6'
-DEFAULT_MODELSIM_VERSION = '10.1a'
+DEFAULT_MODELSIM_VERSION = '10.3b'
 DEFAULT_MODELSIM_INI_TPL = 'modelsim_tpl.ini'
 
 # Directories.
 SCRIPTS_DIR = 'scripts'
 TB_DIR = 'testbench'
-SRC_DIR = '../src'
+SRC_DIR = '../hdl'
 
 # Do file and template.
 INI_FILE_TPL = 'modelsim_tpl.ini'
@@ -34,7 +34,7 @@ TB_FILE = os.path.join(TB_DIR, 'gtl_fdl_wrapper_tb.vhd')
 TEMP_FILE = os.path.join(TB_DIR, 'temp_file.vhd')
 
 # gt_mp7_top_pkg_tpl.vhd template.
-GT_MP7_TOP_PKG_TPL = os.path.join(SRC_DIR, 'gt_mp7_xe_top_pkg_tpl.vhd')
+GT_MP7_TOP_PKG_TPL = os.path.join(SRC_DIR, 'gt_mp7_top_pkg_tpl.vhd')
 GT_MP7_TOP_PKG_SIM_TEMP = os.path.join(SRC_DIR, 'gt_mp7_top_pkg_sim_temp.vhd')
 
 def remove_file(filename):
@@ -145,9 +145,10 @@ def main():
         '{{TESTVECTOR_NAME}}' : testvector_name,
     })
     render_template(GT_MP7_TOP_PKG_TPL, GT_MP7_TOP_PKG_SIM_TEMP, {
-        '_IPBUS_TIMESTAMP_' : 'X"00000000"',
-        '_IPBUS_USERNAME_' : 'X"0000000000000000000000000000000000000000000000000000000000000000"',
-        '_IPBUS_HOSTNAME_' : 'X"0000000000000000000000000000000000000000000000000000000000000000"',
+        '{{IPBUS_TIMESTAMP}}' : 'X"00000000"',
+        '{{IPBUS_USERNAME}}' : 'X"0000000000000000000000000000000000000000000000000000000000000000"',
+        '{{IPBUS_HOSTNAME}}' : 'X"0000000000000000000000000000000000000000000000000000000000000000"',
+        '{{IPBUS_BUILD_VERSION}}' : 'X"00000000"',
     })
 
     # Run Modelsim with makefile, on fail (1) raise error.
@@ -156,7 +157,7 @@ def main():
     print
     print " ==> see `sim_error_{testvector_name}.txt' for detailed information about errors!!!".format(**locals())
     print
-    remove_file(GT_MP7_TOP_PKG_SIM_TEMP)
+#    remove_file(GT_MP7_TOP_PKG_SIM_TEMP)
     print
 
     return 0 # exit success

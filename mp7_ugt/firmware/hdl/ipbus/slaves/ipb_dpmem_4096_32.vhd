@@ -3,11 +3,6 @@ use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.all;
 use work.ipbus.all;
 
--- pragma translate_off
-LIBRARY blk_mem_gen_v8_2;
-USE blk_mem_gen_v8_2.blk_mem_gen_v8_2;
--- pragma translate_on
-
 entity ipb_dpmem_4096_32 is
     port
     (

@@ -34,7 +34,7 @@ if [info exists env(MTI_LIBS)] {
 
 ## set your src files directory for your design
 
-set MP7_BRD ./../../../../../boards/mp7/base_fw
+set MP7_BRD ~/cactus/tags/mp7/stable/firmware/mp7fw_v1_8_2/cactusupgrades/boards/mp7/base_fw
 set MP7_SRC ./../../../../../components
 
 set GT_SRC ./../hdl
@@ -97,16 +97,15 @@ vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/ipbus_ctrl.vhd
 vcom -93 -work work $GT_SRC/top_decl.vhd
 vcom -93 -work work $GT_SRC/lhc_data_pkg.vhd
 vcom -93 -work work $GT_SRC/math_pkg.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_top_pkg_sim_temp.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_top_pkg_sim.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gt_mp7_core_pkg.vhd
 ## HB 2015-06-03: test with l1tm_pkg.vhd instead of gtl_pkg.vhd - gtl_pkg.vhd moved to $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl
-#vcom -93 -work work $L1TM/_MENU_NAME_/vhdl/module_0/src/l1tm_pkg.vhd
-vcom -93 -work work $L1TM/_MENU_NAME_/vhdl/module_0/src/gtl_pkg.vhd
+#vcom -93 -work work $L1TM/L1Menu_CaloMuonCorrelation_2015_hb_test/vhdl/module_0/src/l1tm_pkg.vhd
+vcom -93 -work work $L1TM/L1Menu_CaloMuonCorrelation_2015_hb_test/vhdl/module_0/src/gtl_pkg.vhd
 
 vcom -93 -work work $TESTBENCH/lhc_data_debug_util_pkg.vhd
 vcom -93 -work work $TESTBENCH/txt_util_pkg.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_lib.vhd
+#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/p_m_2_bx_pipeline.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/phi_windows_comp.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_comp_signed.vhd
@@ -128,15 +127,14 @@ vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_obj_vs_obj.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_obj_vs_obj.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd
-vcom -93 -work work $L1TM/_MENU_NAME_/vhdl/module_0/src/gtl_module.vhd
+vcom -93 -work work $L1TM/L1Menu_CaloMuonCorrelation_2015_hb_test/vhdl/module_0/src/gtl_module.vhd
 
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_pkg.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_lib.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/pulse_converter.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/serializer_2_to_1.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_addr_decode.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_fabric.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler.vhd
@@ -147,7 +145,7 @@ vcom -93 -work work $GT_CORES/lhc_clk_pll_40_80_160/lhc_clk_pll_40_80_160.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_dpmem_4096_32.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_read_regs.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_write_regs.vhd
-vcom -93 -work work $L1TM/_MENU_NAME_/vhdl/module_0/src/algo_mapping_rop.vhd
+vcom -93 -work work $L1TM/L1Menu_CaloMuonCorrelation_2015_hb_test/vhdl/module_0/src/algo_mapping_rop.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
 
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd

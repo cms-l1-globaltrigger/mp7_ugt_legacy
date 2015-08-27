@@ -32,7 +32,7 @@ use work.mp7_data_types.all;
 use work.gt_mp7_core_pkg.all;
 
 -- use work.fdl_pkg.all;
--- use work.gtl_pkg.all;
+use work.gtl_pkg.all;
 
 entity fdl_module_TB is
 end fdl_module_TB;
@@ -43,7 +43,7 @@ architecture rtl of fdl_module_TB is
 
     constant LHC_CLK_PERIOD  : time :=  25 ns;
 
-    constant NR_ALGOS : positive := 16;
+--     constant NR_ALGOS : positive := 16;
 
     constant PRESCALER_COUNTER_WIDTH : integer := 24;
     type prescale_factor_array is array (NR_ALGOS-1 downto 0) of std_logic_vector(31 downto 0); -- same width as PCIe data
@@ -72,42 +72,42 @@ begin
     process
     begin
 --         wait for 1207 ns; -- setup time for PLL for 80 MHz
---         algo_in <= X"0000"; 
+--         algo_in <= X"00000"; 
 --         wait for 3*LHC_CLK_PERIOD; 
---         algo_in <= X"0001"; 
+--         algo_in <= X"00001"; 
 --         wait for LHC_CLK_PERIOD; 
---         algo_in <= X"0000"; 
+--         algo_in <= X"00000"; 
 --         wait for LHC_CLK_PERIOD; 
---         algo_in <= X"0003"; 
+--         algo_in <= X"00003"; 
 --         wait for LHC_CLK_PERIOD; 
---         algo_in <= X"0000"; 
+--         algo_in <= X"00000"; 
 --         wait for LHC_CLK_PERIOD; 
---         algo_in <= X"0056"; 
+--         algo_in <= X"00056"; 
 --         wait for LHC_CLK_PERIOD; 
---         algo_in <= X"0000"; 
+--         algo_in <= X"00000"; 
 --         wait for LHC_CLK_PERIOD; 
 --         wait; 
         wait for 1207 ns; -- setup time for PLL for 80 MHz
-        algo_in <= X"0000"; 
+        algo_in <= X"00000"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"0000"; 
+        algo_in <= X"00000"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"0000"; 
+        algo_in <= X"00000"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"0001"; 
-        algo_bx_mask_sim <= X"FFFF"; 
+        algo_in <= X"00001"; 
+        algo_bx_mask_sim <= X"0FFFF"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"0000"; 
+        algo_in <= X"00000"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"0003"; 
-        algo_bx_mask_sim <= X"FFFE"; 
+        algo_in <= X"00003"; 
+        algo_bx_mask_sim <= X"0FFFE"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"0000"; 
+        algo_in <= X"00000"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"0056"; 
-        algo_bx_mask_sim <= X"FFFF"; 
+        algo_in <= X"00056"; 
+        algo_bx_mask_sim <= X"0FFFF"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"0000"; 
+        algo_in <= X"00000"; 
         wait for LHC_CLK_PERIOD; 
         wait; 
     end process;
@@ -143,7 +143,6 @@ dut: entity work.fdl_module
         local_veto_rop  => open,
         finor_2_mezz_lemo  => open,
         veto_2_mezz_lemo  => open,
-	finor_with_veto_2_mezz_lemo  => open,
 	local_finor_with_veto_o  => open,
         algo_bx_mask_sim => algo_bx_mask_sim
     );

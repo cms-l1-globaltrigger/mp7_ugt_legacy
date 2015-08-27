@@ -32,8 +32,9 @@ if [info exists env(MTI_LIBS)] {
     vmap SECUREIP $MTI_LIBS/secureip  
 }
 
-set MP7_BRD ./../../../../../boards/mp7/base_fw
+set MP7_BRD ~/cactus/tags/mp7/stable/firmware/mp7fw_v1_8_2/cactusupgrades/boards/mp7/base_fw
 set MP7_SRC ./../../../../../components
+
 
 set GT_SRC ./../hdl
 set GT_CORES ./../ngc
@@ -95,14 +96,14 @@ vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/ipbus_ctrl.vhd
 vcom -93 -work work $GT_SRC/top_decl.vhd
 vcom -93 -work work $GT_SRC/lhc_data_pkg.vhd
 vcom -93 -work work $GT_SRC/math_pkg.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_top_pkg_sim_temp.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_top_pkg_sim.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gt_mp7_core_pkg.vhd
-vcom -93 -work work $L1TM/l1tm/L1Menu_Collisions2015_25nsStage1_v3_subset/vhdl/module_0/src/gtl_pkg.vhd
-vcom -93 -work work $L1TM/L1Menu_Collisions2015_25nsStage1_v3_subset/vhdl/module_0/src/algo_mapping_rop.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_pkg.vhd
+vcom -93 -work work $L1TM/L1Menu_Collisions2015_25nsStage1_v3_subset_v2/vhdl/module_0/src/gtl_pkg.vhd
+vcom -93 -work work $L1TM/L1Menu_Collisions2015_25nsStage1_v3_subset_v2/vhdl/module_0/src/algo_mapping_rop.vhd
+#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_pkg.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/pulse_converter.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/serializer_2_to_1.vhd
+#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/serializer_2_to_1.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_addr_decode.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_fabric.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler.vhd

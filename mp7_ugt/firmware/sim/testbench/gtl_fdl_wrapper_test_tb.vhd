@@ -40,7 +40,7 @@ use work.lhc_data_debug_util_pkg.all;
 
 use work.gt_mp7_core_pkg.all;
 
-use work.fdl_pkg.all;
+-- use work.fdl_pkg.all;
 use work.gtl_pkg.all;
 
 entity gtl_fdl_wrapper_TB is

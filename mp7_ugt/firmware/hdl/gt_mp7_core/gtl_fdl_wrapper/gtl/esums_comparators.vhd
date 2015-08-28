@@ -46,6 +46,9 @@ entity esums_comparators is
 end esums_comparators;
 
 architecture rtl of esums_comparators is
+
+    constant ZERO : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
+
     signal et_ett : std_logic_vector(D_S_I_ETT.et_high-D_S_I_ETT.et_low downto 0);
 
     signal et_etm : std_logic_vector(D_S_I_ETM.et_high-D_S_I_ETM.et_low downto 0);
@@ -59,12 +62,17 @@ architecture rtl of esums_comparators is
     signal et_comp : std_logic;
     signal phi_comp : std_logic := '0';
 
+    signal no_esums : std_logic;
+
 begin
 -- HB 2015-04-27: used integer for obj_type
 -- ett_obj_type=0
 -- htt_obj_type=1
 -- etm_obj_type=2
 -- htm_obj_type=3
+    
+-- HB 2015-08-28: inserted "no calo" (all object parameters = 0)
+    no_esums <= '1' when data_i = ZERO else '0';
     
     ett_sel: if obj_type=0 generate
         et_ett  <= data_i(D_S_I_ETT.et_high downto D_S_I_ETT.et_low);
@@ -135,7 +143,7 @@ begin
             	phi_comp_o => phi_comp
 	    );
         	
-	comp_o <= et_comp and phi_comp;   
+	comp_o <= et_comp and phi_comp and not no_esums;   
         
     end generate htm_sel;
         

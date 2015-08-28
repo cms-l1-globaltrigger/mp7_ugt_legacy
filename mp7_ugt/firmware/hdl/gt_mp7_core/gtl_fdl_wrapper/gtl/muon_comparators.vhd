@@ -56,6 +56,8 @@ end muon_comparators;
 
 architecture rtl of muon_comparators is
 
+    constant ZERO : std_logic_vector(MAX_MUON_BITS-1 downto 0) := (others => '0');
+
     signal pt : std_logic_vector(d_s_i.pt_high downto d_s_i.pt_low);
     signal eta : std_logic_vector(d_s_i.eta_high downto d_s_i.eta_low);
     signal phi : std_logic_vector(d_s_i.phi_high downto d_s_i.phi_low);
@@ -73,6 +75,9 @@ architecture rtl of muon_comparators is
     signal eta_comp_w2 : std_logic;
     signal phi_comp_w1 : std_logic;
     signal phi_comp_w2 : std_logic;
+    
+    signal no_muon : std_logic;
+
 begin
 
 -- HB 2014-04-14
@@ -102,6 +107,9 @@ begin
     qual <= data_i(d_s_i.qual_high downto d_s_i.qual_low);
     iso <= data_i(d_s_i.iso_high downto d_s_i.iso_low);
     charge <= data_i(d_s_i.charge_high downto d_s_i.charge_low);
+    
+-- HB 2015-08-28: inserted check for "no muon" (all object parameters = 0)
+    no_muon <= '1' when data_i = ZERO else '0';
 
     pt_comp_o <= '1' when ((pt >= pt_threshold and pt_ge_mode=true) or (pt = pt_threshold and pt_ge_mode=false)) else '0';
 
@@ -184,6 +192,7 @@ begin
     iso_comp_o <= iso_lut(CONV_INTEGER(iso)); -- 4 bit LUT for isolation, because of 2 bits isolation
 
 -- Comparators AND
-    comp_o <= pt_comp_o and eta_comp_o and phi_comp_o and qual_comp_o and iso_comp_o and charge_comp_o;
+--     comp_o <= pt_comp_o and eta_comp_o and phi_comp_o and qual_comp_o and iso_comp_o and charge_comp_o;
+    comp_o <= pt_comp_o and eta_comp_o and phi_comp_o and qual_comp_o and iso_comp_o and charge_comp_o and not no_muon;
 
 end architecture rtl;

@@ -52,6 +52,9 @@ entity calo_comparators is
 end calo_comparators;
 
 architecture rtl of calo_comparators is
+
+    constant ZERO : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
+
     signal et : std_logic_vector(d_s_i.et_high downto d_s_i.et_low);
     signal eta : std_logic_vector(d_s_i.eta_high downto d_s_i.eta_low);
     signal phi : std_logic_vector(d_s_i.phi_high downto d_s_i.phi_low);
@@ -62,8 +65,14 @@ architecture rtl of calo_comparators is
     signal phi_comp : std_logic;
     signal phi_comp_w1 : std_logic;
     signal phi_comp_w2 : std_logic;
+
+    signal no_calo : std_logic;
+
 begin
 
+-- HB 2015-08-28: inserted "no calo" (all object parameters = 0)
+    no_calo <= '1' when data_i = ZERO else '0';
+    
     et  <= data_i(d_s_i.et_high downto d_s_i.et_low);
     eta <= data_i(d_s_i.eta_high downto d_s_i.eta_low);
     phi <= data_i(d_s_i.phi_high downto d_s_i.phi_low);
@@ -139,6 +148,6 @@ begin
 
     end generate not_phi_full_range_i;
 
-    comp_o <= et_comp and eta_comp and phi_comp;
+    comp_o <= et_comp and eta_comp and phi_comp and not no_calo;
 
 end architecture rtl;

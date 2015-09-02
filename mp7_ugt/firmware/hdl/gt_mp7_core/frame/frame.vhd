@@ -258,23 +258,20 @@ architecture rtl of frame is
 --===============================================================================================--
 --                          Deceiding between simulation and synthesize  for RST
 --===============================================================================================--
-  SIMULATE_RST_i: if SIMULATE_DATAPATH = true generate
-
-      begin
+    SIMULATE_RST_i: if SIMULATE_DATAPATH = true generate
+    begin
        lhc_rst_o        <= lhc_rst_sim;  --rest singal will be produced by testbench
        lhc_rst_internal <= lhc_rst_sim;
        rop_rst_internal <= rop_rst_sim;  --ROP rest will be produced by testbench
-
-      end generate SIMULATE_RST_i;
+    end generate SIMULATE_RST_i;
 
     synthesize_RST_i: if SIMULATE_DATAPATH = false generate
-
-      begin
-          lhc_rst <= not sw_reset or ipbus_triggered_reset or pulse(0);
-     lhc_rst_o <= lhc_rst;
+    begin
+        lhc_rst <= not sw_reset or ipbus_triggered_reset or pulse(0);
+        lhc_rst_o <= lhc_rst;
         lhc_rst_internal <= lhc_rst;
         rop_rst_internal <= not(not sw_reset or ipbus_triggered_reset or pulse(0));
-      end generate synthesize_RST_i;
+    end generate synthesize_RST_i;
 
 
 --===============================================================================================--
@@ -746,7 +743,7 @@ architecture rtl of frame is
 --     finors_rop(0) <= local_finor_rop; -- to be defined !!!
 --     finors_rop(1) <= local_veto_rop; -- to be defined !!!
 --     finors_rop(FINOR_WIDTH-1) <= finor_rop; -- to be defined !!!
-
+--
 --     rop_inst : entity work.rop
 --         port map
 --         (
@@ -799,7 +796,7 @@ architecture rtl of frame is
 --     daq_data_sim    <= rop_data;
 --
 --       end generate SIMULATE_DAQ_i;
---
+
 
 --===============================================================================================--
 --                              SPYMEM 3

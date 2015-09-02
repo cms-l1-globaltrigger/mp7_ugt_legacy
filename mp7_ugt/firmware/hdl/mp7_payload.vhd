@@ -91,7 +91,7 @@ begin
     ipb_clk <= clk;
     ipb_rst <= rst;
     clk240  <= clk_p;
-    bc0_in  <= ctrs(0).ttc_cmd(0);
+    bc0_in  <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_BC0 else '0';
     lane_data_in  <= d;
     q <= lane_data_out;
 
@@ -110,7 +110,7 @@ begin
     frame_i : entity work.frame
         generic map
         (
-            NR_LANES            => 4 * N_REGION,
+            NR_LANES            => (4 * N_REGION),
             SIMULATE_DATAPATH   => false
         )
         port map

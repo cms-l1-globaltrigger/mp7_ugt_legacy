@@ -18,7 +18,7 @@ package top_decl is
 	constant DR_ADDR_WIDTH: integer := 9;
 	constant RO_CHUNKS: integer := 32;
 	constant CLOCK_RATIO: integer := 6;
-	constant CLOCK_RATIO_PAYLOAD: integer := 6;
+	constant CLOCK_RATIO_PAYLOAD: integer := 1; --JW 2015-09-01: set to '1' for 40MHz payload clk!
 	constant PAYLOAD_LATENCY: integer := 2;
 	constant DAQ_N_BANKS: integer := 4;
 	constant DAQ_TRIGGER_MODES: integer := 2;

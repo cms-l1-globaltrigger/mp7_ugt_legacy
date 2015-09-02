@@ -65,7 +65,7 @@ package frame_addr_decode is
 
     constant C_MODINFO_REGS_ADDR_WIDTH : integer := 5;
     constant C_MODINFO_REGS_BEGIN_INDEX : integer := OFFSET_TIMESTAMP;
-    constant C_MODINFO_REGS_END_INDEX : integer := OFFSET_FRAME_VERSION;
+    constant C_MODINFO_REGS_END_INDEX : integer := OFFSET_BUILD_VERSION;
 
     constant C_TEST_REGS_ADDR_WIDTH : integer := 4;
     constant C_TEST_REGS_BEGIN_INDEX : integer := 0;

@@ -61,6 +61,7 @@ package frame_addr_decode is
     constant OFFSET_USERNAME: natural := OFFSET_HOSTNAME + HOSTNAME'length/32; -- 256 bits = 8 x 32 bits
     constant OFFSET_MODULE_TYPE: natural := OFFSET_USERNAME + USERNAME'length/32; -- 1 x 32 bits
     constant OFFSET_FRAME_VERSION: natural := OFFSET_MODULE_TYPE + MODULE_TYPE'length/32; -- 1 x 32 bits
+    constant OFFSET_BUILD_VERSION: natural := OFFSET_FRAME_VERSION + FRAME_VERSION'length/32; -- 1 x 32 bits
 
     constant C_MODINFO_REGS_ADDR_WIDTH : integer := 5;
     constant C_MODINFO_REGS_BEGIN_INDEX : integer := OFFSET_TIMESTAMP;

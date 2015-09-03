@@ -70,7 +70,7 @@ def parse():
     parser.add_argument('menu', help = "path to trigger menu directory")
     parser.add_argument('testvector', help = "path to testvector to be used")
     parser.add_argument('-m', '--module', metavar = '<n>', type = int, default = 0, help = "module to be simulated, default is `0'")
-    parser.add_argument('-o', metavar = '<filename>', default = None, help = "write transcript, warnings and errors to file, default is `sim_error_<testvector>'")
+    parser.add_argument('-o', metavar = '<filename>', default = None, help = "write transcript, warnings and errors to file, default is `sim_results_gtl_fdl_wrapper_<testvector>'")
     parser.add_argument('--wlf', action = 'store_true', help = "no console transcript info, warning and error messages (transcript output to vsim.wlf)")
     parser.add_argument('--xilinx-path', metavar = '<path>', default = DEFAULT_XILINX_PATH, help = "path to xilinx installation, default is `{DEFAULT_XILINX_PATH}'".format(**globals()))
     parser.add_argument('--modelsim', metavar = '<version>', default = DEFAULT_MODELSIM_VERSION, help = "select modelsim version, default is `{DEFAULT_MODELSIM_VERSION}'".format(**globals()))
@@ -155,7 +155,7 @@ def main():
     call_process('vsim', '-c', '-msgmode', msgmode, '-do', 'do {filename}; quit -f'.format(filename = DO_FILE))
 
     print
-    print " ==> see `sim_error_{testvector_name}.txt' for detailed information about errors!!!".format(**locals())
+    print " ==> see `sim_results_gtl_fdl_wrapper_{testvector_name}.txt' for detailed information !!!".format(**locals())
     print
 #    remove_file(GT_MP7_TOP_PKG_SIM_TEMP)
     print

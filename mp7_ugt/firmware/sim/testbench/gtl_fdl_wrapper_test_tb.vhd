@@ -108,8 +108,8 @@ begin
 	variable algo_error_cnt : integer := 0;
 	variable finor_error_cnt : integer := 0;
 
-        file testvector_file : text open read_mode is "$L1TM_DIR/L1Menu_CaloMuonCorrelation_2015_hb_test/testvectors/L1Menu_CaloMuonCorrelation_2015_hb_test_v1_no_header.txt";
-        file error_file : text open write_mode is "sim_error_L1Menu_CaloMuonCorrelation_2015_hb_test_v1_no_header.txt";
+        file testvector_file : text open read_mode is "/home/bergauer/cactus/trunk/cactusupgrades/projects/ugt/mp7_ugt/l1tm/L1Menu_Point5IntegrationTest_2015_v2/testvectors/TestVector_L1Menu_Point5IntegrationTest_2015_v2_TTbar.txt";
+        file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_test_TestVector_L1Menu_Point5IntegrationTest_2015_v2_TTbar.txt";
 
     function str_to_slv(str : string) return std_logic_vector is
       alias str_norm : string(1 to str'length) is str;

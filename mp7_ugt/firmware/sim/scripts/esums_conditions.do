@@ -34,7 +34,7 @@ if [info exists env(MTI_LIBS)] {
 }
 
 ## set your src files directory for your design
-set MTI ./../hdl
+set GT_SRC ./../hdl
 
 set TESTBENCH ./../sim/testbench
 
@@ -43,12 +43,12 @@ vlib work
 vmap work work
 
 #Top Entity the design
-vcom -93 -work work $MTI/math_pkg.vhd
-vcom -93 -work work $MTI/lhc_data_pkg.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg_sim.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/phi_windows_comp.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_comparators.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
+vcom -93 -work work $GT_SRC/math_pkg.vhd
+vcom -93 -work work $GT_SRC/lhc_data_pkg.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg_sim.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/phi_windows_comp.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_comparators.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
 
 #Testbench
 vcom -93 -work work $TESTBENCH/esums_conditions_tb.vhd

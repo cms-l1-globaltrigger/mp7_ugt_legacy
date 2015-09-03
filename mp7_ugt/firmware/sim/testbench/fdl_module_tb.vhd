@@ -31,7 +31,6 @@ use work.mp7_data_types.all;
 
 use work.gt_mp7_core_pkg.all;
 
--- use work.fdl_pkg.all;
 use work.gtl_pkg.all;
 
 entity fdl_module_TB is
@@ -43,12 +42,14 @@ architecture rtl of fdl_module_TB is
 
     constant LHC_CLK_PERIOD  : time :=  25 ns;
 
---     constant NR_ALGOS : positive := 16;
-
     constant PRESCALER_COUNTER_WIDTH : integer := 24;
     type prescale_factor_array is array (NR_ALGOS-1 downto 0) of std_logic_vector(31 downto 0); -- same width as PCIe data
     constant PRESCALE_FACTOR_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := ( others => X"00000001"); -- written by TME
-
+    constant PRESCALE_FACTOR_SET_INDEX_WIDTH : positive := 8;
+    constant PRESCALE_FACTOR_SET_INDEX_REG_INIT : ipb_regs_array(0 to 0) := (others => X"00000000");
+    constant CNTRL_REG_INIT : ipb_regs_array(0 to 0) := (others => X"00000000");
+-- Input flip-flops for algorithms of fdl_module.vhd - used for tests of fdl_module.vhd only
+    constant ALGO_INPUTS_FF: boolean := true;
 -- HB 2014-02-28: changed vector length of init values for finor- and veto-maks, because of min. 32 bits for register
     constant MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := ( others => X"00000001"); --Finor and veto masks registers (bit 0 = finor, bit 1 = veto)
 
@@ -71,43 +72,25 @@ begin
 
     process
     begin
---         wait for 1207 ns; -- setup time for PLL for 80 MHz
---         algo_in <= X"00000"; 
---         wait for 3*LHC_CLK_PERIOD; 
---         algo_in <= X"00001"; 
---         wait for LHC_CLK_PERIOD; 
---         algo_in <= X"00000"; 
---         wait for LHC_CLK_PERIOD; 
---         algo_in <= X"00003"; 
---         wait for LHC_CLK_PERIOD; 
---         algo_in <= X"00000"; 
---         wait for LHC_CLK_PERIOD; 
---         algo_in <= X"00056"; 
---         wait for LHC_CLK_PERIOD; 
---         algo_in <= X"00000"; 
---         wait for LHC_CLK_PERIOD; 
---         wait; 
-        wait for 1207 ns; -- setup time for PLL for 80 MHz
-        algo_in <= X"00000"; 
+        wait for 107 ns;
+        algo_in <= "00"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"00000"; 
+        algo_in <= "00"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"00000"; 
+        algo_in <= "01"; 
+        algo_bx_mask_sim <= "11"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"00001"; 
-        algo_bx_mask_sim <= X"0FFFF"; 
+        algo_in <= "00"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"00000"; 
+        algo_in <= "11"; 
+        algo_bx_mask_sim <= "10"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"00003"; 
-        algo_bx_mask_sim <= X"0FFFE"; 
+        algo_in <= "00"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"00000"; 
+        algo_in <= "10"; 
+        algo_bx_mask_sim <= "11"; 
         wait for LHC_CLK_PERIOD; 
-        algo_in <= X"00056"; 
-        algo_bx_mask_sim <= X"0FFFF"; 
-        wait for LHC_CLK_PERIOD; 
-        algo_in <= X"00000"; 
+        algo_in <= "00"; 
         wait for LHC_CLK_PERIOD; 
         wait; 
     end process;
@@ -118,8 +101,12 @@ dut: entity work.fdl_module
     generic map(
         SIM_MODE => SIM_MODE,
         PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT,
-        MASKS_INIT => MASKS_INIT
-    )
+        MASKS_INIT => MASKS_INIT,
+	PRESCALE_FACTOR_SET_INDEX_WIDTH => PRESCALE_FACTOR_SET_INDEX_WIDTH,
+	PRESCALE_FACTOR_SET_INDEX_REG_INIT => PRESCALE_FACTOR_SET_INDEX_REG_INIT,
+	CNTRL_REG_INIT => CNTRL_REG_INIT,
+	ALGO_INPUTS_FF => ALGO_INPUTS_FF
+	)
     port map( 
         ipb_clk         => '0',
         ipb_rst         => '0',

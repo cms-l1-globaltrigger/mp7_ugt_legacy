@@ -98,8 +98,8 @@ vcom -93 -work work $GT_SRC/lhc_data_pkg.vhd
 vcom -93 -work work $GT_SRC/math_pkg.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_top_pkg_sim.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gt_mp7_core_pkg.vhd
-vcom -93 -work work $L1TM/L1Menu_Collisions2015_25nsStage1_v3_subset_v2/vhdl/module_0/src/gtl_pkg.vhd
-vcom -93 -work work $L1TM/L1Menu_Collisions2015_25nsStage1_v3_subset_v2/vhdl/module_0/src/algo_mapping_rop.vhd
+vcom -93 -work work $L1TM/L1Menu_CaloMuonCorrelation_2015_hb_test/vhdl/module_0/src/gtl_pkg.vhd
+vcom -93 -work work $L1TM/L1Menu_CaloMuonCorrelation_2015_hb_test/vhdl/module_0/src/algo_mapping_rop.vhd
 #vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_pkg.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/pulse_converter.vhd
@@ -110,10 +110,10 @@ vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_rate_counter.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_slice.vhd
 vcom -93 -work work $GT_CORES/dp_mem_4096x32/dp_mem_4096x32.vhd
-vcom -93 -work work $GT_CORES/lhc_clk_pll_40_80_160/lhc_clk_pll_40_80_160.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_dpmem_4096_32.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_read_regs.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_write_regs.vhd
+vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_pulse_regs.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
 
 #Testbench

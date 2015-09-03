@@ -33,8 +33,7 @@ if [info exists env(MTI_LIBS)] {
 }
 
 ## set your src files directory for your design
-set MTI ./../hdl
-
+set GT_SRC ./../hdl
 set TESTBENCH ./../sim/testbench
 
 ## Create and map work directory
@@ -42,25 +41,25 @@ vlib work
 vmap work work
 
 vcom -93 -work work $TESTBENCH/txt_util_pkg.vhd
-vcom -93 -work work $MTI/lhc_data_pkg.vhd
+vcom -93 -work work $GT_SRC/lhc_data_pkg.vhd
 vcom -93 -work work $TESTBENCH/lhc_data_debug_util_pkg.vhd
-vcom -93 -work work $MTI/math_pkg.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg_sim.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_comp_signed.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/phi_windows_comp.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_windows_comp.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators_v2.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_v2.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
+vcom -93 -work work $GT_SRC/math_pkg.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg_sim.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_comp_signed.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/phi_windows_comp.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_windows_comp.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators_v2.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_v2.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
 
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd
 
 #Testbench
 vcom -93 -work work $TESTBENCH/calo_muon_correlation_condition_deta_dphi_tb.vhd

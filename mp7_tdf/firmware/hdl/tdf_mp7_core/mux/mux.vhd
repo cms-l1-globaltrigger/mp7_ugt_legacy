@@ -33,9 +33,6 @@ entity mux is
         in3    : in lword;
         in4    : in lword;
         in5    : in lword;
-        -- select signal
---      JW - 18.12.2014 put frame_counter code into mux
---      sel    : in std_logic_vector(2 downto 0);
 		-- output
 		mux_out   : out lword
 	);
@@ -43,10 +40,8 @@ end mux;
 
 architecture arch of mux is
     signal s_out    : lword;
-    signal frame_cntr  : std_logic_vector (2 downto 0); --! counter for frame mux: 0 to 5
-    signal bcres240 : std_logic; -- bcres 240 MHz
-    signal temp0 : std_logic;
-    signal temp1 : std_logic;
+    signal frame_cntr  : std_logic_vector (2 downto 0); --counter for frame mux: 0 to 5
+
 begin
 
     -- frame counter

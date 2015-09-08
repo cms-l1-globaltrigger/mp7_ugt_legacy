@@ -1,5 +1,5 @@
 ##--------------------------------------------------------------------------------
-##-- Simulator   : ModelSim 10.3b
+##-- Simulator   : ModelSim 10.1
 ##-- Platform    : Linux Ubuntu 10.04
 ##-- Targets     : Simulation
 ##--------------------------------------------------------------------------------
@@ -9,10 +9,10 @@
 ##-- confidential information of HEPHY.
 ##--------------------------------------------------------------------------------
 ##---Description: 
-##-- $HeadURL$
-##-- $Date$
-##-- $Author$
-##-- $Revision$
+##-- $HeadURL:  $
+##-- $Date:  $
+##-- $Author:  $
+##-- $Revision:  $
 ##--------------------------------------------------------------------------------
 
 ##***************************** Beginning of Script ***************************
@@ -31,8 +31,6 @@ if [info exists env(MTI_LIBS)] {
     vmap UNISIM $MTI_LIBS/unisim
     vmap SECUREIP $MTI_LIBS/secureip  
 }
-
-## set your src files directory for your design
 
 set MP7_BRDS _MP7_TAG_/boards/mp7/base_fw
 set MP7_COMPONENTS _MP7_TAG_/components
@@ -99,69 +97,35 @@ vcom -93 -work work $GT_SRC/lhc_data_pkg.vhd
 vcom -93 -work work $GT_SRC/math_pkg.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_top_pkg_sim.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gt_mp7_core_pkg.vhd
-## HB 2015-06-03: test with l1tm_pkg.vhd instead of gtl_pkg.vhd - gtl_pkg.vhd moved to $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl
-#vcom -93 -work work $L1TM/vhdl/module_0/src/l1tm_pkg.vhd
 vcom -93 -work work $L1TM/vhdl/module_0/src/gtl_pkg.vhd
-
-vcom -93 -work work $TESTBENCH/lhc_data_debug_util_pkg.vhd
-vcom -93 -work work $TESTBENCH/txt_util_pkg.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_lib.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/p_m_2_bx_pipeline.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/phi_windows_comp.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_comp_signed.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_windows_comp.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_obj_vs_obj.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_obj_vs_obj.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators_v2.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_v2.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_comparators.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_obj_vs_obj.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_obj_vs_obj.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd
-vcom -93 -work work $L1TM/vhdl/module_0/src/gtl_module.vhd
-
+vcom -93 -work work $L1TM/vhdl/module_0/src/algo_mapping_rop.vhd
+#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_pkg.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/pulse_converter.vhd
+#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/serializer_2_to_1.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_addr_decode.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_fabric.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_rate_counter.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_slice.vhd
 vcom -93 -work work $GT_CORES/dp_mem_4096x32/dp_mem_4096x32.vhd
-vcom -93 -work work $GT_CORES/lhc_clk_pll_40_80_160/lhc_clk_pll_40_80_160.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_dpmem_4096_32.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_read_regs.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_write_regs.vhd
-vcom -93 -work work $L1TM/vhdl/module_0/src/algo_mapping_rop.vhd
+vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_pulse_regs.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
 
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
-
 #Testbench
-vcom -93 -work work $TESTBENCH/gtl_fdl_wrapper_test_tb.vhd
+vcom -93 -work work $TESTBENCH/fdl_module_test_tb.vhd
 
 #Load Design
-vsim -t 1ps work.gtl_fdl_wrapper_TB 
+vsim -t 1ps work.fdl_module_TB 
 
 ##Load signals in wave window
 view wave
-do $TESTBENCH/../scripts/gtl_fdl_wrapper_test_wave.do
+do $TESTBENCH/../scripts/fdl_module_test__MENU_NAME__wave.do
 
 ##Run simulation
-run 91000 ns
+run 2000 ns
 
 # eof

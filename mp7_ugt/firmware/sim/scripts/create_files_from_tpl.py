@@ -61,54 +61,56 @@ def main():
     # revers order of array
 #    menu_name_array_inv = menu_name_array.reverse()
     menu_name_array_inv = menu_name_array[::-1]
-    if debug == 'prints':
-	print "menu_name_array: {menu_name_array}".format(**locals())
-	print "menu_name_array_inv: {menu_name_array_inv}".format(**locals())
+    #if debug == 'prints':
+	#print "menu_name_array: {menu_name_array}".format(**locals())
+	#print "menu_name_array_inv: {menu_name_array_inv}".format(**locals())
 
     for i in range(1,3):
 	menu_name_array_inv.pop(0)
-	if debug == 'prints':
-	    print "menu_name_array_inv {i}: {menu_name_array_inv}".format(**locals())
+	#if debug == 'prints':
+	    #print "menu_name_array_inv {i}: {menu_name_array_inv}".format(**locals())
     
     menu_name = menu_name_array_inv[0]
-    if debug == 'prints':
-	print "menu_name: {menu_name}".format(**locals())
+    #if debug == 'prints':
+	#print "menu_name: {menu_name}".format(**locals())
     
     menu_path_array = menu_name_array_inv[::-1]
     if debug == 'prints':
 	print "menu_path_array: {menu_path_array}".format(**locals())
 
-# HIER NOCH VERBESSERN!!!
-    #menu_path = ''.join([menu_path_array[0], '/', menu_path_array[1], '/', menu_path_array[2], '/', menu_path_array[3], '/', menu_path_array[4], '/', menu_path_array[5], '/'])
-    #menu_path_length = len(menu_path_array)+1
-    #print "menu_path_length: {menu_path_length}".format(**locals())
-
     temp = []
     for i in range(len(menu_path_array)+1):
 	temp.append(0)
-    if debug == 'prints':
-	print "temp: {temp}".format(**locals())
+    #if debug == 'prints':
+	#print "temp: {temp}".format(**locals())
     temp[0] = ''
-    if debug == 'prints':
-	print "temp[0]: {temp[0]}".format(**locals())
+    #if debug == 'prints':
+	#print "temp[0]: {temp[0]}".format(**locals())
+
     for i in range(len(menu_path_array)):
-	temp[i+1] = ''.join([temp[i], menu_path_array[i], '/'])    
-    if debug == 'prints':
-	print "temp after loop: {temp}".format(**locals())    
+	if i == len(menu_path_array)-1:
+	    temp[i+1] = ''.join([temp[i], menu_path_array[i]]) # no '/' at end of path
+	else:
+	    temp[i+1] = ''.join([temp[i], menu_path_array[i], '/'])    
+	    
+    #if debug == 'prints':
+	#print "temp after loop: {temp}".format(**locals())    
     menu_path = temp[len(menu_path_array)]
     if debug == 'prints':
 	print "menu_path: {menu_path}".format(**locals())    
     
     dofile_out = ''.join([args.dofile, '_', menu_name, '.do'])
     if debug == 'prints':
-	print "dofile_out: {dofile_out}".format(**locals())
+	print "***********************************************************"
+	print "==> dofile for use in vsim (ModelSim): {dofile_out}".format(**locals())
+	print "***********************************************************"
 
     tbfile_tpl = ''.join([args.dofile, '_tb_tpl.vhd'])
     if debug == 'prints':
 	print "tbfile_tpl: {tbfile_tpl}".format(**locals())
     tbfile_out = ''.join([args.dofile, '_tb.vhd'])
     if debug == 'prints':
-	print "tbfile_out: {tbfile_out}".format(**locals())
+	print "tbfile: {tbfile_out}".format(**locals())
 
     # ---------------------------------------------------------------------
     #  Substitute variables in do file template.

@@ -11,7 +11,7 @@
 ---Description: TCM
 -- $HeadURL: $
 -- $Date: $
--- $Author: ? 
+-- $Author: ?
 -- $Revision: 3796 $
 
 -- BR 2015-05-08: done lhc_rst = RST_ACT in processes
@@ -25,7 +25,7 @@ use work.gt_mp7_core_pkg.all;
 use work.rb_pkg.all;
 
 entity tcm is
-	port 
+	port
 	(
 		lhc_clk           : in std_logic;
 		lhc_rst           : in std_logic;
@@ -42,7 +42,7 @@ entity tcm is
 		orbit_nr          : out orbit_nr_t;
 		luminosity_seg_nr : out luminosity_seg_nr_t;
 		start_lumisection : out std_logic
-	); 
+	);
 end;
 
 architecture beh of tcm is
@@ -66,14 +66,14 @@ architecture beh of tcm is
 		bx_nr_chk          : std_logic_vector(31 downto 0); -- the highest value bx_nr ever reached is stored into a sw register for debug purposes
 		bx_nr_max          : std_logic_vector(31 downto 0); -- the highest value bx_nr ever reached is stored into a sw register for debug purposes
 		err_det_reset_old  : std_logic; -- if the sw-in-reg err_det_reset toggles, err_det is reset to zero
-		
+
 		bgos_event_old     : std_logic; -- if any bit in sw-in-reg bgos toggles, the corresponding bgos command is issued for one cycle
 	end record;
-	
-	constant LHC_REG_T_RESET  : lhc_reg_t := ('0', (others => '0'), (others => '0'), (others => '0'), (others => '0'), (others => '0'), (others => '0'), (others =>'0'), '0', '0', '0', (others => '0'), (others => '0'), '0', '0');
+
+	constant LHC_REG_T_RESET  : lhc_reg_t := ('0', X"dd3", X"dd3", (others => '0'), (others => '0'), (others => '0'), (others => '0'), (others =>'0'), '0', '0', '0', (others => '0'), (others => '0'), '0', '0');
 
 	signal l, lin  : lhc_reg_t;
-	
+
 	signal bgos_int : bgos_t; -- merges real bgos signal and simulation signal
 
 begin
@@ -86,10 +86,11 @@ begin
 		-- bcres_nr counter
 		-- start, when we observe the first bcres_d
 		v.start_lumisection := '0'; -- lumisection is high only for one clock period
-		if (l.started_bx = '0' and bcres_d = '1') or sw_reg_in.cmd_ignbcres = '1'  
+		if (l.started_bx = '0' and bcres_d = '1') or sw_reg_in.cmd_ignbcres = '1'
 		then
 			v.started_bx := '1';
-			v.bx_nr := bx_nr_t(to_unsigned(1, BX_NR_WIDTH));
+			--v.bx_nr := bx_nr_t(to_unsigned(1, BX_NR_WIDTH));
+            v.bx_nr := bx_nr_t(to_unsigned(3540, BX_NR_WIDTH)); -- JW 08.09.2015  Changed reset value of the bc cntr
 		end if;
 		if l.started_bx = '1'
 		then
@@ -111,30 +112,33 @@ begin
 			end if;
 		end if;
 		if l.started_bx = '1' and unsigned(l.orbit_nr) > 3 and sw_reg_in.cmd_ignbcres = '0' and
-			((l.bx_nr = (l.bx_nr'range => '0') and bcres_d = '0') or 
-			(l.bx_nr /= (l.bx_nr'range => '0') and bcres_d = '1')) -- the bx_nr has to be zero when bcres_d is asserted, otherwise --> error
+            ((l.bx_nr =  bx_nr_t(to_unsigned(3539, BX_NR_WIDTH)) and bcres_d = '0') or
+            (l.bx_nr /=  bx_nr_t(to_unsigned(3539, BX_NR_WIDTH)) and bcres_d = '1')) -- the bx_nr has to be zero when bcres_d is asserted, otherwise --> error
+-- 			((l.bx_nr = (l.bx_nr'range => '0') and bcres_d = '0') or
+-- 			(l.bx_nr /= (l.bx_nr'range => '0') and bcres_d = '1')) -- the bx_nr has to be zero when bcres_d is asserted, otherwise --> error
 		then
 			v.err_det := '1'; -- set error detected sw register
 			v.started_bx := '0'; -- resync automatically
 			v.started_bx_FDL := '0'; -- note: only bx_nr is used to check synchronism, nevertheless both bx counters have to resync if synchronization is lost
 		end if;
-		
+
 		-- the highest value bx_nr ever reached is stored into a sw register for debug purposes, should be BC_TOP
 		if bcres_d = '1' then
 			v.bx_nr_chk := std_logic_vector(to_unsigned(0, v.bx_nr_chk'length));
 		else
 			v.bx_nr_chk := std_logic_vector(unsigned(l.bx_nr_chk) + to_unsigned(1, l.bx_nr_chk'length));
 		end if;
-		if v.bx_nr_chk > l.bx_nr_max 
+		if v.bx_nr_chk > l.bx_nr_max
 		then
 			v.bx_nr_max := v.bx_nr_chk;
 		end if;
-		
+
 		-- bx_nr_d_FDL
-		if (l.started_bx_FDL = '0' and bcres_d_FDL = '1') or sw_reg_in.cmd_ignbcres = '1'  
+		if (l.started_bx_FDL = '0' and bcres_d_FDL = '1') or sw_reg_in.cmd_ignbcres = '1'
 		then
 			v.started_bx_FDL := '1';
-			v.bx_nr_d_FDL := bx_nr_t(to_unsigned(1, BX_NR_WIDTH));
+			--v.bx_nr_d_FDL := bx_nr_t(to_unsigned(1, BX_NR_WIDTH));
+            v.bx_nr_d_FDL := bx_nr_t(to_unsigned(3540, BX_NR_WIDTH)); -- JW 08.09.2015  Changed reset value of the bc cntr
 		elsif l.started_bx_FDL = '1' then
 			if to_integer(unsigned(l.bx_nr_d_FDL)) = BC_TOP
 			then
@@ -150,7 +154,7 @@ begin
 			v.event_nr := event_nr_t(unsigned(l.event_nr) + to_unsigned(1, EVENT_NR_WIDTH));
 			v.trigger_nr := trigger_nr_t(unsigned(l.trigger_nr) + to_unsigned(1, TRIGGER_NR_WIDTH));
 		end if;
-		
+
 		-- simulate bgos
 		if sw_reg_in.bgos_event /= l.bgos_event_old then
 			bgos_int <= sw_reg_in.bgos;

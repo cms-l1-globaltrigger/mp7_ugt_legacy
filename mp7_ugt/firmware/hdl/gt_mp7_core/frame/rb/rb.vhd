@@ -31,7 +31,7 @@ entity rb is
 --     generic(
 --         addr_width : natural := 12
 --     );
-	port 
+	port
 	(
 		sys_clk           : in std_logic;
 		lhc_clk           : in std_logic;
@@ -45,7 +45,7 @@ entity rb is
 		-- data interface for fpga access
 		sw_regs_in  : out sw_regs_in_t; -- sw registers written via software(uhal) and read by the fpga(Ipbus:frame_fabric)
 		sw_regs_out : in sw_regs_out_t  -- sw registers read via software(uhal) and written by the fpga(Ipbus:frame_fabric)
-	); 
+	);
 end;
 
 architecture arch of rb is
@@ -143,7 +143,7 @@ begin
 
 	rb_i: entity work.ipbus_syncreg_v
 		generic map(
----- BR 2015-05-04: bug fixed region for status register 
+---- BR 2015-05-04: bug fixed region for status register
 -- 			N_CTRL => 2 ** rb_addr_width,
 -- 			N_STAT => 2 ** rb_addr_width
 			N_CTRL => 2 ** (rb_addr_width-1),
@@ -156,8 +156,8 @@ begin
 			rst => sys_rst,
 			ipb_in => data_acc_in,
 			ipb_out => data_acc_out,
-			slv_clk => lhc_clk, 
----- BR 2015-05-04:: bug fixed region for status register 
+			slv_clk => lhc_clk,
+---- BR 2015-05-04:: bug fixed region for status register
 -- 			d => stat_reg(2 ** rb_addr_width - 1 downto 0),
 -- 			q => ctrl_reg(2 ** rb_addr_width - 1 downto 0)
 			d => stat_reg(13 downto 0),
@@ -261,7 +261,7 @@ begin
 	sw_regs_in.tcm.err_det_reset_event <= ctrl_reg(to_integer(unsigned(OFFSET_TCM_ERR_DET_RESET_EVENT)))(0);
 	sw_regs_in.tcm.bgos_event <= ctrl_reg(to_integer(unsigned(OFFSET_TCM_BGOS_EVENT)))(0);
 -- **********************
-	sw_regs_in.tcm.luminosity_seg_period_msk <= ctrl_reg(to_integer(unsigned(OFFSET_TCM_LIMINOSITY_SEG_PERIOD_MSK)))(31 downto 0);
+	sw_regs_in.tcm.luminosity_seg_period_msk <= LUM_SEG_PERIOD_MSK_RESET; --ctrl_reg(to_integer(unsigned(OFFSET_TCM_LIMINOSITY_SEG_PERIOD_MSK)))(31 downto 0);   JW 10.09.2015 set to fixed value
 	sw_regs_in.tcm.bgos <= ctrl_reg(to_integer(unsigned(OFFSET_TCM_BGOS)))(3 downto 0);
 	sw_regs_in.tcm.test_reg <= ctrl_reg(to_integer(unsigned(OFFSET_TCM_TEST_REG)))(31 downto 0);
 

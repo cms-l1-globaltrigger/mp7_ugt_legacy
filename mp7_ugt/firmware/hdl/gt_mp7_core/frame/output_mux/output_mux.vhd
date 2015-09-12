@@ -24,17 +24,20 @@ use work.ipbus.all;
 use work.mp7_data_types.all;
 use work.lhc_data_pkg.all;
 use work.gt_mp7_core_pkg.all;
+use work.mp7_ttc_decl.all;
 
 entity output_mux is
     generic(
         NR_LANES: positive
     );
-	port
-	(
-	lhc_clk     : in std_logic;
+    port
+    (
+        lhc_clk     : in std_logic;
         lhc_rst     : in std_logic;
         clk240      : in std_logic;
+        ctrs        : in ttc_stuff_array; --mp7 ttc ctrs
         bx_nr       : in std_logic_vector(11 downto 0);
+        bx_nr_fdl   : in std_logic_vector(11 downto 0);
         ttc_bx_cntr : in std_logic_vector(11 downto 0);
         algo_in     : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         finor_in    : in std_logic;
@@ -42,8 +45,8 @@ entity output_mux is
         valid_hi    : in std_logic_vector(15 downto 0);
         start       : in std_logic;
         strobe      : in std_logic;
-	lane_out    : out ldata(NR_LANES-1 downto 0)
-	);
+        lane_out    : out ldata(NR_LANES-1 downto 0)
+    );
 end output_mux;
 
 architecture arch of output_mux is
@@ -90,14 +93,14 @@ begin
         (
             clk     =>  clk240,
             res     =>  lhc_rst,
-            bcres   =>  '0',
+            bcres   =>  ctrs(0).ttc_cmd(0), --bcres for quad 0
             in0     =>  s_in0_mux0,   -- frame 0   -> algo 0-31
             in1     =>  s_in1_mux0,   -- frame 1   -> algo 32-63
             in2     =>  s_in2_mux0,   -- frame 2   -> algo 64-95
             in3     =>  s_in3_mux0,   -- frame 3   -> algo 96-127
             in4     =>  s_in4_mux0,   -- frame 4   -> algo 128-159
             in5     =>  s_in5_mux0,   -- frame 5   -> algo 160-191
-            mux_out =>  lane_out(0)
+            mux_out =>  lane_out(16)
         );
 
 
@@ -114,14 +117,14 @@ begin
         (
             clk     =>  clk240,
             res     =>  lhc_rst,
-            bcres   =>  '0',
+            bcres   =>  ctrs(0).ttc_cmd(0), --bcres for quad 0
             in0     =>  s_in0_mux1,    -- frame 0   -> algo 192-223
             in1     =>  s_in1_mux1,    -- frame 1   -> algo 224-255
             in2     =>  s_in2_mux1,    -- frame 2   -> algo 256-287
             in3     =>  s_in3_mux1,    -- frame 3   -> algo 288-319
             in4     =>  s_in4_mux1,    -- frame 4   -> algo 320-351
             in5     =>  s_in5_mux1,    -- frame 5   -> algo 352-383
-            mux_out =>  lane_out(1)
+            mux_out =>  lane_out(17)
         );
 
 
@@ -140,7 +143,7 @@ begin
         (
             clk     =>  clk240,
             res     =>  lhc_rst,
-            bcres   => '0',
+            bcres   =>  ctrs(0).ttc_cmd(0), --bcres for quad 0
             in0     =>  s_in0_mux2,    -- frame 0   -> algo 384-415
             in1     =>  s_in1_mux2,    -- frame 1   -> algo 416-447
             in2     =>  s_in2_mux2,    -- frame 2   -> algo 448-479
@@ -148,15 +151,15 @@ begin
             in4     =>  s_in4_mux2,    -- frame 4  -> finor
             in5     =>  s_in5_mux2,    -- frame 5 -> free
             -- sel     =>  frame_cntr,
-            mux_out =>  lane_out(2)
+            mux_out =>  lane_out(18)
         );
 
     -- JW 2015-08-24: added local and mp7 bc_cntr to output
     -- bc cntr output
 
-    s_in0_mux3   <=   (X"00000" & bx_nr, sValid, start, strobe);    -- frame 0   -> bx_nr
-    s_in1_mux3   <=   (X"00000" & ttc_bx_cntr, sValid, start, strobe);    -- frame 1   -> mp7 ttc bc cntr
-    s_in2_mux3   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
+    s_in0_mux3   <=   (X"00000" & bx_nr, sValid, start, strobe);           -- frame 0   -> bx_nr
+    s_in1_mux3   <=   (X"00000" & ttc_bx_cntr, sValid, start, strobe);     -- frame 1   -> mp7 ttc bc cntr
+    s_in2_mux3   <=   (X"00000" & bx_nr_fdl, sValid, start, strobe);       -- frame 5   -> free
     s_in3_mux3   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
     s_in4_mux3   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
     s_in5_mux3   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
@@ -166,15 +169,15 @@ begin
         (
             clk     =>  clk240,
             res     =>  lhc_rst,
-            bcres   => '0',
+            bcres   =>  ctrs(0).ttc_cmd(0), --bcres for quad 0
             in0     =>  s_in0_mux3,    -- frame 0   -> bx_nr
             in1     =>  s_in1_mux3,    -- frame 1   -> mp7 ttc bc cntr
-            in2     =>  s_in2_mux3,    -- frame 2   -> free
+            in2     =>  s_in2_mux3,    -- frame 2   -> bx_nr_fdl
             in3     =>  s_in3_mux3,    -- frame 3   -> free
             in4     =>  s_in4_mux3,    -- frame 4  -> free
             in5     =>  s_in5_mux3,    -- frame 5 -> free
             -- sel     =>  frame_cntr,
-            mux_out =>  lane_out(3)
+            mux_out =>  lane_out(19)
         );
 
 

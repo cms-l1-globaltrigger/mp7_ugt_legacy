@@ -155,7 +155,7 @@ architecture rtl of frame is
 
     --TCM signals
     signal bx_nr             : bx_nr_t;
---     signal bx_nr_d_FDL       : bx_nr_t;
+    signal bx_nr_d_FDL_int   : bx_nr_t;
     signal event_nr          : event_nr_t;
     signal trigger_nr        : trigger_nr_t;
     signal orbit_nr          : orbit_nr_t;
@@ -225,7 +225,7 @@ architecture rtl of frame is
 
     begin
 
-
+    bx_nr_d_FDL <= bx_nr_d_FDL_int;
 --===============================================================================================--
 --                         RESET LOGIC
 --===============================================================================================--
@@ -385,7 +385,7 @@ architecture rtl of frame is
             sw_reg_in         => rb2tcm,
             sw_reg_out        => tcm2rb,
             bx_nr             => bx_nr,
-            bx_nr_d_FDL       => bx_nr_d_FDL,
+            bx_nr_d_FDL       => bx_nr_d_FDL_int,
             event_nr          => event_nr,
             trigger_nr        => trigger_nr,
             orbit_nr          => orbit_nr,
@@ -686,7 +686,9 @@ architecture rtl of frame is
             lhc_clk     => lhc_clk,
             clk240      => clk240,
             lhc_rst     => lhc_rst,
+            ctrs        => ctrs,
             bx_nr       => bx_nr,
+            bx_nr_fdl   => bx_nr_d_FDL_int,
             ttc_bx_cntr => ctrs(0).bctr,
             algo_in     => algo_after_finor_mask_rop,
             finor_in    => local_finor_with_veto_2_spy2,

@@ -205,8 +205,8 @@ begin
     tp_mux_i : entity work.tp_mux
         port map
         (
-            ipb_clk             => ipb_clk,
-            ipb_rst             => ipb_rst,
+            clk             => ipb_clk,
+            rst             => ipb_rst,
             ipb_in              => ipb_to_slaves(C_IPB_GT_MP7_TP_MUX),
             ipb_out             => ipb_from_slaves(C_IPB_GT_MP7_TP_MUX),
             clk_payload         => lhc_clk,

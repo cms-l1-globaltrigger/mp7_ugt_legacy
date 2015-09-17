@@ -53,8 +53,8 @@ entity tp_mux is
 end tp_mux;
 
 architecture rtl of tp_mux is
-    signal ipb_to_slaves    : ipb_wbus_array(NR_IPB_SLV_TP_MUX-1 downto 0);
-    signal ipb_from_slaves  : ipb_rbus_array(NR_IPB_SLV_TP_MUX-1 downto 0);
+    signal ipb_to_slaves    : ipb_wbus_array(N_SLAVES-1 downto 0);
+    signal ipb_from_slaves  : ipb_rbus_array(N_SLAVES-1 downto 0);
     signal output_regs : ipb_reg_v(15 downto 0) := (others => (others => '0'));
     signal input_regs  : ipb_reg_v(15 downto 0) := (others => (others => '0'));
 
@@ -63,7 +63,7 @@ begin
 
     fabric_i: entity work.ipbus_fabric_sel
     generic map(
-        NSLV => NR_IPB_SLV_TP_MUX,
+        NSLV => N_SLAVES,
         SEL_WIDTH => IPBUS_SEL_WIDTH)
     port map(
       ipb_in => ipb_in,

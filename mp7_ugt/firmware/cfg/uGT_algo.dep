@@ -106,7 +106,7 @@ src gt_mp7_core/frame/dsmux/dsmux.vhd
 src gt_mp7_core/frame/output_mux/mux.vhd
 src gt_mp7_core/frame/output_mux/output_mux.vhd
 #src gt_mp7_core/frame/rmp/rmp.vhd
-src gt_mp7_core/gt_mp7_core_fabric.vhd
+#src gt_mp7_core/gt_mp7_core_fabric.vhd
 src gt_mp7_core/gt_mp7_core_addr_decode.vhd
 src math_pkg.vhd
 src mp7_payload.vhd

@@ -32,8 +32,6 @@ package gt_mp7_core_addr_decode is
     constant C_IPB_GT_MP7_GTLFDL : integer := 1;
     constant C_IPB_GT_MP7_TP_MUX : integer := 2;
 
-    function gt_mp7_core_addr_sel(signal addr : in std_logic_vector(31 downto 0)) return integer;
-
 end gt_mp7_core_addr_decode;
 
 
@@ -43,9 +41,9 @@ package body gt_mp7_core_addr_decode is
         variable sel: ipbus_sel_t;
 
   begin
-        if       std_match(addr, "1000----------------------------") then sel := C_IPB_GT_MP7_FRAME;  --0x80000000
-        elsif    std_match(addr, "1001----------------------------") then sel := C_IPB_GT_MP7_GTLFDL; --0x90000000
-        elsif    std_match(addr, "1010----------------------------") then sel := C_IPB_GT_MP7_TP_MUX; --0xA0000000
+        if       std_match(addr, "1000----------------------------") then sel := ipbus_sel_t(to_unsigned(C_IPB_GT_MP7_FRAME, IPBUS_SEL_WIDTH));  --0x80000000
+        elsif    std_match(addr, "1001----------------------------") then sel := ipbus_sel_t(to_unsigned(C_IPB_GT_MP7_GTLFDL, IPBUS_SEL_WIDTH)); --0x90000000
+        elsif    std_match(addr, "1010----------------------------") then sel := ipbus_sel_t(to_unsigned(C_IPB_GT_MP7_TP_MUX, IPBUS_SEL_WIDTH)); --0xA0000000
         else
             sel := ipbus_sel_t(to_unsigned(NR_IPB_SLV_GT_MP7_CORE, IPBUS_SEL_WIDTH));
         end if;

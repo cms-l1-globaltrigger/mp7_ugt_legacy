@@ -15,6 +15,7 @@
 --------------------------------------------------------------------------------
 
 -- Version-history:
+-- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs" for fdl_module (v0.0.14).
 -- HB 2015-08-24: added algo_bx_mask_sim input for fdl_module (v0.0.13).
 -- HB 2015-06-26: used an additional port "veto_2_mezz_lemo" (in fdl_module), which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
 -- HB 2015-05-29: renamed port "ser_finor_veto" to "finor_2_mezz_lemo", because of renaming in fdl_module. 
@@ -35,9 +36,6 @@ use work.lhc_data_pkg.all;
 entity gtl_fdl_wrapper is
     generic(
         SIM_MODE : boolean := false -- if SIM_MODE = true, "algo_bx_mask" by default = 1.
--- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
---                FDL_OUT_MEZZ_2_TCDS not used anymore.
--- 	FDL_OUT_MEZZ_2_TCDS : boolean := false -- if FDL_OUT_MEZZ_2_TCDS = true, "local_finor_with_veto" send to LEMO on mezzanine for TCDS.
     );
     port
     (
@@ -46,13 +44,14 @@ entity gtl_fdl_wrapper is
         ipb_in              : in ipb_wbus;
         ipb_out             : out ipb_rbus;
 -- ==========================================================================
--- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
---                clk160 not used anymore.
---         clk160              : in std_logic;
         lhc_clk             : in std_logic;
         lhc_rst             : in std_logic;
         lhc_data            : in lhc_data_t;
         bcres               : in std_logic;
+-- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs" for FDL
+        ec0                 : in std_logic;
+        resync              : in std_logic;
+        oc0                 : in std_logic;
         lhc_gap             : in std_logic;
         begin_lumi_section  : in std_logic;
         bx_nr               : in std_logic_vector(11 downto 0);
@@ -135,12 +134,13 @@ fdl_module_i: entity work.fdl_module
         ipb_in          => ipb_in,
         ipb_out         => ipb_out,
 -- ========================================================
--- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
---                clk160 not used anymore.
---         clk160              : in std_logic;
         lhc_clk         => lhc_clk,
         lhc_rst         => lhc_rst,
         bcres           => bcres,
+-- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs" for FDL
+        ec0             => ec0,
+        resync          => resync,
+        oc0             => oc0,
         lhc_gap         => lhc_gap,
         begin_lumi_section => begin_lumi_section,
         bx_nr           => bx_nr,

@@ -18,8 +18,10 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2015-09-01: v0.0.14 - based on v0.0.13, but implemented "prescale_factor_set_index_reg" and "command_pulses" register. "ALGO_INPUTS_FF" is now part of generic declaration. Additionally
+--                          inserted input ports "ec0", "resync" and "oc0" for reset logic.
 -- HB 2015-08-14: v0.0.13 - based on v0.0.12, but added algo_bx_mask_sim input for simulation use. Send a delayed "finor_with_veto" (currently assumed 1.5 bx latency over FINOR-AMC502)
---                          to ports "finor_2_mezz_lemo" and "veto_2_mezz_lemo", which go to MP7-mezzanine to send finor gated with veto to TCDS directly (without AMC502).
+--                          to ports "finor_2_mezz_lemo" and "veto_2_mezz_lemo", which go to MP7-mezzanine to send "finor gated with veto" to TCDS directly (without AMC502).
 --                          Moved constant "ALGO_INPUTS_FF" from fdl_pkg.vhd to fdl_module.vhd, fdl_pkg.vhd not used anymore.
 -- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502. 
 -- HB 2015-05-29: v0.0.11 - based on v0.0.10, but renamed port "ser_finor_veto" to "finor_2_mezz_lemo" and inserted FDL_OUT_MEZZ_2_TCDS in generic. 
@@ -50,12 +52,14 @@ use work.fdl_addr_decode.all;
 
 entity fdl_module is
     generic(
-        SIM_MODE : boolean := false; -- if SIM_MODE = true, "algo_bx_mask" by default all '1'.
--- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
---                FDL_OUT_MEZZ_2_TCDS not used anymore.
---         FDL_OUT_MEZZ_2_TCDS : boolean := false; -- if FDL_OUT_MEZZ_2_TCDS = true, "local_finor_with_veto" send to LEMO on mezzanine for TCDS.
+        SIM_MODE : boolean := false; -- if SIM_MODE = true, "algo_bx_mask" is given by "algo_bx_mask_sim".
         PRESCALE_FACTOR_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"00000001");
-        MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"00000001")
+        MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"00000001");
+        PRESCALE_FACTOR_SET_INDEX_WIDTH : positive := 8;
+        PRESCALE_FACTOR_SET_INDEX_REG_INIT : ipb_regs_array(0 to 1) := (others => X"00000000");
+        CNTRL_REG_INIT : ipb_regs_array(0 to 1) := (others => X"00000000");
+-- Input flip-flops for algorithms of fdl_module.vhd - used for tests of fdl_module.vhd only
+        ALGO_INPUTS_FF: boolean := false
     );
     port(
         ipb_clk             : in std_logic;
@@ -63,18 +67,19 @@ entity fdl_module is
         ipb_in              : in ipb_wbus;
         ipb_out             : out ipb_rbus;
 -- ==========================================================================
--- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
---                clk160 not used anymore.
---         clk160              : in std_logic;
         lhc_clk             : in std_logic;
         lhc_rst             : in std_logic;
         bcres               : in std_logic;
+-- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs"
+        ec0                 : in std_logic;
+        resync              : in std_logic;
+        oc0                 : in std_logic;
         lhc_gap             : in std_logic;
         begin_lumi_section  : in std_logic;
         bx_nr               : in std_logic_vector(11 downto 0);
         algo_i              : in std_logic_vector(NR_ALGOS-1 downto 0);
         fdl_status          : out std_logic_vector(3 downto 0);
-        prescale_factor_set_index_rop : out std_logic_vector(7 downto 0);
+        prescale_factor_set_index_rop : out std_logic_vector(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0);
         algo_before_prescaler_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_finor_mask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
@@ -90,14 +95,8 @@ end fdl_module;
 
 architecture rtl of fdl_module is
 
--- HB 2015-05-26: "switch" for mux of signal to LEMO on mezzanine board
--- HB 2015-06-02: FDL_OUT_MEZZ_2_TCDS moved to generic
---     constant FDL_OUT_MEZZ_2_TCDS : boolean := false;
-
 -- Input flip-flops for algorithms of fdl_module.vhd
-    constant ALGO_INPUTS_FF: boolean := false; -- used for tests of fdl_module.vhd only
-
-    constant CNTRL_REG_INIT : ipb_regs_array(0 downto 0) := (others => X"00000000");
+--     constant ALGO_INPUTS_FF: boolean := false; -- used for tests of fdl_module.vhd only
 
     signal ipb_to_slaves: ipb_wbus_array(NR_IPB_SLV_FDL-1 downto 0);
     signal ipb_from_slaves: ipb_rbus_array(NR_IPB_SLV_FDL-1 downto 0);
@@ -106,8 +105,10 @@ architecture rtl of fdl_module is
     signal prescale_factor_reg: ipb_regs_array(0 to OFFSET_END_PRESCALE_FACTOR-OFFSET_BEG_PRESCALE_FACTOR);
     signal masks_reg: ipb_regs_array(0 to OFFSET_END_MASKS-OFFSET_BEG_MASKS);
     signal versions_to_ipb: ipb_regs_array(0 to OFFSET_END_READ_VERSIONS-OFFSET_BEG_READ_VERSIONS) := (others => (others => '0'));
-    signal control_reg: ipb_regs_array(0 to 0);
-
+    signal control_reg: ipb_regs_array(0 to 1);
+    signal prescale_factor_set_index_reg: ipb_regs_array(0 to 1);
+    signal command_pulses: std_logic_vector(31 downto 0); -- see ipb_pulse_regs.vhd
+    
 -- =================================================================================
     signal finor_masks_int : std_logic_vector(NR_ALGOS-1 downto 0);
     signal veto_masks_int : std_logic_vector(NR_ALGOS-1 downto 0);
@@ -135,43 +136,19 @@ architecture rtl of fdl_module is
     signal sync_en_algo_bx_mem : std_logic := '0';
 
     signal request_update_factor_pulse : std_logic;
-
-    signal clk_80mhz : std_logic;
--- HB 2015-06-26: v0.0.12 - based on v0.0.11, but used an additional port "veto_2_mezz_lemo", which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
---                ser_finor_veto_2_to_1_int not used anymore.
---     signal ser_finor_veto_2_to_1_int : std_logic;
-
---                local_finor_with_veto not used anymore.
--- HB 2014-10-23: local_finor_with_veto for tests
---     signal local_finor_with_veto : std_logic;
+    signal prescale_factor_set_index_reg_updated : std_logic_vector(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0);
 
     signal finor_with_veto_temp1 : std_logic;
     signal finor_with_veto_temp2 : std_logic;
 
 begin
 
--- HB 2015-06-02: to do => insert a register for "prescale_factor_set_index" for output "prescale_factor_set_index_rop"
-    prescale_factor_set_index_rop <= X"00";
-
 -- ******************************************************************************************************************
--- HB 04-09-2013: FDL status (similar to status information send to DAQ partitions via TCS)
+-- HB 04-09-2013: FDL status (similar to status information send to DAQ partitions via TCS) - has to checked!
 -- fdl_status(3) = "ready"
 -- fdl_status(2) = "busy"
 -- fdl_status(1) = "error/out_of_sync"
 -- fdl_status(0) = "warning"
-
--- HB 04-09-2013: if we have more than one uGT board, a "error" could be, if the connections for external FINORs and VETOs are not ok!!!
--- Requirement: the connection must be done in a certain way, so that board_connections signals are used from 1 to MAX_NR_GT_BOARDS-1 without gaps.
--- fdl_status <= X"8"; -- "ready"
--- fdl_status <= X"2"; -- "error"
-
--- board_connections_int <= board_connections & '1'; -- board(0) (=FINOR board) always "connected".
--- 
--- fdl_status <= X"8" when finor_mezz_board = '0' else -- status = "ready", if this board is not a total-FINOR board
---               X"8" when finor_mezz_board = '1' and (board_connections_int(USED_GT_BOARDS-1 downto 0) = board_connections_check(USED_GT_BOARDS-1 downto 0)) else
---               X"2";
-
--- HB 17-09-2013: board_connections should be in a status register !!!
 
 -- HB 2014-10-22:
 -- A redesign of FINOR is done, so no more board_connection check.
@@ -226,9 +203,9 @@ begin
     generic map
     (
         init_value => CNTRL_REG_INIT,
-        addr_width => 1,
+        addr_width => 2,
         regs_beg_index => 0,
-        regs_end_index => 0
+        regs_end_index => 1
     )
     port map
     (
@@ -240,12 +217,7 @@ begin
         regs_o => control_reg
     );
 
---    reset_algo_bx_mem <= control_reg(0)(0); -- Control register bit 0 => reset algo-bx-memory port B
--- HB 2014-12-11: dummy, not used in algo-bx-memory
---      en_algo_bx_mem <= control_reg(0)(1); -- Control register bit 1 => enable input (enb) algo-bx-memory port B
--- HB 2014-12-11: not used in this version
--- Control register bit 3 and 2 => selection for "sel_finor_lemo_out": "00" => local_finor_with_veto, "01" => ser_finor_veto_4_to_1.
--- 	sel_finor_lemo_out <= control_reg(0)(3 downto 2);
+-- HB 2015-08-31: control_reg not used currently
 
 --===============================================================================================--
 -- Algo-bx-memory
@@ -269,7 +241,14 @@ begin
         );
     end generate algo_bx_mem_l;                        
 
-    algo_bx_mask_sim_internal(NR_ALGOS-1 downto 0) <= algo_bx_mask_sim(NR_ALGOS-1 downto 0);
+    algo_bx_mask_sim_sync_p: process(lhc_clk, algo_bx_mask_sim)
+        begin
+        if (lhc_clk'event and (lhc_clk = '1')) then
+	    algo_bx_mask_sim_internal(NR_ALGOS-1 downto 0) <= algo_bx_mask_sim(NR_ALGOS-1 downto 0);
+        end if;
+    end process;
+
+--     algo_bx_mask_sim_internal(NR_ALGOS-1 downto 0) <= algo_bx_mask_sim(NR_ALGOS-1 downto 0);
     
 -- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
     algo_bx_mask <= algo_bx_mask_mem_out when not SIM_MODE else
@@ -314,6 +293,42 @@ begin
         regs_o => prescale_factor_reg
     );
 
+--===============================================================================================--
+-- Prescale factor set index register
+-- HB 2015-08-31: has to implemented
+    prescale_factors_set_index_i: entity work.ipb_write_regs
+    generic map
+    (
+        init_value => PRESCALE_FACTOR_SET_INDEX_REG_INIT,
+        addr_width => 2,
+        regs_beg_index => 0,
+        regs_end_index => 1
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_SET_INDEX),
+        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_SET_INDEX),
+        ------------------
+        regs_o => prescale_factor_set_index_reg
+    );
+
+    prescale_factor_set_index_update_i: entity work.update_process
+        generic map(
+            WIDTH => PRESCALE_FACTOR_SET_INDEX_WIDTH,
+            INIT_VALUE => X"00000000"
+        )
+        port map( 
+            clk => lhc_clk,
+            request_update_pulse => request_update_factor_pulse,
+            update_pulse => begin_lumi_section,
+            data_i => prescale_factor_set_index_reg(0)(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0),
+            data_o => prescale_factor_set_index_reg_updated
+        );
+        
+    prescale_factor_set_index_rop <= prescale_factor_set_index_reg_updated;
+
 -- --===============================================================================================--
 -- Finor and veto masks registers (bit 0 = finor, bit 1 = veto)
     masks_reg_i: entity work.ipb_write_regs
@@ -334,6 +349,22 @@ begin
         regs_o => masks_reg
     );
 
+--===============================================================================================--
+-- Prescale factor set index register
+-- HB 2015-08-31: has to implemented
+    pulse_reg_i: entity work.ipb_pulse_regs
+    port map(
+        ipb_clk => ipb_clk,
+        ipb_reset => ipb_rst,
+        ipb_mosi_i => ipb_to_slaves(C_IPB_COMMAND_PULSES),
+        ipb_miso_o => ipb_from_slaves(C_IPB_COMMAND_PULSES),
+        lhc_clk => lhc_clk,
+        pulse_o => command_pulses
+    );
+
+-- HB 2015-08-31: "request_update_factor_pulse" is bit 0 of "pulseregister 0 (C_IPB_COMMAND_PULSES)";
+    request_update_factor_pulse <= command_pulses(0);
+    
 -- --===============================================================================================--
 
     reg_l: for i in 0 to NR_ALGOS-1 generate
@@ -356,6 +387,14 @@ begin
         end if;
     end process;
 
+-- HB 2015-09-16: reset logic not decided yet (sres = synchr. reset)
+    sres_algo_rate_counter <= resync; -- ????????????
+--     sres_algo_rate_counter <= resync or ec0; -- ????????????
+--     sres_algo_rate_counter <= resync or ec0 or lhc_rst; -- ????????????
+    sres_algo_pre_scaler <= resync; -- ???????????? 
+--     sres_algo_pre_scaler <= resync or oc0; -- ???????????? 
+--     sres_algo_pre_scaler <= resync or oc0 or lhc_rst; -- ???????????? 
+
 -- Prescalers and rate counters
     algo_slices_l: for i in 0 to NR_ALGOS-1 generate
         algo_slice_i: entity work.algo_slice
@@ -367,6 +406,9 @@ begin
         port map( 
             sys_clk => ipb_clk,
             lhc_clk => lhc_clk,
+-- HB 2015-09-17: added "sres_algo_rate_counter" and "sres_algo_pre_scaler"
+	    sres_algo_rate_counter => sres_algo_rate_counter,
+	    sres_algo_pre_scaler => sres_algo_pre_scaler,
             request_update_factor_pulse => request_update_factor_pulse,
             begin_lumi_per => begin_lumi_section,
             algo_i => algo_int(i),

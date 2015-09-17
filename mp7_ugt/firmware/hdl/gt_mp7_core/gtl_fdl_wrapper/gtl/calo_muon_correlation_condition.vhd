@@ -29,9 +29,7 @@ entity calo_muon_correlation_condition is
         deta_cut: boolean := true;
         dphi_cut: boolean := true;
         dr_cut: boolean := false;
--- 	ETA_STEP: natural; -- range width of eta * STEP_PRECISION, see gtl_pkg.vhd
--- 	PHI_STEP: natural; -- range width of phi * STEP_PRECISION, see gtl_pkg.vhd
---
+
         nr_calo_objects: positive;
         et_ge_mode_calo: boolean;
         obj_type_calo: natural := EG_TYPE;
@@ -49,8 +47,8 @@ entity calo_muon_correlation_condition is
         phi_w2_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 	iso_lut_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
---
-        nr_muon_objects: positive;
+
+	nr_muon_objects: positive;
         pt_ge_mode_muon: boolean;
         pt_threshold_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         eta_full_range_muon : boolean;
@@ -68,16 +66,15 @@ entity calo_muon_correlation_condition is
         requested_charge_muon: string(1 to 3);
         qual_lut_muon: std_logic_vector(15 downto 0);
         iso_lut_muon: std_logic_vector(3 downto 0);
---
+
         diff_eta_upper_limit: diff_eta_range_real;
         diff_eta_lower_limit: diff_eta_range_real;
---        
+
         diff_phi_upper_limit: diff_phi_range_real;
         diff_phi_lower_limit: diff_phi_range_real;
---        
-	dr_upper_limit: dr_squared_range_real;
-        dr_lower_limit: dr_squared_range_real
 
+        dr_upper_limit: dr_squared_range_real;
+        dr_lower_limit: dr_squared_range_real
     );
     port(
         clk: in std_logic;
@@ -105,13 +102,9 @@ architecture rtl of calo_muon_correlation_condition is
     signal diff_eta_upper_limit_int : integer;
     signal diff_eta_lower_limit_int : integer;
     
-    signal diff_eta_bins_values: diff_2dim_integer_array(nr_calo_objects-1 downto 0, nr_muon_objects-1 downto 0);
-
     signal diff_phi_upper_limit_int : integer;
     signal diff_phi_lower_limit_int : integer;
     
-    signal diff_phi_bins_values: diff_2dim_integer_array(nr_calo_objects-1 downto 0, nr_muon_objects-1 downto 0);
-
     signal calo_obj_vs_templ : calo_object_vs_template_array;
     signal calo_obj_vs_templ_pipe : calo_object_vs_template_array;
     signal muon_obj_vs_templ : muon_object_vs_template_array;
@@ -191,23 +184,17 @@ begin
             end if;
     end process;
     
-diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**POSITION_FINAL_PRECISION));
-diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**POSITION_FINAL_PRECISION));
-diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**POSITION_FINAL_PRECISION));
-diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**POSITION_FINAL_PRECISION));
+    diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**POSITION_FINAL_PRECISION));
+    diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**POSITION_FINAL_PRECISION));
+    diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**POSITION_FINAL_PRECISION));
+    diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**POSITION_FINAL_PRECISION));
 
-delta_l_1: for i in 0 to nr_calo_objects-1 generate 
+    delta_l_1: for i in 0 to nr_calo_objects-1 generate 
 	delta_l_2: for j in 0 to nr_muon_objects-1 generate
 	    deta_diff_i: if deta_cut = true generate
-                -- "windows"-comparator for difference in eta for all object combinations
---                 diff_eta_bins_values(i,j) <= diff_eta_bins(i,j)*ETA_STEP;
---                 diff_eta_comp(i,j) <= '1' when diff_eta_bins_values(i,j) >= diff_eta_lower_limit_int and diff_eta_bins_values(i,j) <= diff_eta_upper_limit_int else '0';
                 diff_eta_comp(i,j) <= '1' when diff_eta(i,j) >= diff_eta_lower_limit_int and diff_eta(i,j) <= diff_eta_upper_limit_int else '0';
             end generate deta_diff_i;
 	    dphi_diff_i: if dphi_cut = true generate
-                -- "windows"-comparator for difference in phi for all object combinations
---                 diff_phi_bins_values(i,j) <= diff_phi_bins(i,j)*PHI_STEP;
---                 diff_phi_comp(i,j) <= '1' when diff_phi_bins_values(i,j) >= diff_phi_lower_limit_int and diff_phi_bins_values(i,j) <= diff_phi_upper_limit_int else '0';
                 diff_phi_comp(i,j) <= '1' when diff_phi(i,j) >= diff_phi_lower_limit_int and diff_phi(i,j) <= diff_phi_upper_limit_int else '0';
             end generate dphi_diff_i;
 	    dr_i: if dr_cut = true generate
@@ -215,8 +202,6 @@ delta_l_1: for i in 0 to nr_calo_objects-1 generate
 		    generic map(
 			dr_upper_limit => dr_upper_limit,
 			dr_lower_limit => dr_lower_limit
--- 			ETA_STEP => ETA_STEP,
--- 			PHI_STEP => PHI_STEP
 			)
 		    port map(
 			diff_eta => diff_eta(i,j),

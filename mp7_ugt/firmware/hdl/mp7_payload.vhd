@@ -15,6 +15,7 @@
 --------------------------------------------------------------------------------
 -- TODO: review the core and and modify it
 --
+-- HB 2015-09-16: added "ec0_in", "resync_in" and "oc0_in" from "ctrs" for FDL
 -- JW 2015-08-24: modified the core and adapted it for mp7_fw_v1_8_2 usage
 --
 
@@ -81,17 +82,26 @@ architecture rtl of mp7_payload is
     signal ipb_rst	         : std_logic;
     signal clk240            : std_logic;
     signal bc0_in            : std_logic;
+-- HB 2015-09-16: added "ec0_in" and "oc0_in" from "ctrs" for FDL
+    signal ec0_in            : std_logic;
+    signal resync_in         : std_logic;
+    signal oc0_in            : std_logic;
+
     signal lane_data_in      : ldata(4 * N_REGION - 1 downto 0);
     signal lane_data_out     : ldata(4 * N_REGION - 1 downto 0);
 
 begin
 
     lhc_clk <= clk_payload;
-    --lhc_rst <= rst_payload; rst_payload is input of mp7_pyload!!!!
     ipb_clk <= clk;
     ipb_rst <= rst;
     clk240  <= clk_p;
     bc0_in  <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_BC0 else '0';
+-- HB 2015-09-16: added "ec0_in" and "oc0_in" from "ctrs" for FDL
+    ec0_in  <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_EC0 else '0';
+    resync_in  <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_RESYNC else '0';
+    oc0_in  <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_OC0 else '0';
+
     lane_data_in  <= d;
     q <= lane_data_out;
 
@@ -105,7 +115,6 @@ begin
             ipb_to_slaves => ipb_to_slaves,
             ipb_from_slaves => ipb_from_slaves
     );
-
 
     frame_i : entity work.frame
         generic map
@@ -124,15 +133,12 @@ begin
             lhc_rst_sim         => '0',
             rop_rst_sim         => '0',
             ctrs                => ctrs,
-            -- tcm interface
             trigger_nr_sim          => (others => '0'),
             orbit_nr_sim            => (others => '0'),
             bx_nr_sim               => (others => '0'),
             luminosity_seg_nr_sim   => (others => '0'),
             event_nr_sim            => (others => '0'),
-            -- L1A
             l1a_sim             => '0',
-            --DAQ
             daq_oe_sim          => open,
             daq_stop_sim        => open,
             daq_data_sim        => open,
@@ -141,8 +147,6 @@ begin
             lhc_clk            => lhc_clk,
             lhc_rst_o          => lhc_rst,
             bc0                => bc0_in,
-            -- HB 2014-06-05: to get bgo_cmd, mp7_ttc must be changed ("cmd" as outputs)
-            -- bgo_cmd            => bgo_cmd,
             bcres_d_FDL        => bcres_d_FDL,
             bx_nr_d_FDL        => bx_nr_d_FDL,
             start_lumisection  => start_lumisection,
@@ -161,8 +165,6 @@ begin
             local_finor_with_veto_2_spy2    => local_finor_with_veto_o -- HB 2014-10-30: to SPY2_FINOR
         );
 
-
-
     gtl_fdl_wrapper_i : entity work.gtl_fdl_wrapper
        port map
         (
@@ -175,6 +177,10 @@ begin
             lhc_rst            => lhc_rst,
             lhc_data           => dsmux_lhc_data,
             bcres              => bcres_d_FDL,
+-- HB 2015-09-17: added "ec0_in", "resync_in" and "oc0_in" from "ctrs" for FDL
+            ec0                => ec0_in,
+            resync             => resync_in,
+            oc0                => oc0_in,
             lhc_gap            => '0',
             begin_lumi_section => start_lumisection,
             bx_nr              => bx_nr_d_FDL,

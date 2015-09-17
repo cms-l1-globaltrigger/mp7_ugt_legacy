@@ -41,19 +41,26 @@ architecture rtl of fdl_module_TB is
     constant SIM_MODE : boolean := true; -- if SIM_MODE = true, "algo_bx_mask" by default = 1.
 
     constant LHC_CLK_PERIOD  : time :=  25 ns;
+    constant IPBUS_CLK_PERIOD  : time :=  8 ns;
 
     constant PRESCALER_COUNTER_WIDTH : integer := 24;
     type prescale_factor_array is array (NR_ALGOS-1 downto 0) of std_logic_vector(31 downto 0); -- same width as PCIe data
     constant PRESCALE_FACTOR_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := ( others => X"00000001"); -- written by TME
     constant PRESCALE_FACTOR_SET_INDEX_WIDTH : positive := 8;
-    constant PRESCALE_FACTOR_SET_INDEX_REG_INIT : ipb_regs_array(0 to 0) := (others => X"00000000");
-    constant CNTRL_REG_INIT : ipb_regs_array(0 to 0) := (others => X"00000000");
+    constant PRESCALE_FACTOR_SET_INDEX_REG_INIT : ipb_regs_array(0 to 1) := (others => X"00000000");
+    constant CNTRL_REG_INIT : ipb_regs_array(0 to 1) := (others => X"00000000");
 -- Input flip-flops for algorithms of fdl_module.vhd - used for tests of fdl_module.vhd only
     constant ALGO_INPUTS_FF: boolean := true;
 -- HB 2014-02-28: changed vector length of init values for finor- and veto-maks, because of min. 32 bits for register
     constant MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := ( others => X"00000001"); --Finor and veto masks registers (bit 0 = finor, bit 1 = veto)
 
     signal lhc_clk : std_logic;
+    signal ipb_clk : std_logic;
+
+    signal begin_lumi_section : std_logic := '0';
+
+    signal ipb_in : ipb_wbus := IPB_WBUS_NULL;
+    signal ipb_out : ipb_rbus;
 
     signal algo_in : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
     signal algo_bx_mask_sim : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '1');
@@ -62,7 +69,7 @@ architecture rtl of fdl_module_TB is
 begin
     
     -- Clock
-    process
+    lhc_clk_p: process
     begin
         lhc_clk  <=  '1';
         wait for LHC_CLK_PERIOD/2;
@@ -70,10 +77,152 @@ begin
         wait for LHC_CLK_PERIOD/2;
     end process;
 
-    process
+    ipbus_clk_p: process
+    begin
+        ipb_clk  <=  '1';
+        wait for IPBUS_CLK_PERIOD/2;
+        ipb_clk  <=  '0';
+        wait for IPBUS_CLK_PERIOD/2;
+    end process;
+
+    ipbus_access_p: process
+    begin
+        wait for 207 ns;
+        ipb_in <= (X"90010201", X"00000003", '1' ,'1'); -- prescale factor for algo(1) set to 3
+        wait for IPBUS_CLK_PERIOD;
+        ipb_in  <=  IPB_WBUS_NULL;
+        wait for IPBUS_CLK_PERIOD;
+        ipb_in <= (X"90091900", X"00000001", '1' ,'1'); -- request_update_factor_pulse
+        wait for IPBUS_CLK_PERIOD;
+        ipb_in  <=  IPB_WBUS_NULL;
+        wait for IPBUS_CLK_PERIOD;
+        wait for 900 ns;
+        ipb_in <= (X"90010401", X"00000000", '1' ,'1'); -- finormask =0 for algo(1)
+        wait for IPBUS_CLK_PERIOD;
+        ipb_in  <=  IPB_WBUS_NULL;
+        wait for IPBUS_CLK_PERIOD;
+        wait for 577 ns;
+        ipb_in <= (X"90010001", X"00000000", '1' ,'1'); -- rate-counter for algo(1)
+        wait for IPBUS_CLK_PERIOD;
+        ipb_in  <=  IPB_WBUS_NULL;
+        wait for IPBUS_CLK_PERIOD;
+        wait; 
+    end process;
+
+    begin_lumi_section_p: process
+    begin
+        wait for 507 ns;
+        begin_lumi_section  <=  '1';
+        wait for LHC_CLK_PERIOD;
+        begin_lumi_section  <=  '0';
+        wait for LHC_CLK_PERIOD;
+--         wait; 
+    end process;
+
+    stimuli_p: process
     begin
         wait for 107 ns;
         algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "01"; 
+        algo_bx_mask_sim <= "11"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "11"; 
+        algo_bx_mask_sim <= "10"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "10"; 
+        algo_bx_mask_sim <= "11"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for 200 ns;
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "01"; 
+        algo_bx_mask_sim <= "11"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "11"; 
+        algo_bx_mask_sim <= "10"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "10"; 
+        algo_bx_mask_sim <= "11"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for 50 ns;
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "01"; 
+        algo_bx_mask_sim <= "11"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "11"; 
+        algo_bx_mask_sim <= "10"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "10"; 
+        algo_bx_mask_sim <= "11"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "01"; 
+        algo_bx_mask_sim <= "11"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "11"; 
+        algo_bx_mask_sim <= "10"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "10"; 
+        algo_bx_mask_sim <= "11"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "01"; 
+        algo_bx_mask_sim <= "11"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "11"; 
+        algo_bx_mask_sim <= "10"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "10"; 
+        algo_bx_mask_sim <= "11"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "01"; 
+        algo_bx_mask_sim <= "11"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "11"; 
+        algo_bx_mask_sim <= "10"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "00"; 
+        wait for LHC_CLK_PERIOD; 
+        algo_in <= "10"; 
+        algo_bx_mask_sim <= "11"; 
         wait for LHC_CLK_PERIOD; 
         algo_in <= "00"; 
         wait for LHC_CLK_PERIOD; 
@@ -108,9 +257,9 @@ dut: entity work.fdl_module
 	ALGO_INPUTS_FF => ALGO_INPUTS_FF
 	)
     port map( 
-        ipb_clk         => '0',
+        ipb_clk         => ipb_clk,
         ipb_rst         => '0',
-        ipb_in          => IPB_WBUS_NULL,
+        ipb_in          => ipb_in,
         ipb_out         => open,
 -- ========================================================
 --         clk160          => '0',
@@ -118,7 +267,7 @@ dut: entity work.fdl_module
         lhc_rst         => '0',
         bcres           => '0',
         lhc_gap         => '0',
-        begin_lumi_section => '0',
+        begin_lumi_section => begin_lumi_section,
         bx_nr           => (others => '0'),
         algo_i          => algo_in,
         fdl_status      => open,

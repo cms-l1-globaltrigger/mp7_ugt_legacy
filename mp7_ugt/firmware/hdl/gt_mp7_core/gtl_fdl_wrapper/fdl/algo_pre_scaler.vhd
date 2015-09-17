@@ -45,7 +45,7 @@ architecture rtl of algo_pre_scaler is
    signal request_ff : std_logic := '0';
 begin
 
-prescale_fac_set_ind_update_i: entity work.update_process
+prescale_factor_update_i: entity work.update_process
     generic map(
         WIDTH => COUNTER_WIDTH,
         INIT_VALUE => PRESCALE_FACTOR_INIT

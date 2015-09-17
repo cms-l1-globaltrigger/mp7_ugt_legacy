@@ -19,6 +19,8 @@
 -- Output synchronized with sys_clk, to prevent wrong counter values when reading via PCIe.
 -- This design only works with LHC clock (40 MHz) and PCIe system clock (125 MHz)
 
+-- HB 2015-09-17: inserted "clear counter value in the "output" register for reading by IPBus" with sres_counter = '1'.
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
@@ -45,7 +47,7 @@ architecture rtl of algo_rate_counter is
     signal limit : std_logic := '0';
     signal store_cnt_value_lhc : std_logic := '0';
     signal store_cnt_value_sys : std_logic := '0';
-    signal store_cnt_value_sys_2 : std_logic := '0';
+--     signal store_cnt_value_sys_2 : std_logic := '0';
 begin
    counter_p: process (lhc_clk, sres_counter, store_cnt_value, algo_i)
    begin
@@ -96,8 +98,11 @@ begin
    store_p: process (sys_clk, counter_int, store_cnt_value_sys)
    begin
       if sys_clk'event and sys_clk = '1' then
-         if store_cnt_value_sys = '1' then
-            counter_o <= counter_int; -- "store" counter value for read access with store_cnt_value_sys_2, which is store_cnt_value_lhc suncronized with sys_clk and delayed by one sys_clk
+-- HB 2015-09-17: inserted "clear counter value in the "output" register for reading by IPBus" with sres_counter = '1'.
+         if sres_counter = '1' then
+            counter_o <= (others => '0'); -- clear counter value in the "output" register for reading by IPBus
+         elsif store_cnt_value_sys = '1' then
+            counter_o <= counter_int; -- "store" counter value for read access
          end if;
       end if;
    end process store_p;

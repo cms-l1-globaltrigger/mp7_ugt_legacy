@@ -19,6 +19,8 @@
 -- algo-bx-mask at algo input
 -- rate-counter before prescaler only (no rate-counter after finor-mask)
 
+-- HB 2015-09-17: inserted ports "sres_algo_rate_counter" and "sres_algo_pre_scaler".
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
@@ -33,6 +35,9 @@ entity algo_slice is
     port( 
         sys_clk : in std_logic;
         lhc_clk : in std_logic;
+-- HB 2015-09-17: added "sres_algo_rate_counter" and "sres_algo_pre_scaler"
+	sres_algo_rate_counter : in std_logic;
+	sres_algo_pre_scaler : in std_logic;
         request_update_factor_pulse : in std_logic;
         begin_lumi_per : in std_logic;
         algo_i : in std_logic;
@@ -41,7 +46,6 @@ entity algo_slice is
         finor_mask : in std_logic;
         veto_mask : in std_logic;
         rate_cnt_before_prescaler : out std_logic_vector(RATE_COUNTER_WIDTH-1 DOWNTO 0);
---         rate_cnt_after_mask : out std_logic_vector(RATE_COUNTER_WIDTH-1 DOWNTO 0);
         algo_before_prescaler : out std_logic;
         algo_after_prescaler : out std_logic;
         algo_after_finor_mask : out std_logic;
@@ -64,7 +68,8 @@ rate_cnt_before_prescaler_i: entity work.algo_rate_counter
     port map( 
         sys_clk => sys_clk,
         lhc_clk => lhc_clk,
-        sres_counter => '0',
+        sres_counter => sres_algo_rate_counter,
+--         sres_counter => '0',
         store_cnt_value => begin_lumi_per,
         algo_i => algo_after_algo_bx_mask_int,
         counter_o => rate_cnt_before_prescaler
@@ -77,7 +82,8 @@ prescaler_i: entity work.algo_pre_scaler
     )
     port map( 
         clk => lhc_clk,
-        sres_counter => '0',
+        sres_counter => sres_algo_pre_scaler,
+--         sres_counter => '0',
         algo_i => algo_after_algo_bx_mask_int,
         request_update_factor_pulse => request_update_factor_pulse,
         update_factor_pulse => begin_lumi_per,
@@ -87,19 +93,6 @@ prescaler_i: entity work.algo_pre_scaler
 
 algo_after_finor_mask_int <= algo_after_prescaler_int and finor_mask;
 
--- rate_cnt_after_mask_i: algo_rate_counter
---     generic map( 
---         COUNTER_WIDTH => RATE_COUNTER_WIDTH
---     )
---     port map( 
---         sys_clk => sys_clk,
---         lhc_clk => lhc_clk,
---         sres_counter => '0',
---         store_cnt_value => begin_lumi_per,
---         algo_i => algo_after_finor_mask_int,
---         counter_o => rate_cnt_after_mask
---     );
--- 
 veto <= algo_after_finor_mask_int and veto_mask;
 
 algo_before_prescaler <= algo_after_algo_bx_mask_int;

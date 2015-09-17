@@ -82,13 +82,18 @@ architecture rtl of mp7_payload is
     signal ipb_rst	         : std_logic;
     signal clk240            : std_logic;
     signal bc0_in            : std_logic;
--- HB 2015-09-16: added "ec0_in" and "oc0_in" from "ctrs" for FDL
+    -- HB 2015-09-16: added "ec0_in" and "oc0_in" from "ctrs" for FDL
     signal ec0_in            : std_logic;
     signal resync_in         : std_logic;
     signal oc0_in            : std_logic;
 
     signal lane_data_in      : ldata(4 * N_REGION - 1 downto 0);
     signal lane_data_out     : ldata(4 * N_REGION - 1 downto 0);
+
+    --JW 2015-09-17: added a specific module which selects the mezzanine output per IPBUS
+    signal tp0            : std_logic;
+    signal tp1            : std_logic;
+    signal tp2            : std_logic;
 
 begin
 
@@ -97,23 +102,24 @@ begin
     ipb_rst <= rst;
     clk240  <= clk_p;
     bc0_in  <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_BC0 else '0';
--- HB 2015-09-16: added "ec0_in" and "oc0_in" from "ctrs" for FDL
-    ec0_in  <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_EC0 else '0';
+    -- HB 2015-09-16: added "ec0_in" and "oc0_in" from "ctrs" for FDL
+    ec0_in     <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_EC0 else '0';
     resync_in  <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_RESYNC else '0';
-    oc0_in  <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_OC0 else '0';
+    oc0_in     <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_OC0 else '0';
 
     lane_data_in  <= d;
     q <= lane_data_out;
 
-    fabric_i: entity work.gt_mp7_core_fabric
-        generic map(NSLV => NR_IPB_SLV_GT_MP7_CORE)
-        port map(
-            ipb_clk => ipb_clk,
-            ipb_rst => ipb_rst,
-            ipb_in => ipb_in,
-            ipb_out => ipb_out,
-            ipb_to_slaves => ipb_to_slaves,
-            ipb_from_slaves => ipb_from_slaves
+    fabric_i: entity work.ipbus_fabric_sel
+    generic map(
+        NSLV => NR_IPB_SLV_GT_MP7_CORE,
+        SEL_WIDTH => IPBUS_SEL_WIDTH)
+    port map(
+      ipb_in => ipb_in,
+      ipb_out => ipb_out,
+      sel => ipbus_sel_mp7_payload(ipb_in.ipb_addr),
+      ipb_to_slaves => ipb_to_slaves,
+      ipb_from_slaves => ipb_from_slaves
     );
 
     frame_i : entity work.frame
@@ -196,9 +202,31 @@ begin
             local_finor_with_veto_o => local_finor_with_veto_o
         );
 
-    gpio(0) <= finor_2_mezz_lemo;
-    gpio(1) <= veto_2_mezz_lemo;
-    gpio(2) <= bc0_in;
+    tp_mux_i : entity work.tp_mux
+        port map
+        (
+            ipb_clk             => ipb_clk,
+            ipb_rst             => ipb_rst,
+            ipb_in              => ipb_to_slaves(C_IPB_GT_MP7_TP_MUX),
+            ipb_out             => ipb_from_slaves(C_IPB_GT_MP7_TP_MUX),
+            clk_payload         => lhc_clk,
+            rst_payload         => lhc_rst,
+            clk_p               => clk240,
+            ctrs                => ctrs,
+            bc0                 => bc0_in,
+            ec0                 => ec0_in,
+            oc0                 => oc0_in,
+            resync              => resync_in,
+            finor               => finor_2_mezz_lemo,
+            veto                =>  veto_2_mezz_lemo,
+            out0            => tp0,
+            out1            => tp1,
+            out2            => tp2
+        );
+
+    gpio(0) <= tp0; --finor_2_mezz_lemo;
+    gpio(1) <= tp1; --veto_2_mezz_lemo;
+    gpio(2) <= tp2; --bc0_in;
     gpio_en(0) <= '1'; --enable output 0
     gpio_en(1) <= '1'; --enable output 1
     gpio_en(2) <= '1'; --enable output 2

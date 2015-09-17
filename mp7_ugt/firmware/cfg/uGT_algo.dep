@@ -30,6 +30,8 @@
 src lhc_data_pkg.vhd
 src gt_mp7_top_pkg.vhd
 src gt_mp7_core/gt_mp7_core_pkg.vhd
+src gt_mp7_core/tp_mux/tp_mux.vhd
+src gt_mp7_core/tp_mux/tp_mux_address_decoder.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_addr_decode.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd

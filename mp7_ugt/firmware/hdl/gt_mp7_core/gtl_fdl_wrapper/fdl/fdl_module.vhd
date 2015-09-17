@@ -114,9 +114,9 @@ architecture rtl of fdl_module is
     signal veto_masks_int : std_logic_vector(NR_ALGOS-1 downto 0);
 
     signal algo_int : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
-    signal sres_prescaler : std_logic := '0';
+    signal sres_algo_pre_scaler : std_logic := '0';
     signal prescale_factor_int : prescale_factor_array;
-    signal sres_rate_counter : std_logic := '0';
+    signal sres_algo_rate_counter : std_logic := '0';
     signal rate_cnt_before_prescaler : rate_counter_array;
 
     signal algo_before_prescaler : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');

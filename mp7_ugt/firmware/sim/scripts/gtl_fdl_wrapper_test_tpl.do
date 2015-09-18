@@ -148,6 +148,7 @@ vcom -93 -work work $GT_CORES/lhc_clk_pll_40_80_160/lhc_clk_pll_40_80_160.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_dpmem_4096_32.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_read_regs.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_write_regs.vhd
+vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_pulse_regs.vhd
 vcom -93 -work work $L1TM/vhdl/module_0/src/algo_mapping_rop.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
 

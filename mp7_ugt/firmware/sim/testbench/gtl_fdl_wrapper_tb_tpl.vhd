@@ -108,7 +108,7 @@ begin
 	variable finor_error_cnt : integer := 0;
 
         file testvector_file : text open read_mode is "{{TESTVECTOR_FILENAME}}";
-        file error_file : text open write_mode is "sim_error_{{TESTVECTOR_NAME}}.txt";
+        file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_{{TESTVECTOR_NAME}}";
 
     function str_to_slv(str : string) return std_logic_vector is
       alias str_norm : string(1 to str'length) is str;
@@ -222,12 +222,14 @@ dut : entity work.gtl_fdl_wrapper
         ipb_rst            => '0',
         ipb_in             => IPB_WBUS_NULL,
         ipb_out            => open,
-
---         clk160             => clk160,
         lhc_clk            => lhc_clk,
         lhc_rst            => '0',
         lhc_data           => lhc_data,
         bcres              => '0',
+-- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs"
+        ec0             => '0',
+        resync          => '0',
+        oc0             => '0',
         lhc_gap            => '0',
         begin_lumi_section => '0',
         bx_nr              => (others => '0'),

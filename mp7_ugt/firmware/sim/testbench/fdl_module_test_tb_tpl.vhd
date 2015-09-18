@@ -261,11 +261,13 @@ dut: entity work.fdl_module
         ipb_rst         => '0',
         ipb_in          => ipb_in,
         ipb_out         => open,
--- ========================================================
---         clk160          => '0',
         lhc_clk         => lhc_clk,
         lhc_rst         => '0',
         bcres           => '0',
+-- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs"
+        ec0             => '0',
+        resync          => '0',
+        oc0             => '0',
         lhc_gap         => '0',
         begin_lumi_section => begin_lumi_section,
         bx_nr           => (others => '0'),

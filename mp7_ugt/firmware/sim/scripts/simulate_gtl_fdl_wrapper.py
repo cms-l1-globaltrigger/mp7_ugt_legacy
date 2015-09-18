@@ -67,6 +67,7 @@ def call_process(*args):
 def parse():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
+    parser.add_argument('mp7tag', help = "path to MP7 tag")
     parser.add_argument('menu', help = "path to trigger menu directory")
     parser.add_argument('testvector', help = "path to testvector to be used")
     parser.add_argument('-m', '--module', metavar = '<n>', type = int, default = 0, help = "module to be simulated, default is `0'")
@@ -75,6 +76,7 @@ def parse():
     parser.add_argument('--xilinx-path', metavar = '<path>', default = DEFAULT_XILINX_PATH, help = "path to xilinx installation, default is `{DEFAULT_XILINX_PATH}'".format(**globals()))
     parser.add_argument('--modelsim', metavar = '<version>', default = DEFAULT_MODELSIM_VERSION, help = "select modelsim version, default is `{DEFAULT_MODELSIM_VERSION}'".format(**globals()))
     parser.add_argument('--config', metavar = '<filename>', default = DEFAULT_MODELSIM_INI_TPL, help = "set modelsim INI template file, default is `{DEFAULT_MODELSIM_INI_TPL}'".format(**globals()))
+    parser.add_argument('--p', action = 'store_true', help = "enables prints to console")
     return parser.parse_args()
 
 def main():
@@ -83,8 +85,16 @@ def main():
     # Parse command line arguments.
     args = parse()
 
+    debug = 'prints' if args.p else ''
+
     # Setup console logging
     logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.DEBUG)
+
+    # MP7 tag path.
+    mp7_tag = args.mp7tag
+
+    # Menu path.
+    menu_path = args.menu
 
     # Fetch menu name from path.
     menu_name = os.path.basename(args.menu)
@@ -107,7 +117,9 @@ def main():
 
     # Testvector name (basename without extension).
     testvector_name = os.path.splitext(os.path.basename(args.testvector))[0]
-
+    if debug == 'prints':
+	print "testvector_name: {testvector_name}".format(**locals())
+ 
     # As things are getting serious let's start logging to file.
     handler = logging.FileHandler('sum_{testvector_name}.log'.format(**locals()), mode = 'w')
     handler.setFormatter(logging.Formatter(fmt = '%(asctime)s %(levelname)s : %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
@@ -119,6 +131,7 @@ def main():
     # ---------------------------------------------------------------------
 
     logging.info("Running GTL/FDL simulation...")
+    logging.info("mp7_tag: %s", args.mp7tag)
     logging.info("menu: %s", args.menu)
     logging.info("module: %s", args.module)
     logging.info("test vector: %s", args.testvector)
@@ -135,7 +148,8 @@ def main():
         '{{MODELSIM_VERSION}}' : args.modelsim,
     })
     render_template(DO_FILE_TPL, DO_FILE, {
-        '_MENU_NAME_' : menu_name,
+        '_MP7_TAG_' : mp7_tag,
+        '_MENU_PATH_' : menu_path,
     })
     render_template(TB_FILE_TPL, TEMP_FILE, {
         '_MENU_NAME_' : menu_name,

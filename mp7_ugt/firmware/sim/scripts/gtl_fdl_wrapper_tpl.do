@@ -1,5 +1,5 @@
 ##--------------------------------------------------------------------------------
-##-- Simulator   : ModelSim 10.1
+##-- Simulator   : ModelSim 10.3b
 ##-- Platform    : Linux Ubuntu 10.04
 ##-- Targets     : Simulation
 ##--------------------------------------------------------------------------------
@@ -9,10 +9,10 @@
 ##-- confidential information of HEPHY.
 ##--------------------------------------------------------------------------------
 ##---Description: 
-##-- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/sim/scripts/gtl_fdl_wrapper_tpl.do $
-##-- $Date: 2015-08-14 10:57:16 +0200 (Fre, 14 Aug 2015) $
-##-- $Author: bergauer $
-##-- $Revision: 4148 $
+##-- $HeadURL: https://svn.cern.ch/reps/cactus/trunk/cactusupgrades/projects/ugt/mp7_ugt/firmware/sim/scripts/gtl_fdl_wrapper_test_tpl.do $
+##-- $Date: 2015-09-08 11:26:11 +0200 (Tue, 08 Sep 2015) $
+##-- $Author: hbergaue $
+##-- $Revision: 39037 $
 ##--------------------------------------------------------------------------------
 
 ##***************************** Beginning of Script ***************************
@@ -34,13 +34,13 @@ if [info exists env(MTI_LIBS)] {
 
 ## set your src files directory for your design
 
-set MP7_BRD ~/cactus/tags/mp7/stable/firmware/mp7fw_v1_8_2/cactusupgrades/boards/mp7/base_fw
-set MP7_SRC ./../../../../../components
+set MP7_BRDS _MP7_TAG_/boards/mp7/base_fw
+set MP7_COMPONENTS _MP7_TAG_/components
+
+set L1TM _MENU_PATH_
 
 set GT_SRC ./../hdl
 set GT_CORES ./../ngc
-set L1TM ./../../l1tm
-
 set TESTBENCH ./../sim/testbench
 
 ## Create and map work directory
@@ -48,63 +48,64 @@ vlib work
 vmap work work
 
 #Top Entity the design
-vcom -93 -work work $MP7_BRD/mp7xe_690/firmware/hdl/mp7_brd_decl.vhd
-vcom -93 -work work $MP7_BRD/common/firmware/hdl/mp7_top_decl.vhd
-vcom -93 -work work $MP7_SRC/mp7_datapath/firmware/hdl/mp7_data_types.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/ipbus_package.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/ipbus_trans_decl.vhd
-vcom -93 -work work $MP7_SRC/ipbus_slaves/firmware/hdl/ipbus_reg_types.vhd
-vcom -93 -work work $MP7_SRC/ipbus_slaves/firmware/hdl/syncreg_w.vhd
-vcom -93 -work work $MP7_SRC/ipbus_slaves/firmware/hdl/syncreg_r.vhd    
-vcom -93 -work work $MP7_SRC/ipbus_slaves/firmware/hdl/ipbus_syncreg_v.vhd
-vcom -93 -work work $MP7_SRC/ipbus_slaves/firmware/hdl/trans_buffer.vhd
-vcom -93 -work work $MP7_SRC/ipbus_slaves/firmware/hdl/trans_buffer_test.vhd
-vcom -93 -work work $MP7_SRC/ipbus_slaves/firmware/hdl/uc_spi_interface.vhd
-vcom -93 -work work $MP7_SRC/ipbus_slaves/firmware/hdl/uc_pipe_interface.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_buffer_selector.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_build_arp.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_build_payload.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_build_ping.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_build_resend.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_build_status.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_byte_sum.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_clock_crossing_if.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_do_rx_reset.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_dualportram.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_dualportram_rx.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_dualportram_tx.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_ipaddr_block.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_packet_parser.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_rarp_block.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_rxram_mux.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_rxram_shim.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_rxtransactor_if_simple.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_status_buffer.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_tx_mux.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_txtransactor_if_simple.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/udp_if_flat.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/trans_arb.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/transactor_if.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/transactor_sm.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/transactor_cfg.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/transactor.vhd
-vcom -93 -work work $MP7_SRC/mp7_ctrl/firmware/hdl/ipbus_addr_decode.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/ipbus_fabric.vhd
-vcom -93 -work work $MP7_SRC/ipbus_slaves/firmware/hdl/ipbus_reg_types.vhd
-vcom -93 -work work $MP7_SRC/ipbus_slaves/firmware/hdl/ipbus_ctrlreg_v.vhd
-vcom -93 -work work $MP7_SRC/ipbus_core/firmware/hdl/ipbus_ctrl.vhd
+vcom -93 -work work $MP7_BRDS/mp7xe_690/firmware/hdl/mp7_brd_decl.vhd
+vcom -93 -work work $MP7_BRDS/common/firmware/hdl/mp7_top_decl.vhd
+vcom -93 -work work $MP7_COMPONENTS/mp7_datapath/firmware/hdl/mp7_data_types.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/ipbus_package.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/ipbus_trans_decl.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_slaves/firmware/hdl/ipbus_reg_types.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_slaves/firmware/hdl/syncreg_w.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_slaves/firmware/hdl/syncreg_r.vhd    
+vcom -93 -work work $MP7_COMPONENTS/ipbus_slaves/firmware/hdl/ipbus_syncreg_v.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_slaves/firmware/hdl/trans_buffer.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_slaves/firmware/hdl/trans_buffer_test.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_slaves/firmware/hdl/uc_spi_interface.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_slaves/firmware/hdl/uc_pipe_interface.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_buffer_selector.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_build_arp.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_build_payload.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_build_ping.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_build_resend.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_build_status.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_byte_sum.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_clock_crossing_if.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_do_rx_reset.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_dualportram.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_dualportram_rx.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_dualportram_tx.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_ipaddr_block.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_packet_parser.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_rarp_block.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_rxram_mux.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_rxram_shim.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_rxtransactor_if_simple.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_status_buffer.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_tx_mux.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_txtransactor_if_simple.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/udp_if_flat.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/trans_arb.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/transactor_if.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/transactor_sm.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/transactor_cfg.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/transactor.vhd
+vcom -93 -work work $MP7_COMPONENTS/mp7_ctrl/firmware/hdl/ipbus_addr_decode.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/ipbus_fabric.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_slaves/firmware/hdl/ipbus_reg_types.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_slaves/firmware/hdl/ipbus_ctrlreg_v.vhd
+vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/ipbus_ctrl.vhd
 
 vcom -93 -work work $GT_SRC/top_decl.vhd
 vcom -93 -work work $GT_SRC/lhc_data_pkg.vhd
 vcom -93 -work work $GT_SRC/math_pkg.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_top_pkg_sim_temp.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_top_pkg_sim.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gt_mp7_core_pkg.vhd
 ## HB 2015-06-03: test with l1tm_pkg.vhd instead of gtl_pkg.vhd - gtl_pkg.vhd moved to $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl
-#vcom -93 -work work $L1TM/_MENU_NAME_/vhdl/module_0/src/l1tm_pkg.vhd
-vcom -93 -work work $L1TM/_MENU_NAME_/vhdl/module_0/src/gtl_pkg.vhd
+#vcom -93 -work work $L1TM/vhdl/module_0/src/l1tm_pkg.vhd
+vcom -93 -work work $L1TM/vhdl/module_0/src/gtl_pkg.vhd
 
 vcom -93 -work work $TESTBENCH/lhc_data_debug_util_pkg.vhd
 vcom -93 -work work $TESTBENCH/txt_util_pkg.vhd
+#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_lib.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/p_m_2_bx_pipeline.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/phi_windows_comp.vhd
@@ -131,7 +132,7 @@ vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_obj_vs_obj.v
 #vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
 #vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator.vhd
 #vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd
-vcom -93 -work work $L1TM/_MENU_NAME_/vhdl/module_0/src/gtl_module.vhd
+vcom -93 -work work $L1TM/vhdl/module_0/src/gtl_module.vhd
 
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/pulse_converter.vhd
@@ -145,8 +146,7 @@ vcom -93 -work work $GT_CORES/dp_mem_4096x32/dp_mem_4096x32.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_dpmem_4096_32.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_read_regs.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_write_regs.vhd
-vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_pulse_regs.vhd
-vcom -93 -work work $L1TM/_MENU_NAME_/vhdl/module_0/src/algo_mapping_rop.vhd
+vcom -93 -work work $L1TM/vhdl/module_0/src/algo_mapping_rop.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
 
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd

@@ -215,7 +215,6 @@ begin
 dut : entity work.gtl_fdl_wrapper
     generic map(
         SIM_MODE => SIM_MODE
---         FDL_OUT_MEZZ_2_TCDS => FDL_OUT_MEZZ_2_TCDS
     )
     port map
     (
@@ -223,12 +222,14 @@ dut : entity work.gtl_fdl_wrapper
         ipb_rst            => '0',
         ipb_in             => IPB_WBUS_NULL,
         ipb_out            => open,
-
---         clk160             => clk160,
         lhc_clk            => lhc_clk,
         lhc_rst            => '0',
         lhc_data           => lhc_data,
         bcres              => '0',
+-- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs"
+        ec0             => '0',
+        resync          => '0',
+        oc0             => '0',
         lhc_gap            => '0',
         begin_lumi_section => '0',
         bx_nr              => (others => '0'),

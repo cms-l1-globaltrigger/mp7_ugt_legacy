@@ -76,7 +76,7 @@ def parse():
     parser.add_argument('--xilinx-path', metavar = '<path>', default = DEFAULT_XILINX_PATH, help = "path to xilinx installation, default is `{DEFAULT_XILINX_PATH}'".format(**globals()))
     parser.add_argument('--modelsim', metavar = '<version>', default = DEFAULT_MODELSIM_VERSION, help = "select modelsim version, default is `{DEFAULT_MODELSIM_VERSION}'".format(**globals()))
     parser.add_argument('--config', metavar = '<filename>', default = DEFAULT_MODELSIM_INI_TPL, help = "set modelsim INI template file, default is `{DEFAULT_MODELSIM_INI_TPL}'".format(**globals()))
-    parser.add_argument('--p', action = 'store_true', help = "enables prints to console")
+    parser.add_argument('--p', action = 'store_true', help = "enables debug prints to console")
     return parser.parse_args()
 
 def main():

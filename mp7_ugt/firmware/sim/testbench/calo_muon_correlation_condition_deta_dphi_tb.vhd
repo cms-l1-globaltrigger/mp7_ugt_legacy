@@ -255,7 +255,7 @@ dut: entity work.calo_muon_correlation_condition
         dr_lower_limit => dr_lower_limit
     )
     port map(
-        clk => lhc_clk,
+        lhc_clk => lhc_clk,
         calo_data_i => tau_bx_0_ff,
         muon_data_i => muon_bx_0_ff,
         diff_eta => diff_tau_muon_eta_integer_value_bx_0_bx_0,

@@ -43,10 +43,10 @@ use work.gt_mp7_core_pkg.all;
 -- use work.fdl_pkg.all;
 use work.gtl_pkg.all;
 
-entity gtl_fdl_wrapper_TB is
-end gtl_fdl_wrapper_TB;
+entity gtl_fdl_wrapper_test_TB is
+end gtl_fdl_wrapper_test_TB;
 
-architecture rtl of gtl_fdl_wrapper_TB is
+architecture rtl of gtl_fdl_wrapper_test_TB is
 
     type lhc_data_t_array is array(integer range <>) of lhc_data_t;
     type algo_vector_string_array is array(integer range <>) of string(1 to 128);
@@ -108,8 +108,8 @@ begin
 	variable algo_error_cnt : integer := 0;
 	variable finor_error_cnt : integer := 0;
 
-        file testvector_file : text open read_mode is "/home/bergauer/cactus/trunk/cactusprojects/ugt/menu/2015/L1Menu_CaloMuonCorrelation_2015_hb_test/testvectors/L1Menu_CaloMuonCorrelation_2015_hb_test_v1_no_header.txt";
-        file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_test_L1Menu_CaloMuonCorrelation_2015_hb_test_v1_no_header.txt";
+        file testvector_file : text open read_mode is "/home/bergauer/cactus/trunk/cactusprojects/ugt/menu/2015/L1Menu_MuonMuonCorrelation_2015_hb_test/testvectors/L1Menu_MuonMuonCorrelation_2015_hb_test_v1_no_header.txt";
+        file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_test_L1Menu_MuonMuonCorrelation_2015_hb_test_v1_no_header.txt";
 
     function str_to_slv(str : string) return std_logic_vector is
       alias str_norm : string(1 to str'length) is str;

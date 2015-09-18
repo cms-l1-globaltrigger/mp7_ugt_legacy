@@ -76,7 +76,7 @@ entity calo_muon_correlation_condition is
         dr_lower_limit: dr_squared_range_real
     );
     port(
-        clk: in std_logic;
+        lhc_clk: in std_logic;
         calo_data_i: in calo_objects_array;
         muon_data_i: in muon_objects_array;
         diff_eta: in diff_2dim_integer_array;
@@ -166,13 +166,13 @@ begin
      end generate muon_obj_l;
 
 -- Pipeline stage for obj_vs_templ
-    obj_vs_templ_pipeline_p: process(clk, calo_obj_vs_templ, muon_obj_vs_templ)
+    obj_vs_templ_pipeline_p: process(lhc_clk, calo_obj_vs_templ, muon_obj_vs_templ)
         begin
             if obj_vs_templ_pipeline_stage = false then 
                 calo_obj_vs_templ_pipe <= calo_obj_vs_templ;
                 muon_obj_vs_templ_pipe <= muon_obj_vs_templ;
             else
-                if (clk'event and clk = '1') then
+                if (lhc_clk'event and lhc_clk = '1') then
                     calo_obj_vs_templ_pipe <= calo_obj_vs_templ;
                     muon_obj_vs_templ_pipe <= muon_obj_vs_templ;
                 end if;
@@ -208,7 +208,7 @@ begin
     end generate delta_l_1;
 
 -- Pipeline stage for diff_eta_comp, diff_phi_comp and dr_comp
-    diff_pipeline_p: process(clk, diff_eta_comp, diff_phi_comp, dr_comp)
+    diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp)
         begin
             if obj_vs_templ_pipeline_stage = false then 
                 if deta_cut = true and dphi_cut = false and dr_cut = false then
@@ -222,7 +222,7 @@ begin
                     dr_comp_pipe <= dr_comp;
                 end if;
             else
-                if (clk'event and clk = '1') then
+                if (lhc_clk'event and lhc_clk = '1') then
                     if deta_cut = true and dphi_cut = false and dr_cut = false then
                         diff_eta_comp_pipe <= diff_eta_comp;
                     elsif deta_cut = false and dphi_cut = true and dr_cut = false then
@@ -282,12 +282,12 @@ begin
     end process matrix_deta_dphi_dr_p;
 
 -- Pipeline stage for condition output.
-    condition_o_pipeline_p: process(clk, condition_and_or)
+    condition_o_pipeline_p: process(lhc_clk, condition_and_or)
         begin
             if conditions_pipeline_stage = false then 
                 condition_o <= condition_and_or;
             else
-                if (clk'event and clk = '1') then
+                if (lhc_clk'event and lhc_clk = '1') then
                     condition_o <= condition_and_or;
                 end if;
             end if;

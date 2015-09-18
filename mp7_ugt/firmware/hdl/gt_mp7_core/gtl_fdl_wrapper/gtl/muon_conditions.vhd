@@ -307,8 +307,6 @@ matrix_single_i: if nr_templates = 1 generate
         condition_and_or_tmp := '0';
         for i in 0 to nr_objects-1 loop 
             index := index + 1;
---             obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and charge_comp_single_pipe(i);
--- HB 2014-04-15: charge correlation for single conditions not used anymore, does not make sense
             obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1);
         end loop;
         for i in 1 to index loop 

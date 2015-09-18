@@ -75,10 +75,9 @@ entity calo_calo_correlation_condition is
         dr_lower_limit: dr_squared_range_real
     );
     port(
-        clk: in std_logic;
+        lhc_clk: in std_logic;
         calo1_data_i: in calo_objects_array;
         calo2_data_i: in calo_objects_array;
-        muon_data_i: in muon_objects_array;
         diff_eta: in diff_2dim_integer_array;
         diff_phi: in diff_2dim_integer_array;
         condition_o: out std_logic
@@ -94,8 +93,9 @@ architecture rtl of calo_calo_correlation_condition is
 -- fixed to 1 for current implementation of correlation conditions
     constant nr_templates: positive := 1;  
 
-    type calo_object_vs_template_array is array (0 to nr_calo_objects-1, 1 to nr_templates) of std_logic;
-    type diff_comp_array is array (0 to nr_calo_objects-1, 0 to nr_muon_objects-1) of std_logic;
+    type calo1_object_vs_template_array is array (0 to nr_calo1_objects-1, 1 to nr_templates) of std_logic;
+    type calo2_object_vs_template_array is array (0 to nr_calo2_objects-1, 1 to nr_templates) of std_logic;
+    type diff_comp_array is array (0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) of std_logic;
 
     signal diff_eta_upper_limit_int : integer;
     signal diff_eta_lower_limit_int : integer;
@@ -103,10 +103,10 @@ architecture rtl of calo_calo_correlation_condition is
     signal diff_phi_upper_limit_int : integer;
     signal diff_phi_lower_limit_int : integer;
     
-    signal calo1_obj_vs_templ : calo_object_vs_template_array;
-    signal calo1_obj_vs_templ_pipe : calo_object_vs_template_array;
-    signal calo2_obj_vs_templ : calo_object_vs_template_array;
-    signal calo2_obj_vs_templ_pipe : calo_object_vs_template_array;
+    signal calo1_obj_vs_templ : calo1_object_vs_template_array;
+    signal calo1_obj_vs_templ_pipe : calo1_object_vs_template_array;
+    signal calo2_obj_vs_templ : calo2_object_vs_template_array;
+    signal calo2_obj_vs_templ_pipe : calo2_object_vs_template_array;
     signal diff_eta_comp : diff_comp_array := (others => (others => '0'));
     signal diff_eta_comp_pipe : diff_comp_array := (others => (others => '0'));
     signal diff_phi_comp : diff_comp_array := (others => (others => '0'));
@@ -119,7 +119,7 @@ architecture rtl of calo_calo_correlation_condition is
 begin
 
 -- Instance of comparators for calorimeter objects. All permutations between objects and requirements.
-    calo1_obj_l: for i in 0 to nr_calo_objects-1 generate
+    calo1_obj_l: for i in 0 to nr_calo1_objects-1 generate
 	calo1_comp_i: entity work.calo_comparators_v2
 	    generic map(et_ge_mode_calo1, obj_type_calo1,
                 et_threshold_calo1,
@@ -140,7 +140,7 @@ begin
             port map(calo1_data_i(i), calo1_obj_vs_templ(i,1));
     end generate calo1_obj_l;
 
-    calo2_obj_l: for i in 0 to nr_calo_objects-1 generate
+    calo2_obj_l: for i in 0 to nr_calo2_objects-1 generate
 	calo2_comp_i: entity work.calo_comparators_v2
 	    generic map(et_ge_mode_calo2, obj_type_calo2,
                 et_threshold_calo2,
@@ -162,13 +162,13 @@ begin
     end generate calo2_obj_l;
 
 -- Pipeline stage for obj_vs_templ
-    obj_vs_templ_pipeline_p: process(clk, calo1_obj_vs_templ, calo2_obj_vs_templ)
+    obj_vs_templ_pipeline_p: process(lhc_clk, calo1_obj_vs_templ, calo2_obj_vs_templ)
         begin
             if obj_vs_templ_pipeline_stage = false then 
                 calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
                 calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
             else
-                if (clk'event and clk = '1') then
+                if (lhc_clk'event and lhc_clk = '1') then
                     calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
                     calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
                 end if;
@@ -229,7 +229,7 @@ begin
     end generate delta_l_1;
 
 -- Pipeline stage for diff_eta_comp, diff_phi_comp and dr_comp
-    diff_pipeline_p: process(clk, diff_eta_comp, diff_phi_comp, dr_comp)
+    diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp)
         begin
             if obj_vs_templ_pipeline_stage = false then 
                 if deta_cut = true and dphi_cut = false and dr_cut = false then
@@ -243,7 +243,7 @@ begin
                     dr_comp_pipe <= dr_comp;
                 end if;
             else
-                if (clk'event and clk = '1') then
+                if (lhc_clk'event and lhc_clk = '1') then
                     if deta_cut = true and dphi_cut = false and dr_cut = false then
                         diff_eta_comp_pipe <= diff_eta_comp;
                     elsif deta_cut = false and dphi_cut = true and dr_cut = false then
@@ -276,31 +276,31 @@ begin
 			if deta_cut = true and dphi_cut = false and dr_cut = false then
                             index := index + 1;
                             -- AND equations for matrix
-                            obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j);
+                            obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j);
                         elsif deta_cut = false and dphi_cut = true and dr_cut = false then
                             index := index + 1;
-			    obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_phi_comp_pipe(i,j);
+			    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_phi_comp_pipe(i,j);
                         elsif deta_cut = false and dphi_cut = false and dr_cut = true then
                             index := index + 1;
-			    obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and dr_comp_pipe(i,j);
+			    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and dr_comp_pipe(i,j);
                         elsif deta_cut = true and dphi_cut = true and dr_cut = false then
                             index := index + 1;
-                            obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j);
+                            obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j);
 			end if;
 		    end if;
 		elsif obj_type_calo1 /= obj_type_calo2 then
 		    if deta_cut = true and dphi_cut = false and dr_cut = false then
 			index := index + 1;
-			obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j);
+			obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j);
 		    elsif deta_cut = false and dphi_cut = true and dr_cut = false then
 			index := index + 1;
-			obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_phi_comp_pipe(i,j);
+			obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_phi_comp_pipe(i,j);
 		    elsif deta_cut = false and dphi_cut = false and dr_cut = true then
 			index := index + 1;
-			obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and dr_comp_pipe(i,j);
+			obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and dr_comp_pipe(i,j);
 		    elsif deta_cut = true and dphi_cut = true and dr_cut = false then
 			index := index + 1;
-			obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j);
+			obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j);
 		    end if;
 		end if;
             end loop;
@@ -313,12 +313,12 @@ begin
     end process matrix_deta_dphi_dr_p;
 
 -- Pipeline stage for condition output.
-    condition_o_pipeline_p: process(clk, condition_and_or)
+    condition_o_pipeline_p: process(lhc_clk, condition_and_or)
         begin
             if conditions_pipeline_stage = false then 
                 condition_o <= condition_and_or;
             else
-                if (clk'event and clk = '1') then
+                if (lhc_clk'event and lhc_clk = '1') then
                     condition_o <= condition_and_or;
                 end if;
             end if;

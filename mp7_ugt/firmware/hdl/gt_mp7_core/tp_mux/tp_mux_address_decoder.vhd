@@ -11,7 +11,7 @@ use work.math_pkg.all;
 package ipbus_decode_tp_mux is
 
     -- Number of slaves defined in the address table.
-    constant N_SLAVES: positive := 1;
+    constant N_SLAVES: positive := 2;
 
     -- Define selection vector format.
     constant IPBUS_SEL_WIDTH: positive := log2c(N_SLAVES);
@@ -20,6 +20,7 @@ package ipbus_decode_tp_mux is
 
     -- Item\'s unique identification index, used in slave implementation.
     constant C_IPB_TP_MUX0: integer := 0;
+    constant C_IPB_TP_MUX1: integer := 1;
 
     -- Item\'s address width in bits, used in slave implementation.
     constant C_IPB_TP_MUX0_SIZE: integer := 5;
@@ -32,7 +33,8 @@ package body ipbus_decode_tp_mux is
         variable sel: ipbus_sel_t;
 
     begin
-        if    std_match(addr, "101000000000000000000000000-----") then sel := ipbus_sel_t(to_unsigned(C_IPB_TP_MUX0, IPBUS_SEL_WIDTH)); -- 0xA0000000
+        if       std_match(addr, "101000000000000000000000000-----") then sel := ipbus_sel_t(to_unsigned(C_IPB_TP_MUX0, IPBUS_SEL_WIDTH)); -- 0xA0000000
+        elsif    std_match(addr, "101000000000000000000000001-----") then sel := ipbus_sel_t(to_unsigned(C_IPB_TP_MUX1, IPBUS_SEL_WIDTH)); -- 0xA0000020
         else
             sel := ipbus_sel_t(to_unsigned(N_SLAVES, IPBUS_SEL_WIDTH));
         end if;

@@ -22,11 +22,9 @@ use work.gtl_pkg.all;
 
 entity dr_calculator is
     generic (
--- HB 2015-06-18: TM proposed two thresholds for DR
-	dr_upper_limit: dr_squared_range_real := 15.0; -- threshold for ΔR**2 (see formula below) in real values
-	dr_lower_limit: dr_squared_range_real := 10.0 -- threshold for ΔR**2 (see formula below) in real values
--- 	ETA_STEP: natural; -- range width of eta * STEP_PRECISION, see gtl_pkg.vhd
--- 	PHI_STEP: natural -- range width of phi * STEP_PRECISION, see gtl_pkg.vhd
+-- HB 2015-09-21: TM proposed two thresholds for DR
+	dr_upper_limit: dr_squared_range_real := 15.0; -- threshold for ΔR (see formula below) in real values
+	dr_lower_limit: dr_squared_range_real := 10.0 -- threshold for ΔR (see formula below) in real values
     );
     port(
         diff_eta : in integer;
@@ -46,8 +44,6 @@ architecture rtl of dr_calculator is
     signal dr_lower_limit_int : integer;
 begin
 
--- dr_upper_limit_int <= integer(dr_upper_limit*real(10**(POSITION_FINAL_PRECISION*2)));
--- dr_lower_limit_int <= integer(dr_lower_limit*real(10**(POSITION_FINAL_PRECISION*2)));
 dr_upper_limit_int <= integer((dr_upper_limit**2)*real(10**(POSITION_FINAL_PRECISION*2)));
 dr_lower_limit_int <= integer((dr_lower_limit**2)*real(10**(POSITION_FINAL_PRECISION*2)));
 
@@ -57,11 +53,6 @@ dr_lower_limit_int <= integer((dr_lower_limit**2)*real(10**(POSITION_FINAL_PRECI
     begin
 
 -- HB 2015-08-10: "ERROR: ... Nonconstant REAL value  is not supported for synthesis"
---         dr_squared := (real(integer(((diff_eta**2)+(diff_phi**2))*10000.0)))/10000.0; -- cut after the 4th digit after comma
-
--- HB 2015-08-11: rounding at "POSITION_STEP_PRECISION" and "cut" at "POSITION_FINAL_PRECISION".
--- 	diff_eta_value := ((diff_eta*ETA_STEP)+integer(STEP_PRECISION/FINAL_PRECISION)/2)/integer(STEP_PRECISION/FINAL_PRECISION);
---         diff_phi_value := ((diff_phi*PHI_STEP)+integer(STEP_PRECISION/FINAL_PRECISION)/2)/integer(STEP_PRECISION/FINAL_PRECISION);
 
 -- HB 2015-08-11: calculation of ΔR**2:
 -- ΔR**2 = (eta1-eta2)**2+(phi1-phi2)**2

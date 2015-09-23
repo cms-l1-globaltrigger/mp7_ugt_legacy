@@ -76,7 +76,7 @@ architecture rtl of muon_muon_correlation_condition is
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
--- fixed to 1 for current implementation of correlation conditions
+-- fixed to 2 for current implementation of correlation conditions
     constant nr_templates: positive := 2;  
 
     type muon_object_vs_template_array is array (0 to nr_objects-1, 1 to nr_templates) of std_logic;

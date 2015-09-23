@@ -1,3 +1,4 @@
+
 --------------------------------------------------------------------------------
 -- Synthesizer : ISE 14.6
 -- Platform    : Linux Ubuntu 10.04
@@ -90,11 +91,18 @@ architecture rtl of calo_calo_correlation_condition is
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
--- fixed to 1 for current implementation of correlation conditions
-    constant nr_templates: positive := 1;  
+-- HB 2015-09-23: if "obj_type_calo1=obj_type_calo2" then used "NR_CALO_OBJECTS" and "calo_data_i" for "same_obj_type_i" generate section
+    constant NR_CALO_OBJECTS: positive := nr_calo1_objects; -- pipeline stage for condition output 
+    signal calo_data_i : calo_objects_array(0 to NR_CALO_OBJECTS-1);
 
-    type calo1_object_vs_template_array is array (0 to nr_calo1_objects-1, 1 to nr_templates) of std_logic;
-    type calo2_object_vs_template_array is array (0 to nr_calo2_objects-1, 1 to nr_templates) of std_logic;
+-- -- fixed to 1 for current implementation of correlation conditions for different calo object types
+--     constant nr_templates: positive := 1;  
+-- -- fixed to 2 for current implementation of correlation conditions for same object types
+--     constant nr_templates_same: positive := 2;  
+
+    type calo1_object_vs_template_array is array (0 to nr_calo1_objects-1, 1 to 1) of std_logic;
+    type calo2_object_vs_template_array is array (0 to nr_calo2_objects-1, 1 to 1) of std_logic;
+    type object_vs_template_array is array (0 to NR_CALO_OBJECTS-1, 1 to 2) of std_logic;
     type diff_comp_array is array (0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) of std_logic;
 
     signal diff_eta_upper_limit_int : integer;
@@ -107,6 +115,8 @@ architecture rtl of calo_calo_correlation_condition is
     signal calo1_obj_vs_templ_pipe : calo1_object_vs_template_array;
     signal calo2_obj_vs_templ : calo2_object_vs_template_array;
     signal calo2_obj_vs_templ_pipe : calo2_object_vs_template_array;
+    signal obj_vs_templ : object_vs_template_array;
+    signal obj_vs_templ_pipe : object_vs_template_array;
     signal diff_eta_comp : diff_comp_array := (others => (others => '0'));
     signal diff_eta_comp_pipe : diff_comp_array := (others => (others => '0'));
     signal diff_phi_comp : diff_comp_array := (others => (others => '0'));
@@ -118,116 +128,38 @@ architecture rtl of calo_calo_correlation_condition is
 
 begin
 
--- Instance of comparators for calorimeter objects. All permutations between objects and requirements.
-    calo1_obj_l: for i in 0 to nr_calo1_objects-1 generate
-	calo1_comp_i: entity work.calo_comparators_v2
-	    generic map(et_ge_mode_calo1, obj_type_calo1,
-                et_threshold_calo1,
-                eta_full_range_calo1,
-                eta_w1_upper_limit_calo1,
-                eta_w1_lower_limit_calo1,
-                eta_w2_ignore_calo1,
-                eta_w2_upper_limit_calo1,
-                eta_w2_lower_limit_calo1,
-                phi_full_range_calo1,
-                phi_w1_upper_limit_calo1,
-                phi_w1_lower_limit_calo1,
-                phi_w2_ignore_calo1,
-                phi_w2_upper_limit_calo1,
-                phi_w2_lower_limit_calo1,
-                iso_lut_calo1
-            )
-            port map(calo1_data_i(i), calo1_obj_vs_templ(i,1));
-    end generate calo1_obj_l;
+-- HB 2015-09-22: Comparison of differences.
 
-    calo2_obj_l: for i in 0 to nr_calo2_objects-1 generate
-	calo2_comp_i: entity work.calo_comparators_v2
-	    generic map(et_ge_mode_calo2, obj_type_calo2,
-                et_threshold_calo2,
-                eta_full_range_calo2,
-                eta_w1_upper_limit_calo2,
-                eta_w1_lower_limit_calo2,
-                eta_w2_ignore_calo2,
-                eta_w2_upper_limit_calo2,
-                eta_w2_lower_limit_calo2,
-                phi_full_range_calo2,
-                phi_w1_upper_limit_calo2,
-                phi_w1_lower_limit_calo2,
-                phi_w2_ignore_calo2,
-                phi_w2_upper_limit_calo2,
-                phi_w2_lower_limit_calo2,
-                iso_lut_calo2
-            )
-            port map(calo2_data_i(i), calo2_obj_vs_templ(i,1));
-    end generate calo2_obj_l;
-
--- Pipeline stage for obj_vs_templ
-    obj_vs_templ_pipeline_p: process(lhc_clk, calo1_obj_vs_templ, calo2_obj_vs_templ)
-        begin
-            if obj_vs_templ_pipeline_stage = false then 
-                calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
-                calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
-            else
-                if (lhc_clk'event and lhc_clk = '1') then
-                    calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
-                    calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
-                end if;
-            end if;
-    end process;
-    
+-- Conversion of limits to integer.
     diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**POSITION_FINAL_PRECISION));
     diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**POSITION_FINAL_PRECISION));
     diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**POSITION_FINAL_PRECISION));
     diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**POSITION_FINAL_PRECISION));
 
--- HB 2015-0917: permutations are different for same and different object types. For same object type, only differences of different objects are compared.
+-- Comparison of differences with limits.
     delta_l_1: for i in 0 to nr_calo1_objects-1 generate 
-	delta_l_2: for j in 0 to nr_calo2_objects-1 generate
-	    same_obj_type_i: if obj_type_calo1 = obj_type_calo2 generate
-		delta_if: if j/=i generate
-		    deta_diff_i: if deta_cut = true generate
-			diff_eta_comp(i,j) <= '1' when diff_eta(i,j) >= diff_eta_lower_limit_int and diff_eta(i,j) <= diff_eta_upper_limit_int else '0';
-		    end generate deta_diff_i;
-		    dphi_diff_i: if dphi_cut = true generate
-			diff_phi_comp(i,j) <= '1' when diff_phi(i,j) >= diff_phi_lower_limit_int and diff_phi(i,j) <= diff_phi_upper_limit_int else '0';
-		    end generate dphi_diff_i;
-		    dr_i: if dr_cut = true generate
-			dr_calculator_i: entity work.dr_calculator
-			    generic map(
-				dr_upper_limit => dr_upper_limit,
-				dr_lower_limit => dr_lower_limit
-			    )
-			    port map(
-				diff_eta => diff_eta(i,j),
-				diff_phi => diff_phi(i,j),
-				dr_comp => dr_comp(i,j)
-			    );
-		    end generate dr_i;
-		end generate delta_if;
-	    end generate same_obj_type_i;
-	    different_obj_type_i: if obj_type_calo1 /= obj_type_calo2 generate
-		deta_diff_i: if deta_cut = true generate
-		    diff_eta_comp(i,j) <= '1' when diff_eta(i,j) >= diff_eta_lower_limit_int and diff_eta(i,j) <= diff_eta_upper_limit_int else '0';
-		end generate deta_diff_i;
-		dphi_diff_i: if dphi_cut = true generate
-		    diff_phi_comp(i,j) <= '1' when diff_phi(i,j) >= diff_phi_lower_limit_int and diff_phi(i,j) <= diff_phi_upper_limit_int else '0';
-		end generate dphi_diff_i;
-		dr_i: if dr_cut = true generate
-		    dr_calculator_i: entity work.dr_calculator
-			generic map(
-			    dr_upper_limit => dr_upper_limit,
-			    dr_lower_limit => dr_lower_limit
-			)
-			port map(
-			    diff_eta => diff_eta(i,j),
-			    diff_phi => diff_phi(i,j),
-			    dr_comp => dr_comp(i,j)
-			);
-		end generate dr_i;
-	    end generate different_obj_type_i;
-	end generate delta_l_2;
+        delta_l_2: for j in 0 to nr_calo2_objects-1 generate
+            deta_diff_i: if deta_cut = true generate
+                diff_eta_comp(i,j) <= '1' when diff_eta(i,j) >= diff_eta_lower_limit_int and diff_eta(i,j) <= diff_eta_upper_limit_int else '0';
+            end generate deta_diff_i;
+            dphi_diff_i: if dphi_cut = true generate
+                diff_phi_comp(i,j) <= '1' when diff_phi(i,j) >= diff_phi_lower_limit_int and diff_phi(i,j) <= diff_phi_upper_limit_int else '0';
+            end generate dphi_diff_i;
+            dr_i: if dr_cut = true generate
+                dr_calculator_i: entity work.dr_calculator
+                    generic map(
+                        dr_upper_limit => dr_upper_limit,
+                        dr_lower_limit => dr_lower_limit
+                    )
+                    port map(
+                        diff_eta => diff_eta(i,j),
+                        diff_phi => diff_phi(i,j),
+                        dr_comp => dr_comp(i,j)
+                    );
+            end generate dr_i;
+        end generate delta_l_2;
     end generate delta_l_1;
-
+    
 -- Pipeline stage for diff_eta_comp, diff_phi_comp and dr_comp
     diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp)
         begin
@@ -258,37 +190,198 @@ begin
             end if;
     end process;
 
--- "Matrix" of permutations in an and-or-structure.
--- HB 2015-0917: permutations are different for same and different object types. For same object type, only differences of different objects are compared.
+-- HB 2015-09-22: Correlation condition with objects of same type.
 
-    matrix_deta_dphi_dr_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe)
-        variable index : integer := 0;
-        variable obj_vs_templ_vec : std_logic_vector((nr_calo1_objects*nr_calo2_objects) downto 1) := (others => '0');
-        variable condition_and_or_tmp : std_logic := '0';
-    begin
-        index := 0;
-        obj_vs_templ_vec := (others => '0');
-        condition_and_or_tmp := '0';
-        for i in 0 to nr_calo1_objects-1 loop 
-            for j in 0 to nr_calo2_objects-1 loop
-		if obj_type_calo1 = obj_type_calo2 then
+    same_obj_type_i: if obj_type_calo1 = obj_type_calo2 generate
+    
+    calo_data_i <= calo1_data_i;
+    
+-- Instance of comparators for calorimeter objects. All permutations between objects and requirements.
+	templ1_l: for i in 0 to NR_CALO_OBJECTS-1 generate
+	    comp_i: entity work.calo_comparators_v2
+		generic map(et_ge_mode_calo1, obj_type_calo1,
+                    et_threshold_calo1,
+                    eta_full_range_calo1,
+                    eta_w1_upper_limit_calo1,
+                    eta_w1_lower_limit_calo1,
+                    eta_w2_ignore_calo1,
+                    eta_w2_upper_limit_calo1,
+                    eta_w2_lower_limit_calo1,
+                    phi_full_range_calo1,
+                    phi_w1_upper_limit_calo1,
+                    phi_w1_lower_limit_calo1,
+                    phi_w2_ignore_calo1,
+                    phi_w2_upper_limit_calo1,
+                    phi_w2_lower_limit_calo1,
+                    iso_lut_calo1
+                )
+                port map(calo_data_i(i), obj_vs_templ(i,1));
+        end generate templ1_l;
+
+        templ2_l: for i in 0 to NR_CALO_OBJECTS-1 generate
+	    comp_i: entity work.calo_comparators_v2
+		generic map(et_ge_mode_calo2, obj_type_calo2,
+                    et_threshold_calo2,
+                    eta_full_range_calo2,
+                    eta_w1_upper_limit_calo2,
+                    eta_w1_lower_limit_calo2,
+                    eta_w2_ignore_calo2,
+                    eta_w2_upper_limit_calo2,
+                    eta_w2_lower_limit_calo2,
+                    phi_full_range_calo2,
+                    phi_w1_upper_limit_calo2,
+                    phi_w1_lower_limit_calo2,
+                    phi_w2_ignore_calo2,
+                    phi_w2_upper_limit_calo2,
+                    phi_w2_lower_limit_calo2,
+                    iso_lut_calo2
+                )
+                port map(calo_data_i(i), obj_vs_templ(i,2));
+	end generate templ2_l;
+
+-- Pipeline stage for obj_vs_templ
+        obj_vs_templ_pipeline_p: process(lhc_clk, obj_vs_templ)
+            begin
+            if obj_vs_templ_pipeline_stage = false then 
+                obj_vs_templ_pipe <= obj_vs_templ;
+            else
+                if (lhc_clk'event and lhc_clk = '1') then
+                    obj_vs_templ_pipe <= obj_vs_templ;
+                end if;
+            end if;
+	end process;
+    
+	matrix_deta_dphi_dr_p: process(obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe)
+	    variable index : integer := 0;
+	    variable obj_vs_templ_vec : std_logic_vector((NR_CALO_OBJECTS*NR_CALO_OBJECTS) downto 1) := (others => '0');
+	    variable condition_and_or_tmp : std_logic := '0';
+	begin
+	    index := 0;
+	    obj_vs_templ_vec := (others => '0');
+	    condition_and_or_tmp := '0';
+	    for i in 0 to NR_CALO_OBJECTS-1 loop 
+		for j in 0 to NR_CALO_OBJECTS-1 loop
 		    if j/=i then
 			if deta_cut = true and dphi_cut = false and dr_cut = false then
-                            index := index + 1;
-                            -- AND equations for matrix
-                            obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j);
-                        elsif deta_cut = false and dphi_cut = true and dr_cut = false then
-                            index := index + 1;
-			    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_phi_comp_pipe(i,j);
-                        elsif deta_cut = false and dphi_cut = false and dr_cut = true then
-                            index := index + 1;
-			    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and dr_comp_pipe(i,j);
-                        elsif deta_cut = true and dphi_cut = true and dr_cut = false then
-                            index := index + 1;
-                            obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j);
+			    index := index + 1;
+			    obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and diff_eta_comp_pipe(i,j);
+			elsif deta_cut = false and dphi_cut = true and dr_cut = false then
+			    index := index + 1;
+			    obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and diff_phi_comp_pipe(i,j);
+			elsif deta_cut = false and dphi_cut = false and dr_cut = true then
+			    index := index + 1;
+			    obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and dr_comp_pipe(i,j);
+			elsif deta_cut = true and dphi_cut = true and dr_cut = false then
+			    index := index + 1;
+			    obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j);
 			end if;
 		    end if;
-		elsif obj_type_calo1 /= obj_type_calo2 then
+		end loop;
+	    end loop;
+	    for i in 1 to index loop 
+		-- ORs for matrix
+		condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
+	    end loop;
+	    condition_and_or <= condition_and_or_tmp;
+	end process matrix_deta_dphi_dr_p;
+    end generate same_obj_type_i;
+
+-- HB 2015-09-22: Correlation condition with objects of different typea.
+
+    different_obj_type_i: if obj_type_calo1 /= obj_type_calo2 generate
+
+-- Instance of comparators for calorimeter objects. All permutations between objects and requirements.
+	calo1_obj_l: for i in 0 to nr_calo1_objects-1 generate
+	    calo1_comp_i: entity work.calo_comparators_v2
+		generic map(et_ge_mode_calo1, obj_type_calo1,
+                    et_threshold_calo1,
+                    eta_full_range_calo1,
+                    eta_w1_upper_limit_calo1,
+                    eta_w1_lower_limit_calo1,
+                    eta_w2_ignore_calo1,
+                    eta_w2_upper_limit_calo1,
+                    eta_w2_lower_limit_calo1,
+                    phi_full_range_calo1,
+                    phi_w1_upper_limit_calo1,
+                    phi_w1_lower_limit_calo1,
+                    phi_w2_ignore_calo1,
+                    phi_w2_upper_limit_calo1,
+                    phi_w2_lower_limit_calo1,
+                    iso_lut_calo1
+                )
+                port map(calo1_data_i(i), calo1_obj_vs_templ(i,1));
+        end generate calo1_obj_l;
+
+        calo2_obj_l: for i in 0 to nr_calo2_objects-1 generate
+	    calo2_comp_i: entity work.calo_comparators_v2
+		generic map(et_ge_mode_calo2, obj_type_calo2,
+                    et_threshold_calo2,
+                    eta_full_range_calo2,
+                    eta_w1_upper_limit_calo2,
+                    eta_w1_lower_limit_calo2,
+                    eta_w2_ignore_calo2,
+                    eta_w2_upper_limit_calo2,
+                    eta_w2_lower_limit_calo2,
+                    phi_full_range_calo2,
+                    phi_w1_upper_limit_calo2,
+                    phi_w1_lower_limit_calo2,
+                    phi_w2_ignore_calo2,
+                    phi_w2_upper_limit_calo2,
+                    phi_w2_lower_limit_calo2,
+                    iso_lut_calo2
+                )
+                port map(calo2_data_i(i), calo2_obj_vs_templ(i,1));
+	end generate calo2_obj_l;
+
+-- Pipeline stage for obj_vs_templ
+        obj_vs_templ_pipeline_p: process(lhc_clk, calo1_obj_vs_templ, calo2_obj_vs_templ)
+            begin
+            if obj_vs_templ_pipeline_stage = false then 
+                calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
+                calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
+            else
+                if (lhc_clk'event and lhc_clk = '1') then
+                    calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
+                    calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
+                end if;
+            end if;
+        end process;
+    
+-- 	delta_l_1: for i in 0 to nr_calo1_objects-1 generate 
+-- 	    delta_l_2: for j in 0 to nr_calo2_objects-1 generate
+-- 		deta_diff_i: if deta_cut = true generate
+-- 		    diff_eta_comp(i,j) <= '1' when diff_eta(i,j) >= diff_eta_lower_limit_int and diff_eta(i,j) <= diff_eta_upper_limit_int else '0';
+-- 		end generate deta_diff_i;
+-- 		dphi_diff_i: if dphi_cut = true generate
+-- 		    diff_phi_comp(i,j) <= '1' when diff_phi(i,j) >= diff_phi_lower_limit_int and diff_phi(i,j) <= diff_phi_upper_limit_int else '0';
+-- 		end generate dphi_diff_i;
+-- 		dr_i: if dr_cut = true generate
+-- 		    dr_calculator_i: entity work.dr_calculator
+-- 			generic map(
+-- 			    dr_upper_limit => dr_upper_limit,
+-- 			    dr_lower_limit => dr_lower_limit
+-- 			)
+-- 			port map(
+-- 			    diff_eta => diff_eta(i,j),
+-- 			    diff_phi => diff_phi(i,j),
+-- 			    dr_comp => dr_comp(i,j)
+-- 			);
+-- 		end generate dr_i;
+-- 	    end generate delta_l_2;
+-- 	end generate delta_l_1;
+
+-- "Matrix" of permutations in an and-or-structure.
+
+        matrix_deta_dphi_dr_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe)
+            variable index : integer := 0;
+            variable obj_vs_templ_vec : std_logic_vector((nr_calo1_objects*nr_calo2_objects) downto 1) := (others => '0');
+            variable condition_and_or_tmp : std_logic := '0';
+        begin
+            index := 0;
+            obj_vs_templ_vec := (others => '0');
+            condition_and_or_tmp := '0';
+            for i in 0 to nr_calo1_objects-1 loop 
+                for j in 0 to nr_calo2_objects-1 loop
 		    if deta_cut = true and dphi_cut = false and dr_cut = false then
 			index := index + 1;
 			obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j);
@@ -302,15 +395,15 @@ begin
 			index := index + 1;
 			obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j);
 		    end if;
-		end if;
-            end loop;
-        end loop;
-        for i in 1 to index loop 
-            -- ORs for matrix
-            condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
-        end loop;
-        condition_and_or <= condition_and_or_tmp;
-    end process matrix_deta_dphi_dr_p;
+		end loop;
+	    end loop;
+	    for i in 1 to index loop 
+		-- ORs for matrix
+		condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
+	    end loop;
+	    condition_and_or <= condition_and_or_tmp;
+	end process matrix_deta_dphi_dr_p;
+    end generate different_obj_type_i;
 
 -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(lhc_clk, condition_and_or)

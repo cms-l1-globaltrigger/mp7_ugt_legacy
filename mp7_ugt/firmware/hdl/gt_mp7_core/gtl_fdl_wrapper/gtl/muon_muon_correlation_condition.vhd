@@ -31,7 +31,6 @@ entity muon_muon_correlation_condition is
 
         nr_objects: positive;
         pt_ge_mode: boolean;
-        d_s_i: d_s_i_muon_record;
         pt_thresholds: muon_templates_array;
         eta_full_range : muon_templates_boolean_array;
         eta_w1_upper_limits: muon_templates_array;
@@ -111,20 +110,20 @@ begin
     obj_l: for i in 0 to nr_objects-1 generate
         templ_l: for j in 1 to nr_templates generate
             comp_i: entity work.muon_comparators
-                generic map(d_s_i, pt_ge_mode,
-                            pt_thresholds(j)(d_s_i.pt_high-d_s_i.pt_low downto 0),
+                generic map(D_S_I_MUON, pt_ge_mode,
+                            pt_thresholds(j)(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
                             eta_full_range(j),
-                            eta_w1_upper_limits(j)(d_s_i.eta_high-d_s_i.eta_low downto 0),
-                            eta_w1_lower_limits(j)(d_s_i.eta_high-d_s_i.eta_low downto 0),
+                            eta_w1_upper_limits(j)(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                            eta_w1_lower_limits(j)(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
                             eta_w2_ignore(j),
-                            eta_w2_upper_limits(j)(d_s_i.eta_high-d_s_i.eta_low downto 0),
-                            eta_w2_lower_limits(j)(d_s_i.eta_high-d_s_i.eta_low downto 0),
+                            eta_w2_upper_limits(j)(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                            eta_w2_lower_limits(j)(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
                             phi_full_range(j),
-                            phi_w1_upper_limits(j)(d_s_i.phi_high-d_s_i.phi_low downto 0),
-                            phi_w1_lower_limits(j)(d_s_i.phi_high-d_s_i.phi_low downto 0),
+                            phi_w1_upper_limits(j)(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                            phi_w1_lower_limits(j)(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
                             phi_w2_ignore(j),
-                            phi_w2_upper_limits(j)(d_s_i.phi_high-d_s_i.phi_low downto 0),
-                            phi_w2_lower_limits(j)(d_s_i.phi_high-d_s_i.phi_low downto 0),
+                            phi_w2_upper_limits(j)(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                            phi_w2_lower_limits(j)(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
                             requested_charges(j),
                             qual_luts(j),
                             iso_luts(j)

@@ -29,7 +29,7 @@ entity muon_muon_correlation_condition is
         dphi_cut: boolean := true;
         dr_cut: boolean := false;
 
-        nr_objects: positive;
+--         nr_objects: positive;
         pt_ge_mode: boolean;
         pt_thresholds: muon_templates_array;
         eta_full_range : muon_templates_boolean_array;
@@ -78,8 +78,8 @@ architecture rtl of muon_muon_correlation_condition is
 -- fixed to 2 for current implementation of correlation conditions
     constant nr_templates: positive := 2;  
 
-    type muon_object_vs_template_array is array (0 to nr_objects-1, 1 to nr_templates) of std_logic;
-    type diff_comp_array is array (0 to nr_objects-1, 0 to nr_objects-1) of std_logic;
+    type muon_object_vs_template_array is array (0 to NR_MUON_OBJECTS-1, 1 to nr_templates) of std_logic;
+    type diff_comp_array is array (0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic;
 
 --***************************************************************
 -- signals for charge correlation comparison:
@@ -107,7 +107,7 @@ architecture rtl of muon_muon_correlation_condition is
 begin
 
 -- Instance of comparators for muon objects. All permutations between objects and thresholds.
-    obj_l: for i in 0 to nr_objects-1 generate
+    obj_l: for i in 0 to NR_MUON_OBJECTS-1 generate
         templ_l: for j in 1 to nr_templates generate
             comp_i: entity work.muon_comparators
                 generic map(D_S_I_MUON, pt_ge_mode,
@@ -145,8 +145,8 @@ begin
     end process;
     
 -- Charge correlation comparison
-    charge_double_l_1: for i in 0 to nr_objects-1 generate 
-        charge_double_l_2: for j in 0 to nr_objects-1 generate
+    charge_double_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
+        charge_double_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
             charge_double_if: if j/=i generate
                 charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
                                            '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
@@ -173,8 +173,8 @@ begin
     diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**POSITION_FINAL_PRECISION));
     diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**POSITION_FINAL_PRECISION));
 
-    delta_l_1: for i in 0 to nr_objects-1 generate 
-	delta_l_2: for j in 0 to nr_objects-1 generate
+    delta_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
+	delta_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
 	    delta_if: if j/=i generate
 		deta_diff_i: if deta_cut = true generate
 		    diff_eta_comp(i,j) <= '1' when diff_eta(i,j) >= diff_eta_lower_limit_int and diff_eta(i,j) <= diff_eta_upper_limit_int else '0';
@@ -232,14 +232,14 @@ begin
 
     matrix_deta_dphi_dr_p: process(obj_vs_templ_pipe, charge_comp_double_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe)
         variable index : integer := 0;
-        variable obj_vs_templ_vec : std_logic_vector((nr_objects*(nr_objects-1)) downto 1) := (others => '0');
+        variable obj_vs_templ_vec : std_logic_vector((NR_MUON_OBJECTS*(NR_MUON_OBJECTS-1)) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
     begin
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
-        for i in 0 to nr_objects-1 loop 
-            for j in 0 to nr_objects-1 loop
+        for i in 0 to NR_MUON_OBJECTS-1 loop 
+            for j in 0 to NR_MUON_OBJECTS-1 loop
 		if j/=i then
 		    if deta_cut = true and dphi_cut = false and dr_cut = false then
 			index := index + 1;

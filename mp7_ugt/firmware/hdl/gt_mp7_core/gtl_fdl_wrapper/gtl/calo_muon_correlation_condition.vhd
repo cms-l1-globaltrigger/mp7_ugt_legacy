@@ -47,7 +47,7 @@ entity calo_muon_correlation_condition is
         phi_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 	iso_lut_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 
-	nr_muon_objects: positive;
+-- 	nr_muon_objects: positive;
         pt_ge_mode_muon: boolean;
         pt_threshold_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         eta_full_range_muon : boolean;
@@ -95,8 +95,8 @@ architecture rtl of calo_muon_correlation_condition is
     constant nr_templates: positive := 1;  
 
     type calo_object_vs_template_array is array (0 to nr_calo_objects-1, 1 to nr_templates) of std_logic;
-    type muon_object_vs_template_array is array (0 to nr_muon_objects-1, 1 to nr_templates) of std_logic;
-    type diff_comp_array is array (0 to nr_calo_objects-1, 0 to nr_muon_objects-1) of std_logic;
+    type muon_object_vs_template_array is array (0 to NR_MUON_OBJECTS-1, 1 to nr_templates) of std_logic;
+    type diff_comp_array is array (0 to nr_calo_objects-1, 0 to NR_MUON_OBJECTS-1) of std_logic;
 
     signal diff_eta_upper_limit_int : integer;
     signal diff_eta_lower_limit_int : integer;
@@ -142,7 +142,7 @@ begin
     end generate calo_obj_l;
 
 -- Instance of comparators for muon objects. All permutations between objects and requirements..
-    muon_obj_l: for i in 0 to nr_muon_objects-1 generate
+    muon_obj_l: for i in 0 to NR_MUON_OBJECTS-1 generate
         muon_comp_i: entity work.muon_comparators
             generic map(D_S_I_MUON, pt_ge_mode_muon,
                 pt_threshold_muon(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
@@ -185,7 +185,7 @@ begin
     diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**POSITION_FINAL_PRECISION));
 
     delta_l_1: for i in 0 to nr_calo_objects-1 generate 
-	delta_l_2: for j in 0 to nr_muon_objects-1 generate
+	delta_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
 	    deta_diff_i: if deta_cut = true generate
                 diff_eta_comp(i,j) <= '1' when diff_eta(i,j) >= diff_eta_lower_limit_int and diff_eta(i,j) <= diff_eta_upper_limit_int else '0';
             end generate deta_diff_i;
@@ -241,14 +241,14 @@ begin
 
     matrix_deta_dphi_dr_p: process(calo_obj_vs_templ_pipe, muon_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe)
         variable index : integer := 0;
-        variable obj_vs_templ_vec : std_logic_vector((nr_calo_objects*nr_muon_objects) downto 1) := (others => '0');
+        variable obj_vs_templ_vec : std_logic_vector((nr_calo_objects*NR_MUON_OBJECTS) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
     begin
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
         for i in 0 to nr_calo_objects-1 loop 
-            for j in 0 to nr_muon_objects-1 loop
+            for j in 0 to NR_MUON_OBJECTS-1 loop
                 if deta_cut = true and dphi_cut = false and dr_cut = false then
                     index := index + 1;
                     -- AND equations for matrix

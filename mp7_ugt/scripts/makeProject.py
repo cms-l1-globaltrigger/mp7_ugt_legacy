@@ -139,7 +139,10 @@ def main():
 
         logging.info("checkout MP7 base firmware...")
         path = os.path.join('tags', 'mp7', 'unstable' if args.unstable else 'stable', 'firmware', args.tag)
-        subprocess.check_call(['python', 'ProjectManager.py', 'checkout', path, '-u', args.user])
+        if args.tag == "mp7fw_v1_8_3":
+            subprocess.check_call(['python', 'ProjectManager.py', 'create', path, '-u', args.user]) #changes in ProjectManager.py, have to differ between older and newer versions
+        else:
+            subprocess.check_call(['python', 'ProjectManager.py', 'checkout', path, '-u', args.user])
 
         #logging.info("fetching project firmware...")
         #subprocess.check_call(['python', 'ProjectManager.py', 'fetch', os.path.join('projects/examples', args.board)])

@@ -112,6 +112,7 @@ constant NR_EG_OBJECTS : positive := EG_ARRAY_LENGTH; -- number eg objects, from
 constant NR_JET_OBJECTS : positive := JET_ARRAY_LENGTH; -- number jet objects, from lhc_data_pkg.vhd
 constant NR_TAU_OBJECTS : positive := TAU_ARRAY_LENGTH; -- number tau objects, from lhc_data_pkg.vhd
 constant MAX_CALO_BITS : positive := max(EG_DATA_WIDTH, JET_DATA_WIDTH, TAU_DATA_WIDTH);
+constant MAX_ISO_BITS : positive range 1 to 2 := 2;
 
 -- d_s_i_calo_record used for calo_conditions.vhd
 type d_s_i_calo_record is record
@@ -149,6 +150,7 @@ type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO
 constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
 type calo_templates_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 type calo_templates_boolean_array is array (1 to NR_CALO_TEMPLATES) of boolean;
+type calo_templates_iso_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(2**MAX_ISO_BITS-1 downto 0);
 
 -- ESUMs
 constant MAX_ESUMS_BITS_TEMP : positive := max(ETT_DATA_WIDTH, HT_DATA_WIDTH, ETM_DATA_WIDTH);

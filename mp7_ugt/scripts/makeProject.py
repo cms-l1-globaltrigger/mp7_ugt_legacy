@@ -65,6 +65,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--tag', metavar = '<tag>', required = True, help = "mp7fw tag")
     parser.add_argument('--unstable', action = 'store_true', help = "use unstable tag (default is stable)")
+    parser.add_argument('-o', '--old', action = 'store_true', help = "use the old ProjectManager.py commands")
     parser.add_argument('--board', metavar = '<type>', default = 'mp7xe_690', choices = BoardAliases.keys(), help = "set board type (default is `mp7xe_690')")
     parser.add_argument('-u', '--user', metavar = '<username>', required = True, help = "username for SVN")
     parser.add_argument('-p', '--path', metavar = '<path>', required = True, type = os.path.abspath, help = "mp7fw tag")
@@ -139,10 +140,10 @@ def main():
 
         logging.info("checkout MP7 base firmware...")
         path = os.path.join('tags', 'mp7', 'unstable' if args.unstable else 'stable', 'firmware', args.tag)
-        if args.tag == "mp7fw_v1_8_3" or args.tag == "mp7fw_v1_8_4_pre1":
-            subprocess.check_call(['python', 'ProjectManager.py', 'create', path, '-u', args.user]) #changes in ProjectManager.py, have to differ between older and newer versions
-        else:
+        if args.old:
             subprocess.check_call(['python', 'ProjectManager.py', 'checkout', path, '-u', args.user])
+        else:
+            subprocess.check_call(['python', 'ProjectManager.py', 'create', path, '-u', args.user]) #changes in ProjectManager.py, have to differ between older and newer versions
 
         #logging.info("fetching project firmware...")
         #subprocess.check_call(['python', 'ProjectManager.py', 'fetch', os.path.join('projects/examples', args.board)])

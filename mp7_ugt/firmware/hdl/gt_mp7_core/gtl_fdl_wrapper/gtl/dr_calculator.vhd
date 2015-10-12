@@ -14,6 +14,12 @@
 -- $Revision$
 --------------------------------------------------------------------------------
 
+-- Desription:
+-- Calculation of Delta-R and comparison with limits 
+
+-- Version history:
+-- HB 2015-08-24: first design
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;

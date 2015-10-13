@@ -129,11 +129,12 @@ vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_obj_vs_obj.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_obj_vs_obj.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/invariant_mass.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd
 #vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd
 vcom -93 -work work $L1TM/vhdl/module_0/src/gtl_module.vhd
 

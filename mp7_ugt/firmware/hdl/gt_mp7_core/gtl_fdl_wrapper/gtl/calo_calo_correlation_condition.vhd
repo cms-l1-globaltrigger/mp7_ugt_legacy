@@ -90,9 +90,9 @@ entity calo_calo_correlation_condition is
         calo2_data_i: in calo_objects_array;
         diff_eta: in diff_2dim_integer_array;
         diff_phi: in diff_2dim_integer_array;
-        condition_o: out std_logic;
-        cosh_deta_debug: out diff_2dim_integer_array;
-        cos_dphi_debug: out diff_2dim_integer_array
+        condition_o: out std_logic
+--         cosh_deta_debug: out diff_2dim_integer_array;
+--         cos_dphi_debug: out diff_2dim_integer_array
     );
 end calo_calo_correlation_condition; 
 
@@ -176,8 +176,8 @@ begin
 	    eg_sel: if obj_type_calo1 = EG_TYPE and obj_type_calo2 = EG_TYPE and j/=i generate
 		cosh_deta(i,j) <= CONV_STD_LOGIC_VECTOR(CALO_CALO_COSH_DETA_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low)),CONV_INTEGER(calo2_data_i(j)(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low))),cosh_cos_width);
 		cos_dphi(i,j) <= CONV_STD_LOGIC_VECTOR(CALO_CALO_COS_DPHI_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)),CONV_INTEGER(calo2_data_i(j)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low))),cosh_cos_width);
-		cosh_deta_debug(i,j) <= CALO_CALO_COSH_DETA_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low)),CONV_INTEGER(calo2_data_i(j)(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low)));
-		cos_dphi_debug(i,j) <= CALO_CALO_COS_DPHI_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)),CONV_INTEGER(calo2_data_i(j)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)));
+-- 		cosh_deta_debug(i,j) <= CALO_CALO_COSH_DETA_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low)),CONV_INTEGER(calo2_data_i(j)(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low)));
+-- 		cos_dphi_debug(i,j) <= CALO_CALO_COS_DPHI_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)),CONV_INTEGER(calo2_data_i(j)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)));
 	    end generate;
 -- 	    jet_sel: if obj_type_calo1 = JET_TYPE and obj_type_calo2 = JET_TYPE and j/=i generate
 -- 		cosh_deta(i,j) <= CONV_STD_LOGIC_VECTOR(JET_JET_COSH_DETA_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_JET_V2.eta_high downto D_S_I_JET_V2.eta_low)),

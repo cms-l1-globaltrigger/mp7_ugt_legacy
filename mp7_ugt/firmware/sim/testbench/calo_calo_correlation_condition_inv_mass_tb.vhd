@@ -202,9 +202,9 @@ dut: entity work.calo_calo_correlation_condition
         calo2_data_i => eg_bx_0_ff,
         diff_eta => default_diff_eta_integer_value,
         diff_phi => default_diff_phi_integer_value,
-	condition_o => condition_o,
-	cosh_deta_debug => cosh_deta_debug,
-	cos_dphi_debug => cos_dphi_debug
+	condition_o => condition_o
+-- 	cosh_deta_debug => cosh_deta_debug,
+-- 	cos_dphi_debug => cos_dphi_debug
     );
 
 end rtl;

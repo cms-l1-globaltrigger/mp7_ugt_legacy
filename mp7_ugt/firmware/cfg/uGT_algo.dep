@@ -63,6 +63,7 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/invariant_mass.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
 src gt_mp7_core/frame/crc/crc16d64.vhd

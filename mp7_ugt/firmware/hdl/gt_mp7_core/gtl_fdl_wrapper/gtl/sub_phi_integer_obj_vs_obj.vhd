@@ -26,17 +26,18 @@ entity sub_phi_integer_obj_vs_obj is
     generic (
         NR_OBJ_1 : positive := 12;
         NR_OBJ_2 : positive := 8;
-        PHI_HALF_RANGE: positive := 3142 -- or 31415, depends on how many digits after comma used
+        PHI_HALF_RANGE: positive := 72 -- in bins
     );
     port(
         phi_in_1 : in diff_integer_inputs_array(0 to NR_OBJ_1-1);
         phi_in_2 : in diff_integer_inputs_array(0 to NR_OBJ_2-1);
-        phi_diff_o : out diff_2dim_integer_array(0 to NR_OBJ_1-1, 0 to NR_OBJ_2-1)
+        phi_diff_o : out dim2_max_phi_range_array(0 to NR_OBJ_1-1, 0 to NR_OBJ_2-1)
     );
 end sub_phi_integer_obj_vs_obj;
 
 architecture rtl of sub_phi_integer_obj_vs_obj is
-    signal phi_diff_temp : diff_2dim_integer_array(0 to NR_OBJ_1-1, 0 to NR_OBJ_2-1);
+    signal phi_diff_temp : dim2_max_phi_range_array(0 to NR_OBJ_1-1, 0 to NR_OBJ_2-1);
+    
 begin
 -- instantiation of subtractors for phi
     loop_1: for i in 0 to NR_OBJ_1-1 generate

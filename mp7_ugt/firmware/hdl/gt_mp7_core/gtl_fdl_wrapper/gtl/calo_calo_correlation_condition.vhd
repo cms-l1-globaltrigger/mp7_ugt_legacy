@@ -82,7 +82,14 @@ entity calo_calo_correlation_condition is
         dr_lower_limit: dr_squared_range_real;
 
         inv_mass_upper_limit: real;
-        inv_mass_lower_limit: real
+        inv_mass_lower_limit: real;
+        
+        INV_MASS_PRECISION: positive;
+	INV_MASS_PT_PRECISION : positive;
+	pt1_width: positive; 
+	pt2_width: positive; 
+	INV_MASS_COSH_COS_PRECISION : positive;
+	cosh_cos_width: positive	
     );
     port(
         lhc_clk: in std_logic;
@@ -90,9 +97,11 @@ entity calo_calo_correlation_condition is
         calo2_data_i: in calo_objects_array;
         diff_eta: in diff_2dim_integer_array;
         diff_phi: in diff_2dim_integer_array;
+        pt1 : in diff_inputs_array;
+        pt2 : in diff_inputs_array;
+	cosh_deta : in calo_cosh_cos_vector_array;
+        cos_dphi : in calo_cosh_cos_vector_array;
         condition_o: out std_logic
---         cosh_deta_debug: out diff_2dim_integer_array;
---         cos_dphi_debug: out diff_2dim_integer_array
     );
 end calo_calo_correlation_condition; 
 
@@ -104,22 +113,6 @@ architecture rtl of calo_calo_correlation_condition is
 
 -- -- fixed to 1 for current implementation of correlation conditions for different calo object types
     constant nr_templates: positive := 1;  
-
-    constant INV_MASS_PRECISION : positive range 1 to 3 := 1; -- 1 => first digit after decimal point
--- 	    pt1_width <= (integer(real(D_S_I_EG_V2.et_high downto D_S_I_EG_V2.et_low+1)*0.25+0.5))*4 when ((D_S_I_EG_V2.et_high downto D_S_I_EG_V2.et_low+1) mod 4) /= 0 else (integer(real(D_S_I_EG_V2.et_high downto D_S_I_EG_V2.et_low+1)*0.25+0.5)-1)*4; -- ?????????? calculation ok ??????????
-    constant pt1_width: positive := 12; 
-    constant pt2_width: positive := 12; 
-    signal pt1 : diff_inputs_array(0 to nr_calo1_objects-1) := (others => (others => '0'));
-    signal pt2 : diff_inputs_array(0 to nr_calo2_objects-1) := (others => (others => '0'));
---     signal pt1 : diff_integer_inputs_array(0 to nr_calo1_objects-1) := (others => 0);
---     signal pt2 : diff_integer_inputs_array(0 to nr_calo2_objects-1) := (others => 0);
---     signal cosh_deta : diff_2dim_integer_array((0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => 0));
---     signal cos_dphi : diff_2dim_integer_array((0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => 0));
-
-    constant cosh_cos_width: positive := 28;  
-    type cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(cosh_cos_width-1 downto 0);
-    signal cosh_deta : cosh_cos_vector_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
-    signal cos_dphi : cosh_cos_vector_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
 
     type calo1_object_vs_template_array is array (0 to nr_calo1_objects-1, 1 to nr_templates) of std_logic;
     type calo2_object_vs_template_array is array (0 to nr_calo2_objects-1, 1 to nr_templates) of std_logic;
@@ -147,57 +140,6 @@ architecture rtl of calo_calo_correlation_condition is
     signal condition_and_or : std_logic;
     
 begin
-
--- HB 2015-10-01: Loops for invariant mass.
-    calo1_et_l: for i in 0 to nr_calo1_objects-1 generate
-	eg_pt1_i: if obj_type_calo1 = EG_TYPE generate
-	    pt1(i)(pt1_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(EG_ET_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_EG_V2.et_high downto D_S_I_EG_V2.et_low))),pt1_width);
-	end generate;
--- 	jet_pt1_i: if obj_type_calo1 = JET_TYPE generate
--- 	    pt1(i) <= CONV_STD_LOGIC_VECTOR(JET_ET_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_JET_V2.et_high downto D_S_I_JET_V2.et_low))),pt1_width);
--- 	end generate;
--- 	tau_pt1_i: if obj_type_calo1 = TAU_TYPE generate
--- 	    pt1(i) <= CONV_STD_LOGIC_VECTOR(TAU_ET_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_TAU_V2.et_high downto D_S_I_TAU_V2.et_low))),pt1_width);
--- 	end generate;
-    end generate;
-    calo2_et_l: for i in 0 to nr_calo2_objects-1 generate
-	eg_pt2_i: if obj_type_calo2 = EG_TYPE generate
-	    pt2(i)(pt2_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(EG_ET_LUT(CONV_INTEGER(calo2_data_i(i)(D_S_I_EG_V2.et_high downto D_S_I_EG_V2.et_low))),pt2_width);
-	end generate;
--- 	jet_pt2_i: if obj_type_calo2 = JET_TYPE generate
--- 	    pt2(i) <= CONV_STD_LOGIC_VECTOR(JET_ET_LUT(CONV_INTEGER(calo2_data_i(i)(D_S_I_JET_V2.et_high downto D_S_I_JET_V2.et_low))),pt2_width);
--- 	end generate;
--- 	tau_pt2_i: if obj_type_calo2 = TAU_TYPE generate
--- 	    pt2(i) <= CONV_STD_LOGIC_VECTOR(TAU_ET_LUT(CONV_INTEGER(calo2_data_i(i)(D_S_I_TAU_V2.et_high downto D_S_I_TAU_V2.et_low))),pt2_width);
--- 	end generate;
-    end generate;
-    calo1_cosh_cos_l: for i in 0 to nr_calo1_objects-1 generate
-	calo2_cosh_cos_l: for j in 0 to nr_calo2_objects-1 generate
-	    eg_sel: if obj_type_calo1 = EG_TYPE and obj_type_calo2 = EG_TYPE and j/=i generate
-		cosh_deta(i,j) <= CONV_STD_LOGIC_VECTOR(CALO_CALO_COSH_DETA_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low)),CONV_INTEGER(calo2_data_i(j)(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low))),cosh_cos_width);
-		cos_dphi(i,j) <= CONV_STD_LOGIC_VECTOR(CALO_CALO_COS_DPHI_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)),CONV_INTEGER(calo2_data_i(j)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low))),cosh_cos_width);
--- 		cosh_deta_debug(i,j) <= CALO_CALO_COSH_DETA_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low)),CONV_INTEGER(calo2_data_i(j)(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low)));
--- 		cos_dphi_debug(i,j) <= CALO_CALO_COS_DPHI_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)),CONV_INTEGER(calo2_data_i(j)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)));
-	    end generate;
--- 	    jet_sel: if obj_type_calo1 = JET_TYPE and obj_type_calo2 = JET_TYPE and j/=i generate
--- 		cosh_deta(i,j) <= CONV_STD_LOGIC_VECTOR(JET_JET_COSH_DETA_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_JET_V2.eta_high downto D_S_I_JET_V2.eta_low)),
--- 		    CONV_INTEGER(calo2_data_i(i)(D_S_I_JET_V2.eta_high downto D_S_I_JET_V2.eta_low))),cosh_cos_width);
--- 		cos_dphi(i,j) <= CONV_STD_LOGIC_VECTOR(JET_JET_COS_DPHI_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_JET_V2.phi_high downto D_S_I_JET_V2.phi_low)),
--- 		    CONV_INTEGER(calo2_data_i(i)(D_S_I_JET_V2.phi_high downto D_S_I_JET_V2.phi_low))),cosh_cos_width);
--- 	    end generate;
--- 	    tau_sel: if obj_type_calo1 = TAU_TYPE and obj_type_calo2 = TAU_TYPE and j/=i generate
--- 		cosh_deta(i,j) <= CONV_STD_LOGIC_VECTOR(TAU_TAU_COSH_DETA_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_TAU_V2.eta_high downto D_S_I_TAU_V2.eta_low)),
--- 		    CONV_INTEGER(calo2_data_i(i)(D_S_I_TAU_V2.eta_high downto D_S_I_TAU_V2.eta_low))),cosh_cos_width);
--- 		cos_dphi(i,j) <= CONV_STD_LOGIC_VECTOR(TAU_TAU_COS_DPHI_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_TAU_V2.phi_high downto D_S_I_TAU_V2.phi_low)),
--- 		    CONV_INTEGER(calo2_data_i(i)(D_S_I_TAU_V2.phi_high downto D_S_I_TAU_V2.phi_low))),cosh_cos_width);
--- 	    end generate;
--- 	    eg_jet_sel: if obj_type_calo1 = EG_TYPE and obj_type_calo2 = JET_TYPE generate
--- 		cosh_deta(i,j) <= EG_JET_COSH_DETA_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low)),CONV_INTEGER(calo2_data_i(i)(D_S_I_JET_V2.eta_high downto D_S_I_JET_V2.eta_low)));
--- 		cos_dphi(i,j) <= EG_JET_COS_DPHI_LUT(CONV_INTEGER(calo1_data_i(i)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)),CONV_INTEGER(calo2_data_i(i)(D_S_I_JET_V2.phi_high downto D_S_I_JET_V2.phi_low)));
--- 	    end generate;
--- and so on!!!
-	end generate;
-    end generate;
 
 -- HB 2015-09-22: Comparison of differences.
 
@@ -239,7 +181,9 @@ begin
 				pt1_width => pt1_width, 
 				pt2_width => pt2_width, 
 				cosh_cos_width => cosh_cos_width,
-				INV_MASS_PRECISION => INV_MASS_PRECISION
+				INV_MASS_PRECISION => INV_MASS_PRECISION,
+				INV_MASS_PT_PRECISION => INV_MASS_PT_PRECISION,
+				INV_MASS_COSH_COS_PRECISION => INV_MASS_COSH_COS_PRECISION
 			    )
 			    port map(
 				pt1 => pt1(i)(pt1_width-1 downto 0),
@@ -270,12 +214,32 @@ begin
 			    dr_comp => dr_comp(i,j)
 			);
 		end generate dr_i;
+		inv_mass_i: if inv_mass_cut = true generate
+		    inv_mass_calculator_i: entity work.invariant_mass
+		    generic map(
+			upper_limit => inv_mass_upper_limit,
+			lower_limit => inv_mass_lower_limit,
+			pt1_width => pt1_width, 
+			pt2_width => pt2_width, 
+			cosh_cos_width => cosh_cos_width,
+			INV_MASS_PRECISION => INV_MASS_PRECISION,
+			INV_MASS_PT_PRECISION => INV_MASS_PT_PRECISION,
+			INV_MASS_COSH_COS_PRECISION => INV_MASS_COSH_COS_PRECISION
+		    )
+		    port map(
+			pt1 => pt1(i)(pt1_width-1 downto 0),
+			pt2 => pt2(j)(pt2_width-1 downto 0),
+			cosh_deta => cosh_deta(i,j),
+			cos_dphi => cos_dphi(i,j),
+			inv_mass_comp => inv_mass_comp(i,j)
+		    );
+		end generate inv_mass_i;
 	    end generate different_obj_type_i;
 	end generate delta_l_2;
     end generate delta_l_1;
     
 -- Pipeline stage for diff_eta_comp, diff_phi_comp and dr_comp
-    diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp)
+    diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp, inv_mass_comp)
         begin
             if obj_vs_templ_pipeline_stage = false then 
                 if deta_cut = true and dphi_cut = false and dr_cut = false and inv_mass_cut = false then

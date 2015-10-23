@@ -27,7 +27,7 @@ entity sub_eta_integer_obj_vs_obj is
     port(
         eta_in_1 : in diff_integer_inputs_array(0 to NR_OBJ_1-1);
         eta_in_2 : in diff_integer_inputs_array(0 to NR_OBJ_2-1);
-        eta_diff_o : out diff_2dim_integer_array(0 to NR_OBJ_1-1, 0 to NR_OBJ_2-1)
+        eta_diff_o : out dim2_max_eta_range_array(0 to NR_OBJ_1-1, 0 to NR_OBJ_2-1)
     );
 end sub_eta_integer_obj_vs_obj;
 

@@ -105,8 +105,8 @@ begin
 -- cos_dphi <= CALO_CALO_COS_DPHI_LUT(CONV_INTEGER(calo1(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)),CONV_INTEGER(calo2(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)));
 
 dut: entity work.invariant_mass
-    generic map(196.222, 195.0, 12, 12, 28, 1) -- M**2/2
-    port map(pt1, pt2, cosh_deta, cos_dphi, open, open, open, open);
+    generic map(196.222, 195.0, eg_et_vector_width, eg_et_vector_width, cosh_cos_vector_width, INV_MASS_PRECISION) -- M**2/2
+    port map(pt1(eg_et_vector_width-1 downto 0), pt2(eg_et_vector_width-1 downto 0), cosh_deta(cosh_cos_vector_width-1 downto 0), cos_dphi(cosh_cos_vector_width-1 downto 0), open, open, open, open);
 
 end rtl;
 

@@ -28,8 +28,8 @@ entity muon_muon_correlation_condition is
         deta_cut: boolean := true;
         dphi_cut: boolean := true;
         dr_cut: boolean := false;
+        inv_mass_cut: boolean := false;
 
---         nr_objects: positive;
         pt_ge_mode: boolean;
         pt_thresholds: muon_templates_array;
         eta_full_range : muon_templates_boolean_array;
@@ -56,7 +56,16 @@ entity muon_muon_correlation_condition is
         diff_phi_lower_limit: diff_phi_range_real;
 
         dr_upper_limit: dr_squared_range_real;
-        dr_lower_limit: dr_squared_range_real
+        dr_lower_limit: dr_squared_range_real;
+        
+        inv_mass_upper_limit: real;
+        inv_mass_lower_limit: real;
+
+        INV_MASS_PRECISION: positive;
+	INV_MASS_PT_PRECISION : positive;
+	pt_width: positive; 
+	INV_MASS_COSH_COS_PRECISION : positive;
+	cosh_cos_width: positive	
     );
     port(
         lhc_clk: in std_logic;
@@ -65,6 +74,9 @@ entity muon_muon_correlation_condition is
         os_charcorr_double: in muon_charcorr_double_array;
         diff_eta: in diff_2dim_integer_array;
         diff_phi: in diff_2dim_integer_array;
+        pt : in diff_inputs_array;
+	cosh_deta : in muon_cosh_cos_vector_array;
+        cos_dphi : in muon_cosh_cos_vector_array;
         condition_o: out std_logic
     );
 end muon_muon_correlation_condition; 
@@ -101,6 +113,8 @@ architecture rtl of muon_muon_correlation_condition is
     signal diff_phi_comp_pipe : diff_comp_array := (others => (others => '0'));
     signal dr_comp : diff_comp_array;
     signal dr_comp_pipe : diff_comp_array := (others => (others => '0'));
+    signal inv_mass_comp : diff_comp_array := (others => (others => '0'));
+    signal inv_mass_comp_pipe : diff_comp_array := (others => (others => '0'));
 
     signal condition_and_or : std_logic;
 
@@ -194,35 +208,59 @@ begin
 			    dr_comp => dr_comp(i,j)
 			);
 		end generate dr_i;
+		inv_mass_i: if inv_mass_cut = true generate
+		    inv_mass_calculator_i: entity work.invariant_mass
+			generic map(
+			    upper_limit => inv_mass_upper_limit,
+			    lower_limit => inv_mass_lower_limit,
+			    pt1_width => pt_width, 
+			    pt2_width => pt_width, 
+			    cosh_cos_width => cosh_cos_width,
+			    INV_MASS_PRECISION => INV_MASS_PRECISION,
+			    INV_MASS_PT_PRECISION => INV_MASS_PT_PRECISION,
+			    INV_MASS_COSH_COS_PRECISION => INV_MASS_COSH_COS_PRECISION
+			)
+			port map(
+			    pt1 => pt(i)(pt_width-1 downto 0),
+			    pt2 => pt(j)(pt_width-1 downto 0),
+			    cosh_deta => cosh_deta(i,j),
+			    cos_dphi => cos_dphi(i,j),
+			    inv_mass_comp => inv_mass_comp(i,j)
+			);
+		 end generate inv_mass_i;
 	    end generate delta_if;
         end generate delta_l_2;
     end generate delta_l_1;
 
 -- Pipeline stage for diff_eta_comp, diff_phi_comp and dr_comp
-    diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp)
+    diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp, inv_mass_comp)
         begin
             if obj_vs_templ_pipeline_stage = false then 
-                if deta_cut = true and dphi_cut = false and dr_cut = false then
+                if deta_cut = true and dphi_cut = false and dr_cut = false and inv_mass_cut = false then
                     diff_eta_comp_pipe <= diff_eta_comp;
-                elsif deta_cut = false and dphi_cut = true and dr_cut = false then
+                elsif deta_cut = false and dphi_cut = true and dr_cut = false and inv_mass_cut = false then
                     diff_phi_comp_pipe <= diff_phi_comp;
-                elsif deta_cut = true and dphi_cut = true and dr_cut = false then
+                elsif deta_cut = true and dphi_cut = true and dr_cut = false and inv_mass_cut = false then
                     diff_eta_comp_pipe <= diff_eta_comp;
                     diff_phi_comp_pipe <= diff_phi_comp;
-                elsif deta_cut = false and dphi_cut = false and dr_cut = true then
+                elsif deta_cut = false and dphi_cut = false and dr_cut = true and inv_mass_cut = false then
                     dr_comp_pipe <= dr_comp;
+                elsif deta_cut = false and dphi_cut = false and dr_cut = false and inv_mass_cut = true then
+                    inv_mass_comp_pipe <= inv_mass_comp;
                 end if;
-            else
+           else
                 if (lhc_clk'event and lhc_clk = '1') then
-                    if deta_cut = true and dphi_cut = false and dr_cut = false then
+                    if deta_cut = true and dphi_cut = false and dr_cut = false and inv_mass_cut = false then
                         diff_eta_comp_pipe <= diff_eta_comp;
-                    elsif deta_cut = false and dphi_cut = true and dr_cut = false then
+                    elsif deta_cut = false and dphi_cut = true and dr_cut = false and inv_mass_cut = false then
                         diff_phi_comp_pipe <= diff_phi_comp;
-                    elsif deta_cut = true and dphi_cut = true and dr_cut = false then
+                    elsif deta_cut = true and dphi_cut = true and dr_cut = false and inv_mass_cut = false then
                         diff_eta_comp_pipe <= diff_eta_comp;
                         diff_phi_comp_pipe <= diff_phi_comp;
-                    elsif deta_cut = false and dphi_cut = false and dr_cut = true then
+                    elsif deta_cut = false and dphi_cut = false and dr_cut = true and inv_mass_cut = false then
                         dr_comp_pipe <= dr_comp;
+                    elsif deta_cut = false and dphi_cut = false and dr_cut = false and inv_mass_cut = true then
+                        inv_mass_comp_pipe <= inv_mass_comp;
                     end if;
                 end if;
             end if;
@@ -230,9 +268,9 @@ begin
 
 -- "Matrix" of permutations in an and-or-structure.
 
-    matrix_deta_dphi_dr_p: process(obj_vs_templ_pipe, charge_comp_double_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe)
+    matrix_p: process(obj_vs_templ_pipe, charge_comp_double_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, inv_mass_comp_pipe)
         variable index : integer := 0;
-        variable obj_vs_templ_vec : std_logic_vector((NR_MUON_OBJECTS*(NR_MUON_OBJECTS-1)) downto 1) := (others => '0');
+        variable obj_vs_templ_vec : std_logic_vector((NR_MUON_OBJECTS*(NR_MUON_OBJECTS)) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
     begin
         index := 0;
@@ -240,17 +278,20 @@ begin
         condition_and_or_tmp := '0';
         for i in 0 to NR_MUON_OBJECTS-1 loop 
             for j in 0 to NR_MUON_OBJECTS-1 loop
-		if j/=i then
-		    if deta_cut = true and dphi_cut = false and dr_cut = false then
+                if j/=i then
+		    if deta_cut = true and dphi_cut = false and dr_cut = false and inv_mass_cut = false then
 			index := index + 1;
 			obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j);
-		    elsif deta_cut = false and dphi_cut = true and dr_cut = false then
+		    elsif deta_cut = false and dphi_cut = true and dr_cut = false and inv_mass_cut = false then
 			index := index + 1;
 			obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and charge_comp_double_pipe(i,j) and diff_phi_comp_pipe(i,j);
-		    elsif deta_cut = false and dphi_cut = false and dr_cut = true then
+		    elsif deta_cut = false and dphi_cut = false and dr_cut = true and inv_mass_cut = false then
 			index := index + 1;
 			obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and charge_comp_double_pipe(i,j) and dr_comp_pipe(i,j);
-		    elsif deta_cut = true and dphi_cut = true and dr_cut = false then
+		    elsif deta_cut = false and dphi_cut = false and dr_cut = false and inv_mass_cut = true then
+			index := index + 1;
+			obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and charge_comp_double_pipe(i,j) and inv_mass_comp_pipe(i,j);
+		    elsif deta_cut = true and dphi_cut = true and dr_cut = false and inv_mass_cut = false then
 			index := index + 1;
 			obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j);
 		    end if;
@@ -262,7 +303,7 @@ begin
             condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
         end loop;
         condition_and_or <= condition_and_or_tmp;
-    end process matrix_deta_dphi_dr_p;
+    end process matrix_p;
 
 -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(lhc_clk, condition_and_or)

@@ -81,6 +81,8 @@ entity calo_calo_correlation_condition is
         dr_upper_limit: dr_squared_range_real;
         dr_lower_limit: dr_squared_range_real;
 
+        dr_precision_4_limits: positive;
+
         inv_mass_upper_limit: real;
         inv_mass_lower_limit: real;
         
@@ -144,10 +146,10 @@ begin
 -- HB 2015-09-22: Comparison of differences.
 
 -- Conversion of limits to integer.
-    diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**POSITION_FINAL_PRECISION));
-    diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**POSITION_FINAL_PRECISION));
-    diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**POSITION_FINAL_PRECISION));
-    diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**POSITION_FINAL_PRECISION));
+    diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**dr_precision_4_limits));
+    diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**dr_precision_4_limits));
+    diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**dr_precision_4_limits));
+    diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**dr_precision_4_limits));
 
 -- Comparison of differences with limits.
 -- HB 2015-09-17: permutations are different for same and different object types. For same object type, only differences of different objects are compared.
@@ -165,7 +167,8 @@ begin
 			dr_calculator_i: entity work.dr_calculator
 			    generic map(
 				dr_upper_limit => dr_upper_limit,
-				dr_lower_limit => dr_lower_limit
+				dr_lower_limit => dr_lower_limit,
+				dr_precision_4_limits => dr_precision_4_limits
 			    )
 			    port map(
 				diff_eta => diff_eta(i,j),
@@ -206,7 +209,8 @@ begin
 		    dr_calculator_i: entity work.dr_calculator
 			generic map(
 			    dr_upper_limit => dr_upper_limit,
-			    dr_lower_limit => dr_lower_limit
+			    dr_lower_limit => dr_lower_limit,
+			    dr_precision_4_limits => dr_precision_4_limits
 			)
 			port map(
 			    diff_eta => diff_eta(i,j),

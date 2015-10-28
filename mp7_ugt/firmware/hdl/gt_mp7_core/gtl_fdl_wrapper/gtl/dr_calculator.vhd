@@ -30,7 +30,8 @@ entity dr_calculator is
     generic (
 -- HB 2015-09-21: TM proposed two thresholds for DR
 	dr_upper_limit: dr_squared_range_real := 15.0; -- threshold for ΔR (see formula below) in real values
-	dr_lower_limit: dr_squared_range_real := 10.0 -- threshold for ΔR (see formula below) in real values
+	dr_lower_limit: dr_squared_range_real := 10.0; -- threshold for ΔR (see formula below) in real values
+	dr_precision_4_limits: positive := 3 -- 3 => max. number, higher numbers exceed 32 bit integer values !!!
     );
     port(
         diff_eta : in integer;
@@ -50,8 +51,8 @@ architecture rtl of dr_calculator is
     signal dr_lower_limit_int : integer;
 begin
 
-dr_upper_limit_int <= integer((dr_upper_limit**2)*real(10**(POSITION_FINAL_PRECISION*2)));
-dr_lower_limit_int <= integer((dr_lower_limit**2)*real(10**(POSITION_FINAL_PRECISION*2)));
+dr_upper_limit_int <= integer((dr_upper_limit**2)*real(10**(dr_precision_4_limits*2)));
+dr_lower_limit_int <= integer((dr_lower_limit**2)*real(10**(dr_precision_4_limits*2)));
 
     delta_r_p: process(diff_eta, diff_phi)
         variable dr_squared, diff_eta_value, diff_phi_value : integer;

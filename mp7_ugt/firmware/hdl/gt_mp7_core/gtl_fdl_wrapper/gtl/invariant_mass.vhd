@@ -55,7 +55,6 @@ architecture rtl of invariant_mass is
 -- HB 2015-10-21: multiplication factor for limits (number of relevant position after decimal point - INV_MASS_PRECISION => 1, globaly set in gtl.pkg).
     constant INV_MASS_PRECISION_FACTOR : real := real(10**INV_MASS_PRECISION);
 -- HB 2015-10-21: multiplication factor for limits vectors. INV_MASS_COSH_COS_PRECISION: number of relevant position after decimal point for cosh_deta and cos_dphi, globaly set in gtl.pkg.
---     constant PRECISION_LENGTH : positive := 2*INV_MASS_PT_PRECISION+INV_MASS_COSH_COS_PRECISION-INV_MASS_PRECISION;
     constant FACTOR_4_VECTOR : std_logic_vector((INV_MASS_COSH_COS_PRECISION+1)*4-1 downto 0) := conv_std_logic_vector(10**(INV_MASS_COSH_COS_PRECISION+1),(INV_MASS_COSH_COS_PRECISION+1)*4);
 
     signal inv_mass_sq_div2 : std_logic_vector(INV_MASS_VECTOR_WIDTH-1 downto 0);

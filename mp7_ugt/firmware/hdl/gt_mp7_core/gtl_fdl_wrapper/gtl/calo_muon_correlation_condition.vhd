@@ -72,10 +72,12 @@ entity calo_muon_correlation_condition is
         diff_phi_upper_limit: diff_phi_range_real;
         diff_phi_lower_limit: diff_phi_range_real;
 
+        deta_dphi_limits_precision: positive;
+
         dr_upper_limit: dr_squared_range_real;
         dr_lower_limit: dr_squared_range_real;
 
-        dr_precision_4_limits: positive
+        dr_limits_precision: positive
 
     );
     port(
@@ -182,10 +184,10 @@ begin
             end if;
     end process;
     
-    diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**dr_precision_4_limits));
-    diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**dr_precision_4_limits));
-    diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**dr_precision_4_limits));
-    diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**dr_precision_4_limits));
+    diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**deta_dphi_limits_precision));
+    diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**deta_dphi_limits_precision));
+    diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**deta_dphi_limits_precision));
+    diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**deta_dphi_limits_precision));
 
     delta_l_1: for i in 0 to nr_calo_objects-1 generate 
 	delta_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
@@ -200,7 +202,7 @@ begin
 		    generic map(
 			dr_upper_limit => dr_upper_limit,
 			dr_lower_limit => dr_lower_limit,
-			dr_precision_4_limits => dr_precision_4_limits
+			dr_limits_precision => dr_limits_precision
 		    )
 		    port map(
 			diff_eta => diff_eta(i,j),

@@ -78,10 +78,12 @@ entity calo_calo_correlation_condition is
         diff_phi_upper_limit: diff_phi_range_real;
         diff_phi_lower_limit: diff_phi_range_real;
 
+        deta_dphi_limits_precision: positive;
+
         dr_upper_limit: dr_squared_range_real;
         dr_lower_limit: dr_squared_range_real;
 
-        dr_precision_4_limits: positive;
+        dr_limits_precision: positive;
 
         inv_mass_upper_limit: real;
         inv_mass_lower_limit: real;
@@ -146,10 +148,10 @@ begin
 -- HB 2015-09-22: Comparison of differences.
 
 -- Conversion of limits to integer.
-    diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**dr_precision_4_limits));
-    diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**dr_precision_4_limits));
-    diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**dr_precision_4_limits));
-    diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**dr_precision_4_limits));
+    diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**deta_dphi_limits_precision));
+    diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**deta_dphi_limits_precision));
+    diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**deta_dphi_limits_precision));
+    diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**deta_dphi_limits_precision));
 
 -- Comparison of differences with limits.
 -- HB 2015-09-17: permutations are different for same and different object types. For same object type, only differences of different objects are compared.
@@ -168,7 +170,7 @@ begin
 			    generic map(
 				dr_upper_limit => dr_upper_limit,
 				dr_lower_limit => dr_lower_limit,
-				dr_precision_4_limits => dr_precision_4_limits
+				dr_limits_precision => dr_limits_precision
 			    )
 			    port map(
 				diff_eta => diff_eta(i,j),
@@ -210,7 +212,7 @@ begin
 			generic map(
 			    dr_upper_limit => dr_upper_limit,
 			    dr_lower_limit => dr_lower_limit,
-			    dr_precision_4_limits => dr_precision_4_limits
+			    dr_limits_precision => dr_limits_precision
 			)
 			port map(
 			    diff_eta => diff_eta(i,j),

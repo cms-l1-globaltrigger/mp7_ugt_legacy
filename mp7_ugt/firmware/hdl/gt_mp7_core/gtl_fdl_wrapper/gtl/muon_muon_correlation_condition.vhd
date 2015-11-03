@@ -30,23 +30,42 @@ entity muon_muon_correlation_condition is
         dr_cut: boolean := false;
         inv_mass_cut: boolean := false;
 
-        pt_ge_mode: boolean;
-        pt_thresholds: muon_templates_array;
-        eta_full_range : muon_templates_boolean_array;
-        eta_w1_upper_limits: muon_templates_array;
-        eta_w1_lower_limits: muon_templates_array;
-        eta_w2_ignore : muon_templates_boolean_array;
-        eta_w2_upper_limits: muon_templates_array;
-        eta_w2_lower_limits: muon_templates_array;
-        phi_full_range : muon_templates_boolean_array;
-        phi_w1_upper_limits: muon_templates_array;
-        phi_w1_lower_limits: muon_templates_array;
-        phi_w2_ignore : muon_templates_boolean_array;
-        phi_w2_upper_limits: muon_templates_array;
-        phi_w2_lower_limits: muon_templates_array;
-        requested_charges: muon_templates_string_array;
-        qual_luts: muon_templates_quality_array;
-        iso_luts: muon_templates_iso_array;
+        pt_ge_mode_muon1: boolean;
+        pt_threshold_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_full_range_muon1: boolean;
+        eta_w1_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w1_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w2_ignore_muon1: boolean;
+        eta_w2_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w2_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        phi_full_range_muon1: boolean;
+        phi_w1_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        phi_w1_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        phi_w2_ignore_muon1: boolean;
+        phi_w2_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        phi_w2_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        requested_charge_muon1: string(1 to 3);
+        qual_lut_muon1: std_logic_vector(15 downto 0);
+        iso_lut_muon1: std_logic_vector(3 downto 0);
+        
+        pt_ge_mode_muon2: boolean;
+        pt_threshold_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_full_range_muon2: boolean;
+        eta_w1_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w1_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w2_ignore_muon2: boolean;
+        eta_w2_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w2_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        phi_full_range_muon2: boolean;
+        phi_w1_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        phi_w1_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        phi_w2_ignore_muon2: boolean;
+        phi_w2_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        phi_w2_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        requested_charge_muon2: string(1 to 3);
+        qual_lut_muon2: std_logic_vector(15 downto 0);
+        iso_lut_muon2: std_logic_vector(3 downto 0);
+        
         requested_charge_correlation: string(1 to 2);
 
         diff_eta_upper_limit: diff_eta_range_real;
@@ -65,18 +84,21 @@ entity muon_muon_correlation_condition is
 
         INV_MASS_PRECISION: positive;
 	INV_MASS_PT_PRECISION : positive;
-	pt_width: positive; 
+	pt1_width: positive; 
+	pt2_width: positive; 
 	INV_MASS_COSH_COS_PRECISION : positive;
 	cosh_cos_width: positive	
     );
     port(
         lhc_clk: in std_logic;
-        data_i: in muon_objects_array;
+        muon1_data_i: in muon_objects_array;
+        muon2_data_i: in muon_objects_array;
         ls_charcorr_double: in muon_charcorr_double_array;
         os_charcorr_double: in muon_charcorr_double_array;
         diff_eta: in diff_2dim_integer_array;
         diff_phi: in diff_2dim_integer_array;
-        pt : in diff_inputs_array;
+        pt1 : in diff_inputs_array;
+        pt2 : in diff_inputs_array;
 	cosh_deta : in muon_cosh_cos_vector_array;
         cos_dphi : in muon_cosh_cos_vector_array;
         condition_o: out std_logic
@@ -107,8 +129,10 @@ architecture rtl of muon_muon_correlation_condition is
     signal diff_phi_upper_limit_int : integer;
     signal diff_phi_lower_limit_int : integer;
     
-    signal obj_vs_templ : muon_object_vs_template_array;
-    signal obj_vs_templ_pipe : muon_object_vs_template_array;
+    signal muon1_obj_vs_templ : muon_object_vs_template_array;
+    signal muon1_obj_vs_templ_pipe : muon_object_vs_template_array;
+    signal muon2_obj_vs_templ : muon_object_vs_template_array;
+    signal muon2_obj_vs_templ_pipe : muon_object_vs_template_array;
     signal diff_eta_comp : diff_comp_array := (others => (others => '0'));
     signal diff_eta_comp_pipe : diff_comp_array := (others => (others => '0'));
     signal diff_phi_comp : diff_comp_array := (others => (others => '0'));
@@ -121,68 +145,6 @@ architecture rtl of muon_muon_correlation_condition is
     signal condition_and_or : std_logic;
 
 begin
-
--- Instance of comparators for muon objects. All permutations between objects and thresholds.
-    obj_l: for i in 0 to NR_MUON_OBJECTS-1 generate
-        templ_l: for j in 1 to nr_templates generate
-            comp_i: entity work.muon_comparators
-                generic map(D_S_I_MUON, pt_ge_mode,
-                            pt_thresholds(j)(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
-                            eta_full_range(j),
-                            eta_w1_upper_limits(j)(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                            eta_w1_lower_limits(j)(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                            eta_w2_ignore(j),
-                            eta_w2_upper_limits(j)(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                            eta_w2_lower_limits(j)(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                            phi_full_range(j),
-                            phi_w1_upper_limits(j)(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                            phi_w1_lower_limits(j)(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                            phi_w2_ignore(j),
-                            phi_w2_upper_limits(j)(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                            phi_w2_lower_limits(j)(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                            requested_charges(j),
-                            qual_luts(j),
-                            iso_luts(j)
-                            )
-                port map(data_i(i), obj_vs_templ(i,j));
-	end generate templ_l;
-    end generate obj_l;
-
--- Pipeline stage for obj_vs_templ
-    obj_vs_templ_pipeline_p: process(lhc_clk, obj_vs_templ)
-        begin
-            if obj_vs_templ_pipeline_stage = false then 
-                obj_vs_templ_pipe <= obj_vs_templ;
-            else
-                if (lhc_clk'event and lhc_clk = '1') then
-                    obj_vs_templ_pipe <= obj_vs_templ;
-                end if;
-            end if;
-    end process;
-    
--- Charge correlation comparison
-    charge_double_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
-        charge_double_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
-            charge_double_if: if j/=i generate
-                charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
-                                           '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
-                                           '1' when requested_charge_correlation = "ig" else
-                                           '0';
-            end generate charge_double_if;
-        end generate charge_double_l_2;
-    end generate charge_double_l_1;
-
--- Pipeline stage for charge correlation comparison
-    charge_comp_2_pipeline_p: process(lhc_clk, charge_comp_double)
-        begin
-            if obj_vs_templ_pipeline_stage = false then 
-                charge_comp_double_pipe <= charge_comp_double;
-            else
-                if (lhc_clk'event and lhc_clk = '1') then
-                    charge_comp_double_pipe <= charge_comp_double;
-                end if;
-            end if;
-    end process;
 
     diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**dr_precision_4_limits));
     diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**dr_precision_4_limits));
@@ -216,16 +178,16 @@ begin
 			generic map(
 			    upper_limit => inv_mass_upper_limit,
 			    lower_limit => inv_mass_lower_limit,
-			    pt1_width => pt_width, 
-			    pt2_width => pt_width, 
+			    pt1_width => pt1_width, 
+			    pt2_width => pt2_width, 
 			    cosh_cos_width => cosh_cos_width,
 			    INV_MASS_PRECISION => INV_MASS_PRECISION,
 			    INV_MASS_PT_PRECISION => INV_MASS_PT_PRECISION,
 			    INV_MASS_COSH_COS_PRECISION => INV_MASS_COSH_COS_PRECISION
 			)
 			port map(
-			    pt1 => pt(i)(pt_width-1 downto 0),
-			    pt2 => pt(j)(pt_width-1 downto 0),
+			    pt1 => pt1(i)(pt1_width-1 downto 0),
+			    pt2 => pt2(j)(pt2_width-1 downto 0),
 			    cosh_deta => cosh_deta(i,j),
 			    cos_dphi => cos_dphi(i,j),
 			    inv_mass_comp => inv_mass_comp(i,j)
@@ -269,9 +231,94 @@ begin
             end if;
     end process;
 
+-- Instance of comparators for muon objects. All permutations between objects and thresholds.
+    muon1_obj_l: for i in 0 to NR_MUON_OBJECTS-1 generate
+        muon2_comp_i: entity work.muon_comparators_v2
+            generic map(pt_ge_mode_muon1,
+                pt_threshold_muon1(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
+                eta_full_range_muon1,
+                eta_w1_upper_limit_muon1(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                eta_w1_lower_limit_muon1(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                eta_w2_ignore_muon1,
+                eta_w2_upper_limit_muon1(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                eta_w2_lower_limit_muon1(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                phi_full_range_muon1,
+                phi_w1_upper_limit_muon1(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                phi_w1_lower_limit_muon1(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                phi_w2_ignore_muon1,
+                phi_w2_upper_limit_muon1(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                phi_w2_lower_limit_muon1(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                requested_charge_muon1,
+                qual_lut_muon1,
+                iso_lut_muon1
+	    )
+            port map(muon1_data_i(i), muon1_obj_vs_templ(i,1));
+    end generate muon1_obj_l;
+
+    muon2_obj_l: for i in 0 to NR_MUON_OBJECTS-1 generate
+        muon2_comp_i: entity work.muon_comparators_v2
+            generic map(pt_ge_mode_muon2,
+                pt_threshold_muon2(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
+                eta_full_range_muon2,
+                eta_w1_upper_limit_muon2(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                eta_w1_lower_limit_muon2(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                eta_w2_ignore_muon2,
+                eta_w2_upper_limit_muon2(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                eta_w2_lower_limit_muon2(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                phi_full_range_muon2,
+                phi_w1_upper_limit_muon2(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                phi_w1_lower_limit_muon2(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                phi_w2_ignore_muon2,
+                phi_w2_upper_limit_muon2(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                phi_w2_lower_limit_muon2(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                requested_charge_muon2,
+                qual_lut_muon2,
+                iso_lut_muon2
+	    )
+            port map(muon2_data_i(i), muon2_obj_vs_templ(i,1));
+    end generate muon2_obj_l;
+
+-- Pipeline stage for obj_vs_templ
+    obj_vs_templ_pipeline_p: process(lhc_clk, muon1_obj_vs_templ, muon2_obj_vs_templ)
+        begin
+        if obj_vs_templ_pipeline_stage = false then 
+            muon1_obj_vs_templ_pipe <= muon1_obj_vs_templ;
+            muon2_obj_vs_templ_pipe <= muon2_obj_vs_templ;
+        else
+            if (lhc_clk'event and lhc_clk = '1') then
+                muon1_obj_vs_templ_pipe <= muon1_obj_vs_templ;
+                muon2_obj_vs_templ_pipe <= muon2_obj_vs_templ;
+            end if;
+        end if;
+    end process;
+    
+-- Charge correlation comparison
+    charge_double_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
+        charge_double_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
+            charge_double_if: if j/=i generate
+                charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
+                                           '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
+                                           '1' when requested_charge_correlation = "ig" else
+                                           '0';
+            end generate charge_double_if;
+        end generate charge_double_l_2;
+    end generate charge_double_l_1;
+
+-- Pipeline stage for charge correlation comparison
+    charge_comp_2_pipeline_p: process(lhc_clk, charge_comp_double)
+        begin
+            if obj_vs_templ_pipeline_stage = false then 
+                charge_comp_double_pipe <= charge_comp_double;
+            else
+                if (lhc_clk'event and lhc_clk = '1') then
+                    charge_comp_double_pipe <= charge_comp_double;
+                end if;
+            end if;
+    end process;
+
 -- "Matrix" of permutations in an and-or-structure.
 
-    matrix_p: process(obj_vs_templ_pipe, charge_comp_double_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, inv_mass_comp_pipe)
+    matrix_p: process(muon1_obj_vs_templ_pipe, muon2_obj_vs_templ_pipe, charge_comp_double_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, inv_mass_comp_pipe)
         variable index : integer := 0;
         variable obj_vs_templ_vec : std_logic_vector((NR_MUON_OBJECTS*(NR_MUON_OBJECTS)) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
@@ -284,19 +331,19 @@ begin
                 if j/=i then
 		    if deta_cut = true and dphi_cut = false and dr_cut = false and inv_mass_cut = false then
 			index := index + 1;
-			obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j);
+			obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j);
 		    elsif deta_cut = false and dphi_cut = true and dr_cut = false and inv_mass_cut = false then
 			index := index + 1;
-			obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and charge_comp_double_pipe(i,j) and diff_phi_comp_pipe(i,j);
+			obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and diff_phi_comp_pipe(i,j);
 		    elsif deta_cut = false and dphi_cut = false and dr_cut = true and inv_mass_cut = false then
 			index := index + 1;
-			obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and charge_comp_double_pipe(i,j) and dr_comp_pipe(i,j);
+			obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and dr_comp_pipe(i,j);
 		    elsif deta_cut = false and dphi_cut = false and dr_cut = false and inv_mass_cut = true then
 			index := index + 1;
-			obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and charge_comp_double_pipe(i,j) and inv_mass_comp_pipe(i,j);
+			obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and inv_mass_comp_pipe(i,j);
 		    elsif deta_cut = true and dphi_cut = true and dr_cut = false and inv_mass_cut = false then
 			index := index + 1;
-			obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j);
+			obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j);
 		    end if;
 		end if;
             end loop;

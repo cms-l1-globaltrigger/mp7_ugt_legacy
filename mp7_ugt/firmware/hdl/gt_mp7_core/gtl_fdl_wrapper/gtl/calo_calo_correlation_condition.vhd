@@ -52,7 +52,7 @@ entity calo_calo_correlation_condition is
         phi_w2_ignore_calo1: boolean;
         phi_w2_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w2_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-	iso_lut_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+	iso_lut_calo1: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
 	nr_calo2_objects: positive;
         et_ge_mode_calo2: boolean;
@@ -70,7 +70,7 @@ entity calo_calo_correlation_condition is
         phi_w2_ignore_calo2: boolean;
         phi_w2_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w2_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-	iso_lut_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+	iso_lut_calo2: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
 	diff_eta_upper_limit: diff_eta_range_real;
         diff_eta_lower_limit: diff_eta_range_real;

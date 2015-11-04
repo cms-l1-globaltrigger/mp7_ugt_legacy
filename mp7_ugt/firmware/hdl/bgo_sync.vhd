@@ -47,7 +47,7 @@ architecture rtl of bgo_sync is
     signal resync_in         : std_logic;
 begin
 
-    bc0_in     <= '1' when ctrs(4).ttc_cmd = TTC_BCMD_BC0 else '0';
+    bc0_in     <= '1' when ttc_in = TTC_BCMD_BC0 else '0';
     ec0_in     <= '1' when ttc_in = TTC_BCMD_EC0 else '0';
     oc0_in     <= '1' when ttc_in = TTC_BCMD_OC0 else '0';
     resync_in  <= '1' when ttc_in = TTC_BCMD_RESYNC else '0';

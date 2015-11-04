@@ -241,8 +241,7 @@ architecture rtl of frame is
 
     --! generates 40Mhz reset signal from IPBus reset
     lhc40mhz_rst0: entity work.slow_cd_reset
-        port map
-        (
+        port map(
             sys_rst => ipb_rst,
             sys_clk => ipb_clk,
             slow_clk => lhc_clk,
@@ -333,10 +332,9 @@ architecture rtl of frame is
 --===============================================================================================--
 
 
-    register_bank : entity work.rb
+    register_bank: entity work.rb
 --         generic map(addr_width => C_RB_ADDR_WIDTH) -- C_IPB_RB definition in frame_addr_decode.vhd
-        port map
-        (
+        port map(
             sys_clk       => ipb_clk,
             lhc_clk       => lhc_clk,
             sys_rst       => ipb_rst,
@@ -370,7 +368,7 @@ architecture rtl of frame is
 --===============================================================================================--
 
     bgos <= BGOS_NOP;
-    tcm_inst : entity work.tcm
+    tcm_inst: entity work.tcm
         port map(
             lhc_clk           => lhc_clk,
             lhc_rst           => lhc_rst,
@@ -532,9 +530,8 @@ architecture rtl of frame is
 --===============================================================================================--
 
 
-    spytrig_inst : entity work.spytrig
-        port map
-        (
+    spytrig_inst: entity work.spytrig
+        port map(
             lhc_clk    => lhc_clk,
             lhc_rst    => lhc_rst,
             orbit_nr   => orbit_nr,
@@ -560,8 +557,7 @@ architecture rtl of frame is
       lhc_data_slv_i_simulator( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ) <= lhc_data_slv_i( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH );
 
       simspy_mem_i: entity work.ipb_dpmem_4096_32
-         port map
-         (
+         port map(
              ipbus_clk => ipb_clk,
              reset     => ipb_rst,
              ipbus_in  => ipb_to_slaves(C_IPB_SIMSPYMEM(i)),
@@ -631,8 +627,7 @@ architecture rtl of frame is
       spymem2_algos_l: for i in 0 to 15 generate -- 16 memory blocks for 512 algos
       algo_after_finor_mask_rop_simulator ( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ) <= algo_after_finor_mask_rop( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH );
          spymem2_algos_i: entity work.ipb_dpmem_4096_32
-             port map
-             (
+             port map(
                  ipbus_clk => ipb_clk,
                  reset     => ipb_rst,
                  ipbus_in  => ipb_to_slaves(C_IPB_SPYMEM2_ALGOS(i)),
@@ -656,8 +651,7 @@ architecture rtl of frame is
 -- BR :[Synth 8-1565] actual for formal port dinb is neither a static name nor a globally static expression. It should be fixed
     local_finor_with_veto_2_spy2_simulator <= (X"0000000" & "000" & local_finor_with_veto_2_spy2);
      spymem2_finor_i: entity work.ipb_dpmem_4096_32
-         port map
-         (
+         port map(
              ipbus_clk => ipb_clk,
              reset     => ipb_rst,
              ipbus_in  => ipb_to_slaves(C_IPB_SPYMEM2_FINOR),
@@ -681,8 +675,7 @@ architecture rtl of frame is
         generic map(
             NR_LANES => NR_LANES
         )
-        port map
-        (
+        port map(
             lhc_clk     => lhc_clk,
             clk240      => clk240,
             lhc_rst     => lhc_rst,
@@ -693,7 +686,10 @@ architecture rtl of frame is
             algo_in_1   => algo_before_prescaler_rop,
             algo_in_2   => algo_after_prescaler_rop,
             algo_in_3   => algo_after_finor_mask_rop,
-            finor_in    => local_finor_with_veto_2_spy2,
+            local_finor_in      => local_finor_rop,
+            local_veto_in       => local_veto_rop,
+            local_finor_veto_in => local_finor_with_veto_2_spy2,
+            prescale_factor     => prescale_factor_set_index_rop,
             valid_lo    => mux_ctrl_regs_1(0)(15 downto 0),
             valid_hi    => mux_ctrl_regs_1(1)(15 downto 0),
             start       => mux_ctrl_regs_1(2)(0),
@@ -715,9 +711,8 @@ architecture rtl of frame is
 
       begin
 
-            l1asim : entity work.l1asim
-        port map
-        (
+        l1asim: entity work.l1asim
+        port map(
             lhc_clk    => lhc_clk,
             lhc_rst    => lhc_rst,
 

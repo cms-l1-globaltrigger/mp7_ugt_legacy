@@ -14,6 +14,8 @@
 -- $Author: wittmann $
 -- $Revision: 3435 $
 
+-- JW 2015-11-04: included local veto and finor, included prescale_factor_set_index in readout
+
 library ieee;
 use IEEE.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
@@ -42,7 +44,10 @@ entity output_mux is
         algo_in_1   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_in_2   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_in_3   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-        finor_in    : in std_logic;
+        local_finor_in      : in std_logic;
+        local_veto_in       : in std_logic;
+        local_finor_veto_in : in std_logic;
+        prescale_factor     : in std_logic_vector(7 downto 0);
         valid_lo    : in std_logic_vector(15 downto 0);
         valid_hi    : in std_logic_vector(15 downto 0);
         start       : in std_logic;
@@ -55,7 +60,7 @@ architecture arch of output_mux is
 
     signal sValid : std_logic := '0';
 
-
+    signal readout_finor : std_logic_vector(31 downto 0);
     signal s_in0_mux0,s_in0_mux1,s_in0_mux2,s_in0_mux3,s_in0_mux4,s_in0_mux5,s_in0_mux6,s_in0_mux7,s_in0_mux8,s_in0_mux9 : lword;
     signal s_in1_mux0,s_in1_mux1,s_in1_mux2,s_in1_mux3,s_in1_mux4,s_in1_mux5,s_in1_mux6,s_in1_mux7,s_in1_mux8,s_in1_mux9 : lword;
     signal s_in2_mux0,s_in2_mux1,s_in2_mux2,s_in2_mux3,s_in2_mux4,s_in2_mux5,s_in2_mux6,s_in2_mux7,s_in2_mux8,s_in2_mux9 : lword;
@@ -89,8 +94,7 @@ begin
     s_in5_mux0   <=    	(algo_in_1(191 downto 160), sValid, start, strobe);
 
     mux0_i: entity work.mux
-        port map
-        (
+        port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
@@ -113,8 +117,7 @@ begin
     s_in5_mux1   <=    (algo_in_1(383 downto 352), sValid, start, strobe);    -- frame 5   -> algo_before_prescaler 352-383
 
    mux1_i: entity work.mux
-        port map
-        (
+        port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
@@ -137,8 +140,7 @@ begin
     s_in5_mux2   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
 
   mux2_i: entity work.mux
-        port map
-        (
+        port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
@@ -162,8 +164,7 @@ begin
     s_in5_mux3   <=     (algo_in_2(191 downto 160), sValid, start, strobe);
 
     mux3_i: entity work.mux
-        port map
-        (
+        port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
@@ -186,8 +187,7 @@ begin
     s_in5_mux4   <=    (algo_in_2(383 downto 352), sValid, start, strobe);    -- frame 5   -> algo_after_prescaler 352-383
 
    mux4_i: entity work.mux
-        port map
-        (
+        port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(5).ttc_cmd(0), --bcres for quad 5
@@ -210,8 +210,7 @@ begin
     s_in5_mux5   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
 
   mux5_i: entity work.mux
-        port map
-        (
+        port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(5).ttc_cmd(0), --bcres for quad 5
@@ -235,8 +234,7 @@ begin
     s_in5_mux6   <=     (algo_in_3(191 downto 160), sValid, start, strobe);
 
     mux6_i: entity work.mux
-        port map
-        (
+        port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(5).ttc_cmd(0), --bcres for quad 5
@@ -259,8 +257,7 @@ begin
     s_in5_mux7   <=    (algo_in_3(383 downto 352), sValid, start, strobe);    -- frame 5   -> algo_after_finor_mask 352-383
 
    mux7_i: entity work.mux
-        port map
-        (
+        port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(5).ttc_cmd(0), --bcres for quad 5
@@ -275,16 +272,16 @@ begin
 
 
     -- algo_after_finor_mask 384-511 + finor mux
+    readout_finor <=  "000000000000000" & local_finor_veto_in & "0000000" & local_veto_in & "0000000" & local_finor_in; -- local finor, veto and combination
     s_in0_mux8   <=   (algo_in_3(415 downto 384), sValid, start, strobe);    -- frame 0   -> algo_after_finor_mask 384-415
     s_in1_mux8   <=   (algo_in_3(447 downto 416), sValid, start, strobe);    -- frame 1   -> algo_after_finor_mask 416-447
     s_in2_mux8   <=   (algo_in_3(479 downto 448), sValid, start, strobe);    -- frame 2   -> algo_after_finor_mask 448-479
     s_in3_mux8   <=   (algo_in_3(511 downto 480), sValid, start, strobe);    -- frame 3   -> algo_after_finor_mask 480-511
-    s_in4_mux8   <=   ("0000000000000000000000000000000" & finor_in, sValid, start, strobe);     -- frame 4   -> finor
-    s_in5_mux8   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
+    s_in4_mux8   <=   (readout_finor, sValid, start, strobe);     -- frame 4   -> finor
+    s_in5_mux8   <=   (X"000000" & prescale_factor, sValid, start, strobe);            -- frame 5   -> free
 
   mux8_i: entity work.mux
-        port map
-        (
+        port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(6).ttc_cmd(0), --bcres for quad 6
@@ -303,15 +300,14 @@ begin
     -- bc cntr output
 
     s_in0_mux9   <=   (X"00000" & bx_nr, sValid, start, strobe);           -- frame 0   -> frame bx_nr
-    s_in1_mux9   <=   (X"00000" & ctrs(6).bctr, sValid, start, strobe);     -- frame 1   -> mp7 ttc bc cntr for Quad 6!
+    s_in1_mux9   <=   (X"00000" & ctrs(6).bctr, sValid, start, strobe);    -- frame 1   -> mp7 ttc bc cntr for Quad 6!
     s_in2_mux9   <=   (X"00000" & bx_nr_fdl, sValid, start, strobe);       -- frame 5   -> frame bx_nr_fdl
     s_in3_mux9   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
     s_in4_mux9   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
     s_in5_mux9   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
 
   mux9_i: entity work.mux
-        port map
-        (
+        port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(6).ttc_cmd(0), --bcres for quad 6

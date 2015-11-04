@@ -14,7 +14,8 @@
 -- $Revision: 0.1  $
 --------------------------------------------------------------------------------
 --
--- JW 2015-09-17: started development of bgo_sync to synchronize the bgos with 40MHz and avoid timing conflicts
+-- JW 2015-11-04: added bc0 to the sync stage
+-- JW 2015-10-17: started development of bgo_sync to synchronize the bgos with 40MHz and avoid timing conflicts
 --
 
 library ieee;
@@ -32,6 +33,7 @@ entity bgo_sync is
         clk_payload: in std_logic;
         rst_payload: in std_logic;
         ttc_in:      in ttc_cmd_t;
+        bc0_out:     out std_logic;
         ec0_out:     out std_logic;
         oc0_out:     out std_logic;
         resync_out:  out std_logic
@@ -39,22 +41,26 @@ entity bgo_sync is
 end bgo_sync;
 
 architecture rtl of bgo_sync is
+    signal bc0_in            : std_logic;
     signal ec0_in            : std_logic;
-    signal resync_in         : std_logic;
     signal oc0_in            : std_logic;
+    signal resync_in         : std_logic;
 begin
 
+    bc0_in     <= '1' when ctrs(4).ttc_cmd = TTC_BCMD_BC0 else '0';
     ec0_in     <= '1' when ttc_in = TTC_BCMD_EC0 else '0';
-    resync_in  <= '1' when ttc_in = TTC_BCMD_RESYNC else '0';
     oc0_in     <= '1' when ttc_in = TTC_BCMD_OC0 else '0';
+    resync_in  <= '1' when ttc_in = TTC_BCMD_RESYNC else '0';
 
     sync_bgos_p: process(clk_payload, rst_payload, ttc_in)
         begin
         if (rst_payload = '1') then
+            bc0_out <= '0';
             ec0_out <= '0';
             oc0_out <= '0';
             resync_out <= '0';
         elsif (clk_payload'event and clk_payload = '1') then
+            bc0_out <= bc0_in;
             ec0_out <= ec0_in;
             oc0_out <= oc0_in;
             resync_out <= resync_in;

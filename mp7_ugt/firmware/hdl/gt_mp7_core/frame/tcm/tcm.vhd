@@ -14,6 +14,7 @@
 -- $Author: ?
 -- $Revision: 3796 $
 
+-- JW 2015-11-04: included mp7_ttc_decl and used constant TTC_BC0_BX
 -- BR 2015-05-08: done lhc_rst = RST_ACT in processes
 
 library ieee;
@@ -23,6 +24,7 @@ use IEEE.numeric_std.all;
 library work;
 use work.gt_mp7_core_pkg.all;
 use work.rb_pkg.all;
+use work.mp7_ttc_decl.all;
 
 entity tcm is
 	port
@@ -78,7 +80,7 @@ architecture beh of tcm is
 
 begin
 	-- LHC clock domain
-	ctrl_lhc : process(lhc_rst, l, bgos, l1a_sync, bcres_d, sw_reg_in, bcres_d_FDL, bgos_int)
+	ctrl_lhc: process(lhc_rst, l, bgos, l1a_sync, bcres_d, sw_reg_in, bcres_d_FDL, bgos_int)
 		variable v : lhc_reg_t;
 	begin
 		v := l;
@@ -90,7 +92,7 @@ begin
 		then
 			v.started_bx := '1';
 			--v.bx_nr := bx_nr_t(to_unsigned(1, BX_NR_WIDTH));
-            v.bx_nr := bx_nr_t(to_unsigned(3540, BX_NR_WIDTH)); -- JW 08.09.2015  Changed reset value of the bc cntr
+            v.bx_nr := bx_nr_t(to_unsigned(TTC_BC0_BX + 1, BX_NR_WIDTH)); -- JW 08.09.2015  Changed reset value of the bc cntr
 		end if;
 		if l.started_bx = '1'
 		then
@@ -112,8 +114,8 @@ begin
 			end if;
 		end if;
 		if l.started_bx = '1' and unsigned(l.orbit_nr) > 3 and sw_reg_in.cmd_ignbcres = '0' and
-            ((l.bx_nr =  bx_nr_t(to_unsigned(3539, BX_NR_WIDTH)) and bcres_d = '0') or
-            (l.bx_nr /=  bx_nr_t(to_unsigned(3539, BX_NR_WIDTH)) and bcres_d = '1')) -- the bx_nr has to be zero when bcres_d is asserted, otherwise --> error
+            ((l.bx_nr =  bx_nr_t(to_unsigned(TTC_BC0_BX, BX_NR_WIDTH)) and bcres_d = '0') or
+            (l.bx_nr /=  bx_nr_t(to_unsigned(TTC_BC0_BX, BX_NR_WIDTH)) and bcres_d = '1')) -- the bx_nr has to be zero when bcres_d is asserted, otherwise --> error
 -- 			((l.bx_nr = (l.bx_nr'range => '0') and bcres_d = '0') or
 -- 			(l.bx_nr /= (l.bx_nr'range => '0') and bcres_d = '1')) -- the bx_nr has to be zero when bcres_d is asserted, otherwise --> error
 		then
@@ -138,7 +140,7 @@ begin
 		then
 			v.started_bx_FDL := '1';
 			--v.bx_nr_d_FDL := bx_nr_t(to_unsigned(1, BX_NR_WIDTH));
-            v.bx_nr_d_FDL := bx_nr_t(to_unsigned(3540, BX_NR_WIDTH)); -- JW 08.09.2015  Changed reset value of the bc cntr
+            v.bx_nr_d_FDL := bx_nr_t(to_unsigned(TTC_BC0_BX + 1, BX_NR_WIDTH)); -- JW 08.09.2015  Changed reset value of the bc cntr
 		elsif l.started_bx_FDL = '1' then
 			if to_integer(unsigned(l.bx_nr_d_FDL)) = BC_TOP
 			then
@@ -221,7 +223,7 @@ begin
 
 	end process;
 
-	sync_lhc : process(lhc_clk, lhc_rst)
+	sync_lhc: process(lhc_clk, lhc_rst)
 	begin
 -- 		if lhc_rst = '0' then
 		if lhc_rst = RST_ACT then

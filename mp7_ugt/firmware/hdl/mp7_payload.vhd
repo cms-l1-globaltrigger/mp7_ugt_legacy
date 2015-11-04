@@ -15,9 +15,9 @@
 --------------------------------------------------------------------------------
 -- TODO: review the core and and modify it
 --
+-- JW 2015-11-04: added bgo sync stage
 -- HB 2015-09-16: added "ec0_in", "resync_in" and "oc0_in" from "ctrs" for FDL
 -- JW 2015-08-24: modified the core and adapted it for mp7_fw_v1_8_2 usage
---
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -101,14 +101,23 @@ begin
     ipb_clk <= clk;
     ipb_rst <= rst;
     clk240  <= clk_p;
-    bc0_in  <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_BC0 else '0';
-    -- HB 2015-09-16: added "ec0_in" and "oc0_in" from "ctrs" for FDL
-    ec0_in     <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_EC0 else '0';
-    resync_in  <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_RESYNC else '0';
-    oc0_in     <= '1' when ctrs(0).ttc_cmd = TTC_BCMD_OC0 else '0';
+    --bc0_in  <= '1' when ctrs(4).ttc_cmd = TTC_BCMD_BC0 else '0';
 
     lane_data_in  <= d;
     q <= lane_data_out;
+
+    -- HB 2015-09-16: added "ec0_in" and "oc0_in" from "ctrs" for FDL
+    -- JW 2015-10-24: added bgo sync stage to avoid timing issues
+    bgo_sync_i: entity work.bgo_sync
+    port map(
+        clk_payload => lhc_clk,
+        rst_payload => rst_payload,
+        ttc_in      => ctrs(4).ttc_cmd,
+        bc0_out     => bc0_in,
+        ec0_out     => ec0_in,
+        oc0_out     => oc0_in,
+        resync_out  => resync_in
+    );
 
     fabric_i: entity work.ipbus_fabric_sel
     generic map(
@@ -122,111 +131,107 @@ begin
       ipb_from_slaves => ipb_from_slaves
     );
 
-    frame_i : entity work.frame
-        generic map
-        (
-            NR_LANES            => (4 * N_REGION),
-            SIMULATE_DATAPATH   => false
-        )
-        port map
-        (
-            ipb_clk            => ipb_clk,
-            ipb_rst            => ipb_rst,
-            ipb_in             => ipb_to_slaves(C_IPB_GT_MP7_FRAME),
-            ipb_out            => ipb_from_slaves(C_IPB_GT_MP7_FRAME),
+    frame_i: entity work.frame
+    generic map(
+        NR_LANES            => (4 * N_REGION),
+        SIMULATE_DATAPATH   => false
+    )
+    port map(
+        ipb_clk            => ipb_clk,
+        ipb_rst            => ipb_rst,
+        ipb_in             => ipb_to_slaves(C_IPB_GT_MP7_FRAME),
+        ipb_out            => ipb_from_slaves(C_IPB_GT_MP7_FRAME),
 -- ====================Simulator interface===============================
-            lane_data_in_sim	=>  LHC_DATA_NULL,
-            lhc_rst_sim         => '0',
-            rop_rst_sim         => '0',
-            ctrs                => ctrs,
-            trigger_nr_sim          => (others => '0'),
-            orbit_nr_sim            => (others => '0'),
-            bx_nr_sim               => (others => '0'),
-            luminosity_seg_nr_sim   => (others => '0'),
-            event_nr_sim            => (others => '0'),
-            l1a_sim             => '0',
-            daq_oe_sim          => open,
-            daq_stop_sim        => open,
-            daq_data_sim        => open,
+        lane_data_in_sim	=>  LHC_DATA_NULL,
+        lhc_rst_sim         => '0',
+        rop_rst_sim         => '0',
+        ctrs                => ctrs,
+        trigger_nr_sim          => (others => '0'),
+        orbit_nr_sim            => (others => '0'),
+        bx_nr_sim               => (others => '0'),
+        luminosity_seg_nr_sim   => (others => '0'),
+        event_nr_sim            => (others => '0'),
+        l1a_sim             => '0',
+        daq_oe_sim          => open,
+        daq_stop_sim        => open,
+        daq_data_sim        => open,
 -- ====================end of Simulator interface========================
-            clk240             => clk240,
-            lhc_clk            => lhc_clk,
-            lhc_rst_o          => lhc_rst,
-            bc0                => bc0_in,
-            bcres_d_FDL        => bcres_d_FDL,
-            bx_nr_d_FDL        => bx_nr_d_FDL,
-            start_lumisection  => start_lumisection,
-            tp                 => tp_frame,
-            lane_data_in       => lane_data_in,
-            lane_data_out      => lane_data_out,
-            dsmux_lhc_data_o   => dsmux_lhc_data,
-            fdl_status         => fdl_status,
-            prescale_factor_set_index_rop   => prescale_factor_set_index_rop,
-            algo_before_prescaler_rop       => algo_before_prescaler_rop,
-            algo_after_prescaler_rop        => algo_after_prescaler_rop,
-            algo_after_finor_mask_rop       => algo_after_finor_mask_rop,
-            local_finor_rop                 => local_finor_rop,
-            local_veto_rop                  => local_veto_rop, -- HB 2014-10-22: added for ROP
-            finor_rop                       => '0', -- HB 2014-10-30: no total_finor to ROP
-            local_finor_with_veto_2_spy2    => local_finor_with_veto_o -- HB 2014-10-30: to SPY2_FINOR
-        );
+        clk240             => clk240,
+        lhc_clk            => lhc_clk,
+        lhc_rst_o          => lhc_rst,
+        bc0                => bc0_in,
+        bcres_d_FDL        => bcres_d_FDL,
+        bx_nr_d_FDL        => bx_nr_d_FDL,
+        start_lumisection  => start_lumisection,
+        tp                 => tp_frame,
+        lane_data_in       => lane_data_in,
+        lane_data_out      => lane_data_out,
+        dsmux_lhc_data_o   => dsmux_lhc_data,
+        fdl_status         => fdl_status,
+        prescale_factor_set_index_rop   => prescale_factor_set_index_rop,
+        algo_before_prescaler_rop       => algo_before_prescaler_rop,
+        algo_after_prescaler_rop        => algo_after_prescaler_rop,
+        algo_after_finor_mask_rop       => algo_after_finor_mask_rop,
+        local_finor_rop                 => local_finor_rop,
+        local_veto_rop                  => local_veto_rop, -- HB 2014-10-22: added for ROP
+        finor_rop                       => '0', -- HB 2014-10-30: no total_finor to ROP
+        local_finor_with_veto_2_spy2    => local_finor_with_veto_o -- HB 2014-10-30: to SPY2_FINOR
+    );
 
-    gtl_fdl_wrapper_i : entity work.gtl_fdl_wrapper
-       port map
-        (
-            ipb_clk            => ipb_clk,
-            ipb_rst            => ipb_rst,
-            ipb_in             => ipb_to_slaves(C_IPB_GT_MP7_GTLFDL),
-            ipb_out            => ipb_from_slaves(C_IPB_GT_MP7_GTLFDL),
+    gtl_fdl_wrapper_i: entity work.gtl_fdl_wrapper
+    port map(
+        ipb_clk            => ipb_clk,
+        ipb_rst            => ipb_rst,
+        ipb_in             => ipb_to_slaves(C_IPB_GT_MP7_GTLFDL),
+        ipb_out            => ipb_from_slaves(C_IPB_GT_MP7_GTLFDL),
 -- ========================================================
-            lhc_clk            => lhc_clk,
-            lhc_rst            => lhc_rst,
-            lhc_data           => dsmux_lhc_data,
-            bcres              => bcres_d_FDL,
+        lhc_clk            => lhc_clk,
+        lhc_rst            => lhc_rst,
+        lhc_data           => dsmux_lhc_data,
+        bcres              => bcres_d_FDL,
 -- HB 2015-09-17: added "ec0_in", "resync_in" and "oc0_in" from "ctrs" for FDL
-            ec0                => ec0_in,
-            resync             => resync_in,
-            oc0                => oc0_in,
-            lhc_gap            => '0',
-            begin_lumi_section => start_lumisection,
-            bx_nr              => bx_nr_d_FDL,
-            fdl_status         => fdl_status,
-            prescale_factor_set_index_rop   => prescale_factor_set_index_rop,
-            algo_before_prescaler_rop       => algo_before_prescaler_rop,
-            algo_after_prescaler_rop        => algo_after_prescaler_rop,
-            algo_after_finor_mask_rop       => algo_after_finor_mask_rop,
-            local_finor_rop         => local_finor_rop,
-            local_veto_rop          => local_veto_rop,
-            finor_2_mezz_lemo      => finor_2_mezz_lemo,
-            veto_2_mezz_lemo      =>  veto_2_mezz_lemo,
-            local_finor_with_veto_o => local_finor_with_veto_o
-        );
+        ec0                => ec0_in,
+        resync             => resync_in,
+        oc0                => oc0_in,
+        lhc_gap            => '0',
+        begin_lumi_section => start_lumisection,
+        bx_nr              => bx_nr_d_FDL,
+        fdl_status         => fdl_status,
+        prescale_factor_set_index_rop   => prescale_factor_set_index_rop,
+        algo_before_prescaler_rop       => algo_before_prescaler_rop,
+        algo_after_prescaler_rop        => algo_after_prescaler_rop,
+        algo_after_finor_mask_rop       => algo_after_finor_mask_rop,
+        local_finor_rop         => local_finor_rop,
+        local_veto_rop          => local_veto_rop,
+        finor_2_mezz_lemo      => finor_2_mezz_lemo,
+        veto_2_mezz_lemo      =>  veto_2_mezz_lemo,
+        local_finor_with_veto_o => local_finor_with_veto_o
+    );
 
-    tp_mux_i : entity work.tp_mux
-        port map
-        (
-            clk             => ipb_clk,
-            rst             => ipb_rst,
-            ipb_in              => ipb_to_slaves(C_IPB_GT_MP7_TP_MUX),
-            ipb_out             => ipb_from_slaves(C_IPB_GT_MP7_TP_MUX),
-            clk_payload         => lhc_clk,
-            rst_payload         => lhc_rst,
-            clk_p               => clk240,
-            ctrs                => ctrs,
-            bc0                 => bc0_in,
-            ec0                 => ec0_in,
-            oc0                 => oc0_in,
-            resync              => resync_in,
-            finor               => finor_2_mezz_lemo,
-            veto                =>  veto_2_mezz_lemo,
-            out0            => tp0,
-            out1            => tp1,
-            out2            => tp2
-        );
+    tp_mux_i: entity work.tp_mux
+    port map(
+        clk             => ipb_clk,
+        rst             => ipb_rst,
+        ipb_in              => ipb_to_slaves(C_IPB_GT_MP7_TP_MUX),
+        ipb_out             => ipb_from_slaves(C_IPB_GT_MP7_TP_MUX),
+        clk_payload         => lhc_clk,
+        rst_payload         => lhc_rst,
+        clk_p               => clk240,
+        ctrs                => ctrs,
+        bc0                 => bc0_in,
+        ec0                 => ec0_in,
+        oc0                 => oc0_in,
+        resync              => resync_in,
+        finor               => finor_2_mezz_lemo,
+        veto                =>  veto_2_mezz_lemo,
+        out0            => tp0,
+        out1            => tp1,
+        out2            => tp2
+    );
 
-    gpio(0) <= tp0; --finor_2_mezz_lemo;
-    gpio(1) <= tp1; --veto_2_mezz_lemo;
-    gpio(2) <= tp2; --bc0_in;
+    gpio(0) <= tp0; -- per default: finor_2_mezz_lemo
+    gpio(1) <= tp1; -- per default: finor_2_mezz_lemo
+    gpio(2) <= tp2; -- per default: finor_2_mezz_lemo
     gpio_en(0) <= '1'; --enable output 0
     gpio_en(1) <= '1'; --enable output 1
     gpio_en(2) <= '1'; --enable output 2

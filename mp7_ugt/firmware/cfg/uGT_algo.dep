@@ -29,6 +29,7 @@
 # addrtab -t ugmt_serdes.xml
 src lhc_data_pkg.vhd
 src gt_mp7_top_pkg.vhd
+src bgo_sync.vhd
 src gt_mp7_core/gt_mp7_core_pkg.vhd
 src gt_mp7_core/tp_mux/tp_mux.vhd
 src gt_mp7_core/tp_mux/tp_mux_address_decoder.vhd
@@ -59,6 +60,7 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/eta_windows_comp.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_obj_vs_obj.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_v2.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_v3.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/invariant_mass.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd

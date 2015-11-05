@@ -45,6 +45,7 @@ src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_slice.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/eta_comp_signed.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators_v2.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_obj_vs_obj.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_lib.vhd
@@ -54,6 +55,7 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators_v2.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/phi_windows_comp.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_v2.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_v3.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_comparators.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/p_m_2_bx_pipeline.vhd

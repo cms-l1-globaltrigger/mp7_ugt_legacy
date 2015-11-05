@@ -8,10 +8,10 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
--- $HeadURL: https://svn.cern.ch/reps/cactus/trunk/cactusupgrades/projects/ugt/mp7_ugt/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_v2.vhd $
--- $Date: 2015-09-29 15:54:51 +0200 (Tue, 29 Sep 2015) $
--- $Author: hbergaue $
--- $Revision: 39662 $
+-- $HeadURL$
+-- $Date$
+-- $Author$
+-- $Revision$
 --------------------------------------------------------------------------------
 
 -- Desription:

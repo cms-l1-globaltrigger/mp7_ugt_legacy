@@ -86,8 +86,7 @@ entity muon_muon_correlation_condition is
 
         INV_MASS_PRECISION: positive;
 	INV_MASS_PT_PRECISION : positive;
-	pt1_width: positive; 
-	pt2_width: positive; 
+	pt_width: positive; 
 	INV_MASS_COSH_COS_PRECISION : positive;
 	cosh_cos_width: positive	
     );
@@ -113,8 +112,8 @@ architecture rtl of muon_muon_correlation_condition is
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
--- fixed to 2 for current implementation of correlation conditions
-    constant nr_templates: positive := 2;  
+-- fixed for current implementation of correlation conditions
+    constant nr_templates: positive := 1;  
 
     type muon_object_vs_template_array is array (0 to NR_MUON_OBJECTS-1, 1 to nr_templates) of std_logic;
     type diff_comp_array is array (0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic;
@@ -180,16 +179,16 @@ begin
 			generic map(
 			    upper_limit => inv_mass_upper_limit,
 			    lower_limit => inv_mass_lower_limit,
-			    pt1_width => pt1_width, 
-			    pt2_width => pt2_width, 
+			    pt1_width => pt_width, 
+			    pt2_width => pt_width, 
 			    cosh_cos_width => cosh_cos_width,
 			    INV_MASS_PRECISION => INV_MASS_PRECISION,
 			    INV_MASS_PT_PRECISION => INV_MASS_PT_PRECISION,
 			    INV_MASS_COSH_COS_PRECISION => INV_MASS_COSH_COS_PRECISION
 			)
 			port map(
-			    pt1 => pt1(i)(pt1_width-1 downto 0),
-			    pt2 => pt2(j)(pt2_width-1 downto 0),
+			    pt1 => pt1(i)(pt_width-1 downto 0),
+			    pt2 => pt2(j)(pt_width-1 downto 0),
 			    cosh_deta => cosh_deta(i,j),
 			    cos_dphi => cos_dphi(i,j),
 			    inv_mass_comp => inv_mass_comp(i,j)
@@ -199,7 +198,7 @@ begin
         end generate delta_l_2;
     end generate delta_l_1;
 
--- Pipeline stage for diff_eta_comp, diff_phi_comp and dr_comp
+-- Pipeline stage for diff_eta_comp, diff_phi_comp, dr_comp and inv_mass_comp
     diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp, inv_mass_comp)
         begin
             if obj_vs_templ_pipeline_stage = false then 

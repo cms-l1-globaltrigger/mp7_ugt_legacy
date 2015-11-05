@@ -244,7 +244,7 @@ begin
 	end generate delta_l_2;
     end generate delta_l_1;
     
--- Pipeline stage for diff_eta_comp, diff_phi_comp and dr_comp
+-- Pipeline stage for diff_eta_comp, diff_phi_comp, dr_comp and inv_mass_comp
     diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp, inv_mass_comp)
         begin
             if obj_vs_templ_pipeline_stage = false then 

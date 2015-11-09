@@ -44,7 +44,8 @@ entity invariant_mass is
         pt2 : in std_logic_vector(pt2_width-1 downto 0);
 	cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
-        inv_mass_comp : out std_logic
+        inv_mass_comp : out std_logic;
+        sim_inv_mass_sq_div2 : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0)
     );
 end invariant_mass;
 
@@ -69,6 +70,7 @@ architecture rtl of invariant_mass is
 
 -- HB 2015-10-01: calculation of invariant mass with formular M**2/2=pt1*pt2*(cosh(eta1-eta2)-cos(phi1-phi2)
     inv_mass_sq_div2 <= pt1 * pt2 * (cosh_deta - cos_dphi);
+    sim_inv_mass_sq_div2 <= inv_mass_sq_div2;
 
 -- HB 2015-10-01: comparison
     inv_mass_comp <= '1' when (inv_mass_sq_div2 >= lower_limit_vector and inv_mass_sq_div2 <= upper_limit_vector) else '0';

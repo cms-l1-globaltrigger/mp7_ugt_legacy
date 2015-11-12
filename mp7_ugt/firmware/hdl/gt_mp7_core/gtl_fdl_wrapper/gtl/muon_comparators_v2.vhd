@@ -30,7 +30,6 @@ use work.gtl_pkg.all;
 
 entity muon_comparators_v2 is
 	generic	(
---         d_s_i: d_s_i_muon_record; -- "data structure index" array
         pt_ge_mode : boolean;
         pt_threshold: std_logic_vector;
         eta_full_range : boolean;

@@ -17,6 +17,9 @@
 -- Desription:
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and muon.
 
+-- Version history:
+-- HB 2015-11-11: first design
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
@@ -140,71 +143,13 @@ architecture rtl of calo_muon_correlation_condition is
 
 begin
 
--- Instance of comparators for calorimeter objects. All permutations between objects and requirements.
-    calo_obj_l: for i in 0 to nr_calo_objects-1 generate
-	calo_comp_i: entity work.calo_comparators_v2
-	    generic map(et_ge_mode_calo, obj_type_calo,
-                et_threshold_calo,
-                eta_full_range_calo,
-                eta_w1_upper_limit_calo,
-                eta_w1_lower_limit_calo,
-                eta_w2_ignore_calo,
-                eta_w2_upper_limit_calo,
-                eta_w2_lower_limit_calo,
-                phi_full_range_calo,
-                phi_w1_upper_limit_calo,
-                phi_w1_lower_limit_calo,
-                phi_w2_ignore_calo,
-                phi_w2_upper_limit_calo,
-                phi_w2_lower_limit_calo,
-                iso_lut_calo
-            )
-            port map(calo_data_i(i), calo_obj_vs_templ(i,1));
-    end generate calo_obj_l;
-
--- Instance of comparators for muon objects. All permutations between objects and requirements..
-    muon_obj_l: for i in 0 to NR_MUON_OBJECTS-1 generate
-        muon_comp_i: entity work.muon_comparators_v2
-            generic map(pt_ge_mode_muon,
-                pt_threshold_muon(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
-                eta_full_range_muon,
-                eta_w1_upper_limit_muon(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                eta_w1_lower_limit_muon(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                eta_w2_ignore_muon,
-                eta_w2_upper_limit_muon(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                eta_w2_lower_limit_muon(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                phi_full_range_muon,
-                phi_w1_upper_limit_muon(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                phi_w1_lower_limit_muon(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                phi_w2_ignore_muon,
-                phi_w2_upper_limit_muon(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                phi_w2_lower_limit_muon(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                requested_charge_muon,
-                qual_lut_muon,
-                iso_lut_muon
-                )
-            port map(muon_data_i(i), muon_obj_vs_templ(i,1));
-     end generate muon_obj_l;
-
--- Pipeline stage for obj_vs_templ
-    obj_vs_templ_pipeline_p: process(lhc_clk, calo_obj_vs_templ, muon_obj_vs_templ)
-        begin
-            if obj_vs_templ_pipeline_stage = false then 
-                calo_obj_vs_templ_pipe <= calo_obj_vs_templ;
-                muon_obj_vs_templ_pipe <= muon_obj_vs_templ;
-            else
-                if (lhc_clk'event and lhc_clk = '1') then
-                    calo_obj_vs_templ_pipe <= calo_obj_vs_templ;
-                    muon_obj_vs_templ_pipe <= muon_obj_vs_templ;
-                end if;
-            end if;
-    end process;
-    
+-- Conversion of limits to integer.
     diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**deta_dphi_limits_precision));
     diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**deta_dphi_limits_precision));
     diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**deta_dphi_limits_precision));
     diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**deta_dphi_limits_precision));
 
+-- Comparison with limits.
     delta_l_1: for i in 0 to nr_calo_objects-1 generate 
 	delta_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
 	    deta_diff_i: if deta_cut = true generate
@@ -283,6 +228,66 @@ begin
             end if;
     end process;
 
+-- Instance of comparators for calorimeter objects.
+    calo_obj_l: for i in 0 to nr_calo_objects-1 generate
+	calo_comp_i: entity work.calo_comparators_v2
+	    generic map(et_ge_mode_calo, obj_type_calo,
+                et_threshold_calo,
+                eta_full_range_calo,
+                eta_w1_upper_limit_calo,
+                eta_w1_lower_limit_calo,
+                eta_w2_ignore_calo,
+                eta_w2_upper_limit_calo,
+                eta_w2_lower_limit_calo,
+                phi_full_range_calo,
+                phi_w1_upper_limit_calo,
+                phi_w1_lower_limit_calo,
+                phi_w2_ignore_calo,
+                phi_w2_upper_limit_calo,
+                phi_w2_lower_limit_calo,
+                iso_lut_calo
+            )
+            port map(calo_data_i(i), calo_obj_vs_templ(i,1));
+    end generate calo_obj_l;
+
+-- Instance of comparators for muon objects.
+    muon_obj_l: for i in 0 to NR_MUON_OBJECTS-1 generate
+        muon_comp_i: entity work.muon_comparators_v2
+            generic map(pt_ge_mode_muon,
+                pt_threshold_muon(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
+                eta_full_range_muon,
+                eta_w1_upper_limit_muon(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                eta_w1_lower_limit_muon(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                eta_w2_ignore_muon,
+                eta_w2_upper_limit_muon(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                eta_w2_lower_limit_muon(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                phi_full_range_muon,
+                phi_w1_upper_limit_muon(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                phi_w1_lower_limit_muon(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                phi_w2_ignore_muon,
+                phi_w2_upper_limit_muon(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                phi_w2_lower_limit_muon(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                requested_charge_muon,
+                qual_lut_muon,
+                iso_lut_muon
+                )
+            port map(muon_data_i(i), muon_obj_vs_templ(i,1));
+     end generate muon_obj_l;
+
+-- Pipeline stage for obj_vs_templ
+    obj_vs_templ_pipeline_p: process(lhc_clk, calo_obj_vs_templ, muon_obj_vs_templ)
+        begin
+            if obj_vs_templ_pipeline_stage = false then 
+                calo_obj_vs_templ_pipe <= calo_obj_vs_templ;
+                muon_obj_vs_templ_pipe <= muon_obj_vs_templ;
+            else
+                if (lhc_clk'event and lhc_clk = '1') then
+                    calo_obj_vs_templ_pipe <= calo_obj_vs_templ;
+                    muon_obj_vs_templ_pipe <= muon_obj_vs_templ;
+                end if;
+            end if;
+    end process;
+    
 -- "Matrix" of permutations in an and-or-structure.
 
     matrix_deta_dphi_dr_p: process(calo_obj_vs_templ_pipe, muon_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe)

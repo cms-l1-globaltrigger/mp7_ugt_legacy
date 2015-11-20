@@ -429,69 +429,28 @@ begin
             end if;
         end process;
         
--- HB 2015-11-12: Charge correlation for different Bx. TBD and implemented in gtl_module.vhd !!!
---         -- Charge correlation comparison
---         charge_double_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
---             charge_double_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
---                 charge_double_if: if j/=i generate
---                     charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
---                                                '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
---                                                '1' when requested_charge_correlation = "ig" else
---                                                '0';
---                 end generate charge_double_if;
---             end generate charge_double_l_2;
---         end generate charge_double_l_1;
--- 
---         -- Pipeline stage for charge correlation comparison
---         charge_comp_2_pipeline_p: process(lhc_clk, charge_comp_double)
---             begin
---                 if obj_vs_templ_pipeline_stage = false then 
---                     charge_comp_double_pipe <= charge_comp_double;
---                 else
---                     if (lhc_clk'event and lhc_clk = '1') then
---                         charge_comp_double_pipe <= charge_comp_double;
---                     end if;
---                 end if;
---         end process;
--- 
---         -- "Matrix" of permutations in an and-or-structure.
---         matrix_p: process(muon1_obj_vs_templ_pipe, muon2_obj_vs_templ_pipe, charge_comp_double_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, inv_mass_comp_pipe)
---             variable index : integer := 0;
---             variable obj_vs_templ_vec : std_logic_vector((NR_MUON_OBJECTS*(NR_MUON_OBJECTS)) downto 1) := (others => '0');
---             variable condition_and_or_tmp : std_logic := '0';
---         begin
---             index := 0;
---             obj_vs_templ_vec := (others => '0');
---             condition_and_or_tmp := '0';
---             for i in 0 to NR_MUON_OBJECTS-1 loop 
---                 for j in 0 to NR_MUON_OBJECTS-1 loop
---                     if j/=i then
--- 			if deta_cut = true and dphi_cut = false and dr_cut = false and inv_mass_cut = false then
--- 			    index := index + 1;
--- 			    obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j);
--- 			elsif deta_cut = false and dphi_cut = true and dr_cut = false and inv_mass_cut = false then
--- 			    index := index + 1;
--- 			    obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and diff_phi_comp_pipe(i,j);
--- 			elsif deta_cut = false and dphi_cut = false and dr_cut = true and inv_mass_cut = false then
--- 			    index := index + 1;
--- 			    obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and dr_comp_pipe(i,j);
--- 			elsif deta_cut = false and dphi_cut = false and dr_cut = false and inv_mass_cut = true then
--- 			    index := index + 1;
--- 			    obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and inv_mass_comp_pipe(i,j);
--- 			elsif deta_cut = true and dphi_cut = true and dr_cut = false and inv_mass_cut = false then
--- 			    index := index + 1;
--- 			    obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j);
--- 			end if;
--- 		    end if;
--- 		end loop;
--- 	    end loop;
--- 	    for i in 1 to index loop 
--- 		-- ORs for matrix
--- 		condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
--- 	    end loop;
--- 	    condition_and_or <= condition_and_or_tmp;
--- 	end process matrix_p;
+	-- Charge correlation comparison
+        charge_double_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
+            charge_double_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
+                charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
+                                           '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
+                                           '1' when requested_charge_correlation = "ig" else
+                                           '0';
+            end generate charge_double_l_2;
+        end generate charge_double_l_1;
 
+        -- Pipeline stage for charge correlation comparison
+        charge_comp_2_pipeline_p: process(lhc_clk, charge_comp_double)
+            begin
+                if obj_vs_templ_pipeline_stage = false then 
+                    charge_comp_double_pipe <= charge_comp_double;
+                else
+                    if (lhc_clk'event and lhc_clk = '1') then
+                        charge_comp_double_pipe <= charge_comp_double;
+                    end if;
+                end if;
+        end process;
+         
 	-- "Matrix" of permutations in an and-or-structure.
         matrix_p: process(muon1_obj_vs_templ_pipe, muon2_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, inv_mass_comp_pipe)
             variable index : integer := 0;

@@ -16,9 +16,8 @@
 
 -- Desription:
 -- Condition module for muon objects.
--- All condition types ("single", "double", "double_wsc", "triple" and "quad") are implemented in this module,
--- selected by nr_templates and double_wsc.
--- No registers for "pt" and "quality", not need anymore.
+-- All condition types ("single", "double", "triple" and "quad") are implemented in this module,
+-- selected by nr_templates.
 -- Charge correlation selection implemented with "LS" and "OS" (charge correlation calculated in muon_charge_correlations.vhd)
 
 -- Version history:
@@ -37,7 +36,6 @@ use work.gtl_pkg.all;
 entity muon_conditions_v3 is
     generic (
         nr_templates: positive;
---         double_wsc: boolean;
         pt_ge_mode : boolean;
         pt_thresholds: muon_templates_array;
         eta_full_range : muon_templates_boolean_array;
@@ -56,10 +54,6 @@ entity muon_conditions_v3 is
         qual_luts: muon_templates_quality_array;
         iso_luts: muon_templates_iso_array;
         requested_charge_correlation: string(1 to 2)
---         diff_eta_upper_limit: natural;
---         diff_eta_lower_limit: natural;
---         diff_phi_upper_limit: natural;
---         diff_phi_lower_limit: natural
     );
     port(
         lhc_clk : in std_logic;
@@ -70,8 +64,6 @@ entity muon_conditions_v3 is
         os_charcorr_triple: in muon_charcorr_triple_array;
         ls_charcorr_quad: in muon_charcorr_quad_array;
         os_charcorr_quad: in muon_charcorr_quad_array;
---         diff_eta : in diff_2dim_integer_array;
---         diff_phi : in diff_2dim_integer_array;
         condition_o : out std_logic
     );
 end muon_conditions_v3;
@@ -230,38 +222,6 @@ charge_quad_i: if nr_templates = 3 generate
     end process;
 end generate charge_quad_i;
 
---************************************************************
-
--- -- HB, 18-07-2013: changed to windows comparators and added one pipeline stage
--- diff_double_wsc_i: if (nr_templates = 2 and double_wsc = true) generate
---     delta_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
---         delta_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
---             delta_if: if j/=i generate
---                     -- "windows"-comparator for difference in eta and phi for all object combinations
---                     -- differences are interpreted as unsigned values
---                     diff_eta_comp(i,j) <= '1' when diff_eta(i,j) >= diff_eta_lower_limit and diff_eta(i,j) <= diff_eta_upper_limit else '0';
---                     diff_phi_comp(i,j) <= '1' when diff_phi(i,j) >= diff_phi_lower_limit and diff_phi(i,j) <= diff_phi_upper_limit else '0';
---             end generate delta_if;
---         end generate delta_l_2;
---     end generate delta_l_1;
--- 
--- -- Pipeline stage for diff_eta_comp and diff_phi_comp
---     diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp)
---         begin
---             if obj_vs_templ_pipeline_stage = false then 
---                 diff_eta_comp_pipe <= diff_eta_comp;
---                 diff_phi_comp_pipe <= diff_phi_comp;
---             else
---                 if (lhc_clk'event and lhc_clk = '1') then
---                     diff_eta_comp_pipe <= diff_eta_comp;
---                     diff_phi_comp_pipe <= diff_phi_comp;
---                 end if;
---             end if;
---     end process;
--- 
--- end generate diff_double_wsc_i;
---*************************************************************************
-
 -- "Matrix" of permutations in an and-or-structure.
 -- Selection of muon condition types ("single", "double", "double_wsc", "triple" and "quad") by 'nr_templates' and 'double_wsc'.
 
@@ -315,33 +275,6 @@ matrix_double_i: if nr_templates = 2 generate
     end process matrix_double_p;
 end generate matrix_double_i;
 
--- -- Condition type: "double_wsc".
--- matrix_double_wsc_i: if (nr_templates = 2 and double_wsc = true) generate
---     matrix_double_wsc_p: process(obj_vs_templ_pipe, charge_comp_double_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe)
---         variable index : integer := 0;
---         variable obj_vs_templ_vec : std_logic_vector((NR_MUON_OBJECTS*(NR_MUON_OBJECTS-1)) downto 1) := (others => '0');
---         variable condition_and_or_tmp : std_logic := '0';
---     begin
---         index := 0;
---         obj_vs_templ_vec := (others => '0');
---         condition_and_or_tmp := '0';
---         for i in 0 to NR_MUON_OBJECTS-1 loop 
---             for j in 0 to NR_MUON_OBJECTS-1 loop
---                 if j/=i then
---                     index := index + 1;
---                     -- AND equations for matrix
---                     obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j);
---                 end if;
---             end loop;
---         end loop;
---         for i in 1 to index loop 
---             -- ORs for matrix
---             condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
---         end loop;
---         condition_and_or <= condition_and_or_tmp;
---     end process matrix_double_wsc_p;
--- end generate matrix_double_wsc_i;
--- 
 -- Condition type: "triple".
 matrix_triple_i: if nr_templates = 3 generate
     matrix_triple_p: process(obj_vs_templ_pipe, charge_comp_triple_pipe)

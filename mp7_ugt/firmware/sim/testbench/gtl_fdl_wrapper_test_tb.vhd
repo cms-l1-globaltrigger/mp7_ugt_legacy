@@ -107,8 +107,8 @@ begin
 	variable algo_error_cnt : integer := 0;
 	variable finor_error_cnt : integer := 0;
 
-        file testvector_file : text open read_mode is "/home/bergauer/cactus/trunk/cactusprojects/ugt/menu/2015/L1Menu_EgMuonCorrelation_2015_hb_inv_mass/testvectors/L1Menu_EgMuonCorrelation_2015_hb_inv_mass.txt";
-        file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_L1Menu_EgMuonCorrelation_2015_hb_inv_mass.txt";
+        file testvector_file : text open read_mode is "/home/bergauer/cactus/trunk/cactusprojects/ugt/menu/2015/L1Menu_Correlation_2015_hb_test/testvectors/L1Menu_Correlation_2015_hb_test.txt";
+        file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_L1Menu_Correlation_2015_hb_test.txt";
 
     function str_to_slv(str : string) return std_logic_vector is
       alias str_norm : string(1 to str'length) is str;

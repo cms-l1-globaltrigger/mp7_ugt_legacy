@@ -51,8 +51,8 @@ entity muon_muon_correlation_condition is
         phi_w2_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         phi_w2_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         requested_charge_muon1: string(1 to 3);
-        qual_lut_muon1: std_logic_vector(2**(d_s_i_muon.qual_high-d_s_i_muon.qual_low+1)-1 downto 0);
-        iso_lut_muon1: std_logic_vector(2**(d_s_i_muon.iso_high-d_s_i_muon.iso_low+1)-1 downto 0);
+        qual_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0);
+        iso_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0);
         
         pt_ge_mode_muon2: boolean;
         pt_threshold_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
@@ -69,8 +69,8 @@ entity muon_muon_correlation_condition is
         phi_w2_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         phi_w2_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         requested_charge_muon2: string(1 to 3);
-        qual_lut_muon2: std_logic_vector(2**(d_s_i_muon.qual_high-d_s_i_muon.qual_low+1)-1 downto 0);
-        iso_lut_muon2: std_logic_vector(2**(d_s_i_muon.iso_high-d_s_i_muon.iso_low+1)-1 downto 0);
+        qual_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0);
+        iso_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0);
         
         requested_charge_correlation: string(1 to 2);
 
@@ -80,12 +80,12 @@ entity muon_muon_correlation_condition is
         diff_phi_upper_limit: diff_phi_range_real;
         diff_phi_lower_limit: diff_phi_range_real;
 
-        deta_dphi_limits_precision: positive;
-
         dr_upper_limit: dr_squared_range_real;
         dr_lower_limit: dr_squared_range_real;
         
-        dr_limits_precision: positive;
+	DETA_DPHI_VECTOR_WIDTH: positive ;
+-- 	DR_PRECISION : positive;
+	DETA_DPHI_PRECISION: positive;
 
         inv_mass_upper_limit: real;
         inv_mass_lower_limit: real;
@@ -102,8 +102,8 @@ entity muon_muon_correlation_condition is
         muon2_data_i: in muon_objects_array;
         ls_charcorr_double: in muon_charcorr_double_array;
         os_charcorr_double: in muon_charcorr_double_array;
-        diff_eta: in diff_2dim_integer_array;
-        diff_phi: in diff_2dim_integer_array;
+        diff_eta: in deta_dphi_vector_array;
+        diff_phi: in deta_dphi_vector_array;
         pt1 : in diff_inputs_array;
         pt2 : in diff_inputs_array;
 	cosh_deta : in muon_cosh_cos_vector_array;
@@ -128,11 +128,11 @@ architecture rtl of muon_muon_correlation_condition is
     signal charge_comp_double_pipe : muon_charcorr_double_array;
 --***************************************************************
 
-    signal diff_eta_upper_limit_int : integer;
-    signal diff_eta_lower_limit_int : integer;
+    signal diff_eta_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
+    signal diff_eta_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     
-    signal diff_phi_upper_limit_int : integer;
-    signal diff_phi_lower_limit_int : integer;
+    signal diff_phi_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
+    signal diff_phi_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     
     signal obj_vs_templ : object_vs_template_array;
     signal obj_vs_templ_pipe : object_vs_template_array;
@@ -154,11 +154,11 @@ architecture rtl of muon_muon_correlation_condition is
 begin
 
     -- *** section: CUTs - begin ***************************************************************************************
-    -- Conversion of limits to integer.
-    diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**deta_dphi_limits_precision));
-    diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**deta_dphi_limits_precision));
-    diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**deta_dphi_limits_precision));
-    diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**deta_dphi_limits_precision));
+    -- Conversion of limits to std_logic_vector.
+    diff_eta_upper_limit_int <= conv_std_logic_vector(integer(diff_eta_upper_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
+    diff_eta_lower_limit_int <= conv_std_logic_vector(integer(diff_eta_lower_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
+    diff_phi_upper_limit_int <= conv_std_logic_vector(integer(diff_phi_upper_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
+    diff_phi_lower_limit_int <= conv_std_logic_vector(integer(diff_phi_lower_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
 
     -- Comparison with limits.
     delta_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
@@ -171,17 +171,19 @@ begin
 		    diff_phi_comp(i,j) <= '1' when diff_phi(i,j) >= diff_phi_lower_limit_int and diff_phi(i,j) <= diff_phi_upper_limit_int else '0';
 		end generate dphi_diff_i;
 		dr_i: if dr_cut = true generate
-		    dr_calculator_i: entity work.dr_calculator
-			generic map(
-			    dr_upper_limit => dr_upper_limit,
-			    dr_lower_limit => dr_lower_limit,
-			    dr_limits_precision => dr_limits_precision
-			)
-			port map(
-			    diff_eta => diff_eta(i,j),
-			    diff_phi => diff_phi(i,j),
-			    dr_comp => dr_comp(i,j)
-			);
+		dr_calculator_i: entity work.dr_calculator
+		    generic map(
+			upper_limit => dr_upper_limit,
+			lower_limit => dr_lower_limit,
+			DETA_DPHI_VECTOR_WIDTH => DETA_DPHI_VECTOR_WIDTH,
+-- 			DR_PRECISION => DR_PRECISION,
+			DETA_DPHI_PRECISION => DETA_DPHI_PRECISION
+		    )
+		    port map(
+			diff_eta => diff_eta(i,j),
+			diff_phi => diff_phi(i,j),
+			dr_comp => dr_comp(i,j)
+		    );
 		end generate dr_i;
 		inv_mass_i: if inv_mass_cut = true generate
 		    inv_mass_calculator_i: entity work.invariant_mass
@@ -259,7 +261,7 @@ begin
                     phi_w1_lower_limit_muon1(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
                     phi_w2_ignore_muon1,
                     phi_w2_upper_limit_muon1(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                    phi_w2_lower_limit_muon1(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                    phi_w2_lower_limit_muon1(D_S_I_MUON.phi_high-D_S_I_MUON_V2.phi_low downto 0),
                     requested_charge_muon1,
                     qual_lut_muon1,
                     iso_lut_muon1
@@ -270,19 +272,19 @@ begin
         obj_templ2_l_l: for i in 0 to NR_MUON_OBJECTS-1 generate
             obj_templ2_comp_i: entity work.muon_comparators_v2
                 generic map(pt_ge_mode_muon2,
-                    pt_threshold_muon2(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
+                    pt_threshold_muon2(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low downto 0),
                     eta_full_range_muon2,
-                    eta_w1_upper_limit_muon2(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                    eta_w1_lower_limit_muon2(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                    eta_w1_upper_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                    eta_w1_lower_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
                     eta_w2_ignore_muon2,
-                    eta_w2_upper_limit_muon2(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                    eta_w2_lower_limit_muon2(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                    eta_w2_upper_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                    eta_w2_lower_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
                     phi_full_range_muon2,
-                    phi_w1_upper_limit_muon2(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                    phi_w1_lower_limit_muon2(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                    phi_w1_upper_limit_muon2(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
+                    phi_w1_lower_limit_muon2(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
                     phi_w2_ignore_muon2,
-                    phi_w2_upper_limit_muon2(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                    phi_w2_lower_limit_muon2(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                    phi_w2_upper_limit_muon2(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
+                    phi_w2_lower_limit_muon2(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
                     requested_charge_muon2,
                     qual_lut_muon2,
                     iso_lut_muon2
@@ -372,19 +374,19 @@ begin
         muon1_templ1_l: for i in 0 to NR_MUON_OBJECTS-1 generate
             muon1_templ1_l_comp_i: entity work.muon_comparators_v2
                 generic map(pt_ge_mode_muon1,
-                    pt_threshold_muon1(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
+                    pt_threshold_muon1(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low downto 0),
                     eta_full_range_muon1,
-                    eta_w1_upper_limit_muon1(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                    eta_w1_lower_limit_muon1(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                    eta_w1_upper_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                    eta_w1_lower_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
                     eta_w2_ignore_muon1,
-                    eta_w2_upper_limit_muon1(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                    eta_w2_lower_limit_muon1(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                    eta_w2_upper_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                    eta_w2_lower_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
                     phi_full_range_muon1,
-                    phi_w1_upper_limit_muon1(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                    phi_w1_lower_limit_muon1(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                    phi_w1_upper_limit_muon1(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
+                    phi_w1_lower_limit_muon1(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
                     phi_w2_ignore_muon1,
-                    phi_w2_upper_limit_muon1(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                    phi_w2_lower_limit_muon1(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                    phi_w2_upper_limit_muon1(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
+                    phi_w2_lower_limit_muon1(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
                     requested_charge_muon1,
                     qual_lut_muon1,
                     iso_lut_muon1
@@ -395,19 +397,19 @@ begin
         muon2_templ1_l: for i in 0 to NR_MUON_OBJECTS-1 generate
             muon2_templ1_comp_i: entity work.muon_comparators_v2
                 generic map(pt_ge_mode_muon2,
-                    pt_threshold_muon2(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
+                    pt_threshold_muon2(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low downto 0),
                     eta_full_range_muon2,
-                    eta_w1_upper_limit_muon2(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                    eta_w1_lower_limit_muon2(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                    eta_w1_upper_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                    eta_w1_lower_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
                     eta_w2_ignore_muon2,
-                    eta_w2_upper_limit_muon2(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-                    eta_w2_lower_limit_muon2(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+                    eta_w2_upper_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                    eta_w2_lower_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
                     phi_full_range_muon2,
-                    phi_w1_upper_limit_muon2(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                    phi_w1_lower_limit_muon2(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                    phi_w1_upper_limit_muon2(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
+                    phi_w1_lower_limit_muon2(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
                     phi_w2_ignore_muon2,
-                    phi_w2_upper_limit_muon2(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-                    phi_w2_lower_limit_muon2(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
+                    phi_w2_upper_limit_muon2(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
+                    phi_w2_lower_limit_muon2(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
                     requested_charge_muon2,
                     qual_lut_muon2,
                     iso_lut_muon2

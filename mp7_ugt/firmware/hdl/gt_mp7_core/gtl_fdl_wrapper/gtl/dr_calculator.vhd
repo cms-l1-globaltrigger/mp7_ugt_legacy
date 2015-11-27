@@ -18,10 +18,12 @@
 -- Calculation of Delta-R and comparison with limits 
 
 -- Version history:
+-- HB 2015-11-26: changed to calculation with std_logic_vector
 -- HB 2015-08-24: first design
 
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
@@ -29,62 +31,40 @@ use work.gtl_pkg.all;
 entity dr_calculator is
     generic (
 -- HB 2015-09-21: TM proposed two thresholds for DR
-	dr_upper_limit: dr_squared_range_real := 15.0; -- threshold for ΔR (see formula below) in real values
-	dr_lower_limit: dr_squared_range_real := 10.0; -- threshold for ΔR (see formula below) in real values
-	dr_limits_precision: positive := 3 -- 3 => max. number, higher numbers exceed 32 bit integer values !!!
+	upper_limit: dr_squared_range_real := 15.0; -- threshold for ΔR**2 (see formula below) in real values
+	lower_limit: dr_squared_range_real := 10.0; -- threshold for ΔR**2 (see formula below) in real values
+	DETA_DPHI_VECTOR_WIDTH: positive := 14;
+-- 	DR_PRECISION : positive := 1;
+	DETA_DPHI_PRECISION: positive := 3
     );
     port(
-        diff_eta : in integer;
-        diff_phi : in integer;
-        dr_comp : out std_logic;
-        sim_diff_eta_value_out : out integer;
-        sim_diff_phi_value_out : out integer;
-        sim_diff_eta_sq_out : out integer;
-        sim_diff_phi_sq_out : out integer;
-        sim_dr_squ_out : out integer;
-        sim_dr_comp : out std_logic
+        diff_eta : in std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
+        diff_phi : in std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
+        dr_comp : out std_logic
     );
 end dr_calculator;
 
 architecture rtl of dr_calculator is
-    signal dr_upper_limit_int : integer;
-    signal dr_lower_limit_int : integer;
+-- -- HB 2015-11-26: length of std_logic_vector for Delta-R (dr_squared) and limits.
+--     constant DR_VECTOR_WIDTH : positive := DETA_DPHI_VECTOR_WIDTH*2;
+-- -- HB 2015-11-26: multiplication factor for limits (number of relevant position after decimal point - DR_PRECISION => 1, globaly set in gtl.pkg).
+--     constant DR_PRECISION_FACTOR : real := real(10**DR_PRECISION);
+-- -- HB 2015-11-26: multiplication factor for limits vectors. INV_MASS_COSH_COS_PRECISION: number of relevant position after decimal point for cosh_deta and cos_dphi, globaly set in gtl.pkg.
+--     constant FACTOR_4_VECTOR : std_logic_vector((INV_MASS_COSH_COS_PRECISION+1)*4-1 downto 0) := conv_std_logic_vector(10**(INV_MASS_COSH_COS_PRECISION+1),(INV_MASS_COSH_COS_PRECISION+1)*4);
+
+    signal dr_squared : std_logic_vector(DETA_DPHI_VECTOR_WIDTH*2-1 downto 0);
+    signal upper_limit_vector : std_logic_vector(DETA_DPHI_VECTOR_WIDTH*2-1 downto 0);
+    signal lower_limit_vector : std_logic_vector(DETA_DPHI_VECTOR_WIDTH*2-1 downto 0);
 begin
 
-dr_upper_limit_int <= integer((dr_upper_limit**2)*real(10**(dr_limits_precision*2)));
-dr_lower_limit_int <= integer((dr_lower_limit**2)*real(10**(dr_limits_precision*2)));
+-- HB 2015-11-26: converting limits to std_logic_vector for comparison.
+    upper_limit_vector <= conv_std_logic_vector(integer(upper_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH*2);
+    lower_limit_vector <= conv_std_logic_vector(integer(lower_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH*2);
 
-    delta_r_p: process(diff_eta, diff_phi)
-        variable dr_squared, diff_eta_value, diff_phi_value : integer;
-        variable result : std_logic;
-    begin
+-- HB 2015-11-26: calculation of ΔR**2 with formular ΔR**2 = (eta1-eta2)**2+(phi1-phi2)**2
+    dr_squared <= diff_eta*diff_eta+diff_phi*diff_phi;
 
--- HB 2015-08-10: "ERROR: ... Nonconstant REAL value  is not supported for synthesis"
-
--- HB 2015-08-11: calculation of ΔR**2:
--- ΔR**2 = (eta1-eta2)**2+(phi1-phi2)**2
-
-	diff_eta_value := diff_eta;
-        diff_phi_value := diff_phi;
-        dr_squared := diff_eta_value*diff_eta_value+diff_phi_value*diff_phi_value;
-           
--- HB 2015-08-11: comparison of DR**2 with limits
-        if (dr_squared >= dr_lower_limit_int and dr_squared <= dr_upper_limit_int) then
-            result := '1';
-        else
-            result := '0';
-        end if;
-
-        dr_comp <= result;
-        
--- for simulation
-        sim_diff_eta_value_out <= diff_eta_value;
-        sim_diff_phi_value_out <= diff_phi_value;
-        sim_diff_eta_sq_out <= diff_eta_value*diff_eta_value;
-        sim_diff_phi_sq_out <= diff_phi_value*diff_phi_value;
-        sim_dr_squ_out <= dr_squared;
-	sim_dr_comp <= result;
-	
-    end process delta_r_p;
-
+-- HB 2015-11-26: comparison
+    dr_comp <= '1' when (dr_squared >= lower_limit_vector and dr_squared <= upper_limit_vector) else '0';
+    
 end architecture rtl;

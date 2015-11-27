@@ -80,12 +80,12 @@ entity calo_calo_correlation_condition is
         diff_phi_upper_limit: diff_phi_range_real;
         diff_phi_lower_limit: diff_phi_range_real;
 
-        deta_dphi_limits_precision: positive;
-
         dr_upper_limit: dr_squared_range_real;
         dr_lower_limit: dr_squared_range_real;
 
-        dr_limits_precision: positive;
+	DETA_DPHI_VECTOR_WIDTH: positive ;
+-- 	DR_PRECISION : positive;
+	DETA_DPHI_PRECISION: positive;
 
         inv_mass_upper_limit: real;
         inv_mass_lower_limit: real;
@@ -101,8 +101,8 @@ entity calo_calo_correlation_condition is
         lhc_clk: in std_logic;
         calo1_data_i: in calo_objects_array;
         calo2_data_i: in calo_objects_array;
-        diff_eta: in diff_2dim_integer_array;
-        diff_phi: in diff_2dim_integer_array;
+        diff_eta: in deta_dphi_vector_array;
+        diff_phi: in deta_dphi_vector_array;
         pt1 : in diff_inputs_array;
         pt2 : in diff_inputs_array;
 	cosh_deta : in calo_cosh_cos_vector_array;
@@ -122,11 +122,11 @@ architecture rtl of calo_calo_correlation_condition is
     type calo2_object_vs_template_array is array (0 to nr_calo2_objects-1, 1 to 1) of std_logic;
     type diff_comp_array is array (0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) of std_logic;
 
-    signal diff_eta_upper_limit_int : integer;
-    signal diff_eta_lower_limit_int : integer;
+    signal diff_eta_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
+    signal diff_eta_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     
-    signal diff_phi_upper_limit_int : integer;
-    signal diff_phi_lower_limit_int : integer;
+    signal diff_phi_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
+    signal diff_phi_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     
     signal obj_vs_templ : object_vs_template_array;
     signal obj_vs_templ_pipe : object_vs_template_array;
@@ -148,11 +148,11 @@ architecture rtl of calo_calo_correlation_condition is
 begin
 
     -- *** section: CUTs - begin ***************************************************************************************
-    -- Conversion of limits to integer.
-    diff_eta_upper_limit_int <= integer(diff_eta_upper_limit*real(10**deta_dphi_limits_precision));
-    diff_eta_lower_limit_int <= integer(diff_eta_lower_limit*real(10**deta_dphi_limits_precision));
-    diff_phi_upper_limit_int <= integer(diff_phi_upper_limit*real(10**deta_dphi_limits_precision));
-    diff_phi_lower_limit_int <= integer(diff_phi_lower_limit*real(10**deta_dphi_limits_precision));
+    -- Conversion of limits to std_logic_vector.
+    diff_eta_upper_limit_int <= conv_std_logic_vector(integer(diff_eta_upper_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
+    diff_eta_lower_limit_int <= conv_std_logic_vector(integer(diff_eta_lower_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
+    diff_phi_upper_limit_int <= conv_std_logic_vector(integer(diff_phi_upper_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
+    diff_phi_lower_limit_int <= conv_std_logic_vector(integer(diff_phi_lower_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
 
     -- Comparison with limits.
     -- HB 2015-09-17: permutations are different for same and different object types and different Bx. For same object type at same Bx, only differences of different object indices are compared.
@@ -169,9 +169,11 @@ begin
 		    dr_i: if dr_cut = true generate
 			dr_calculator_i: entity work.dr_calculator
 			    generic map(
-				dr_upper_limit => dr_upper_limit,
-				dr_lower_limit => dr_lower_limit,
-				dr_limits_precision => dr_limits_precision
+				upper_limit => dr_upper_limit,
+				lower_limit => dr_lower_limit,
+				DETA_DPHI_VECTOR_WIDTH => DETA_DPHI_VECTOR_WIDTH,
+-- 				DR_PRECISION => DR_PRECISION,
+				DETA_DPHI_PRECISION => DETA_DPHI_PRECISION
 			    )
 			    port map(
 				diff_eta => diff_eta(i,j),
@@ -211,9 +213,11 @@ begin
 		dr_i: if dr_cut = true generate
 		    dr_calculator_i: entity work.dr_calculator
 			generic map(
-			    dr_upper_limit => dr_upper_limit,
-			    dr_lower_limit => dr_lower_limit,
-			    dr_limits_precision => dr_limits_precision
+			    upper_limit => dr_upper_limit,
+			    lower_limit => dr_lower_limit,
+			    DETA_DPHI_VECTOR_WIDTH => DETA_DPHI_VECTOR_WIDTH,
+-- 			    DR_PRECISION => DR_PRECISION,
+			    DETA_DPHI_PRECISION => DETA_DPHI_PRECISION
 			)
 			port map(
 			    diff_eta => diff_eta(i,j),

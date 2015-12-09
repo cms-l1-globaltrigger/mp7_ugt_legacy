@@ -17,6 +17,7 @@
 -- Desription:
 
 -- Version history:
+-- HB 2015-12-09: removed clk - not needed
 -- HB 2015-05-29: removed "use work.gtl_lib.all;" - using "entity work.xxx" for instances
 
 library ieee;
@@ -39,7 +40,7 @@ entity esums_comparators is
         phi_w2_lower_limit: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0)
    );
     port(
-        clk : in std_logic;
+--         clk : in std_logic;
         data_i : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         comp_o : out std_logic
     );

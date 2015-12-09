@@ -17,6 +17,7 @@
 -- Desription:
 
 -- Version history:
+-- HB 2015-12-09: removed clk in esums_comparators
 -- HB 2015-05-29: removed "use work.gtl_lib.all;" - using "entity work.xxx" for instances
 
 library ieee;
@@ -71,7 +72,7 @@ begin
             phi_w2_lower_limit => phi_w2_lower_limit	
 	)
 	port map(
-	    clk => clk,
+-- 	    clk => clk,
 	    data_i => data_i,
 	    comp_o => comp_o
 	);

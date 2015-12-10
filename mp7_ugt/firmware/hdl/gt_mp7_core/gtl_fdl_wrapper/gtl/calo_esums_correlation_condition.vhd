@@ -57,11 +57,14 @@ entity calo_esums_correlation_condition is
         phi_w1_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0);
         phi_w2_ignore_esums: boolean;
         phi_w2_upper_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0);
-        phi_w2_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0)
+        phi_w2_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0);
 
         diff_phi_upper_limit: diff_phi_range_real;
-        diff_phi_lower_limit: diff_phi_range_real
+        diff_phi_lower_limit: diff_phi_range_real;
 
+	DETA_DPHI_VECTOR_WIDTH: positive;
+	DETA_DPHI_PRECISION: positive
+	
     );
     port(
         lhc_clk: in std_logic;
@@ -79,7 +82,7 @@ architecture rtl of calo_esums_correlation_condition is
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
     type object_vs_template_array is array (0 to nr_calo_objects-1, 1 to 1) of std_logic;
-    type diff_comp_array is array (0 to nr_calo1_objects-1, 0 to 0) of std_logic;
+    type diff_comp_array is array (0 to nr_calo_objects-1, 0 to 0) of std_logic;
 
     signal diff_phi_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     signal diff_phi_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
@@ -101,13 +104,11 @@ begin
 
     -- Comparison with limits.
     delta_l: for i in 0 to nr_calo_objects-1 generate 
-	dphi_diff_i: if dphi_cut = true generate
-	    diff_phi_comp(i,1) <= '1' when diff_phi(i,1) >= diff_phi_lower_limit_int and diff_phi(i,1) <= diff_phi_upper_limit_int else '0';
-	end generate dphi_diff_i;
+	diff_phi_comp(i,0) <= '1' when diff_phi(i,0) >= diff_phi_lower_limit_int and diff_phi(i,0) <= diff_phi_upper_limit_int else '0';
     end generate delta_l;
     
     -- Pipeline stage for diff_phi_comp
-    diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp, inv_mass_comp)
+    diff_pipeline_p: process(lhc_clk, diff_phi_comp)
     begin
         if obj_vs_templ_pipeline_stage = false then 
 	    diff_phi_comp_pipe <= diff_phi_comp;
@@ -182,8 +183,8 @@ begin
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
         for i in 0 to nr_calo_objects-1 loop 
-	    obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o and diff_phi_comp_pipe(i,1);
 	    index := index + 1;
+	    obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o and diff_phi_comp_pipe(i,0);
         end loop;
         for i in 1 to index loop 
             -- ORs for matrix

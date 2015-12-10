@@ -28,7 +28,7 @@ use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
 
-entity calo_esums_correlation_condition is
+entity muon_esums_correlation_condition is
      generic(
 
         pt_ge_mode_muon: boolean;
@@ -57,11 +57,14 @@ entity calo_esums_correlation_condition is
         phi_w1_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0);
         phi_w2_ignore_esums: boolean;
         phi_w2_upper_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0);
-        phi_w2_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0)
+        phi_w2_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0);
 
         diff_phi_upper_limit: diff_phi_range_real;
-        diff_phi_lower_limit: diff_phi_range_real
+        diff_phi_lower_limit: diff_phi_range_real;
 
+	DETA_DPHI_VECTOR_WIDTH: positive;
+	DETA_DPHI_PRECISION: positive
+	
     );
     port(
         lhc_clk: in std_logic;
@@ -70,9 +73,9 @@ entity calo_esums_correlation_condition is
         diff_phi: in deta_dphi_vector_array;
         condition_o: out std_logic
     );
-end calo_esums_correlation_condition; 
+end muon_esums_correlation_condition; 
 
-architecture rtl of calo_esums_correlation_condition is
+architecture rtl of muon_esums_correlation_condition is
 
 -- fixed pipeline structure, 2 stages total
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
@@ -100,14 +103,12 @@ begin
     diff_phi_lower_limit_int <= conv_std_logic_vector(integer(diff_phi_lower_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
 
     -- Comparison with limits.
-    delta_l_1: for i in 0 to nr_calo_objects-1 generate 
-	dphi_diff_i: if dphi_cut = true generate
-	    diff_phi_comp(i,1) <= '1' when diff_phi(i,1) >= diff_phi_lower_limit_int and diff_phi(i,1) <= diff_phi_upper_limit_int else '0';
-	end generate dphi_diff_i;
+    delta_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
+	diff_phi_comp(i,0) <= '1' when diff_phi(i,0) >= diff_phi_lower_limit_int and diff_phi(i,0) <= diff_phi_upper_limit_int else '0';
     end generate delta_l_1;
     
     -- Pipeline stage for diff_phi_comp
-    diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp, inv_mass_comp)
+    diff_pipeline_p: process(lhc_clk, diff_phi_comp)
     begin
             if obj_vs_templ_pipeline_stage = false then 
 		diff_phi_comp_pipe <= diff_phi_comp;
@@ -156,7 +157,7 @@ begin
             phi_w2_lower_limit => phi_w2_lower_limit_esums	
 	)
 	port map(
-	    data_i => data_i,
+	    data_i => esums_data_i,
 	    comp_o => esums_comp_o
 	);
     
@@ -177,15 +178,15 @@ begin
     -- "Matrix" of permutations in an and-or-structure.
     matrix_deta_dphi_dr_p: process(obj_vs_templ_pipe, esums_comp_o_pipe, diff_phi_comp_pipe)
         variable index : integer := 0;
-        variable obj_vs_templ_vec : std_logic_vector(nr_calo_objects downto 1) := (others => '0');
+        variable obj_vs_templ_vec : std_logic_vector(NR_MUON_OBJECTS downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
     begin
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
-        for i in 0 to nr_calo_objects-1 loop 
-	    obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o and diff_phi_comp_pipe(i,1);
+        for i in 0 to NR_MUON_OBJECTS-1 loop 
 	    index := index + 1;
+	    obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o and diff_phi_comp_pipe(i,0);
         end loop;
         for i in 1 to index loop 
             -- ORs for matrix

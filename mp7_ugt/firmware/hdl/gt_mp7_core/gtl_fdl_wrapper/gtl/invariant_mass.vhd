@@ -18,6 +18,7 @@
 -- Calculation of invariant mass based on LUTs and comparison with limits 
 
 -- Version history:
+-- HB 2015-12-14: removed INV_MASS_PT_PRECISION from generic - not used anymore.
 -- HB 2015-10-01: first design
 
 library ieee;
@@ -36,7 +37,7 @@ entity invariant_mass is
 	pt2_width: positive := 12;
 	cosh_cos_width: positive := 28;
 	INV_MASS_PRECISION : positive := 1; -- 1 => first digit after decimal point
-	INV_MASS_PT_PRECISION : positive := 1;
+-- 	INV_MASS_PT_PRECISION : positive := 1;
 	INV_MASS_COSH_COS_PRECISION : positive := 3
     );
     port(

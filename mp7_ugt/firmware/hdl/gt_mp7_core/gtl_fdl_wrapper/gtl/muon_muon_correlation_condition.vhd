@@ -18,6 +18,7 @@
 -- Correlation Condition module for muon objects.
 
 -- Version history:
+-- HB 2015-12-14: removed INV_MASS_PT_PRECISION from generic - not used anymore.
 -- HB 2015-11-12: updated for two modes: data from same Bx or from different Bx.
 -- HB 2015-11-11: first design
 
@@ -91,7 +92,7 @@ entity muon_muon_correlation_condition is
         inv_mass_lower_limit: real;
 
         INV_MASS_PRECISION: positive;
-	INV_MASS_PT_PRECISION : positive;
+-- 	INV_MASS_PT_PRECISION : positive;
 	pt_width: positive; 
 	INV_MASS_COSH_COS_PRECISION : positive;
 	cosh_cos_width: positive	
@@ -194,7 +195,7 @@ begin
 			    pt2_width => pt_width, 
 			    cosh_cos_width => cosh_cos_width,
 			    INV_MASS_PRECISION => INV_MASS_PRECISION,
-			    INV_MASS_PT_PRECISION => INV_MASS_PT_PRECISION,
+-- 			    INV_MASS_PT_PRECISION => INV_MASS_PT_PRECISION,
 			    INV_MASS_COSH_COS_PRECISION => INV_MASS_COSH_COS_PRECISION
 			)
 			port map(

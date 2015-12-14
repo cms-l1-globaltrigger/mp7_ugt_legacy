@@ -18,6 +18,7 @@
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and muon.
 
 -- Version history:
+-- HB 2015-12-14: removed INV_MASS_PT_PRECISION from generic - not used anymore.
 -- HB 2015-11-11: first design
 
 library ieee;
@@ -86,7 +87,7 @@ entity calo_muon_correlation_condition is
         inv_mass_lower_limit: real;
 
         INV_MASS_PRECISION: positive;
-	INV_MASS_PT_PRECISION : positive;
+-- 	INV_MASS_PT_PRECISION : positive;
 	pt1_width: positive; 
 	pt2_width: positive; 
 	INV_MASS_COSH_COS_PRECISION : positive;
@@ -182,7 +183,7 @@ begin
 			pt2_width => pt2_width, 
 			cosh_cos_width => cosh_cos_width,
 			INV_MASS_PRECISION => INV_MASS_PRECISION,
-			INV_MASS_PT_PRECISION => INV_MASS_PT_PRECISION,
+-- 			INV_MASS_PT_PRECISION => INV_MASS_PT_PRECISION,
 			INV_MASS_COSH_COS_PRECISION => INV_MASS_COSH_COS_PRECISION
 		    )
 		    port map(

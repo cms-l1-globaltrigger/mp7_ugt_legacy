@@ -8,10 +8,11 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
 use work.mp7_top_decl.all;
+use work.gt_mp7_top_pkg.all;
 
 package top_decl is
 
-  constant ALGO_REV: std_logic_vector(31 downto 0) := X"00010000";
+  constant ALGO_REV: std_logic_vector(31 downto 0) := TOP_BUILD_VERSION; -- JW 11.11.2015 use unique uGT build version (eg. 0x1038) as algo_rev value
 
 	constant LHC_BUNCH_COUNT: integer := 3564;
 	constant LB_ADDR_WIDTH: integer := 10;

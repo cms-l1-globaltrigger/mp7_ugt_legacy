@@ -6,6 +6,7 @@ import datetime
 import urllib
 import logging
 import shutil
+from distutils.dir_util import copy_tree
 import subprocess
 import glob
 import ConfigParser
@@ -201,8 +202,21 @@ def main():
     # Do for every module of the menu...
     for i in range(modules):
         module_dir = os.path.join(build_area_dir, menu_name, 'module_{i}'.format(**locals()))
-        subprocess.check_call(['python', 'ProjectManager.py', 'vivado', uGTalgosPath, '-w', module_dir])
+        local_fw_dir = os.path.abspath(os.path.join(module_dir, 'mp7_ugt'))
+        os.makedirs(module_dir)
+        os.makedirs(local_fw_dir)
+        copy_tree(os.path.join(uGTalgosPath, 'firmware', 'cfg'), os.path.join(local_fw_dir, 'firmware', 'cfg'))
+        copy_tree(os.path.join(uGTalgosPath, 'firmware', 'hdl'), os.path.join(local_fw_dir, 'firmware', 'hdl'))
+        copy_tree(os.path.join(uGTalgosPath, 'firmware', 'ngc'), os.path.join(local_fw_dir, 'firmware', 'ngc'))
+        copy_tree(os.path.join(uGTalgosPath, 'firmware', 'ucf'), os.path.join(local_fw_dir, 'firmware', 'ucf'))
+        subprocess.check_call(['python', 'ProjectManager.py', 'vivado', local_fw_dir, '-w', module_dir])
 
+        logging.info("create menu dependencies...")
+        filename = os.path.join(local_fw_dir, 'firmware', 'cfg', 'uGT_gtl.dep')
+        with open(filename, 'w') as f:
+            f.write("src {args.menu}/vhdl/module_{i}/src/algo_mapping_rop.vhd\n".format(**locals()))
+            f.write("src {args.menu}/vhdl/module_{i}/src/gtl_module.vhd\n".format(**locals()))
+            f.write("src {args.menu}/vhdl/module_{i}/src/gtl_pkg.vhd\n".format(**locals())) #until the tmVHDLproducer is released, the gtl_pkg is used
     os.chdir(cwd)
 
     #
@@ -213,13 +227,6 @@ def main():
     subprocess.check_call(['python', os.path.join(scripts_dir, 'pkgpatch.py'), '--build', args.build ,TARGET_PKG_TPL, TARGET_PKG])
 
 
-    logging.info("create menu dependencies...")
-    filename = os.path.join(uGTalgosPath, 'firmware/cfg/uGT_gtl.dep')
-    with open(filename, 'w') as f:
-        f.write("src {args.menu}/vhdl/module_0/src/algo_mapping_rop.vhd\n".format(**locals()))
-        f.write("src {args.menu}/vhdl/module_0/src/gtl_module.vhd\n".format(**locals()))
-        f.write("src {args.menu}/vhdl/module_0/src/gtl_pkg.vhd\n".format(**locals())) #until the tmVHDLproducer is released, the gtl_pkg is used
-
     #filename = os.path.join(uGTalgosPath, 'firmware/cfg/uGT_board.dep')
     #with open(filename, 'w') as f:
 ##        f.write("src -c projects/examples/{args.board} top_decl.vhd\n".format(**locals())) # Babak changed based on Dave suggesstion
@@ -227,13 +234,13 @@ def main():
         #f.write("src -c boards/mp7/base_fw/{args.board} mp7_brd_decl.vhd\n".format(**locals()))
         #f.write("src {args.board}.vhd\n".format(**locals()))
 
-    logging.info("linking mp7_ugt into cactusupgrades/components...")
-    cwd = os.getcwd()
-    os.chdir('cactusupgrades/components/')
-    remove_file("mp7_ugt")
-    os.symlink(uGTalgosPath, "mp7_ugt")
+    #logging.info("linking mp7_ugt into cactusupgrades/components...")
+    #cwd = os.getcwd()
+    #os.chdir('cactusupgrades/components/')
+    #remove_file("mp7_ugt")
+    #os.symlink(uGTalgosPath, "mp7_ugt")
 
-    os.chdir(cwd)
+    #os.chdir(cwd)
 
     #logging.info("removing constraints for null algo...")
     #filename = 'cactusupgrades/components/mp7_null_algo/firmware/ucf/mp7_null_algo.tcl'
@@ -244,9 +251,9 @@ def main():
     for i in range(modules):
         logging.info("setting up build area for module %s of %s...", i, menu_name)
         module_dir = os.path.join(build_area_dir, menu_name, 'module_{i}'.format(**locals()))
-        os.chdir(module_dir)
-        remove_file("runAll.sh")
-        os.symlink(os.path.join(uGTalgosPath, 'runAll.sh'),  'runAll.sh')
+        #os.chdir(module_dir)
+        #remove_file("runAll.sh") #removed, because file was not used...
+        #os.symlink(os.path.join(uGTalgosPath, 'runAll.sh'),  'runAll.sh')
 
     #logging.info("replacing the original top file with the modified uGT one...")
     #shutil.copyfile(

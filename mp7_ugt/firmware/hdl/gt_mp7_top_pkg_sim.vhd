@@ -30,7 +30,7 @@
 library IEEE;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
-use work.top_decl.all;
+-- use work.top_decl.all;
 use work.mp7_brd_decl.all;
 
 package gt_mp7_top_pkg is

@@ -94,10 +94,10 @@ vcom -93 -work work $MP7_COMPONENTS/ipbus_slaves/firmware/hdl/ipbus_reg_types.vh
 vcom -93 -work work $MP7_COMPONENTS/ipbus_slaves/firmware/hdl/ipbus_ctrlreg_v.vhd
 vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/ipbus_ctrl.vhd
 
+vcom -93 -work work $GT_SRC/gt_mp7_top_pkg_sim.vhd
 vcom -93 -work work $GT_SRC/top_decl.vhd
 vcom -93 -work work $GT_SRC/lhc_data_pkg.vhd
 vcom -93 -work work $GT_SRC/math_pkg.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_top_pkg_sim.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gt_mp7_core_pkg.vhd
 ## HB 2015-06-03: test with l1tm_pkg.vhd instead of gtl_pkg.vhd - gtl_pkg.vhd moved to $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl
 #vcom -93 -work work $L1TM/vhdl/module_0/src/l1tm_pkg.vhd

@@ -136,6 +136,11 @@ process(clk, eg_data, jet_data, tau_data, muon_data, ett_data, ht_data, etm_data
         htm_bx_m1_tmp <= htm_bx_0_tmp;
         htm_bx_m2_tmp <= htm_bx_m1_tmp;
 
+        ext_cond_bx_p1_tmp <= ext_cond_data;
+        ext_cond_bx_0_tmp <= ext_cond_bx_p1_tmp;
+        ext_cond_bx_m1_tmp <= ext_cond_bx_0_tmp;
+        ext_cond_bx_m2_tmp <= ext_cond_bx_m1_tmp;
+
     end if;
 end process;
 

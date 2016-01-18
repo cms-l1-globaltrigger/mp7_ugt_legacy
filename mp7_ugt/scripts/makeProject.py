@@ -138,16 +138,12 @@ def main():
         st = os.stat(filename)
         os.chmod(filename, st.st_mode | stat.S_IEXEC)
 
-
         logging.info("checkout MP7 base firmware...")
         path = os.path.join('tags', 'mp7', 'unstable' if args.unstable else 'stable', 'firmware', args.tag)
         if args.old:
             subprocess.check_call(['python', 'ProjectManager.py', 'checkout', path, '-u', args.user])
         else:
             subprocess.check_call(['python', 'ProjectManager.py', 'create', path, '-u', args.user]) #changes in ProjectManager.py, have to differ between older and newer versions
-
-        #logging.info("fetching project firmware...")
-        #subprocess.check_call(['python', 'ProjectManager.py', 'fetch', os.path.join('projects/examples', args.board)])
 
         os.chdir(args.path)
 
@@ -175,27 +171,20 @@ def main():
 
         ######################################################
 
-
     cwd = os.getcwd()
     os.chdir(mp7path)
 
     #
-    #  Fetching projects from cactus
-    #
-    #print os.path.join("cactusupgrades/projects/examples", args.board)
-    #sys.exit()
-    #if not os.path.isdir(os.path.join("cactusupgrades/projects/examples", args.board)):
-        #logging.info("fetching project firmware...")
-        #subprocess.check_call(['python', 'ProjectManager.py', 'fetch', os.path.join('projects/examples', args.board)])
-
-
-    #
     #  Creating build areas
     #
-
     logging.info("creating build areas...")
-
     build_area_dir = ''.join(('build_0x', args.build))
+
+    #
+    #  Patching VHDL
+    #
+    logging.info("patch the target package with current UNIX timestamp/username/hostname...")
+    subprocess.check_call(['python', os.path.join(scripts_dir, 'pkgpatch.py'), '--build', args.build ,TARGET_PKG_TPL, TARGET_PKG])
 
     if os.path.isdir(build_area_dir):
         raise RuntimeError("build area alredy exists: {build_area_dir}".format(**locals()))
@@ -219,47 +208,10 @@ def main():
             f.write("src {args.menu}/vhdl/module_{i}/src/gtl_pkg.vhd\n".format(**locals())) #until the tmVHDLproducer is released, the gtl_pkg is used
     os.chdir(cwd)
 
-    #
-    #  Patching VHDL
-    #
-
-    logging.info("patch the target package with current UNIX timestamp/username/hostname...")
-    subprocess.check_call(['python', os.path.join(scripts_dir, 'pkgpatch.py'), '--build', args.build ,TARGET_PKG_TPL, TARGET_PKG])
-
-
-    #filename = os.path.join(uGTalgosPath, 'firmware/cfg/uGT_board.dep')
-    #with open(filename, 'w') as f:
-##        f.write("src -c projects/examples/{args.board} top_decl.vhd\n".format(**locals())) # Babak changed based on Dave suggesstion
-        #f.write("src top_decl_ugt_local.vhd\n".format(**locals())) # Babak changed based on Dave suggesstion
-        #f.write("src -c boards/mp7/base_fw/{args.board} mp7_brd_decl.vhd\n".format(**locals()))
-        #f.write("src {args.board}.vhd\n".format(**locals()))
-
-    #logging.info("linking mp7_ugt into cactusupgrades/components...")
-    #cwd = os.getcwd()
-    #os.chdir('cactusupgrades/components/')
-    #remove_file("mp7_ugt")
-    #os.symlink(uGTalgosPath, "mp7_ugt")
-
-    #os.chdir(cwd)
-
-    #logging.info("removing constraints for null algo...")
-    #filename = 'cactusupgrades/components/mp7_null_algo/firmware/ucf/mp7_null_algo.tcl'
-    ## Clear and touch
-    #clear_file(filename)
-
     # Do for every module of the menu...
     for i in range(modules):
         logging.info("setting up build area for module %s of %s...", i, menu_name)
         module_dir = os.path.join(build_area_dir, menu_name, 'module_{i}'.format(**locals()))
-        #os.chdir(module_dir)
-        #remove_file("runAll.sh") #removed, because file was not used...
-        #os.symlink(os.path.join(uGTalgosPath, 'runAll.sh'),  'runAll.sh')
-
-    #logging.info("replacing the original top file with the modified uGT one...")
-    #shutil.copyfile(
-        #os.path.join(uGTalgosPath, 'firmware/hdl/{args.board}.vhd'.format(**locals())),
-        #os.path.join(mp7currPath, 'cactusupgrades/boards/mp7/base_fw/{args.board}/firmware/hdl/{args.board}.vhd'.format(**locals()))
-    #)
 
     # Go to build area root directory.
     os.chdir(mp7path)

@@ -18,6 +18,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2016-01-18: v0.0.15 - based on v0.0.14, but used internal bx number for algo-bx-memory
 -- HB 2015-09-01: v0.0.14 - based on v0.0.13, but implemented "prescale_factor_set_index_reg" and "command_pulses" register. "ALGO_INPUTS_FF" is now part of generic declaration. Additionally
 --                          inserted input ports "ec0", "resync" and "oc0" for reset logic.
 -- HB 2015-08-14: v0.0.13 - based on v0.0.12, but added algo_bx_mask_sim input for simulation use. Send a delayed "finor_with_veto" (currently assumed 1.5 bx latency over FINOR-AMC502)
@@ -141,6 +142,8 @@ architecture rtl of fdl_module is
     signal finor_with_veto_temp1 : std_logic;
     signal finor_with_veto_temp2 : std_logic;
 
+    signal bx_nr_internal : std_logic_vector(11 downto 0) := (others => '0');
+
 begin
 
 -- ******************************************************************************************************************
@@ -220,6 +223,19 @@ begin
 -- HB 2015-08-31: control_reg not used currently
 
 --===============================================================================================--
+-- bc counter
+    bc_cntr: process (lhc_clk, bcres)
+    begin
+        if (lhc_clk'event and lhc_clk = '1') then
+           if (bcres = '1') then
+--               bx_length <= bx_nr_internal; -- "store" counter value for reading
+              bx_nr_internal <= X"000";   -- sync BCReset
+           else
+              bx_nr_internal <= bx_nr_internal + 1;
+           end if;
+        end if;
+    end process bc_cntr;
+
 -- Algo-bx-memory
 -- HB 11.08.2014 - 16 memory-blocks instantiated, same as defined in XML for addresses
     algo_bx_mem_l: for i in 0 to 15 generate
@@ -235,7 +251,9 @@ begin
             enb       => '1',
 --             enb       => en_algo_bx_mem,
             web       => '0', -- read
-            addrb     => bx_nr(11 downto 0),
+-- HB 2016-01-18: using internal bx number for algo_bx_mem
+--             addrb     => bx_nr(11 downto 0),
+            addrb     => bx_nr_internal(11 downto 0),
             dinb      => X"FFFFFFFF", -- dummy
             doutb     => algo_bx_mask_mem_out(32*i+31 downto 32*i)
         );

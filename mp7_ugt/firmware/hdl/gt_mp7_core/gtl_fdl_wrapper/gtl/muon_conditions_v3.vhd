@@ -72,7 +72,7 @@ architecture rtl of muon_conditions_v3 is
 
 -- fixed pipeline structure, 2 stages total
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
-    constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
+    constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
 
     type object_vs_template_array is array (0 to NR_MUON_OBJECTS-1, 1 to nr_templates) of std_logic;
     type diff_comp_array is array (0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic;
@@ -101,7 +101,7 @@ begin
 
 -- Instance of comparators for muon objects. All permutations between objects and thresholds.
 obj_l: for i in 0 to NR_MUON_OBJECTS-1 generate
-    templ_l: for j in 1 to nr_templates generate        
+    templ_l: for j in 1 to nr_templates generate
         comp_i: entity work.muon_comparators_v2
             generic map(pt_ge_mode,
                         pt_thresholds(j)(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
@@ -128,7 +128,7 @@ end generate obj_l;
 -- Pipeline stage for obj_vs_templ
 obj_vs_templ_pipeline_p: process(lhc_clk, obj_vs_templ)
     begin
-        if obj_vs_templ_pipeline_stage = false then 
+        if obj_vs_templ_pipeline_stage = false then
             obj_vs_templ_pipe <= obj_vs_templ;
         else
             if (lhc_clk'event and lhc_clk = '1') then
@@ -142,7 +142,7 @@ end process;
 -- The definition of requested_charge_correlation has to be checked.
 
 charge_double_i: if nr_templates = 2 generate
-    charge_double_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
+    charge_double_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate
         charge_double_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
             charge_double_if: if j/=i generate
                 charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
@@ -156,7 +156,7 @@ charge_double_i: if nr_templates = 2 generate
 -- Pipeline stage for charge_comp_2
     charge_comp_2_pipeline_p: process(lhc_clk, charge_comp_double)
         begin
-            if obj_vs_templ_pipeline_stage = false then 
+            if obj_vs_templ_pipeline_stage = false then
                 charge_comp_double_pipe <= charge_comp_double;
             else
                 if (lhc_clk'event and lhc_clk = '1') then
@@ -167,7 +167,7 @@ charge_double_i: if nr_templates = 2 generate
 end generate charge_double_i;
 
 charge_triple_i: if nr_templates = 3 generate
-    charge_triple_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
+    charge_triple_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate
         charge_triple_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
             charge_triple_l_3: for k in 0 to NR_MUON_OBJECTS-1 generate
                 charge_triple_if: if (j/=i and k/=i and k/=j) generate
@@ -183,7 +183,7 @@ charge_triple_i: if nr_templates = 3 generate
 -- Pipeline stage for charge_comp_2
     charge_comp_3_pipeline_p: process(lhc_clk, charge_comp_triple)
         begin
-            if obj_vs_templ_pipeline_stage = false then 
+            if obj_vs_templ_pipeline_stage = false then
                 charge_comp_triple_pipe <= charge_comp_triple;
             else
                 if (lhc_clk'event and lhc_clk = '1') then
@@ -193,8 +193,8 @@ charge_triple_i: if nr_templates = 3 generate
     end process;
 end generate charge_triple_i;
 
-charge_quad_i: if nr_templates = 3 generate
-    charge_quad_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
+charge_quad_i: if nr_templates = 4 generate
+    charge_quad_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate
         charge_quad_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
             charge_quad_l_3: for k in 0 to NR_MUON_OBJECTS-1 generate
                 charge_quad_l_4: for l in 0 to NR_MUON_OBJECTS-1 generate
@@ -212,7 +212,7 @@ charge_quad_i: if nr_templates = 3 generate
 -- Pipeline stage for charge_comp_2
     charge_comp_4_pipeline_p: process(lhc_clk, charge_comp_quad)
         begin
-            if obj_vs_templ_pipeline_stage = false then 
+            if obj_vs_templ_pipeline_stage = false then
                 charge_comp_quad_pipe <= charge_comp_quad;
             else
                 if (lhc_clk'event and lhc_clk = '1') then
@@ -237,11 +237,11 @@ matrix_single_i: if nr_templates = 1 generate
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
-        for i in 0 to NR_MUON_OBJECTS-1 loop 
+        for i in 0 to NR_MUON_OBJECTS-1 loop
             index := index + 1;
             obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1);
         end loop;
-        for i in 1 to index loop 
+        for i in 1 to index loop
             condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
         end loop;
         condition_and_or <= condition_and_or_tmp;
@@ -259,7 +259,7 @@ matrix_double_i: if nr_templates = 2 generate
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
-        for i in 0 to NR_MUON_OBJECTS-1 loop 
+        for i in 0 to NR_MUON_OBJECTS-1 loop
             for j in 0 to NR_MUON_OBJECTS-1 loop
                 if j/=i then
                     index := index + 1;
@@ -268,7 +268,7 @@ matrix_double_i: if nr_templates = 2 generate
                 end if;
             end loop;
         end loop;
-        for i in 1 to index loop 
+        for i in 1 to index loop
             condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
         end loop;
         condition_and_or <= condition_and_or_tmp;
@@ -285,9 +285,9 @@ matrix_triple_i: if nr_templates = 3 generate
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
-        for i in 0 to NR_MUON_OBJECTS-1 loop 
+        for i in 0 to NR_MUON_OBJECTS-1 loop
             for j in 0 to NR_MUON_OBJECTS-1 loop
-                for k in 0 to NR_MUON_OBJECTS-1 loop 
+                for k in 0 to NR_MUON_OBJECTS-1 loop
                     if (j/=i and k/=i and k/=j) then
                         index := index + 1;
                         obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and obj_vs_templ_pipe(j,2) and obj_vs_templ_pipe(k,3) and charge_comp_triple_pipe(i,j,k);
@@ -295,7 +295,7 @@ matrix_triple_i: if nr_templates = 3 generate
                 end loop;
             end loop;
         end loop;
-        for i in 1 to index loop 
+        for i in 1 to index loop
             condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
         end loop;
         condition_and_or <= condition_and_or_tmp;
@@ -312,9 +312,9 @@ matrix_quad_i: if nr_templates = 4 generate
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
-        for i in 0 to NR_MUON_OBJECTS-1 loop 
+        for i in 0 to NR_MUON_OBJECTS-1 loop
             for j in 0 to NR_MUON_OBJECTS-1 loop
-                for k in 0 to NR_MUON_OBJECTS-1 loop 
+                for k in 0 to NR_MUON_OBJECTS-1 loop
                     for l in 0 to NR_MUON_OBJECTS-1 loop
                         if (j/=i and k/=i and k/=j and l/=i and l/=j and l/=k) then
                             index := index + 1;
@@ -324,7 +324,7 @@ matrix_quad_i: if nr_templates = 4 generate
                 end loop;
             end loop;
         end loop;
-        for i in 1 to index loop 
+        for i in 1 to index loop
             condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
         end loop;
         condition_and_or <= condition_and_or_tmp;
@@ -334,7 +334,7 @@ end generate matrix_quad_i;
 -- Pipeline stage for condition output.
 condition_o_pipeline_p: process(lhc_clk, condition_and_or)
     begin
-        if conditions_pipeline_stage = false then 
+        if conditions_pipeline_stage = false then
             condition_o <= condition_and_or;
         else
             if (lhc_clk'event and lhc_clk = '1') then

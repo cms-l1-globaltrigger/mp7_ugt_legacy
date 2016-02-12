@@ -18,6 +18,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2016-02-11: v0.0.16 - based on v0.0.15, but used implemented finor-rate-counter
 -- HB 2016-01-18: v0.0.15 - based on v0.0.14, but used internal bx number for algo-bx-memory
 -- HB 2015-09-01: v0.0.14 - based on v0.0.13, but implemented "prescale_factor_set_index_reg" and "command_pulses" register. "ALGO_INPUTS_FF" is now part of generic declaration. Additionally
 --                          inserted input ports "ec0", "resync" and "oc0" for reset logic.
@@ -44,8 +45,7 @@ use ieee.std_logic_arith.ALL;
 use ieee.std_logic_unsigned.ALL; -- for function "CONV_INTEGER"
 
 use work.ipbus.all;
--- HB 2015-08-26: not used anymore
--- use work.fdl_pkg.ALL;
+
 use work.gtl_pkg.ALL;
 
 use work.gt_mp7_core_pkg.ALL;
@@ -119,6 +119,10 @@ architecture rtl of fdl_module is
     signal prescale_factor_int : prescale_factor_array;
     signal sres_algo_rate_counter : std_logic := '0';
     signal rate_cnt_before_prescaler : rate_counter_array;
+    
+    constant FINOR_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
+    signal sres_finor_rate_counter : std_logic := '0';
+    signal rate_cnt_finor_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
     signal algo_before_prescaler : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
     signal algo_after_prescaler : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
@@ -223,12 +227,11 @@ begin
 -- HB 2015-08-31: control_reg not used currently
 
 --===============================================================================================--
--- bc counter
+-- bx counter
     bc_cntr: process (lhc_clk, bcres)
-    begin
+	begin
         if (lhc_clk'event and lhc_clk = '1') then
            if (bcres = '1') then
---               bx_length <= bx_nr_internal; -- "store" counter value for reading
               bx_nr_internal <= X"000";   -- sync BCReset
            else
               bx_nr_internal <= bx_nr_internal + 1;
@@ -237,7 +240,7 @@ begin
     end process bc_cntr;
 
 -- Algo-bx-memory
--- HB 11.08.2014 - 16 memory-blocks instantiated, same as defined in XML for addresses
+-- HB 2016-02-11: 16 (MAX_NR_ALGOS/SW_DATA_WIDTH) memory-blocks instantiated, same as defined in XML for addresses
     algo_bx_mem_l: for i in 0 to 15 generate
         algo_bx_mem_i: entity work.ipb_dpmem_4096_32
         port map
@@ -266,14 +269,12 @@ begin
         end if;
     end process;
 
---     algo_bx_mask_sim_internal(NR_ALGOS-1 downto 0) <= algo_bx_mask_sim(NR_ALGOS-1 downto 0);
-    
 -- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
     algo_bx_mask <= algo_bx_mask_mem_out when not SIM_MODE else
 		    algo_bx_mask_sim_internal when SIM_MODE else (others => '1');
     
 --===============================================================================================--
--- Rate counter before prescaler register
+-- Rate counter before prescaler registers
     read_rate_cnt_i: entity work.ipb_read_regs
     generic map
     (
@@ -313,7 +314,6 @@ begin
 
 --===============================================================================================--
 -- Prescale factor set index register
--- HB 2015-08-31: has to implemented
     prescale_factors_set_index_i: entity work.ipb_write_regs
     generic map
     (
@@ -369,7 +369,6 @@ begin
 
 --===============================================================================================--
 -- Prescale factor set index register
--- HB 2015-08-31: has to implemented
     pulse_reg_i: entity work.ipb_pulse_regs
     port map(
         ipb_clk => ipb_clk,
@@ -383,7 +382,27 @@ begin
 -- HB 2015-08-31: "request_update_factor_pulse" is bit 0 of "pulseregister 0 (C_IPB_COMMAND_PULSES)";
     request_update_factor_pulse <= command_pulses(0);
     
--- --===============================================================================================--
+--===============================================================================================--
+-- Rate counter finor register
+-- HB 2016-02-11: requested for monitoring (in legacy system part of TCS). Has to be moved to FINOR-AMC502 !!!
+    read_rate_cnt_finor_i: entity work.ipb_read_regs
+    generic map
+    (
+        addr_width => 1,
+        regs_beg_index => 0,
+        regs_end_index => 0
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_FINOR),
+        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_FINOR),
+        ------------------
+        regs_i => rate_cnt_finor_reg
+    );
+
+--===============================================================================================--
 
     reg_l: for i in 0 to NR_ALGOS-1 generate
         rate_cnt_before_prescaler_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_before_prescaler(i);
@@ -391,6 +410,14 @@ begin
         finor_masks_int(i) <= masks_reg(i)(0);
         veto_masks_int(i) <= masks_reg(i)(1);
     end generate reg_l;
+
+--===============================================================================================--
+
+-- HB 2015-09-16: reset logic not decided yet (sres = synchr. reset)
+    sres_algo_rate_counter <= resync;
+    sres_algo_pre_scaler <= resync; 
+-- HB 2016-02-11: sync res for rate counter finor
+    sres_finor_rate_counter <= resync;
 
 -- ******************************************************************************************************************
 -- FDL data flow - begin
@@ -404,14 +431,6 @@ begin
             algo_int <= algo_i;
         end if;
     end process;
-
--- HB 2015-09-16: reset logic not decided yet (sres = synchr. reset)
-    sres_algo_rate_counter <= resync; -- ????????????
---     sres_algo_rate_counter <= resync or ec0; -- ????????????
---     sres_algo_rate_counter <= resync or ec0 or lhc_rst; -- ????????????
-    sres_algo_pre_scaler <= resync; -- ???????????? 
---     sres_algo_pre_scaler <= resync or oc0; -- ???????????? 
---     sres_algo_pre_scaler <= resync or oc0 or lhc_rst; -- ???????????? 
 
 -- Prescalers and rate counters
     algo_slices_l: for i in 0 to NR_ALGOS-1 generate
@@ -435,43 +454,34 @@ begin
             finor_mask => finor_masks_int(i),
             veto_mask => veto_masks_int(i),
             rate_cnt_before_prescaler => rate_cnt_before_prescaler(i),
---         rate_cnt_after_mask => rate_cnt_after_mask(i),
             algo_before_prescaler => algo_before_prescaler(i),
             algo_after_prescaler => algo_after_prescaler(i),
 	    algo_after_finor_mask => algo_after_finor_mask(i),
 	    veto => veto(i)
 	);
-
--- ********************************************
--- FDL data flow - begin
-
     end generate algo_slices_l;
 
 -- HB 2014-10-23: renamed
 -- Finor of algorithms
--- finor_masked_algo_p: process(algo_after_finor_mask)
     local_finor_p: process(algo_after_finor_mask)
        variable or_algo_var : std_logic := '0';
-    begin
+	begin
         or_algo_var := '0';
-            for i in 0 to NR_ALGOS-1 loop
-                or_algo_var := or_algo_var or algo_after_finor_mask(i);
-            end loop;
-    --     finor_algo <= or_algo_var;
+        for i in 0 to NR_ALGOS-1 loop
+            or_algo_var := or_algo_var or algo_after_finor_mask(i);
+        end loop;
         local_finor <= or_algo_var;
     end process local_finor_p;
     
 -- HB 2014-10-23: renamed
 -- Finor of vetos
--- finor_veto_algo_p: process(veto)
     local_veto_or_p: process(veto)
         variable or_veto_var : std_logic := '0';
-    begin
+	begin
         or_veto_var := '0';
-            for i in 0 to NR_ALGOS-1 loop
-                or_veto_var := or_veto_var or veto(i); 
-            end loop;
---     finor_veto <= or_veto_var;
+        for i in 0 to NR_ALGOS-1 loop
+            or_veto_var := or_veto_var or veto(i); 
+        end loop;
 	local_veto <= or_veto_var;
     end process local_veto_or_p;
 
@@ -490,9 +500,9 @@ begin
 -- HB 2014-12-15: bug fixed - local_finor_with_veto used for finor_2_mezz_lemo not for SPY2_FINOR !!!
     local_finor_with_veto_o <= local_finor_pipe and not local_veto_pipe;
 
+-------------------------------------------------------------------------------------------------------------------------------------
 -- Pipeline stages for "simulating" the stages of FINOR-AMC502, to get the same latency for both possibilities of connecting to TCDS.
 -- HB 2015-08-21: currently assumed 1.5 bx latency over FINOR-AMC502
-
     stage1_finor_amc502_sim_p: process(lhc_clk, local_finor, local_veto)
         begin
         if (lhc_clk'event and (lhc_clk = '1')) then
@@ -500,13 +510,6 @@ begin
             finor_with_veto_temp2 <= finor_with_veto_temp1;
         end if;
     end process;
-
---     stage2_finor_amc502_sim_p: process(lhc_clk, finor_with_veto_temp2)
---         begin
---         if (lhc_clk'event and (lhc_clk = '0')) then
---             finor_with_veto_2_mezz_lemo <= finor_with_veto_temp2;
---         end if;
---     end process;
 
 -- Output FFs should be placed in IOBs - to be done in UCF
 -- HB 2015-08-21: for begin of "Parallel Run" (Sept. 2015), finor_2_mezz_lemo _AND_ veto_2_mezz_lemo send the veto-gated finor to TCDS (without FINOR-AMC502) !!!
@@ -517,9 +520,22 @@ begin
             veto_2_mezz_lemo <= finor_with_veto_temp2;
         end if;
     end process;
+-------------------------------------------------------------------------------------------------------------------------------------
 
---     finor_2_mezz_lemo <= local_finor_pipe;
---     veto_2_mezz_lemo <= local_veto_pipe;
+-- Rate counter finor register
+-- HB 2016-02-11: requested for monitoring (in legacy system part of TCS). Has to be moved to FINOR-AMC502 !!!
+    rate_cnt_finor_i: entity work.algo_rate_counter
+	generic map( 
+	    COUNTER_WIDTH => FINOR_RATE_COUNTER_WIDTH
+	)
+	port map( 
+            sys_clk => ipb_clk,
+            lhc_clk => lhc_clk,
+            sres_counter => sres_finor_rate_counter,
+            store_cnt_value => begin_lumi_section,
+            algo_i => finor_with_veto_temp1,
+            counter_o => rate_cnt_finor_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
+	);
 
 -- FDL data flow - end
 -- ********************************************

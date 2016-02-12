@@ -27,7 +27,7 @@ package fdl_addr_decode is
 
     type ipb_algo_bx_mem_index_array is array (0 to 15) of natural;
 
-    constant NR_IPB_SLV_FDL : positive:= 23;
+    constant NR_IPB_SLV_FDL : positive:= 24;
 
     constant C_IPB_ALGO_BX_MEM : ipb_algo_bx_mem_index_array := (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
     constant C_IPB_RATE_CNT_BEFORE_PRESCALER : natural := 16;
@@ -37,12 +37,8 @@ package fdl_addr_decode is
     constant C_IPB_CONTROL : natural := 20;
     constant C_IPB_READ_VERSIONS : natural := 21;
     constant C_IPB_COMMAND_PULSES : natural := 22;
+    constant C_IPB_RATE_CNT_FINOR : natural := 23;
 
--- -- algo-bx-memories
---     constant ADDR_WIDTH_ALGO_BX_MEM: natural := 12;
---     constant OFFSET_BEG_ALGO_BX_MEM: natural := 0;
---     constant OFFSET_END_ALGO_BX_MEM: natural := 4095;
-    
 -- rate counter before prescaler
     constant ADDR_WIDTH_RATE_CNT_BEFORE_PRESCALER: natural := log2c(MAX_NR_ALGOS);
     constant OFFSET_BEG_RATE_CNT_BEFORE_PRESCALER: natural := 0;
@@ -69,16 +65,6 @@ package fdl_addr_decode is
     constant OFFSET_BEG_READ_VERSIONS: natural := OFFSET_L1TM_NAME;
     constant OFFSET_END_READ_VERSIONS: natural := OFFSET_FDL_FW_VERSION;
 
---     constant OFFSET_L1TM_NAME: natural := 0; 
---     constant OFFSET_L1TM_UID: natural := OFFSET_L1TM_NAME + L1TM_NAME'length/32;
---     constant OFFSET_L1TM_COMPILER_VERSION: natural := OFFSET_L1TM_UID + L1TM_UID'length/32;
---     constant OFFSET_GTL_FW_VERSION: natural := OFFSET_L1TM_COMPILER_VERSION + L1TM_COMPILER_VERSION'length/32;
---     constant OFFSET_FDL_FW_VERSION: natural := OFFSET_GTL_FW_VERSION + GTL_FW_VERSION'length/32;
---     
---     constant ADDR_WIDTH_READ_VERSIONS: natural := 6;
---     constant OFFSET_BEG_READ_VERSIONS: natural := OFFSET_L1TM_NAME;
---     constant OFFSET_END_READ_VERSIONS: natural := OFFSET_FDL_FW_VERSION;
--- 
     function fdl_addr_sel(signal addr : in std_logic_vector(31 downto 0)) return natural;
 
 end fdl_addr_decode;
@@ -114,6 +100,7 @@ package body fdl_addr_decode is
         elsif std_match(addr, "10010000000010010001100010001000") then sel := C_IPB_CONTROL; -- 0x90091888
         elsif std_match(addr, "10010000000010010001100011------") then sel := C_IPB_READ_VERSIONS; -- 0x900918C0
         elsif std_match(addr, "1001000000001001000110010000000-") then sel := C_IPB_COMMAND_PULSES; -- 0x90091900
+        elsif std_match(addr, "10010000000010010001100110000000") then sel := C_IPB_RATE_CNT_FINOR; -- 0x90091980
 		else sel := 99;
 		end if;
 		return sel;

@@ -143,12 +143,15 @@ vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlati
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd
 vcom -93 -work work $L1TM/vhdl/module_0/src/gtl_module.vhd
 
+vcom -93 -work work $GT_SRC/gt_mp7_core/frame/dm/delay_element.vhd
+
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/pulse_converter.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_addr_decode.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_fabric.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_rate_counter.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_post_dead_time_counter.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_slice.vhd
 vcom -93 -work work $GT_CORES/dp_mem_4096x32/dp_mem_4096x32.vhd
 #vcom -93 -work work $GT_CORES/lhc_clk_pll_40_80_160/lhc_clk_pll_40_80_160.vhd

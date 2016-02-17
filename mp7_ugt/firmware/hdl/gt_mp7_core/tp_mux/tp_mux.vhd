@@ -14,6 +14,7 @@
 -- $Revision: 0.1  $
 --------------------------------------------------------------------------------
 --
+-- HB 2016-02-16: added L1A (used for post dead time counter in fdl_module.vhd)
 -- JW 2015-09-17: started development of testpoint-mux module
 --
 
@@ -44,6 +45,7 @@ entity tp_mux is
         ec0: in std_logic;
         oc0: in std_logic;
         resync: in std_logic;
+        l1a: in std_logic;
         finor: in std_logic;
         veto: in std_logic;
         out0: out std_logic;
@@ -103,6 +105,7 @@ begin
                 ec0                                     when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"06"     else    --ECRes signal
                 oc0                                     when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"07"     else    --OCRes signal
                 resync                                  when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"08"     else    --Resync signal
+                l1a                                     when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"09"     else    --L1A signal
                 finor;
 
     out1   <=   finor                                   when    input_regs(TP_MUX_INDEX)(15 downto 8)    =   X"00"     else    --finor signal
@@ -114,6 +117,7 @@ begin
                 ec0                                     when    input_regs(TP_MUX_INDEX)(15 downto 8)    =   X"06"     else    --ECRes signal
                 oc0                                     when    input_regs(TP_MUX_INDEX)(15 downto 8)    =   X"07"     else    --OCRes signal
                 resync                                  when    input_regs(TP_MUX_INDEX)(15 downto 8)    =   X"08"     else    --Resync signal
+                l1a                                     when    input_regs(TP_MUX_INDEX)(15 downto 8)    =   X"09"     else    --L1A signal
                 finor;
 
     out2   <=   finor                                   when    input_regs(TP_MUX_INDEX)(23 downto 16)    =   X"00"     else    --finor signal
@@ -125,6 +129,7 @@ begin
                 ec0                                     when    input_regs(TP_MUX_INDEX)(23 downto 16)    =   X"06"     else    --ECRes signal
                 oc0                                     when    input_regs(TP_MUX_INDEX)(23 downto 16)    =   X"07"     else    --OCRes signal
                 resync                                  when    input_regs(TP_MUX_INDEX)(23 downto 16)    =   X"08"     else    --Resync signal
+                l1a                                     when    input_regs(TP_MUX_INDEX)(23 downto 16)    =   X"09"     else    --L1A signal
                 bc0;
 
 end rtl;

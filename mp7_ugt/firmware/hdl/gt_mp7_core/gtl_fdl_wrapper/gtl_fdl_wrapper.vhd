@@ -15,6 +15,7 @@
 --------------------------------------------------------------------------------
 
 -- Version-history:
+-- HB 2016-02-16: added "l1a" for algo post dead time counter in fdl_module (v0.0.17).
 -- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs" for fdl_module (v0.0.14).
 -- HB 2015-08-24: added algo_bx_mask_sim input for fdl_module (v0.0.13).
 -- HB 2015-06-26: used an additional port "veto_2_mezz_lemo" (in fdl_module), which goes to MP7-mezzanine (with 3 LEMOs) to send finor and veto to FINOR-FMC on AMC502.
@@ -53,6 +54,7 @@ entity gtl_fdl_wrapper is
         resync              : in std_logic;
         oc0                 : in std_logic;
         lhc_gap             : in std_logic;
+        l1a                 : in std_logic;
         begin_lumi_section  : in std_logic;
         bx_nr               : in std_logic_vector(11 downto 0);
         fdl_status          : out std_logic_vector(3 downto 0);
@@ -142,6 +144,7 @@ fdl_module_i: entity work.fdl_module
         resync          => resync,
         oc0             => oc0,
         lhc_gap         => lhc_gap,
+        l1a             => l1a,
         begin_lumi_section => begin_lumi_section,
         bx_nr           => bx_nr,
         algo_i          => algo,

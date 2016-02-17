@@ -18,6 +18,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2016-02-11: v0.0.17 - based on v0.0.16, but used implemented port l1a, module algo_post_dead_time_counter (in algo_slice) and register for L1A latency delay (delaying algos for post_dead_time_counter)
 -- HB 2016-02-11: v0.0.16 - based on v0.0.15, but used implemented finor-rate-counter
 -- HB 2016-01-18: v0.0.15 - based on v0.0.14, but used internal bx number for algo-bx-memory
 -- HB 2015-09-01: v0.0.14 - based on v0.0.13, but implemented "prescale_factor_set_index_reg" and "command_pulses" register. "ALGO_INPUTS_FF" is now part of generic declaration. Additionally
@@ -51,6 +52,8 @@ use work.gtl_pkg.ALL;
 use work.gt_mp7_core_pkg.ALL;
 use work.fdl_addr_decode.all;
 
+use work.math_pkg.all;
+
 entity fdl_module is
     generic(
         SIM_MODE : boolean := false; -- if SIM_MODE = true, "algo_bx_mask" is given by "algo_bx_mask_sim".
@@ -58,6 +61,7 @@ entity fdl_module is
         MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"00000001");
         PRESCALE_FACTOR_SET_INDEX_WIDTH : positive := 8;
         PRESCALE_FACTOR_SET_INDEX_REG_INIT : ipb_regs_array(0 to 1) := (others => X"00000000");
+        L1A_LATENCY_DELAY_INIT : ipb_regs_array(0 to 1) := (others => X"00000000");
         CNTRL_REG_INIT : ipb_regs_array(0 to 1) := (others => X"00000000");
 -- Input flip-flops for algorithms of fdl_module.vhd - used for tests of fdl_module.vhd only
         ALGO_INPUTS_FF: boolean := false
@@ -76,6 +80,7 @@ entity fdl_module is
         resync              : in std_logic;
         oc0                 : in std_logic;
         lhc_gap             : in std_logic;
+        l1a                 : in std_logic;
         begin_lumi_section  : in std_logic;
         bx_nr               : in std_logic_vector(11 downto 0);
         algo_i              : in std_logic_vector(NR_ALGOS-1 downto 0);
@@ -103,6 +108,7 @@ architecture rtl of fdl_module is
     signal ipb_from_slaves: ipb_rbus_array(NR_IPB_SLV_FDL-1 downto 0);
 
     signal rate_cnt_before_prescaler_reg: ipb_regs_array(0 to OFFSET_END_RATE_CNT_BEFORE_PRESCALER-OFFSET_BEG_RATE_CNT_BEFORE_PRESCALER);
+    signal rate_cnt_post_dead_time_reg: ipb_regs_array(0 to OFFSET_END_RATE_CNT_POST_DEAD_TIME-OFFSET_BEG_RATE_CNT_POST_DEAD_TIME);
     signal prescale_factor_reg: ipb_regs_array(0 to OFFSET_END_PRESCALE_FACTOR-OFFSET_BEG_PRESCALE_FACTOR);
     signal masks_reg: ipb_regs_array(0 to OFFSET_END_MASKS-OFFSET_BEG_MASKS);
     signal versions_to_ipb: ipb_regs_array(0 to OFFSET_END_READ_VERSIONS-OFFSET_BEG_READ_VERSIONS) := (others => (others => '0'));
@@ -123,6 +129,12 @@ architecture rtl of fdl_module is
     constant FINOR_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
     signal sres_finor_rate_counter : std_logic := '0';
     signal rate_cnt_finor_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
+
+    signal sres_algo_post_dead_time_counter : std_logic := '0';
+--     constant MAX_DELAY_L1A_LATENCY : integer := 64;
+    constant MAX_DELAY_L1A_LATENCY : integer := 63; -- values = 2^x causes "fatal error" at simulation in module "delay_element.vhd" !!!
+    signal l1a_latency_delay_reg : ipb_regs_array(0 to 1) := (others => (others => '0'));
+    signal rate_cnt_post_dead_time : rate_counter_array;
 
     signal algo_before_prescaler : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
     signal algo_after_prescaler : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
@@ -206,23 +218,23 @@ begin
 
 --===============================================================================================--
 -- Control register
-    control_reg_i: entity work.ipb_write_regs
-    generic map
-    (
-        init_value => CNTRL_REG_INIT,
-        addr_width => 2,
-        regs_beg_index => 0,
-        regs_end_index => 1
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_CONTROL),
-        ipbus_out => ipb_from_slaves(C_IPB_CONTROL),
-        ------------------
-        regs_o => control_reg
-    );
+--     control_reg_i: entity work.ipb_write_regs
+--     generic map
+--     (
+--         init_value => CNTRL_REG_INIT,
+--         addr_width => 2,
+--         regs_beg_index => 0,
+--         regs_end_index => 1
+--     )
+--     port map
+--     (
+--         clk => ipb_clk,
+--         reset => ipb_rst,
+--         ipbus_in => ipb_to_slaves(C_IPB_CONTROL),
+--         ipbus_out => ipb_from_slaves(C_IPB_CONTROL),
+--         ------------------
+--         regs_o => control_reg
+--     );
 
 -- HB 2015-08-31: control_reg not used currently
 
@@ -275,7 +287,7 @@ begin
     
 --===============================================================================================--
 -- Rate counter before prescaler registers
-    read_rate_cnt_i: entity work.ipb_read_regs
+    read_rate_cnt_before_prescaler_i: entity work.ipb_read_regs
     generic map
     (
         addr_width => ADDR_WIDTH_RATE_CNT_BEFORE_PRESCALER,
@@ -290,6 +302,45 @@ begin
         ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_BEFORE_PRESCALER),
         ------------------
         regs_i => rate_cnt_before_prescaler_reg
+    );
+
+--===============================================================================================--
+-- Rate counter post dead time registers
+    read_rate_cnt_post_dead_time_i: entity work.ipb_read_regs
+    generic map
+    (
+        addr_width => ADDR_WIDTH_RATE_CNT_POST_DEAD_TIME,
+        regs_beg_index => OFFSET_BEG_RATE_CNT_POST_DEAD_TIME,
+        regs_end_index => OFFSET_END_RATE_CNT_POST_DEAD_TIME
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_POST_DEAD_TIME),
+        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_POST_DEAD_TIME),
+        ------------------
+        regs_i => rate_cnt_post_dead_time_reg
+    );
+
+--===============================================================================================--
+-- Prescale factor set index register
+    l1a_latency_delay_reg_i: entity work.ipb_write_regs
+    generic map
+    (
+        init_value => L1A_LATENCY_DELAY_INIT,
+        addr_width => 2,
+        regs_beg_index => 0,
+        regs_end_index => 1
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_L1A_LATENCY_DELAY),
+        ipbus_out => ipb_from_slaves(C_IPB_L1A_LATENCY_DELAY),
+        ------------------
+        regs_o => l1a_latency_delay_reg
     );
 
 --===============================================================================================--
@@ -406,6 +457,7 @@ begin
 
     reg_l: for i in 0 to NR_ALGOS-1 generate
         rate_cnt_before_prescaler_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_before_prescaler(i);
+        rate_cnt_post_dead_time_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_post_dead_time(i);
         prescale_factor_int(i) <= prescale_factor_reg(i);
         finor_masks_int(i) <= masks_reg(i)(0);
         veto_masks_int(i) <= masks_reg(i)(1);
@@ -418,7 +470,9 @@ begin
     sres_algo_pre_scaler <= resync; 
 -- HB 2016-02-11: sync res for rate counter finor
     sres_finor_rate_counter <= resync;
-
+-- HB 2016-02-11: sync res for algo post dead time counter
+    sres_algo_post_dead_time_counter <= resync;
+    
 -- ******************************************************************************************************************
 -- FDL data flow - begin
 
@@ -438,14 +492,19 @@ begin
         generic map( 
             RATE_COUNTER_WIDTH => RATE_COUNTER_WIDTH,
             PRESCALER_COUNTER_WIDTH => PRESCALER_COUNTER_WIDTH,
-            PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT(i)
+            PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT(i),
+            MAX_DELAY => MAX_DELAY_L1A_LATENCY
         )
         port map( 
             sys_clk => ipb_clk,
             lhc_clk => lhc_clk,
+            lhc_rst => lhc_rst,
 -- HB 2015-09-17: added "sres_algo_rate_counter" and "sres_algo_pre_scaler"
 	    sres_algo_rate_counter => sres_algo_rate_counter,
 	    sres_algo_pre_scaler => sres_algo_pre_scaler,
+	    sres_algo_post_dead_time_counter => sres_algo_post_dead_time_counter,
+	    l1a => l1a,
+	    l1a_latency_delay => l1a_latency_delay_reg(0)(log2c(MAX_DELAY_L1A_LATENCY)-1 downto 0),
             request_update_factor_pulse => request_update_factor_pulse,
             begin_lumi_per => begin_lumi_section,
             algo_i => algo_int(i),
@@ -454,6 +513,7 @@ begin
             finor_mask => finor_masks_int(i),
             veto_mask => veto_masks_int(i),
             rate_cnt_before_prescaler => rate_cnt_before_prescaler(i),
+            rate_cnt_post_dead_time => rate_cnt_post_dead_time(i),
             algo_before_prescaler => algo_before_prescaler(i),
             algo_after_prescaler => algo_after_prescaler(i),
 	    algo_after_finor_mask => algo_after_finor_mask(i),

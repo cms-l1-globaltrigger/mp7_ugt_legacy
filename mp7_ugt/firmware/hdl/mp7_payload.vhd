@@ -15,6 +15,7 @@
 --------------------------------------------------------------------------------
 -- TODO: review the core and and modify it
 --
+-- HB 2016-02-16: added "l1a" for post dead time counter in fdl_module (v0.0.17)
 -- JW 2015-11-04: added bgo sync stage
 -- HB 2015-09-16: added "ec0_in", "resync_in" and "oc0_in" from "ctrs" for FDL
 -- JW 2015-08-24: modified the core and adapted it for mp7_fw_v1_8_2 usage
@@ -95,7 +96,14 @@ architecture rtl of mp7_payload is
     signal tp1            : std_logic;
     signal tp2            : std_logic;
 
+    signal l1a            : std_logic := '0';
+
 begin
+
+-- ***********************************************************************
+-- HB 2016-02-17: L1A connection has to be done (for post dead time counter in fdl_module.vhd)!!!
+--     l1a <= ?????; -- from MP7
+-- ***********************************************************************
 
     lhc_clk <= clk_payload;
     ipb_clk <= clk;
@@ -194,6 +202,7 @@ begin
         resync             => resync_in,
         oc0                => oc0_in,
         lhc_gap            => '0',
+        l1a                => l1a,
         begin_lumi_section => start_lumisection,
         bx_nr              => bx_nr_d_FDL,
         fdl_status         => fdl_status,
@@ -222,8 +231,9 @@ begin
         ec0                 => ec0_in,
         oc0                 => oc0_in,
         resync              => resync_in,
+        l1a                 => l1a,
         finor               => finor_2_mezz_lemo,
-        veto                =>  veto_2_mezz_lemo,
+        veto                => veto_2_mezz_lemo,
         out0            => tp0,
         out1            => tp1,
         out2            => tp2

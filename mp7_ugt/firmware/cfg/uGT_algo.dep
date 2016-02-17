@@ -37,6 +37,7 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_addr_decode.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_rate_counter.vhd
+src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_post_dead_time_counter.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_fabric.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd

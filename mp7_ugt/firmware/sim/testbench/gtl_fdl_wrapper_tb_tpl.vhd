@@ -214,7 +214,6 @@ begin
 dut : entity work.gtl_fdl_wrapper
     generic map(
         SIM_MODE => SIM_MODE
---         FDL_OUT_MEZZ_2_TCDS => FDL_OUT_MEZZ_2_TCDS
     )
     port map
     (
@@ -231,6 +230,7 @@ dut : entity work.gtl_fdl_wrapper
         resync          => '0',
         oc0             => '0',
         lhc_gap            => '0',
+        l1a                => '0',
         begin_lumi_section => '0',
         bx_nr              => (others => '0'),
         fdl_status      => open,

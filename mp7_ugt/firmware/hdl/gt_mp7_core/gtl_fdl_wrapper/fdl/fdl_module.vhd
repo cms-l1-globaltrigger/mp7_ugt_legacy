@@ -18,6 +18,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2016-02-23: v0.0.19 - based on v0.0.18, but implemented algo-rate-counter after prescaler
 -- HB 2016-02-11: v0.0.18 - based on v0.0.17, but implemented L1A-rate-counter (only for monitoring and verification of incoming L1As)
 -- HB 2016-02-11: v0.0.17 - based on v0.0.16, but implemented port l1a, module algo_post_dead_time_counter (in algo_slice) and register for L1A latency delay (delaying algos for post_dead_time_counter)
 -- HB 2016-02-11: v0.0.16 - based on v0.0.15, but implemented finor-rate-counter

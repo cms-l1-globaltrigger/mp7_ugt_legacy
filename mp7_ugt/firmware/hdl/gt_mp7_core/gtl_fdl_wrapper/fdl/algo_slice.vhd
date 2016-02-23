@@ -19,6 +19,7 @@
 -- algo-bx-mask at algo input
 -- rate-counter before prescaler only (no rate-counter after finor-mask)
 
+-- HB 2016-02-23: added algo_rate_counter after prescaler.
 -- HB 2016-02-22: moved "algo_post_dead_time_counter" after prescaler.
 -- HB 2016-02-16: inserted "algo_post_dead_time_counter".
 -- HB 2015-09-17: inserted ports "sres_algo_rate_counter" and "sres_algo_pre_scaler".

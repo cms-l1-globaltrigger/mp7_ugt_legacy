@@ -18,7 +18,8 @@
 -- FDL structure
 
 -- Version-history:
--- HB 2016-02-23: v0.0.19 - based on v0.0.18, but implemented algo-rate-counter after prescaler
+-- HB 2016-02-23: v0.0.19 - based on v0.0.18, but implemented algo-rate-counter after prescaler. 
+--                                            Fixed bug for syncr. reset of counter, "resync" not used anymore. No syncr. reset for counters except begin of lumi-section.
 -- HB 2016-02-11: v0.0.18 - based on v0.0.17, but implemented L1A-rate-counter (only for monitoring and verification of incoming L1As)
 -- HB 2016-02-11: v0.0.17 - based on v0.0.16, but implemented port l1a, module algo_post_dead_time_counter (in algo_slice) and register for L1A latency delay (delaying algos for post_dead_time_counter)
 -- HB 2016-02-11: v0.0.16 - based on v0.0.15, but implemented finor-rate-counter
@@ -512,15 +513,12 @@ begin
 
 --===============================================================================================--
 
--- HB 2015-09-16: reset logic not decided yet (sres = synchr. reset)
-    sres_algo_rate_counter <= resync;
-    sres_algo_pre_scaler <= resync; 
--- HB 2016-02-11: sync res for rate counter finor
-    sres_finor_rate_counter <= resync;
--- HB 2016-02-19: sync res for rate counter L1A
-    sres_l1a_rate_counter <= resync;
--- HB 2016-02-11: sync res for algo post dead time counter
-    sres_algo_post_dead_time_counter <= resync;
+-- HB 2016-02-23: sync reset for counters not used anymore - resync was a bug !!! Reset with begin of lumi-section is ok.
+    sres_algo_rate_counter <= '0';
+    sres_algo_pre_scaler <= '0'; 
+    sres_finor_rate_counter <= '0';
+    sres_l1a_rate_counter <= '0';
+    sres_algo_post_dead_time_counter <= '0';
     
 -- ******************************************************************************************************************
 -- FDL data flow - begin

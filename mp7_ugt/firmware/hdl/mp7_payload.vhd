@@ -45,6 +45,7 @@ entity mp7_payload is
         rst_loc: in std_logic_vector(N_REGION - 1 downto 0);
         clken_loc: in std_logic_vector(N_REGION - 1 downto 0);
         ctrs: in ttc_stuff_array;
+	l1a: in std_logic; -- L1A input
         bc0: out std_logic;
         d: in ldata(4 * N_REGION - 1 downto 0); -- data in
         q: out ldata(4 * N_REGION - 1 downto 0); -- data out
@@ -96,13 +97,13 @@ architecture rtl of mp7_payload is
     signal tp1            : std_logic;
     signal tp2            : std_logic;
 
-    signal l1a            : std_logic := '0';
+    signal l1a_int            : std_logic := '0';
 
 begin
 
 -- ***********************************************************************
--- HB 2016-02-17: L1A connection has to be done (for post dead time counter in fdl_module.vhd)!!!
---     l1a <= ?????; -- from MP7
+-- HB 2016-02-17: L1A connection has to be done (for post dead time counter in fdl_module.vhd) in top (mp7xe_690.vhd) !!!
+    l1a_int <= l1a; -- from MP7
 -- ***********************************************************************
 
     lhc_clk <= clk_payload;
@@ -202,7 +203,7 @@ begin
         resync             => resync_in,
         oc0                => oc0_in,
         lhc_gap            => '0',
-        l1a                => l1a,
+        l1a                => l1a_int,
         begin_lumi_section => start_lumisection,
         bx_nr              => bx_nr_d_FDL,
         fdl_status         => fdl_status,
@@ -231,7 +232,7 @@ begin
         ec0                 => ec0_in,
         oc0                 => oc0_in,
         resync              => resync_in,
-        l1a                 => l1a,
+        l1a                 => l1a_int,
         finor               => finor_2_mezz_lemo,
         veto                => veto_2_mezz_lemo,
         out0            => tp0,

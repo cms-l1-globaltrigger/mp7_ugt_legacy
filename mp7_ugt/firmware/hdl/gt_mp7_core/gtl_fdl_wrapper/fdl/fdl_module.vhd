@@ -18,8 +18,9 @@
 -- FDL structure
 
 -- Version-history:
--- HB 2016-02-11: v0.0.17 - based on v0.0.16, but used implemented port l1a, module algo_post_dead_time_counter (in algo_slice) and register for L1A latency delay (delaying algos for post_dead_time_counter)
--- HB 2016-02-11: v0.0.16 - based on v0.0.15, but used implemented finor-rate-counter
+-- HB 2016-02-11: v0.0.18 - based on v0.0.17, but implemented L1A-rate-counter (only for monitoring and verification of incoming L1As)
+-- HB 2016-02-11: v0.0.17 - based on v0.0.16, but implemented port l1a, module algo_post_dead_time_counter (in algo_slice) and register for L1A latency delay (delaying algos for post_dead_time_counter)
+-- HB 2016-02-11: v0.0.16 - based on v0.0.15, but implemented finor-rate-counter
 -- HB 2016-01-18: v0.0.15 - based on v0.0.14, but used internal bx number for algo-bx-memory
 -- HB 2015-09-01: v0.0.14 - based on v0.0.13, but implemented "prescale_factor_set_index_reg" and "command_pulses" register. "ALGO_INPUTS_FF" is now part of generic declaration. Additionally
 --                          inserted input ports "ec0", "resync" and "oc0" for reset logic.
@@ -108,6 +109,7 @@ architecture rtl of fdl_module is
     signal ipb_from_slaves: ipb_rbus_array(NR_IPB_SLV_FDL-1 downto 0);
 
     signal rate_cnt_before_prescaler_reg: ipb_regs_array(0 to OFFSET_END_RATE_CNT_BEFORE_PRESCALER-OFFSET_BEG_RATE_CNT_BEFORE_PRESCALER);
+    signal rate_cnt_after_prescaler_reg: ipb_regs_array(0 to OFFSET_END_RATE_CNT_AFTER_PRESCALER-OFFSET_BEG_RATE_CNT_AFTER_PRESCALER);
     signal rate_cnt_post_dead_time_reg: ipb_regs_array(0 to OFFSET_END_RATE_CNT_POST_DEAD_TIME-OFFSET_BEG_RATE_CNT_POST_DEAD_TIME);
     signal prescale_factor_reg: ipb_regs_array(0 to OFFSET_END_PRESCALE_FACTOR-OFFSET_BEG_PRESCALE_FACTOR);
     signal masks_reg: ipb_regs_array(0 to OFFSET_END_MASKS-OFFSET_BEG_MASKS);
@@ -125,10 +127,15 @@ architecture rtl of fdl_module is
     signal prescale_factor_int : prescale_factor_array;
     signal sres_algo_rate_counter : std_logic := '0';
     signal rate_cnt_before_prescaler : rate_counter_array;
+    signal rate_cnt_after_prescaler : rate_counter_array;
     
     constant FINOR_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
     signal sres_finor_rate_counter : std_logic := '0';
     signal rate_cnt_finor_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
+
+    constant L1A_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
+    signal sres_l1a_rate_counter : std_logic := '0';
+    signal rate_cnt_l1a_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
     signal sres_algo_post_dead_time_counter : std_logic := '0';
 --     constant MAX_DELAY_L1A_LATENCY : integer := 64;
@@ -305,6 +312,25 @@ begin
     );
 
 --===============================================================================================--
+-- Rate counter after prescaler registers
+    read_rate_cnt_after_prescaler_i: entity work.ipb_read_regs
+    generic map
+    (
+        addr_width => ADDR_WIDTH_RATE_CNT_AFTER_PRESCALER,
+        regs_beg_index => OFFSET_BEG_RATE_CNT_AFTER_PRESCALER,
+        regs_end_index => OFFSET_END_RATE_CNT_AFTER_PRESCALER
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_AFTER_PRESCALER),
+        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_AFTER_PRESCALER),
+        ------------------
+        regs_i => rate_cnt_after_prescaler_reg
+    );
+
+--===============================================================================================--
 -- Rate counter post dead time registers
     read_rate_cnt_post_dead_time_i: entity work.ipb_read_regs
     generic map
@@ -454,9 +480,29 @@ begin
     );
 
 --===============================================================================================--
+-- Rate counter L1A register
+    read_rate_cnt_l1a_i: entity work.ipb_read_regs
+    generic map
+    (
+        addr_width => 1,
+        regs_beg_index => 0,
+        regs_end_index => 0
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_L1A),
+        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_L1A),
+        ------------------
+        regs_i => rate_cnt_l1a_reg
+    );
+
+--===============================================================================================--
 
     reg_l: for i in 0 to NR_ALGOS-1 generate
         rate_cnt_before_prescaler_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_before_prescaler(i);
+        rate_cnt_after_prescaler_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_after_prescaler(i);
         rate_cnt_post_dead_time_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_post_dead_time(i);
         prescale_factor_int(i) <= prescale_factor_reg(i);
         finor_masks_int(i) <= masks_reg(i)(0);
@@ -470,6 +516,8 @@ begin
     sres_algo_pre_scaler <= resync; 
 -- HB 2016-02-11: sync res for rate counter finor
     sres_finor_rate_counter <= resync;
+-- HB 2016-02-19: sync res for rate counter L1A
+    sres_l1a_rate_counter <= resync;
 -- HB 2016-02-11: sync res for algo post dead time counter
     sres_algo_post_dead_time_counter <= resync;
     
@@ -513,6 +561,7 @@ begin
             finor_mask => finor_masks_int(i),
             veto_mask => veto_masks_int(i),
             rate_cnt_before_prescaler => rate_cnt_before_prescaler(i),
+            rate_cnt_after_prescaler => rate_cnt_after_prescaler(i),
             rate_cnt_post_dead_time => rate_cnt_post_dead_time(i),
             algo_before_prescaler => algo_before_prescaler(i),
             algo_after_prescaler => algo_after_prescaler(i),
@@ -582,7 +631,7 @@ begin
     end process;
 -------------------------------------------------------------------------------------------------------------------------------------
 
--- Rate counter finor register
+-- Rate counter finor
 -- HB 2016-02-11: requested for monitoring (in legacy system part of TCS). Has to be moved to FINOR-AMC502 !!!
     rate_cnt_finor_i: entity work.algo_rate_counter
 	generic map( 
@@ -595,6 +644,21 @@ begin
             store_cnt_value => begin_lumi_section,
             algo_i => finor_with_veto_temp1,
             counter_o => rate_cnt_finor_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
+	);
+
+-- Rate counter L1A
+-- HB 2016-02-19: only for monitoring and verification of incoming L1As
+    rate_cnt_l1a_i: entity work.algo_rate_counter
+	generic map( 
+	    COUNTER_WIDTH => L1A_RATE_COUNTER_WIDTH
+	)
+	port map( 
+            sys_clk => ipb_clk,
+            lhc_clk => lhc_clk,
+            sres_counter => sres_l1a_rate_counter,
+            store_cnt_value => begin_lumi_section,
+            algo_i => l1a,
+            counter_o => rate_cnt_l1a_reg(0)(L1A_RATE_COUNTER_WIDTH-1 downto 0)
 	);
 
 -- FDL data flow - end

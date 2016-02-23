@@ -27,24 +27,31 @@ package fdl_addr_decode is
 
     type ipb_algo_bx_mem_index_array is array (0 to 15) of natural;
 
-    constant NR_IPB_SLV_FDL : positive:= 26;
+    constant NR_IPB_SLV_FDL : positive:= 28;
 
     constant C_IPB_ALGO_BX_MEM : ipb_algo_bx_mem_index_array := (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
     constant C_IPB_RATE_CNT_BEFORE_PRESCALER : natural := 16;
     constant C_IPB_PRESCALE_FACTOR : natural := 17;
-    constant C_IPB_MASKS : natural := 18;
-    constant C_IPB_PRESCALE_FACTOR_SET_INDEX : natural := 19;
-    constant C_IPB_CONTROL : natural := 20;
-    constant C_IPB_READ_VERSIONS : natural := 21;
-    constant C_IPB_COMMAND_PULSES : natural := 22;
-    constant C_IPB_RATE_CNT_FINOR : natural := 23;
-    constant C_IPB_RATE_CNT_POST_DEAD_TIME : natural := 24;
-    constant C_IPB_L1A_LATENCY_DELAY : natural := 25;
+    constant C_IPB_RATE_CNT_AFTER_PRESCALER : natural := 18;
+    constant C_IPB_RATE_CNT_POST_DEAD_TIME : natural := 19;
+    constant C_IPB_MASKS : natural := 20;
+    constant C_IPB_PRESCALE_FACTOR_SET_INDEX : natural := 21;
+    constant C_IPB_CONTROL : natural := 22;
+    constant C_IPB_READ_VERSIONS : natural := 23;
+    constant C_IPB_COMMAND_PULSES : natural := 24;
+    constant C_IPB_RATE_CNT_FINOR : natural := 25;
+    constant C_IPB_L1A_LATENCY_DELAY : natural := 26;
+    constant C_IPB_RATE_CNT_L1A : natural := 27;
 
 -- rate counter before prescaler
     constant ADDR_WIDTH_RATE_CNT_BEFORE_PRESCALER: natural := log2c(MAX_NR_ALGOS);
     constant OFFSET_BEG_RATE_CNT_BEFORE_PRESCALER: natural := 0;
     constant OFFSET_END_RATE_CNT_BEFORE_PRESCALER: natural := MAX_NR_ALGOS-1;
+    
+-- rate counter after prescaler
+    constant ADDR_WIDTH_RATE_CNT_AFTER_PRESCALER: natural := log2c(MAX_NR_ALGOS);
+    constant OFFSET_BEG_RATE_CNT_AFTER_PRESCALER: natural := 0;
+    constant OFFSET_END_RATE_CNT_AFTER_PRESCALER: natural := MAX_NR_ALGOS-1;
     
 -- prescale factor range
     constant ADDR_WIDTH_PRESCALE_FACTOR: natural := log2c(MAX_NR_ALGOS);
@@ -102,14 +109,16 @@ package body fdl_addr_decode is
         elsif std_match(addr, "10010000000000001111------------") then sel := C_IPB_ALGO_BX_MEM(15); -- 0x9000F000 .. 0x9000FFFF
         elsif std_match(addr, "10010000000000010000000---------") then sel := C_IPB_RATE_CNT_BEFORE_PRESCALER; -- 0x90010000 .. 0x900101FF
         elsif std_match(addr, "10010000000000010000001---------") then sel := C_IPB_PRESCALE_FACTOR; -- 0x90010200 .. 0x900103FF
-        elsif std_match(addr, "10010000000000010000010---------") then sel := C_IPB_MASKS; -- 0x90010400 .. 0x900105FF
+        elsif std_match(addr, "10010000000000010000010---------") then sel := C_IPB_RATE_CNT_AFTER_PRESCALER; -- 0x90010400 .. 0x900105FF
+        elsif std_match(addr, "10010000000000010000011---------") then sel := C_IPB_RATE_CNT_POST_DEAD_TIME; -- 0x90010600 .. 0x900107FF
+        elsif std_match(addr, "10010000000000010000100---------") then sel := C_IPB_MASKS; -- 0x90010800 .. 0x900109FF
         elsif std_match(addr, "1001000000001001000110001000000-") then sel := C_IPB_PRESCALE_FACTOR_SET_INDEX; -- 0x90091880
         elsif std_match(addr, "10010000000010010001100010001000") then sel := C_IPB_CONTROL; -- 0x90091888
         elsif std_match(addr, "10010000000010010001100011------") then sel := C_IPB_READ_VERSIONS; -- 0x900918C0
         elsif std_match(addr, "1001000000001001000110010000000-") then sel := C_IPB_COMMAND_PULSES; -- 0x90091900
         elsif std_match(addr, "10010000000010010001100110000000") then sel := C_IPB_RATE_CNT_FINOR; -- 0x90091980
-        elsif std_match(addr, "10010000000010010010000---------") then sel := C_IPB_RATE_CNT_POST_DEAD_TIME; -- 0x90092000
         elsif std_match(addr, "1001000000001001001000100000000-") then sel := C_IPB_L1A_LATENCY_DELAY; -- 0x90092200
+        elsif std_match(addr, "10010000000010010011000000000000") then sel := C_IPB_RATE_CNT_L1A; -- 0x90093000
 		else sel := 99;
 		end if;
 		return sel;

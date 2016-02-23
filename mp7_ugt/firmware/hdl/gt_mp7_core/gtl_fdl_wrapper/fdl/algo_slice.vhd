@@ -19,6 +19,7 @@
 -- algo-bx-mask at algo input
 -- rate-counter before prescaler only (no rate-counter after finor-mask)
 
+-- HB 2016-02-22: moved "algo_post_dead_time_counter" after prescaler.
 -- HB 2016-02-16: inserted "algo_post_dead_time_counter".
 -- HB 2015-09-17: inserted ports "sres_algo_rate_counter" and "sres_algo_pre_scaler".
 
@@ -44,6 +45,7 @@ entity algo_slice is
 	sres_algo_rate_counter : in std_logic;
 	sres_algo_pre_scaler : in std_logic;
 	sres_algo_post_dead_time_counter : in std_logic;
+-- HB 2015-09-2: added "l1a" and "l1a_latency_delay" for post-dead-time counter
 	l1a : in std_logic;
 	l1a_latency_delay : in std_logic_vector(log2c(MAX_DELAY)-1 downto 0);
         request_update_factor_pulse : in std_logic;
@@ -54,6 +56,7 @@ entity algo_slice is
         finor_mask : in std_logic;
         veto_mask : in std_logic;
         rate_cnt_before_prescaler : out std_logic_vector(RATE_COUNTER_WIDTH-1 DOWNTO 0);
+        rate_cnt_after_prescaler : out std_logic_vector(RATE_COUNTER_WIDTH-1 DOWNTO 0);
         rate_cnt_post_dead_time : out std_logic_vector(RATE_COUNTER_WIDTH-1 DOWNTO 0);
         algo_before_prescaler : out std_logic;
         algo_after_prescaler : out std_logic;
@@ -83,6 +86,34 @@ rate_cnt_before_prescaler_i: entity work.algo_rate_counter
         counter_o => rate_cnt_before_prescaler
     );
 
+prescaler_i: entity work.algo_pre_scaler
+    generic map( 
+        COUNTER_WIDTH => PRESCALER_COUNTER_WIDTH,
+        PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT
+    )
+    port map( 
+        clk => lhc_clk,
+        sres_counter => sres_algo_pre_scaler,
+        algo_i => algo_after_algo_bx_mask_int,
+        request_update_factor_pulse => request_update_factor_pulse,
+        update_factor_pulse => begin_lumi_per,
+        prescale_factor => prescale_factor,
+        prescaled_algo_o => algo_after_prescaler_int
+    );
+
+rate_cnt_after_prescaler_i: entity work.algo_rate_counter
+    generic map( 
+        COUNTER_WIDTH => RATE_COUNTER_WIDTH
+    )
+    port map( 
+        sys_clk => sys_clk,
+        lhc_clk => lhc_clk,
+        sres_counter => sres_algo_rate_counter,
+        store_cnt_value => begin_lumi_per,
+        algo_i => algo_after_prescaler_int,
+        counter_o => rate_cnt_after_prescaler
+    );
+
 rate_cnt_post_dead_time_i: entity work.algo_post_dead_time_counter
     generic map( 
         COUNTER_WIDTH => RATE_COUNTER_WIDTH,
@@ -96,24 +127,8 @@ rate_cnt_post_dead_time_i: entity work.algo_post_dead_time_counter
         store_cnt_value => begin_lumi_per,
         l1a => l1a,
         delay => l1a_latency_delay,
-        algo_i => algo_after_algo_bx_mask_int,
+        algo_i => algo_after_prescaler_int,
         counter_o => rate_cnt_post_dead_time
-    );
-
-prescaler_i: entity work.algo_pre_scaler
-    generic map( 
-        COUNTER_WIDTH => PRESCALER_COUNTER_WIDTH,
-        PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT
-    )
-    port map( 
-        clk => lhc_clk,
-        sres_counter => sres_algo_pre_scaler,
---         sres_counter => '0',
-        algo_i => algo_after_algo_bx_mask_int,
-        request_update_factor_pulse => request_update_factor_pulse,
-        update_factor_pulse => begin_lumi_per,
-        prescale_factor => prescale_factor,
-        prescaled_algo_o => algo_after_prescaler_int
     );
 
 algo_after_finor_mask_int <= algo_after_prescaler_int and finor_mask;

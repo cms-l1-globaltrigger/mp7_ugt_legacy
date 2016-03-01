@@ -175,19 +175,27 @@ def main():
     os.chdir(mp7path)
 
     #
-    #  Creating build areas
-    #
-    logging.info("creating build areas...")
-    build_area_dir = ''.join(('build_0x', args.build))
-
-    #
     #  Patching VHDL
     #
     logging.info("patch the target package with current UNIX timestamp/username/hostname...")
     subprocess.check_call(['python', os.path.join(scripts_dir, 'pkgpatch.py'), '--build', args.build ,TARGET_PKG_TPL, TARGET_PKG])
 
+    #
+    #  Creating build areas
+    #
+    logging.info("creating build areas...")
+    build_area_dir = ''.join(('build_0x', args.build))
+
     if os.path.isdir(build_area_dir):
         raise RuntimeError("build area alredy exists: {build_area_dir}".format(**locals()))
+
+    # Create build directory for fw synthesis...
+    project_dir = os.path.abspath(os.path.join(build_area_dir, menu_name))
+    os.makedirs(project_dir)
+
+    copy_tree(os.path.join(args.menu, 'vhdl'), os.path.join(project_dir, 'vhdl_producer', 'vhdl'))
+    local_menudir = os.path.abspath(os.path.join(project_dir, 'vhdl_producer'))
+
     # Do for every module of the menu...
     for i in range(modules):
         module_dir = os.path.join(build_area_dir, menu_name, 'module_{i}'.format(**locals()))
@@ -203,9 +211,9 @@ def main():
         logging.info("create menu dependencies...")
         filename = os.path.join(local_fw_dir, 'firmware', 'cfg', 'uGT_gtl.dep')
         with open(filename, 'w') as f:
-            f.write("src {args.menu}/vhdl/module_{i}/src/algo_mapping_rop.vhd\n".format(**locals()))
-            f.write("src {args.menu}/vhdl/module_{i}/src/gtl_module.vhd\n".format(**locals()))
-            f.write("src {args.menu}/vhdl/module_{i}/src/gtl_pkg.vhd\n".format(**locals())) #until the tmVHDLproducer is released, the gtl_pkg is used
+            f.write("src {local_menudir}/vhdl/module_{i}/src/algo_mapping_rop.vhd\n".format(**locals()))
+            f.write("src {local_menudir}/vhdl/module_{i}/src/gtl_module.vhd\n".format(**locals()))
+            f.write("src {local_menudir}/vhdl/module_{i}/src/gtl_pkg.vhd\n".format(**locals())) #until the tmVHDLproducer is released, the gtl_pkg is used
     os.chdir(cwd)
 
     # Do for every module of the menu...

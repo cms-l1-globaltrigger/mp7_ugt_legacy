@@ -15,6 +15,7 @@
 --------------------------------------------------------------------------------
 
 -- Version-history:
+-- HB 2016-02-26: inserted finor_w_veto_2_mezz_lemo with 1.5bx delay. Removed unused inputs (ec0, oc0, etc.) and fdl_status output (see fdl_module v0.0.20).
 -- HB 2016-02-16: added "l1a" for algo post dead time counter in fdl_module (v0.0.17).
 -- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs" for fdl_module (v0.0.14).
 -- HB 2015-08-24: added algo_bx_mask_sim input for fdl_module (v0.0.13).
@@ -49,15 +50,8 @@ entity gtl_fdl_wrapper is
         lhc_rst             : in std_logic;
         lhc_data            : in lhc_data_t;
         bcres               : in std_logic;
--- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs" for FDL
-        ec0                 : in std_logic;
-        resync              : in std_logic;
-        oc0                 : in std_logic;
-        lhc_gap             : in std_logic;
         l1a                 : in std_logic;
         begin_lumi_section  : in std_logic;
-        bx_nr               : in std_logic_vector(11 downto 0);
-        fdl_status          : out std_logic_vector(3 downto 0);
         prescale_factor_set_index_rop : out std_logic_vector(7 downto 0);
         algo_before_prescaler_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
@@ -66,6 +60,7 @@ entity gtl_fdl_wrapper is
         local_veto_rop      : out std_logic;
         finor_2_mezz_lemo      : out std_logic;
         veto_2_mezz_lemo      : out std_logic;
+        finor_w_veto_2_mezz_lemo      : out std_logic;
         local_finor_with_veto_o      : out std_logic
     );
 end gtl_fdl_wrapper;
@@ -139,16 +134,9 @@ fdl_module_i: entity work.fdl_module
         lhc_clk         => lhc_clk,
         lhc_rst         => lhc_rst,
         bcres           => bcres,
--- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs" for FDL
-        ec0             => ec0,
-        resync          => resync,
-        oc0             => oc0,
-        lhc_gap         => lhc_gap,
         l1a             => l1a,
         begin_lumi_section => begin_lumi_section,
-        bx_nr           => bx_nr,
         algo_i          => algo,
-        fdl_status      => fdl_status,
         prescale_factor_set_index_rop => prescale_factor_set_index_rop,
         algo_before_prescaler_rop => algo_before_prescaler_rop,
         algo_after_prescaler_rop  => algo_after_prescaler_rop,
@@ -157,6 +145,7 @@ fdl_module_i: entity work.fdl_module
         local_veto_rop  => local_veto_rop,
         finor_2_mezz_lemo  => finor_2_mezz_lemo,
         veto_2_mezz_lemo  => veto_2_mezz_lemo,
+        finor_w_veto_2_mezz_lemo  => finor_w_veto_2_mezz_lemo,
         local_finor_with_veto_o  => local_finor_with_veto_o,
 	algo_bx_mask_sim => (others => '1')  
     );

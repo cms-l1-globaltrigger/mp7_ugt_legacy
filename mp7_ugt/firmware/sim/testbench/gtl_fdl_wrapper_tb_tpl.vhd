@@ -225,15 +225,8 @@ dut : entity work.gtl_fdl_wrapper
         lhc_rst            => '0',
         lhc_data           => lhc_data,
         bcres              => '0',
--- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs"
-        ec0             => '0',
-        resync          => '0',
-        oc0             => '0',
-        lhc_gap            => '0',
         l1a                => '0',
         begin_lumi_section => '0',
-        bx_nr              => (others => '0'),
-        fdl_status      => open,
         prescale_factor_set_index_rop => open,
         algo_before_prescaler_rop => open,
         algo_after_prescaler_rop  => open,
@@ -242,7 +235,8 @@ dut : entity work.gtl_fdl_wrapper
         local_veto_rop  => open,
         finor_2_mezz_lemo  => open,
         veto_2_mezz_lemo  => open,
-        local_finor_with_veto_o  => local_finor_with_veto
+	finor_w_veto_2_mezz_lemo  => open,
+	local_finor_with_veto_o  => local_finor_with_veto
     );
 
 end rtl;

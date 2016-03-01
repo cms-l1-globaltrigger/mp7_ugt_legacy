@@ -18,6 +18,9 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2016-02-26: v0.0.20 - based on v0.0.19, but changed finor_2_mezz_lemo and veto_2_mezz_lemo (no additional delay anymore) and inserted finor_w_veto_2_mezz_lemo with
+--			    1.5bx delay.
+--			    Removed unused inputs (ec0, oc0, etc.) and fdl_status output.
 -- HB 2016-02-23: v0.0.19 - based on v0.0.18, but implemented algo-rate-counter after prescaler. 
 --                                            Fixed bug for syncr. reset of counter, "resync" not used anymore. No syncr. reset for counters except begin of lumi-section.
 -- HB 2016-02-11: v0.0.18 - based on v0.0.17, but implemented L1A-rate-counter (only for monitoring and verification of incoming L1As)
@@ -78,25 +81,19 @@ entity fdl_module is
         lhc_clk             : in std_logic;
         lhc_rst             : in std_logic;
         bcres               : in std_logic;
--- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs"
-        ec0                 : in std_logic;
-        resync              : in std_logic;
-        oc0                 : in std_logic;
-        lhc_gap             : in std_logic;
         l1a                 : in std_logic;
         begin_lumi_section  : in std_logic;
-        bx_nr               : in std_logic_vector(11 downto 0);
         algo_i              : in std_logic_vector(NR_ALGOS-1 downto 0);
-        fdl_status          : out std_logic_vector(3 downto 0);
         prescale_factor_set_index_rop : out std_logic_vector(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0);
         algo_before_prescaler_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_finor_mask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         local_finor_rop     : out std_logic;
         local_veto_rop      : out std_logic;
-        finor_2_mezz_lemo      : out std_logic;
-        veto_2_mezz_lemo      : out std_logic;
-        local_finor_with_veto_o       : out std_logic; -- to SPY2_FINOR
+        finor_2_mezz_lemo      : out std_logic; -- to tp_mux.vhd
+        veto_2_mezz_lemo      : out std_logic; -- to tp_mux.vhd
+        finor_w_veto_2_mezz_lemo      : out std_logic; -- to tp_mux.vhd
+	local_finor_with_veto_o       : out std_logic; -- to SPY2_FINOR
 -- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
         algo_bx_mask_sim    : in std_logic_vector(NR_ALGOS-1 downto 0)
     );
@@ -170,17 +167,6 @@ architecture rtl of fdl_module is
     signal bx_nr_internal : std_logic_vector(11 downto 0) := (others => '0');
 
 begin
-
--- ******************************************************************************************************************
--- HB 04-09-2013: FDL status (similar to status information send to DAQ partitions via TCS) - has to checked!
--- fdl_status(3) = "ready"
--- fdl_status(2) = "busy"
--- fdl_status(1) = "error/out_of_sync"
--- fdl_status(0) = "warning"
-
--- HB 2014-10-22:
--- A redesign of FINOR is done, so no more board_connection check.
-    fdl_status <= X"8"; -- status of FDL has to be designed, here set to "ready"
 
 -- ******************************************************************************************************************
     fabric_i: entity work.fdl_fabric
@@ -352,7 +338,7 @@ begin
     );
 
 --===============================================================================================--
--- Prescale factor set index register
+-- L1A latency delay register
     l1a_latency_delay_reg_i: entity work.ipb_write_regs
     generic map
     (
@@ -447,7 +433,7 @@ begin
     );
 
 --===============================================================================================--
--- Prescale factor set index register
+-- Command pulses register
     pulse_reg_i: entity work.ipb_pulse_regs
     port map(
         ipb_clk => ipb_clk,
@@ -569,8 +555,7 @@ begin
 	);
     end generate algo_slices_l;
 
--- HB 2014-10-23: renamed
--- Finor of algorithms
+-- Finors
     local_finor_p: process(algo_after_finor_mask)
        variable or_algo_var : std_logic := '0';
 	begin
@@ -581,8 +566,7 @@ begin
         local_finor <= or_algo_var;
     end process local_finor_p;
     
--- HB 2014-10-23: renamed
--- Finor of vetos
+-- Vetos
     local_veto_or_p: process(veto)
         variable or_veto_var : std_logic := '0';
 	begin
@@ -604,10 +588,14 @@ begin
 
     local_finor_rop <= local_finor_pipe;
     local_veto_rop <= local_veto_pipe;
-        
+    
 -- HB 2014-12-15: bug fixed - local_finor_with_veto used for finor_2_mezz_lemo not for SPY2_FINOR !!!
     local_finor_with_veto_o <= local_finor_pipe and not local_veto_pipe;
 
+-- HB 2016-02-26: local finor and local veto to tp_mux for LEMO connectors
+    finor_2_mezz_lemo <= local_finor;
+    veto_2_mezz_lemo <= local_veto;
+        
 -------------------------------------------------------------------------------------------------------------------------------------
 -- Pipeline stages for "simulating" the stages of FINOR-AMC502, to get the same latency for both possibilities of connecting to TCDS.
 -- HB 2015-08-21: currently assumed 1.5 bx latency over FINOR-AMC502
@@ -619,19 +607,17 @@ begin
         end if;
     end process;
 
--- Output FFs should be placed in IOBs - to be done in UCF
--- HB 2015-08-21: for begin of "Parallel Run" (Sept. 2015), finor_2_mezz_lemo _AND_ veto_2_mezz_lemo send the veto-gated finor to TCDS (without FINOR-AMC502) !!!
+-- HB HB 2016-02-26: finor_w_veto_2_mezz_lemo to tp_mux for LEMO connectors
     mezz_finor_veto_pipeline_p: process(lhc_clk, finor_with_veto_temp2)
         begin
         if (lhc_clk'event and (lhc_clk = '0')) then
-            finor_2_mezz_lemo <= finor_with_veto_temp2;
-            veto_2_mezz_lemo <= finor_with_veto_temp2;
+            finor_w_veto_2_mezz_lemo <= finor_with_veto_temp2;
         end if;
     end process;
 -------------------------------------------------------------------------------------------------------------------------------------
 
 -- Rate counter finor
--- HB 2016-02-11: requested for monitoring (in legacy system part of TCS). Has to be moved to FINOR-AMC502 !!!
+-- HB 2016-02-26: requested for monitoring (in legacy system part of TCS). Has to be implemented in FINOR-AMC502, too - for vetoed finor for TCDS !!!
     rate_cnt_finor_i: entity work.algo_rate_counter
 	generic map( 
 	    COUNTER_WIDTH => FINOR_RATE_COUNTER_WIDTH
@@ -641,7 +627,7 @@ begin
             lhc_clk => lhc_clk,
             sres_counter => sres_finor_rate_counter,
             store_cnt_value => begin_lumi_section,
-            algo_i => finor_with_veto_temp1,
+            algo_i => local_finor,
             counter_o => rate_cnt_finor_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
 	);
 

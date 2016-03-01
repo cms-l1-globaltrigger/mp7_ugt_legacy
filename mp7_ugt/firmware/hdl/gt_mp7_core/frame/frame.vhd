@@ -15,6 +15,7 @@
 --------------------------------------------------------------------------------
 
 -- Description: contains the "framework" of GT-logic (all parts, except GTL and FDL)
+-- HB 2016-02-26: v0.0.36 - removed unused fdl_status, bx_nr_d_FDL and tp.
 -- BR 2015-06-11: v0.1.4  changed ROP for 32-bits and usage of 40Mhz clock domain for calculation the data
 -- BR 2015-05-07: new concpept for simulation the design and especially for ROP. The concept is based on modularity by using new input ports. The case now is for ROP, which is should be extended for ugt payload.
 -- BR 2015-05-29: changed the ports for simulation desing concept
@@ -71,16 +72,12 @@ entity frame is
         lhc_clk            : in std_logic;
         lhc_rst_o        : out std_logic;
         bc0            : in std_logic;
-        --l1a            : in std_logic;
---     bgo_cmd: in std_logic_vector(7 downto 0);
+        bcres_d        : out std_logic;
         bcres_d_FDL        : out std_logic;
-        bx_nr_d_FDL        : out std_logic_vector (11 downto 0);
         start_lumisection     : out std_logic;
-        tp              : out std_logic_vector (3 downto 0);
         lane_data_in        : in ldata(NR_LANES-1 downto 0);
         lane_data_out        : out ldata(NR_LANES-1 downto 0);
         dsmux_lhc_data_o    : out lhc_data_t;
-        fdl_status              : in std_logic_vector(3 downto 0);
         prescale_factor_set_index_rop : in std_logic_vector(7 downto 0);
         algo_before_prescaler_rop     : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
@@ -143,7 +140,7 @@ architecture rtl of frame is
     signal dm_lhc_data_valid_o   : std_logic;
 
     signal bcres             : std_logic; -- NOT USED, "bc0" of mp7_ttc is used instead of "bcres"
-    signal bcres_d           : std_logic; -- delayed version of bcres NOT USED
+    signal bcres_d_int       : std_logic; -- delayed version of bcres
     signal bcres_d_FDL_int   : std_logic; -- delayed version of bcres for FDL
 
     signal rop_clk : std_logic; --! clock signal for the ROP --> DAQ interface
@@ -160,7 +157,6 @@ architecture rtl of frame is
     signal trigger_nr        : trigger_nr_t;
     signal orbit_nr          : orbit_nr_t;
     signal luminosity_seg_nr : luminosity_seg_nr_t;
---  signal start_lumisection : std_logic;
     signal bgos              : bgos_t;
 
     -- sim/spy mem
@@ -209,23 +205,14 @@ architecture rtl of frame is
 
 --TCM signals
     signal bx_nr_internal    : bx_nr_t;
---     signal bx_nr_d_FDL    : bx_nr_t;
     signal event_nr_internal    : event_nr_t;
     signal trigger_nr_internal    : trigger_nr_t;
     signal orbit_nr_internal    : orbit_nr_t;
     signal luminosity_seg_nr_internal    : luminosity_seg_nr_t;
---  signal start_lumisection    : std_logic;
---    signal bgos            : bgos_t;
     signal l1a_internal        :std_logic;
-
---     signal    daq_oe_sim    : std_logic;
---     signal     daq_stop_sim     : std_logic;
---     signal     daq_data_sim    :std_logic_vector(DAQ_INPUT_WIDTH-1 downto 0);
---
 
     begin
 
-    bx_nr_d_FDL <= bx_nr_d_FDL_int;
 --===============================================================================================--
 --                         RESET LOGIC
 --===============================================================================================--
@@ -326,7 +313,6 @@ architecture rtl of frame is
         regs_o => mux_ctrl_regs_1
     );
 
-
 --===============================================================================================--
 --                        REGISTER BANK
 --===============================================================================================--
@@ -362,7 +348,6 @@ architecture rtl of frame is
     sw_regs_out.tcm        <= tcm2rb;
     sw_regs_out.rop        <= rop2rb;
 
-
 --===============================================================================================--
 --                          TIMER COUNTER MODULE                             --
 --===============================================================================================--
@@ -374,11 +359,8 @@ architecture rtl of frame is
             lhc_rst           => lhc_rst,
             bgos              => bgos,
             l1a_sync          => l1a_int,
- --  "bcres" NOT USED, "bc0" of mp7_ttc is used instead
---             bcres_d           => bcres,
- -- BR 2015-02-03: "bcres_d" is used, which commes from DM
---            bcres_d           => bc0,
-            bcres_d           => bcres_d,
+-- HB 2016-02-29: "bcres_d_int" is used, which commes from dm.vhd
+            bcres_d           => bcres_d_int,
             bcres_d_FDL       => bcres_d_FDL_int,
             sw_reg_in         => rb2tcm,
             sw_reg_out        => tcm2rb,
@@ -390,8 +372,6 @@ architecture rtl of frame is
             luminosity_seg_nr => luminosity_seg_nr,
             start_lumisection => start_lumisection
         );
-
-
 
 --===============================================================================================--
 --                          Deceiding between simulation and synthesize  for TCM
@@ -504,8 +484,6 @@ architecture rtl of frame is
             lhc_data_valid_o => lmp_lhc_data_valid_o
         );
 
-
-
 -- DM
     dm_i: entity work.dm
         port map(
@@ -514,7 +492,7 @@ architecture rtl of frame is
             lhc_data_i => lmp_lhc_data_o,
             lhc_data_o => dm_lhc_data_o,
             bcres_i => bc0,
-            bcres_o => bcres_d,
+            bcres_o => bcres_d_int,
             bcres_fdl_o => bcres_d_FDL_int,
             valid_i => lmp_lhc_data_valid_o,
             valid_o => dm_lhc_data_valid_o,
@@ -523,12 +501,11 @@ architecture rtl of frame is
         );
 
     bcres_d_FDL <= bcres_d_FDL_int;
-
+    bcres_d <= bcres_d_int;
 
 --===============================================================================================--
 --                           SIM/SPY MEMORY
 --===============================================================================================--
-
 
     spytrig_inst: entity work.spytrig
         port map(
@@ -546,7 +523,6 @@ architecture rtl of frame is
 
             simmem_in_use_i => simmem_in_use
         );
-
 
 --===============================================================================================--
 --                                SIMSPYMEM          lhc_data_slv_i_simulator
@@ -575,7 +551,6 @@ architecture rtl of frame is
 
     sim_lhc_data <= std_logic_vector_to_lhc_data_t(lhc_data_slv_o);
     lhc_data_slv_i <= lhc_data_t_to_std_logic_vector(dm_lhc_data_o);
-
 
 --===============================================================================================--
 --                           Data Source Multiplex--DSMUX
@@ -616,8 +591,6 @@ architecture rtl of frame is
        dsmux_lhc_data_int_rop <= dsmux_lhc_data_int;
       end generate synthesize_INTERFACE_i;
 
-
-
 --===============================================================================================--
 --                                 spymem2_algos
 --===============================================================================================--
@@ -642,7 +615,6 @@ architecture rtl of frame is
                  doutb     => open
              );
      end generate spymem2_algos_l;
---  end generate with_spymem2_algos;
 
 --===============================================================================================--
 --                               SPYMEM2 FINOR
@@ -727,112 +699,6 @@ architecture rtl of frame is
         );
 
       end generate synthesize_L1A_i;
-
-
-
-
---===============================================================================================--
---                                READ OUT PROCESS-- ROP
---===============================================================================================--
-
-    -- required signals:
-    -- l1a
-    --rop_clk <= clk240; -- should be connected to the clock that is used for the output of the ROP
---     rop_clk <= lhc_clk;
---     finors_rop(0) <= local_finor_rop; -- to be defined !!!
---     finors_rop(1) <= local_veto_rop; -- to be defined !!!
---     finors_rop(FINOR_WIDTH-1) <= finor_rop; -- to be defined !!!
---
---     rop_inst : entity work.rop
---         port map
---         (
---             lhc_clk       => lhc_clk,
---              lhc_rst       => lhc_rst_internal,
---
---             daq_clk          => rop_clk,
---              daq_rst          => rop_rst_internal,
---
---
---             sw_reg_in      => rb2rop,
---             sw_reg_out      => rop2rb,
---
---             trigger_nr        => trigger_nr_internal,
---             orbit_nr          => orbit_nr_internal,
---             bx_nr             => bx_nr_internal,
---             luminosity_seg_nr => luminosity_seg_nr_internal,
---             event_nr      => event_nr_internal,
---
---             lhc_data      => dsmux_lhc_data_int_rop,
---             lhc_valid       => dsmux_lhc_data_valid,
---
--- --             prescale_factor_set_index => prescale_factor_set_index_rop, -- not implemented in ROP now !!!
---             algo_before_pre   => algo_before_prescaler_rop,
---             algo_after_pre    => algo_after_prescaler_rop,
---             algo_after_mask   => algo_after_finor_mask_rop,
---
--- --             finors => (others => '0'),
---             finors           => finors_rop,
---
---             l1a          => l1a_int,
---             ready          => open,
---
---             daq_data       => rop_data,
---             daq_oe         => rop_en,
---             daq_stop       => rop_packet_end,
---             daq_busy       => '0'
---         );
-
-
-
---===============================================================================================--
---                          sending the data to testbench for simulaiotn
---===============================================================================================--
---       SIMULATE_DAQ_i: if SIMULATE_DATAPATH = true generate
---
---       begin
---     daq_oe_sim    <= rop_en;
---     daq_stop_sim     <= rop_packet_end;
---     daq_data_sim    <= rop_data;
---
---       end generate SIMULATE_DAQ_i;
-
-
---===============================================================================================--
---                              SPYMEM 3
---===============================================================================================--
-
---     spymem3 : entity work.spymem3
---         generic map
---         (
---             SIZE_IN_BYTES => 4096,
---             INPUT_DATA_WIDTH => DAQ_INPUT_WIDTH
---         )
---         port map
---         (
---               ipbus_clk => ipb_clk,
---               ipbus_rst => ipb_rst,
---               ipbus_in => ipb_to_slaves(C_IPB_SPYMEM3),
---               ipbus_out => ipb_from_slaves(C_IPB_SPYMEM3),
---
---               lhc_clk          => lhc_clk,
---               lhc_rst          => lhc_rst_internal,
---
---               spy_i            => spy3,
---               spy_ack_o        => spy3_ack,
---
---               rop_clk          => rop_clk,
---               rop_rst          => rop_rst_internal,
---               rop_data_i       => rop_data,
---               rop_en_i         => rop_en,
---               rop_packet_end_i => rop_packet_end
---         );
-
-
---===============================================================================================--
--- Testpoints to mezzanine-board
-    tp(0) <= simmem_in_use;
-    tp(1) <= bcres_d_FDL_int;
-    tp(3 downto 2) <= "00";
 
 end rtl;
 

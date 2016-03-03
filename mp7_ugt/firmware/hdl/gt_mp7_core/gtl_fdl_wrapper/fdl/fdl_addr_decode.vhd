@@ -27,7 +27,7 @@ package fdl_addr_decode is
 
     type ipb_algo_bx_mem_index_array is array (0 to 15) of natural;
 
-    constant NR_IPB_SLV_FDL : positive:= 28;
+    constant NR_IPB_SLV_FDL : positive:= 29;
 
     constant C_IPB_ALGO_BX_MEM : ipb_algo_bx_mem_index_array := (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
     constant C_IPB_RATE_CNT_BEFORE_PRESCALER : natural := 16;
@@ -42,6 +42,7 @@ package fdl_addr_decode is
     constant C_IPB_RATE_CNT_FINOR : natural := 25;
     constant C_IPB_L1A_LATENCY_DELAY : natural := 26;
     constant C_IPB_RATE_CNT_L1A : natural := 27;
+    constant C_IPB_RATE_CNT_VETO : natural := 28;
 
 -- rate counter before prescaler
     constant ADDR_WIDTH_RATE_CNT_BEFORE_PRESCALER: natural := log2c(MAX_NR_ALGOS);
@@ -119,6 +120,7 @@ package body fdl_addr_decode is
         elsif std_match(addr, "10010000000010010001100110000000") then sel := C_IPB_RATE_CNT_FINOR; -- 0x90091980
         elsif std_match(addr, "1001000000001001001000100000000-") then sel := C_IPB_L1A_LATENCY_DELAY; -- 0x90092200
         elsif std_match(addr, "10010000000010010011000000000000") then sel := C_IPB_RATE_CNT_L1A; -- 0x90093000
+        elsif std_match(addr, "10010000000010010100000000000000") then sel := C_IPB_RATE_CNT_VETO; -- 0x90094000
 		else sel := 99;
 		end if;
 		return sel;

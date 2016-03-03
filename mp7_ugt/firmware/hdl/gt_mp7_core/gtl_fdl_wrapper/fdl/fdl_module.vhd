@@ -18,6 +18,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2016-03-02: v0.0.21 - based on v0.0.20, but mapping global-local index is done for masks and counters. Inserted rate-counter for veto. Updated algo_bx_mask_sim for global index.
 -- HB 2016-02-26: v0.0.20 - based on v0.0.19, but changed finor_2_mezz_lemo and veto_2_mezz_lemo (no additional delay anymore) and inserted finor_w_veto_2_mezz_lemo with
 --			    1.5bx delay.
 --			    Removed unused inputs (ec0, oc0, etc.) and fdl_status output.
@@ -94,8 +95,10 @@ entity fdl_module is
         veto_2_mezz_lemo      : out std_logic; -- to tp_mux.vhd
         finor_w_veto_2_mezz_lemo      : out std_logic; -- to tp_mux.vhd
 	local_finor_with_veto_o       : out std_logic; -- to SPY2_FINOR
--- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
-        algo_bx_mask_sim    : in std_logic_vector(NR_ALGOS-1 downto 0)
+-- -- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
+--         algo_bx_mask_sim    : in std_logic_vector(NR_ALGOS-1 downto 0)
+-- HB 2016-03-02: v0.0.21 - algo_bx_mask_sim input for simulation use with MAX_NR_ALGOS (because of global index).
+        algo_bx_mask_sim    : in std_logic_vector(MAX_NR_ALGOS-1 downto 0)
     );
 end fdl_module;
 
@@ -103,6 +106,14 @@ architecture rtl of fdl_module is
 
 -- Input flip-flops for algorithms of fdl_module.vhd
 --     constant ALGO_INPUTS_FF: boolean := false; -- used for tests of fdl_module.vhd only
+
+    constant FINOR_BIT_IN_MASKS_REG : integer := 0;
+    constant VETO_BIT_IN_MASKS_REG : integer := 1;
+    constant FINOR_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
+    constant VETO_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
+    constant L1A_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
+--     constant MAX_DELAY_L1A_LATENCY : integer := 64;
+    constant MAX_DELAY_L1A_LATENCY : integer := 63; -- values = 2**x causes "fatal error" at simulation in module "delay_element.vhd" !!!
 
     signal ipb_to_slaves: ipb_wbus_array(NR_IPB_SLV_FDL-1 downto 0);
     signal ipb_from_slaves: ipb_rbus_array(NR_IPB_SLV_FDL-1 downto 0);
@@ -118,27 +129,22 @@ architecture rtl of fdl_module is
     signal command_pulses: std_logic_vector(31 downto 0); -- see ipb_pulse_regs.vhd
     
 -- =================================================================================
-    signal finor_masks_int : std_logic_vector(NR_ALGOS-1 downto 0);
-    signal veto_masks_int : std_logic_vector(NR_ALGOS-1 downto 0);
 
     signal algo_int : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
     signal sres_algo_pre_scaler : std_logic := '0';
     signal prescale_factor_int : prescale_factor_array;
     signal sres_algo_rate_counter : std_logic := '0';
-    signal rate_cnt_before_prescaler : rate_counter_array;
-    signal rate_cnt_after_prescaler : rate_counter_array;
     
-    constant FINOR_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
     signal sres_finor_rate_counter : std_logic := '0';
     signal rate_cnt_finor_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
-    constant L1A_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
+    signal sres_veto_rate_counter : std_logic := '0';
+    signal rate_cnt_veto_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
+
     signal sres_l1a_rate_counter : std_logic := '0';
     signal rate_cnt_l1a_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
     signal sres_algo_post_dead_time_counter : std_logic := '0';
---     constant MAX_DELAY_L1A_LATENCY : integer := 64;
-    constant MAX_DELAY_L1A_LATENCY : integer := 63; -- values = 2^x causes "fatal error" at simulation in module "delay_element.vhd" !!!
     signal l1a_latency_delay_reg : ipb_regs_array(0 to 1) := (others => (others => '0'));
     signal rate_cnt_post_dead_time : rate_counter_array;
 
@@ -150,10 +156,10 @@ architecture rtl of fdl_module is
     signal local_veto : std_logic := '0';
     signal local_finor_pipe : std_logic;
     signal local_veto_pipe : std_logic;
-    signal algo_bx_mask : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
+--     signal algo_bx_mask : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
     signal algo_bx_mask_mem_out : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
-    signal algo_bx_mask_default : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
-    signal algo_bx_mask_sim_internal : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
+--     signal algo_bx_mask_default : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
+--     signal algo_bx_mask_sim_internal : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
 
     signal lhc_clk_algo_bx_mem : std_logic := '0';
     signal sync_en_algo_bx_mem : std_logic := '0';
@@ -165,6 +171,21 @@ architecture rtl of fdl_module is
     signal finor_with_veto_temp2 : std_logic;
 
     signal bx_nr_internal : std_logic_vector(11 downto 0) := (others => '0');
+
+    signal algo_bx_mask_global : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
+    signal algo_bx_mask_local : std_logic_vector(NR_ALGOS-1 downto 0);
+    signal rate_cnt_before_prescaler_local : rate_counter_array;
+    signal rate_cnt_before_prescaler_global : rate_counter_global_array;
+    signal prescale_factor_global : prescale_factor_global_array;
+    signal prescale_factor_local : prescale_factor_array;
+    signal rate_cnt_after_prescaler_local : rate_counter_array;
+    signal rate_cnt_after_prescaler_global : rate_counter_global_array;
+    signal rate_cnt_post_dead_time_local : rate_counter_array;
+    signal rate_cnt_post_dead_time_global : rate_counter_global_array;
+    signal finor_masks_global : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+    signal finor_masks_local : std_logic_vector(NR_ALGOS-1 downto 0);
+    signal veto_masks_global : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+    signal veto_masks_local : std_logic_vector(NR_ALGOS-1 downto 0);
 
 begin
 
@@ -269,16 +290,20 @@ begin
         );
     end generate algo_bx_mem_l;                        
 
-    algo_bx_mask_sim_sync_p: process(lhc_clk, algo_bx_mask_sim)
-        begin
-        if (lhc_clk'event and (lhc_clk = '1')) then
-	    algo_bx_mask_sim_internal(NR_ALGOS-1 downto 0) <= algo_bx_mask_sim(NR_ALGOS-1 downto 0);
-        end if;
-    end process;
-
+--     algo_bx_mask_sim_sync_p: process(lhc_clk, algo_bx_mask_sim)
+--         begin
+--         if (lhc_clk'event and (lhc_clk = '1')) then
+-- 	    algo_bx_mask_sim_internal(NR_ALGOS-1 downto 0) <= algo_bx_mask_sim(NR_ALGOS-1 downto 0);
+--         end if;
+--     end process;
+-- 
+-- -- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
+--     algo_bx_mask_global <= algo_bx_mask_mem_out when not SIM_MODE else
+-- 		           algo_bx_mask_sim_internal when SIM_MODE else (others => '1');
+--     
 -- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
-    algo_bx_mask <= algo_bx_mask_mem_out when not SIM_MODE else
-		    algo_bx_mask_sim_internal when SIM_MODE else (others => '1');
+    algo_bx_mask_global <= algo_bx_mask_mem_out when not SIM_MODE else
+		           algo_bx_mask_sim when SIM_MODE else (others => '1');
     
 --===============================================================================================--
 -- Rate counter before prescaler registers
@@ -468,6 +493,26 @@ begin
     );
 
 --===============================================================================================--
+-- Rate counter veto register
+-- HB 2016-03-02: for monitoring only
+    read_rate_cnt_veto_i: entity work.ipb_read_regs
+    generic map
+    (
+        addr_width => 1,
+        regs_beg_index => 0,
+        regs_end_index => 0
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_VETO),
+        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_VETO),
+        ------------------
+        regs_i => rate_cnt_veto_reg
+    );
+
+--===============================================================================================--
 -- Rate counter L1A register
     read_rate_cnt_l1a_i: entity work.ipb_read_regs
     generic map
@@ -489,13 +534,16 @@ begin
 --===============================================================================================--
 
     reg_l: for i in 0 to NR_ALGOS-1 generate
-        rate_cnt_before_prescaler_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_before_prescaler(i);
-        rate_cnt_after_prescaler_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_after_prescaler(i);
-        rate_cnt_post_dead_time_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_post_dead_time(i);
-        prescale_factor_int(i) <= prescale_factor_reg(i);
-        finor_masks_int(i) <= masks_reg(i)(0);
-        veto_masks_int(i) <= masks_reg(i)(1);
+        rate_cnt_before_prescaler_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_before_prescaler_global(i);
+        rate_cnt_after_prescaler_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_after_prescaler_global(i);
+        rate_cnt_post_dead_time_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_post_dead_time_global(i);
     end generate reg_l;
+
+    masks_reg_l: for i in 0 to MAX_NR_ALGOS-1 generate
+        prescale_factor_global(i) <= prescale_factor_reg(i);
+	finor_masks_global(i) <= masks_reg(i)(FINOR_BIT_IN_MASKS_REG);
+	veto_masks_global(i) <= masks_reg(i)(VETO_BIT_IN_MASKS_REG);
+    end generate masks_reg_l;
 
 --===============================================================================================--
 
@@ -503,6 +551,7 @@ begin
     sres_algo_rate_counter <= '0';
     sres_algo_pre_scaler <= '0'; 
     sres_finor_rate_counter <= '0';
+    sres_veto_rate_counter <= '0';
     sres_l1a_rate_counter <= '0';
     sres_algo_post_dead_time_counter <= '0';
     
@@ -541,13 +590,13 @@ begin
             request_update_factor_pulse => request_update_factor_pulse,
             begin_lumi_per => begin_lumi_section,
             algo_i => algo_int(i),
-            prescale_factor => prescale_factor_int(i)(PRESCALER_COUNTER_WIDTH-1 downto 0),
-            algo_bx_mask => algo_bx_mask(i),
-            finor_mask => finor_masks_int(i),
-            veto_mask => veto_masks_int(i),
-            rate_cnt_before_prescaler => rate_cnt_before_prescaler(i),
-            rate_cnt_after_prescaler => rate_cnt_after_prescaler(i),
-            rate_cnt_post_dead_time => rate_cnt_post_dead_time(i),
+            prescale_factor => prescale_factor_local(i)(PRESCALER_COUNTER_WIDTH-1 downto 0),
+            algo_bx_mask => algo_bx_mask_local(i),
+            finor_mask => finor_masks_local(i),
+            veto_mask => veto_masks_local(i),
+            rate_cnt_before_prescaler => rate_cnt_before_prescaler_local(i),
+            rate_cnt_after_prescaler => rate_cnt_after_prescaler_local(i),
+            rate_cnt_post_dead_time => rate_cnt_post_dead_time_local(i),
             algo_before_prescaler => algo_before_prescaler(i),
             algo_after_prescaler => algo_after_prescaler(i),
 	    algo_after_finor_mask => algo_after_finor_mask(i),
@@ -631,6 +680,21 @@ begin
             counter_o => rate_cnt_finor_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
 	);
 
+-- Rate counter veto
+-- HB 2016-03-02: for monitoring only
+    rate_cnt_veto_i: entity work.algo_rate_counter
+	generic map( 
+	    COUNTER_WIDTH => VETO_RATE_COUNTER_WIDTH
+	)
+	port map( 
+            sys_clk => ipb_clk,
+            lhc_clk => lhc_clk,
+            sres_counter => sres_veto_rate_counter,
+            store_cnt_value => begin_lumi_section,
+            algo_i => local_veto,
+            counter_o => rate_cnt_veto_reg(0)(VETO_RATE_COUNTER_WIDTH-1 downto 0)
+	);
+
 -- Rate counter L1A
 -- HB 2016-02-19: only for monitoring and verification of incoming L1As
     rate_cnt_l1a_i: entity work.algo_rate_counter
@@ -653,6 +717,20 @@ begin
     algo_mapping_rop_i: entity work.algo_mapping_rop
         port map ( 
             lhc_clk => lhc_clk,
+            algo_bx_masks_global => algo_bx_mask_global,
+            algo_bx_masks_local => algo_bx_mask_local,
+            rate_cnt_before_prescaler_local => rate_cnt_before_prescaler_local,
+            rate_cnt_before_prescaler_global => rate_cnt_before_prescaler_global,
+            prescale_factor_global => prescale_factor_global,
+            prescale_factor_local => prescale_factor_local,
+            rate_cnt_after_prescaler_local => rate_cnt_after_prescaler_local,
+            rate_cnt_after_prescaler_global => rate_cnt_after_prescaler_global,
+            rate_cnt_post_dead_time_local => rate_cnt_post_dead_time_local,
+            rate_cnt_post_dead_time_global => rate_cnt_post_dead_time_global,
+            finor_masks_global => finor_masks_global,
+            finor_masks_local => finor_masks_local,
+            veto_masks_global => veto_masks_global,
+            veto_masks_local => veto_masks_local,
             algo_before_prescaler => algo_before_prescaler,
             algo_after_prescaler => algo_after_prescaler,
             algo_after_finor_mask => algo_after_finor_mask,

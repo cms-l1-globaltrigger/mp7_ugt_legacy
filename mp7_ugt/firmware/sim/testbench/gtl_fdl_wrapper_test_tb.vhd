@@ -107,8 +107,8 @@ begin
 	variable algo_error_cnt : integer := 0;
 	variable finor_error_cnt : integer := 0;
 
-        file testvector_file : text open read_mode is "/home/bergauer/cactus/trunk/cactusprojects/ugt/menu/2015/L1Menu_Correlation_2015_hb_test/testvectors/L1Menu_Correlation_2015_hb_test.txt";
-        file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_L1Menu_Correlation_2015_hb_test.txt";
+        file testvector_file : text open read_mode is "/home/bergauer/cactus/trunk/cactusprojects/ugt/menu/2016/L1Menu_Collisions2015_25nsStage1_v7_uGT_v3_test_global_vhdl_prod/testvectors/TestVector_L1Menu_Collisions2015_25nsStage1_v7_uGT_v3.txt";
+        file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_TestVector_L1Menu_Collisions2015_25nsStage1_v7_uGT_v3.txt";
 
     function str_to_slv(str : string) return std_logic_vector is
       alias str_norm : string(1 to str'length) is str;
@@ -226,14 +226,8 @@ dut : entity work.gtl_fdl_wrapper
         lhc_rst            => '0',
         lhc_data           => lhc_data,
         bcres              => '0',
--- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs"
-        ec0             => '0',
-        resync          => '0',
-        oc0             => '0',
-        lhc_gap            => '0',
+        l1a                => '0',
         begin_lumi_section => '0',
-        bx_nr              => (others => '0'),
-        fdl_status      => open,
         prescale_factor_set_index_rop => open,
         algo_before_prescaler_rop => open,
         algo_after_prescaler_rop  => open,

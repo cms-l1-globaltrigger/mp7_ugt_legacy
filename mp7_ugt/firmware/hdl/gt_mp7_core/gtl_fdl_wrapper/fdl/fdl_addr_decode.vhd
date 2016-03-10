@@ -70,10 +70,12 @@ package fdl_addr_decode is
     constant OFFSET_L1TM_COMPILER_VERSION: natural := OFFSET_L1TM_UID + L1TM_UID'length/32;
     constant OFFSET_GTL_FW_VERSION: natural := OFFSET_L1TM_COMPILER_VERSION + L1TM_COMPILER_VERSION'length/32;
     constant OFFSET_FDL_FW_VERSION: natural := OFFSET_GTL_FW_VERSION + GTL_FW_VERSION'length/32;
+    constant OFFSET_L1TM_FW_UID: natural := OFFSET_FDL_FW_VERSION + FDL_FW_VERSION'length/32;
+    constant OFFSET_SVN_REVISION_NUMBER: natural := OFFSET_L1TM_FW_UID + L1TM_FW_UID'length/32;
     
     constant ADDR_WIDTH_READ_VERSIONS: natural := 6;
     constant OFFSET_BEG_READ_VERSIONS: natural := OFFSET_L1TM_NAME;
-    constant OFFSET_END_READ_VERSIONS: natural := OFFSET_FDL_FW_VERSION;
+    constant OFFSET_END_READ_VERSIONS: natural := OFFSET_SVN_REVISION_NUMBER;
 
 -- rate counter post dead time
     constant ADDR_WIDTH_RATE_CNT_POST_DEAD_TIME: natural := log2c(MAX_NR_ALGOS);

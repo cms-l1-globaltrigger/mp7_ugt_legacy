@@ -18,6 +18,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2016-03-10: v0.0.22 - based on v0.0.21, but inserted L1TM_FW_UID and SVN_REVISION_NUMBER to version registers
 -- HB 2016-03-02: v0.0.21 - based on v0.0.20, but mapping global-local index is done for masks and counters. Inserted rate-counter for veto. Updated algo_bx_mask_sim for global index.
 -- HB 2016-02-26: v0.0.20 - based on v0.0.19, but changed finor_2_mezz_lemo and veto_2_mezz_lemo (no additional delay anymore) and inserted finor_w_veto_2_mezz_lemo with
 --			    1.5bx delay.
@@ -228,9 +229,15 @@ begin
 		versions_to_ipb(i+OFFSET_L1TM_UID) <= L1TM_UID(i*32+31 downto i*32);
     end generate l1tm_uid_l;                        
 
-	versions_to_ipb(OFFSET_L1TM_COMPILER_VERSION) <= L1TM_COMPILER_VERSION;
-	versions_to_ipb(OFFSET_GTL_FW_VERSION) <= GTL_FW_VERSION;
-	versions_to_ipb(OFFSET_FDL_FW_VERSION) <= FDL_FW_VERSION;
+    versions_to_ipb(OFFSET_L1TM_COMPILER_VERSION) <= L1TM_COMPILER_VERSION;
+    versions_to_ipb(OFFSET_GTL_FW_VERSION) <= GTL_FW_VERSION;
+    versions_to_ipb(OFFSET_FDL_FW_VERSION) <= FDL_FW_VERSION;
+
+    l1tm_fw_uid_l: for i in 0 to L1TM_FW_UID'length/32-1 generate
+		versions_to_ipb(i+OFFSET_L1TM_FW_UID) <= L1TM_FW_UID(i*32+31 downto i*32);
+    end generate l1tm_fw_uid_l;                        
+
+    versions_to_ipb(OFFSET_SVN_REVISION_NUMBER) <= SVN_REVISION_NUMBER;
 
 --===============================================================================================--
 -- Control register

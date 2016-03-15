@@ -18,7 +18,7 @@ package top_decl is
 	constant DR_ADDR_WIDTH: integer := 9;
 	constant RO_CHUNKS: integer := 32;
 	constant CLOCK_RATIO: integer := 6;
-	constant CLOCK_RATIO_PAYLOAD: integer := 6;
+	constant CLOCK_AUX_RATIO: clock_ratio_array_t := (6, 6, 6);
 	constant PAYLOAD_LATENCY: integer := 2;
 	constant DAQ_N_BANKS: integer := 4;
 	constant DAQ_TRIGGER_MODES: integer := 2;

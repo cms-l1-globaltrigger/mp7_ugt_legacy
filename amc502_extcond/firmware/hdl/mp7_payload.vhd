@@ -23,7 +23,8 @@ entity mp7_payload is
 		rst_ipb: in std_logic;
 		ipb_in: in ipb_wbus;
 		ipb_out: out ipb_rbus;
-		clk_payload: in std_logic;-- 40MHz LHC clk
+		clk_payload : in  std_logic_vector(2 downto 0);
+		rst_payload : in  std_logic_vector(2 downto 0);
 		rst40: in std_logic;--reset 40MHz
 		clk_p: in std_logic; -- data clock
 		bunch_ctr: in std_logic_vector(11 downto 0); --bx counter
@@ -82,7 +83,7 @@ architecture rtl of mp7_payload is
     signal orbit_nr                         : std_logic_vector (47 DOWNTO 0);
 begin
 
-	lhc_clk <= clk_payload; --40MHz
+	lhc_clk <= clk_payload(0); --40MHz
 	lhc_rst <= rst_ipb or pulse(0); --rst40; -- High Active!! ipbus_reset OR user_reset
 
     fabric_i: entity work.ipbus_fabric_sel

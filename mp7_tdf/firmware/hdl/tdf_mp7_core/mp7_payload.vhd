@@ -56,8 +56,8 @@ entity mp7_payload is
         rst: in std_logic;
         ipb_in: in ipb_wbus;
         ipb_out: out ipb_rbus;
-        clk_payload: in std_logic;
-        rst_payload: in std_logic;
+        clk_payload : in  std_logic_vector(2 downto 0);
+        rst_payload : in  std_logic_vector(2 downto 0);
         clk_p: in std_logic; -- data clock
         rst_loc: in std_logic_vector(N_REGION - 1 downto 0);
         clken_loc: in std_logic_vector(N_REGION - 1 downto 0);
@@ -506,13 +506,13 @@ begin
         );
 
     -- bc counter
-    bc_cntr: process (clk_payload, ctrs(0).ttc_cmd(0))
+    bc_cntr: process (clk_payload(0), ctrs(0).ttc_cmd(0))
     begin
 --      if ( internal_reset_i = '1') then
 --            bx_nr <= X"0000";      -- async. clr
 --            bx_length <= X"0000";      -- async. clr
 --      else
-        if (clk_payload'event and clk_payload = '1') then
+        if (clk_payload(0)'event and clk_payload(0) = '1') then
            if (ctrs(0).ttc_cmd(0) = '1') then
               bx_length <= bx_nr; -- "store" counter value for reading
               bx_nr <= X"0000";   -- sync BCReset
@@ -524,9 +524,9 @@ begin
     end process bc_cntr;
 
     -- set sValid process
-    p_sValid: process (clk_payload, bx_nr, sThresholdValid_lo, sThresholdValid_hi)
+    p_sValid: process (clk_payload(0), bx_nr, sThresholdValid_lo, sThresholdValid_hi)
     begin
-        if (clk_payload'event and clk_payload = '1') then -- shift range for one bx? because of possible 1bx delay
+        if (clk_payload(0)'event and clk_payload(0) = '1') then -- shift range for one bx? because of possible 1bx delay
            if ((bx_nr >= sThresholdValid_lo) and (bx_nr <= sThresholdValid_hi)) then --define range
               sValid <= '0';
            else
@@ -546,7 +546,7 @@ begin
             ipbus_in  => ipb_to_slaves(C_IPB_TDFMEM(i)),
             ipbus_out => ipb_from_slaves(C_IPB_TDFMEM(i)),
             ------------------
-            clk_b     => clk_payload,
+            clk_b     => clk_payload(0),
             enb       => '1',
             web       => '0', -- spy1 = 1 => spying, spy1 = 0 => simulation data out
             addrb     => bx_nr(11 downto 0), -- HB 2014-08-18: no write and no read latency
@@ -562,7 +562,7 @@ begin
         mem_pipe_i: entity work.mem_pipe
         port map
         (
-            clk     =>  clk_payload,
+            clk     =>  clk_payload(0),
             pipe_in =>  tdf_data_o(j),
             pipe_out => s_tdf_data(j)
         );
@@ -578,7 +578,7 @@ begin
         )
         port map
         (
-            clk     =>  clk_payload,
+            clk     =>  clk_payload(0),
             pipe_in =>  sbc0,
             pipe_out => piped_bc0(k)
         );

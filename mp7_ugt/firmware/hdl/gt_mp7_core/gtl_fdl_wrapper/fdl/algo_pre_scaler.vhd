@@ -17,6 +17,8 @@
 -- Desription:
 -- Prescalers for algorithms in FDL
 
+-- HB 2016-04-04: inhibit algo with factor=0 in "prescaled_algo_p" process.
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
@@ -39,6 +41,8 @@ entity algo_pre_scaler is
 end algo_pre_scaler;
 
 architecture rtl of algo_pre_scaler is
+   constant ZERO : std_logic_vector(COUNTER_WIDTH-1 downto 0) := (others => '0');
+
    signal prescale_factor_int : std_logic_vector(COUNTER_WIDTH-1 downto 0) := PRESCALE_FACTOR_INIT(COUNTER_WIDTH-1 downto 0);
    signal counter : std_logic_vector(COUNTER_WIDTH-1 downto 0) := (others => '0');
    signal limit : std_logic := '0';
@@ -87,8 +91,6 @@ prescale_factor_update_i: entity work.update_process
 --       end if;
 --    end process prescaled_algo_p;   
 
-   prescaled_algo_p: process (clk, algo_i, limit)
-   begin
 -- HB 04-09-2013: process with clk needed to get prescaled_algo_o with clk period width, otherwise
 -- "glitches" on prescaled_algo_o occur.
 -- This gives an additional latency of one bx in FDL.
@@ -98,8 +100,15 @@ prescale_factor_update_i: entity work.update_process
 -- "glitches" on prescaled_algo_o occur.
 -- Using negative edge of lhc_clk gives no latency.
 -- Check whether timing is ok for clk-nclk-clk !!!
+
+-- HB 2016-04-04: bug fix for factor=0. Inhibit algo with factor=0 in "prescaled_algo_p" process.
+
+   prescaled_algo_p: process (clk, algo_i, limit, prescale_factor_int)
+   begin
       if clk'event and clk = '0' then 
-        if limit = '1' and algo_i = '1' then
+        if prescale_factor_int = ZERO then
+            prescaled_algo_o <= '0';
+        elsif limit = '1' and algo_i = '1' then
             prescaled_algo_o <= '1';
         else
             prescaled_algo_o <= '0';

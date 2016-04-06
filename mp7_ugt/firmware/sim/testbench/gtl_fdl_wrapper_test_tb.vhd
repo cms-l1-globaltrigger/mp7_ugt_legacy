@@ -107,8 +107,8 @@ begin
 	variable algo_error_cnt : integer := 0;
 	variable finor_error_cnt : integer := 0;
 
-        file testvector_file : text open read_mode is "/home/bergauer/cactus/trunk/cactusprojects/ugt/menu/2016/L1Menu_Collisions2015_25nsStage1_v7_uGT_v3_test_global_vhdl_prod/testvectors/TestVector_L1Menu_Collisions2015_25nsStage1_v7_uGT_v3.txt";
-        file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_TestVector_L1Menu_Collisions2015_25nsStage1_v7_uGT_v3.txt";
+        file testvector_file : text open read_mode is "/home/bergauer/cactus/branches/ugt_menu_dev/L1Menu_test_correlations/testvectors/TestVector_Corr_v3.txt";
+        file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_TestVector_Corr_v3.txt";
 
     function str_to_slv(str : string) return std_logic_vector is
       alias str_norm : string(1 to str'length) is str;

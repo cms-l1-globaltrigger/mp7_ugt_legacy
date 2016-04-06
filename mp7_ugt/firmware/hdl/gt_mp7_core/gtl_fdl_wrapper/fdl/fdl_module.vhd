@@ -18,6 +18,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2016-04-06: v0.0.23 - based on v0.0.22, but bug fixed in algo_pre_scaler, prescale_factor=0 disables algos correctly.
 -- HB 2016-03-10: v0.0.22 - based on v0.0.21, but inserted L1TM_FW_UID and SVN_REVISION_NUMBER to version registers
 -- HB 2016-03-02: v0.0.21 - based on v0.0.20, but mapping global-local index is done for masks and counters. Inserted rate-counter for veto. Updated algo_bx_mask_sim for global index.
 -- HB 2016-02-26: v0.0.20 - based on v0.0.19, but changed finor_2_mezz_lemo and veto_2_mezz_lemo (no additional delay anymore) and inserted finor_w_veto_2_mezz_lemo with

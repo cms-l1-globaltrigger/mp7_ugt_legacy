@@ -31,109 +31,109 @@ entity dm is
 	(
 		USE_REGISTERED_OUTPUT : boolean := false
 	);
-	port 
-	(		
+	port
+	(
 		lhc_clk : in std_logic;
 		lhc_rst : in std_logic;
-		
-		lhc_data_i : in lhc_data_t;  
+
+		lhc_data_i : in lhc_data_t;
 		lhc_data_o : out lhc_data_t; -- delayed version of lhc_data
-		
+
 		bcres_i : in std_logic;
-		bcres_o : out std_logic;     -- delayed version of bcres
-		bcres_fdl_o : out std_logic; -- delayed version of bcres for fdl
-		
+		bcres_o : out std_logic;     -- delayed version of bcres. This signal has an additional delay on 1BX to compensate the regional delay in the output mux
+		bcres_fdl_o : out std_logic; -- delayed version of bcres for fdl. This signal has an additional delay on 1BX to compensate the regional delay in the output mux
+		bcres_outputmux_o : out std_logic; -- delayed version of bcres for output mux
 		valid_i : in std_logic;
-		valid_o : out std_logic;     -- 1 if lhc_data is valid 
-		
-		sw_reg_i : in sw_reg_dm_in_t;  
+		valid_o : out std_logic;     -- 1 if lhc_data is valid
+
+		sw_reg_i : in sw_reg_dm_in_t;
 		sw_reg_o : out sw_reg_dm_out_t
-	); 
+	);
 end;
 
 
 architecture arch of dm is
-	
-	component delay_element 
+
+	component delay_element
 		generic
 		(
 			DATA_WIDTH : integer := 32;
 			MAX_DELAY : integer := 31
 		);
-		port 
-		(		
+		port
+		(
 			lhc_clk : in std_logic;
 			lhc_rst : in std_logic;
-		
-			data_i : in std_logic_vector;  
-			data_o : out std_logic_vector; 
-		
+
+			data_i : in std_logic_vector;
+			data_o : out std_logic_vector;
+
 			valid_i : in std_logic;
-			valid_o : out std_logic;     
-		
+			valid_o : out std_logic;
+
 			delay : in std_logic_vector(log2c(MAX_DELAY)-1 downto 0)
-		); 
+		);
 	end component;
-	
+
 	signal valid_flags : std_logic_vector(LHC_DATA_OBJECT_COUNT-1 downto 0);
-	signal bcres_valid : std_logic; 
-	signal bcres_fdl_valid : std_logic; 
-	
+	signal bcres_valid : std_logic;
+	signal bcres_fdl_valid : std_logic;
+
 	signal lhc_data_slv_i : std_logic_vector(LHC_DATA_WIDTH-1 downto 0);
 	signal lhc_data_slv_o : std_logic_vector(LHC_DATA_WIDTH-1 downto 0);
-	
+
 	type delay_array_t is array (0 to LHC_DATA_OBJECT_COUNT-1) of std_logic_vector(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0);
-	
+
 	signal delay_array : delay_array_t;
-	
-	
+
+
 	signal bcres_i_slv : std_logic_vector(0 downto 0);
 	signal bcres_o_slv : std_logic_vector(0 downto 0);
 	signal bcres_fdl_o_slv : std_logic_vector(0 downto 0);
-	
+
 	signal lhc_data_out_internal : lhc_data_t;
 	signal valid_out_internal : std_logic;
-	
+
 	signal bcres_out_internal : std_logic;
 	signal bcres_fdl_out_internal : std_logic;
-begin 
+    signal bcres_o_delayed : std_logic;
+    signal bcres_fdl_o_delayed : std_logic;
+begin
 
 	lhc_data_slv_i <= lhc_data_t_to_std_logic_vector(lhc_data_i);
-	
 
-	-- IMPORTANT: 
+
+	-- IMPORTANT:
 	-- the delays must have the exact same order as the associated objects in lhc_data_t
 	-- if a new object is added to lhc_data_t, the delay for this object must be added to the array
 	delay_array <= (sw_reg_i.delay_muons(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
-	                sw_reg_i.delay_eg(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), 
-	                sw_reg_i.delay_tau(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), 
-	                sw_reg_i.delay_jet(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), 
-	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), 
+	                sw_reg_i.delay_eg(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
+	                sw_reg_i.delay_tau(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
+	                sw_reg_i.delay_jet(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
+	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
 	                sw_reg_i.delay_ht(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
-	                sw_reg_i.delay_etm(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), 
-	                sw_reg_i.delay_htm(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), 
+	                sw_reg_i.delay_etm(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
+	                sw_reg_i.delay_htm(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
 	                sw_reg_i.delay_ext_con(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0));
 
 	dealy_elements : for i in 0 to LHC_DATA_OBJECT_COUNT-1 generate
-		d : delay_element 
-			generic map
-			(
+		d : delay_element
+			generic map(
 				DATA_WIDTH => LHC_DATA_SLV_OBJECT_WIDTH(i),
 				MAX_DELAY => DM_MAX_DELAY_OBJECTS
 			)
-			port map 
-			(		
+			port map(
 				lhc_clk     => lhc_clk,
 				lhc_rst     => lhc_rst,
-				data_i      => lhc_data_slv_i(LHC_DATA_SLV_START_INDICES(i)+LHC_DATA_SLV_OBJECT_WIDTH(i)-1 downto LHC_DATA_SLV_START_INDICES(i)),  
-				data_o      => lhc_data_slv_o(LHC_DATA_SLV_START_INDICES(i)+LHC_DATA_SLV_OBJECT_WIDTH(i)-1 downto LHC_DATA_SLV_START_INDICES(i)),  
+				data_i      => lhc_data_slv_i(LHC_DATA_SLV_START_INDICES(i)+LHC_DATA_SLV_OBJECT_WIDTH(i)-1 downto LHC_DATA_SLV_START_INDICES(i)),
+				data_o      => lhc_data_slv_o(LHC_DATA_SLV_START_INDICES(i)+LHC_DATA_SLV_OBJECT_WIDTH(i)-1 downto LHC_DATA_SLV_START_INDICES(i)),
 				valid_i     => valid_i,
 				valid_o     => valid_flags(i),
 				delay       => delay_array(i) -- the delay array constructed above
-			); 
+			);
 	end generate;
 
-	
+
 	-- wide and for valid out signal
 	wide_and : process (valid_flags, bcres_valid)
 		variable temp : std_logic;
@@ -142,7 +142,7 @@ begin
 		for i in 1 to valid_flags'length-1 loop
 			temp := temp and valid_flags(i);
 		end loop;
-		temp := temp and bcres_valid; 
+		temp := temp and bcres_valid;
 		valid_out_internal <= temp;
 		sw_reg_o.valid <= temp;
 	end process;
@@ -150,49 +150,56 @@ begin
 
 	bcres_i_slv(0) <= bcres_i;
 	bcres_out_internal <= bcres_o_slv(0);
-	dm_bcres : delay_element 
-		generic map
-		(
+	dm_bcres : delay_element
+		generic map(
 			DATA_WIDTH => 1,
 			MAX_DELAY  => DM_MAX_DELAY_BCRES
 		)
-		port map 
-		(		
+		port map(
 			lhc_clk     => lhc_clk,
 			lhc_rst     => lhc_rst,
-			data_i      => bcres_i_slv,  
-			data_o      => bcres_o_slv,  
+			data_i      => bcres_i_slv,
+			data_o      => bcres_o_slv,
 			valid_i     => '1',
-			valid_o     => bcres_valid,  
+			valid_o     => bcres_valid,
 			delay       => sw_reg_i.delay_bcres
-		); 
-		
+		);
+
  	bcres_fdl_out_internal <= bcres_fdl_o_slv(0);
-	dm_bcres_fdl : delay_element 
-		generic map
-		(
+	dm_bcres_fdl : delay_element
+		generic map(
 			DATA_WIDTH => 1,
 			MAX_DELAY  => DM_MAX_DELAY_BCRES
 		)
-		port map 
-		(		
+		port map(
 			lhc_clk     => lhc_clk,
 			lhc_rst     => lhc_rst,
-			data_i      => bcres_i_slv,  
-			data_o      => bcres_fdl_o_slv,  
+			data_i      => bcres_i_slv,
+			data_o      => bcres_fdl_o_slv,
 			valid_i     => '1',
-			valid_o     => bcres_fdl_valid,  
+			valid_o     => bcres_fdl_valid,
 			delay       => sw_reg_i.delay_bcres_fdl
-		); 
-		
+		);
+
 
 	lhc_data_out_internal <= std_logic_vector_to_lhc_data_t(lhc_data_slv_o);
-		
+
+	sync_lhc_clk : process (lhc_clk, lhc_rst)
+    begin
+        if lhc_rst = RST_ACT then
+            bcres_o_delayed    <= '0';
+            bcres_fdl_o_delayed    <= '0';
+        elsif rising_edge(lhc_clk) then
+            bcres_o_delayed         <= bcres_out_internal;
+            bcres_fdl_o_delayed     <= bcres_fdl_out_internal;
+        end if;
+    end process;
+
+
 	GEN_ADDITIONAL_OUTPUT_REGISTER : if USE_REGISTERED_OUTPUT = true generate
 		sync_lhc_clk : process (lhc_clk, lhc_rst)
 		begin
 		--BR: 04.02.2015 Delay Manager out put was zero, becaue lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
-
 			if lhc_rst = RST_ACT then
 				valid_o    <= '0';
 				lhc_data_o <= LHC_DATA_NULL;
@@ -201,8 +208,9 @@ begin
 			elsif rising_edge(lhc_clk) then
 				valid_o    <= valid_out_internal;
 				lhc_data_o <= lhc_data_out_internal;
-				bcres_o    <= bcres_out_internal;
-				bcres_fdl_o    <= bcres_fdl_out_internal;
+				bcres_o    <= bcres_o_delayed;
+                bcres_outputmux_o    <= bcres_out_internal;
+				bcres_fdl_o    <= bcres_fdl_o_delayed;
 			end if;
 		end process;
 	end generate;
@@ -210,8 +218,9 @@ begin
 	DONT_GEN_ADDITIONAL_OUTPUT_REGISTER : if USE_REGISTERED_OUTPUT = false generate
 		valid_o    <= valid_out_internal;
 		lhc_data_o <= lhc_data_out_internal;
-		bcres_o    <= bcres_out_internal;
-		bcres_fdl_o    <= bcres_fdl_out_internal;
+        bcres_o    <= bcres_o_delayed;
+        bcres_outputmux_o    <= bcres_out_internal;
+		bcres_fdl_o    <= bcres_fdl_o_delayed;
 	end generate;
 
 

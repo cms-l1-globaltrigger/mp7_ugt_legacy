@@ -94,7 +94,7 @@ def main():
     mp7_tag = args.mp7tag
 
     # Menu path.
-    menu_path = args.menu + '/vhdl/module_' + str(args.module)
+    menu_path = args.menu
 
     # Fetch menu name from path.
     menu_name = os.path.basename(args.menu)
@@ -134,7 +134,6 @@ def main():
     logging.info("mp7_tag: %s", args.mp7tag)
     logging.info("menu: %s", args.menu)
     logging.info("module: %s", args.module)
-    logging.info("menu_path: %s", menu_path)
     logging.info("test vector: %s", args.testvector)
     logging.info("vsim msgmode: %s", msgmode)
     logging.info("Xilinx path: %s", args.xilinx_path)

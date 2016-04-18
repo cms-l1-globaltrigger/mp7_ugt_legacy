@@ -14,6 +14,8 @@
 -- $Author: ?
 -- $Revision: 3796 $
 
+-- HB 2016-03-17: inserted reset of lumi-section number with OC0
+-- HB 2016-03-10: used signals (of BGos) for reset OC, reset EC, start and resync
 -- JW 2015-11-04: included mp7_ttc_decl and used constant TTC_BC0_BX
 -- BR 2015-05-08: done lhc_rst = RST_ACT in processes
 
@@ -31,7 +33,11 @@ entity tcm is
 	(
 		lhc_clk           : in std_logic;
 		lhc_rst           : in std_logic;
-		bgos              : in bgos_t;
+		ec0		  : in std_logic;
+		oc0		  : in std_logic;
+		resync		  : in std_logic;
+		start		  : in std_logic;
+		stop		  : in std_logic;
 		l1a_sync          : in std_logic;
 		bcres_d           : in std_logic;
 		bcres_d_FDL       : in std_logic;
@@ -63,24 +69,25 @@ architecture beh of tcm is
 
 		started_bx         : std_logic;
 		started_bx_FDL     : std_logic;
--- 		bx_nr_chk          : std_logic_vector(PCIE_DATA_WIDTH-1 downto 0); -- the highest value bx_nr ever reached is stored into a sw register for debug purposes
--- 		bx_nr_max          : std_logic_vector(PCIE_DATA_WIDTH-1 downto 0); -- the highest value bx_nr ever reached is stored into a sw register for debug purposes
 		bx_nr_chk          : std_logic_vector(31 downto 0); -- the highest value bx_nr ever reached is stored into a sw register for debug purposes
 		bx_nr_max          : std_logic_vector(31 downto 0); -- the highest value bx_nr ever reached is stored into a sw register for debug purposes
 		err_det_reset_old  : std_logic; -- if the sw-in-reg err_det_reset toggles, err_det is reset to zero
 
-		bgos_event_old     : std_logic; -- if any bit in sw-in-reg bgos toggles, the corresponding bgos command is issued for one cycle
+-- HB 2016-03-10: removed unused SW BGos
+-- 		bgos_event_old     : std_logic; -- if any bit in sw-in-reg bgos toggles, the corresponding bgos command is issued for one cycle
 	end record;
 
-	constant LHC_REG_T_RESET  : lhc_reg_t := ('0', X"dd3", X"dd3", (others => '0'), (others => '0'), (others => '0'), (others => '0'), (others =>'0'), '0', '0', '0', (others => '0'), (others => '0'), '0', '0');
+-- 	constant LHC_REG_T_RESET  : lhc_reg_t := ('0', X"dd3", X"dd3", (others => '0'), (others => '0'), (others => '0'), (others => '0'), (others =>'0'), '0', '0', '0', (others => '0'), (others => '0'), '0', '0');
+-- HB 2016-03-10: removed unused SW BGos
+	constant LHC_REG_T_RESET  : lhc_reg_t := ('0', X"dd3", X"dd3", (others => '0'), (others => '0'), (others => '0'), (others => '0'), (others =>'0'), '0', '0', '0', (others => '0'), (others => '0'), '0');
 
 	signal l, lin  : lhc_reg_t;
 
-	signal bgos_int : bgos_t; -- merges real bgos signal and simulation signal
+-- 	signal bgos_int : bgos_t; -- merges real bgos signal and simulation signal
 
 begin
 	-- LHC clock domain
-	ctrl_lhc: process(lhc_rst, l, bgos, l1a_sync, bcres_d, sw_reg_in, bcres_d_FDL, bgos_int)
+	ctrl_lhc: process(lhc_rst, l, ec0, oc0, resync, start, l1a_sync, bcres_d, sw_reg_in, bcres_d_FDL)
 		variable v : lhc_reg_t;
 	begin
 		v := l;
@@ -157,40 +164,65 @@ begin
 			v.trigger_nr := trigger_nr_t(unsigned(l.trigger_nr) + to_unsigned(1, TRIGGER_NR_WIDTH));
 		end if;
 
-		-- simulate bgos
-		if sw_reg_in.bgos_event /= l.bgos_event_old then
-			bgos_int <= sw_reg_in.bgos;
-			v.bgos_event_old := sw_reg_in.bgos_event;
-		else
-			bgos_int <= bgos;
+-- HB 2016-03-10: removed "locally defined" BGos and SW simulated BGos
+-- 		-- simulate bgos
+-- 		if sw_reg_in.bgos_event /= l.bgos_event_old then
+-- 			bgos_int <= sw_reg_in.bgos;
+-- 			v.bgos_event_old := sw_reg_in.bgos_event;
+-- 		else
+-- 			bgos_int <= bgos;
+-- 		end if;
+-- 
+		-- handle BGos messages
+-- 		case bgos_int is
+-- 			when BGOS_RESYNC =>
+-- 				if to_integer(unsigned(l.bx_nr)) /= BC_TOP
+-- 				then
+-- 					v.err_det := '1';
+-- 					v.started_bx := '0'; -- resync
+-- 					v.started_bx_FDL := '0';
+-- 				end if;
+-- 				v.orbit_nr_periodic := (others => '0');
+-- 			when BGOS_ORBIT_COUNTER_RESET =>
+-- 				v.orbit_nr := (others => '0');
+-- 				v.orbit_nr_periodic := (others => '0');
+-- 			when BGOS_START_RUN =>
+-- 				v.trigger_nr := (others => '0');
+-- 			when BGOS_EVENT_COUNTER_RESET =>
+-- 				v.event_nr := (others => '0');
+-- 			when others =>
+-- 				null;
+-- 		end case;
+
+-- HB 2016-03-10: used signals (of BGo) for reset OC, reset EC, start and resync (from mp7_ttc.vhd)
+		if resync = '1' then
+			if to_integer(unsigned(l.bx_nr)) /= BC_TOP
+			then
+				v.err_det := '1';
+				v.started_bx := '0'; -- resync
+				v.started_bx_FDL := '0';
+			end if;
+			v.orbit_nr_periodic := (others => '0');
+		end if;
+		if oc0 = '1' then
+			v.orbit_nr := (others => '0');
+			v.orbit_nr_periodic := (others => '0');
+-- HB 2016-03-17: inserted reset of lumi-section number with OC0
+			v.luminosity_seg_nr := (others => '0');
+		end if;
+		if start = '1' then
+			v.trigger_nr := (others => '0');
+		end if;
+		if ec0 = '1' then
+			v.event_nr := (others => '0');
 		end if;
 
-		-- handle BGos messages
-		case bgos_int is
-			when BGOS_RESYNC =>
-				if to_integer(unsigned(l.bx_nr)) /= BC_TOP
-				then
-					v.err_det := '1';
-					v.started_bx := '0'; -- resync
-					v.started_bx_FDL := '0';
-				end if;
-				v.orbit_nr_periodic := (others => '0');
-			when BGOS_ORBIT_COUNTER_RESET =>
-				v.orbit_nr := (others => '0');
-				v.orbit_nr_periodic := (others => '0');
-			when BGOS_START_RUN =>
-				v.trigger_nr := (others => '0');
-			when BGOS_EVENT_COUNTER_RESET =>
-				v.event_nr := (others => '0');
-			when others =>
-				null;
-		end case;
-
+-- HB 2016-03-10: removed reset of unused SW BGos
 		-- reset
 -- 		if lhc_rst = '0' then
-		if lhc_rst = RST_ACT then
-			v.bgos_event_old := sw_reg_in.bgos_event; -- a reset should not trigger bgos
-		end if;
+-- 		if lhc_rst = RST_ACT then
+-- 			v.bgos_event_old := sw_reg_in.bgos_event; -- a reset should not trigger bgos
+-- 		end if;
 
 		-- if the sw in reg err_det_reset toggles, err_det is reset to zero
 		if sw_reg_in.err_det_reset_event /= l.err_det_reset_old then

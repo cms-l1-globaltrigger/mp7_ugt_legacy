@@ -14,6 +14,7 @@
 -- $Author: wittmann $
 -- $Revision: 3435 $
 
+-- HB 2016-04-11: inserted "algo_after_gtLogic" and renamed "algo_before_prescaler" to "algo_after_bxomask". In this version "algo_after_gtLogic" not used in read-out-record.
 -- JW 2015-11-04: included local veto and finor, included prescale_factor_set_index in readout
 
 library ieee;
@@ -40,8 +41,8 @@ entity output_mux is
         ctrs        : in ttc_stuff_array; --mp7 ttc ctrs
         bx_nr       : in std_logic_vector(11 downto 0);
         bx_nr_fdl   : in std_logic_vector(11 downto 0);
-        --ttc_bx_cntr : in std_logic_vector(11 downto 0);
-        algo_before_prescaler   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        algo_after_gtLogic   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        algo_after_bxomask   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_finor   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         local_finor_in      : in std_logic;
@@ -85,57 +86,57 @@ begin
     end process p_sValid;
 
 
-    -- algo_before_prescaler 0-191 mux
-    s_in0_mux0   <=     (algo_before_prescaler(31 downto 0), sValid, start, strobe);
-    s_in1_mux0   <=     (algo_before_prescaler(63 downto 32), sValid, start, strobe);
-    s_in2_mux0   <=    	(algo_before_prescaler(95 downto 64), sValid, start, strobe);
-    s_in3_mux0   <=     (algo_before_prescaler(127 downto 96), sValid, start, strobe);
-    s_in4_mux0   <=     (algo_before_prescaler(159 downto 128), sValid, start, strobe);
-    s_in5_mux0   <=    	(algo_before_prescaler(191 downto 160), sValid, start, strobe);
+    -- algo_after_bxomask 0-191 mux
+    s_in0_mux0   <=     (algo_after_bxomask(31 downto 0), sValid, start, strobe);
+    s_in1_mux0   <=     (algo_after_bxomask(63 downto 32), sValid, start, strobe);
+    s_in2_mux0   <=    	(algo_after_bxomask(95 downto 64), sValid, start, strobe);
+    s_in3_mux0   <=     (algo_after_bxomask(127 downto 96), sValid, start, strobe);
+    s_in4_mux0   <=     (algo_after_bxomask(159 downto 128), sValid, start, strobe);
+    s_in5_mux0   <=    	(algo_after_bxomask(191 downto 160), sValid, start, strobe);
 
     mux0_i: entity work.mux
         port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
-            in0     =>  s_in0_mux0,   -- frame 0   -> algo_before_prescaler 0-31
-            in1     =>  s_in1_mux0,   -- frame 1   -> algo_before_prescaler 32-63
-            in2     =>  s_in2_mux0,   -- frame 2   -> algo_before_prescaler 64-95
-            in3     =>  s_in3_mux0,   -- frame 3   -> algo_before_prescaler 96-127
-            in4     =>  s_in4_mux0,   -- frame 4   -> algo_before_prescaler 128-159
-            in5     =>  s_in5_mux0,   -- frame 5   -> algo_before_prescaler 160-191
+            in0     =>  s_in0_mux0,   -- frame 0   -> algo_after_bxomask 0-31
+            in1     =>  s_in1_mux0,   -- frame 1   -> algo_after_bxomask 32-63
+            in2     =>  s_in2_mux0,   -- frame 2   -> algo_after_bxomask 64-95
+            in3     =>  s_in3_mux0,   -- frame 3   -> algo_after_bxomask 96-127
+            in4     =>  s_in4_mux0,   -- frame 4   -> algo_after_bxomask 128-159
+            in5     =>  s_in5_mux0,   -- frame 5   -> algo_after_bxomask 160-191
             mux_out =>  lane_out(16)
         );
 
 
-    -- algo_before_prescaler 192-383 mux
-    s_in0_mux1   <=    (algo_before_prescaler(223 downto 192), sValid, start, strobe);    -- frame 0   -> algo_before_prescaler 192-223
-    s_in1_mux1   <=    (algo_before_prescaler(255 downto 224), sValid, start, strobe);    -- frame 1   -> algo_before_prescaler 224-255
-    s_in2_mux1   <=    (algo_before_prescaler(287 downto 256), sValid, start, strobe);    -- frame 2   -> algo_before_prescaler 256-287
-    s_in3_mux1   <=    (algo_before_prescaler(319 downto 288), sValid, start, strobe);    -- frame 3   -> algo_before_prescaler 288-319
-    s_in4_mux1   <=    (algo_before_prescaler(351 downto 320), sValid, start, strobe);    -- frame 4   -> algo_before_prescaler 320-351
-    s_in5_mux1   <=    (algo_before_prescaler(383 downto 352), sValid, start, strobe);    -- frame 5   -> algo_before_prescaler 352-383
+    -- algo_after_bxomask 192-383 mux
+    s_in0_mux1   <=    (algo_after_bxomask(223 downto 192), sValid, start, strobe);    -- frame 0   -> algo_after_bxomask 192-223
+    s_in1_mux1   <=    (algo_after_bxomask(255 downto 224), sValid, start, strobe);    -- frame 1   -> algo_after_bxomask 224-255
+    s_in2_mux1   <=    (algo_after_bxomask(287 downto 256), sValid, start, strobe);    -- frame 2   -> algo_after_bxomask 256-287
+    s_in3_mux1   <=    (algo_after_bxomask(319 downto 288), sValid, start, strobe);    -- frame 3   -> algo_after_bxomask 288-319
+    s_in4_mux1   <=    (algo_after_bxomask(351 downto 320), sValid, start, strobe);    -- frame 4   -> algo_after_bxomask 320-351
+    s_in5_mux1   <=    (algo_after_bxomask(383 downto 352), sValid, start, strobe);    -- frame 5   -> algo_after_bxomask 352-383
 
    mux1_i: entity work.mux
         port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
-            in0     =>  s_in0_mux1,    -- frame 0   -> algo_before_prescaler 192-223
-            in1     =>  s_in1_mux1,    -- frame 1   -> algo_before_prescaler 224-255
-            in2     =>  s_in2_mux1,    -- frame 2   -> algo_before_prescaler 256-287
-            in3     =>  s_in3_mux1,    -- frame 3   -> algo_before_prescaler 288-319
-            in4     =>  s_in4_mux1,    -- frame 4   -> algo_before_prescaler 320-351
-            in5     =>  s_in5_mux1,    -- frame 5   -> algo_before_prescaler 352-383
+            in0     =>  s_in0_mux1,    -- frame 0   -> algo_after_bxomask 192-223
+            in1     =>  s_in1_mux1,    -- frame 1   -> algo_after_bxomask 224-255
+            in2     =>  s_in2_mux1,    -- frame 2   -> algo_after_bxomask 256-287
+            in3     =>  s_in3_mux1,    -- frame 3   -> algo_after_bxomask 288-319
+            in4     =>  s_in4_mux1,    -- frame 4   -> algo_after_bxomask 320-351
+            in5     =>  s_in5_mux1,    -- frame 5   -> algo_after_bxomask 352-383
             mux_out =>  lane_out(17)
         );
 
 
-    -- algo_before_prescaler 384-511 + finor mux
-    s_in0_mux2   <=   (algo_before_prescaler(415 downto 384), sValid, start, strobe);    -- frame 0   -> algo_before_prescaler 384-415
-    s_in1_mux2   <=   (algo_before_prescaler(447 downto 416), sValid, start, strobe);    -- frame 1   -> algo_before_prescaler 416-447
-    s_in2_mux2   <=   (algo_before_prescaler(479 downto 448), sValid, start, strobe);    -- frame 2   -> algo_before_prescaler 448-479
-    s_in3_mux2   <=   (algo_before_prescaler(511 downto 480), sValid, start, strobe);    -- frame 3   -> algo_before_prescaler 480-511
+    -- algo_after_bxomask 384-511 + finor mux
+    s_in0_mux2   <=   (algo_after_bxomask(415 downto 384), sValid, start, strobe);    -- frame 0   -> algo_after_bxomask 384-415
+    s_in1_mux2   <=   (algo_after_bxomask(447 downto 416), sValid, start, strobe);    -- frame 1   -> algo_after_bxomask 416-447
+    s_in2_mux2   <=   (algo_after_bxomask(479 downto 448), sValid, start, strobe);    -- frame 2   -> algo_after_bxomask 448-479
+    s_in3_mux2   <=   (algo_after_bxomask(511 downto 480), sValid, start, strobe);    -- frame 3   -> algo_after_bxomask 480-511
     s_in4_mux2   <=   ((others => '0'), sValid, start, strobe);            -- frame 4   -> free
     s_in5_mux2   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
 
@@ -144,10 +145,10 @@ begin
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
-            in0     =>  s_in0_mux2,    -- frame 0   -> algo_before_prescaler 384-415
-            in1     =>  s_in1_mux2,    -- frame 1   -> algo_before_prescaler 416-447
-            in2     =>  s_in2_mux2,    -- frame 2   -> algo_before_prescaler 448-479
-            in3     =>  s_in3_mux2,    -- frame 3   -> algo_before_prescaler 480-511
+            in0     =>  s_in0_mux2,    -- frame 0   -> algo_after_bxomask 384-415
+            in1     =>  s_in1_mux2,    -- frame 1   -> algo_after_bxomask 416-447
+            in2     =>  s_in2_mux2,    -- frame 2   -> algo_after_bxomask 448-479
+            in3     =>  s_in3_mux2,    -- frame 3   -> algo_after_bxomask 480-511
             in4     =>  s_in4_mux2,    -- frame 4  -> free
             in5     =>  s_in5_mux2,    -- frame 5 -> free
             -- sel     =>  frame_cntr,

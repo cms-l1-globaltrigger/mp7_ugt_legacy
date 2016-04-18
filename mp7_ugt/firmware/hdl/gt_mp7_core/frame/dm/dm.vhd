@@ -16,6 +16,8 @@
 -- $Revision: 0.1  $
 --------------------------------------------------------------------------------
 
+-- HB 2016-04-11: implemented delays for EC0, OC0, RESYNC and START (same delay as BCRES). Inserted bcres_outputmux_o - delayed version of bcres for output mux.
+
 library ieee;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -40,7 +42,15 @@ entity dm is
 		lhc_data_o : out lhc_data_t; -- delayed version of lhc_data
 
 		bcres_i : in std_logic;
+		ec0_i : in std_logic;
+		oc0_i : in std_logic;
+		resync_i : in std_logic;
+		start_i : in std_logic;
 		bcres_o : out std_logic;     -- delayed version of bcres. This signal has an additional delay on 1BX to compensate the regional delay in the output mux
+		ec0_o : out std_logic;     -- delayed ec0
+		oc0_o : out std_logic;     -- delayed oc0
+		resync_o : out std_logic;     -- delayed resync
+		start_o : out std_logic;     -- delayed start
 		bcres_fdl_o : out std_logic; -- delayed version of bcres for fdl. This signal has an additional delay on 1BX to compensate the regional delay in the output mux
 		bcres_outputmux_o : out std_logic; -- delayed version of bcres for output mux
 		valid_i : in std_logic;
@@ -86,22 +96,29 @@ architecture arch of dm is
 
 	signal delay_array : delay_array_t;
 
-
-	signal bcres_i_slv : std_logic_vector(0 downto 0);
-	signal bcres_o_slv : std_logic_vector(0 downto 0);
+	signal bcres_i_slv : std_logic_vector(4 downto 0);
+	signal bcres_o_slv : std_logic_vector(4 downto 0);
 	signal bcres_fdl_o_slv : std_logic_vector(0 downto 0);
 
 	signal lhc_data_out_internal : lhc_data_t;
 	signal valid_out_internal : std_logic;
 
 	signal bcres_out_internal : std_logic;
+	signal ec0_out_internal : std_logic;
+	signal oc0_out_internal : std_logic;
+	signal resync_out_internal : std_logic;
+	signal start_out_internal : std_logic;
 	signal bcres_fdl_out_internal : std_logic;
-    signal bcres_o_delayed : std_logic;
-    signal bcres_fdl_o_delayed : std_logic;
+	signal bcres_o_delayed : std_logic;
+	signal ec0_o_delayed : std_logic;
+	signal oc0_o_delayed : std_logic;
+	signal resync_o_delayed : std_logic;
+	signal start_o_delayed : std_logic;
+	signal bcres_fdl_o_delayed : std_logic;
+
 begin
 
 	lhc_data_slv_i <= lhc_data_t_to_std_logic_vector(lhc_data_i);
-
 
 	-- IMPORTANT:
 	-- the delays must have the exact same order as the associated objects in lhc_data_t
@@ -133,7 +150,6 @@ begin
 			);
 	end generate;
 
-
 	-- wide and for valid out signal
 	wide_and : process (valid_flags, bcres_valid)
 		variable temp : std_logic;
@@ -147,25 +163,56 @@ begin
 		sw_reg_o.valid <= temp;
 	end process;
 
-
+-- 	bcres_i_slv(0) <= bcres_i;
+-- 	bcres_out_internal <= bcres_o_slv(0);
+-- 	dm_bcres : delay_element 
+-- 		generic map
+-- 		(
+-- 			DATA_WIDTH => 1,
+-- 			MAX_DELAY  => DM_MAX_DELAY_BCRES
+-- 		)
+-- 		port map 
+-- 		(		
+-- 			lhc_clk     => lhc_clk,
+-- 			lhc_rst     => lhc_rst,
+-- 			data_i      => bcres_i_slv,  
+-- 			data_o      => bcres_o_slv,  
+-- 			valid_i     => '1',
+-- 			valid_o     => bcres_valid,  
+-- 			delay       => sw_reg_i.delay_bcres
+-- 		); 
+		
+-- HB 2016-03-10: implemented delays for EC0, OC0, RESYNC, START and STOP (same delay as BCRES)
 	bcres_i_slv(0) <= bcres_i;
+	bcres_i_slv(1) <= ec0_i;
+	bcres_i_slv(2) <= oc0_i;
+	bcres_i_slv(3) <= resync_i;
+	bcres_i_slv(4) <= start_i;
 	bcres_out_internal <= bcres_o_slv(0);
-	dm_bcres : delay_element
-		generic map(
-			DATA_WIDTH => 1,
+	ec0_out_internal <= bcres_o_slv(1);
+	oc0_out_internal <= bcres_o_slv(2);
+	resync_out_internal <= bcres_o_slv(3);
+	start_out_internal <= bcres_o_slv(4);
+
+	dm_bcres : delay_element 
+		generic map
+		(
+			DATA_WIDTH => 5,
 			MAX_DELAY  => DM_MAX_DELAY_BCRES
 		)
-		port map(
+		port map 
+		(		
 			lhc_clk     => lhc_clk,
 			lhc_rst     => lhc_rst,
-			data_i      => bcres_i_slv,
-			data_o      => bcres_o_slv,
+			data_i      => bcres_i_slv(4 downto 0),  
+			data_o      => bcres_o_slv(4 downto 0),  
 			valid_i     => '1',
-			valid_o     => bcres_valid,
+			valid_o     => bcres_valid,  
 			delay       => sw_reg_i.delay_bcres
-		);
-
+		); 
+		
  	bcres_fdl_out_internal <= bcres_fdl_o_slv(0);
+ 	
 	dm_bcres_fdl : delay_element
 		generic map(
 			DATA_WIDTH => 1,
@@ -174,27 +221,33 @@ begin
 		port map(
 			lhc_clk     => lhc_clk,
 			lhc_rst     => lhc_rst,
-			data_i      => bcres_i_slv,
-			data_o      => bcres_fdl_o_slv,
+			data_i      => bcres_i_slv(0 downto 0),
+			data_o      => bcres_fdl_o_slv(0 downto 0),
 			valid_i     => '1',
 			valid_o     => bcres_fdl_valid,
 			delay       => sw_reg_i.delay_bcres_fdl
 		);
 
-
 	lhc_data_out_internal <= std_logic_vector_to_lhc_data_t(lhc_data_slv_o);
 
 	sync_lhc_clk : process (lhc_clk, lhc_rst)
-    begin
-        if lhc_rst = RST_ACT then
-            bcres_o_delayed    <= '0';
-            bcres_fdl_o_delayed    <= '0';
-        elsif rising_edge(lhc_clk) then
-            bcres_o_delayed         <= bcres_out_internal;
-            bcres_fdl_o_delayed     <= bcres_fdl_out_internal;
-        end if;
-    end process;
-
+	begin
+	    if lhc_rst = RST_ACT then
+		bcres_o_delayed    <= '0';
+		ec0_o_delayed    <= '0';
+		oc0_o_delayed    <= '0';
+		resync_o_delayed    <= '0';
+		start_o_delayed    <= '0';
+		bcres_fdl_o_delayed    <= '0';
+	    elsif rising_edge(lhc_clk) then
+		bcres_o_delayed         <= bcres_out_internal;
+		ec0_o_delayed    <= ec0_out_internal;
+		oc0_o_delayed    <= oc0_out_internal;
+		resync_o_delayed    <= resync_out_internal;
+		start_o_delayed    <= start_out_internal;
+		bcres_fdl_o_delayed     <= bcres_fdl_out_internal;
+	    end if;
+	end process;
 
 	GEN_ADDITIONAL_OUTPUT_REGISTER : if USE_REGISTERED_OUTPUT = true generate
 		sync_lhc_clk : process (lhc_clk, lhc_rst)
@@ -204,12 +257,20 @@ begin
 				valid_o    <= '0';
 				lhc_data_o <= LHC_DATA_NULL;
 				bcres_o    <= '0';
+				ec0_o    <= '0';
+				oc0_o    <= '0';
+				resync_o    <= '0';
+				start_o    <= '0';
 				bcres_fdl_o    <= '0';
 			elsif rising_edge(lhc_clk) then
 				valid_o    <= valid_out_internal;
 				lhc_data_o <= lhc_data_out_internal;
 				bcres_o    <= bcres_o_delayed;
-                bcres_outputmux_o    <= bcres_out_internal;
+				ec0_o    <= ec0_o_delayed;
+				oc0_o    <= oc0_o_delayed;
+				resync_o    <= resync_o_delayed;
+				start_o    <= start_o_delayed;
+				bcres_outputmux_o    <= bcres_out_internal;
 				bcres_fdl_o    <= bcres_fdl_o_delayed;
 			end if;
 		end process;
@@ -218,12 +279,14 @@ begin
 	DONT_GEN_ADDITIONAL_OUTPUT_REGISTER : if USE_REGISTERED_OUTPUT = false generate
 		valid_o    <= valid_out_internal;
 		lhc_data_o <= lhc_data_out_internal;
-        bcres_o    <= bcres_o_delayed;
-        bcres_outputmux_o    <= bcres_out_internal;
+		bcres_o    <= bcres_o_delayed;
+		ec0_o    <= ec0_o_delayed;
+		oc0_o    <= oc0_o_delayed;
+		resync_o    <= resync_o_delayed;
+		start_o    <= start_o_delayed;
+		bcres_outputmux_o    <= bcres_out_internal;
 		bcres_fdl_o    <= bcres_fdl_o_delayed;
 	end generate;
-
-
 
 end architecture;
 

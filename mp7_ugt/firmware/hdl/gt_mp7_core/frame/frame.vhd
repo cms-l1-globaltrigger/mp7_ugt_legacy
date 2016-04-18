@@ -15,6 +15,11 @@
 --------------------------------------------------------------------------------
 
 -- Description: contains the "framework" of GT-logic (all parts, except GTL and FDL)
+-- HB 2016-04-11: v0.0.38 - implemented delays for EC0, OC0, RESYNC and START (same delay as BCRES) and inserted bcres_outputmux_o (delayed version of bcres for output mux) in dm.vhd.
+--                Inserted reset of lumi-section number with OC0 and used signals of synchronized (and delayed) BGos in tcm.vhd. 
+--                Used "algo_after_gtLogic" for read-out-record (changed "algo_before_prescaler" to "algo_after_bxomask") in output_mux.vhd (according to fdl_module v0.0.24).
+--                Changed tp_mux.vhd for synchronized BGos.
+-- HB 2016-03-23: v0.0.37 - removed l1asim module, inserted B-Go signals and l1a (ports) for tcm module.
 -- HB 2016-02-26: v0.0.36 - removed unused fdl_status, bx_nr_d_FDL and tp.
 -- BR 2015-06-11: v0.1.4  changed ROP for 32-bits and usage of 40Mhz clock domain for calculation the data
 -- BR 2015-05-07: new concpept for simulation the design and especially for ROP. The concept is based on modularity by using new input ports. The case now is for ROP, which is should be extended for ugt payload.
@@ -72,6 +77,11 @@ entity frame is
         lhc_clk            : in std_logic;
         lhc_rst_o        : out std_logic;
         bc0            : in std_logic;
+        ec0: in std_logic;
+        oc0: in std_logic;
+        resync: in std_logic;
+        start: in std_logic;
+        l1a            : in std_logic;
         bcres_d        : out std_logic;
         bcres_d_FDL        : out std_logic;
         start_lumisection     : out std_logic;
@@ -79,7 +89,8 @@ entity frame is
         lane_data_out        : out ldata(NR_LANES-1 downto 0);
         dsmux_lhc_data_o    : out lhc_data_t;
         prescale_factor_set_index_rop : in std_logic_vector(7 downto 0);
-        algo_before_prescaler_rop     : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        algo_after_gtLogic_rop        : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        algo_after_bxomask_rop        : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_finor_mask_rop     : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         local_finor_rop         : in std_logic;
@@ -157,7 +168,6 @@ architecture rtl of frame is
     signal trigger_nr        : trigger_nr_t;
     signal orbit_nr          : orbit_nr_t;
     signal luminosity_seg_nr : luminosity_seg_nr_t;
-    signal bgos              : bgos_t;
 
     -- sim/spy mem
     signal spy1 : std_logic;
@@ -175,7 +185,7 @@ architecture rtl of frame is
 
     signal finors_rop : std_logic_vector (FINOR_WIDTH-1 downto 0) := (others => '0');
 
-    signal l1a_int : std_logic; -- internal L1A (output of l1asim), signal (port) "l1a" input from mp7_ttc.vhd
+--     signal l1a_int : std_logic; -- internal L1A (output of l1asim), signal (port) "l1a" input from mp7_ttc.vhd
 
 --  for simspy memory (test with ipb_dpmem_4096_32)
     constant SW_DATA_WIDTH : integer := 32;
@@ -209,7 +219,13 @@ architecture rtl of frame is
     signal trigger_nr_internal    : trigger_nr_t;
     signal orbit_nr_internal    : orbit_nr_t;
     signal luminosity_seg_nr_internal    : luminosity_seg_nr_t;
-    signal l1a_internal        :std_logic;
+--     signal l1a_internal        :std_logic;
+
+    signal ec0_d_int       : std_logic;
+    signal oc0_d_int       : std_logic;
+    signal resync_d_int       : std_logic;
+    signal start_d_int       : std_logic;
+    signal stop_d_int       : std_logic;
 
     begin
 
@@ -352,14 +368,18 @@ architecture rtl of frame is
 --                          TIMER COUNTER MODULE                             --
 --===============================================================================================--
 
-    bgos <= BGOS_NOP;
+--     bgos <= BGOS_NOP;
     tcm_inst: entity work.tcm
         port map(
             lhc_clk           => lhc_clk,
             lhc_rst           => lhc_rst,
-            bgos              => bgos,
-            l1a_sync          => l1a_int,
--- HB 2016-02-29: "bcres_d_int" is used, which commes from dm.vhd
+-- HB 2016-03-17: all bgos from dm.vhd
+	    ec0               => ec0_d_int,
+	    oc0               => oc0_d_int,
+	    resync            => resync_d_int,
+	    start             => start_d_int,
+	    stop              => stop_d_int,
+            l1a_sync          => l1a,
             bcres_d           => bcres_d_int,
             bcres_d_FDL       => bcres_d_FDL_int,
             sw_reg_in         => rb2tcm,
@@ -492,7 +512,15 @@ architecture rtl of frame is
             lhc_data_i => lmp_lhc_data_o,
             lhc_data_o => dm_lhc_data_o,
             bcres_i => bc0,
+            ec0_i => ec0,
+            oc0_i => oc0,
+            resync_i => resync,
+            start_i => start,
             bcres_o => bcres_d_int,
+            ec0_o => ec0_d_int,
+            oc0_o => oc0_d_int,
+            resync_o => resync_d_int,
+            start_o => start_d_int,
             bcres_fdl_o => bcres_d_FDL_int,
             valid_i => lmp_lhc_data_valid_o,
             valid_o => dm_lhc_data_valid_o,
@@ -654,8 +682,8 @@ architecture rtl of frame is
             ctrs        => ctrs,
             bx_nr       => bx_nr,
             bx_nr_fdl   => bx_nr_d_FDL_int,
-            --ttc_bx_cntr => ctrs(0).bctr,
-            algo_before_prescaler   => algo_before_prescaler_rop,
+            algo_after_gtLogic   => algo_after_gtLogic_rop,
+            algo_after_bxomask   => algo_after_bxomask_rop,
             algo_after_prescaler   => algo_after_prescaler_rop,
             algo_after_finor   => algo_after_finor_mask_rop,
             local_finor_in      => local_finor_rop,
@@ -670,35 +698,6 @@ architecture rtl of frame is
         );
 
 -- END OF DATA-PATH
---===============================================================================================--
---                          Deceiding between simulation and synthesize for L1A
---===============================================================================================--
-      SIMULATE_L1A_i: if SIMULATE_DATAPATH = true generate
-
-      l1a_int <= l1a_sim;
-
-      end generate SIMULATE_L1A_i;
-
-      synthesize_L1A_i: if SIMULATE_DATAPATH = false generate
-
-      begin
-
-        l1asim: entity work.l1asim
-        port map(
-            lhc_clk    => lhc_clk,
-            lhc_rst    => lhc_rst,
-
-            bx_nr      => bx_nr,
-            orbit_nr   => orbit_nr,
-
-            sw_reg_i   => rb2l1asim,
-
-            l1a_real_i => '0',
-
-            l1a_o      => l1a_int
-        );
-
-      end generate synthesize_L1A_i;
 
 end rtl;
 

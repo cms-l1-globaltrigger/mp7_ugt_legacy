@@ -107,8 +107,8 @@ begin
 	variable algo_error_cnt : integer := 0;
 	variable finor_error_cnt : integer := 0;
 
-        file testvector_file : text open read_mode is "/home/bergauer/cactus/branches/ugt_menu_dev/L1Menu_test_correlations_v3/testvectors/TestVector_CorrV3_A1_hb_test.txt";
-        file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_TestVector_CorrV3_A1_hb_test.txt";
+        file testvector_file : text open read_mode is "/home/bergauer/cactus/branches/ugt_menu_dev/L1Menu_test_correlations_v3/testvectors/TestVector_CorrV3_A1_bx_13_186_at_bx_0_1.txt";
+        file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_TestVector_CorrV3_A1_bx_13_186_at_bx_0_1.txt";
 
     function str_to_slv(str : string) return std_logic_vector is
       alias str_norm : string(1 to str'length) is str;
@@ -214,7 +214,6 @@ begin
 dut : entity work.gtl_fdl_wrapper
     generic map(
         SIM_MODE => SIM_MODE
---         FDL_OUT_MEZZ_2_TCDS => FDL_OUT_MEZZ_2_TCDS
     )
     port map
     (
@@ -229,14 +228,16 @@ dut : entity work.gtl_fdl_wrapper
         l1a                => '0',
         begin_lumi_section => '0',
         prescale_factor_set_index_rop => open,
-        algo_before_prescaler_rop => open,
+        algo_after_gtLogic_rop => open,
+        algo_after_bxomask_rop => open,
         algo_after_prescaler_rop  => open,
         algo_after_finor_mask_rop => algo_after_finor_mask_rop,
         local_finor_rop => open,
         local_veto_rop  => open,
         finor_2_mezz_lemo  => open,
         veto_2_mezz_lemo  => open,
-        local_finor_with_veto_o  => local_finor_with_veto
+	finor_w_veto_2_mezz_lemo  => open,
+	local_finor_with_veto_o  => local_finor_with_veto
     );
 
 end rtl;

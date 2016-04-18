@@ -27,7 +27,7 @@ package fdl_addr_decode is
 
     type ipb_algo_bx_mem_index_array is array (0 to 15) of natural;
 
-    constant NR_IPB_SLV_FDL : positive:= 29;
+    constant NR_IPB_SLV_FDL : positive:= 30;
 
     constant C_IPB_ALGO_BX_MEM : ipb_algo_bx_mem_index_array := (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
     constant C_IPB_RATE_CNT_BEFORE_PRESCALER : natural := 16;
@@ -43,6 +43,7 @@ package fdl_addr_decode is
     constant C_IPB_L1A_LATENCY_DELAY : natural := 26;
     constant C_IPB_RATE_CNT_L1A : natural := 27;
     constant C_IPB_RATE_CNT_VETO : natural := 28;
+    constant C_IPB_PRESCALE_FACTOR_SET_INDEX_UPDATED : natural := 29;
 
 -- rate counter before prescaler
     constant ADDR_WIDTH_RATE_CNT_BEFORE_PRESCALER: natural := log2c(MAX_NR_ALGOS);
@@ -72,10 +73,12 @@ package fdl_addr_decode is
     constant OFFSET_FDL_FW_VERSION: natural := OFFSET_GTL_FW_VERSION + GTL_FW_VERSION'length/32;
     constant OFFSET_L1TM_FW_UID: natural := OFFSET_FDL_FW_VERSION + FDL_FW_VERSION'length/32;
     constant OFFSET_SVN_REVISION_NUMBER: natural := OFFSET_L1TM_FW_UID + L1TM_FW_UID'length/32;
+    constant OFFSET_L1TM_UID_HASH: natural := OFFSET_SVN_REVISION_NUMBER + SVN_REVISION_NUMBER'length/32;
+    constant OFFSET_FW_UID_HASH: natural := OFFSET_L1TM_UID_HASH + L1TM_UID_HASH'length/32;
     
     constant ADDR_WIDTH_READ_VERSIONS: natural := 6;
     constant OFFSET_BEG_READ_VERSIONS: natural := OFFSET_L1TM_NAME;
-    constant OFFSET_END_READ_VERSIONS: natural := OFFSET_SVN_REVISION_NUMBER;
+    constant OFFSET_END_READ_VERSIONS: natural := OFFSET_FW_UID_HASH;
 
 -- rate counter post dead time
     constant ADDR_WIDTH_RATE_CNT_POST_DEAD_TIME: natural := log2c(MAX_NR_ALGOS);
@@ -123,6 +126,7 @@ package body fdl_addr_decode is
         elsif std_match(addr, "1001000000001001001000100000000-") then sel := C_IPB_L1A_LATENCY_DELAY; -- 0x90092200
         elsif std_match(addr, "10010000000010010011000000000000") then sel := C_IPB_RATE_CNT_L1A; -- 0x90093000
         elsif std_match(addr, "10010000000010010100000000000000") then sel := C_IPB_RATE_CNT_VETO; -- 0x90094000
+        elsif std_match(addr, "10010000000010010101000000000000") then sel := C_IPB_PRESCALE_FACTOR_SET_INDEX_UPDATED; -- 0x90095000
 		else sel := 99;
 		end if;
 		return sel;

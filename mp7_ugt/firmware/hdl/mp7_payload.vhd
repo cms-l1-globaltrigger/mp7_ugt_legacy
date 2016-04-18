@@ -15,6 +15,7 @@
 --------------------------------------------------------------------------------
 -- TODO: review the core and and modify it
 --
+-- HB 2016-04-06: used "algo_after_gtLogic" for read-out-record (changed "algo_before_prescaler" to "algo_after_bxomask") according to fdl_module v0.0.24.
 -- HB 2016-02-26: changed inputs of tp_mux.vhd, removed unused signals in frame (v0.0.36) and fdl_module (v0.0.20)
 -- HB 2016-02-16: added "l1a" for post dead time counter in fdl_module (v0.0.17)
 -- JW 2015-11-04: added bgo sync stage
@@ -68,7 +69,8 @@ architecture rtl of mp7_payload is
 
     signal fdl_status                    : std_logic_vector(3 downto 0);
     signal prescale_factor_set_index_rop : std_logic_vector(7 downto 0);
-    signal algo_before_prescaler_rop     : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+    signal algo_after_gtLogic_rop        : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+    signal algo_after_bxomask_rop        : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal algo_after_prescaler_rop      : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal algo_after_finor_mask_rop     : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal local_finor_rop               : std_logic;
@@ -78,17 +80,25 @@ architecture rtl of mp7_payload is
     signal veto_2_mezz_lemo              : std_logic;
     signal finor_w_veto_2_mezz_lemo      : std_logic;
 
-    signal bcres_d           : std_logic;
-    signal bcres_d_FDL       : std_logic;
-    signal bx_nr_d_FDL       : bx_nr_t;
-    signal start_lumisection : std_logic;
+    signal bcres_d            : std_logic;
+    signal bcres_d_FDL        : std_logic;
+    signal bx_nr_d_FDL        : bx_nr_t;
+    signal start_lumisection  : std_logic;
 
-    signal lhc_rst           : std_logic;
-    signal lhc_clk           : std_logic;
-    signal ipb_clk	         : std_logic;
-    signal ipb_rst	         : std_logic;
-    signal clk240            : std_logic;
-    signal bc0_in            : std_logic;
+    signal lhc_rst            : std_logic;
+    signal lhc_clk            : std_logic;
+    signal ipb_clk	      : std_logic;
+    signal ipb_rst	      : std_logic;
+    signal clk240             : std_logic;
+    signal bc0_in             : std_logic;
+    signal ec0_int            : std_logic;
+    signal oc0_int            : std_logic;
+    signal resync_int         : std_logic;
+    signal start_int          : std_logic;
+    signal ec0_sync_bc0_int   : std_logic;
+    signal oc0_sync_bc0_int   : std_logic;
+    signal resync_sync_bc0_int: std_logic;
+    signal start_sync_bc0_int : std_logic;
 
     signal lane_data_in      : ldata(4 * N_REGION - 1 downto 0);
     signal lane_data_out     : ldata(4 * N_REGION - 1 downto 0);
@@ -117,18 +127,24 @@ begin
     lane_data_in  <= d;
     q <= lane_data_out;
 
+    -- HB 2016-03-03: added outputs for synchronized oc0 and start (with bc0)
+    -- HB 2016-03-03: inserted coded bgos (and start and stop)
     -- HB 2016-02-26: ec0, oc0 and resync not used anymore
     -- JW 2015-10-24: added bgo sync stage to avoid timing issues
     bgo_sync_i: entity work.bgo_sync
     port map(
         clk_payload => lhc_clk,
-        --rst_payload => rst_payload(0),
         rst_payload => rst_payload,
         ttc_in      => ctrs(4).ttc_cmd,
         bc0_out     => bc0_in,
-        ec0_out     => open,
-        oc0_out     => open,
-        resync_out  => open
+        ec0_out     => ec0_int,
+        ec0_sync_bc0_out     => ec0_sync_bc0_int,
+        oc0_out     => oc0_int,
+        oc0_sync_bc0_out     => oc0_sync_bc0_int,
+        resync_out  => resync_int,
+        resync_sync_bc0_out     => resync_sync_bc0_int,
+        start_out  => start_int,
+        start_sync_bc0_out  => start_sync_bc0_int
     );
 
     fabric_i: entity work.ipbus_fabric_sel
@@ -172,6 +188,12 @@ begin
         lhc_clk            => lhc_clk,
         lhc_rst_o          => lhc_rst,
         bc0                => bc0_in,
+-- HB 2016-03-29: used xxx_sync_bc0_int for BGos in TCM
+        ec0             => ec0_sync_bc0_int,
+        oc0             => oc0_sync_bc0_int,
+        resync          => resync_sync_bc0_int,
+        start           => start_sync_bc0_int,
+        l1a                => l1a_int,
         bcres_d            => bcres_d,
         bcres_d_FDL        => bcres_d_FDL,
         start_lumisection  => start_lumisection,
@@ -179,7 +201,8 @@ begin
         lane_data_out      => lane_data_out,
         dsmux_lhc_data_o   => dsmux_lhc_data,
         prescale_factor_set_index_rop   => prescale_factor_set_index_rop,
-        algo_before_prescaler_rop       => algo_before_prescaler_rop,
+        algo_after_gtLogic_rop          => algo_after_gtLogic_rop,
+        algo_after_bxomask_rop          => algo_after_bxomask_rop,
         algo_after_prescaler_rop        => algo_after_prescaler_rop,
         algo_after_finor_mask_rop       => algo_after_finor_mask_rop,
         local_finor_rop                 => local_finor_rop,
@@ -202,7 +225,8 @@ begin
         l1a                => l1a_int,
         begin_lumi_section => start_lumisection,
         prescale_factor_set_index_rop   => prescale_factor_set_index_rop,
-        algo_before_prescaler_rop       => algo_before_prescaler_rop,
+        algo_after_gtLogic_rop          => algo_after_gtLogic_rop,
+        algo_after_bxomask_rop          => algo_after_bxomask_rop,
         algo_after_prescaler_rop        => algo_after_prescaler_rop,
         algo_after_finor_mask_rop       => algo_after_finor_mask_rop,
         local_finor_rop         => local_finor_rop,
@@ -230,6 +254,14 @@ begin
         start_lumisection => start_lumisection,
         bcres_d         => bcres_d,
         bcres_d_FDL     => bcres_d_FDL,
+        ec0             => ec0_int,
+        ec0_sync_bc0    => ec0_sync_bc0_int,
+        oc0             => oc0_int,
+        oc0_sync_bc0    => oc0_sync_bc0_int,
+        resync          => resync_int,
+        resync_sync_bc0 => resync_sync_bc0_int,
+        start           => start_int,
+        start_sync_bc0  => start_sync_bc0_int,
         out0            => tp0,
         out1            => tp1,
         out2            => tp2

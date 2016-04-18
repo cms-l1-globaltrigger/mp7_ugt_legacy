@@ -14,6 +14,8 @@
 -- $Revision: 0.1  $
 --------------------------------------------------------------------------------
 --
+-- HB 2016-03-17: added outputs for synchronized BGos (with bc0)
+-- HB 2016-03-10: added ec0, oc0, resync, start and stop signals for tcm v0.0.37 test
 -- HB 2016-02-29: removed ctrs, ec0, oc0 and resync. Added local_finor, local_veto and finor_w_veto_local
 -- HB 2016-02-16: added L1A (used for post dead time counter in fdl_module.vhd)
 -- JW 2015-09-17: started development of testpoint-mux module
@@ -25,12 +27,7 @@ use ieee.std_logic_unsigned.all;
 
 use work.ipbus.all;
 use work.ipbus_reg_types.all;
--- use work.mp7_data_types.all;
--- use work.lhc_data_pkg.all;
 use work.ipbus_decode_tp_mux.all;
--- use work.mp7_brd_decl.all;
--- use work.mp7_ttc_decl.all;
--- use work.top_decl.all;
 
 entity tp_mux is
     port(
@@ -49,6 +46,14 @@ entity tp_mux is
         start_lumisection: in std_logic;
         bcres_d: in std_logic;
         bcres_d_FDL: in std_logic;
+        ec0: in std_logic;
+        ec0_sync_bc0: in std_logic;
+        oc0: in std_logic;
+        oc0_sync_bc0: in std_logic;
+        resync: in std_logic;
+        resync_sync_bc0: in std_logic;
+        start: in std_logic;
+        start_sync_bc0: in std_logic;
         out0: out std_logic;
         out1: out std_logic;
         out2: out std_logic
@@ -97,6 +102,7 @@ begin
     --===========================================--
 
 -- HB 2016-02-29: DO NOT CHANGE THIS "TABLE" - IT IS IMPLEMENTED IN SWATCH !!!
+-- HB 2016-03-04: added BGos for tests - not in SWATCH
 
     out0   <=   '0'                     when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"00"     else    --default
 		local_finor             when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"01"     else    --finor signal
@@ -110,6 +116,15 @@ begin
                 start_lumisection       when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"09"     else    --start_lumisection
                 bcres_d	                when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"0A"     else    --delayed BC0
                 bcres_d_FDL             when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"0B"     else    --delayed BC0 for FDL
+-- HB 2016-03-04: added BGos for tests - not in SWATCH
+                ec0                     when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"0C"     else    --EC0 from MP7 TTC
+                oc0                     when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"0D"     else    --OC0 from MP7 TTC
+                resync                  when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"0E"     else    --RESYNC from MP7 TTC
+                start                   when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"0F"     else    --START from MP7 TTC
+                oc0_sync_bc0            when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"11"     else    --OC0 synchronized with BC0
+                start_sync_bc0          when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"12"     else    --START synchronized with BC0
+                ec0_sync_bc0            when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"13"     else    --EC0 synchronized with BC0
+                resync_sync_bc0         when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"14"     else    --RESYNC synchronized with BC0
                 '0';
 
     out1   <=   '0'                     when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"00"     else
@@ -124,6 +139,15 @@ begin
                 start_lumisection       when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"09"     else
                 bcres_d	                when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"0A"     else
                 bcres_d_FDL             when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"0B"     else
+-- HB 2016-03-04: added BGos for tests - not in SWATCH
+                ec0                     when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"0C"     else
+                oc0                     when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"0D"     else
+                resync                  when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"0E"     else
+                start                   when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"0F"     else
+                oc0_sync_bc0            when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"11"     else
+                start_sync_bc0          when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"12"     else
+                ec0_sync_bc0            when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"13"     else
+                resync_sync_bc0         when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"14"     else
                 '0';
 
     out2   <=   '0'                     when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"00"     else
@@ -138,6 +162,15 @@ begin
                 start_lumisection       when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"09"     else
                 bcres_d	                when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"0A"     else
                 bcres_d_FDL             when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"0B"     else
+-- HB 2016-03-04: added BGos for tests - not in SWATCH
+                ec0                     when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"0C"     else
+                oc0                     when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"0D"     else
+                resync                  when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"0E"     else
+                start                   when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"0F"     else
+                oc0_sync_bc0            when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"11"     else
+                start_sync_bc0          when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"12"     else
+                ec0_sync_bc0            when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"13"     else
+                resync_sync_bc0         when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"14"     else
                 '0';
 
 end rtl;

@@ -18,8 +18,10 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2016-04-06: v0.0.24 - based on v0.0.23, but used algo_mapping_rop with "algo_after_gtLogic" for read-out-record (changed algo_before_prescaler to algo_after_bxomask).
+--                          Inserted read register for updated prescale factor index.
 -- HB 2016-04-06: v0.0.23 - based on v0.0.22, but bug fixed in algo_pre_scaler, prescale_factor=0 disables algos correctly.
--- HB 2016-03-10: v0.0.22 - based on v0.0.21, but inserted L1TM_FW_UID and SVN_REVISION_NUMBER to version registers
+-- HB 2016-03-10: v0.0.22 - based on v0.0.21, but inserted L1TM_FW_UID and SVN_REVISION_NUMBER to version registers.
 -- HB 2016-03-02: v0.0.21 - based on v0.0.20, but mapping global-local index is done for masks and counters. Inserted rate-counter for veto. Updated algo_bx_mask_sim for global index.
 -- HB 2016-02-26: v0.0.20 - based on v0.0.19, but changed finor_2_mezz_lemo and veto_2_mezz_lemo (no additional delay anymore) and inserted finor_w_veto_2_mezz_lemo with
 --			    1.5bx delay.
@@ -88,7 +90,8 @@ entity fdl_module is
         begin_lumi_section  : in std_logic;
         algo_i              : in std_logic_vector(NR_ALGOS-1 downto 0);
         prescale_factor_set_index_rop : out std_logic_vector(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0);
-        algo_before_prescaler_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        algo_after_gtLogic_rop  : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        algo_after_bxomask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_finor_mask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         local_finor_rop     : out std_logic;
@@ -105,9 +108,6 @@ entity fdl_module is
 end fdl_module;
 
 architecture rtl of fdl_module is
-
--- Input flip-flops for algorithms of fdl_module.vhd
---     constant ALGO_INPUTS_FF: boolean := false; -- used for tests of fdl_module.vhd only
 
     constant FINOR_BIT_IN_MASKS_REG : integer := 0;
     constant VETO_BIT_IN_MASKS_REG : integer := 1;
@@ -150,7 +150,7 @@ architecture rtl of fdl_module is
     signal l1a_latency_delay_reg : ipb_regs_array(0 to 1) := (others => (others => '0'));
     signal rate_cnt_post_dead_time : rate_counter_array;
 
-    signal algo_before_prescaler : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
+    signal algo_after_bxomask : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
     signal algo_after_prescaler : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
     signal algo_after_finor_mask : std_logic_vector(NR_ALGOS-1 downto 0);
     signal veto : std_logic_vector(NR_ALGOS-1 downto 0);
@@ -158,16 +158,13 @@ architecture rtl of fdl_module is
     signal local_veto : std_logic := '0';
     signal local_finor_pipe : std_logic;
     signal local_veto_pipe : std_logic;
---     signal algo_bx_mask : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
     signal algo_bx_mask_mem_out : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
---     signal algo_bx_mask_default : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
---     signal algo_bx_mask_sim_internal : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
 
     signal lhc_clk_algo_bx_mem : std_logic := '0';
     signal sync_en_algo_bx_mem : std_logic := '0';
 
     signal request_update_factor_pulse : std_logic;
-    signal prescale_factor_set_index_reg_updated : std_logic_vector(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0);
+    signal prescale_factor_set_index_reg_updated : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
     signal finor_with_veto_temp1 : std_logic;
     signal finor_with_veto_temp2 : std_logic;
@@ -239,27 +236,11 @@ begin
     end generate l1tm_fw_uid_l;                        
 
     versions_to_ipb(OFFSET_SVN_REVISION_NUMBER) <= SVN_REVISION_NUMBER;
+    versions_to_ipb(OFFSET_L1TM_UID_HASH) <= L1TM_UID_HASH;
+    versions_to_ipb(OFFSET_FW_UID_HASH) <= FW_UID_HASH;
 
 --===============================================================================================--
 -- Control register
---     control_reg_i: entity work.ipb_write_regs
---     generic map
---     (
---         init_value => CNTRL_REG_INIT,
---         addr_width => 2,
---         regs_beg_index => 0,
---         regs_end_index => 1
---     )
---     port map
---     (
---         clk => ipb_clk,
---         reset => ipb_rst,
---         ipbus_in => ipb_to_slaves(C_IPB_CONTROL),
---         ipbus_out => ipb_from_slaves(C_IPB_CONTROL),
---         ------------------
---         regs_o => control_reg
---     );
-
 -- HB 2015-08-31: control_reg not used currently
 
 --===============================================================================================--
@@ -298,17 +279,6 @@ begin
         );
     end generate algo_bx_mem_l;                        
 
---     algo_bx_mask_sim_sync_p: process(lhc_clk, algo_bx_mask_sim)
---         begin
---         if (lhc_clk'event and (lhc_clk = '1')) then
--- 	    algo_bx_mask_sim_internal(NR_ALGOS-1 downto 0) <= algo_bx_mask_sim(NR_ALGOS-1 downto 0);
---         end if;
---     end process;
--- 
--- -- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
---     algo_bx_mask_global <= algo_bx_mask_mem_out when not SIM_MODE else
--- 		           algo_bx_mask_sim_internal when SIM_MODE else (others => '1');
---     
 -- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
     algo_bx_mask_global <= algo_bx_mask_mem_out when not SIM_MODE else
 		           algo_bx_mask_sim when SIM_MODE else (others => '1');
@@ -440,10 +410,29 @@ begin
             request_update_pulse => request_update_factor_pulse,
             update_pulse => begin_lumi_section,
             data_i => prescale_factor_set_index_reg(0)(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0),
-            data_o => prescale_factor_set_index_reg_updated
+            data_o => prescale_factor_set_index_reg_updated(0)(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0)
         );
         
-    prescale_factor_set_index_rop <= prescale_factor_set_index_reg_updated;
+    prescale_factor_set_index_rop <= prescale_factor_set_index_reg_updated(0)(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0);
+
+-- Read register for updated prescale factor index
+-- HB 2016-04-06: requested for monitoring by TM
+    prescale_factor_set_index_updated_i: entity work.ipb_read_regs
+    generic map
+    (
+        addr_width => 1,
+        regs_beg_index => 0,
+        regs_end_index => 0
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_SET_INDEX_UPDATED),
+        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_SET_INDEX_UPDATED),
+        ------------------
+        regs_i => prescale_factor_set_index_reg_updated
+    );
 
 -- --===============================================================================================--
 -- Finor and veto masks registers (bit 0 = finor, bit 1 = veto)
@@ -605,7 +594,7 @@ begin
             rate_cnt_before_prescaler => rate_cnt_before_prescaler_local(i),
             rate_cnt_after_prescaler => rate_cnt_after_prescaler_local(i),
             rate_cnt_post_dead_time => rate_cnt_post_dead_time_local(i),
-            algo_before_prescaler => algo_before_prescaler(i),
+            algo_after_bxomask => algo_after_bxomask(i),
             algo_after_prescaler => algo_after_prescaler(i),
 	    algo_after_finor_mask => algo_after_finor_mask(i),
 	    veto => veto(i)
@@ -739,10 +728,12 @@ begin
             finor_masks_local => finor_masks_local,
             veto_masks_global => veto_masks_global,
             veto_masks_local => veto_masks_local,
-            algo_before_prescaler => algo_before_prescaler,
+            algo_after_gtLogic => algo_int,
+            algo_after_bxomask => algo_after_bxomask,
             algo_after_prescaler => algo_after_prescaler,
             algo_after_finor_mask => algo_after_finor_mask,
-            algo_before_prescaler_rop => algo_before_prescaler_rop,
+            algo_after_gtLogic_rop => algo_after_gtLogic_rop,
+            algo_after_bxomask_rop => algo_after_bxomask_rop,
             algo_after_prescaler_rop => algo_after_prescaler_rop,
             algo_after_finor_mask_rop => algo_after_finor_mask_rop
         );

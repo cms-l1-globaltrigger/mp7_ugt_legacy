@@ -19,6 +19,7 @@
 -- algo-bx-mask at algo input
 -- rate-counter before prescaler only (no rate-counter after finor-mask)
 
+-- HB 2016-04-12: renamed "algo_before_prescaler" to "algo_after_bxomask".
 -- HB 2016-02-23: added algo_rate_counter after prescaler.
 -- HB 2016-02-22: moved "algo_post_dead_time_counter" after prescaler.
 -- HB 2016-02-16: inserted "algo_post_dead_time_counter".
@@ -59,7 +60,7 @@ entity algo_slice is
         rate_cnt_before_prescaler : out std_logic_vector(RATE_COUNTER_WIDTH-1 DOWNTO 0);
         rate_cnt_after_prescaler : out std_logic_vector(RATE_COUNTER_WIDTH-1 DOWNTO 0);
         rate_cnt_post_dead_time : out std_logic_vector(RATE_COUNTER_WIDTH-1 DOWNTO 0);
-        algo_before_prescaler : out std_logic;
+        algo_after_bxomask : out std_logic;
         algo_after_prescaler : out std_logic;
         algo_after_finor_mask : out std_logic;
         veto : out std_logic
@@ -136,7 +137,7 @@ algo_after_finor_mask_int <= algo_after_prescaler_int and finor_mask;
 
 veto <= algo_after_finor_mask_int and veto_mask;
 
-algo_before_prescaler <= algo_after_algo_bx_mask_int;
+algo_after_bxomask <= algo_after_algo_bx_mask_int;
 algo_after_prescaler <= algo_after_prescaler_int;
 algo_after_finor_mask <= algo_after_finor_mask_int;
 

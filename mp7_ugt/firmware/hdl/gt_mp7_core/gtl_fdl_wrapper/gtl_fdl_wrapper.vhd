@@ -15,6 +15,7 @@
 --------------------------------------------------------------------------------
 
 -- Version-history:
+-- HB 2016-04-06: used algo_mapping_rop with "algo_after_gtLogic" for read-out-record (changed "algo_before_prescaler" to "algo_after_bxomask") according to fdl_module v0.0.24.
 -- HB 2016-02-26: inserted finor_w_veto_2_mezz_lemo with 1.5bx delay. Removed unused inputs (ec0, oc0, etc.) and fdl_status output (see fdl_module v0.0.20).
 -- HB 2016-02-16: added "l1a" for algo post dead time counter in fdl_module (v0.0.17).
 -- HB 2015-09-17: added "ec0", "resync" and "oc0" from "ctrs" for fdl_module (v0.0.14).
@@ -53,7 +54,8 @@ entity gtl_fdl_wrapper is
         l1a                 : in std_logic;
         begin_lumi_section  : in std_logic;
         prescale_factor_set_index_rop : out std_logic_vector(7 downto 0);
-        algo_before_prescaler_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        algo_after_gtLogic_rop        : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        algo_after_bxomask_rop        : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_finor_mask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         local_finor_rop     : out std_logic;
@@ -138,7 +140,8 @@ fdl_module_i: entity work.fdl_module
         begin_lumi_section => begin_lumi_section,
         algo_i          => algo,
         prescale_factor_set_index_rop => prescale_factor_set_index_rop,
-        algo_before_prescaler_rop => algo_before_prescaler_rop,
+        algo_after_gtLogic_rop => algo_after_gtLogic_rop,
+        algo_after_bxomask_rop => algo_after_bxomask_rop,
         algo_after_prescaler_rop  => algo_after_prescaler_rop,
         algo_after_finor_mask_rop => algo_after_finor_mask_rop,
         local_finor_rop => local_finor_rop,

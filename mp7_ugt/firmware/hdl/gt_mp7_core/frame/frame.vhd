@@ -15,8 +15,9 @@
 --------------------------------------------------------------------------------
 
 -- Description: contains the "framework" of GT-logic (all parts, except GTL and FDL)
+-- JW 2016-04-19: v0.0.39 - connected the bcres_outputmux_o to the output mux, changed the mux code to sync the bcres signal and convert it to 240MHz domain
 -- HB 2016-04-11: v0.0.38 - implemented delays for EC0, OC0, RESYNC and START (same delay as BCRES) and inserted bcres_outputmux_o (delayed version of bcres for output mux) in dm.vhd.
---                Inserted reset of lumi-section number with OC0 and used signals of synchronized (and delayed) BGos in tcm.vhd. 
+--                Inserted reset of lumi-section number with OC0 and used signals of synchronized (and delayed) BGos in tcm.vhd.
 --                Used "algo_after_gtLogic" for read-out-record (changed "algo_before_prescaler" to "algo_after_bxomask") in output_mux.vhd (according to fdl_module v0.0.24).
 --                Changed tp_mux.vhd for synchronized BGos.
 -- HB 2016-03-23: v0.0.37 - removed l1asim module, inserted B-Go signals and l1a (ports) for tcm module.
@@ -153,6 +154,7 @@ architecture rtl of frame is
     signal bcres             : std_logic; -- NOT USED, "bc0" of mp7_ttc is used instead of "bcres"
     signal bcres_d_int       : std_logic; -- delayed version of bcres
     signal bcres_d_FDL_int   : std_logic; -- delayed version of bcres for FDL
+    signal bcres_outputmux   : std_logic; -- non-delayed version of bcres for output mux
 
     signal rop_clk : std_logic; --! clock signal for the ROP --> DAQ interface
     signal rop_rst : std_logic; --! reset signal for the rop_clk
@@ -522,6 +524,7 @@ architecture rtl of frame is
             resync_o => resync_d_int,
             start_o => start_d_int,
             bcres_fdl_o => bcres_d_FDL_int,
+            bcres_outputmux_o => bcres_outputmux,
             valid_i => lmp_lhc_data_valid_o,
             valid_o => dm_lhc_data_valid_o,
             sw_reg_i    => rb2dm,
@@ -680,6 +683,7 @@ architecture rtl of frame is
             clk240      => clk240,
             lhc_rst     => lhc_rst,
             ctrs        => ctrs,
+            bcres       => bcres_outputmux,
             bx_nr       => bx_nr,
             bx_nr_fdl   => bx_nr_d_FDL_int,
             algo_after_gtLogic   => algo_after_gtLogic_rop,

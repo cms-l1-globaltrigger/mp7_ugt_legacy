@@ -13,8 +13,9 @@
 -- $Author: wittmann $
 -- $Revision: 4044 $
 --------------------------------------------------------------------------------
+-- JW 2016-04-19: v0.0.39 - connected the bcres_outputmux_o to the output mux, changed the mux code to sync the bcres signal and convert it to 240MHz domain
 -- HB 2016-04-11: v0.0.38 - implemented delays for EC0, OC0, RESYNC and START (same delay as BCRES) and inserted bcres_outputmux_o (delayed version of bcres for output mux) in dm.vhd.
---                Inserted reset of lumi-section number with OC0 and used signals of synchronized (and delayed) BGos in tcm.vhd. 
+--                Inserted reset of lumi-section number with OC0 and used signals of synchronized (and delayed) BGos in tcm.vhd.
 --                Used "algo_after_gtLogic" for read-out-record (changed "algo_before_prescaler" to "algo_after_bxomask") in output_mux.vhd (according to fdl_module v0.0.24).
 --                Changed tp_mux.vhd for synchronized BGos.
 -- JW 2016-04-06: v0.0.37 - added an additional delay for the bc0 output of the dm module (except for the output_mux bc0 signal)
@@ -106,7 +107,7 @@ type ipb_regs_array is array (natural range <>) of std_logic_vector(31 downto 0)
 -- FRAME version (given by the editor of frame.vhd)
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 0;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 0;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 38;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 39;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &

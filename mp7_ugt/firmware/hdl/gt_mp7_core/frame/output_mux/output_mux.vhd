@@ -39,6 +39,7 @@ entity output_mux is
         lhc_rst     : in std_logic;
         clk240      : in std_logic;
         ctrs        : in ttc_stuff_array; --mp7 ttc ctrs
+        bcres       : in std_logic;
         bx_nr       : in std_logic_vector(11 downto 0);
         bx_nr_fdl   : in std_logic_vector(11 downto 0);
         algo_after_gtLogic   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
@@ -97,8 +98,9 @@ begin
     mux0_i: entity work.mux
         port map(
             clk     =>  clk240,
+            lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
-            bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
+            bcres   =>  bcres, --bcres for quad 4
             in0     =>  s_in0_mux0,   -- frame 0   -> algo_after_bxomask 0-31
             in1     =>  s_in1_mux0,   -- frame 1   -> algo_after_bxomask 32-63
             in2     =>  s_in2_mux0,   -- frame 2   -> algo_after_bxomask 64-95
@@ -120,8 +122,9 @@ begin
    mux1_i: entity work.mux
         port map(
             clk     =>  clk240,
+            lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
-            bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
+            bcres   =>  bcres, --bcres for quad 4
             in0     =>  s_in0_mux1,    -- frame 0   -> algo_after_bxomask 192-223
             in1     =>  s_in1_mux1,    -- frame 1   -> algo_after_bxomask 224-255
             in2     =>  s_in2_mux1,    -- frame 2   -> algo_after_bxomask 256-287
@@ -143,8 +146,9 @@ begin
   mux2_i: entity work.mux
         port map(
             clk     =>  clk240,
+            lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
-            bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
+            bcres   =>  bcres, --bcres for quad 4
             in0     =>  s_in0_mux2,    -- frame 0   -> algo_after_bxomask 384-415
             in1     =>  s_in1_mux2,    -- frame 1   -> algo_after_bxomask 416-447
             in2     =>  s_in2_mux2,    -- frame 2   -> algo_after_bxomask 448-479
@@ -167,8 +171,9 @@ begin
     mux3_i: entity work.mux
         port map(
             clk     =>  clk240,
+            lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
-            bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
+            bcres   =>  bcres, --bcres for quad 4
             in0     =>  s_in0_mux3,   -- frame 0   -> algo_after_prescaler 0-31
             in1     =>  s_in1_mux3,   -- frame 1   -> algo_after_prescaler 32-63
             in2     =>  s_in2_mux3,   -- frame 2   -> algo_after_prescaler 64-95
@@ -190,8 +195,9 @@ begin
    mux4_i: entity work.mux
         port map(
             clk     =>  clk240,
+            lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
-            bcres   =>  ctrs(5).ttc_cmd(0), --bcres for quad 5
+            bcres   =>  bcres, --bcres for quad 5
             in0     =>  s_in0_mux4,    -- frame 0   -> algo_after_prescaler 192-223
             in1     =>  s_in1_mux4,    -- frame 1   -> algo_after_prescaler 224-255
             in2     =>  s_in2_mux4,    -- frame 2   -> algo_after_prescaler 256-287
@@ -213,8 +219,9 @@ begin
   mux5_i: entity work.mux
         port map(
             clk     =>  clk240,
+            lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
-            bcres   =>  ctrs(5).ttc_cmd(0), --bcres for quad 5
+            bcres   =>  bcres, --bcres for quad 5
             in0     =>  s_in0_mux5,    -- frame 0   -> algo_after_prescaler 384-415
             in1     =>  s_in1_mux5,    -- frame 1   -> algo_after_prescaler 416-447
             in2     =>  s_in2_mux5,    -- frame 2   -> algo_after_prescaler 448-479
@@ -237,8 +244,9 @@ begin
     mux6_i: entity work.mux
         port map(
             clk     =>  clk240,
+            lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
-            bcres   =>  ctrs(5).ttc_cmd(0), --bcres for quad 5
+            bcres   =>  bcres, --bcres for quad 5
             in0     =>  s_in0_mux6,   -- frame 0   -> algo_after_finor_mask 0-31
             in1     =>  s_in1_mux6,   -- frame 1   -> algo_after_finor_mask 32-63
             in2     =>  s_in2_mux6,   -- frame 2   -> algo_after_finor_mask 64-95
@@ -260,8 +268,9 @@ begin
    mux7_i: entity work.mux
         port map(
             clk     =>  clk240,
+            lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
-            bcres   =>  ctrs(5).ttc_cmd(0), --bcres for quad 5
+            bcres   =>  bcres, --bcres for quad 5
             in0     =>  s_in0_mux7,    -- frame 0   -> algo_after_finor_mask 192-223
             in1     =>  s_in1_mux7,    -- frame 1   -> algo_after_finor_mask 224-255
             in2     =>  s_in2_mux7,    -- frame 2   -> algo_after_finor_mask 256-287
@@ -284,8 +293,9 @@ begin
   mux8_i: entity work.mux
         port map(
             clk     =>  clk240,
+            lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
-            bcres   =>  ctrs(6).ttc_cmd(0), --bcres for quad 6
+            bcres   =>  bcres, --bcres for quad 6
             in0     =>  s_in0_mux8,    -- frame 0   -> algo_after_finor_mask 384-415
             in1     =>  s_in1_mux8,    -- frame 1   -> algo_after_finor_mask 416-447
             in2     =>  s_in2_mux8,    -- frame 2   -> algo_after_finor_mask 448-479
@@ -310,8 +320,9 @@ begin
   mux9_i: entity work.mux
         port map(
             clk     =>  clk240,
+            lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
-            bcres   =>  ctrs(6).ttc_cmd(0), --bcres for quad 6
+            bcres   =>  bcres, --bcres for quad 6
             in0     =>  s_in0_mux9,    -- frame 0   -> bx_nr
             in1     =>  s_in1_mux9,    -- frame 1   -> mp7 ttc bc cntr
             in2     =>  s_in2_mux9,    -- frame 2   -> bx_nr_fdl

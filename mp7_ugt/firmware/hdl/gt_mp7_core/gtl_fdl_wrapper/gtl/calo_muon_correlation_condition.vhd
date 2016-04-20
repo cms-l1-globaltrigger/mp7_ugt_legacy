@@ -18,6 +18,7 @@
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and muon.
 
 -- Version history:
+-- HB 2016-04-20: bug fixed in "matrix_deta_dphi_dr_p" (inserted missing "inv_mass_comp_pipe").
 -- HB 2015-12-14: removed INV_MASS_PT_PRECISION from generic - not used anymore.
 -- HB 2015-11-11: first design
 
@@ -293,7 +294,7 @@ begin
     
 -- "Matrix" of permutations in an and-or-structure.
 
-    matrix_deta_dphi_dr_p: process(calo_obj_vs_templ_pipe, muon_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe)
+    matrix_deta_dphi_dr_p: process(calo_obj_vs_templ_pipe, muon_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, inv_mass_comp_pipe)
         variable index : integer := 0;
         variable obj_vs_templ_vec : std_logic_vector((nr_calo_objects*NR_MUON_OBJECTS) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';

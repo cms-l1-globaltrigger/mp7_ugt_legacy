@@ -48,7 +48,7 @@ end esums_comparators;
 
 architecture rtl of esums_comparators is
 
-    constant ZERO : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
+    constant ZERO : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
 
     signal et_ett : std_logic_vector(D_S_I_ETT.et_high-D_S_I_ETT.et_low downto 0);
 

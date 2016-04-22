@@ -74,12 +74,19 @@ architecture rtl of gtl_fdl_wrapper is
     signal eg_temp : calo_objects_array(0 to NR_EG_OBJECTS-1);
     signal jet_temp : calo_objects_array(0 to NR_JET_OBJECTS-1);
     signal tau_temp : calo_objects_array(0 to NR_TAU_OBJECTS-1);
-    signal ett_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-    signal ht_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-    signal etm_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-    signal htm_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+-- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
+--     signal ett_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    signal ett_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
+    signal ht_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
+    signal etm_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
+    signal htm_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
     signal muon_temp : muon_objects_array(0 to NR_MUON_OBJECTS-1);
     signal ext_cond_temp : std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
+-- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
+    signal mbhfpt1_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
+    signal mbhfmt1_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
+    signal mbhfpt0_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
+    signal mbhfmt0_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
     
 begin
 
@@ -99,11 +106,32 @@ begin
         muon_temp(i) <= lhc_data.muon(i)(MAX_MUON_BITS-1 downto 0);
     end generate;
 
-    ett_temp <= lhc_data.ett(MAX_ESUMS_BITS-1 downto 0);
-    ht_temp <= lhc_data.ht(MAX_ESUMS_BITS-1 downto 0);
-    etm_temp <= lhc_data.etm(MAX_ESUMS_BITS-1 downto 0);
-    htm_temp <= lhc_data.htm(MAX_ESUMS_BITS-1 downto 0);
+-- ****************************************************************************************
+-- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
+-- HB 2016-04-21: see email from Johannes (Andrew Rose), 2016-04-20 15:34
+-- Frame 0: (HF+ thresh 0) ... ... (Scalar ET) - 4 MSBs
+-- Frame 1: (HF- thresh 0) ... ... (Scalar HT) - 4 MSBs
+-- Frame 2: (HF+ thresh 1) ... ... (Vector ET) - 4 MSBs
+-- Frame 3: (HF- thresh 1) ... ... (Vector HT) - 4 MSBs
+-- HB 2016-04-18: Takashi's notation
+-- HF+ thresh 0 => MBHFPT0
+-- HF- thresh 0 => MBHFMT0
+-- HF+ thresh 1 => MBHFPT1
+-- HF- thresh 1 => MBHFMT1
 
+--     ett_temp <= lhc_data.ett(MAX_ESUMS_BITS-1 downto 0);
+    ett_temp(D_S_I_ETT_V2.et_high downto D_S_I_ETT_V2.et_low) <= lhc_data.ett(D_S_I_ETT_V2.et_high downto D_S_I_ETT_V2.et_low);
+    ht_temp(D_S_I_HTT_V2.et_high downto D_S_I_HTT_V2.et_low) <= lhc_data.ht(D_S_I_HTT_V2.et_high downto D_S_I_HTT_V2.et_low);
+    etm_temp(D_S_I_ETM_V2.phi_high downto D_S_I_ETM_V2.et_low) <= lhc_data.etm(D_S_I_ETM_V2.phi_high downto D_S_I_ETM_V2.et_low);
+    htm_temp(D_S_I_HTM_V2.phi_high downto D_S_I_HTM_V2.et_low) <= lhc_data.htm(D_S_I_HTM_V2.phi_high downto D_S_I_HTM_V2.et_low);
+
+    mbhfpt0_temp(D_S_I_MBHFPT0_V2.count_high downto D_S_I_MBHFPT0_V2.count_low) <= lhc_data.ett(MBHFPT0_IN_ETT_HIGH downto MBHFPT0_IN_ETT_LOW);
+    mbhfmt0_temp(D_S_I_MBHFMT0_V2.count_high downto D_S_I_MBHFMT0_V2.count_low) <= lhc_data.ht(MBHFMT0_IN_HTT_HIGH downto MBHFMT0_IN_HTT_LOW);
+    mbhfpt1_temp(D_S_I_MBHFPT1_V2.count_high downto D_S_I_MBHFPT1_V2.count_low) <= lhc_data.etm(MBHFPT1_IN_ETM_HIGH downto MBHFPT1_IN_ETM_LOW);
+    mbhfmt1_temp(D_S_I_MBHFMT1_V2.count_high downto D_S_I_MBHFMT1_V2.count_low) <= lhc_data.htm(MBHFMT1_IN_HTM_HIGH downto MBHFMT1_IN_HTM_LOW);
+
+-- ****************************************************************************************
+    
     ext_cond_temp <= lhc_data.external_conditions(NR_EXTERNAL_CONDITIONS-1 downto 0);
 
 gtl_module_i: entity work.gtl_module
@@ -116,6 +144,13 @@ gtl_module_i: entity work.gtl_module
         ht_data         => ht_temp,
         etm_data        => etm_temp,
         htm_data        => htm_temp,
+-- ****************************************************************************************
+-- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
+        mbhfpt1_data    => mbhfpt1_temp,
+        mbhfmt1_data    => mbhfmt1_temp,
+        mbhfpt0_data    => mbhfpt0_temp,
+        mbhfmt0_data    => mbhfmt0_temp,
+-- ****************************************************************************************
         muon_data       => muon_temp,
         external_conditions => ext_cond_temp,
         algo_o          => algo

@@ -73,6 +73,7 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/min_bias_hf_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
 src gt_mp7_core/frame/crc/crc16d64.vhd
 src gt_mp7_core/frame/crc/crc16d32.vhd

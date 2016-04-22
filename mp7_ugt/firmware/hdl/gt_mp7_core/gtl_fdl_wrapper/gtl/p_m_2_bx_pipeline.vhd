@@ -70,6 +70,33 @@ entity p_m_2_bx_pipeline is
         htm_bx_0     : out std_logic_vector(max_esums_bits-1 downto 0);
         htm_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
         htm_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
+-- ****************************************************************************************
+-- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
+        mbhfpt1_data     : in std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfpt1_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfpt1_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfpt1_bx_0     : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfpt1_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfpt1_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfmt1_data     : in std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfmt1_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfmt1_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfmt1_bx_0     : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfmt1_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfmt1_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfpt0_data     : in std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfpt0_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfpt0_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfpt0_bx_0     : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfpt0_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfpt0_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfmt0_data     : in std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfmt0_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfmt0_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfmt0_bx_0     : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfmt0_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        mbhfmt0_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
+-- ****************************************************************************************
         ext_cond_data     : in std_logic_vector(nr_external_conditions-1 downto 0);
         ext_cond_bx_p2   : out std_logic_vector(nr_external_conditions-1 downto 0);
         ext_cond_bx_p1   : out std_logic_vector(nr_external_conditions-1 downto 0);
@@ -89,6 +116,13 @@ architecture rtl of p_m_2_bx_pipeline is
     signal ht_bx_p1_tmp, ht_bx_0_tmp, ht_bx_m1_tmp, ht_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
     signal etm_bx_p1_tmp, etm_bx_0_tmp, etm_bx_m1_tmp, etm_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
     signal htm_bx_p1_tmp, htm_bx_0_tmp, htm_bx_m1_tmp, htm_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
+-- ****************************************************************************************
+-- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
+    signal mbhfpt1_bx_p1_tmp, mbhfpt1_bx_0_tmp, mbhfpt1_bx_m1_tmp, mbhfpt1_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
+    signal mbhfmt1_bx_p1_tmp, mbhfmt1_bx_0_tmp, mbhfmt1_bx_m1_tmp, mbhfmt1_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
+    signal mbhfpt0_bx_p1_tmp, mbhfpt0_bx_0_tmp, mbhfpt0_bx_m1_tmp, mbhfpt0_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
+    signal mbhfmt0_bx_p1_tmp, mbhfmt0_bx_0_tmp, mbhfmt0_bx_m1_tmp, mbhfmt0_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
+-- ****************************************************************************************
     signal ext_cond_bx_p1_tmp, ext_cond_bx_0_tmp, ext_cond_bx_m1_tmp, ext_cond_bx_m2_tmp : std_logic_vector(nr_external_conditions-1 downto 0) := (others => '0');
 
 begin
@@ -135,6 +169,26 @@ process(clk, eg_data, jet_data, tau_data, muon_data, ett_data, ht_data, etm_data
         htm_bx_0_tmp <= htm_bx_p1_tmp;
         htm_bx_m1_tmp <= htm_bx_0_tmp;
         htm_bx_m2_tmp <= htm_bx_m1_tmp;
+
+        mbhfpt1_bx_p1_tmp <= mbhfpt1_data;
+        mbhfpt1_bx_0_tmp <= mbhfpt1_bx_p1_tmp;
+        mbhfpt1_bx_m1_tmp <= mbhfpt1_bx_0_tmp;
+        mbhfpt1_bx_m2_tmp <= mbhfpt1_bx_m1_tmp;
+
+        mbhfmt1_bx_p1_tmp <= mbhfmt1_data;
+        mbhfmt1_bx_0_tmp <= mbhfmt1_bx_p1_tmp;
+        mbhfmt1_bx_m1_tmp <= mbhfmt1_bx_0_tmp;
+        mbhfmt1_bx_m2_tmp <= mbhfmt1_bx_m1_tmp;
+
+        mbhfpt0_bx_p1_tmp <= mbhfpt0_data;
+        mbhfpt0_bx_0_tmp <= mbhfpt0_bx_p1_tmp;
+        mbhfpt0_bx_m1_tmp <= mbhfpt0_bx_0_tmp;
+        mbhfpt0_bx_m2_tmp <= mbhfpt0_bx_m1_tmp;
+
+        mbhfmt0_bx_p1_tmp <= mbhfmt0_data;
+        mbhfmt0_bx_0_tmp <= mbhfmt0_bx_p1_tmp;
+        mbhfmt0_bx_m1_tmp <= mbhfmt0_bx_0_tmp;
+        mbhfmt0_bx_m2_tmp <= mbhfmt0_bx_m1_tmp;
 
         ext_cond_bx_p1_tmp <= ext_cond_data;
         ext_cond_bx_0_tmp <= ext_cond_bx_p1_tmp;
@@ -191,6 +245,30 @@ end process;
     htm_bx_0 <= htm_bx_0_tmp;
     htm_bx_m1 <= htm_bx_m1_tmp;
     htm_bx_m2 <= htm_bx_m2_tmp;
+
+    mbhfpt1_bx_p2 <= mbhfpt1_data;
+    mbhfpt1_bx_p1 <= mbhfpt1_bx_p1_tmp;
+    mbhfpt1_bx_0 <= mbhfpt1_bx_0_tmp;
+    mbhfpt1_bx_m1 <= mbhfpt1_bx_m1_tmp;
+    mbhfpt1_bx_m2 <= mbhfpt1_bx_m2_tmp;
+
+    mbhfmt1_bx_p2 <= mbhfmt1_data;
+    mbhfmt1_bx_p1 <= mbhfmt1_bx_p1_tmp;
+    mbhfmt1_bx_0 <= mbhfmt1_bx_0_tmp;
+    mbhfmt1_bx_m1 <= mbhfmt1_bx_m1_tmp;
+    mbhfmt1_bx_m2 <= mbhfmt1_bx_m2_tmp;
+
+    mbhfpt0_bx_p2 <= mbhfpt0_data;
+    mbhfpt0_bx_p1 <= mbhfpt0_bx_p1_tmp;
+    mbhfpt0_bx_0 <= mbhfpt0_bx_0_tmp;
+    mbhfpt0_bx_m1 <= mbhfpt0_bx_m1_tmp;
+    mbhfpt0_bx_m2 <= mbhfpt0_bx_m2_tmp;
+
+    mbhfmt0_bx_p2 <= mbhfmt0_data;
+    mbhfmt0_bx_p1 <= mbhfmt0_bx_p1_tmp;
+    mbhfmt0_bx_0 <= mbhfmt0_bx_0_tmp;
+    mbhfmt0_bx_m1 <= mbhfmt0_bx_m1_tmp;
+    mbhfmt0_bx_m2 <= mbhfmt0_bx_m2_tmp;
 
     ext_cond_bx_p2 <= ext_cond_data;
     ext_cond_bx_p1 <= ext_cond_bx_p1_tmp;

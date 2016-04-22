@@ -116,7 +116,7 @@ type ipb_regs_array is array (natural range <>) of std_logic_vector(31 downto 0)
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 0;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 0;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 9;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 10;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 0;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 0;

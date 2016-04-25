@@ -18,6 +18,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2016-04-25: v0.0.25 - based on v0.0.24, but bug fixed at "rate_cnt_reg_l" (using MAX_NR_ALGOS instead of NR_ALGOS).
 -- HB 2016-04-06: v0.0.24 - based on v0.0.23, but used algo_mapping_rop with "algo_after_gtLogic" for read-out-record (changed algo_before_prescaler to algo_after_bxomask).
 --                          Inserted read register for updated prescale factor index.
 -- HB 2016-04-06: v0.0.23 - based on v0.0.22, but bug fixed in algo_pre_scaler, prescale_factor=0 disables algos correctly.
@@ -530,11 +531,13 @@ begin
 
 --===============================================================================================--
 
-    reg_l: for i in 0 to NR_ALGOS-1 generate
+-- HB 2016-04-25: bug fixed at "rate_cnt_reg_l" (using MAX_NR_ALGOS instead of NR_ALGOS).
+--     reg_l: for i in 0 to NR_ALGOS-1 generate
+    rate_cnt_reg_l: for i in 0 to MAX_NR_ALGOS-1 generate
         rate_cnt_before_prescaler_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_before_prescaler_global(i);
         rate_cnt_after_prescaler_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_after_prescaler_global(i);
         rate_cnt_post_dead_time_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_post_dead_time_global(i);
-    end generate reg_l;
+    end generate rate_cnt_reg_l;
 
     masks_reg_l: for i in 0 to MAX_NR_ALGOS-1 generate
         prescale_factor_global(i) <= prescale_factor_reg(i);

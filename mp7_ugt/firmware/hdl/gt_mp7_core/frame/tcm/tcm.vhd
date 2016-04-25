@@ -14,6 +14,9 @@
 -- $Author: ?
 -- $Revision: 3796 $
 
+-- HB 2016-04-25: bug fixed in length of lumi-section (1 bx to short, checked with "Always true"-algo). 
+--                Resync not used anymore. Resetting v.orbit_nr_periodic with resync was a bug.
+-- HB 2016-04-22: OC0 resets orbit number and lumi-section number to 1.
 -- HB 2016-03-17: inserted reset of lumi-section number with OC0
 -- HB 2016-03-10: used signals (of BGos) for reset OC, reset EC, start and resync
 -- JW 2015-11-04: included mp7_ttc_decl and used constant TTC_BC0_BX
@@ -85,6 +88,10 @@ architecture beh of tcm is
 
 -- 	signal bgos_int : bgos_t; -- merges real bgos signal and simulation signal
 
+-- HB 2016-04-22: value 0 for orbit_nr and luminosity_seg_nr.
+	constant ZERO_ORBIT_NR : orbit_nr_t := (others => '0');
+	constant ZERO_LUMI_NR : luminosity_seg_nr_t := (others => '0');
+
 begin
 	-- LHC clock domain
 	ctrl_lhc: process(lhc_rst, l, ec0, oc0, resync, start, l1a_sync, bcres_d, sw_reg_in, bcres_d_FDL)
@@ -108,7 +115,9 @@ begin
 				v.bx_nr := (others => '0');
 				v.orbit_nr := orbit_nr_t(unsigned(l.orbit_nr) + to_unsigned(1, ORBIT_NR_WIDTH));
 				-- luminosity segment counter
-				if unsigned(l.orbit_nr_periodic) >= (unsigned(sw_reg_in.luminosity_seg_period_msk) - 1)
+-- HB 2016-04-25: bug in length of lumi-section (1 bx to short, checked with "Always true"-algo).
+-- 				if unsigned(l.orbit_nr_periodic) >= (unsigned(sw_reg_in.luminosity_seg_period_msk) - 1)
+				if unsigned(l.orbit_nr_periodic) >= (unsigned(sw_reg_in.luminosity_seg_period_msk))
 				then
 					v.luminosity_seg_nr := luminosity_seg_nr_t(unsigned(l.luminosity_seg_nr) + to_unsigned(1, LUM_SEG_NR_WIDTH));
 					v.start_lumisection := '1';
@@ -195,20 +204,25 @@ begin
 -- 		end case;
 
 -- HB 2016-03-10: used signals (of BGo) for reset OC, reset EC, start and resync (from mp7_ttc.vhd)
-		if resync = '1' then
-			if to_integer(unsigned(l.bx_nr)) /= BC_TOP
-			then
-				v.err_det := '1';
-				v.started_bx := '0'; -- resync
-				v.started_bx_FDL := '0';
-			end if;
-			v.orbit_nr_periodic := (others => '0');
-		end if;
+-- HB 2016-04-25: resync not used anymore. Resetting v.orbit_nr_periodic with resync was a bug.
+-- 		if resync = '1' then
+-- 			if to_integer(unsigned(l.bx_nr)) /= BC_TOP
+-- 			then
+-- 				v.err_det := '1';
+-- 				v.started_bx := '0'; -- resync
+-- 				v.started_bx_FDL := '0';
+-- 			end if;
+-- 			v.orbit_nr_periodic := (others => '0');
+-- 		end if;
 		if oc0 = '1' then
-			v.orbit_nr := (others => '0');
+-- HB 2016-04-22: OC0 resets orbit number and lumi-section number to 1.
+-- 			v.orbit_nr := (others => '0');
+			v.orbit_nr := orbit_nr_t(to_unsigned(1, ORBIT_NR_WIDTH));
 			v.orbit_nr_periodic := (others => '0');
 -- HB 2016-03-17: inserted reset of lumi-section number with OC0
-			v.luminosity_seg_nr := (others => '0');
+-- HB 2016-04-22: OC0 resets orbit number and lumi-section number to 1.
+-- 			v.luminosity_seg_nr := (others => '0');
+			v.luminosity_seg_nr := luminosity_seg_nr_t(to_unsigned(1, LUM_SEG_NR_WIDTH));
 		end if;
 		if start = '1' then
 			v.trigger_nr := (others => '0');

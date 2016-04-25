@@ -13,6 +13,9 @@
 -- $Author: wittmann $
 -- $Revision: 4044 $
 --------------------------------------------------------------------------------
+-- HB 2016-04-25: v0.0.40 - updated tcm.vhd (bug fixed in length of lumi-section, resync not used anymore and OC0 resets orbit number and lumi-section number to 1).
+--                          FDL v0.0.25 used (bug fixed at "rate_cnt_reg_l" - using MAX_NR_ALGOS instead of NR_ALGOS).
+--                          GTL v0.0.10 used (min_bias_hf_conditions.vhd for minimum bias trigger).
 -- JW 2016-04-19: v0.0.39 - connected the bcres_outputmux_o to the output mux, changed the mux code to sync the bcres signal and convert it to 240MHz domain
 -- HB 2016-04-11: v0.0.38 - implemented delays for EC0, OC0, RESYNC and START (same delay as BCRES) and inserted bcres_outputmux_o (delayed version of bcres for output mux) in dm.vhd.
 --                Inserted reset of lumi-section number with OC0 and used signals of synchronized (and delayed) BGos in tcm.vhd.
@@ -107,7 +110,7 @@ type ipb_regs_array is array (natural range <>) of std_logic_vector(31 downto 0)
 -- FRAME version (given by the editor of frame.vhd)
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 0;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 0;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 39;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 40;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &
@@ -120,7 +123,7 @@ type ipb_regs_array is array (natural range <>) of std_logic_vector(31 downto 0)
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 0;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 0;
-    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 24;
+    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 25;
 -- ==================================================================================================
 
 constant BUNCHES_PER_ORBIT : natural range 3564 to 3564 := LHC_BUNCH_COUNT;

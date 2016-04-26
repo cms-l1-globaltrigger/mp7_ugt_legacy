@@ -14,8 +14,7 @@
 -- $Author: ?
 -- $Revision: 3796 $
 
--- HB 2016-04-25: bug fixed in length of lumi-section (1 bx to short, checked with "Always true"-algo). 
---                Resync not used anymore. Resetting v.orbit_nr_periodic with resync was a bug.
+-- HB 2016-04-25: Resync not used anymore. Resetting v.orbit_nr_periodic with resync was a bug.
 -- HB 2016-04-22: OC0 resets orbit number and lumi-section number to 1.
 -- HB 2016-03-17: inserted reset of lumi-section number with OC0
 -- HB 2016-03-10: used signals (of BGos) for reset OC, reset EC, start and resync
@@ -115,9 +114,7 @@ begin
 				v.bx_nr := (others => '0');
 				v.orbit_nr := orbit_nr_t(unsigned(l.orbit_nr) + to_unsigned(1, ORBIT_NR_WIDTH));
 				-- luminosity segment counter
--- HB 2016-04-25: bug in length of lumi-section (1 bx to short, checked with "Always true"-algo).
--- 				if unsigned(l.orbit_nr_periodic) >= (unsigned(sw_reg_in.luminosity_seg_period_msk) - 1)
-				if unsigned(l.orbit_nr_periodic) >= (unsigned(sw_reg_in.luminosity_seg_period_msk))
+ 				if unsigned(l.orbit_nr_periodic) >= (unsigned(sw_reg_in.luminosity_seg_period_msk) - 1)
 				then
 					v.luminosity_seg_nr := luminosity_seg_nr_t(unsigned(l.luminosity_seg_nr) + to_unsigned(1, LUM_SEG_NR_WIDTH));
 					v.start_lumisection := '1';
@@ -181,7 +178,7 @@ begin
 -- 		else
 -- 			bgos_int <= bgos;
 -- 		end if;
--- 
+--
 		-- handle BGos messages
 -- 		case bgos_int is
 -- 			when BGOS_RESYNC =>

@@ -15,6 +15,8 @@
 --------------------------------------------------------------------------------
 
 -- Description: contains the "framework" of GT-logic (all parts, except GTL and FDL)
+-- JW 2016-04-19: v0.0.41 - added a delay for the bcres240 in the output mux, to compensate the 0,5BX delay which results form the clock domain change
+-- HB 2016-04-25: v0.0.40 - updated tcm.vhd (resync not used anymore and OC0 resets orbit number and lumi-section number to 1).
 -- JW 2016-04-19: v0.0.39 - connected the bcres_outputmux_o to the output mux, changed the mux code to sync the bcres signal and convert it to 240MHz domain
 -- HB 2016-04-11: v0.0.38 - implemented delays for EC0, OC0, RESYNC and START (same delay as BCRES) and inserted bcres_outputmux_o (delayed version of bcres for output mux) in dm.vhd.
 --                Inserted reset of lumi-section number with OC0 and used signals of synchronized (and delayed) BGos in tcm.vhd.
@@ -376,11 +378,11 @@ architecture rtl of frame is
             lhc_clk           => lhc_clk,
             lhc_rst           => lhc_rst,
 -- HB 2016-03-17: all bgos from dm.vhd
-	    ec0               => ec0_d_int,
-	    oc0               => oc0_d_int,
-	    resync            => resync_d_int,
-	    start             => start_d_int,
-	    stop              => stop_d_int,
+        ec0               => ec0_d_int,
+        oc0               => oc0_d_int,
+        resync            => resync_d_int,
+        start             => start_d_int,
+        stop              => stop_d_int,
             l1a_sync          => l1a,
             bcres_d           => bcres_d_int,
             bcres_d_FDL       => bcres_d_FDL_int,
@@ -698,6 +700,7 @@ architecture rtl of frame is
             valid_hi    => mux_ctrl_regs_1(1)(15 downto 0),
             start       => mux_ctrl_regs_1(2)(0),
             strobe      => mux_ctrl_regs_1(3)(0),
+            delay_bcres240 => mux_ctrl_regs_1(0)(18 downto 16),
             lane_out     => lane_data_out
         );
 

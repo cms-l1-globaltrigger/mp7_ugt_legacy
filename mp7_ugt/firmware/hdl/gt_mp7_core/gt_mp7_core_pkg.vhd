@@ -13,7 +13,8 @@
 -- $Author: wittmann $
 -- $Revision: 4044 $
 --------------------------------------------------------------------------------
--- HB 2016-04-25: v0.0.40 - updated tcm.vhd (bug fixed in length of lumi-section, resync not used anymore and OC0 resets orbit number and lumi-section number to 1).
+-- JW 2016-04-19: v0.0.41 - added a delay for the bcres240 in the output mux, to compensate the 0,5BX delay which results form the clock domain change
+-- HB 2016-04-25: v0.0.40 - updated tcm.vhd (resync not used anymore and OC0 resets orbit number and lumi-section number to 1).
 --                          FDL v0.0.25 used (bug fixed at "rate_cnt_reg_l" - using MAX_NR_ALGOS instead of NR_ALGOS).
 --                          GTL v0.0.10 used (min_bias_hf_conditions.vhd for minimum bias trigger).
 -- JW 2016-04-19: v0.0.39 - connected the bcres_outputmux_o to the output mux, changed the mux code to sync the bcres signal and convert it to 240MHz domain
@@ -110,7 +111,7 @@ type ipb_regs_array is array (natural range <>) of std_logic_vector(31 downto 0)
 -- FRAME version (given by the editor of frame.vhd)
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 0;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 0;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 40;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 41;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &

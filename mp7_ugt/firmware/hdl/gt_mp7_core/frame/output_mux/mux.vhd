@@ -22,11 +22,15 @@ library work;
 use work.mp7_data_types.all;
 
 entity mux is
+    generic(
+        MAX_DELAY: positive := 6
+    );
     port
     (   clk    : in std_logic;
         lhc_clk: in std_logic;
         res    : in std_logic;
         bcres  : in std_logic; -- bcres 40 MHz
+        delay  : in std_logic_vector(log2c(MAX_DELAY)-1 downto 0);
         -- 6 inputs for 40MHz -> 240MHz
         in0    : in lword;
         in1    : in lword;
@@ -42,7 +46,7 @@ end mux;
 architecture arch of mux is
     signal s_out    : lword;
     signal frame_cntr  : std_logic_vector (2 downto 0); --counter for frame mux: 0 to 5
-    signal bcres_240, bcres_s, temp0, temp1: std_logic;
+    signal bcres_240, bcres_240_delayed, bcres_s, temp0, temp1: std_logic;
 begin
 
     --=============================--
@@ -71,13 +75,28 @@ begin
         end if;
     end process;
 
+    bcres240_delay_i: entity work.delay_element
+    generic map(
+        DATA_WIDTH  => 1,
+        MAX_DELAY  => MAX_DELAY
+    )
+    port map(
+        lhc_clk     => clk,
+        lhc_rst     => res,
+        data_i      => bcres_240,
+        data_o      => bcres_240_delayed,
+        valid_i     => '1',
+        valid_o     => open,
+        delay       => delay
+    );
+
     -- frame counter
     frame_counter: process (clk, res)
     begin
         if (res = '1') then
            frame_cntr <= "000";      -- async. res
         elsif (clk'event and clk = '1') then
-            if (frame_cntr = "101") or (bcres_240 = '1') then
+            if (frame_cntr = "101") or (bcres_240_delayed = '1') then
                 frame_cntr <= "000";   -- sync BCReset
             else
                 frame_cntr <= frame_cntr + '1';

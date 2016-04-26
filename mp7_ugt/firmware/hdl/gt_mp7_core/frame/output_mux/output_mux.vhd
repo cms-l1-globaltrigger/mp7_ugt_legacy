@@ -54,6 +54,7 @@ entity output_mux is
         valid_hi    : in std_logic_vector(15 downto 0);
         start       : in std_logic;
         strobe      : in std_logic;
+        delay_bcres240      : in std_logic_vector(2 downto 0);
         lane_out    : out ldata(NR_LANES-1 downto 0)
     );
 end output_mux;
@@ -90,10 +91,10 @@ begin
     -- algo_after_bxomask 0-191 mux
     s_in0_mux0   <=     (algo_after_bxomask(31 downto 0), sValid, start, strobe);
     s_in1_mux0   <=     (algo_after_bxomask(63 downto 32), sValid, start, strobe);
-    s_in2_mux0   <=    	(algo_after_bxomask(95 downto 64), sValid, start, strobe);
+    s_in2_mux0   <=     (algo_after_bxomask(95 downto 64), sValid, start, strobe);
     s_in3_mux0   <=     (algo_after_bxomask(127 downto 96), sValid, start, strobe);
     s_in4_mux0   <=     (algo_after_bxomask(159 downto 128), sValid, start, strobe);
-    s_in5_mux0   <=    	(algo_after_bxomask(191 downto 160), sValid, start, strobe);
+    s_in5_mux0   <=     (algo_after_bxomask(191 downto 160), sValid, start, strobe);
 
     mux0_i: entity work.mux
         port map(
@@ -101,6 +102,7 @@ begin
             lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
             bcres   =>  bcres, --bcres for quad 4
+            delay   =>  delay_bcres240,
             in0     =>  s_in0_mux0,   -- frame 0   -> algo_after_bxomask 0-31
             in1     =>  s_in1_mux0,   -- frame 1   -> algo_after_bxomask 32-63
             in2     =>  s_in2_mux0,   -- frame 2   -> algo_after_bxomask 64-95
@@ -125,6 +127,7 @@ begin
             lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
             bcres   =>  bcres, --bcres for quad 4
+            delay   =>  delay_bcres240,
             in0     =>  s_in0_mux1,    -- frame 0   -> algo_after_bxomask 192-223
             in1     =>  s_in1_mux1,    -- frame 1   -> algo_after_bxomask 224-255
             in2     =>  s_in2_mux1,    -- frame 2   -> algo_after_bxomask 256-287
@@ -149,6 +152,7 @@ begin
             lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
             bcres   =>  bcres, --bcres for quad 4
+            delay   =>  delay_bcres240,
             in0     =>  s_in0_mux2,    -- frame 0   -> algo_after_bxomask 384-415
             in1     =>  s_in1_mux2,    -- frame 1   -> algo_after_bxomask 416-447
             in2     =>  s_in2_mux2,    -- frame 2   -> algo_after_bxomask 448-479
@@ -174,6 +178,7 @@ begin
             lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
             bcres   =>  bcres, --bcres for quad 4
+            delay   =>  delay_bcres240,
             in0     =>  s_in0_mux3,   -- frame 0   -> algo_after_prescaler 0-31
             in1     =>  s_in1_mux3,   -- frame 1   -> algo_after_prescaler 32-63
             in2     =>  s_in2_mux3,   -- frame 2   -> algo_after_prescaler 64-95
@@ -198,6 +203,7 @@ begin
             lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
             bcres   =>  bcres, --bcres for quad 5
+            delay   =>  delay_bcres240,
             in0     =>  s_in0_mux4,    -- frame 0   -> algo_after_prescaler 192-223
             in1     =>  s_in1_mux4,    -- frame 1   -> algo_after_prescaler 224-255
             in2     =>  s_in2_mux4,    -- frame 2   -> algo_after_prescaler 256-287
@@ -222,6 +228,7 @@ begin
             lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
             bcres   =>  bcres, --bcres for quad 5
+            delay   =>  delay_bcres240,
             in0     =>  s_in0_mux5,    -- frame 0   -> algo_after_prescaler 384-415
             in1     =>  s_in1_mux5,    -- frame 1   -> algo_after_prescaler 416-447
             in2     =>  s_in2_mux5,    -- frame 2   -> algo_after_prescaler 448-479
@@ -247,6 +254,7 @@ begin
             lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
             bcres   =>  bcres, --bcres for quad 5
+            delay   =>  delay_bcres240,
             in0     =>  s_in0_mux6,   -- frame 0   -> algo_after_finor_mask 0-31
             in1     =>  s_in1_mux6,   -- frame 1   -> algo_after_finor_mask 32-63
             in2     =>  s_in2_mux6,   -- frame 2   -> algo_after_finor_mask 64-95
@@ -271,6 +279,7 @@ begin
             lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
             bcres   =>  bcres, --bcres for quad 5
+            delay   =>  delay_bcres240,
             in0     =>  s_in0_mux7,    -- frame 0   -> algo_after_finor_mask 192-223
             in1     =>  s_in1_mux7,    -- frame 1   -> algo_after_finor_mask 224-255
             in2     =>  s_in2_mux7,    -- frame 2   -> algo_after_finor_mask 256-287
@@ -296,6 +305,7 @@ begin
             lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
             bcres   =>  bcres, --bcres for quad 6
+            delay   =>  delay_bcres240,
             in0     =>  s_in0_mux8,    -- frame 0   -> algo_after_finor_mask 384-415
             in1     =>  s_in1_mux8,    -- frame 1   -> algo_after_finor_mask 416-447
             in2     =>  s_in2_mux8,    -- frame 2   -> algo_after_finor_mask 448-479
@@ -323,6 +333,7 @@ begin
             lhc_clk =>  lhc_clk,
             res     =>  lhc_rst,
             bcres   =>  bcres, --bcres for quad 6
+            delay   =>  delay_bcres240,
             in0     =>  s_in0_mux9,    -- frame 0   -> bx_nr
             in1     =>  s_in1_mux9,    -- frame 1   -> mp7 ttc bc cntr
             in2     =>  s_in2_mux9,    -- frame 2   -> bx_nr_fdl

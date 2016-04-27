@@ -20,6 +20,7 @@ use ieee.std_logic_unsigned.all;
 
 library work;
 use work.mp7_data_types.all;
+use work.math_pkg.all;
 
 entity mux is
     generic(
@@ -46,7 +47,8 @@ end mux;
 architecture arch of mux is
     signal s_out    : lword;
     signal frame_cntr  : std_logic_vector (2 downto 0); --counter for frame mux: 0 to 5
-    signal bcres_240, bcres_240_delayed, bcres_s, temp0, temp1: std_logic;
+    signal bcres_s, temp0, temp1: std_logic;
+    signal bcres_240, bcres_240_delayed: std_logic_vector(0 downto 0);
 begin
 
     --=============================--
@@ -67,11 +69,11 @@ begin
         if res = '1' then
             temp0 <= '0';
             temp1 <= '0';
-            bcres_240 <= '0';
+            bcres_240(0) <= '0';
         elsif rising_edge(clk) then
             temp0 <= bcres_s;
             temp1 <= temp0;
-            bcres_240 <= temp0 and not temp1;
+            bcres_240(0) <= temp0 and not temp1;
         end if;
     end process;
 
@@ -96,7 +98,7 @@ begin
         if (res = '1') then
            frame_cntr <= "000";      -- async. res
         elsif (clk'event and clk = '1') then
-            if (frame_cntr = "101") or (bcres_240_delayed = '1') then
+            if (frame_cntr = "101") or (bcres_240_delayed(0) = '1') then
                 frame_cntr <= "000";   -- sync BCReset
             else
                 frame_cntr <= frame_cntr + '1';

@@ -207,7 +207,7 @@ architecture rtl of frame is
 
     signal mux_ctrl_regs_1 : ipb_regs_array(0 to 3);
 -- BR 25.05.2015 - change to constant for avoiding the metastability and warning in simulator as well as in syntheseis process
-    constant  mux_ctrl_regs_1_init  : ipb_regs_array(0 to 3) := (X"00030bb8", X"00000c80", X"00000000", X"00000001"); -- bb8 =^ 3000, c80 =^ 3200
+    constant  mux_ctrl_regs_1_init  : ipb_regs_array(0 to 3) := (X"00000bb8", X"00000c80", X"00000000", X"00000001"); -- bb8 =^ 3000, c80 =^ 3200
 --===============================================================================================--
 --                          Deceiding between simulation and synthesize signals
 --===============================================================================================--
@@ -685,11 +685,10 @@ architecture rtl of frame is
             clk240      => clk240,
             lhc_rst     => lhc_rst,
             ctrs        => ctrs,
-            bcres       => bcres_outputmux,
             bx_nr       => bx_nr,
             bx_nr_fdl   => bx_nr_d_FDL_int,
-            algo_after_gtLogic   => algo_after_gtLogic_rop,
-            algo_after_bxomask   => algo_after_bxomask_rop,
+            --ttc_bx_cntr => ctrs(0).bctr,
+            algo_before_prescaler   => algo_after_bxomask_rop,
             algo_after_prescaler   => algo_after_prescaler_rop,
             algo_after_finor   => algo_after_finor_mask_rop,
             local_finor_in      => local_finor_rop,
@@ -700,7 +699,6 @@ architecture rtl of frame is
             valid_hi    => mux_ctrl_regs_1(1)(15 downto 0),
             start       => mux_ctrl_regs_1(2)(0),
             strobe      => mux_ctrl_regs_1(3)(0),
-            delay_bcres240 => mux_ctrl_regs_1(0)(18 downto 16),
             lane_out     => lane_data_out
         );
 

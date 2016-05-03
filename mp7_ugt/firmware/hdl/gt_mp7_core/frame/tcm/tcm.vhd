@@ -43,8 +43,8 @@ entity tcm is
 		l1a_sync          : in std_logic;
 		bcres_d           : in std_logic;
 		bcres_d_FDL       : in std_logic;
-		sw_reg_in         : in sw_reg_tcm_in_t;
-		sw_reg_out        : out sw_reg_tcm_out_t;
+-- 		sw_reg_in         : in sw_reg_tcm_in_t;
+        sw_reg_out        : out sw_reg_tcm_out_t;
 		bx_nr             : out bx_nr_t;
 		bx_nr_d_fdl       : out bx_nr_t;
 		event_nr          : out event_nr_t;
@@ -59,7 +59,7 @@ architecture beh of tcm is
 
 	type lhc_reg_t is record
 		err_det            : std_logic;
-
+        internal_bx_nr     : bx_nr_t;
 		bx_nr              : bx_nr_t;
 		bx_nr_d_fdl        : bx_nr_t;
 		event_nr           : event_nr_t;
@@ -81,7 +81,7 @@ architecture beh of tcm is
 
 -- 	constant LHC_REG_T_RESET  : lhc_reg_t := ('0', X"dd3", X"dd3", (others => '0'), (others => '0'), (others => '0'), (others => '0'), (others =>'0'), '0', '0', '0', (others => '0'), (others => '0'), '0', '0');
 -- HB 2016-03-10: removed unused SW BGos
-	constant LHC_REG_T_RESET  : lhc_reg_t := ('0', X"dd3", X"dd3", (others => '0'), (others => '0'), (others => '0'), (others => '0'), (others =>'0'), '0', '0', '0', (others => '0'), (others => '0'), '0');
+	constant LHC_REG_T_RESET  : lhc_reg_t := ('0', X"000", X"dd3", X"dd3", (others => '0'), (others => '0'), (others => '0'), (others => '0'), (others =>'0'), '0', '0', '0', (others => '0'), (others => '0'), '0');
 
 	signal l, lin  : lhc_reg_t;
 
@@ -90,6 +90,9 @@ architecture beh of tcm is
 -- HB 2016-04-22: value 0 for orbit_nr and luminosity_seg_nr.
 	constant ZERO_ORBIT_NR : orbit_nr_t := (others => '0');
 	constant ZERO_LUMI_NR : luminosity_seg_nr_t := (others => '0');
+
+	--remove after SIMULATION!!!
+	signal sw_reg_in : sw_reg_tcm_in_t := SW_REG_TCM_IN_RESET;
 
 begin
 	-- LHC clock domain
@@ -100,11 +103,11 @@ begin
 
 		-- bcres_nr counter
 		-- start, when we observe the first bcres_d
-		v.start_lumisection := '0'; -- lumisection is high only for one clock period
+		v.start_lumisection := oc0; -- lumisection is high only for one clock period
 		if (l.started_bx = '0' and bcres_d = '1') or sw_reg_in.cmd_ignbcres = '1'
 		then
 			v.started_bx := '1';
-			--v.bx_nr := bx_nr_t(to_unsigned(1, BX_NR_WIDTH));
+			v.internal_bx_nr := bx_nr_t(to_unsigned(1, BX_NR_WIDTH));
             v.bx_nr := bx_nr_t(to_unsigned(TTC_BC0_BX + 1, BX_NR_WIDTH)); -- JW 08.09.2015  Changed reset value of the bc cntr
 		end if;
 		if l.started_bx = '1'
@@ -112,19 +115,38 @@ begin
 			if to_integer(unsigned(l.bx_nr)) = BC_TOP
 			then
 				v.bx_nr := (others => '0');
-				v.orbit_nr := orbit_nr_t(unsigned(l.orbit_nr) + to_unsigned(1, ORBIT_NR_WIDTH));
-				-- luminosity segment counter
- 				if unsigned(l.orbit_nr_periodic) >= (unsigned(sw_reg_in.luminosity_seg_period_msk) - 1)
-				then
-					v.luminosity_seg_nr := luminosity_seg_nr_t(unsigned(l.luminosity_seg_nr) + to_unsigned(1, LUM_SEG_NR_WIDTH));
-					v.start_lumisection := '1';
-					v.orbit_nr_periodic := (others => '0');
-				else
-					v.orbit_nr_periodic := luminosity_seg_period_msk_t(unsigned(l.orbit_nr_periodic) + to_unsigned(1, LUM_SEG_PERIOD_MSK_WIDTH));
-				end if;
+-- 				v.orbit_nr := orbit_nr_t(unsigned(l.orbit_nr) + to_unsigned(1, ORBIT_NR_WIDTH));
+-- 				-- luminosity segment counter
+--  				if unsigned(l.orbit_nr_periodic) >= (unsigned(sw_reg_in.luminosity_seg_period_msk) - 1)
+-- 				then
+-- 					v.luminosity_seg_nr := luminosity_seg_nr_t(unsigned(l.luminosity_seg_nr) + to_unsigned(1, LUM_SEG_NR_WIDTH));
+-- 					v.start_lumisection := '1';
+-- 					v.orbit_nr_periodic := (others => '0');
+-- 				else
+-- 					v.orbit_nr_periodic := luminosity_seg_period_msk_t(unsigned(l.orbit_nr_periodic) + to_unsigned(1, LUM_SEG_PERIOD_MSK_WIDTH));
+-- 				end if;
 			else
 				v.bx_nr := bx_nr_t(unsigned(l.bx_nr) + to_unsigned(1, BX_NR_WIDTH));
 			end if;
+
+			if to_integer(unsigned(l.internal_bx_nr)) = BC_TOP
+            then
+                v.internal_bx_nr := (others => '0');
+                v.orbit_nr := orbit_nr_t(unsigned(l.orbit_nr) + to_unsigned(1, ORBIT_NR_WIDTH));
+                -- luminosity segment counter
+                if unsigned(l.orbit_nr_periodic) >= (unsigned(sw_reg_in.luminosity_seg_period_msk) - 1)
+                then
+                    v.luminosity_seg_nr := luminosity_seg_nr_t(unsigned(l.luminosity_seg_nr) + to_unsigned(1, LUM_SEG_NR_WIDTH));
+                    v.start_lumisection := '1';
+                    v.orbit_nr_periodic := (others => '0');
+                else
+                    v.orbit_nr_periodic := luminosity_seg_period_msk_t(unsigned(l.orbit_nr_periodic) + to_unsigned(1, LUM_SEG_PERIOD_MSK_WIDTH));
+                end if;
+            else
+                v.internal_bx_nr := bx_nr_t(unsigned(l.internal_bx_nr) + to_unsigned(1, BX_NR_WIDTH));
+            end if;
+
+
 		end if;
 		if l.started_bx = '1' and unsigned(l.orbit_nr) > 3 and sw_reg_in.cmd_ignbcres = '0' and
             ((l.bx_nr =  bx_nr_t(to_unsigned(TTC_BC0_BX, BX_NR_WIDTH)) and bcres_d = '0') or

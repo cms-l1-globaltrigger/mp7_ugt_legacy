@@ -46,7 +46,7 @@ architecture arch of mux is
 begin
 
     -- frame counter
-    frame_counter: process (clk, res)
+    frame_counter: process (clk, res, bcres, frame_cntr)
     begin
         if (res = '1' or bcres = '1') then
            frame_cntr <= "000";      -- async. res

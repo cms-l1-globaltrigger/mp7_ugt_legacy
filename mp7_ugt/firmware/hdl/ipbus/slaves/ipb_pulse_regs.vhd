@@ -34,7 +34,7 @@ architecture rtl of ipb_pulse_regs is
 begin
 
     --=============================--
-    process(ipb_reset, lhc_clk)
+    process(ipb_reset, lhc_clk, reg, temp1, temp0)
     --=============================--
     begin
     if ipb_reset = '1' then

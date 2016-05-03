@@ -63,7 +63,7 @@ entity muon_esums_correlation_condition is
 
 	DETA_DPHI_VECTOR_WIDTH: positive;
 	DETA_DPHI_PRECISION: positive
-	
+
     );
     port(
         lhc_clk: in std_logic;
@@ -72,20 +72,20 @@ entity muon_esums_correlation_condition is
         diff_phi: in deta_dphi_vector_array;
         condition_o: out std_logic
     );
-end muon_esums_correlation_condition; 
+end muon_esums_correlation_condition;
 
 architecture rtl of muon_esums_correlation_condition is
 
 -- fixed pipeline structure, 2 stages total
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
-    constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
+    constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
 
     type object_vs_template_array is array (0 to NR_MUON_OBJECTS-1, 1 to 1) of std_logic;
     type diff_comp_array is array (0 to NR_MUON_OBJECTS-1, 0 to 0) of std_logic;
 
     signal diff_phi_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     signal diff_phi_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
-    
+
     signal obj_vs_templ : object_vs_template_array;
     signal obj_vs_templ_pipe : object_vs_template_array;
     signal diff_phi_comp : diff_comp_array := (others => (others => '0'));
@@ -93,7 +93,7 @@ architecture rtl of muon_esums_correlation_condition is
 
     signal esums_comp_o, esums_comp_o_pipe : std_logic;
     signal condition_and_or : std_logic;
-    
+
 begin
 
     -- *** section: CUTs - begin ***************************************************************************************
@@ -102,14 +102,14 @@ begin
     diff_phi_lower_limit_int <= conv_std_logic_vector(integer(diff_phi_lower_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
 
     -- Comparison with limits.
-    delta_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
+    delta_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate
 	diff_phi_comp(i,0) <= '1' when diff_phi(i,0) >= diff_phi_lower_limit_int and diff_phi(i,0) <= diff_phi_upper_limit_int else '0';
     end generate delta_l_1;
-    
+
     -- Pipeline stage for diff_phi_comp
     diff_pipeline_p: process(lhc_clk, diff_phi_comp)
     begin
-            if obj_vs_templ_pipeline_stage = false then 
+            if obj_vs_templ_pipeline_stage = false then
 		diff_phi_comp_pipe <= diff_phi_comp;
             else
                 if (lhc_clk'event and lhc_clk = '1') then
@@ -153,17 +153,17 @@ begin
             phi_w1_lower_limit => phi_w1_lower_limit_esums,
             phi_w2_ignore => phi_w2_ignore_esums,
             phi_w2_upper_limit => phi_w2_upper_limit_esums,
-            phi_w2_lower_limit => phi_w2_lower_limit_esums	
+            phi_w2_lower_limit => phi_w2_lower_limit_esums
 	)
 	port map(
 	    data_i => esums_data_i,
 	    comp_o => esums_comp_o
 	);
-    
+
     -- Pipeline stage for obj_vs_templ
-    obj_vs_templ_pipeline_p: process(lhc_clk, obj_vs_templ)
+    obj_vs_templ_pipeline_p: process(lhc_clk, obj_vs_templ, esums_comp_o)
     begin
-	if obj_vs_templ_pipeline_stage = false then 
+	if obj_vs_templ_pipeline_stage = false then
 	    obj_vs_templ_pipe <= obj_vs_templ;
 	    esums_comp_o_pipe <= esums_comp_o;
 	else
@@ -183,11 +183,11 @@ begin
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
-        for i in 0 to NR_MUON_OBJECTS-1 loop 
+        for i in 0 to NR_MUON_OBJECTS-1 loop
 	    index := index + 1;
-	    obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o and diff_phi_comp_pipe(i,0);
+	    obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o_pipe and diff_phi_comp_pipe(i,0);
         end loop;
-        for i in 1 to index loop 
+        for i in 1 to index loop
             -- ORs for matrix
             condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
         end loop;
@@ -197,7 +197,7 @@ begin
     -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(lhc_clk, condition_and_or)
         begin
-            if conditions_pipeline_stage = false then 
+            if conditions_pipeline_stage = false then
                 condition_o <= condition_and_or;
             else
                 if (lhc_clk'event and lhc_clk = '1') then
@@ -205,15 +205,14 @@ begin
                 end if;
             end if;
     end process;
-    
+
 end architecture rtl;
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+

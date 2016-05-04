@@ -25,12 +25,13 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
+use IEEE.numeric_std.all;
 
 entity algo_rate_counter is
-   generic( 
+   generic(
       COUNTER_WIDTH : integer := 32
    );
-   port( 
+   port(
       sys_clk          : in     std_logic;
       lhc_clk          : in     std_logic;
       sres_counter     : in     std_logic;
@@ -53,7 +54,11 @@ begin
    begin
       if lhc_clk'event and lhc_clk = '1' then
         if sres_counter = '1' or store_cnt_value = '1' then
-            counter <= (others => '0'); -- clear counter with synchr. reset and store_cnt_value (which is begin of lumi section)
+            if (limit = '0' and algo_i = '1') then
+                counter <= std_logic_vector(to_unsigned(1, counter'length)); -- this (re)sets the counter value to 1 if there occurs a trigger just in the 'store_cnt_value' clk cycle
+            else
+                counter <= (others => '0'); -- clear counter with synchr. reset and store_cnt_value (which is begin of lumi section)
+            end if;
          elsif limit = '1' then
             counter <= counter_end;
          elsif (limit = '0' and algo_i = '1') then
@@ -80,7 +85,7 @@ begin
       end if;
    end process store_int_p;
 
--- Processes for clock domain change for read access via PCIe 
+-- Processes for clock domain change for read access via PCIe
    store_cnt_value_lhc_p: process (lhc_clk, store_cnt_value)
    begin
       if lhc_clk'event and lhc_clk = '1' then

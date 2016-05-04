@@ -43,7 +43,7 @@ entity tcm is
 		l1a_sync          : in std_logic;
 		bcres_d           : in std_logic;
 		bcres_d_FDL       : in std_logic;
--- 		sw_reg_in         : in sw_reg_tcm_in_t;
+        sw_reg_in         : in sw_reg_tcm_in_t;
         sw_reg_out        : out sw_reg_tcm_out_t;
 		bx_nr             : out bx_nr_t;
 		bx_nr_d_fdl       : out bx_nr_t;
@@ -91,8 +91,9 @@ architecture beh of tcm is
 	constant ZERO_ORBIT_NR : orbit_nr_t := (others => '0');
 	constant ZERO_LUMI_NR : luminosity_seg_nr_t := (others => '0');
 
-	--remove after SIMULATION!!!
-	signal sw_reg_in : sw_reg_tcm_in_t := SW_REG_TCM_IN_RESET;
+	-- for simulation only
+-- 	signal sw_reg_in  : sw_reg_tcm_in_t :=  SW_REG_TCM_IN_RESET;
+-- 	constant LUM_SEG_PERIOD_SIMU     : luminosity_seg_period_msk_t := X"00000064";
 
 begin
 	-- LHC clock domain
@@ -103,7 +104,7 @@ begin
 
 		-- bcres_nr counter
 		-- start, when we observe the first bcres_d
-		v.start_lumisection := oc0; -- lumisection is high only for one clock period
+		v.start_lumisection := '0'; -- lumisection is high only for one clock period
 		if (l.started_bx = '0' and bcres_d = '1') or sw_reg_in.cmd_ignbcres = '1'
 		then
 			v.started_bx := '1';
@@ -134,6 +135,7 @@ begin
                 v.internal_bx_nr := (others => '0');
                 v.orbit_nr := orbit_nr_t(unsigned(l.orbit_nr) + to_unsigned(1, ORBIT_NR_WIDTH));
                 -- luminosity segment counter
+                --if unsigned(l.orbit_nr_periodic) >= (unsigned(LUM_SEG_PERIOD_SIMU) - 1)
                 if unsigned(l.orbit_nr_periodic) >= (unsigned(sw_reg_in.luminosity_seg_period_msk) - 1)
                 then
                     v.luminosity_seg_nr := luminosity_seg_nr_t(unsigned(l.luminosity_seg_nr) + to_unsigned(1, LUM_SEG_NR_WIDTH));
@@ -293,8 +295,29 @@ begin
 -- 		if lhc_rst = '0' then
 		if lhc_rst = RST_ACT then
 			l <= LHC_REG_T_RESET;
-		elsif rising_edge(lhc_clk) then
-			l <= lin;
+	    elsif oc0 = '1' then
+            l.start_lumisection <= '1';
+            if rising_edge(lhc_clk) then
+                l.err_det <= lin.err_det;
+                l.internal_bx_nr <= lin.internal_bx_nr;
+                l.bx_nr <= lin.bx_nr;
+                l.bx_nr_d_fdl <= lin.bx_nr_d_fdl;
+                l.event_nr <= lin.event_nr;
+                l.trigger_nr <= lin.trigger_nr;
+                l.orbit_nr <= lin.orbit_nr;
+                l.luminosity_seg_nr <= lin.luminosity_seg_nr;
+                l.orbit_nr_periodic <= lin.orbit_nr_periodic;
+                --l.start_lumisection <= '1';
+                l.started_bx <= lin.started_bx;
+                l.started_bx_FDL <= lin.started_bx_FDL;
+                l.bx_nr_chk <= lin.bx_nr_chk;
+                l.bx_nr_max <= lin.bx_nr_max;
+                l.err_det_reset_old <= lin.err_det_reset_old;
+            end if;
+	    elsif oc0 = '0' then
+            if rising_edge(lhc_clk) then
+			    l <= lin;
+			end if;
 		end if;
 	end process;
 

@@ -101,7 +101,9 @@ vcom -93 -work work $GT_SRC/math_pkg.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gt_mp7_core_pkg.vhd
 ## HB 2015-06-03: test with l1tm_pkg.vhd instead of gtl_pkg.vhd - gtl_pkg.vhd moved to $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl
 #vcom -93 -work work $L1TM/vhdl/module_0/src/l1tm_pkg.vhd
-vcom -93 -work work $L1TM/vhdl/module_0/src/gtl_pkg.vhd
+#vcom -93 -work work $L1TM/vhdl/module_0/src/gtl_pkg.vhd
+## Test for multiple modules => _MENU_PATH_ : ../vhdl/module_xxx
+vcom -93 -work work $L1TM/src/gtl_pkg.vhd
 
 vcom -93 -work work $TESTBENCH/lhc_data_debug_util_pkg.vhd
 vcom -93 -work work $TESTBENCH/txt_util_pkg.vhd
@@ -142,7 +144,9 @@ vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlatio
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd
-vcom -93 -work work $L1TM/vhdl/module_0/src/gtl_module.vhd
+#vcom -93 -work work $L1TM/vhdl/module_0/src/gtl_module.vhd
+## Test for multiple modules => _MENU_PATH_ : ../vhdl/module_xxx
+vcom -93 -work work $L1TM/src/gtl_module.vhd
 
 vcom -93 -work work $GT_SRC/gt_mp7_core/frame/dm/delay_element.vhd
 
@@ -160,7 +164,9 @@ vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_dpmem_4096_32.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_read_regs.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_write_regs.vhd
 vcom -93 -work work $GT_SRC/ipbus/slaves/ipb_pulse_regs.vhd
-vcom -93 -work work $L1TM/vhdl/module_0/src/algo_mapping_rop.vhd
+#vcom -93 -work work $L1TM/vhdl/module_0/src/algo_mapping_rop.vhd
+## Test for multiple modules => _MENU_PATH_ : ../vhdl/module_xxx
+vcom -93 -work work $L1TM/src/algo_mapping_rop.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
 
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd

@@ -165,23 +165,23 @@ begin
 
 -- 	bcres_i_slv(0) <= bcres_i;
 -- 	bcres_out_internal <= bcres_o_slv(0);
--- 	dm_bcres : delay_element 
+-- 	dm_bcres : delay_element
 -- 		generic map
 -- 		(
 -- 			DATA_WIDTH => 1,
 -- 			MAX_DELAY  => DM_MAX_DELAY_BCRES
 -- 		)
--- 		port map 
--- 		(		
+-- 		port map
+-- 		(
 -- 			lhc_clk     => lhc_clk,
 -- 			lhc_rst     => lhc_rst,
--- 			data_i      => bcres_i_slv,  
--- 			data_o      => bcres_o_slv,  
+-- 			data_i      => bcres_i_slv,
+-- 			data_o      => bcres_o_slv,
 -- 			valid_i     => '1',
--- 			valid_o     => bcres_valid,  
+-- 			valid_o     => bcres_valid,
 -- 			delay       => sw_reg_i.delay_bcres
--- 		); 
-		
+-- 		);
+
 -- HB 2016-03-10: implemented delays for EC0, OC0, RESYNC, START and STOP (same delay as BCRES)
 	bcres_i_slv(0) <= bcres_i;
 	bcres_i_slv(1) <= ec0_i;
@@ -194,25 +194,23 @@ begin
 	resync_out_internal <= bcres_o_slv(3);
 	start_out_internal <= bcres_o_slv(4);
 
-	dm_bcres : delay_element 
-		generic map
-		(
+	dm_bcres : delay_element
+		generic map(
 			DATA_WIDTH => 5,
 			MAX_DELAY  => DM_MAX_DELAY_BCRES
 		)
-		port map 
-		(		
+		port map(
 			lhc_clk     => lhc_clk,
 			lhc_rst     => lhc_rst,
-			data_i      => bcres_i_slv(4 downto 0),  
-			data_o      => bcres_o_slv(4 downto 0),  
+			data_i      => bcres_i_slv(4 downto 0),
+			data_o      => bcres_o_slv(4 downto 0),
 			valid_i     => '1',
-			valid_o     => bcres_valid,  
+			valid_o     => bcres_valid,
 			delay       => sw_reg_i.delay_bcres
-		); 
-		
+		);
+
  	bcres_fdl_out_internal <= bcres_fdl_o_slv(0);
- 	
+
 	dm_bcres_fdl : delay_element
 		generic map(
 			DATA_WIDTH => 1,

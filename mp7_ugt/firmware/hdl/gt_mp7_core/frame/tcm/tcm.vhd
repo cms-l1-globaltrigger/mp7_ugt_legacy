@@ -135,7 +135,7 @@ begin
                 v.internal_bx_nr := (others => '0');
                 v.orbit_nr := orbit_nr_t(unsigned(l.orbit_nr) + to_unsigned(1, ORBIT_NR_WIDTH));
                 -- luminosity segment counter
-                --if unsigned(l.orbit_nr_periodic) >= (unsigned(LUM_SEG_PERIOD_SIMU) - 1)
+--                 if unsigned(l.orbit_nr_periodic) >= (unsigned(LUM_SEG_PERIOD_SIMU) - 1)
                 if unsigned(l.orbit_nr_periodic) >= (unsigned(sw_reg_in.luminosity_seg_period_msk) - 1)
                 then
                     v.luminosity_seg_nr := luminosity_seg_nr_t(unsigned(l.luminosity_seg_nr) + to_unsigned(1, LUM_SEG_NR_WIDTH));
@@ -150,16 +150,16 @@ begin
 
 
 		end if;
-		if l.started_bx = '1' and unsigned(l.orbit_nr) > 3 and sw_reg_in.cmd_ignbcres = '0' and
-            ((l.bx_nr =  bx_nr_t(to_unsigned(TTC_BC0_BX, BX_NR_WIDTH)) and bcres_d = '0') or
-            (l.bx_nr /=  bx_nr_t(to_unsigned(TTC_BC0_BX, BX_NR_WIDTH)) and bcres_d = '1')) -- the bx_nr has to be zero when bcres_d is asserted, otherwise --> error
--- 			((l.bx_nr = (l.bx_nr'range => '0') and bcres_d = '0') or
--- 			(l.bx_nr /= (l.bx_nr'range => '0') and bcres_d = '1')) -- the bx_nr has to be zero when bcres_d is asserted, otherwise --> error
-		then
-			v.err_det := '1'; -- set error detected sw register
-			v.started_bx := '0'; -- resync automatically
-			v.started_bx_FDL := '0'; -- note: only bx_nr is used to check synchronism, nevertheless both bx counters have to resync if synchronization is lost
-		end if;
+-- 		if l.started_bx = '1' and unsigned(l.orbit_nr) > 3 and sw_reg_in.cmd_ignbcres = '0' and
+--             ((l.bx_nr =  bx_nr_t(to_unsigned(TTC_BC0_BX, BX_NR_WIDTH)) and bcres_d = '0') or
+--             (l.bx_nr /=  bx_nr_t(to_unsigned(TTC_BC0_BX, BX_NR_WIDTH)) and bcres_d = '1')) -- the bx_nr has to be zero when bcres_d is asserted, otherwise --> error
+-- -- 			((l.bx_nr = (l.bx_nr'range => '0') and bcres_d = '0') or
+-- -- 			(l.bx_nr /= (l.bx_nr'range => '0') and bcres_d = '1')) -- the bx_nr has to be zero when bcres_d is asserted, otherwise --> error
+-- 		then
+-- 			v.err_det := '1'; -- set error detected sw register
+-- 			v.started_bx := '0'; -- resync automatically
+-- 			v.started_bx_FDL := '0'; -- note: only bx_nr is used to check synchronism, nevertheless both bx counters have to resync if synchronization is lost
+-- 		end if;
 
 		-- the highest value bx_nr ever reached is stored into a sw register for debug purposes, should be BC_TOP
 		if bcres_d = '1' then
@@ -240,6 +240,7 @@ begin
 -- 			v.orbit_nr := (others => '0');
 			v.orbit_nr := orbit_nr_t(to_unsigned(1, ORBIT_NR_WIDTH));
 			v.orbit_nr_periodic := (others => '0');
+			v.start_lumisection := '0';
 -- HB 2016-03-17: inserted reset of lumi-section number with OC0
 -- HB 2016-04-22: OC0 resets orbit number and lumi-section number to 1.
 -- 			v.luminosity_seg_nr := (others => '0');
@@ -295,9 +296,10 @@ begin
 -- 		if lhc_rst = '0' then
 		if lhc_rst = RST_ACT then
 			l <= LHC_REG_T_RESET;
-	    elsif oc0 = '1' then
-            l.start_lumisection <= '1';
-            if rising_edge(lhc_clk) then
+        elsif rising_edge(lhc_clk) then
+	        if oc0 = '1' then
+                l.start_lumisection <= '1';
+            --if rising_edge(lhc_clk) then
                 l.err_det <= lin.err_det;
                 l.internal_bx_nr <= lin.internal_bx_nr;
                 l.bx_nr <= lin.bx_nr;
@@ -313,10 +315,11 @@ begin
                 l.bx_nr_chk <= lin.bx_nr_chk;
                 l.bx_nr_max <= lin.bx_nr_max;
                 l.err_det_reset_old <= lin.err_det_reset_old;
-            end if;
-	    elsif oc0 = '0' then
-            if rising_edge(lhc_clk) then
+            --end if;
+	        elsif oc0 = '0' then
+            --if rising_edge(lhc_clk) then
 			    l <= lin;
+			--end if;
 			end if;
 		end if;
 	end process;

@@ -50,7 +50,7 @@ architecture rtl of algo_rate_counter is
     signal store_cnt_value_sys : std_logic := '0';
 --     signal store_cnt_value_sys_2 : std_logic := '0';
 begin
-   counter_p: process (lhc_clk, sres_counter, store_cnt_value, algo_i)
+   counter_p: process (lhc_clk, sres_counter, store_cnt_value, algo_i, limit, counter)
    begin
       if lhc_clk'event and lhc_clk = '1' then
         if sres_counter = '1' or store_cnt_value = '1' then

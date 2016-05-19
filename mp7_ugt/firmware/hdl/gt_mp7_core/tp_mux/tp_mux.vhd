@@ -89,8 +89,7 @@ begin
         N_CTRL => 16,
         N_STAT => 16
     )
-    port map
-    (
+    port map(
         clk              => clk,
         reset            => rst,
         ipbus_in         => ipb_to_slaves(C_IPB_TP_MUX0),

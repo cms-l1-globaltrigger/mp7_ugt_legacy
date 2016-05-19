@@ -42,7 +42,7 @@ entity mp7_payload is
         ipb_in: in ipb_wbus;
         ipb_out: out ipb_rbus;
         --clk_payload : in  std_logic_vector(2 downto 0);
-        --rst_payload : in  std_logic_vector(2 downto 0);
+--         rst_payload : in  std_logic_vector(2 downto 0);
         clk_payload : in  std_logic;
         rst_payload : in  std_logic;
         clk_p: in std_logic; -- data clock
@@ -117,7 +117,7 @@ begin
     l1a_int <= l1a; -- from MP7
 -- ***********************************************************************
 
-    --lhc_clk <= clk_payload(0);
+--     lhc_clk <= clk_payload(0);
     lhc_clk <= clk_payload;
     ipb_clk <= clk;
     ipb_rst <= rst;
@@ -134,6 +134,7 @@ begin
     bgo_sync_i: entity work.bgo_sync
     port map(
         clk_payload => lhc_clk,
+--         rst_payload => rst_payload(0),
         rst_payload => rst_payload,
         ttc_in      => ctrs(4).ttc_cmd,
         bc0_out     => bc0_in,

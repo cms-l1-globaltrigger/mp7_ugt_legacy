@@ -19,6 +19,7 @@
 -- Output synchronized with sys_clk, to prevent wrong counter values when reading via PCIe.
 -- This design only works with LHC clock (40 MHz) and PCIe system clock (125 MHz)
 
+-- HB 2016-06-28: removed clock domain change for counter_o.
 -- HB 2015-09-17: inserted "clear counter value in the "output" register for reading by IPBus" with sres_counter = '1'.
 
 library ieee;
@@ -108,32 +109,7 @@ begin
       end if;
    end process store_int_p;
 
--- Processes for clock domain change for read access via PCIe 
-   store_cnt_value_lhc_p: process (lhc_clk, store_cnt_value)
-   begin
-      if lhc_clk'event and lhc_clk = '1' then
-            store_cnt_value_lhc <= store_cnt_value;
-      end if;
-   end process store_cnt_value_lhc_p;
-
-   store_sync_sys_p: process (sys_clk, store_cnt_value_lhc)
-   begin
-      if sys_clk'event and sys_clk = '1' then
-            store_cnt_value_sys <= store_cnt_value_lhc;
-      end if;
-   end process store_sync_sys_p;
-
-   store_p: process (sys_clk, counter_int, store_cnt_value_sys)
-   begin
-      if sys_clk'event and sys_clk = '1' then
--- HB 2015-09-17: inserted "clear counter value in the "output" register for reading by IPBus" with sres_counter = '1'.
-         if sres_counter = '1' then
-            counter_o <= (others => '0'); -- clear counter value in the "output" register for reading by IPBus
-         elsif store_cnt_value_sys = '1' then
-            counter_o <= counter_int; -- "store" counter value for read access
-         end if;
-      end if;
-   end process store_p;
+   counter_o <= counter_int;
 
 end architecture rtl;
 

@@ -18,6 +18,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2016-06-28: v0.0.26 - based on v0.0.25, but removed clock domain change for counter_o in algo_rate_counter.vhd and algo_post_dead_time_counter.vhd.
 -- HB 2016-04-25: v0.0.25 - based on v0.0.24, but bug fixed at "rate_cnt_reg_l" (using MAX_NR_ALGOS instead of NR_ALGOS).
 -- HB 2016-04-06: v0.0.24 - based on v0.0.23, but used algo_mapping_rop with "algo_after_gtLogic" for read-out-record (changed algo_before_prescaler to algo_after_bxomask).
 --                          Inserted read register for updated prescale factor index.
@@ -567,7 +568,7 @@ begin
             algo_int <= algo_i;
         end if;
     end process;
-
+    
 -- Prescalers and rate counters
     algo_slices_l: for i in 0 to NR_ALGOS-1 generate
         algo_slice_i: entity work.algo_slice
@@ -603,7 +604,7 @@ begin
 	    veto => veto(i)
 	);
     end generate algo_slices_l;
-
+    
 -- Finors
     local_finor_p: process(algo_after_finor_mask)
        variable or_algo_var : std_logic := '0';

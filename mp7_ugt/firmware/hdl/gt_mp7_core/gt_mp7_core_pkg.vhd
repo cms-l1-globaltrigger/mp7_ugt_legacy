@@ -124,7 +124,7 @@ type ipb_regs_array is array (natural range <>) of std_logic_vector(31 downto 0)
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 0;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 0;
-    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 25;
+    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 26;
 -- ==================================================================================================
 
 constant BUNCHES_PER_ORBIT : natural range 3564 to 3564 := LHC_BUNCH_COUNT;

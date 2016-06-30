@@ -88,7 +88,8 @@ def main():
 
     # Fetch menu name from path.
     menu_name = os.path.basename(args.menu)
-
+    print menu_name
+    
     if not menu_name.startswith('L1Menu_'):
         raise RuntimeError("Menu contains no modules")
 

@@ -104,7 +104,7 @@ architecture rtl of overlap_remover_condition_test_TB is
     constant phi_w2_lower_limit_calo_inv_mass_2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0):= X"0000";
     constant iso_lut_calo_inv_mass_2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := X"000F";
     
-    constant dr_upper_limit : dr_squared_range_real := 0.0;
+    constant dr_upper_limit : dr_squared_range_real := 10.0;
     constant dr_lower_limit : dr_squared_range_real := 0.0;
         
     constant inv_mass_upper_limit : real := 13200.5;

@@ -131,7 +131,7 @@ end overlap_remover_condition;
 architecture rtl of overlap_remover_condition is
 
     type removed_objects_mask_array is array (natural range <>) of std_logic;
-    signal removed_objects_mask : removed_objects_mask_array(0 to nr_calo2_delta_r_objects-1);
+    signal removed_objects_mask, removed_objects_mask_pipe : removed_objects_mask_array(0 to nr_calo2_delta_r_objects-1);
 
     constant ZERO_PT : std_logic_vector(MAX_DIFF_BITS-1 downto 0):= (others => '0');
     signal removed_overlaps_pt : diff_inputs_array(0 to nr_calo2_delta_r_objects-1);
@@ -248,12 +248,12 @@ begin
 
     -- "Matrix" of permutations in an and-or-structure.
     remove_overlaps_p: process(calo1_delta_r_obj_vs_templ_pipe, calo2_delta_r_obj_vs_templ_pipe, dr_comp_pipe)
--- 	type removed_objects_mask_or_array is array (natural range <>) of std_logic;
-	variable removed_objects_mask_or : removed_objects_mask_array(0 to nr_calo2_delta_r_objects-1);
+	variable removed_objects_mask_or : removed_objects_mask_array(0 to nr_calo2_delta_r_objects-1) := (others => '0');
 	type dr_obj_templ_array is array (natural range <>, natural range <>) of std_logic;
 	variable dr_obj_templ : dr_obj_templ_array(0 to nr_calo1_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => '0'));
     begin
 	dr_obj_templ := (others => (others => '0'));
+	removed_objects_mask_or := (others => '0');
 	for i in 0 to nr_calo1_delta_r_objects-1 loop 
 	    for j in 0 to nr_calo2_delta_r_objects-1 loop
 		dr_obj_templ(i,j) := calo1_delta_r_obj_vs_templ_pipe(i,1) and calo2_delta_r_obj_vs_templ_pipe(j,1) and dr_comp_pipe(i,j);
@@ -261,17 +261,21 @@ begin
 	end loop;
 	for i in 0 to nr_calo1_delta_r_objects-1 loop 
 	    for j in 0 to nr_calo2_delta_r_objects-1 loop
-		removed_objects_mask_or(j) := removed_objects_mask_or(j) and dr_obj_templ(i,j);
+		removed_objects_mask_or(j) := removed_objects_mask_or(j) or dr_obj_templ(i,j);
 	    end loop;
 	end loop;
 	removed_objects_mask <= removed_objects_mask_or;
--- 	for k in 0 to nr_calo2_delta_r_objects-1 loop
--- 	    removed_overlaps_pt(k) <= pt(k) when removed_objects_mask_or(k) = '0' else ZERO_PT;
--- 	end loop;
     end process remove_overlaps_p;
     
+    removed_objects_mask_pipeline_p: process(lhc_clk, removed_objects_mask)
+	begin
+	    if (lhc_clk'event and lhc_clk = '1') then
+		removed_objects_mask_pipe <= removed_objects_mask;
+	    end if;
+    end process;
+
     removed_overlaps_pt_l: for i in 0 to nr_calo2_delta_r_objects-1 generate
-	removed_overlaps_pt(i) <= pt(i) when removed_objects_mask(i) = '0' else ZERO_PT;
+	removed_overlaps_pt(i) <= pt(i) when removed_objects_mask_pipe(i) = '0' else ZERO_PT;
     end generate removed_overlaps_pt_l;
 
 

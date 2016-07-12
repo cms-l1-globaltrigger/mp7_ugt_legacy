@@ -27,14 +27,17 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
+use work.math_pkg.all;
 use work.gtl_pkg.all;
 
 entity overlap_remover_condition is
      generic(
 
+        remove_calo1_obj: boolean := true; -- "true" removes objects of calo1 inputs, "false" removes objects of calo2 inputs
+
         nr_calo1_delta_r_objects: positive;
         et_ge_mode_calo1_delta_r: boolean;
-        obj_type_calo1_delta_r: natural := TAU_TYPE;
+        obj_type_calo1_delta_r: natural := JET_TYPE;
         et_threshold_calo1_delta_r: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_full_range_calo1_delta_r: boolean;
         eta_w1_upper_limit_calo1_delta_r: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
@@ -52,7 +55,7 @@ entity overlap_remover_condition is
 
 	nr_calo2_delta_r_objects: positive;
         et_ge_mode_calo2_delta_r: boolean;
-        obj_type_calo2_delta_r: natural := JET_TYPE;
+        obj_type_calo2_delta_r: natural := TAU_TYPE;
         et_threshold_calo2_delta_r: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_full_range_calo2_delta_r: boolean;
         eta_w1_upper_limit_calo2_delta_r: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
@@ -67,6 +70,9 @@ entity overlap_remover_condition is
         phi_w2_upper_limit_calo2_delta_r: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w2_lower_limit_calo2_delta_r: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 	iso_lut_calo2_delta_r: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+
+	nr_calo_inv_mass_objects: positive;
+        obj_type_calo_inv_mass: natural := JET_TYPE;
 
         et_ge_mode_calo_inv_mass_1: boolean;
         et_threshold_calo_inv_mass_1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
@@ -131,20 +137,20 @@ end overlap_remover_condition;
 architecture rtl of overlap_remover_condition is
 
     type removed_objects_mask_array is array (natural range <>) of std_logic;
-    signal removed_objects_mask, removed_objects_mask_pipe : removed_objects_mask_array(0 to nr_calo2_delta_r_objects-1);
+    signal removed_objects_mask, removed_objects_mask_pipe : removed_objects_mask_array(0 to (max(nr_calo1_delta_r_objects, nr_calo2_delta_r_objects))-1);
 
     constant ZERO_PT : std_logic_vector(MAX_DIFF_BITS-1 downto 0):= (others => '0');
-    signal removed_overlaps_pt : diff_inputs_array(0 to nr_calo2_delta_r_objects-1);
+    signal removed_overlaps_pt : diff_inputs_array(0 to (max(nr_calo1_delta_r_objects, nr_calo2_delta_r_objects))-1);
     
 -- fixed pipeline structure, 2 stages total
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
-    type inv_mass_object_vs_template_array is array (0 to nr_calo2_delta_r_objects-1, 1 to 2) of std_logic;
+    type inv_mass_object_vs_template_array is array (0 to nr_calo_inv_mass_objects-1, 1 to 2) of std_logic;
     type calo1_delta_r_object_vs_template_array is array (0 to nr_calo1_delta_r_objects-1, 1 to 1) of std_logic;
     type calo2_delta_r_object_vs_template_array is array (0 to nr_calo2_delta_r_objects-1, 1 to 1) of std_logic;
     type dr_diff_comp_array is array (0 to nr_calo1_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) of std_logic;
-    type inv_mass_diff_comp_array is array (0 to nr_calo2_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) of std_logic;
+    type inv_mass_diff_comp_array is array (0 to nr_calo_inv_mass_objects-1, 0 to nr_calo_inv_mass_objects-1) of std_logic;
 
     signal inv_mass_obj_vs_templ : inv_mass_object_vs_template_array;
     signal inv_mass_obj_vs_templ_pipe : inv_mass_object_vs_template_array;
@@ -249,7 +255,7 @@ begin
 
     -- "Matrix" of permutations in an and-or-structure.
     remove_overlaps_p: process(calo1_delta_r_obj_vs_templ_pipe, calo2_delta_r_obj_vs_templ_pipe, dr_comp_pipe)
-	variable removed_objects_mask_or : removed_objects_mask_array(0 to nr_calo2_delta_r_objects-1) := (others => '0');
+	variable removed_objects_mask_or : removed_objects_mask_array(0 to (max(nr_calo1_delta_r_objects, nr_calo2_delta_r_objects))-1) := (others => '0');
 	type dr_obj_templ_array is array (natural range <>, natural range <>) of std_logic;
 	variable dr_obj_templ : dr_obj_templ_array(0 to nr_calo1_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => '0'));
     begin
@@ -262,7 +268,11 @@ begin
 	end loop;
 	for i in 0 to nr_calo1_delta_r_objects-1 loop 
 	    for j in 0 to nr_calo2_delta_r_objects-1 loop
-		removed_objects_mask_or(j) := removed_objects_mask_or(j) or dr_obj_templ(i,j);
+		if remove_calo1_obj then
+		    removed_objects_mask_or(i) := removed_objects_mask_or(i) or dr_obj_templ(i,j);
+		else
+		    removed_objects_mask_or(j) := removed_objects_mask_or(j) or dr_obj_templ(i,j);		
+		end if;
 	    end loop;
 	end loop;
 	removed_objects_mask <= removed_objects_mask_or;
@@ -275,16 +285,23 @@ begin
 	    end if;
     end process;
 
-    removed_overlaps_pt_l: for i in 0 to nr_calo2_delta_r_objects-1 generate
-	removed_overlaps_pt(i) <= pt(i) when removed_objects_mask_pipe(i) = '0' else ZERO_PT;
-    end generate removed_overlaps_pt_l;
+    removed_overlaps_pt_calo1_if: if remove_calo1_obj generate 
+	removed_overlaps_pt_calo1_l:for i in 0 to nr_calo1_delta_r_objects-1 generate
+	    removed_overlaps_pt(i) <= pt(i) when removed_objects_mask_pipe(i) = '0' else ZERO_PT;
+	end generate removed_overlaps_pt_calo1_l;
+    end generate removed_overlaps_pt_calo1_if;
 
+    removed_overlaps_pt_calo2_if: if not remove_calo1_obj generate 
+	removed_overlaps_pt_calo2_l:for i in 0 to nr_calo2_delta_r_objects-1 generate
+	    removed_overlaps_pt(i) <= pt(i) when removed_objects_mask_pipe(i) = '0' else ZERO_PT;
+	end generate removed_overlaps_pt_calo2_l;
+    end generate removed_overlaps_pt_calo2_if;
 
     -- *** section: Delta-R - end ***************************************************************************************
     
     -- *** section: Invariant mass - begin ***************************************************************************************
-    inv_mass_l_1: for i in 0 to nr_calo2_delta_r_objects-1 generate 
-	inv_mass_l_2: for j in 0 to nr_calo2_delta_r_objects-1 generate
+    inv_mass_l_1: for i in 0 to nr_calo_inv_mass_objects-1 generate 
+	inv_mass_l_2: for j in 0 to nr_calo_inv_mass_objects-1 generate
 	    delta_if: if j/=i generate
 		inv_mass_calculator_i: entity work.invariant_mass
 		    generic map(
@@ -316,7 +333,7 @@ begin
     end process;
 
 	-- Instance of comparators for calorimeter objects.
-    inv_mass_obj_templ1_l: for i in 0 to nr_calo2_delta_r_objects-1 generate
+    inv_mass_obj_templ1_l: for i in 0 to nr_calo_inv_mass_objects-1 generate
 	inv_mass_obj_templ1_comp_i: entity work.calo_comparators_v2
 	    generic map(et_ge_mode_calo_inv_mass_1, obj_type_calo2_delta_r,
 		et_threshold_calo_inv_mass_1,
@@ -337,7 +354,7 @@ begin
 	    port map(calo_inv_mass(i), inv_mass_obj_vs_templ(i,1));
     end generate inv_mass_obj_templ1_l;
 
-    inv_mass_obj_templ2_l: for i in 0 to nr_calo2_delta_r_objects-1 generate
+    inv_mass_obj_templ2_l: for i in 0 to nr_calo_inv_mass_objects-1 generate
 	inv_mass_obj_templ2_comp_i: entity work.calo_comparators_v2
 	    generic map(et_ge_mode_calo_inv_mass_2, obj_type_calo2_delta_r,
 		et_threshold_calo_inv_mass_2,
@@ -369,14 +386,14 @@ begin
     -- "Matrix" of permutations in an and-or-structure.
     matrix_inv_mass_p: process(inv_mass_obj_vs_templ_pipe, inv_mass_comp_pipe)
 	variable index : integer := 0;
-	variable obj_vs_templ_vec : std_logic_vector((nr_calo2_delta_r_objects*nr_calo2_delta_r_objects) downto 1) := (others => '0');
+	variable obj_vs_templ_vec : std_logic_vector((nr_calo_inv_mass_objects*nr_calo_inv_mass_objects) downto 1) := (others => '0');
 	variable condition_and_or_tmp : std_logic := '0';
     begin
 	index := 0;
 	obj_vs_templ_vec := (others => '0');
 	condition_and_or_tmp := '0';
-	for i in 0 to nr_calo2_delta_r_objects-1 loop 
-	    for j in 0 to nr_calo2_delta_r_objects-1 loop
+	for i in 0 to nr_calo_inv_mass_objects-1 loop 
+	    for j in 0 to nr_calo_inv_mass_objects-1 loop
 		if j/=i then
 		    index := index + 1;
 		    obj_vs_templ_vec(index) := inv_mass_obj_vs_templ_pipe(i,1) and inv_mass_obj_vs_templ_pipe(j,2) and inv_mass_comp_pipe(i,j);

@@ -22,7 +22,7 @@ add wave -noupdate -radix hexadecimal /overlap_remover_condition_test_tb/jet_phi
 add wave -noupdate -radix hexadecimal /overlap_remover_condition_test_tb/jet_eta_integer_bx_0
 add wave -noupdate -radix hexadecimal /overlap_remover_condition_test_tb/jet_phi_integer_bx_0
 add wave -noupdate -radix hexadecimal /overlap_remover_condition_test_tb/tau_eta_integer_bx_p2
-add wave -noupdate -radix hexadecimal /overlap_remover_condition_test_tb/tau_phi_intege_bx_p2r
+add wave -noupdate -radix hexadecimal /overlap_remover_condition_test_tb/tau_phi_integer_bx_p2
 add wave -noupdate -radix hexadecimal /overlap_remover_condition_test_tb/diff_jet_jet_eta_integer_bx_0_bx_0
 add wave -noupdate -radix hexadecimal /overlap_remover_condition_test_tb/diff_jet_jet_phi_integer_bx_0_bx_0
 add wave -noupdate -radix hexadecimal /overlap_remover_condition_test_tb/jet_jet_cosh_deta_vector_bx_0_bx_0

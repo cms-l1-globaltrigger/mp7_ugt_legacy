@@ -143,7 +143,8 @@ architecture rtl of overlap_remover_condition is
     type inv_mass_object_vs_template_array is array (0 to nr_calo2_delta_r_objects-1, 1 to 2) of std_logic;
     type calo1_delta_r_object_vs_template_array is array (0 to nr_calo1_delta_r_objects-1, 1 to 1) of std_logic;
     type calo2_delta_r_object_vs_template_array is array (0 to nr_calo2_delta_r_objects-1, 1 to 1) of std_logic;
-    type diff_comp_array is array (0 to nr_calo1_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) of std_logic;
+    type dr_diff_comp_array is array (0 to nr_calo1_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) of std_logic;
+    type inv_mass_diff_comp_array is array (0 to nr_calo2_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) of std_logic;
 
     signal inv_mass_obj_vs_templ : inv_mass_object_vs_template_array;
     signal inv_mass_obj_vs_templ_pipe : inv_mass_object_vs_template_array;
@@ -151,14 +152,14 @@ architecture rtl of overlap_remover_condition is
     signal calo1_delta_r_obj_vs_templ_pipe : calo1_delta_r_object_vs_template_array;
     signal calo2_delta_r_obj_vs_templ : calo2_delta_r_object_vs_template_array;
     signal calo2_delta_r_obj_vs_templ_pipe : calo2_delta_r_object_vs_template_array;
-    signal diff_eta_comp : diff_comp_array := (others => (others => '0'));
-    signal diff_eta_comp_pipe : diff_comp_array := (others => (others => '0'));
-    signal diff_phi_comp : diff_comp_array := (others => (others => '0'));
-    signal diff_phi_comp_pipe : diff_comp_array := (others => (others => '0'));
-    signal dr_comp : diff_comp_array;
-    signal dr_comp_pipe : diff_comp_array := (others => (others => '0'));
-    signal inv_mass_comp : diff_comp_array;
-    signal inv_mass_comp_pipe : diff_comp_array := (others => (others => '0'));
+    signal diff_eta_comp : dr_diff_comp_array := (others => (others => '0'));
+    signal diff_eta_comp_pipe : dr_diff_comp_array := (others => (others => '0'));
+    signal diff_phi_comp : dr_diff_comp_array := (others => (others => '0'));
+    signal diff_phi_comp_pipe : dr_diff_comp_array := (others => (others => '0'));
+    signal dr_comp : dr_diff_comp_array;
+    signal dr_comp_pipe : dr_diff_comp_array := (others => (others => '0'));
+    signal inv_mass_comp : inv_mass_diff_comp_array := (others => (others => '0'));
+    signal inv_mass_comp_pipe : inv_mass_diff_comp_array := (others => (others => '0'));
 
     signal condition_and_or : std_logic;
     

@@ -30,7 +30,7 @@ end overlap_remover_condition_test_TB;
 
 architecture rtl of overlap_remover_condition_test_TB is
 
--- NOCH SINNVOLLE DATEN FÜR "jet_dr", "tau_dr" und "requirements" einbauen !!!
+-- NOCH SINNVOLLE DATEN FÜR "jet", "tau" und "requirements" einbauen !!!
 
     constant LHC_CLK_PERIOD  : time :=  25 ns;
 
@@ -54,7 +54,7 @@ architecture rtl of overlap_remover_condition_test_TB is
     constant phi_w2_lower_limit_calo1_delta_r: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := X"0000";
     constant iso_lut_calo1_delta_r: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := X"000F";
 
-    constant nr_calo2_delta_r_objects: positive := 2;
+    constant nr_calo2_delta_r_objects: positive := 3;
     constant et_ge_mode_calo2_delta_r: boolean := true;
     constant obj_type_calo2_delta_r: natural := JET_TYPE;
     constant et_threshold_calo2_delta_r: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := X"0020";
@@ -104,36 +104,34 @@ architecture rtl of overlap_remover_condition_test_TB is
     constant phi_w2_lower_limit_calo_inv_mass_2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0):= X"0000";
     constant iso_lut_calo_inv_mass_2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := X"000F";
     
-    constant dr_upper_limit : dr_squared_range_real := 10.0;
+    constant dr_upper_limit : dr_squared_range_real := 1.0;
     constant dr_lower_limit : dr_squared_range_real := 0.0;
         
-    constant inv_mass_upper_limit : real := 13200.5;
-    constant inv_mass_lower_limit : real := 13100.5;
+    constant inv_mass_upper_limit : real := 200.1;
+    constant inv_mass_lower_limit : real := 3.0;
         
 -- ************************************************************************************************
 
-    signal tau_dr, tau_dr_pipe: calo_objects_array(0 to nr_calo1_delta_r_objects-1) := (X"00000000", X"00000000");
-    signal jet_dr, jet_dr_pipe, jet_dr_2, jet_inv_mass: calo_objects_array(0 to nr_calo2_delta_r_objects-1) := (X"00000000", X"00000000");
+    signal tau, tau_bx_p2: calo_objects_array(0 to nr_calo1_delta_r_objects-1) := (X"00000000", X"00000000");
+    signal jet, jet_bx_p2, jet_temp, jet_bx_0: calo_objects_array(0 to nr_calo2_delta_r_objects-1) := (X"00000000", X"00000000", X"00000000");
 
-    signal jet_eta_integer: diff_integer_inputs_array(0 to nr_calo2_delta_r_objects-1) := (others => 0);
-    signal jet_phi_integer: diff_integer_inputs_array(0 to nr_calo2_delta_r_objects-1) := (others => 0);
-    signal jet_eta_integer_inv_mass: diff_integer_inputs_array(0 to nr_calo2_delta_r_objects-1) := (others => 0);
-    signal jet_phi_integer_inv_mass: diff_integer_inputs_array(0 to nr_calo2_delta_r_objects-1) := (others => 0);
-    signal tau_eta_integer: diff_integer_inputs_array(0 to nr_calo1_delta_r_objects-1) := (others => 0);
-    signal tau_phi_integer: diff_integer_inputs_array(0 to nr_calo1_delta_r_objects-1) := (others => 0);
+    signal jet_eta_integer_bx_p2: diff_integer_inputs_array(0 to nr_calo2_delta_r_objects-1) := (others => 0);
+    signal jet_phi_integer_bx_p2: diff_integer_inputs_array(0 to nr_calo2_delta_r_objects-1) := (others => 0);
+    signal jet_eta_integer_bx_0: diff_integer_inputs_array(0 to nr_calo2_delta_r_objects-1) := (others => 0);
+    signal jet_phi_integer_bx_0: diff_integer_inputs_array(0 to nr_calo2_delta_r_objects-1) := (others => 0);
+    signal tau_eta_integer_bx_p2: diff_integer_inputs_array(0 to nr_calo1_delta_r_objects-1) := (others => 0);
+    signal tau_phi_integer_bx_p2: diff_integer_inputs_array(0 to nr_calo1_delta_r_objects-1) := (others => 0);
 
-    signal diff_jet_tau_eta_integer : dim2_max_eta_range_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo1_delta_r_objects-1) := (others => (others => 0));      
-    signal diff_jet_tau_phi_integer : dim2_max_phi_range_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo1_delta_r_objects-1) := (others => (others => 0));      
-    signal diff_jet_jet_eta_integer_inv_mass : dim2_max_eta_range_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => 0));      
-    signal diff_jet_jet_phi_integer_inv_mass : dim2_max_phi_range_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => 0));      
-    signal diff_jet_tau_eta_vector: deta_dphi_vector_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo1_delta_r_objects-1) := (others => (others => (others => '0')));
-    signal diff_jet_tau_phi_vector: deta_dphi_vector_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo1_delta_r_objects-1) := (others => (others => (others => '0')));
-    signal diff_jet_jet_eta_vector_inv_mass: deta_dphi_vector_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => (others => '0')));
-    signal diff_jet_jet_phi_vector_inv_mass: deta_dphi_vector_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => (others => '0')));
+    signal diff_tau_jet_eta_integer_bx_p2_bx_p2 : dim2_max_eta_range_array(0 to nr_calo1_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => 0));      
+    signal diff_tau_jet_phi_integer_bx_p2_bx_p2 : dim2_max_phi_range_array(0 to nr_calo1_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => 0));      
+    signal diff_jet_jet_eta_integer_bx_0_bx_0 : dim2_max_eta_range_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => 0));      
+    signal diff_jet_jet_phi_integer_bx_0_bx_0 : dim2_max_phi_range_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => 0));      
+    signal diff_tau_jet_eta_vector_bx_p2_bx_p2: deta_dphi_vector_array(0 to nr_calo1_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => (others => '0')));
+    signal diff_tau_jet_phi_vector_bx_p2_bx_p2: deta_dphi_vector_array(0 to nr_calo1_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => (others => '0')));
 
-    signal jet_pt_vector: diff_inputs_array(0 to nr_calo2_delta_r_objects-1) := (others => (others => '0'));
-    signal jet_jet_cosh_deta_vector: calo_cosh_cos_vector_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => (others => '0')));
-    signal jet_jet_cos_dphi_vector: calo_cosh_cos_vector_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => (others => '0')));
+    signal jet_pt_vector_bx_0: diff_inputs_array(0 to nr_calo2_delta_r_objects-1) := (others => (others => '0'));
+    signal jet_jet_cosh_deta_vector_bx_0_bx_0: calo_cosh_cos_vector_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => (others => '0')));
+    signal jet_jet_cos_dphi_vector_bx_0_bx_0: calo_cosh_cos_vector_array(0 to nr_calo2_delta_r_objects-1, 0 to nr_calo2_delta_r_objects-1) := (others => (others => (others => '0')));
 
     signal condition_o: std_logic;
 
@@ -153,81 +151,64 @@ begin
     begin
         wait for 5 * LHC_CLK_PERIOD; 
         wait for 7 ns; 
-        tau_dr <= (("00000"&"00"&X"00"&X"00"&('0'&X"30")), ("00000"&"00"&X"88"&X"90"&('0'&X"11")));
-        jet_dr <= (("00000"&"00"&X"00"&X"00"&('0'&X"30")), ("00000"&"00"&X"88"&X"90"&('0'&X"11")));
+        tau <= (("00000"&"00"&X"00"&X"00"&('0'&X"35")), ("00000"&"00"&X"88"&X"31"&('0'&X"33")));
+        jet <= (("00000"&X"00"&X"01"&("000"&X"38")), ("00000"&X"40"&X"30"&("000"&X"30")), ("00000"&X"42"&X"31"&("000"&X"31")));
         wait for LHC_CLK_PERIOD; 
-        tau_dr <= (("00000"&"00"&X"00"&X"00"&('0'&X"30")), ("00000"&"00"&X"00"&X"00"&('0'&X"30")));
-        jet_dr <= (("00000"&"00"&X"00"&X"00"&('0'&X"30")), ("00000"&"00"&X"88"&X"90"&('0'&X"11")));
-        wait for LHC_CLK_PERIOD; 
-        tau_dr <= (("00000"&"00"&X"00"&X"00"&('0'&X"30")), ("00000"&"00"&X"88"&X"98"&('0'&X"20")));
-        jet_dr <= (("00000"&"00"&X"00"&X"00"&('0'&X"30")), ("00000"&"00"&X"88"&X"90"&('0'&X"11")));
-        wait for LHC_CLK_PERIOD; 
-        tau_dr <= (("00000"&"00"&X"00"&X"00"&('0'&X"30")), ("00000"&"00"&X"00"&X"00"&('0'&X"30")));
-        jet_dr <= (("00000"&"00"&X"00"&X"00"&('0'&X"30")), ("00000"&"00"&X"88"&X"90"&('0'&X"11")));
-        wait for LHC_CLK_PERIOD; 
-        tau_dr <= (("00000"&"00"&X"00"&X"00"&('0'&X"30")), ("00000"&"00"&X"88"&X"98"&('0'&X"20")));
-        jet_dr <= (("00000"&"00"&X"00"&X"00"&('0'&X"30")), ("00000"&"00"&X"88"&X"90"&('0'&X"11")));
-        wait for LHC_CLK_PERIOD; 
-        tau_dr <= (("00000"&"00"&X"00"&X"00"&('0'&X"30")), ("00000"&"00"&X"00"&X"00"&('0'&X"30")));
-        jet_dr <= (("00000"&"00"&X"00"&X"00"&('0'&X"30")), ("00000"&"00"&X"88"&X"90"&('0'&X"11")));
+        tau <= (("00000"&"00"&X"02"&X"02"&('0'&X"30")), ("00000"&"00"&X"01"&X"01"&('0'&X"30")));
+        jet <= (("00000"&X"40"&X"92"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")));
         wait for LHC_CLK_PERIOD; 
         wait; 
     end process;
 
  ------------------- Instantiate  modules  -----------------
-pipeline_p: process(lhc_clk, jet_dr)
+pipeline_p: process(lhc_clk, tau, jet)
     begin
         if (lhc_clk'event and lhc_clk = '1') then
-           tau_dr_pipe <= tau_dr;
-           jet_dr_pipe <= jet_dr;
-           jet_dr_2 <= jet_dr_pipe;
-           jet_inv_mass <= jet_dr_2;
+           tau_bx_p2 <= tau;
+           jet_bx_p2 <= jet;
+           jet_temp <= jet_bx_p2;
+           jet_bx_0 <= jet_temp;
         end if;
 end process;
 
 jet_l: for i in 0 to nr_calo2_delta_r_objects-1 generate
-  jet_pt_vector(i)(JET_PT_VECTOR_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR(JET_PT_LUT(CONV_INTEGER(jet_inv_mass(i)(D_S_I_JET_V2.et_high downto D_S_I_JET_V2.et_low))), JET_PT_VECTOR_WIDTH);
-  jet_eta_integer(i) <= CONV_INTEGER(signed(jet_dr_pipe(i)(D_S_I_JET_V2.eta_high downto D_S_I_JET_V2.eta_low)));
-  jet_phi_integer(i) <= CONV_INTEGER(jet_dr_pipe(i)(D_S_I_JET_V2.phi_high downto D_S_I_JET_V2.phi_low));
-  jet_eta_integer_inv_mass(i) <= CONV_INTEGER(signed(jet_inv_mass(i)(D_S_I_JET_V2.eta_high downto D_S_I_JET_V2.eta_low)));
-  jet_phi_integer_inv_mass(i) <= CONV_INTEGER(jet_inv_mass(i)(D_S_I_JET_V2.phi_high downto D_S_I_JET_V2.phi_low));
+  jet_pt_vector_bx_0(i)(JET_PT_VECTOR_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR(JET_PT_LUT(CONV_INTEGER(jet_bx_0(i)(D_S_I_JET_V2.et_high downto D_S_I_JET_V2.et_low))), JET_PT_VECTOR_WIDTH);
+  jet_eta_integer_bx_p2(i) <= CONV_INTEGER(signed(jet_bx_p2(i)(D_S_I_JET_V2.eta_high downto D_S_I_JET_V2.eta_low)));
+  jet_phi_integer_bx_p2(i) <= CONV_INTEGER(jet_bx_p2(i)(D_S_I_JET_V2.phi_high downto D_S_I_JET_V2.phi_low));
+  jet_eta_integer_bx_0(i) <= CONV_INTEGER(signed(jet_bx_0(i)(D_S_I_JET_V2.eta_high downto D_S_I_JET_V2.eta_low)));
+  jet_phi_integer_bx_0(i) <= CONV_INTEGER(jet_bx_0(i)(D_S_I_JET_V2.phi_high downto D_S_I_JET_V2.phi_low));
 end generate;
 
 tau_l: for i in 0 to nr_calo1_delta_r_objects-1 generate
-  tau_eta_integer(i) <= CONV_INTEGER(signed(tau_dr_pipe(i)(D_S_I_TAU_V2.eta_high downto D_S_I_TAU_V2.eta_low)));
-  tau_phi_integer(i) <= CONV_INTEGER(tau_dr_pipe(i)(D_S_I_TAU_V2.phi_high downto D_S_I_TAU_V2.phi_low));
+  tau_eta_integer_bx_p2(i) <= CONV_INTEGER(signed(tau_bx_p2(i)(D_S_I_TAU_V2.eta_high downto D_S_I_TAU_V2.eta_low)));
+  tau_phi_integer_bx_p2(i) <= CONV_INTEGER(tau_bx_p2(i)(D_S_I_TAU_V2.phi_high downto D_S_I_TAU_V2.phi_low));
 end generate;
 
-diff_jet_tau_eta_i: entity work.sub_eta_integer_obj_vs_obj
-  generic map(nr_calo2_delta_r_objects, nr_calo1_delta_r_objects)
-  port map(jet_eta_integer, tau_eta_integer, diff_jet_tau_eta_integer);      
-diff_jet_tau_phi_i: entity work.sub_phi_integer_obj_vs_obj
-  generic map(nr_calo2_delta_r_objects, nr_calo1_delta_r_objects, CALO_PHI_HALF_RANGE_BINS)
-  port map(jet_phi_integer, tau_phi_integer, diff_jet_tau_phi_integer);      
-jet_tau_l1: for i in 0 to nr_calo2_delta_r_objects-1 generate
-  jet_tau_l2: for j in 0 to nr_calo1_delta_r_objects-1 generate
-    diff_jet_tau_eta_vector(i,j) <= CONV_STD_LOGIC_VECTOR(JET_TAU_DIFF_ETA_LUT(diff_jet_tau_eta_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-    diff_jet_tau_phi_vector(i,j) <= CONV_STD_LOGIC_VECTOR(JET_TAU_DIFF_PHI_LUT(diff_jet_tau_phi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-  end generate jet_tau_l2;
-end generate jet_tau_l1;
+diff_tau_jet_eta_i: entity work.sub_eta_integer_obj_vs_obj
+  generic map(nr_calo1_delta_r_objects, nr_calo2_delta_r_objects)
+  port map(tau_eta_integer_bx_p2, jet_eta_integer_bx_p2, diff_tau_jet_eta_integer_bx_p2_bx_p2);      
+diff_tau_jet_phi_i: entity work.sub_phi_integer_obj_vs_obj
+  generic map(nr_calo1_delta_r_objects, nr_calo2_delta_r_objects, CALO_PHI_HALF_RANGE_BINS)
+  port map(tau_phi_integer_bx_p2, jet_phi_integer_bx_p2, diff_tau_jet_phi_integer_bx_p2_bx_p2);
+
+tau_jet_l1: for i in 0 to nr_calo1_delta_r_objects-1 generate
+  tau_jet_l2: for j in 0 to nr_calo2_delta_r_objects-1 generate
+    diff_tau_jet_eta_vector_bx_p2_bx_p2(i,j) <= CONV_STD_LOGIC_VECTOR(JET_TAU_DIFF_ETA_LUT(diff_tau_jet_eta_integer_bx_p2_bx_p2(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
+    diff_tau_jet_phi_vector_bx_p2_bx_p2(i,j) <= CONV_STD_LOGIC_VECTOR(JET_TAU_DIFF_PHI_LUT(diff_tau_jet_phi_integer_bx_p2_bx_p2(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
+  end generate tau_jet_l2;
+end generate tau_jet_l1;
 
 diff_jet_jet_eta_i: entity work.sub_eta_integer_obj_vs_obj
   generic map(nr_calo2_delta_r_objects, nr_calo2_delta_r_objects)
-  port map(jet_eta_integer_inv_mass, jet_eta_integer_inv_mass, diff_jet_jet_eta_integer_inv_mass);      
+  port map(jet_eta_integer_bx_0, jet_eta_integer_bx_0, diff_jet_jet_eta_integer_bx_0_bx_0);      
 diff_jet_jet_phi_i: entity work.sub_phi_integer_obj_vs_obj
   generic map(nr_calo2_delta_r_objects, nr_calo2_delta_r_objects, CALO_PHI_HALF_RANGE_BINS)
-  port map(jet_phi_integer_inv_mass, jet_phi_integer_inv_mass, diff_jet_jet_phi_integer_inv_mass);      
-jet_jet_l1: for i in 0 to nr_calo2_delta_r_objects-1 generate
-  jet_jet_l2: for j in 0 to nr_calo2_delta_r_objects-1 generate
-    diff_jet_jet_eta_vector_inv_mass(i,j) <= CONV_STD_LOGIC_VECTOR(JET_JET_DIFF_ETA_LUT(diff_jet_jet_eta_integer_inv_mass(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-    diff_jet_jet_phi_vector_inv_mass(i,j) <= CONV_STD_LOGIC_VECTOR(JET_JET_DIFF_PHI_LUT(diff_jet_jet_phi_integer_inv_mass(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-  end generate jet_jet_l2;
-end generate jet_jet_l1;
+  port map(jet_phi_integer_bx_0, jet_phi_integer_bx_0, diff_jet_jet_phi_integer_bx_0_bx_0);      
 
 jet_jet_cosh_cos_l1: for i in 0 to nr_calo2_delta_r_objects-1 generate
   jet_jet_cosh_cos_l2: for j in 0 to nr_calo2_delta_r_objects-1 generate
-    jet_jet_cosh_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR(JET_JET_COSH_DETA_LUT(diff_jet_jet_eta_integer_inv_mass(i,j)), JET_JET_COSH_COS_VECTOR_WIDTH);
-    jet_jet_cos_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR(JET_JET_COS_DPHI_LUT(diff_jet_jet_phi_integer_inv_mass(i,j)), JET_JET_COSH_COS_VECTOR_WIDTH);
+    jet_jet_cosh_deta_vector_bx_0_bx_0(i,j) <= CONV_STD_LOGIC_VECTOR(JET_JET_COSH_DETA_LUT(diff_jet_jet_eta_integer_bx_0_bx_0(i,j)), JET_JET_COSH_COS_VECTOR_WIDTH);
+    jet_jet_cos_dphi_vector_bx_0_bx_0(i,j) <= CONV_STD_LOGIC_VECTOR(JET_JET_COS_DPHI_LUT(diff_jet_jet_phi_integer_bx_0_bx_0(i,j)), JET_JET_COSH_COS_VECTOR_WIDTH);
   end generate jet_jet_cosh_cos_l2;
 end generate jet_jet_cosh_cos_l1;
 
@@ -318,14 +299,14 @@ dut: entity work.overlap_remover_condition
     )
     port map(
         lhc_clk => lhc_clk,
-        calo1_delta_r => tau_dr_pipe,
-        calo2_delta_r => jet_dr_pipe,
-        calo_inv_mass => jet_inv_mass,
-        diff_eta => diff_jet_tau_eta_vector,
-        diff_phi => diff_jet_tau_phi_vector,
-        pt => jet_pt_vector,
-	cosh_deta => jet_jet_cosh_deta_vector,
-        cos_dphi => jet_jet_cos_dphi_vector,
+        calo1_delta_r => tau_bx_p2,
+        calo2_delta_r => jet_bx_p2,
+        calo_inv_mass => jet_bx_0,
+        diff_eta => diff_tau_jet_eta_vector_bx_p2_bx_p2,
+        diff_phi => diff_tau_jet_phi_vector_bx_p2_bx_p2,
+        pt => jet_pt_vector_bx_0,
+	cosh_deta => jet_jet_cosh_deta_vector_bx_0_bx_0,
+        cos_dphi => jet_jet_cos_dphi_vector_bx_0_bx_0,
 	condition_o => condition_o
     );
 

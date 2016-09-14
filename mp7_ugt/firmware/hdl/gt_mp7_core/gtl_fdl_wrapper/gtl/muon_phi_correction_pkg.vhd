@@ -8,7 +8,7 @@ use work.gtl_pkg.all;
 package muon_phi_correction_pkg is
 
 -- HB 2016-08-17: LUT was generated center values of pt and the formular: 2.677/pt**1.014 (pt [GeV] center value of bin). LUT values in bins.
-type phi_correction_lut_array is array (0 to 2**(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low)-1) of natural range 0 to 425;
+type phi_correction_lut_array is array (0 to 2**(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low)-1) of natural range 0 to 425;
 constant PHI_CORRECTION_LUT : phi_correction_lut_array := (
 0,	425,	329,	196,	139,	108,	88,	74,	64,	57,	51,	46,	42,	38,	35,	33,
 31,	29,	27,	26,	24,	23,	22,	21,	20,	19,	19,	18,	17,	17,	16,	15,

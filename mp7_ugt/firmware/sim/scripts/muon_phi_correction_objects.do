@@ -40,17 +40,18 @@ vlib work
 vmap work work
 vcom -93 -work work ../hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg_sim.vhd
 vcom -93 -work work ../hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_phi_correction_pkg.vhd
+vcom -93 -work work ../hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_phi_correction_objects.vhd
 vcom -93 -work work ../hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_phi_correction.vhd
 
 #Testbench
-vcom -93 -work work $TESTBENCH/muon_phi_correction_tb.vhd
+vcom -93 -work work $TESTBENCH/muon_phi_correction_objects_tb.vhd
 
 #Load Design
-vsim -t 1ps work.muon_phi_correction_TB 
+vsim -t 1ps work.muon_phi_correction_objects_TB 
 
 ##Load signals in wave window
 view wave
-do $TESTBENCH/../scripts/muon_phi_correction_wave.do
+do $TESTBENCH/../scripts/muon_phi_correction_objects_wave.do
 
 ##Run simulation
 run 200 ns

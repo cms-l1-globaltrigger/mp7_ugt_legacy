@@ -12,7 +12,7 @@ use work.gtl_pkg.all;
 entity muon_phi_correction_objects is
     port(
         data_i : in muon_objects_array;
-        data_o : in muon_objects_array
+        data_o : out muon_objects_array
     );
 end muon_phi_correction_objects;
 
@@ -32,6 +32,7 @@ begin
 	data_o(i)(D_S_I_MUON.eta_high downto D_S_I_MUON.eta_low) <= data_i(i)(D_S_I_MUON.eta_high downto D_S_I_MUON.eta_low);
 	data_o(i)(D_S_I_MUON.iso_high downto D_S_I_MUON.iso_low) <= data_i(i)(D_S_I_MUON.iso_high downto D_S_I_MUON.iso_low);
 	data_o(i)(D_S_I_MUON.charge_high downto D_S_I_MUON.charge_low) <= data_i(i)(D_S_I_MUON.charge_high downto D_S_I_MUON.charge_low);
+	data_o(i)(MAX_MUON_BITS-1 downto D_S_I_MUON.charge_high+1) <= data_i(i)(MAX_MUON_BITS-1 downto D_S_I_MUON.charge_high+1);
 	
     end generate obj_l;
 

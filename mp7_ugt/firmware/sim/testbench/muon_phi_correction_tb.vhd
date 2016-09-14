@@ -5,6 +5,8 @@ use ieee.std_logic_unsigned.all;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 
+use work.gtl_pkg.all;
+
 entity muon_phi_correction_TB is
 end muon_phi_correction_TB;
 
@@ -12,9 +14,9 @@ architecture rtl of muon_phi_correction_TB is
 
     constant LHC_CLK_PERIOD  : time :=  25 ns;
 
-    signal pt: std_logic_vector(9-1 downto 0) := (others => '0');
-    signal phi: std_logic_vector(10-1 downto 0) := (others => '0');
-    signal charge: std_logic_vector(2-1 downto 0) := "10";
+    signal pt: std_logic_vector(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0) := (others => '0');
+    signal phi: std_logic_vector(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0) := (others => '0');
+    signal charge: std_logic_vector(D_S_I_MUON.charge_high-D_S_I_MUON.charge_low downto 0) := "10";
     
 --*********************************Main Body of Code**********************************
 begin

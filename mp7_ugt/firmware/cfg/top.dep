@@ -1,7 +1,8 @@
+include uGT_algo.dep
+include uGT_gtl.dep
+?toolset=="ISE"? src --cd ../ucf mp7_mgt.ucf
 include -c boards/mp7/base_fw/mp7xe_690
 src top_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd
 src -c boards/mp7/base_fw/mp7xe_690 mp7_brd_decl.vhd
-?toolset=="ISE"? src --cd ../ucf mp7_mgt.ucf
-include uGT_algo.dep
-include uGT_gtl.dep
+

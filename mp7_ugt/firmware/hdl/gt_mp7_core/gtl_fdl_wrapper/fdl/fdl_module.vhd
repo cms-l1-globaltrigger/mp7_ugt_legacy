@@ -18,7 +18,16 @@
 -- FDL structure
 
 -- Version-history:
--- HB 2016-06-28: v0.0.26 - based on v0.0.25, but removed clock domain change for counter_o in algo_rate_counter.vhd and algo_post_dead_time_counter.vhd.
+-- HB 2016-09-02: v1.0.1 - based on v1.0.0, but bug fixed at algo_after_finor_mask_rop.
+-- HB 2016-08-31: v1.0.0 - based on v0.0.31, but renamed rate_cnt_after_finor_mask to rate_cnt_after_prescaler and removed finor mask logic (in algo_slice.vhd).
+--                         Kept "algo_after_finor_mask" port, used algo_after_prescaler for this port. Kept "algo_after_finor_mask_rop" port, used algo_after_prescaler_rop for this port.
+-- HB 2016-07-04: v0.0.31 - based on v0.0.30, but rate_cnt_after_finor_mask (instead of rate_cnt_after_prescaler) used in algo_slice.
+-- HB 2016-06-30: v0.0.30 - based on v0.0.29, but removed clock domain change for counter_o in algo_rate_counter.vhd and algo_post_dead_time_counter.vhd.
+-- HB 2016-06-29: v0.0.29 - based on v0.0.28, but added register for MODULE_ID.
+-- HB 2016-06-21: v0.0.28 - based on v0.0.27, but added register for values begin and end of calibration trigger gap (cal_trigger_gap_beg and cal_trigger_gap_end).
+-- HB 2016-06-17: v0.0.27 - based on v0.0.26, but added BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490)
+--			    and logic for suppress counting algos caused by calibration trigger.
+-- HB 2016-06-10: v0.0.26 - based on v0.0.25, but tested using "local_finor_pipe" for "finor_2_mezz_lemo" (instead of "local_finor"), same for veto.
 -- HB 2016-04-25: v0.0.25 - based on v0.0.24, but bug fixed at "rate_cnt_reg_l" (using MAX_NR_ALGOS instead of NR_ALGOS).
 -- HB 2016-04-06: v0.0.24 - based on v0.0.23, but used algo_mapping_rop with "algo_after_gtLogic" for read-out-record (changed algo_before_prescaler to algo_after_bxomask).
 --                          Inserted read register for updated prescale factor index.
@@ -88,6 +97,7 @@ entity fdl_module is
         lhc_clk             : in std_logic;
         lhc_rst             : in std_logic;
         bcres               : in std_logic;
+        test_en             : in std_logic;
         l1a                 : in std_logic;
         begin_lumi_section  : in std_logic;
         algo_i              : in std_logic_vector(NR_ALGOS-1 downto 0);
@@ -110,6 +120,15 @@ entity fdl_module is
 end fdl_module;
 
 architecture rtl of fdl_module is
+
+-- gap for calibration trigger between 3480 and 3505 (proposed by MJ). Calibration trigger at bx=3490.
+-- HB 2016-06-21: 
+-- bit 31..16: end of calibration trigger gap
+-- bit 15..0: begin of calibration trigger gap
+    constant CAL_TRIGGER_GAP_INIT : ipb_regs_array(0 to 1) := (others => (X"0DB1" & X"0D9A")); -- end=3505 & begin=3480
+    signal cal_trigger_gap_beg : std_logic_vector(11 downto 0);
+    signal cal_trigger_gap_end : std_logic_vector(11 downto 0);
+    signal cal_trigger_gap_reg : ipb_regs_array(0 to 1) := (others => (others => '0'));
 
     constant FINOR_BIT_IN_MASKS_REG : integer := 0;
     constant VETO_BIT_IN_MASKS_REG : integer := 1;
@@ -188,6 +207,9 @@ architecture rtl of fdl_module is
     signal veto_masks_global : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal veto_masks_local : std_logic_vector(NR_ALGOS-1 downto 0);
 
+    signal test_en_occurred : std_logic;
+    signal suppress_cal_trigger : std_logic;
+
 begin
 
 -- ******************************************************************************************************************
@@ -240,6 +262,7 @@ begin
     versions_to_ipb(OFFSET_SVN_REVISION_NUMBER) <= SVN_REVISION_NUMBER;
     versions_to_ipb(OFFSET_L1TM_UID_HASH) <= L1TM_UID_HASH;
     versions_to_ipb(OFFSET_FW_UID_HASH) <= FW_UID_HASH;
+    versions_to_ipb(OFFSET_MODULE_ID) <= conv_std_logic_vector(MODULE_ID, 32);
 
 --===============================================================================================--
 -- Control register
@@ -257,6 +280,30 @@ begin
            end if;
         end if;
     end process bc_cntr;
+
+-- HB 2016-06-10: BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490)
+-- "test enable occurred" signal
+    test_en_occurred_p: process (test_en, bcres)
+	begin
+        if (bcres = '1')  then
+	    test_en_occurred <= '0'; -- reset with bcres
+        elsif (test_en'event and test_en = '1') then
+	    test_en_occurred <= '1'; -- test_en_occurred indicates that BGo test enable was send
+        end if;
+    end process test_en_occurred_p;
+
+-- "suppress calibration trigger" (pos. active signal: '1' = suppression of calibration trigger !!!)
+-- gap for calibration trigger between 3480 and 3505 (proposed by MJ)
+    suppress_cal_trigger_p: process (lhc_clk, test_en_occurred, bx_nr_internal)
+	begin
+        if (lhc_clk'event and lhc_clk = '1') then
+           if (test_en_occurred = '1' and (bx_nr_internal >= (cal_trigger_gap_beg-1)) and (bx_nr_internal < cal_trigger_gap_end)) then -- minus 1 to get correct length of gap (see simulation with test_bgo_test_enable_logic_tb.vhd)
+              suppress_cal_trigger <= '1'; -- pos. active signal: '1' = suppression of algos caused by calibration trigger during gap !!!
+           else
+              suppress_cal_trigger <= '0';
+           end if;
+        end if;
+    end process suppress_cal_trigger_p;
 
 -- Algo-bx-memory
 -- HB 2016-02-11: 16 (MAX_NR_ALGOS/SW_DATA_WIDTH) memory-blocks instantiated, same as defined in XML for addresses
@@ -305,7 +352,7 @@ begin
     );
 
 --===============================================================================================--
--- Rate counter after prescaler registers
+-- Rate counter after finor-mask registers
     read_rate_cnt_after_prescaler_i: entity work.ipb_read_regs
     generic map
     (
@@ -361,6 +408,32 @@ begin
         ------------------
         regs_o => l1a_latency_delay_reg
     );
+
+--===============================================================================================--
+-- Calibration trigger gap register
+-- HB 2016-06-21: 
+-- bit 31..16: end of calibration trigger gap
+-- bit 15..0: begin of calibration trigger gap
+    cal_trigger_gap_reg_i: entity work.ipb_write_regs
+    generic map
+    (
+        init_value => CAL_TRIGGER_GAP_INIT,
+        addr_width => 2,
+        regs_beg_index => 0,
+        regs_end_index => 1
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_CAL_TRIGGER_GAP),
+        ipbus_out => ipb_from_slaves(C_IPB_CAL_TRIGGER_GAP),
+        ------------------
+        regs_o => cal_trigger_gap_reg
+    );
+
+    cal_trigger_gap_beg <= cal_trigger_gap_reg(0)(11 downto 0);
+    cal_trigger_gap_end <= cal_trigger_gap_reg(0)(27 downto 16);
 
 --===============================================================================================--
 -- Prescale factor registers
@@ -586,6 +659,7 @@ begin
 	    sres_algo_rate_counter => sres_algo_rate_counter,
 	    sres_algo_pre_scaler => sres_algo_pre_scaler,
 	    sres_algo_post_dead_time_counter => sres_algo_post_dead_time_counter,
+	    suppress_cal_trigger => suppress_cal_trigger,
 	    l1a => l1a,
 	    l1a_latency_delay => l1a_latency_delay_reg(0)(log2c(MAX_DELAY_L1A_LATENCY)-1 downto 0),
             request_update_factor_pulse => request_update_factor_pulse,
@@ -600,18 +674,19 @@ begin
             rate_cnt_post_dead_time => rate_cnt_post_dead_time_local(i),
             algo_after_bxomask => algo_after_bxomask(i),
             algo_after_prescaler => algo_after_prescaler(i),
-	    algo_after_finor_mask => algo_after_finor_mask(i),
+-- HB 2016-08-31: removed logic with finor_mask.
+-- 	    algo_after_finor_mask => algo_after_finor_mask(i),
 	    veto => veto(i)
 	);
     end generate algo_slices_l;
     
 -- Finors
-    local_finor_p: process(algo_after_finor_mask)
+    local_finor_p: process(algo_after_prescaler)
        variable or_algo_var : std_logic := '0';
 	begin
         or_algo_var := '0';
         for i in 0 to NR_ALGOS-1 loop
-            or_algo_var := or_algo_var or algo_after_finor_mask(i);
+            or_algo_var := or_algo_var or algo_after_prescaler(i);
         end loop;
         local_finor <= or_algo_var;
     end process local_finor_p;
@@ -643,8 +718,11 @@ begin
     local_finor_with_veto_o <= local_finor_pipe and not local_veto_pipe;
 
 -- HB 2016-02-26: local finor and local veto to tp_mux for LEMO connectors
-    finor_2_mezz_lemo <= local_finor;
-    veto_2_mezz_lemo <= local_veto;
+-- HB 2016-06-10: tested using "local_finor_pipe" for "finor_2_mezz_lemo" (instead of "local_finor"), same for veto.
+--     finor_2_mezz_lemo <= local_finor;
+--     veto_2_mezz_lemo <= local_veto;
+    finor_2_mezz_lemo <= local_finor_pipe;
+    veto_2_mezz_lemo <= local_veto_pipe;
         
 -------------------------------------------------------------------------------------------------------------------------------------
 -- Pipeline stages for "simulating" the stages of FINOR-AMC502, to get the same latency for both possibilities of connecting to TCDS.
@@ -735,7 +813,8 @@ begin
             algo_after_gtLogic => algo_int,
             algo_after_bxomask => algo_after_bxomask,
             algo_after_prescaler => algo_after_prescaler,
-            algo_after_finor_mask => algo_after_finor_mask,
+-- HB 2016-08-31: removed logic with finor_mask. Kept "algo_after_finor_mask" port, used algo_after_prescaler for this port
+            algo_after_finor_mask => algo_after_prescaler,
             algo_after_gtLogic_rop => algo_after_gtLogic_rop,
             algo_after_bxomask_rop => algo_after_bxomask_rop,
             algo_after_prescaler_rop => algo_after_prescaler_rop,

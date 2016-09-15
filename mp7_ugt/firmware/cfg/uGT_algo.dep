@@ -1,5 +1,6 @@
-?toolset=="ISE"?    src ../ucf/algo_constraints.ucf
-?toolset=="Vivado"? src ../ucf/algo_constraints.xdc
+## HB 2016-08-17: moved constraints from algo_constraints.xdc to mp7_payload.tcl
+##?toolset=="ISE"?    src ../ucf/algo_constraints.ucf
+##?toolset=="Vivado"? src ../ucf/algo_constraints.xdc
 ?toolset=="Vivado"? src ../ucf/mp7_payload.tcl
 # addrtab -t cancel_out_barrel.xml
 # addrtab -t cancel_out_bo_wedge.xml

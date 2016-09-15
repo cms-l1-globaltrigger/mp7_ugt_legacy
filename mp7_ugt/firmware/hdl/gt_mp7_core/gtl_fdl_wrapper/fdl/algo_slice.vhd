@@ -17,8 +17,10 @@
 -- Desription:
 -- FDL structure for one algo (slice)
 -- algo-bx-mask at algo input
--- rate-counter before prescaler only (no rate-counter after finor-mask)
 
+-- HB 2016-08-31: removed logic with finor_mask. algo_rate_counter after prescaler. Removed port "algo_after_finor_mask".
+-- HB 2016-07-04: algo_rate_counter after finor-mask. No algo_rate_counter between algo_pre_scaler and finor_mask.
+-- HB 2016-06-17: added suppress_cal_trigger, used to suppress counting algos caused by calibration trigger at bx=3490.
 -- HB 2016-04-12: renamed "algo_before_prescaler" to "algo_after_bxomask".
 -- HB 2016-02-23: added algo_rate_counter after prescaler.
 -- HB 2016-02-22: moved "algo_post_dead_time_counter" after prescaler.
@@ -47,6 +49,8 @@ entity algo_slice is
 	sres_algo_rate_counter : in std_logic;
 	sres_algo_pre_scaler : in std_logic;
 	sres_algo_post_dead_time_counter : in std_logic;
+-- HB 2016-06-17: added suppress_cal_trigger, used to suppress counting algos caused by calibration trigger at bx=3490.
+	suppress_cal_trigger : in std_logic; -- pos. active signal: '1' = suppression of algos caused by calibration trigger !!!
 -- HB 2015-09-2: added "l1a" and "l1a_latency_delay" for post-dead-time counter
 	l1a : in std_logic;
 	l1a_latency_delay : in std_logic_vector(log2c(MAX_DELAY)-1 downto 0);
@@ -62,7 +66,8 @@ entity algo_slice is
         rate_cnt_post_dead_time : out std_logic_vector(RATE_COUNTER_WIDTH-1 DOWNTO 0);
         algo_after_bxomask : out std_logic;
         algo_after_prescaler : out std_logic;
-        algo_after_finor_mask : out std_logic;
+-- HB 2016-08-31: removed logic with finor_mask.
+--         algo_after_finor_mask : out std_logic;
         veto : out std_logic
     );
 end algo_slice;
@@ -70,76 +75,86 @@ end algo_slice;
 architecture rtl of algo_slice is
     signal algo_after_algo_bx_mask_int : std_logic;
     signal algo_after_prescaler_int : std_logic;
-    signal algo_after_finor_mask_int : std_logic;
+-- HB 2016-08-31: removed logic with finor_mask.
+--     signal algo_after_finor_mask_int : std_logic;
 begin
 
-algo_after_algo_bx_mask_int <= algo_i and algo_bx_mask;
+-- algo_after_algo_bx_mask_int <= algo_i and algo_bx_mask;
+-- HB 2016-06-17: added "suppress_cal_trigger", used to suppress counting of algos caused by calibration trigger at bx=3490.
+--                Signal pos. active: '1' = suppression algos caused by calibration trigger !!!
+    algo_after_algo_bx_mask_int <= algo_i and algo_bx_mask and not suppress_cal_trigger;
 
-rate_cnt_before_prescaler_i: entity work.algo_rate_counter
-    generic map( 
-        COUNTER_WIDTH => RATE_COUNTER_WIDTH
-    )
-    port map( 
-        sys_clk => sys_clk,
-        lhc_clk => lhc_clk,
-        sres_counter => sres_algo_rate_counter,
-        store_cnt_value => begin_lumi_per,
-        algo_i => algo_after_algo_bx_mask_int,
-        counter_o => rate_cnt_before_prescaler
-    );
+    rate_cnt_before_prescaler_i: entity work.algo_rate_counter
+	generic map( 
+	    COUNTER_WIDTH => RATE_COUNTER_WIDTH
+	)
+	port map( 
+	    sys_clk => sys_clk,
+	    lhc_clk => lhc_clk,
+	    sres_counter => sres_algo_rate_counter,
+	    store_cnt_value => begin_lumi_per,
+	    algo_i => algo_after_algo_bx_mask_int,
+	    counter_o => rate_cnt_before_prescaler
+	);
 
-prescaler_i: entity work.algo_pre_scaler
-    generic map( 
-        COUNTER_WIDTH => PRESCALER_COUNTER_WIDTH,
-        PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT
-    )
-    port map( 
-        clk => lhc_clk,
-        sres_counter => sres_algo_pre_scaler,
-        algo_i => algo_after_algo_bx_mask_int,
-        request_update_factor_pulse => request_update_factor_pulse,
-        update_factor_pulse => begin_lumi_per,
-        prescale_factor => prescale_factor,
-        prescaled_algo_o => algo_after_prescaler_int
-    );
+    prescaler_i: entity work.algo_pre_scaler
+	generic map( 
+	    COUNTER_WIDTH => PRESCALER_COUNTER_WIDTH,
+	    PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT
+	)
+	port map( 
+	    clk => lhc_clk,
+	    sres_counter => sres_algo_pre_scaler,
+	    algo_i => algo_after_algo_bx_mask_int,
+	    request_update_factor_pulse => request_update_factor_pulse,
+	    update_factor_pulse => begin_lumi_per,
+	    prescale_factor => prescale_factor,
+	    prescaled_algo_o => algo_after_prescaler_int
+	);
 
-rate_cnt_after_prescaler_i: entity work.algo_rate_counter
-    generic map( 
-        COUNTER_WIDTH => RATE_COUNTER_WIDTH
-    )
-    port map( 
-        sys_clk => sys_clk,
-        lhc_clk => lhc_clk,
-        sres_counter => sres_algo_rate_counter,
-        store_cnt_value => begin_lumi_per,
-        algo_i => algo_after_prescaler_int,
-        counter_o => rate_cnt_after_prescaler
-    );
+-- HB 2016-08-31: removed logic with finor_mask.
+--     algo_after_finor_mask_int <= algo_after_prescaler_int and finor_mask;
 
-rate_cnt_post_dead_time_i: entity work.algo_post_dead_time_counter
-    generic map( 
-        COUNTER_WIDTH => RATE_COUNTER_WIDTH,
-        MAX_DELAY => MAX_DELAY
-    )
-    port map( 
-        sys_clk => sys_clk,
-        lhc_clk => lhc_clk,
-        lhc_rst => lhc_rst,
-        sres_counter => sres_algo_post_dead_time_counter,
-        store_cnt_value => begin_lumi_per,
-        l1a => l1a,
-        delay => l1a_latency_delay,
-        algo_i => algo_after_prescaler_int,
-        counter_o => rate_cnt_post_dead_time
-    );
+    veto <= algo_after_prescaler_int and veto_mask;
 
-algo_after_finor_mask_int <= algo_after_prescaler_int and finor_mask;
+-- HB 2016-08-31: renamed algo_rate_counter after finor-mask to algo_rate_counter after presclaer.
+    rate_cnt_after_prescaler_i: entity work.algo_rate_counter
+	generic map( 
+	    COUNTER_WIDTH => RATE_COUNTER_WIDTH
+	)
+	port map( 
+	    sys_clk => sys_clk,
+	    lhc_clk => lhc_clk,
+	    sres_counter => sres_algo_rate_counter,
+	    store_cnt_value => begin_lumi_per,
+-- HB 2016-08-31: used algo_after_prescaler_int, because removed logic with finor_mask.
+-- 	    algo_i => algo_after_finor_mask_int,
+	    algo_i => algo_after_prescaler_int,
+	    counter_o => rate_cnt_after_prescaler
+	);
 
-veto <= algo_after_finor_mask_int and veto_mask;
+-- HB 2016-07-04: algo_post_dead_time_counter after finor-mask
+    rate_cnt_post_dead_time_i: entity work.algo_post_dead_time_counter
+	generic map( 
+	    COUNTER_WIDTH => RATE_COUNTER_WIDTH,
+	    MAX_DELAY => MAX_DELAY
+	)
+	port map( 
+	    sys_clk => sys_clk,
+	    lhc_clk => lhc_clk,
+	    lhc_rst => lhc_rst,
+	    sres_counter => sres_algo_post_dead_time_counter,
+	    store_cnt_value => begin_lumi_per,
+	    l1a => l1a,
+	    delay => l1a_latency_delay,
+	    algo_i => algo_after_prescaler_int,
+	    counter_o => rate_cnt_post_dead_time
+	);
 
-algo_after_bxomask <= algo_after_algo_bx_mask_int;
-algo_after_prescaler <= algo_after_prescaler_int;
-algo_after_finor_mask <= algo_after_finor_mask_int;
+    algo_after_bxomask <= algo_after_algo_bx_mask_int;
+    algo_after_prescaler <= algo_after_prescaler_int;
+-- HB 2016-08-31: removed logic with finor_mask.
+--     algo_after_finor_mask <= algo_after_prescaler_int;
 
 end architecture rtl;
 

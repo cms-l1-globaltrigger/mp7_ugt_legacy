@@ -13,8 +13,8 @@
 -- $Author: Babak $
 -- $Revision: 0.1  $
 --------------------------------------------------------------------------------
--- TODO: review the core and and modify it
 --
+-- HB 2016-09-01: added BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490)
 -- HB 2016-04-06: used "algo_after_gtLogic" for read-out-record (changed "algo_before_prescaler" to "algo_after_bxomask") according to fdl_module v0.0.24.
 -- HB 2016-02-26: changed inputs of tp_mux.vhd, removed unused signals in frame (v0.0.36) and fdl_module (v0.0.20)
 -- HB 2016-02-16: added "l1a" for post dead time counter in fdl_module (v0.0.17)
@@ -41,10 +41,8 @@ entity mp7_payload is
         rst: in std_logic;
         ipb_in: in ipb_wbus;
         ipb_out: out ipb_rbus;
-        --clk_payload : in  std_logic_vector(2 downto 0);
---         rst_payload : in  std_logic_vector(2 downto 0);
-        clk_payload : in  std_logic;
-        rst_payload : in  std_logic;
+        clk_payload : in  std_logic_vector(2 downto 0);
+        rst_payload : in  std_logic_vector(2 downto 0);
         clk_p: in std_logic; -- data clock
         rst_loc: in std_logic_vector(N_REGION - 1 downto 0);
         clken_loc: in std_logic_vector(N_REGION - 1 downto 0);
@@ -95,6 +93,7 @@ architecture rtl of mp7_payload is
     signal oc0_int            : std_logic;
     signal resync_int         : std_logic;
     signal start_int          : std_logic;
+    signal test_en_int        : std_logic;
     signal ec0_sync_bc0_int   : std_logic;
     signal oc0_sync_bc0_int   : std_logic;
     signal resync_sync_bc0_int: std_logic;
@@ -114,11 +113,13 @@ begin
 
 -- ***********************************************************************
 -- HB 2016-02-17: L1A connection has to be done (for post dead time counter in fdl_module.vhd) in top (mp7xe_690.vhd) !!!
-    l1a_int <= l1a; -- from MP7
+     l1a_int <= l1a; -- from MP7
+--    l1a_int <= ctrs(4).l1a;
 -- ***********************************************************************
 
---     lhc_clk <= clk_payload(0);
-    lhc_clk <= clk_payload;
+    lhc_clk <= clk_payload(0);
+--     lhc_clk <= clk_payload;
+
     ipb_clk <= clk;
     ipb_rst <= rst;
     clk240  <= clk_p;
@@ -127,6 +128,7 @@ begin
     lane_data_in  <= d;
     q <= lane_data_out;
 
+    -- HB 2016-09-01: added BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490)
     -- HB 2016-03-03: added outputs for synchronized oc0 and start (with bc0)
     -- HB 2016-03-03: inserted coded bgos (and start and stop)
     -- HB 2016-02-26: ec0, oc0 and resync not used anymore
@@ -134,8 +136,8 @@ begin
     bgo_sync_i: entity work.bgo_sync
     port map(
         clk_payload => lhc_clk,
---         rst_payload => rst_payload(0),
-        rst_payload => rst_payload,
+        rst_payload => rst_payload(0),
+--         rst_payload => rst_payload,
         ttc_in      => ctrs(4).ttc_cmd,
         bc0_out     => bc0_in,
         ec0_out     => ec0_int,
@@ -145,7 +147,8 @@ begin
         resync_out  => resync_int,
         resync_sync_bc0_out     => resync_sync_bc0_int,
         start_out  => start_int,
-        start_sync_bc0_out  => start_sync_bc0_int
+        start_sync_bc0_out  => start_sync_bc0_int,
+        test_en_out  => test_en_int
     );
 
     fabric_i: entity work.ipbus_fabric_sel
@@ -223,6 +226,7 @@ begin
         lhc_rst            => lhc_rst,
         lhc_data           => dsmux_lhc_data,
         bcres              => bcres_d_FDL,
+        test_en            => test_en_int,
         l1a                => l1a_int,
         begin_lumi_section => start_lumisection,
         prescale_factor_set_index_rop   => prescale_factor_set_index_rop,
@@ -263,6 +267,7 @@ begin
         resync_sync_bc0 => resync_sync_bc0_int,
         start           => start_int,
         start_sync_bc0  => start_sync_bc0_int,
+        test_en         => test_en_int,
         out0            => tp0,
         out1            => tp1,
         out2            => tp2

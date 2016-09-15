@@ -15,7 +15,9 @@
 --------------------------------------------------------------------------------
 
 -- Description: contains the "framework" of GT-logic (all parts, except GTL and FDL)
--- JW 2016-04-19: v0.0.41 - added a delay for the bcres240 in the output mux, to compensate the 0,5BX delay which results form the clock domain change
+
+-- HB 2016-08-31: v1.0.0 - based on v0.0.41, but used tcm.vhd with correct lumi-section.
+-- JW 2016-04-19: v0.0.41 - added a delay for the bcres240 in the output mux, to compensate the 0,5BX delay which results form the clock domain change.
 -- HB 2016-04-25: v0.0.40 - updated tcm.vhd (resync not used anymore and OC0 resets orbit number and lumi-section number to 1).
 -- JW 2016-04-19: v0.0.39 - connected the bcres_outputmux_o to the output mux, changed the mux code to sync the bcres signal and convert it to 240MHz domain
 -- HB 2016-04-11: v0.0.38 - implemented delays for EC0, OC0, RESYNC and START (same delay as BCRES) and inserted bcres_outputmux_o (delayed version of bcres for output mux) in dm.vhd.

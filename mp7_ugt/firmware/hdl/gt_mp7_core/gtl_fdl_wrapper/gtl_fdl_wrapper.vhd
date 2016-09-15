@@ -15,6 +15,7 @@
 --------------------------------------------------------------------------------
 
 -- Version-history:
+-- HB 2016-09-01: added BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490) for fdl_module.
 -- HB 2016-04-06: used algo_mapping_rop with "algo_after_gtLogic" for read-out-record (changed "algo_before_prescaler" to "algo_after_bxomask") according to fdl_module v0.0.24.
 -- HB 2016-02-26: inserted finor_w_veto_2_mezz_lemo with 1.5bx delay. Removed unused inputs (ec0, oc0, etc.) and fdl_status output (see fdl_module v0.0.20).
 -- HB 2016-02-16: added "l1a" for algo post dead time counter in fdl_module (v0.0.17).
@@ -51,6 +52,7 @@ entity gtl_fdl_wrapper is
         lhc_rst             : in std_logic;
         lhc_data            : in lhc_data_t;
         bcres               : in std_logic;
+        test_en             : in std_logic;
         l1a                 : in std_logic;
         begin_lumi_section  : in std_logic;
         prescale_factor_set_index_rop : out std_logic_vector(7 downto 0);
@@ -171,6 +173,7 @@ fdl_module_i: entity work.fdl_module
         lhc_clk         => lhc_clk,
         lhc_rst         => lhc_rst,
         bcres           => bcres,
+        test_en         => test_en,
         l1a             => l1a,
         begin_lumi_section => begin_lumi_section,
         algo_i          => algo,

@@ -27,7 +27,7 @@ package top_decl is
         constant DAQ_TRIGGER_MODES: integer := 2; -- Number of trigger modes for readout
         constant DAQ_N_CAP_CTRLS: integer := 4; -- Number of capture controls per trigger mode28
         constant ZS_ENABLED: boolean := FALSE;
-        --constant CLOCK_AUX_RATIO: clock_ratio_array_t := (1, 1, 1);
+        constant CLOCK_AUX_RATIO: clock_ratio_array_t := (1, 1, 1);
 
         constant REGION_CONF: region_conf_array_t := (
                 0 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 3, 10), -- 0 / 118

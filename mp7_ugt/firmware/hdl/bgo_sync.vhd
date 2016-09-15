@@ -14,6 +14,7 @@
 -- $Revision: 0.1  $
 --------------------------------------------------------------------------------
 --
+-- HB 2016-06-17: added BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490)
 -- HB 2016-03-17: added outputs for synchronized BGos (with bc0)
 -- HB 2016-03-14: added B-Go signals with TTC_BCMD_xxx
 -- JW 2015-11-04: added bc0 to the sync stage
@@ -39,7 +40,8 @@ entity bgo_sync is
         resync_out:  out std_logic;
         resync_sync_bc0_out:  out std_logic;
         start_out:  out std_logic;
-        start_sync_bc0_out:  out std_logic
+        start_sync_bc0_out:  out std_logic;
+        test_en_out:  out std_logic
     );
 end bgo_sync;
 
@@ -51,6 +53,7 @@ architecture rtl of bgo_sync is
     signal oc0_in            : std_logic;
     signal resync_in         : std_logic;
     signal start_in          : std_logic;
+    signal test_en_in          : std_logic;
     signal resync_int           : std_logic;
     signal resync_rqst           : std_logic;
     signal oc0_int           : std_logic;
@@ -59,6 +62,8 @@ architecture rtl of bgo_sync is
     signal ec0_rqst           : std_logic;
     signal start_int           : std_logic;
     signal start_rqst           : std_logic;
+    signal test_en_int           : std_logic;
+    signal test_en_rqst           : std_logic;
 begin
 
     bc0_in     <= '1' when ttc_in = TTC_BCMD_BC0 else '0';
@@ -66,9 +71,13 @@ begin
     oc0_in     <= '1' when ttc_in = TTC_BCMD_OC0 else '0';
     resync_in  <= '1' when ttc_in = TTC_BCMD_RESYNC else '0';
     start_in   <= '1' when ttc_in = TTC_BCMD_START else '0';
+-- HB 2016-06-17: BGo test-enable (used to prevent counting algos caused by calibration trigger)
+-- definition in tags/mp7/stable/firmware/mp7fw_v2_0_6/../mp7_ttc/../mp7_ttc_decl.vhd !!! (email Greg Iles 2016-06-28)
+--     test_en_in <= '1' when ttc_in = TTC_BCMD_TEST_ENABLE else '0';
+    test_en_in <= '1' when ttc_in = X"12" else '0';
 
---     sync_bgos_p: process(clk_payload, rst_payload, bc0_in, ec0_in, oc0_in, resync_in, bgos_in)
-    sync_bgos_p: process(clk_payload, rst_payload, bc0_in, ec0_in, oc0_in, resync_in, start_in)
+--     sync_bgos_p: process(clk_payload, rst_payload, bc0_in, ec0_in, oc0_in, resync_in, start_in)
+    sync_bgos_p: process(clk_payload, rst_payload, bc0_in, ec0_in, oc0_in, resync_in, start_in, test_en_in)
         begin
         if (rst_payload = '1') then
             bc0_out <= '0';
@@ -86,6 +95,7 @@ begin
             start_out <= '0';
             start_int <= '0';
             start_sync_bc0_out <= '0';
+            test_en_out <= '0';
         elsif (clk_payload'event and clk_payload = '1') then
             bc0_out <= bc0_in;
             bc0_int <= bc0_in;
@@ -102,6 +112,7 @@ begin
             start_out <= start_in;
             start_int <= start_in;
             start_sync_bc0_out <= start_rqst and bc0_in; -- start synchronized with bc0
+            test_en_out <= test_en_in;
         end if;
     end process;
 

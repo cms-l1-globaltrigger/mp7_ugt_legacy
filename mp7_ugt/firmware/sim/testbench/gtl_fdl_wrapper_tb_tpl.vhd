@@ -69,7 +69,7 @@ architecture rtl of gtl_fdl_wrapper_TB is
     signal lhc_clk : std_logic;
 
     signal lhc_data : lhc_data_t := LHC_DATA_NULL;
-    signal algo_after_finor_mask_rop : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+    signal algo_after_prescaler_rop : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal local_finor_with_veto : std_logic;
 
     signal stop : boolean := false;
@@ -136,11 +136,11 @@ begin
         while not endfile(testvector_file) loop
             readline(testvector_file, l);
             bx_nr_vector_data(temp_counter) := l(1 to 4); -- bx nr
-            testdata(temp_counter) := string_to_lhc_data_t(l(6 to 530)); -- without bx_nr, algos and finor
-            algo_vector_string(temp_counter) := l(531 to 658); -- algo strings
-            algo_vector_data(temp_counter) := str_to_slv(l(531 to 658)); -- algos
-            finor_vector_data(temp_counter) := str_to_slv(l(660 to 660)); -- finor
-            finor_vector_string(temp_counter) := l(660 to 660); -- finor string
+            testdata(temp_counter) := string_to_lhc_data_t(l(6 to 638)); -- without bx_nr, algos and finor
+            algo_vector_string(temp_counter) := l(639 to 766); -- algo strings
+            algo_vector_data(temp_counter) := str_to_slv(l(639 to 766)); -- algos
+            finor_vector_data(temp_counter) := str_to_slv(l(768 to 768)); -- finor
+            finor_vector_string(temp_counter) := l(768 to 768); -- finor string
             temp_counter := temp_counter + 1;
         end loop;
         
@@ -154,7 +154,7 @@ begin
 		lhc_data <= testdata(i);
 	    end if;
 	    if i >= GTL_FDL_LATENCY then
-		if algo_after_finor_mask_rop /= algo_vector_data(i - GTL_FDL_LATENCY) then
+		if algo_after_prescaler_rop /= algo_vector_data(i - GTL_FDL_LATENCY) then
 		    algo_error_cnt := algo_error_cnt + 1;
 		    write(write_l, string'("***************************************************************************************************************************************************"));
 		    writeline(error_file, write_l);
@@ -162,11 +162,11 @@ begin
 		    writeline(error_file, write_l);
 		    write(write_l, string'("algos test vector: " & algo_vector_string(i - GTL_FDL_LATENCY)));
 		    writeline(error_file, write_l);
-		    write(write_l, string'("algos simulation:  " & hstr(algo_after_finor_mask_rop)));
+		    write(write_l, string'("algos simulation:  " & hstr(algo_after_prescaler_rop)));
 		    writeline(error_file, write_l);
 		    report "Error @ bx-nr: " & bx_nr_vector_data(i - GTL_FDL_LATENCY) & " => ALGO Error - algos not as expected!!!" severity error;
 		    report "algos test vector: " & algo_vector_string(i - GTL_FDL_LATENCY);
-		    report "algos simulation:  " & hstr(algo_after_finor_mask_rop);
+		    report "algos simulation:  " & hstr(algo_after_prescaler_rop);
 		end if;
 		if local_finor_with_veto /= finor_vector_data(i - GTL_FDL_LATENCY)(0) then
 		    finor_error_cnt := finor_error_cnt + 1;
@@ -225,13 +225,14 @@ dut : entity work.gtl_fdl_wrapper
         lhc_rst            => '0',
         lhc_data           => lhc_data,
         bcres              => '0',
+        test_en            => '0',
         l1a                => '0',
         begin_lumi_section => '0',
         prescale_factor_set_index_rop => open,
         algo_after_gtLogic_rop => open,
         algo_after_bxomask_rop => open,
-        algo_after_prescaler_rop  => open,
-        algo_after_finor_mask_rop => algo_after_finor_mask_rop,
+        algo_after_prescaler_rop  => algo_after_prescaler_rop,
+--         algo_after_finor_mask_rop => algo_after_finor_mask_rop,
         local_finor_rop => open,
         local_veto_rop  => open,
         finor_2_mezz_lemo  => open,

@@ -16,6 +16,7 @@
 -- $Revision: 0.1  $
 --------------------------------------------------------------------------------
 
+-- HB 2016-09-19: updated for "all frames" (new esums).
 -- HB 2016-04-11: implemented delays for EC0, OC0, RESYNC and START (same delay as BCRES). Inserted bcres_outputmux_o - delayed version of bcres for output mux.
 
 library ieee;
@@ -123,6 +124,10 @@ begin
 	-- IMPORTANT:
 	-- the delays must have the exact same order as the associated objects in lhc_data_t
 	-- if a new object is added to lhc_data_t, the delay for this object must be added to the array
+
+-- HB 2016-09-19: inserted all frames of calo links for extended format structure of test-vector-file
+-- used delay_ett for etmhf_data, htmhf_data and link_11_fr_x_data (for own delays for link frames, rb must be extended).
+
 	delay_array <= (sw_reg_i.delay_muons(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
 	                sw_reg_i.delay_eg(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
 	                sw_reg_i.delay_tau(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
@@ -131,6 +136,14 @@ begin
 	                sw_reg_i.delay_ht(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
 	                sw_reg_i.delay_etm(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
 	                sw_reg_i.delay_htm(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0),
+	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), -- ETM_HF
+	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), -- HTM_HF
+	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), -- link_11_fr_0_data
+	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), -- link_11_fr_1_data
+	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), -- link_11_fr_2_data
+	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), -- link_11_fr_3_data
+	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), -- link_11_fr_4_data
+	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), -- link_11_fr_5_data	                
 	                sw_reg_i.delay_ext_con(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0));
 
 	dealy_elements : for i in 0 to LHC_DATA_OBJECT_COUNT-1 generate

@@ -17,7 +17,6 @@
 -- Desription:
 
 -- Version history:
--- HB 2015-12-09: removed clk in esums_comparators
 -- HB 2015-05-29: removed "use work.gtl_lib.all;" - using "entity work.xxx" for instances
 
 library ieee;
@@ -53,11 +52,6 @@ architecture rtl of esums_conditions is
     signal comp_o : std_logic;
 
 begin
--- HB 2015-04-27: used integer for obj_type
--- ett_obj_type=0
--- htt_obj_type=1
--- etm_obj_type=2
--- htm_obj_type=3
     
     esums_comparators_i: entity work.esums_comparators
 	generic map(

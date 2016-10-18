@@ -14,6 +14,9 @@
 -- $Revision: 3878 $
 --------------------------------------------------------------------------------
 
+-- Version-history:
+-- HB 2016-09-16: inserted new esums.
+
 library ieee;
 use ieee.std_logic_1164.all;
 
@@ -96,6 +99,32 @@ entity p_m_2_bx_pipeline is
         mbhfmt0_bx_0     : out std_logic_vector(max_esums_bits-1 downto 0);
         mbhfmt0_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
         mbhfmt0_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
+-- HB 2016-06-07: inserted new esums quantities (ETTEM and ETMHF).
+        ettem_data     : in std_logic_vector(max_esums_bits-1 downto 0);
+        ettem_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        ettem_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        ettem_bx_0     : out std_logic_vector(max_esums_bits-1 downto 0);
+        ettem_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        ettem_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        etmhf_data     : in std_logic_vector(max_esums_bits-1 downto 0);
+        etmhf_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        etmhf_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        etmhf_bx_0     : out std_logic_vector(max_esums_bits-1 downto 0);
+        etmhf_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        etmhf_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
+-- HB 2016-09-16: inserted HTMHF and TOWERCNT
+        htmhf_data     : in std_logic_vector(max_esums_bits-1 downto 0);
+        htmhf_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        htmhf_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        htmhf_bx_0     : out std_logic_vector(max_esums_bits-1 downto 0);
+        htmhf_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        htmhf_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        towercount_data     : in std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
+        towercount_bx_p2   : out std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
+        towercount_bx_p1   : out std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
+        towercount_bx_0     : out std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
+        towercount_bx_m1   : out std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
+        towercount_bx_m2   : out std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
 -- ****************************************************************************************
         ext_cond_data     : in std_logic_vector(nr_external_conditions-1 downto 0);
         ext_cond_bx_p2   : out std_logic_vector(nr_external_conditions-1 downto 0);
@@ -122,12 +151,18 @@ architecture rtl of p_m_2_bx_pipeline is
     signal mbhfmt1_bx_p1_tmp, mbhfmt1_bx_0_tmp, mbhfmt1_bx_m1_tmp, mbhfmt1_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
     signal mbhfpt0_bx_p1_tmp, mbhfpt0_bx_0_tmp, mbhfpt0_bx_m1_tmp, mbhfpt0_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
     signal mbhfmt0_bx_p1_tmp, mbhfmt0_bx_0_tmp, mbhfmt0_bx_m1_tmp, mbhfmt0_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
+-- HB 2016-06-07: inserted new esums quantities (ETTEM and ETMHF).
+    signal ettem_bx_p1_tmp, ettem_bx_0_tmp, ettem_bx_m1_tmp, ettem_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
+    signal etmhf_bx_p1_tmp, etmhf_bx_0_tmp, etmhf_bx_m1_tmp, etmhf_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
+-- HB 2016-09-16: inserted HTMHF and TOWERCNT
+    signal htmhf_bx_p1_tmp, htmhf_bx_0_tmp, htmhf_bx_m1_tmp, htmhf_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
+    signal towercount_bx_p1_tmp, towercount_bx_0_tmp, towercount_bx_m1_tmp, towercount_bx_m2_tmp : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0) := (others => '0');
 -- ****************************************************************************************
     signal ext_cond_bx_p1_tmp, ext_cond_bx_0_tmp, ext_cond_bx_m1_tmp, ext_cond_bx_m2_tmp : std_logic_vector(nr_external_conditions-1 downto 0) := (others => '0');
 
 begin
 
-process(clk, eg_data, jet_data, tau_data, muon_data, ett_data, ht_data, etm_data, htm_data, ext_cond_data)
+process(clk, eg_data, jet_data, tau_data, muon_data, ett_data, ht_data, etm_data, htm_data, ettem_data, etmhf_data, htmhf_data, towercount_data, ext_cond_data)
     begin
     if (clk'event and clk = '1') then
         muon_bx_p1_tmp <= muon_data;
@@ -189,6 +224,26 @@ process(clk, eg_data, jet_data, tau_data, muon_data, ett_data, ht_data, etm_data
         mbhfmt0_bx_0_tmp <= mbhfmt0_bx_p1_tmp;
         mbhfmt0_bx_m1_tmp <= mbhfmt0_bx_0_tmp;
         mbhfmt0_bx_m2_tmp <= mbhfmt0_bx_m1_tmp;
+
+        ettem_bx_p1_tmp <= ettem_data;
+        ettem_bx_0_tmp <= ettem_bx_p1_tmp;
+        ettem_bx_m1_tmp <= ettem_bx_0_tmp;
+        ettem_bx_m2_tmp <= ettem_bx_m1_tmp;
+
+        etmhf_bx_p1_tmp <= etmhf_data;
+        etmhf_bx_0_tmp <= etmhf_bx_p1_tmp;
+        etmhf_bx_m1_tmp <= etmhf_bx_0_tmp;
+        etmhf_bx_m2_tmp <= etmhf_bx_m1_tmp;
+
+        htmhf_bx_p1_tmp <= htmhf_data;
+        htmhf_bx_0_tmp <= htmhf_bx_p1_tmp;
+        htmhf_bx_m1_tmp <= htmhf_bx_0_tmp;
+        htmhf_bx_m2_tmp <= htmhf_bx_m1_tmp;
+
+        towercount_bx_p1_tmp <= towercount_data;
+        towercount_bx_0_tmp <= towercount_bx_p1_tmp;
+        towercount_bx_m1_tmp <= towercount_bx_0_tmp;
+        towercount_bx_m2_tmp <= towercount_bx_m1_tmp;
 
         ext_cond_bx_p1_tmp <= ext_cond_data;
         ext_cond_bx_0_tmp <= ext_cond_bx_p1_tmp;
@@ -269,6 +324,30 @@ end process;
     mbhfmt0_bx_0 <= mbhfmt0_bx_0_tmp;
     mbhfmt0_bx_m1 <= mbhfmt0_bx_m1_tmp;
     mbhfmt0_bx_m2 <= mbhfmt0_bx_m2_tmp;
+
+    ettem_bx_p2 <= ettem_data;
+    ettem_bx_p1 <= ettem_bx_p1_tmp;
+    ettem_bx_0 <= ettem_bx_0_tmp;
+    ettem_bx_m1 <= ettem_bx_m1_tmp;
+    ettem_bx_m2 <= ettem_bx_m2_tmp;
+
+    etmhf_bx_p2 <= etmhf_data;
+    etmhf_bx_p1 <= etmhf_bx_p1_tmp;
+    etmhf_bx_0 <= etmhf_bx_0_tmp;
+    etmhf_bx_m1 <= etmhf_bx_m1_tmp;
+    etmhf_bx_m2 <= etmhf_bx_m2_tmp;
+
+    htmhf_bx_p2 <= htmhf_data;
+    htmhf_bx_p1 <= htmhf_bx_p1_tmp;
+    htmhf_bx_0 <= htmhf_bx_0_tmp;
+    htmhf_bx_m1 <= htmhf_bx_m1_tmp;
+    htmhf_bx_m2 <= htmhf_bx_m2_tmp;
+
+    towercount_bx_p2 <= towercount_data;
+    towercount_bx_p1 <= towercount_bx_p1_tmp;
+    towercount_bx_0 <= towercount_bx_0_tmp;
+    towercount_bx_m1 <= towercount_bx_m1_tmp;
+    towercount_bx_m2 <= towercount_bx_m2_tmp;
 
     ext_cond_bx_p2 <= ext_cond_data;
     ext_cond_bx_p1 <= ext_cond_bx_p1_tmp;

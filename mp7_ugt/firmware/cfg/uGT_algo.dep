@@ -35,6 +35,12 @@ src gt_mp7_core/gt_mp7_core_pkg.vhd
 src gt_mp7_core/tp_mux/tp_mux.vhd
 src gt_mp7_core/tp_mux/tp_mux_address_decoder.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
+#
+# HB 2016-09-29: moved gtl_module.vhd, gtl_pkg.vhd and algo_mapping_rop.vhd to "fix" part
+#src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg.vhd
+#src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_mapping_rop.vhd
+#src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_module.vhd
+#
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_addr_decode.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_rate_counter.vhd
@@ -75,6 +81,7 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/min_bias_hf_conditions.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/towercount_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
 src gt_mp7_core/frame/crc/crc16d64.vhd
 src gt_mp7_core/frame/crc/crc16d32.vhd
@@ -115,7 +122,7 @@ src gt_mp7_core/frame/ram/ram_asym_2c2w2r.vhd
 src gt_mp7_core/frame/ram/ram_2c1w1r.vhd
 src gt_mp7_core/frame/lmp/lmp.vhd
 src gt_mp7_core/frame/slow_cd_reset.vhd
-src gt_mp7_core/frame/l1asim/l1asim.vhd
+#src gt_mp7_core/frame/l1asim/l1asim.vhd
 src gt_mp7_core/frame/frame_module_info.vhd
 src gt_mp7_core/frame/dm/delay_element.vhd
 src gt_mp7_core/frame/dm/dm.vhd

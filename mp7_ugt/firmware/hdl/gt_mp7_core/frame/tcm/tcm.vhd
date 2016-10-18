@@ -14,6 +14,7 @@
 -- $Author: ?
 -- $Revision: 3796 $
 
+-- HB 2016-09-19: Removed "resync" and "stop" from port, not used anymore.
 -- HB 2016-07-04: Signal err_det not used anymore, but remained in the sw_reg_out (used by swatch ?). Removed err_det_reset_old from record, not used anymore.
 -- HB 2016-06-30: Inserted new logic for "start_lumisection" with "oc0" (to prevent 50ns pulse of "start_lumisection" after OC0).
 -- HB 2016-04-25: Resync not used anymore. Resetting v.orbit_nr_periodic with resync was a bug.
@@ -39,9 +40,7 @@ entity tcm is
 	lhc_rst           : in std_logic;
 	ec0		  : in std_logic;
 	oc0		  : in std_logic;
-	resync		  : in std_logic;
 	start		  : in std_logic;
-	stop		  : in std_logic;
 	l1a_sync          : in std_logic;
 	bcres_d           : in std_logic;
 	bcres_d_FDL       : in std_logic;
@@ -85,7 +84,7 @@ architecture beh of tcm is
 
 begin
     -- LHC clock domain
-    ctrl_lhc: process(lhc_rst, l, ec0, oc0, resync, start, l1a_sync, bcres_d, sw_reg_in, bcres_d_FDL)
+    ctrl_lhc: process(lhc_rst, l, ec0, oc0, start, l1a_sync, bcres_d, sw_reg_in, bcres_d_FDL)
 	variable v : lhc_reg_t;
     begin
 	v := l;

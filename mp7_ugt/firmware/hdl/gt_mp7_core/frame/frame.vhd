@@ -1,21 +1,9 @@
---------------------------------------------------------------------------------
--- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 14.04
--- Targets     : Synthese
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
--- $HeadURL: s $
--- $Date: 2015-02-27 10:46:07 +0100 (Fri, 27 Feb 2015) $
--- $Author: Babak $
--- $Revision:  $
---------------------------------------------------------------------------------
+-- Description: 
+-- Contains the "framework" of GT-logic (all parts, except GTL and FDL).
 
--- Description: contains the "framework" of GT-logic (all parts, except GTL and FDL)
-
+-- HB 2016-09-16: v1.1.0 - based on v1.0.0, but memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd).
+--                         Removed algo_after_finor_mask_rop from port (not used anymore, because finor-mask logic removed from fdl_module.vhd).
+--                         Removed multiplexer for simulation signals. Removed "resync" and "stop" from port of tcm, not used anymore.
 -- HB 2016-08-31: v1.0.0 - based on v0.0.41, but used tcm.vhd with correct lumi-section.
 -- JW 2016-04-19: v0.0.41 - added a delay for the bcres240 in the output mux, to compensate the 0,5BX delay which results form the clock domain change.
 -- HB 2016-04-25: v0.0.40 - updated tcm.vhd (resync not used anymore and OC0 resets orbit number and lumi-section number to 1).
@@ -59,32 +47,14 @@ entity frame is
         ipb_rst            : in std_logic;
         ipb_in             : in ipb_wbus;
         ipb_out            : out ipb_rbus;
--- ====================Simulator interface===============================
-        lane_data_in_sim   : in lhc_data_t;
-        lhc_rst_sim        : in std_logic;
-        rop_rst_sim        : in std_logic;
         ctrs               : in ttc_stuff_array; --mp7 ttc ctrs
-      -- tcm interface
-        trigger_nr_sim     : in  trigger_nr_t;
-        orbit_nr_sim       : in  orbit_nr_t;
-        bx_nr_sim          : in  bx_nr_t;
-        luminosity_seg_nr_sim    : in  luminosity_seg_nr_t;
-        event_nr_sim       : in  event_nr_t;
-    -- L1A
-        l1a_sim            : in  std_logic;
-    --DAQ
-        daq_oe_sim         : out std_logic;
-        daq_stop_sim       : out std_logic;
-        daq_data_sim       : out std_logic_vector(DAQ_INPUT_WIDTH-1 downto 0);
-
--- ====================end of Simulator interface========================
         clk240            : in std_logic;
         lhc_clk            : in std_logic;
         lhc_rst_o        : out std_logic;
         bc0            : in std_logic;
         ec0: in std_logic;
         oc0: in std_logic;
-        resync: in std_logic;
+--         resync: in std_logic;
         start: in std_logic;
         l1a            : in std_logic;
         bcres_d        : out std_logic;
@@ -97,7 +67,7 @@ entity frame is
         algo_after_gtLogic_rop        : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_bxomask_rop        : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-        algo_after_finor_mask_rop     : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+--         algo_after_finor_mask_rop     : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         local_finor_rop         : in std_logic;
         local_veto_rop          : in std_logic;
         finor_rop               : in std_logic;
@@ -109,10 +79,7 @@ end frame;
 architecture rtl of frame is
 
 -- ================================================================================================
--- insert reset logic similar to gt_amc514 to get proper reset conditions !!!
---     signal lhc_rst : std_logic := '1';
     signal lhc_rst : std_logic;
-    -- sw_reset
     signal sw_reset : std_logic; -- this reset is triggered by writing to the software register for the sw_reset
     signal ipbus_triggered_reset : std_logic; -- this is a 40mhz reset signal generated from the sys reset
 -- ================================================================================================
@@ -137,13 +104,6 @@ architecture rtl of frame is
     signal rb2tcm : sw_reg_tcm_in_t;
     signal tcm2rb : sw_reg_tcm_out_t;
 
-    signal rb2rop : sw_reg_rop_in_t;
-
-    signal rop2rb : sw_reg_rop_out_t;
-
-    signal rb2l1asim : sw_reg_l1asim_in_t;
-    --
-
     signal demux_data_o : demux_lanes_data_objects_array_t(NR_LANES-1 downto 0);
     signal demux_data_valid_o : demux_lanes_data_objects_array_valid_t(NR_LANES-1 downto 0);
 
@@ -159,13 +119,6 @@ architecture rtl of frame is
     signal bcres_d_int       : std_logic; -- delayed version of bcres
     signal bcres_d_FDL_int   : std_logic; -- delayed version of bcres for FDL
     signal bcres_outputmux   : std_logic; -- non-delayed version of bcres for output mux
-
-    signal rop_clk : std_logic; --! clock signal for the ROP --> DAQ interface
-    signal rop_rst : std_logic; --! reset signal for the rop_clk
-
-    signal rop_data       : std_logic_vector(DAQ_INPUT_WIDTH-1 downto 0);
-    signal rop_en         : std_logic;
-    signal rop_packet_end : std_logic;
 
     --TCM signals
     signal bx_nr             : bx_nr_t;
@@ -191,33 +144,23 @@ architecture rtl of frame is
 
     signal finors_rop : std_logic_vector (FINOR_WIDTH-1 downto 0) := (others => '0');
 
---     signal l1a_int : std_logic; -- internal L1A (output of l1asim), signal (port) "l1a" input from mp7_ttc.vhd
-
---  for simspy memory (test with ipb_dpmem_4096_32)
-    constant SW_DATA_WIDTH : integer := 32;
-
+-- HB 2016-09-16: SW_DATA_WIDTH defined in lhc_data_pkg.vhd
     constant MEMORY_BLOCKS : integer := LHC_DATA_WIDTH/SW_DATA_WIDTH;
 
     signal lhc_data_slv_o : std_logic_vector(LHC_DATA_WIDTH-1 downto 0);
     signal lhc_data_slv_i : std_logic_vector(LHC_DATA_WIDTH-1 downto 0);
---  solving the error message :Actual expression (infix expression) of formal "dinb" is not globally static
-    signal lhc_data_slv_i_simulator         : std_logic_vector(LHC_DATA_WIDTH-1 downto 0);
-    signal algo_after_finor_mask_rop_simulator    : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-    signal local_finor_with_veto_2_spy2_simulator   : std_logic_vector (31 downto 0);
+
+    signal local_finor_with_veto_2_spy2_int   : std_logic_vector (31 downto 0);
 
     signal pulse           : std_logic_vector(31 downto 0);
 
     signal mux_ctrl_regs_1 : ipb_regs_array(0 to 3);
 -- BR 25.05.2015 - change to constant for avoiding the metastability and warning in simulator as well as in syntheseis process
     constant  mux_ctrl_regs_1_init  : ipb_regs_array(0 to 3) := (X"00000bb8", X"00000c80", X"00000000", X"00000001"); -- bb8 =^ 3000, c80 =^ 3200
---===============================================================================================--
---                          Deceiding between simulation and synthesize signals
---===============================================================================================--
 
     signal dsmux_lhc_data_int_sim : lhc_data_t; -- lhc_data output of dsmux
     signal dsmux_lhc_data_int_rop : lhc_data_t; --simulation data for ROP
     signal lhc_rst_internal       : std_logic;
-    signal rop_rst_internal       :std_logic;
 
 --TCM signals
     signal bx_nr_internal    : bx_nr_t;
@@ -225,13 +168,10 @@ architecture rtl of frame is
     signal trigger_nr_internal    : trigger_nr_t;
     signal orbit_nr_internal    : orbit_nr_t;
     signal luminosity_seg_nr_internal    : luminosity_seg_nr_t;
---     signal l1a_internal        :std_logic;
 
     signal ec0_d_int       : std_logic;
     signal oc0_d_int       : std_logic;
-    signal resync_d_int       : std_logic;
     signal start_d_int       : std_logic;
-    signal stop_d_int       : std_logic;
 
     begin
 
@@ -263,24 +203,10 @@ architecture rtl of frame is
 -- BR "Milestone" : lhc_rst is for doing the reset the counter in tcm module. It is implmented as resgister, which later should be re-implemented as event register.
 --  added pulse reg output to reset logic
 
---===============================================================================================--
---                          Deceiding between simulation and synthesize  for RST
---===============================================================================================--
-    SIMULATE_RST_i: if SIMULATE_DATAPATH = true generate
-    begin
-       lhc_rst_o        <= lhc_rst_sim;  --rest singal will be produced by testbench
-       lhc_rst_internal <= lhc_rst_sim;
-       rop_rst_internal <= rop_rst_sim;  --ROP rest will be produced by testbench
-    end generate SIMULATE_RST_i;
-
-    synthesize_RST_i: if SIMULATE_DATAPATH = false generate
-    begin
-        lhc_rst <= not sw_reset or ipbus_triggered_reset or pulse(0);
-        lhc_rst_o <= lhc_rst;
-        lhc_rst_internal <= lhc_rst;
-        rop_rst_internal <= not(not sw_reset or ipbus_triggered_reset or pulse(0));
-    end generate synthesize_RST_i;
-
+    lhc_rst <= not sw_reset or ipbus_triggered_reset or pulse(0);
+    lhc_rst_o <= lhc_rst;
+    lhc_rst_internal <= lhc_rst;
+--     rop_rst_internal <= not(not sw_reset or ipbus_triggered_reset or pulse(0));
 
 --===============================================================================================--
     fabric_i: entity work.frame_fabric
@@ -303,7 +229,6 @@ architecture rtl of frame is
         ipb_in => ipb_to_slaves(C_IPB_MODULE_INFO),
         ipb_out => ipb_from_slaves(C_IPB_MODULE_INFO)
     );
-
 
 --===============================================================================================--
 -- BR 24.05.2015 - added ipb event register
@@ -339,7 +264,6 @@ architecture rtl of frame is
 --                        REGISTER BANK
 --===============================================================================================--
 
-
     register_bank: entity work.rb
 --         generic map(addr_width => C_RB_ADDR_WIDTH) -- C_IPB_RB definition in frame_addr_decode.vhd
         port map(
@@ -362,29 +286,23 @@ architecture rtl of frame is
     rb2spytrig  <= sw_regs_in.spytrigger;
     rb2dsmux    <= sw_regs_in.dsmux;
     rb2tcm      <= sw_regs_in.tcm;
-    rb2l1asim   <= sw_regs_in.l1asim;
-    rb2rop      <= sw_regs_in.rop;
 
     sw_regs_out.dm         <= dm2rb;
     sw_regs_out.spytrigger <= spytrig2rb;
     sw_regs_out.tcm        <= tcm2rb;
-    sw_regs_out.rop        <= rop2rb;
 
 --===============================================================================================--
 --                          TIMER COUNTER MODULE                             --
 --===============================================================================================--
 
---     bgos <= BGOS_NOP;
     tcm_inst: entity work.tcm
         port map(
             lhc_clk           => lhc_clk,
             lhc_rst           => lhc_rst,
 -- HB 2016-03-17: all bgos from dm.vhd
-        ec0               => ec0_d_int,
-        oc0               => oc0_d_int,
-        resync            => resync_d_int,
-        start             => start_d_int,
-        stop              => stop_d_int,
+	    ec0               => ec0_d_int,
+	    oc0               => oc0_d_int,
+	    start             => start_d_int,
             l1a_sync          => l1a,
             bcres_d           => bcres_d_int,
             bcres_d_FDL       => bcres_d_FDL_int,
@@ -399,97 +317,92 @@ architecture rtl of frame is
             start_lumisection => start_lumisection
         );
 
---===============================================================================================--
---                          Deceiding between simulation and synthesize  for TCM
---===============================================================================================--
-  SIMULATE_TCM_i: if SIMULATE_DATAPATH = true generate
-
-      begin
-       trigger_nr_internal        <= trigger_nr_sim;
-       orbit_nr_internal         <= orbit_nr_sim;
-       luminosity_seg_nr_internal     <= luminosity_seg_nr_sim;
-       event_nr_internal        <= event_nr_sim;
-       bx_nr_internal            <= bx_nr_sim;
-      end generate SIMULATE_TCM_i;
-
-    synthesize_TCM_i: if SIMULATE_DATAPATH = false generate
-
-      begin
-       trigger_nr_internal          <= trigger_nr;
-       orbit_nr_internal        <= orbit_nr;
-       luminosity_seg_nr_internal      <= luminosity_seg_nr;
-       event_nr_internal        <= event_nr;
-       bx_nr_internal            <= bx_nr;
-
-      end generate synthesize_TCM_i;
+    trigger_nr_internal <= trigger_nr;
+    orbit_nr_internal <= orbit_nr;
+    luminosity_seg_nr_internal <= luminosity_seg_nr;
+    event_nr_internal <= event_nr;
+    bx_nr_internal <= bx_nr;
 
 --===============================================================================================--
 --                             Proposed structure of lanes:
 -- ===============================================================================================
--- Object types/Objects from Layer 2 to UGT:
+-- Object types/Objects from Calop Layer 2 to uGT:
 -- protocol : 192 bits/lane, one object has 32-bits.
 -- =======================================================
 --
--- Object-type         Objects     used GTHs   GTH location
+-- Object-type         Objects     used GTHs   link
 --                     (32 bits)
--- electron/gamma      6 (5..0)        1
--- electron/gamma      6 (11..6)       1
--- jet                 6 (5..0)        1
--- jet                 6 (11..6)       1
--- tau                 6 (5..0)        1
--- tau                 2 (7..6)        1
--- esums               4               1
--- ext-cond(63..0)     2               1
--- ext-cond(127..64)   2               1
--- ext-cond(191..128)  2               1
--- ext-cond(255..192)  2               1
+-- electron/gamma      6 (5..0)        1        4
+-- electron/gamma      6 (11..6)       1        5
+-- jet                 6 (5..0)        1        6
+-- jet                 6 (11..6)       1        7
+-- tau                 6 (5..0)        1        8
+-- tau                 6 (11..6)       1        9
+-- esums               6               1       10
+-- spare               6               1       11
+-- ext-cond(63..0)     2               1       12
+-- ext-cond(127..64)   2               1       13
+-- ext-cond(191..128)  2               1       14
+-- ext-cond(255..192)  2               1       15
 --                     (64 bits)
--- muon                2 (1..0)        1
--- muon                2 (3..2)        1
--- muon                2 (5..4)        1
--- muon                2 (7..6)        1
+-- muon                2 (1..0)        1        0
+-- muon                2 (3..2)        1        1
+-- muon                2 (5..4)        1        2
+-- muon                2 (7..6)        1        3
 -- __________________________________________________________
--- Summary             60 (32 bits)    15
+-- Summary             72 (32 bits)    16
 --
 -- Proposed structure of objects (32 bits) within the 192 bits:
---             192.................0
--- e/g         5   4   3   2   1   0
--- e/g         11  10  9   8   7   6
--- jet         5   4   3   2   1   0
--- jet         11  10  9   8   7   6
--- tau         5   4   3   2   1   0
--- tau         x   x   x   x   7   6
--- esums       x   x   HTm ETm HT  ET
--- ext-cond    x   x   x   x   1   0
--- ext-cond    x   x   x   x   3   2
--- ext-cond    x   x   x   x   5   4
--- ext-cond    x   x   x   x   7   6
--- muon        1h  1l  0h  0l  x   x
--- muon        3h  3l  2h  2l  x   x
--- muon        5h  5l  4h  4l  x   x
--- muon        7h  7l  6h  6l  x   x
+--             192...........................0
+-- e/g         5      4     3    2    1      0
+-- e/g         11     10    9    8    7      6
+-- jet         5      4     3    2    1      0
+-- jet         11     10    9    8    7      6
+-- tau         5      4     3    2    1      0
+-- tau         11     10    9    8    7      6
+-- esums       HTmHF  ETmHF HTm* ETm* HT,TC* ET,ETTEM*
+-- ext-cond    x      x     x    x    1      0
+-- ext-cond    x      x     x    x    3      2
+-- ext-cond    x      x     x    x    5      4
+-- ext-cond    x      x     x    x    7      6
+-- muon        1h     1l    0h   0l   x      x
+-- muon        3h     3l    2h   2l   x      x
+-- muon        5h     5l    4h   4l   x      x
+-- muon        7h     7l    6h   6l   x      x
+--
+-- *) in addition 4 MSBs for Minimum Bias bits. TC means "TOWERCNT" (ECAL sum)
 
---     type muon_array_t is array(0 to MUON_ARRAY_LENGTH-1) of std_logic_vector(MUON_DATA_WIDTH-1 downto 0);
---     type eg_array_t is array(0 to EG_ARRAY_LENGTH-1) of std_logic_vector(EG_DATA_WIDTH-1 downto 0);
---     type tau_array_t is array(0 to TAU_ARRAY_LENGTH-1) of std_logic_vector(TAU_DATA_WIDTH-1 downto 0);
---     type jet_array_t is array(0 to JET_ARRAY_LENGTH-1) of std_logic_vector(JET_DATA_WIDTH-1 downto 0);
-
---     type lhc_data_t is record
---         muon : muon_array_t;
---         eg : eg_array_t;
---         tau : tau_array_t;
---         jet : jet_array_t;
---         ett : std_logic_vector(ETT_DATA_WIDTH-1 downto 0);
---         ht : std_logic_vector(HT_DATA_WIDTH-1 downto 0);
---         etm : std_logic_vector(ETM_DATA_WIDTH-1 downto 0);
---         htm : std_logic_vector(HTM_DATA_WIDTH-1 downto 0);
---         external_conditions : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
---     end record;
+-- 	type muon_array_t is array(0 to MUON_ARRAY_LENGTH-1) of std_logic_vector(MUON_DATA_WIDTH-1 downto 0);
+-- 	type eg_array_t is array(0 to EG_ARRAY_LENGTH-1) of std_logic_vector(EG_DATA_WIDTH-1 downto 0);
+-- 	type tau_array_t is array(0 to TAU_ARRAY_LENGTH-1) of std_logic_vector(TAU_DATA_WIDTH-1 downto 0);
+-- 	type jet_array_t is array(0 to JET_ARRAY_LENGTH-1) of std_logic_vector(JET_DATA_WIDTH-1 downto 0);
+-- 
+-- 	type lhc_data_t is record 
+-- 		muon : muon_array_t;
+-- 		eg : eg_array_t;
+-- 		tau : tau_array_t;
+-- 		jet : jet_array_t;
+-- 		ett : std_logic_vector(ETT_DATA_WIDTH-1 downto 0);
+-- 		ht : std_logic_vector(HT_DATA_WIDTH-1 downto 0);
+-- 		etm : std_logic_vector(ETM_DATA_WIDTH-1 downto 0);
+-- 		htm : std_logic_vector(HTM_DATA_WIDTH-1 downto 0);
+-- 		etmhf : std_logic_vector(ETMHF_DATA_WIDTH-1 downto 0);
+-- 		htmhf : std_logic_vector(HTMHF_DATA_WIDTH-1 downto 0);		
+-- 		link_11_fr_0_data : std_logic_vector(LINK_11_FR_0_WIDTH-1 downto 0);
+-- 		link_11_fr_1_data : std_logic_vector(LINK_11_FR_1_WIDTH-1 downto 0);
+-- 		link_11_fr_2_data : std_logic_vector(LINK_11_FR_2_WIDTH-1 downto 0);
+-- 		link_11_fr_3_data : std_logic_vector(LINK_11_FR_3_WIDTH-1 downto 0);
+-- 		link_11_fr_4_data : std_logic_vector(LINK_11_FR_4_WIDTH-1 downto 0);
+-- 		link_11_fr_5_data : std_logic_vector(LINK_11_FR_5_WIDTH-1 downto 0);		
+-- 		external_conditions : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
+-- 	end record; 
+	
 --===============================================================================================--
 
 --===============================================================================================--
 --                                     BEGIN OF DATA-PATH
 --================================================================================================
+
 -- DEMUX LANES
     demux_lane_data_l: for i in 0 to NR_LANES-1 generate
         demux_lane_data_i: entity work.demux_lane_data
@@ -520,12 +433,12 @@ architecture rtl of frame is
             bcres_i => bc0,
             ec0_i => ec0,
             oc0_i => oc0,
-            resync_i => resync,
+            resync_i => '0',
             start_i => start,
             bcres_o => bcres_d_int,
             ec0_o => ec0_d_int,
             oc0_o => oc0_d_int,
-            resync_o => resync_d_int,
+            resync_o => open,
             start_o => start_d_int,
             bcres_fdl_o => bcres_d_FDL_int,
             bcres_outputmux_o => bcres_outputmux,
@@ -562,10 +475,10 @@ architecture rtl of frame is
 --===============================================================================================--
 --                                SIMSPYMEM          lhc_data_slv_i_simulator
 --===============================================================================================--
---     simspy_mem_l: for i in 0 to MEMORY_BLOCKS-1 generate
-      simspy_mem_l: for i in 0 to 59 generate -- 60 memory blocks with LHC_DATA_WIDTH = 1920
-
-      lhc_data_slv_i_simulator( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ) <= lhc_data_slv_i( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH );
+-- HB 2106-05-31: memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd)
+-- 72 memory blocks with LHC_DATA_WIDTH = 2304
+--     simspy_mem_l: for i in 0 to LHC_DATA_WIDTH/SW_DATA_WIDTH-1 generate
+    simspy_mem_l: for i in 0 to 71 generate
 
       simspy_mem_i: entity work.ipb_dpmem_4096_32
          port map(
@@ -578,9 +491,8 @@ architecture rtl of frame is
              enb       => '1',
              web       => spy1, -- spy1 = 1 => spying, spy1 = 0 => simulation data out
              addrb     => bx_nr, -- HB 2014-08-18: no write and no read latency
---             dinb      => lhc_data_slv_i( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ),
-          dinb      => lhc_data_slv_i_simulator( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ),
-             doutb         => lhc_data_slv_o( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH )
+	     dinb      => lhc_data_slv_i( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ),
+             doutb     => lhc_data_slv_o( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH )
          );
      end generate simspy_mem_l;
 
@@ -608,23 +520,8 @@ architecture rtl of frame is
             simmem_in_use_o => simmem_in_use
         );
 
---===============================================================================================--
---                          Deceiding between simulation and synthesize for GTL/ROP
---===============================================================================================--
-      SIMULATE_INTERFACE_i: if SIMULATE_DATAPATH = true generate
-
-      begin
-       dsmux_lhc_data_o        <= lane_data_in_sim;  -- data coming from testbech goes to GTL
-       dsmux_lhc_data_int_rop  <= lane_data_in_sim;
-
-      end generate SIMULATE_INTERFACE_i;
-
-      synthesize_INTERFACE_i: if SIMULATE_DATAPATH = false generate
-
-      begin
-       dsmux_lhc_data_o <= dsmux_lhc_data_int;  -- data to GTL (gtl_fdl_wrapper.vhd)
-       dsmux_lhc_data_int_rop <= dsmux_lhc_data_int;
-      end generate synthesize_INTERFACE_i;
+    dsmux_lhc_data_o <= dsmux_lhc_data_int;  -- data to GTL (gtl_fdl_wrapper.vhd)
+    dsmux_lhc_data_int_rop <= dsmux_lhc_data_int;
 
 --===============================================================================================--
 --                                 spymem2_algos
@@ -633,7 +530,6 @@ architecture rtl of frame is
 -- DATA-PATH: gtl_fdl_wrapper.vhd
 -- SPYMEM2 ALGOS
       spymem2_algos_l: for i in 0 to 15 generate -- 16 memory blocks for 512 algos
-      algo_after_finor_mask_rop_simulator ( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ) <= algo_after_finor_mask_rop( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH );
          spymem2_algos_i: entity work.ipb_dpmem_4096_32
              port map(
                  ipbus_clk => ipb_clk,
@@ -645,8 +541,7 @@ architecture rtl of frame is
                  enb       => '1',
                  web       => spy2,
                  addrb     => bx_nr, -- : no write and no read latency
---                  dinb      => algo_after_finor_mask_rop( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ), -- data from FDL (gtl_fdl_wrapper.vhd)
-                 dinb      => algo_after_finor_mask_rop_simulator ( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ), -- data from FDL (gtl_fdl_wrapper.vhd)
+                 dinb      => algo_after_prescaler_rop ( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ), -- data from FDL (gtl_fdl_wrapper.vhd)
                  doutb     => open
              );
      end generate spymem2_algos_l;
@@ -656,8 +551,8 @@ architecture rtl of frame is
 --===============================================================================================--
 
 -- BR :[Synth 8-1565] actual for formal port dinb is neither a static name nor a globally static expression. It should be fixed
-    local_finor_with_veto_2_spy2_simulator <= (X"0000000" & "000" & local_finor_with_veto_2_spy2);
-     spymem2_finor_i: entity work.ipb_dpmem_4096_32
+    local_finor_with_veto_2_spy2_int <= (X"0000000" & "000" & local_finor_with_veto_2_spy2);
+    spymem2_finor_i: entity work.ipb_dpmem_4096_32
          port map(
              ipbus_clk => ipb_clk,
              reset     => ipb_rst,
@@ -668,16 +563,14 @@ architecture rtl of frame is
              enb       => '1',
              web       => spy2,
              addrb     => bx_nr, -- HB 2014-08-18: no write and no read latency
--- added local_finor_with_veto_2_spy2, which comes from fdl_module.vhd and is the local combination of local_finor with local_veto. Not routed to ROP.
---              dinb      => (X"0000000" & "000" & local_finor_with_veto_2_spy2), -- data from FDL (gtl_fdl_wrapper.vhd) - only bit 0 => local_finor_with_veto_2_spy2
-         dinb      => local_finor_with_veto_2_spy2_simulator,
+	     dinb      => local_finor_with_veto_2_spy2_int,
              doutb     => open
          );
-
 
 --===============================================================================================--
 --                              Output multiplexer -- GTL/FDL data to Tx-buffer
 --===============================================================================================--
+
     output_mux_i: entity work.output_mux
         generic map(
             NR_LANES => NR_LANES
@@ -689,10 +582,9 @@ architecture rtl of frame is
             ctrs        => ctrs,
             bx_nr       => bx_nr,
             bx_nr_fdl   => bx_nr_d_FDL_int,
-            --ttc_bx_cntr => ctrs(0).bctr,
-            algo_before_prescaler   => algo_after_bxomask_rop,
-            algo_after_prescaler   => algo_after_prescaler_rop,
-            algo_after_finor   => algo_after_finor_mask_rop,
+            algo_after_gtLogic   => algo_after_gtLogic_rop,
+            algo_after_bxomask   => algo_after_bxomask_rop,
+            algo_after_prescaler => algo_after_prescaler_rop,
             local_finor_in      => local_finor_rop,
             local_veto_in       => local_veto_rop,
             local_finor_veto_in => local_finor_with_veto_2_spy2,

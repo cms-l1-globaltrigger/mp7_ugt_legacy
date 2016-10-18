@@ -14,6 +14,8 @@
 -- $Revision: 0.1  $
 --------------------------------------------------------------------------------
 --
+-- HB 2016-10-11: signals finor_2_mezz_lemo and veto_2_mezz_lemo for IOB output FF. Connected directly to gpio without tp_mux. 
+--                Removed finor_2_mezz_lemo and veto_2_mezz_lemo from tp_mux. Signals local_finor_rop and local_veto_rop used for tp_mux.
 -- HB 2016-09-01: added BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490)
 -- HB 2016-04-06: used "algo_after_gtLogic" for read-out-record (changed "algo_before_prescaler" to "algo_after_bxomask") according to fdl_module v0.0.24.
 -- HB 2016-02-26: changed inputs of tp_mux.vhd, removed unused signals in frame (v0.0.36) and fdl_module (v0.0.20)
@@ -70,7 +72,6 @@ architecture rtl of mp7_payload is
     signal algo_after_gtLogic_rop        : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal algo_after_bxomask_rop        : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal algo_after_prescaler_rop      : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-    signal algo_after_finor_mask_rop     : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal local_finor_rop               : std_logic;
     signal local_veto_rop                : std_logic;
     signal local_finor_with_veto_o       : std_logic;
@@ -91,12 +92,10 @@ architecture rtl of mp7_payload is
     signal bc0_in             : std_logic;
     signal ec0_int            : std_logic;
     signal oc0_int            : std_logic;
-    signal resync_int         : std_logic;
     signal start_int          : std_logic;
     signal test_en_int        : std_logic;
     signal ec0_sync_bc0_int   : std_logic;
     signal oc0_sync_bc0_int   : std_logic;
-    signal resync_sync_bc0_int: std_logic;
     signal start_sync_bc0_int : std_logic;
 
     signal lane_data_in      : ldata(4 * N_REGION - 1 downto 0);
@@ -144,8 +143,8 @@ begin
         ec0_sync_bc0_out     => ec0_sync_bc0_int,
         oc0_out     => oc0_int,
         oc0_sync_bc0_out     => oc0_sync_bc0_int,
-        resync_out  => resync_int,
-        resync_sync_bc0_out     => resync_sync_bc0_int,
+        resync_out  => open,
+        resync_sync_bc0_out     => open,
         start_out  => start_int,
         start_sync_bc0_out  => start_sync_bc0_int,
         test_en_out  => test_en_int
@@ -162,7 +161,7 @@ begin
       ipb_to_slaves => ipb_to_slaves,
       ipb_from_slaves => ipb_from_slaves
     );
-
+    
     frame_i: entity work.frame
     generic map(
         NR_LANES            => (4 * N_REGION),
@@ -173,21 +172,7 @@ begin
         ipb_rst            => ipb_rst,
         ipb_in             => ipb_to_slaves(C_IPB_GT_MP7_FRAME),
         ipb_out            => ipb_from_slaves(C_IPB_GT_MP7_FRAME),
--- ====================Simulator interface===============================
-        lane_data_in_sim	=>  LHC_DATA_NULL,
-        lhc_rst_sim         => '0',
-        rop_rst_sim         => '0',
         ctrs                => ctrs,
-        trigger_nr_sim          => (others => '0'),
-        orbit_nr_sim            => (others => '0'),
-        bx_nr_sim               => (others => '0'),
-        luminosity_seg_nr_sim   => (others => '0'),
-        event_nr_sim            => (others => '0'),
-        l1a_sim             => '0',
-        daq_oe_sim          => open,
-        daq_stop_sim        => open,
-        daq_data_sim        => open,
--- ====================end of Simulator interface========================
         clk240             => clk240,
         lhc_clk            => lhc_clk,
         lhc_rst_o          => lhc_rst,
@@ -195,7 +180,6 @@ begin
 -- HB 2016-03-29: used xxx_sync_bc0_int for BGos in TCM
         ec0             => ec0_sync_bc0_int,
         oc0             => oc0_sync_bc0_int,
-        resync          => resync_sync_bc0_int,
         start           => start_sync_bc0_int,
         l1a                => l1a_int,
         bcres_d            => bcres_d,
@@ -208,7 +192,6 @@ begin
         algo_after_gtLogic_rop          => algo_after_gtLogic_rop,
         algo_after_bxomask_rop          => algo_after_bxomask_rop,
         algo_after_prescaler_rop        => algo_after_prescaler_rop,
-        algo_after_finor_mask_rop       => algo_after_finor_mask_rop,
         local_finor_rop                 => local_finor_rop,
         local_veto_rop                  => local_veto_rop, -- HB 2014-10-22: added for ROP
         finor_rop                       => '0', -- HB 2014-10-30: no total_finor to ROP
@@ -233,7 +216,6 @@ begin
         algo_after_gtLogic_rop          => algo_after_gtLogic_rop,
         algo_after_bxomask_rop          => algo_after_bxomask_rop,
         algo_after_prescaler_rop        => algo_after_prescaler_rop,
-        algo_after_finor_mask_rop       => algo_after_finor_mask_rop,
         local_finor_rop         => local_finor_rop,
         local_veto_rop          => local_veto_rop,
         finor_2_mezz_lemo      => finor_2_mezz_lemo,
@@ -253,8 +235,9 @@ begin
         clk_p           => clk240,
         bc0             => bc0_in,
         l1a             => l1a_int,
-        local_finor     => finor_2_mezz_lemo,
-        local_veto      => veto_2_mezz_lemo,
+-- HB 2016-09-30: removed finor_2_mezz_lemo and veto_2_mezz_lemo from tp_mux. Used local_finor_rop and local_veto_rop for tests.
+        local_finor     => local_finor_rop,
+        local_veto      => local_veto_rop,
         finor_w_veto_local => finor_w_veto_2_mezz_lemo,
         start_lumisection => start_lumisection,
         bcres_d         => bcres_d,
@@ -263,18 +246,18 @@ begin
         ec0_sync_bc0    => ec0_sync_bc0_int,
         oc0             => oc0_int,
         oc0_sync_bc0    => oc0_sync_bc0_int,
-        resync          => resync_int,
-        resync_sync_bc0 => resync_sync_bc0_int,
         start           => start_int,
         start_sync_bc0  => start_sync_bc0_int,
         test_en         => test_en_int,
-        out0            => tp0,
-        out1            => tp1,
+        out0            => open,
+        out1            => open,
         out2            => tp2
     );
 
-    gpio(0) <= tp0; -- per default: finor_2_mezz_lemo
-    gpio(1) <= tp1; -- per default: finor_2_mezz_lemo
+--     gpio(0) <= tp0; -- per default: finor_2_mezz_lemo
+--     gpio(1) <= tp1; -- per default: finor_2_mezz_lemo
+    gpio(0) <= finor_2_mezz_lemo;
+    gpio(1) <= veto_2_mezz_lemo;
     gpio(2) <= tp2; -- per default: finor_2_mezz_lemo
     gpio_en(0) <= '1'; --enable output 0
     gpio_en(1) <= '1'; --enable output 1

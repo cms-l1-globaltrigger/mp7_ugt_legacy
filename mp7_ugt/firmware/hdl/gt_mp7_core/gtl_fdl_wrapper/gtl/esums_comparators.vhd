@@ -17,6 +17,7 @@
 -- Desription:
 
 -- Version history:
+-- HB 2015-06-29: updated for "ettem" and "etmhf"
 -- HB 2015-12-09: removed clk - not needed
 -- HB 2015-05-29: removed "use work.gtl_lib.all;" - using "entity work.xxx" for instances
 
@@ -60,17 +61,25 @@ architecture rtl of esums_comparators is
     signal et_htm : std_logic_vector(D_S_I_HTM.et_high-D_S_I_HTM.et_low downto 0);
     signal phi_htm : std_logic_vector(D_S_I_HTM.phi_high-D_S_I_HTM.phi_low downto 0);
 
+-- HB 2016-06-07: inserted new esums quantities (ETTEM and ETMHF).
+    signal et_ettem : std_logic_vector(D_S_I_ETTEM.et_high-D_S_I_ETTEM.et_low downto 0);
+
+    signal et_etmhf : std_logic_vector(D_S_I_ETMHF.et_high-D_S_I_ETMHF.et_low downto 0);
+    signal phi_etmhf : std_logic_vector(D_S_I_ETMHF.phi_high-D_S_I_ETMHF.phi_low downto 0);
+
     signal et_comp : std_logic;
     signal phi_comp : std_logic := '0';
 
     signal no_esums : std_logic;
 
 begin
--- HB 2015-04-27: used integer for obj_type
+-- HB 2015-06-29: used integer for obj_type
 -- ett_obj_type=0
 -- htt_obj_type=1
 -- etm_obj_type=2
 -- htm_obj_type=3
+-- ettem_obj_type=4
+-- etmhf_obj_type=5
     
 -- HB 2015-08-28: inserted "no calo" (all object parameters = 0)
     no_esums <= '1' when data_i = ZERO else '0';
@@ -83,7 +92,7 @@ begin
         et_comp <= '1' when (et_ett >= et_threshold) and et_ge_mode else            
                    '1' when (et_ett = et_threshold) and not et_ge_mode else '0';            
     
-        comp_o <= et_comp;   
+        comp_o <= et_comp and not no_esums;   
 
     end generate ett_sel;
     
@@ -93,7 +102,7 @@ begin
         et_comp <= '1' when (et_htt >= et_threshold) and et_ge_mode else            
                    '1' when (et_htt = et_threshold) and not et_ge_mode  else '0';            
     
-        comp_o <= et_comp;   
+        comp_o <= et_comp and not no_esums;   
 
     end generate htt_sel;
     
@@ -119,7 +128,7 @@ begin
 		phi_comp_o => phi_comp
 	    );
 	
-	comp_o <= et_comp and phi_comp;   
+	comp_o <= et_comp and phi_comp and not no_esums;   
 
     end generate etm_sel;
 
@@ -148,4 +157,41 @@ begin
         
     end generate htm_sel;
         
+    ettem_sel: if obj_type=4 generate
+        et_ettem  <= data_i(D_S_I_ETTEM.et_high downto D_S_I_ETTEM.et_low);
+    
+-- Comparator for energy (et)
+        et_comp <= '1' when (et_ettem >= et_threshold) and et_ge_mode else            
+                   '1' when (et_ettem = et_threshold) and not et_ge_mode else '0';            
+    
+        comp_o <= et_comp;   
+
+    end generate ettem_sel;
+    
+    etmhf_sel: if obj_type=5 generate
+        et_etmhf  <= data_i(D_S_I_ETMHF.et_high downto D_S_I_ETMHF.et_low);
+	phi_etmhf <= data_i(D_S_I_ETMHF.phi_high downto D_S_I_ETMHF.phi_low);
+    
+        et_comp <= '1' when (et_etmhf >= et_threshold) and et_ge_mode else            
+                   '1' when (et_etmhf = et_threshold) and not et_ge_mode else '0';            
+    
+-- Phi windows comparator (same module as used in calo_conditions_v2)
+        phi_windows_comp_i: entity work.phi_windows_comp
+	    generic map(
+                phi_full_range => phi_full_range,
+                phi_w1_upper_limit => phi_w1_upper_limit,
+		phi_w1_lower_limit => phi_w1_lower_limit,
+                phi_w2_ignore => phi_w2_ignore,
+                phi_w2_upper_limit => phi_w2_upper_limit,
+                phi_w2_lower_limit => phi_w2_lower_limit
+	    )
+	    port map(
+		phi => phi_etmhf,
+		phi_comp_o => phi_comp
+	    );
+	
+	comp_o <= et_comp and phi_comp and not no_esums;   
+
+    end generate etmhf_sel;
+
 end architecture rtl;

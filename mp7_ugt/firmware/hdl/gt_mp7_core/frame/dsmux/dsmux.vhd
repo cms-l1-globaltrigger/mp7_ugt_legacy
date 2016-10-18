@@ -60,7 +60,10 @@ architecture arch of dsmux is
 begin
 
 	src_bits_array_in <= (sw_reg_i.muon_src, sw_reg_i.eg_src, sw_reg_i.tau_src, sw_reg_i.jet_src,
-	                      sw_reg_i.ett_src,  sw_reg_i.ht_src, sw_reg_i.etm_src, sw_reg_i.htm_src,
+	                      sw_reg_i.ett_src, sw_reg_i.ht_src, sw_reg_i.etm_src, sw_reg_i.htm_src,
+	                      sw_reg_i.ett_src, sw_reg_i.ett_src, -- dummy for ETMHF and HTMHF
+	                      sw_reg_i.ett_src, sw_reg_i.ett_src, sw_reg_i.ett_src, sw_reg_i.ett_src,  
+	                      sw_reg_i.ett_src, sw_reg_i.ett_src, -- dummy for link 11 (6 frames)
 	                      sw_reg_i.ext_con_src);
 	
 	process(sw_reg_i, src_bits_array_internal, lhc_data_ext_i, lhc_data_sim_i)

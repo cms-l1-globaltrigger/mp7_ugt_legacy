@@ -72,9 +72,8 @@ begin
     resync_in  <= '1' when ttc_in = TTC_BCMD_RESYNC else '0';
     start_in   <= '1' when ttc_in = TTC_BCMD_START else '0';
 -- HB 2016-06-17: BGo test-enable (used to prevent counting algos caused by calibration trigger)
--- definition in tags/mp7/stable/firmware/mp7fw_v2_0_6/../mp7_ttc/../mp7_ttc_decl.vhd !!! (email Greg Iles 2016-06-28)
---     test_en_in <= '1' when ttc_in = TTC_BCMD_TEST_ENABLE else '0';
-    test_en_in <= '1' when ttc_in = X"12" else '0';
+-- definition in tags/mp7/stable/firmware/mp7fw_v2_2_0/../mp7_ttc/../mp7_ttc_decl.vhd !!! (email Greg Iles 2016-06-28)
+    test_en_in <= '1' when ttc_in = TTC_BCMD_TEST_ENABLE else '0';
 
 --     sync_bgos_p: process(clk_payload, rst_payload, bc0_in, ec0_in, oc0_in, resync_in, start_in)
     sync_bgos_p: process(clk_payload, rst_payload, bc0_in, ec0_in, oc0_in, resync_in, start_in, test_en_in)

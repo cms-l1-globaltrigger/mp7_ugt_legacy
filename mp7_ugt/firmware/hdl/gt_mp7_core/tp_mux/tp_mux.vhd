@@ -14,6 +14,7 @@
 -- $Revision: 0.1  $
 --------------------------------------------------------------------------------
 --
+-- HB 2016-09-19: removed BGo "resync"
 -- HB 2016-06-17: added BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490)
 -- HB 2016-03-17: added outputs for synchronized BGos (with bc0)
 -- HB 2016-03-10: added ec0, oc0, resync, start and stop signals for tcm v0.0.37 test
@@ -51,8 +52,6 @@ entity tp_mux is
         ec0_sync_bc0: in std_logic;
         oc0: in std_logic;
         oc0_sync_bc0: in std_logic;
-        resync: in std_logic;
-        resync_sync_bc0: in std_logic;
         start: in std_logic;
         start_sync_bc0: in std_logic;
         test_en: in std_logic;
@@ -120,12 +119,10 @@ begin
 -- HB 2016-03-04: added BGos for tests - not in SWATCH
                 ec0                     when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"0C"     else    --EC0 from MP7 TTC
                 oc0                     when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"0D"     else    --OC0 from MP7 TTC
-                resync                  when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"0E"     else    --RESYNC from MP7 TTC
                 start                   when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"0F"     else    --START from MP7 TTC
                 oc0_sync_bc0            when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"11"     else    --OC0 synchronized with BC0
                 start_sync_bc0          when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"12"     else    --START synchronized with BC0
                 ec0_sync_bc0            when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"13"     else    --EC0 synchronized with BC0
-                resync_sync_bc0         when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"14"     else    --RESYNC synchronized with BC0
                 test_en                 when    input_regs(TP_MUX_INDEX)(7 downto 0)     =   X"15"     else    --TEST ENABLE from MP7 TTC
                 '0';
 
@@ -144,12 +141,10 @@ begin
 -- HB 2016-03-04: added BGos for tests - not in SWATCH
                 ec0                     when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"0C"     else
                 oc0                     when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"0D"     else
-                resync                  when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"0E"     else
                 start                   when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"0F"     else
                 oc0_sync_bc0            when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"11"     else
                 start_sync_bc0          when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"12"     else
                 ec0_sync_bc0            when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"13"     else
-                resync_sync_bc0         when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"14"     else
                 test_en                 when    input_regs(TP_MUX_INDEX)(15 downto 8)     =   X"15"     else
                 '0';
 
@@ -168,12 +163,10 @@ begin
 -- HB 2016-03-04: added BGos for tests - not in SWATCH
                 ec0                     when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"0C"     else
                 oc0                     when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"0D"     else
-                resync                  when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"0E"     else
                 start                   when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"0F"     else
                 oc0_sync_bc0            when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"11"     else
                 start_sync_bc0          when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"12"     else
                 ec0_sync_bc0            when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"13"     else
-                resync_sync_bc0         when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"14"     else
                 test_en                 when    input_regs(TP_MUX_INDEX)(23 downto 16)     =   X"15"     else
                 '0';
 

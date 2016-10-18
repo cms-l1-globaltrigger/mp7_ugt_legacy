@@ -15,6 +15,7 @@
 --------------------------------------------------------------------------------
 
 -- Version-history:
+-- HB 2016-09-16: removed algo_after_finor_mask_rop, not used anymore in read-out record. Inserted new esums.
 -- HB 2016-09-01: added BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490) for fdl_module.
 -- HB 2016-04-06: used algo_mapping_rop with "algo_after_gtLogic" for read-out-record (changed "algo_before_prescaler" to "algo_after_bxomask") according to fdl_module v0.0.24.
 -- HB 2016-02-26: inserted finor_w_veto_2_mezz_lemo with 1.5bx delay. Removed unused inputs (ec0, oc0, etc.) and fdl_status output (see fdl_module v0.0.20).
@@ -59,7 +60,8 @@ entity gtl_fdl_wrapper is
         algo_after_gtLogic_rop        : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_bxomask_rop        : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-        algo_after_finor_mask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+-- HB 2016-09-01: removed algo_after_finor_mask_rop, not used anymore in read-out record.
+--         algo_after_finor_mask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         local_finor_rop     : out std_logic;
         local_veto_rop      : out std_logic;
         finor_2_mezz_lemo      : out std_logic;
@@ -89,7 +91,12 @@ architecture rtl of gtl_fdl_wrapper is
     signal mbt1hfm_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
     signal mbt0hfp_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
     signal mbt0hfm_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
-    
+-- HB 2016-09-16: inserted new esums
+    signal ettem_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
+    signal etmhf_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
+    signal htmhf_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
+    signal towercount_temp : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0) := (others => '0');
+
 begin
 
     eg_temp_l: for i in 0 to NR_EG_OBJECTS-1 generate
@@ -126,6 +133,11 @@ begin
     ht_temp(D_S_I_HTT_V2.et_high downto D_S_I_HTT_V2.et_low) <= lhc_data.ht(D_S_I_HTT_V2.et_high downto D_S_I_HTT_V2.et_low);
     etm_temp(D_S_I_ETM_V2.phi_high downto D_S_I_ETM_V2.et_low) <= lhc_data.etm(D_S_I_ETM_V2.phi_high downto D_S_I_ETM_V2.et_low);
     htm_temp(D_S_I_HTM_V2.phi_high downto D_S_I_HTM_V2.et_low) <= lhc_data.htm(D_S_I_HTM_V2.phi_high downto D_S_I_HTM_V2.et_low);
+-- HB 2016-09-16: inserted new esums
+    ettem_temp(D_S_I_ETTEM_V2.et_high downto D_S_I_ETTEM_V2.et_low) <= lhc_data.ett(ETTEM_IN_ETT_HIGH downto ETTEM_IN_ETT_LOW);
+    etmhf_temp(D_S_I_ETMHF_V2.phi_high downto D_S_I_ETMHF_V2.et_low) <= lhc_data.etmhf(D_S_I_ETMHF_V2.phi_high downto D_S_I_ETMHF_V2.et_low);
+    htmhf_temp(D_S_I_HTMHF_V2.phi_high downto D_S_I_HTMHF_V2.et_low) <= lhc_data.htmhf(D_S_I_HTMHF_V2.phi_high downto D_S_I_HTMHF_V2.et_low);
+    towercount_temp(D_S_I_TOWERCOUNT_V2.count_high-D_S_I_TOWERCOUNT_V2.count_low downto 0) <= lhc_data.ht(TOWERCOUNT_IN_HTT_HIGH downto TOWERCOUNT_IN_HTT_LOW);
 
     mbt0hfp_temp(D_S_I_MBT0HFP_V2.count_high downto D_S_I_MBT0HFP_V2.count_low) <= lhc_data.ett(MBT0HFP_IN_ETT_HIGH downto MBT0HFP_IN_ETT_LOW);
     mbt0hfm_temp(D_S_I_MBT0HFM_V2.count_high downto D_S_I_MBT0HFM_V2.count_low) <= lhc_data.ht(MBT0HFM_IN_HTT_HIGH downto MBT0HFM_IN_HTT_LOW);
@@ -152,6 +164,11 @@ gtl_module_i: entity work.gtl_module
         mbt1hfm_data    => mbt1hfm_temp,
         mbt0hfp_data    => mbt0hfp_temp,
         mbt0hfm_data    => mbt0hfm_temp,
+-- HB 2016-09-16: inserted new esums
+        ettem_data      => ettem_temp,
+        etmhf_data      => etmhf_temp,
+        htmhf_data      => htmhf_temp,
+        towercount_data => towercount_temp,
 -- ****************************************************************************************
         muon_data       => muon_temp,
         external_conditions => ext_cond_temp,
@@ -181,7 +198,7 @@ fdl_module_i: entity work.fdl_module
         algo_after_gtLogic_rop => algo_after_gtLogic_rop,
         algo_after_bxomask_rop => algo_after_bxomask_rop,
         algo_after_prescaler_rop  => algo_after_prescaler_rop,
-        algo_after_finor_mask_rop => algo_after_finor_mask_rop,
+--         algo_after_finor_mask_rop => algo_after_finor_mask_rop,
         local_finor_rop => local_finor_rop,
         local_veto_rop  => local_veto_rop,
         finor_2_mezz_lemo  => finor_2_mezz_lemo,

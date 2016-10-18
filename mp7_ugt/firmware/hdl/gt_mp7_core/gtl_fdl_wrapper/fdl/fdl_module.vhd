@@ -1,23 +1,10 @@
---------------------------------------------------------------------------------
--- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Synthese
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/src/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd $
--- $Date: 2015-08-14 10:57:16 +0200 (Fre, 14 Aug 2015) $
--- $Author: bergauer $
--- $Revision: 4148 $
---------------------------------------------------------------------------------
-
 -- Desription:
 -- FDL structure
 
 -- Version-history:
+-- HB 2016-10-11: v1.1.0 - based on v1.0.3, but inserted extra FF for finor_2_mezz_lemo and veto_2_mezz_lemo for IOB output FF.
+-- HB 2016-09-19: v1.0.3 - based on v1.0.2, but module algo_mapping_rop.vhd moved to "fix" part (no template anymore for algo_mapping_rop.vhd).
+-- HB 2016-09-12: v1.0.2 - based on v1.0.1, but removed algo_after_finor_mask_rop, not used anymore in read-out record.
 -- HB 2016-09-02: v1.0.1 - based on v1.0.0, but bug fixed at algo_after_finor_mask_rop.
 -- HB 2016-08-31: v1.0.0 - based on v0.0.31, but renamed rate_cnt_after_finor_mask to rate_cnt_after_prescaler and removed finor mask logic (in algo_slice.vhd).
 --                         Kept "algo_after_finor_mask" port, used algo_after_prescaler for this port. Kept "algo_after_finor_mask_rop" port, used algo_after_prescaler_rop for this port.
@@ -105,15 +92,13 @@ entity fdl_module is
         algo_after_gtLogic_rop  : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_bxomask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-        algo_after_finor_mask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+--         algo_after_finor_mask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         local_finor_rop     : out std_logic;
         local_veto_rop      : out std_logic;
         finor_2_mezz_lemo      : out std_logic; -- to tp_mux.vhd
         veto_2_mezz_lemo      : out std_logic; -- to tp_mux.vhd
         finor_w_veto_2_mezz_lemo      : out std_logic; -- to tp_mux.vhd
 	local_finor_with_veto_o       : out std_logic; -- to SPY2_FINOR
--- -- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
---         algo_bx_mask_sim    : in std_logic_vector(NR_ALGOS-1 downto 0)
 -- HB 2016-03-02: v0.0.21 - algo_bx_mask_sim input for simulation use with MAX_NR_ALGOS (because of global index).
         algo_bx_mask_sim    : in std_logic_vector(MAX_NR_ALGOS-1 downto 0)
     );
@@ -173,7 +158,7 @@ architecture rtl of fdl_module is
 
     signal algo_after_bxomask : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
     signal algo_after_prescaler : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
-    signal algo_after_finor_mask : std_logic_vector(NR_ALGOS-1 downto 0);
+--     signal algo_after_finor_mask : std_logic_vector(NR_ALGOS-1 downto 0);
     signal veto : std_logic_vector(NR_ALGOS-1 downto 0);
     signal local_finor : std_logic := '0';
     signal local_veto : std_logic := '0';
@@ -209,6 +194,12 @@ architecture rtl of fdl_module is
 
     signal test_en_occurred : std_logic;
     signal suppress_cal_trigger : std_logic;
+
+-- HB 2016-10-11: "... DONT_TOUCH is forward annotated to place and route to prevent logic optimization." (UG901/pg.33)
+--                Used to implement output registers for finor_2_mezz_lemo [mezz(0)] and veto_2_mezz_lemo [mezz(1)] in IOB.
+    signal finor_2_mezz_lemo_tmp, veto_2_mezz_lemo_tmp : std_logic;
+    attribute dont_touch : string;
+    attribute dont_touch of finor_2_mezz_lemo_tmp, veto_2_mezz_lemo_tmp : signal is "true";
 
 begin
 
@@ -718,11 +709,16 @@ begin
     local_finor_with_veto_o <= local_finor_pipe and not local_veto_pipe;
 
 -- HB 2016-02-26: local finor and local veto to tp_mux for LEMO connectors
--- HB 2016-06-10: tested using "local_finor_pipe" for "finor_2_mezz_lemo" (instead of "local_finor"), same for veto.
---     finor_2_mezz_lemo <= local_finor;
---     veto_2_mezz_lemo <= local_veto;
-    finor_2_mezz_lemo <= local_finor_pipe;
-    veto_2_mezz_lemo <= local_veto_pipe;
+-- HB 2016-10-11: for FFs in IOBs for gpio(0) and gpio(1).
+    finor_2_mezz_lemo_tmp <= local_finor; -- finor_2_mezz_lemo_tmp needed for DONT_TOUCH attribute to get finor_2_mezz_lemoin IOB
+    veto_2_mezz_lemo_tmp <= local_veto;
+    finor_veto_2_mezz_p: process(lhc_clk, finor_2_mezz_lemo_tmp, veto_2_mezz_lemo_tmp)
+        begin
+        if (lhc_clk'event and (lhc_clk = '1')) then
+            finor_2_mezz_lemo <= finor_2_mezz_lemo_tmp;
+            veto_2_mezz_lemo <= veto_2_mezz_lemo_tmp;
+        end if;
+    end process;
         
 -------------------------------------------------------------------------------------------------------------------------------------
 -- Pipeline stages for "simulating" the stages of FINOR-AMC502, to get the same latency for both possibilities of connecting to TCDS.
@@ -813,12 +809,9 @@ begin
             algo_after_gtLogic => algo_int,
             algo_after_bxomask => algo_after_bxomask,
             algo_after_prescaler => algo_after_prescaler,
--- HB 2016-08-31: removed logic with finor_mask. Kept "algo_after_finor_mask" port, used algo_after_prescaler for this port
-            algo_after_finor_mask => algo_after_prescaler,
             algo_after_gtLogic_rop => algo_after_gtLogic_rop,
             algo_after_bxomask_rop => algo_after_bxomask_rop,
-            algo_after_prescaler_rop => algo_after_prescaler_rop,
-            algo_after_finor_mask_rop => algo_after_finor_mask_rop
+            algo_after_prescaler_rop => algo_after_prescaler_rop
         );
     
 end architecture rtl;

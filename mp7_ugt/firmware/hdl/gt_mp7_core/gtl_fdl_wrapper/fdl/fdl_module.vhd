@@ -2,6 +2,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2016-10-24: v1.1.1 - based on v1.1.0, but inserted register for "updated prescale factor index" and "lumi section number" for monitoring (N-1).
 -- HB 2016-10-11: v1.1.0 - based on v1.0.3, but inserted extra FF for finor_2_mezz_lemo and veto_2_mezz_lemo for IOB output FF.
 -- HB 2016-09-19: v1.0.3 - based on v1.0.2, but module algo_mapping_rop.vhd moved to "fix" part (no template anymore for algo_mapping_rop.vhd).
 -- HB 2016-09-12: v1.0.2 - based on v1.0.1, but removed algo_after_finor_mask_rop, not used anymore in read-out record.
@@ -170,7 +171,7 @@ architecture rtl of fdl_module is
     signal sync_en_algo_bx_mem : std_logic := '0';
 
     signal request_update_factor_pulse : std_logic;
-    signal prescale_factor_set_index_reg_updated : ipb_regs_array(0 to 0) := (others => (others => '0'));
+    signal prescale_factor_set_index_reg_updated : ipb_regs_array(0 to 1) := (others => (others => '0'));
 
     signal finor_with_veto_temp1 : std_logic;
     signal finor_with_veto_temp2 : std_logic;
@@ -466,7 +467,7 @@ begin
         regs_o => prescale_factor_set_index_reg
     );
 
-    prescale_factor_set_index_update_i: entity work.update_process
+    prescale_factor_set_index_update_0_i: entity work.update_process
         generic map(
             WIDTH => PRESCALE_FACTOR_SET_INDEX_WIDTH,
             INIT_VALUE => X"00000000"
@@ -481,14 +482,29 @@ begin
         
     prescale_factor_set_index_rop <= prescale_factor_set_index_reg_updated(0)(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0);
 
+-- HB 2016-10-24: inserted for monitoring to store previous prescale_factor_set_index_updated (N-1).
+    prescale_factor_set_index_update_1_i: entity work.update_process
+        generic map(
+            WIDTH => PRESCALE_FACTOR_SET_INDEX_WIDTH,
+            INIT_VALUE => X"00000000"
+        )
+        port map( 
+            clk => lhc_clk,
+            request_update_pulse => '1', -- no update pulse requested, updated with every begin_lumi_section
+            update_pulse => begin_lumi_section,
+            data_i => prescale_factor_set_index_reg_updated(0)(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0),
+            data_o => prescale_factor_set_index_reg_updated(1)(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0)
+        );
+        
 -- Read register for updated prescale factor index
 -- HB 2016-04-06: requested for monitoring by TM
-    prescale_factor_set_index_updated_i: entity work.ipb_read_regs
+-- HB 2016-10-24: inserted prescale_factor_set_index_reg_updated(1) for monitoring.
+    prescale_factor_set_index_updated_reg_i: entity work.ipb_read_regs
     generic map
     (
-        addr_width => 1,
+        addr_width => 2,
         regs_beg_index => 0,
-        regs_end_index => 0
+        regs_end_index => 1
     )
     port map
     (

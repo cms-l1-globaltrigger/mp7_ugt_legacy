@@ -128,7 +128,7 @@ package body fdl_addr_decode is
         elsif std_match(addr, "1001000000001001001000100000000-") then sel := C_IPB_L1A_LATENCY_DELAY; -- 0x90092200
         elsif std_match(addr, "10010000000010010011000000000000") then sel := C_IPB_RATE_CNT_L1A; -- 0x90093000
         elsif std_match(addr, "10010000000010010100000000000000") then sel := C_IPB_RATE_CNT_VETO; -- 0x90094000
-        elsif std_match(addr, "10010000000010010101000000000000") then sel := C_IPB_PRESCALE_FACTOR_SET_INDEX_UPDATED; -- 0x90095000
+        elsif std_match(addr, "1001000000001001010100000000000-") then sel := C_IPB_PRESCALE_FACTOR_SET_INDEX_UPDATED; -- 0x90095000
         elsif std_match(addr, "1001000000001001011000000000000-") then sel := C_IPB_CAL_TRIGGER_GAP; -- 0x90096000
 		else sel := 99;
 		end if;

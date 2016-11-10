@@ -579,10 +579,10 @@ type tau_htm_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natura
 -- type muon_pt_lut_array is array (0 to 2**(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low+1)-1) of natural range 0 to 2545;
 -- HB 2016-04-07: TM updated LUTs for PTto the center of bins, so max. values increased by 3 
 -- (bin width = 0.5 => 0.5/2 = 0.25 => selected 0.3, multiplied by 10 because of one digit after comma)
-type eg_pt_lut_array is array (0 to 2**(D_S_I_EG_V2.et_high-D_S_I_EG_V2.et_low+1)-1) of natural range 0 to 2548;
-type jet_pt_lut_array is array (0 to 2**(D_S_I_JET_V2.et_high-D_S_I_JET_V2.et_low+1)-1) of natural range 0 to 10228;
-type tau_pt_lut_array is array (0 to 2**(D_S_I_TAU_V2.et_high-D_S_I_TAU_V2.et_low+1)-1) of natural range 0 to 2548;
-type muon_pt_lut_array is array (0 to 2**(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low+1)-1) of natural range 0 to 2548;
+type eg_pt_lut_array is array (0 to 2**(D_S_I_EG_V2.et_high-D_S_I_EG_V2.et_low+1)-1) of natural range 0 to 2555;
+type jet_pt_lut_array is array (0 to 2**(D_S_I_JET_V2.et_high-D_S_I_JET_V2.et_low+1)-1) of natural range 0 to 10235;
+type tau_pt_lut_array is array (0 to 2**(D_S_I_TAU_V2.et_high-D_S_I_TAU_V2.et_low+1)-1) of natural range 0 to 2555;
+type muon_pt_lut_array is array (0 to 2**(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low+1)-1) of natural range 0 to 2555;
 type eg_eg_cosh_deta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 10597282;
 type eg_jet_cosh_deta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 10597282;
 type eg_tau_cosh_deta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 10597282;
@@ -1782,7 +1782,7 @@ constant EG_PT_LUT : eg_pt_lut_array := (
 2243, 2248, 2253, 2258, 2263, 2268, 2273, 2278, 2283, 2288, 2293, 2298, 2303, 2308, 2313, 2318,
 2323, 2328, 2333, 2338, 2343, 2348, 2353, 2358, 2363, 2368, 2373, 2378, 2383, 2388, 2393, 2398,
 2403, 2408, 2413, 2418, 2423, 2428, 2433, 2438, 2443, 2448, 2453, 2458, 2463, 2468, 2473, 2478,
-2483, 2488, 2493, 2498, 2503, 2508, 2513, 2518, 2523, 2528, 2533, 2538, 2543, 2548, 0, 0
+2483, 2488, 2493, 2498, 2503, 2508, 2513, 2518, 2523, 2528, 2533, 2538, 2543, 2548, 2555, 2555
 );
 
 constant TAU_PT_LUT : tau_pt_lut_array := (
@@ -1817,7 +1817,7 @@ constant TAU_PT_LUT : tau_pt_lut_array := (
 2243, 2248, 2253, 2258, 2263, 2268, 2273, 2278, 2283, 2288, 2293, 2298, 2303, 2308, 2313, 2318,
 2323, 2328, 2333, 2338, 2343, 2348, 2353, 2358, 2363, 2368, 2373, 2378, 2383, 2388, 2393, 2398,
 2403, 2408, 2413, 2418, 2423, 2428, 2433, 2438, 2443, 2448, 2453, 2458, 2463, 2468, 2473, 2478,
-2483, 2488, 2493, 2498, 2503, 2508, 2513, 2518, 2523, 2528, 2533, 2538, 2543, 2548, 0, 0
+2483, 2488, 2493, 2498, 2503, 2508, 2513, 2518, 2523, 2528, 2533, 2538, 2543, 2548, 2555, 2555
 );
 
 constant JET_PT_LUT : jet_pt_lut_array := (
@@ -1948,7 +1948,7 @@ constant JET_PT_LUT : jet_pt_lut_array := (
 9923, 9928, 9933, 9938, 9943, 9948, 9953, 9958, 9963, 9968, 9973, 9978, 9983, 9988, 9993, 9998,
 10003, 10008, 10013, 10018, 10023, 10028, 10033, 10038, 10043, 10048, 10053, 10058, 10063, 10068, 10073, 10078,
 10083, 10088, 10093, 10098, 10103, 10108, 10113, 10118, 10123, 10128, 10133, 10138, 10143, 10148, 10153, 10158,
-10163, 10168, 10173, 10178, 10183, 10188, 10193, 10198, 10203, 10208, 10213, 10218, 10223, 10228, 0, 0
+10163, 10168, 10173, 10178, 10183, 10188, 10193, 10198, 10203, 10208, 10213, 10218, 10223, 10228, 10235, 10235
 );
 
 -- constant MUON_PT_LUT : muon_pt_lut_array := (
@@ -1984,7 +1984,7 @@ constant MU_PT_LUT : muon_pt_lut_array := (
 2238, 2243, 2248, 2253, 2258, 2263, 2268, 2273, 2278, 2283, 2288, 2293, 2298, 2303, 2308, 2313,
 2318, 2323, 2328, 2333, 2338, 2343, 2348, 2353, 2358, 2363, 2368, 2373, 2378, 2383, 2388, 2393,
 2398, 2403, 2408, 2413, 2418, 2423, 2428, 2433, 2438, 2443, 2448, 2453, 2458, 2463, 2468, 2473,
-2478, 2483, 2488, 2493, 2498, 2503, 2508, 2513, 2518, 2523, 2528, 2533, 2538, 2543, 2548, 0
+2478, 2483, 2488, 2493, 2498, 2503, 2508, 2513, 2518, 2523, 2528, 2533, 2538, 2543, 2548, 2555
 );
 
 constant EG_EG_COSH_DETA_LUT : eg_eg_cosh_deta_lut_array := (

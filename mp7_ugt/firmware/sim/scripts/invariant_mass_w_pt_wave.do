@@ -19,7 +19,7 @@ add wave -noupdate -radix hexadecimal /invariant_mass_w_pt_tb/dut/sim_pt_sq_uppe
 add wave -noupdate -radix hexadecimal /invariant_mass_w_pt_tb/dut/sim_pt_sq_lower_limit_vector
 add wave -noupdate -radix hexadecimal /invariant_mass_w_pt_tb/dut/sim_pt_square
 add wave -noupdate /invariant_mass_w_pt_tb/dut/pt_square_comp
-add wave -noupdate /invariant_mass_w_pt_tb/dut/pt_square_cut
+add wave -noupdate /invariant_mass_w_pt_tb/dut/pt_square_cut_internal
 add wave -noupdate -radix hexadecimal /invariant_mass_w_pt_tb/dut/inv_mass_upper_limit
 add wave -noupdate -radix hexadecimal /invariant_mass_w_pt_tb/dut/inv_mass_lower_limit
 add wave -noupdate -radix hexadecimal /invariant_mass_w_pt_tb/dut/inv_mass_upper_limit_vector

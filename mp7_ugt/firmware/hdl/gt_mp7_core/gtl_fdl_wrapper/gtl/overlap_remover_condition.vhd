@@ -20,6 +20,7 @@
 -- In the current latency budget, this condition works only with bx_p2 data (using 2 bx for Delta-R calculation).
 
 -- Version history:
+-- HB 2016-11-15: removed generic parameter "remove_calo1_obj", overlap removing objects selected via objects type comparison
 -- HB 2016-07-08: first design
 
 library ieee;
@@ -32,8 +33,6 @@ use work.gtl_pkg.all;
 
 entity overlap_remover_condition is
      generic(
-
-        remove_calo1_obj: boolean := true; -- "true" removes objects of calo1 inputs, "false" removes objects of calo2 inputs
 
         nr_calo1_delta_r_objects: positive;
         et_ge_mode_calo1_delta_r: boolean;
@@ -168,14 +167,26 @@ architecture rtl of overlap_remover_condition is
     signal inv_mass_comp_pipe : inv_mass_diff_comp_array := (others => (others => '0'));
 
     signal condition_and_or : std_logic;
-    
+
 begin
 
-    -- *** section: Delta-R - begin ***************************************************************************************
+-- HB 2016-11-15: asserts check with simulator - to be done for synthesis !!!
+
+-- HB 2016-11-15: failure if object type for inv. mass not one of Delta-R
+    assert (obj_type_calo_inv_mass = obj_type_calo1_delta_r) or (obj_type_calo_inv_mass = obj_type_calo2_delta_r) report 
+	"obj_type_calo_inv_mass different from obj_type_calo1_delta_r and from obj_type_calo2_delta_r" severity failure;
+
+-- HB 2016-11-15: failure if number of objects for inv. mass not same as one of Delta-R
+    assert (nr_calo_inv_mass_objects = nr_calo1_delta_r_objects) or (nr_calo_inv_mass_objects = nr_calo2_delta_r_objects) report 
+	"number of objects are different: nr_calo_inv_mass_objects = " & integer'image(nr_calo_inv_mass_objects)
+	& ", nr_calo1_delta_r_objects = " & integer'image(nr_calo1_delta_r_objects) 
+	& ", nr_calo2_delta_r_objects = " & integer'image(nr_calo2_delta_r_objects) severity failure;	
+
+   -- *** section: Delta-R - begin ***************************************************************************************
     
     -- Comparison with limits.
     -- HB 2015-09-17: permutations for Delta-R.
-   dr_l_1: for i in 0 to nr_calo1_delta_r_objects-1 generate 
+    dr_l_1: for i in 0 to nr_calo1_delta_r_objects-1 generate 
 	dr_l_2: for j in 0 to nr_calo2_delta_r_objects-1 generate
 	    dr_calculator_i: entity work.dr_calculator
 	    generic map(
@@ -268,7 +279,7 @@ begin
 	end loop;
 	for i in 0 to nr_calo1_delta_r_objects-1 loop 
 	    for j in 0 to nr_calo2_delta_r_objects-1 loop
-		if remove_calo1_obj then
+		if obj_type_calo_inv_mass = obj_type_calo1_delta_r then
 		    removed_objects_mask_or(i) := removed_objects_mask_or(i) or dr_obj_templ(i,j);
 		else
 		    removed_objects_mask_or(j) := removed_objects_mask_or(j) or dr_obj_templ(i,j);		
@@ -285,13 +296,13 @@ begin
 	    end if;
     end process;
 
-    removed_overlaps_pt_calo1_if: if remove_calo1_obj generate 
+    removed_overlaps_pt_calo1_if: if obj_type_calo_inv_mass = obj_type_calo1_delta_r generate 
 	removed_overlaps_pt_calo1_l:for i in 0 to nr_calo1_delta_r_objects-1 generate
 	    removed_overlaps_pt(i) <= pt(i) when removed_objects_mask_pipe(i) = '0' else ZERO_PT;
 	end generate removed_overlaps_pt_calo1_l;
     end generate removed_overlaps_pt_calo1_if;
 
-    removed_overlaps_pt_calo2_if: if not remove_calo1_obj generate 
+    removed_overlaps_pt_calo2_if: if obj_type_calo_inv_mass = obj_type_calo2_delta_r generate 
 	removed_overlaps_pt_calo2_l:for i in 0 to nr_calo2_delta_r_objects-1 generate
 	    removed_overlaps_pt(i) <= pt(i) when removed_objects_mask_pipe(i) = '0' else ZERO_PT;
 	end generate removed_overlaps_pt_calo2_l;

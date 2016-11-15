@@ -37,13 +37,11 @@ architecture rtl of overlap_remover_condition_test_TB is
 
     signal lhc_clk : std_logic;
         
-    constant remove_calo1_obj: boolean := true; -- calo1 for inv. mass (JET)
     constant INV_MASS_PRECISION : positive := JET_JET_INV_MASS_PRECISION;
     constant PT_VECTOR_WIDTH : positive := JET_PT_VECTOR_WIDTH;
     constant INV_MASS_COSH_COS_PRECISION : positive := JET_JET_COSH_COS_PRECISION;
     constant COSH_COS_VECTOR_WIDTH : positive := JET_JET_COSH_COS_VECTOR_WIDTH;	
 
---     constant remove_calo1_obj: boolean := false; -- calo2 for inv. mass (TAU)
 --     constant INV_MASS_PRECISION : positive := TAU_TAU_INV_MASS_PRECISION;
 --     constant PT_VECTOR_WIDTH : positive := TAU_PT_VECTOR_WIDTH;
 --     constant INV_MASS_COSH_COS_PRECISION : positive := TAU_TAU_COSH_COS_PRECISION;
@@ -200,18 +198,14 @@ pipeline_p: process(lhc_clk, tau, jet)
         end if;
 end process;
 
-remove_calo1_obj_true: if remove_calo1_obj generate
+calo_inv_calo1_obj_i: if obj_type_calo_inv_mass = obj_type_calo1_delta_r generate
     calo_inv_mass_bx0(0 to NR_JET_OBJECTS-1) <= jet_bx_0;
     pt_vector_bx_0(0 to NR_JET_OBJECTS-1) <= jet_pt_vector_bx_0;
---     cosh_deta_vector_bx_0_bx_0 <= jet_jet_cosh_deta_vector_bx_0_bx_0;
---     cos_dphi_vector_bx_0_bx_0 <= jet_jet_cos_dphi_vector_bx_0_bx_0;
 end generate;
 
-remove_calo1_obj_false: if not remove_calo1_obj generate
+calo_inv_calo2_obj_i: if obj_type_calo_inv_mass = obj_type_calo2_delta_r generate
     calo_inv_mass_bx0(0 to NR_TAU_OBJECTS-1) <= tau_bx_0;
     pt_vector_bx_0(0 to NR_TAU_OBJECTS-1) <= tau_pt_vector_bx_0;
---     cosh_deta_vector_bx_0_bx_0 <= tau_tau_cosh_deta_vector_bx_0_bx_0;
---     cos_dphi_vector_bx_0_bx_0 <= tau_tau_cos_dphi_vector_bx_0_bx_0;
 end generate;
 
 jet_l: for i in 0 to NR_JET_OBJECTS-1 generate
@@ -275,8 +269,6 @@ end generate tau_tau_cosh_cos_l1;
 dut: entity work.overlap_remover_condition
      generic map(
         
-        remove_calo1_obj => remove_calo1_obj, -- "true" removes objects of calo1 inputs, "false" removes objects of calo2 inputs
-
         nr_calo1_delta_r_objects => nr_calo1_delta_r_objects,
         et_ge_mode_calo1_delta_r => et_ge_mode_calo1_delta_r,
         obj_type_calo1_delta_r => obj_type_calo1_delta_r,
@@ -374,7 +366,7 @@ dut: entity work.overlap_remover_condition
 	cosh_deta => jet_jet_cosh_deta_vector_bx_0_bx_0,
         cos_dphi => jet_jet_cos_dphi_vector_bx_0_bx_0,
 -- 	cosh_deta => tau_tau_cosh_deta_vector_bx_0_bx_0,
---         cos_dphi => tau_tau_cos_dphi_vector_bx_0_bx_0,
+-- 	cos_dphi => tau_tau_cos_dphi_vector_bx_0_bx_0,
 	condition_o => condition_o
     );
 

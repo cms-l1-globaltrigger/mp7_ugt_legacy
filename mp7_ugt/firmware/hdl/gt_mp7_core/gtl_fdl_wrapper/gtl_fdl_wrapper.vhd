@@ -15,6 +15,7 @@
 --------------------------------------------------------------------------------
 
 -- Version-history:
+-- HB 2016-11-17: inserted port "finor_preview_2_mezz_lemo" for "prescaler preview" in monitoring.
 -- HB 2016-09-16: removed algo_after_finor_mask_rop, not used anymore in read-out record. Inserted new esums.
 -- HB 2016-09-01: added BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490) for fdl_module.
 -- HB 2016-04-06: used algo_mapping_rop with "algo_after_gtLogic" for read-out-record (changed "algo_before_prescaler" to "algo_after_bxomask") according to fdl_module v0.0.24.
@@ -60,11 +61,10 @@ entity gtl_fdl_wrapper is
         algo_after_gtLogic_rop        : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_bxomask_rop        : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
--- HB 2016-09-01: removed algo_after_finor_mask_rop, not used anymore in read-out record.
---         algo_after_finor_mask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         local_finor_rop     : out std_logic;
         local_veto_rop      : out std_logic;
         finor_2_mezz_lemo      : out std_logic;
+        finor_preview_2_mezz_lemo      : out std_logic;
         veto_2_mezz_lemo      : out std_logic;
         finor_w_veto_2_mezz_lemo      : out std_logic;
         local_finor_with_veto_o      : out std_logic
@@ -79,7 +79,6 @@ architecture rtl of gtl_fdl_wrapper is
     signal jet_temp : calo_objects_array(0 to NR_JET_OBJECTS-1);
     signal tau_temp : calo_objects_array(0 to NR_TAU_OBJECTS-1);
 -- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
---     signal ett_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
     signal ett_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
     signal ht_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
     signal etm_temp : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
@@ -198,10 +197,10 @@ fdl_module_i: entity work.fdl_module
         algo_after_gtLogic_rop => algo_after_gtLogic_rop,
         algo_after_bxomask_rop => algo_after_bxomask_rop,
         algo_after_prescaler_rop  => algo_after_prescaler_rop,
---         algo_after_finor_mask_rop => algo_after_finor_mask_rop,
         local_finor_rop => local_finor_rop,
         local_veto_rop  => local_veto_rop,
         finor_2_mezz_lemo  => finor_2_mezz_lemo,
+        finor_preview_2_mezz_lemo  => finor_preview_2_mezz_lemo,
         veto_2_mezz_lemo  => veto_2_mezz_lemo,
         finor_w_veto_2_mezz_lemo  => finor_w_veto_2_mezz_lemo,
         local_finor_with_veto_o  => local_finor_with_veto_o,

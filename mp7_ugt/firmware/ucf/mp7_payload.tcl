@@ -10,6 +10,7 @@
 
 ## HB 2016-08-31: ../ucf/algo_constraints.xdc not used anymore (see uGT_algo.dep)
 
-# HB 2016-09-28: set output FFs in IOB for finor_2_mezz_lemo and veto_2_mezz_lemo
+# HB 2016-11-17: set output FFs in IOB for finor_2_mezz_lemo, veto_2_mezz_lemo and finor_preview_2_mezz_lemo
 set_property IOB TRUE [get_ports {mezz_p[0]}]
 set_property IOB TRUE [get_ports {mezz_p[1]}]
+set_property IOB TRUE [get_ports {mezz_p[2]}]

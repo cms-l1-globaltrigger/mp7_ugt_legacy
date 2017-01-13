@@ -8,6 +8,7 @@ import subprocess
 import logging
 import glob
 import sys, os
+import shutil
 
 # Default paths and versions.
 DEFAULT_XILINX_PATH = '/opt/xilinx/14.6'
@@ -33,9 +34,10 @@ TB_FILE = os.path.join(TB_DIR, 'gtl_fdl_wrapper_tb.vhd')
 
 TEMP_FILE = os.path.join(TB_DIR, 'temp_file.vhd')
 
-# gt_mp7_top_pkg_tpl.vhd template.
-GT_MP7_TOP_PKG_TPL = os.path.join(SRC_DIR, 'gt_mp7_top_pkg_tpl.vhd')
-GT_MP7_TOP_PKG_SIM_TEMP = os.path.join(SRC_DIR, 'gt_mp7_top_pkg_sim_temp.vhd')
+## HB 2016-12-05: not used anymore (using ../hdl/gt_mp7_core/gt_mp7_core_pkg_sim.vhd for simulation)
+## gt_mp7_top_pkg_tpl.vhd template.
+#GT_MP7_TOP_PKG_TPL = os.path.join(SRC_DIR, 'gt_mp7_top_pkg_tpl.vhd')
+#GT_MP7_TOP_PKG_SIM_TEMP = os.path.join(SRC_DIR, 'gt_mp7_top_pkg_sim_temp.vhd')
 
 def remove_file(filename):
     """Savely remove a file or a symbolic link."""
@@ -78,6 +80,36 @@ def parse():
     parser.add_argument('--config', metavar = '<filename>', default = DEFAULT_MODELSIM_INI_TPL, help = "set modelsim INI template file, default is `{DEFAULT_MODELSIM_INI_TPL}'".format(**globals()))
     parser.add_argument('--p', action = 'store_true', help = "enables debug prints to console")
     return parser.parse_args()
+
+## *****************************************************************************************************
+## HB 2016-11-15: inserted for test with replacement in templates for VHDL files of L1Menu
+def template_replace(template, replace_map, result):
+    """Load template by replacing keys from dictionary and writing to result
+    file. The function ignores VHDL escaped lines.
+
+    Example:
+    >>> template_replace('sample.tpl.vhd', {'name': "title"}, 'sample.vhd')
+
+    """
+    # Read content of source file.
+    with open(template, 'rb') as fp:
+        lines = fp.readlines()
+    # Replace placeholders.
+    for key, value in replace_map.items():
+        for i, line in enumerate(lines):
+            if not line.strip().startswith('--'):
+                lines[i] = line.replace(key, value)
+    # Write content to destination file.
+    with open(result, 'wb') as fp:
+        fp.write(''.join(lines))
+
+def read_file(filename):
+    """Returns contents of a file."""
+#    with open(os.path.join(src_dir, 'gtl_module_instances.vhd'), 'rb') as fp:
+    with open(filename, 'rb') as fp:
+        return fp.read()
+
+## *****************************************************************************************************
 
 def main():
     """Main routine."""
@@ -159,22 +191,63 @@ def main():
         '{{TESTVECTOR_FILENAME}}' : args.testvector,
         '{{TESTVECTOR_NAME}}' : testvector_name,
     })
-    render_template(GT_MP7_TOP_PKG_TPL, GT_MP7_TOP_PKG_SIM_TEMP, {
-        '{{IPBUS_TIMESTAMP}}' : 'X"00000000"',
-        '{{IPBUS_USERNAME}}' : 'X"0000000000000000000000000000000000000000000000000000000000000000"',
-        '{{IPBUS_HOSTNAME}}' : 'X"0000000000000000000000000000000000000000000000000000000000000000"',
-        '{{IPBUS_BUILD_VERSION}}' : 'X"00000000"',
-    })
+## HB 2016-12-05: not used anymore (using ../hdl/gt_mp7_core/gt_mp7_core_pkg_sim.vhd for simulation)
+    #render_template(GT_MP7_TOP_PKG_TPL, GT_MP7_TOP_PKG_SIM_TEMP, {
+        #'{{IPBUS_TIMESTAMP}}' : 'X"00000000"',
+        #'{{IPBUS_USERNAME}}' : 'X"0000000000000000000000000000000000000000000000000000000000000000"',
+        #'{{IPBUS_HOSTNAME}}' : 'X"0000000000000000000000000000000000000000000000000000000000000000"',
+        #'{{IPBUS_BUILD_VERSION}}' : 'X"00000000"',
+    #})
+
+## *****************************************************************************************************
+## HB 2016-11-15: generate temporary VHDL files with templates of VHDL files and 'snippets' from VHDL Producer
+
+    sim_dir = os.getcwd()
+    #print sim_dir
+## HB 2016-11-16: create temporary directory 'vhdl_temp'
+    sim_dir_vhdl_temp = os.path.join(sim_dir, 'vhdl_temp')
+    #print sim_dir_vhdl_temp
+    if not os.path.exists(sim_dir_vhdl_temp):
+	os.makedirs(sim_dir_vhdl_temp)
+	
+    uGTalgosPath = os.path.abspath(os.path.join(sim_dir, '..'))
+    #print uGTalgosPath
+    
+    src_dir = os.path.join(menu_path, 'src')
+    #print src_dir
+    
+    replace_map = {
+	'{{algo_index}}': read_file(os.path.join(src_dir, 'algo_index.vhd')),
+	'{{ugt_constants}}': read_file(os.path.join(src_dir, 'ugt_constants.vhd')),
+	'{{gtl_module_signals}}': read_file(os.path.join(src_dir, 'gtl_module_signals.vhd')),
+	'{{gtl_module_instances}}': read_file(os.path.join(src_dir, 'gtl_module_instances.vhd')),
+    }
+    
+    gtl_fdl_wrapper_dir = os.path.join(uGTalgosPath, 'hdl', 'gt_mp7_core', 'gtl_fdl_wrapper')
+    #print gtl_fdl_wrapper_dir
+    gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
+    #print gtl_dir
+    fdl_dir = os.path.join(gtl_fdl_wrapper_dir, 'fdl')
+    #print fdl_dir
+
+    # Patch VHDL files
+    template_replace(os.path.join(fdl_dir, 'algo_mapping_rop_tpl.vhd'), replace_map, os.path.join(sim_dir_vhdl_temp, 'algo_mapping_rop.vhd'))
+    template_replace(os.path.join(gtl_dir, 'gtl_pkg_tpl.vhd'), replace_map, os.path.join(sim_dir_vhdl_temp, 'gtl_pkg.vhd'))
+    template_replace(os.path.join(gtl_dir, 'gtl_module_tpl.vhd'), replace_map, os.path.join(sim_dir_vhdl_temp, 'gtl_module.vhd'))
+
+## *****************************************************************************************************
 
     # Run Modelsim with makefile, on fail (1) raise error.
     call_process('vsim', '-c', '-msgmode', msgmode, '-do', 'do {filename}; quit -f'.format(filename = DO_FILE))
 
     print
-    print " ==> see `sim_results_gtl_fdl_wrapper_{testvector_name}.txt' for detailed information !!!".format(**locals())
-    print
-#    remove_file(GT_MP7_TOP_PKG_SIM_TEMP)
+    print " ==> see 'sim_results_gtl_fdl_wrapper_{testvector_name}.txt' for detailed information !!!".format(**locals())
     print
 
+## HB 2016-11-16: remove temporary directory 'vhdl_temp'
+    #print " ==> removed temporary directory 'vhdl_temp'"
+#    shutil.rmtree('vhdl_temp')
+    
     return 0 # exit success
 
 # Run main function with passed arguments.

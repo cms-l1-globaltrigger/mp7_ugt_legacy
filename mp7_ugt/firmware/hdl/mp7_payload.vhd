@@ -14,6 +14,7 @@
 -- $Revision: 0.1  $
 --------------------------------------------------------------------------------
 --
+-- HB 2016-11-17: inserted port "finor_preview_2_mezz_lemo" for "prescaler preview" in monitoring on gpio(2). No use of tp_mux anymore.
 -- HB 2016-10-11: signals finor_2_mezz_lemo and veto_2_mezz_lemo for IOB output FF. Connected directly to gpio without tp_mux. 
 --                Removed finor_2_mezz_lemo and veto_2_mezz_lemo from tp_mux. Signals local_finor_rop and local_veto_rop used for tp_mux.
 -- HB 2016-09-01: added BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490)
@@ -76,6 +77,7 @@ architecture rtl of mp7_payload is
     signal local_veto_rop                : std_logic;
     signal local_finor_with_veto_o       : std_logic;
     signal finor_2_mezz_lemo             : std_logic;
+    signal finor_preview_2_mezz_lemo             : std_logic;
     signal veto_2_mezz_lemo              : std_logic;
     signal finor_w_veto_2_mezz_lemo      : std_logic;
 
@@ -219,6 +221,7 @@ begin
         local_finor_rop         => local_finor_rop,
         local_veto_rop          => local_veto_rop,
         finor_2_mezz_lemo      => finor_2_mezz_lemo,
+        finor_preview_2_mezz_lemo      => finor_preview_2_mezz_lemo,
         veto_2_mezz_lemo      =>  veto_2_mezz_lemo,
         finor_w_veto_2_mezz_lemo      =>  finor_w_veto_2_mezz_lemo,
         local_finor_with_veto_o => local_finor_with_veto_o
@@ -251,14 +254,12 @@ begin
         test_en         => test_en_int,
         out0            => open,
         out1            => open,
-        out2            => tp2
+        out2            => open
     );
 
---     gpio(0) <= tp0; -- per default: finor_2_mezz_lemo
---     gpio(1) <= tp1; -- per default: finor_2_mezz_lemo
     gpio(0) <= finor_2_mezz_lemo;
     gpio(1) <= veto_2_mezz_lemo;
-    gpio(2) <= tp2; -- per default: finor_2_mezz_lemo
+    gpio(2) <= finor_preview_2_mezz_lemo;
     gpio_en(0) <= '1'; --enable output 0
     gpio_en(1) <= '1'; --enable output 1
     gpio_en(2) <= '1'; --enable output 2

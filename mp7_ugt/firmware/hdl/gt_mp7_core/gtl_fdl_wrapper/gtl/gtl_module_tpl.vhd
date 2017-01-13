@@ -36,7 +36,7 @@ entity gtl_module is
         etmhf_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 -- HB 2016-09-16: inserted HTMHF and TOWERCNT
         htmhf_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        towercount_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        towercount_data : in std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
 -- ****************************************************************************************
         muon_data : in muon_objects_array(0 to NR_MUON_OBJECTS-1);
         external_conditions : in std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
@@ -70,7 +70,7 @@ architecture rtl of gtl_module is
     signal etmhf_bx_p2, etmhf_bx_p1, etmhf_bx_0, etmhf_bx_m1, etmhf_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 -- HB 2016-09-16: inserted HTMHF and TOWERCNT
     signal htmhf_bx_p2, htmhf_bx_p1, htmhf_bx_0, htmhf_bx_m1, htmhf_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-    signal towercount_bx_p2, towercount_bx_p1, towercount_bx_0, towercount_bx_m1, towercount_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    signal towercount_bx_p2, towercount_bx_p1, towercount_bx_0, towercount_bx_m1, towercount_bx_m2 : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
 -- ****************************************************************************************
 -- HB 2016-01-08: renamed ext_cond after +/-2bx to ext_cond_bx_p2_int, etc., because ext_cond_bx_p2, etc. used in algos (names coming from TME grammar).
     signal ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_cond_bx_0_int, ext_cond_bx_m1_int, ext_cond_bx_m2_int : std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);

@@ -2,32 +2,7 @@
 ##?toolset=="ISE"?    src ../ucf/algo_constraints.ucf
 ##?toolset=="Vivado"? src ../ucf/algo_constraints.xdc
 ?toolset=="Vivado"? src ../ucf/mp7_payload.tcl
-# addrtab -t cancel_out_barrel.xml
-# addrtab -t cancel_out_bo_wedge.xml
-# addrtab -t cancel_out_bo.xml
-# addrtab -t cancel_out_fo_wedge.xml
-# addrtab -t cancel_out_fo.xml
-# addrtab -t cancel_out_half_sorters.xml
-# addrtab -t cancel_out_mems.xml
-# addrtab -t extrapolation_eta.xml
-# addrtab -t extrapolation_phi.xml
-# addrtab -t extrapolation_regional.xml
-# addrtab -t extrapolation.xml
-# addrtab -t idx_bit_mems_eta.xml
-# addrtab -t idx_bit_mems_phi.xml
-# addrtab -t idx_bits_regional.xml
-# addrtab -t index_bits.xml
-# addrtab -t isolation_assignment.xml
-# addrtab -t isolation_mem_absolute.xml
-# addrtab -t isolation_mem_relative.xml
-# addrtab -t isolation.xml
-# addrtab -t sorting.xml
-# addrtab -t mu_quad_deserialization.xml
-# addrtab -t energy_quad_deserialization.xml
-# addrtab -t mu_deserialization.xml
-# addrtab -t energy_deserialization.xml
-# addrtab -t uGMT.xml
-# addrtab -t ugmt_serdes.xml
+#
 src lhc_data_pkg.vhd
 src gt_mp7_top_pkg.vhd
 src bgo_sync.vhd
@@ -36,10 +11,10 @@ src gt_mp7_core/tp_mux/tp_mux.vhd
 src gt_mp7_core/tp_mux/tp_mux_address_decoder.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
 #
-# HB 2016-09-29: moved gtl_module.vhd, gtl_pkg.vhd and algo_mapping_rop.vhd to "fix" part
-#src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_mapping_rop.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_module.vhd
+# HB 2016-11-16: gtl_module.vhd, gtl_pkg.vhd and algo_mapping_rop.vhd from gt_mp7_core/..
+src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg.vhd
+src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_mapping_rop.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_module.vhd
 #
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_addr_decode.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
@@ -56,7 +31,7 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators_v2.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_obj_vs_obj.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_lib.vhd
+#src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_lib.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/phi_windows_comp.vhd
@@ -87,19 +62,6 @@ src gt_mp7_core/frame/crc/crc16d64.vhd
 src gt_mp7_core/frame/crc/crc16d32.vhd
 src gt_mp7_core/frame/crc/crc16d16_ugt.vhd
 src gt_mp7_core/frame/demux_lane/demux_lane_data.vhd
-#src gt_mp7_core/frame/rop/mux_word_generator.vhd
-#src gt_mp7_core/frame/rop/auto_gen/output_logic_pkg.vhd
-#src gt_mp7_core/frame/rop/auto_gen/output_logic_beh.vhd
-#src gt_mp7_core/frame/rop/auto_gen/output_instruction_rom.vhd
-#src gt_mp7_core/frame/rop/validity_checker.vhd
-#src gt_mp7_core/frame/rop/address_fetch_unit.vhd
-#src gt_mp7_core/frame/rop/rop.vhd
-#src gt_mp7_core/frame/rop/address_manager.vhd
-#src gt_mp7_core/frame/rop/rop_sw_reg_synchronizer.vhd
-#src gt_mp7_core/frame/rop/stretch_unit.vhd
-#src gt_mp7_core/frame/rop/output_logic.vhd
-#src gt_mp7_core/frame/synchronizer/flag_synchronizer.vhd
-#src gt_mp7_core/frame/synchronizer/dualclock_synchronizer.vhd
 src gt_mp7_core/frame/frame.vhd
 src gt_mp7_core/frame/rb/rb_pkg.vhd
 src gt_mp7_core/frame/rb/rb.vhd
@@ -122,15 +84,12 @@ src gt_mp7_core/frame/ram/ram_asym_2c2w2r.vhd
 src gt_mp7_core/frame/ram/ram_2c1w1r.vhd
 src gt_mp7_core/frame/lmp/lmp.vhd
 src gt_mp7_core/frame/slow_cd_reset.vhd
-#src gt_mp7_core/frame/l1asim/l1asim.vhd
 src gt_mp7_core/frame/frame_module_info.vhd
 src gt_mp7_core/frame/dm/delay_element.vhd
 src gt_mp7_core/frame/dm/dm.vhd
 src gt_mp7_core/frame/dsmux/dsmux.vhd
 src gt_mp7_core/frame/output_mux/mux.vhd
 src gt_mp7_core/frame/output_mux/output_mux.vhd
-#src gt_mp7_core/frame/rmp/rmp.vhd
-#src gt_mp7_core/gt_mp7_core_fabric.vhd
 src gt_mp7_core/gt_mp7_core_addr_decode.vhd
 src math_pkg.vhd
 src mp7_payload.vhd
@@ -140,7 +99,7 @@ src ipbus/slaves/ipb_read_regs.vhd
 src ipbus/slaves/ipb_dpmem_4096_32.vhd
 src ../ngc/dp_mem_4096x32/dp_mem_4096x32.ngc
 src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
-src ../ngc/lhc_clk_pll_40_80_160/lhc_clk_pll_40_80_160.vhd
+#src ../ngc/lhc_clk_pll_40_80_160/lhc_clk_pll_40_80_160.vhd
 src -c components/ipbus_slaves ipbus_reg_v.vhd
 src -c components/ipbus_core ipbus_fabric_sel.vhd
 src -c components/mp7_ttc mp7_ttc_decl.vhd

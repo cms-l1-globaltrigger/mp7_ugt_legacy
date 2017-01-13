@@ -2,6 +2,9 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2017-01-10: v1.2.2 - based on v1.2.1, but fixed bug with 1 bx delay for "begin_lumi_per" (in algo_slice.vhd) for rate counter after pre-scaler.
+-- HB 2016-12-01: v1.2.1 - based on v1.2.0, but inserted rate counter and register for finor with "prescaler preview" in monitoring.
+-- HB 2016-11-17: v1.2.0 - based on v1.1.1, but inserted logic for "prescaler preview" in monitoring. Removed port "finor_mask".
 -- HB 2016-10-24: v1.1.1 - based on v1.1.0, but inserted register for "updated prescale factor index" and "lumi section number" for monitoring (N-1).
 -- HB 2016-10-11: v1.1.0 - based on v1.0.3, but inserted extra FF for finor_2_mezz_lemo and veto_2_mezz_lemo for IOB output FF.
 -- HB 2016-09-19: v1.0.3 - based on v1.0.2, but module algo_mapping_rop.vhd moved to "fix" part (no template anymore for algo_mapping_rop.vhd).
@@ -93,11 +96,11 @@ entity fdl_module is
         algo_after_gtLogic_rop  : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_bxomask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop      : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
---         algo_after_finor_mask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         local_finor_rop     : out std_logic;
         local_veto_rop      : out std_logic;
-        finor_2_mezz_lemo      : out std_logic; -- to tp_mux.vhd
-        veto_2_mezz_lemo      : out std_logic; -- to tp_mux.vhd
+        finor_2_mezz_lemo      : out std_logic; -- to LEMO
+        finor_preview_2_mezz_lemo      : out std_logic; -- to LEMO
+        veto_2_mezz_lemo      : out std_logic; -- to LEMO
         finor_w_veto_2_mezz_lemo      : out std_logic; -- to tp_mux.vhd
 	local_finor_with_veto_o       : out std_logic; -- to SPY2_FINOR
 -- HB 2016-03-02: v0.0.21 - algo_bx_mask_sim input for simulation use with MAX_NR_ALGOS (because of global index).
@@ -147,6 +150,8 @@ architecture rtl of fdl_module is
     signal sres_finor_rate_counter : std_logic := '0';
     signal rate_cnt_finor_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
+    signal rate_cnt_finor_preview_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
+
     signal sres_veto_rate_counter : std_logic := '0';
     signal rate_cnt_veto_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
@@ -159,7 +164,6 @@ architecture rtl of fdl_module is
 
     signal algo_after_bxomask : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
     signal algo_after_prescaler : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
---     signal algo_after_finor_mask : std_logic_vector(NR_ALGOS-1 downto 0);
     signal veto : std_logic_vector(NR_ALGOS-1 downto 0);
     signal local_finor : std_logic := '0';
     signal local_veto : std_logic := '0';
@@ -188,8 +192,8 @@ architecture rtl of fdl_module is
     signal rate_cnt_after_prescaler_global : rate_counter_global_array;
     signal rate_cnt_post_dead_time_local : rate_counter_array;
     signal rate_cnt_post_dead_time_global : rate_counter_global_array;
-    signal finor_masks_global : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-    signal finor_masks_local : std_logic_vector(NR_ALGOS-1 downto 0);
+--     signal finor_masks_global : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+--     signal finor_masks_local : std_logic_vector(NR_ALGOS-1 downto 0);
     signal veto_masks_global : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal veto_masks_local : std_logic_vector(NR_ALGOS-1 downto 0);
 
@@ -201,6 +205,22 @@ architecture rtl of fdl_module is
     signal finor_2_mezz_lemo_tmp, veto_2_mezz_lemo_tmp : std_logic;
     attribute dont_touch : string;
     attribute dont_touch of finor_2_mezz_lemo_tmp, veto_2_mezz_lemo_tmp : signal is "true";
+
+-- ******************************************************************************************************************
+-- HB 2016-11-17: signals for "prescaler preview" in monitoring
+    signal rate_cnt_after_prescaler_preview_reg: ipb_regs_array(0 to OFFSET_END_RATE_CNT_AFTER_PRESCALER_PREVIEW-OFFSET_BEG_RATE_CNT_AFTER_PRESCALER_PREVIEW);
+    signal prescale_factor_preview_reg: ipb_regs_array(0 to OFFSET_END_PRESCALE_FACTOR_PREVIEW-OFFSET_BEG_PRESCALE_FACTOR_PREVIEW);
+    signal prescale_factor_preview_set_index_reg: ipb_regs_array(0 to 1);
+    signal prescale_factor_preview_set_index_reg_updated : ipb_regs_array(0 to 1) := (others => (others => '0'));
+    signal prescale_factor_preview_int : prescale_factor_array;
+    signal algo_after_prescaler_preview : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
+    signal local_finor_preview : std_logic := '0';
+    signal prescale_facto_previewr_set_index_reg_updated : ipb_regs_array(0 to 1) := (others => (others => '0'));
+    signal prescale_factor_preview_global : prescale_factor_global_array;
+    signal prescale_factor_preview_local : prescale_factor_array;
+    signal rate_cnt_after_prescaler_preview_local : rate_counter_array;
+    signal rate_cnt_after_prescaler_preview_global : rate_counter_global_array;
+    signal finor_preview_2_mezz_lemo_tmp : std_logic;
 
 begin
 
@@ -572,6 +592,26 @@ begin
     );
 
 --===============================================================================================--
+-- Rate counter finor preview register
+-- HB 2016-12-01: register for rate counter finor for "prescaler preview" in monitoring
+    read_rate_cnt_finor_preview_i: entity work.ipb_read_regs
+    generic map
+    (
+        addr_width => 1,
+        regs_beg_index => 0,
+        regs_end_index => 0
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_FINOR_PREVIEW),
+        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_FINOR_PREVIEW),
+        ------------------
+        regs_i => rate_cnt_finor_preview_reg
+    );
+
+--===============================================================================================--
 -- Rate counter veto register
 -- HB 2016-03-02: for monitoring only
     read_rate_cnt_veto_i: entity work.ipb_read_regs
@@ -612,17 +652,119 @@ begin
 
 --===============================================================================================--
 
+-- ****************************************************************************************************
+-- HB 2016-11-17: register for "prescaler preview" in monitoring
+    read_rate_cnt_after_prescaler_preview_i: entity work.ipb_read_regs
+    generic map
+    (
+        addr_width => ADDR_WIDTH_RATE_CNT_AFTER_PRESCALER_PREVIEW,
+        regs_beg_index => OFFSET_BEG_RATE_CNT_AFTER_PRESCALER_PREVIEW,
+        regs_end_index => OFFSET_END_RATE_CNT_AFTER_PRESCALER_PREVIEW
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_AFTER_PRESCALER_PREVIEW),
+        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_AFTER_PRESCALER_PREVIEW),
+        ------------------
+        regs_i => rate_cnt_after_prescaler_preview_reg
+    );
+
+    prescale_factor_preview_reg_i: entity work.ipb_write_regs
+    generic map
+    (
+        init_value => PRESCALE_FACTOR_INIT,
+        addr_width => ADDR_WIDTH_PRESCALE_FACTOR_PREVIEW,
+        regs_beg_index => OFFSET_BEG_PRESCALE_FACTOR_PREVIEW,
+        regs_end_index => OFFSET_END_PRESCALE_FACTOR_PREVIEW
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW),
+        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW),
+        ------------------
+        regs_o => prescale_factor_preview_reg
+    );
+
+    prescale_factors_preview_set_index_i: entity work.ipb_write_regs
+    generic map
+    (
+        init_value => PRESCALE_FACTOR_SET_INDEX_REG_INIT,
+        addr_width => 2,
+        regs_beg_index => 0,
+        regs_end_index => 1
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX),
+        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX),
+        ------------------
+        regs_o => prescale_factor_preview_set_index_reg
+    );
+
+    prescale_factor_preview_set_index_update_0_i: entity work.update_process
+        generic map(
+            WIDTH => PRESCALE_FACTOR_SET_INDEX_WIDTH,
+            INIT_VALUE => X"00000000"
+        )
+        port map( 
+            clk => lhc_clk,
+            request_update_pulse => request_update_factor_pulse,
+            update_pulse => begin_lumi_section,
+            data_i => prescale_factor_preview_set_index_reg(0)(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0),
+            data_o => prescale_factor_preview_set_index_reg_updated(0)(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0)
+        );
+        
+    prescale_factor_preview_set_index_update_1_i: entity work.update_process
+        generic map(
+            WIDTH => PRESCALE_FACTOR_SET_INDEX_WIDTH,
+            INIT_VALUE => X"00000000"
+        )
+        port map( 
+            clk => lhc_clk,
+            request_update_pulse => '1', -- no update pulse requested, updated with every begin_lumi_section
+            update_pulse => begin_lumi_section,
+            data_i => prescale_factor_preview_set_index_reg_updated(0)(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0),
+            data_o => prescale_factor_preview_set_index_reg_updated(1)(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0)
+        );
+        
+    prescale_factor_preview_set_index_updated_reg_i: entity work.ipb_read_regs
+    generic map
+    (
+        addr_width => 2,
+        regs_beg_index => 0,
+        regs_end_index => 1
+    )
+    port map
+    (
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX_UPDATED),
+        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX_UPDATED),
+        ------------------
+        regs_i => prescale_factor_preview_set_index_reg_updated
+    );
+
+-- ****************************************************************************************************
+
 -- HB 2016-04-25: bug fixed at "rate_cnt_reg_l" (using MAX_NR_ALGOS instead of NR_ALGOS).
 --     reg_l: for i in 0 to NR_ALGOS-1 generate
     rate_cnt_reg_l: for i in 0 to MAX_NR_ALGOS-1 generate
         rate_cnt_before_prescaler_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_before_prescaler_global(i);
         rate_cnt_after_prescaler_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_after_prescaler_global(i);
+        rate_cnt_after_prescaler_preview_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_after_prescaler_preview_global(i);
         rate_cnt_post_dead_time_reg(i)(RATE_COUNTER_WIDTH-1 downto 0) <= rate_cnt_post_dead_time_global(i);
     end generate rate_cnt_reg_l;
 
     masks_reg_l: for i in 0 to MAX_NR_ALGOS-1 generate
         prescale_factor_global(i) <= prescale_factor_reg(i);
-	finor_masks_global(i) <= masks_reg(i)(FINOR_BIT_IN_MASKS_REG);
+        prescale_factor_preview_global(i) <= prescale_factor_preview_reg(i);
+-- 	finor_masks_global(i) <= masks_reg(i)(FINOR_BIT_IN_MASKS_REG);
 	veto_masks_global(i) <= masks_reg(i)(VETO_BIT_IN_MASKS_REG);
     end generate masks_reg_l;
 
@@ -673,16 +815,16 @@ begin
             begin_lumi_per => begin_lumi_section,
             algo_i => algo_int(i),
             prescale_factor => prescale_factor_local(i)(PRESCALER_COUNTER_WIDTH-1 downto 0),
+            prescale_factor_preview => prescale_factor_preview_local(i)(PRESCALER_COUNTER_WIDTH-1 downto 0),
             algo_bx_mask => algo_bx_mask_local(i),
-            finor_mask => finor_masks_local(i),
             veto_mask => veto_masks_local(i),
             rate_cnt_before_prescaler => rate_cnt_before_prescaler_local(i),
             rate_cnt_after_prescaler => rate_cnt_after_prescaler_local(i),
+            rate_cnt_after_prescaler_preview => rate_cnt_after_prescaler_preview_local(i),
             rate_cnt_post_dead_time => rate_cnt_post_dead_time_local(i),
             algo_after_bxomask => algo_after_bxomask(i),
             algo_after_prescaler => algo_after_prescaler(i),
--- HB 2016-08-31: removed logic with finor_mask.
--- 	    algo_after_finor_mask => algo_after_finor_mask(i),
+            algo_after_prescaler_preview => algo_after_prescaler_preview(i),
 	    veto => veto(i)
 	);
     end generate algo_slices_l;
@@ -697,6 +839,17 @@ begin
         end loop;
         local_finor <= or_algo_var;
     end process local_finor_p;
+    
+-- Finors for "prescaler preview" in monitoring
+    local_finor_preview_p: process(algo_after_prescaler_preview)
+       variable or_algo_var : std_logic := '0';
+	begin
+        or_algo_var := '0';
+        for i in 0 to NR_ALGOS-1 loop
+            or_algo_var := or_algo_var or algo_after_prescaler_preview(i);
+        end loop;
+        local_finor_preview <= or_algo_var;
+    end process local_finor_preview_p;
     
 -- Vetos
     local_veto_or_p: process(veto)
@@ -727,11 +880,13 @@ begin
 -- HB 2016-02-26: local finor and local veto to tp_mux for LEMO connectors
 -- HB 2016-10-11: for FFs in IOBs for gpio(0) and gpio(1).
     finor_2_mezz_lemo_tmp <= local_finor; -- finor_2_mezz_lemo_tmp needed for DONT_TOUCH attribute to get finor_2_mezz_lemoin IOB
+    finor_preview_2_mezz_lemo_tmp <= local_finor_preview;
     veto_2_mezz_lemo_tmp <= local_veto;
-    finor_veto_2_mezz_p: process(lhc_clk, finor_2_mezz_lemo_tmp, veto_2_mezz_lemo_tmp)
+    finor_veto_2_mezz_p: process(lhc_clk, finor_2_mezz_lemo_tmp, veto_2_mezz_lemo_tmp, finor_preview_2_mezz_lemo_tmp)
         begin
         if (lhc_clk'event and (lhc_clk = '1')) then
             finor_2_mezz_lemo <= finor_2_mezz_lemo_tmp;
+            finor_preview_2_mezz_lemo <= finor_preview_2_mezz_lemo_tmp;
             veto_2_mezz_lemo <= veto_2_mezz_lemo_tmp;
         end if;
     end process;
@@ -747,7 +902,7 @@ begin
         end if;
     end process;
 
--- HB HB 2016-02-26: finor_w_veto_2_mezz_lemo to tp_mux for LEMO connectors
+-- HB 2016-02-26: finor_w_veto_2_mezz_lemo to tp_mux for LEMO connectors
     mezz_finor_veto_pipeline_p: process(lhc_clk, finor_with_veto_temp2)
         begin
         if (lhc_clk'event and (lhc_clk = '0')) then
@@ -769,6 +924,20 @@ begin
             store_cnt_value => begin_lumi_section,
             algo_i => local_finor,
             counter_o => rate_cnt_finor_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
+	);
+
+-- HB 2016-12-01: rate counter finor for "prescaler preview" in monitoring
+    rate_cnt_finor_preview_i: entity work.algo_rate_counter
+	generic map( 
+	    COUNTER_WIDTH => FINOR_RATE_COUNTER_WIDTH
+	)
+	port map( 
+            sys_clk => ipb_clk,
+            lhc_clk => lhc_clk,
+            sres_counter => sres_finor_rate_counter,
+            store_cnt_value => begin_lumi_section,
+            algo_i => local_finor_preview,
+            counter_o => rate_cnt_finor_preview_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
 	);
 
 -- Rate counter veto
@@ -813,13 +982,17 @@ begin
             rate_cnt_before_prescaler_local => rate_cnt_before_prescaler_local,
             rate_cnt_before_prescaler_global => rate_cnt_before_prescaler_global,
             prescale_factor_global => prescale_factor_global,
+            prescale_factor_preview_local => prescale_factor_preview_local,
+            prescale_factor_preview_global => prescale_factor_preview_global,
             prescale_factor_local => prescale_factor_local,
             rate_cnt_after_prescaler_local => rate_cnt_after_prescaler_local,
             rate_cnt_after_prescaler_global => rate_cnt_after_prescaler_global,
+            rate_cnt_after_prescaler_preview_local => rate_cnt_after_prescaler_preview_local,
+            rate_cnt_after_prescaler_preview_global => rate_cnt_after_prescaler_preview_global,
             rate_cnt_post_dead_time_local => rate_cnt_post_dead_time_local,
             rate_cnt_post_dead_time_global => rate_cnt_post_dead_time_global,
-            finor_masks_global => finor_masks_global,
-            finor_masks_local => finor_masks_local,
+--             finor_masks_global => finor_masks_global,
+--             finor_masks_local => finor_masks_local,
             veto_masks_global => veto_masks_global,
             veto_masks_local => veto_masks_local,
             algo_after_gtLogic => algo_int,

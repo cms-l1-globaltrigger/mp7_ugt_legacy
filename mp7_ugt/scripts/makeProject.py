@@ -10,7 +10,8 @@ from distutils.dir_util import copy_tree
 import subprocess
 import glob
 import ConfigParser
-import sys, stat, os
+import sys, os
+import stat
 import pwd
 import socket
 
@@ -30,6 +31,36 @@ def remove_file(filename):
 def clear_file(filename):
     """Re-Create empty file."""
     open(filename, 'w').close()
+
+def read_file(filename):
+    """Returns contents of a file."""
+    with open(filename, 'rb') as fp:
+        return fp.read()
+
+def make_executable(filename):
+    """Set executable flag for file."""
+    st = os.stat(filename)
+    os.chmod(filename, st.st_mode | stat.S_IEXEC)
+
+def template_replace(template, replace_map, result):
+    """Load template by replacing keys from dictionary and writing to result
+    file. The function ignores VHDL escaped lines.
+
+    Example:
+    >>> template_replace('sample.tpl.vhd', {'name': "title"}, 'sample.vhd')
+
+    """
+    # Read content of source file.
+    with open(template, 'rb') as fp:
+        lines = fp.readlines()
+    # Replace placeholders.
+    for key, value in replace_map.items():
+        for i, line in enumerate(lines):
+            if not line.strip().startswith('--'):
+                lines[i] = line.replace(key, value)
+    # Write content to destination file.
+    with open(result, 'wb') as fp:
+        fp.write(''.join(lines))
 
 def count_modules(menu):
     """Returns count of modules of menu. *menu* is the path to the menu directory."""
@@ -53,8 +84,8 @@ scripts_dir = os.getcwd()
 uGTalgosPath = os.path.abspath(os.path.join(scripts_dir, '..'))
 
 # Target VHDL package and it's template must be defined.
-TARGET_PKG_TPL = os.path.join(uGTalgosPath, 'firmware/hdl/gt_mp7_top_pkg_tpl.vhd')
-TARGET_PKG = os.path.join(uGTalgosPath, 'firmware/hdl/gt_mp7_top_pkg.vhd')
+TARGET_PKG_TPL = os.path.join(uGTalgosPath, 'firmware', 'hdl', 'gt_mp7_top_pkg_tpl.vhd')
+TARGET_PKG = os.path.join(uGTalgosPath, 'firmware', 'hdl', 'gt_mp7_top_pkg.vhd')
 
 def build_t(value):
     """Custom build type validator for argparse."""
@@ -88,8 +119,7 @@ def main():
 
     # Fetch menu name from path.
     menu_name = os.path.basename(args.menu)
-    print menu_name
-    
+
     if not menu_name.startswith('L1Menu_'):
         raise RuntimeError("Menu contains no modules")
 
@@ -103,7 +133,8 @@ def main():
     logging.info("tag: %s (%s)", args.tag, "unstable" if args.unstable else "stable")
     logging.info("user: %s", args.user)
     logging.info("path: %s", args.path)
-    logging.info("menu: %s", args.menu)
+    logging.info("menu file: %s", args.menu)
+    logging.info("menu name: %s", menu_name)
     logging.info("menu modules: %s", modules)
     logging.info("build: 0x%s", args.build)
     logging.info("board type: %s", args.board)
@@ -135,9 +166,7 @@ def main():
         url = "https://svnweb.cern.ch/trac/cactus/browser/tags/mp7/{release_mode}/firmware/{args.tag}/cactusupgrades/scripts/firmware/ProjectManager.py?format=txt".format(**locals())
         logging.info("retrieving %s", url)
         urllib.urlretrieve(url, filename)
-        # Make executable
-        st = os.stat(filename)
-        os.chmod(filename, st.st_mode | stat.S_IEXEC)
+        make_executable(filename)
 
         logging.info("checkout MP7 base firmware...")
         path = os.path.join('tags', 'mp7', 'unstable' if args.unstable else 'stable', 'firmware', args.tag)
@@ -176,7 +205,7 @@ def main():
     os.chdir(mp7path)
 
     #
-    #  Patching VHDL
+    #  Patching top VHDL
     #
     logging.info("patch the target package with current UNIX timestamp/username/hostname...")
     subprocess.check_call(['python', os.path.join(scripts_dir, 'pkgpatch.py'), '--build', args.build ,TARGET_PKG_TPL, TARGET_PKG])
@@ -194,33 +223,42 @@ def main():
     project_dir = os.path.abspath(os.path.join(build_area_dir, menu_name))
     os.makedirs(project_dir)
 
-    copy_tree(os.path.join(args.menu, 'vhdl'), os.path.join(project_dir, 'vhdl_producer', 'vhdl'))
-    local_menudir = os.path.abspath(os.path.join(project_dir, 'vhdl_producer'))
-
     # Do for every module of the menu...
     for i in range(modules):
         module_dir = os.path.join(build_area_dir, menu_name, 'module_{i}'.format(**locals()))
         local_fw_dir = os.path.abspath(os.path.join(module_dir, 'mp7_ugt'))
-        os.makedirs(module_dir)
+
+        # Creat module build area
         os.makedirs(local_fw_dir)
+
+        # Copy sources to module build area
         copy_tree(os.path.join(uGTalgosPath, 'firmware', 'cfg'), os.path.join(local_fw_dir, 'firmware', 'cfg'))
         copy_tree(os.path.join(uGTalgosPath, 'firmware', 'hdl'), os.path.join(local_fw_dir, 'firmware', 'hdl'))
         copy_tree(os.path.join(uGTalgosPath, 'firmware', 'ngc'), os.path.join(local_fw_dir, 'firmware', 'ngc'))
         copy_tree(os.path.join(uGTalgosPath, 'firmware', 'ucf'), os.path.join(local_fw_dir, 'firmware', 'ucf'))
+
+        # Read generated VHDL snippets
+        src_dir = os.path.join(args.menu, 'vhdl', 'module_{i}'.format(**locals()), 'src')
+	
+        replace_map = {
+            '{{algo_index}}': read_file(os.path.join(src_dir, 'algo_index.vhd')),
+            '{{ugt_constants}}': read_file(os.path.join(src_dir, 'ugt_constants.vhd')),
+            '{{gtl_module_signals}}': read_file(os.path.join(src_dir, 'gtl_module_signals.vhd')),
+            '{{gtl_module_instances}}': read_file(os.path.join(src_dir, 'gtl_module_instances.vhd')),
+        }
+
+        gtl_fdl_wrapper_dir = os.path.join(local_fw_dir, 'firmware', 'hdl', 'gt_mp7_core', 'gtl_fdl_wrapper')
+        gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
+        fdl_dir = os.path.join(gtl_fdl_wrapper_dir, 'fdl')
+
+        # Patch VHDL files
+        template_replace(os.path.join(fdl_dir, 'algo_mapping_rop_tpl.vhd'), replace_map, os.path.join(fdl_dir, 'algo_mapping_rop.vhd'))
+        template_replace(os.path.join(gtl_dir, 'gtl_pkg_tpl.vhd'), replace_map, os.path.join(gtl_dir, 'gtl_pkg.vhd'))
+        template_replace(os.path.join(gtl_dir, 'gtl_module_tpl.vhd'), replace_map, os.path.join(gtl_dir, 'gtl_module.vhd'))
+
+        # Run project manager
         subprocess.check_call(['python', 'ProjectManager.py', 'vivado', local_fw_dir, '-w', module_dir])
-
-        logging.info("create menu dependencies...")
-        filename = os.path.join(local_fw_dir, 'firmware', 'cfg', 'uGT_gtl.dep')
-        with open(filename, 'w') as f:
-            f.write("src {local_menudir}/vhdl/module_{i}/src/algo_mapping_rop.vhd\n".format(**locals()))
-            f.write("src {local_menudir}/vhdl/module_{i}/src/gtl_module.vhd\n".format(**locals()))
-            f.write("src {local_menudir}/vhdl/module_{i}/src/gtl_pkg.vhd\n".format(**locals())) #until the tmVHDLproducer is released, the gtl_pkg is used
     os.chdir(cwd)
-
-    # Do for every module of the menu...
-    for i in range(modules):
-        logging.info("setting up build area for module %s of %s...", i, menu_name)
-        module_dir = os.path.join(build_area_dir, menu_name, 'module_{i}'.format(**locals()))
 
     # Go to build area root directory.
     os.chdir(mp7path)

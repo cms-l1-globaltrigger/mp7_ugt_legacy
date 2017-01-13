@@ -2,7 +2,7 @@
 -- actual versions:
 --	frame: v1.1.0
 --	gtl: v1.1.0
---	fdl: v1.1.1
+--	fdl: v1.2.2
 
 -- HB 2016-09-19: removed more unused constants
 -- HB 2016-06-30: removed unused constants and cleaned up
@@ -46,8 +46,8 @@ package gt_mp7_core_pkg is
     constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 0;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 1;
-    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 1;
+    constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 2;
+    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 2;
 -- ==================================================================================================
 
     constant BUNCHES_PER_ORBIT : natural range 3564 to 3564 := LHC_BUNCH_COUNT;

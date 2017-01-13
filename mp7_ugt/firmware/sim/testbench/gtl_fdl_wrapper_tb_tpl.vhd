@@ -232,10 +232,10 @@ dut : entity work.gtl_fdl_wrapper
         algo_after_gtLogic_rop => open,
         algo_after_bxomask_rop => open,
         algo_after_prescaler_rop  => algo_after_prescaler_rop,
---         algo_after_finor_mask_rop => algo_after_finor_mask_rop,
         local_finor_rop => open,
         local_veto_rop  => open,
         finor_2_mezz_lemo  => open,
+        finor_preview_2_mezz_lemo  => open,
         veto_2_mezz_lemo  => open,
 	finor_w_veto_2_mezz_lemo  => open,
 	local_finor_with_veto_o  => local_finor_with_veto

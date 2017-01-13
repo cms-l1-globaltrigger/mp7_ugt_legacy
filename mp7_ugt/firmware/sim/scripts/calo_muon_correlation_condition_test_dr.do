@@ -57,6 +57,7 @@ vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator.vhd
+vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/invariant_mass.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
 

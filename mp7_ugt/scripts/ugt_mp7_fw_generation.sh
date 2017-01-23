@@ -46,10 +46,11 @@ else
 	echo ========================
 	exit 1
     fi
-    # HB 2016-12-01: extract L1MenuName from XML file
-    l1_menu_name=$(sed -n '/L1Menu/p' $1 | cut -d'>' -f2 | cut -d'<' -f1)
+    # HB 2016-12-01: extract L1MenuName from XML file from <name>...</name>
+#     l1_menu_name=$(sed -n '/L1Menu/p' $1 | cut -d'>' -f2 | cut -d'<' -f1)
+    l1_menu_name=$(sed -n '/<name>L1Menu/p' $1 | cut -d'>' -f2 | cut -d'<' -f1)
     cd
-    # HB 2016-12-01: used a temporary file as output of TME for VHDL Producer
+#     # HB 2016-12-01: used a temporary file as output of TME for VHDL Producer
     echo ========================
     echo INFO: TME is checking $1 and exporting a temporary file [~/$l1_menu_name\_temp.xml] for VHDL Producer
     echo ========================

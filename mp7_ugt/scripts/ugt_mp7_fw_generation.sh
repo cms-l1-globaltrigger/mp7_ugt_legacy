@@ -46,11 +46,11 @@ else
 	echo ========================
 	exit 1
     fi
-    # HB 2016-12-01: extract L1MenuName from XML file from <name>...</name>
+## HB 2016-12-01: extract L1MenuName from XML file from <name>...</name>
 #     l1_menu_name=$(sed -n '/L1Menu/p' $1 | cut -d'>' -f2 | cut -d'<' -f1)
     l1_menu_name=$(sed -n '/<name>L1Menu/p' $1 | cut -d'>' -f2 | cut -d'<' -f1)
     cd
-#     # HB 2016-12-01: used a temporary file as output of TME for VHDL Producer
+## HB 2016-12-01: used a temporary file as output of TME for VHDL Producer
     echo ========================
     echo INFO: TME is checking $1 and exporting a temporary file [~/$l1_menu_name\_temp.xml] for VHDL Producer
     echo ========================
@@ -66,12 +66,14 @@ else
     rm $l1_menu_name\_temp.xml
     cd $5/scripts
     python makeProject.py -t $6 -u $7 -b 0x$8 -p ~/work/mp7fwdir/ -m $4/$l1_menu_name\_m$3
-    source /opt/xilinx/Vivado/2016.2/settings64.sh
+## HB 2017-03-08: switched to Vivado 2016.4
+#    source /opt/xilinx/Vivado/2016.2/settings64.sh
+    source /opt/xilinx/Vivado/2016.4/settings64.sh
     nr_modules=0
     while [ $nr_modules -lt $3 ]; do
 	cd ~/work/mp7fwdir/$6/build_0x$8/$l1_menu_name\_m$3/module_$nr_modules
 	make project
-	# HB 2016-12-01: starting synthesis in screen
+## HB 2016-12-01: starting synthesis in screen
 	screen -S $8_$nr_modules -dm make bitfile
 	nr_modules=$((nr_modules + 1))
     done

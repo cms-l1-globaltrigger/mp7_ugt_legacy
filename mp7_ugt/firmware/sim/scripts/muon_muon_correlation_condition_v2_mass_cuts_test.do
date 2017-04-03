@@ -52,23 +52,23 @@ vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_comp_signed.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/phi_windows_comp.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_windows_comp.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators_v2.vhd
-#vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator.vhd
+vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators_v2.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator_v2.vhd
+vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/twobody_pt_calculator.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/mass_cuts.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_overlap_remover_condition.vhd
+vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition_v2.vhd
 
 #Testbench
-vcom -93 -work work $TESTBENCH/calo_calo_overlap_remover_condition_test_tb.vhd
+vcom -93 -work work $TESTBENCH/muon_muon_correlation_condition_v2_mass_cuts_tb.vhd
 
 #Load Design
-vsim -t 1ps work.calo_calo_overlap_remover_condition_test_tb 
+vsim -t 1ps work.muon_muon_correlation_condition_v2_mass_cuts_tb
 
 ##Load signals in wave window
 view wave
-do $TESTBENCH/../scripts/calo_calo_overlap_remover_condition_test_wave.do
+do $TESTBENCH/../scripts/muon_muon_correlation_condition_v2_mass_cuts_test_wave.do
 
 ##Run simulation
 run 500 ns

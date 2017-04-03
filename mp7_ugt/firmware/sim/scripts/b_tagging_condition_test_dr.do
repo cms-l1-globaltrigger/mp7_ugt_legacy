@@ -45,6 +45,7 @@ vcom -93 -work work $TESTBENCH/txt_util_pkg.vhd
 vcom -93 -work work $MTI/lhc_data_pkg.vhd
 vcom -93 -work work $TESTBENCH/lhc_data_debug_util_pkg.vhd
 vcom -93 -work work $MTI/math_pkg.vhd
+vcom -93 -work work $MTI/gt_mp7_core/gt_mp7_core_pkg_sim.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg_sim.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd

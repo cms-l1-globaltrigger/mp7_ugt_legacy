@@ -25,10 +25,10 @@ use UNISIM.VCOMPONENTS.ALL;
 
 use work.gtl_pkg.all;
 
-entity b_tagging_condition_TB is
-end b_tagging_condition_TB;
+entity calo_muon_muon_b_tagging_condition_TB is
+end calo_muon_muon_b_tagging_condition_TB;
 
-architecture rtl of b_tagging_condition_TB is
+architecture rtl of calo_muon_muon_b_tagging_condition_TB is
 
     constant LHC_CLK_PERIOD  : time :=  24 ns;
 
@@ -222,7 +222,7 @@ jet_mu_bx_0_bx_0_l1: for i in 0 to nr_calo_objects-1 generate
     end generate jet_mu_bx_0_bx_0_l2;
 end generate jet_mu_bx_0_bx_0_l1;
 
-dut: entity work.b_tagging_condition
+dut: entity work.calo_muon_muon_b_tagging_condition
      generic map(
         dr_cut => dr_cut,
         

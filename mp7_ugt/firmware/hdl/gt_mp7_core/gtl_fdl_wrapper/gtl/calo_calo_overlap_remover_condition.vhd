@@ -1,26 +1,14 @@
 
---------------------------------------------------------------------------------
--- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Synthese
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
--- $HeadURL: https://svn.cern.ch/reps/cactus/trunk/cactusupgrades/projects/ugt/mp7_ugt/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd $
--- $Date: 2015-12-14 14:49:29 +0100 (Mon, 14 Dec 2015) $
--- $Author: hbergaue $
--- $Revision: 41145 $
---------------------------------------------------------------------------------
-
 -- Desription:
 -- A Delta-R for two different calo object types is calculated. If DR is within thresholds for a certain combination of objects,
 -- the result of the calculation for DETA, DHI or mass is ignored for this combination of objects.
 -- In the current latency budget, this condition works with bx_p2 data for DR (because calculation of DR needs 2 bx) and bx_0 data for DETA, DHI or mass.
 
 -- Version history:
+-- HB 2017-02-28: added ports "diff_eta_dr" and "diff_phi_dr" for calculation of Delta-R (with bx_p2 data) for "removal". Used "diff_eta" and "diff_phi" for DETA and DPHI cuts (with bx_o data)
+-- HB 2017-02-27: removed comparison with bx0 data (calo1_correlation and calo2_correlation). Two pipeline stages of calo1_delta_r_obj_vs_templ and calo2_delta_r_obj_vs_templ used 
+--                for calo1_obj_vs_templ and calo2_obj_vs_templ instead of comparison
+-- HB 2017-02-07: used dr_calculator_v2
 -- HB 2017-01-10: updated mass_cuts instantiation
 -- HB 2016-12-20: first design
 
@@ -40,7 +28,8 @@ entity calo_calo_overlap_remover_condition is
         mass_cut: boolean := false;
 	mass_type : natural := 0;
 
-        nr_calo1_objects: positive;
+        calo1_object_low: natural;
+        calo1_object_high: natural;
         et_ge_mode_calo1: boolean;
         obj_type_calo1: natural := JET_TYPE;
         et_threshold_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
@@ -56,9 +45,10 @@ entity calo_calo_overlap_remover_condition is
         phi_w2_ignore_calo1: boolean;
         phi_w2_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w2_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-	iso_lut_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+	iso_lut_calo1: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
-	nr_calo2_objects: positive;
+	calo2_object_low: natural;
+	calo2_object_high: natural;
         et_ge_mode_calo2: boolean;
         obj_type_calo2: natural := TAU_TYPE;
         et_threshold_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
@@ -74,7 +64,7 @@ entity calo_calo_overlap_remover_condition is
         phi_w2_ignore_calo2: boolean;
         phi_w2_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w2_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-	iso_lut_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+	iso_lut_calo2: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
         dr_upper_limit: dr_squared_range_real;
         dr_lower_limit: dr_squared_range_real;
@@ -105,10 +95,10 @@ entity calo_calo_overlap_remover_condition is
     );
     port(
         lhc_clk: in std_logic;
-        calo1_delta_r: in calo_objects_array;
-        calo2_delta_r: in calo_objects_array;
-        calo1_correlation: in calo_objects_array;
-        calo2_correlation: in calo_objects_array;
+        calo1: in calo_objects_array;
+        calo2: in calo_objects_array;
+        diff_eta_dr: in deta_dphi_vector_array;
+        diff_phi_dr: in deta_dphi_vector_array;
         diff_eta: in deta_dphi_vector_array;
         diff_phi: in deta_dphi_vector_array;
         pt1 : in diff_inputs_array;
@@ -126,18 +116,15 @@ end calo_calo_overlap_remover_condition;
 architecture rtl of calo_calo_overlap_remover_condition is
 
     type removed_objects_mask_array is array (natural range <>, natural range <>) of std_logic;
-    signal removed_objects_mask, removed_objects_mask_pipe : removed_objects_mask_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1);
+    signal removed_objects_mask, removed_objects_mask_pipe : removed_objects_mask_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high);
 
--- fixed pipeline structure, 2 stages total
+-- fixed pipeline structure
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
---     type inv_mass_object_vs_template_array is array (0 to nr_calo_inv_mass_objects-1, 1 to 2) of std_logic;
-    type calo1_delta_r_object_vs_template_array is array (0 to nr_calo1_objects-1, 1 to 1) of std_logic;
-    type calo2_delta_r_object_vs_template_array is array (0 to nr_calo2_objects-1, 1 to 1) of std_logic;
-    type diff_comp_array is array (0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) of std_logic;
-    type calo1_object_vs_template_array is array (0 to nr_calo1_objects-1, 1 to 1) of std_logic;
-    type calo2_object_vs_template_array is array (0 to nr_calo2_objects-1, 1 to 1) of std_logic;
+    type calo1_object_vs_template_array is array (calo1_object_low to calo1_object_high, 1 to 1) of std_logic;
+    type calo2_object_vs_template_array is array (calo2_object_low to calo2_object_high, 1 to 1) of std_logic;
+    type diff_comp_array is array (calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) of std_logic;
 
     signal diff_eta_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     signal diff_eta_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
@@ -145,14 +132,16 @@ architecture rtl of calo_calo_overlap_remover_condition is
     signal diff_phi_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     signal diff_phi_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     
-    signal calo1_delta_r_obj_vs_templ : calo1_delta_r_object_vs_template_array;
-    signal calo1_delta_r_obj_vs_templ_pipe : calo1_delta_r_object_vs_template_array;
-    signal calo2_delta_r_obj_vs_templ : calo2_delta_r_object_vs_template_array;
-    signal calo2_delta_r_obj_vs_templ_pipe : calo2_delta_r_object_vs_template_array;
-    signal calo1_obj_vs_templ : calo1_object_vs_template_array;
-    signal calo1_obj_vs_templ_pipe : calo1_object_vs_template_array;
-    signal calo2_obj_vs_templ : calo2_object_vs_template_array;
-    signal calo2_obj_vs_templ_pipe : calo2_object_vs_template_array;
+    signal calo1_delta_r_obj_vs_templ : calo1_object_vs_template_array;
+    signal calo1_delta_r_obj_vs_templ_pipe : calo1_object_vs_template_array;
+    signal calo2_delta_r_obj_vs_templ : calo2_object_vs_template_array;
+    signal calo2_delta_r_obj_vs_templ_pipe : calo2_object_vs_template_array;
+    signal calo1_obj_vs_templ_temp : calo1_object_vs_template_array := (others => (others => '0'));
+    signal calo1_obj_vs_templ : calo1_object_vs_template_array := (others => (others => '0'));
+    signal calo1_obj_vs_templ_pipe : calo1_object_vs_template_array := (others => (others => '0'));
+    signal calo2_obj_vs_templ_temp : calo2_object_vs_template_array := (others => (others => '0'));
+    signal calo2_obj_vs_templ : calo2_object_vs_template_array := (others => (others => '0'));
+    signal calo2_obj_vs_templ_pipe : calo2_object_vs_template_array := (others => (others => '0'));
     signal diff_eta_comp : diff_comp_array := (others => (others => '0'));
     signal diff_eta_comp_pipe : diff_comp_array := (others => (others => '0'));
     signal diff_phi_comp : diff_comp_array := (others => (others => '0'));
@@ -185,9 +174,9 @@ begin
 
     -- Comparison with limits.
     -- HB 2015-09-17: permutations for Delta-R.
-    dr_l_1: for i in 0 to nr_calo1_objects-1 generate 
-	dr_l_2: for j in 0 to nr_calo2_objects-1 generate
-	    dr_calculator_i: entity work.dr_calculator
+    dr_l_1: for i in calo1_object_low to calo1_object_high generate 
+	dr_l_2: for j in calo2_object_low to calo2_object_high generate
+	    dr_calculator_i: entity work.dr_calculator_v2
 	    generic map(
 		upper_limit => dr_upper_limit,
 		lower_limit => dr_lower_limit,
@@ -195,8 +184,8 @@ begin
 		DETA_DPHI_PRECISION => DETA_DPHI_PRECISION
 	    )
 	    port map(
-		diff_eta => diff_eta(i,j),
-		diff_phi => diff_phi(i,j),
+		diff_eta => diff_eta_dr(i,j),
+		diff_phi => diff_phi_dr(i,j),
 		dr_comp => dr_comp(i,j)
 	    );
 	end generate dr_l_2;
@@ -212,7 +201,7 @@ begin
 
 -- HB 2016-07-08: different object types for Delta-R.
 
-    calo1_delta_r_obj_l: for i in 0 to nr_calo1_objects-1 generate
+    calo1_delta_r_obj_l: for i in calo1_object_low to calo1_object_high generate
 	calo1_delta_r_comp_i: entity work.calo_comparators_v2
 	    generic map(et_ge_mode_calo1, obj_type_calo1,
 		et_threshold_calo1,
@@ -230,10 +219,10 @@ begin
 		phi_w2_lower_limit_calo1,
 		iso_lut_calo1
 	    )
-	    port map(calo1_delta_r(i), calo1_delta_r_obj_vs_templ(i,1));
+	    port map(calo1(i), calo1_delta_r_obj_vs_templ(i,1));
     end generate calo1_delta_r_obj_l;
 
-    calo2_delta_r_obj_l: for i in 0 to nr_calo2_objects-1 generate
+    calo2_delta_r_obj_l: for i in calo2_object_low to calo2_object_high generate
 	calo2_delta_r_comp_i: entity work.calo_comparators_v2
 	    generic map(et_ge_mode_calo2, obj_type_calo2,
 		et_threshold_calo2,
@@ -251,7 +240,7 @@ begin
 		phi_w2_lower_limit_calo2,
 		iso_lut_calo2
 	    )
-	    port map(calo2_delta_r(i), calo2_delta_r_obj_vs_templ(i,1));
+	    port map(calo2(i), calo2_delta_r_obj_vs_templ(i,1));
     end generate calo2_delta_r_obj_l;
 
 	-- Pipeline stage for obj_vs_templ
@@ -265,16 +254,12 @@ begin
 
     -- "Matrix" of permutations in an and-or-structure.
     remove_overlaps_p: process(calo1_delta_r_obj_vs_templ_pipe, calo2_delta_r_obj_vs_templ_pipe, dr_comp_pipe)
-	variable removed_objects_mask_or : removed_objects_mask_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => '0'));
-	type dr_obj_templ_array is array (natural range <>, natural range <>) of std_logic;
-	variable dr_obj_templ : dr_obj_templ_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => '0'));
+	variable removed_objects_mask_or : removed_objects_mask_array(0 to calo1_object_high, 0 to calo2_object_high) := (others => (others => '0'));
     begin
-	dr_obj_templ := (others => (others => '0'));
 	removed_objects_mask_or := (others => (others => '0'));
-	for i in 0 to nr_calo1_objects-1 loop 
-	    for j in 0 to nr_calo2_objects-1 loop
-		dr_obj_templ(i,j) := calo1_delta_r_obj_vs_templ_pipe(i,1) and calo2_delta_r_obj_vs_templ_pipe(j,1) and dr_comp_pipe(i,j);
-		removed_objects_mask_or(i,j) := removed_objects_mask_or(i,j) or dr_obj_templ(i,j);
+	for i in calo1_object_low to calo1_object_high loop 
+	    for j in calo2_object_low to calo2_object_high loop
+		removed_objects_mask_or(i,j) := calo1_delta_r_obj_vs_templ_pipe(i,1) and calo2_delta_r_obj_vs_templ_pipe(j,1) and dr_comp_pipe(i,j);
 	    end loop;
 	end loop;
 	removed_objects_mask <= removed_objects_mask_or;
@@ -290,8 +275,8 @@ begin
     -- *** section: Delta-R - end ***************************************************************************************
     
     -- *** section: Correlations - begin ***************************************************************************************
-    delta_l_1: for i in 0 to nr_calo1_objects-1 generate 
-	delta_l_2: for j in 0 to nr_calo2_objects-1 generate
+    delta_l_1: for i in calo1_object_low to calo1_object_high generate 
+	delta_l_2: for j in calo2_object_low to calo2_object_high generate
 	    deta_diff_i: if deta_cut = true generate
 		diff_eta_comp(i,j) <= '1' when diff_eta(i,j) >= diff_eta_lower_limit_int and diff_eta(i,j) <= diff_eta_upper_limit_int and removed_objects_mask_pipe(i,j) = '0' else '0';
 	    end generate deta_diff_i;
@@ -310,7 +295,8 @@ begin
 			MASS_PRECISION => MASS_PRECISION,
 			MASS_COSH_COS_PRECISION => MASS_COSH_COS_PRECISION,
 			pt_sq_threshold => pt_sq_threshold,
-			sin_cos_width => sin_cos_width,
+			sin_cos_width_1 => sin_cos_width,
+			sin_cos_width_2 => sin_cos_width,
 			PT_PRECISION => PT_PRECISION,
 			PT_SQ_SIN_COS_PRECISION => PT_SQ_SIN_COS_PRECISION
 		    )
@@ -360,48 +346,59 @@ begin
             end if;
     end process;
 
-    -- Instance of comparators for calorimeter objects.
-    calo1_obj_l: for i in 0 to nr_calo1_objects-1 generate
-	calo1_comp_i: entity work.calo_comparators_v2
-	    generic map(et_ge_mode_calo1, obj_type_calo1,
-		et_threshold_calo1,
-		eta_full_range_calo1,
-		eta_w1_upper_limit_calo1,
-		eta_w1_lower_limit_calo1,
-		eta_w2_ignore_calo1,
-		eta_w2_upper_limit_calo1,
-		eta_w2_lower_limit_calo1,
-		phi_full_range_calo1,
-		phi_w1_upper_limit_calo1,
-		phi_w1_lower_limit_calo1,
-		phi_w2_ignore_calo1,
-		phi_w2_upper_limit_calo1,
-		phi_w2_lower_limit_calo1,
-	      iso_lut_calo1
-	  )
-	  port map(calo1_correlation(i), calo1_obj_vs_templ(i,1));
-    end generate calo1_obj_l;
+--     -- Instance of comparators for calorimeter objects.
+--     calo1_obj_l: for i in calo1_object_low to calo1_object_high generate
+-- 	calo1_comp_i: entity work.calo_comparators_v2
+-- 	    generic map(et_ge_mode_calo1, obj_type_calo1,
+-- 		et_threshold_calo1,
+-- 		eta_full_range_calo1,
+-- 		eta_w1_upper_limit_calo1,
+-- 		eta_w1_lower_limit_calo1,
+-- 		eta_w2_ignore_calo1,
+-- 		eta_w2_upper_limit_calo1,
+-- 		eta_w2_lower_limit_calo1,
+-- 		phi_full_range_calo1,
+-- 		phi_w1_upper_limit_calo1,
+-- 		phi_w1_lower_limit_calo1,
+-- 		phi_w2_ignore_calo1,
+-- 		phi_w2_upper_limit_calo1,
+-- 		phi_w2_lower_limit_calo1,
+-- 	      iso_lut_calo1
+-- 	  )
+-- 	  port map(calo1_correlation(i), calo1_obj_vs_templ(i,1));
+--     end generate calo1_obj_l;    
+-- 
+--     calo2_obj_l: for i in calo2_object_low to calo2_object_high generate
+-- 	calo2_comp_i: entity work.calo_comparators_v2
+-- 	    generic map(et_ge_mode_calo2, obj_type_calo2,
+--                 et_threshold_calo2,
+--                 eta_full_range_calo2,
+--                 eta_w1_upper_limit_calo2,
+--                 eta_w1_lower_limit_calo2,
+--                 eta_w2_ignore_calo2,
+--                 eta_w2_upper_limit_calo2,
+--                 eta_w2_lower_limit_calo2,
+--                 phi_full_range_calo2,
+--                 phi_w1_upper_limit_calo2,
+--                 phi_w1_lower_limit_calo2,
+--                 phi_w2_ignore_calo2,
+--                 phi_w2_upper_limit_calo2,
+--                 phi_w2_lower_limit_calo2,
+--                 iso_lut_calo2
+-- 	    )
+-- 	    port map(calo2_correlation(i), calo2_obj_vs_templ(i,1));
+--     end generate calo2_obj_l;
 
-    calo2_obj_l: for i in 0 to nr_calo2_objects-1 generate
-	calo2_comp_i: entity work.calo_comparators_v2
-	    generic map(et_ge_mode_calo2, obj_type_calo2,
-                et_threshold_calo2,
-                eta_full_range_calo2,
-                eta_w1_upper_limit_calo2,
-                eta_w1_lower_limit_calo2,
-                eta_w2_ignore_calo2,
-                eta_w2_upper_limit_calo2,
-                eta_w2_lower_limit_calo2,
-                phi_full_range_calo2,
-                phi_w1_upper_limit_calo2,
-                phi_w1_lower_limit_calo2,
-                phi_w2_ignore_calo2,
-                phi_w2_upper_limit_calo2,
-                phi_w2_lower_limit_calo2,
-                iso_lut_calo2
-	    )
-	    port map(calo2_correlation(i), calo2_obj_vs_templ(i,1));
-    end generate calo2_obj_l;
+    -- Two pipeline stages of calo1_delta_r_obj_vs_templ and calo2_delta_r_obj_vs_templ used for calo1_obj_vs_templ and calo2_obj_vs_templ instead of comparison
+    obj_vs_templ_2_stages_p: process(lhc_clk, calo1_delta_r_obj_vs_templ, calo2_delta_r_obj_vs_templ)
+	begin
+	if (lhc_clk'event and lhc_clk = '1') then
+	    calo1_obj_vs_templ_temp <= calo1_delta_r_obj_vs_templ;
+	    calo1_obj_vs_templ <= calo1_obj_vs_templ_temp;
+	    calo2_obj_vs_templ_temp <= calo2_delta_r_obj_vs_templ;
+	    calo2_obj_vs_templ <= calo2_obj_vs_templ_temp;
+	end if;
+    end process;
 
     -- Pipeline stage for obj_vs_templ
     obj_vs_templ_pipeline_p: process(lhc_clk, calo1_obj_vs_templ, calo2_obj_vs_templ)
@@ -422,14 +419,14 @@ begin
 
     matrix_deta_dphi_mass_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, mass_comp_pipe)
 	variable index : integer := 0;
-	variable obj_vs_templ_vec : std_logic_vector((nr_calo1_objects*nr_calo2_objects) downto 1) := (others => '0');
+	variable obj_vs_templ_vec : std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0');
 	variable condition_and_or_tmp : std_logic := '0';
     begin
 	index := 0;
 	obj_vs_templ_vec := (others => '0');
 	condition_and_or_tmp := '0';
-	for i in 0 to nr_calo1_objects-1 loop 
-	    for j in 0 to nr_calo2_objects-1 loop
+	for i in calo1_object_low to calo1_object_high loop 
+	    for j in calo2_object_low to calo2_object_high loop
 		if deta_cut = true and dphi_cut = false and mass_cut = false then
 		    index := index + 1;
 		    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j);

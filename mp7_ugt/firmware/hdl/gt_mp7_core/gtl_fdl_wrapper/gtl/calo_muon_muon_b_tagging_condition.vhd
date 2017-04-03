@@ -3,7 +3,8 @@
 -- Correlation Condition module for "b-tagging" (jet-mu-mu).
 
 -- Version history:
--- HB 2017-01-11: first design with dr_cut only
+-- HB 2017-02-07: used dr_calculator_v2.
+-- HB 2017-02-03: first design with dr_cut only
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -11,7 +12,7 @@ use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
 
-entity b_tagging_condition is
+entity calo_muon_muon_b_tagging_condition is
      generic(
 
 	dr_cut: boolean := true;
@@ -88,9 +89,9 @@ entity b_tagging_condition is
         diff_phi: in deta_dphi_vector_array;
         condition_o: out std_logic
     );
-end b_tagging_condition; 
+end calo_muon_muon_b_tagging_condition; 
 
-architecture rtl of b_tagging_condition is
+architecture rtl of calo_muon_muon_b_tagging_condition is
 
 -- fixed pipeline structure, 2 stages total
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
@@ -119,7 +120,7 @@ begin
     delta_l_1: for i in calo_object_low to calo_object_high generate 
 	delta_l_2: for j in muon_object_low to muon_object_high generate
 	    dr_i: if dr_cut = true generate
-		dr_calculator_i: entity work.dr_calculator
+		dr_calculator_i: entity work.dr_calculator_v2
 		    generic map(
 			upper_limit => dr_upper_limit,
 			lower_limit => dr_lower_limit,

@@ -14,7 +14,11 @@
 -- $Revision: 40316 $
 --------------------------------------------------------------------------------
 
--- Desription:
+-- Description:
+-- Testbench for simulation of mass_cuts.vhd
+
+-- Version history:
+-- HB 2017-03-23: used integer for cos(phi) and sin(phi) for twobody_pt calculation 
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -32,54 +36,6 @@ end mass_cuts_TB;
 
 architecture rtl of mass_cuts_TB is
 
--- ****************************************************************************
---HB 2016-12-13: the following types and LUTs should be inserted in gtl_pkg.vhd
--- ****************************************************************************
-
-type cos_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range -1000 to 1000;
-
--- HB 2016-11-09: LUTs for calo objecttypes
--- HB 2016-11-09: center of phi bins for calculation of cosine and sine with 3 digits after decimal point
-constant COS_PHI_LUT : cos_phi_lut_array := (
-1000, 998, 994, 988, 981, 971, 960, 947, 932, 915, 897, 877, 855, 831, 806, 780,
-752, 722, 692, 659, 626, 591, 556, 519, 481, 442, 403, 362, 321, 280, 238, 195,
-152, 109, 65, 22, -22, -65, -109, -152, -195, -238, -280, -321, -362, -403, -442, -481,
--519, -556, -591, -626, -659, -692, -722, -752, -780, -806, -831, -855, -877, -897, -915, -932,
--947, -960, -971, -981, -988, -994, -998, -1000, -1000, -998, -994, -988, -981, -971, -960, -947,
--932, -915, -897, -877, -855, -831, -806, -780, -752, -722, -692, -659, -626, -591, -556, -519,
--481, -442, -403, -362, -321, -280, -238, -195, -152, -109, -65, -22, 22, 65, 109, 152,
-195, 238, 280, 321, 362, 403, 442, 481, 519, 556, 591, 626, 659, 692, 722, 752,
-780, 806, 831, 855, 877, 897, 915, 932, 947, 960, 971, 981, 988, 994, 998, 1000,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-);
-
-type sin_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range -1000 to 1000;
-
-constant SIN_PHI_LUT : sin_phi_lut_array := (
-22, 65, 109, 152, 195, 238, 280, 321, 362, 403, 442, 481, 519, 556, 591, 626,
-659, 692, 722, 752, 780, 806, 831, 855, 877, 897, 915, 932, 947, 960, 971, 981,
-988, 994, 998, 1000, 1000, 998, 994, 988, 981, 971, 960, 947, 932, 915, 897, 877,
-855, 831, 806, 780, 752, 722, 692, 659, 626, 591, 556, 519, 481, 442, 403, 362,
-321, 280, 238, 195, 152, 109, 65, 22, -22, -65, -109, -152, -195, -238, -280, -321,
--362, -403, -442, -481, -519, -556, -591, -626, -659, -692, -722, -752, -780, -806, -831, -855,
--877, -897, -915, -932, -947, -960, -971, -981, -988, -994, -998, -1000, -1000, -998, -994, -988,
--981, -971, -960, -947, -932, -915, -897, -877, -855, -831, -806, -780, -752, -722, -692, -659,
--626, -591, -556, -519, -481, -442, -403, -362, -321, -280, -238, -195, -152, -109, -65, -22,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-);
-
 -- Definition of mass_type:
 -- 0 => invariant mass
 -- 1 => invariant mass with pt cut
@@ -92,10 +48,11 @@ constant SIN_PHI_LUT : sin_phi_lut_array := (
 --     constant mass_upper_limit: real := 32.6; -- upper limit for transverse mass
 --     constant mass_lower_limit: real := 32.5; -- lower limit for transverse mass
     
---     constant pt_sq_upper_limit: real := 14481.7; -- upper limit for pt**2 (pt square)
-    constant pt_sq_threshold: real := 14481.7; -- threshold for pt**2 (pt square)
+--     constant pt_sq_threshold: real := 14481.7; -- threshold for pt**2 (pt square)
+    constant pt_sq_threshold: real := 15000.0; -- threshold for pt**2 (pt square)
     constant EG_PT_SIN_COS_PRECISION  : positive := 3; -- digits after decimal point for calculation of sine and cosine values in LUTs
-    constant SIN_COS_WIDTH  : positive :=  10; -- width for std_logic_vector of values for sine and cosine (1000 < 2**10=1024)
+-- HB 2017-03-22: width for std_logic_vector of values for sine and cosine (1000 < 2**10=1024) plus 1 for negative values !!!
+    constant SIN_COS_WIDTH  : positive :=  CALO_SIN_COS_VECTOR_WIDTH;
 
     constant LHC_CLK_PERIOD  : time :=  25 ns;
 
@@ -107,9 +64,7 @@ constant SIN_PHI_LUT : sin_phi_lut_array := (
     signal diff_eg_eg_phi_integer: dim2_max_phi_range_array(0 to 1, 0 to 1) := (others => (others => 0));
     signal cosh_deta_vector : std_logic_vector(EG_EG_COSH_COS_VECTOR_WIDTH-1 downto 0) := (others => '0');
     signal cos_dphi_vector : std_logic_vector(EG_EG_COSH_COS_VECTOR_WIDTH-1 downto 0) := (others => '0');
-    signal cos_phi_1, sin_phi_2 : std_logic_vector(SIN_COS_WIDTH-1 downto 0);
-    signal cos_phi_2, sin_phi_1 : std_logic_vector(SIN_COS_WIDTH-1 downto 0);
-    signal sig_pt_square_cut_int : boolean := true;
+    signal cos_phi_1_integer, sin_phi_1_integer, cos_phi_2_integer, sin_phi_2_integer : integer;
 
 --*********************************Main Body of Code**********************************
 begin
@@ -132,10 +87,8 @@ begin
         eg_data <= (X"00000000", X"00000000");
 	wait for LHC_CLK_PERIOD; 
         eg_data <= (X"0006D070", X"0000E090");
-        sig_pt_square_cut_int <= false;
 	wait for LHC_CLK_PERIOD; 
         eg_data <= (X"00000000", X"00000000");
-        sig_pt_square_cut_int <= true;
         wait;
     end process;
 
@@ -163,18 +116,16 @@ diff_eg_eg_phi_i: entity work.sub_phi_integer_obj_vs_obj
 cosh_deta_vector <= CONV_STD_LOGIC_VECTOR(EG_EG_COSH_DETA_LUT(diff_eg_eg_eta_integer(0,1)), EG_EG_COSH_COS_VECTOR_WIDTH);
 cos_dphi_vector <= CONV_STD_LOGIC_VECTOR(EG_EG_COS_DPHI_LUT(diff_eg_eg_phi_integer(0,1)), EG_EG_COSH_COS_VECTOR_WIDTH);
 
-cos_phi_1 <= CONV_STD_LOGIC_VECTOR(COS_PHI_LUT(CONV_INTEGER(eg_data(0)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low))), SIN_COS_WIDTH);
-cos_phi_2 <= CONV_STD_LOGIC_VECTOR(COS_PHI_LUT(CONV_INTEGER(eg_data(1)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low))), SIN_COS_WIDTH);
-sin_phi_1 <= CONV_STD_LOGIC_VECTOR(SIN_PHI_LUT(CONV_INTEGER(eg_data(0)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low))), SIN_COS_WIDTH);
-sin_phi_2 <= CONV_STD_LOGIC_VECTOR(SIN_PHI_LUT(CONV_INTEGER(eg_data(1)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low))), SIN_COS_WIDTH);
-
---HB 2016-11-11: simulation of invariant_mass_w_pt.vhd
+cos_phi_1_integer <= CALO_COS_PHI_LUT(CONV_INTEGER(eg_data(0)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)));
+cos_phi_2_integer <= CALO_COS_PHI_LUT(CONV_INTEGER(eg_data(1)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)));
+sin_phi_1_integer <= CALO_SIN_PHI_LUT(CONV_INTEGER(eg_data(0)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)));
+sin_phi_2_integer <= CALO_SIN_PHI_LUT(CONV_INTEGER(eg_data(1)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)));
 
 dut: entity work.mass_cuts
     generic map(MASS_TYPE, mass_upper_limit, mass_lower_limit, EG_PT_VECTOR_WIDTH, EG_PT_VECTOR_WIDTH, EG_EG_COSH_COS_VECTOR_WIDTH, EG_EG_INV_MASS_PRECISION, EG_EG_COSH_COS_PRECISION,
-	 pt_sq_threshold, SIN_COS_WIDTH, EG_ET_PRECISION, EG_PT_SIN_COS_PRECISION) -- M**2/2
+	 pt_sq_threshold, SIN_COS_WIDTH, EG_PT_PRECISION, EG_PT_SIN_COS_PRECISION) -- M**2/2
     port map(pt1(EG_PT_VECTOR_WIDTH-1 downto 0), pt2(EG_PT_VECTOR_WIDTH-1 downto 0), cosh_deta_vector(EG_EG_COSH_COS_VECTOR_WIDTH-1 downto 0), cos_dphi_vector(EG_EG_COSH_COS_VECTOR_WIDTH-1 downto 0),
-	cos_phi_1, cos_phi_2, sin_phi_1, sin_phi_2, open, open, open, open, open);
+	cos_phi_1_integer, cos_phi_2_integer, sin_phi_1_integer, sin_phi_2_integer, open, open, open, open, open, open);
 
 end rtl;
 

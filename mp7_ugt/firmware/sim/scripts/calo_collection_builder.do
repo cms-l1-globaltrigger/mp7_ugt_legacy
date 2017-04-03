@@ -47,23 +47,20 @@ vcom -93 -work work $GT_SRC/lhc_data_pkg.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gt_mp7_core_pkg_sim.vhd
 vcom -93 -work work $GT_SRC/math_pkg.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg_sim.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/twobody_pt_calculator.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/mass_cuts.vhd
+vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_collection_builder.vhd
 
 #Testbench
-vcom -93 -work work $TESTBENCH/mass_cuts_tb.vhd
+vcom -93 -work work $TESTBENCH/calo_collection_builder_tb.vhd
 
 #Load Design
-vsim -t 1ps work.mass_cuts_TB 
+vsim -t 1ps work.calo_collection_builder_TB 
 
 ##Load signals in wave window
 view wave
-do $TESTBENCH/../scripts/mass_cuts_wave.do
+do $TESTBENCH/../scripts/calo_collection_builder_wave.do
 
 ##Run simulation
-run 500 ns
+run 200 ns
 
 # eof
 

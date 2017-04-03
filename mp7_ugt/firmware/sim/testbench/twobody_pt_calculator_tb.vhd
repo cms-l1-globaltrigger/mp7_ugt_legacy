@@ -14,7 +14,7 @@
 -- $Revision: 40316 $
 --------------------------------------------------------------------------------
 
--- Description:
+-- Desription:
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -27,17 +27,15 @@ use std.textio.all;
 
 use work.gtl_pkg.all;
 
-entity invariant_mass_w_pt_TB is
-end invariant_mass_w_pt_TB;
+entity twobody_pt_calculator_TB is
+end twobody_pt_calculator_TB;
 
-architecture rtl of invariant_mass_w_pt_TB is
+architecture rtl of twobody_pt_calculator_TB is
 
-    constant sel_sig_pt_square_cut : boolean := true; -- "true" selects sig_pt_square_cut for simulation, "false" selects pt_square_cut in generic for synthesis
-    constant pt_square_cut : boolean := true; -- generic parameter for synthesis
-    constant pt_sq_upper_limit: real := 15000.5; -- upper limit for pt**2 (pt square)
-    constant pt_sq_lower_limit: real := 10000.9; -- lower limit for pt**2 (pt square)
+    constant pt_sq_threshold: real := 14481.7; -- threshold for pt**2 (pt square)
     constant EG_PT_SIN_COS_PRECISION  : positive := 3; -- digits after decimal point for calculation of sine and cosine values in LUTs
-    constant SIN_COS_WIDTH  : positive :=  10; -- width for std_logic_vector of values for sine and cosine (1000 < 2**10=1024)
+-- HB 2017-03-22: width for std_logic_vector of values for sine and cosine (1000 < 2**10=1024) plus 1 for negative values !!!
+    constant SIN_COS_WIDTH  : positive :=  CALO_SIN_COS_VECTOR_WIDTH;
 
     constant LHC_CLK_PERIOD  : time :=  25 ns;
 
@@ -51,7 +49,9 @@ architecture rtl of invariant_mass_w_pt_TB is
     signal cos_dphi_vector : std_logic_vector(EG_EG_COSH_COS_VECTOR_WIDTH-1 downto 0) := (others => '0');
     signal cos_phi_1, sin_phi_2 : std_logic_vector(SIN_COS_WIDTH-1 downto 0);
     signal cos_phi_2, sin_phi_1 : std_logic_vector(SIN_COS_WIDTH-1 downto 0);
-    signal sig_pt_square_cut_int : boolean := true;
+
+    signal pt1_integer, pt2_integer : integer;
+    signal cos_phi_1_integer, sin_phi_1_integer, cos_phi_2_integer, sin_phi_2_integer : integer;
 
 --*********************************Main Body of Code**********************************
 begin
@@ -73,11 +73,9 @@ begin
 	wait for LHC_CLK_PERIOD; 
         eg_data <= (X"00000000", X"00000000");
 	wait for LHC_CLK_PERIOD; 
-        eg_data <= (X"0006D070", X"0000E080");
-        sig_pt_square_cut_int <= false;
+        eg_data <= (X"0006D070", X"0000E090");
 	wait for LHC_CLK_PERIOD; 
         eg_data <= (X"00000000", X"00000000");
-        sig_pt_square_cut_int <= true;
         wait;
     end process;
 
@@ -87,36 +85,20 @@ begin
 --HB 2016-11-11: the following calculations of signals should be part of gtl_module.vhd
 -- ****************************************************************************
 
-pt1(EG_PT_VECTOR_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR(EG_PT_LUT(CONV_INTEGER(eg_data(0)(D_S_I_EG_V2.et_high downto D_S_I_EG_V2.et_low))), EG_PT_VECTOR_WIDTH);
-pt2(EG_PT_VECTOR_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR(EG_PT_LUT(CONV_INTEGER(eg_data(1)(D_S_I_EG_V2.et_high downto D_S_I_EG_V2.et_low))), EG_PT_VECTOR_WIDTH);
+pt1_integer <= EG_PT_LUT(CONV_INTEGER(eg_data(0)(D_S_I_EG_V2.et_high downto D_S_I_EG_V2.et_low)));
+pt2_integer <= EG_PT_LUT(CONV_INTEGER(eg_data(1)(D_S_I_EG_V2.et_high downto D_S_I_EG_V2.et_low)));
+pt1(EG_PT_VECTOR_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR(pt1_integer, EG_PT_VECTOR_WIDTH);
+pt2(EG_PT_VECTOR_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR(pt2_integer, EG_PT_VECTOR_WIDTH);
 
-eg_data_l: for i in 0 to 1 generate
-    eg_eta_integer(i) <= CONV_INTEGER(signed(eg_data(i)(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low)));
-    eg_phi_integer(i) <= CONV_INTEGER(eg_data(i)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low));
-end generate;
+cos_phi_1_integer <= CALO_COS_PHI_LUT(CONV_INTEGER(eg_data(0)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)));
+cos_phi_2_integer <= CALO_COS_PHI_LUT(CONV_INTEGER(eg_data(1)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)));
+sin_phi_1_integer <= CALO_SIN_PHI_LUT(CONV_INTEGER(eg_data(0)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)));
+sin_phi_2_integer <= CALO_SIN_PHI_LUT(CONV_INTEGER(eg_data(1)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low)));
 
-diff_eg_eg_eta_i: entity work.sub_eta_integer_obj_vs_obj
-    generic map(2, 2)
-    port map(eg_eta_integer, eg_eta_integer, diff_eg_eg_eta_integer);
-diff_eg_eg_phi_i: entity work.sub_phi_integer_obj_vs_obj
-    generic map(2, 2, CALO_PHI_HALF_RANGE_BINS)
-    port map(eg_phi_integer, eg_phi_integer, diff_eg_eg_phi_integer);
-
-cosh_deta_vector <= CONV_STD_LOGIC_VECTOR(EG_EG_COSH_DETA_LUT(diff_eg_eg_eta_integer(0,1)), EG_EG_COSH_COS_VECTOR_WIDTH);
-cos_dphi_vector <= CONV_STD_LOGIC_VECTOR(EG_EG_COS_DPHI_LUT(diff_eg_eg_phi_integer(0,1)), EG_EG_COSH_COS_VECTOR_WIDTH);
-
-cos_phi_1 <= CONV_STD_LOGIC_VECTOR(CALO_COS_PHI_LUT(CONV_INTEGER(eg_data(0)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low))), SIN_COS_WIDTH);
-cos_phi_2 <= CONV_STD_LOGIC_VECTOR(CALO_COS_PHI_LUT(CONV_INTEGER(eg_data(1)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low))), SIN_COS_WIDTH);
-sin_phi_1 <= CONV_STD_LOGIC_VECTOR(CALO_SIN_PHI_LUT(CONV_INTEGER(eg_data(0)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low))), SIN_COS_WIDTH);
-sin_phi_2 <= CONV_STD_LOGIC_VECTOR(CALO_SIN_PHI_LUT(CONV_INTEGER(eg_data(1)(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low))), SIN_COS_WIDTH);
-
---HB 2016-11-11: simulation of invariant_mass_w_pt.vhd
-
-dut: entity work.invariant_mass_w_pt
-    generic map(sel_sig_pt_square_cut, 1300.1, 195.4, EG_PT_VECTOR_WIDTH, EG_PT_VECTOR_WIDTH, EG_EG_COSH_COS_VECTOR_WIDTH, EG_EG_INV_MASS_PRECISION, EG_EG_COSH_COS_PRECISION,
-	 pt_square_cut, pt_sq_upper_limit, pt_sq_lower_limit, SIN_COS_WIDTH, EG_PT_PRECISION, EG_PT_SIN_COS_PRECISION) -- M**2/2
-    port map(pt1(EG_PT_VECTOR_WIDTH-1 downto 0), pt2(EG_PT_VECTOR_WIDTH-1 downto 0), cosh_deta_vector(EG_EG_COSH_COS_VECTOR_WIDTH-1 downto 0), cos_dphi_vector(EG_EG_COSH_COS_VECTOR_WIDTH-1 downto 0),
-	cos_phi_1, cos_phi_2, sin_phi_1, sin_phi_2, sig_pt_square_cut_int, open, open, open, open);
+dut: entity work.twobody_pt_calculator
+    generic map(EG_PT_VECTOR_WIDTH, EG_PT_VECTOR_WIDTH, pt_sq_threshold, SIN_COS_WIDTH, EG_PT_PRECISION, EG_PT_SIN_COS_PRECISION)
+    port map(pt1(EG_PT_VECTOR_WIDTH-1 downto 0), pt2(EG_PT_VECTOR_WIDTH-1 downto 0),
+	cos_phi_1_integer, cos_phi_2_integer, sin_phi_1_integer, sin_phi_2_integer, open, open);
 
 end rtl;
 

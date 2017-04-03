@@ -58,19 +58,19 @@ vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator_v2.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/mass_cuts.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
 vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_overlap_remover_condition.vhd
+vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_1plus1_orm_condition.vhd
 
 #Testbench
-vcom -93 -work work $TESTBENCH/calo_calo_overlap_remover_condition_test_tb.vhd
+vcom -93 -work work $TESTBENCH/calo_1plus1_orm_condition_test_tb.vhd
 
 #Load Design
-vsim -t 1ps work.calo_calo_overlap_remover_condition_test_tb 
+vsim -t 1ps work.calo_1plus1_orm_condition_test_TB 
 
 ##Load signals in wave window
 view wave
-do $TESTBENCH/../scripts/calo_calo_overlap_remover_condition_test_wave.do
+do $TESTBENCH/../scripts/calo_1plus1_orm_condition_test_wave.do
 
 ##Run simulation
-run 500 ns
+run 350 ns
 
 # eof

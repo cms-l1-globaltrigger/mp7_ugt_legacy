@@ -2,6 +2,11 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
+-- HB 2016-09-16: v1.2.0: 
+-- 	Implemented bottom and top limit for object range in all condition types.
+-- 	Created new VHDL modules: mass_cuts, dr_calculator_v2, calo_conditions_v4, muon_conditions_v4,
+--		calo_calo_correlation_condition_v2, calo_esums_correlation_condition_v2, calo_muon_correlation_condition_v2
+--		muon_muon_correlation_condition_v2, muon_esums_correlation_condition_v2, calo_calo_overlap_remover_condition, calo_muon_muon_b_tagging_condition
 -- HB 2016-09-16: v1.1.0: Implemented new esums with ETTEM, "TOWERCNT" (ECAL sum), ETMHF and HTMHF.
 -- HB 2016-08-31: v1.0.0: Same version as v0.0.10
 -- HB 2016-04-22: v0.0.10: Implemented min_bias_hf_conditions.vhd for minimum bias trigger conditions for low-pileup-run in May 2016.

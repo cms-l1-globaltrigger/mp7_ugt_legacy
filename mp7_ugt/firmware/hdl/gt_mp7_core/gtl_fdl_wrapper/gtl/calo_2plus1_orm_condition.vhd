@@ -333,11 +333,14 @@ begin
 		for k in calo2_object_low to calo2_object_high loop
 		    if j/=i then
 			index := index + 1;
-			obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo2_obj_vs_templ_pipe(k,1) and
-						  mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and diff_eta_comp_pipe(i,j) and
-						  not dr_orm_comp_pipe(i,k) and not dr_orm_comp_pipe(j,k) and
-						  not diff_phi_orm_comp_pipe(i,k) and not diff_phi_orm_comp_pipe(j,k) and
-						  not diff_eta_orm_comp_pipe(i,k) and not diff_eta_orm_comp_pipe(j,k);			
+			obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and
+						   mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and diff_eta_comp_pipe(i,j) and
+						   not (dr_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
+						   not (dr_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1)) and
+						   not (diff_phi_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
+						   not (diff_phi_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1)) and
+						   not (diff_eta_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
+						   not (diff_eta_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1));			
 		    end if;
 		end loop;
 	    end loop;

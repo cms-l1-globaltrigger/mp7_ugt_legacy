@@ -14,6 +14,7 @@ import sys, os
 import stat
 import pwd
 import socket
+import patchFiles
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
@@ -183,6 +184,8 @@ def main():
         os.symlink(mp7path, mp7currDir)
         mp7currPath = os.path.join(args.path, mp7currDir)
 
+        patchFiles.patch_all(os.path.join(mp7path,'cactusupgrades'))
+
         os.chdir(mp7currPath)
 
     else:
@@ -239,7 +242,7 @@ def main():
 
         # Read generated VHDL snippets
         src_dir = os.path.join(args.menu, 'vhdl', 'module_{i}'.format(**locals()), 'src')
-	
+
         replace_map = {
             '{{algo_index}}': read_file(os.path.join(src_dir, 'algo_index.vhd')),
             '{{ugt_constants}}': read_file(os.path.join(src_dir, 'ugt_constants.vhd')),

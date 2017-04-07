@@ -4,6 +4,7 @@
 -- There are cuts for "overlap removal" between different object types and cuts for the correlations of same object type.
 
 -- Version history:
+-- HB 2017-04-05: corrected "and structure" of obj_vs_templ_vec.
 -- HB 2017-03-30: updated pt, cos_phi_integer and sin_phi_integer ports.
 -- HB 2017-03-29: updated for one "sin_cos_width" in mass_cuts.
 -- HB 2017-03-16: first design.

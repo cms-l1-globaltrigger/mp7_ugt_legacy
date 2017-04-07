@@ -116,11 +116,13 @@ architecture rtl of muon_esums_correlation_condition_v2 is
 
 begin
 
--- HB 2016-12-20: only transverse mass could be calculated with esums
-    assert (mass_cut and mass_type = 2) or (mass_cut and mass_type = 3) report 
-	"mass selection not valid: mass_type = " & integer'image(mass_type) & ", which means one of invariant mass types (but, only transverse mass types are valid)" 
-    severity failure;	
-
+-- HB 2017-04-04: only transverse mass could be calculated with esums
+    check_mass_type_i: if mass_cut generate
+	assert (mass_type = 2 or mass_type = 3) report 
+	    "mass selection not valid: mass_type = " & integer'image(mass_type) & ", which means one of invariant mass types (but, only transverse mass types are valid)" 
+	severity failure;	
+    end generate check_mass_type_i;
+    
     -- *** section: CUTs - begin ***************************************************************************************
     -- Conversion of limits to std_logic_vector.
     diff_phi_upper_limit_int <= conv_std_logic_vector(integer(diff_phi_upper_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);

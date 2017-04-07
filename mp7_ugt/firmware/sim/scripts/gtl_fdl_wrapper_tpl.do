@@ -35,7 +35,7 @@ if [info exists env(MTI_LIBS)] {
 ## set your src files directory for your design
 
 ##set MP7_BRDS _MP7_TAG_/boards/mp7/base_fw
-set MP7_COMPONENTS _MP7_TAG_/components
+set MP7_COMPONENTS _MP7_TAG_/cactusupgrades/components
 
 ## HB 2016-11-16: vhdl_temp is a temporary directory, which is removed after simulation
 set L1TM ./../sim/vhdl_temp
@@ -66,38 +66,21 @@ vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_windows_comp.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators_v2.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_v2.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_v3.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_v4.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_comparators.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/min_bias_hf_conditions.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators_v2.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_v2.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_v3.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_v4.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_obj_vs_obj.vhd
-#vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_obj_vs_obj.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator_v2.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/invariant_mass.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/twobody_pt_calculator.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/mass_cuts.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/towercount_condition.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition_v2.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition_v2.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition_v2.vhd

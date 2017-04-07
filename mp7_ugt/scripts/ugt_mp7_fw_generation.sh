@@ -5,7 +5,7 @@ set -e
 ## Description:
 ## runs TME, VHDL Producer, creates project for FW synthesis, executes "make project" and starts screen for synthesis
 
-nr_arguments=9
+nr_arguments=8
 max_nr_modules=3
 
 function error_exit
@@ -57,26 +57,21 @@ else
     l1_menu_name=$(sed -n '/<name>L1Menu/p' $1 | cut -d'>' -f2 | cut -d'<' -f1)
     cd
 ## HB 2016-12-01: used a temporary file as output of TME for VHDL Producer
-    if [ "$9" = "1" ]; then
-								echo ========================
-						    echo INFO: TME is checking $1 and exporting a temporary file [~/$l1_menu_name\_temp.xml] for VHDL Producer
-						    echo ========================
-						    tm-editor $1 --export-xml ~/$l1_menu_name\_temp.xml || error_exit "Could not open tm-editor! Aborting"
-						    cd $2 || error_exit "Cannot change directory! Aborting"
-						    source setup.sh || error_exit "Could not source setup.sh! Aborting"
-						    cd $2/tmVhdlProducer || error_exit "Cannot change directory! Aborting"
-						    tm-vhdlproducer ~/$l1_menu_name\_temp.xml --output=$4 --modules $3 || error_exit "VHDL producer failed! Aborting"
-						    cd
-						    echo ========================
-						    echo INFO: removed ~/$l1_menu_name\_temp.xml
-						    echo ========================
-						    rm $l1_menu_name\_temp.xml || error_exit "Cannot remove temp XML! Aborting"
-						    cd $5/scripts || error_exit "Cannot change directory! Aborting"
-						    python makeProject.py -t $6 -u $7 -b 0x$8 -p ~/work/mp7fwdir/ -m $4/$l1_menu_name\_m$3 || error_exit "makePropject.py script failed! Aborting"
-    else
-								cd $5/scripts || error_exit "Cannot change directory! Aborting"
-			          python makeProject.py -t $6 -u $7 -b 0x$8 -p ~/work/mp7fwdir/ -m $1 || error_exit "makePropject.py script failed! Aborting"
-		fi
+    echo ========================
+    echo INFO: TME is checking $1 and exporting a temporary file [~/$l1_menu_name\_temp.xml] for VHDL Producer
+    echo ========================
+    tm-editor $1 --export-xml ~/$l1_menu_name\_temp.xml || error_exit "Could not open tm-editor! Aborting"
+    cd $2 || error_exit "Cannot change directory! Aborting"
+    source setup.sh || error_exit "Could not source setup.sh! Aborting"
+    cd $2/tmVhdlProducer || error_exit "Cannot change directory! Aborting"
+    tm-vhdlproducer ~/$l1_menu_name\_temp.xml --output=$4 --modules $3 || error_exit "VHDL producer failed! Aborting"
+    cd
+    echo ========================
+    echo INFO: removed ~/$l1_menu_name\_temp.xml
+    echo ========================
+    rm $l1_menu_name\_temp.xml || error_exit "Cannot remove temp XML! Aborting"
+    cd $5/scripts || error_exit "Cannot change directory! Aborting"
+    python makeProject.py -t $6 -u $7 -b 0x$8 -p ~/work/mp7fwdir/ -m $4/$l1_menu_name\_m$3 || error_exit "makePropject.py script failed! Aborting"
     nr_modules=0
     while [ $nr_modules -lt $3 ]; do
 ## HB 2016-12-01: starting synthesis in screen

@@ -4,6 +4,7 @@
 -- There are cuts for "overlap removal" between different object types and cuts for the correlations of same object type.
 
 -- Version history:
+-- HB 2017-04-10: inserted "orm mask" for use in "and structure" of "obj_vs_templ_vec".
 -- HB 2017-04-05: corrected "and structure" of obj_vs_templ_vec.
 -- HB 2017-03-30: updated pt, cos_phi_integer and sin_phi_integer ports.
 -- HB 2017-03-29: updated for one "sin_cos_width" in mass_cuts.
@@ -119,7 +120,7 @@ entity calo_2plus1_orm_condition is
         cos_phi_integer : in calo_sin_cos_integer_array;
         sin_phi_integer : in calo_sin_cos_integer_array;
         condition_o: out std_logic;
-        sim_obj_vs_templ_vec: out std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo1_object_high-calo1_object_low+1)*(calo2_object_high-calo2_object_low+1)) downto 1)
+        sim_obj_vs_templ_vec: out std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo1_object_high-calo1_object_low+1)) downto 1)
     );
 end calo_2plus1_orm_condition; 
 
@@ -129,25 +130,24 @@ architecture rtl of calo_2plus1_orm_condition is
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
-    signal diff_eta_orm_comp, diff_eta_orm_comp_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '0'));
     signal diff_eta_orm_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     signal diff_eta_orm_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
-    signal diff_phi_orm_comp, diff_phi_orm_comp_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '0'));
     signal diff_phi_orm_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     signal diff_phi_orm_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
-    signal dr_orm_comp, dr_orm_comp_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '0'));
+    signal diff_eta_orm_comp, diff_eta_orm_comp_pipe, diff_phi_orm_comp, diff_phi_orm_comp_pipe, dr_orm_comp, dr_orm_comp_pipe: 
+	std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '0'));
     signal calo1_obj_vs_templ, calo1_obj_vs_templ_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, 1 to 2) := (others => (others => '0'));
     signal calo2_obj_vs_templ, calo2_obj_vs_templ_pipe : std_logic_2dim_array(calo2_object_low to calo2_object_high, 1 to 1) := (others => (others => '0'));
 -- HB 2017-03-27: default values of cut comps -> '1' because of AND in formular of obj_vs_templ_vec
-    signal diff_eta_comp, diff_eta_comp_temp, diff_eta_comp_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo1_object_low to calo1_object_high) := (others => (others => '1'));
     signal diff_eta_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     signal diff_eta_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
-    signal diff_phi_comp, diff_phi_comp_temp, diff_phi_comp_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo1_object_low to calo1_object_high) := (others => (others => '1'));
     signal diff_phi_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     signal diff_phi_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
-    signal dr_comp, dr_comp_temp, dr_comp_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo1_object_low to calo1_object_high) := (others => (others => '1'));
-    signal mass_comp, mass_comp_temp, mass_comp_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo1_object_low to calo1_object_high) := (others => (others => '1'));
+    signal diff_eta_comp, diff_eta_comp_temp, diff_eta_comp_pipe, diff_phi_comp, diff_phi_comp_temp, diff_phi_comp_pipe, dr_comp, dr_comp_temp, dr_comp_pipe, 
+	mass_comp, mass_comp_temp, mass_comp_pipe: std_logic_2dim_array(calo1_object_low to calo1_object_high, calo1_object_low to calo1_object_high) := (others => (others => '1'));
     signal condition_and_or : std_logic;
+    
+    signal orm_mask_pipe: std_logic_vector(calo1_object_low to calo1_object_high) := (others => '0');
     
 begin
 
@@ -320,10 +320,31 @@ begin
         end if;
     end process;
     
+-- HB 2017-04-10: "orm mask" for use in "and structure" of "obj_vs_templ_vec"
+    orm_mask_p: process(diff_eta_orm_comp_pipe, diff_phi_orm_comp_pipe, dr_orm_comp_pipe)
+	variable orm_comp_tmp : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '0'));
+	variable orm_mask_tmp : std_logic_vector(calo1_object_low to calo1_object_high) := (others => '0');
+    begin
+	orm_mask_tmp := (others => '0');
+	for i in calo1_object_low to calo1_object_high loop
+	    for j in calo2_object_low to calo2_object_high loop
+		if deta_orm_cut = true then
+		    orm_comp_tmp(i,j) := diff_eta_orm_comp_pipe(i,j);
+		elsif dphi_orm_cut then
+		    orm_comp_tmp(i,j) := diff_phi_orm_comp_pipe(i,j);
+		else
+		    orm_comp_tmp(i,j) := dr_orm_comp_pipe(i,j);
+		end if;
+		orm_mask_tmp(i) := orm_mask_tmp(i) or (orm_comp_tmp(i,j) and calo2_obj_vs_templ_pipe(j,1));
+	    end loop;
+	end loop;
+	orm_mask_pipe <= orm_mask_tmp;
+    end process orm_mask_p;
+
 -- HB 2017-03-27: values of orm cuts between orm limits -> removal !!!
-    matrix_and_or_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, diff_eta_orm_comp_pipe, diff_phi_orm_comp_pipe, dr_orm_comp_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, mass_comp_pipe)
+    matrix_and_or_p: process(calo1_obj_vs_templ_pipe, orm_mask_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, mass_comp_pipe)
 	variable index : integer := 0;
-	variable obj_vs_templ_vec : std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo1_object_high-calo1_object_low+1)*(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0');
+	variable obj_vs_templ_vec : std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo1_object_high-calo1_object_low+1)) downto 1) := (others => '0');
 	variable condition_and_or_tmp : std_logic := '0';
     begin
 	index := 0;
@@ -331,19 +352,12 @@ begin
 	condition_and_or_tmp := '0';
 	for i in calo1_object_low to calo1_object_high loop 
 	    for j in calo1_object_low to calo1_object_high loop
-		for k in calo2_object_low to calo2_object_high loop
-		    if j/=i then
-			index := index + 1;
-			obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and
-						   mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and diff_eta_comp_pipe(i,j) and
-						   not (dr_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
-						   not (dr_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1)) and
-						   not (diff_phi_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
-						   not (diff_phi_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1)) and
-						   not (diff_eta_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
-						   not (diff_eta_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1));			
-		    end if;
-		end loop;
+		if j/=i then
+		    index := index + 1;
+		    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and
+					       mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and diff_eta_comp_pipe(i,j) and
+					       not (orm_mask_pipe(i) or orm_mask_pipe(j));
+		end if;
 	    end loop;
 	end loop;	
 	for i in 1 to index loop 

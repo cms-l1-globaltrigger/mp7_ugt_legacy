@@ -26,7 +26,7 @@ architecture rtl of calo_conditions_orm_TB is
     constant calo1_object_low : natural := 0;
     constant calo1_object_high : natural := 3;
     constant nr_calo1_objects : natural := calo1_object_high-calo1_object_low+1;
-    constant nr_templates : natural := 3;
+    constant nr_templates : natural := 4;
     constant et_ge_mode_calo1: boolean := true;
     constant obj_type_calo1: natural := JET_TYPE;
     constant et_thresholds_calo1: calo_templates_array := (X"0020", X"0010", X"0010", X"0010");
@@ -45,7 +45,7 @@ architecture rtl of calo_conditions_orm_TB is
     constant iso_luts_calo1: calo_templates_iso_array := (X"F", X"F", X"F", X"F");
 
     constant calo2_object_low : natural := 0;
-    constant calo2_object_high : natural := 0;
+    constant calo2_object_high : natural := 1;
     constant nr_calo2_objects : natural := calo2_object_high-calo2_object_low+1;
     constant et_ge_mode_calo2: boolean := true;
     constant obj_type_calo2: natural := TAU_TYPE;
@@ -65,7 +65,7 @@ architecture rtl of calo_conditions_orm_TB is
     constant iso_lut_calo2: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := X"F";
         
     constant dr_orm_upper_limit : dr_squared_range_real := 1.1;
-    constant dr_orm_lower_limit : dr_squared_range_real := 0.1;
+    constant dr_orm_lower_limit : dr_squared_range_real := 0.0;
         
     constant diff_eta_upper_limit : dr_squared_range_real := 0.0;
     constant diff_eta_lower_limit : dr_squared_range_real := 0.0;
@@ -75,7 +75,7 @@ architecture rtl of calo_conditions_orm_TB is
     
 -- ************************************************************************************************
 
-    signal tau, tau_bx_0: calo_objects_array(0 to nr_calo2_objects-1) := (others => X"00000000");
+    signal tau, tau_bx_0: calo_objects_array(0 to nr_calo2_objects-1) := (others => "00000"&"00"&X"02"&X"30"&('0'&X"00"));
     signal jet, jet_bx_0: calo_objects_array(0 to nr_calo1_objects-1) := (others => X"00000000");
 
     signal jet_eta_integer_bx_0: diff_integer_inputs_array(0 to nr_calo1_objects-1) := (others => 0);
@@ -108,13 +108,38 @@ begin
         wait for 3*LHC_CLK_PERIOD; 
         wait for 7 ns; 
         jet <= (("00000"&X"42"&X"31"&("000"&X"38")), ("00000"&X"40"&X"30"&("000"&X"20")), ("00000"&X"00"&X"00"&("000"&X"13")), ("00000"&X"42"&X"31"&("000"&X"11")), others => ("00000"&X"42"&X"31"&("000"&X"02")));
-        tau <= (("00000"&"00"&X"00"&X"10"&('1'&X"40")), others => X"00000000");
+        tau <= (("00000"&"00"&X"00"&X"10"&('1'&X"40")), ("00000"&"00"&X"02"&X"30"&('0'&X"05")), others => X"00000000");
+--         tau <= (("00000"&"00"&X"40"&X"10"&('1'&X"40")), ("00000"&"00"&X"02"&X"30"&('0'&X"05")), others => X"00000000");
         wait for LHC_CLK_PERIOD; 
         jet <= (("00000"&X"40"&X"92"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")), others => X"00000000");
         tau <= (("00000"&"00"&X"02"&X"02"&('0'&X"0F")), others => X"00000000");
         wait for 3*LHC_CLK_PERIOD; 
         jet <= (("00000"&X"42"&X"31"&("000"&X"38")), ("00000"&X"00"&X"00"&("000"&X"20")), ("00000"&X"40"&X"30"&("000"&X"13")), ("00000"&X"42"&X"31"&("000"&X"0f")), others => ("00000"&X"42"&X"31"&("000"&X"02")));
-        tau <= (("00000"&"00"&X"01"&X"11"&('1'&X"20")), others => X"00000000");
+        tau <= (("00000"&"00"&X"01"&X"11"&('1'&X"20")), ("00000"&"00"&X"02"&X"30"&('0'&X"05")), others => X"00000000");
+        wait for LHC_CLK_PERIOD; 
+        jet <= (("00000"&X"40"&X"92"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")), others => X"00000000");
+        tau <= (("00000"&"00"&X"02"&X"02"&('0'&X"0F")), others => X"00000000");
+        wait for 3*LHC_CLK_PERIOD; 
+        jet <= (("00000"&X"42"&X"31"&("000"&X"38")), ("00000"&X"00"&X"00"&("000"&X"20")), ("00000"&X"40"&X"30"&("000"&X"13")), ("00000"&X"42"&X"31"&("000"&X"0f")), others => ("00000"&X"42"&X"31"&("000"&X"02")));
+        tau <= (("00000"&"00"&X"01"&X"11"&('1'&X"20")), ("00000"&"00"&X"02"&X"12"&('1'&X"15")), others => X"00000000");
+        wait for LHC_CLK_PERIOD; 
+        jet <= (("00000"&X"40"&X"92"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")), others => X"00000000");
+        tau <= (("00000"&"00"&X"02"&X"02"&('0'&X"0F")), others => X"00000000");
+        wait for 3*LHC_CLK_PERIOD; 
+        jet <= (("00000"&X"42"&X"31"&("000"&X"38")), ("00000"&X"00"&X"00"&("000"&X"20")), ("00000"&X"40"&X"30"&("000"&X"13")), ("00000"&X"42"&X"31"&("000"&X"11")), others => ("00000"&X"42"&X"31"&("000"&X"02")));
+        tau <= (("00000"&"00"&X"01"&X"11"&('1'&X"20")), ("00000"&"00"&X"02"&X"12"&('1'&X"15")), others => X"00000000");
+        wait for LHC_CLK_PERIOD; 
+        jet <= (("00000"&X"40"&X"92"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")), others => X"00000000");
+        tau <= (("00000"&"00"&X"02"&X"02"&('0'&X"0F")), others => X"00000000");
+        wait for 3*LHC_CLK_PERIOD; 
+        jet <= (("00000"&X"42"&X"31"&("000"&X"38")), ("00000"&X"00"&X"00"&("000"&X"20")), ("00000"&X"02"&X"03"&("000"&X"13")), ("00000"&X"42"&X"31"&("000"&X"11")), others => ("00000"&X"42"&X"31"&("000"&X"02")));
+        tau <= (("00000"&"00"&X"41"&X"11"&('1'&X"20")), ("00000"&"00"&X"02"&X"12"&('1'&X"15")), others => X"00000000");
+        wait for LHC_CLK_PERIOD; 
+        jet <= (("00000"&X"40"&X"92"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")), others => X"00000000");
+        tau <= (("00000"&"00"&X"02"&X"02"&('0'&X"0F")), others => X"00000000");
+        wait for 3*LHC_CLK_PERIOD; 
+        jet <= (("00000"&X"42"&X"31"&("000"&X"38")), ("00000"&X"00"&X"00"&("000"&X"20")), ("00000"&X"02"&X"03"&("000"&X"13")), ("00000"&X"42"&X"31"&("000"&X"11")), others => ("00000"&X"42"&X"31"&("000"&X"02")));
+        tau <= (("00000"&"00"&X"41"&X"11"&('1'&X"20")), ("00000"&"00"&X"02"&X"12"&('0'&X"0f")), others => X"00000000");
         wait for LHC_CLK_PERIOD; 
         jet <= (("00000"&X"40"&X"92"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")), ("00000"&X"89"&X"89"&("000"&X"11")), others => X"00000000");
         tau <= (("00000"&"00"&X"02"&X"02"&('0'&X"0F")), others => X"00000000");

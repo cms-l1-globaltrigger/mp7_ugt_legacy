@@ -69,6 +69,6 @@ view wave
 do $TESTBENCH/../scripts/calo_conditions_orm_test_wave.do
 
 ##Run simulation
-run 500 ns
+run 800 ns
 
 # eof

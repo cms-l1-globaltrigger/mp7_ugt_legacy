@@ -89,13 +89,22 @@ constant MUON_ISO_LOW : natural := 32;
 constant MUON_ISO_HIGH : natural := 33;
 constant MUON_CHARGE_LOW : natural := 34;
 constant MUON_CHARGE_HIGH : natural := 35;
+-- HB 2017-04-11: updated muon structure for "raw" ann "extrapolated" phi and eta bits (phi_high, phi_low, eta_high and eta_low => for "extrapolated").
+constant MUON_IDX_BITS_LOW : natural := 36;
+constant MUON_IDX_BITS_HIGH : natural := 42;
+constant MUON_PHI_RAW_LOW : natural := 43;
+constant MUON_PHI_RAW_HIGH : natural := 52;
+constant MUON_ETA_RAW_LOW : natural := 53;
+constant MUON_ETA_RAW_HIGH : natural := 61;
 
 type d_s_i_muon_record is record
-    charge_high, charge_low, iso_high, iso_low, eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MAX_MUON_BITS-1 downto 0;
+    eta_raw_high, eta_raw_low, phi_raw_high, phi_raw_low, idx_bits_high, idx_bits_low, charge_high, charge_low, iso_high, iso_low, 
+    eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MAX_MUON_BITS-1 downto 0;
 end record d_s_i_muon_record;
 
-constant d_s_i_muon : d_s_i_muon_record := (MUON_CHARGE_HIGH,MUON_CHARGE_LOW,MUON_ISO_HIGH,MUON_ISO_LOW,
-					    MUON_ETA_HIGH,MUON_ETA_LOW,MUON_QUAL_HIGH,MUON_QUAL_LOW,MUON_PT_HIGH,MUON_PT_LOW,MUON_PHI_HIGH,MUON_PHI_LOW);
+constant d_s_i_muon : d_s_i_muon_record := 
+    (MUON_ETA_RAW_HIGH,MUON_ETA_RAW_LOW,MUON_PHI_RAW_HIGH,MUON_PHI_RAW_LOW,MUON_IDX_BITS_HIGH,MUON_IDX_BITS_LOW,MUON_CHARGE_HIGH,MUON_CHARGE_LOW,MUON_ISO_HIGH,MUON_ISO_LOW,
+    MUON_ETA_HIGH,MUON_ETA_LOW,MUON_QUAL_HIGH,MUON_QUAL_LOW,MUON_PT_HIGH,MUON_PT_LOW,MUON_PHI_HIGH,MUON_PHI_LOW);
 					    
 constant D_S_I_MUON_V2 : d_s_i_muon_record := d_s_i_muon;
 constant D_S_I_MU_V2 : d_s_i_muon_record := d_s_i_muon; -- dummy for VHDL-Producer output (correlation conditions)

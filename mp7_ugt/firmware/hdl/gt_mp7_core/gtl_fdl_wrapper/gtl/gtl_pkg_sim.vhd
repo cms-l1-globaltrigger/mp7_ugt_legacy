@@ -1,6 +1,7 @@
 -- Description:
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
+-- HB 2017-04-11: updated muon structure for "raw" ann "extrapolated" phi and eta bits (phi_high, phi_low, eta_high and eta_low => for "extrapolated").
 -- HB 2017-03-30: changed ET_PRECISION in strings to PT_PRECISION.
 -- HB 2017-03-28: inserted integer type array for cos and sin phi (for twobody_pt).
 -- HB 2017-01-20: cleaned up, added new LUTs, made LUTs more compact, adjusted pt LUTs (for mass) to new scale set (2017-01-12) at higest bins.

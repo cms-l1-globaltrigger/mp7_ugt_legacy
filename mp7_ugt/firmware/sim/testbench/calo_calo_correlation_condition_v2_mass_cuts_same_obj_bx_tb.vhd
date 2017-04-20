@@ -83,6 +83,7 @@ architecture rtl of calo_calo_correlation_condition_v2_mass_cuts_same_obj_bx_TB 
     constant mass_lower_limit : real := 3.0;
 
     constant pt_sq_threshold : real := 2805.0;
+--     constant pt_sq_threshold : real := 80.0;
         
 -- ************************************************************************************************
 

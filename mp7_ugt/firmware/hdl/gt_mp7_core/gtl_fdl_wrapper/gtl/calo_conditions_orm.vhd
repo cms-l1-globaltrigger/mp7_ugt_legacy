@@ -1,7 +1,9 @@
 
--- Desription:
+-- Description:
 
 -- Version history:
+-- HB 2017-04-20: removed "orm mask" (roll back to version from 2017-04-05).
+-- HB 2017-04-10: inserted "orm mask" for use in "and structure" of "obj_vs_templ_vec".
 -- HB 2017-04-05: first design.
 
 library ieee;
@@ -75,10 +77,10 @@ entity calo_conditions_orm is
         diff_eta_orm: in deta_dphi_vector_array;
         diff_phi_orm: in deta_dphi_vector_array;
         condition_o: out std_logic;
-        sim_obj_vs_templ_vec_single: out std_logic_vector((calo1_object_high-calo1_object_low+1) downto 1) := (others => '0');
-        sim_obj_vs_templ_vec_double: out std_logic_vector((calo1_object_high-calo1_object_low+1)*(calo1_object_high-calo1_object_low+1-1) downto 1) := (others => '0');
-        sim_obj_vs_templ_vec_triple: out std_logic_vector((calo1_object_high-calo1_object_low+1)*(calo1_object_high-calo1_object_low+1-1)*(calo1_object_high-calo1_object_low+1-2) downto 1)
-	    := (others => '0')
+        sim_obj_vs_templ_vec_single: out std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0');
+        sim_obj_vs_templ_vec_double: out std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo1_object_high-calo1_object_low+1-1)*(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0');
+        sim_obj_vs_templ_vec_triple: out std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo1_object_high-calo1_object_low+1-1)*(calo1_object_high-calo1_object_low+1-2)
+	    *(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0')
     );
 end calo_conditions_orm;
 
@@ -91,20 +93,25 @@ architecture rtl of calo_conditions_orm is
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
 
+    signal diff_eta_orm_comp, diff_eta_orm_comp_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '0'));
     signal diff_eta_orm_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     signal diff_eta_orm_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
+    signal diff_phi_orm_comp, diff_phi_orm_comp_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '0'));
     signal diff_phi_orm_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     signal diff_phi_orm_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
-    signal diff_eta_orm_comp, diff_eta_orm_comp_pipe, diff_phi_orm_comp, diff_phi_orm_comp_pipe, dr_orm_comp, dr_orm_comp_pipe : 
-	std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '0'));
+    signal dr_orm_comp, dr_orm_comp_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '0'));
     signal calo1_obj_vs_templ, calo1_obj_vs_templ_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, 1 to nr_templates) := (others => (others => '0'));
     signal calo2_obj_vs_templ, calo2_obj_vs_templ_pipe : std_logic_2dim_array(calo2_object_low to calo2_object_high, 1 to 1) := (others => (others => '0'));
 
     signal condition_and_or : std_logic;
     
-    signal obj_vs_templ_vec_sig1, obj_vs_templ_vec_sig2, obj_vs_templ_vec_sig3: std_logic_vector(1023 downto 0) := (others => '0');
+    signal obj_vs_templ_vec_sig1: std_logic_vector(1023 downto 0) := (others => '0');
+    signal obj_vs_templ_vec_sig2: std_logic_vector(1023 downto 0) := (others => '0');
+    signal obj_vs_templ_vec_sig3: std_logic_vector(1023 downto 0) := (others => '0');
 
-    signal condition_and_or_sig1, condition_and_or_sig2, condition_and_or_sig3: std_logic;
+    signal condition_and_or_sig1: std_logic;
+    signal condition_and_or_sig2: std_logic;
+    signal condition_and_or_sig3: std_logic;
 
     attribute keep: boolean;    
     attribute keep of obj_vs_templ_vec_sig1  : signal is true;
@@ -114,8 +121,6 @@ architecture rtl of calo_conditions_orm is
     attribute keep of condition_and_or_sig1  : signal is true;
     attribute keep of condition_and_or_sig2  : signal is true;
     attribute keep of condition_and_or_sig3  : signal is true;
-    
-    signal orm_mask_pipe: std_logic_vector(calo1_object_low to calo1_object_high) := (others => '0');
 
 begin
 
@@ -222,44 +227,27 @@ obj_vs_templ_pipeline_p: process(clk, calo1_obj_vs_templ, calo2_obj_vs_templ, di
         end if;
 end process;
 
--- HB 2017-04-10: "orm mask" for use in "and structure" of "obj_vs_templ_vec"
-orm_mask_p: process(diff_eta_orm_comp_pipe, diff_phi_orm_comp_pipe, dr_orm_comp_pipe)
-    variable orm_comp_tmp : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '0'));
-    variable orm_mask_tmp : std_logic_vector(calo1_object_low to calo1_object_high) := (others => '0');
-begin
-    orm_mask_tmp := (others => '0');
-    for i in calo1_object_low to calo1_object_high loop
-	for j in calo2_object_low to calo2_object_high loop
-	    if deta_orm_cut = true then
-		orm_comp_tmp(i,j) := diff_eta_orm_comp_pipe(i,j);
-	    elsif dphi_orm_cut then
-		orm_comp_tmp(i,j) := diff_phi_orm_comp_pipe(i,j);
-	    else
-		orm_comp_tmp(i,j) := dr_orm_comp_pipe(i,j);
-	    end if;
-	    orm_mask_tmp(i) := orm_mask_tmp(i) or (orm_comp_tmp(i,j) and calo2_obj_vs_templ_pipe(j,1));
-	end loop;
-    end loop;
---     sim_orm_mask <= orm_mask_tmp;
-    orm_mask_pipe <= orm_mask_tmp;
-end process orm_mask_p;
-
 -- "Matrix" of permutations in an and-or-structure.
 -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates' and 'double_wsc'.
 
 -- Condition type: "single".
 matrix_single_i: if nr_templates = 1 generate
-    matrix_single_p: process(calo1_obj_vs_templ_pipe, orm_mask_pipe)
+    matrix_single_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, diff_eta_orm_comp_pipe, diff_phi_orm_comp_pipe, dr_orm_comp_pipe)
         variable index : integer := 0;
-        variable obj_vs_templ_vec : std_logic_vector(nr_calo1_objects_int downto 1) := (others => '0');
+        variable obj_vs_templ_vec : std_logic_vector(nr_calo1_objects_int*(calo2_object_high-calo2_object_low+1) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
     begin
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
         for i in calo1_object_low to calo1_object_high loop
+	    for j in calo2_object_low to calo2_object_high loop
 		index := index + 1;
-		obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and not orm_mask_pipe(i);
+		obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and 
+					   not (diff_eta_orm_comp_pipe(i,j) and calo2_obj_vs_templ_pipe(j,1)) and 
+					   not (diff_phi_orm_comp_pipe(i,j) and calo2_obj_vs_templ_pipe(j,1)) and 
+					   not (dr_orm_comp_pipe(i,j) and calo2_obj_vs_templ_pipe(j,1));
+	    end loop;
         end loop;
         for i in 1 to index loop
             condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
@@ -271,9 +259,9 @@ end generate matrix_single_i;
 
 -- Condition type: "double".
 matrix_double_i: if (nr_templates = 2) generate
-    matrix_double_p: process(calo1_obj_vs_templ_pipe, orm_mask_pipe)
+    matrix_double_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, diff_eta_orm_comp_pipe, diff_phi_orm_comp_pipe, dr_orm_comp_pipe)
         variable index : integer := 0;
-        variable obj_vs_templ_vec : std_logic_vector(nr_calo1_objects_int*(nr_calo1_objects_int-1) downto 1) := (others => '0');
+        variable obj_vs_templ_vec : std_logic_vector((nr_calo1_objects_int*(nr_calo1_objects_int-1)*(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
     begin
         index := 0;
@@ -281,11 +269,18 @@ matrix_double_i: if (nr_templates = 2) generate
         condition_and_or_tmp := '0';
         for i in calo1_object_low to calo1_object_high loop
             for j in calo1_object_low to calo1_object_high loop
-		if j/=i then
-		    index := index + 1;
-		    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and 
-					       not (orm_mask_pipe(i) or orm_mask_pipe(j));
-		end if;
+		for k in calo2_object_low to calo2_object_high loop
+		    if j/=i then
+			index := index + 1;
+			obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and 
+					           not (diff_eta_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
+					           not (diff_eta_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1)) and 
+					           not (diff_phi_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
+					           not (diff_phi_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1)) and 
+					           not (dr_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
+					           not (dr_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1)); 
+		    end if;
+		end loop;
             end loop;
         end loop;
         for i in 1 to index loop
@@ -299,9 +294,9 @@ end generate matrix_double_i;
 -- HB 2017-04-06: max. 6 objects for nr_templates = 3 are allowed, because of length of obj_vs_templ_vec. Max length = (6*5*4)*6 = 720
 -- Condition type: "triple".
 matrix_triple_i: if nr_templates = 3 generate
-    matrix_triple_p: process(calo1_obj_vs_templ_pipe, orm_mask_pipe)
+    matrix_triple_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, diff_eta_orm_comp_pipe, diff_phi_orm_comp_pipe, dr_orm_comp_pipe)
         variable index : integer := 0;
-        variable obj_vs_templ_vec : std_logic_vector(nr_calo1_objects_int*(nr_calo1_objects_int-1)*(nr_calo1_objects_int-2) downto 1) := (others => '0');
+        variable obj_vs_templ_vec : std_logic_vector((nr_calo1_objects_int*(nr_calo1_objects_int-1)*(nr_calo1_objects_int-2)*(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
     begin
         index := 0;
@@ -310,11 +305,21 @@ matrix_triple_i: if nr_templates = 3 generate
         for i in calo1_object_low to calo1_object_high loop
             for j in calo1_object_low to calo1_object_high loop
                 for k in calo1_object_low to calo1_object_high loop
-		    if (j/=i and k/=i and k/=j) then
-			index := index + 1;
-			obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and
-						   not (orm_mask_pipe(i) or orm_mask_pipe(j) or orm_mask_pipe(k));
-		    end if;
+		    for l in calo2_object_low to calo2_object_high loop
+			if (j/=i and k/=i and k/=j) then
+			    index := index + 1;
+			    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and
+						       not (diff_eta_orm_comp_pipe(i,l) and calo2_obj_vs_templ_pipe(l,1)) and 
+						       not (diff_eta_orm_comp_pipe(j,l) and calo2_obj_vs_templ_pipe(l,1)) and 
+						       not (diff_eta_orm_comp_pipe(k,l) and calo2_obj_vs_templ_pipe(l,1)) and 
+						       not (diff_phi_orm_comp_pipe(i,l) and calo2_obj_vs_templ_pipe(l,1)) and 
+						       not (diff_phi_orm_comp_pipe(j,l) and calo2_obj_vs_templ_pipe(l,1)) and 
+						       not (diff_phi_orm_comp_pipe(k,l) and calo2_obj_vs_templ_pipe(l,1)) and 
+						       not (dr_orm_comp_pipe(i,l) and calo2_obj_vs_templ_pipe(l,1)) and 
+						       not (dr_orm_comp_pipe(j,l) and calo2_obj_vs_templ_pipe(l,1)) and 
+						       not (dr_orm_comp_pipe(k,l) and calo2_obj_vs_templ_pipe(l,1));
+			end if;
+		    end loop;
                 end loop;
             end loop;
         end loop;
@@ -329,7 +334,7 @@ end generate matrix_triple_i;
 -- HB 2017-04-06: max. 6 objects for nr_templates = 4 are allowed, because of length of obj_vs_templ_vec. Max length = (6*5*4*3)*6 = 2160 ==> 2160/1024 = 2,11 ==> 3 obj_vs_templ_vecs.
 -- Condition type: "quad".
 matrix_quad_i: if nr_templates = 4 generate
-    matrix_quad_p_1: process(calo1_obj_vs_templ_pipe, orm_mask_pipe)
+    matrix_quad_p_1: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, diff_eta_orm_comp_pipe, diff_phi_orm_comp_pipe, dr_orm_comp_pipe)
         variable index : integer := 0;
         variable index2 : integer := 0;
         variable test_index : integer := 0;
@@ -347,6 +352,7 @@ matrix_quad_i: if nr_templates = 4 generate
             for j in calo1_object_low to calo1_object_high loop
                 for k in calo1_object_low to calo1_object_high loop
                     for l in calo1_object_low to calo1_object_high loop
+			for m in calo2_object_low to calo2_object_high loop
 			    if (j/=i and k/=i and k/=j and l/=i and l/=j and l/=k) then
 				if((index mod 1024) = 0) then
 				    if(index /= 0) then
@@ -355,21 +361,52 @@ matrix_quad_i: if nr_templates = 4 generate
 				    end if;
 				end if;
 				if(test_index = 0) then
-				    obj_vs_templ_vec1(index2) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and 
-								 calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
-								 not (orm_mask_pipe(i) or orm_mask_pipe(j) or orm_mask_pipe(k) or orm_mask_pipe(l));
+				    obj_vs_templ_vec1(index2) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
+								 not (diff_eta_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_eta_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (dr_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (dr_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)); 
 				elsif(test_index = 1) then
-				    obj_vs_templ_vec2(index2) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and 
-								 calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
-								 not (orm_mask_pipe(i) or orm_mask_pipe(j) or orm_mask_pipe(k) or orm_mask_pipe(l));
+				    obj_vs_templ_vec2(index2) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
+								 not (diff_eta_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_eta_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (dr_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (dr_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)); 
 				elsif(test_index = 2) then
-				    obj_vs_templ_vec3(index2) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and 
-								 calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
-								 not (orm_mask_pipe(i) or orm_mask_pipe(j) or orm_mask_pipe(k) or orm_mask_pipe(l));
+				    obj_vs_templ_vec3(index2) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
+								 not (diff_eta_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_eta_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (dr_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (dr_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)); 
 				end if;
 				index := index + 1;
 				index2 := index2 +1;
 			    end if;
+			end loop;
                     end loop;
                 end loop;
             end loop;

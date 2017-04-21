@@ -2,6 +2,7 @@
 -- Description:
 
 -- Version history:
+-- HB 2017-04-21: wrong typo fixed.
 -- HB 2017-04-20: removed "orm mask" (roll back to version from 2017-04-05).
 -- HB 2017-04-10: inserted "orm mask" for use in "and structure" of "obj_vs_templ_vec".
 -- HB 2017-04-05: first design.
@@ -365,43 +366,43 @@ matrix_quad_i: if nr_templates = 4 generate
 								 not (diff_eta_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_eta_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								 not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_eta_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_phi_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_phi_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								 not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (dr_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (dr_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								 not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)); 
+								 not (dr_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)); 
 				elsif(test_index = 1) then
 				    obj_vs_templ_vec2(index2) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
 								 not (diff_eta_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_eta_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								 not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_eta_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_phi_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_phi_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								 not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (dr_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (dr_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								 not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)); 
+								 not (dr_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)); 
 				elsif(test_index = 2) then
 				    obj_vs_templ_vec3(index2) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
 								 not (diff_eta_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_eta_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								 not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_eta_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_phi_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_phi_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								 not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
+								 not (diff_phi_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (dr_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (dr_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
 								 not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								 not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)); 
+								 not (dr_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)); 
 				end if;
 				index := index + 1;
 				index2 := index2 +1;

@@ -28,10 +28,9 @@ architecture rtl of calo_2plus1_orm_condition_deta_TB is
     constant dphi_cut : boolean := false;
     constant dr_cut : boolean := false;
     constant mass_cut : boolean := false;
---     constant mass_type : natural := 0;
     constant mass_type : natural := INVARIANT_MASS_TYPE;
---     constant mass_type : natural := 4;
-    constant cuts_same_type : boolean := true;
+--     constant mass_type : natural := TRANSVERSE_MASS_TYPE;
+    constant twobody_pt_cut : boolean := false;
 --     
     constant MASS_PRECISION : positive := JET_JET_MASS_PRECISION;
     constant PT_VECTOR_WIDTH : positive := JET_PT_VECTOR_WIDTH;
@@ -226,6 +225,7 @@ dut: entity work.calo_2plus1_orm_condition
         dr_cut => dr_cut,
         mass_cut => mass_cut,
         mass_type => mass_type,
+	twobody_pt_cut => twobody_pt_cut,
 
         calo1_object_low => calo1_object_low,
         calo1_object_high => calo1_object_high,

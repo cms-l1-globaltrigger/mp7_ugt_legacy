@@ -25,12 +25,9 @@ architecture rtl of calo_calo_correlation_condition_v2_mass_cuts_TB is
     constant deta_cut : boolean := false;
     constant dphi_cut : boolean := false;
     constant mass_cut : boolean := true;
---     constant mass_type : natural := 0;
---     constant mass_type : natural := INVARIANT_MASS_PT_TYPE;
 --     constant mass_type : natural := INVARIANT_MASS_TYPE;
---     constant mass_type : natural := TRANSVERSE_MASS_TYPE;
-    constant mass_type : natural := TRANSVERSE_MASS_PT_TYPE;
---     constant mass_type : natural := 4;
+    constant mass_type : natural := TRANSVERSE_MASS_TYPE;
+    constant twobody_pt_cut : boolean := false;
     
     constant MASS_PRECISION : positive := JET_TAU_INV_MASS_PRECISION;
     constant PT1_VECTOR_WIDTH : positive := JET_PT_VECTOR_WIDTH;
@@ -199,6 +196,7 @@ dut: entity work.calo_calo_correlation_condition_v2
         dphi_cut => dphi_cut,
         mass_cut => mass_cut,
         mass_type => mass_type,
+	twobody_pt_cut => twobody_pt_cut,
 
         calo1_object_low => calo1_object_low,
         calo1_object_high => calo1_object_high,

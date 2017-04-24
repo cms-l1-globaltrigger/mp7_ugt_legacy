@@ -258,11 +258,11 @@ begin
 			cos_phi_2_integer => cos_phi_2_integer(j),
 			sin_phi_1_integer => sin_phi_1_integer(i),
 			sin_phi_2_integer => sin_phi_2_integer(j),
-			diff_eta_comp => diff_eta_comp_temp(i,j),
-			diff_phi_comp => diff_phi_comp_temp(i,j),
-			dr_comp => dr_comp_temp(i,j),
-			mass_comp => mass_comp_temp(i,j),
-			twobody_pt_comp => twobody_pt_comp_temp(i,j)
+			diff_eta_comp => diff_eta_comp(i,j),
+			diff_phi_comp => diff_phi_comp(i,j),
+			dr_comp => dr_comp(i,j),
+			mass_comp => mass_comp(i,j),
+			twobody_pt_comp => twobody_pt_comp(i,j)
 		    );
 	    end generate different_obj_type_i;
 	end generate delta_l_2;

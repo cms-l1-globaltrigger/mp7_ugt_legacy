@@ -49,6 +49,8 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/towercount_condition.vhd
 # HB 2017-01-19: inserted new conditions in gtl
 src gt_mp7_core/gtl_fdl_wrapper/gtl/twobody_pt_calculator.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_cuts.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_calculator.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/cuts_instances.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition_v2.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition_v2.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition_v2.vhd

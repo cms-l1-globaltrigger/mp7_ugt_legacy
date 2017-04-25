@@ -163,13 +163,13 @@ begin
 		    pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
 		)
 		port map(
-		    pt1 => pt1(pt1_width-1 downto 0),
-		    pt2 => pt2(pt2_width-1 downto 0),
+		    pt1 => pt1(i)(pt1_width-1 downto 0),
+		    pt2 => pt2(0)(pt2_width-1 downto 0),
 		    cos_phi_1_integer => cos_phi_1_integer(i),
 		    cos_phi_2_integer => cos_phi_2_integer(0),
 		    sin_phi_1_integer => sin_phi_1_integer(i),
 		    sin_phi_2_integer => sin_phi_2_integer(0),
-		    pt_square_comp => twobody_pt_comp
+		    pt_square_comp => twobody_pt_comp(i,0)
 	    );
 	end generate twobody_pt_i;
     end generate delta_l;
@@ -253,7 +253,7 @@ begin
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
-        for i in calo_object_low to calo_object_high-1 loop
+        for i in calo_object_low to calo_object_high loop
 		index := index + 1;
 		obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o_pipe and diff_phi_comp_pipe(i,0) and mass_comp_pipe(i,0) and twobody_pt_comp_pipe(i,0);
         end loop;

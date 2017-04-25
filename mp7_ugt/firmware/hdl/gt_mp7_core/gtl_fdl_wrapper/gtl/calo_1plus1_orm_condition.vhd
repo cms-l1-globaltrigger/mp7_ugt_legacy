@@ -2,6 +2,7 @@
 -- Description:
 
 -- Version history:
+-- HB 2017-04-25: inserted "calo2_obj_vs_templ" and "twobody_pt_comp" in and-structure. Used "cuts_instances" module.
 -- HB 2017-03-28: first design.
 
 library ieee;
@@ -104,8 +105,6 @@ entity calo_1plus1_orm_condition is
         lhc_clk: in std_logic;
         calo1: in calo_objects_array;
         calo2: in calo_objects_array;
-        diff_eta_orm: in deta_dphi_vector_array;
-        diff_phi_orm: in deta_dphi_vector_array;
         diff_eta: in deta_dphi_vector_array;
         diff_phi: in deta_dphi_vector_array;
         pt1 : in diff_inputs_array;
@@ -201,10 +200,10 @@ begin
     cuts_orm_l_1: for i in calo1_object_low to calo1_object_high generate 
 	cuts_orm_l_2: for k in calo2_object_low to calo2_object_high generate
 	    deta_orm_cut_i: if deta_orm_cut = true generate
-		diff_eta_orm_comp(i,k) <= '1' when diff_eta_orm(i,k) >= diff_eta_orm_lower_limit_int and diff_eta_orm(i,k) <= diff_eta_orm_upper_limit_int else '0';
+		diff_eta_orm_comp(i,k) <= '1' when diff_eta(i,k) >= diff_eta_orm_lower_limit_int and diff_eta(i,k) <= diff_eta_orm_upper_limit_int else '0';
 	    end generate deta_orm_cut_i;
 	    dphi_orm_cut_i: if dphi_orm_cut = true generate
-		diff_phi_orm_comp(i,k) <= '1' when diff_phi_orm(i,k) >= diff_phi_orm_lower_limit_int and diff_phi_orm(i,k) <= diff_phi_orm_upper_limit_int else '0';
+		diff_phi_orm_comp(i,k) <= '1' when diff_phi(i,k) >= diff_phi_orm_lower_limit_int and diff_phi(i,k) <= diff_phi_orm_upper_limit_int else '0';
 	    end generate dphi_orm_cut_i;
 	    dr_orm_cut_i: if dr_orm_cut = true generate
 		dr_calculator_i: entity work.dr_calculator_v2
@@ -215,8 +214,8 @@ begin
 		    DETA_DPHI_PRECISION => DETA_DPHI_PRECISION
 		)
 		port map(
-		    diff_eta => diff_eta_orm(i,k),
-		    diff_phi => diff_phi_orm(i,k),
+		    diff_eta => diff_eta(i,k),
+		    diff_phi => diff_phi(i,k),
 		    dr_comp => dr_orm_comp(i,k)
 		);
 	    end generate dr_orm_cut_i;
@@ -233,10 +232,6 @@ begin
 		    mass_cut => mass_cut,
 		    mass_type => mass_type,
 		    twobody_pt_cut => twobody_pt_cut,
-		    object1_low => calo1_object_low,
-		    object1_high => calo1_object_high,
-		    object2_low => calo2_object_low,
-		    object2_high => calo2_object_high,
 		    diff_eta_upper_limit => diff_eta_upper_limit,
 		    diff_eta_lower_limit => diff_eta_lower_limit,
 		    diff_phi_upper_limit => diff_phi_upper_limit,

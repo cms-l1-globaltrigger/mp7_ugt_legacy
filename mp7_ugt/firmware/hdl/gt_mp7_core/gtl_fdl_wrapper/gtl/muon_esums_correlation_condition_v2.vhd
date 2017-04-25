@@ -108,7 +108,7 @@ architecture rtl of muon_esums_correlation_condition_v2 is
     signal obj_vs_templ_pipe : object_vs_template_array;
 -- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
     signal diff_phi_comp, diff_phi_comp_pipe, mass_comp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_pipe : 
-	std_logic_2dim_array(calo_object_low to calo_object_high, 0 to 0) := (others => (others => '1'));
+	std_logic_2dim_array(muon_object_low to muon_object_high, 0 to 0) := (others => (others => '1'));
 
     signal esums_comp_o, esums_comp_o_pipe : std_logic;
     signal condition_and_or : std_logic;
@@ -128,7 +128,7 @@ begin
     diff_phi_lower_limit_int <= conv_std_logic_vector(integer(diff_phi_lower_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
 
     -- Comparison with limits.
-    delta_l_1: for i in muon_object_low to muon_object_high generate
+    delta_l: for i in muon_object_low to muon_object_high generate
 	diff_phi_i: if dphi_cut = true generate
 	    diff_phi_comp(i,0) <= '1' when diff_phi(i,0) >= diff_phi_lower_limit_int and diff_phi(i,0) <= diff_phi_upper_limit_int else '0';
 	end generate diff_phi_i;
@@ -163,16 +163,16 @@ begin
 		    pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
 		)
 		port map(
-		    pt1 => pt1(pt1_width-1 downto 0),
-		    pt2 => pt2(pt2_width-1 downto 0),
+		    pt1 => pt1(i)(pt1_width-1 downto 0),
+		    pt2 => pt2(0)(pt2_width-1 downto 0),
 		    cos_phi_1_integer => cos_phi_1_integer(i),
 		    cos_phi_2_integer => cos_phi_2_integer(0),
 		    sin_phi_1_integer => sin_phi_1_integer(i),
 		    sin_phi_2_integer => sin_phi_2_integer(0),
-		    pt_square_comp => twobody_pt_comp
+		    pt_square_comp => twobody_pt_comp(i,0)
 	    );
 	end generate twobody_pt_i;
-    end generate delta_l_1;
+    end generate delta_l;
 
     -- Pipeline stage for cut comps
     diff_pipeline_p: process(lhc_clk, diff_phi_comp, mass_comp, twobody_pt_comp)
@@ -249,13 +249,13 @@ begin
     -- "Matrix" of permutations in an and-or-structure.
     matrix_dphi_mass_p: process(obj_vs_templ_pipe, esums_comp_o_pipe, diff_phi_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
         variable index : integer := 0;
-        variable obj_vs_templ_vec : std_logic_vector((calo_object_high-calo_object_low+1) downto 1) := (others => '0');
+        variable obj_vs_templ_vec : std_logic_vector((muon_object_high-muon_object_low+1) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
     begin
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
-        for i in calo_object_low to calo_object_high-1 loop
+        for i in muon_object_low to muon_object_high loop
 		index := index + 1;
 		obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o_pipe and diff_phi_comp_pipe(i,0) and mass_comp_pipe(i,0) and twobody_pt_comp_pipe(i,0);
         end loop;

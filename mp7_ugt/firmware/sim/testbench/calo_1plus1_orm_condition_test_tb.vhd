@@ -297,8 +297,6 @@ dut: entity work.calo_1plus1_orm_condition
         lhc_clk => lhc_clk,
         calo1 => jet_bx_0,
         calo2 => tau_bx_0,
-        diff_eta_orm => diff_jet_tau_eta_vector_bx_0_bx_0,
-        diff_phi_orm => diff_jet_tau_phi_vector_bx_0_bx_0,
         diff_eta => diff_jet_tau_eta_vector_bx_0_bx_0,
         diff_phi => diff_jet_tau_phi_vector_bx_0_bx_0,
         pt1 => jet_pt_vector_bx_0,

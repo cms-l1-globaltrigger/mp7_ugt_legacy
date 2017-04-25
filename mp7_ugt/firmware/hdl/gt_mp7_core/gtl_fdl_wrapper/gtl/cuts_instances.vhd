@@ -21,12 +21,6 @@ entity cuts_instances is
         mass_type: natural := INVARIANT_MASS_TYPE;
         twobody_pt_cut: boolean := false;
 
-        object1_low: natural;
-        object1_high: natural;
-
-        object2_low: natural;
-        object2_high: natural;
-
         diff_eta_upper_limit: diff_eta_range_real;
         diff_eta_lower_limit: diff_eta_range_real;
 

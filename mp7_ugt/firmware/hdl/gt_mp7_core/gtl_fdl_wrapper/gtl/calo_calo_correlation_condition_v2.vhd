@@ -161,10 +161,6 @@ begin
 			    mass_cut => mass_cut,
 			    mass_type => mass_type,
 			    twobody_pt_cut => twobody_pt_cut,
-			    object1_low => calo1_object_low,
-			    object1_high => calo1_object_high,
-			    object2_low => calo2_object_low,
-			    object2_high => calo2_object_high,
 			    diff_eta_upper_limit => diff_eta_upper_limit,
 			    diff_eta_lower_limit => diff_eta_lower_limit,
 			    diff_phi_upper_limit => diff_phi_upper_limit,
@@ -223,10 +219,6 @@ begin
 			mass_cut => mass_cut,
 			mass_type => mass_type,
 			twobody_pt_cut => twobody_pt_cut,
-			object1_low => calo1_object_low,
-			object1_high => calo1_object_high,
-			object2_low => calo2_object_low,
-			object2_high => calo2_object_high,
 			diff_eta_upper_limit => diff_eta_upper_limit,
 			diff_eta_lower_limit => diff_eta_lower_limit,
 			diff_phi_upper_limit => diff_phi_upper_limit,
@@ -268,7 +260,7 @@ begin
 	end generate delta_l_2;
     end generate delta_l_1;
     
-    -- Pipeline stage for diff_eta_comp, diff_phi_comp, dr_comp and mass_comp
+    -- Pipeline stage for cut comps
     diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp, mass_comp, twobody_pt_comp)
         begin
         if obj_vs_templ_pipeline_stage = false then 

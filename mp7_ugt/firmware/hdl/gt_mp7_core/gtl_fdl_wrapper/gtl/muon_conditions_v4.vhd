@@ -61,7 +61,6 @@ architecture rtl of muon_conditions_v4 is
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
 
     type object_vs_template_array is array (muon_object_low to muon_object_high, 1 to nr_templates) of std_logic;
-    type diff_comp_array is array (muon_object_low to muon_object_high, muon_object_low to muon_object_high) of std_logic;
 
     signal obj_vs_templ : object_vs_template_array;
     signal obj_vs_templ_pipe : object_vs_template_array;
@@ -77,10 +76,6 @@ architecture rtl of muon_conditions_v4 is
     signal charge_comp_quad_pipe : muon_charcorr_quad_array;
 --***************************************************************
 
-    signal diff_eta_comp : diff_comp_array := (others => (others => '0'));
-    signal diff_eta_comp_pipe : diff_comp_array;
-    signal diff_phi_comp : diff_comp_array := (others => (others => '0'));
-    signal diff_phi_comp_pipe : diff_comp_array;
     signal condition_and_or : std_logic;
 
 begin

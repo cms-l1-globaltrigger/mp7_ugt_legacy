@@ -26,12 +26,9 @@ architecture rtl of muon_muon_correlation_condition_v2_mass_cuts_TB is
     constant dphi_cut : boolean := false;
     constant dr_cut : boolean := false;
     constant mass_cut : boolean := true;
---     constant mass_type : natural := 0;
-    constant mass_type : natural := INVARIANT_MASS_PT_TYPE;
---     constant mass_type : natural := INVARIANT_MASS_TYPE;
+    constant mass_type : natural := INVARIANT_MASS_TYPE;
 --     constant mass_type : natural := TRANSVERSE_MASS_TYPE;
---     constant mass_type : natural := TRANSVERSE_MASS_PT_TYPE;
---     constant mass_type : natural := 4;
+    constant twobody_pt_cut : boolean := true;
     
     constant MASS_PRECISION : positive := MU_MU_MASS_PRECISION;
     constant PT_VECTOR_WIDTH : positive := MU_PT_VECTOR_WIDTH;
@@ -189,6 +186,7 @@ dut: entity work.muon_muon_correlation_condition_v2
         dr_cut => dr_cut,
         mass_cut => mass_cut,
         mass_type => mass_type,
+	twobody_pt_cut => twobody_pt_cut,
 
         muon_object_low => muon_object_low,
         muon_object_high => muon_object_high,

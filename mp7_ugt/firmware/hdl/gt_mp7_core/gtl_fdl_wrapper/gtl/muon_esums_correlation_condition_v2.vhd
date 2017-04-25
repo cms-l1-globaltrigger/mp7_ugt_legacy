@@ -3,6 +3,7 @@
 -- Correlation Condition module for muon and esums (etm and htm).
 
 -- Version history:
+-- HB 2017-04-25: "twobody_pt" detached from "mass fixation". Used "mass_calculator.vhd" and "twobody_pt_calculator.vhd".
 -- HB 2017-03-29: updated for one "sin_cos_width" in mass_cuts.
 -- HB 2017-03-28: updated to provide all combinations of cuts (eg.: MASS and DPHI). Using integer for cos and sin phi inputs.
 -- HB 2017-02-01: used "muon_object_low" and "muon_object_high" for object ranges.
@@ -21,7 +22,8 @@ entity muon_esums_correlation_condition_v2 is
 
         dphi_cut: boolean := true;
         mass_cut: boolean := false;
-	mass_type : natural := 2;
+	mass_type : natural := TRANSVERSE_MASS_TYPE;
+        twobody_pt_cut: boolean := false;
 
 	muon_object_low: natural;
         muon_object_high: natural;
@@ -56,22 +58,21 @@ entity muon_esums_correlation_condition_v2 is
         diff_phi_upper_limit: diff_phi_range_real;
         diff_phi_lower_limit: diff_phi_range_real;
 
-	DETA_DPHI_VECTOR_WIDTH: positive;
-	DETA_DPHI_PRECISION: positive;
+	deta_dphi_vector_width: positive;
+	deta_dphi_precision: positive;
 
         mass_upper_limit: real;
         mass_lower_limit: real;
-        
-        MASS_PRECISION: positive;
+        mass_precision: positive;
 	pt1_width: positive; 
 	pt2_width: positive; 
-	MASS_COSH_COS_PRECISION : positive;
+	mass_cosh_cos_precision : positive;
 	cosh_cos_width: positive;
 	
-	pt_sq_threshold: real;
-	sin_cos_width: positive;
-	PT_PRECISION : positive;
-	PT_SQ_SIN_COS_PRECISION : positive
+	pt_sq_threshold: real; -- for pt**2
+	sin_cos_width: positive; -- for pt**2 calculation
+	pt_precision : positive;
+	pt_sq_sin_cos_precision : positive
 
     );
     port(
@@ -97,7 +98,6 @@ architecture rtl of muon_esums_correlation_condition_v2 is
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
 
     type object_vs_template_array is array (muon_object_low to muon_object_high, 1 to 1) of std_logic;
-    type diff_comp_array is array (muon_object_low to muon_object_high, 0 to 0) of std_logic;
 
     signal diff_phi_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
     signal diff_phi_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
@@ -106,20 +106,19 @@ architecture rtl of muon_esums_correlation_condition_v2 is
 
     signal obj_vs_templ : object_vs_template_array;
     signal obj_vs_templ_pipe : object_vs_template_array;
-    signal diff_phi_comp : diff_comp_array := (others => (others => '0'));
-    signal diff_phi_comp_pipe : diff_comp_array := (others => (others => '0'));
-    signal mass_comp : diff_comp_array;
-    signal mass_comp_pipe : diff_comp_array := (others => (others => '0'));
+-- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
+    signal diff_phi_comp, diff_phi_comp_pipe, mass_comp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_pipe : 
+	std_logic_2dim_array(calo_object_low to calo_object_high, 0 to 0) := (others => (others => '1'));
 
     signal esums_comp_o, esums_comp_o_pipe : std_logic;
     signal condition_and_or : std_logic;
 
 begin
 
--- HB 2017-04-04: only transverse mass could be calculated with esums
+-- HB 2017-04-25: only transverse mass could be calculated with esums
     check_mass_type_i: if mass_cut generate
-	assert (mass_type = 2 or mass_type = 3) report 
-	    "mass selection not valid: mass_type = " & integer'image(mass_type) & ", which means one of invariant mass types (but, only transverse mass types are valid)" 
+	assert (mass_type = TRANSVERSE_MASS_TYPE) report 
+	    "ERROR: mass type selection not valid: mass_type = " & integer'image(mass_type) 
 	severity failure;	
     end generate check_mass_type_i;
     
@@ -134,7 +133,7 @@ begin
 	    diff_phi_comp(i,0) <= '1' when diff_phi(i,0) >= diff_phi_lower_limit_int and diff_phi(i,0) <= diff_phi_upper_limit_int else '0';
 	end generate diff_phi_i;
 	mass_i: if mass_cut = true generate
-	    mass_calculator_i: entity work.mass_cuts
+	    mass_calculator_i: entity work.mass_calculator
 		generic map(
 		    mass_type => mass_type,
 		    mass_upper_limit => mass_upper_limit,
@@ -142,37 +141,51 @@ begin
 		    pt1_width => pt1_width, 
 		    pt2_width => pt2_width, 
 		    cosh_cos_width => cosh_cos_width,
-		    MASS_PRECISION => MASS_PRECISION,
-		    MASS_COSH_COS_PRECISION => MASS_COSH_COS_PRECISION,
-		    pt_sq_threshold => pt_sq_threshold,
-		    sin_cos_width => sin_cos_width,
-		    PT_PRECISION => PT_PRECISION,
-		    PT_SQ_SIN_COS_PRECISION => PT_SQ_SIN_COS_PRECISION
+		    mass_precision => mass_precision,
+		    mass_cosh_cos_precision => mass_cosh_cos_precision
 		)
 		port map(
 		    pt1 => pt1(i)(pt1_width-1 downto 0),
 		    pt2 => pt2(0)(pt2_width-1 downto 0),
 		    cosh_deta => cosh_deta_zero_vector(i,0),
 		    cos_dphi => cos_dphi(i,0),
+		    mass_comp => mass_comp(i,0)
+		);
+	end generate mass_i;
+	twobody_pt_i: if twobody_pt_cut = true generate
+	    twobody_pt_calculator_i: entity work.twobody_pt_calculator
+		generic map(
+		    pt1_width => pt1_width, 
+		    pt2_width => pt2_width, 
+		    pt_sq_threshold => pt_sq_threshold,
+		    sin_cos_width => sin_cos_width,
+		    pt_precision => pt_precision,
+		    pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
+		)
+		port map(
+		    pt1 => pt1(pt1_width-1 downto 0),
+		    pt2 => pt2(pt2_width-1 downto 0),
 		    cos_phi_1_integer => cos_phi_1_integer(i),
 		    cos_phi_2_integer => cos_phi_2_integer(0),
 		    sin_phi_1_integer => sin_phi_1_integer(i),
 		    sin_phi_2_integer => sin_phi_2_integer(0),
-		    mass_comp => mass_comp(i,0)
-		);
-	end generate mass_i;
+		    pt_square_comp => twobody_pt_comp
+	    );
+	end generate twobody_pt_i;
     end generate delta_l_1;
 
-    -- Pipeline stage for diff_phi_comp
-    diff_pipeline_p: process(lhc_clk, diff_phi_comp)
+    -- Pipeline stage for cut comps
+    diff_pipeline_p: process(lhc_clk, diff_phi_comp, mass_comp, twobody_pt_comp)
     begin
         if obj_vs_templ_pipeline_stage = false then
-            diff_phi_comp_pipe <= diff_phi_comp;
-            mass_comp_pipe <= mass_comp;
+	    diff_phi_comp_pipe <= diff_phi_comp;
+	    mass_comp_pipe <= mass_comp;
+	    twobody_pt_comp_pipe <= twobody_pt_comp;
         else
             if (lhc_clk'event and lhc_clk = '1') then
 		diff_phi_comp_pipe <= diff_phi_comp;
 		mass_comp_pipe <= mass_comp;
+		twobody_pt_comp_pipe <= twobody_pt_comp;
             end if;
         end if;
     end process;
@@ -234,25 +247,17 @@ begin
     end process;
 
     -- "Matrix" of permutations in an and-or-structure.
-    matrix_dphi_mass_p: process(obj_vs_templ_pipe, esums_comp_o_pipe, diff_phi_comp_pipe, mass_comp_pipe)
+    matrix_dphi_mass_p: process(obj_vs_templ_pipe, esums_comp_o_pipe, diff_phi_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
         variable index : integer := 0;
-        variable obj_vs_templ_vec : std_logic_vector((muon_object_high-muon_object_low+1) downto 1) := (others => '0');
+        variable obj_vs_templ_vec : std_logic_vector((calo_object_high-calo_object_low+1) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
     begin
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
-        for i in muon_object_low to muon_object_high loop
-	    if dphi_cut = true and mass_cut = false then
+        for i in calo_object_low to calo_object_high-1 loop
 		index := index + 1;
-		obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o_pipe and diff_phi_comp_pipe(i,0);
-	    elsif dphi_cut = false and mass_cut = true then
-		index := index + 1;
-		obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o_pipe and mass_comp_pipe(i,0);
-	    elsif dphi_cut = true and mass_cut = true then
-		index := index + 1;
-		obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o_pipe and diff_phi_comp_pipe(i,0) and mass_comp_pipe(i,0);
-	    end if;
+		obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o_pipe and diff_phi_comp_pipe(i,0) and mass_comp_pipe(i,0) and twobody_pt_comp_pipe(i,0);
         end loop;
         for i in 1 to index loop
             -- ORs for matrix

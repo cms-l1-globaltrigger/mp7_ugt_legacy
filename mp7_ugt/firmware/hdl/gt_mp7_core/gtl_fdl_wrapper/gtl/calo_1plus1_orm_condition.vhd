@@ -16,16 +16,16 @@ use work.gtl_pkg.all;
 entity calo_1plus1_orm_condition is
      generic(
 
-        deta_orm_cut: boolean := false;
-        dphi_orm_cut: boolean := false;
-        dr_orm_cut: boolean := false;
+        deta_orm_cut: boolean;
+        dphi_orm_cut: boolean;
+        dr_orm_cut: boolean;
 
-        deta_cut: boolean := false;
-        dphi_cut: boolean := false;
-        dr_cut: boolean := false;
-        mass_cut: boolean := true;
-	mass_type : natural := INVARIANT_MASS_TYPE;
-        twobody_pt_cut: boolean := false;
+        deta_cut: boolean;
+        dphi_cut: boolean;
+        dr_cut: boolean;
+        mass_cut: boolean;
+	mass_type : natural;
+        twobody_pt_cut: boolean;
 
 	calo1_object_low: natural;
 	calo1_object_high: natural;

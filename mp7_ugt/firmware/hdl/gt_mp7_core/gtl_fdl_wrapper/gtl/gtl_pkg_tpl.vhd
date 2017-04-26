@@ -1,6 +1,7 @@
 -- Description:
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
+-- HB 2017-04-26: updated mass types definition.
 -- HB 2017-04-11: updated muon structure for "raw" ann "extrapolated" phi and eta bits (phi_high, phi_low, eta_high and eta_low => for "extrapolated").
 -- HB 2017-03-30: changed ET_PRECISION in strings to PT_PRECISION.
 -- HB 2017-03-28: inserted integer type array for cos and sin phi (for twobody_pt).
@@ -483,14 +484,12 @@ subtype dr_squared_range_real is real range 0.0 to ((ETA_RANGE_REAL*(real(10**DE
 
 -- ********************************************************
 -- mass parameters
--- HB 2017-04-24: definition of mass_type:
+-- HB 2017-04-26: definition of mass_type:
 -- 0 => invariant mass
--- 2 => transverse mass
-constant MASS_TYPE_MAX_VALUE : natural := 3;
+-- 1 => transverse mass
+constant MASS_TYPE_MAX_VALUE : natural := 1;
 constant INVARIANT_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 0;
--- constant INVARIANT_MASS_PT_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 1;
-constant TRANSVERSE_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 2;
--- constant TRANSVERSE_MASS_PT_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 3;
+constant TRANSVERSE_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 1;
 
 -- HB 2105-10-21: INV_MASS_LIMITS_PRECISION_ALL must be less than 2*INV_MASS_PT_PRECISION+INV_MASS_COSH_COS_PRECISION !!!
 -- constant INV_MASS_LIMITS_PRECISION_ALL : positive range 1 to 3 := 1; -- 1 => first digit after decimal point

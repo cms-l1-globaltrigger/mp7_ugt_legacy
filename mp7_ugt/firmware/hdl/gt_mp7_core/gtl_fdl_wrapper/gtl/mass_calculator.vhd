@@ -23,7 +23,7 @@ use work.gtl_pkg.all;
 
 entity mass_calculator is
     generic (
-	mass_type : natural := INVARIANT_MASS_TYPE;
+	mass_type : natural;
 -- limits for comparison of invariant mass, given for M**2/2 [=pt1*pt2*(cosh(eta1-eta2)-cos(phi1-phi2)]
 -- or transverse mass, given for M**2/2 [=pt1*pt2*(1-cos(phi1-phi2)]
 	mass_upper_limit: real := 15.0;

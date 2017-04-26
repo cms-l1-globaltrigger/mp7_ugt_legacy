@@ -25,6 +25,7 @@ architecture rtl of calo_calo_correlation_condition_v2_mass_cuts_same_obj_bx_TB 
     
     constant deta_cut : boolean := false;
     constant dphi_cut : boolean := false;
+    constant dr_cut : boolean := false;
     constant mass_cut : boolean := true;
     constant mass_type : natural := INVARIANT_MASS_TYPE;
 --     constant mass_type : natural := TRANSVERSE_MASS_TYPE;
@@ -174,6 +175,7 @@ dut: entity work.calo_calo_correlation_condition_v2
 
         deta_cut => deta_cut,
         dphi_cut => dphi_cut,
+        dr_cut => dr_cut,
         mass_cut => mass_cut,
         mass_type => mass_type,
 	twobody_pt_cut => twobody_pt_cut,

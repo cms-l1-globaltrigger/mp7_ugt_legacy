@@ -3,6 +3,7 @@
 -- Correlation Condition module for muon and esums (etm and htm).
 
 -- Version history:
+-- HB 2017-04-26: removed assert statement.
 -- HB 2017-04-25: "twobody_pt" detached from "mass fixation". Used "mass_calculator.vhd" and "twobody_pt_calculator.vhd".
 -- HB 2017-03-29: updated for one "sin_cos_width" in mass_cuts.
 -- HB 2017-03-28: updated to provide all combinations of cuts (eg.: MASS and DPHI). Using integer for cos and sin phi inputs.
@@ -20,10 +21,10 @@ use work.gtl_pkg.all;
 entity muon_esums_correlation_condition_v2 is
      generic(
 
-        dphi_cut: boolean := true;
-        mass_cut: boolean := false;
-	mass_type : natural := TRANSVERSE_MASS_TYPE;
-        twobody_pt_cut: boolean := false;
+        dphi_cut: boolean;
+        mass_cut: boolean;
+	mass_type : natural;
+        twobody_pt_cut: boolean;
 
 	muon_object_low: natural;
         muon_object_high: natural;
@@ -115,13 +116,6 @@ architecture rtl of muon_esums_correlation_condition_v2 is
 
 begin
 
--- HB 2017-04-25: only transverse mass could be calculated with esums
-    check_mass_type_i: if mass_cut generate
-	assert (mass_type = TRANSVERSE_MASS_TYPE) report 
-	    "ERROR: mass type selection not valid: mass_type = " & integer'image(mass_type) 
-	severity failure;	
-    end generate check_mass_type_i;
-    
     -- *** section: CUTs - begin ***************************************************************************************
     -- Conversion of limits to std_logic_vector.
     diff_phi_upper_limit_int <= conv_std_logic_vector(integer(diff_phi_upper_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);

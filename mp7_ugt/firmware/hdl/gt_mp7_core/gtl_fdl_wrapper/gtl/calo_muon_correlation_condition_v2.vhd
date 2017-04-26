@@ -19,12 +19,12 @@ use work.gtl_pkg.all;
 
 entity calo_muon_correlation_condition_v2 is
      generic(
-        deta_cut: boolean := true;
-        dphi_cut: boolean := true;
-        dr_cut: boolean := false;
-        mass_cut: boolean := false;
-	mass_type : natural := INVARIANT_MASS_TYPE;
-        twobody_pt_cut: boolean := false;
+        deta_cut: boolean;
+        dphi_cut: boolean;
+        dr_cut: boolean;
+        mass_cut: boolean;
+	mass_type : natural;
+        twobody_pt_cut: boolean;
 
 	calo_object_low: natural;
         calo_object_high: natural;

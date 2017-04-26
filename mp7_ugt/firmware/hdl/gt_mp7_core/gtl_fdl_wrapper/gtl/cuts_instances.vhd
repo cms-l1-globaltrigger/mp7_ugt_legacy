@@ -14,12 +14,12 @@ use work.gtl_pkg.all;
 
 entity cuts_instances is
      generic(
-        deta_cut: boolean := false;
-        dphi_cut: boolean := false;
-        dr_cut: boolean := false;
-        mass_cut: boolean := false;
-        mass_type: natural := INVARIANT_MASS_TYPE;
-        twobody_pt_cut: boolean := false;
+        deta_cut: boolean;
+        dphi_cut: boolean;
+        dr_cut: boolean;
+        mass_cut: boolean;
+        mass_type: natural;
+        twobody_pt_cut: boolean;
 
         diff_eta_upper_limit: diff_eta_range_real;
         diff_eta_lower_limit: diff_eta_range_real;

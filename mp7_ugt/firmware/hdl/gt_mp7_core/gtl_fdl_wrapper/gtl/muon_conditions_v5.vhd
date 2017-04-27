@@ -58,8 +58,8 @@ entity muon_conditions_v5 is
         ls_charcorr_quad: in muon_charcorr_quad_array;
         os_charcorr_quad: in muon_charcorr_quad_array;
         pt : in diff_inputs_array;
-        cos_phi_integer : in calo_sin_cos_integer_array;
-        sin_phi_integer : in calo_sin_cos_integer_array;
+        cos_phi_integer : in muon_sin_cos_integer_array;
+        sin_phi_integer : in muon_sin_cos_integer_array;
         condition_o : out std_logic
     );
 end muon_conditions_v5;
@@ -91,7 +91,7 @@ architecture rtl of muon_conditions_v5 is
     signal condition_and_or : std_logic;
 
     signal twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : 
-	std_logic_2dim_array(calo_object_low to calo_object_high, calo_object_low to calo_object_high) := (others => (others => '1'));
+	std_logic_2dim_array(muon_object_low to muon_object_high, muon_object_low to muon_object_high) := (others => (others => '1'));
 
 begin
 
@@ -151,13 +151,13 @@ begin
     end generate obj_l;
 
 -- Pipeline stage for obj_vs_templ and twobody_pt_comp
-    obj_vs_templ_pipeline_p: process(clk, obj_vs_templ, twobody_pt_comp)
+    obj_vs_templ_pipeline_p: process(lhc_clk, obj_vs_templ, twobody_pt_comp)
 	begin
 	    if obj_vs_templ_pipeline_stage = false then
 		obj_vs_templ_pipe <= obj_vs_templ;
 		twobody_pt_comp_pipe <= twobody_pt_comp;
 	    else
-		if (clk'event and clk = '1') then
+		if (lhc_clk'event and lhc_clk = '1') then
 		    obj_vs_templ_pipe <= obj_vs_templ;
 		    twobody_pt_comp_pipe <= twobody_pt_comp;
 		end if;

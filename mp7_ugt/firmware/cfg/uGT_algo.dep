@@ -37,9 +37,11 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators_v2.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_v4.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_v5.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators_v2.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_v4.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_v5.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_comparators.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator_v2.vhd

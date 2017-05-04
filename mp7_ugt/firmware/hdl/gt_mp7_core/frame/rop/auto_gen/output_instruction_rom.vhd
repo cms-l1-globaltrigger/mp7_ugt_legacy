@@ -11,10 +11,10 @@
 ---Description: Read-out Process, complex design, Specification and architecture design/implementation.
 --             ROP moudule produce read-out recorrd for sending their to DAQ block in MP7 from there to
 --              AMC13..
---              Please do not change any part of the design without to cousultate Babak, because the main part of design
---              will automated produced and you have to know, what do you do. 
+--              Please do not change any part of the design without to cousultate HEPHY, because the main part of design
+--              will automated produced and you have to know, what do you do.
 -- $Date: 2015-06-15 $
--- $Author: rahbaran $
+-- $Author: HEPHY $
 -- Warning:  Do not touch change anything on this file, any changes has a consequence of discrepance of the hardware dump to Specification. And in
 -- the such cases zero on output dump
 --------------------------------------------------------------------------------
@@ -28,11 +28,11 @@ entity output_instruction_rom is
    (
       ADDR_WIDTH  : integer := 3;
       INSTR_WIDTH : integer := 8;
-      
+
       RST_ACT_ROP : std_logic := '0'
 
    );
-   port 
+   port
    (
       clk   : in  std_logic;
       rst   : in  std_logic;
@@ -44,8 +44,8 @@ end output_instruction_rom;
 
 architecture behavioral of output_instruction_rom is
 
-   type rom_type is array (0 to 2**ADDR_WIDTH-1) of std_logic_vector (INSTR_WIDTH-1 downto 0); 
-   
+   type rom_type is array (0 to 2**ADDR_WIDTH-1) of std_logic_vector (INSTR_WIDTH-1 downto 0);
+
 	-- ctrl(oe|eof|eoh|soh)|bx_ie|addr|mux_word
    constant rom_content : rom_type :=
    (
@@ -306,15 +306,15 @@ architecture behavioral of output_instruction_rom is
 		"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
 		"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
 		"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-   );   
-   
+   );
+
    signal rom : rom_type := rom_content;
    signal instr_int : std_logic_vector(instr_width-1 downto 0) := (others => '0');
-   
+
 begin
 
    instr_int <= rom(to_integer(unsigned(addr)));
-   
+
    process (clk,rst)
    begin
 
@@ -325,7 +325,7 @@ begin
             instr <= instr_int;
          end if;
       end if;
-   
+
    end process;
 
 end behavioral;

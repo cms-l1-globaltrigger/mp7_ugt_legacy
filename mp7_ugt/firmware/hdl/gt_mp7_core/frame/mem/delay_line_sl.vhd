@@ -8,11 +8,11 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description:Lane Mapping Process, Developer Babak, Markus
+---Description:Lane Mapping Process, Developer HEPHY
 -- $HeadURL: $
 -- $Date:  $
--- $Author: Babak $
--- Modification :  
+-- $Author: HEPHY $
+-- Modification :
 --    1) modification for different reset, lhc reset as well as IPbus reset is active high, and the reset is active low.
 -- $Revision: 0.1 $
 --------------------------------------------------------------------------------
@@ -47,11 +47,11 @@ begin
 	NO_DELAY : if DELAY = 0 generate
 		sig_o <= sig_i;
 	end generate;
-	
-  FOR_SPY_IN_i: if SPY_IN = true generate 
+
+  FOR_SPY_IN_i: if SPY_IN = true generate
   -- for SYP_i   rst   => rop_rst
   begin
-  
+
   	DELAY_1 : if DELAY = 1 generate
 		signal reg : std_logic;
 	begin
@@ -65,9 +65,9 @@ begin
 		end process;
 		sig_o  <= reg;
 	end generate;
-	
+
 	DELAY_GR_1 : if DELAY > 1 generate
-		signal delay_line : std_logic_vector(DELAY-1 downto 0); 
+		signal delay_line : std_logic_vector(DELAY-1 downto 0);
 	begin
 		gen_DELAY : process(clk, rst)
 		begin
@@ -77,16 +77,16 @@ begin
 				delay_line <= delay_line(DELAY-2 downto 0) & sig_i;
 			end if;
 		end process;
-	
+
 		sig_o  <= delay_line(DELAY-1);
 	end generate;
 
-  
+
   end generate  FOR_SPY_IN_i;
-  
-  FOR_SPY_ACK_i: if SPY_IN = false generate 
+
+  FOR_SPY_ACK_i: if SPY_IN = false generate
   -- for SPY_ACK  rst   => lhc_rst,
-    
+
   begin
      	DELAY_1 : if DELAY = 1 generate
 		signal reg : std_logic;
@@ -101,9 +101,9 @@ begin
 		end process;
 		sig_o  <= reg;
 	end generate;
-	
+
 	DELAY_GR_1 : if DELAY > 1 generate
-		signal delay_line : std_logic_vector(DELAY-1 downto 0); 
+		signal delay_line : std_logic_vector(DELAY-1 downto 0);
 	begin
 		gen_DELAY : process(clk, rst)
 		begin
@@ -113,11 +113,11 @@ begin
 				delay_line <= delay_line(DELAY-2 downto 0) & sig_i;
 			end if;
 		end process;
-	
+
 		sig_o  <= delay_line(DELAY-1);
-	end generate; 
+	end generate;
   end generate  FOR_SPY_ACK_i;
-	
+
 
 end architecture;
 

@@ -11,7 +11,7 @@
 ---Description:delay line concept for adjusting the delay for different part
 -- $HeadURL: $
 -- $Date:  $
--- $Author: Babak $
+-- $Author: HEPHY $
 -- $Revision: 0.1 $
 --------------------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ begin
 	NO_DELAY : if DELAY = 0 generate
 		sig_o <= sig_i;
 	end generate;
-	
+
 	DELAY_1 : if DELAY = 1 generate
 		signal reg : std_logic_vector(WIDTH-1 downto 0);
 	begin
@@ -60,9 +60,9 @@ begin
 		end process;
 		sig_o  <= reg;
 	end generate;
-	
+
 	DELAY_GR_1 : if DELAY > 1 generate
-		type delay_line_t is array(0 to DELAY-1) of std_logic_vector(WIDTH-1 downto 0);  
+		type delay_line_t is array(0 to DELAY-1) of std_logic_vector(WIDTH-1 downto 0);
 		signal delay_line : delay_line_t;
 	begin
 		gen_DELAY : process(clk, rst)
@@ -71,12 +71,12 @@ begin
 				delay_line <= (others=>(others=>'0'));
 			elsif rising_edge(clk) then
 				delay_line(0) <= sig_i;
-				for i in 1 to delay_line'length-1 loop	
+				for i in 1 to delay_line'length-1 loop
 					delay_line(i) <= delay_line(i-1);
-				end loop;	
+				end loop;
 			end if;
 		end process;
-	
+
 		sig_o  <= delay_line(DELAY-1);
 	end generate;
 

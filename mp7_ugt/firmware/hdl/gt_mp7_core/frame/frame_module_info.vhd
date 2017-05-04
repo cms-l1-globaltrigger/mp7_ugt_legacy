@@ -10,12 +10,12 @@
 --------------------------------------------------------------------------------
 -- $HeadURL: $
 -- $Date: $
--- $Author: rahbaran $
+-- $Author: HEPHY $
 -- $Revision:  $
 --------------------------------------------------------------------------------
 
 -- Description: this module contains the "frame module info"
---BR:21-11-2014 TOP_SERIAL_VENDOR is not mor relevant, because in future we will read from hardware over ipmi just MAC address
+-- HEPHY:21-11-2014 TOP_SERIAL_VENDOR is not mor relevant, because in future we will read from hardware over ipmi just MAC address
 
 library ieee;
 use ieee.std_logic_1164.all;

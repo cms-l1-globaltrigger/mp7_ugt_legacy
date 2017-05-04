@@ -8,11 +8,11 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description:Lane Mapping Process, Developer Babak, Markus
+---Description:Lane Mapping Process, Developer HEPHY
 -- $HeadURL: $
 -- $Date:  $
 -- $Author: ?$
--- Modification : Babak
+-- Modification : HEPHY
 -- $Revision: 0.1 $
 --------------------------------------------------------------------------------
 
@@ -24,8 +24,8 @@ use work.ipbus.all;
 use work.gt_mp7_core_pkg.all;
 
 package rb_pkg is
-	
-	
+
+
 type sw_reg_dsmux_in_t is record
 	muon_src                      : std_logic;
 	eg_src                        : std_logic;
@@ -37,7 +37,7 @@ type sw_reg_dsmux_in_t is record
 	htm_src                       : std_logic;
 	ext_con_src                   : std_logic;
 end record;
-constant SW_REG_DSMUX_IN_RESET : sw_reg_dsmux_in_t := 
+constant SW_REG_DSMUX_IN_RESET : sw_reg_dsmux_in_t :=
 (
 	muon_src                      => '0',
 	eg_src                        => '0',
@@ -57,7 +57,7 @@ type sw_reg_l1asim_in_t is record
 	pattern_a                     : bx_nr_array_t(4 downto 0);
 	pattern_b                     : bx_nr_array_t(4 downto 0);
 end record;
-constant SW_REG_L1ASIM_IN_RESET : sw_reg_l1asim_in_t := 
+constant SW_REG_L1ASIM_IN_RESET : sw_reg_l1asim_in_t :=
 (
 	enable_l1a_sim                => '0',
 	fire_once_event               => '0',
@@ -75,7 +75,7 @@ type sw_reg_spytrigger_in_t is record
 	clear_spy3_ready_event        : std_logic;
 	clear_spy12_error_event       : std_logic;
 end record;
-constant SW_REG_SPYTRIGGER_IN_RESET : sw_reg_spytrigger_in_t := 
+constant SW_REG_SPYTRIGGER_IN_RESET : sw_reg_spytrigger_in_t :=
 (
 	orbit_nr                      => (others=>('0')),
 	spy12_once_event              => '0',
@@ -92,7 +92,7 @@ type sw_reg_spytrigger_out_t is record
 	trig_spy3_busy                : std_logic;
 	trig_spy12_busy               : std_logic;
 end record;
-constant SW_REG_SPYTRIGGER_OUT_RESET : sw_reg_spytrigger_out_t := 
+constant SW_REG_SPYTRIGGER_OUT_RESET : sw_reg_spytrigger_out_t :=
 (
 	trig_spy12_error              => '0',
 	trig_spy3_ready               => '0',
@@ -103,7 +103,7 @@ constant SW_REG_SPYTRIGGER_OUT_RESET : sw_reg_spytrigger_out_t :=
 type sw_reg_sw_reset_in_t is record
 	reset_event                   : std_logic;
 end record;
-constant SW_REG_SW_RESET_IN_RESET : sw_reg_sw_reset_in_t := 
+constant SW_REG_SW_RESET_IN_RESET : sw_reg_sw_reset_in_t :=
 (
 	reset_event                   => '0'
 );
@@ -120,7 +120,7 @@ type sw_reg_dm_in_t is record
 	delay_bcres                   : std_logic_vector(11 downto 0);
 	delay_bcres_fdl               : std_logic_vector(11 downto 0);
 end record;
-constant SW_REG_DM_IN_RESET : sw_reg_dm_in_t := 
+constant SW_REG_DM_IN_RESET : sw_reg_dm_in_t :=
 (
 	delay_muons                   => (others=>('0')),
 	delay_eg                      => (others=>('0')),
@@ -137,7 +137,7 @@ constant SW_REG_DM_IN_RESET : sw_reg_dm_in_t :=
 type sw_reg_dm_out_t is record
 	valid                         : std_logic;
 end record;
-constant SW_REG_DM_OUT_RESET : sw_reg_dm_out_t := 
+constant SW_REG_DM_OUT_RESET : sw_reg_dm_out_t :=
 (
 	valid                         => '0'
 );
@@ -149,7 +149,7 @@ type sw_reg_tcm_in_t is record
 	test_reg                      : std_logic_vector(31 downto 0);
 	luminosity_seg_period_msk     : luminosity_seg_period_msk_t;
 end record;
-constant SW_REG_TCM_IN_RESET : sw_reg_tcm_in_t := 
+constant SW_REG_TCM_IN_RESET : sw_reg_tcm_in_t :=
 (
 	cmd_ignbcres                  => '0',
 	err_det_reset_event           => '0',
@@ -169,7 +169,7 @@ type sw_reg_tcm_out_t is record
 	bx_nr_d_fdl                   : bx_nr_t;
 	luminosity_seg_nr             : luminosity_seg_nr_t;
 end record;
-constant SW_REG_TCM_OUT_RESET : sw_reg_tcm_out_t := 
+constant SW_REG_TCM_OUT_RESET : sw_reg_tcm_out_t :=
 (
 	bx_nr                         => (others=>('0')),
 	event_nr                      => (others=>('0')),
@@ -195,7 +195,7 @@ type sw_reg_rop_in_t is record
 	busy_reset_event              : std_logic;
 	Payload                       : std_logic_vector(19 downto 0);
 end record;
-constant SW_REG_ROP_IN_RESET : sw_reg_rop_in_t := 
+constant SW_REG_ROP_IN_RESET : sw_reg_rop_in_t :=
 (
 	version                       => (0 => '1', others => '0'),
 	BoardID                       => "0000000000000011",
@@ -213,12 +213,12 @@ constant SW_REG_ROP_IN_RESET : sw_reg_rop_in_t :=
 type sw_reg_rop_out_t is record
 	busy                          : std_logic;
 end record;
-constant SW_REG_ROP_OUT_RESET : sw_reg_rop_out_t := 
+constant SW_REG_ROP_OUT_RESET : sw_reg_rop_out_t :=
 (
 	busy                          => '0'
 );
 
-	
+
 type sw_regs_in_t is record
 	dsmux                         : sw_reg_dsmux_in_t;
 	l1asim                        : sw_reg_l1asim_in_t;
@@ -228,7 +228,7 @@ type sw_regs_in_t is record
 	tcm                           : sw_reg_tcm_in_t;
 	rop                           : sw_reg_rop_in_t;
 end record;
-constant SW_REGS_IN_RESET : sw_regs_in_t := 
+constant SW_REGS_IN_RESET : sw_regs_in_t :=
 (
 	dsmux                         => SW_REG_DSMUX_IN_RESET,
 	l1asim                        => SW_REG_L1ASIM_IN_RESET,
@@ -244,19 +244,19 @@ type sw_regs_out_t is record
 	tcm                           : sw_reg_tcm_out_t;
 	rop                           : sw_reg_rop_out_t;
 end record;
-constant SW_REGS_OUT_RESET : sw_regs_out_t := 
+constant SW_REGS_OUT_RESET : sw_regs_out_t :=
 (
 	spytrigger                    => SW_REG_SPYTRIGGER_OUT_RESET,
 	dm                            => SW_REG_DM_OUT_RESET,
 	tcm                           => SW_REG_TCM_OUT_RESET,
 	rop                           => SW_REG_ROP_OUT_RESET
 );
-	
+
 	component rb
 		generic(
 			addr_width : natural
 		);
-		port 
+		port
 		(
 			sys_clk           : in std_logic;
 			lhc_clk           : in std_logic;
@@ -270,8 +270,8 @@ constant SW_REGS_OUT_RESET : sw_regs_out_t :=
 		-- data interface for fpga access
 			sw_regs_in  : out sw_regs_in_t; -- sw registers written via pci and read by the fpga
 			sw_regs_out : in sw_regs_out_t  -- sw registers read via pci and written by the fpga
-		); 
+		);
 	end component;
 
-	
+
 end package;

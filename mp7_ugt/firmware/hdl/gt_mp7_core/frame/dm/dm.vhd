@@ -11,7 +11,7 @@
 -- $HeadURL:  $
 -- $Date:  $
 -- $Author: Florian $
--- Modification : Babak
+-- Modification : HEPHY
 -- 		1) lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
 -- $Revision: 0.1  $
 --------------------------------------------------------------------------------
@@ -143,7 +143,7 @@ begin
 	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), -- link_11_fr_2_data
 	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), -- link_11_fr_3_data
 	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), -- link_11_fr_4_data
-	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), -- link_11_fr_5_data	                
+	                sw_reg_i.delay_ett(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0), -- link_11_fr_5_data
 	                sw_reg_i.delay_ext_con(log2c(DM_MAX_DELAY_OBJECTS)-1 downto 0));
 
 	dealy_elements : for i in 0 to LHC_DATA_OBJECT_COUNT-1 generate
@@ -263,7 +263,7 @@ begin
 	GEN_ADDITIONAL_OUTPUT_REGISTER : if USE_REGISTERED_OUTPUT = true generate
 		sync_lhc_clk : process (lhc_clk, lhc_rst)
 		begin
-		--BR: 04.02.2015 Delay Manager out put was zero, becaue lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
+		-- HEPHY: 04.02.2015 Delay Manager out put was zero, becaue lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
 			if lhc_rst = RST_ACT then
 				valid_o    <= '0';
 				lhc_data_o <= LHC_DATA_NULL;

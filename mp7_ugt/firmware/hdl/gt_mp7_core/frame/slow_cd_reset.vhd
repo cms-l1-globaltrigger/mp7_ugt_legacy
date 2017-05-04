@@ -14,7 +14,7 @@
 -- $Revision:  $
 --------------------------------------------------------------------------------
 
--- BR 2015-06-01: ipbus_rst (sys_rst) is high active, therefore changed in processes
+-- HEPHY 2015-06-01: ipbus_rst (sys_rst) is high active, therefore changed in processes
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -38,15 +38,15 @@ end slow_cd_reset;
 architecture beh of slow_cd_reset is
   subtype rst_counter_t is integer range 0 to RST_DELAY-1;
   type rstflag_cdc_t is array (SYNC_STAGES-1 downto 0) of std_logic;
-  
+
 
   signal rc, rcin            : rst_counter_t;
   signal rstack              : std_logic;
   signal rstreq, rstreq_in   : std_logic;
-  
+
   signal rstreq_slow        : rstflag_cdc_t;
   signal rstack_sys         : rstflag_cdc_t;
-  
+
 begin
 
   comb_slow: process(rc, rstreq_slow) is

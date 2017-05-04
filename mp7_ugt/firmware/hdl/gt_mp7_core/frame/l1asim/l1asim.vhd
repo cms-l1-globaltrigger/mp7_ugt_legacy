@@ -13,7 +13,7 @@
 -- $Author:  $
 -- $Revision: 0.1  $
 ------------------------------------------------------------------------------------------------------------------------------------
---BR: 04.05.2015 Delay Manager out put was zero, becaue lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
+-- HEPHY: 04.05.2015 Delay Manager out put was zero, becaue lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
 
 library ieee;
 use IEEE.std_logic_1164.all;
@@ -28,12 +28,12 @@ entity l1asim is
 	(
 		lhc_clk    : in std_logic;
 		lhc_rst    : in std_logic;
-		
+
 		bx_nr      : in bx_nr_t;
 		orbit_nr   : in orbit_nr_t;
-		
+
 		sw_reg_i   : in sw_reg_l1asim_in_t;
-		
+
 		l1a_real_i : in std_logic;
 		l1a_o      : out std_logic
 	);
@@ -63,7 +63,7 @@ begin
 		fire_once <= '0';
 		if sw_reg_i.fire_once_event /= last_fire_once_event then
 			fire_once <= '1';
-		end if; 
+		end if;
 	end process;
 
 
@@ -71,29 +71,29 @@ begin
 		variable pattern_a_match : std_logic;
 		variable pattern_b_match : std_logic;
 	begin
-	
+
 		sim_temp <= '0';
-	
+
 		pattern_a_match := '0';
 		for i in 0 to sw_reg_i.pattern_a'length-1 loop
 			if sw_reg_i.pattern_a(i) = bx_nr then
 				pattern_a_match := '1';
 			end if;
 		end loop;
-	
+
 		pattern_b_match := '0';
 		for i in 0 to sw_reg_i.pattern_b'length-1 loop
 			if sw_reg_i.pattern_b(i) = bx_nr then
 				pattern_b_match := '1';
 			end if;
 		end loop;
-	
+
 		case sw_reg_i.cntrl is
 			when L1A_SIM_CNTRL_PATTERN_AT_ORBIT =>
 				if orbit_nr = sw_reg_i.orbit_nr then
 					sim_temp <= pattern_a_match;
 				end if;
-			when L1A_SIM_CNTRL_ALTERNATING => 
+			when L1A_SIM_CNTRL_ALTERNATING =>
 				if orbit_nr(0) = '0' then -- --> even
 					sim_temp <= pattern_a_match;
 				else -- orbit_nr = '1' --> odd
@@ -102,9 +102,9 @@ begin
 			when others =>
 				sim_temp <= '0';
 		end case;
-	
+
 	end process;
-	
+
 
 	l1a_sim <= fire_once or sim_temp;
 

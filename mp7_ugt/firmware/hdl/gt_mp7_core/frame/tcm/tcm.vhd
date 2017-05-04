@@ -22,7 +22,7 @@
 -- HB 2016-03-17: inserted reset of lumi-section number with OC0
 -- HB 2016-03-10: used signals (of BGos) for reset OC, reset EC, start and resync
 -- JW 2015-11-04: included mp7_ttc_decl and used constant TTC_BC0_BX
--- BR 2015-05-08: done lhc_rst = RST_ACT in processes
+-- HEPHY 2015-05-08: done lhc_rst = RST_ACT in processes
 
 library ieee;
 use IEEE.std_logic_1164.all;
@@ -38,6 +38,7 @@ entity tcm is
     (
 	lhc_clk           : in std_logic;
 	lhc_rst           : in std_logic;
+	cntr_rst          : in std_logic;
 	ec0		  : in std_logic;
 	oc0		  : in std_logic;
 	start		  : in std_logic;
@@ -83,8 +84,10 @@ architecture beh of tcm is
     signal start_lumisection_int  : std_logic := '0';
 
 begin
+    tcm_rst <= lhc_rst or cntr_rst;
+
     -- LHC clock domain
-    ctrl_lhc: process(lhc_rst, l, ec0, oc0, start, l1a_sync, bcres_d, sw_reg_in, bcres_d_FDL)
+    ctrl_lhc: process(tcm_rst, l, ec0, oc0, start, l1a_sync, bcres_d, sw_reg_in, bcres_d_FDL)
 	variable v : lhc_reg_t;
     begin
 	v := l;
@@ -142,20 +145,20 @@ begin
 	    v.event_nr := event_nr_t(unsigned(l.event_nr) + to_unsigned(1, EVENT_NR_WIDTH));
 	    v.trigger_nr := trigger_nr_t(unsigned(l.trigger_nr) + to_unsigned(1, TRIGGER_NR_WIDTH));
 	end if;
-		
+
 	if oc0 = '1' then
 	    v.orbit_nr := orbit_nr_t(to_unsigned(1, ORBIT_NR_WIDTH));
 	    v.orbit_nr_periodic := (others => '0');
 	    v.luminosity_seg_nr := luminosity_seg_nr_t(to_unsigned(1, LUM_SEG_NR_WIDTH));
 	end if;
-	
+
 	if start = '1' then
 	    v.trigger_nr := (others => '0');
 	end if;
 	if ec0 = '1' then
 	    v.event_nr := (others => '0');
 	end if;
-	
+
 	-- write out software registers
 -- HB 2016-07-04: Signal err_det not used anymore, but remained in the sw_reg_out (used by swatch ?)
 	sw_reg_out.err_det           <= l.err_det;
@@ -184,10 +187,10 @@ begin
 
 -- HB 2016-06-30: Inserted new logic for "start_lumisection" with "oc0" (to prevent 50ns pulse of "start_lumisection" after OC0).
     start_lumisection <= start_lumisection_int or oc0;
-	
-    sync_lhc: process(lhc_clk, lhc_rst)
+
+    sync_lhc: process(lhc_clk, tcm_rst)
     begin
-	if lhc_rst = RST_ACT then
+	if tcm_rst = RST_ACT then
 	    l <= LHC_REG_T_RESET;
 	elsif rising_edge(lhc_clk) then
 	    l <= lin;

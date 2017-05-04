@@ -10,10 +10,10 @@
 --------------------------------------------------------------------------------
 -- $HeadURL:  $
 -- $Date:  $
--- $Author:  Babak
+-- $Author:  HEPHY
 -- $Revision: 0.1  $
 -- Description : FIFO for using in ROP design. Configuration the file for using in cactus repository
--- The configuration is based on new reset logic, which should be used for overall .vhdl file. 
+-- The configuration is based on new reset logic, which should be used for overall .vhdl file.
 --------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------
@@ -83,10 +83,10 @@ architecture beh of fifo_2c1r1w is
 
 	signal rd_addr_gray : std_logic_vector(BUFFER_WIDTH downto 0);
 	signal rd_addr_gray_next : std_logic_vector(BUFFER_WIDTH downto 0);
-	
+
 	signal wr_addr_gray_sync_stages : sync_stages_type;
 	signal wr_addr_gray_sync : std_logic_vector(BUFFER_WIDTH downto 0) ;
-	
+
 	signal rd_addr_gray_sync_stages : sync_stages_type;
 	signal rd_addr_gray_sync : std_logic_vector(BUFFER_WIDTH downto 0) ;
 
@@ -113,12 +113,12 @@ begin
 
 			rd_data => data_out1,
 			wr_data => data_in2
-		); 
-	
+		);
+
   wr_addr_gray_sync <= wr_addr_gray_sync_stages(SYNC_STAGES - 1);
   rd_addr_gray_sync <= rd_addr_gray_sync_stages(SYNC_STAGES - 1);
 
-  IN_ADDRESS_MANAGER_RST_i: if ADDRESS_MANAGER = true generate 
+  IN_ADDRESS_MANAGER_RST_i: if ADDRESS_MANAGER = true generate
       -- the definition of wr_res_n => daq_rst
       -- the definition of rd_res_n => lhc_rst,
   begin
@@ -134,11 +134,11 @@ begin
 			sig_full <= full_next;
 		end if;
 	end process;
-  
-   
+
+
 	sync_rd : process(rd_clk, rd_res_n)
 	begin
-		if rd_res_n = RST_ACT then 
+		if rd_res_n = RST_ACT then
 			rd_addr <= (others => '0');
          rd_addr_gray <= (others => '0');
 			sig_empty <= '1';
@@ -148,11 +148,11 @@ begin
 			sig_empty <= empty_next;
 		end if;
 	end process;
-	
-	
+
+
 	synchronizer_rd : process(rd_clk, rd_res_n)
 	begin
-		if rd_res_n = RST_ACT then 
+		if rd_res_n = RST_ACT then
 			wr_addr_gray_sync_stages <= (others => (others => '0'));
 		elsif rising_edge(rd_clk) then
 			wr_addr_gray_sync_stages(0) <= wr_addr_gray;
@@ -161,8 +161,8 @@ begin
 			end loop;
 		end if;
 	end process;
-  
-  
+
+
 	synchronizer_wr : process(wr_clk, wr_res_n)
 	begin
 		if wr_res_n = RST_ACT_ROP then
@@ -173,11 +173,11 @@ begin
 				rd_addr_gray_sync_stages(i) <= rd_addr_gray_sync_stages(i - 1);
 			end loop;
 		end if;
-	end process;   
-       
+	end process;
+
   end generate IN_ADDRESS_MANAGER_RST_i;
-    
-  IN_ROP_RST_i: if ADDRESS_MANAGER = false generate 
+
+  IN_ROP_RST_i: if ADDRESS_MANAGER = false generate
      -- the definition of    wr_res_n	=> lhc_rst
      -- the definition of   rd_res_n	=> daq_rst,
   begin
@@ -193,11 +193,11 @@ begin
 			sig_full <= full_next;
 		end if;
 	end process;
-  
-   
+
+
 	sync_rd : process(rd_clk, rd_res_n)
 	begin
-		if rd_res_n = RST_ACT_ROP then 
+		if rd_res_n = RST_ACT_ROP then
 			rd_addr <= (others => '0');
 			rd_addr_gray <= (others => '0');
 			sig_empty <= '1';
@@ -207,10 +207,10 @@ begin
 			sig_empty <= empty_next;
 		end if;
 	end process;
-	
+
 	 	synchronizer_rd : process(rd_clk, rd_res_n)
 	begin
-		if rd_res_n = RST_ACT_ROP then 
+		if rd_res_n = RST_ACT_ROP then
 			wr_addr_gray_sync_stages <= (others => (others => '0'));
 		elsif rising_edge(rd_clk) then
 			wr_addr_gray_sync_stages(0) <= wr_addr_gray;
@@ -219,8 +219,8 @@ begin
 			end loop;
 		end if;
 	end process;
-  
-  
+
+
 	synchronizer_wr : process(wr_clk, wr_res_n)
 	begin
 		if wr_res_n = RST_ACT then
@@ -232,7 +232,7 @@ begin
 			end loop;
 		end if;
 	end process;
-	
+
   end generate IN_ROP_RST_i;
 
   	empty <= sig_empty;
@@ -254,14 +254,14 @@ begin
 		else
 			rd_addr_buffer := rd_addr;
 		end if;
-	
+
 		-- gray encoding
 		rd_addr_gray_buffer := rd_addr_buffer xor ('0' & rd_addr_buffer(rd_addr'length-1 downto 1));
-	
+
 		if wr_addr_gray_sync = rd_addr_gray_buffer then
 				empty_next <= '1';
 		end if;
-			
+
 		rd_addr_gray_next <= rd_addr_gray_buffer;
 		rd_addr_next <= rd_addr_buffer;
 	end process read_operation;
@@ -284,21 +284,21 @@ begin
 		else
 			wr_addr_buffer := wr_addr;
 		end if;
-	
+
 		-- gray encoding
 		wr_addr_gray_buffer := wr_addr_buffer xor ('0' & wr_addr_buffer(wr_addr_buffer'length-1 downto 1));
-		
+
 		-- if the MSB in binary encoding is toggeled, the 2 MSB in the gray-code represantation of this register have to be toggled
 		compare_buffer_gray := not wr_addr_gray_buffer(BUFFER_WIDTH downto BUFFER_WIDTH-1);
-		 
+
 		if rd_addr_gray_sync = (compare_buffer_gray & wr_addr_gray_buffer(BUFFER_WIDTH-2 downto 0)) then
 				full_next <= '1';
 		end if;
-			
+
 		wr_addr_gray_next <= wr_addr_gray_buffer;
 		wr_addr_next <= wr_addr_buffer;
 	end process write_operation;
 
-  
+
 end architecture;
 

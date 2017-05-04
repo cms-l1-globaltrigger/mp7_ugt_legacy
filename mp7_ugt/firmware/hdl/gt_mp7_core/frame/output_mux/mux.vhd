@@ -8,10 +8,10 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description:Lane Mapping Process, Developer Babak, Markus
+---Description:Lane Mapping Process, Developer HEPHY
 -- $HeadURL: $
 -- $Date:  $
--- $Author:Babak  $
+-- $Author:HEPHY  $
 -- $Revision: 0.1 $
 --------------------------------------------------------------------------------
 

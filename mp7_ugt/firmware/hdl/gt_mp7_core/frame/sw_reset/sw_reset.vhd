@@ -11,7 +11,7 @@
 ---Description: ROP
 -- $HeadURL: $
 -- $Date:  $
--- $Author: Markus $
+-- $Author: HEPHY $
 -- $Revision: 0.1 $
 --------------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ use work.math_pkg.all;
 use work.rb_pkg.all;
 
 entity sw_reset is
-	port 
+	port
 	(
 		lhc_clk    : in std_logic;
 
@@ -34,7 +34,7 @@ entity sw_reset is
 
 		-- the synchronized lhc reset
 		sw_reset   : out std_logic
-	); 
+	);
 end;
 
 architecture arch of sw_reset is
@@ -48,7 +48,7 @@ begin
 	end process;
 
 	sw_reset <= '0' when reset_event_old /= sw_reg_in.reset_event else '1';
-	
+
 end architecture;
 
 

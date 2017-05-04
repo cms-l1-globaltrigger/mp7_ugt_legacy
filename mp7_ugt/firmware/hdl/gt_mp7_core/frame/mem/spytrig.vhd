@@ -8,10 +8,10 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description:SPY trigger concept. Some changes are needed, if you will use it instead of MP7 one. Please follow the ugt spec 0.2 
+---Description:SPY trigger concept. Some changes are needed, if you will use it instead of MP7 one. Please follow the ugt spec 0.2
 -- $HeadURL: $
 -- $Date:  $
--- $Author:  Babak $
+-- $Author:  HEPHY $
 -- Modification : some part of design is not working bug free. Please follow the elog server for finding out, what should you do.
 -- $Revision: 0.1 $
 --------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ use work.rb_pkg.all;
 use work.math_pkg.all;
 
 entity spytrig is
-	port 
+	port
 	(
 		lhc_clk    : in  std_logic;
 		lhc_rst    : in  std_logic;
@@ -47,13 +47,13 @@ end;
 
 
 architecture arch of spytrig is
-	
+
 	constant RESET_TIMEOUT : integer := 31;
 	-- give the values time to travel through the synchronizer in the register bank
 	signal rst_timeout_cnt     : std_logic_vector(log2c(RESET_TIMEOUT)-1 downto 0);
 	signal rst_timeout_cnt_nxt : std_logic_vector(log2c(RESET_TIMEOUT)-1 downto 0);
-	signal rst_timeout_flag    : std_logic;  
-	
+	signal rst_timeout_flag    : std_logic;
+
 	type event_flags_t is
 	record
 		spy12_once        : std_logic;
@@ -63,34 +63,34 @@ architecture arch of spytrig is
 		clear_spy3_ready  : std_logic;
 		clear_spy12_error : std_logic;
 	end record;
-	
+
 	constant EVENT_FLAGS_NULL : event_flags_t := ('0','0','0','0','0', '0');
-	signal last_flags : event_flags_t; 
-	
+	signal last_flags : event_flags_t;
+
 	type spy3_fsm_state_t is (IDLE, WAIT_ACK);
 	signal spy3_fsm_state : spy3_fsm_state_t;
 	signal spy3_fsm_state_nxt : spy3_fsm_state_t;
-	
+
 	type spy12_fsm_state_t is (IDLE, SPY, SPY_COMPLETE, SPY_NEXT, SPY_ONCE, SPY_ONCE_ERROR);
 	signal spy12_fsm_state : spy12_fsm_state_t;
 	signal spy12_fsm_state_nxt : spy12_fsm_state_t;
-	
-	
+
+
 	signal set_spy12_ready_flag : std_logic;
 	signal set_spy3_ready_flag  : std_logic;
 	signal set_spy12_error_flag : std_logic;
 
 	signal spy12_ready_flag     : std_logic;
 	signal spy12_ready_flag_nxt : std_logic;
-	signal spy3_ready_flag      : std_logic;	
+	signal spy3_ready_flag      : std_logic;
 	signal spy3_ready_flag_nxt  : std_logic;
 	signal spy12_error_flag     : std_logic;
 	signal spy12_error_flag_nxt : std_logic;
-	
-	
+
+
 	signal spy_once_orbit_nr     : orbit_nr_t;
 	signal spy_once_orbit_nr_nxt : orbit_nr_t;
-begin  
+begin
 
 	sync : process(lhc_clk, lhc_rst)
 	begin
@@ -117,7 +117,7 @@ begin
 			-- ready flags
 			spy12_ready_flag  <= spy12_ready_flag_nxt;
 			spy3_ready_flag   <= spy3_ready_flag_nxt;
-			spy12_error_flag  <= spy12_error_flag_nxt;  
+			spy12_error_flag  <= spy12_error_flag_nxt;
 			spy_once_orbit_nr <= spy_once_orbit_nr_nxt;
 		end if;
 	end process;
@@ -125,7 +125,7 @@ begin
 	sw_reg_o.trig_spy12_ready <= spy12_ready_flag;
 	sw_reg_o.trig_spy3_ready <= spy3_ready_flag;
 	sw_reg_o.trig_spy12_error <= spy12_error_flag;
-	
+
 	rst_cnt : process(rst_timeout_cnt)
 	begin
 		rst_timeout_cnt_nxt <= rst_timeout_cnt;
@@ -144,7 +144,7 @@ begin
 		spy3_o <= '0';
 		sw_reg_o.trig_spy3_busy <= '0';
 		set_spy3_ready_flag <= '0';
-		
+
 		case spy3_fsm_state is
 			when IDLE =>
 				if rst_timeout_flag = '1' then
@@ -159,12 +159,12 @@ begin
 					spy3_fsm_state_nxt <= IDLE;
 					set_spy3_ready_flag <= '1';
 				end if;
-			--when others => -- case statement is complete 
+			--when others => -- case statement is complete
 				--null;
 		end case;
 	end process;
-	
-	
+
+
 	spy12_fsm : process(spy12_fsm_state, spy_once_orbit_nr, rst_timeout_flag, sw_reg_i, bx_nr, simmem_in_use_i, last_flags, orbit_nr)
 	begin
 		spy12_fsm_state_nxt <= spy12_fsm_state;
@@ -172,10 +172,10 @@ begin
 		spy2_o <= '0';
 		sw_reg_o.trig_spy12_busy <= '1';
 		spy_once_orbit_nr_nxt <= spy_once_orbit_nr;
-		
+
 		set_spy12_error_flag <= '0';
 		set_spy12_ready_flag <= '0';
-		
+
 		case spy12_fsm_state is
 			when IDLE =>
 				sw_reg_o.trig_spy12_busy <= '0';
@@ -187,30 +187,30 @@ begin
 							spy12_fsm_state_nxt <= SPY_NEXT;
 					end if;
 				end if;
-			
+
 			when SPY_NEXT =>
 				if unsigned(bx_nr) = BUNCHES_PER_ORBIT-1 then
 					spy12_fsm_state_nxt <= SPY;
 				end if;
-				
+
 			when SPY_ONCE =>
 				if (unsigned(spy_once_orbit_nr) - 1) < unsigned(orbit_nr) then
 					spy12_fsm_state_nxt <= SPY_ONCE_ERROR;
-				end if; 
-				
-				if (unsigned(spy_once_orbit_nr) - 1) = unsigned(orbit_nr) and 
+				end if;
+
+				if (unsigned(spy_once_orbit_nr) - 1) = unsigned(orbit_nr) and
 					unsigned(bx_nr) = BUNCHES_PER_ORBIT-1 then
 					spy12_fsm_state_nxt <= SPY;
 				end if;
-			
+
 			when SPY =>
 				spy1_o <= '1' and not simmem_in_use_i;
 				spy2_o <= '1';
-				
+
 				if unsigned(bx_nr) = BUNCHES_PER_ORBIT-1 then
 					spy12_fsm_state_nxt <= SPY_COMPLETE;
 				end if;
-				
+
 			when SPY_COMPLETE =>
 				spy12_fsm_state_nxt <= IDLE;
 				set_spy12_ready_flag <= '1';
@@ -218,41 +218,41 @@ begin
 			when SPY_ONCE_ERROR =>
 				set_spy12_error_flag <= '1';
 				spy12_fsm_state_nxt <= IDLE;
-			
-			--when others => -- case statement is complete 
+
+			--when others => -- case statement is complete
 				--null;
 		end case;
-				
+
 	end process;
-	
-	
+
+
 	-- ready/error flags logic
 	spy_ready_flags : process(set_spy12_ready_flag, set_spy3_ready_flag, spy12_ready_flag, spy3_ready_flag, last_flags, sw_reg_i, spy12_error_flag, set_spy12_error_flag)
 	begin
-		
+
 		spy12_ready_flag_nxt <= spy12_ready_flag;
 		spy3_ready_flag_nxt  <= spy3_ready_flag;
 		spy12_error_flag_nxt <= spy12_error_flag;
-	
+
 		if set_spy12_ready_flag = '1' then
 			spy12_ready_flag_nxt <= '1';
 		elsif sw_reg_i.clear_spy12_ready_event /= last_flags.clear_spy12_ready then -- clear ready flag
 			spy12_ready_flag_nxt <= '0';
 		end if;
-		
+
 		if set_spy3_ready_flag = '1' then
 			spy3_ready_flag_nxt <= '1';
 		elsif sw_reg_i.clear_spy3_ready_event /= last_flags.clear_spy3_ready then -- clear ready flag
 			spy3_ready_flag_nxt <= '0';
 		end if;
-		
+
 		if set_spy12_error_flag = '1' then
 			spy12_error_flag_nxt <= '1';
 		elsif sw_reg_i.clear_spy12_error_event /= last_flags.clear_spy12_error then -- clear ready flag
 			spy12_ready_flag_nxt <= '0';
 		end if;
 	end process;
-	
+
 
 end architecture;
 

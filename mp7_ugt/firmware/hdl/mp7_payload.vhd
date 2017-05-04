@@ -10,12 +10,12 @@
 --------------------------------------------------------------------------------
 -- $HeadURL:  $
 -- $Date:  $
--- $Author: Babak $
+-- $Author: HEPHY $
 -- $Revision: 0.1  $
 --------------------------------------------------------------------------------
 --
 -- HB 2016-11-17: inserted port "finor_preview_2_mezz_lemo" for "prescaler preview" in monitoring on gpio(2). No use of tp_mux anymore.
--- HB 2016-10-11: signals finor_2_mezz_lemo and veto_2_mezz_lemo for IOB output FF. Connected directly to gpio without tp_mux. 
+-- HB 2016-10-11: signals finor_2_mezz_lemo and veto_2_mezz_lemo for IOB output FF. Connected directly to gpio without tp_mux.
 --                Removed finor_2_mezz_lemo and veto_2_mezz_lemo from tp_mux. Signals local_finor_rop and local_veto_rop used for tp_mux.
 -- HB 2016-09-01: added BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490)
 -- HB 2016-04-06: used "algo_after_gtLogic" for read-out-record (changed "algo_before_prescaler" to "algo_after_bxomask") according to fdl_module v0.0.24.
@@ -163,7 +163,7 @@ begin
       ipb_to_slaves => ipb_to_slaves,
       ipb_from_slaves => ipb_from_slaves
     );
-    
+
     frame_i: entity work.frame
     generic map(
         NR_LANES            => (4 * N_REGION),

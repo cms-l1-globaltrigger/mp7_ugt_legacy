@@ -11,7 +11,7 @@
 -- $HeadURL:  $
 -- $Date:  $
 -- $Author: Florian $
--- Modification : Babak
+-- Modification : HEPHY
 -- 		1) lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
 --              2) changed logic for address calculation based on bug as follows:
  --                if the MAX_DELAY is smaller than the whole instanciated ram, we have to take care,
@@ -22,7 +22,7 @@
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
- 
+
 library ieee;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -87,7 +87,7 @@ begin
 
 	sync : process (lhc_clk, lhc_rst)
 	begin
-	--BR: 04.02.2015 Delay Manager out put was zero, becaue lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
+	-- HEPHY: 04.02.2015 Delay Manager out put was zero, becaue lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
 		if lhc_rst = RST_ACT then
 			r <= DM_RESET_STATE;
 		elsif rising_edge(lhc_clk) then
@@ -119,7 +119,7 @@ begin
         --JW 11.02.2015 - changed logic for address calculation, because an bug was found:
         --  if the MAX_DELAY is smaller than the whole instanciated ram, we have to take care,
         --  that the read pointer does not jump to an unused position when the write pointer is set back to 0
-        
+
 	if ((r.wr_addr - to_integer(unsigned(r.cur_delay)) + 1) < 0) then
         -- special formula for the case mentionned above:
             rd_addr <=  MAX_DELAY - to_integer(unsigned(r.cur_delay)) + r.wr_addr + 1;
@@ -153,7 +153,7 @@ begin
 	--ram_data_in <= data_i;
  	ram_access : process(lhc_clk)
   	begin
-    		
+
 	if rising_edge(lhc_clk) then
       		ram_data_out <= ram(rd_addr);
       		--if WrEn = '1' then

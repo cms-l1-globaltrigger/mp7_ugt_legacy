@@ -10,7 +10,7 @@
 --------------------------------------------------------------------------------
 -- $HeadURL:  $
 -- $Date:  $
--- $Author:  Babak
+-- $Author:  HEPHY
 -- $Revision: 0.1  $
 -- Description : FIFO for using in ROP
 --------------------------------------------------------------------------------
@@ -66,10 +66,10 @@ architecture mixed of fifo_1c1r1w is
 	signal full_int, full_next : std_logic := '0';
 	signal empty_int, empty_next : std_logic := '0';
 	signal wr_int, rd_int : std_logic := '0';
-   
+
 	signal fill_level_int  : std_logic_vector(log2c(MIN_DEPTH) - 1 downto 0) := (others => '0');
 	signal fill_level_next : std_logic_vector(log2c(MIN_DEPTH) - 1 downto 0) := (others => '0');
-	
+
 	component dp_ram_1c1r1w is
 		generic
 		(
@@ -107,8 +107,8 @@ begin
 			waddr2 => write_address,
 			wdata2 => data_in2,
 			wr2    => wr_int
-		); 
-  
+		);
+
 	--------------------------------------------------------------------
 	--                    PROCESS : SYNC                              --
 	--------------------------------------------------------------------
@@ -128,14 +128,14 @@ begin
 			fill_level_int <= fill_level_next;
 		end if;
 	end process sync;
-  
+
 	--------------------------------------------------------------------
 	--                    PROCESS : EXEC                              --
 	--------------------------------------------------------------------
 	exec : process(write_address, read_address, full_int, empty_int, wr2, rd1)
 	begin
 		write_address_next <= write_address;
-		read_address_next <= read_address;  
+		read_address_next <= read_address;
 		full_next <= full_int;
 		empty_next <= empty_int;
 		wr_int <= '0';
@@ -164,13 +164,13 @@ begin
 			empty_next <= '0';
 			if read_address = std_logic_vector(unsigned(write_address) + 1) then
 				full_next <= '1';
-			end if;      
+			end if;
 		end if;
 	end process exec;
 
 
 	GENERATE_FILL_LEVEL : if FILL_LEVEL_COUNTER = true generate
-		
+
 	fill_level_process : process (full_next, full_int, empty_int, wr2, rd1, fill_level_int, read_address, write_address)
 		variable fill_level_temp : std_logic_vector(log2c(MIN_DEPTH) downto 0);
 		variable read_address_temp : std_logic_vector(log2c(MIN_DEPTH)-1 downto 0);
@@ -179,46 +179,46 @@ begin
 		--fill_level_temp := fill_level_int;
 		fill_level_next <= (others=>'0');
 		fill_level_temp := (others=>'0');
-		
+
 		write_address_temp := write_address;
 		read_address_temp := read_address;
-		
-		
+
+
 		if wr2 = '1' and full_int = '0' then
 			write_address_temp := std_logic_vector(unsigned(write_address) + 1);
 		end if;
 		if rd1 = '1' and empty_int = '0'  then
 			read_address_temp := std_logic_vector(unsigned(read_address) + 1);
 		end if;
-		
-		
+
+
 		if read_address_temp > write_address_temp then
 			fill_level_temp  := std_logic_vector(unsigned('1'&write_address_temp)-unsigned('0'&read_address_temp));
 			fill_level_next <= fill_level_temp(log2c(MIN_DEPTH)-1 downto 0);
 		else
 			fill_level_next <= std_logic_vector(unsigned(write_address_temp)-unsigned(read_address_temp));
 		end if;
-	
+
 		if full_next = '1' then
 			fill_level_next <= (others=>'1');
 		end if;
-	
+
 	end process;
-			
-	fill_level <= std_logic_vector(unsigned(fill_level_int));	
-			
+
+	fill_level <= std_logic_vector(unsigned(fill_level_int));
+
 	end generate;
 
 	GENERATE_NO_FILL_LEVEL : if FILL_LEVEL_COUNTER = false generate
-	
+
 	fill_level <= (others=>'0');
 	fill_level_next <= (others=>'0');
-	
+
 	end generate;
 
 	full <= full_int;
 	empty <= empty_int;
-  
+
 end architecture mixed;
 
 

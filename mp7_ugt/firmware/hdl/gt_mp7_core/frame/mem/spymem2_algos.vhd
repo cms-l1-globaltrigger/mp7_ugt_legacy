@@ -11,9 +11,9 @@
 ---Description:SPYMEM 2 for algos.
 -- $HeadURL: $
 -- $Date:  $
--- $Author: Babak $
--- Modification : Babak, the deisgn has a bug and it does not working correctly at hardware. The problem is fixed, but it is decided to use coregenerator version 
--- 
+-- $Author: HEPHY $
+-- Modification : HEPHY, the deisgn has a bug and it does not working correctly at hardware. The problem is fixed, but it is decided to use coregenerator version
+--
 -- $Revision: 0.1 $
 --------------------------------------------------------------------------------
 
@@ -51,20 +51,20 @@ entity spymem2_algos is
 begin
 	assert(ipbus_in.ipb_wdata'length = 32 )
 		report "Software data width NOT supported!"
-		severity error; 
+		severity error;
 	assert(ipbus_in.ipb_addr'length > (log2c(MAX_NR_ALGOS/ipbus_in.ipb_wdata'length)+log2c(BUNCHES_PER_ORBIT)) )
 		report "address space too small for spy II (algos)!"
-		severity error; 
+		severity error;
 end;
 
 architecture arch of spymem2_algos is
-	
+
 	constant SW_DATA_WIDTH : integer := 32;
 	constant MEMORY_BLOCKS : integer := MAX_NR_ALGOS/SW_DATA_WIDTH;
 -- 	constant READ_LATENCY : integer := 2; -- read latency of the internal ram
 	constant READ_LATENCY : integer := 0; -- read latency of the internal ram
-	
-	
+
+
 	signal bx_addr : std_logic_vector(log2c(BUNCHES_PER_ORBIT)-1 downto 0);
 	signal bx_addr_nxt : std_logic_vector(log2c(BUNCHES_PER_ORBIT)-1 downto 0);
 	signal spy_we  : std_logic;
@@ -75,7 +75,7 @@ architecture arch of spymem2_algos is
 	signal dl_in_rd_ack : std_logic;
 	signal addr_internal : std_logic_vector(log2c(BUNCHES_PER_ORBIT)+log2c(MEMORY_BLOCKS)-1 downto 0);
 	signal mem_sel : std_logic_vector(log2c(MEMORY_BLOCKS)-1 downto 0);
-	
+
 	signal rd_ack_internal   : std_logic;
 	signal sw_data_out_internal : std_logic_vector((ipbus_out.ipb_rdata'length)-1 downto 0);
 
@@ -94,11 +94,11 @@ begin
 			bx_addr <= bx_addr_nxt;
 		end if;
 	end process;
-	
+
 	dprams : for i in 0 to MEMORY_BLOCKS-1 generate
 	begin
 		ram32 : entity work.ram_2c1w1r
-			generic map 
+			generic map
 			(
 				DATA_WIDTH => SW_DATA_WIDTH,
 --  what's that ???
@@ -112,28 +112,28 @@ begin
 				wr      => spy_we,
 				wr_addr => bx_addr,
 				wr_data => algos_i(SW_DATA_WIDTH*(i+1)-1 downto SW_DATA_WIDTH*i),
-				
+
 				rd_clk  => ipbus_clk,
 				rd      => '1',
 				rd_addr => addr_internal(addr_internal'length-1 downto log2c(MEMORY_BLOCKS)),
 				rd_data => data_out_array(i)
-			);	
-	end generate;		
-	
+			);
+	end generate;
+
 	gen_bx_addr : process (bx_nr, spy_we, bx_addr)
-	begin 
+	begin
 		bx_addr_nxt <= (others=>'0');
 		if spy_we = '1' then
 			bx_addr_nxt <= std_logic_vector(unsigned(bx_addr) + 1);
 		end if;
 		-- just for safty, this is needed if two spy triggers come back to back
 		-- should never happen ...
-		if unsigned(bx_addr) = BUNCHES_PER_ORBIT-1 then  
+		if unsigned(bx_addr) = BUNCHES_PER_ORBIT-1 then
 			bx_addr_nxt <= (others=>'0');
 		end if;
 	end process;
-	
-	dl_spy : entity work.delay_line_sl 
+
+	dl_spy : entity work.delay_line_sl
 		generic map
 		(
 			DELAY => GTL_FDL_LATENCY
@@ -145,14 +145,14 @@ begin
 			sig_i => spy_i,
 			sig_o => spy_we
 		);
-		
+
 -- Generation of "error" for IPBus
     ipbus_out.ipb_err <= '0';
 
 
     dl_in_rd_ack <= ipbus_in.ipb_strobe;
-	
-	dl_rd_ack : entity work.delay_line_sl 
+
+	dl_rd_ack : entity work.delay_line_sl
 		generic map
 		(
 			DELAY => READ_LATENCY
@@ -164,8 +164,8 @@ begin
 			sig_i => dl_in_rd_ack,
 			sig_o => rd_ack_internal
 		);
-		
-	dl_mem_sel : entity work.delay_line_slv 
+
+	dl_mem_sel : entity work.delay_line_slv
 		generic map
 		(
 			DELAY => READ_LATENCY,
@@ -178,7 +178,7 @@ begin
 			sig_i => addr_internal(log2c(MEMORY_BLOCKS)-1 downto 0),
 			sig_o => mem_sel
 		);
-	
+
 	data_out_mux : process (mem_sel, data_out_array)
 	begin
 
@@ -191,8 +191,8 @@ begin
 		end loop;
 
 	end process;
-	
-	--! generate an additional output register 
+
+	--! generate an additional output register
 	GEN_SW_OUTPUT_REGISTER : if USE_SW_OUTPUT_REGISTER = true generate
 	begin
 		sync_ipbus_clk : process (ipbus_clk, ipbus_rst)
@@ -206,7 +206,7 @@ begin
                 ipbus_out.ipb_ack <= rd_ack_internal;
             end if;
 		end process;
-	
+
 	end generate;
 
 	DONT_GEN_SW_OUTPUT_REGISTER : if USE_SW_OUTPUT_REGISTER = false generate
@@ -214,7 +214,7 @@ begin
         ipbus_out.ipb_ack <= rd_ack_internal;
 	end generate;
 
-		
+
 end architecture;
 
 

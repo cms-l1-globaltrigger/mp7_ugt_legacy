@@ -11,14 +11,14 @@
 ---Description: ROP
 -- $HeadURL: $
 -- $Date:  $
--- $Author: Babak $
+-- $Author: HEPHY $
 --- $Revision: 0.1 $
 --------------------------------------------------------------------------------
 
 -- HB 2106-05-31: memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd)
--- BR:21-05-2015 TOP_SERIAL_VENDOR is not more relevant, because in future we will read from hardware over ipmi just MAC address
--- BR:21-05-2015: test version with spy2_algos and spy2_finor instantiated with ipb_dpmem_4096_32 modules, too.
--- BR:21-05-2015: test version with simspymem instantiated with ipb_dpmem_4096_32 modules.
+-- HEPHY:21-05-2015 TOP_SERIAL_VENDOR is not more relevant, because in future we will read from hardware over ipmi just MAC address
+-- HEPHY:21-05-2015: test version with spy2_algos and spy2_finor instantiated with ipb_dpmem_4096_32 modules, too.
+-- HEPHY:21-05-2015: test version with simspymem instantiated with ipb_dpmem_4096_32 modules.
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
@@ -46,7 +46,7 @@ package frame_addr_decode is
 							     60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75);
 
 --     constant C_IPB_SPYMEM2_ALGOS : natural := 64;
--- BR:21-05-2015: test version with spy2_algos and spy2_finor instantiated with ipb_dpmem_4096_32 modules.
+-- HEPHY:21-05-2015: test version with spy2_algos and spy2_finor instantiated with ipb_dpmem_4096_32 modules.
 --                16 memory blocks for 512 algos, 1 block for finor
 
     type ipb_spy2_algos_index_array is array (0 to 15) of natural;
@@ -73,7 +73,7 @@ package frame_addr_decode is
     constant C_TEST_REGS_BEGIN_INDEX : integer := 0;
     constant C_TEST_REGS_END_INDEX : integer := 14;
 
--- BR:21-05-2015: C_RB_ADDR_WIDTH fixed to 12 in rb.vhd
+-- HEPHY:21-05-2015: C_RB_ADDR_WIDTH fixed to 12 in rb.vhd
 --     constant C_RB_ADDR_WIDTH : integer := 20;
 
     function frame_addr_sel(signal addr : in std_logic_vector(31 downto 0)) return natural;
@@ -89,7 +89,7 @@ package body frame_addr_decode is
 
     begin
         if    std_match(addr, "100000000000000000000000000-----") then sel := C_IPB_MODULE_INFO;    -- 0x80000000
---BR:21-05-2015: added test status register addresses
+-- HEPHY:21-05-2015: added test status register addresses
         elsif std_match(addr, "1000000000000000000000000010----") then sel := C_IPB_TEST_REGS;      -- 0x80000020
         elsif std_match(addr, "10000000000000000000000001000000") then sel := C_IPB_DEMUX_LANE_ADJ; -- 0x80000040
         elsif std_match(addr, "10000000000000000000100000000000") then sel := C_IPB_PULSEREG;       -- 0x80000800
@@ -170,7 +170,7 @@ package body frame_addr_decode is
         elsif std_match(addr, "10000000001101000101------------") then sel := C_IPB_SIMSPYMEM(69);
         elsif std_match(addr, "10000000001101000110------------") then sel := C_IPB_SIMSPYMEM(70);
         elsif std_match(addr, "10000000001101000111------------") then sel := C_IPB_SIMSPYMEM(71);  -- 0x80347000 .. 0x80347FFF
-        
+
         elsif std_match(addr, "10000000001001000000------------") then sel := C_IPB_SPYMEM2_ALGOS(0); -- 0x80240000 .. 0x80240FFF
         elsif std_match(addr, "10000000001001000001------------") then sel := C_IPB_SPYMEM2_ALGOS(1);
         elsif std_match(addr, "10000000001001000010------------") then sel := C_IPB_SPYMEM2_ALGOS(2);

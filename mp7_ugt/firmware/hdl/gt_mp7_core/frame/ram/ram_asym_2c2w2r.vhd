@@ -11,7 +11,7 @@
 ---Description:RTL RAM design for ROP. It could be used for any design. It should be adjusted for changing the technology
 -- $HeadURL: $
 -- $Date:  $
--- $Author:  Babak$
+-- $Author:  HEPHY$
 -- $Revision: 0.1 $
 --------------------------------------------------------------------------------
 library ieee;
@@ -25,7 +25,7 @@ use ieee.std_logic_arith.all;
 -- 2 cycles read latency
 entity ram_asym_2c2w2r is
 
-  generic 
+  generic
   (
     WIDTHA      : integer := 1;--:= 32;
     SIZEA       : integer := 4096;--:= 512;
@@ -99,7 +99,7 @@ architecture behavioral of ram_asym_2c2w2r is
   --   - the RAM has only one write port whose data width is maxWIDTH
   -- In all other cases, ram can be a signal.
   shared variable ram : ramType := (others => (others => '0'));
-  
+
   signal readA : std_logic_vector(WIDTHA-1 downto 0):= (others => '0');
   signal readB : std_logic_vector(WIDTHB-1 downto 0):= (others => '0');
   signal regA  : std_logic_vector(WIDTHA-1 downto 0):= (others => '0');
@@ -125,7 +125,7 @@ begin
   process (b_clk)
   begin
     if rising_edge(b_clk) then
-      if b_en = '1' then        
+      if b_en = '1' then
         for i in 0 to RATIO-1 loop
           if b_we = '1' then
             ram(conv_integer(b_addr & conv_std_logic_vector(i,log2(RATIO))))
@@ -143,7 +143,7 @@ begin
 
   a_rd_data <= regA;
   b_rd_data <= regB;
-  
+
 end behavioral;
 
-							
+

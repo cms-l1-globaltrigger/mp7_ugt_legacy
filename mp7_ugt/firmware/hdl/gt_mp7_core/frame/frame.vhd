@@ -1,4 +1,4 @@
--- Description: 
+-- Description:
 -- Contains the "framework" of GT-logic (all parts, except GTL and FDL).
 
 -- HB 2016-09-16: v1.1.0 - based on v1.0.0, but memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd).
@@ -14,15 +14,15 @@
 --                Changed tp_mux.vhd for synchronized BGos.
 -- HB 2016-03-23: v0.0.37 - removed l1asim module, inserted B-Go signals and l1a (ports) for tcm module.
 -- HB 2016-02-26: v0.0.36 - removed unused fdl_status, bx_nr_d_FDL and tp.
--- BR 2015-06-11: v0.1.4  changed ROP for 32-bits and usage of 40Mhz clock domain for calculation the data
--- BR 2015-05-07: new concpept for simulation the design and especially for ROP. The concept is based on modularity by using new input ports. The case now is for ROP, which is should be extended for ugt payload.
--- BR 2015-05-29: changed the ports for simulation desing concept
--- BR 2015-05-19: v0.0.17 - based on v0.0.16, but an output_mux for sending algo & finor data to tx buffer and to the links
--- BR 2015-05-24: v0.0.16 - based on v0.0.15, but added a pulse reg and connected its output to reset logic
--- BR 2015-05-1 :"Milestone" : lhc_rst is for doing the reset the counter in tcm module. It is implmented as resgister, which later should be re-implemented as event register.
+-- HEPHY 2015-06-11: v0.1.4  changed ROP for 32-bits and usage of 40Mhz clock domain for calculation the data
+-- HEPHY 2015-05-07: new concpept for simulation the design and especially for ROP. The concept is based on modularity by using new input ports. The case now is for ROP, which is should be extended for ugt payload.
+-- HEPHY 2015-05-29: changed the ports for simulation desing concept
+-- HEPHY 2015-05-19: v0.0.17 - based on v0.0.16, but an output_mux for sending algo & finor data to tx buffer and to the links
+-- HEPHY 2015-05-24: v0.0.16 - based on v0.0.15, but added a pulse reg and connected its output to reset logic
+-- HEPHY 2015-05-1 :"Milestone" : lhc_rst is for doing the reset the counter in tcm module. It is implmented as resgister, which later should be re-implemented as event register.
 -- HB 2015-02-05: v0.0.13 - based on v0.0.12, but cleaned up the code and changed demux_lane_data (removed port del_a).
--- BR: 04.02.2015 Delay Manager out put was zero, becaue lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package. frame version 0.0.12
--- BR 2015-02-03: "bcres_d" is used, which commes from DM, frame version 0.0.11
+-- HEPHY: 04.02.2015 Delay Manager out put was zero, becaue lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package. frame version 0.0.12
+-- HEPHY 2015-02-03: "bcres_d" is used, which commes from DM, frame version 0.0.11
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -155,7 +155,7 @@ architecture rtl of frame is
     signal pulse           : std_logic_vector(31 downto 0);
 
     signal mux_ctrl_regs_1 : ipb_regs_array(0 to 3);
--- BR 25.05.2015 - change to constant for avoiding the metastability and warning in simulator as well as in syntheseis process
+-- HEPHY 25.05.2015 - change to constant for avoiding the metastability and warning in simulator as well as in syntheseis process
     constant  mux_ctrl_regs_1_init  : ipb_regs_array(0 to 3) := (X"00000bb8", X"00000c80", X"00000000", X"00000001"); -- bb8 =^ 3000, c80 =^ 3200
 
     signal dsmux_lhc_data_int_sim : lhc_data_t; -- lhc_data output of dsmux
@@ -200,10 +200,11 @@ architecture rtl of frame is
 --  lhc_rst = RST_ACT (= '1' in this version) and ipb_rst => high active !!!
 --                    sw_reset = low active !!!
 --     lhc_rst <= sw_reset and ipbus_triggered_reset; -- old !!!
--- BR "Milestone" : lhc_rst is for doing the reset the counter in tcm module. It is implmented as resgister, which later should be re-implemented as event register.
+-- HEPHY "Milestone" : lhc_rst is for doing the reset the counter in tcm module. It is implmented as resgister, which later should be re-implemented as event register.
 --  added pulse reg output to reset logic
 
     lhc_rst <= not sw_reset or ipbus_triggered_reset or pulse(0);
+    cntr_rst <= pulse(1); -- counter reset
     lhc_rst_o <= lhc_rst;
     lhc_rst_internal <= lhc_rst;
 --     rop_rst_internal <= not(not sw_reset or ipbus_triggered_reset or pulse(0));
@@ -231,7 +232,7 @@ architecture rtl of frame is
     );
 
 --===============================================================================================--
--- BR 24.05.2015 - added ipb event register
+-- HEPHY 24.05.2015 - added ipb event register
 -- IPBus pulse registger (sw_reset)
     pulse_reg_i: entity work.ipb_pulse_regs
     port map(
@@ -299,6 +300,7 @@ architecture rtl of frame is
         port map(
             lhc_clk           => lhc_clk,
             lhc_rst           => lhc_rst,
+            cntr_rst          => cntr_rst,
 -- HB 2016-03-17: all bgos from dm.vhd
 	    ec0               => ec0_d_int,
 	    oc0               => oc0_d_int,
@@ -376,8 +378,8 @@ architecture rtl of frame is
 -- 	type eg_array_t is array(0 to EG_ARRAY_LENGTH-1) of std_logic_vector(EG_DATA_WIDTH-1 downto 0);
 -- 	type tau_array_t is array(0 to TAU_ARRAY_LENGTH-1) of std_logic_vector(TAU_DATA_WIDTH-1 downto 0);
 -- 	type jet_array_t is array(0 to JET_ARRAY_LENGTH-1) of std_logic_vector(JET_DATA_WIDTH-1 downto 0);
--- 
--- 	type lhc_data_t is record 
+--
+-- 	type lhc_data_t is record
 -- 		muon : muon_array_t;
 -- 		eg : eg_array_t;
 -- 		tau : tau_array_t;
@@ -387,16 +389,16 @@ architecture rtl of frame is
 -- 		etm : std_logic_vector(ETM_DATA_WIDTH-1 downto 0);
 -- 		htm : std_logic_vector(HTM_DATA_WIDTH-1 downto 0);
 -- 		etmhf : std_logic_vector(ETMHF_DATA_WIDTH-1 downto 0);
--- 		htmhf : std_logic_vector(HTMHF_DATA_WIDTH-1 downto 0);		
+-- 		htmhf : std_logic_vector(HTMHF_DATA_WIDTH-1 downto 0);
 -- 		link_11_fr_0_data : std_logic_vector(LINK_11_FR_0_WIDTH-1 downto 0);
 -- 		link_11_fr_1_data : std_logic_vector(LINK_11_FR_1_WIDTH-1 downto 0);
 -- 		link_11_fr_2_data : std_logic_vector(LINK_11_FR_2_WIDTH-1 downto 0);
 -- 		link_11_fr_3_data : std_logic_vector(LINK_11_FR_3_WIDTH-1 downto 0);
 -- 		link_11_fr_4_data : std_logic_vector(LINK_11_FR_4_WIDTH-1 downto 0);
--- 		link_11_fr_5_data : std_logic_vector(LINK_11_FR_5_WIDTH-1 downto 0);		
+-- 		link_11_fr_5_data : std_logic_vector(LINK_11_FR_5_WIDTH-1 downto 0);
 -- 		external_conditions : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
--- 	end record; 
-	
+-- 	end record;
+
 --===============================================================================================--
 
 --===============================================================================================--
@@ -550,7 +552,7 @@ architecture rtl of frame is
 --                               SPYMEM2 FINOR
 --===============================================================================================--
 
--- BR :[Synth 8-1565] actual for formal port dinb is neither a static name nor a globally static expression. It should be fixed
+-- HEPHY :[Synth 8-1565] actual for formal port dinb is neither a static name nor a globally static expression. It should be fixed
     local_finor_with_veto_2_spy2_int <= (X"0000000" & "000" & local_finor_with_veto_2_spy2);
     spymem2_finor_i: entity work.ipb_dpmem_4096_32
          port map(

@@ -11,7 +11,7 @@
 ---Description:RTL RAM design for ROP. It could be used for any design. It should be adjusted for changing the technology
 -- $HeadURL: $
 -- $Date:  $
--- $Author:  Babak$
+-- $Author:  HEPHY$
 -- $Revision: 0.1 $
 --------------------------------------------------------------------------------
 library ieee;
@@ -38,7 +38,7 @@ entity ram_2c2w2r is
 		a_addr    : in  std_logic_vector(log2c(SIZE)-1 downto 0);
 		a_rd_data : out std_logic_vector(DATA_WIDTH-1 downto 0);
 		a_wr_data : in  std_logic_vector(DATA_WIDTH-1 downto 0);
-		
+
 		b_clk     : in  std_logic;
 		b_en      : in  std_logic;
 		b_wr      : in  std_logic;
@@ -55,10 +55,10 @@ architecture arch of ram_2c2w2r is
 
 	-- If using Dual Port, 2 Clocks, 2 Read/Write Ports use the following definition for ram
 	shared variable ram : ram_t := (others=>(others=>'0'));
-	
+
 	signal a_rd_data_temp : std_logic_vector(DATA_WIDTH-1 downto 0);
 	signal b_rd_data_temp : std_logic_vector(DATA_WIDTH-1 downto 0);
-	
+
 begin
 
 

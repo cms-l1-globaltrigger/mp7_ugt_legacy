@@ -8,15 +8,15 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description:Lane Mapping Process, Developer Babak, Markus
+---Description:Lane Mapping Process, Developer HEPHY
 -- $HeadURL: $
 -- $Date:  $
--- $Author: rahbaran $
+-- $Author: HEPHY $
 -- $Revision: 0.1 $
 --------------------------------------------------------------------------------
 
 -- HB 2106-05-31: lane mapping for all frames of calo links (for extended test-vector-file structure - see lhc_data_pkg.vhd)
--- BR 2014-05-20: changed lane mapping for muons from 0,1,2,3 to 2,3,4,5 of 240MHz objects - 
+-- HEPHY 2014-05-20: changed lane mapping for muons from 0,1,2,3 to 2,3,4,5 of 240MHz objects -
 
 library ieee;
 use IEEE.std_logic_1164.all;
@@ -31,13 +31,13 @@ entity lmp is
 	(
         	NR_LANES: positive
 	);
-	port 
+	port
 	(
 		demux_data_i		: in demux_lanes_data_objects_array_t(NR_LANES-1 downto 0);
 		demux_data_valid_i	: in demux_lanes_data_objects_array_valid_t(NR_LANES-1 downto 0);
 		lhc_data_o		: out lhc_data_t;
 		lhc_data_valid_o	: out std_logic
-	); 
+	);
 end;
 
 architecture arch of lmp is
@@ -57,7 +57,7 @@ begin
 
     lhc_data_valid_o <= '1';
 
--- BR 2015-05-20: changed lane mapping for muons 0,1,2,3 to 2,3,4,5 of 240MHz objects.
+-- HEPHY 2015-05-20: changed lane mapping for muons 0,1,2,3 to 2,3,4,5 of 240MHz objects.
     lhc_data_o.muon(0)(31 downto 0)  <= demux_data_i(OFFSET_MUON_LANES+0)(2);
     lhc_data_o.muon(0)(63 downto 32) <= demux_data_i(OFFSET_MUON_LANES+0)(3);
     lhc_data_o.muon(1)(31 downto 0)  <= demux_data_i(OFFSET_MUON_LANES+0)(4);
@@ -138,7 +138,7 @@ begin
     lhc_data_o.link_11_fr_4_data <= demux_data_i(OFFSET_LINK_11_LANES)(4);
     lhc_data_o.link_11_fr_5_data <= demux_data_i(OFFSET_LINK_11_LANES)(5);
 
--- BR 2015-05-01: added external-conditions.
+-- HEPHY 2015-05-01: added external-conditions.
     lhc_data_o.external_conditions(31 downto 0) <= demux_data_i(OFFSET_EXT_COND_LANES+0)(0);
     lhc_data_o.external_conditions(63 downto 32) <= demux_data_i(OFFSET_EXT_COND_LANES+0)(1);
     lhc_data_o.external_conditions(95 downto 64) <= demux_data_i(OFFSET_EXT_COND_LANES+1)(0);

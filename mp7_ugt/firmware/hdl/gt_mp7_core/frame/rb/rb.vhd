@@ -8,11 +8,11 @@
 -- except by authorized licensees of HEPHY. This work is the
 -- confidential information of HEPHY.
 --------------------------------------------------------------------------------
----Description:Lane Mapping Process, Developer Babak, Markus
+---Description:Lane Mapping Process, Developer HEPHY
 -- $HeadURL: $
 -- $Date:  $
 -- $Author: ?$
--- Modification : Babak
+-- Modification : HEPHY
 -- $Revision: 0.1 $
 --------------------------------------------------------------------------------
 
@@ -102,7 +102,7 @@ architecture arch of rb is
 
 
 
--- BR 2015-05-10: changed status register addresses
+-- HEPHY 2015-05-10: changed status register addresses
 	constant OFFSET_SPYTRIGGER_STATUS : std_logic_vector(rb_addr_width-1 downto 0) := X"000";
 	constant OFFSET_DM_STATUS : std_logic_vector(rb_addr_width-1 downto 0) := X"001";
 	constant OFFSET_TCM_STATUS_BX_NR : std_logic_vector(rb_addr_width-1 downto 0) := X"002";
@@ -143,11 +143,11 @@ begin
 
 	rb_i: entity work.ipbus_syncreg_v
 		generic map(
----- BR 2015-05-04: bug fixed region for status register
+-- HEPHY 2015-05-04: bug fixed region for status register
 -- 			N_CTRL => 2 ** rb_addr_width,
 -- 			N_STAT => 2 ** rb_addr_width
 			N_CTRL => 2 ** (rb_addr_width-1),
--- BR 2015-05-04:: changed status register addresses
+-- HEPHY 2015-05-04:: changed status register addresses
 -- 			N_STAT => 2 ** (rb_addr_width-1)
 			N_STAT => 14
 		)
@@ -157,7 +157,7 @@ begin
 			ipb_in => data_acc_in,
 			ipb_out => data_acc_out,
 			slv_clk => lhc_clk,
----- BR 2015-05-04:: bug fixed region for status register
+-- HEPHY 2015-05-04:: bug fixed region for status register
 -- 			d => stat_reg(2 ** rb_addr_width - 1 downto 0),
 -- 			q => ctrl_reg(2 ** rb_addr_width - 1 downto 0)
 			d => stat_reg(13 downto 0),
@@ -179,11 +179,11 @@ begin
 -- l1asim
 	sw_regs_in.l1asim.enable_l1a_sim <= ctrl_reg(to_integer(unsigned(OFFSET_L1ASIM_CONFIG)))(0);
 -- **********************
--- BR 2015-05-04:: event register implementation - has to be checked in HW !!!
+-- HEPHY 2015-05-04:: event register implementation - has to be checked in HW !!!
 -- 	l1asim_fire_once_event_int <= not l1asim_fire_once_event_int when ctrl_reg(to_integer(unsigned(OFFSET_L1ASIM_CONFIG)))(1) = '1' else l1asim_fire_once_event_int;
 -- 	sw_regs_in.l1asim.fire_once_event <= l1asim_fire_once_event_int;
 
---BR 2015-05-04:: changed event register (not working) to "in-register"
+-- HEPHY 2015-05-04:: changed event register (not working) to "in-register"
 	sw_regs_in.l1asim.fire_once_event <= ctrl_reg(to_integer(unsigned(OFFSET_L1ASIM_CONFIG)))(1);
 -- **********************
 	sw_regs_in.l1asim.cntrl <= ctrl_reg(to_integer(unsigned(OFFSET_L1ASIM_CONFIG)))(3 downto 2);
@@ -219,7 +219,7 @@ begin
 -- 	spytrigger_clear_spy12_error_event_int <= not spytrigger_clear_spy12_error_event_int when ctrl_reg(to_integer(unsigned(OFFSET_SPYTRIGGER_CONTROL)))(5) = '1' else spytrigger_clear_spy12_error_event_int;
 -- 	sw_regs_in.spytrigger.clear_spy12_error_event <= spytrigger_clear_spy12_error_event_int;
 
--- BR 2015-05-04:: changed event register (not working) to "in-register"
+-- HEPHY 2015-05-04:: changed event register (not working) to "in-register"
 	sw_regs_in.spytrigger.spy12_once_event <= ctrl_reg(to_integer(unsigned(OFFSET_SPYTRIGGER_CONTROL)))(0);
 	sw_regs_in.spytrigger.spy12_next_event <= ctrl_reg(to_integer(unsigned(OFFSET_SPYTRIGGER_CONTROL)))(1);
 	sw_regs_in.spytrigger.spy3_event <= ctrl_reg(to_integer(unsigned(OFFSET_SPYTRIGGER_CONTROL)))(2);
@@ -232,7 +232,7 @@ begin
 -- 	sw_reset_reset_event_int <= not sw_reset_reset_event_int when ctrl_reg(to_integer(unsigned(OFFSET_SW_RESET_RESET_EVENT)))(0) = '1' else sw_reset_reset_event_int;
 -- 	sw_regs_in.sw_reset.reset_event <= sw_reset_reset_event_int;
 
--- BR 2015-05-04: changed event register (not working) to "in-register"
+-- HEPHY 2015-05-04: changed event register (not working) to "in-register"
 	sw_regs_in.sw_reset.reset_event <= ctrl_reg(to_integer(unsigned(OFFSET_SW_RESET_RESET_EVENT)))(0);
 
 -- dm
@@ -257,7 +257,7 @@ begin
 -- 	tcm_bgos_event_int <= not tcm_bgos_event_int when ctrl_reg(to_integer(unsigned(OFFSET_TCM_BGOS_EVENT)))(0) = '1' else tcm_bgos_event_int;
 -- 	sw_regs_in.tcm.bgos_event <= tcm_bgos_event_int;
 
--- BR 2015-05-04: changed event register (not working) to "in-register"
+-- HEPHY 2015-05-04: changed event register (not working) to "in-register"
 	sw_regs_in.tcm.err_det_reset_event <= ctrl_reg(to_integer(unsigned(OFFSET_TCM_ERR_DET_RESET_EVENT)))(0);
 	sw_regs_in.tcm.bgos_event <= ctrl_reg(to_integer(unsigned(OFFSET_TCM_BGOS_EVENT)))(0);
 -- **********************
@@ -281,7 +281,7 @@ begin
 -- 	rop_busy_reset_event_int <= not rop_busy_reset_event_int when ctrl_reg(to_integer(unsigned(OFFSET_ROP_BUSY_RESET_EVENT)))(0) = '1' else rop_busy_reset_event_int;
 -- 	sw_regs_in.rop.busy_reset_event <= tcm_bgos_event_int;
 
--- BR 2015-05-04:: changed event register (not working) to "in-register"
+-- HEPHY 2015-05-04:: changed event register (not working) to "in-register"
 	sw_regs_in.rop.busy_reset_event <= ctrl_reg(to_integer(unsigned(OFFSET_ROP_BUSY_RESET_EVENT)))(0);
 -- **********************
 	sw_regs_in.rop.Payload <= ctrl_reg(to_integer(unsigned(OFFSET_ROP_PAYLOAD)))(19 downto 0);

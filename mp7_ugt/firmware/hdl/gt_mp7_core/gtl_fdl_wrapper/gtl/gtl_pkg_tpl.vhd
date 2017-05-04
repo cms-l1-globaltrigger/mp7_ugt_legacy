@@ -1,6 +1,7 @@
 -- Description:
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
+-- HB 2017-05-04: updated for "unsorted" calo-calo constants.
 -- HB 2017-04-26: updated mass types definition.
 -- HB 2017-04-11: updated muon structure for "raw" ann "extrapolated" phi and eta bits (phi_high, phi_low, eta_high and eta_low => for "extrapolated").
 -- HB 2017-03-30: changed ET_PRECISION in strings to PT_PRECISION.
@@ -420,8 +421,11 @@ constant MAX_MUON_PHI_BITS : positive := MUON_PHI_HIGH-MUON_PHI_LOW+1;
 constant EG_EG_DETA_PRECISION: positive := 3;
 constant EG_JET_DETA_PRECISION: positive := 3;
 constant EG_TAU_DETA_PRECISION: positive := 3;
+constant JET_EG_DETA_PRECISION: positive := 3;
 constant JET_JET_DETA_PRECISION: positive := 3;
 constant JET_TAU_DETA_PRECISION: positive := 3;
+constant TAU_EG_DETA_PRECISION: positive := 3;
+constant TAU_JET_DETA_PRECISION: positive := 3;
 constant TAU_TAU_DETA_PRECISION: positive := 3;
 constant EG_MUON_DETA_PRECISION: positive := 3;
 constant JET_MUON_DETA_PRECISION: positive := 3;
@@ -431,8 +435,11 @@ constant MUON_MUON_DETA_PRECISION: positive := 3;
 constant EG_EG_DPHI_PRECISION: positive := 3;
 constant EG_JET_DPHI_PRECISION: positive := 3;
 constant EG_TAU_DPHI_PRECISION: positive := 3;
+constant JET_EG_DPHI_PRECISION: positive := 3;
 constant JET_JET_DPHI_PRECISION: positive := 3;
 constant JET_TAU_DPHI_PRECISION: positive := 3;
+constant TAU_EG_DPHI_PRECISION: positive := 3;
+constant TAU_JET_DPHI_PRECISION: positive := 3;
 constant TAU_TAU_DPHI_PRECISION: positive := 3;
 constant EG_MUON_DPHI_PRECISION: positive := 3;
 constant JET_MUON_DPHI_PRECISION: positive := 3;
@@ -455,17 +462,16 @@ constant MUON_ETMHF_DPHI_PRECISION: positive := 3;
 constant EG_EG_DETA_DPHI_PRECISION: positive := max(EG_EG_DETA_PRECISION, EG_EG_DPHI_PRECISION);
 constant EG_JET_DETA_DPHI_PRECISION: positive := max(EG_JET_DETA_PRECISION, EG_JET_DPHI_PRECISION);
 constant EG_TAU_DETA_DPHI_PRECISION: positive := max(EG_TAU_DETA_PRECISION, EG_TAU_DPHI_PRECISION);
+constant JET_EG_DETA_DPHI_PRECISION: positive := max(JET_EG_DETA_PRECISION, JET_EG_DPHI_PRECISION);
 constant JET_JET_DETA_DPHI_PRECISION: positive := max(JET_JET_DETA_PRECISION, JET_JET_DPHI_PRECISION);
 constant JET_TAU_DETA_DPHI_PRECISION: positive := max(JET_TAU_DETA_PRECISION, JET_TAU_DPHI_PRECISION);
+constant TAU_EG_DETA_DPHI_PRECISION: positive := max(TAU_EG_DETA_PRECISION, TAU_EG_DPHI_PRECISION);
+constant TAU_JET_DETA_DPHI_PRECISION: positive := max(TAU_JET_DETA_PRECISION, TAU_JET_DPHI_PRECISION);
 constant TAU_TAU_DETA_DPHI_PRECISION: positive := max(TAU_TAU_DETA_PRECISION, TAU_TAU_DPHI_PRECISION);
 constant EG_MUON_DETA_DPHI_PRECISION: positive := max(EG_MUON_DETA_PRECISION, EG_MUON_DPHI_PRECISION);
 constant JET_MUON_DETA_DPHI_PRECISION: positive := max(JET_MUON_DETA_PRECISION, JET_MUON_DPHI_PRECISION);
 constant TAU_MUON_DETA_DPHI_PRECISION: positive := max(TAU_MUON_DETA_PRECISION, TAU_MUON_DPHI_PRECISION);
 constant MUON_MUON_DETA_DPHI_PRECISION: positive := max(MUON_MUON_DETA_PRECISION, MUON_MUON_DPHI_PRECISION);
--- HB 2017-04-24: needed for calo_2plus1_orm_condition
-constant JET_EG_DETA_DPHI_PRECISION: positive := EG_JET_DETA_DPHI_PRECISION;
-constant TAU_EG_DETA_DPHI_PRECISION: positive := EG_TAU_DETA_DPHI_PRECISION;
-constant TAU_JET_DETA_DPHI_PRECISION: positive := JET_TAU_DETA_DPHI_PRECISION;
 -- HB 2017-01-20: for correlation conditions v2
 constant EG_MU_DETA_DPHI_PRECISION: positive := max(EG_MUON_DETA_PRECISION, EG_MUON_DPHI_PRECISION);
 constant JET_MU_DETA_DPHI_PRECISION: positive := max(JET_MUON_DETA_PRECISION, JET_MUON_DPHI_PRECISION);
@@ -512,8 +518,11 @@ constant MUON_MUON_INV_MASS_PRECISION : positive range 1 to 3 := 1;
 constant EG_EG_MASS_PRECISION : positive range 1 to 3 := 1;
 constant EG_JET_MASS_PRECISION : positive range 1 to 3 := 1;
 constant EG_TAU_MASS_PRECISION : positive range 1 to 3 := 1;
+constant JET_EG_MASS_PRECISION : positive range 1 to 3 := 1;
 constant JET_JET_MASS_PRECISION : positive range 1 to 3 := 1;
 constant JET_TAU_MASS_PRECISION : positive range 1 to 3 := 1;
+constant TAU_EG_MASS_PRECISION : positive range 1 to 3 := 1;
+constant TAU_JET_MASS_PRECISION : positive range 1 to 3 := 1;
 constant TAU_TAU_MASS_PRECISION : positive range 1 to 3 := 1;
 constant EG_MU_MASS_PRECISION : positive range 1 to 3 := 1;
 constant JET_MU_MASS_PRECISION : positive range 1 to 3 := 1;
@@ -554,8 +563,11 @@ constant HTM_PT_VECTOR_WIDTH: positive := log2c((2**(D_S_I_HTM_V2.et_high-D_S_I_
 constant EG_EG_COSH_COS_PRECISION : positive := 3;
 constant EG_JET_COSH_COS_PRECISION : positive := 3;
 constant EG_TAU_COSH_COS_PRECISION : positive := 3;
+constant JET_EG_COSH_COS_PRECISION : positive := 3;
 constant JET_JET_COSH_COS_PRECISION : positive := 3;
 constant JET_TAU_COSH_COS_PRECISION : positive := 3;
+constant TAU_EG_COSH_COS_PRECISION : positive := 3;
+constant TAU_JET_COSH_COS_PRECISION : positive := 3;
 constant TAU_TAU_COSH_COS_PRECISION : positive := 3;
 constant EG_ETM_COSH_COS_PRECISION : positive := 3;
 constant JET_ETM_COSH_COS_PRECISION : positive := 3;
@@ -571,8 +583,11 @@ constant TAU_HTM_COSH_COS_PRECISION : positive := 3;
 constant EG_EG_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000)); -- [10597282-(-1000)]=10598282 => 0xA1B78A
 constant EG_JET_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant EG_TAU_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
+constant JET_EG_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant JET_JET_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant JET_TAU_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
+constant TAU_EG_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
+constant TAU_JET_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant TAU_TAU_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant EG_ETM_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant EG_ETMHF_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
@@ -603,8 +618,11 @@ constant TAU_HTM_PT_PRECISION : positive := 1;
 constant EG_EG_PT_PRECISION : positive := 1;
 constant EG_JET_PT_PRECISION : positive := 1;
 constant EG_TAU_PT_PRECISION : positive := 1;
+constant JET_EG_PT_PRECISION : positive := 1;
 constant JET_JET_PT_PRECISION : positive := 1;
 constant JET_TAU_PT_PRECISION : positive := 1;
+constant TAU_EG_PT_PRECISION : positive := 1;
+constant TAU_JET_PT_PRECISION : positive := 1;
 constant TAU_TAU_PT_PRECISION : positive := 1;
 -- HB 2017-03-29: Calos -> calculation of cosine(phi) and sine(phi) for twobody-pt with 3 digits after decimal point
 constant EG_ETM_SIN_COS_PRECISION : positive := 3;
@@ -619,8 +637,11 @@ constant TAU_HTM_SIN_COS_PRECISION : positive := 3;
 constant EG_EG_SIN_COS_PRECISION : positive := 3;
 constant EG_JET_SIN_COS_PRECISION : positive := 3;
 constant EG_TAU_SIN_COS_PRECISION : positive := 3;
+constant JET_EG_SIN_COS_PRECISION : positive := 3;
 constant JET_JET_SIN_COS_PRECISION : positive := 3;
 constant JET_TAU_SIN_COS_PRECISION : positive := 3;
+constant TAU_EG_SIN_COS_PRECISION : positive := 3;
+constant TAU_JET_SIN_COS_PRECISION : positive := 3;
 constant TAU_TAU_SIN_COS_PRECISION : positive := 3;
 constant CALO_SIN_COS_VECTOR_WIDTH: positive := log2c(1000-(-1000));
 type calo_sin_cos_vector_array is array (natural range <>) of std_logic_vector(CALO_SIN_COS_VECTOR_WIDTH-1 downto 0);
@@ -799,9 +820,12 @@ constant CALO_CALO_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := (
 constant EG_EG_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
 constant EG_TAU_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
 constant EG_JET_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
-constant TAU_TAU_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
+constant JET_EG_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
 constant JET_JET_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
 constant JET_TAU_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
+constant TAU_EG_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
+constant TAU_JET_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
+constant TAU_TAU_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
 
 type calo_calo_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
 -- type eg_eg_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
@@ -833,9 +857,12 @@ constant CALO_CALO_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := (
 constant EG_EG_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 constant EG_TAU_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 constant EG_JET_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
-constant TAU_TAU_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
+constant JET_EG_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 constant JET_JET_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 constant JET_TAU_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
+constant TAU_EG_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
+constant TAU_JET_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
+constant TAU_TAU_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 
 -- calo-esums differences LUTs
 -- type eg_etm_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
@@ -1653,9 +1680,12 @@ constant CALO_CALO_COSH_DETA_LUT : calo_calo_cosh_deta_lut_array := (
 constant EG_EG_COSH_DETA_LUT : calo_calo_cosh_deta_lut_array := CALO_CALO_COSH_DETA_LUT;
 constant EG_TAU_COSH_DETA_LUT : calo_calo_cosh_deta_lut_array := CALO_CALO_COSH_DETA_LUT;
 constant EG_JET_COSH_DETA_LUT : calo_calo_cosh_deta_lut_array := CALO_CALO_COSH_DETA_LUT;
-constant TAU_TAU_COSH_DETA_LUT : calo_calo_cosh_deta_lut_array := CALO_CALO_COSH_DETA_LUT;
+constant JET_EG_COSH_DETA_LUT : calo_calo_cosh_deta_lut_array := CALO_CALO_COSH_DETA_LUT;
 constant JET_JET_COSH_DETA_LUT : calo_calo_cosh_deta_lut_array := CALO_CALO_COSH_DETA_LUT;
 constant JET_TAU_COSH_DETA_LUT : calo_calo_cosh_deta_lut_array := CALO_CALO_COSH_DETA_LUT;
+constant TAU_EG_COSH_DETA_LUT : calo_calo_cosh_deta_lut_array := CALO_CALO_COSH_DETA_LUT;
+constant TAU_JET_COSH_DETA_LUT : calo_calo_cosh_deta_lut_array := CALO_CALO_COSH_DETA_LUT;
+constant TAU_TAU_COSH_DETA_LUT : calo_calo_cosh_deta_lut_array := CALO_CALO_COSH_DETA_LUT;
 
 -- calo-calo cos dphi LUTs
 type calo_calo_cos_dphi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range -1000 to 1000;
@@ -1691,9 +1721,12 @@ constant CALO_CALO_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := (
 constant EG_EG_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
 constant EG_TAU_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
 constant EG_JET_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
-constant TAU_TAU_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
+constant JET_EG_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
 constant JET_JET_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
 constant JET_TAU_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
+constant TAU_EG_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
+constant TAU_JET_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
+constant TAU_TAU_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
 constant EG_ETM_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
 constant JET_ETM_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
 constant TAU_ETM_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;

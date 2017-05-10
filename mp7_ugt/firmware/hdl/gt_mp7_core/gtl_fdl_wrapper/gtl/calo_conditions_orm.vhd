@@ -2,6 +2,7 @@
 -- Description:
 
 -- Version history:
+-- HB 2017-05-10: inserted "twobody_pt" cut for double condition.
 -- HB 2017-04-24: inserted "calo2_obj_vs_templ" in and-structure.
 -- HB 2017-04-21: wrong typo fixed.
 -- HB 2017-04-20: removed "orm mask" (roll back to version from 2017-04-05).
@@ -71,7 +72,14 @@ entity calo_conditions_orm is
         diff_phi_orm_lower_limit: diff_phi_range_real;
 
         dr_orm_upper_limit: dr_squared_range_real;
-        dr_orm_lower_limit: dr_squared_range_real
+        dr_orm_lower_limit: dr_squared_range_real;
+        
+        twobody_pt_cut: boolean := false;
+	pt_width: positive; 
+	pt_sq_threshold: real;
+	sin_cos_width: positive;
+	pt_precision : positive;
+	pt_sq_sin_cos_precision : positive
     );
     port(
         clk: in std_logic;
@@ -79,6 +87,9 @@ entity calo_conditions_orm is
         calo2: in calo_objects_array;
         diff_eta_orm: in deta_dphi_vector_array;
         diff_phi_orm: in deta_dphi_vector_array;
+        pt : in diff_inputs_array;
+        cos_phi_integer : in calo_sin_cos_integer_array;
+        sin_phi_integer : in calo_sin_cos_integer_array;
         condition_o: out std_logic;
         sim_obj_vs_templ_vec_single: out std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0');
         sim_obj_vs_templ_vec_double: out std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo1_object_high-calo1_object_low+1-1)*(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0');
@@ -125,6 +136,9 @@ architecture rtl of calo_conditions_orm is
     attribute keep of condition_and_or_sig2  : signal is true;
     attribute keep of condition_and_or_sig3  : signal is true;
 
+    signal twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : 
+	std_logic_2dim_array(calo_object_low to calo_object_high, calo_object_low to calo_object_high) := (others => (others => '1'));
+
 begin
 
 -- HB 2017-04-06: max. 6 objects for nr_templates = 3 and nr_templates = 4 are allowed, because of length of obj_vs_templ_vec
@@ -140,6 +154,36 @@ begin
     diff_phi_orm_upper_limit_int <= conv_std_logic_vector(integer(diff_phi_orm_upper_limit*real(10**DETA_DPHI_ORM_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
     diff_phi_orm_lower_limit_int <= conv_std_logic_vector(integer(diff_phi_orm_lower_limit*real(10**DETA_DPHI_ORM_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
 
+-- Instantiation of two-body pt cut.
+    twobody_pt_cut_i: if twobody_pt_cut = true and nr_templates = 2 generate
+	twobody_pt_l_1: for i in calo1_object_low to calo1_object_high generate 
+	    twobody_pt_l_2: for j in calo1_object_low to calo1_object_high generate
+		if_j_gr_i: if j > i generate
+		    twobody_pt_calculator_i: entity work.twobody_pt_calculator
+			generic map(
+			    pt1_width => pt_width, 
+			    pt2_width => pt_width, 
+			    pt_sq_threshold => pt_sq_threshold,
+			    sin_cos_width => sin_cos_width,
+			    pt_precision => pt_precision,
+			    pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
+			)
+			port map(
+			    pt1 => pt(i)(pt_width-1 downto 0),
+			    pt2 => pt(j)(pt_width-1 downto 0),
+			    cos_phi_1_integer => cos_phi_integer(i),
+			    cos_phi_2_integer => cos_phi_integer(j),
+			    sin_phi_1_integer => sin_phi_integer(i),
+			    sin_phi_2_integer => sin_phi_integer(j),
+			    pt_square_comp => twobody_pt_comp_temp(i,j)
+		    );
+		    twobody_pt_comp(i,j) <= twobody_pt_comp_temp(i,j);
+		    twobody_pt_comp(j,i) <= twobody_pt_comp_temp(i,j);
+		end generate if_j_gr_i;
+	    end generate twobody_pt_l_2;
+	end generate twobody_pt_l_1;
+    end generate twobody_pt_cut_i;
+    
 -- Instance of comparators for calorimeter objects. All permutations between objects and thresholds/luts.
     obj_l: for i in calo1_object_low to calo1_object_high generate
 	templ_l: for j in 1 to nr_templates generate
@@ -219,6 +263,7 @@ begin
 		diff_eta_orm_comp_pipe <= diff_eta_orm_comp;
 		diff_phi_orm_comp_pipe <= diff_phi_orm_comp;
 		dr_orm_comp_pipe <= dr_orm_comp;
+		twobody_pt_comp_pipe <= twobody_pt_comp;
 	    else
 		if (clk'event and clk = '1') then
 		    calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
@@ -226,6 +271,7 @@ begin
 		    diff_eta_orm_comp_pipe <= diff_eta_orm_comp;
 		    diff_phi_orm_comp_pipe <= diff_phi_orm_comp;
 		    dr_orm_comp_pipe <= dr_orm_comp;
+		    twobody_pt_comp_pipe <= twobody_pt_comp;
 		end if;
 	    end if;
     end process;
@@ -261,7 +307,7 @@ begin
     end generate matrix_single_i;
 
 -- Condition type: "double".
-    matrix_double_i: if (nr_templates = 2) generate
+    matrix_double_i: if nr_templates = 2 generate
 	matrix_double_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, diff_eta_orm_comp_pipe, diff_phi_orm_comp_pipe, dr_orm_comp_pipe)
 	    variable index : integer := 0;
 	    variable obj_vs_templ_vec : std_logic_vector((nr_calo1_objects_int*(nr_calo1_objects_int-1)*(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0');
@@ -275,7 +321,7 @@ begin
 		    for k in calo2_object_low to calo2_object_high loop
 			if j/=i then
 			    index := index + 1;
-			    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo2_obj_vs_templ_pipe(k,1) and
+			    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo2_obj_vs_templ_pipe(k,1) and twobody_pt_comp_pipe(i,j) and
 						      not (diff_eta_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
 						      not (diff_eta_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1)) and 
 						      not (diff_phi_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 

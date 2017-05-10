@@ -127,10 +127,11 @@ architecture rtl of calo_conditions_v5 is
 
 begin
 
-    twobody_pt_l_1: for i in calo_object_low to calo_object_high generate 
-	twobody_pt_l_2: for j in calo_object_low to calo_object_high generate
-	    if_j_gr_i: if j > i generate
-		twobody_pt_i: if twobody_pt_cut = true generate
+-- Instantiation of two-body pt cut.
+    twobody_pt_cut_i: if twobody_pt_cut = true and nr_templates = 2 generate
+	twobody_pt_l_1: for i in calo_object_low to calo_object_high generate 
+	    twobody_pt_l_2: for j in calo_object_low to calo_object_high generate
+		if_j_gr_i: if j > i generate
 		    twobody_pt_calculator_i: entity work.twobody_pt_calculator
 			generic map(
 			    pt1_width => pt_width, 
@@ -151,10 +152,10 @@ begin
 		    );
 		    twobody_pt_comp(i,j) <= twobody_pt_comp_temp(i,j);
 		    twobody_pt_comp(j,i) <= twobody_pt_comp_temp(i,j);
-		end generate twobody_pt_i;
-	    end generate if_j_gr_i;
-	end generate twobody_pt_l_2;
-    end generate twobody_pt_l_1;
+		end generate if_j_gr_i;
+	    end generate twobody_pt_l_2;
+	end generate twobody_pt_l_1;
+    end generate twobody_pt_cut_i;
     
 -- Instance of comparators for calorimeter objects. All permutations between objects and thresholds/luts.
     obj_l: for i in calo_object_low to calo_object_high generate

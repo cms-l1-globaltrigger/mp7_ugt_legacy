@@ -137,7 +137,7 @@ architecture rtl of calo_conditions_orm is
     attribute keep of condition_and_or_sig3  : signal is true;
 
     signal twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : 
-	std_logic_2dim_array(calo_object_low to calo_object_high, calo_object_low to calo_object_high) := (others => (others => '1'));
+	std_logic_2dim_array(calo1_object_low to calo1_object_high, calo1_object_low to calo1_object_high) := (others => (others => '1'));
 
 begin
 
@@ -255,7 +255,7 @@ begin
     end generate cuts_orm_l_1;
 
 -- Pipeline stage for obj_vs_templ
-    obj_vs_templ_pipeline_p: process(clk, calo1_obj_vs_templ, calo2_obj_vs_templ, diff_eta_orm_comp, diff_phi_orm_comp, dr_orm_comp)
+    obj_vs_templ_pipeline_p: process(clk, calo1_obj_vs_templ, calo2_obj_vs_templ, diff_eta_orm_comp, diff_phi_orm_comp, dr_orm_comp, twobody_pt_comp)
 	begin
 	    if obj_vs_templ_pipeline_stage = false then
 		calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
@@ -308,7 +308,7 @@ begin
 
 -- Condition type: "double".
     matrix_double_i: if nr_templates = 2 generate
-	matrix_double_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, diff_eta_orm_comp_pipe, diff_phi_orm_comp_pipe, dr_orm_comp_pipe)
+	matrix_double_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, diff_eta_orm_comp_pipe, diff_phi_orm_comp_pipe, dr_orm_comp_pipe, twobody_pt_comp_pipe)
 	    variable index : integer := 0;
 	    variable obj_vs_templ_vec : std_logic_vector((nr_calo1_objects_int*(nr_calo1_objects_int-1)*(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0');
 	    variable condition_and_or_tmp : std_logic := '0';

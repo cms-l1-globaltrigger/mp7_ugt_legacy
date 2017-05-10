@@ -2,6 +2,7 @@
 -- Description:
 
 -- Version history:
+-- HB 2017-05-10: improved orm-and-structure of "obj_vs_templ_vec".
 -- HB 2017-05-10: inserted "twobody_pt" cut for double condition.
 -- HB 2017-04-24: inserted "calo2_obj_vs_templ" in and-structure.
 -- HB 2017-04-21: wrong typo fixed.
@@ -293,9 +294,7 @@ begin
 		for j in calo2_object_low to calo2_object_high loop
 		    index := index + 1;
 		    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and
-					      not (diff_eta_orm_comp_pipe(i,j) and calo2_obj_vs_templ_pipe(j,1)) and 
-					      not (diff_phi_orm_comp_pipe(i,j) and calo2_obj_vs_templ_pipe(j,1)) and 
-					      not (dr_orm_comp_pipe(i,j) and calo2_obj_vs_templ_pipe(j,1));
+					      not ((diff_eta_orm_comp_pipe(i,j) or diff_phi_orm_comp_pipe(i,j) or dr_orm_comp_pipe(i,j)) and calo2_obj_vs_templ_pipe(j,1));
 		end loop;
 	    end loop;
 	    for i in 1 to index loop
@@ -321,13 +320,12 @@ begin
 		    for k in calo2_object_low to calo2_object_high loop
 			if j/=i then
 			    index := index + 1;
-			    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo2_obj_vs_templ_pipe(k,1) and twobody_pt_comp_pipe(i,j) and
-						      not (diff_eta_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
-						      not (diff_eta_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1)) and 
-						      not (diff_phi_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
-						      not (diff_phi_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1)) and 
-						      not (dr_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
-						      not (dr_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1)); 
+			    obj_vs_templ_vec(index) := 	calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo2_obj_vs_templ_pipe(k,1) and twobody_pt_comp_pipe(i,j) and
+							not (
+							(diff_eta_orm_comp_pipe(i,k) or diff_eta_orm_comp_pipe(j,k) or diff_phi_orm_comp_pipe(i,k) or 
+							diff_phi_orm_comp_pipe(j,k) or dr_orm_comp_pipe(i,k) or dr_orm_comp_pipe(j,k)) 
+							and calo2_obj_vs_templ_pipe(k,1)
+							); 
 			end if;
 		    end loop;
 		end loop;
@@ -357,16 +355,13 @@ begin
 			for l in calo2_object_low to calo2_object_high loop
 			    if (j/=i and k/=i and k/=j) then
 				index := index + 1;
-				obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and calo2_obj_vs_templ_pipe(l,1) and
-							  not (diff_eta_orm_comp_pipe(i,l) and calo2_obj_vs_templ_pipe(l,1)) and 
-							  not (diff_eta_orm_comp_pipe(j,l) and calo2_obj_vs_templ_pipe(l,1)) and 
-							  not (diff_eta_orm_comp_pipe(k,l) and calo2_obj_vs_templ_pipe(l,1)) and 
-							  not (diff_phi_orm_comp_pipe(i,l) and calo2_obj_vs_templ_pipe(l,1)) and 
-							  not (diff_phi_orm_comp_pipe(j,l) and calo2_obj_vs_templ_pipe(l,1)) and 
-							  not (diff_phi_orm_comp_pipe(k,l) and calo2_obj_vs_templ_pipe(l,1)) and 
-							  not (dr_orm_comp_pipe(i,l) and calo2_obj_vs_templ_pipe(l,1)) and 
-							  not (dr_orm_comp_pipe(j,l) and calo2_obj_vs_templ_pipe(l,1)) and 
-							  not (dr_orm_comp_pipe(k,l) and calo2_obj_vs_templ_pipe(l,1));
+				obj_vs_templ_vec(index) :=  calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and calo2_obj_vs_templ_pipe(l,1) and
+							    not (
+							    (diff_eta_orm_comp_pipe(i,l) or diff_eta_orm_comp_pipe(j,l) or diff_eta_orm_comp_pipe(k,l) or 
+							    diff_phi_orm_comp_pipe(i,l) or diff_phi_orm_comp_pipe(j,l) or diff_phi_orm_comp_pipe(k,l) or 
+							    dr_orm_comp_pipe(i,l) or dr_orm_comp_pipe(j,l) or dr_orm_comp_pipe(k,l))
+							    and calo2_obj_vs_templ_pipe(l,1)
+							    );
 			    end if;
 			end loop;
 		    end loop;
@@ -410,50 +405,32 @@ begin
 					end if;
 				    end if;
 				    if(test_index = 0) then
-					obj_vs_templ_vec1(index2) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
-								    calo2_obj_vs_templ_pipe(m,1) and
-								    not (diff_eta_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_eta_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_eta_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_phi_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_phi_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_phi_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (dr_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (dr_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (dr_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)); 
+					obj_vs_templ_vec1(index2) :=  calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
+								      calo2_obj_vs_templ_pipe(m,1) and
+								      not (
+								      (diff_eta_orm_comp_pipe(i,m) or diff_eta_orm_comp_pipe(j,m) or diff_eta_orm_comp_pipe(k,m) or diff_eta_orm_comp_pipe(l,m) or
+								      diff_phi_orm_comp_pipe(i,m) or diff_phi_orm_comp_pipe(j,m) or diff_phi_orm_comp_pipe(k,m) or diff_phi_orm_comp_pipe(l,m) or
+								      dr_orm_comp_pipe(i,m) or dr_orm_comp_pipe(j,m) or dr_orm_comp_pipe(k,m) or dr_orm_comp_pipe(l,m))
+								      and calo2_obj_vs_templ_pipe(m,1)
+								      ); 
 				    elsif(test_index = 1) then
-					obj_vs_templ_vec2(index2) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
-								    calo2_obj_vs_templ_pipe(m,1) and
-								    not (diff_eta_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_eta_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_eta_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_phi_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_phi_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_phi_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (dr_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (dr_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (dr_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)); 
+					obj_vs_templ_vec2(index2) :=  calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
+								      calo2_obj_vs_templ_pipe(m,1) and
+								      not (
+								      (diff_eta_orm_comp_pipe(i,m) or diff_eta_orm_comp_pipe(j,m) or diff_eta_orm_comp_pipe(k,m) or diff_eta_orm_comp_pipe(l,m) or
+								      diff_phi_orm_comp_pipe(i,m) or diff_phi_orm_comp_pipe(j,m) or diff_phi_orm_comp_pipe(k,m) or diff_phi_orm_comp_pipe(l,m) or
+								      dr_orm_comp_pipe(i,m) or dr_orm_comp_pipe(j,m) or dr_orm_comp_pipe(k,m) or dr_orm_comp_pipe(l,m))
+								      and calo2_obj_vs_templ_pipe(m,1)
+								      ); 
 				    elsif(test_index = 2) then
-					obj_vs_templ_vec3(index2) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
-								    calo2_obj_vs_templ_pipe(m,1) and
-								    not (diff_eta_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_eta_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_eta_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_eta_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_phi_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_phi_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_phi_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (diff_phi_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (dr_orm_comp_pipe(i,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (dr_orm_comp_pipe(j,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (dr_orm_comp_pipe(k,m) and calo2_obj_vs_templ_pipe(m,1)) and 
-								    not (dr_orm_comp_pipe(l,m) and calo2_obj_vs_templ_pipe(m,1)); 
+					obj_vs_templ_vec3(index2) :=  calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo1_obj_vs_templ_pipe(k,3) and calo1_obj_vs_templ_pipe(l,4) and
+								      calo2_obj_vs_templ_pipe(m,1) and
+								      not (
+								      (diff_eta_orm_comp_pipe(i,m) or diff_eta_orm_comp_pipe(j,m) or diff_eta_orm_comp_pipe(k,m) or diff_eta_orm_comp_pipe(l,m) or
+								      diff_phi_orm_comp_pipe(i,m) or diff_phi_orm_comp_pipe(j,m) or diff_phi_orm_comp_pipe(k,m) or diff_phi_orm_comp_pipe(l,m) or
+								      dr_orm_comp_pipe(i,m) or dr_orm_comp_pipe(j,m) or dr_orm_comp_pipe(k,m) or dr_orm_comp_pipe(l,m))
+								      and calo2_obj_vs_templ_pipe(m,1)
+								      ); 
 				    end if;
 				    index := index + 1;
 				    index2 := index2 +1;

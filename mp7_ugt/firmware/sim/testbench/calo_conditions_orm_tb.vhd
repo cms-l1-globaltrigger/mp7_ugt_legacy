@@ -90,6 +90,10 @@ architecture rtl of calo_conditions_orm_TB is
 
     signal condition_o: std_logic;
    
+    signal jet_pt_vector_bx_0: diff_inputs_array(0 to NR_JET_OBJECTS-1) := (others => (others => '0'));
+    signal jet_cos_phi_bx_0: calo_sin_cos_integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
+    signal jet_sin_phi_bx_0: calo_sin_cos_integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
+
 --*********************************Main Body of Code**********************************
 --*********************************Main Body of Code**********************************
 begin
@@ -287,8 +291,14 @@ dut: entity work.calo_conditions_orm
         diff_phi_orm_lower_limit => 0.0,
 --        
         dr_orm_upper_limit => dr_orm_upper_limit,
-        dr_orm_lower_limit => dr_orm_lower_limit
+        dr_orm_lower_limit => dr_orm_lower_limit,
         
+	twobody_pt_cut => false,
+	pt_width => 1,
+	pt_sq_threshold => 0.0, 
+        sin_cos_width => 1, 
+        PT_PRECISION => 1, 
+        PT_SQ_SIN_COS_PRECISION => 1
     )
     port map(
         clk => lhc_clk,
@@ -296,6 +306,9 @@ dut: entity work.calo_conditions_orm
         calo2 => tau_bx_0,
         diff_eta_orm => diff_jet_tau_eta_vector_bx_0_bx_0,
         diff_phi_orm => diff_jet_tau_phi_vector_bx_0_bx_0,
+        pt => jet_pt_vector_bx_0,
+        cos_phi_integer => jet_cos_phi_bx_0, 
+        sin_phi_integer => jet_sin_phi_bx_0, 
 	condition_o => condition_o,
 	sim_obj_vs_templ_vec_single => open,
 	sim_obj_vs_templ_vec_double => open,

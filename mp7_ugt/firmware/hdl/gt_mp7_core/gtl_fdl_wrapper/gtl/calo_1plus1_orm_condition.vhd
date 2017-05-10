@@ -2,6 +2,7 @@
 -- Description:
 
 -- Version history:
+-- HB 2017-05-10: improved orm-and-structure of "obj_vs_templ_vec".
 -- HB 2017-04-25: inserted "calo2_obj_vs_templ" and "twobody_pt_comp" in and-structure. Used "cuts_instances" module.
 -- HB 2017-03-28: first design.
 
@@ -316,9 +317,7 @@ begin
 		index := index + 1;
 		obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and
 					   mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and diff_eta_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j) and
-					   not (dr_orm_comp_pipe(i,j) and calo2_obj_vs_templ_pipe(j,1)) and
-					   not (diff_phi_orm_comp_pipe(i,j) and calo2_obj_vs_templ_pipe(j,1)) and 
-					   not (diff_eta_orm_comp_pipe(i,j) and calo2_obj_vs_templ_pipe(j,1));
+					   not ((dr_orm_comp_pipe(i,j) or diff_phi_orm_comp_pipe(i,j) or diff_eta_orm_comp_pipe(i,j)) and calo2_obj_vs_templ_pipe(j,1));
 	    end loop;
 	end loop;	
 	for i in 1 to index loop 

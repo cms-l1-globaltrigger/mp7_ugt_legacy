@@ -4,6 +4,7 @@
 -- There are cuts for "overlap removal" between different object types and cuts for the correlations of same object type.
 
 -- Version history:
+-- HB 2017-05-10: improved orm-and-structure of "obj_vs_templ_vec".
 -- HB 2017-04-21: implemented use of "cuts_instances" module.
 -- HB 2017-04-21: inserted "calo2_obj_vs_templ" and "twobody_pt_comp" in and-structure.
 -- HB 2017-04-20: removed "orm mask" (roll back to version from 2017-04-05).
@@ -345,12 +346,11 @@ begin
 			obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo2_obj_vs_templ_pipe(k,1) and
 						   mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and 
 						   diff_eta_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j) and
-						   not (dr_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
-						   not (dr_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1)) and
-						   not (diff_phi_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
-						   not (diff_phi_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1)) and
-						   not (diff_eta_orm_comp_pipe(i,k) and calo2_obj_vs_templ_pipe(k,1)) and 
-						   not (diff_eta_orm_comp_pipe(j,k) and calo2_obj_vs_templ_pipe(k,1));			
+						   not (
+						   (dr_orm_comp_pipe(i,k) or dr_orm_comp_pipe(j,k) or diff_phi_orm_comp_pipe(i,k) or
+						   diff_phi_orm_comp_pipe(j,k) or diff_eta_orm_comp_pipe(i,k) or diff_eta_orm_comp_pipe(j,k))
+						   and calo2_obj_vs_templ_pipe(k,1)
+						   ); 
 		    end if;
 		end loop;
 	    end loop;

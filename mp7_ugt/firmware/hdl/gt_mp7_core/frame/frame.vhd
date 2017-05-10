@@ -80,6 +80,7 @@ architecture rtl of frame is
 
 -- ================================================================================================
     signal lhc_rst : std_logic;
+    signal cntr_rst : std_logic;
     signal sw_reset : std_logic; -- this reset is triggered by writing to the software register for the sw_reset
     signal ipbus_triggered_reset : std_logic; -- this is a 40mhz reset signal generated from the sys reset
 -- ================================================================================================

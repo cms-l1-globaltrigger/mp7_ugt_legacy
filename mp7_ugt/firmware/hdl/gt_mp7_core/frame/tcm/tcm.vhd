@@ -82,6 +82,7 @@ architecture beh of tcm is
 
     signal l, lin  : lhc_reg_t;
     signal start_lumisection_int  : std_logic := '0';
+    signal tcm_rst : std_logic := '0';
 
 begin
     tcm_rst <= lhc_rst or cntr_rst;

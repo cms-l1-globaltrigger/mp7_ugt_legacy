@@ -6,7 +6,7 @@ set -e
 ## runs TME, VHDL Producer, creates project for FW synthesis, executes "make project" and starts screen for synthesis
 
 nr_arguments=8
-max_nr_modules=3
+max_nr_modules=6
 
 function error_exit
 {

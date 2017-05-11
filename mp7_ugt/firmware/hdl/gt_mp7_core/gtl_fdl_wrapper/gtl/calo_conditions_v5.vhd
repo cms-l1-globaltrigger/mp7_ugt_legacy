@@ -5,6 +5,7 @@
 -- selected by nr_templates.
 
 -- Version history:
+-- HB 2017-05-11: changed order in port for instances without "twobody_pt" cut.
 -- HB 2017-04-20: based on muon_conditions_v4.vhd, but inserted "twobody_pt" cut for Double condition.
 -- HB 2017-02-01: based on muon_conditions_v3.vhd, but inserted "calo_object_low" and "calo_object_high" in generic (and replaced "nr_objects" by those).
 
@@ -21,7 +22,7 @@ entity calo_conditions_v5 is
         calo_object_high: natural;
         nr_templates: positive;
         et_ge_mode: boolean;
-	obj_type : natural := EG_TYPE; -- eg=0, jet=1, tau=2
+	obj_type : natural := EG_TYPE;
         et_thresholds: calo_templates_array;
         eta_full_range : calo_templates_boolean_array;
         eta_w1_upper_limits: calo_templates_array;
@@ -38,21 +39,21 @@ entity calo_conditions_v5 is
         iso_luts: calo_templates_iso_array;
 
         twobody_pt_cut: boolean := false;
-	pt_width: positive; 
-	pt_sq_threshold: real;
-	sin_cos_width: positive;
-	pt_precision : positive;
-	pt_sq_sin_cos_precision : positive
+	pt_width: positive := 1; 
+	pt_sq_threshold: real := 0.0;
+	sin_cos_width: positive := 1;
+	pt_precision : positive := 1;
+	pt_sq_sin_cos_precision : positive := 1
 
     );
     port(
         clk: in std_logic;
         data_i: in calo_objects_array;
-        pt : in diff_inputs_array;
-        cos_phi_integer : in calo_sin_cos_integer_array;
-        sin_phi_integer : in calo_sin_cos_integer_array;
-        condition_o: out std_logic
-    );
+        condition_o: out std_logic;
+        pt : in diff_inputs_array(calo_object_low to calo_object_high) := (others => (others => '0'));
+        cos_phi_integer : in calo_sin_cos_integer_array(calo_object_low to calo_object_high) := (others => 0);
+        sin_phi_integer : in calo_sin_cos_integer_array(calo_object_low to calo_object_high) := (others => 0)
+   );
 end calo_conditions_v5;
 
 architecture rtl of calo_conditions_v5 is

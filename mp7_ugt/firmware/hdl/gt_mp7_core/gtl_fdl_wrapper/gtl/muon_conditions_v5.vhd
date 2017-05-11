@@ -6,6 +6,7 @@
 -- Charge correlation selection implemented with "LS" and "OS" (charge correlation calculated in muon_charge_correlations.vhd)
 
 -- Version history:
+-- HB 2017-05-11: changed order in port for instances without "twobody_pt" cut.
 -- HB 2017-04-25: based on muon_conditions_v4.vhd, but inserted "twobody_pt" cut for Double condition.
 -- HB 2017-02-01: based on muon_conditions_v3.vhd, but inserted "muon_object_low" and "muon_object_high" in generic (and replaced NR_MUON_OBJECTS by those).
 
@@ -41,11 +42,11 @@ entity muon_conditions_v5 is
         requested_charge_correlation: string(1 to 2);
         
         twobody_pt_cut: boolean := false;
-	pt_width: positive; 
-	pt_sq_threshold: real;
-	sin_cos_width: positive;
-	pt_precision : positive;
-	pt_sq_sin_cos_precision : positive
+	pt_width: positive := 1; 
+	pt_sq_threshold: real := 0.0;
+	sin_cos_width: positive := 1;
+	pt_precision : positive := 1;
+	pt_sq_sin_cos_precision : positive := 1
 
     );
     port(
@@ -57,10 +58,10 @@ entity muon_conditions_v5 is
         os_charcorr_triple: in muon_charcorr_triple_array;
         ls_charcorr_quad: in muon_charcorr_quad_array;
         os_charcorr_quad: in muon_charcorr_quad_array;
-        pt : in diff_inputs_array;
-        cos_phi_integer : in muon_sin_cos_integer_array;
-        sin_phi_integer : in muon_sin_cos_integer_array;
-        condition_o : out std_logic
+        condition_o : out std_logic;
+        pt : in diff_inputs_array(muon_object_low to muon_object_high) := (others => (others => '0'));
+        cos_phi_integer : in muon_sin_cos_integer_array(muon_object_low to muon_object_high) := (others => 0);
+        sin_phi_integer : in muon_sin_cos_integer_array(muon_object_low to muon_object_high) := (others => 0)
     );
 end muon_conditions_v5;
 
@@ -95,10 +96,11 @@ architecture rtl of muon_conditions_v5 is
 
 begin
 
-    twobody_pt_l_1: for i in muon_object_low to muon_object_high generate 
-	twobody_pt_l_2: for j in muon_object_low to muon_object_high generate
-	    if_j_gr_i: if j > i generate
-		twobody_pt_i: if twobody_pt_cut = true generate
+-- Instantiation of two-body pt cut.
+    twobody_pt_cut_i: if twobody_pt_cut = true and nr_templates = 2 generate
+	twobody_pt_l_1: for i in muon_object_low to muon_object_high generate 
+	    twobody_pt_l_2: for j in muon_object_low to muon_object_high generate
+		if_j_gr_i: if j > i generate
 		    twobody_pt_calculator_i: entity work.twobody_pt_calculator
 			generic map(
 			    pt1_width => pt_width, 
@@ -119,10 +121,10 @@ begin
 		    );
 		    twobody_pt_comp(i,j) <= twobody_pt_comp_temp(i,j);
 		    twobody_pt_comp(j,i) <= twobody_pt_comp_temp(i,j);
-		end generate twobody_pt_i;
-	    end generate if_j_gr_i;
-	end generate twobody_pt_l_2;
-    end generate twobody_pt_l_1;
+		end generate if_j_gr_i;
+	    end generate twobody_pt_l_2;
+	end generate twobody_pt_l_1;
+    end generate twobody_pt_cut_i;
     
     -- Instance of comparators for muon objects. All permutations between objects and thresholds.
     obj_l: for i in muon_object_low to muon_object_high generate

@@ -26,7 +26,6 @@ src gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/pulse_converter.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_slice.vhd
 #
-# HB 2017-04-04: cleaned up gtl (removed obsolete files)
 src gt_mp7_core/gtl_fdl_wrapper/gtl/p_m_2_bx_pipeline.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/eta_comp_signed.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/eta_windows_comp.vhd
@@ -36,11 +35,9 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/phi_windows_comp.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators_v2.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_v4.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_v5.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators_v2.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_v4.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_v5.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_comparators.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
@@ -50,7 +47,6 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/towercount_condition.vhd
 #
 # HB 2017-01-19: inserted new conditions in gtl
 src gt_mp7_core/gtl_fdl_wrapper/gtl/twobody_pt_calculator.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_cuts.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_calculator.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/cuts_instances.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition_v2.vhd

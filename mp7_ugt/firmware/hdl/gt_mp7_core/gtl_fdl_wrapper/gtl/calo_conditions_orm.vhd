@@ -76,11 +76,11 @@ entity calo_conditions_orm is
         dr_orm_lower_limit: dr_squared_range_real;
         
         twobody_pt_cut: boolean := false;
-	pt_width: positive; 
-	pt_sq_threshold: real;
-	sin_cos_width: positive;
-	pt_precision : positive;
-	pt_sq_sin_cos_precision : positive
+	pt_width: positive := 1; 
+	pt_sq_threshold: real := 0.0;
+	sin_cos_width: positive := 1;
+	pt_precision : positive := 1;
+	pt_sq_sin_cos_precision : positive := 1
     );
     port(
         clk: in std_logic;
@@ -88,10 +88,10 @@ entity calo_conditions_orm is
         calo2: in calo_objects_array;
         diff_eta_orm: in deta_dphi_vector_array;
         diff_phi_orm: in deta_dphi_vector_array;
-        pt : in diff_inputs_array;
-        cos_phi_integer : in calo_sin_cos_integer_array;
-        sin_phi_integer : in calo_sin_cos_integer_array;
         condition_o: out std_logic;
+        pt : in diff_inputs_array(calo1_object_low to calo1_object_high) := (others => (others => '0'));
+        cos_phi_integer : in calo_sin_cos_integer_array(calo1_object_low to calo1_object_high) := (others => 0);
+        sin_phi_integer : in calo_sin_cos_integer_array(calo1_object_low to calo1_object_high) := (others => 0);
         sim_obj_vs_templ_vec_single: out std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0');
         sim_obj_vs_templ_vec_double: out std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo1_object_high-calo1_object_low+1-1)*(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0');
         sim_obj_vs_templ_vec_triple: out std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo1_object_high-calo1_object_low+1-1)*(calo1_object_high-calo1_object_low+1-2)

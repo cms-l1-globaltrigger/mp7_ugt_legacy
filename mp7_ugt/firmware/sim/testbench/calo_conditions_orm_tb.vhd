@@ -306,10 +306,10 @@ dut: entity work.calo_conditions_orm
         calo2 => tau_bx_0,
         diff_eta_orm => diff_jet_tau_eta_vector_bx_0_bx_0,
         diff_phi_orm => diff_jet_tau_phi_vector_bx_0_bx_0,
-        pt => jet_pt_vector_bx_0,
-        cos_phi_integer => jet_cos_phi_bx_0, 
-        sin_phi_integer => jet_sin_phi_bx_0, 
 	condition_o => condition_o,
+        pt => jet_pt_vector_bx_0(calo1_object_low to calo1_object_high),
+        cos_phi_integer => jet_cos_phi_bx_0(calo1_object_low to calo1_object_high), 
+        sin_phi_integer => jet_sin_phi_bx_0(calo1_object_low to calo1_object_high), 
 	sim_obj_vs_templ_vec_single => open,
 	sim_obj_vs_templ_vec_double => open,
 	sim_obj_vs_templ_vec_triple => open

@@ -2,6 +2,7 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
+-- HB 2017-05-15: v1.3.1: Used calo_calo_calo_correlation_orm_condition.vhd instead of calo_1plus1_orm_condition.vhd and calo_2plus1_orm_condition.vhd
 -- HB 2017-04-07: v1.3.0: Prepared for using ORM conditions (calo_conditions_orm.vhd, calo_1plus1_orm_condition.vhd and calo_2plus1_orm_condition.vhd)
 -- HB 2017-04-05: v1.2.1: Created new VHDL module: twobody_pt_calculator
 -- HB 2016-09-16: v1.2.0: 

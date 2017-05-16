@@ -5,6 +5,7 @@
 -- selected by nr_templates.
 
 -- Version history:
+-- HB 2017-05-16: inserted check for "twobody_pt" cut use only for Double condition.
 -- HB 2017-05-11: changed order in port for instances without "twobody_pt" cut.
 -- HB 2017-04-20: based on muon_conditions_v4.vhd, but inserted "twobody_pt" cut for Double condition.
 -- HB 2017-02-01: based on muon_conditions_v3.vhd, but inserted "calo_object_low" and "calo_object_high" in generic (and replaced "nr_objects" by those).
@@ -128,6 +129,13 @@ architecture rtl of calo_conditions_v5 is
 
 begin
 
+-- HB 2017-05-16: TBPT only for Double condition
+    check_tbpt_i: if twobody_pt_cut generate
+	assert (nr_templates = 2) report 
+	    "two-body pt cut only for Double condition - nr_templates = " & integer'image(nr_templates) 
+	severity failure;	
+    end generate check_tbpt_i;
+    
 -- Instantiation of two-body pt cut.
     twobody_pt_cut_i: if twobody_pt_cut = true and nr_templates = 2 generate
 	twobody_pt_l_1: for i in calo_object_low to calo_object_high generate 

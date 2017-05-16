@@ -2,6 +2,7 @@
 -- Description:
 
 -- Version history:
+-- HB 2017-05-16: inserted check for "twobody_pt" cut use only for Double condition.
 -- HB 2017-05-10: improved orm-and-structure of "obj_vs_templ_vec".
 -- HB 2017-05-10: inserted "twobody_pt" cut for double condition.
 -- HB 2017-04-24: inserted "calo2_obj_vs_templ" in and-structure.
@@ -142,6 +143,13 @@ architecture rtl of calo_conditions_orm is
 
 begin
 
+-- HB 2017-05-16: TBPT only for Double condition
+    check_tbpt_i: if twobody_pt_cut generate
+	assert (nr_templates = 2) report 
+	    "two-body pt cut only for Double condition - nr_templates = " & integer'image(nr_templates) 
+	severity failure;	
+    end generate check_tbpt_i;
+    
 -- HB 2017-04-06: max. 6 objects for nr_templates = 3 and nr_templates = 4 are allowed, because of length of obj_vs_templ_vec
     check_nr_obj_i: if nr_templates = 3 or nr_templates = 4 generate
 	assert (nr_calo1_objects_int < 7 and nr_calo2_objects_int < 7) report 

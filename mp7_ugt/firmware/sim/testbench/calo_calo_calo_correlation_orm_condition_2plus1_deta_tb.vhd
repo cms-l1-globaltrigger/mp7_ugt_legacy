@@ -321,7 +321,9 @@ dut: entity work.calo_calo_calo_correlation_orm_condition
         cos_phi_2_integer => jet_cos_phi_bx_0, 
         sin_phi_1_integer => jet_sin_phi_bx_0, 
         sin_phi_2_integer => jet_sin_phi_bx_0, 
-	condition_o => condition_o
+	condition_o => condition_o,
+	sim_orm_vec_or_tmp => open,
+	sim_obj_vs_templ_vec => open
     );
 
 end rtl;

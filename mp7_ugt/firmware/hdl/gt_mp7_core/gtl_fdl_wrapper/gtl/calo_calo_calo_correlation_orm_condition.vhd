@@ -2,6 +2,7 @@
 -- Description:
 
 -- Version history:
+-- HB 2017-05-18: updated and-structure for correct use with orm.
 -- HB 2017-05-03: first design.
 
 library ieee;
@@ -120,7 +121,12 @@ entity calo_calo_calo_correlation_orm_condition is
         cos_phi_2_integer : in calo_sin_cos_integer_array;
         sin_phi_1_integer : in calo_sin_cos_integer_array;
         sin_phi_2_integer : in calo_sin_cos_integer_array;
-        condition_o: out std_logic
+        condition_o: out std_logic;
+	sim_orm_vec: out std_logic_3dim_array(calo1_object_low to calo1_object_high, calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => (others => '0')));
+	sim_orm_vec_or_tmp: out std_logic_2dim_array(calo1_object_low to calo1_object_high, calo1_object_low to calo1_object_high) := (others => (others => '0'));
+	sim_obj_vs_templ_vec: out std_logic_3dim_array(calo1_object_low to calo1_object_high, calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => (others => '0')));
+	sim_obj_vs_templ_or_tmp: out std_logic_2dim_array(calo1_object_low to calo1_object_high, calo1_object_low to calo1_object_high) := (others => (others => '0'));
+	sim_obj_vs_templ_orm_vec: out std_logic_2dim_array(calo1_object_low to calo1_object_high, calo1_object_low to calo1_object_high) := (others => (others => '0'))
     );
 end calo_calo_calo_correlation_orm_condition; 
 
@@ -408,33 +414,48 @@ begin
 	matrix_and_or_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, diff_eta_orm_comp_pipe, diff_phi_orm_comp_pipe, dr_orm_comp_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, 
 		dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
 	    variable index : integer := 0;
-	    variable obj_vs_templ_vec : std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo1_object_high-calo1_object_low+1)*(calo2_object_high-calo2_object_low+1)) downto 1) := 
+	    variable obj_vs_templ_vec, orm_vec: std_logic_3dim_array(calo1_object_low to calo1_object_high, calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) :=
+		(others => (others => (others => '0')));
+	    variable obj_vs_templ_or_tmp, obj_vs_templ_orm_vec, orm_vec_or_tmp: std_logic_2dim_array(calo1_object_low to calo1_object_high, calo1_object_low to calo1_object_high) := (others => (others => '0'));
+	    variable obj_vs_templ_orm_idx_vec : std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo1_object_high-calo1_object_low+1)) downto 1) := 
 		(others => '0');
 	    variable condition_and_or_tmp : std_logic := '0';
 	begin
 	    index := 0;
-	    obj_vs_templ_vec := (others => '0');
+	    obj_vs_templ_vec := (others => (others => (others => '0')));
+	    obj_vs_templ_or_tmp := (others => (others => '0'));
+	    obj_vs_templ_orm_vec := (others => (others => '0'));
+	    obj_vs_templ_orm_idx_vec := (others => '0');
+	    orm_vec := (others => (others => (others => '0')));
+	    orm_vec_or_tmp := (others => (others => '0'));
 	    condition_and_or_tmp := '0';
 	    for i in calo1_object_low to calo1_object_high loop 
 		for j in calo1_object_low to calo1_object_high loop
-		    for k in calo2_object_low to calo2_object_high loop
-			if j/=i then
-			    index := index + 1;
-			    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo2_obj_vs_templ_pipe(k,1) and
-						      mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and 
-						      diff_eta_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j) and
-						      not (
-						      (dr_orm_comp_pipe(i,k) or dr_orm_comp_pipe(j,k) or diff_phi_orm_comp_pipe(i,k) or
-						      diff_phi_orm_comp_pipe(j,k) or diff_eta_orm_comp_pipe(i,k) or diff_eta_orm_comp_pipe(j,k))
-						      and calo2_obj_vs_templ_pipe(k,1)
-						      ); 
-			end if;
-		    end loop;
+		    if j/=i then
+			for k in calo2_object_low to calo2_object_high loop
+			    obj_vs_templ_vec(i,j,k) := calo1_obj_vs_templ_pipe(i,1) and calo1_obj_vs_templ_pipe(j,2) and calo2_obj_vs_templ_pipe(k,1) and
+						       mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and 
+						       diff_eta_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
+			    sim_obj_vs_templ_vec(i,j,k) <= obj_vs_templ_vec(i,j,k);
+			    orm_vec(i,j,k) := (dr_orm_comp_pipe(i,k) or dr_orm_comp_pipe(j,k) or diff_phi_orm_comp_pipe(i,k) or
+					      diff_phi_orm_comp_pipe(j,k) or diff_eta_orm_comp_pipe(i,k) or diff_eta_orm_comp_pipe(j,k)) and
+					      calo2_obj_vs_templ_pipe(k,1);
+			    sim_orm_vec(i,j,k) <= orm_vec(i,j,k);			  
+			    orm_vec_or_tmp(i,j) := orm_vec_or_tmp(i,j) or orm_vec(i,j,k);
+			    obj_vs_templ_or_tmp(i,j) := obj_vs_templ_or_tmp(i,j) or obj_vs_templ_vec(i,j,k);
+			    sim_orm_vec_or_tmp(i,j) <= orm_vec_or_tmp(i,j);
+			    sim_obj_vs_templ_or_tmp(i,j) <= obj_vs_templ_or_tmp(i,j);
+			end loop;
+			index := index + 1;
+			obj_vs_templ_orm_vec(i,j) := obj_vs_templ_or_tmp(i,j) and not orm_vec_or_tmp(i,j);
+			sim_obj_vs_templ_orm_vec(i,j) <= obj_vs_templ_orm_vec(i,j);
+			obj_vs_templ_orm_idx_vec(index) := obj_vs_templ_orm_vec(i,j);
+		    end if;
 		end loop;
 	    end loop;	
 	    for i in 1 to index loop 
 		-- ORs for matrix
-		condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
+		condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_orm_idx_vec(i);
 	    end loop;
 	    condition_and_or <= condition_and_or_tmp;
 	end process;

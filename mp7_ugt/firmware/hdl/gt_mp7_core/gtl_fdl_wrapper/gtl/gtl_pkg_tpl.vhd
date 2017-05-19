@@ -130,6 +130,8 @@ type muon_charcorr_quad_array is array (0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJ
 -- HB 2017-03-15: type definition for "std_logic" arrays.
 type std_logic_array is array (natural range <>) of std_logic;
 type std_logic_2dim_array is array (natural range <>, natural range <>) of std_logic;
+-- HB 2017-05-18:
+type std_logic_3dim_array is array (natural range <>, natural range <>, natural range <>) of std_logic;
 
 -- ==== CALOs - begin ============================================================
 -- CALOs

@@ -106,7 +106,10 @@ begin
 	variable temp_counter : integer := 0;
 	variable algo_error_cnt : integer := 0;
 	variable finor_error_cnt : integer := 0;
-
+-- *************************************************************************
+-- HB 2017-05-22:
+	variable index : integer := 0;
+-- *************************************************************************
         file testvector_file : text open read_mode is "{{TESTVECTOR_FILENAME}}";
         file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_{{TESTVECTOR_NAME}}";
 
@@ -164,9 +167,18 @@ begin
 		    writeline(error_file, write_l);
 		    write(write_l, string'("algos simulation:  " & hstr(algo_after_prescaler_rop)));
 		    writeline(error_file, write_l);
+		    report "***************************************************************************************************************************************************";
 		    report "Error @ bx-nr: " & bx_nr_vector_data(i - GTL_FDL_LATENCY) & " => ALGO Error - algos not as expected!!!" severity error;
 		    report "algos test vector: " & algo_vector_string(i - GTL_FDL_LATENCY);
 		    report "algos simulation:  " & hstr(algo_after_prescaler_rop);
+		    for j in 0 to 511 loop
+			index := index + 1;
+			if algo_after_prescaler_rop(j) /= algo_vector_data(i - GTL_FDL_LATENCY)(j) then
+			    write(write_l, string'("algo mismatched #: " & str(j)));
+			    writeline(error_file, write_l);
+			    report "algo mismatched #: " & str(j);
+			end if;
+		    end loop;
 		end if;
 		if local_finor_with_veto /= finor_vector_data(i - GTL_FDL_LATENCY)(0) then
 		    finor_error_cnt := finor_error_cnt + 1;
@@ -178,6 +190,7 @@ begin
 		    writeline(error_file, write_l);
 		    write(write_l, string'("finor simulation:  " & str(local_finor_with_veto)));
 		    writeline(error_file, write_l);
+		    report "***************************************************************************************************************************************************";
 		    report "Error @ bx-nr: " & bx_nr_vector_data(i - GTL_FDL_LATENCY) & " => FINOR Error - algos not as expected!!!" severity error;
 		    report "finor test vector: " & finor_vector_string(i - GTL_FDL_LATENCY);
 		    report "finor simulation:  " & str(local_finor_with_veto);
@@ -191,6 +204,7 @@ begin
 	    writeline(error_file, write_l);
 	    write(write_l, string'("Success! No algorithm errors."));
 	    writeline(error_file, write_l);
+	    report "***************************************************************************************************************************************************";
 	    report "Success! No algorithm errors.";
 	end if;
 	
@@ -199,6 +213,7 @@ begin
 	    writeline(error_file, write_l);
 	    write(write_l, string'("Success! No FINOR errors."));
 	    writeline(error_file, write_l);
+	    report "***************************************************************************************************************************************************";
 	    report "Success! No FINOR errors.";
 	end if;
 	

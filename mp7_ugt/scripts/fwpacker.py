@@ -23,7 +23,8 @@ EXIT_FAILURE = 1
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('config', help = "build configuration file to read")
+    parser.add_argument('config', help="build configuration file to read")
+    parser.add_argument('--outdir', type=os.path.abspath, help="set location to write tarball")
     return parser.parse_args()
 
 def main():
@@ -54,6 +55,9 @@ def main():
 
     basename = "{menu}_v{build}_{board}".format(**locals())
     basepath = os.path.dirname(args.config)
+    # Custom output directory?
+    if args.outdir:
+        basepath = args.outdir
     filename = os.path.join(basepath, "{basename}-{timestamp}.tar.gz".format(**locals()))
 
     tmpdir = tempfile.mkdtemp()

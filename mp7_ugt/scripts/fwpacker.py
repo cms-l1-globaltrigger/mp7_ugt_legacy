@@ -46,6 +46,7 @@ def main():
             print " ", option, "=", config.get(section, option)
 
     menu = config.get('menu', 'name')
+    location = config.get('menu', 'location')
     build = config.get('menu', 'build')
     board = config.get('device', 'alias')
     buildarea = config.get('firmware', 'buildarea')
@@ -69,8 +70,12 @@ def main():
             os.path.join(build_dir, 'gt_mp7_{board}_v{build}_module_{i}.bit'.format(**locals())))
         shutil.copy(os.path.join(buildarea, module_dir, 'vivado.log'), log_dir)
 
-    # Copy build configuration file.
+    logging.info("adding build configuration: %s", args.config)
     shutil.copy(args.config, tmpdir)
+
+    xml_file = os.path.join(location, 'xml', '{menu}.xml')
+    logging.info("adding XML menu: %s", xml_file)
+    shutil.copy(xml_file, tmpdir)
 
     logging.info("creating tarball: %s", filename)
     tar = tarfile.open(filename, "w:gz")

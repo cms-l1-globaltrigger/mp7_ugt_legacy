@@ -24,7 +24,7 @@ def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('config', help="build configuration file to read")
-    parser.add_argument('--outdir', type=os.path.abspath, help="set location to write tarball")
+    parser.add_argument('--outdir', metavar="<path>", type=os.path.abspath, help="set location to write tarball")
     return parser.parse_args()
 
 def main():
@@ -77,7 +77,7 @@ def main():
     logging.info("adding build configuration: %s", args.config)
     shutil.copy(args.config, tmpdir)
 
-    xml_file = os.path.join(location, 'xml', '{menu}.xml')
+    xml_file = os.path.join(location, 'xml', '{menu}.xml'.format(**locals()))
     logging.info("adding XML menu: %s", xml_file)
     shutil.copy(xml_file, tmpdir)
 

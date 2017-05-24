@@ -49,7 +49,7 @@ architecture rtl of gtl_fdl_wrapper_TB is
 
     type lhc_data_t_array is array(integer range <>) of lhc_data_t;
     type algo_vector_string_array is array(integer range <>) of string(1 to 128);
-    type algo_vector_data_array is array(integer range <>) of std_logic_vector(511 downto 0);
+    type algo_vector_data_array is array(integer range <>) of std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     type bx_nr_vector_data_array is array(integer range <>) of string(1 to 4);
     type finor_vector_string_array is array(integer range <>) of string(1 to 1);
     type finor_vector_data_array is array(integer range <>) of std_logic_vector(3 downto 0);
@@ -149,6 +149,10 @@ begin
         
         wait for OFFSET_CLK80_PLL + OFFSET_LHC_DATA; -- setup time for PLL for 80 MHz plus setup time for lhc_data
 
+	write(write_l, string'("***************************************************************************************************************************************************"));
+	writeline(error_file, write_l);
+	write(write_l, string'("**************************************************** SUMMARY @ END OF FILE ************************************************************************"));
+	writeline(error_file, write_l);
 	report "**********************************************************************************************************************************************************************************";
 	report "******************************************************************** ERROR LISTING ***********************************************************************************************";
 	report "**********************************************************************************************************************************************************************************";
@@ -161,22 +165,22 @@ begin
 		    algo_error_cnt := algo_error_cnt + 1;
 		    write(write_l, string'("***************************************************************************************************************************************************"));
 		    writeline(error_file, write_l);
-		    write(write_l, string'("Error @ bx-nr: " & bx_nr_vector_data(i - GTL_FDL_LATENCY) & " => ALGO Error - algos not as expected!!!"));
+		    write(write_l, string'("Error @ bx-nr: " & bx_nr_vector_data(i - GTL_FDL_LATENCY) & " => ALGO Error - Algos not as expected!!!"));
 		    writeline(error_file, write_l);
-		    write(write_l, string'("algos test vector: " & algo_vector_string(i - GTL_FDL_LATENCY)));
+		    write(write_l, string'("Algos test vector: " & algo_vector_string(i - GTL_FDL_LATENCY)));
 		    writeline(error_file, write_l);
-		    write(write_l, string'("algos simulation:  " & hstr(algo_after_prescaler_rop)));
+		    write(write_l, string'("Algos simulation:  " & hstr(algo_after_prescaler_rop)));
 		    writeline(error_file, write_l);
 		    report "***************************************************************************************************************************************************";
-		    report "Error @ bx-nr: " & bx_nr_vector_data(i - GTL_FDL_LATENCY) & " => ALGO Error - algos not as expected!!!" severity error;
-		    report "algos test vector: " & algo_vector_string(i - GTL_FDL_LATENCY);
-		    report "algos simulation:  " & hstr(algo_after_prescaler_rop);
-		    for j in 0 to 511 loop
+		    report "Error @ bx-nr: " & bx_nr_vector_data(i - GTL_FDL_LATENCY) & " => ALGO Error - Algos not as expected!!!" severity error;
+		    report "Algos test vector: " & algo_vector_string(i - GTL_FDL_LATENCY);
+		    report "Algos simulation:  " & hstr(algo_after_prescaler_rop);
+		    for j in 0 to MAX_NR_ALGOS-1 loop
 			index := index + 1;
 			if algo_after_prescaler_rop(j) /= algo_vector_data(i - GTL_FDL_LATENCY)(j) then
-			    write(write_l, string'("algo mismatched #: " & str(j)));
+			    write(write_l, string'("Algo mismatch @ bit: " & str(j)));
 			    writeline(error_file, write_l);
-			    report "algo mismatched #: " & str(j);
+			    report "Algo mismatch @ bit: " & str(j);
 			end if;
 		    end loop;
 		end if;
@@ -184,16 +188,16 @@ begin
 		    finor_error_cnt := finor_error_cnt + 1;
 		    write(write_l, string'("***************************************************************************************************************************************************"));
 		    writeline(error_file, write_l);
-		    write(write_l, string'("Error @ bx-nr: " & bx_nr_vector_data(i - GTL_FDL_LATENCY) & " => FINOR Error - finor not as expected!!!"));
+		    write(write_l, string'("Error @ bx-nr: " & bx_nr_vector_data(i - GTL_FDL_LATENCY) & " => FINOR Error - Finor not as expected!!!"));
 		    writeline(error_file, write_l);
-		    write(write_l, string'("finor test vector: " & finor_vector_string(i - GTL_FDL_LATENCY)));
+		    write(write_l, string'("Finor test vector: " & finor_vector_string(i - GTL_FDL_LATENCY)));
 		    writeline(error_file, write_l);
-		    write(write_l, string'("finor simulation:  " & str(local_finor_with_veto)));
+		    write(write_l, string'("Finor simulation:  " & str(local_finor_with_veto)));
 		    writeline(error_file, write_l);
 		    report "***************************************************************************************************************************************************";
-		    report "Error @ bx-nr: " & bx_nr_vector_data(i - GTL_FDL_LATENCY) & " => FINOR Error - algos not as expected!!!" severity error;
-		    report "finor test vector: " & finor_vector_string(i - GTL_FDL_LATENCY);
-		    report "finor simulation:  " & str(local_finor_with_veto);
+		    report "Error @ bx-nr: " & bx_nr_vector_data(i - GTL_FDL_LATENCY) & " => FINOR Error - Finor not as expected!!!" severity error;
+		    report "Finor test vector: " & finor_vector_string(i - GTL_FDL_LATENCY);
+		    report "Finor simulation:  " & str(local_finor_with_veto);
 		end if;
 	    end if;
             wait for CLK40_PERIOD;
@@ -202,10 +206,25 @@ begin
 	if algo_error_cnt = 0 then
 	    write(write_l, string'("***************************************************************************************************************************************************"));
 	    writeline(error_file, write_l);
-	    write(write_l, string'("Success! No algorithm errors."));
+	    write(write_l, string'("**************************************************** SUMMARY **************************************************************************************"));
+	    writeline(error_file, write_l);
+	    write(write_l, string'("***************************************************************************************************************************************************"));
+	    writeline(error_file, write_l);
+	    write(write_l, string'("Success! No Algorithm errors."));
 	    writeline(error_file, write_l);
 	    report "***************************************************************************************************************************************************";
-	    report "Success! No algorithm errors.";
+	    report "Success! No Algorithm errors.";
+	else
+	    write(write_l, string'("***************************************************************************************************************************************************"));
+	    writeline(error_file, write_l);
+	    write(write_l, string'("**************************************************** SUMMARY **************************************************************************************"));
+	    writeline(error_file, write_l);
+	    write(write_l, string'("***************************************************************************************************************************************************"));
+	    writeline(error_file, write_l);
+	    write(write_l, string'("Total Algo errors: " & str(algo_error_cnt)));
+	    writeline(error_file, write_l);
+	    report "***************************************************************************************************************************************************";
+	    report "Total Algo errors: " & str(algo_error_cnt);	
 	end if;
 	
 	if finor_error_cnt = 0 then
@@ -215,6 +234,13 @@ begin
 	    writeline(error_file, write_l);
 	    report "***************************************************************************************************************************************************";
 	    report "Success! No FINOR errors.";
+	else
+	    write(write_l, string'("***************************************************************************************************************************************************"));
+	    writeline(error_file, write_l);
+	    write(write_l, string'("Total FINOR errors: " & str(finor_error_cnt)));
+	    writeline(error_file, write_l);
+	    report "***************************************************************************************************************************************************";
+	    report "Total FINOR errors: " & str(finor_error_cnt);	
 	end if;
 	
 	

@@ -1,6 +1,7 @@
 -- Description:
 -- Contains the "framework" of GT-logic (all parts, except GTL and FDL).
 
+-- JW 2017-04-16: v1.1.1 - added counter reset pulse
 -- HB 2016-09-16: v1.1.0 - based on v1.0.0, but memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd).
 --                         Removed algo_after_finor_mask_rop from port (not used anymore, because finor-mask logic removed from fdl_module.vhd).
 --                         Removed multiplexer for simulation signals. Removed "resync" and "stop" from port of tcm, not used anymore.

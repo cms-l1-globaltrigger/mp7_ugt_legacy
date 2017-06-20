@@ -35,7 +35,7 @@ package gt_mp7_core_pkg is
 -- FRAME version (given by the editor of frame.vhd)
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 1;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 0;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 1;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &
@@ -54,9 +54,9 @@ package gt_mp7_core_pkg is
 
 -- HB, 24-10-2013: proposed MAX_NR_ALGOS instead of NR_ALGOS
     constant MAX_NR_ALGOS        : integer := 512;
-    
+
     type ipb_regs_array is array (natural range <>) of std_logic_vector(31 downto 0);
-    
+
     constant FINOR_WIDTH : integer := 4; -- for read-out record
 
 -- HB 2014-07-08: ipbus_rst is high active, RST_ACT changed to '1' (for lhc_rst [in gt_mp7_core_pkg.vhd]) to get proper reset-conditions,
@@ -84,14 +84,14 @@ package gt_mp7_core_pkg is
     constant BGOS_WIDTH                   : integer := 4;
     constant BX_NR_WIDTH                  : integer := log2c(BUNCHES_PER_ORBIT);
     constant ORBIT_NR_WIDTH               : integer := 48;
-    
+
     constant LUM_SEG_NR_WIDTH             : integer := 32;
     constant EVENT_NR_WIDTH               : integer := 32;
     constant EVENT_TYPE_WIDTH             : integer := 4;
     constant LUM_SEG_PERIOD_WIDTH         : integer := 32;
     constant LUM_SEG_PERIOD_MSK_WIDTH     : integer := 32;
     constant TRIGGER_NR_WIDTH             : natural := 48;
-    
+
     subtype bgos_t                      is std_logic_vector(BGOS_WIDTH-1 downto 0);
     subtype bx_nr_t                     is std_logic_vector(BX_NR_WIDTH-1 downto 0);
     subtype orbit_nr_t                  is std_logic_vector(ORBIT_NR_WIDTH-1 downto 0);
@@ -101,12 +101,12 @@ package gt_mp7_core_pkg is
     subtype luminosity_seg_period_t     is std_logic_vector(LUM_SEG_PERIOD_WIDTH-1 downto 0);
     subtype luminosity_seg_period_msk_t is std_logic_vector(LUM_SEG_PERIOD_MSK_WIDTH-1 downto 0);
     subtype trigger_nr_t                is std_logic_vector(TRIGGER_NR_WIDTH-1 downto 0);
-    
+
     type bx_nr_array_t is array(integer range<>) of bx_nr_t;
 
     constant BC_TOP                       : integer := BUNCHES_PER_ORBIT-1;
     constant LUM_SEG_PERIOD_MSK_RESET     : luminosity_seg_period_msk_t := X"00040000";
-    
+
 --------------------------------------------------------------------------------
 -- delay manager
 --------------------------------------------------------------------------------

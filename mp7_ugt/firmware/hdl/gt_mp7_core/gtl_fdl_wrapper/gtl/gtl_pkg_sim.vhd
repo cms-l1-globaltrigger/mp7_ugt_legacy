@@ -460,6 +460,10 @@ constant EG_ETMHF_DPHI_PRECISION: positive := 3;
 constant JET_ETMHF_DPHI_PRECISION: positive := 3;
 constant TAU_ETMHF_DPHI_PRECISION: positive := 3;
 constant MUON_ETMHF_DPHI_PRECISION: positive := 3;
+-- HB 2017-06-21: for correlation conditions v2
+constant MU_ETM_DPHI_PRECISION: positive := 3;
+constant MU_HTM_DPHI_PRECISION: positive := 3;
+constant MU_ETMHF_DPHI_PRECISION: positive := 3;
 
 constant EG_EG_DETA_DPHI_PRECISION: positive := max(EG_EG_DETA_PRECISION, EG_EG_DPHI_PRECISION);
 constant EG_JET_DETA_DPHI_PRECISION: positive := max(EG_JET_DETA_PRECISION, EG_JET_DPHI_PRECISION);

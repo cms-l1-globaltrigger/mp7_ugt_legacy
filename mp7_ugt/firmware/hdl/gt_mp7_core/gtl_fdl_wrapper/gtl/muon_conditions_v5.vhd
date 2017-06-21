@@ -53,13 +53,13 @@ entity muon_conditions_v5 is
     port(
         lhc_clk : in std_logic;
         data_i : in muon_objects_array;
-        ls_charcorr_double: in muon_charcorr_double_array;
-        os_charcorr_double: in muon_charcorr_double_array;
-        ls_charcorr_triple: in muon_charcorr_triple_array;
-        os_charcorr_triple: in muon_charcorr_triple_array;
-        ls_charcorr_quad: in muon_charcorr_quad_array;
-        os_charcorr_quad: in muon_charcorr_quad_array;
         condition_o : out std_logic;
+        ls_charcorr_double: in muon_charcorr_double_array := (others => (others => '0'));
+        os_charcorr_double: in muon_charcorr_double_array := (others => (others => '0'));
+        ls_charcorr_triple: in muon_charcorr_triple_array := (others => (others => (others => '0')));
+        os_charcorr_triple: in muon_charcorr_triple_array := (others => (others => (others => '0')));
+        ls_charcorr_quad: in muon_charcorr_quad_array := (others => (others => (others => (others => '0'))));
+        os_charcorr_quad: in muon_charcorr_quad_array := (others => (others => (others => (others => '0'))));
         pt : in diff_inputs_array(muon_object_low to muon_object_high) := (others => (others => '0'));
         cos_phi_integer : in muon_sin_cos_integer_array(muon_object_low to muon_object_high) := (others => 0);
         sin_phi_integer : in muon_sin_cos_integer_array(muon_object_low to muon_object_high) := (others => 0)

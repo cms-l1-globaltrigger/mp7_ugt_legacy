@@ -6,6 +6,7 @@
 -- Charge correlation selection implemented with "LS" and "OS" (charge correlation calculated in muon_charge_correlations.vhd)
 
 -- Version history:
+-- HB 2017-06-20: changed order in port for charge correlation signals.
 -- HB 2017-05-16: inserted check for "twobody_pt" cut use only for Double condition.
 -- HB 2017-05-11: changed order in port for instances without "twobody_pt" cut.
 -- HB 2017-04-25: based on muon_conditions_v4.vhd, but inserted "twobody_pt" cut for Double condition.

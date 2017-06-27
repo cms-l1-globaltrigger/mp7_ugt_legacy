@@ -156,9 +156,9 @@ architecture rtl of frame is
 
     signal pulse           : std_logic_vector(31 downto 0);
 
-    signal mux_ctrl_regs_1 : ipb_regs_array(0 to 3);
+    signal mux_ctrl_regs_1 : ipb_regs_array(0 to 15);
 -- HEPHY 25.05.2015 - change to constant for avoiding the metastability and warning in simulator as well as in syntheseis process
-    constant  mux_ctrl_regs_1_init  : ipb_regs_array(0 to 3) := (X"00000bb8", X"00000c80", X"00000000", X"00000001"); -- bb8 =^ 3000, c80 =^ 3200
+    constant  mux_ctrl_regs_1_init  : ipb_regs_array(0 to 15) := (X"00000bb8", X"00000c80", X"00000000", X"00000001", X"00000000", X"00000000", X"00000000", X"00000000", X"00000000", X"00000000", X"00000000", X"00000000", X"00000000", X"00000000", X"00000000", X"00000000",); -- bb8 =^ 3000, c80 =^ 3200
 
     signal dsmux_lhc_data_int_sim : lhc_data_t; -- lhc_data output of dsmux
     signal dsmux_lhc_data_int_rop : lhc_data_t; --simulation data for ROP
@@ -253,7 +253,7 @@ architecture rtl of frame is
         init_value => mux_ctrl_regs_1_init,
         addr_width => 4,
         regs_beg_index => 0,
-        regs_end_index => 3
+        regs_end_index => 15
         )
     port map(
         clk => ipb_clk,

@@ -3,6 +3,7 @@
 -- Correlation Condition module for muon objects.
 
 -- Version history:
+-- HB 2017-06-28: charge correlation comparison inserted for different bx data (bug fix).
 -- HB 2017-03-29: updated for one "sin_cos_width" in mass_cuts.
 -- HB 2017-03-28: updated to provide all combinations of cuts (eg.: MASS and DR). Using integer for cos and sin phi inputs.
 -- HB 2017-02-21: optimisation of LUTs and DSP resources: calculations only for one half of permutations, second half by assignment of "mirrored" indices
@@ -130,12 +131,6 @@ architecture rtl of muon_muon_correlation_condition_v2 is
     signal charge_comp_double_pipe : muon_charcorr_double_array;
 --***************************************************************
 
-    signal diff_eta_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
-    signal diff_eta_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
-    
-    signal diff_phi_upper_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
-    signal diff_phi_lower_limit_int : std_logic_vector(DETA_DPHI_VECTOR_WIDTH-1 downto 0);
-    
     signal obj_vs_templ : object_vs_template_array;
     signal obj_vs_templ_pipe : object_vs_template_array;
     signal muon1_obj_vs_templ : muon_object_vs_template_array;
@@ -152,11 +147,6 @@ architecture rtl of muon_muon_correlation_condition_v2 is
 begin
 
     -- *** section: CUTs - begin ***************************************************************************************
-    -- Conversion of limits to std_logic_vector.
-    diff_eta_upper_limit_int <= conv_std_logic_vector(integer(diff_eta_upper_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
-    diff_eta_lower_limit_int <= conv_std_logic_vector(integer(diff_eta_lower_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
-    diff_phi_upper_limit_int <= conv_std_logic_vector(integer(diff_phi_upper_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
-    diff_phi_lower_limit_int <= conv_std_logic_vector(integer(diff_phi_lower_limit*real(10**DETA_DPHI_PRECISION)),DETA_DPHI_VECTOR_WIDTH);
 
     -- Comparison with limits.
     delta_l_1: for i in muon_object_low to muon_object_high generate 
@@ -466,8 +456,30 @@ begin
             end if;
         end process;
         
+	-- Charge correlation comparison
+        charge_double_l_1: for i in muon_object_low to muon_object_high generate 
+            charge_double_l_2: for j in muon_object_low to muon_object_high generate
+		charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
+                                           '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
+                                           '1' when requested_charge_correlation = "ig" else
+                                           '0';
+            end generate charge_double_l_2;
+        end generate charge_double_l_1;
+
+        -- Pipeline stage for charge correlation comparison
+        charge_comp_2_pipeline_p: process(lhc_clk, charge_comp_double)
+            begin
+                if obj_vs_templ_pipeline_stage = false then 
+                    charge_comp_double_pipe <= charge_comp_double;
+                else
+                    if (lhc_clk'event and lhc_clk = '1') then
+                        charge_comp_double_pipe <= charge_comp_double;
+                    end if;
+                end if;
+        end process;
+         
 	-- "Matrix" of permutations in an and-or-structure.
-        matrix_p: process(muon1_obj_vs_templ_pipe, muon2_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
+        matrix_p: process(muon1_obj_vs_templ_pipe, muon2_obj_vs_templ_pipe, charge_comp_double_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
             variable index : integer := 0;
             variable obj_vs_templ_vec : std_logic_vector((muon_object_high-muon_object_low+1)*(muon_object_high-muon_object_low+1) downto 1) := (others => '0');
             variable condition_and_or_tmp : std_logic := '0';

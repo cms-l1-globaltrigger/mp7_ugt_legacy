@@ -143,6 +143,7 @@ architecture rtl of fdl_module is
     signal prescale_otf_flags_reg: ipb_regs_array(0 to 1);
     signal prescale_otf_reg_updated: ipb_regs_array(0 to 1);
     signal prescale_preview_otf_reg_updated: ipb_regs_array(0 to 1);
+    constant PRESCALE_OTF_FLAGS_REG_DEFAULT : ipb_regs_array(0 to 1) := (others => X"00000000");
 
 -- =================================================================================
 
@@ -757,7 +758,7 @@ begin
 ------ JW 4.7.2017:
     prescale_otf_flags_i: entity work.ipb_write_regs
     generic map(
-        init_value => (others => X"00000000"),
+        init_value => PRESCALE_OTF_FLAGS_REG_DEFAULT,
         addr_width => 2,
         regs_beg_index => 0,
         regs_end_index => 1

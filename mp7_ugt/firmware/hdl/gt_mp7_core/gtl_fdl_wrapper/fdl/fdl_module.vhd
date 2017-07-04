@@ -138,7 +138,11 @@ architecture rtl of fdl_module is
     signal versions_to_ipb: ipb_regs_array(0 to OFFSET_END_READ_VERSIONS-OFFSET_BEG_READ_VERSIONS) := (others => (others => '0'));
     signal control_reg: ipb_regs_array(0 to 1);
     signal prescale_factor_set_index_reg: ipb_regs_array(0 to 1);
-    signal command_pulses: std_logic_vector(31 downto 0); -- see ipb_pulse_regs.vhd
+    signal command_pulses: std_logic_vector(31 downto 0); -- see ipb_pulse_regs.vhd.
+
+    signal prescale_otf_flags_reg: ipb_regs_array(0 to 1);
+    signal prescale_otf_reg_updated: ipb_regs_array(0 to 1);
+    signal prescale_preview_otf_reg_updated: ipb_regs_array(0 to 1);
 
 -- =================================================================================
 
@@ -749,6 +753,108 @@ begin
         ------------------
         regs_i => prescale_factor_preview_set_index_reg_updated
     );
+
+------ JW 4.7.2017:
+    prescale_otf_flags_i: entity work.ipb_write_regs
+    generic map(
+        init_value => (others => X"00000000"),
+        addr_width => 2,
+        regs_beg_index => 0,
+        regs_end_index => 1
+    )
+    port map(
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_OTF_FLAGS),
+        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_OTF_FLAGS),
+        ------------------
+        regs_o => prescale_otf_flags_reg
+    );
+
+------ JW 4.7.2017:
+    prescale_otf_update_0_i: entity work.update_process
+        generic map(
+            WIDTH => 1,
+            INIT_VALUE => X"00000000"
+        )
+        port map(
+            clk => lhc_clk,
+            request_update_pulse => request_update_factor_pulse,
+            update_pulse => begin_lumi_section,
+            data_i => prescale_otf_flags_reg(0)(0 downto 0),
+            data_o => prescale_otf_reg_updated(0)(0 downto 0)
+        );
+
+    prescale_otf_update_1_i: entity work.update_process
+        generic map(
+            WIDTH => 1,
+            INIT_VALUE => X"00000000"
+        )
+        port map(
+            clk => lhc_clk,
+            request_update_pulse => '1', -- no update pulse requested, updated with every begin_lumi_section
+            update_pulse => begin_lumi_section,
+            data_i => prescale_otf_reg_updated(0)(0 downto 0),
+            data_o => prescale_otf_reg_updated(1)(0 downto 0)
+        );
+
+    prescale_otf_update_reg_i: entity work.ipb_read_regs
+    generic map(
+        addr_width => 2,
+        regs_beg_index => 0,
+        regs_end_index => 1
+    )
+    port map(
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_OTF_UPDATED),
+        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_OTF_UPDATED),
+        ------------------
+        regs_i => prescale_otf_reg_updated
+    );
+
+------ JW 4.7.2017:
+    prescale_preview_otf_update_0_i: entity work.update_process
+        generic map(
+            WIDTH => 1,
+            INIT_VALUE => X"00000000"
+        )
+        port map(
+            clk => lhc_clk,
+            request_update_pulse => request_update_factor_pulse,
+            update_pulse => begin_lumi_section,
+            data_i => prescale_otf_flags_reg(1)(0 downto 0),
+            data_o => prescale_preview_otf_reg_updated(0)(0 downto 0)
+        );
+
+    prescale_preview_otf_update_1_i: entity work.update_process
+        generic map(
+            WIDTH => 1,
+            INIT_VALUE => X"00000000"
+        )
+        port map(
+            clk => lhc_clk,
+            request_update_pulse => '1', -- no update pulse requested, updated with every begin_lumi_section
+            update_pulse => begin_lumi_section,
+            data_i => prescale_preview_otf_reg_updated(0)(0 downto 0),
+            data_o => prescale_preview_otf_reg_updated(1)(0 downto 0)
+        );
+
+    prescale_preview_otf_update_reg_i: entity work.ipb_read_regs
+    generic map(
+        addr_width => 2,
+        regs_beg_index => 0,
+        regs_end_index => 1
+    )
+    port map(
+        clk => ipb_clk,
+        reset => ipb_rst,
+        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_PREVIEW_OTF_UPDATED),
+        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_PREVIEW_OTF_UPDATED),
+        ------------------
+        regs_i => prescale_preview_otf_reg_updated
+    );
+
 
 -- ****************************************************************************************************
 

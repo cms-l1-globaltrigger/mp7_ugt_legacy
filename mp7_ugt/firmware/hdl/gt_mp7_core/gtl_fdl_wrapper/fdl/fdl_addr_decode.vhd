@@ -27,7 +27,7 @@ package fdl_addr_decode is
 
     type ipb_algo_bx_mem_index_array is array (0 to 15) of natural;
 
-    constant NR_IPB_SLV_FDL : positive:= 36;
+    constant NR_IPB_SLV_FDL : positive:= 39;
 
     constant C_IPB_ALGO_BX_MEM : ipb_algo_bx_mem_index_array := (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
     constant C_IPB_RATE_CNT_BEFORE_PRESCALER : natural := 16;
@@ -46,28 +46,38 @@ package fdl_addr_decode is
     constant C_IPB_PRESCALE_FACTOR_SET_INDEX_UPDATED : natural := 29;
     constant C_IPB_CAL_TRIGGER_GAP : natural := 30;
 
+    constant C_IPB_PRESCALE_FACTOR_PREVIEW : natural := 31;
+    constant C_IPB_RATE_CNT_AFTER_PRESCALER_PREVIEW : natural := 32;
+    constant C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX : natural := 33;
+    constant C_IPB_RATE_CNT_FINOR_PREVIEW : natural := 34;
+    constant C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX_UPDATED : natural := 35;
+
+    constant C_IPB_PRESCALE_OTF_FLAGS : natural := 36;
+    constant C_IPB_PRESCALE_OTF_UPDATED : natural := 37;
+    constant C_IPB_PRESCALE_PREVIEW_OTF_UPDATED : natural := 38;
+
 -- rate counter before prescaler
     constant ADDR_WIDTH_RATE_CNT_BEFORE_PRESCALER: natural := log2c(MAX_NR_ALGOS);
     constant OFFSET_BEG_RATE_CNT_BEFORE_PRESCALER: natural := 0;
     constant OFFSET_END_RATE_CNT_BEFORE_PRESCALER: natural := MAX_NR_ALGOS-1;
-    
+
 -- rate counter after prescaler
     constant ADDR_WIDTH_RATE_CNT_AFTER_PRESCALER: natural := log2c(MAX_NR_ALGOS);
     constant OFFSET_BEG_RATE_CNT_AFTER_PRESCALER: natural := 0;
     constant OFFSET_END_RATE_CNT_AFTER_PRESCALER: natural := MAX_NR_ALGOS-1;
-    
+
 -- prescale factor range
     constant ADDR_WIDTH_PRESCALE_FACTOR: natural := log2c(MAX_NR_ALGOS);
     constant OFFSET_BEG_PRESCALE_FACTOR: natural := 0;
     constant OFFSET_END_PRESCALE_FACTOR: natural := MAX_NR_ALGOS-1;
-    
+
 -- finor and veto masks range
     constant ADDR_WIDTH_MASKS: natural := log2c(MAX_NR_ALGOS);
     constant OFFSET_BEG_MASKS: natural := 0;
     constant OFFSET_END_MASKS: natural := MAX_NR_ALGOS-1;
-    
+
 -- for versions values (ipb_read_regs.vhd)
-    constant OFFSET_L1TM_NAME: natural := 0; 
+    constant OFFSET_L1TM_NAME: natural := 0;
     constant OFFSET_L1TM_UID: natural := OFFSET_L1TM_NAME + L1TM_NAME'length/32;
     constant OFFSET_L1TM_COMPILER_VERSION: natural := OFFSET_L1TM_UID + L1TM_UID'length/32;
     constant OFFSET_GTL_FW_VERSION: natural := OFFSET_L1TM_COMPILER_VERSION + L1TM_COMPILER_VERSION'length/32;
@@ -77,7 +87,7 @@ package fdl_addr_decode is
     constant OFFSET_L1TM_UID_HASH: natural := OFFSET_SVN_REVISION_NUMBER + SVN_REVISION_NUMBER'length/32;
     constant OFFSET_FW_UID_HASH: natural := OFFSET_L1TM_UID_HASH + L1TM_UID_HASH'length/32;
     constant OFFSET_MODULE_ID: natural := OFFSET_FW_UID_HASH + FW_UID_HASH'length/32;
-    
+
     constant ADDR_WIDTH_READ_VERSIONS: natural := 6;
     constant OFFSET_BEG_READ_VERSIONS: natural := OFFSET_L1TM_NAME;
     constant OFFSET_END_READ_VERSIONS: natural := OFFSET_MODULE_ID;
@@ -89,12 +99,6 @@ package fdl_addr_decode is
 
 -- ***********************************************************************************************
 -- HB 2016-12-01: register for "prescaler preview" in monitoring
-    constant C_IPB_PRESCALE_FACTOR_PREVIEW : natural := 31;
-    constant C_IPB_RATE_CNT_AFTER_PRESCALER_PREVIEW : natural := 32;
-    constant C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX : natural := 33;
-    constant C_IPB_RATE_CNT_FINOR_PREVIEW : natural := 34;
-    constant C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX_UPDATED : natural := 35;
- 
     constant ADDR_WIDTH_RATE_CNT_AFTER_PRESCALER_PREVIEW: natural := log2c(MAX_NR_ALGOS);
     constant OFFSET_BEG_RATE_CNT_AFTER_PRESCALER_PREVIEW: natural := 0;
     constant OFFSET_END_RATE_CNT_AFTER_PRESCALER_PREVIEW: natural := MAX_NR_ALGOS-1;
@@ -147,13 +151,17 @@ package body fdl_addr_decode is
         elsif std_match(addr, "10010000000010010100000000000000") then sel := C_IPB_RATE_CNT_VETO; -- 0x90094000
         elsif std_match(addr, "1001000000001001010100000000000-") then sel := C_IPB_PRESCALE_FACTOR_SET_INDEX_UPDATED; -- 0x90095000
         elsif std_match(addr, "1001000000001001011000000000000-") then sel := C_IPB_CAL_TRIGGER_GAP; -- 0x90096000
+        elsif std_match(addr, "1001000000001001100000000000000-") then sel := C_IPB_PRESCALE_OTF_FLAGS;   -- 0x90097000
+        elsif std_match(addr, "1001000000001001100000000001000-") then sel := C_IPB_PRESCALE_OTF_UPDATED; -- 0x90097010
+        elsif std_match(addr, "1001000000001001100000000010000-") then sel := C_IPB_PRESCALE_PREVIEW_OTF_UPDATED; -- 0x90097020
+
 -- HB 2016-12-01: register for "prescaler preview" in monitoring
         elsif std_match(addr, "10010001000000010000001---------") then sel := C_IPB_PRESCALE_FACTOR_PREVIEW; -- 0x91010200 .. 0x910103FF
         elsif std_match(addr, "10010001000000010000010---------") then sel := C_IPB_RATE_CNT_AFTER_PRESCALER_PREVIEW; -- 0x91010400 .. 0x910105FF
         elsif std_match(addr, "1001000100001001000110001000000-") then sel := C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX; -- 0x91091880
         elsif std_match(addr, "10010001000010010001100110000000") then sel := C_IPB_RATE_CNT_FINOR_PREVIEW; -- 0x91091980
         elsif std_match(addr, "1001000100001001010100000000000-") then sel := C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX_UPDATED; -- 0x91095000
-        
+
         else sel := 99;
 		end if;
 		return sel;

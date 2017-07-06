@@ -110,6 +110,11 @@ begin
 -- HB 2017-05-22:
 	variable index : integer := 0;
 -- *************************************************************************
+	type algo_occur_array is array(integer range <>) of integer;
+	variable algo_after_prescaler_rop_occur : algo_occur_array(MAX_NR_ALGOS-1 downto 0) := (others => 0);
+	variable algo_vector_data_occur : algo_occur_array(MAX_NR_ALGOS-1 downto 0) := (others => 0);
+	variable diff_occur, algo_mismatch : integer := 0;
+	
         file testvector_file : text open read_mode is "{{TESTVECTOR_FILENAME}}";
         file error_file : text open write_mode is "sim_results_gtl_fdl_wrapper_{{TESTVECTOR_NAME}}";
 
@@ -161,6 +166,14 @@ begin
 		lhc_data <= testdata(i);
 	    end if;
 	    if i >= GTL_FDL_LATENCY then
+		for j in 0 to MAX_NR_ALGOS-1 loop
+		    if algo_after_prescaler_rop(j) = '1' then
+			algo_after_prescaler_rop_occur(j) := algo_after_prescaler_rop_occur(j) + 1;
+		    end if;
+		    if algo_vector_data(i - GTL_FDL_LATENCY)(j) = '1' then
+			algo_vector_data_occur(j) := algo_vector_data_occur(j) + 1;
+		    end if;
+		end loop;
 		if algo_after_prescaler_rop /= algo_vector_data(i - GTL_FDL_LATENCY) then
 		    algo_error_cnt := algo_error_cnt + 1;
 		    write(write_l, string'("***************************************************************************************************************************************************"));
@@ -221,10 +234,10 @@ begin
 	    writeline(error_file, write_l);
 	    write(write_l, string'("***************************************************************************************************************************************************"));
 	    writeline(error_file, write_l);
-	    write(write_l, string'("Total Algo errors: " & str(algo_error_cnt)));
+	    write(write_l, string'("Total BX with Algo errors: " & str(algo_error_cnt)));
 	    writeline(error_file, write_l);
 	    report "***************************************************************************************************************************************************";
-	    report "Total Algo errors: " & str(algo_error_cnt);	
+	    report "Total BX with Algo errors: " & str(algo_error_cnt);	
 	end if;
 	
 	if finor_error_cnt = 0 then
@@ -237,12 +250,51 @@ begin
 	else
 	    write(write_l, string'("***************************************************************************************************************************************************"));
 	    writeline(error_file, write_l);
-	    write(write_l, string'("Total FINOR errors: " & str(finor_error_cnt)));
+	    write(write_l, string'("Total BX with FINOR errors: " & str(finor_error_cnt)));
 	    writeline(error_file, write_l);
 	    report "***************************************************************************************************************************************************";
-	    report "Total FINOR errors: " & str(finor_error_cnt);	
+	    report "Total BX with FINOR errors: " & str(finor_error_cnt);	
 	end if;
 	
+	write(write_l, string'("***************************************************************************************************************************************************"));
+	writeline(error_file, write_l);
+	write(write_l, string'("Algo bits mismatched: "));
+	writeline(error_file, write_l);
+	write(write_l, string'("Bit | FW | TV | DIFF "));
+	writeline(error_file, write_l);
+	report "***************************************************************************************************************************************************";
+	report " Algo bits mismatched: ";
+	report " Bit | FW | TV | DIFF ";
+	for j in 0 to MAX_NR_ALGOS-1 loop
+	    diff_occur := algo_after_prescaler_rop_occur(j) - algo_vector_data_occur(j);
+	    if diff_occur /= 0 then
+		algo_mismatch := algo_mismatch + 1;
+		write(write_l, string'(str(j) & " | " & str(algo_after_prescaler_rop_occur(j)) & " | " & str(algo_vector_data_occur(j)) & " | " & str(diff_occur)));
+		writeline(error_file, write_l);
+		report " " & str(j) & " | " & str(algo_after_prescaler_rop_occur(j)) & " | " & str(algo_vector_data_occur(j)) & " | " & str(diff_occur);
+	    end if;
+	end loop;
+	write(write_l, string'(""));
+	writeline(error_file, write_l);
+	write(write_l, string'("Number of mismatched algo bits: " & str(algo_mismatch)));
+	writeline(error_file, write_l);
+	report "Number of mismatched algo bits: " & str(algo_mismatch);
+	
+	write(write_l, string'("***************************************************************************************************************************************************"));
+	writeline(error_file, write_l);
+	write(write_l, string'("Algo bits statistic [all algos]:"));
+	writeline(error_file, write_l);
+	write(write_l, string'("Bit | FW | TV | DIFF "));
+	writeline(error_file, write_l);
+	report "***************************************************************************************************************************************************";
+	report " Algo bits statistic [all algos]:";
+	report " Bit | FW | TV | DIFF ";
+	for j in 0 to MAX_NR_ALGOS-1 loop
+	    diff_occur := algo_after_prescaler_rop_occur(j) - algo_vector_data_occur(j);
+	    write(write_l, string'(str(j) & " | " & str(algo_after_prescaler_rop_occur(j)) & " | " & str(algo_vector_data_occur(j)) & " | " & str(diff_occur)));
+	    writeline(error_file, write_l);
+	    report " " & str(j) & " | " & str(algo_after_prescaler_rop_occur(j)) & " | " & str(algo_vector_data_occur(j)) & " | " & str(diff_occur);
+	end loop;
 	
         wait for 100 us;
         stop <= true; --stop orbit signal generation

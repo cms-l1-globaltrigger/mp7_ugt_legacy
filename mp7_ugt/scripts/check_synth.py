@@ -26,7 +26,7 @@ def print_hepler(s, output):
 
 def err_search(f, args): #gets path to a log file
 
-    def _print(s):
+    def _print(s): # helper to get the former global args into the _print call
         print_hepler(s, args.o)
 
     error = 0
@@ -133,7 +133,7 @@ def main():
     # Parse command line arguments.
     args = parse()
 
-    def _print(s):
+    def _print(s): # helper to get the former global args into the _print call
         print_hepler(s, args.o)
 
     # checks for path if no path is given (deprecated??)
@@ -182,6 +182,7 @@ def main():
         with open(os.path.abspath(args.o), 'w+') as ins:#then outpus in a file with -o as path
             ins.write(a)
             ins.close()
+
 
 # Run main function with passed arguments.
 if __name__ == '__main__':

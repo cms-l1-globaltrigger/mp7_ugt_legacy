@@ -6,12 +6,14 @@ import os
 import argparse
 import logging
 
+
 whitered = "\033[37;41;1m"#collors
 yellowwhite = "\033[43;37;1m"
 reset = "\033[0m"
 o, ts = os.popen('stty size', 'r').read().split()
 ts = int(ts)
 a = ""
+
 
 def print_hepler(s, output):
     print (s)
@@ -20,6 +22,7 @@ def print_hepler(s, output):
         if whitered in s or yellowwhite in s or reset in s:
             s = s[10:-4]
         a += (s + "\n")
+
 
 def err_search(f, args): #gets path to a log file
 
@@ -80,19 +83,24 @@ def err_search(f, args): #gets path to a log file
     if error != 0:
         _print("%sERRORS: %d%s" % (whitered, error, reset))
     else: _print("ERRORS: %d" % error)
+
     if warning != 0:
         _print("%sWARNINGS: %d%s" % (yellowwhite, warning, reset))
     else: _print("WARNINGS: %d" % warnings)
+
     if crit_warning != 0:
         _print("%sCRITICAL WARNINGS: %d%s" % (yellowwhite, crit_warning, reset))
     else: _print("CRITICAL WARNINGS: %d" % crit_warning)
+
     if violated_count != 0:
         _print("%sVIOLATED: %d%s" % (whitered, violated_count, reset))
     else: _print("VIOLATED: %d" % violated_count)
+
     if not os.path.exists("%stop/top.runs/impl_1/top.bit" % f):
         _print("%sMISSING BIT FILE: %stop/top.runs/impl_1/top.bit%s" % (whitered, f, reset))
         _print("")
     _print ("#" * ts)
+
 
 def cfg_info(f):#gets path to the cfg file
     cfg = {}
@@ -104,6 +112,7 @@ def cfg_info(f):#gets path to the cfg file
             elif line.startswith("modules"):#checks for module count
                 cfg["ordneranz"] = line[10:-1]#puts the count in cfg array
     return cfg
+
 
 def parse():
     parser = argparse.ArgumentParser(description='Output Log data info') #arguments and parameters
@@ -117,6 +126,7 @@ def parse():
     parser.add_argument('-o', action = 'store', help = 'inputs path for the output', metavar = 'path')
     return parser.parse_args()
 
+
 def main():
     """Main routine."""
 
@@ -126,10 +136,11 @@ def main():
     def _print(s):
         print_hepler(s, args.o)
 
-    if args.path == None:#checks for path if no path is given
+    # checks for path if no path is given (deprecated??)
+    if args.path == None:
         f = os.path.basename(os.path.dirname(os.path.abspath(__file__)))#take the path of the skript
-        cfg = {}
         cfg = cfg_info(f)
+
         if args.m == None:#checks if -m is none
             for x in range(int(cfg["ordneranz"])):#loop is from 0 to module count
                 _print ("=" * ts)
@@ -146,10 +157,10 @@ def main():
             err_search("%s/module_%d/" % (cfg["ordner"], args.m), args)#uses err_search <13>
             _print("")
         else: _print ("module %d not available. There are only %s modules registed(0-%d)" % (args.m, cfg["ordneranz"], int(cfg["ordneranz"]) - 1))#else outputs error message
-    else:#if no path is given
+    else:#if path is given
         f = os.path.basename(os.path.abspath(args.path))#takes path given and strips the last folder name
-        cfg = {}
         cfg = cfg_info(args.path + "/" + f)#gives cfg_info the folder name
+
         if args.m == None:# checks if -m is none
             for x in range(int(cfg["ordneranz"])):#loop is from 0 to module count
                 _print ("=" * ts)
@@ -166,6 +177,7 @@ def main():
             err_search("%s/%s/module_%d/" % (args.path, cfg["ordner"], args.m), args)#uses err_search <13>
             _print("")
         else: _print ("module %d not available. There are only %s modules registed" % (args.m, cfg["ordneranz"]))#else outputs error message
+
     if args.o:
         with open(os.path.abspath(args.o), 'w+') as ins:#then outpus in a file with -o as path
             ins.write(a)

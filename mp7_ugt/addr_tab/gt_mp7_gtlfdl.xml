@@ -1,0 +1,88 @@
+<node description="GT-MP7-GTLFDL registers">
+	<!-- 16x4096 memories in chain -->
+	<node id="algo_bx_mem"  address="0x00000000" mode="incremental" size="65536" permission="rw" parameters="class=AlgoBxMemoryImage"/>
+	<node id="rate_cnt_before_prescaler" address="0x00010000" mode="incremental" size="512" permission="r"/>
+	<node id="prescale_factor" address="0x00010200" mode="incremental" size="512" permission="rw" parameters="class=PreScaleFactorsImage"/>
+<!--HB 2016-02-23: "rate_cnt_after_prescaler" for monitoring only new in fdl v0.0.19 -->
+	<node id="rate_cnt_after_prescaler" address="0x00010400" mode="incremental" size="512" permission="r"/>
+<!--HB 2016-02-23: "rate_cnt_post_dead_time" and "l1a_latency_delay" new in fdl v0.0.17 address new in fdl v0.0.19 -->
+	<node id="rate_cnt_post_dead_time" address="0x00010600" mode="incremental" size="512" permission="r"/>
+<!--HB 2016-02-23: "masks" address new in fdl v0.0.19 -->
+	<node id="masks" address="0x00010800" mode="incremental" size="512" permission="rw" parameters="class=MasksMemoryImage"/>
+	<node id="prescale_factor_set_index" address="0x00091880" permission="rw" parameters="type=parent"/>
+<!--HB 2016-02-17: "control" register not used in fdl v0.0.15 -->
+<!--	<node id="control" address="0x00091888" permission="rw" parameters="type=parent">
+	</node>-->
+	<node id="read_versions" address="0x000918C0" permission="r" parameters="type=parent">
+		<node id="l1tm_name" address="0x00000000" mode="incremental" size="32" permission="r" parameters="type=string"/>
+		<node id="l1tm_uuid" address="0x00000020" mode="incremental" size="4" permission="r" parameters="type=uuid"/>
+
+		<node id="l1tm_compiler_version" address="0x00000024" permission="r" parameters="type=version">
+			<node id="major"      address="0x00000000" mask="0x00ff0000" permission="r" parameters="type=number"/>
+			<node id="minor"      address="0x00000000" mask="0x0000ff00" permission="r" parameters="type=number"/>
+			<node id="rev"        address="0x00000000" mask="0x000000ff" permission="r" parameters="type=number"/>
+		</node>
+		<node id="gtl_fw_version" address="0x00000025" permission="r" parameters="type=version">
+			<node id="major"      address="0x00000000" mask="0x00ff0000" permission="r" parameters="type=number"/>
+			<node id="minor"      address="0x00000000" mask="0x0000ff00" permission="r" parameters="type=number"/>
+			<node id="rev"        address="0x00000000" mask="0x000000ff" permission="r" parameters="type=number"/>
+		</node>
+		<node id="fdl_fw_version" address="0x00000026" permission="r" parameters="type=version">
+			<node id="major"      address="0x00000000" mask="0x00ff0000" permission="r" parameters="type=number"/>
+			<node id="minor"      address="0x00000000" mask="0x0000ff00" permission="r" parameters="type=number"/>
+			<node id="rev"        address="0x00000000" mask="0x000000ff" permission="r" parameters="type=number"/>
+		</node>
+		<node id="l1tm_fw_uuid" address="0x00000027" mode="incremental" size="4" permission="r" parameters="type=uuid"/>
+		<node id="svn_revision_number" address="0x0000002B" permission="r" parameters="type=number"/>
+		<node id="l1tm_uuid_hash" address="0x0000002C" permission="r" parameters="type=number"/>
+		<node id="l1tm_fw_uuid_hash" address="0x0000002D" permission="r" parameters="type=number"/>
+		<node id="module_id" address="0x0000002E" permission="r" parameters="type=number"/>
+	</node>
+	<node id="command_pulses" address="0x00091900" permission="w" parameters="type=parent">
+		<node id="request_update_factor_pulse" address="0x00000000" mask="0x00000001" permission="w"/>
+	</node>
+<!--HB 2016-02-17: "rate_cnt_finor" new in fdl v0.0.16 -->
+	<node id="rate_cnt_finor" address="0x00091980" permission="r" parameters="type=parent"/>
+<!--HB 2016-02-17: "l1a_latency_delay" new in fdl v0.0.17 (used for rate_cnt_post_dead_time) -->
+	<node id="l1a_latency_delay" address="0x00092200" permission="rw" parameters="type=parent"/>
+<!--HB 2016-02-22: "rate_cnt_post_dead_time" and "l1a_latency_delay" new in fdl v0.0.18 -->
+	<node id="rate_cnt_l1a" address="0x00093000" permission="r" parameters="type=parent"/>
+<!--HB 2016-03-03: "rate_cnt_veto" new in fdl v0.0.21 -->
+	<node id="rate_cnt_veto" address="0x00094000" permission="r" parameters="type=parent"/>
+<!--HB 2016-04-26: prescale_factor_set_index updated with begin of lumisection -->
+	<node id="prescale_factor_set_index_updated" address="0x00095000" permission="r" parameters="type=parent"/>
+<!-- used prescale set index correlating with rate counters of previous lumisection -->
+	<node id="previous_prescale_set_index" address="0x00095001" permission="r" parameters="type=parent"/>
+
+    <!-- JW 4.7.2017: added prescale OTF flags -->
+    <node id="prescale_otf_flags" address="0x00098000" permission="rw" parameters="type=parent">
+      <node id="production_flag"  address="0x00000000" mask="0x00000001" permission="rw" parameters="type=number"/>
+      <node id="preview_flag"     address="0x00000001" mask="0x00000001" permission="rw" parameters="type=number"/>
+	</node>
+    <!-- JW 4.7.2017: added prescale OTF status regs -->
+    <node id="prescale_otf_applied"    address="0x00098010" permission="r" parameters="type=parent">
+      <node id="current_prescale_otf"  address="0x00000000" permission="r" parameters="type=number"/>
+      <node id="previous_prescale_otf" address="0x00000001" permission="r" parameters="type=number"/>
+	</node>
+    <!-- JW 4.7.2017: added prescale preview OTF status regs -->
+    <node id="prescale_preview_otf_applied"   address="0x00098020"  permission="r" parameters="type=parent">
+      <node id="current_prescale_preview_otf"  address="0x00000000" permission="r" parameters="type=number"/>
+      <node id="previous_prescale_preview_otf" address="0x00000001" permission="r" parameters="type=number"/>
+	</node>
+
+	<!-- begin and end of calibration trigger gap -->
+	<node id="calibration_trigger_gap" address="0x00096000" permission="rw">
+		<node id="begin" address="0x00000000" mask="0x00000fff" permission="rw" />
+		<node id="end" address="0x00000000" mask="0x0fff0000" permission="rw" />
+	</node>
+
+	<!--HB 2016-11-22: register for prescale preview -->
+	<node id="preview" address="0x01000000" permission="rw" >
+		<node id="prescale_factor" address="0x00010200" mode="incremental" size="512" permission="rw" parameters="class=PreScaleFactorsImage"/>
+	 	<node id="rate_cnt_after_prescaler" address="0x00010400" mode="incremental" size="512" permission="r"/>
+	 	<node id="prescale_factor_set_index" address="0x00091880" permission="rw" parameters="type=parent"/>
+		<node id="rate_cnt_finor" address="0x00091980" permission="r" parameters="type=parent"/>
+	 	<node id="current_prescale_set_index" address="0x00095000" permission="r" parameters="type=parent"/>
+	 	<node id="previous_prescale_set_index" address="0x00095001" permission="r" parameters="type=parent"/>
+	</node>
+</node>

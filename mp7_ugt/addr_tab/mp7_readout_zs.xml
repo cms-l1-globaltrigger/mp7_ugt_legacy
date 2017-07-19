@@ -1,0 +1,28 @@
+<node description="MP7 readout zs" fwinfo="endpoint" class="ZeroSuppressionNode">
+    <node id="csr" address="0x0" description="Formatting for the readout buffer" fwinfo="endpoint;width=2">
+        <node id="ctrl" address="0x0">
+            <node id="en" mask="0x1"/>
+            <node id="cap_en" mask="0xffff0"/>
+            <node id="val_mode" mask="0xff00000"/>
+        </node>
+        <node id="stat" address="0x2" permission="r">
+            <node id="fifo2_empty" mask="0x1"/>
+            <node id="fifo2_full" mask="0x2"/>
+            <node id="fifo1_empty" mask="0x4"/>
+            <node id="fifo1_full" mask="0x8"/>
+            <node id="output_state" mask="0x30"/>
+            <node id="transfer_state" mask="0xc0"/>
+            <node id="state_main" mask="0x700"/>
+        </node>
+        <node id="info" address="0x3" permission="r">
+            <node id="mask_ram_depth" mask="0xff"/>
+            <node id="fifo2_depth" mask="0xff00"/>
+            <node id="fifo1_depth" mask="0xff0000"/>
+            <node id="zs_enabled" mask="0x1000000"/>
+        </node>
+    </node>
+    <node id="ram" address="0x4" description="port to ram containing the zero suppression masks" fwinfo="endpoint;width=1">
+            <node id="addr" address="0x0"/>
+            <node id="mask_data" address="0x1" size="0x100" mode="port"/>
+    </node>
+</node>

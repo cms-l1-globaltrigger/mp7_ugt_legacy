@@ -1,0 +1,68 @@
+<node description="MP7 TTC block control registers" fwinfo="endpoint" class="TTCNode">
+	<node id="csr" address="0x0" description="MP7 TTC block" fwinfo="endpoint;width=3">
+		<node id="ctrl" address="0x0">
+			<node id="ttc_enable" mask="0x1"/>
+			<node id="err_ctr_clear" mask="0x2"/>
+			<node id="rst" mask="0x4"/>
+			<node id="int_bc0_enable" mask="0x8"/>
+			<node id="ctr_clear" mask="0x40"/>
+			<node id="l1a_force" mask="0x80"/>
+			<node id="throttle_en" mask="0x100"/>
+			<node id="b_cmd_force" mask="0x200"/>
+			<node id="ttc_sync_en" mask="0x400"/>
+			<node id="ttc_sync_bx" mask="0xfff000"/>
+			<node id="b_cmd" mask="0xff000000"/>
+		</node>
+		<node id="ctrl1" address="0x1">
+			<node id="ttc_phase" mask="0xfff"/>
+			<node id="ttc_phase_en" mask="0x1000"/>
+			<node id="c_del" mask="0x1f0000"/>
+		</node>
+		<node id="stat0" address="0x4">
+			<node id="bunch_ctr" mask="0xfff"/>
+			<node id="bc0_lock" mask="0x10000"/>
+			<node id="dist_lock" mask="0x20000"/>
+			<node id="ttc_phase_ok" mask="0x40000"/>
+			<node id="force_pending" mask="0x80000"/>
+			<node id="orb_len" mask="0xfff00000"/>	
+		</node>
+		<node id="stat1" address="0x5">
+			<node id="evt_ctr" mask="0xffffffff"/>
+		</node>
+		<node id="stat2" address="0x6">
+			<node id="orb_ctr" mask="0xffffffff"/>
+		</node>
+		<node id="stat3" address="0x7">
+			<node id="single_biterr_ctr" mask="0xffff"/>
+			<node id="double_biterr_ctr" mask="0xffff0000"/>
+		</node>
+	</node>
+	<node id="freq" address="0x8" description="TTC frequency counter" fwinfo="endpoint;width=1">
+		<node id="ctrl" address="0x0">
+			<node id="chan_sel" mask="0xf"/>
+			<node id="en_crap_mode" mask="0x10"/>
+		</node>
+		<node id="freq" address="0x1">
+			<node id="count" mask="0xffffff"/>
+			<node id="valid" mask="0x1000000"/>
+		</node>
+	</node>
+	<node id="l1_gen" address="0xa" description="L1A random generator" fwinfo="endpoint;width=1">
+		<node id="ctrl" address="0x0">
+			<node id="rate" mask="0x3fffffff"/>
+			<node id="rules_en" mask="0x80000000"/>
+		</node>
+		<node id="trig_cnt" address="0x1"/>
+	</node>
+	<node id="hist" module="file://state_history.xml" address="0xc"/>
+	<node id="cmd_ctrs" address="0x10" description="TTC command counters" fwinfo="endpoint;width=1">
+		<node id="ctr_sel" address="0x0"/>
+		<node id="ctr" address="0x1"/>
+	</node>
+	<node id="tmt" address="0x12" description="TMT cycle control" fwinfo="endpoint;width=0">
+		<node id="max_phase" mask="0xf"/>
+		<node id="phase" mask="0xf0"/>
+		<node id="l1a_offset" mask="0xf00"/>
+		<node id="pkt_offset" mask="0xf000"/>
+	</node>
+</node>

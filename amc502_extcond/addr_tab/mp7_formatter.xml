@@ -1,0 +1,19 @@
+<node description="MP7 formatter block" class="FormatterNode">
+	<node id="csr" address="0x0" description="ctrl register" fwinfo="endpoint;width=1">
+		<node id="ctrl" address="0x0" description="general ctrl register">
+			<node id="enable_strip" mask="0x1"/>
+			<node id="enable_insert" mask="0x2"/>
+			<node id="sel_bxsrc" mask="0x4"/>
+			<node id="flag_bx" mask="0xfff0"/>
+			<node id="dest" mask="0xff0000"/>
+			<node id="src" mask="0xff000000"/>
+		</node>
+		<node id="dv_override" address="0x1" description="data valid override register">
+			<node id="enable_dv_override" mask="0x1" description="replaces datavalid signal from payload with locally generated signal"/>
+			<node id="sub_bx_start" mask="0xe"/>
+			<node id="bx_start" mask="0xfff0"/>
+			<node id="sub_bx_stop" mask="0x70000"/>
+			<node id="bx_stop" mask="0x7ff80000"/>
+		</node>
+	</node>
+</node>

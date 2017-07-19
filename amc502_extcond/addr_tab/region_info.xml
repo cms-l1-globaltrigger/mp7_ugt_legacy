@@ -1,0 +1,9 @@
+<node description="MP7 region info" fwinfo="endpoint;width=0">
+	<node id="mgt_i_kind" mask="0xf"/>
+	<node id="chk_i_kind" mask="0xf0"/>	
+	<node id="buf_i_kind" mask="0xf00"/>
+	<node id="fmt_kind" mask="0xf000"/>
+	<node id="buf_o_kind" mask="0xf0000"/>
+	<node id="chk_o_kind" mask="0xf00000"/>
+	<node id="mgt_o_kind" mask="0xf000000"/>
+</node>

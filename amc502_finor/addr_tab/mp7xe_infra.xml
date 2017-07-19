@@ -1,0 +1,15 @@
+<node id="TOP">
+	<node id="ctrl" module="file://mp7_ctrl.xml" address="0x0"/>
+	<node id="ttc" module="file://mp7_ttc.xml" address="0x40"/>
+	<node id="i2c" address="0x60">
+		<node id="minipods_top" address="0x0" module="file://opencores_i2c.xml" class="MiniPODMasterNode"
+			parameters="tx0=0x29;tx1=0x2b;tx2=0x2d;rx0=0x30;rx1=0x32;rx2=0x34"/>
+		<node id="minipods_bot" address="0x8" module="file://opencores_i2c.xml" class="MiniPODMasterNode"
+			parameters="tx3=0x29;tx4=0x2b;tx5=0x2d;rx3=0x30;rx4=0x32;rx5=0x34"/>
+	</node>
+	<node id="clocking" module="file://mp7xe_xpoint.xml" address="0x80"/>
+	<node id="readout" module="file://mp7_readout.xml" address="0x100"/>
+	<node id="datapath" module="file://mp7_datapath.xml" address="0x1000"/>
+	<node id="uc" module="file://mp7_infra_uc.xml" address="0x70000000"/>
+        <node id="payload" module="file://payload.xml" address="0x80000000"/>
+</node>

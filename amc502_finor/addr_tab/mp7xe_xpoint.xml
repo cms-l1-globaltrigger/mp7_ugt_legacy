@@ -1,0 +1,31 @@
+<node description="clock control" fwinfo="endpoint" class="ClockingXENode">
+	<node id="csr" address="0x0" description="ctrl/stat register" fwinfo="endpoint;width=1">
+		<node id="ctrl" address="0x0">
+			<node id="clk_i2c_sel" mask="0x3" description="Selects which clk synthesizer is connected to I2C. Use '00' for si5326_top, '01' for si5326_bot, '10' for si570"/>
+			<node id="prog_u36" mask="0x4"/>
+			<node id="rst_top_si5326" mask="0x10"/>
+			<node id="rst_bot_si5326" mask="0x40"/>
+			<node id="si53314_top_enable_ext" mask="0x100" description="SI53314 'TOP' clk network' output enable for chans 0&5, For 690 only (X11)" />
+			<node id="si53314_top_enable_base" mask="0x200" description="SI53314 'TOP' clk network' output enable for chans 1-4, For 485 & 690 (X14 & X17)" />
+			<node id="si53314_top_clk_sel" mask="0x400" description="SI53314 'TOP' clk network' Use '0' for CLK0 (unconnected), '1' for CLK1 (SI5326)" />
+			<node id="si53314_bot_enable_ext" mask="0x800" description="SI53314 'BOT' clk network' output enable for chans 0&5, For 690 only (X11)" />
+			<node id="si53314_bot_enable_base" mask="0x1000" description="SI53314 'BOT' clk network' output enable for chans 1-4, For 485 & 690 (X14 & X17)" />
+			<node id="si53314_bot_clk_sel" mask="0x2000" description="SI53314 'BOT' clk network' Use '0' for CLK0 (SI570), '1' for CLK1 (SI5326)" />
+			<node id="selforout1_u36" mask="0x03000000"/>
+			<node id="selforout2_u36" mask="0x0c000000"/>
+			<node id="selforout3_u36" mask="0x30000000"/>
+			<node id="selforout4_u36" mask="0xc0000000"/>
+		</node>
+		<node id="stat" address="0x1">
+			<node id="done_u36" mask="0x4"/>
+			<node id="si5326_top_int" mask="0x10"/>
+			<node id="si5326_top_lol" mask="0x20"/>
+			<node id="si5326_bot_int" mask="0x40"/>
+			<node id="si5326_bot_lol" mask="0x80"/>
+		</node>
+	</node>
+	<node id="i2c_si570_bot" module="file://opencores_i2c.xml" address="0x08" class="SI570Node" parameters="i2caddr=0x55" />
+	<node id="i2c_si5326_bot" module="file://opencores_i2c.xml" address="0x10" class="SI5326Node" parameters="i2caddr=0x68" />
+	<node id="i2c_si5326_top" module="file://opencores_i2c.xml" address="0x18" class="SI5326Node" parameters="i2caddr=0x68" />
+</node>
+

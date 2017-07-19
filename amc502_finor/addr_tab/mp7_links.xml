@@ -1,0 +1,5 @@
+<node description="MGT quad CSR registers" fwinfo="endpoint;width=5" class="MGTRegionNode">
+	<node id="rw_regs" module="file://mp7_quad_rw.xml" address="0x00000"/>
+	<node id="ro_regs" module="file://mp7_quad_ro.xml" address="0x00010"/>
+</node>
+

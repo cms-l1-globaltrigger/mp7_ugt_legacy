@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="LATIN1"?>
+
+<node>
+	<node id="status">	
+		<node id="qplllock" mask="0x00000001" />
+		<node id="kind" mask="0x0000001E" description="Defines the kind of quad - 10g, 5g, 3g, etc" /> 
+	</node>
+</node>

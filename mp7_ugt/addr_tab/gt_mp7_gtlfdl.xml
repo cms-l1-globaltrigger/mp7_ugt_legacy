@@ -38,8 +38,8 @@
 		<node id="l1tm_fw_uuid_hash" address="0x0000002D" permission="r" parameters="type=number"/>
 		<node id="module_id" address="0x0000002E" permission="r" parameters="type=number"/>
 	</node>
-	<node id="command_pulses" address="0x00091900" permission="w" parameters="type=parent">
-		<node id="request_update_factor_pulse" address="0x00000000" mask="0x00000001" permission="w"/>
+	<node id="command_pulses" address="0x00091900" permission="rw" parameters="type=parent">
+		<node id="request_update_factor_pulse" address="0x00000000" mask="0x00000001" permission="rw"/>
 	</node>
 <!--HB 2016-02-17: "rate_cnt_finor" new in fdl v0.0.16 -->
 	<node id="rate_cnt_finor" address="0x00091980" permission="r" parameters="type=parent"/>

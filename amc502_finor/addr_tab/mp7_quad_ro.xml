@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="LATIN1"?>
-
-<node>
-	<node id="ch0" module="file://mp7_chan_ro.xml" address="0x0000"/>
-	<node id="ch1" module="file://mp7_chan_ro.xml" address="0x0002"/>
-	<node id="ch2" module="file://mp7_chan_ro.xml" address="0x0004"/>
-	<node id="ch3" module="file://mp7_chan_ro.xml" address="0x0006"/>
-	<node id="common" module="file://mp7_common_ro.xml" address="0x0008"/>
-</node>

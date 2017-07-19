@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="LATIN1"?>
-
-<node>
-	<node id="control">
-		<node id="soft_reset" mask="0x00000001" />
-	</node>
-</node>

@@ -1,8 +1,0 @@
-#include -c boards/mp7/base_fw/mp7_690es
-include -c boards/amc502/base_fw/amc502 amc502.dep
-#include -c components/mp7_formatter
-#include -c components/mp7_null_algo
-src -c boards/mp7/base_fw/common mp7_top_decl.vhd
-#src -c boards/amc502/base_fw/mp7xe_690 mp7_brd_decl.vhd
-include ext_cond.dep
-src top_decl.vhd

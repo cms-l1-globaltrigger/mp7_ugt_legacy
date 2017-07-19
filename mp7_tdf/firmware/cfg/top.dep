@@ -1,7 +1,0 @@
-addrtab -t -c components/mp7_null_algo mp7_payload.xml 
-include -c boards/mp7/base_fw/mp7xe_690
-src top_decl.vhd
-src -c boards/mp7/base_fw/common mp7_top_decl.vhd
-src -c boards/mp7/base_fw/mp7xe_690 mp7_brd_decl.vhd
-?toolset=="ISE"? src --cd ../ucf mp7_mgt.ucf
-include tdf_algo.dep

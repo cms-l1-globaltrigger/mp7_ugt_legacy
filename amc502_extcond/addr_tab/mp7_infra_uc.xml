@@ -1,6 +1,0 @@
-<node id="MmcPipe" class="MmcPipeInterface" size="0x3" fwinfo="endpoint;width=2">
-  <node id="FPGAtoMMCcounters" address="0x0"/>
-  <node id="MMCtoFPGAcounters" address="0x1"/>
-  <node id="FIFO" address="0x2" mode="non-incremental" size="512"/>
-</node>
-

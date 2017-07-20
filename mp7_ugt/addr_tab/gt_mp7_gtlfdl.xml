@@ -50,7 +50,7 @@
 <!--HB 2016-03-03: "rate_cnt_veto" new in fdl v0.0.21 -->
 	<node id="rate_cnt_veto" address="0x00094000" permission="r" parameters="type=parent"/>
 <!--HB 2016-04-26: prescale_factor_set_index updated with begin of lumisection -->
-	<node id="prescale_factor_set_index_updated" address="0x00095000" permission="r" parameters="type=parent"/>
+	<node id="current_prescale_set_index" address="0x00095000" permission="r" parameters="type=parent"/>
 <!-- used prescale set index correlating with rate counters of previous lumisection -->
 	<node id="previous_prescale_set_index" address="0x00095001" permission="r" parameters="type=parent"/>
 

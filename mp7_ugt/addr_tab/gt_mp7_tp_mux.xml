@@ -1,7 +1,11 @@
 <node description="MP7 daughter board output mux registers">
-	<node id="tp_mux"  address="0x00000000" permission="rw">
+    <node id="tp_mux"  address="0x00000000" permission="rw">
         <node id="out0"      address="0x00000000" mask="0x000000ff" permission="rw" parameters="type=hex"/>
         <node id="out1"      address="0x00000000" mask="0x0000ff00" permission="rw" parameters="type=hex"/>
         <node id="out2"      address="0x00000000" mask="0x00ff0000" permission="rw" parameters="type=hex"/>
     </node>
+    <node id="test_out0"  address="0x00000001" mask="0x00000001" permission="rw" parameters="type=hex"/>
+    <node id="test_out1"  address="0x00000002" mask="0x00000001" permission="rw" parameters="type=hex"/>
+    <node id="test_out2"  address="0x00000003" mask="0x00000001" permission="rw" parameters="type=hex"/>
 </node>
+

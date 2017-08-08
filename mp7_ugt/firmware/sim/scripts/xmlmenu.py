@@ -46,9 +46,14 @@ def filter_first(function, sequence):
     """Retruns first match of filter() result or None if nothing was found."""
     return list(filter(function, sequence) or [None])[0]
 
-def get_xpath(elem, path, fmt=str):
-    """Easy access using etree elem xpath method."""
-    return fmt(elem.xpath('{path}/text()'.format(path=path))[0])
+def get_xpath(elem, path, fmt=str, default=None):
+    """Easy access using etree elem xpath method. Returns value of 'default' if
+    element was not found (default is 'None').
+    """
+    results = elem.xpath('{path}/text()'.format(path=path))
+    if results:
+        return fmt(results[0])
+    return default
 
 def fast_iter(context, func, *args, **kwargs):
     """Fast XML iterator for huge XML files.
@@ -143,7 +148,7 @@ class XmlMenu(object):
             self.is_valid = get_xpath(context, 'is_valid', bool)
             self.is_obsolete = get_xpath(context, 'is_obsolete', bool)
             self.n_modules = get_xpath(context, 'n_modules', int)
-            self.comment = get_xpath(context, 'comment')
+            self.comment = get_xpath(context, 'comment', default="")
             # Access list of algorithms
             fp.seek(0) # Seek begin of file
             context = etree.iterparse(fp, tag='algorithm')
@@ -156,7 +161,7 @@ class XmlMenu(object):
         expression = get_xpath(elem, 'expression')
         module_id = get_xpath(elem, 'module_id', int)
         module_index = get_xpath(elem, 'module_index', int)
-        comment = get_xpath(elem, 'comment')
+        comment = get_xpath(elem, 'comment', default="")
         algorithm = Algorithm(index, name, expression, module_id, module_index, comment)
         self.algorithms.append(algorithm)
 

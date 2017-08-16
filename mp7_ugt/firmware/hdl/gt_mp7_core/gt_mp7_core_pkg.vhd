@@ -1,6 +1,6 @@
 
 -- actual versions:
---	frame: v1.1.0
+--	frame: v1.1.1
 --	gtl: v1.3.3
 --	fdl: v1.2.2
 

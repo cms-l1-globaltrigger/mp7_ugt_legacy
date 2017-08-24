@@ -346,15 +346,15 @@ def main():
         if algos_tv[algo.index][0][1] != algos_sim[algo.index][0][1]:
             result = 'ERROR'
             success = False
-        if algos_tv[algo.index][0][1] > 0 or algos_sim[algo.index][0][1] > 0:
-            sum_log.info('|{:>5}|{:>5}|{:<66}|{:>8}|{:>8}|{:>8}|'.format(#prints line with information about the testvectors
-                algo.module_id,
-                algo.index,
-                algo.name,
-                algos_tv[algo.index][0][1],
-                algos_sim[algo.index][0][1],
-                result
-            ))
+
+        sum_log.info('|{:>5}|{:>5}|{:<66}|{:>8}|{:>8}|{:>8}|'.format( #prints line with information about each algo present in the menu
+            algo.module_id,
+            algo.index,
+            algo.name,
+            algos_tv[algo.index][0][1],
+            algos_sim[algo.index][0][1],
+            result
+        ))
 
     sum_log.info("|-----|-----|------------------------------------------------------------------|--------|--------|--------|")
 

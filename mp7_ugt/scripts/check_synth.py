@@ -1,131 +1,152 @@
-#Philipp Wanggo
-#Error Tester
-#06.07.2017
-import sys
-import os
+#!/usr/bin/env python
+# Created by Philipp Wanggo, Jul 2017
+# Extended by Bernhard Arnold, Aug 2017
+#
+# Validating synthesis builds.
+#
+
 import argparse
+import ConfigParser
 import logging
+import re
+import sys, os
 
+# TTY color sequences
+ColorWhiteRed = "\033[37;41;1m"
+ColorYellowWhite = "\033[43;37;1m"
+ColorReset = "\033[0m"
 
-whitered = "\033[37;41;1m"#collors
-yellowwhite = "\033[43;37;1m"
-reset = "\033[0m"
+# TTY size
 o, ts = os.popen('stty size', 'r').read().split()
 ts = int(ts)
-a = ""
 
+# Global message stack
+messages = []
 
-def print_hepler(s, output):
-    print (s)
-    if output:#checks for -o in args
-        global a
-        if whitered in s or yellowwhite in s or reset in s:
-            s = s[10:-4]
-        a += (s + "\n")
+def log_info(message):
+    messages.append(message)
+    print message
 
+def log_warning(message):
+    messages.append(message)
+    # Apply TTY colors
+    if sys.stdout.isatty():
+        message = "{}{}{}".format(ColorYellowWhite, message, ColorReset)
+    print message
 
-def err_search(f, args): #gets path to a log file
+def log_error(message):
+    messages.append(message)
+    # Apply TTY colors
+    if sys.stdout.isatty():
+        message = "{}{}{}".format(ColorWhiteRed, message, ColorReset)
+    print message
 
-    def _print(s): # helper to get the former global args into the _print call
-        print_hepler(s, args.o)
+def find_errors(path, args, index):
+    """gets path to a log file.""" # ???
 
-    error = 0
-    warning = 0
-    crit_warning = 0
-    violated_count = 0
-    output = ""
-    with open("%s/vivado.log"  % f, "r+") as ins:#opens file as .log
-        for line in ins:
+    errors = 0
+    warnings = 0
+    crit_warnings = 0
+    violated_counts = 0
+
+    # opens file as .log
+    with open("%s/vivado.log"  % path, "r+") as fp:
+        for line in fp:
             line = line.lstrip()
-            if line.startswith("ERROR"):#checks in current ine if error is at the beginning
-                error += 1
-                if args.a == True or args.e == True: #checks for args if -a or -e is an arg print error line
-                    _print("-" * ts)
-                    _print(line)
-                    _print("-" * ts)
-            elif line.startswith("WARNING"):#checks in current ine if warning is at the beginning
-                warning += 1
-                if args.a == True or args.w == True:#checks for args if -a or -w is an arg print warning line#checks for args if -a or -w is an arg print warning line
-                    _print("-" * ts)
-                    _print(line)
-                    _print("-" * ts)
-            elif line.startswith("CRITICAL WARNING"):#checks in current ine if critical warning is at the beginning
-                crit_warning += 1
-                if args.a == True or args.c == True:#checks for args if -a or -c is an arg print critical warning line
-                    _print("-" * ts)
-                    _print(line)
-                    _print("-" * ts)
+            # checks in current ine if error is at the beginning
+            if line.startswith("ERROR"):
+                errors += 1
+                # checks for args if -a or -e is an arg print error line
+                if args.a or args.e:
+                    log_info("-" * ts)
+                    log_info(line)
+                    log_info("-" * ts)
+            # checks in current ine if warning is at the beginning
+            elif line.startswith("WARNING"):
+                warnings += 1
+                # checks for args if -a or -w is an arg print warning line
+                if args.a or args.w:
+                    log_info("-" * ts)
+                    log_info(line)
+                    log_info("-" * ts)
+            # checks in current ine if critical warning is at the beginning
+            elif line.startswith("CRITICAL WARNING"):
+                crit_warnings += 1
+                # checks for args if -a or -c is an arg print critical warning line
+                if args.a or args.c:
+                    log_info("-" * ts)
+                    log_info(line)
+                    log_info("-" * ts)
 
-    # checks if file exists
-    timing_summary = "%s/top/top.runs/impl_1/top_timing_summary_postroute_physopted.rpt" % f
-    if not os.path.exists(timing_summary):
-        # else takes this path
-        timing_summary = "%s/top/top.runs/impl_1/top_timing_summary_routed.rpt" % f
-    # opens timing log
-    with open(timing_summary, "r+") as ins:
+    # Try to lacate timing summary, first try
+    timing_summary = os.path.join(path, 'top', 'top.runs', 'impl_1', 'top_timing_summary_postroute_physopted.rpt')
+    if not os.path.isfile(timing_summary):
+        # else a second try
+        timing_summary = os.path.join(path, 'top', 'top.runs', 'impl_1', 'top_timing_summary_routed.rpt')
+        if not os.path.isfile(timing_summary):
+            log_error("MISSING TIMING SUMMARY: failed to locate timing summary for module #{}".format(index))
+            return
+
+    # Parse timing summary
+    with open(timing_summary, "r+") as fp:
         while True:
-            line = ins.readline()
-            if line == "":#checks line if empty
+            line = fp.readline()
+            # checks if line is empty (EOF)!
+            if not line:
                 break
-            if "VIOLATED" in line:#checks for VIOLATED
-                violated_count += 1#adds 1 to counter if found
-                if args.v == True or args.a == True:#checks args for -v and -a
-                    _print( "-" * ts)
-                    _print (line)#prints the line
-                    _print (ins.readline())
-                    _print (ins.readline())
-                    _print (ins.readline())
-                    _print (ins.readline())
-                    _print ("-" * ts)
+            # checks for VIOLATED
+            if "VIOLATED" in line:
+                # adds 1 to counter if found
+                violated_counts += 1
+                # checks args for -v and -a
+                if args.v or args.a:
+                    log_info( "-" * ts)
+                    log_info(line.strip(os.linesep))
+                    additional_lines = 4
+                    for _ in range(additional_lines):
+                        log_info(fp.readline().strip(os.linesep))
+                    log_info("-" * ts)
 
-    #outputs sum of errors warnings and critical warnings if any accured it gets painted in color
-    _print ("#" * ts)
-    if error != 0:
-        _print("%sERRORS: %d%s" % (whitered, error, reset))
-    else: _print("ERRORS: %d" % error)
+    # outputs sum of errors warnings and critical warnings if any accured it gets painted in color
+    log_info("#" * ts)
+    if errors:
+        log_error("ERRORS: %d" % errors)
+    else:
+        log_info("ERRORS: %d" % errors)
 
-    if warning != 0:
-        _print("%sWARNINGS: %d%s" % (yellowwhite, warning, reset))
-    else: _print("WARNINGS: %d" % warnings)
+    if warnings:
+        log_warning("WARNINGS: %d" % warnings)
+    else:
+        log_info("WARNINGS: %d" % warnings)
 
-    if crit_warning != 0:
-        _print("%sCRITICAL WARNINGS: %d%s" % (yellowwhite, crit_warning, reset))
-    else: _print("CRITICAL WARNINGS: %d" % crit_warning)
+    if crit_warnings:
+        log_warning("CRITICAL WARNINGS: %d" % crit_warnings)
+    else:
+        log_info("CRITICAL WARNINGS: %d" % crit_warnings)
 
-    if violated_count != 0:
-        _print("%sVIOLATED: %d%s" % (whitered, violated_count, reset))
-    else: _print("VIOLATED: %d" % violated_count)
+    if violated_counts:
+        log_error("VIOLATED: %d" % violated_counts)
+    else:
+        log_info("VIOLATED: %d" % violated_counts)
 
-    if not os.path.exists("%stop/top.runs/impl_1/top.bit" % f):
-        _print("%sMISSING BIT FILE: %stop/top.runs/impl_1/top.bit%s" % (whitered, f, reset))
-        _print("")
-    _print ("#" * ts)
+    bit_filename = os.path.join(path, 'top', 'top.runs', 'impl_1', 'top.bit')
 
-
-def cfg_info(f):#gets path to the cfg file
-    cfg = {}
-
-    with open("%s.cfg" % f, "r+") as ins:#opens file as .cfg
-        for line in ins:
-            if line.startswith("name"):#checks for sub folder name
-                cfg["ordner"] = line[7:-1]#puts the folder name in cfg array
-            elif line.startswith("modules"):#checks for module count
-                cfg["ordneranz"] = line[10:-1]#puts the count in cfg array
-    return cfg
-
+    if not os.path.isfile(bit_filename):
+        log_error("MISSING BIT FILE: %s" % bit_filename)
+        log_info("")
+    log_info ("#" * ts)
 
 def parse():
-    parser = argparse.ArgumentParser(description='Output Log data info') #arguments and parameters
-    parser.add_argument('path', help = 'synthesis base path (e.g. build_0x10af)', metavar = 'path')
-    parser.add_argument('-a', action = 'store_true', help='outputs all errors, warnings, critical warnings and timing violations with line')
-    parser.add_argument('-c', action = 'store_true', help='outputs critical warnings with line info')
-    parser.add_argument('-e', action = 'store_true', help='outputs errors with line info')
-    parser.add_argument('-w', action = 'store_true', help='outputs warnings with line info')
-    parser.add_argument('-m', action = 'store',type = int, help = 'input a number refering to a module in the folder; outputs the log of one module', metavar = 'int')
-    parser.add_argument('-v', action = 'store_true', help = 'outputs line that contains VIOLATED')
-    parser.add_argument('-o', action = 'store', help = 'inputs path for the output', metavar = 'path')
+    parser = argparse.ArgumentParser(description="Output Log data info")
+    parser.add_argument('path', help='synthesis base path (e.g. build_0x10af)', metavar='path')
+    parser.add_argument('-m', action='store', type=int, metavar='module', help="input a number refering to a module in the folder; outputs the log of one module")
+    parser.add_argument('-a', action='store_true', help="show all errors, warnings, critical warnings and timing violations")
+    parser.add_argument('-c', action='store_true', help="show critical warnings")
+    parser.add_argument('-e', action='store_true', help="show errors")
+    parser.add_argument('-w', action='store_true', help="show warnings")
+    parser.add_argument('-v', action='store_true', help="show timing violations")
+    parser.add_argument('-o', action='store', metavar='path', help="dump output to logfile")
     return parser.parse_args()
-
 
 def main():
     """Main routine."""
@@ -133,55 +154,46 @@ def main():
     # Parse command line arguments.
     args = parse()
 
-    def _print(s): # helper to get the former global args into the _print call
-        print_hepler(s, args.o)
+    # Check for exisiting target path.
+    if not os.path.isdir(args.path):
+        raise RuntimeError("no such directory: {}".format(args.path))
 
-    # checks for path if no path is given (deprecated??)
-    if args.path == None:
-        f = os.path.basename(os.path.dirname(os.path.abspath(__file__)))#take the path of the skript
-        cfg = cfg_info(f)
+    # Name of build directory.
+    buildname = os.path.basename(os.path.abspath(args.path))
 
-        if args.m == None:#checks if -m is none
-            for x in range(int(cfg["ordneranz"])):#loop is from 0 to module count
-                _print ("=" * ts)
-                _print ("module_%d" % x)#prints current module number
-                _print ("=" * ts)
-                _print("")
-                err_search("%s/module_%d/" % (cfg["ordner"], x), args)#uses err_search <13>
-                _print("")
-        elif args.m <= int(cfg["ordneranz"]) - 1 and args.m >= 0:#cheks if -m is positive and available
-            _print ("=" * ts)
-            _print ("module_%d" % args.m)#prints current module
-            _print ("=" * ts)
-            _print("")
-            err_search("%s/module_%d/" % (cfg["ordner"], args.m), args)#uses err_search <13>
-            _print("")
-        else: _print ("module %d not available. There are only %s modules registed(0-%d)" % (args.m, cfg["ordneranz"], int(cfg["ordneranz"]) - 1))#else outputs error message
-    else:#if path is given
-        f = os.path.basename(os.path.abspath(args.path))#takes path given and strips the last folder name
-        cfg = cfg_info(args.path + "/" + f)#gives cfg_info the folder name
+    # Read build configuration.
+    config = ConfigParser.ConfigParser()
+    filename = "{}.cfg".format(buildname)
+    config.read(os.path.join(args.path, filename))
+    menu_name = config.get('menu', 'name')
+    menu_modules = int(config.get('menu', 'modules'))
 
-        if args.m == None:# checks if -m is none
-            for x in range(int(cfg["ordneranz"])):#loop is from 0 to module count
-                _print ("=" * ts)
-                _print ("module_%d" % x)#prints current module number
-                _print ("=" * ts)
-                _print("")
-                err_search("%s/%s/module_%d/" % (args.path, cfg["ordner"], x), args)#uses err_search <13>
-                _print
-        elif args.m <= int(cfg["ordneranz"]) and args.m >= 0:#cheks if -m is positive and available
-            _print ("=" * ts)
-            _print ("module_%d" % args.m)#prints current module number
-            _print ("=" * ts)
-            _print("")
-            err_search("%s/%s/module_%d/" % (args.path, cfg["ordner"], args.m), args)#uses err_search <13>
-            _print("")
-        else: _print ("module %d not available. There are only %s modules registed" % (args.m, cfg["ordneranz"]))#else outputs error message
+    # Select only a single module
+    if args.m != None:
+        if not 0 <= args.m < menu_modules:
+            raise RuntimeError("module %d not available. There are only %s modules registed" % (args.m, menu_modules))
+        check_modules = [args.m]
+    else:
+        check_modules = range(menu_modules)
+
+    # Check only a particular module
+    for index in check_modules:
+        module_id = "module_{}".format(index)
+        module_path = os.path.join(args.path, menu_name, module_id)
+        log_info("=" * ts)
+        log_info(module_id)
+        log_info("=" * ts)
+        log_info("")
+        find_errors(module_path, args, index)
+        log_info("")
 
     if args.o:
-        with open(os.path.abspath(args.o), 'w+') as ins:#then outpus in a file with -o as path
-            ins.write(a)
-            ins.close()
+        # Write log to file
+        with open(os.path.abspath(args.o), 'w+') as ins:
+            # Dump accumulated messages
+            for message in messages:
+                ins.write(message)
+                ins.write(os.linesep)
 
 
 # Run main function with passed arguments.

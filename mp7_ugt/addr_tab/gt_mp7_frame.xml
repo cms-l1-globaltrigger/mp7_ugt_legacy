@@ -21,7 +21,7 @@
 	<node id="pulse_reset"   address="0x00000800" mask="0x00000001" permission="rw" description="Resets the frame logic"/>
 	<node id="counter_reset" address="0x00000800" mask="0x00000002" permission="rw" description="Resets the uGT counters"/>
 	<!-- SIM-SPY-MEMS -->
-	<node id="simspymem"    address="0x00300000" mode="incremental" size="245760" permission="rw" parameters="class=SimSpyMemoryImage"/>
+	<node id="simspymem"    address="0x00300000" mode="incremental" size="294912" permission="rw" parameters="class=SimSpyMemoryImage"/>
 	<node id="spymem2_algos" address="0x00240000" mode="incremental" size="65536" permission="rw" parameters="class=AlgorithmMemoryImage"/>
 	<node id="spymem2_finor" address="0x00200000" mode="incremental" size="4096" permission="rw" parameters="class=FinorMemoryImage"/>
 	<!--RB control register-->

@@ -3,6 +3,9 @@
 -- Correlation Condition module for muon objects.
 
 -- Version history:
+-- HB 2017-09-06: inserted port muon2_data_i again - bug fix.
+-- HB 2017-09-05: removed port muon2_data_i, used muon1_data_i instead in logic.
+-- HB 2017-08-18: improved cuts_instances loops.
 -- HB 2017-07-03: changed to muon_muon_correlation_condition_v3 for correct use of different object slices.
 -- HB 2017-06-28: charge correlation comparison inserted for different bx data (bug fix).
 -- HB 2017-03-29: updated for one "sin_cos_width" in mass_cuts.
@@ -152,51 +155,113 @@ begin
     -- Comparison with limits.
     delta_l_1: for i in muon1_object_low to muon1_object_high generate 
 	delta_l_2: for j in muon2_object_low to muon2_object_high generate
-	    cuts_instances_i: entity work.cuts_instances
-		generic map(
-		    deta_cut => deta_cut,
-		    dphi_cut => dphi_cut,
-		    dr_cut => dr_cut,
-		    mass_cut => mass_cut,
-		    mass_type => mass_type,
-		    twobody_pt_cut => twobody_pt_cut,
-		    diff_eta_upper_limit => diff_eta_upper_limit,
-		    diff_eta_lower_limit => diff_eta_lower_limit,
-		    diff_phi_upper_limit => diff_phi_upper_limit,
-		    diff_phi_lower_limit => diff_phi_lower_limit,
-		    dr_upper_limit => dr_upper_limit,
-		    dr_lower_limit => dr_lower_limit,
-		    deta_dphi_vector_width => deta_dphi_vector_width,
-		    deta_dphi_precision => deta_dphi_precision,
-		    mass_upper_limit => mass_upper_limit,
-		    mass_lower_limit => mass_lower_limit,
-		    mass_precision => mass_precision,
-		    pt1_width => pt_width, 
-		    pt2_width => pt_width, 
-		    cosh_cos_precision => mass_cosh_cos_precision,
-		    cosh_cos_width => cosh_cos_width,
-		    pt_sq_threshold => pt_sq_threshold,
-		    sin_cos_width => sin_cos_width,
-		    pt_precision => pt_precision,
-		    pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
-		)
-		port map(
-		    diff_eta => diff_eta(i,j),
-		    diff_phi => diff_phi(i,j),
-		    pt1 => pt1(i),
-		    pt2 => pt2(j),
-		    cosh_deta => cosh_deta(i,j),
-		    cos_dphi => cos_dphi(i,j),
-		    cos_phi_1_integer => cos_phi_1_integer(i),
-		    cos_phi_2_integer => cos_phi_2_integer(j),
-		    sin_phi_1_integer => sin_phi_1_integer(i),
-		    sin_phi_2_integer => sin_phi_2_integer(j),
-		    diff_eta_comp => diff_eta_comp(i,j),
-		    diff_phi_comp => diff_phi_comp(i,j),
-		    dr_comp => dr_comp(i,j),
-		    mass_comp => mass_comp(i,j),
-		    twobody_pt_comp => twobody_pt_comp(i,j)
-		);
+	    same_bx_same_range_i: if same_bx and (muon1_object_low = muon2_object_low) and (muon1_object_high = muon2_object_high) generate
+-- HB 2017-02-21: optimisation of LUTs and DSP resources: calculations of cuts only for one half of permutations, second half by assignment of "mirrored" indices.
+		if_j_gr_i: if j > i generate
+		    cuts_instances_i: entity work.cuts_instances
+			generic map(
+			    deta_cut => deta_cut,
+			    dphi_cut => dphi_cut,
+			    dr_cut => dr_cut,
+			    mass_cut => mass_cut,
+			    mass_type => mass_type,
+			    twobody_pt_cut => twobody_pt_cut,
+			    diff_eta_upper_limit => diff_eta_upper_limit,
+			    diff_eta_lower_limit => diff_eta_lower_limit,
+			    diff_phi_upper_limit => diff_phi_upper_limit,
+			    diff_phi_lower_limit => diff_phi_lower_limit,
+			    dr_upper_limit => dr_upper_limit,
+			    dr_lower_limit => dr_lower_limit,
+			    deta_dphi_vector_width => deta_dphi_vector_width,
+			    deta_dphi_precision => deta_dphi_precision,
+			    mass_upper_limit => mass_upper_limit,
+			    mass_lower_limit => mass_lower_limit,
+			    mass_precision => mass_precision,
+			    pt1_width => pt_width, 
+			    pt2_width => pt_width, 
+			    cosh_cos_precision => mass_cosh_cos_precision,
+			    cosh_cos_width => cosh_cos_width,
+			    pt_sq_threshold => pt_sq_threshold,
+			    sin_cos_width => sin_cos_width,
+			    pt_precision => pt_precision,
+			    pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
+			)
+			port map(
+			    diff_eta => diff_eta(i,j),
+			    diff_phi => diff_phi(i,j),
+			    pt1 => pt1(i),
+			    pt2 => pt2(j),
+			    cosh_deta => cosh_deta(i,j),
+			    cos_dphi => cos_dphi(i,j),
+			    cos_phi_1_integer => cos_phi_1_integer(i),
+			    cos_phi_2_integer => cos_phi_2_integer(j),
+			    sin_phi_1_integer => sin_phi_1_integer(i),
+			    sin_phi_2_integer => sin_phi_2_integer(j),
+			    diff_eta_comp => diff_eta_comp_temp(i,j),
+			    diff_phi_comp => diff_phi_comp_temp(i,j),
+			    dr_comp => dr_comp_temp(i,j),
+			    mass_comp => mass_comp_temp(i,j),
+			    twobody_pt_comp => twobody_pt_comp_temp(i,j)
+			);
+		    diff_eta_comp(i,j) <= diff_eta_comp_temp(i,j);
+		    diff_eta_comp(j,i) <= diff_eta_comp_temp(i,j);
+		    diff_phi_comp(i,j) <= diff_phi_comp_temp(i,j);
+		    diff_phi_comp(j,i) <= diff_phi_comp_temp(i,j);
+		    dr_comp(i,j) <= dr_comp_temp(i,j);
+		    dr_comp(j,i) <= dr_comp_temp(i,j);
+		    mass_comp(i,j) <= mass_comp_temp(i,j);
+		    mass_comp(j,i) <= mass_comp_temp(i,j);
+		    twobody_pt_comp(i,j) <= twobody_pt_comp_temp(i,j);
+		    twobody_pt_comp(j,i) <= twobody_pt_comp_temp(i,j);
+		end generate if_j_gr_i;
+	    end generate same_bx_same_range_i;
+	    different_bx_different_range_i: if not same_bx or (muon1_object_low /= muon2_object_low) or (muon1_object_high /= muon2_object_high) generate
+		cuts_instances_i: entity work.cuts_instances
+		    generic map(
+			deta_cut => deta_cut,
+			dphi_cut => dphi_cut,
+			dr_cut => dr_cut,
+			mass_cut => mass_cut,
+			mass_type => mass_type,
+			twobody_pt_cut => twobody_pt_cut,
+			diff_eta_upper_limit => diff_eta_upper_limit,
+			diff_eta_lower_limit => diff_eta_lower_limit,
+			diff_phi_upper_limit => diff_phi_upper_limit,
+			diff_phi_lower_limit => diff_phi_lower_limit,
+			dr_upper_limit => dr_upper_limit,
+			dr_lower_limit => dr_lower_limit,
+			deta_dphi_vector_width => deta_dphi_vector_width,
+			deta_dphi_precision => deta_dphi_precision,
+			mass_upper_limit => mass_upper_limit,
+			mass_lower_limit => mass_lower_limit,
+			mass_precision => mass_precision,
+			pt1_width => pt_width, 
+			pt2_width => pt_width, 
+			cosh_cos_precision => mass_cosh_cos_precision,
+			cosh_cos_width => cosh_cos_width,
+			pt_sq_threshold => pt_sq_threshold,
+			sin_cos_width => sin_cos_width,
+			pt_precision => pt_precision,
+			pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
+		    )
+		    port map(
+			diff_eta => diff_eta(i,j),
+			diff_phi => diff_phi(i,j),
+			pt1 => pt1(i),
+			pt2 => pt2(j),
+			cosh_deta => cosh_deta(i,j),
+			cos_dphi => cos_dphi(i,j),
+			cos_phi_1_integer => cos_phi_1_integer(i),
+			cos_phi_2_integer => cos_phi_2_integer(j),
+			sin_phi_1_integer => sin_phi_1_integer(i),
+			sin_phi_2_integer => sin_phi_2_integer(j),
+			diff_eta_comp => diff_eta_comp(i,j),
+			diff_phi_comp => diff_phi_comp(i,j),
+			dr_comp => dr_comp(i,j),
+			mass_comp => mass_comp(i,j),
+			twobody_pt_comp => twobody_pt_comp(i,j)
+		    );
+	    end generate different_bx_different_range_i;
         end generate delta_l_2;
     end generate delta_l_1;
 

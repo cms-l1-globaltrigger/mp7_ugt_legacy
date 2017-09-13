@@ -31,7 +31,9 @@ DO_FILE_TPL = 'scripts/templates/gtl_fdl_wrapper_tpl.do'
 
 mp7_tag = 'cactusupgrades'
 algonum = 512#numbers of bits
-#print sim_dir_vhdl_temp
+IGNORED_ALGOS = [
+  'L1_FirstBunchInTrain',
+  ]
 
 def read_file(filename):
     """Returns contents of a file."""
@@ -342,8 +344,10 @@ def main():
     success = True
     for algo in algorithms:
         result = 'OK'
+        if algo.name in IGNORED_ALGOS:
+            result = 'IGNORE'
         #checks if algorithm trigger count is equal in both hardware and testvectors
-        if algos_tv[algo.index][0][1] != algos_sim[algo.index][0][1]:
+        elif algos_tv[algo.index][0][1] != algos_sim[algo.index][0][1]:
             result = 'ERROR'
             success = False
 

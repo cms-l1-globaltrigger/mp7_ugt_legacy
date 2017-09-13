@@ -3,6 +3,8 @@
 -- Correlation Condition module for two calorimeter object types (eg, jet and tau).
 
 -- Version history:
+-- HB 2017-09-05: removed port calo2_data_i, used calo1_data_i instead in logic.
+-- HB 2017-08-18: improved cuts_instances loops.
 -- HB 2017-07-04: changed to calo_calo_correlation_condition_v3 for correct use of different object slices for same object type.
 -- HB 2017-04-20: implemented use of "cuts_instances" module.
 -- HB 2017-04-19: "twobody_pt" detached from "mass fixation". Used "mass_calculator.vhd" and "twobody_pt_calculator.vhd".
@@ -100,7 +102,7 @@ entity calo_calo_correlation_condition_v3 is
     port(
         lhc_clk: in std_logic;
         calo1_data_i: in calo_objects_array;
-        calo2_data_i: in calo_objects_array;
+--         calo2_data_i: in calo_objects_array;
         diff_eta: in deta_dphi_vector_array;
         diff_phi: in deta_dphi_vector_array;
         pt1 : in diff_inputs_array;
@@ -136,55 +138,117 @@ begin
     -- *** section: CUTs - begin ***************************************************************************************
 
     -- Comparison with limits.
-    delta_l_1: for i in calo1_object_low to calo1_object_high generate 
-	delta_l_2: for j in calo2_object_low to calo2_object_high generate
-	    cuts_instances_i: entity work.cuts_instances
-		generic map(
-		    deta_cut => deta_cut,
-		    dphi_cut => dphi_cut,
-		    dr_cut => dr_cut,
-		    mass_cut => mass_cut,
-		    mass_type => mass_type,
-		    twobody_pt_cut => twobody_pt_cut,
-		    diff_eta_upper_limit => diff_eta_upper_limit,
-		    diff_eta_lower_limit => diff_eta_lower_limit,
-		    diff_phi_upper_limit => diff_phi_upper_limit,
-		    diff_phi_lower_limit => diff_phi_lower_limit,
-		    dr_upper_limit => dr_upper_limit,
-		    dr_lower_limit => dr_lower_limit,
-		    deta_dphi_vector_width => deta_dphi_vector_width,
-		    deta_dphi_precision => deta_dphi_precision,
-		    mass_upper_limit => mass_upper_limit,
-		    mass_lower_limit => mass_lower_limit,
-		    mass_precision => mass_precision,
-		    pt1_width => pt1_width, 
-		    pt2_width => pt2_width, 
-		    cosh_cos_precision => mass_cosh_cos_precision,
-		    cosh_cos_width => cosh_cos_width,
-		    pt_sq_threshold => pt_sq_threshold,
-		    sin_cos_width => sin_cos_width,
-		    pt_precision => pt_precision,
-		    pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
-		)
-		port map(
-		    diff_eta => diff_eta(i,j),
-		    diff_phi => diff_phi(i,j),
-		    pt1 => pt1(i),
-		    pt2 => pt2(j),
-		    cosh_deta => cosh_deta(i,j),
-		    cos_dphi => cos_dphi(i,j),
-		    cos_phi_1_integer => cos_phi_1_integer(i),
-		    cos_phi_2_integer => cos_phi_2_integer(j),
-		    sin_phi_1_integer => sin_phi_1_integer(i),
-		    sin_phi_2_integer => sin_phi_2_integer(j),
-		    diff_eta_comp => diff_eta_comp(i,j),
-		    diff_phi_comp => diff_phi_comp(i,j),
-		    dr_comp => dr_comp(i,j),
-		    mass_comp => mass_comp(i,j),
-		    twobody_pt_comp => twobody_pt_comp(i,j)
-		);
-	end generate delta_l_2;
-    end generate delta_l_1;
+    cuts_l_1: for i in calo1_object_low to calo1_object_high generate 
+	cuts_l_2: for j in calo2_object_low to calo2_object_high generate
+	    same_obj_type_same_bx_same_range_i: if obj_type_calo1 = obj_type_calo2 and same_bx and (calo1_object_low = calo2_object_low) and (calo1_object_high = calo2_object_high) generate
+-- HB 2017-02-21: optimisation of LUTs and DSP resources: calculations of cuts only for one half of permutations, second half by assignment of "mirrored" indices.
+		if_j_gr_i: if j > i generate
+		    cuts_instances_i: entity work.cuts_instances
+			generic map(
+			    deta_cut => deta_cut,
+			    dphi_cut => dphi_cut,
+			    dr_cut => dr_cut,
+			    mass_cut => mass_cut,
+			    mass_type => mass_type,
+			    twobody_pt_cut => twobody_pt_cut,
+			    diff_eta_upper_limit => diff_eta_upper_limit,
+			    diff_eta_lower_limit => diff_eta_lower_limit,
+			    diff_phi_upper_limit => diff_phi_upper_limit,
+			    diff_phi_lower_limit => diff_phi_lower_limit,
+			    dr_upper_limit => dr_upper_limit,
+			    dr_lower_limit => dr_lower_limit,
+			    deta_dphi_vector_width => deta_dphi_vector_width,
+			    deta_dphi_precision => deta_dphi_precision,
+			    mass_upper_limit => mass_upper_limit,
+			    mass_lower_limit => mass_lower_limit,
+			    mass_precision => mass_precision,
+			    pt1_width => pt1_width, 
+			    pt2_width => pt2_width, 
+			    cosh_cos_precision => mass_cosh_cos_precision,
+			    cosh_cos_width => cosh_cos_width,
+			    pt_sq_threshold => pt_sq_threshold,
+			    sin_cos_width => sin_cos_width,
+			    pt_precision => pt_precision,
+			    pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
+			)
+			port map(
+			    diff_eta => diff_eta(i,j),
+			    diff_phi => diff_phi(i,j),
+			    pt1 => pt1(i),
+			    pt2 => pt2(j),
+			    cosh_deta => cosh_deta(i,j),
+			    cos_dphi => cos_dphi(i,j),
+			    cos_phi_1_integer => cos_phi_1_integer(i),
+			    cos_phi_2_integer => cos_phi_2_integer(j),
+			    sin_phi_1_integer => sin_phi_1_integer(i),
+			    sin_phi_2_integer => sin_phi_2_integer(j),
+			    diff_eta_comp => diff_eta_comp_temp(i,j),
+			    diff_phi_comp => diff_phi_comp_temp(i,j),
+			    dr_comp => dr_comp_temp(i,j),
+			    mass_comp => mass_comp_temp(i,j),
+			    twobody_pt_comp => twobody_pt_comp_temp(i,j)
+			);
+		    diff_eta_comp(i,j) <= diff_eta_comp_temp(i,j);
+		    diff_eta_comp(j,i) <= diff_eta_comp_temp(i,j);
+		    diff_phi_comp(i,j) <= diff_phi_comp_temp(i,j);
+		    diff_phi_comp(j,i) <= diff_phi_comp_temp(i,j);
+		    dr_comp(i,j) <= dr_comp_temp(i,j);
+		    dr_comp(j,i) <= dr_comp_temp(i,j);
+		    mass_comp(i,j) <= mass_comp_temp(i,j);
+		    mass_comp(j,i) <= mass_comp_temp(i,j);
+		    twobody_pt_comp(i,j) <= twobody_pt_comp_temp(i,j);
+		    twobody_pt_comp(j,i) <= twobody_pt_comp_temp(i,j);
+		end generate if_j_gr_i;
+	    end generate same_obj_type_same_bx_same_range_i;
+	    diffrent_obj_type_different_bx_different_range_i: if obj_type_calo1 /= obj_type_calo2 or not same_bx or (calo1_object_low /= calo2_object_low) or (calo1_object_high /= calo2_object_high) generate
+		cuts_instances_i: entity work.cuts_instances
+		    generic map(
+			deta_cut => deta_cut,
+			dphi_cut => dphi_cut,
+			dr_cut => dr_cut,
+			mass_cut => mass_cut,
+			mass_type => mass_type,
+			twobody_pt_cut => twobody_pt_cut,
+			diff_eta_upper_limit => diff_eta_upper_limit,
+			diff_eta_lower_limit => diff_eta_lower_limit,
+			diff_phi_upper_limit => diff_phi_upper_limit,
+			diff_phi_lower_limit => diff_phi_lower_limit,
+			dr_upper_limit => dr_upper_limit,
+			dr_lower_limit => dr_lower_limit,
+			deta_dphi_vector_width => deta_dphi_vector_width,
+			deta_dphi_precision => deta_dphi_precision,
+			mass_upper_limit => mass_upper_limit,
+			mass_lower_limit => mass_lower_limit,
+			mass_precision => mass_precision,
+			pt1_width => pt1_width, 
+			pt2_width => pt2_width, 
+			cosh_cos_precision => mass_cosh_cos_precision,
+			cosh_cos_width => cosh_cos_width,
+			pt_sq_threshold => pt_sq_threshold,
+			sin_cos_width => sin_cos_width,
+			pt_precision => pt_precision,
+			pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
+		    )
+		    port map(
+			diff_eta => diff_eta(i,j),
+			diff_phi => diff_phi(i,j),
+			pt1 => pt1(i),
+			pt2 => pt2(j),
+			cosh_deta => cosh_deta(i,j),
+			cos_dphi => cos_dphi(i,j),
+			cos_phi_1_integer => cos_phi_1_integer(i),
+			cos_phi_2_integer => cos_phi_2_integer(j),
+			sin_phi_1_integer => sin_phi_1_integer(i),
+			sin_phi_2_integer => sin_phi_2_integer(j),
+			diff_eta_comp => diff_eta_comp(i,j),
+			diff_phi_comp => diff_phi_comp(i,j),
+			dr_comp => dr_comp(i,j),
+			mass_comp => mass_comp(i,j),
+			twobody_pt_comp => twobody_pt_comp(i,j)
+		    );
+	    end generate diffrent_obj_type_different_bx_different_range_i;
+	end generate cuts_l_2;
+    end generate cuts_l_1;
     
     -- Pipeline stage for cut comps
     diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp, mass_comp, twobody_pt_comp)
@@ -247,7 +311,7 @@ begin
                     phi_w2_lower_limit_calo2,
                     iso_lut_calo2
                 )
-                port map(calo2_data_i(i), calo2_obj_vs_templ(i,1));
+                port map(calo1_data_i(i), calo2_obj_vs_templ(i,1));
         end generate calo2_obj_l;
 
         -- Pipeline stage for obj_vs_templ

@@ -3,6 +3,7 @@
 -- Correlation Condition module for two calorimeter object types (eg, jet and tau).
 
 -- Version history:
+-- HB 2017-09-13: inserted port calo2_data_i again - bug fix.
 -- HB 2017-09-05: removed port calo2_data_i, used calo1_data_i instead in logic.
 -- HB 2017-08-18: improved cuts_instances loops.
 -- HB 2017-07-04: changed to calo_calo_correlation_condition_v3 for correct use of different object slices for same object type.
@@ -102,7 +103,7 @@ entity calo_calo_correlation_condition_v3 is
     port(
         lhc_clk: in std_logic;
         calo1_data_i: in calo_objects_array;
---         calo2_data_i: in calo_objects_array;
+        calo2_data_i: in calo_objects_array;
         diff_eta: in deta_dphi_vector_array;
         diff_phi: in deta_dphi_vector_array;
         pt1 : in diff_inputs_array;
@@ -311,7 +312,7 @@ begin
                     phi_w2_lower_limit_calo2,
                     iso_lut_calo2
                 )
-                port map(calo1_data_i(i), calo2_obj_vs_templ(i,1));
+                port map(calo2_data_i(i), calo2_obj_vs_templ(i,1));
         end generate calo2_obj_l;
 
         -- Pipeline stage for obj_vs_templ

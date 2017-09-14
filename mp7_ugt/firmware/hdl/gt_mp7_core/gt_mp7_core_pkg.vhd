@@ -1,7 +1,7 @@
 
 -- actual versions:
 --	frame: v1.1.1
---	gtl: v1.4.0
+--	gtl: v1.4.1
 --	fdl: v1.2.2
 
 -- HB 2016-09-19: removed more unused constants
@@ -43,7 +43,7 @@ package gt_mp7_core_pkg is
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 4;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 0;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 1;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 2;

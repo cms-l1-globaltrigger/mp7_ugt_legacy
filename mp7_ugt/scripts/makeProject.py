@@ -15,14 +15,21 @@ import stat
 import pwd
 import socket
 import patchFiles
+from os.path import expanduser
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
+
+# Set correct FW_TYPE and BOARD_TYPE for each project!
+FW_TYPE = 'ugt'
+BOARD_TYPE = 'mp7'
 
 BoardAliases = {
     'mp7_690es': 'r1',
     'mp7xe_690': 'xe',
 }
+
+DEFAULT_FW_DIR = expanduser("~/work/fwdir")
 
 def remove_file(filename):
     """Savely remove a file or a symbolic link."""
@@ -101,7 +108,7 @@ def parse_args():
     parser.add_argument('-o', '--old', action = 'store_true', help = "use the old ProjectManager.py commands")
     parser.add_argument('--board', metavar = '<type>', default = 'mp7xe_690', choices = BoardAliases.keys(), help = "set board type (default is `mp7xe_690')")
     parser.add_argument('-u', '--user', metavar = '<username>', required = True, help = "username for SVN")
-    parser.add_argument('-p', '--path', metavar = '<path>', required = True, type = os.path.abspath, help = "mp7fw tag")
+    parser.add_argument('-p', '--path', metavar = '<path>', default = DEFAULT_FW_DIR, type = os.path.abspath, help = "fw build path")
     parser.add_argument('-m', '--menu', metavar = '<menu>', required = True, type = os.path.abspath, help = "path to L1Menu_ directory")
     parser.add_argument('-b', '--build', metavar = '<version>', required = True, type = build_t, help = 'menu build version (eg. 0x1001)')
     return parser.parse_args()
@@ -118,6 +125,9 @@ def main():
     # Feth current timestamp.
     timestamp = get_timestamp()
 
+
+    fw_build_dir = os.path.join(args.path, "{}_{}".format(BOARD_TYPE, FW_TYPE))
+
     # Fetch menu name from path.
     menu_name = os.path.basename(args.menu)
 
@@ -133,7 +143,7 @@ def main():
     logging.info("Creating uGT build area...")
     logging.info("tag: %s (%s)", args.tag, "unstable" if args.unstable else "stable")
     logging.info("user: %s", args.user)
-    logging.info("path: %s", args.path)
+    logging.info("path: %s", fw_build_dir)
     logging.info("menu file: %s", args.menu)
     logging.info("menu name: %s", menu_name)
     logging.info("menu modules: %s", modules)
@@ -143,7 +153,7 @@ def main():
     if not os.path.isdir(args.menu):
         raise RuntimeError("menu directory does not exist: {args.menu}".format(**locals()))
 
-    mp7path = os.path.join(args.path, args.tag)
+    mp7path = os.path.join(fw_build_dir, args.tag)
 
     #
     # Create build area
@@ -176,13 +186,13 @@ def main():
         else:
             subprocess.check_call(['python', 'ProjectManager.py', 'create', path, '-u', args.user]) #changes in ProjectManager.py, have to differ between older and newer versions
 
-        os.chdir(args.path)
+        os.chdir(fw_build_dir)
 
         logging.info("creating link to current tag: mp7fw_current -> %s", mp7path)
         mp7currDir = 'mp7fw_current'
         remove_file(mp7currDir)
         os.symlink(mp7path, mp7currDir)
-        mp7currPath = os.path.join(args.path, mp7currDir)
+        mp7currPath = os.path.join(fw_build_dir, mp7currDir)
 
         patchFiles.patch_all(os.path.join(mp7path,'cactusupgrades'))
 
@@ -191,14 +201,14 @@ def main():
     else:
 
         # included in the else, to preserve the path structure
-        os.chdir(args.path)
+        os.chdir(fw_build_dir)
         ######################################################
 
         logging.info("creating link to current tag: mp7fw_current -> %s", mp7path)
         mp7currDir = 'mp7fw_current'
         remove_file(mp7currDir)
         os.symlink(mp7path, mp7currDir)
-        mp7currPath = os.path.join(args.path, mp7currDir)
+        mp7currPath = os.path.join(fw_build_dir, mp7currDir)
 
         os.chdir(mp7currPath)
 
@@ -283,10 +293,12 @@ def main():
     config.add_section('firmware')
     config.set('firmware', 'tag', args.tag)
     config.set('firmware', 'stable', str(not args.unstable))
+    config.set('firmware', 'type', FW_TYPE)
     config.set('firmware', 'buildarea', os.path.join(mp7path, build_area_dir, menu_name))
 
     config.add_section('device')
     config.set('device', 'type', args.board)
+    config.set('device', 'name', BOARD_TYPE)
     config.set('device', 'alias', BoardAliases[args.board])
 
     # Writing our configuration file to 'example.cfg'

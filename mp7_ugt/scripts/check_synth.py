@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Created by Philipp Wanggo, Jul 2017
-# Extended by Bernhard Arnold, Aug 2017
+# Extended by Bernhard Arnold, Aug/Dec 2017
 #
 # Validating synthesis builds.
 #
@@ -11,17 +11,19 @@ import logging
 import re
 import sys, os
 
+from collections import namedtuple
+
 # TTY color sequences
 ColorWhiteRed = "\033[37;41;1m"
 ColorYellowWhite = "\033[43;37;1m"
 ColorReset = "\033[0m"
 
-# TTY size
-o, ts = os.popen('stty size', 'r').read().split()
-ts = int(ts)
+UtilizationRow = namedtuple('UtilizationRow', 'site_type, used, fixed, available, percent')
+"""Tuple holding utilization information."""
 
 # Global message stack
 messages = []
+utilization = {}
 
 def log_info(message):
     messages.append(message)
@@ -41,54 +43,77 @@ def log_error(message):
         message = "{}{}{}".format(ColorWhiteRed, message, ColorReset)
     print message
 
-def find_errors(path, args, index):
-    """gets path to a log file.""" # ???
+def log_hr(pattern):
+    """Print horizontal line to logger."""
+    # TTY size
+    o, ts = os.popen('stty size', 'r').read().split()
+    log_info(pattern * int(ts))
+
+def parse_utilization(line):
+    """Simple parser to read a single row from a utilization report table."""
+    cols = [col.strip() for col in line.split("|")][1:-1]
+    return UtilizationRow(*cols)
+
+def find_errors(module_path, module_id, args):
+    """Parse log files."""
 
     errors = 0
     warnings = 0
     crit_warnings = 0
     violated_counts = 0
 
+    #
+    # Parse Vivado log file
+    #
+
+    vivado_log = os.path.join(module_path, 'vivado.log')
+
     # opens file as .log
-    with open("%s/vivado.log"  % path, "r+") as fp:
+    with open(vivado_log) as fp:
         for line in fp:
             line = line.lstrip()
             # checks in current ine if error is at the beginning
             if line.startswith("ERROR"):
                 errors += 1
                 # checks for args if -a or -e is an arg print error line
-                if args.a or args.e:
-                    log_info("-" * ts)
+                if args.all or args.errors:
+                    log_hr("-" )
                     log_info(line)
-                    log_info("-" * ts)
+                    log_hr("-")
             # checks in current ine if warning is at the beginning
             elif line.startswith("WARNING"):
                 warnings += 1
                 # checks for args if -a or -w is an arg print warning line
-                if args.a or args.w:
-                    log_info("-" * ts)
+                if args.all or args.warnings:
+                    log_hr("-")
                     log_info(line)
-                    log_info("-" * ts)
+                    log_hr("-")
             # checks in current ine if critical warning is at the beginning
             elif line.startswith("CRITICAL WARNING"):
                 crit_warnings += 1
                 # checks for args if -a or -c is an arg print critical warning line
-                if args.a or args.c:
-                    log_info("-" * ts)
+                if args.all or args.criticals:
+                    log_hr("-")
                     log_info(line)
-                    log_info("-" * ts)
+                    log_hr("-")
+
+    #
+    # Parse timing summary\
+    #
+
+    impl_path = os.path.join(module_path, 'top', 'top.runs', 'impl_1')
 
     # Try to lacate timing summary, first try
-    timing_summary = os.path.join(path, 'top', 'top.runs', 'impl_1', 'top_timing_summary_postroute_physopted.rpt')
+    timing_summary = os.path.join(impl_path, 'top_timing_summary_postroute_physopted.rpt')
     if not os.path.isfile(timing_summary):
         # else a second try
-        timing_summary = os.path.join(path, 'top', 'top.runs', 'impl_1', 'top_timing_summary_routed.rpt')
+        timing_summary = os.path.join(impl_path, 'top_timing_summary_routed.rpt')
         if not os.path.isfile(timing_summary):
-            log_error("MISSING TIMING SUMMARY: failed to locate timing summary for module #{}".format(index))
+            log_error("MISSING TIMING SUMMARY: failed to locate timing summary for module #{}".format(module_id))
             return
 
     # Parse timing summary
-    with open(timing_summary, "r+") as fp:
+    with open(timing_summary) as fp:
         while True:
             line = fp.readline()
             # checks if line is empty (EOF)!
@@ -99,53 +124,86 @@ def find_errors(path, args, index):
                 # adds 1 to counter if found
                 violated_counts += 1
                 # checks args for -v and -a
-                if args.v or args.a:
-                    log_info( "-" * ts)
+                if args.all or args.violations:
+                    log_hr("-")
                     log_info(line.strip(os.linesep))
                     additional_lines = 4
                     for _ in range(additional_lines):
                         log_info(fp.readline().strip(os.linesep))
-                    log_info("-" * ts)
+                    log_hr("-")
 
     # outputs sum of errors warnings and critical warnings if any accured it gets painted in color
-    log_info("#" * ts)
-    if errors:
-        log_error("ERRORS: %d" % errors)
-    else:
-        log_info("ERRORS: %d" % errors)
+    log_hr("#")
 
-    if warnings:
-        log_warning("WARNINGS: %d" % warnings)
-    else:
-        log_info("WARNINGS: %d" % warnings)
+    message = "ERRORS: {}".format(errors)
+    log_error(message) if errors else log_info(message)
 
-    if crit_warnings:
-        log_warning("CRITICAL WARNINGS: %d" % crit_warnings)
-    else:
-        log_info("CRITICAL WARNINGS: %d" % crit_warnings)
+    message = "WARNINGS: {}".format(warnings)
+    log_warning(message) if warnings else log_info(message)
 
-    if violated_counts:
-        log_error("VIOLATED: %d" % violated_counts)
-    else:
-        log_info("VIOLATED: %d" % violated_counts)
+    message = "CRITICAL WARNINGS: {}".format(crit_warnings)
+    log_warning(message) if crit_warnings else log_info(message)
 
-    bit_filename = os.path.join(path, 'top', 'top.runs', 'impl_1', 'top.bit')
+    message = "VIOLATED: {}".format(violated_counts)
+    log_error(message) if violated_counts else log_info(message)
+
+    #
+    # Parse utilization report (dump later)
+    #
+
+    utilization_placed = os.path.join(impl_path, 'top_utilization_placed.rpt')
+
+    global utilization
+    utilization[module_id] = []
+
+    with open(utilization_placed) as fp:
+        for line in fp:
+            if line.startswith("| Slice LUTs"):
+                utilization[module_id].append(parse_utilization(line))
+            if line.startswith("| DSPs"):
+                utilization[module_id].append(parse_utilization(line))
+
+    #
+    # Check for existing bitfile
+    #
+
+    bit_filename = os.path.join(impl_path, 'top.bit')
 
     if not os.path.isfile(bit_filename):
-        log_error("MISSING BIT FILE: %s" % bit_filename)
+        log_error("MISSING BIT FILE: {}".format(bit_filename))
         log_info("")
-    log_info ("#" * ts)
+    log_hr("#")
+
+def dump_utilization_report():
+    """Dumps utilization summary table."""
+    log_info("+--------------------------------------------------------------------+")
+    log_info("|                                                                    |")
+    log_info("|                     Utilization Design Summary                     |")
+    log_info("|                                                                    |")
+    log_info("+--------+-----------------------------+-----------------------------+")
+    log_info("|        |         Slice LUTs          |            DSPs             |")
+    log_info("| Module +------------------+----------+------------------+----------+")
+    log_info("|        | Used/Available   | Percent  | Used/Available   | Percent  |")
+    log_info("+--------+------------------+----------+------------------+----------+")
+    for module_id, utils in utilization.items():
+        row = "| {:>6} ".format(module_id)
+        for util in utils:
+            ratio = "{}/{}".format(util.used, util.available)
+            row += "| {:>16} | {:>6} % ".format(ratio, util.percent)
+        row += "|"
+        log_info(row)
+    log_info("+--------+------------------+----------+------------------+----------+")
 
 def parse():
-    parser = argparse.ArgumentParser(description="Output Log data info")
-    parser.add_argument('path', help='synthesis base path (e.g. build_0x10af)', metavar='path')
-    parser.add_argument('-m', action='store', type=int, metavar='module', help="input a number refering to a module in the folder; outputs the log of one module")
-    parser.add_argument('-a', action='store_true', help="show all errors, warnings, critical warnings and timing violations")
-    parser.add_argument('-c', action='store_true', help="show critical warnings")
-    parser.add_argument('-e', action='store_true', help="show errors")
-    parser.add_argument('-w', action='store_true', help="show warnings")
-    parser.add_argument('-v', action='store_true', help="show timing violations")
-    parser.add_argument('-o', action='store', metavar='path', help="dump output to logfile")
+    parser = argparse.ArgumentParser(description="Check synthesis result logs")
+    parser.add_argument('path', metavar='path', help="synthesis build path (e.g. build_0x10af)")
+    parser.add_argument('-m', type=int, metavar='<id>', help="check only a single module ID")
+    parser.add_argument('-a', '--all', action='store_true', help="show all errors, warnings, critical warnings and timing violations")
+    parser.add_argument('-c', '--criticals', action='store_true', help="show critical warnings")
+    parser.add_argument('-e', '--errors', action='store_true', help="show errors")
+    parser.add_argument('-w', '--warnings', action='store_true', help="show warnings")
+    parser.add_argument('-v', '--violations', action='store_true', help="show timing violations")
+    parser.add_argument('-o', metavar='<filename>', help="dumps output to file")
     return parser.parse_args()
 
 def main():
@@ -171,29 +229,32 @@ def main():
     # Select only a single module
     if args.m != None:
         if not 0 <= args.m < menu_modules:
-            raise RuntimeError("module %d not available. There are only %s modules registed" % (args.m, menu_modules))
+            raise RuntimeError("module {} not available. There are only {} modules registed".format(args.m, menu_modules))
         check_modules = [args.m]
     else:
         check_modules = range(menu_modules)
 
-    # Check only a particular module
+    # Check modules
     for index in check_modules:
         module_id = "module_{}".format(index)
         module_path = os.path.join(args.path, menu_name, module_id)
-        log_info("=" * ts)
-        log_info(module_id)
-        log_info("=" * ts)
+        log_hr("=")
+        log_info("Module #{}".format(index))
+        log_hr("=")
         log_info("")
-        find_errors(module_path, args, index)
+        find_errors(module_path, index, args)
         log_info("")
+
+    dump_utilization_report()
+    log_info("")
 
     if args.o:
         # Write log to file
-        with open(os.path.abspath(args.o), 'w+') as ins:
+        with open(os.path.abspath(args.o), 'w+') as fp:
             # Dump accumulated messages
             for message in messages:
-                ins.write(message)
-                ins.write(os.linesep)
+                fp.write(message)
+                fp.write(os.linesep)
 
 
 # Run main function with passed arguments.

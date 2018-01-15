@@ -1,6 +1,8 @@
 -- Description:
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
+-- HB 2017-10-02: inserted constant MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR and MAX_WIDTH_DR_LIMIT_VECTOR.
+-- HB 2017-09-29: inserted constant MAX_WIDTH_MASS_LIMIT_VECTOR and MAX_WIDTH_TBPT_LIMIT_VECTOR.
 -- HB 2017-09-05: inserted constant MAX_CALO_OBJECTS.
 -- HB 2017-05-04: updated for "unsorted" calo-calo constants.
 -- HB 2017-04-26: updated mass types definition.
@@ -613,7 +615,7 @@ constant TAU_HTM_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant CALO_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 type calo_cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_COSH_COS_VECTOR_WIDTH-1 downto 0);
 
--- HB 2016-12-13: Calos -> type definition for twobody-pt calculation in mass_cuts.vhd
+-- HB 2016-12-13: Calos -> type definition for twobody-pt calculation
 constant EG_ETM_PT_PRECISION : positive := 1;
 constant JET_ETM_PT_PRECISION : positive := 1;
 constant TAU_ETM_PT_PRECISION : positive := 1;
@@ -729,6 +731,12 @@ subtype max_eta_range_integer is integer range 0 to integer(ETA_RANGE_REAL/MUON_
 type dim2_max_eta_range_array is array (natural range <>, natural range <>) of max_eta_range_integer;
 subtype max_phi_range_integer is integer range 0 to max(MUON_PHI_BINS, CALO_PHI_BINS)-1; -- number of bins with muon bin width (=576)
 type dim2_max_phi_range_array is array (natural range <>, natural range <>) of max_phi_range_integer;
+
+-- HB 2017-10-02: Max. vector width for limits of correlation cuts
+constant MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR : positive := 32;
+constant MAX_WIDTH_DR_LIMIT_VECTOR : positive := 64;
+constant MAX_WIDTH_MASS_LIMIT_VECTOR : positive := 64;
+constant MAX_WIDTH_TBPT_LIMIT_VECTOR : positive := 64;
 
 -- ********************************************************
 -- conversion LUTs

@@ -2,6 +2,7 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
+-- HB 2017-10-06: v1.5.0: Used new modules for use of std_logic_vector for limits of correlation cuts 
 -- HB 2017-09-15: v1.4.1: Bug fix in calo_calo_correlation_condition_v3.vhd
 -- HB 2017-09-08: v1.4.0: Updated modules for correct use of object slices
 -- HB 2017-07-03: v1.3.3: Charge correlation comparison inserted for different bx data (bug fix) in muon_muon_correlation_condition_v2.vhd

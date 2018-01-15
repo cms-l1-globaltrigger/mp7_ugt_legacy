@@ -7,11 +7,12 @@ src lhc_data_pkg.vhd
 src gt_mp7_top_pkg.vhd
 src bgo_sync.vhd
 src gt_mp7_core/gt_mp7_core_pkg.vhd
-src gt_mp7_core/tp_mux/tp_mux.vhd
-src gt_mp7_core/tp_mux/tp_mux_address_decoder.vhd
+
+## HB 2017-09-18: tp_mux not used anymore
+
 src gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
 #
-# HB 2016-11-16: gtl_module.vhd, gtl_pkg.vhd and algo_mapping_rop.vhd from gt_mp7_core/..
+## HB 2016-11-16: gtl_module.vhd, gtl_pkg.vhd and algo_mapping_rop.vhd from gt_mp7_core/..
 src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_mapping_rop.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_module.vhd
@@ -58,36 +59,22 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_orm_v3_triple.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_orm_v3_quad.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_calo_correlation_orm_condition_v2.vhd
 #
-src gt_mp7_core/frame/crc/crc16d64.vhd
-src gt_mp7_core/frame/crc/crc16d32.vhd
-src gt_mp7_core/frame/crc/crc16d16_ugt.vhd
+## HB 2017-09-18: rop and mem not used anymore
+
 src gt_mp7_core/frame/demux_lane/demux_lane_data.vhd
 src gt_mp7_core/frame/frame.vhd
 src gt_mp7_core/frame/rb/rb_pkg.vhd
 src gt_mp7_core/frame/rb/rb.vhd
-src gt_mp7_core/frame/dyndl/dynamic_delay_line.vhd
 src gt_mp7_core/frame/tcm/tcm.vhd
-src gt_mp7_core/frame/fifo/fifo_2c1r1w.vhd
-src gt_mp7_core/frame/fifo/fifo_1c1r1w.vhd
-src gt_mp7_core/frame/mem/simspymem.vhd
-src gt_mp7_core/frame/mem/spymem2_algos.vhd
-src gt_mp7_core/frame/mem/delay_line_sl.vhd
 src gt_mp7_core/frame/mem/spytrig.vhd
-src gt_mp7_core/frame/mem/delay_line_slv.vhd
-src gt_mp7_core/frame/mem/spymem2_finor.vhd
-src gt_mp7_core/frame/mem/spymem3.vhd
 src gt_mp7_core/frame/frame_fabric.vhd
-src gt_mp7_core/frame/sw_reset/sw_reset.vhd
 src gt_mp7_core/frame/frame_addr_decode.vhd
-src gt_mp7_core/frame/ram/ram_2c2w2r.vhd
-src gt_mp7_core/frame/ram/ram_asym_2c2w2r.vhd
-src gt_mp7_core/frame/ram/ram_2c1w1r.vhd
 src gt_mp7_core/frame/lmp/lmp.vhd
-src gt_mp7_core/frame/slow_cd_reset.vhd
 src gt_mp7_core/frame/frame_module_info.vhd
 src gt_mp7_core/frame/dm/delay_element.vhd
-src gt_mp7_core/frame/dm/dm.vhd
-src gt_mp7_core/frame/dsmux/dsmux.vhd
+
+## HB 2017-09-18: dm and dsmux not used anymore
+
 src gt_mp7_core/frame/output_mux/mux.vhd
 src gt_mp7_core/frame/output_mux/output_mux.vhd
 src gt_mp7_core/gt_mp7_core_addr_decode.vhd
@@ -99,7 +86,6 @@ src ipbus/slaves/ipb_read_regs.vhd
 src ipbus/slaves/ipb_dpmem_4096_32.vhd
 src ../ngc/dp_mem_4096x32/dp_mem_4096x32.ngc
 src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
-#src ../ngc/lhc_clk_pll_40_80_160/lhc_clk_pll_40_80_160.vhd
 src -c components/ipbus_slaves ipbus_reg_v.vhd
 src -c components/ipbus_core ipbus_fabric_sel.vhd
 src -c components/mp7_ttc mp7_ttc_decl.vhd

@@ -14,6 +14,8 @@
 -- $Revision: 0.1  $
 --------------------------------------------------------------------------------
 --
+-- HB 2017-10-06: renamed signal "dsmux_lhc_data" to "lhc_data_2_gtl" (similar to port name of frame).
+-- HB 2017-09-13: removed instance tp_mux_i.
 -- HB 2016-11-17: inserted port "finor_preview_2_mezz_lemo" for "prescaler preview" in monitoring on gpio(2). No use of tp_mux anymore.
 -- HB 2016-10-11: signals finor_2_mezz_lemo and veto_2_mezz_lemo for IOB output FF. Connected directly to gpio without tp_mux.
 --                Removed finor_2_mezz_lemo and veto_2_mezz_lemo from tp_mux. Signals local_finor_rop and local_veto_rop used for tp_mux.
@@ -64,7 +66,7 @@ architecture rtl of mp7_payload is
     signal ipb_to_slaves    : ipb_wbus_array(NR_IPB_SLV_GT_MP7_CORE-1 downto 0);
     signal ipb_from_slaves  : ipb_rbus_array(NR_IPB_SLV_GT_MP7_CORE-1 downto 0);
 
-    signal dsmux_lhc_data                : lhc_data_t;
+    signal lhc_data_2_gtl                : lhc_data_t;
 
     signal tp_frame                      : std_logic_vector(3 downto 0);
 
@@ -166,8 +168,7 @@ begin
 
     frame_i: entity work.frame
     generic map(
-        NR_LANES            => (4 * N_REGION),
-        SIMULATE_DATAPATH   => false
+        NR_LANES            => (4 * N_REGION)
     )
     port map(
         ipb_clk            => ipb_clk,
@@ -189,7 +190,7 @@ begin
         start_lumisection  => start_lumisection,
         lane_data_in       => lane_data_in,
         lane_data_out      => lane_data_out,
-        dsmux_lhc_data_o   => dsmux_lhc_data,
+        lhc_data_2_gtl_o   => lhc_data_2_gtl,
         prescale_factor_set_index_rop   => prescale_factor_set_index_rop,
         algo_after_gtLogic_rop          => algo_after_gtLogic_rop,
         algo_after_bxomask_rop          => algo_after_bxomask_rop,
@@ -209,7 +210,7 @@ begin
 -- ========================================================
         lhc_clk            => lhc_clk,
         lhc_rst            => lhc_rst,
-        lhc_data           => dsmux_lhc_data,
+        lhc_data           => lhc_data_2_gtl,
         bcres              => bcres_d_FDL,
         test_en            => test_en_int,
         l1a                => l1a_int,
@@ -225,36 +226,6 @@ begin
         veto_2_mezz_lemo      =>  veto_2_mezz_lemo,
         finor_w_veto_2_mezz_lemo      =>  finor_w_veto_2_mezz_lemo,
         local_finor_with_veto_o => local_finor_with_veto_o
-    );
-
-    tp_mux_i: entity work.tp_mux
-    port map(
-        clk             => ipb_clk,
-        rst             => ipb_rst,
-        ipb_in          => ipb_to_slaves(C_IPB_GT_MP7_TP_MUX),
-        ipb_out         => ipb_from_slaves(C_IPB_GT_MP7_TP_MUX),
-        clk_payload     => lhc_clk,
-        rst_payload     => lhc_rst,
-        clk_p           => clk240,
-        bc0             => bc0_in,
-        l1a             => l1a_int,
--- HB 2016-09-30: removed finor_2_mezz_lemo and veto_2_mezz_lemo from tp_mux. Used local_finor_rop and local_veto_rop for tests.
-        local_finor     => local_finor_rop,
-        local_veto      => local_veto_rop,
-        finor_w_veto_local => finor_w_veto_2_mezz_lemo,
-        start_lumisection => start_lumisection,
-        bcres_d         => bcres_d,
-        bcres_d_FDL     => bcres_d_FDL,
-        ec0             => ec0_int,
-        ec0_sync_bc0    => ec0_sync_bc0_int,
-        oc0             => oc0_int,
-        oc0_sync_bc0    => oc0_sync_bc0_int,
-        start           => start_int,
-        start_sync_bc0  => start_sync_bc0_int,
-        test_en         => test_en_int,
-        out0            => open,
-        out1            => open,
-        out2            => open
     );
 
     gpio(0) <= finor_2_mezz_lemo;

@@ -1,6 +1,6 @@
 
 -- actual versions:
---	frame: v1.1.1
+--	frame: v1.2.3
 --	gtl: v1.4.1
 --	fdl: v1.2.2
 
@@ -34,8 +34,8 @@ package gt_mp7_core_pkg is
 -- ==================================================================================================
 -- FRAME version (given by the editor of frame.vhd)
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 1;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 1;
+    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 2;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 3;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &

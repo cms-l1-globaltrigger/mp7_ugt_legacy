@@ -11,13 +11,6 @@
 		</node>
 		<node id="build_version"    address="0x00000013" mask ="0x0000ffff" permission="r" parameters="type=hex" description="Build Version Number"/>
 	</node>
-	<!-- JW 2015-02-26: Control registers for the output mux -->
-	<node id="gtl_mux_ctrl1"        address="0x00000900" permission="rw" parameters="type=parent">
-		<node id="valid_low"        address="0x00000000" mask="0x00000fff" permission="rw" parameters="type=hex"/>
-		<node id="valid_high"       address="0x00000001" mask="0x00000fff" permission="rw" parameters="type=hex"/>
-		<node id="start"            address="0x00000002" mask="0x00000001" permission="rw" parameters="type=hex"/>
-		<node id="strobe"           address="0x00000003" mask="0x00000001" permission="rw" parameters="type=hex"/>
-	</node>
 	<node id="pulse_reset"   address="0x00000800" mask="0x00000001" permission="rw" description="Resets the frame logic"/>
 	<node id="counter_reset" address="0x00000800" mask="0x00000002" permission="rw" description="Resets the uGT counters"/>
 	<!-- SIM-SPY-MEMS -->
@@ -26,51 +19,27 @@
 	<node id="spymem2_finor" address="0x00200000" mode="incremental" size="4096" permission="rw" parameters="class=FinorMemoryImage"/>
 	<!--RB control register-->
 	<node id="rb" address="0x00700000" permission="rw">
-		<node id="dsmux" address="0x0000004C" permission="rw" parameters="type=parent">
-			<node id="muon_src" address="0x00000000" mask="0x00000001" permission="rw"/>
-			<node id="eg_src"   address="0x00000000" mask="0x00000002" permission="rw"/>
-			<node id="tau_src"  address="0x00000000" mask="0x00000004" permission="rw"/>
-			<node id="jet_src"  address="0x00000000" mask="0x00000008" permission="rw"/>
-			<node id="ett_src"  address="0x00000000" mask="0x00000010" permission="rw"/>
-			<node id="ht_src"   address="0x00000000" mask="0x00000020" permission="rw"/>
-			<node id="etm_src"  address="0x00000000" mask="0x00000040" permission="rw"/>
-			<node id="htm_src"  address="0x00000000" mask="0x00000080" permission="rw"/>
-			<node id="ext_con_src" address="0x00000000" mask="0x00000100" permission="rw"/>
-		</node>
-		<node id="spytrigger" address="0x00000300" permission="rw">
+		<node id="spytrigger" address="0x00000000" permission="rw">
 			<node id="orbit_nr_l" address="0x00000000" mask="0xffffffff" permission="rw"/>
-			<node id="orbit_nr_h" address="0x00000004" mask="0x0000ffff" permission="rw"/>
-			<node id="control" address="0x00000008" permission="rw" parameters="type=parent">
+			<node id="orbit_nr_h" address="0x00000001" mask="0x0000ffff" permission="rw"/>
+			<node id="control" address="0x00000002" permission="rw" parameters="type=parent">
 				<node id="spy12_once_event" address="0x00000000" mask="0x00000001" permission="rw"/> <!-- Triggers a spy event (for a specific orbit) for spy memory I and II, when written 1 -->
 				<node id="spy12_next_event" address="0x00000000" mask="0x00000002" permission="rw"/> <!-- Triggers a spy event (for the next orbit) for spy memory I and II, when written 1 -->
 				<node id="clear_spy12_ready_event" address="0x00000000" mask="0x00000008" permission="rw"/> <!-- Clears the ready flag of the spy I/II trigger, when written 1 -->
 				<node id="clear_spy12_error_event" address="0x00000000" mask="0x00000020" permission="rw"/> <!-- Clears the error flag of the spy I/II trigger, when written 1 -->
 			</node>
 		</node>
-		<node id="sw_reset" address="0x0000005c" permission="rw" parameters="type=parent">
+		<node id="sw_reset" address="0x00000003" permission="rw" parameters="type=parent">
 			<node id="reset_event" address="0x00000000" mask="0x00000001" permission="rw"/>
-		</node>
-		<node id="dm" address="0x00000014" permission="rw" parameters="type=parent">
-			<node id="delay_muons"     address="0x00000000" mask="0x00000fff" permission="rw"/>
-			<node id="delay_eg"        address="0x00000004" mask="0x00000fff" permission="rw"/>
-			<node id="delay_tau"       address="0x00000008" mask="0x00000fff" permission="rw"/>
-			<node id="delay_jet"       address="0x0000000C" mask="0x00000fff" permission="rw"/>
-			<node id="delay_ett"       address="0x00000010" mask="0x00000fff" permission="rw"/>
-			<node id="delay_ht"        address="0x00000014" mask="0x00000fff" permission="rw"/>
-			<node id="delay_etm"       address="0x00000018" mask="0x00000fff" permission="rw"/>
-			<node id="delay_htm"       address="0x0000001C" mask="0x00000fff" permission="rw"/>
-			<node id="delay_ext_con"   address="0x00000020" mask="0x00000fff" permission="rw"/>
-			<node id="delay_bcres"     address="0x00000024" mask="0x00000fff" permission="rw"/>
-			<node id="delay_bcres_fdl" address="0x00000028" mask="0x00000fff" permission="rw"/>
 		</node>
 		<!--RB status register-->
 		<!-- HB 2014-07-10: changed status register addresses -->
-		<node id="spytrigger_status" address="0x00000800" permission="r" parameters="type=parent"> <!-- HB 2014-06-26: register for status of spytrigger (in AMC514 part of address 0x00700308), bit 11 of address selects status registers of rb (see rb.vhd) -->
+		<node id="spytrigger_status" address="0x00000010" permission="r" parameters="type=parent"> <!-- HB 2014-06-26: register for status of spytrigger (in AMC514 part of address 0x00700308), bit 11 of address selects status registers of rb (see rb.vhd) -->
 			<node id="trig_spy12_error" address="0x00000000" mask="0x08000000" permission="r" tags="0x0:OK,0x1:ERROR"/>
 			<node id="trig_spy12_ready" address="0x00000000" mask="0x20000000" permission="r" tags="0x0:NOTREADY,0x1:READY"/>
 			<node id="trig_spy12_busy"  address="0x00000000" mask="0x80000000" permission="r" tags="0x0:READY,0x1:BUSY"/>
 		</node>
-		<node id="tcm_status"       address="0x00000802" permission="r" parameters="type=parent">
+		<node id="tcm_status"       address="0x00000012" permission="r" parameters="type=parent">
 			<node id="orbit_nr_l"   address="0x00000004" mask="0xffffffff" permission="r"/>
 			<node id="orbit_nr_h"   address="0x00000005" mask="0x0000ffff" permission="r"/>
 			<node id="bx_nr_max"    address="0x00000007" mask="0xffffffff" permission="r"/> <!-- should always be equal 0xdeb -->

@@ -10,7 +10,7 @@ EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
 v_clk_40_ext_period = 24.2
-v_refclks_period = 3.9
+v_refclks_period = 4.0
 v_n_region = 7
 v_cross_region = 6
 v_payload_x_cross_device_reg = 6

@@ -33,15 +33,18 @@
 			<node id="tts_stat" mask="0xf"/>
 		</node>
 	</node>
-	<node id="buffer" address="0x8" size="0x4" description="DAQ/Readout buffer" fwinfo="endpoint;width=1">
-		<node id="fifo_flags" address="0x0" permission="r">
+	<node id="buffer" address="0x8" size="0x4" description="DAQ/Readout buffer" fwinfo="endpoint;width=2">
+		<node id="info" address="0x0">
+			<node id="ro_chunks" mask="0x3f"/>
+		</node>
+		<node id="fifo_flags" address="0x1" permission="r">
 			<node id="fifo_cnt" mask="0x3ffff"/>
 			<node id="fifo_valid" mask="0x1000000"/>
 			<node id="fifo_warn" mask="0x2000000"/>
 			<node id="fifo_full" mask="0x4000000"/>
 			<node id="fifo_empty" mask="0x8000000"/>
 		</node>
-		<node id="data" address="0x1" size="0x3000" mode="port" permission="r"/>
+		<node id="data" address="0x2" size="0x3000" mode="port" permission="r"/>
 	</node>
 	<node id="hist" module="file://state_history.xml" address="0x10"/>
 	<node id="tts_hist" module="file://state_history.xml" address="0x14"/>

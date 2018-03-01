@@ -9,37 +9,7 @@ import logging
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
-v_clk_40_ext_period = 24.2
-v_refclks_period = 4.0
-v_n_region = 7
-v_cross_region = 6
-v_payload_x_cross_device_reg = 6
-
-def replace_clock_constraints(filename):
-  try:
-    with open(filename) as fp:
-        content = fp.read()
-  except (OSError, IOError) as message:
-    logging.error(message)
-    sys.exit(EXIT_FAILURE)
-
-  # TODO: capture float and integer values (e.g.: 24.0 or 24)
-  expr_clk40 = re.compile(r"(create_clock\s*-period\s*)(\d+.\d+)(\s*-name\s*clk_40_ext)")
-  expr_refclks = re.compile(r"(create_clock\s*-name\s*configurable_refclks\s*-period\s*)(\d+.\d+)")
-  #expr_tx_path_forloop = re.compile(r"(for\s+{\s*set\s*i\s*0\s*}\s+{\s*\$i\s*<\s*)(\d+)(\s*}\s+{\s*incr\s+i\s*})")
-
-  content, count = expr_clk40.subn(r"\g<1>{0}\g<3>".format(v_clk_40_ext_period), content)
-  if count != 1: raise RuntimeError("Could not replace the clk_40_ext period value.")
-
-  content, count = expr_refclks.subn(r"\g<1>{0}".format(v_refclks_period), content)
-  if count != 1: raise RuntimeError("Could not replace the refclks period value.")
-
-  #content, count = expr_tx_path_forloop.subn(r"\g<1>{0}\g<3>".format(v_n_region), content)
-  #if count != 1: raise RuntimeError("Could not replace the tx path for-loop value.")
-
-  with open(filename, "wb") as fp:
-    fp.write(content)
-    print "Successfully patched the clock_constraints file!"
+## HB 2018-02-22: removed replace_clock_constraints (values for clk_40_ext_period and refclks_period are correct in mp7 tags 2.4.0 and higher)
 
 def replace_area_constraints(filename):
   try:
@@ -130,13 +100,6 @@ def patch_all(projectpath): # to execute the patches from another python script
   root_path = os.path.abspath(projectpath)
 
   try:
-    replace_clock_constraints(os.path.join(root_path, clock_constraints_path))
-  except (OSError, IOError) as message:
-    print "\nFAILURE\n"
-    logging.error(message)
-    sys.exit(EXIT_FAILURE)
-
-  try:
     replace_brd_decl(os.path.join(root_path, brd_decl_path))
   except (OSError, IOError) as message:
     print "\nFAILURE\n"
@@ -188,13 +151,6 @@ def main():
   script_writer_path = 'scripts/firmware/dep_tree/VivadoScriptWriter.py'
 
   root_path = os.path.abspath(args.path)
-
-  try:
-    replace_clock_constraints(os.path.join(root_path, clock_constraints_path))
-  except (OSError, IOError) as message:
-    print "\nFAILURE\n"
-    logging.error(message)
-    sys.exit(EXIT_FAILURE)
 
   try:
     replace_brd_decl(os.path.join(root_path, brd_decl_path))

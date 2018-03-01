@@ -21,8 +21,9 @@ resize_pblock [get_pblocks payload] -add {DSP48_X17Y0:DSP48_X17Y39}
 # HB 2017-10-13: Resize ctrl region
 resize_pblock [get_pblocks ctrl] -remove {CLOCKREGION_X0Y9:CLOCKREGION_X1Y9}
 resize_pblock [get_pblocks ctrl] -add {SLICE_X74Y450:SLICE_X221Y499}
-resize_pblock [get_pblocks ctrl] -add {RAMB18_X4Y180:RAMB18_X14Y199}
-resize_pblock [get_pblocks ctrl] -add {RAMB36_X4Y90:RAMB36_X14Y99}
+# HB 2018-02-21: moved RAMs out of payload into ctrl region
+resize_pblock [get_pblocks ctrl] -add {RAMB18_X5Y180:RAMB18_X14Y199}
+resize_pblock [get_pblocks ctrl] -add {RAMB36_X5Y90:RAMB36_X14Y99}
 
 # HB 2017-10-13: Extended payload region to former left top region of ctrl region
 # JW 2017-10-06: Extend payload region to unused parts of the ctrl region (Greg's suggestion)

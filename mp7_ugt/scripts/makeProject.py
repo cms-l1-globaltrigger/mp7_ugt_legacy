@@ -29,7 +29,9 @@ BoardAliases = {
     'mp7xe_690': 'xe',
 }
 
-DEFAULT_FW_DIR = expanduser("~/work/fwdir")
+## HB 2018-02-22: changed default fwdir because of changes in patchFiles.py
+#DEFAULT_FW_DIR = expanduser("~/work/fwdir")
+DEFAULT_FW_DIR = expanduser("~/work/fwdir_2018")
 
 def remove_file(filename):
     """Savely remove a file or a symbolic link."""

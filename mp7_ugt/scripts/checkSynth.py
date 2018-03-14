@@ -196,7 +196,7 @@ def dump_utilization_report():
 
 def parse():
     parser = argparse.ArgumentParser(description="Check synthesis result logs")
-    parser.add_argument('path', metavar='path', help="synthesis build path (e.g. build_0x10af)")
+    parser.add_argument('config', metavar='config', help="synthesis build configuration file, eg. build_0x10af.cfg")
     parser.add_argument('-m', type=int, metavar='<id>', help="check only a single module ID")
     parser.add_argument('-a', '--all', action='store_true', help="show all errors, warnings, critical warnings and timing violations")
     parser.add_argument('-c', '--criticals', action='store_true', help="show critical warnings")
@@ -212,17 +212,13 @@ def main():
     # Parse command line arguments.
     args = parse()
 
-    # Check for exisiting target path.
-    if not os.path.isdir(args.path):
-        raise RuntimeError("no such directory: {}".format(args.path))
-
-    # Name of build directory.
-    buildname = os.path.basename(os.path.abspath(args.path))
+    # Check for exisiting config file.
+    if not os.path.isfile(args.config):
+        raise RuntimeError("no such file: {}".format(args.config))
 
     # Read build configuration.
     config = ConfigParser.ConfigParser()
-    filename = "{}.cfg".format(buildname)
-    config.read(os.path.join(args.path, filename))
+    config.read(args.config)
     menu_name = config.get('menu', 'name')
     menu_modules = int(config.get('menu', 'modules'))
 
@@ -237,7 +233,8 @@ def main():
     # Check modules
     for index in check_modules:
         module_id = "module_{}".format(index)
-        module_path = os.path.join(args.path, menu_name, module_id)
+        build_path = os.path.dirname(args.config)
+        module_path = os.path.join(build_path, menu_name, module_id)
         log_hr("=")
         log_info("Module #{}".format(index))
         log_hr("=")

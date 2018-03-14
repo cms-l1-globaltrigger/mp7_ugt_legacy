@@ -1,21 +1,17 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-from makeProject import (
-    BoardAliases,
-    count_modules,
-    get_timestamp,
-)
+from makeProject import BoardAliases
+import toolbox as tb
 
 import tarfile
-import datetime
 import argparse
 import logging
 import shutil
 import glob
 import tempfile
 import ConfigParser
-import sys, stat, os
+import sys, os
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
@@ -48,13 +44,14 @@ def main():
 
     menu = config.get('menu', 'name')
     location = config.get('menu', 'location')
-    build = config.get('menu', 'build')
+    build = tb.build_t(config.get('menu', 'build')) # format 'ffff'
     board = config.get('device', 'alias')
     buildarea = config.get('firmware', 'buildarea')
-    timestamp = get_timestamp()
+    timestamp = tb.timestamp()
 
     basename = "{menu}_v{build}_{board}".format(**locals())
     basepath = os.path.dirname(args.config)
+
     # Custom output directory?
     if args.outdir:
         basepath = args.outdir
@@ -84,7 +81,7 @@ def main():
     logging.info("creating tarball: %s", filename)
     tar = tarfile.open(filename, "w:gz")
     logging.info("adding to tarball: %s", tmpdir)
-    tar.add(tmpdir, arcname = basename, recursive = True)
+    tar.add(tmpdir, arcname=basename, recursive=True)
     logging.info("closing tarball: %s", filename)
     tar.close()
 

@@ -139,9 +139,12 @@ def main():
     def textile_strong(s):
         return "*{0}*".format(s)
 
+    def textile_pre_inline(s):
+        return "@{0}@".format(s)
+
     row = [
         menu_name,
-        build_id,
+        textile_pre_inline(build_id),
         username,
         textile_strong(mp7fw_tag),
         versions['FRAME'],

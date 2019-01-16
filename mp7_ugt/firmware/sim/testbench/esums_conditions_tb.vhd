@@ -1,18 +1,3 @@
---------------------------------------------------------------------------------
--- Simulator   : Modelsim 10.1
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Simulation
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/sim/testbench/esums_conditions_tb.vhd $
--- $Date: 2015-05-20 11:40:51 +0200 (Mit, 20 Mai 2015) $
--- $Author: bergauer $
--- $Revision: 3958 $
---------------------------------------------------------------------------------
 
 -- Desription:
 

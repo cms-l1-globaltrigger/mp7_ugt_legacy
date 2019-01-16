@@ -1,19 +1,3 @@
-##--------------------------------------------------------------------------------
-##-- Simulator   : ModelSim 10.1
-##-- Platform    : Linux Ubuntu 10.04
-##-- Targets     : Simulation
-##--------------------------------------------------------------------------------
-##-- This work is held in copyright as an unpublished work by HEPHY (Institute
-##-- of High Energy Physics) All rights reserved.  This work may not be used
-##-- except by authorized licensees of HEPHY. This work is the
-##-- confidential information of HEPHY.
-##--------------------------------------------------------------------------------
-##---Description: 
-##-- $HeadURL:  $
-##-- $Date:  $
-##-- $Author:  $
-##-- $Revision:  $
-##--------------------------------------------------------------------------------
 
 ##***************************** Beginning of Script ***************************
         

@@ -1,18 +1,3 @@
---------------------------------------------------------------------------------
--- Simulator   : Modelsim 10.1
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Simulation
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
--- $HeadURL: https://svn.cern.ch/reps/cactus/trunk/cactusupgrades/projects/ugt/mp7_ugt/firmware/sim/testbench/invariant_mass_tb.vhd $
--- $Date: 2015-10-23 11:55:54 +0200 (Fri, 23 Oct 2015) $
--- $Author: hbergaue $
--- $Revision: 40316 $
---------------------------------------------------------------------------------
 
 -- Description:
 -- Testbench for simulation of mass_cuts.vhd

@@ -1,19 +1,3 @@
--------------------------------------------------------------------------------
--- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Synthese
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
----Description:Lane Mapping Process, Developer HEPHY
--- $HeadURL: $
--- $Date:  $
--- $Author:HEPHY  $
--- $Revision: 0.1 $
---------------------------------------------------------------------------------
 
 library ieee;
 use IEEE.std_logic_1164.all;

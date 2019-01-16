@@ -94,6 +94,10 @@ def main():
     menu_name = config.get('menu', 'name')
     menu_dir = config.get('menu', 'location')
     menu_url = detect_menu_url(menu_dir)
+# Created 'menu_url_pr' for correct link in "Menu local dir"
+    menu_svnweb_url = menu_url.replace('https://svn.cern.ch/reps/cactus/', 'https://svnweb.cern.ch/trac/cactus/browser/')
+    menu_url_pr = ''.join(['"', menu_url, '":', menu_svnweb_url])
+#
     build_id = "0x{0}".format(config.get('menu', 'build'))
     n_modules = config.get('menu', 'modules')
     username = config.get('environment', 'username')
@@ -120,7 +124,7 @@ def main():
         ("Vivado", versions['vivado']),
         ("Build area", buildarea_dir),
         ("Menu local dir", menu_dir),
-        ("Menu repo url", menu_url),
+        ("Menu repo url", menu_url_pr),
         ("MP7 tag", mp7fw_tag),
         ("uGT tag", ugt_tag),
         ("uGT", versions['FRAME']),

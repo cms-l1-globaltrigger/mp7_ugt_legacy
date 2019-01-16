@@ -1,22 +1,3 @@
--------------------------------------------------------------------------------
--- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Synthese
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
----Description:SPYMEM 2 FINOR
--- $HeadURL: $
--- $Date:  $
--- $Author: HEPHY $
--- Modification : HEPHY, the deisgn has a bug and it does not working correctly at hardware. The problem is fixed, but it is decided to use coregenerator version
---
--- $Revision: 0.1 $
---------------------------------------------------------------------------------
-
 
 library ieee;
 use IEEE.std_logic_1164.all;

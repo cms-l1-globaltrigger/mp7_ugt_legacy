@@ -1,18 +1,3 @@
---------------------------------------------------------------------------------
--- Simulator   : Modelsim 10.1
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Simulation
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
--- $HeadURL: https://svn.cern.ch/reps/cactus/trunk/cactusupgrades/projects/ugt/mp7_ugt/firmware/sim/testbench/calo_calo_correlation_condition_inv_mass_tb.vhd $
--- $Date: 2015-10-15 10:00:21 +0200 (Thu, 15 Oct 2015) $
--- $Author: hbergaue $
--- $Revision: 40100 $
---------------------------------------------------------------------------------
 
 -- Desription:
 

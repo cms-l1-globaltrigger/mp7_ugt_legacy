@@ -1,19 +1,3 @@
-##--------------------------------------------------------------------------------
-##-- Simulator   : ModelSim 10.3b
-##-- Platform    : Linux Ubuntu 10.04
-##-- Targets     : Simulation
-##--------------------------------------------------------------------------------
-##-- This work is held in copyright as an unpublished work by HEPHY (Institute
-##-- of High Energy Physics) All rights reserved.  This work may not be used
-##-- except by authorized licensees of HEPHY. This work is the
-##-- confidential information of HEPHY.
-##--------------------------------------------------------------------------------
-##---Description: 
-##-- $HeadURL: https://svn.cern.ch/reps/cactus/trunk/cactusupgrades/projects/ugt/mp7_ugt/firmware/sim/scripts/gtl_fdl_wrapper_test_tpl.do $
-##-- $Date: 2015-12-11 09:20:47 +0100 (Fri, 11 Dec 2015) $
-##-- $Author: hbergaue $
-##-- $Revision: 41112 $
-##--------------------------------------------------------------------------------
 
 ##***************************** Beginning of Script ***************************
         

@@ -1,22 +1,4 @@
--------------------------------------------------------------------------------
--- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Synthese
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
----Description:
--- $HeadURL: $
--- $Date:  $
--- $Author: HEPHY $
--- Modification : HEPHY,
---    1)for MP7
---    2) do not edit this part, it will be produced autmatically based  on python scirpt. The scirpt has a bug, and the bug should be fixed. I am not sure, if desing is woking correctly
--- $Revision: 0.1 $
---------------------------------------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;

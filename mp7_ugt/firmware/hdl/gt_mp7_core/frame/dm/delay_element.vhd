@@ -1,27 +1,3 @@
---------------------------------------------------------------------------------
--- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 14.04
--- Targets     : Synthese
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
--- $HeadURL:  $
--- $Date:  $
--- $Author: Florian $
--- Modification : HEPHY
--- 		1) lhc_rst for ip-bus and PCI-e is different. RST_ACT is defined in package.
---              2) changed logic for address calculation based on bug as follows:
- --                if the MAX_DELAY is smaller than the whole instanciated ram, we have to take care,
- --                that the read pointer does not jump to an unused position when the write pointer is set back to 0
---              3) changed rd + wr addresses to natural
---              4) modified the rd address calculation because delay was always 1bx too much
--- $Revision: 0.1  $
---------------------------------------------------------------------------------
-
---------------------------------------------------------------------------------
 
 library ieee;
 use IEEE.std_logic_1164.all;

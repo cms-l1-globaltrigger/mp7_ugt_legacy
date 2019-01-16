@@ -1,19 +1,3 @@
-##--------------------------------------------------------------------------------
-##-- Simulator   : ModelSim 10.1
-##-- Platform    : Linux Ubuntu 10.04
-##-- Targets     : Simulation
-##--------------------------------------------------------------------------------
-##-- This work is held in copyright as an unpublished work by HEPHY (Institute
-##-- of High Energy Physics) All rights reserved.  This work may not be used
-##-- except by authorized licensees of HEPHY. This work is the
-##-- confidential information of HEPHY.
-##--------------------------------------------------------------------------------
-##---Description: 
-##-- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/sim/scripts/calo_muon_correlation_condition_test_dr.do $
-##-- $Date: 2015-08-25 11:26:14 +0200 (Die, 25 Aug 2015) $
-##-- $Author: bergauer $
-##-- $Revision: 4175 $
-##--------------------------------------------------------------------------------
 
 ##***************************** Beginning of Script ***************************
         

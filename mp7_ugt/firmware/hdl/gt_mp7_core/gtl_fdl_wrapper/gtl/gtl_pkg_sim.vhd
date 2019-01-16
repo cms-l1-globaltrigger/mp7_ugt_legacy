@@ -208,6 +208,7 @@ type calo_templates_boolean_array is array (1 to NR_CALO_TEMPLATES) of boolean;
 constant MAX_CALO_ISO_BITS : positive range 1 to 2 := max((D_S_I_EG_V2.iso_high-D_S_I_EG_V2.iso_low+1), (D_S_I_TAU_V2.iso_high-D_S_I_TAU_V2.iso_low+1));
 type calo_templates_iso_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
+-- *******************************************************************************************************
 -- ESUMs
 -- HB 2016-10-11: changed MAX_ESUMS_BITS to actual value
 -- constant MAX_ESUMS_BITS_TEMP : positive := max(ETT_DATA_WIDTH, HT_DATA_WIDTH, ETM_DATA_WIDTH);
@@ -225,15 +226,21 @@ constant NR_ETMHF_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (co
 constant NR_HTMHF_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
 constant NR_TOWERCOUNT_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
 
-constant ETT_TYPE : natural range 0 to 6:= 0;
-constant HTT_TYPE : natural range 0 to 6:= 1;
-constant ETM_TYPE : natural range 0 to 6:= 2;
-constant HTM_TYPE : natural range 0 to 6:= 3;
+constant MAX_ESUMS_TYPES : natural := 11;
+constant ETT_TYPE : natural range 0 to MAX_ESUMS_TYPES-1:= 0;
+constant HTT_TYPE : natural range 0 to MAX_ESUMS_TYPES-1:= 1;
+constant ETM_TYPE : natural range 0 to MAX_ESUMS_TYPES-1:= 2;
+constant HTM_TYPE : natural range 0 to MAX_ESUMS_TYPES-1:= 3;
 -- HB 2016-06-07: inserted ETTEM and ETMHF
-constant ETTEM_TYPE : natural range 0 to 6:= 4;
-constant ETMHF_TYPE : natural range 0 to 6:= 5;
+constant ETTEM_TYPE : natural range 0 to MAX_ESUMS_TYPES-1:= 4;
+constant ETMHF_TYPE : natural range 0 to MAX_ESUMS_TYPES-1:= 5;
 -- HB 2016-09-16: inserted HTMHF to esums
-constant HTMHF_TYPE : natural range 0 to 6:= 6;
+constant HTMHF_TYPE : natural range 0 to MAX_ESUMS_TYPES-1:= 6;
+-- HB 2018-08-08: inserted "Asymmetry" to esums
+constant ASYMET_TYPE : natural range 0 to MAX_ESUMS_TYPES-1 := 7;
+constant ASYMHT_TYPE : natural range 0 to MAX_ESUMS_TYPES-1 := 8;
+constant ASYMETHF_TYPE : natural range 0 to MAX_ESUMS_TYPES-1 := 9;
+constant ASYMHTHF_TYPE : natural range 0 to MAX_ESUMS_TYPES-1 := 10;
 
 type d_s_i_ett_record is record
     et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
@@ -316,6 +323,78 @@ constant HTMHF_PHI_LOW : natural := 12;
 constant HTMHF_PHI_HIGH : natural := 19;
 constant D_S_I_HTMHF : d_s_i_htmhf_record := (HTMHF_PHI_HIGH,HTMHF_PHI_LOW,HTMHF_ET_HIGH,HTMHF_ET_LOW);
 constant D_S_I_HTMHF_V2 : d_s_i_htmhf_record := D_S_I_HTMHF; -- dummy for VHDL-Producer output (correlation conditions)
+
+-- HB 2018-08-06: inserted constants and types for "Asymmetry" and "Centrality" (included in esums data structure).
+-- see: https://indico.cern.ch/event/746381/contributions/3085360/subcontributions/260912/attachments/1693846/2725976/DemuxOutput.pdf
+
+-- Frame 2, ETM: bits 27..20 => ASYMET
+-- Frame 3, HTM: bits 27..20 => ASYMHT
+-- Frame 4, ETMHF: bits 27..20 => ASYMETHF
+-- Frame 5, HTMHF: bits 27..20 => ASYMHTHF
+
+-- Frame 4, ETMHF: bits 31..28 => CENT3..CENT0
+-- Frame 5, HTMHF: bits 31..28 => CENT7..CENT4
+
+constant ASYMET_IN_ETM_HIGH : natural := 27;
+constant ASYMET_IN_ETM_LOW : natural := 20;
+constant ASYMHT_IN_HTM_HIGH : natural := 27;
+constant ASYMHT_IN_HTM_LOW : natural := 20;
+constant ASYMETHF_IN_ETMHF_HIGH : natural := 27;
+constant ASYMETHF_IN_ETMHF_LOW : natural := 20;
+constant ASYMHTHF_IN_HTMHF_HIGH : natural := 27;
+constant ASYMHTHF_IN_HTMHF_LOW : natural := 20;
+
+constant MAX_ASYM_BITS : positive range 1 to 8 := 8;
+constant MAX_ASYM_TEMPLATES_BITS : positive range 1 to MAX_ASYM_BITS := 8;
+
+-- Type definitions for "Asymmetry"
+type d_s_i_asymet_record is record
+    high, low : natural range MAX_ASYM_BITS-1 downto 0;
+end record d_s_i_asymet_record;
+
+type d_s_i_asymht_record is record
+    high, low : natural range MAX_ASYM_BITS-1 downto 0;
+end record d_s_i_asymht_record;
+
+type d_s_i_asymethf_record is record
+    high, low : natural range MAX_ASYM_BITS-1 downto 0;
+end record d_s_i_asymethf_record;
+
+type d_s_i_asymhthf_record is record
+    high, low : natural range MAX_ASYM_BITS-1 downto 0;
+end record d_s_i_asymhthf_record;
+
+constant ASYMET_LOW : natural := 0;
+constant ASYMET_HIGH : natural := 7;
+constant D_S_I_ASYMET : d_s_i_asymet_record := (ASYMET_HIGH,ASYMET_LOW);
+
+constant ASYMHT_LOW : natural := 0;
+constant ASYMHT_HIGH : natural := 7;
+constant D_S_I_ASYMHT : d_s_i_asymht_record := (ASYMHT_HIGH,ASYMHT_LOW);
+
+constant ASYMETHF_LOW : natural := 0;
+constant ASYMETHF_HIGH : natural := 7;
+constant D_S_I_ASYMETHF : d_s_i_asymethf_record := (ASYMETHF_HIGH,ASYMETHF_LOW);
+
+constant ASYMHTHF_LOW : natural := 0;
+constant ASYMHTHF_HIGH : natural := 7;
+constant D_S_I_ASYMHTHF : d_s_i_asymhthf_record := (ASYMHTHF_HIGH,ASYMHTHF_LOW);
+
+-- *******************************************************************************************************
+-- Type definitions for "Centrality"
+constant CENT_IN_ETMHF_HIGH : natural := 31;
+constant CENT_IN_ETMHF_LOW : natural := 28;
+constant CENT_IN_HTMHF_HIGH : natural := 31;
+constant CENT_IN_HTMHF_LOW : natural := 28;
+
+constant CENT_LBITS_LOW : natural := 0;
+constant CENT_LBITS_HIGH: natural := 3;
+constant CENT_UBITS_LOW : natural := 4;
+constant CENT_UBITS_HIGH: natural := 7;
+
+constant NR_CENTRALITY_BITS : positive := CENT_UBITS_HIGH-CENT_LBITS_LOW+1;
+
+-- *******************************************************************************************************
 -- HB 2016-09-16: inserted TOWERCOUNT
 constant TOWERCOUNT_IN_HTT_LOW : natural := 12;
 constant TOWERCOUNT_IN_HTT_HIGH : natural := 24;
@@ -325,6 +404,7 @@ constant MAX_TOWERCOUNT_BITS : natural := 16; -- 4 hex digits !
 constant D_S_I_TOWERCOUNT : d_s_i_towercnt_record := (TOWERCOUNT_COUNT_HIGH,TOWERCOUNT_COUNT_LOW);
 constant D_S_I_TOWERCOUNT_V2 : d_s_i_towercnt_record := D_S_I_TOWERCOUNT; -- dummy for VHDL-Producer output (correlation conditions)
 
+-- *******************************************************************************************************
 -- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
 -- HB 2016-04-21: see email from Johannes (Andrew Rose), 2016-04-20 15:34
 -- Frame 0: (HF+ thresh 0) ... ... (Scalar ET) - 4 MSBs
@@ -386,6 +466,7 @@ constant D_S_I_MBT1HFP_V2 : d_s_i_mbt1hfp_record := (MBT1HFP_COUNT_HIGH,MBT1HFP_
 constant MBT1HFM_COUNT_LOW : natural := 0;
 constant MBT1HFM_COUNT_HIGH : natural := 3;
 constant D_S_I_MBT1HFM_V2 : d_s_i_mbt1hfm_record := (MBT1HFM_COUNT_HIGH,MBT1HFM_COUNT_LOW);
+
 -- ==== CALOs - end ============================================================
 
 -- "External conditions" (former "Technical Triggers" and "External Algorithms") definitions

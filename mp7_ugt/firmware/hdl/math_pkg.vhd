@@ -1,18 +1,3 @@
---------------------------------------------------------------------------------
--- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Synthese
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.oeaw.ac.at/GlobalTriggerUpgrade/firmware/uGT_fw_integration/uGT_algos/firmware/hdl/math_pkg.vhd $
--- $Date: 2015-05-13 12:29:43 +0200 (Wed, 13 May 2015) $
--- $Author: wittmann $
--- $Revision: 3937 $
---------------------------------------------------------------------------------
 
 library IEEE;
 use ieee.std_logic_1164.all;

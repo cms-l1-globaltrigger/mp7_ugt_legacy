@@ -3,10 +3,6 @@
 #
 # Update IPbus VHDL creation timestamp, username and hostname (defined by placeholder).
 #
-# Repository path   : $HeadURL: $
-# Last committed    : $Revision: $
-# Last changed by   : $Author: $
-# Last changed date : $Date: 2011-05-17 09:48:37 +0200 (Tue, 17 May 2011) $
 #
 
 """

@@ -1,18 +1,3 @@
---------------------------------------------------------------------------------
--- Simulator   : Modelsim 10.1
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Simulation
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/sim/testbench/gtl_fdl_wrapper_tb_tpl.vhd $
--- $Date: 2015-08-14 10:57:16 +0200 (Fre, 14 Aug 2015) $
--- $Author: bergauer $
--- $Revision: 4148 $
---------------------------------------------------------------------------------
 
 -- Desription:
 

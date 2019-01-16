@@ -1,21 +1,3 @@
--------------------------------------------------------------------------------
--- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Synthese
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
----Description:SPY trigger concept. Some changes are needed, if you will use it instead of MP7 one. Please follow the ugt spec 0.2
--- $HeadURL: $
--- $Date:  $
--- $Author:  HEPHY $
--- Modification : some part of design is not working bug free. Please follow the elog server for finding out, what should you do.
--- $Revision: 0.1 $
---------------------------------------------------------------------------------
-
 
 library ieee;
 use ieee.std_logic_1164.all;

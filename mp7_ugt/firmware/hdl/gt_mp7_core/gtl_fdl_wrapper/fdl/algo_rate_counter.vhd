@@ -1,18 +1,3 @@
---------------------------------------------------------------------------------
--- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Synthese
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/firmware/gt_mp7/branches/hb_algo_2_buffer/src/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_rate_counter.vhd $
--- $Date: 2015-06-12 12:26:03 +0200 (Fre, 12 Jun 2015) $
--- $Author: bergauer $
--- $Revision: 4032 $
---------------------------------------------------------------------------------
 
 -- Desription:
 -- Rate counter for algorithms in FDL

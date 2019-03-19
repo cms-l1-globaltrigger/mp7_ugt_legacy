@@ -2,6 +2,8 @@ include uGT_algo.dep
 ## HB 2016-11-16: uGT_gtl.dep not used anymore, VHDL files of L1Menu in uGT_algo.dep now
 #include uGT_gtl.dep
 ?toolset=="ISE"? src --cd ../ucf mp7_mgt.ucf
+## HB 2019-03-19: project setup with ugt specific strategy
+setup ../ucf/ugt_strategy.tcl
 include -c boards/mp7/base_fw/mp7xe_690
 src top_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd

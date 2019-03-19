@@ -33,7 +33,7 @@ Added a tcl file (ugt_strategy.tcl) for ugt specific strategy.
     ipbb vivado project
 
     # Execute ugt_strategy.tcl
-    vivado top/top.xpr -mode batch -source ../../src/ugt/mp7_ugt/firmware/ucf/test.tcl
+    vivado top/top.xpr -mode batch -source ../../src/ugt/mp7_ugt/firmware/ucf/ugt_strategy.tcl
 
     # Run implementation, synthesis
     ipbb vivado synth

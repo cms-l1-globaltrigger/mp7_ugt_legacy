@@ -6,7 +6,8 @@ of [mp7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware tag "mp7fw_v2_
 This branch contains patched MP7 files for mp7_ugt.
 * The ugt branch [devel](https://gitlab.cern.ch/hbergaue/ugt) is a fork
 of [ugt](https://gitlab.cern.ch/cms-cactus/svn2git/firmware) master.
-Added a tcl file (ugt_strategy.tcl) for ugt specific strategy.
+Added a tcl file (ugt_strategy.tcl) for ugt specific strategy. Inserted ipbb vivado project
+into top.dep.
 
 ### Setup ###
 
@@ -31,9 +32,6 @@ Added a tcl file (ugt_strategy.tcl) for ugt specific strategy.
     ipbb proj create vivado mp7_ugt_<build_version>_<module_nr> mp7:../ugt/mp7_ugt
     cd proj/mp7_ugt_<build_version>_<module_nr>
     ipbb vivado project
-
-    # Execute ugt_strategy.tcl
-    vivado top/top.xpr -mode batch -source ../../src/ugt/mp7_ugt/firmware/ucf/ugt_strategy.tcl
 
     # Run implementation, synthesis
     ipbb vivado synth

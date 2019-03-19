@@ -3,7 +3,10 @@
 * This is a draft description with branches of MP7 and ugt repos.
 * The MP7 branch [mp7fw_v2_4_1_ugt](https://gitlab.cern.ch/hbergaue/mp7) is a fork
 of [mp7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware tag "mp7fw_v2_4_1".
-This branch contains patched MP7 files for mp7_ugt.
+This branch contains patched MP7 files for mp7_ugt:
+- area_constraints.tcl
+- mp7_brd_decl.vhd
+- mp7xe_690.vhd
 * The ugt branch [devel](https://gitlab.cern.ch/hbergaue/ugt) is a fork
 of [ugt](https://gitlab.cern.ch/cms-cactus/svn2git/firmware) master.
 Added a tcl file (ugt_strategy.tcl) for ugt specific strategy. Inserted ugt_strategy.tcl

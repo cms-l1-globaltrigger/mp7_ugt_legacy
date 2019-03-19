@@ -24,7 +24,8 @@ Added a tcl file (ugt_strategy.tcl) for ugt specific strategy.
     ipbb add git https://:@gitlab.cern.ch:8443/hbergaue/mp7.git -b mp7fw_v2_4_1_ugt
     ipbb add git https://:@gitlab.cern.ch:8443/hbergaue/ugt.git -b devel
 
-    # Copy VHDL producer output files to mp7_ugt
+    # Copy VHDL producer output and patched files to mp7_ugt (gtl_module.vhd, gtl_pkg.vhd,
+    algo_mapping_rop.vhd and gt_mp7_top_pkg.vhd)
 
     # Create project 
     ipbb proj create vivado mp7_ugt_<build_version>_<module_nr> mp7:../ugt/mp7_ugt

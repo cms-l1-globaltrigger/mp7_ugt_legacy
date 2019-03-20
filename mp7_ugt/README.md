@@ -1,16 +1,22 @@
 ### Build mp7_ugt firmware with IPBB ###
 
 * This is a draft description with branches of MP7 and ugt repos.
-* The MP7 branch [mp7fw_v2_4_1_ugt](https://gitlab.cern.ch/hbergaue/mp7) is a fork
-of [mp7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware tag "mp7fw_v2_4_1".
-This branch contains patched MP7 files for mp7_ugt:
+* A fork of [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware is available with three branches:
+  - branch "mp7fw_v2_4_1_ugt" created from tag mp7fw_v2_4_1.
+  - branch "mp7fw_v2_4_3_ugt" created from tag mp7fw_v2_4_3.
+  - branch "mp7fw_master_ugt" created from master.
+* These branches contain modified MP7 files for mp7_ugt:
   - area_constraints.tcl
   - mp7_brd_decl.vhd
   - mp7xe_690.vhd
+* One of these branches can be used for build (see below).
+
 * The ugt branch [devel](https://gitlab.cern.ch/hbergaue/ugt) is a fork
 of [ugt](https://gitlab.cern.ch/cms-cactus/svn2git/firmware) master.
-Added a tcl file (ugt_strategy.tcl) for ugt specific strategy. Inserted ugt_strategy.tcl
-into top.dep.
+Following modifications are done in the branch:
+  - added [ugt_strategy.tcl](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/ucf/ugt_strategy.tcl) for ugt specific strategy and inserted it
+into [top.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/cfg/top.dep).
+  - modified [uGT_algo.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/cfg/uGT_algo.dep): pointing to ipbus-firmware.
 
 ### Setup ###
 

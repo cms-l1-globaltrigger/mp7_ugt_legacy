@@ -1,7 +1,7 @@
 ### Build mp7_ugt firmware with IPBB ###
 
 * This is a draft description with branches of MP7 and ugt repos.
-* A fork of [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware is available with three branches:
+* A fork of [MP7](https://gitlab.cern.ch/hbergaue/mp7) firmware is available with three branches:
   - branch "mp7fw_v2_4_1_ugt" created from tag mp7fw_v2_4_1.
   - branch "mp7fw_v2_4_3_ugt" created from tag mp7fw_v2_4_3.
   - branch "mp7fw_master_ugt" created from master.

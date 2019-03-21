@@ -37,6 +37,8 @@ into [top.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/c
     # Copy VHDL producer output and patched files to mp7_ugt (gtl_module.vhd, gtl_pkg.vhd,
     algo_mapping_rop.vhd and gt_mp7_top_pkg.vhd)
 
+    # Source Vivado
+    
     # Create project 
     ipbb proj create vivado mp7_ugt_<build_version>_<module_nr> mp7:../ugt/mp7_ugt
     cd proj/mp7_ugt_<build_version>_<module_nr>

@@ -33,6 +33,7 @@ mp7_tag = 'cactusupgrades'
 algonum = 512#numbers of bits
 IGNORED_ALGOS = [
   'L1_FirstBunchInTrain',
+  'L1_SecondBunchInTrain',
   ]
 
 def read_file(filename):

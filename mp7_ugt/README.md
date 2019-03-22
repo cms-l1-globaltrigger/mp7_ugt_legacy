@@ -16,7 +16,7 @@ of [ugt](https://gitlab.cern.ch/cms-cactus/svn2git/firmware) master.
 Following modifications are done in the branch:
   - added [ugt_strategy.tcl](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/ucf/ugt_strategy.tcl) for ugt specific strategy and inserted it
 into [top.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/cfg/top.dep).
-  - modified [uGT_algo.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/cfg/uGT_algo.dep): pointing to ipbus-firmware.
+  - modified [uGT_algo.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/cfg/uGT_algo.dep): removed "doubled" commands (these commnads are in MP7 dep files).
 
 ### Setup ###
 

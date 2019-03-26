@@ -18,7 +18,7 @@ if [info exists env(MTI_LIBS)] {
 
 ## set your src files directory for your design
 
-set MP7_COMPONENTS {{MP7_TAG}}/cactusupgrades/components
+set MP7_COMPONENTS {{MP7_TAG}}/components
 set VIEW_WAVE {{VIEW_WAVE}}
 
 set HDL_DIR {{SIM_DIR}}/../hdl

@@ -11,8 +11,7 @@
   - mp7xe_690.vhd
 * One of these branches can be used for build (see below).
 
-* The ugt branch [devel](https://gitlab.cern.ch/hbergaue/ugt) is a fork
-of [ugt](https://gitlab.cern.ch/cms-cactus/svn2git/firmware) master.
+* The ugt repo is a fork of [svn2git ugt](https://gitlab.cern.ch/cms-cactus/svn2git/firmware/ugt) repo.
 Following modifications are done in the branch:
   - added [ugt_strategy.tcl](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/ucf/ugt_strategy.tcl) for ugt specific strategy and inserted it
 into [top.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/cfg/top.dep).
@@ -32,7 +31,7 @@ into [top.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/c
     cd <build_name>
     ipbb add git https://github.com/ipbus/ipbus-firmware.git -b master
     ipbb add git https://:@gitlab.cern.ch:8443/hbergaue/mp7.git -b mp7fw_v2_4_1_ugt
-    ipbb add git https://:@gitlab.cern.ch:8443/hbergaue/ugt.git -b devel
+    ipbb add git https://:@gitlab.cern.ch:8443/hbergaue/ugt.git -b master
 
     # Copy VHDL producer output and patched files to mp7_ugt (gtl_module.vhd, gtl_pkg.vhd,
     algo_mapping_rop.vhd and gt_mp7_top_pkg.vhd)

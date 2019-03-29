@@ -27,11 +27,11 @@ into [top.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/c
     source ipbb-0.2.8/env.sh
 
     # Create a local working area
-    ipbb init <build_name>
-    cd <build_name>
+    ipbb init <work dir>/mp7_ugt/<mp7fw version>/<menu version>/<build version>/module_<module number>
+    cd <work dir>/mp7_ugt/<mp7fw version>/<menu version>/<build version>/module_<module number>
     ipbb add git https://github.com/ipbus/ipbus-firmware.git -b master
     ipbb add git https://:@gitlab.cern.ch:8443/hbergaue/mp7.git -b mp7fw_v2_4_1_ugt
-    ipbb add git https://:@gitlab.cern.ch:8443/hbergaue/ugt.git -b master
+    ipbb add git https://:@gitlab.cern.ch:8443/hbergaue/ugt.git -b <master or branch name or tag name>
 
     # Copy VHDL producer output and patched files to mp7_ugt (gtl_module.vhd, gtl_pkg.vhd,
     algo_mapping_rop.vhd and gt_mp7_top_pkg.vhd)
@@ -39,8 +39,8 @@ into [top.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/c
     # Source Vivado
     
     # Create project 
-    ipbb proj create vivado mp7_ugt_<build_version>_<module_nr> mp7:../ugt/mp7_ugt
-    cd proj/mp7_ugt_<build_version>_<module_nr>
+    ipbb proj create vivado mp7_ugt_<build version>_<module number> mp7:../ugt/mp7_ugt
+    cd proj/mp7_ugt_<build version>_<module number>
     ipbb vivado project
 
     # Run implementation, synthesis

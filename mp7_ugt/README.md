@@ -22,6 +22,10 @@ into [top.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/c
     # Run kerberos for outside of CERN network
     kinit username@CERN.CH
 
+    # Make local clone of ugt repositiory
+    git clone https://gitlab.cern.ch/hbergaue/ugt.git <local path>
+    cd <local path>
+    
     # Run synthesis script (for all 6 modules)
     python mp7_ugt/scripts/runIpbbSynth.py <vivado version [2018.2]> -t <MP7 tag [mp7fw_v2_4_3]> -p <work dir> -m <menu path> -b <build version> --ugt <ugt master, branch or tag name>
 

@@ -17,7 +17,15 @@ Following modifications are done in the branch:
 into [top.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/cfg/top.dep).
   - modified [uGT_algo.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/devel/mp7_ugt/firmware/cfg/uGT_algo.dep): removed "doubled" commands (these commnads are in MP7 dep files).
 
-### Setup ###
+### Setup using script ###
+
+    # Run kerberos for outside of CERN network
+    kinit username@CERN.CH
+
+    # Run synthesis script (for all 6 modules)
+    python mp7_ugt/scripts/runIpbbSynth.py <vivado version [2018.2]> -t <MP7 tag [mp7fw_v2_4_3]> -p <work dir> -m <menu path> -b <build version> --ugt <ugt master, branch or tag name>
+
+### Setup (commands for one module) ###
 
     # Run kerberos for outside of CERN network
     kinit username@CERN.CH

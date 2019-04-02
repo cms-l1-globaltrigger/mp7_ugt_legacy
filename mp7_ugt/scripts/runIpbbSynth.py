@@ -108,7 +108,7 @@ def main():
     for module_id in range(modules):
         module_name = 'module_{}'.format(module_id)
         ipbb_module_dir = os.path.join(ipbb_dir, module_name)
-        ipbb_src_fw_dir = os.path.abspath(os.path.join(ipbb_module_dir, 'src', 'ugt', 'mp7_ugt', 'firmware'))
+        ipbb_src_fw_dir = os.path.abspath(os.path.join(ipbb_module_dir, 'src', 'ugt', project_type, 'firmware'))
         
         # IPBB commands: creating IPBB area
         cmd_source_ipbb = "source ipbb-0.2.8/env.sh"
@@ -123,7 +123,7 @@ def main():
         run_command(command)
         
         # Removing unused AMC502 firmware directories
-        logging.info("removing src directories of unused amc502 fw ...")
+        logging.info("removing src directories of unused firmware ...")
         command = 'bash -c "cd; cd {ipbb_module_dir}/src/ugt; rm -rf amc502_extcond && rm -rf amc502_finor && rm -rf amc502_finor_pre && rm -rf mp7_tdf"'.format(**locals())
         run_command(command)
 
@@ -161,7 +161,7 @@ def main():
             )
 
         logging.info("creating IPBB project ...")
-        cmd_ipbb_proj_create = "ipbb proj create vivado mp7_ugt_{build_name}_{module_id} mp7:../ugt/mp7_ugt".format(**locals())
+        cmd_ipbb_proj_create = "ipbb proj create vivado {project_type}_{build_name}_{module_id} mp7:../ugt/{project_type}".format(**locals())
         
         command = 'bash -c "cd; {cmd_source_ipbb}; cd {ipbb_module_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
         run_command(command)
@@ -174,9 +174,9 @@ def main():
         cmd_ipbb_impl = "ipbb vivado impl"
         cmd_ipbb_bitfile = "ipbb vivado package"
         
-        command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_module_dir}/proj/mp7_ugt_{build_name}_{module_id}; {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
+        command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_module_dir}/proj/{project_type}_{build_name}_{module_id}; {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
 
-        session = "build_{build_name}_{module_id}".format(**locals())
+        session = "build_{project_type}_{build_name}_{module_id}".format(**locals())
         logging.info("starting screen session '%s' for module %s ...", session, module_id)
         run_command('screen', '-dmS', session, command)
 

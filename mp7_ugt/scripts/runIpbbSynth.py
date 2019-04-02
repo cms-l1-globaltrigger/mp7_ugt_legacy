@@ -41,7 +41,7 @@ DefaultFirmwareDir = os.path.expanduser("~/work_ipbb")
 """Default output directory for firmware builds."""
 
 DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware.git'
-"""Default URL of gitlab MP7 repo."""
+"""Default URL of gitlab IPB repo."""
 
 DefaultGitlabUrlMP7 = 'https://:@gitlab.cern.ch:8443/hbergaue/mp7.git'
 """Default URL of gitlab MP7 repo."""

@@ -40,6 +40,15 @@ DefaultBoardType = 'mp7xe_690'
 DefaultFirmwareDir = os.path.expanduser("~/work_ipbb")
 """Default output directory for firmware builds."""
 
+DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware.git'
+"""Default URL of gitlab MP7 repo."""
+
+DefaultGitlabUrlMP7 = 'https://:@gitlab.cern.ch:8443/hbergaue/mp7.git'
+"""Default URL of gitlab MP7 repo."""
+
+DefaultGitlabUrlUgt = 'https://:@gitlab.cern.ch:8443/hbergaue/ugt.git'
+"""Default URL of gitlab ugt repo."""
+
 def run_command(*args):
     command = ' '.join(args)
     logging.info(">$ %s", command)
@@ -55,12 +64,16 @@ def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('vivado', type=vivado_t, help="xilinx vivado version to run, eg. '2018.2'")
-    parser.add_argument('-t', '--tag', metavar='<tag>', required=True, help="mp7fw tag")
+    parser.add_argument('--ipburl', metavar='<path>', default=DefaultGitlabUrlIPB, help="URL of IPB firmware repo")
+    parser.add_argument('-i', '--ipb', metavar='<tag>', default='master', help='IPBus firmware repo: tag or branch name (default is "master")')
+    parser.add_argument('--mp7url', metavar='<path>', default=DefaultGitlabUrlMP7, help="URL of MP7 firmware repo")
+    parser.add_argument('-t', '--tag', metavar='<tag>', required=True, help="MP7 firmware repo: tag name [is required]")
+    parser.add_argument('--ugturl', metavar='<path>', default=DefaultGitlabUrlUgt, help="URL of ugt firmware repo")
+    parser.add_argument('-u', '--ugt', metavar='<tag>', required=True, help='ugt firmware repo: tag or branch name [is required]')
     parser.add_argument('--board', metavar='<type>', default=DefaultBoardType, choices=BoardAliases.keys(), help="set board type (default is {})".format(DefaultBoardType))
     parser.add_argument('-p', '--path', metavar='<path>', default=DefaultFirmwareDir, type=os.path.abspath, help="fw build path (default is {})".format(DefaultFirmwareDir))
-    parser.add_argument('-m', '--menu', metavar='<menu>', required=True, type=os.path.abspath, help="path to L1Menu_ directory")
-    parser.add_argument('-b', '--build', metavar='<version>', required=True, type=tb.build_t, help='menu build version (eg. 0x1001)')
-    parser.add_argument('--ugt', metavar='<branch>', required=True, help='ugt repo: "master", branch name or tag name')
+    parser.add_argument('-m', '--menu', metavar='<menu>', required=True, type=os.path.abspath, help="path to L1Menu_ directory [is required]")
+    parser.add_argument('-b', '--build', metavar='<version>', required=True, type=tb.build_t, help='menu build version (eg. 0x1001) [is required]')
     return parser.parse_args()
 
 def main():
@@ -100,9 +113,9 @@ def main():
         # IPBB commands: creating IPBB area
         cmd_source_ipbb = "source ipbb-0.2.8/env.sh"
         cmd_ipbb_init = "ipbb init {ipbb_module_dir}".format(**locals())
-        cmd_ipbb_add_ipb = "ipbb add git https://github.com/ipbus/ipbus-firmware.git -b master"
-        cmd_ipbb_add_mp7 = "ipbb add git https://:@gitlab.cern.ch:8443/hbergaue/mp7.git -b {args.tag}_ugt".format(**locals())
-        cmd_ipbb_add_ugt = "ipbb add git https://:@gitlab.cern.ch:8443/hbergaue/ugt.git -b {args.ugt}".format(**locals())
+        cmd_ipbb_add_ipb = "ipbb add git {args.ipburl} -b {args.ipb}".format(**locals())
+        cmd_ipbb_add_mp7 = "ipbb add git {args.mp7url} -b {args.tag}_ugt".format(**locals())
+        cmd_ipbb_add_ugt = "ipbb add git {args.ugturl} -b {args.ugt}".format(**locals())
         
         logging.info("===========================================================================")
         logging.info("creating IPBB area for %s ...", module_name)
@@ -138,7 +151,7 @@ def main():
         top_pkg_tpl = os.path.join(ipbb_src_fw_dir, 'hdl', 'gt_mp7_top_pkg_tpl.vhd')
         top_pkg = os.path.join(ipbb_src_fw_dir, 'hdl', 'gt_mp7_top_pkg.vhd')
         subprocess.check_call(['python', os.path.join(ipbb_src_fw_dir, '..', 'scripts', 'pkgpatch.py'), '--build', args.build, top_pkg_tpl, top_pkg])
-
+        
         # Vivado settings
         settings64 = os.path.join(VIVADO_BASE_DIR, args.vivado, 'settings64.sh')
         if not os.path.isfile(settings64):
@@ -170,6 +183,41 @@ def main():
     # list running screen sessions
     run_command('screen', '-ls')
 
+    os.chdir(ipbb_dir)
+
+    # Creating configuration file.
+    config = ConfigParser.RawConfigParser()
+    config.add_section('environment')
+    config.set('environment', 'timestamp', tb.timestamp())
+    config.set('environment', 'hostname', tb.hostname())
+    config.set('environment', 'username', tb.username())
+
+    config.add_section('menu')
+    config.set('menu', 'build', args.build)
+    config.set('menu', 'name', menu_name)
+    config.set('menu', 'location', args.menu)
+    config.set('menu', 'modules', modules)
+
+    config.add_section('firmware')
+    config.set('firmware', 'ipb URL', args.ipburl)
+    config.set('firmware', 'ipb branch', args.ipb)
+    config.set('firmware', 'mp7 URL', args.mp7url)
+    config.set('firmware', 'mp7 tag', args.tag)
+    config.set('firmware', 'ugt URL', args.ugturl)
+    config.set('firmware', 'ugt branch', args.ugt)
+    config.set('firmware', 'type', FW_TYPE)
+    config.set('firmware', 'buildarea', ipbb_dir)
+
+    config.add_section('device')
+    config.set('device', 'type', args.board)
+    config.set('device', 'name', BOARD_TYPE)
+    config.set('device', 'alias', BoardAliases[args.board])
+
+    # Writing configuration file
+    with open('build_0x{}.cfg'.format(args.build), 'wb') as fp:
+        config.write(fp)
+
+    logging.info("created configuration file: %s/build_0x%s.cfg.", ipbb_dir, args.build)
     logging.info("done.")
 
 if __name__ == '__main__':

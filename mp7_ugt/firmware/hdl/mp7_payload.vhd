@@ -1,3 +1,6 @@
+
+-- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name, too)
+-- mp7_ugt (=FRAME_VERSION): v1.7.0
 --
 -- HB 2017-10-06: renamed signal "dsmux_lhc_data" to "lhc_data_2_gtl" (similar to port name of frame).
 -- HB 2017-09-13: removed instance tp_mux_i.

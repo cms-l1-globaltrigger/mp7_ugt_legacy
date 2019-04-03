@@ -1,0 +1,17 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/)
+and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## [mp7_ugt_v1_7_0 ] - 2019-04-03
+### Comment
+
+- mp7_ugt firmware release v1.7.0 is created for use with IPBus builder and based on frame v1.2.3, gtl v1.6.0 and fdl v1.2.2.
+
+### Changed
+- used "FRAME_VERSION" in gt_mp7_core_pkg.vhd for mp7_ugt firmware release number.
+- added ugt_strategy.tcl for ugt specific strategy and inserted it into top.dep.
+- modified uGT_algo.dep: removed "doubled" commands (these commnads are in MP7 dep files).
+- added scripts runIpbbSynth.py for IPBB synthesis (all 6 mp7_ugt modules), checkIpbbSynth.py and fwpackerIpbb.py.
+

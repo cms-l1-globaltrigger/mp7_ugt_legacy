@@ -114,7 +114,7 @@ def main():
         cmd_source_ipbb = "source ipbb-0.2.8/env.sh"
         cmd_ipbb_init = "ipbb init {ipbb_module_dir}".format(**locals())
         cmd_ipbb_add_ipb = "ipbb add git {args.ipburl} -b {args.ipb}".format(**locals())
-        cmd_ipbb_add_mp7 = "ipbb add git {args.mp7url} -b {args.tag}_ugt".format(**locals())
+        cmd_ipbb_add_mp7 = "ipbb add git {args.mp7url} -b {args.tag}_{project_type}".format(**locals())
         cmd_ipbb_add_ugt = "ipbb add git {args.ugturl} -b {args.ugt}".format(**locals())
         
         logging.info("===========================================================================")

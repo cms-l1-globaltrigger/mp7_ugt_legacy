@@ -43,10 +43,10 @@ DefaultFirmwareDir = os.path.expanduser("~/work_ipbb")
 DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware.git'
 """Default URL of gitlab IPB repo."""
 
-DefaultGitlabUrlMP7 = 'https://:@gitlab.cern.ch:8443/hbergaue/mp7.git'
+#DefaultGitlabUrlMP7 = 'https://:@gitlab.cern.ch:8443/hbergaue/mp7.git'
 """Default URL of gitlab MP7 repo."""
 
-DefaultGitlabUrlUgt = 'https://:@gitlab.cern.ch:8443/hbergaue/ugt.git'
+#DefaultGitlabUrlUgt = 'https://:@gitlab.cern.ch:8443/hbergaue/ugt.git'
 """Default URL of gitlab ugt repo."""
 
 def run_command(*args):
@@ -66,9 +66,9 @@ def parse_args():
     parser.add_argument('vivado', type=vivado_t, help="xilinx vivado version to run, eg. '2018.2'")
     parser.add_argument('--ipburl', metavar='<path>', default=DefaultGitlabUrlIPB, help="URL of IPB firmware repo")
     parser.add_argument('-i', '--ipb', metavar='<tag>', default='master', help='IPBus firmware repo: tag or branch name (default is "master")')
-    parser.add_argument('--mp7url', metavar='<path>', default=DefaultGitlabUrlMP7, help="URL of MP7 firmware repo")
+    parser.add_argument('--mp7url', metavar='<path>', required=True, help="URL of MP7 firmware repo")
     parser.add_argument('-t', '--tag', metavar='<tag>', required=True, help="MP7 firmware repo: tag name [is required]")
-    parser.add_argument('--ugturl', metavar='<path>', default=DefaultGitlabUrlUgt, help="URL of ugt firmware repo")
+    parser.add_argument('--ugturl', metavar='<path>', required=True, help="URL of ugt firmware repo")
     parser.add_argument('-u', '--ugt', metavar='<tag>', required=True, help='ugt firmware repo: tag or branch name [is required]')
     parser.add_argument('--board', metavar='<type>', default=DefaultBoardType, choices=BoardAliases.keys(), help="set board type (default is {})".format(DefaultBoardType))
     parser.add_argument('-p', '--path', metavar='<path>', default=DefaultFirmwareDir, type=os.path.abspath, help="fw build path (default is {})".format(DefaultFirmwareDir))
@@ -93,6 +93,7 @@ def main():
 
     # Compile build root directory
     project_type = "{}_{}".format(BOARD_TYPE, FW_TYPE)
+    mp7fw_tag = "{}_{}".format(args.tag, project_type)
     build_name = "0x{}".format(args.build)
     ipbb_dir = os.path.join(args.path, project_type, args.tag, menu_name, build_name)
 
@@ -114,7 +115,7 @@ def main():
         cmd_source_ipbb = "source ipbb-0.2.8/env.sh"
         cmd_ipbb_init = "ipbb init {ipbb_module_dir}".format(**locals())
         cmd_ipbb_add_ipb = "ipbb add git {args.ipburl} -b {args.ipb}".format(**locals())
-        cmd_ipbb_add_mp7 = "ipbb add git {args.mp7url} -b {args.tag}_{project_type}".format(**locals())
+        cmd_ipbb_add_mp7 = "ipbb add git {args.mp7url} -b {mp7fw_tag}".format(**locals())
         cmd_ipbb_add_ugt = "ipbb add git {args.ugturl} -b {args.ugt}".format(**locals())
         
         logging.info("===========================================================================")
@@ -152,36 +153,36 @@ def main():
         top_pkg = os.path.join(ipbb_src_fw_dir, 'hdl', 'gt_mp7_top_pkg.vhd')
         subprocess.check_call(['python', os.path.join(ipbb_src_fw_dir, '..', 'scripts', 'pkgpatch.py'), '--build', args.build, top_pkg_tpl, top_pkg])
         
-        # Vivado settings
-        settings64 = os.path.join(VIVADO_BASE_DIR, args.vivado, 'settings64.sh')
-        if not os.path.isfile(settings64):
-            raise RuntimeError(
-                "no such Xilinx Vivado settings file '{settings64}'\n" \
-                "  check if Xilinx Vivado {args.vivado} is installed on this machine.".format(**locals())
-            )
+        ## Vivado settings
+        #settings64 = os.path.join(VIVADO_BASE_DIR, args.vivado, 'settings64.sh')
+        #if not os.path.isfile(settings64):
+            #raise RuntimeError(
+                #"no such Xilinx Vivado settings file '{settings64}'\n" \
+                #"  check if Xilinx Vivado {args.vivado} is installed on this machine.".format(**locals())
+            #)
 
-        logging.info("creating IPBB project ...")
-        cmd_ipbb_proj_create = "ipbb proj create vivado {project_type}_{build_name}_{module_id} mp7:../ugt/{project_type}".format(**locals())
+        #logging.info("creating IPBB project ...")
+        #cmd_ipbb_proj_create = "ipbb proj create vivado {project_type}_{build_name}_{module_id} mp7:../ugt/{project_type}".format(**locals())
         
-        command = 'bash -c "cd; {cmd_source_ipbb}; cd {ipbb_module_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
-        run_command(command)
+        #command = 'bash -c "cd; {cmd_source_ipbb}; cd {ipbb_module_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
+        #run_command(command)
         
-        logging.info("running IPBB project, synthesis and implementation, creating bitfile ...")
+        #logging.info("running IPBB project, synthesis and implementation, creating bitfile ...")
         
-        # IPBB commands: running IPBB project, synthesis and implementation, creating bitfile
-        cmd_ipbb_project = "ipbb vivado project"
-        cmd_ipbb_synth = "ipbb vivado synth"
-        cmd_ipbb_impl = "ipbb vivado impl"
-        cmd_ipbb_bitfile = "ipbb vivado package"
+        ## IPBB commands: running IPBB project, synthesis and implementation, creating bitfile
+        #cmd_ipbb_project = "ipbb vivado project"
+        #cmd_ipbb_synth = "ipbb vivado synth"
+        #cmd_ipbb_impl = "ipbb vivado impl"
+        #cmd_ipbb_bitfile = "ipbb vivado package"
         
-        command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_module_dir}/proj/{project_type}_{build_name}_{module_id}; {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
+        #command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_module_dir}/proj/{project_type}_{build_name}_{module_id}; {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
 
-        session = "build_{project_type}_{build_name}_{module_id}".format(**locals())
-        logging.info("starting screen session '%s' for module %s ...", session, module_id)
-        run_command('screen', '-dmS', session, command)
+        #session = "build_{project_type}_{build_name}_{module_id}".format(**locals())
+        #logging.info("starting screen session '%s' for module %s ...", session, module_id)
+        #run_command('screen', '-dmS', session, command)
 
-    # list running screen sessions
-    run_command('screen', '-ls')
+    ## list running screen sessions
+    #run_command('screen', '-ls')
 
     os.chdir(ipbb_dir)
 
@@ -199,12 +200,13 @@ def main():
     config.set('menu', 'modules', modules)
 
     config.add_section('firmware')
-    config.set('firmware', 'ipb URL', args.ipburl)
-    config.set('firmware', 'ipb branch', args.ipb)
-    config.set('firmware', 'mp7 URL', args.mp7url)
-    config.set('firmware', 'mp7 tag', args.tag)
-    config.set('firmware', 'ugt URL', args.ugturl)
-    config.set('firmware', 'ugt branch', args.ugt)
+    config.set('firmware', 'ipburl', args.ipburl)
+    config.set('firmware', 'ipbtag', args.ipb)
+    config.set('firmware', 'mp7url', args.mp7url)
+    config.set('firmware', 'mp7tag', mp7fw_tag)
+    config.set('firmware', 'tag', args.tag)
+    config.set('firmware', 'ugturl', args.ugturl)
+    config.set('firmware', 'ugttag', args.ugt)
     config.set('firmware', 'type', FW_TYPE)
     config.set('firmware', 'buildarea', ipbb_dir)
 

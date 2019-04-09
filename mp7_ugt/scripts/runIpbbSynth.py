@@ -60,10 +60,17 @@ def vivado_t(version):
         raise ValueError("not a xilinx vivado version: '{version}'".format(**locals()))
     return version
 
+def ipbb_version_t(version):
+    """Validates IPBB version number."""
+    if not re.match(r'^\d\.\d\.\d+$', version):
+        raise ValueError("not a valid IPBB version: '{version}'".format(**locals()))
+    return version
+
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('vivado', type=vivado_t, help="xilinx vivado version to run, eg. '2018.2'")
+    parser.add_argument('--ipbb', metavar='<version>', required=True, type=ipbb_version_t, help="IPBus builder version [tag] (eg. 0.4.3) [is required]")
     parser.add_argument('--ipburl', metavar='<path>', default=DefaultGitlabUrlIPB, help="URL of IPB firmware repo")
     parser.add_argument('-i', '--ipb', metavar='<tag>', default='master', help='IPBus firmware repo: tag or branch name (default is "master")')
     parser.add_argument('--mp7url', metavar='<path>', required=True, help="URL of MP7 firmware repo")
@@ -106,13 +113,25 @@ def main():
     if not modules:
         raise RuntimeError("Menu contains no modules")
 
+    ipbb_version = args.ipbb
+    ipbb_version_path = os.path.join(os.getenv("HOME"),"ipbb-{}".format(ipbb_version))
+    
+    if not os.path.isdir(ipbb_version_path):
+        logging.info("execute 'curl' command ...")
+        cmd_curl = "curl -L https://github.com/ipbus/ipbb/archive/v{ipbb_version}.tar.gz | tar xvz".format(**locals())
+        command = 'bash -c "cd; {cmd_curl}"'.format(**locals())
+        run_command(command)
+    
+    cmd_source_ipbb = "source ipbb-{ipbb_version}/env.sh".format(**locals())
+    #command = 'bash -c "cd; {cmd_source_ipbb}"'.format(**locals())
+    #run_command(command)
+
     for module_id in range(modules):
         module_name = 'module_{}'.format(module_id)
         ipbb_module_dir = os.path.join(ipbb_dir, module_name)
         ipbb_src_fw_dir = os.path.abspath(os.path.join(ipbb_module_dir, 'src', 'ugt', project_type, 'firmware'))
         
         # IPBB commands: creating IPBB area
-        cmd_source_ipbb = "source ipbb-0.2.8/env.sh"
         cmd_ipbb_init = "ipbb init {ipbb_module_dir}".format(**locals())
         cmd_ipbb_add_ipb = "ipbb add git {args.ipburl} -b {args.ipb}".format(**locals())
         cmd_ipbb_add_mp7 = "ipbb add git {args.mp7url} -b {mp7fw_tag}".format(**locals())
@@ -153,36 +172,36 @@ def main():
         top_pkg = os.path.join(ipbb_src_fw_dir, 'hdl', 'gt_mp7_top_pkg.vhd')
         subprocess.check_call(['python', os.path.join(ipbb_src_fw_dir, '..', 'scripts', 'pkgpatch.py'), '--build', args.build, top_pkg_tpl, top_pkg])
         
-        ## Vivado settings
-        #settings64 = os.path.join(VIVADO_BASE_DIR, args.vivado, 'settings64.sh')
-        #if not os.path.isfile(settings64):
-            #raise RuntimeError(
-                #"no such Xilinx Vivado settings file '{settings64}'\n" \
-                #"  check if Xilinx Vivado {args.vivado} is installed on this machine.".format(**locals())
-            #)
+        # Vivado settings
+        settings64 = os.path.join(VIVADO_BASE_DIR, args.vivado, 'settings64.sh')
+        if not os.path.isfile(settings64):
+            raise RuntimeError(
+                "no such Xilinx Vivado settings file '{settings64}'\n" \
+                "  check if Xilinx Vivado {args.vivado} is installed on this machine.".format(**locals())
+            )
 
-        #logging.info("creating IPBB project ...")
-        #cmd_ipbb_proj_create = "ipbb proj create vivado {project_type}_{build_name}_{module_id} mp7:../ugt/{project_type}".format(**locals())
+        logging.info("creating IPBB project ...")
+        cmd_ipbb_proj_create = "ipbb proj create vivado {project_type}_{build_name}_{module_id} mp7:../ugt/{project_type}".format(**locals())
         
-        #command = 'bash -c "cd; {cmd_source_ipbb}; cd {ipbb_module_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
-        #run_command(command)
+        command = 'bash -c "cd; {cmd_source_ipbb}; cd {ipbb_module_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
+        run_command(command)
         
-        #logging.info("running IPBB project, synthesis and implementation, creating bitfile ...")
+        logging.info("running IPBB project, synthesis and implementation, creating bitfile ...")
         
-        ## IPBB commands: running IPBB project, synthesis and implementation, creating bitfile
-        #cmd_ipbb_project = "ipbb vivado project"
-        #cmd_ipbb_synth = "ipbb vivado synth"
-        #cmd_ipbb_impl = "ipbb vivado impl"
-        #cmd_ipbb_bitfile = "ipbb vivado package"
+        # IPBB commands: running IPBB project, synthesis and implementation, creating bitfile
+        cmd_ipbb_project = "ipbb vivado project"
+        cmd_ipbb_synth = "ipbb vivado synth"
+        cmd_ipbb_impl = "ipbb vivado impl"
+        cmd_ipbb_bitfile = "ipbb vivado package"
         
-        #command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_module_dir}/proj/{project_type}_{build_name}_{module_id}; {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
+        command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_module_dir}/proj/{project_type}_{build_name}_{module_id}; {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
 
-        #session = "build_{project_type}_{build_name}_{module_id}".format(**locals())
-        #logging.info("starting screen session '%s' for module %s ...", session, module_id)
-        #run_command('screen', '-dmS', session, command)
+        session = "build_{project_type}_{build_name}_{module_id}".format(**locals())
+        logging.info("starting screen session '%s' for module %s ...", session, module_id)
+        run_command('screen', '-dmS', session, command)
 
-    ## list running screen sessions
-    #run_command('screen', '-ls')
+    # list running screen sessions
+    run_command('screen', '-ls')
 
     os.chdir(ipbb_dir)
 
@@ -199,6 +218,9 @@ def main():
     config.set('menu', 'location', args.menu)
     config.set('menu', 'modules', modules)
 
+    config.add_section('ipbb')
+    config.set('ipbb', 'version', ipbb_version)
+    
     config.add_section('firmware')
     config.set('firmware', 'ipburl', args.ipburl)
     config.set('firmware', 'ipbtag', args.ipb)

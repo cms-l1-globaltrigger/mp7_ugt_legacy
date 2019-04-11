@@ -14,14 +14,6 @@ import ConfigParser
 import sys, os, re
 import socket
 
-HB_PC = 'powerslave'
-"""if HB_PC => Bergauer PC 'powerslave' Xilinx Vivado installation location = '/opt/Xilinx/Vivado."""
-"""else => Default Xilinx Vivado installation location = '/opt/xilinx/Vivado'."""
-if socket.gethostname() == HB_PC:
-    VIVADO_BASE_DIR = '/opt/Xilinx/Vivado'
-else:
-    VIVADO_BASE_DIR = '/opt/xilinx/Vivado'
-
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
@@ -91,6 +83,11 @@ def main():
 
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+    
+    # Check for VIVADO_BASE_DIR
+    vivado_base_dir = os.getenv('VIVADO_BASE_DIR')
+    if not vivado_base_dir:
+        raise RuntimeError("Environment variable 'VIVADO_BASE_DIR' not set.")
 
     # Fetch menu name from path.
     menu_name = os.path.basename(args.menu)
@@ -173,7 +170,7 @@ def main():
         subprocess.check_call(['python', os.path.join(ipbb_src_fw_dir, '..', 'scripts', 'pkgpatch.py'), '--build', args.build, top_pkg_tpl, top_pkg])
         
         # Vivado settings
-        settings64 = os.path.join(VIVADO_BASE_DIR, args.vivado, 'settings64.sh')
+        settings64 = os.path.join(vivado_base_dir, args.vivado, 'settings64.sh')
         if not os.path.isfile(settings64):
             raise RuntimeError(
                 "no such Xilinx Vivado settings file '{settings64}'\n" \

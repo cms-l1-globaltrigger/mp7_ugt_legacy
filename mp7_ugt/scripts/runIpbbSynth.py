@@ -87,7 +87,7 @@ def main():
     # Check for VIVADO_BASE_DIR
     vivado_base_dir = os.getenv('VIVADO_BASE_DIR')
     if not vivado_base_dir:
-        raise RuntimeError("Environment variable 'VIVADO_BASE_DIR' not set.")
+        raise RuntimeError("Environment variable 'VIVADO_BASE_DIR' not set. Set with: 'export VIVADO_BASE_DIR=...'")
 
     # Fetch menu name from path.
     menu_name = os.path.basename(args.menu)
@@ -119,16 +119,13 @@ def main():
         command = 'bash -c "cd; {cmd_curl}"'.format(**locals())
         run_command(command)
     
-    cmd_source_ipbb = "source ipbb-{ipbb_version}/env.sh".format(**locals())
-    #command = 'bash -c "cd; {cmd_source_ipbb}"'.format(**locals())
-    #run_command(command)
-
     for module_id in range(modules):
         module_name = 'module_{}'.format(module_id)
         ipbb_module_dir = os.path.join(ipbb_dir, module_name)
         ipbb_src_fw_dir = os.path.abspath(os.path.join(ipbb_module_dir, 'src', 'ugt', project_type, 'firmware'))
         
         # IPBB commands: creating IPBB area
+        cmd_source_ipbb = "source ipbb-{ipbb_version}/env.sh".format(**locals())
         cmd_ipbb_init = "ipbb init {ipbb_module_dir}".format(**locals())
         cmd_ipbb_add_ipb = "ipbb add git {args.ipburl} -b {args.ipb}".format(**locals())
         cmd_ipbb_add_mp7 = "ipbb add git {args.mp7url} -b {mp7fw_tag}".format(**locals())

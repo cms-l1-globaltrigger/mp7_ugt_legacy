@@ -91,3 +91,6 @@ src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
 
 src -c components/mp7_ttc mp7_ttc_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd
+
+## HB 2019-04-24: gtl_module.vhd, gtl_pkg.vhd and algo_mapping_rop.vhd added via tcl script for every module
+src ../cfg/l1menu_files.tcl

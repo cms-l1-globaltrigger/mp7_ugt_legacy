@@ -119,29 +119,33 @@ def main():
         command = 'bash -c "cd; {cmd_curl}"'.format(**locals())
         run_command(command)
     
+    # IPBB commands: creating IPBB area
+    cmd_source_ipbb = "source ipbb-{ipbb_version}/env.sh".format(**locals())
+    cmd_ipbb_init = "ipbb init {ipbb_dir}".format(**locals())
+    cmd_ipbb_add_ipb = "ipbb add git {args.ipburl} -b {args.ipb}".format(**locals())
+    cmd_ipbb_add_mp7 = "ipbb add git {args.mp7url} -b {mp7fw_tag}".format(**locals())
+    cmd_ipbb_add_ugt = "ipbb add git {args.ugturl} -b {args.ugt}".format(**locals())
+
+    logging.info("===========================================================================")
+    logging.info("creating IPBB area ...")
+    command = 'bash -c "cd; {cmd_source_ipbb}; {cmd_ipbb_init}; cd {ipbb_dir}; {cmd_ipbb_add_ipb} && {cmd_ipbb_add_mp7} && {cmd_ipbb_add_ugt}"'.format(**locals())
+    run_command(command)
+
+    # Removing unused AMC502 firmware directories
+    logging.info("removing src directories of unused firmware ...")
+    command = 'bash -c "cd; cd {ipbb_dir}/src/ugt; rm -rf amc502_extcond && rm -rf amc502_finor && rm -rf amc502_finor_pre && rm -rf mp7_tdf"'.format(**locals())
+    run_command(command)
+
+    ipbb_src_fw_dir = os.path.abspath(os.path.join(ipbb_dir, 'src', 'ugt', project_type, 'firmware'))
+        
     for module_id in range(modules):
         module_name = 'module_{}'.format(module_id)
         ipbb_module_dir = os.path.join(ipbb_dir, module_name)
-        ipbb_src_fw_dir = os.path.abspath(os.path.join(ipbb_module_dir, 'src', 'ugt', project_type, 'firmware'))
         
-        # IPBB commands: creating IPBB area
-        cmd_source_ipbb = "source ipbb-{ipbb_version}/env.sh".format(**locals())
-        cmd_ipbb_init = "ipbb init {ipbb_module_dir}".format(**locals())
-        cmd_ipbb_add_ipb = "ipbb add git {args.ipburl} -b {args.ipb}".format(**locals())
-        cmd_ipbb_add_mp7 = "ipbb add git {args.mp7url} -b {mp7fw_tag}".format(**locals())
-        cmd_ipbb_add_ugt = "ipbb add git {args.ugturl} -b {args.ugt}".format(**locals())
+        ipbb_dest_fw_dir = os.path.abspath(os.path.join(ipbb_dir, 'src', module_name))
+        os.makedirs(ipbb_dest_fw_dir)
         
-        logging.info("===========================================================================")
-        logging.info("creating IPBB area for %s ...", module_name)
-        command = 'bash -c "cd; {cmd_source_ipbb}; {cmd_ipbb_init}; cd {ipbb_module_dir}; {cmd_ipbb_add_ipb} && {cmd_ipbb_add_mp7} && {cmd_ipbb_add_ugt}"'.format(**locals())
-        run_command(command)
-        
-        # Removing unused AMC502 firmware directories
-        logging.info("removing src directories of unused firmware ...")
-        command = 'bash -c "cd; cd {ipbb_module_dir}/src/ugt; rm -rf amc502_extcond && rm -rf amc502_finor && rm -rf amc502_finor_pre && rm -rf mp7_tdf"'.format(**locals())
-        run_command(command)
-
-        # Read generated VHDL snippets
+        #Read generated VHDL snippets
         vhdl_producer_dir = os.path.join(args.menu, 'vhdl', module_name, 'src')
 
         logging.info("replace VHDL templates with snippets from VHDL Producer ...")
@@ -156,17 +160,17 @@ def main():
         gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
         fdl_dir = os.path.join(gtl_fdl_wrapper_dir, 'fdl')
 
-        # Patch VHDL files in IPBB area (
-        tb.template_replace(os.path.join(fdl_dir, 'algo_mapping_rop_tpl.vhd'), replace_map, os.path.join(fdl_dir, 'algo_mapping_rop.vhd'))
-        tb.template_replace(os.path.join(gtl_dir, 'gtl_pkg_tpl.vhd'), replace_map, os.path.join(gtl_dir, 'gtl_pkg.vhd'))
-        tb.template_replace(os.path.join(gtl_dir, 'gtl_module_tpl.vhd'), replace_map, os.path.join(gtl_dir, 'gtl_module.vhd'))
+        #Patch VHDL files in IPBB area (
+        tb.template_replace(os.path.join(fdl_dir, 'algo_mapping_rop_tpl.vhd'), replace_map, os.path.join(ipbb_dest_fw_dir, 'algo_mapping_rop.vhd'))
+        tb.template_replace(os.path.join(gtl_dir, 'gtl_pkg_tpl.vhd'), replace_map, os.path.join(ipbb_dest_fw_dir, 'gtl_pkg.vhd'))
+        tb.template_replace(os.path.join(gtl_dir, 'gtl_module_tpl.vhd'), replace_map, os.path.join(ipbb_dest_fw_dir, 'gtl_module.vhd'))
 
         logging.info("patch the target package with current UNIX timestamp/username/hostname ...")
         top_pkg_tpl = os.path.join(ipbb_src_fw_dir, 'hdl', 'gt_mp7_top_pkg_tpl.vhd')
         top_pkg = os.path.join(ipbb_src_fw_dir, 'hdl', 'gt_mp7_top_pkg.vhd')
         subprocess.check_call(['python', os.path.join(ipbb_src_fw_dir, '..', 'scripts', 'pkgpatch.py'), '--build', args.build, top_pkg_tpl, top_pkg])
         
-        # Vivado settings
+        #Vivado settings
         settings64 = os.path.join(vivado_base_dir, args.vivado, 'settings64.sh')
         if not os.path.isfile(settings64):
             raise RuntimeError(
@@ -177,66 +181,71 @@ def main():
         logging.info("creating IPBB project ...")
         cmd_ipbb_proj_create = "ipbb proj create vivado {project_type}_{build_name}_{module_id} mp7:../ugt/{project_type}".format(**locals())
         
-        command = 'bash -c "cd; {cmd_source_ipbb}; cd {ipbb_module_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
+        command = 'bash -c "cd; {cmd_source_ipbb}; cd {ipbb_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
         run_command(command)
         
-        logging.info("running IPBB project, synthesis and implementation, creating bitfile ...")
+        command = 'bash -c "cd; {cmd_source_ipbb}; cp {ipbb_src_fw_dir}/cfg/uGT_algo_{module_name}.dep {ipbb_src_fw_dir}/cfg/uGT_algo.dep"'.format(**locals())
+        run_command(command)
         
-        # IPBB commands: running IPBB project, synthesis and implementation, creating bitfile
-        cmd_ipbb_project = "ipbb vivado project"
-        cmd_ipbb_synth = "ipbb vivado synth"
-        cmd_ipbb_impl = "ipbb vivado impl"
-        cmd_ipbb_bitfile = "ipbb vivado package"
+        #logging.info("running IPBB project, synthesis and implementation, creating bitfile ...")
         
-        command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_module_dir}/proj/{project_type}_{build_name}_{module_id}; {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
+        ##IPBB commands: running IPBB project, synthesis and implementation, creating bitfile
+        #cmd_ipbb_project = "ipbb vivado project"
+        #cmd_ipbb_synth = "ipbb vivado synth"
+        #cmd_ipbb_impl = "ipbb vivado impl"
+        #cmd_ipbb_bitfile = "ipbb vivado package"
+        
+        #command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_module_dir}/proj/{project_type}_{build_name}_{module_id}; {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
+        #command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_dir}/proj/{project_type}_{build_name}_{module_id}; {cmd_ipbb_project}"'.format(**locals())
 
-        session = "build_{project_type}_{build_name}_{module_id}".format(**locals())
-        logging.info("starting screen session '%s' for module %s ...", session, module_id)
-        run_command('screen', '-dmS', session, command)
+        #session = "build_{project_type}_{build_name}_{module_id}".format(**locals())
+        #logging.info("starting screen session '%s' for module %s ...", session, module_id)
+        #run_command('screen', '-dmS', session, command)
+        #run_command(command)
 
-    # list running screen sessions
-    run_command('screen', '-ls')
+    ## list running screen sessions
+    #run_command('screen', '-ls')
 
-    os.chdir(ipbb_dir)
+    #os.chdir(ipbb_dir)
 
-    # Creating configuration file.
-    config = ConfigParser.RawConfigParser()
-    config.add_section('environment')
-    config.set('environment', 'timestamp', tb.timestamp())
-    config.set('environment', 'hostname', tb.hostname())
-    config.set('environment', 'username', tb.username())
+    ## Creating configuration file.
+    #config = ConfigParser.RawConfigParser()
+    #config.add_section('environment')
+    #config.set('environment', 'timestamp', tb.timestamp())
+    #config.set('environment', 'hostname', tb.hostname())
+    #config.set('environment', 'username', tb.username())
 
-    config.add_section('menu')
-    config.set('menu', 'build', args.build)
-    config.set('menu', 'name', menu_name)
-    config.set('menu', 'location', args.menu)
-    config.set('menu', 'modules', modules)
+    #config.add_section('menu')
+    #config.set('menu', 'build', args.build)
+    #config.set('menu', 'name', menu_name)
+    #config.set('menu', 'location', args.menu)
+    #config.set('menu', 'modules', modules)
 
-    config.add_section('ipbb')
-    config.set('ipbb', 'version', ipbb_version)
+    #config.add_section('ipbb')
+    #config.set('ipbb', 'version', ipbb_version)
     
-    config.add_section('firmware')
-    config.set('firmware', 'ipburl', args.ipburl)
-    config.set('firmware', 'ipbtag', args.ipb)
-    config.set('firmware', 'mp7url', args.mp7url)
-    config.set('firmware', 'mp7tag', mp7fw_tag)
-    config.set('firmware', 'tag', args.tag)
-    config.set('firmware', 'ugturl', args.ugturl)
-    config.set('firmware', 'ugttag', args.ugt)
-    config.set('firmware', 'type', FW_TYPE)
-    config.set('firmware', 'buildarea', ipbb_dir)
+    #config.add_section('firmware')
+    #config.set('firmware', 'ipburl', args.ipburl)
+    #config.set('firmware', 'ipbtag', args.ipb)
+    #config.set('firmware', 'mp7url', args.mp7url)
+    #config.set('firmware', 'mp7tag', mp7fw_tag)
+    #config.set('firmware', 'tag', args.tag)
+    #config.set('firmware', 'ugturl', args.ugturl)
+    #config.set('firmware', 'ugttag', args.ugt)
+    #config.set('firmware', 'type', FW_TYPE)
+    #config.set('firmware', 'buildarea', ipbb_dir)
 
-    config.add_section('device')
-    config.set('device', 'type', args.board)
-    config.set('device', 'name', BOARD_TYPE)
-    config.set('device', 'alias', BoardAliases[args.board])
+    #config.add_section('device')
+    #config.set('device', 'type', args.board)
+    #config.set('device', 'name', BOARD_TYPE)
+    #config.set('device', 'alias', BoardAliases[args.board])
 
-    # Writing configuration file
-    with open('build_0x{}.cfg'.format(args.build), 'wb') as fp:
-        config.write(fp)
+    ## Writing configuration file
+    #with open('build_0x{}.cfg'.format(args.build), 'wb') as fp:
+        #config.write(fp)
 
-    logging.info("created configuration file: %s/build_0x%s.cfg.", ipbb_dir, args.build)
-    logging.info("done.")
+    #logging.info("created configuration file: %s/build_0x%s.cfg.", ipbb_dir, args.build)
+    #logging.info("done.")
 
 if __name__ == '__main__':
     try:

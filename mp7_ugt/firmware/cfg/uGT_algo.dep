@@ -3,8 +3,6 @@
 ##?toolset=="Vivado"? src ../ucf/algo_constraints.xdc
 ?toolset=="Vivado"? src ../ucf/mp7_payload.tcl
 
-## HB 2019-04-24: gtl_module.vhd, gtl_pkg.vhd and algo_mapping_rop.vhd added via tcl script for every module
-src ../cfg/l1menu_files.tcl
 #
 src lhc_data_pkg.vhd
 src gt_mp7_top_pkg.vhd

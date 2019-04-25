@@ -8,3 +8,5 @@ setup ../ucf/ugt_strategy.tcl
 src top_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd
 src -c boards/mp7/base_fw/mp7xe_690 mp7_brd_decl.vhd
+## HB 2019-04-24: gtl_module.vhd, gtl_pkg.vhd and algo_mapping_rop.vhd added via tcl script for every module
+setup ../cfg/l1menu_files.tcl

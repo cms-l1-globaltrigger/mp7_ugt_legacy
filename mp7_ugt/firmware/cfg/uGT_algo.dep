@@ -11,6 +11,8 @@ src gt_mp7_core/gt_mp7_core_pkg.vhd
 
 ## HB 2017-09-18: tp_mux not used anymore
 
+## HB 2019-04-24: gtl_module.vhd, gtl_pkg.vhd and algo_mapping_rop.vhd added via tcl script for every module in top.dep
+
 src gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
 #
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_addr_decode.vhd
@@ -90,5 +92,5 @@ src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
 src -c components/mp7_ttc mp7_ttc_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd
 
-## HB 2019-04-24: gtl_module.vhd, gtl_pkg.vhd and algo_mapping_rop.vhd added via tcl script for every module
-src ../cfg/l1menu_files.tcl
+
+#src ../cfg/l1menu_files.tcl

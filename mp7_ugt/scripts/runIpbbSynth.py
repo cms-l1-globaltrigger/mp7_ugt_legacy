@@ -67,6 +67,7 @@ def parse_args():
     parser.add_argument('-i', '--ipb', metavar='<tag>', default='master', help='IPBus firmware repo: tag or branch name (default is "master")')
     parser.add_argument('--mp7url', metavar='<path>', required=True, help="URL of MP7 firmware repo")
     parser.add_argument('-t', '--tag', metavar='<tag>', required=True, help="MP7 firmware repo: tag name [is required]")
+    parser.add_argument('--mp7tag', metavar='<tag>', required=True, help="MP7 firmware repo: tag or branch for 'ipbb add' [is required]")
     parser.add_argument('--ugturl', metavar='<path>', required=True, help="URL of ugt firmware repo")
     parser.add_argument('-u', '--ugt', metavar='<tag>', required=True, help='ugt firmware repo: tag or branch name [is required]')
     parser.add_argument('--board', metavar='<type>', default=DefaultBoardType, choices=BoardAliases.keys(), help="set board type (default is {})".format(DefaultBoardType))
@@ -97,7 +98,7 @@ def main():
 
     # Compile build root directory
     project_type = "{}_{}".format(BOARD_TYPE, FW_TYPE)
-    mp7fw_tag = "{}_{}".format(args.tag, project_type)
+    mp7fw_tag = args.mp7tag
     build_name = "0x{}".format(args.build)
     ipbb_dir = os.path.join(args.path, project_type, args.tag, menu_name, build_name)
 

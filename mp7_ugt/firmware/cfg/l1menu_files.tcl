@@ -10,6 +10,4 @@ set algo_mapping_rop "../../src/module_${mod_id}/algo_mapping_rop.vhd"
 set gtl_module "../../src/module_${mod_id}/gtl_module.vhd"
 # puts $gtl_module
 
-add_files -norecurse -fileset sources_1 $gtl_pkg
-add_files -norecurse -fileset sources_1 $algo_mapping_rop
-add_files -norecurse -fileset sources_1 $gtl_module
+add_files -norecurse -fileset sources_1 $gtl_pkg $algo_mapping_rop $gtl_module

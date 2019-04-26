@@ -2,6 +2,7 @@
 ##?toolset=="ISE"?    src ../ucf/algo_constraints.ucf
 ##?toolset=="Vivado"? src ../ucf/algo_constraints.xdc
 ?toolset=="Vivado"? src ../ucf/mp7_payload.tcl
+
 #
 src lhc_data_pkg.vhd
 src gt_mp7_top_pkg.vhd
@@ -10,12 +11,9 @@ src gt_mp7_core/gt_mp7_core_pkg.vhd
 
 ## HB 2017-09-18: tp_mux not used anymore
 
+## HB 2019-04-24: gtl_module.vhd, gtl_pkg.vhd and algo_mapping_rop.vhd added via tcl script for every module in top.dep
+
 src gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
-#
-## HB 2016-11-16: gtl_module.vhd, gtl_pkg.vhd and algo_mapping_rop.vhd from gt_mp7_core/..
-src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg.vhd
-src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_mapping_rop.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_module.vhd
 #
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_addr_decode.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
@@ -93,3 +91,6 @@ src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
 
 src -c components/mp7_ttc mp7_ttc_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd
+
+
+#src ../cfg/l1menu_files.tcl

@@ -47,6 +47,7 @@ def main():
     build = tb.build_t(config.get('menu', 'build')) # format 'ffff'
     board = config.get('device', 'alias')
     buildarea = config.get('firmware', 'buildarea')
+    menu_modules = int(config.get('menu', 'modules'))
     timestamp = tb.timestamp()
 
     # Definitions for name of IPBB 'proj' directory
@@ -64,7 +65,9 @@ def main():
     tmpdir = tempfile.mkdtemp()
     logging.info("Created temporary dircetory %s", tmpdir)
 
-    for i in range(len(glob.glob(os.path.join(buildarea, 'module_*')))):
+    # Check modules
+    for i in range(menu_modules):
+    #for i in range(len(glob.glob(os.path.join(buildarea, 'module_*')))):
         logging.info("collecting data from module %s", i)
         module_dir = 'module_{i}'.format(**locals())
         proj_dir = 'proj/{}_{}_0x{}_{}'.format(device_name, fw_type, build, i)
@@ -72,11 +75,11 @@ def main():
         log_dir = os.path.join(tmpdir, module_dir, 'log')
         os.makedirs(build_dir)
         os.makedirs(log_dir)
-        shutil.copy(os.path.join(buildarea, module_dir, proj_dir, 'top', 'top.runs', 'impl_1', 'top.bit'),
+        shutil.copy(os.path.join(buildarea, proj_dir, 'top', 'top.runs', 'impl_1', 'top.bit'),
             os.path.join(build_dir, 'gt_mp7_{board}_v{build}_module_{i}.bit'.format(**locals())))
-        shutil.copy(os.path.join(buildarea, module_dir, proj_dir, 'top', 'top.runs', 'synth_1', 'runme.log'),
+        shutil.copy(os.path.join(buildarea, proj_dir, 'top', 'top.runs', 'synth_1', 'runme.log'),
             os.path.join(log_dir, 'runme_synth_1.log'))
-        shutil.copy(os.path.join(buildarea, module_dir, proj_dir, 'top', 'top.runs', 'impl_1', 'runme.log'),
+        shutil.copy(os.path.join(buildarea, proj_dir, 'top', 'top.runs', 'impl_1', 'runme.log'),
             os.path.join(log_dir, 'runme_impl_1.log'))
 
     logging.info("adding build configuration: %s", args.config)

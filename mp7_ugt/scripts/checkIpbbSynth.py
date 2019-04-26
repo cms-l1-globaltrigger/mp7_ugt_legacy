@@ -259,7 +259,8 @@ def main():
     fw_type = config.get('firmware', 'type')
     device_name = config.get('device', 'name')
     menu_build = config.get('menu', 'build')
-
+    build_path = config.get('firmware', 'buildarea')
+    
     # Select only a single module
     if args.m != None:
         if not 0 <= args.m < menu_modules:
@@ -271,10 +272,8 @@ def main():
     # Check modules
     for index in check_modules:
         module_id = "module_{}".format(index)
-        build_path = os.path.dirname(args.config)
-        module_path = os.path.join(build_path, module_id)
         # IPBB 'proj' directory
-        project_path = os.path.join(module_path, 'proj', '{}_{}_0x{}_{}').format(device_name, fw_type, menu_build, index)
+        project_path = os.path.join(build_path, 'proj', '{}_{}_0x{}_{}').format(device_name, fw_type, menu_build, index)
         log_hr("=")
         log_info("Module #{}".format(index))
         log_hr("=")

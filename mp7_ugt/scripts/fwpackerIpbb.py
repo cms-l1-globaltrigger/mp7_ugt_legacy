@@ -85,7 +85,7 @@ def main():
     logging.info("adding build configuration: %s", args.config)
     shutil.copy(args.config, tmpdir)
 
-    xml_file = os.path.join(location, 'xml', '{menu}.xml'.format(**locals()))
+    xml_file = os.path.join(buildarea, 'src', '{menu}.xml'.format(**locals()))
     logging.info("adding XML menu: %s", xml_file)
     shutil.copy(xml_file, tmpdir)
 

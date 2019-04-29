@@ -1,4 +1,3 @@
-### Build mp7_ugt firmware with IPBB ###
 
 * This is a draft description with branches of MP7 and ugt repos.
 * A fork of [MP7](https://gitlab.cern.ch/hbergaue/mp7) firmware is available with three branches:
@@ -33,6 +32,9 @@ into [top.dep](https://gitlab.cern.ch/hbergaue/ugt/blob/master/mp7_ugt/firmware/
     
     # Run synthesis script (for all 6 modules)
     python mp7_ugt/scripts/runIpbbSynth.py <vivado version [2018.2]> --mp7url <URL MP7 git repo> --mp7tag <MP7 tag in repo> -t <MP7 fw version> -p <work dir> --menutag <L1menu tag in github repo> --menudir <L1menu dir in repo> --menuname <L1menu name> -b <build version> --ugturl <URL ugt git repo> -u <ugt tag in repo> --ipbb <IPBB version>
+
+    # Example
+    python mp7_ugt/scripts/runIpbbSynth.py 2018.2 --mp7url https://:@gitlab.cern.ch:8443/hbergaue/mp7.git --mp7tag mp7fw_v2_4_1_mp7_ugt -t mp7fw_v2_4_1 -p ~/work_ipbb_test_new --menutag master --menudir herbberg/l1menus --menuname L1Menu_Collisions2018_v2_1_0-d1 -b 0xfffa --ugturl https://:@gitlab.cern.ch:8443/hbergaue/ugt.git -u dev_ipbb --ipbb 0.2.8### Build mp7_ugt firmware with IPBB ###
 
 ### Setup (commands for one module) ###
 

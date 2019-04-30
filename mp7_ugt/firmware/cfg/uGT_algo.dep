@@ -35,7 +35,6 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_v7_no_quad.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/quad_cond_matrix.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/quad_cuts.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_condition_v6_quad.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_condition_v1_quad_240MHz.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators_v2.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_v7.vhd

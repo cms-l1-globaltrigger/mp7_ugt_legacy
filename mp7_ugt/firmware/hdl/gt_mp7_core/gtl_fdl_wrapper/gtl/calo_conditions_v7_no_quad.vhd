@@ -209,70 +209,82 @@ begin
 -- "Matrix" of permutations in an and-or-structure.
 -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates' and 'double_wsc'.
 
--- Condition type: "single".
-    matrix_single_i: if nr_templates = 1 generate
-        matrix_single_p: process(obj_slice_1_vs_templ_pipe)
-            variable condition_and_or_tmp : std_logic := '0';
-        begin
-            condition_and_or_tmp := '0';
-            for i in calo_object_slice_1_low to calo_object_slice_1_high loop
-                condition_and_or_tmp := condition_and_or_tmp or obj_slice_1_vs_templ_pipe(i,1);
-            end loop;
-            condition_and_or <= condition_and_or_tmp;
-        end process matrix_single_p;
-    end generate matrix_single_i;
+    cond_matrix: entity work.calo_cond_matrix
+        generic map(
+            nr_templates => nr_templates
+        )
+        port map( clk => clk,
+            obj_slice_1_vs_templ_pipe => obj_slice_1_vs_templ_pipe,
+            obj_slice_2_vs_templ_pipe => obj_slice_2_vs_templ_pipe,
+            obj_slice_3_vs_templ_pipe => obj_slice_3_vs_templ_pipe,
+            obj_slice_4_vs_templ_pipe => obj_slice_4_vs_templ_pipe,
+            condition_o => condition_o
+        );
 
--- Condition type: "double".
-    matrix_double_i: if (nr_templates = 2) generate
-        matrix_double_p: process(obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, twobody_pt_comp_pipe)
-            variable index : integer := 0;
-            variable obj_vs_templ_vec : std_logic_vector((nr_objects_slice_1_int*nr_objects_slice_2_int) downto 1) := (others => '0');
-            variable condition_and_or_tmp : std_logic := '0';
-        begin
-            index := 0;
-            obj_vs_templ_vec := (others => '0');
-            condition_and_or_tmp := '0';
-            for i in calo_object_slice_1_low to calo_object_slice_1_high loop
-                for j in calo_object_slice_2_low to calo_object_slice_2_high loop
-                    if j/=i then
-                        index := index + 1;
-                        obj_vs_templ_vec(index) := obj_slice_1_vs_templ_pipe(i,1) and obj_slice_2_vs_templ_pipe(j,1) and twobody_pt_comp_pipe(i,j);
-                    end if;
-                end loop;
-            end loop;
-            for i in 1 to index loop
-                condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
-            end loop;
-            condition_and_or <= condition_and_or_tmp;
-        end process matrix_double_p;
-    end generate matrix_double_i;
-
--- Condition type: "triple".
-    matrix_triple_i: if nr_templates = 3 generate
-        matrix_triple_p: process(obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, obj_slice_3_vs_templ_pipe)
-            variable index : integer := 0;
-            variable obj_vs_templ_vec : std_logic_vector((nr_objects_slice_1_int*nr_objects_slice_2_int*nr_objects_slice_3_int) downto 1) := (others => '0');
-            variable condition_and_or_tmp : std_logic := '0';
-        begin
-            index := 0;
-            obj_vs_templ_vec := (others => '0');
-            condition_and_or_tmp := '0';
-            for i in calo_object_slice_1_low to calo_object_slice_1_high loop
-                for j in calo_object_slice_2_low to calo_object_slice_2_high loop
-                    for k in calo_object_slice_3_low to calo_object_slice_3_high loop
-                        if (j/=i and k/=i and k/=j) then
-                            index := index + 1;
-                            obj_vs_templ_vec(index) := obj_slice_1_vs_templ_pipe(i,1) and obj_slice_2_vs_templ_pipe(j,1) and obj_slice_3_vs_templ_pipe(k,1);
-                        end if;
-                    end loop;
-                end loop;
-            end loop;
-            for i in 1 to index loop
-                condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
-            end loop;
-            condition_and_or <= condition_and_or_tmp;
-        end process matrix_triple_p;
-    end generate matrix_triple_i;
+-- -- Condition type: "single".
+--     matrix_single_i: if nr_templates = 1 generate
+--         matrix_single_p: process(obj_slice_1_vs_templ_pipe)
+--             variable condition_and_or_tmp : std_logic := '0';
+--         begin
+--             condition_and_or_tmp := '0';
+--             for i in calo_object_slice_1_low to calo_object_slice_1_high loop
+--                 condition_and_or_tmp := condition_and_or_tmp or obj_slice_1_vs_templ_pipe(i,1);
+--             end loop;
+--             condition_and_or <= condition_and_or_tmp;
+--         end process matrix_single_p;
+--     end generate matrix_single_i;
+-- 
+-- -- Condition type: "double".
+--     matrix_double_i: if (nr_templates = 2) generate
+--         matrix_double_p: process(obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, twobody_pt_comp_pipe)
+--             variable index : integer := 0;
+--             variable obj_vs_templ_vec : std_logic_vector((nr_objects_slice_1_int*nr_objects_slice_2_int) downto 1) := (others => '0');
+--             variable condition_and_or_tmp : std_logic := '0';
+--         begin
+--             index := 0;
+--             obj_vs_templ_vec := (others => '0');
+--             condition_and_or_tmp := '0';
+--             for i in calo_object_slice_1_low to calo_object_slice_1_high loop
+--                 for j in calo_object_slice_2_low to calo_object_slice_2_high loop
+--                     if j/=i then
+--                         index := index + 1;
+--                         obj_vs_templ_vec(index) := obj_slice_1_vs_templ_pipe(i,1) and obj_slice_2_vs_templ_pipe(j,1) and twobody_pt_comp_pipe(i,j);
+--                     end if;
+--                 end loop;
+--             end loop;
+--             for i in 1 to index loop
+--                 condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
+--             end loop;
+--             condition_and_or <= condition_and_or_tmp;
+--         end process matrix_double_p;
+--     end generate matrix_double_i;
+-- 
+-- -- Condition type: "triple".
+--     matrix_triple_i: if nr_templates = 3 generate
+--         matrix_triple_p: process(obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, obj_slice_3_vs_templ_pipe)
+--             variable index : integer := 0;
+--             variable obj_vs_templ_vec : std_logic_vector((nr_objects_slice_1_int*nr_objects_slice_2_int*nr_objects_slice_3_int) downto 1) := (others => '0');
+--             variable condition_and_or_tmp : std_logic := '0';
+--         begin
+--             index := 0;
+--             obj_vs_templ_vec := (others => '0');
+--             condition_and_or_tmp := '0';
+--             for i in calo_object_slice_1_low to calo_object_slice_1_high loop
+--                 for j in calo_object_slice_2_low to calo_object_slice_2_high loop
+--                     for k in calo_object_slice_3_low to calo_object_slice_3_high loop
+--                         if (j/=i and k/=i and k/=j) then
+--                             index := index + 1;
+--                             obj_vs_templ_vec(index) := obj_slice_1_vs_templ_pipe(i,1) and obj_slice_2_vs_templ_pipe(j,1) and obj_slice_3_vs_templ_pipe(k,1);
+--                         end if;
+--                     end loop;
+--                 end loop;
+--             end loop;
+--             for i in 1 to index loop
+--                 condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
+--             end loop;
+--             condition_and_or <= condition_and_or_tmp;
+--         end process matrix_triple_p;
+--     end generate matrix_triple_i;
 
 -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(clk, condition_and_or)

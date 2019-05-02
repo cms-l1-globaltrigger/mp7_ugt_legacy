@@ -19,7 +19,7 @@ use ieee.std_logic_unsigned.all; -- for function "CONV_INTEGER"
 
 use work.gtl_pkg.all;
 
-entity calo_condition_v6_quad is
+entity calo_conditions is
      generic(
         calo_object_slice_1_low: natural;
         calo_object_slice_1_high: natural;
@@ -45,17 +45,25 @@ entity calo_condition_v6_quad is
         phi_w2_ignore : calo_templates_boolean_array;
         phi_w2_upper_limits: calo_templates_array;
         phi_w2_lower_limits: calo_templates_array;
-        iso_luts: calo_templates_iso_array
-
+        iso_luts: calo_templates_iso_array;
+        
+        twobody_pt_cut: boolean := false;
+        pt_width: positive := 1; 
+        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        sin_cos_width: positive := 1;
+        pt_sq_sin_cos_precision : positive := 1
     );
     port(
         clk: in std_logic;
         data_i: in calo_objects_array;
-        condition_o: out std_logic
+        condition_o: out std_logic;
+        pt : in diff_inputs_array(0 to MAX_CALO_OBJECTS) := (others => (others => '0'));
+        cos_phi_integer : in calo_sin_cos_integer_array(0 to MAX_CALO_OBJECTS) := (others => 0);
+        sin_phi_integer : in calo_sin_cos_integer_array(0 to MAX_CALO_OBJECTS) := (others => 0)
     );
-end calo_condition_v6_quad;
+end calo_conditions;
 
-architecture rtl of calo_condition_v6_quad is
+architecture rtl of calo_conditions is
 
     constant nr_objects_slice_1_int: natural := calo_object_slice_1_high-calo_object_slice_1_low+1;
     constant nr_objects_slice_2_int: natural := calo_object_slice_2_high-calo_object_slice_2_low+1;
@@ -95,6 +103,22 @@ architecture rtl of calo_condition_v6_quad is
 
 begin
 
+    twobody_pt_i: entity work.twobody_pt
+        generic map(
+            calo_object_slice_1_low, calo_object_slice_1_high,
+            calo_object_slice_2_low, calo_object_slice_2_high,
+            nr_templates,
+            
+            twobody_pt_cut,
+            pt_width, 
+            pt_sq_threshold_vector,
+            sin_cos_width,
+            pt_sq_sin_cos_precision
+        )
+        port map(
+            pt, cos_phi_integer, sin_phi_integer, twobody_pt_comp
+        );
+    
     cuts: entity work.calo_obj_cuts
         generic map(
             calo_object_slice_1_low, calo_object_slice_1_high,

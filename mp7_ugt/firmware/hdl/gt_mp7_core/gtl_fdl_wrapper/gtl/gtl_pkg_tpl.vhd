@@ -1,6 +1,7 @@
 -- Description:
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
+-- HB 2019-05-02: inserted types for calo_cond_matrix.vhd.
 -- HB 2018-08-06: inserted constants and types for "Asymmetry" and "Centrality" (included in esums data structure).
 -- HB 2017-10-02: inserted constant MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR and MAX_WIDTH_DR_LIMIT_VECTOR.
 -- HB 2017-09-29: inserted constant MAX_WIDTH_MASS_LIMIT_VECTOR and MAX_WIDTH_TBPT_LIMIT_VECTOR.
@@ -37,6 +38,12 @@ use work.gt_mp7_core_pkg.all;
 
 package gtl_pkg is
 
+-- HB 2019-05-02: inserted types for calo_cond_matrix.vhd.
+    type object_slice_1_vs_template_array is array (natural range <>, natural range <>) of std_logic;     
+    type object_slice_2_vs_template_array is array (natural range <>, natural range <>) of std_logic;     
+    type object_slice_3_vs_template_array is array (natural range <>, natural range <>) of std_logic;     
+    type object_slice_4_vs_template_array is array (natural range <>, natural range <>) of std_logic; 
+    
 {{ugt_constants}}
 
 -- HB 2014-09-09: GTL and FDL firmware major, minor and revision versions moved to gt_mp7_core_pkg.vhd (GTL_FW_MAJOR_VERSION, etc.)

@@ -28,24 +28,25 @@ use work.gtl_pkg.all;
 
 entity calo_cond_matrix_orm is
     generic(
-        calo_object_slice_1_low: natural;
-        calo_object_slice_1_high: natural;
-        calo_object_slice_2_low: natural;
-        calo_object_slice_2_high: natural;
-        calo_object_slice_3_low: natural;
-        calo_object_slice_3_high: natural;
-        calo_object_slice_4_low: natural;
-        calo_object_slice_4_high: natural;
+        calo1_object_slice_1_low: natural;
+        calo1_object_slice_1_high: natural;
+        calo1_object_slice_2_low: natural;
+        calo1_object_slice_2_high: natural;
+        calo1_object_slice_3_low: natural;
+        calo1_object_slice_3_high: natural;
+        calo1_object_slice_4_low: natural;
+        calo1_object_slice_4_high: natural;
         nr_templates: positive;        
         calo2_object_low: natural;
         calo2_object_high: natural
     );
     Port (clk : in std_logic;
-        obj_slice_1_vs_templ : in object_slice_1_vs_template_array(calo_object_slice_1_low to calo_object_slice_1_high, 1 to 1);
-        obj_slice_2_vs_templ : in object_slice_2_vs_template_array(calo_object_slice_2_low to calo_object_slice_2_high, 1 to 1);
-        obj_slice_3_vs_templ : in object_slice_3_vs_template_array(calo_object_slice_3_low to calo_object_slice_3_high, 1 to 1);
-        obj_slice_4_vs_templ : in object_slice_4_vs_template_array(calo_object_slice_4_low to calo_object_slice_4_high, 1 to 1);
-        twobody_pt_comp : in std_logic_2dim_array(calo_object_slice_1_low to calo_object_slice_1_high, calo_object_slice_2_low to calo_object_slice_2_high);
+        calo1_obj_slice_1_vs_templ : in object_slice_1_vs_template_array(calo1_object_slice_1_low to calo1_object_slice_1_high, 1 to 1);
+        calo1_obj_slice_2_vs_templ : in object_slice_2_vs_template_array(calo1_object_slice_2_low to calo1_object_slice_2_high, 1 to 1);
+        calo1_obj_slice_3_vs_templ : in object_slice_3_vs_template_array(calo1_object_slice_3_low to calo1_object_slice_3_high, 1 to 1);
+        calo1_obj_slice_4_vs_templ : in object_slice_4_vs_template_array(calo1_object_slice_4_low to calo1_object_slice_4_high, 1 to 1);
+        calo2_obj_vs_templ : in std_logic_2dim_array(calo2_object_low to calo2_object_high, 1 to 1);
+        twobody_pt_comp : in std_logic_2dim_array(calo1_object_slice_1_low to calo1_object_slice_1_high, calo1_object_slice_2_low to calo1_object_slice_2_high);
         diff_eta_orm_comp : in std_logic_2dim_array(0 to MAX_CALO_OBJECTS-1, calo2_object_low to calo2_object_high);
         diff_phi_orm_comp : in std_logic_2dim_array(0 to MAX_CALO_OBJECTS-1, calo2_object_low to calo2_object_high);
         dr_orm_comp : in std_logic_2dim_array(0 to MAX_CALO_OBJECTS-1, calo2_object_low to calo2_object_high);
@@ -54,9 +55,10 @@ entity calo_cond_matrix_orm is
 end calo_cond_matrix_orm;
 
 architecture Behavioral of calo_cond_matrix_orm is
-    constant nr_objects_slice_1_int: natural := calo_object_slice_1_high-calo_object_slice_1_low+1;
-    constant nr_objects_slice_2_int: natural := calo_object_slice_2_high-calo_object_slice_2_low+1;
-    constant nr_objects_slice_3_int: natural := calo_object_slice_3_high-calo_object_slice_3_low+1;
+    constant nr_objects_slice_1_int: natural := calo1_object_slice_1_high-calo1_object_slice_1_low+1;
+    constant nr_objects_slice_2_int: natural := calo1_object_slice_2_high-calo1_object_slice_2_low+1;
+    constant nr_objects_slice_3_int: natural := calo1_object_slice_3_high-calo1_object_slice_3_low+1;
+    constant nr_calo2_objects_int: natural := calo2_object_high-calo2_object_low+1;
 
     signal obj_vs_templ_vec_sig1: std_logic_vector(4095 downto 0) := (others => '0');
     signal obj_vs_templ_vec_sig2: std_logic_vector(4095 downto 0) := (others => '0');
@@ -98,7 +100,7 @@ begin
 
 -- Condition type: "double".
     matrix_double_i: if nr_templates = 2 generate
-        matrix_double_p: process(calo1_obj_slice_1_vs_templ, calo1_obj_slice_2_vs_templ, calo2_obj_vs_templ, diff_eta_orm_comp, diff_phi_orm_comp,         dr_orm_comp, twobody_pt_comp)
+        matrix_double_p: process(calo1_obj_slice_1_vs_templ, calo1_obj_slice_2_vs_templ, calo2_obj_vs_templ, diff_eta_orm_comp, diff_phi_orm_comp, dr_orm_comp, twobody_pt_comp)
             variable index : integer := 0;
             variable obj_vs_templ_vec : std_logic_vector((nr_objects_slice_1_int*nr_objects_slice_2_int*nr_calo2_objects_int) downto 1) := (others => '0');
             variable condition_and_or_tmp : std_logic := '0';
@@ -111,7 +113,7 @@ begin
                     for k in calo2_object_low to calo2_object_high loop
                         if j/=i then
                             index := index + 1;
-                            obj_vs_templ_vec(index) :=     calo1_obj_slice_1_vs_templ(i,1) and calo1_obj_slice_2_vs_templ(j,1) and calo2_obj_vs_templ(k,1) and twobody_pt_comp(i,j) and
+                            obj_vs_templ_vec(index) := calo1_obj_slice_1_vs_templ(i,1) and calo1_obj_slice_2_vs_templ(j,1) and calo2_obj_vs_templ(k,1) and twobody_pt_comp(i,j) and
                             not (
                             (diff_eta_orm_comp(i,k) or diff_eta_orm_comp(j,k) or diff_phi_orm_comp(i,k) or 
                             diff_phi_orm_comp(j,k) or dr_orm_comp(i,k) or dr_orm_comp(j,k)) 

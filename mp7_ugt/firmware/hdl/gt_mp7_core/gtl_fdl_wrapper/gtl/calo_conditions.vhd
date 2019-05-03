@@ -103,22 +103,26 @@ architecture rtl of calo_conditions is
 
 begin
 
-    twobody_pt_i: entity work.twobody_pt
-        generic map(
-            calo_object_slice_1_low, calo_object_slice_1_high,
-            calo_object_slice_2_low, calo_object_slice_2_high,
-            nr_templates,
-            
-            twobody_pt_cut,
-            pt_width, 
-            pt_sq_threshold_vector,
-            sin_cos_width,
-            pt_sq_sin_cos_precision
-        )
-        port map(
-            pt, cos_phi_integer, sin_phi_integer, twobody_pt_comp
-        );
-    
+-- Instantiation of two-body pt cut.
+    twobody_pt_cut_i: if twobody_pt_cut = true and nr_templates = 2 generate
+        twobody_pt_i: entity work.twobody_pt
+            generic map(
+                calo_object_slice_1_low, calo_object_slice_1_high,
+                calo_object_slice_2_low, calo_object_slice_2_high,
+                nr_templates,
+                
+                twobody_pt_cut,
+                pt_width, 
+                pt_sq_threshold_vector,
+                sin_cos_width,
+                pt_sq_sin_cos_precision
+            )
+            port map(
+                pt, cos_phi_integer, sin_phi_integer, twobody_pt_comp
+            );
+    end generate twobody_pt_cut_i;
+
+-- Instantiation of object cuts.
     obj_cuts_i: entity work.calo_obj_cuts
         generic map(
             calo_object_slice_1_low, calo_object_slice_1_high,
@@ -157,7 +161,6 @@ begin
 
 -- "Matrix" of permutations in an and-or-structure.
 -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates' and 'double_wsc'.
-
     cond_matrix_i: entity work.calo_cond_matrix
         generic map(
             calo_object_slice_1_low, calo_object_slice_1_high,

@@ -125,7 +125,7 @@ begin
         twobody_pt_l_1: for i in muon_object_slice_1_low to muon_object_slice_1_high generate 
             twobody_pt_l_2: for j in muon_object_slice_2_low to muon_object_slice_2_high generate
                 if_j_gr_i: if j > i generate
-                    twobody_pt_calculator_i: entity work.twobody_pt_calculator_v2
+                    twobody_pt_calculator_i: entity work.twobody_pt_calculator
                         generic map(
                             pt1_width => pt_width, 
                             pt2_width => pt_width, 

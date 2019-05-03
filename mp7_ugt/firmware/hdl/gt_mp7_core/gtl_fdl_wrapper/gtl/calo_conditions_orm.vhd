@@ -117,11 +117,6 @@ architecture rtl of calo_conditions_orm is
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
 
---     type object_slice_1_vs_template_array is array (calo1_object_slice_1_low to calo1_object_slice_1_high, 1 to 1) of std_logic;
---     type object_slice_2_vs_template_array is array (calo1_object_slice_2_low to calo1_object_slice_2_high, 1 to 1) of std_logic;
---     type object_slice_3_vs_template_array is array (calo1_object_slice_3_low to calo1_object_slice_3_high, 1 to 1) of std_logic;
---     type object_slice_4_vs_template_array is array (calo1_object_slice_4_low to calo1_object_slice_4_high, 1 to 1) of std_logic;
-
     signal calo1_obj_slice_1_vs_templ, calo1_obj_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array(calo1_object_slice_1_low to calo1_object_slice_1_high, 1 to 1);
     signal calo1_obj_slice_2_vs_templ, calo1_obj_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(calo1_object_slice_2_low to calo1_object_slice_2_high, 1 to 1);
     signal calo1_obj_slice_3_vs_templ, calo1_obj_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(calo1_object_slice_3_low to calo1_object_slice_3_high, 1 to 1);
@@ -203,7 +198,7 @@ begin
 
 -- Instantiation of object cuts for calo2.
     calo2_obj_l: for i in calo2_object_low to calo2_object_high generate
-        calo2_comp_i: entity work.calo_comparators_v2
+        calo2_comp_i: entity work.calo_comparators
             generic map(et_ge_mode_calo2, obj_type_calo2,
                 et_threshold_calo2,
                 eta_full_range_calo2,
@@ -235,7 +230,7 @@ begin
                 diff_phi_orm_comp(i,k) <= '1' when diff_phi_orm(i,k) >= diff_phi_orm_lower_limit_vector and diff_phi_orm(i,k) <= diff_phi_orm_upper_limit_vector else '0';
             end generate dphi_orm_cut_i;
             dr_orm_cut_i: if dr_orm_cut = true generate
-                dr_calculator_i: entity work.dr_calculator_v3
+                dr_calculator_i: entity work.dr_calculator
                     generic map(
                         upper_limit_vector => dr_orm_upper_limit_vector,
                         lower_limit_vector => dr_orm_lower_limit_vector

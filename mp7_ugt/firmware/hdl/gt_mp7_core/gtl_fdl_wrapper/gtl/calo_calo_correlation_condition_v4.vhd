@@ -141,7 +141,7 @@ begin
             same_obj_type_same_bx_same_range_i: if obj_type_calo1 = obj_type_calo2 and same_bx and (calo1_object_low = calo2_object_low) and (calo1_object_high = calo2_object_high) generate
 -- HB 2017-02-21: optimisation of LUTs and DSP resources: calculations of cuts only for one half of permutations, second half by assignment of "mirrored" indices.
                 if_j_gr_i: if j > i generate
-                    cuts_instances_i: entity work.cuts_instances_v2
+                    cuts_instances_i: entity work.cuts_instances
                         generic map(
                             deta_cut => deta_cut,
                             dphi_cut => dphi_cut,
@@ -195,7 +195,7 @@ begin
                 end generate if_j_gr_i;
             end generate same_obj_type_same_bx_same_range_i;
             diffrent_obj_type_different_bx_different_range_i: if obj_type_calo1 /= obj_type_calo2 or not same_bx or (calo1_object_low /= calo2_object_low) or (calo1_object_high /= calo2_object_high) generate
-                cuts_instances_i: entity work.cuts_instances_v2
+                cuts_instances_i: entity work.cuts_instances
                     generic map(
                         deta_cut => deta_cut,
                         dphi_cut => dphi_cut,
@@ -263,7 +263,7 @@ begin
 
     -- Instance of comparators for calorimeter objects.
     calo1_obj_l: for i in calo1_object_low to calo1_object_high generate
-        calo1_comp_i: entity work.calo_comparators_v2
+        calo1_comp_i: entity work.calo_comparators
             generic map(et_ge_mode_calo1, obj_type_calo1,
                 et_threshold_calo1,
                 eta_full_range_calo1,
@@ -284,7 +284,7 @@ begin
     end generate calo1_obj_l;
 
     calo2_obj_l: for i in calo2_object_low to calo2_object_high generate
-        calo2_comp_i: entity work.calo_comparators_v2
+        calo2_comp_i: entity work.calo_comparators
             generic map(et_ge_mode_calo2, obj_type_calo2,
                 et_threshold_calo2,
                 eta_full_range_calo2,

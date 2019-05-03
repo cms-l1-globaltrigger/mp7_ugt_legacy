@@ -168,7 +168,7 @@ architecture rtl of calo_calo_calo_correlation_orm_condition_v3 is
 begin
 
     calo1_obj_l: for i in calo1_object_low to calo1_object_high generate
-        calo1_comp_i: entity work.calo_comparators_v2
+        calo1_comp_i: entity work.calo_comparators
             generic map(et_ge_mode_calo1, obj_type_calo1,
                 et_threshold_calo1,
                 eta_full_range_calo1,
@@ -190,7 +190,7 @@ begin
 
     obj_2plus1_true_comb_i: if obj_2plus1 = true generate
         calo2_obj_l: for i in calo2_object_low to calo2_object_high generate
-            calo2_comp_i: entity work.calo_comparators_v2
+            calo2_comp_i: entity work.calo_comparators
                 generic map(et_ge_mode_calo2, obj_type_calo2,
                     et_threshold_calo2,
                     eta_full_range_calo2,
@@ -212,7 +212,7 @@ begin
     end generate obj_2plus1_true_comb_i;
 
     calo3_obj_l: for i in calo3_object_low to calo3_object_high generate
-        calo3_comp_i: entity work.calo_comparators_v2
+        calo3_comp_i: entity work.calo_comparators
             generic map(et_ge_mode_calo3, obj_type_calo3,
                 et_threshold_calo3,
                 eta_full_range_calo3,
@@ -243,7 +243,7 @@ begin
                                      diff_phi_orm(i,k) <= diff_phi_orm_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
             end generate dphi_orm_cut_i;
             dr_orm_cut_i: if dr_orm_cut = true generate
-                dr_calculator_i: entity work.dr_calculator_v3
+                dr_calculator_i: entity work.dr_calculator
                 generic map(
                     upper_limit_vector => dr_orm_upper_limit_vector,
                     lower_limit_vector => dr_orm_lower_limit_vector
@@ -269,7 +269,7 @@ begin
                                          diff_phi_orm(i,k) <= diff_phi_orm_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
                 end generate dphi_orm_cut_i;
                 dr_orm_cut_i: if dr_orm_cut = true generate
-                    dr_calculator_i: entity work.dr_calculator_v3
+                    dr_calculator_i: entity work.dr_calculator
                     generic map(
                         upper_limit_vector => dr_orm_upper_limit_vector,
                         lower_limit_vector => dr_orm_lower_limit_vector
@@ -287,7 +287,7 @@ begin
     obj_2plus1_true_cuts_i: if obj_2plus1 = true generate
         cuts_l_1: for i in calo1_object_low to calo1_object_high generate 
             cuts_l_2: for j in calo2_object_low to calo2_object_high generate
-                cuts_instances_i: entity work.cuts_instances_v2
+                cuts_instances_i: entity work.cuts_instances
                     generic map(
                             deta_cut => deta_cut,
                             dphi_cut => dphi_cut,
@@ -335,7 +335,7 @@ begin
     obj_2plus1_false_cuts_i: if obj_2plus1 = false generate
         cuts_l_1: for i in calo1_object_low to calo1_object_high generate 
             cuts_l_2: for j in calo3_object_low to calo3_object_high generate
-                cuts_instances_i: entity work.cuts_instances_v2
+                cuts_instances_i: entity work.cuts_instances
                     generic map(
                             deta_cut => deta_cut,
                             dphi_cut => dphi_cut,

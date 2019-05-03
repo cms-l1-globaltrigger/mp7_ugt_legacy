@@ -154,7 +154,7 @@ begin
             same_bx_same_range_i: if same_bx and (muon1_object_low = muon2_object_low) and (muon1_object_high = muon2_object_high) generate
 -- HB 2017-02-21: optimisation of LUTs and DSP resources: calculations of cuts only for one half of permutations, second half by assignment of "mirrored" indices.
                 if_j_gr_i: if j > i generate
-                    cuts_instances_i: entity work.cuts_instances_v2
+                    cuts_instances_i: entity work.cuts_instances
                         generic map(
                             deta_cut => deta_cut,
                             dphi_cut => dphi_cut,
@@ -208,7 +208,7 @@ begin
                 end generate if_j_gr_i;
             end generate same_bx_same_range_i;
             different_bx_different_range_i: if not same_bx or (muon1_object_low /= muon2_object_low) or (muon1_object_high /= muon2_object_high) generate
-                cuts_instances_i: entity work.cuts_instances_v2
+                cuts_instances_i: entity work.cuts_instances
                     generic map(
                         deta_cut => deta_cut,
                         dphi_cut => dphi_cut,

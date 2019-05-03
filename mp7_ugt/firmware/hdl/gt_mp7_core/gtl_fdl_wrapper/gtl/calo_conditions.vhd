@@ -1,5 +1,5 @@
 
--- Desription:
+-- Description:
 -- Condition module for calorimeter object types (eg, jet and tau) conditions.
 
 -- Version history:

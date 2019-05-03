@@ -3,6 +3,7 @@
 -- Calculation of Delta-R and comparison with limits 
 
 -- Version history:
+-- HB 2019-05-03: changed name from  dr_calculator_v3 to dr_calculator.
 -- HB 2017-09-21: based on "dr_calculator_v2.vhd" but added upper_limit_vector and lower_limit_vector to generic. Changed attribute "use_dsp48" to "use_dsp"
 -- HB 2017-02-06: inserted "attribute use_dsp" for "dr_squared" (calculation of dr_squared is done by DSPs, reduces used number of LUTs)
 -- HB 2015-11-26: changed to calculation with std_logic_vector
@@ -15,7 +16,7 @@ use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
 
-entity dr_calculator_v3 is
+entity dr_calculator is
     generic (
 -- HB 2015-09-21: TM proposed two thresholds for DR
         upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
@@ -27,9 +28,9 @@ entity dr_calculator_v3 is
         dr_comp : out std_logic;
         dr_squared_sim : out std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0)
     );
-end dr_calculator_v3;
+end dr_calculator;
 
-architecture rtl of dr_calculator_v3 is
+architecture rtl of dr_calculator is
     signal diff_eta_squared : std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0);
     signal diff_phi_squared : std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0);
     signal dr_squared : std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0);

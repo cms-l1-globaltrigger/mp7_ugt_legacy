@@ -71,7 +71,7 @@ begin
 
 -- Instance of comparators for calorimeter objects. All permutations between objects and thresholds/luts.
     obj_slice_1_l: for i in calo_object_slice_1_low to calo_object_slice_1_high generate
-        comp_i: entity work.calo_comparators_v2
+        comp_i: entity work.calo_comparators
             generic map(et_ge_mode, obj_type,
                 et_thresholds(1),
                 eta_full_range(1),
@@ -92,7 +92,7 @@ begin
     end generate obj_slice_1_l;
 
     obj_slice_2_l: for i in calo_object_slice_2_low to calo_object_slice_2_high generate
-        comp_i: entity work.calo_comparators_v2
+        comp_i: entity work.calo_comparators
             generic map(et_ge_mode, obj_type,
                 et_thresholds(2),
                 eta_full_range(2),
@@ -113,7 +113,7 @@ begin
     end generate obj_slice_2_l;
 
     obj_slice_3_l: for i in calo_object_slice_3_low to calo_object_slice_3_high generate
-        comp_i: entity work.calo_comparators_v2
+        comp_i: entity work.calo_comparators
             generic map(et_ge_mode, obj_type,
                 et_thresholds(3),
                 eta_full_range(3),
@@ -134,7 +134,7 @@ begin
     end generate obj_slice_3_l;
 
     obj_slice_4_l: for i in calo_object_slice_4_low to calo_object_slice_4_high generate
-        comp_i: entity work.calo_comparators_v2
+        comp_i: entity work.calo_comparators
             generic map(et_ge_mode, obj_type,
                 et_thresholds(4),
                 eta_full_range(4),

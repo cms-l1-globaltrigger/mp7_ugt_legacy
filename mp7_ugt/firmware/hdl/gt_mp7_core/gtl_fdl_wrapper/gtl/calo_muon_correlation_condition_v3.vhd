@@ -133,7 +133,7 @@ begin
 -- Comparison with limits.
     delta_l_1: for i in calo_object_low to calo_object_high generate 
         delta_l_2: for j in muon_object_low to muon_object_high generate
-            cuts_instances_i: entity work.cuts_instances_v2
+            cuts_instances_i: entity work.cuts_instances
                 generic map(
                     deta_cut => deta_cut,
                     dphi_cut => dphi_cut,
@@ -199,7 +199,7 @@ begin
 
 -- Instance of comparators for calorimeter objects.
     calo_obj_l: for i in calo_object_low to calo_object_high generate
-        calo_comp_i: entity work.calo_comparators_v2
+        calo_comp_i: entity work.calo_comparators
             generic map(et_ge_mode_calo, obj_type_calo,
                 et_threshold_calo,
                 eta_full_range_calo,

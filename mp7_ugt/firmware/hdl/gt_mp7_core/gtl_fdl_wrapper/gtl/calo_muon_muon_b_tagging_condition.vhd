@@ -120,7 +120,7 @@ begin
     delta_l_1: for i in calo_object_low to calo_object_high generate 
 	delta_l_2: for j in muon_object_low to muon_object_high generate
 	    dr_i: if dr_cut = true generate
-		dr_calculator_i: entity work.dr_calculator_v2
+		dr_calculator_i: entity work.dr_calculator
 		    generic map(
 			upper_limit => dr_upper_limit,
 			lower_limit => dr_lower_limit,
@@ -154,7 +154,7 @@ begin
 
 -- Instance of comparators for calorimeter objects.
     calo_obj_l: for i in calo_object_low to calo_object_high generate
-	calo_comp_i: entity work.calo_comparators_v2
+	calo_comp_i: entity work.calo_comparators
 	    generic map(et_ge_mode_calo, obj_type_calo,
                 et_threshold_calo,
                 eta_full_range_calo,

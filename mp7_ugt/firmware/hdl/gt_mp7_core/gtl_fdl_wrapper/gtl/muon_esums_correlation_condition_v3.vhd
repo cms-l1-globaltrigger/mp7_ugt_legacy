@@ -118,7 +118,7 @@ begin
                                   diff_phi(i,0) <= diff_phi_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
         end generate diff_phi_i;
         mass_i: if mass_cut = true generate
-            mass_calculator_i: entity work.mass_calculator_v2
+            mass_calculator_i: entity work.mass_calculator
                 generic map(
                     mass_type => mass_type,
                     mass_upper_limit_vector => mass_upper_limit_vector,
@@ -137,7 +137,7 @@ begin
                 );
         end generate mass_i;
         twobody_pt_i: if twobody_pt_cut = true generate
-            twobody_pt_calculator_i: entity work.twobody_pt_calculator_v2
+            twobody_pt_calculator_i: entity work.twobody_pt_calculator
                 generic map(
                     pt1_width => pt1_width, 
                     pt2_width => pt2_width, 

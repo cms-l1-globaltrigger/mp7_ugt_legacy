@@ -1,9 +1,9 @@
 
 -- Desription:
--- Condition module for calorimeter object types (eg, jet and tau) quad condition.
+-- Condition module for calorimeter object types (eg, jet and tau) conditions.
 
 -- Version history:
--- HB 2019-04-30: used instances "calo_cuts" and "calo_cond_matrix" (proposal Dinyar/Hannes) to reduce resources.
+-- HB 2019-05-03: used instances "calo_cuts" and "calo_cond_matrix" (proposal Dinyar/Hannes) to reduce resources. Inserted instance for twobody_pt.
 -- HB 2017-09-05: inserted slice ranges in generic for correct use of object slices.
 -- HB 2017-08-28: increased length of vector signals (to 4096).
 -- HB 2017-06-13: module for quad condition only.
@@ -119,7 +119,7 @@ begin
             pt, cos_phi_integer, sin_phi_integer, twobody_pt_comp
         );
     
-    cuts: entity work.calo_obj_cuts
+    obj_cuts_i: entity work.calo_obj_cuts
         generic map(
             calo_object_slice_1_low, calo_object_slice_1_high,
             calo_object_slice_2_low, calo_object_slice_2_high,
@@ -134,7 +134,7 @@ begin
             iso_luts
         )
         port map(
-           data_i, obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ, obj_slice_4_vs_templ
+            data_i, obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ, obj_slice_4_vs_templ
         );
 
 -- Pipeline stage for obj_vs_templ and twobody_pt_comp
@@ -146,21 +146,19 @@ begin
                 obj_slice_3_vs_templ_pipe <= obj_slice_3_vs_templ;
                 obj_slice_4_vs_templ_pipe <= obj_slice_4_vs_templ;
                 twobody_pt_comp_pipe <= twobody_pt_comp;
-            else
-                if (clk'event and clk = '1') then
-                    obj_slice_1_vs_templ_pipe <= obj_slice_1_vs_templ;
-                    obj_slice_2_vs_templ_pipe <= obj_slice_2_vs_templ;
-                    obj_slice_3_vs_templ_pipe <= obj_slice_3_vs_templ;
-                    obj_slice_4_vs_templ_pipe <= obj_slice_4_vs_templ;
-                    twobody_pt_comp_pipe <= twobody_pt_comp;
-                end if;
+            elsif (clk'event and clk = '1') then
+                obj_slice_1_vs_templ_pipe <= obj_slice_1_vs_templ;
+                obj_slice_2_vs_templ_pipe <= obj_slice_2_vs_templ;
+                obj_slice_3_vs_templ_pipe <= obj_slice_3_vs_templ;
+                obj_slice_4_vs_templ_pipe <= obj_slice_4_vs_templ;
+                twobody_pt_comp_pipe <= twobody_pt_comp;
             end if;
     end process;
 
 -- "Matrix" of permutations in an and-or-structure.
 -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates' and 'double_wsc'.
 
-    cond_matrix: entity work.calo_cond_matrix
+    cond_matrix_i: entity work.calo_cond_matrix
         generic map(
             calo_object_slice_1_low, calo_object_slice_1_high,
             calo_object_slice_2_low, calo_object_slice_2_high,

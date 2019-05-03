@@ -38,13 +38,13 @@ entity calo_cond_matrix is
         calo_object_slice_4_high: natural;
         nr_templates: positive        
     );
-    Port ( clk : in STD_LOGIC;
-        obj_slice_1_vs_templ_pipe : in object_slice_1_vs_template_array(calo_object_slice_1_low to calo_object_slice_1_high, 1 to 1);
-        obj_slice_2_vs_templ_pipe : in object_slice_2_vs_template_array(calo_object_slice_2_low to calo_object_slice_2_high, 1 to 1);
-        obj_slice_3_vs_templ_pipe : in object_slice_3_vs_template_array(calo_object_slice_3_low to calo_object_slice_3_high, 1 to 1);
-        obj_slice_4_vs_templ_pipe : in object_slice_4_vs_template_array(calo_object_slice_4_low to calo_object_slice_4_high, 1 to 1);
-        twobody_pt_comp_pipe : in std_logic_2dim_array(calo_object_slice_1_low to calo_object_slice_1_high, calo_object_slice_2_low to calo_object_slice_2_high);
-        condition_o : out STD_LOGIC
+    Port ( clk : in std_logic;
+        obj_slice_1_vs_templ : in object_slice_1_vs_template_array(calo_object_slice_1_low to calo_object_slice_1_high, 1 to 1);
+        obj_slice_2_vs_templ : in object_slice_2_vs_template_array(calo_object_slice_2_low to calo_object_slice_2_high, 1 to 1);
+        obj_slice_3_vs_templ : in object_slice_3_vs_template_array(calo_object_slice_3_low to calo_object_slice_3_high, 1 to 1);
+        obj_slice_4_vs_templ : in object_slice_4_vs_template_array(calo_object_slice_4_low to calo_object_slice_4_high, 1 to 1);
+        twobody_pt_comp : in std_logic_2dim_array(calo_object_slice_1_low to calo_object_slice_1_high, calo_object_slice_2_low to calo_object_slice_2_high);
+        condition_o : out std_logic
     );
 end calo_cond_matrix;
 
@@ -66,12 +66,12 @@ begin
 
 -- Condition type: "single".
     matrix_single_i: if nr_templates = 1 generate
-        matrix_single_p: process(obj_slice_1_vs_templ_pipe)
+        matrix_single_p: process(obj_slice_1_vs_templ)
             variable condition_and_or_tmp : std_logic := '0';
         begin
             condition_and_or_tmp := '0';
             for i in calo_object_slice_1_low to calo_object_slice_1_high loop
-                condition_and_or_tmp := condition_and_or_tmp or obj_slice_1_vs_templ_pipe(i,1);
+                condition_and_or_tmp := condition_and_or_tmp or obj_slice_1_vs_templ(i,1);
             end loop;
             condition_and_or <= condition_and_or_tmp;
         end process matrix_single_p;
@@ -79,7 +79,7 @@ begin
 
 -- Condition type: "double".
     matrix_double_i: if (nr_templates = 2) generate
-        matrix_double_p: process(obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, twobody_pt_comp_pipe)
+        matrix_double_p: process(obj_slice_1_vs_templ, obj_slice_2_vs_templ, twobody_pt_comp)
             variable index : integer := 0;
             variable obj_vs_templ_vec : std_logic_vector((nr_objects_slice_1_int*nr_objects_slice_2_int) downto 1) := (others => '0');
             variable condition_and_or_tmp : std_logic := '0';
@@ -91,7 +91,7 @@ begin
                 for j in calo_object_slice_2_low to calo_object_slice_2_high loop
                     if j/=i then
                         index := index + 1;
-                        obj_vs_templ_vec(index) := obj_slice_1_vs_templ_pipe(i,1) and obj_slice_2_vs_templ_pipe(j,1) and twobody_pt_comp_pipe(i,j);
+                        obj_vs_templ_vec(index) := obj_slice_1_vs_templ(i,1) and obj_slice_2_vs_templ(j,1) and twobody_pt_comp(i,j);
                     end if;
                 end loop;
             end loop;
@@ -104,7 +104,7 @@ begin
 
 -- Condition type: "triple".
     matrix_triple_i: if nr_templates = 3 generate
-        matrix_triple_p: process(obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, obj_slice_3_vs_templ_pipe)
+        matrix_triple_p: process(obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ)
             variable index : integer := 0;
             variable obj_vs_templ_vec : std_logic_vector((nr_objects_slice_1_int*nr_objects_slice_2_int*nr_objects_slice_3_int) downto 1) := (others => '0');
             variable condition_and_or_tmp : std_logic := '0';
@@ -117,7 +117,7 @@ begin
                     for k in calo_object_slice_3_low to calo_object_slice_3_high loop
                         if (j/=i and k/=i and k/=j) then
                             index := index + 1;
-                            obj_vs_templ_vec(index) := obj_slice_1_vs_templ_pipe(i,1) and obj_slice_2_vs_templ_pipe(j,1) and obj_slice_3_vs_templ_pipe(k,1);
+                            obj_vs_templ_vec(index) := obj_slice_1_vs_templ(i,1) and obj_slice_2_vs_templ(j,1) and obj_slice_3_vs_templ(k,1);
                         end if;
                     end loop;
                 end loop;
@@ -131,7 +131,7 @@ begin
 
 -- Condition type: "quad".
     matrix_quad_i: if nr_templates = 4 generate
-        matrix_quad_p_1: process(obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, obj_slice_3_vs_templ_pipe, obj_slice_4_vs_templ_pipe)
+        matrix_quad_p_1: process(obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ, obj_slice_4_vs_templ)
             variable index : integer := 0;
             variable index2 : integer := 0;
             variable test_index : integer := 0;
@@ -157,11 +157,11 @@ begin
                                     end if;
                                 end if;
                                 if(test_index = 0) then
-                                    obj_vs_templ_vec1(index2) := obj_slice_1_vs_templ_pipe(i,1) and obj_slice_2_vs_templ_pipe(j,1) and obj_slice_3_vs_templ_pipe(k,1) and obj_slice_4_vs_templ_pipe(l,1);
+                                    obj_vs_templ_vec1(index2) := obj_slice_1_vs_templ(i,1) and obj_slice_2_vs_templ(j,1) and obj_slice_3_vs_templ(k,1) and obj_slice_4_vs_templ(l,1);
                                 elsif(test_index = 1) then
-                                    obj_vs_templ_vec2(index2) := obj_slice_1_vs_templ_pipe(i,1) and obj_slice_2_vs_templ_pipe(j,1) and obj_slice_3_vs_templ_pipe(k,1) and obj_slice_4_vs_templ_pipe(l,1);
+                                    obj_vs_templ_vec2(index2) := obj_slice_1_vs_templ(i,1) and obj_slice_2_vs_templ(j,1) and obj_slice_3_vs_templ(k,1) and obj_slice_4_vs_templ(l,1);
                                 elsif(test_index = 2) then
-                                    obj_vs_templ_vec3(index2) := obj_slice_1_vs_templ_pipe(i,1) and obj_slice_2_vs_templ_pipe(j,1) and obj_slice_3_vs_templ_pipe(k,1) and obj_slice_4_vs_templ_pipe(l,1);
+                                    obj_vs_templ_vec3(index2) := obj_slice_1_vs_templ(i,1) and obj_slice_2_vs_templ(j,1) and obj_slice_3_vs_templ(k,1) and obj_slice_4_vs_templ(l,1);
                                 end if;
                                 index := index + 1;
                                 index2 := index2 +1;

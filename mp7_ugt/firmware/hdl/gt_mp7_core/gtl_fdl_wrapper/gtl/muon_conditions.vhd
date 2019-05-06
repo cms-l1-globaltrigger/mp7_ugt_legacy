@@ -71,8 +71,8 @@ entity muon_conditions is
         ls_charcorr_quad: in muon_charcorr_quad_array := (others => (others => (others => (others => '0'))));
         os_charcorr_quad: in muon_charcorr_quad_array := (others => (others => (others => (others => '0'))));
         pt : in diff_inputs_array(0 to NR_MUON_OBJECTS-1) := (others => (others => '0'));
-        cos_phi_integer : in muon_sin_cos_integer_array(0 to NR_MUON_OBJECTS-1) := (others => 0);
-        sin_phi_integer : in muon_sin_cos_integer_array(0 to NR_MUON_OBJECTS-1) := (others => 0)
+        cos_phi_integer : in sin_cos_integer_array(0 to NR_MUON_OBJECTS-1) := (others => 0);
+        sin_phi_integer : in sin_cos_integer_array(0 to NR_MUON_OBJECTS-1) := (others => 0)
     );
 end muon_conditions;
 
@@ -85,17 +85,16 @@ architecture rtl of muon_conditions is
 
     -- fixed pipeline structure, 2 stages total
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
-    constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
 
-    type object_slice_1_vs_template_array is array (muon_object_slice_1_low to muon_object_slice_1_high, 1 to 1) of std_logic;
-    type object_slice_2_vs_template_array is array (muon_object_slice_2_low to muon_object_slice_2_high, 1 to 1) of std_logic;
-    type object_slice_3_vs_template_array is array (muon_object_slice_3_low to muon_object_slice_3_high, 1 to 1) of std_logic;
-    type object_slice_4_vs_template_array is array (muon_object_slice_4_low to muon_object_slice_4_high, 1 to 1) of std_logic;
+--     type object_slice_1_vs_template_array is array (muon_object_slice_1_low to muon_object_slice_1_high, 1 to 1) of std_logic;
+--     type object_slice_2_vs_template_array is array (muon_object_slice_2_low to muon_object_slice_2_high, 1 to 1) of std_logic;
+--     type object_slice_3_vs_template_array is array (muon_object_slice_3_low to muon_object_slice_3_high, 1 to 1) of std_logic;
+--     type object_slice_4_vs_template_array is array (muon_object_slice_4_low to muon_object_slice_4_high, 1 to 1) of std_logic;
 
-    signal obj_slice_1_vs_templ, obj_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array;
-    signal obj_slice_2_vs_templ, obj_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array;
-    signal obj_slice_3_vs_templ, obj_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array;
-    signal obj_slice_4_vs_templ, obj_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array;
+    signal obj_slice_1_vs_templ, obj_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array(muon_object_slice_1_low to muon_object_slice_1_high, 1 to 1);
+    signal obj_slice_2_vs_templ, obj_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(muon_object_slice_2_low to muon_object_slice_2_high, 1 to 1);
+    signal obj_slice_3_vs_templ, obj_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(muon_object_slice_3_low to muon_object_slice_3_high, 1 to 1);
+    signal obj_slice_4_vs_templ, obj_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(muon_object_slice_4_low to muon_object_slice_4_high, 1 to 1);
     
 --***************************************************************
 -- signals for charge correlation comparison:
@@ -183,7 +182,7 @@ begin
             eta_w2_ignore, eta_w2_upper_limits, eta_w2_lower_limits,
             phi_full_range, phi_w1_upper_limits, phi_w1_lower_limits,
             phi_w2_ignore, phi_w2_upper_limits, phi_w2_lower_limits,
-            iso_luts
+            requested_charges, qual_luts, iso_luts
         )
         port map(
             data_i, obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ, obj_slice_4_vs_templ
@@ -303,8 +302,9 @@ begin
     end process;
 
 -- Instantiation of charge correlation matrix.
-    charge__corr_matrix_i: entity work.muon_charge_corr_matrix
+    charge_corr_matrix_i: entity work.muon_charge_corr_matrix
         generic map(
+            obj_vs_templ_pipeline_stage,
             muon_object_slice_1_low, muon_object_slice_1_high,
             muon_object_slice_2_low, muon_object_slice_2_high,
             muon_object_slice_3_low, muon_object_slice_3_high,
@@ -312,10 +312,10 @@ begin
             nr_templates,
             requested_charge_correlation
         )
-        port map(
+        port map(lhc_clk,
             ls_charcorr_double, os_charcorr_double,
-            ls_charcorr_triple, os_charcorr_triple
-            ls_charcorr_quad, os_charcorr_quad
+            ls_charcorr_triple, os_charcorr_triple,
+            ls_charcorr_quad, os_charcorr_quad,
             charge_comp_double_pipe, charge_comp_triple_pipe, charge_comp_quad_pipe
         );
 
@@ -417,7 +417,7 @@ begin
             muon_object_slice_4_low, muon_object_slice_4_high,
             nr_templates
         )
-        port map(clk,
+        port map(lhc_clk,
             obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, obj_slice_3_vs_templ_pipe, obj_slice_4_vs_templ_pipe,
             charge_comp_double_pipe, charge_comp_triple_pipe, charge_comp_quad_pipe, twobody_pt_comp_pipe,
             condition_o

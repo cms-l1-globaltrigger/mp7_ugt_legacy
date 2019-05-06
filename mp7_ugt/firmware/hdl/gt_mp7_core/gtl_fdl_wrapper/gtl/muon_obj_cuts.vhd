@@ -36,7 +36,7 @@ entity muon_obj_cuts is
         phi_w2_lower_limits: muon_templates_array;
         requested_charges: muon_templates_string_array;
         qual_luts: muon_templates_quality_array;
-        iso_luts: muon_templates_iso_array;
+        iso_luts: muon_templates_iso_array
 
     );
     port(

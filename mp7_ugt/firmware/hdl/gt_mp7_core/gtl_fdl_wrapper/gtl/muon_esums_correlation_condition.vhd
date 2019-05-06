@@ -83,10 +83,10 @@ entity muon_esums_correlation_condition is
         pt1 : in diff_inputs_array;
         pt2 : in diff_inputs_array;
         cos_dphi : in calo_muon_cosh_cos_vector_array;
-        cos_phi_1_integer : in muon_sin_cos_integer_array;
-        cos_phi_2_integer : in muon_sin_cos_integer_array;
-        sin_phi_1_integer : in muon_sin_cos_integer_array;
-        sin_phi_2_integer : in muon_sin_cos_integer_array;
+        cos_phi_1_integer : in sin_cos_integer_array;
+        cos_phi_2_integer : in sin_cos_integer_array;
+        sin_phi_1_integer : in sin_cos_integer_array;
+        sin_phi_2_integer : in sin_cos_integer_array;
         condition_o: out std_logic
     );
 end muon_esums_correlation_condition;

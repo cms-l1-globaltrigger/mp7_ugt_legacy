@@ -39,11 +39,13 @@ use work.gt_mp7_core_pkg.all;
 package gtl_pkg is
 
 -- HB 2019-05-02: inserted types for calo_cond_matrix.vhd.
-    type object_slice_1_vs_template_array is array (natural range <>, natural range <>) of std_logic;     
-    type object_slice_2_vs_template_array is array (natural range <>, natural range <>) of std_logic;     
-    type object_slice_3_vs_template_array is array (natural range <>, natural range <>) of std_logic;     
-    type object_slice_4_vs_template_array is array (natural range <>, natural range <>) of std_logic; 
+type object_slice_1_vs_template_array is array (natural range <>, natural range <>) of std_logic;     
+type object_slice_2_vs_template_array is array (natural range <>, natural range <>) of std_logic;     
+type object_slice_3_vs_template_array is array (natural range <>, natural range <>) of std_logic;     
+type object_slice_4_vs_template_array is array (natural range <>, natural range <>) of std_logic; 
     
+type sin_cos_integer_array is array (natural range <>) of integer;
+
 {{ugt_constants}}
 
 -- HB 2014-09-09: GTL and FDL firmware major, minor and revision versions moved to gt_mp7_core_pkg.vhd (GTL_FW_MAJOR_VERSION, etc.)

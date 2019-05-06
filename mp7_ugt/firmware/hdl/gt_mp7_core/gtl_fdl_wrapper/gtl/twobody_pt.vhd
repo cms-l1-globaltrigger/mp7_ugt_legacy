@@ -28,8 +28,8 @@ entity twobody_pt is
     );
     port(
         pt : in diff_inputs_array(0 to MAX_CALO_OBJECTS) := (others => (others => '0'));
-        cos_phi_integer : in calo_sin_cos_integer_array(0 to MAX_CALO_OBJECTS) := (others => 0);
-        sin_phi_integer : in calo_sin_cos_integer_array(0 to MAX_CALO_OBJECTS) := (others => 0);
+        cos_phi_integer : in sin_cos_integer_array(0 to MAX_CALO_OBJECTS) := (others => 0);
+        sin_phi_integer : in sin_cos_integer_array(0 to MAX_CALO_OBJECTS) := (others => 0);
         twobody_pt_comp : out std_logic_2dim_array(calo_object_slice_1_low to calo_object_slice_1_high, calo_object_slice_2_low to calo_object_slice_2_high) := (others => (others => '1'))
     );
 end twobody_pt;

@@ -133,10 +133,10 @@ entity calo_calo_calo_correlation_orm_condition is
         pt2 : in diff_inputs_array;
         cosh_deta : in calo_cosh_cos_vector_array;
         cos_dphi : in calo_cosh_cos_vector_array;
-        cos_phi_1_integer : in calo_sin_cos_integer_array;
-        cos_phi_2_integer : in calo_sin_cos_integer_array;
-        sin_phi_1_integer : in calo_sin_cos_integer_array;
-        sin_phi_2_integer : in calo_sin_cos_integer_array;
+        cos_phi_1_integer : in sin_cos_integer_array;
+        cos_phi_2_integer : in sin_cos_integer_array;
+        sin_phi_1_integer : in sin_cos_integer_array;
+        sin_phi_2_integer : in sin_cos_integer_array;
         condition_o: out std_logic;
         sim_orm_vec: out std_logic_3dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high, calo3_object_low to calo3_object_high) := (others => (others => (others => '0')));
         sim_orm_vec_or_tmp: out std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '0'));

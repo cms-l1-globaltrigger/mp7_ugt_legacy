@@ -58,8 +58,8 @@ entity calo_conditions is
         data_i: in calo_objects_array;
         condition_o: out std_logic;
         pt : in diff_inputs_array(0 to MAX_CALO_OBJECTS) := (others => (others => '0'));
-        cos_phi_integer : in calo_sin_cos_integer_array(0 to MAX_CALO_OBJECTS) := (others => 0);
-        sin_phi_integer : in calo_sin_cos_integer_array(0 to MAX_CALO_OBJECTS) := (others => 0)
+        cos_phi_integer : in sin_cos_integer_array(0 to MAX_CALO_OBJECTS) := (others => 0);
+        sin_phi_integer : in sin_cos_integer_array(0 to MAX_CALO_OBJECTS) := (others => 0)
     );
 end calo_conditions;
 

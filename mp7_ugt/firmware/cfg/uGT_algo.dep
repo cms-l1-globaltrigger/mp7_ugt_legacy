@@ -36,7 +36,10 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_cond_matrix_orm.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_obj_cuts.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_corr_matrix.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_cond_matrix.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_obj_cuts.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_comparators.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd

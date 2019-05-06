@@ -1,22 +1,5 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 03/08/2019 01:26:09 PM
--- Design Name: 
--- Module Name: calo_obj_cuts - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
+-- Description:
+-- Calo objects cuts
 
 -- Version history:
 -- HB 2019-04-30: first version proposed by Dinyar/Hannes.

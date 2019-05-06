@@ -1,22 +1,5 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 03/07/2019 12:17:34 PM
--- Design Name: 
--- Module Name: calo_cond_matrix - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
+-- Description:
+-- Calo condition matrix
 
 -- Version history:
 -- HB 2019-04-30: first version (updated Dinyar/Hannes proposal).

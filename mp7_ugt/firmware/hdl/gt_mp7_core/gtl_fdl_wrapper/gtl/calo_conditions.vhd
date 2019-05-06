@@ -160,7 +160,7 @@ begin
     end process;
 
 -- "Matrix" of permutations in an and-or-structure.
--- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates' and 'double_wsc'.
+-- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates'.
     cond_matrix_i: entity work.calo_cond_matrix
         generic map(
             calo_object_slice_1_low, calo_object_slice_1_high,

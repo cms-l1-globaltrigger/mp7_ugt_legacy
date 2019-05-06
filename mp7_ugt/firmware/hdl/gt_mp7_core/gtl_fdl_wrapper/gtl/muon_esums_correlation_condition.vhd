@@ -178,7 +178,7 @@ begin
 
     -- Instance of comparators for muon objects.
     muon_obj_l: for i in muon_object_low to muon_object_high generate
-        muon_comp_i: entity work.muon_comparators_v2
+        muon_comp_i: entity work.muon_comparators
             generic map(pt_ge_mode_muon,
                 pt_threshold_muon(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low downto 0),
                 eta_full_range_muon,

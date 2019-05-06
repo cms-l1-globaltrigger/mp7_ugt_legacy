@@ -3,6 +3,8 @@
 -- Correlation Condition module for two calorimeter object types (eg, jet and tau).
 
 -- Version history:
+-- HB 2019-05-06: updated instances.
+-- HB 2019-05-06: renamed from calo_calo_correlation_condition_v4 to calo_calo_correlation_condition.
 -- HB 2017-10-02: added limit vectors for correlation cuts.
 -- HB 2017-09-20: changed to calo_calo_correlation_condition_v4 - added mass_upper_limit_vector and mass_lower_limit_vector to generic.
 -- HB 2017-09-13: inserted port calo2_data_i again - bug fix.
@@ -26,7 +28,7 @@ use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
 
-entity calo_calo_correlation_condition_v4 is
+entity calo_calo_correlation_condition is
     generic(
         same_bx: boolean; 
     
@@ -113,9 +115,9 @@ entity calo_calo_correlation_condition_v4 is
         sin_phi_2_integer : in calo_sin_cos_integer_array;
         condition_o: out std_logic
     );
-end calo_calo_correlation_condition_v4; 
+end calo_calo_correlation_condition; 
 
-architecture rtl of calo_calo_correlation_condition_v4 is
+architecture rtl of calo_calo_correlation_condition is
 
 -- fixed pipeline structure, 2 stages total
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)

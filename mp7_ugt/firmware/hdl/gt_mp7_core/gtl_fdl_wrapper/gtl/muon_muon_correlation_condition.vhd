@@ -3,6 +3,8 @@
 -- Correlation Condition module for muon objects.
 
 -- Version history:
+-- HB 2019-05-06: updated instances.
+-- HB 2019-05-06: renamed from muon_muon_correlation_condition_v4 to muon_muon_correlation_condition.
 -- HB 2017-10-02: based on muon_muon_correlation_condition_v3 - used limit vectors for correlation cuts.
 -- HB 2017-09-06: inserted port muon2_data_i again - bug fix.
 -- HB 2017-09-05: removed port muon2_data_i, used muon1_data_i instead in logic.
@@ -24,7 +26,7 @@ use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
 
-entity muon_muon_correlation_condition_v4 is
+entity muon_muon_correlation_condition is
      generic(
         same_bx: boolean; 
 
@@ -116,9 +118,9 @@ entity muon_muon_correlation_condition_v4 is
         sin_phi_2_integer : in muon_sin_cos_integer_array;
         condition_o: out std_logic
     );
-end muon_muon_correlation_condition_v4; 
+end muon_muon_correlation_condition; 
 
-architecture rtl of muon_muon_correlation_condition_v4 is
+architecture rtl of muon_muon_correlation_condition is
 
 -- fixed pipeline structure, 2 stages total
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
@@ -275,7 +277,7 @@ begin
     -- *** section: CUTs - end ***************************************************************************************
 
     obj_templ1_l: for i in muon1_object_low to muon1_object_high generate
-        obj_templ1_comp_i: entity work.muon_comparators_v2
+        obj_templ1_comp_i: entity work.muon_comparators
             generic map(pt_ge_mode_muon1,
                 pt_threshold_muon1(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low downto 0),
                 eta_full_range_muon1,
@@ -298,7 +300,7 @@ begin
     end generate obj_templ1_l;
 
     obj_templ2_l_l: for i in muon2_object_low to muon2_object_high generate
-        obj_templ2_comp_i: entity work.muon_comparators_v2
+        obj_templ2_comp_i: entity work.muon_comparators
             generic map(pt_ge_mode_muon2,
                 pt_threshold_muon2(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low downto 0),
                 eta_full_range_muon2,

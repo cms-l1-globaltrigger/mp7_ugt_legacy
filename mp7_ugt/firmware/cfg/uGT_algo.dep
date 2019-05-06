@@ -36,8 +36,8 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_cond_matrix_orm.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_obj_cuts.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators_v2.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_v7.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_comparators.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/dr_calculator.vhd
@@ -47,13 +47,13 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/twobody_pt_calculator.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/twobody_pt.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_calculator.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/cuts_instances.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition_v4.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition_v3.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition_v3.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition_v4.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition_v3.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_orm.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_calo_correlation_orm_condition_v3.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_calo_correlation_orm_condition.vhd
 #
 src gt_mp7_core/frame/demux_lane/demux_lane_data.vhd
 src gt_mp7_core/frame/frame.vhd

@@ -3,6 +3,7 @@
 -- Comparators for transverse momentum, pseudorapidity, azimuth angle, quality and isolation of muon objects
 
 -- Version history:
+-- HB 2019-05-06: renamed from muon_comparators_v2 to muon_comparators.
 -- HB 2015-09-24: renamed to "muon_comparators_v2" for removing "d_s_i" from generic. These constants used directly from gtl.pkg now.
 -- HB 2015-05-29: removed "use work.gtl_lib.all;" - using "entity work.xxx" for instances
 
@@ -13,7 +14,7 @@ use ieee.std_logic_unsigned.all; -- for function "CONV_INTEGER"
 
 use work.gtl_pkg.all;
 
-entity muon_comparators_v2 is
+entity muon_comparators is
 	generic	(
         pt_ge_mode : boolean;
         pt_threshold: std_logic_vector;
@@ -37,9 +38,9 @@ entity muon_comparators_v2 is
         data_i : in std_logic_vector;
         comp_o : out std_logic
     );
-end muon_comparators_v2;
+end muon_comparators;
 
-architecture rtl of muon_comparators_v2 is
+architecture rtl of muon_comparators is
 
     constant ZERO : std_logic_vector(MAX_MUON_BITS-1 downto 0) := (others => '0');
 

@@ -3,6 +3,8 @@
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and muon.
 
 -- Version history:
+-- HB 2019-05-06: updated instances.
+-- HB 2019-05-06: renamed from calo_muon_correlation_condition_v3 to calo_muon_correlation_condition.
 -- HB 2017-10-02: based on calo_muon_correlation_condition_v2 - used limit vectors for correlation cuts.
 -- HB 2017-04-25: "twobody_pt" detached from "mass fixation". Used "mass_calculator.vhd" and "twobody_pt_calculator.vhd" in "cuts_instances" module.
 -- HB 2017-03-29: updated for one "sin_cos_width" in mass_cuts.
@@ -18,7 +20,7 @@ use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
 
-entity calo_muon_correlation_condition_v3 is
+entity calo_muon_correlation_condition is
      generic(
         deta_cut: boolean;
         dphi_cut: boolean;
@@ -104,9 +106,9 @@ entity calo_muon_correlation_condition_v3 is
         sin_phi_2_integer : in muon_sin_cos_integer_array;
         condition_o: out std_logic
     );
-end calo_muon_correlation_condition_v3; 
+end calo_muon_correlation_condition; 
 
-architecture rtl of calo_muon_correlation_condition_v3 is
+architecture rtl of calo_muon_correlation_condition is
 
 -- fixed pipeline structure, 2 stages total
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
@@ -221,7 +223,7 @@ begin
 
 -- Instance of comparators for muon objects.
     muon_obj_l: for i in muon_object_low to muon_object_high generate
-        muon_comp_i: entity work.muon_comparators_v2
+        muon_comp_i: entity work.muon_comparators
             generic map(pt_ge_mode_muon,
                 pt_threshold_muon(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low downto 0),
                 eta_full_range_muon,

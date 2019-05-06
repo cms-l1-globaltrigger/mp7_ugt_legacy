@@ -3,6 +3,7 @@
 -- Correlation Condition module for "b-tagging" (jet-mu-mu).
 
 -- Version history:
+-- HB 2019-05-06: updated instances.
 -- HB 2017-02-07: used dr_calculator_v2.
 -- HB 2017-02-03: first design with dr_cut only
 
@@ -176,7 +177,7 @@ begin
 
 -- Instance of comparators for muon objects.
     muon_obj_1_l: for i in muon_object_low to muon_object_high generate
-        muon_1_comp_i: entity work.muon_comparators_v2
+        muon_1_comp_i: entity work.muon_comparators
             generic map(pt_ge_mode_muon_1,
                 pt_threshold_muon_1(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low downto 0),
                 eta_full_range_muon_1,
@@ -199,7 +200,7 @@ begin
      end generate muon_obj_1_l;
 
     muon_obj_2_l: for i in muon_object_low to muon_object_high generate
-        muon_2_comp_i: entity work.muon_comparators_v2
+        muon_2_comp_i: entity work.muon_comparators
             generic map(pt_ge_mode_muon_2,
                 pt_threshold_muon_2(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low downto 0),
                 eta_full_range_muon_2,

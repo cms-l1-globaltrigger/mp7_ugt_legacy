@@ -2,6 +2,8 @@
 -- Description:
 
 -- Version history:
+-- HB 2019-05-06: updated instances.
+-- HB 2019-05-06: renamed from calo_calo_calo_correlation_orm_condition_v3 to calo_calo_calo_correlation_orm_condition.
 -- HB 2017-07-04: changed from calo_calo_calo_correlation_orm_condition to calo_calo_calo_correlation_orm_condition_v2 for correct use of different object slices. 
 --                Object types and bx of calo1 and calo2 are the same. Only one collection of input data (port "calo1") for calo1 and calo2.
 -- HB 2017-05-18: updated and-structure for correct use with orm.
@@ -15,7 +17,7 @@ use ieee.std_logic_arith.all;
 use work.math_pkg.all;
 use work.gtl_pkg.all;
 
-entity calo_calo_calo_correlation_orm_condition_v3 is
+entity calo_calo_calo_correlation_orm_condition is
      generic(
 
         obj_2plus1: boolean;
@@ -142,9 +144,9 @@ entity calo_calo_calo_correlation_orm_condition_v3 is
         sim_obj_vs_templ_or_tmp: out std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '0'));
         sim_obj_vs_templ_orm_vec: out std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '0'))
     );
-end calo_calo_calo_correlation_orm_condition_v3; 
+end calo_calo_calo_correlation_orm_condition; 
 
-architecture rtl of calo_calo_calo_correlation_orm_condition_v3 is
+architecture rtl of calo_calo_calo_correlation_orm_condition is
 
 -- fixed pipeline structure
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)

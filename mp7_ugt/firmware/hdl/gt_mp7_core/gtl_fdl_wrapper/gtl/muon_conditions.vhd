@@ -6,6 +6,8 @@
 -- Charge correlation selection implemented with "LS" and "OS" (charge correlation calculated in muon_charge_correlations.vhd)
 
 -- Version history:
+-- HB 2019-05-06: updated instances.
+-- HB 2019-05-06: renamed from muon_conditions_v7 to muon_conditions.
 -- HB 2017-10-04: based on muon_conditions_v6 - used limit vector for pt_sq_threshold.
 -- HB 2017-09-05: based on muon_conditions_v5, but inserted slice ranges in generic for correct use of object slices.
 -- HB 2017-06-20: changed order in port for charge correlation signals.
@@ -21,7 +23,7 @@ use ieee.std_logic_unsigned.all; -- for function "CONV_INTEGER"
 
 use work.gtl_pkg.all;
 
-entity muon_conditions_v7 is
+entity muon_conditions is
     generic (
         muon_object_slice_1_low: natural;
         muon_object_slice_1_high: natural;
@@ -72,9 +74,9 @@ entity muon_conditions_v7 is
         cos_phi_integer : in muon_sin_cos_integer_array(0 to NR_MUON_OBJECTS-1) := (others => 0);
         sin_phi_integer : in muon_sin_cos_integer_array(0 to NR_MUON_OBJECTS-1) := (others => 0)
     );
-end muon_conditions_v7;
+end muon_conditions;
 
-architecture rtl of muon_conditions_v7 is
+architecture rtl of muon_conditions is
 
     constant nr_objects_slice_1_int: natural := muon_object_slice_1_high-muon_object_slice_1_low+1;
     constant nr_objects_slice_2_int: natural := muon_object_slice_2_high-muon_object_slice_2_low+1;
@@ -151,7 +153,7 @@ begin
     
     -- Instance of comparators for muon objects. All permutations between objects and thresholds.
     obj_slice_1_l: for i in muon_object_slice_1_low to muon_object_slice_1_high generate
-        comp_i: entity work.muon_comparators_v2
+        comp_i: entity work.muon_comparators
             generic map(pt_ge_mode,
                         pt_thresholds(1)(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
                         eta_full_range(1),
@@ -174,7 +176,7 @@ begin
     end generate obj_slice_1_l;
 
     obj_slice_2_l: for i in muon_object_slice_2_low to muon_object_slice_2_high generate
-        comp_i: entity work.muon_comparators_v2
+        comp_i: entity work.muon_comparators
             generic map(pt_ge_mode,
                         pt_thresholds(2)(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
                         eta_full_range(2),
@@ -197,7 +199,7 @@ begin
     end generate obj_slice_2_l;
 
     obj_slice_3_l: for i in muon_object_slice_3_low to muon_object_slice_3_high generate
-        comp_i: entity work.muon_comparators_v2
+        comp_i: entity work.muon_comparators
             generic map(pt_ge_mode,
                         pt_thresholds(3)(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
                         eta_full_range(3),
@@ -220,7 +222,7 @@ begin
     end generate obj_slice_3_l;
 
     obj_slice_4_l: for i in muon_object_slice_4_low to muon_object_slice_4_high generate
-        comp_i: entity work.muon_comparators_v2
+        comp_i: entity work.muon_comparators
             generic map(pt_ge_mode,
                         pt_thresholds(4)(D_S_I_MUON.pt_high-D_S_I_MUON.pt_low downto 0),
                         eta_full_range(4),

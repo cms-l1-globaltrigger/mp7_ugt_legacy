@@ -81,8 +81,9 @@ src ipbus/slaves/ipb_read_regs.vhd
 src ipbus/slaves/ipb_dpmem_4096_32.vhd
 #src ../ngc/dp_mem_4096x32/dp_mem_4096x32.ngc
 #src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
-src ../ngc/dp_mem_4096x32_blk_mem_gen_v8_4/dp_mem_4096x32.xci
-src ../ngc/dp_mem_4096x32_blk_mem_gen_v8_4/synth/dp_mem_4096x32.vhd
+
+?toolset=="Vivado"? src ../ngc/dp_mem_4096x32_blk_mem_gen_v8_4/dp_mem_4096x32.xci
+#src ../ngc/dp_mem_4096x32_blk_mem_gen_v8_4/synth/dp_mem_4096x32.vhd
 #
 src -c components/mp7_ttc mp7_ttc_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd

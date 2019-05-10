@@ -6,3 +6,6 @@
 set_property "steps.synth_design.args.assert" 1 [get_runs synth_1]
 ## HB 2017-04-06: for timimg optimisation
 set_property strategy Performance_ExplorePostRoutePhysOpt [get_runs impl_1]
+
+## HB 2019-05-10: for tests - upgrade IP dp_mem_4096x32
+upgrade_ip [get_ips dp_mem_4096x32]

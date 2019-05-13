@@ -14,19 +14,18 @@ from threading import Thread
 o, ts = os.popen('stty size', 'r').read().split()#terminal size
 ts = int(ts)
 
-whitered = "\033[37;41;1m"#collor tags
-reset = "\033[0m"
+failed_red = ("\033[1;31m Failed! \033[0m")
+success_green = ("\033[1;32m Success! \033[0m")
+ok_green = ("\033[1;32m OK     \033[0m")
+ignore_yellow = ("\033[1;33m IGNORE \033[0m")
+error_red = ("\033[1;31m ERROR  \033[0m")
 
-DEFAULT_QUESTLIBS_PATH = '/opt/mentor/questalibs_vivado_v2018.2/'#default paths
-#DEFAULT_XILINX_PATH = '/opt/xilinx/14.6'#default paths
-#DEFAULT_MODELSIM_VERSION = '10.3b'
-#DEFAULT_MODELSIM_INI_TPL = 'modelsim_tpl.ini'
+#reset = "\033[0m"
 
 DO_FILE = 'gtl_fdl_wrapper.do'
 TB_FILE_TPL = 'testbench/templates/gtl_fdl_wrapper_tb_tpl.vhd'
 TB_FILE = 'testbench/gtl_fdl_wrapper_tb.vhd'
 
-#INI_FILE_TPL = 'modelsim_tpl.ini'
 INI_FILE = 'modelsim.ini'
 DO_FILE_TPL = 'scripts/templates/gtl_fdl_wrapper_tpl.do'
 
@@ -200,18 +199,19 @@ def parse():
     parser = argparse.ArgumentParser()
     parser.add_argument('--mp7_tag', type=os.path.abspath, help = "path to MP7 tag", required = True)
     parser.add_argument('--menu', metavar = 'path', help = 'menue folder path', type = os.path.abspath, required = True)
-    parser.add_argument('--testvector', metavar = 'path', help = 'testvector file path')
+    parser.add_argument('--testvector', metavar = 'path', help = 'testvector file path', required = True)
     parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
     parser.add_argument('--view-wave', action = 'store_true', help = "shows the waveform")
     parser.add_argument('--wlf', action = 'store_true', help = "no console transcript info, warning and error messages (transcript output to vsim.wlf)")
-    #parser.add_argument('--xilinx-path', metavar = '<path>', default = DEFAULT_XILINX_PATH, help = "path to xilinx installation, default is `{DEFAULT_XILINX_PATH}'".format(**globals()))
-    #parser.add_argument('--modelsim', metavar = '<version>', default = DEFAULT_MODELSIM_VERSION, help = "select modelsim version, default is `{DEFAULT_MODELSIM_VERSION}'".format(**globals()))
-    #parser.add_argument('--config', metavar = '<filename>', default = DEFAULT_MODELSIM_INI_TPL, help = "set modelsim INI template file, default is `{DEFAULT_MODELSIM_INI_TPL}'".format(**globals()))
     parser.add_argument('-v', '--verbose', action = 'store_const',const = logging.DEBUG, help = "enables debug prints to console", default = logging.INFO)
     return parser.parse_args()
 
 def main():
     args = parse()
+
+    questalib_dir = os.getenv('QUESTASIMLIB_DIR')
+    if not questalib_dir:#checks for gtu settings
+        raise RuntimeError("Questasimlib directory not set (command: export QUESTASIMLIB_DIR=/opt/mentor/questalibs_vivado_v2018.2/)")
 
     sim_dir = os.getenv('SIM_ROOT')
     if not sim_dir:
@@ -251,20 +251,13 @@ def main():
 
     menu = xmlmenu.XmlMenu(menu_filepath)
 
-
     modules = []
     for _id in range(menu.n_modules):#makes list for each module
         modules.append(Module(menu ,_id, base_dir))
 
-    #ini_file = os.path.join(base_dir, INI_FILE)
-    #render_template(#makes render template
-        #os.path.join(sim_dir, INI_FILE_TPL),
-        #ini_file, {
-        #'{{XILINX_PATH}}' : args.xilinx_path,
-        #'{{MODELSIM_VERSION}}' : args.modelsim,
-    #})
-
-    ini_file = os.path.join(DEFAULT_QUESTLIBS_PATH, INI_FILE)
+    # Getting modelsim.ini file directly from questalib directory:
+    ini_file = os.path.join(questalib_dir, INI_FILE)
+    logging.info('modelsim.ini file: %s' % ini_file)
 
     logging.info('Creating Modules and Masks...')
 
@@ -285,10 +278,6 @@ def main():
 
     logging.info('finished creating modules and masks')
     logging.info('starting simulations...')
-
-    gtu_settings = os.getenv('GTU_SETTINGS_MODELSIM_INI_VERSION')
-    if not gtu_settings:#checks for gtu settings
-        raise RuntimeError("GTU settings not set (run gtu-settings-XXX)")
 
     threads = []
     for module in modules:#makes for all simulations a thread
@@ -347,12 +336,12 @@ def main():
     algorithms = sorted(menu.algorithms, key = lambda algorithm: algorithm.index)#sorts all algorithms by index number
     success = True
     for algo in algorithms:
-        result = 'OK'
+        result = ok_green
         if algo.name in IGNORED_ALGOS:
-            result = 'IGNORE'
+            result = ignore_yellow
         #checks if algorithm trigger count is equal in both hardware and testvectors
         elif algos_tv[algo.index][0][1] != algos_sim[algo.index][0][1]:
-            result = 'ERROR'
+            result = error_red
             success = False
 
         sum_log.info('|{:>5}|{:>5}|{:<66}|{:>8}|{:>8}|{:>8}|'.format( #prints line with information about each algo present in the menu
@@ -406,9 +395,9 @@ def main():
     print ("")
 
     if success:
-        logging.info("Success!")
+        logging.info(success_green)
     else:
-        logging.error("Failed!")
+        logging.error(failed_red)
 
     #with open('')
 if __name__ == '__main__':

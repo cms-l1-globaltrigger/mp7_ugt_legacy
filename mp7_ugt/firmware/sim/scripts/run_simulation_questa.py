@@ -4,6 +4,7 @@
 #all credit to Johannes Wittmann and Bernhard Arnold
 import xmlmenu
 import os, sys
+import shutil
 import json
 import subprocess
 import logging
@@ -256,8 +257,11 @@ def main():
         modules.append(Module(menu ,_id, base_dir))
 
     # Getting modelsim.ini file directly from questalib directory:
-    ini_file = os.path.join(questalib_dir, INI_FILE)
-    logging.info('modelsim.ini file: %s' % ini_file)
+    ini_file_questalib = os.path.join(questalib_dir, INI_FILE)
+    logging.info('modelsim.ini questalib: %s' % ini_file_questalib)
+    ini_file = os.path.join(sim_dir, INI_FILE)    
+    shutil.copyfile(ini_file_questalib, ini_file)
+    logging.info('modelsim.ini local path: %s' % ini_file)
 
     logging.info('Creating Modules and Masks...')
 

@@ -27,7 +27,7 @@ TB_FILE_TPL = 'testbench/templates/gtl_fdl_wrapper_tb_tpl.vhd'
 TB_FILE = 'testbench/gtl_fdl_wrapper_tb.vhd'
 
 INI_FILE = 'modelsim.ini'
-DO_FILE_TPL = 'scripts/templates/gtl_fdl_wrapper_tpl.do'
+DO_FILE_TPL = 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do'
 
 mp7_tag = 'cactusupgrades'
 algonum = 512#numbers of bits

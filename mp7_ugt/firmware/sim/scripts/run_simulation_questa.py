@@ -212,7 +212,7 @@ def main():
 
     questalib_dir = os.getenv('QUESTASIMLIB_DIR')
     if not questalib_dir:#checks for gtu settings
-        raise RuntimeError("Questasimlib directory not set (command: export QUESTASIMLIB_DIR=/opt/mentor/questalibs_vivado_v2018.2/)")
+        raise RuntimeError("Questasimlib directory not set (use e.g.: export QUESTASIMLIB_DIR=/opt/mentor/questalibs_vivado_v2018.3/ to set)")
 
     sim_dir = os.getenv('SIM_ROOT')
     if not sim_dir:
@@ -256,7 +256,7 @@ def main():
     for _id in range(menu.n_modules):#makes list for each module
         modules.append(Module(menu ,_id, base_dir))
 
-    # Getting modelsim.ini file directly from questalib directory:
+    # Copying modelsim.ini file from questalib to simulation directory:
     ini_file_questalib = os.path.join(questalib_dir, INI_FILE)
     logging.info('modelsim.ini questalib: %s' % ini_file_questalib)
     ini_file = os.path.join(sim_dir, INI_FILE)    

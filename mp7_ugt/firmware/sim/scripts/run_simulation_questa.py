@@ -11,6 +11,7 @@ import logging
 import argparse
 import time, datetime
 from threading import Thread
+from run_compile_simlib import run_compile_simlib
 
 o, ts = os.popen('stty size', 'r').read().split()#terminal size
 ts = int(ts)
@@ -29,6 +30,9 @@ TB_FILE = 'testbench/gtl_fdl_wrapper_tb.vhd'
 
 INI_FILE = 'modelsim.ini'
 DO_FILE_TPL = 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do'
+
+DefaultQuestaSimPath = '/opt/mentor/questasim'
+DefaultQuestaSimLibsPath = 'questasimlibs'
 
 mp7_tag = 'cactusupgrades'
 algonum = 512#numbers of bits
@@ -204,16 +208,29 @@ def parse():
     parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
     parser.add_argument('--view-wave', action = 'store_true', help = "shows the waveform")
     parser.add_argument('--wlf', action = 'store_true', help = "no console transcript info, warning and error messages (transcript output to vsim.wlf)")
-    parser.add_argument('-v', '--verbose', action = 'store_const',const = logging.DEBUG, help = "enables debug prints to console", default = logging.INFO)
+    parser.add_argument('-v', '--verbose', action = 'store_const', const = logging.DEBUG, help = "enables debug prints to console", default = logging.INFO)
+    parser.add_argument('--vivado', help = "Vivado version", required = True)
+    parser.add_argument('--questasim', default=DefaultQuestaSimPath, help = "Questasim installation path")
+    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsPath, help = "Questasim Vivado libraries path")
     return parser.parse_args()
 
 def main():
     args = parse()
+    
+    # Setup console logging
+    logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.INFO)
 
-    questalib_dir = os.getenv('QUESTASIMLIB_DIR')
-    if not questalib_dir:#checks for gtu settings
-        raise RuntimeError("Questasimlib directory not set (use e.g.: export QUESTASIMLIB_DIR=/opt/mentor/questalibs_vivado_v2018.3/ to set)")
+    # Copy dofile from gtl_fdl_wrapper_tpl_questa_v<vivado version>.do to gtl_fdl_wrapper_tpl_questa.do
+    src_do = "scripts/templates/gtl_fdl_wrapper_tpl_questa_v{}.do".format(args.vivado)
+    dest_do = "scripts/templates/gtl_fdl_wrapper_tpl_questa.do"
+    shutil.copyfile(src_do, dest_do)
+    
+    pwd = os.path.dirname(__file__)
 
+    questasimlib_path = os.path.join(os.environ['HOME'], args.questasimlibs, args.vivado)
+    
+    run_compile_simlib(args.vivado, args.questasim, questasimlib_path)
+    
     sim_dir = os.getenv('SIM_ROOT')
     if not sim_dir:
         raise RuntimeError("var SIM_ROOT is not defined (source setup.sh first!)")#checks if setup.py was executed
@@ -221,9 +238,6 @@ def main():
     # using SIM_ROOT dir as default output path
     if not args.output:
         args.output = sim_dir
-
-    # Setup console logging
-    logging.basicConfig(format = '%(levelname)s: %(message)s', level = args.verbose)
 
     # Set message mode:
     # wlf => no output to console for transcript info, warning and error messages (transcript output to vsim.wlf).
@@ -256,12 +270,12 @@ def main():
     for _id in range(menu.n_modules):#makes list for each module
         modules.append(Module(menu ,_id, base_dir))
 
-    # Copying modelsim.ini file from questalib to simulation directory:
-    ini_file_questalib = os.path.join(questalib_dir, INI_FILE)
-    logging.info('modelsim.ini questalib: %s' % ini_file_questalib)
+    ## Copying modelsim.ini file from questalib to simulation directory:
+    #ini_file_questalib = os.path.join(questalib_dir, INI_FILE)
+    #logging.info('modelsim.ini questalib: %s' % ini_file_questalib)
     ini_file = os.path.join(sim_dir, INI_FILE)    
-    shutil.copyfile(ini_file_questalib, ini_file)
-    logging.info('modelsim.ini local path: %s' % ini_file)
+    #shutil.copyfile(ini_file_questalib, ini_file)
+    #logging.info('modelsim.ini local path: %s' % ini_file)
 
     logging.info('Creating Modules and Masks...')
 

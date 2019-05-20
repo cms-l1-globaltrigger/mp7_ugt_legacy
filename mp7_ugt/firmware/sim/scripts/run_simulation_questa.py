@@ -233,7 +233,7 @@ def main():
         raise RuntimeError("Questa sim version '%s' does NOT exist" % args.questasim)
     
     if not os.path.isdir(questasim_path):
-        raise RuntimeError("No installation of Questa sim in '%s'" % args.questasim)
+        raise RuntimeError("No installation of Questa sim in '%s'" % questasim_path)
         
     # Set sim_dir
     sim_dir = os.getcwd()

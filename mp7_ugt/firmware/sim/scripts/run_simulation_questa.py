@@ -32,8 +32,10 @@ TB_FILE = 'testbench/gtl_fdl_wrapper_tb.vhd'
 INI_FILE = 'modelsim.ini'
 DO_FILE_TPL = 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do'
 
-DefaultQuestaSimPath = '/opt/mentor/questasim'
-DefaultQuestaSimLibsPath = 'questasimlibs'
+DefaultQuestaSimVersion = '10.7c'
+QuestaSimPathVersion107c = '/opt/mentor/questasim'
+QuestaSimPathVersion106a = '/opt/mentor/questa_core_prime_10.6a/questasim'
+DefaultQuestaSimLibsName = 'questasimlibs'
 
 mp7_tag = 'cactusupgrades'
 algonum = 512#numbers of bits
@@ -212,8 +214,8 @@ def parse():
     parser.add_argument('--wlf', action = 'store_true', help = "no console transcript info, warning and error messages (transcript output to vsim.wlf)")
     parser.add_argument('-v', '--verbose', action = 'store_const', const = logging.DEBUG, help = "enables debug prints to console", default = logging.INFO)
     parser.add_argument('--vivado', help = "Vivado version", required = True)
-    parser.add_argument('--questasim', default=DefaultQuestaSimPath, help = "Questasim installation path")
-    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsPath, help = "Questasim Vivado libraries path")
+    parser.add_argument('--questasim', default=DefaultQuestaSimVersion, help = "Questasim version")
+    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name")
     return parser.parse_args()
 
 def main():
@@ -221,38 +223,36 @@ def main():
     
     # Setup console logging
     logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.INFO)
+    
+    # Check Questa sim version
+    if args.questasim == '10.6a':
+        questasim_path = QuestaSimPathVersion106a
+    elif args.questasim == '10.7c':
+        questasim_path = QuestaSimPathVersion107c
+    else:    
+        raise RuntimeError("Questa sim version '%s' does NOT exist" % args.questasim)
 
-    # Check Questasim installation directory exists
-    if not os.path.exists(args.questasim):
-        raise RuntimeError("Questa installation path '%s' does NOT exist" % args.questasim)
-
-    # Check sim_dir is set
-    sim_dir = os.getenv('SIM_ROOT')
-    if not sim_dir:
-        raise RuntimeError("var SIM_ROOT is not defined (source setup.sh first!)")#checks if setup.py was executed
-
-    # Check questasim same as $QUESTASIM_DIR
-    if args.questasim != os.getenv('QUESTASIM_DIR'):
-        raise RuntimeError("'args.questasim' not equal '$QUESTASIM_DIR'!\n==> Set 'export QUESTASIM_DIR=%s'" % args.questasim)
+    # Set sim_dir
+    sim_dir = os.getcwd()
     
     # Copy dofile from gtl_fdl_wrapper_tpl_questa_v<vivado version>.do to gtl_fdl_wrapper_tpl_questa.do
     src_do = "scripts/templates/gtl_fdl_wrapper_tpl_questa_v{}.do".format(args.vivado)
     dest_do = "scripts/templates/gtl_fdl_wrapper_tpl_questa.do"
     shutil.copyfile(src_do, dest_do)
     
-    pwd = os.path.dirname(__file__)
-
-    questasimlib_path = os.path.join(os.environ['HOME'], args.questasimlibs, args.vivado)
+    # Path to Questa sim libs for selected vivado version
+    questasimlibs_name = args.questasimlibs + '_' + args.questasim
+    questasimlib_path = os.path.join(os.environ['HOME'], questasimlibs_name, args.vivado)
     
     # Run compile Vivado sim libs for Questa (if not exist)
-    run_compile_simlib(args.vivado, args.questasim, questasimlib_path)
+    run_compile_simlib(args.vivado, questasim_path, questasimlib_path)
     
     # using SIM_ROOT dir as default output path
     if not args.output:
         args.output = sim_dir
 
     # Set message mode:
-    # wlf => no output to console for transcript info, warning and error messages (transcript output to vsim.wlf).
+    # wlf => no output to console for transcript info, warning and error messages (transccd -ript output to vsim.wlf).
     # tran => output to console.
     msgmode = 'wlf' if args.wlf else 'tran'
 
@@ -302,11 +302,12 @@ def main():
         module.make_files(sim_dir, args.view_wave, args.mp7_tag, args.menu)#sim_dir, view_wave, mp7_tag, menu_path
 
     logging.info('finished creating modules and masks')
-    logging.info('starting simulations...')
+    logging.info("===========================================================================")
+    logging.info('starting simulations with Questa Simulator version %s (from directory %s)'% (args.questasim, questasim_path))
 
     threads = []
     for module in modules:#makes for all simulations a thread
-        thread = Thread(target = run_vsim, args = (args.questasim, module, msgmode, ini_file))
+        thread = Thread(target = run_vsim, args = (questasim_path, module, msgmode, ini_file))
         threads.append(thread)
         thread.start()
         while not os.path.exists(os.path.join(module.path, 'running.lock')):#stops starting of new threads if .do file is still in use

@@ -48,13 +48,13 @@ def run_compile_simlib(vivado, questasim, questasimlib_path):
     if not os.path.isdir(questasimlib_path):
         logging.info("===========================================================================")
         command = 'bash -c "source {}; vivado -mode batch -source {}/compile_simlib.tcl"'.format(settings64, pwd)
-        logging.info("creating libs in %s (running '%s/compile_simlib.tcl')", questasimlib_path, pwd)
+        logging.info("Creating Questa sim libs in %s (running '%s/compile_simlib.tcl')", questasimlib_path, pwd)
         run_command(command)
         logging.info("Done!")
         logging.info("===========================================================================")
     else:
         logging.info("===========================================================================")
-        logging.info("libs in %s already exists", questasimlib_path)
+        logging.info("Questa sim libs in %s already exists", questasimlib_path)
         logging.info("Nothing to do!")
         logging.info("===========================================================================")
     

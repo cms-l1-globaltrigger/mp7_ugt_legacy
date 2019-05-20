@@ -32,10 +32,9 @@ TB_FILE = 'testbench/gtl_fdl_wrapper_tb.vhd'
 INI_FILE = 'modelsim.ini'
 DO_FILE_TPL = 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do'
 
-DefaultQuestaSimVersion = '10.7c'
 QuestaSimPathVersion107c = '/opt/mentor/questasim'
 QuestaSimPathVersion106a = '/opt/mentor/questa_core_prime_10.6a/questasim'
-DefaultQuestaSimLibsName = 'questasimlibs'
+DefaultQuestaSimLibsName = 'questasimlibs' # generated im $HOME
 
 mp7_tag = 'cactusupgrades'
 algonum = 512#numbers of bits
@@ -214,7 +213,7 @@ def parse():
     parser.add_argument('--wlf', action = 'store_true', help = "no console transcript info, warning and error messages (transcript output to vsim.wlf)")
     parser.add_argument('-v', '--verbose', action = 'store_const', const = logging.DEBUG, help = "enables debug prints to console", default = logging.INFO)
     parser.add_argument('--vivado', help = "Vivado version", required = True)
-    parser.add_argument('--questasim', default=DefaultQuestaSimVersion, help = "Questasim version")
+    parser.add_argument('--questasim', help = "Questasim version", required = True)
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name")
     return parser.parse_args()
 

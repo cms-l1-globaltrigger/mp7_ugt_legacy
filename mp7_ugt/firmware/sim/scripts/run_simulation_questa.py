@@ -270,12 +270,7 @@ def main():
     for _id in range(menu.n_modules):#makes list for each module
         modules.append(Module(menu ,_id, base_dir))
 
-    ## Copying modelsim.ini file from questalib to simulation directory:
-    #ini_file_questalib = os.path.join(questalib_dir, INI_FILE)
-    #logging.info('modelsim.ini questalib: %s' % ini_file_questalib)
     ini_file = os.path.join(sim_dir, INI_FILE)    
-    #shutil.copyfile(ini_file_questalib, ini_file)
-    #logging.info('modelsim.ini local path: %s' % ini_file)
 
     logging.info('Creating Modules and Masks...')
 

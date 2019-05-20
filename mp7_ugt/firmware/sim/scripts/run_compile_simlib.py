@@ -23,10 +23,6 @@ def run_command(*args):
 
 def run_compile_simlib(vivado, questasim, questasimlib_path):
 
-    # Delete local modelsim.ini
-    command = 'bash -c "rm {}/../modelsim.ini"'.format(pwd)
-    run_command(command)
-
     # Check for VIVADO_BASE_DIR
     vivado_base_dir = os.getenv('VIVADO_BASE_DIR')
     if not vivado_base_dir:

@@ -14,6 +14,7 @@ import ConfigParser
 import sys, os, re
 import socket
 from xmlmenu import XmlMenu
+from run_simulation_questa import run_simulation_questa
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
@@ -113,6 +114,13 @@ def parse_args():
     parser.add_argument('--menudir', required=True, help="L1Menu repository directory (eg. 'herbberg/l1menus')[is required]")
     parser.add_argument('--menuname', required=True, help="L1Menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')[is required]")
     parser.add_argument('-b', '--build', metavar='<version>', required=True, type=tb.build_t, help='menu build version (eg. 0x1001) [is required]')
+    parser.add_argument('--sim', action='store_true', help='runnig simulation with Questa simulator')
+    parser.add_argument('--testvector', metavar = 'path', help = 'testvector file path')
+    parser.add_argument('--wlf', action = 'store_true', help = "no console transcript info, warning and error messages (transcript output to vsim.wlf)")
+    parser.add_argument('-v', '--verbose', action = 'store_const', const = logging.DEBUG, help = "enables debug prints to console", default = logging.INFO)
+    parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
+    parser.add_argument('--questasim', default=DefaultQuestaSimPath, help = "Questasim installation path")
+    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsPath, help = "Questasim Vivado libraries path")
     return parser.parse_args()
 
 def main():
@@ -128,6 +136,12 @@ def main():
     vivado_base_dir = os.getenv('VIVADO_BASE_DIR')
     if not vivado_base_dir:
         raise RuntimeError("Environment variable 'VIVADO_BASE_DIR' not set. Set with: 'export VIVADO_BASE_DIR=...'")
+    
+    ## Runnig simulation with Questa simulator, if args.sim is set
+    #if args.sim:
+        ## "... makes one module visible to the other..."
+        #sys.path.append('../firmware/sim/scripts')
+        #run_simulation_questa(args.tag, args.menudir, args.testvector, args.wlf, args.verbose, args.output, args.questasim, args.questasimlibs)
 
     # Compile build root directory
     project_type = "{}_{}".format(BOARD_TYPE, FW_TYPE)

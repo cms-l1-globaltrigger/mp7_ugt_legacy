@@ -2,6 +2,7 @@
 #20.07.2017
 #simultion program
 #all credit to Johannes Wittmann and Bernhard Arnold
+import re
 import xmlmenu
 import os, sys
 import shutil
@@ -88,9 +89,10 @@ def bitfield(i, n=algonum):
     """
     return [int(digit) for digit in '{0:0{1}b}'.format(i, n)][::-1]
 
-def run_vsim(module, msgmode, ini_file):#uses class module, arg msgmode and ini file path to start the simulation
+def run_vsim(vsim, module, msgmode, ini_file):#uses class module, arg msgmode and ini file path to start the simulation
+    vsim_bin = vsim + '/bin/vsim'
     with open(module.results_log,'w') as logfile:
-        cmd = ['vsim', '-c', '-msgmode', msgmode, '-modelsimini', ini_file, '-do', 'do {filename}; quit -f'.format(filename = os.path.join(module.path, DO_FILE))]
+        cmd = [vsim_bin, '-c', '-msgmode', msgmode, '-modelsimini', ini_file, '-do', 'do {filename}; quit -f'.format(vsim, filename = os.path.join(module.path, DO_FILE))]
         logging.info("starting simulation for module_%d..." % module._id)
         logging.info("executing: %s", ' '.join(['"{0}"'.format(arg) if ' ' in str(arg) else str(arg) for arg in cmd]))
         subprocess.check_call(cmd, stdout = logfile)
@@ -220,6 +222,19 @@ def main():
     # Setup console logging
     logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.INFO)
 
+    # Check Questasim installation directory exists
+    if not os.path.exists(args.questasim):
+        raise RuntimeError("Questa installation path '%s' does NOT exist" % args.questasim)
+
+    # Check sim_dir is set
+    sim_dir = os.getenv('SIM_ROOT')
+    if not sim_dir:
+        raise RuntimeError("var SIM_ROOT is not defined (source setup.sh first!)")#checks if setup.py was executed
+
+    # Check questasim same as $QUESTASIM_DIR
+    if args.questasim != os.getenv('QUESTASIM_DIR'):
+        raise RuntimeError("'args.questasim' not equal '$QUESTASIM_DIR'!\n==> Set 'export QUESTASIM_DIR=%s'" % args.questasim)
+    
     # Copy dofile from gtl_fdl_wrapper_tpl_questa_v<vivado version>.do to gtl_fdl_wrapper_tpl_questa.do
     src_do = "scripts/templates/gtl_fdl_wrapper_tpl_questa_v{}.do".format(args.vivado)
     dest_do = "scripts/templates/gtl_fdl_wrapper_tpl_questa.do"
@@ -229,12 +244,9 @@ def main():
 
     questasimlib_path = os.path.join(os.environ['HOME'], args.questasimlibs, args.vivado)
     
+    # Run compile Vivado sim libs for Questa (if not exist)
     run_compile_simlib(args.vivado, args.questasim, questasimlib_path)
     
-    sim_dir = os.getenv('SIM_ROOT')
-    if not sim_dir:
-        raise RuntimeError("var SIM_ROOT is not defined (source setup.sh first!)")#checks if setup.py was executed
-
     # using SIM_ROOT dir as default output path
     if not args.output:
         args.output = sim_dir
@@ -294,7 +306,7 @@ def main():
 
     threads = []
     for module in modules:#makes for all simulations a thread
-        thread = Thread(target = run_vsim, args = (module, msgmode, ini_file))
+        thread = Thread(target = run_vsim, args = (args.questasim, module, msgmode, ini_file))
         threads.append(thread)
         thread.start()
         while not os.path.exists(os.path.join(module.path, 'running.lock')):#stops starting of new threads if .do file is still in use

@@ -26,7 +26,7 @@ def run_compile_simlib(vivado, questasim, questasimlib_path):
     # Check for VIVADO_BASE_DIR
     vivado_base_dir = os.getenv('VIVADO_BASE_DIR')
     if not vivado_base_dir:
-        raise RuntimeError("Environment variable 'VIVADO_BASE_DIR' not set. Set with: 'export VIVADO_BASE_DIR=...'")
+        raise RuntimeError("Environment variable 'VIVADO_BASE_DIR' not set. Set with: 'export VIVADO_BASE_DIR=... (e.g. export VIVADO_BASE_DIR=/opt/xilinx/Vivado'")
 
     settings64 = os.path.join(vivado_base_dir, vivado, 'settings64.sh')
     

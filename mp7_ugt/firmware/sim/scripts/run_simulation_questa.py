@@ -205,16 +205,16 @@ class Module(object):#module class and nessesary information
 
 def parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mp7_tag', type=os.path.abspath, help = "path to MP7 tag", required = True)
-    parser.add_argument('--menu', metavar = 'path', help = 'menue folder path', type = os.path.abspath, required = True)
-    parser.add_argument('--testvector', metavar = 'path', help = 'testvector file path', required = True)
+    parser.add_argument('--mp7_tag', type=os.path.abspath, help = "path to MP7 tag [required]", required = True)
+    parser.add_argument('--menu', metavar = 'path', help = 'menue folder path [required]', type = os.path.abspath, required = True)
+    parser.add_argument('--testvector', metavar = 'path', help = 'testvector file path [required]', required = True)
+    parser.add_argument('--vivado', help = "Vivado version [required]", required = True)
+    parser.add_argument('--questasim', help = "Questasim version [required]", required = True)
+    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}')".format(DefaultQuestaSimLibsName))
     parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
     parser.add_argument('--view-wave', action = 'store_true', help = "shows the waveform")
     parser.add_argument('--wlf', action = 'store_true', help = "no console transcript info, warning and error messages (transcript output to vsim.wlf)")
     parser.add_argument('-v', '--verbose', action = 'store_const', const = logging.DEBUG, help = "enables debug prints to console", default = logging.INFO)
-    parser.add_argument('--vivado', help = "Vivado version", required = True)
-    parser.add_argument('--questasim', help = "Questasim version", required = True)
-    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name")
     return parser.parse_args()
 
 def main():

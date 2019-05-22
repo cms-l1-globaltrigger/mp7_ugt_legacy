@@ -44,7 +44,12 @@ DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware.git'
 """Default URL of gitlab ugt repo."""
 
 vhdl_snippets = ('algo_index.vhd','gtl_module_instances.vhd','gtl_module_signals.vhd','ugt_constants.vhd')
-        
+
+# For Questa simulation
+QuestaSimPathVersion107c = '/opt/mentor/questasim'
+QuestaSimPathVersion106a = '/opt/mentor/questa_core_prime_10.6a/questasim'
+DefaultQuestaSimLibsName = 'questasimlibs' # generated im $HOME
+
 def run_command(*args):
     command = ' '.join(args)
     logging.info(">$ %s", command)
@@ -115,12 +120,15 @@ def parse_args():
     parser.add_argument('--menuname', required=True, help="L1Menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')[is required]")
     parser.add_argument('-b', '--build', metavar='<version>', required=True, type=tb.build_t, help='menu build version (eg. 0x1001) [is required]')
     parser.add_argument('--sim', action='store_true', help='runnig simulation with Questa simulator')
+    parser.add_argument('--simmp7path', metavar='<tag>', help="local MP7 firmware repo")
+    parser.add_argument('--simmenu', metavar = 'path', help = 'local menu folder path [is required]', type = os.path.abspath)
     parser.add_argument('--testvector', metavar = 'path', help = 'testvector file path')
+    parser.add_argument('--view-wave', action = 'store_true', help = "shows the waveform")
     parser.add_argument('--wlf', action = 'store_true', help = "no console transcript info, warning and error messages (transcript output to vsim.wlf)")
     parser.add_argument('-v', '--verbose', action = 'store_const', const = logging.DEBUG, help = "enables debug prints to console", default = logging.INFO)
     parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
-    parser.add_argument('--questasim', default=DefaultQuestaSimPath, help = "Questasim installation path")
-    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsPath, help = "Questasim Vivado libraries path")
+    parser.add_argument('--questasim', help = "Questasim version")
+    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}')".format(DefaultQuestaSimLibsName))
     return parser.parse_args()
 
 def main():
@@ -130,19 +138,25 @@ def main():
     args = parse_args()
 
     # Setup console logging
-    logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+    logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
     
     # Check for VIVADO_BASE_DIR
     vivado_base_dir = os.getenv('VIVADO_BASE_DIR')
     if not vivado_base_dir:
         raise RuntimeError("Environment variable 'VIVADO_BASE_DIR' not set. Set with: 'export VIVADO_BASE_DIR=...'")
     
-    ## Runnig simulation with Questa simulator, if args.sim is set
-    #if args.sim:
-        ## "... makes one module visible to the other..."
-        #sys.path.append('../firmware/sim/scripts')
-        #run_simulation_questa(args.tag, args.menudir, args.testvector, args.wlf, args.verbose, args.output, args.questasim, args.questasimlibs)
+    # Runnig simulation with Questa simulator, if args.sim is set    
+    if args.sim:
+        logging.info("running simulation with Questa ...")
+        run_simulation_questa(args.simmp7path, args.simmenu, args.testvector, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
+    else:
+        logging.info("no simulation required ...")
+                
+    sys.exit()
 
+    # Setup console logging
+    logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+    
     # Compile build root directory
     project_type = "{}_{}".format(BOARD_TYPE, FW_TYPE)
     mp7fw_tag = args.mp7tag

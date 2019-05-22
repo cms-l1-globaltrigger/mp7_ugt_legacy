@@ -62,9 +62,9 @@ def render_template(src, dst, args):
     with open(dst, 'w') as dst:
         dst.write(content)
 
-def make_testvector(mask, testvectorfile, new_testverctor):#uses mask of the module, testvector file and the path of the new testvector file where the masked testvectors are stored
+def make_testvector(mask, testvectorfile, new_testvector):#uses mask of the module, testvector file and the path of the new testvector file where the masked testvectors are stored
     with open(testvectorfile, 'r') as tvf:
-        with open(new_testverctor,'w') as opf:
+        with open(new_testvector,'w') as opf:
             for line in tvf:
                 colums = line.strip().split()
                 mask_trigger = int(colums[-2], 16) & mask
@@ -203,72 +203,54 @@ class Module(object):#module class and nessesary information
         render_template(os.path.join(gtl_dir, 'gtl_pkg_tpl.vhd'), '%s/vhdl/gtl_pkg.vhd' % self.path, replace_map)
         render_template(os.path.join(gtl_dir, 'gtl_module_tpl.vhd'), '%s/vhdl/gtl_module.vhd' % self.path, replace_map)
 
-def parse():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--mp7_tag', type=os.path.abspath, help = "path to MP7 tag [required]", required = True)
-    parser.add_argument('--menu', metavar = 'path', help = 'menue folder path [required]', type = os.path.abspath, required = True)
-    parser.add_argument('--testvector', metavar = 'path', help = 'testvector file path [required]', required = True)
-    parser.add_argument('--vivado', help = "Vivado version [required]", required = True)
-    parser.add_argument('--questasim', help = "Questasim version [required]", required = True)
-    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}')".format(DefaultQuestaSimLibsName))
-    parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
-    parser.add_argument('--view-wave', action = 'store_true', help = "shows the waveform")
-    parser.add_argument('--wlf', action = 'store_true', help = "no console transcript info, warning and error messages (transcript output to vsim.wlf)")
-    parser.add_argument('-v', '--verbose', action = 'store_const', const = logging.DEBUG, help = "enables debug prints to console", default = logging.INFO)
-    return parser.parse_args()
-
-def main():
-    args = parse()
-    
-    # Setup console logging
-    logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.INFO)
-    
+def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
     # Check Questa sim version
-    if args.questasim == '10.6a':
+    if a_questasim == '10.6a':
         questasim_path = QuestaSimPathVersion106a
-    elif args.questasim == '10.7c':
+    elif a_questasim == '10.7c':
         questasim_path = QuestaSimPathVersion107c
     else:    
-        raise RuntimeError("Questa sim version '%s' does NOT exist" % args.questasim)
+        raise RuntimeError("Questa sim version '%s' does NOT exist" % a_questasim)
     
     if not os.path.isdir(questasim_path):
         raise RuntimeError("No installation of Questa sim in '%s'" % questasim_path)
         
     # Set sim_dir
-    sim_dir = os.getcwd()
+    sim_dir = os.path.join(os.path.dirname(__file__), '../firmware/sim')
     
     # Copy dofile from gtl_fdl_wrapper_tpl_questa_v<vivado version>.do to gtl_fdl_wrapper_tpl_questa.do
-    src_do = "scripts/templates/gtl_fdl_wrapper_tpl_questa_v{}.do".format(args.vivado)
-    dest_do = "scripts/templates/gtl_fdl_wrapper_tpl_questa.do"
+    src_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa_v{}.do'.format(a_vivado))
+    dest_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do')
     shutil.copyfile(src_do, dest_do)
     
     # Path to Questa sim libs for selected vivado version
-    questasimlibs_name = args.questasimlibs + '_' + args.questasim
-    questasimlib_path = os.path.join(os.environ['HOME'], questasimlibs_name, args.vivado)
+    questasimlibs_name = a_questasimlibs + '_' + a_questasim
+    questasimlib_path = os.path.join(os.environ['HOME'], questasimlibs_name, a_vivado)
     
     # Run compile Vivado sim libs for Questa (if not exist)
-    run_compile_simlib(args.vivado, questasim_path, questasimlib_path)
+    #run_compile_simlib(a_vivado, questasim_path, questasimlib_path, sim_dir)
+    run_compile_simlib(a_vivado, questasim_path, questasimlib_path)
     
     # using SIM_ROOT dir as default output path
-    if not args.output:
-        args.output = sim_dir
+    if not a_output:
+        a_output = sim_dir
 
     # Set message mode:
     # wlf => no output to console for transcript info, warning and error messages (transccd -ript output to vsim.wlf).
     # tran => output to console.
-    msgmode = 'wlf' if args.wlf else 'tran'
+    msgmode = 'wlf' if a_wlf else 'tran'
 
-    _base = os.path.basename(os.path.abspath(args.menu))
+    _base = os.path.basename(os.path.abspath(a_menu))
 
-    menu_filepath = os.path.join(args.menu, ('xml/%s.xml' % (_base)))#gets xmlmenu
-    testvector_filepath = os.path.join(args.menu, ('testvectors/TestVector_%s.txt' % (_base)))#gets path to testvector file
+    menu_filepath = os.path.join(a_menu, ('xml/%s.xml' % (_base)))#gets xmlmenu
+    testvector_filepath = os.path.join(a_menu, ('testvectors/TestVector_%s.txt' % (_base)))#gets path to testvector file
     timestamp = time.time()#creates timestamp
     _time = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%dT%H-%M-%S')#changes time apperance
 
-    base_dir = '%s/sim_results/%s_%s' % (args.output, _time, _base)#creates base directory for later use
+    base_dir = '%s/sim_results/%s_%s' % (a_output, _time, _base)#creates base directory for later use
 
-    if args.testvector:#checks if testvector file argument is given else uses default path
-        testvector_filepath = os.path.abspath(args.testvector)
+    if a_testvector:#checks if testvector file argument is given else uses default path
+        testvector_filepath = os.path.abspath(a_testvector)
     if not os.path.exists(menu_filepath):#checks for menu
         raise RuntimeError('Missing %s File' % menu_filepath)#help
     if not os.path.exists(testvector_filepath):#checks for testvector
@@ -301,11 +283,11 @@ def main():
 
         logging.debug('Module_%d created at %s' % (module._id, base_dir))
 
-        module.make_files(sim_dir, args.view_wave, args.mp7_tag, args.menu)#sim_dir, view_wave, mp7_tag, menu_path
+        module.make_files(sim_dir, a_view_wave, a_mp7_tag, a_menu)#sim_dir, view_wave, mp7_tag, menu_path
 
     logging.info('finished creating modules and masks')
     logging.info("===========================================================================")
-    logging.info('starting simulations with Questa Simulator version %s (from directory %s)'% (args.questasim, questasim_path))
+    logging.info('starting simulations with Questa Simulator version %s (from directory %s)'% (a_questasim, questasim_path))
 
     threads = []
     for module in modules:#makes for all simulations a thread
@@ -426,6 +408,28 @@ def main():
         logging.info(success_green)
     else:
         logging.error(failed_red)
+    
+def parse():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--mp7_tag', type=os.path.abspath, help = "path to MP7 tag [required]", required = True)
+    parser.add_argument('--menu', metavar = 'path', help = 'menue folder path [required]', type = os.path.abspath, required = True)
+    parser.add_argument('--testvector', metavar = 'path', help = 'testvector file path [required]', required = True)
+    parser.add_argument('--vivado', help = "Vivado version [required]", required = True)
+    parser.add_argument('--questasim', help = "Questasim version [required]", required = True)
+    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}')".format(DefaultQuestaSimLibsName))
+    parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
+    parser.add_argument('--view-wave', action = 'store_true', help = "shows the waveform")
+    parser.add_argument('--wlf', action = 'store_true', help = "no console transcript info, warning and error messages (transcript output to vsim.wlf)")
+    parser.add_argument('-v', '--verbose', action = 'store_const', const = logging.DEBUG, help = "enables debug prints to console", default = logging.INFO)
+    return parser.parse_args()
+
+def main():
+    args = parse()
+    
+    # Setup console logging
+    logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.INFO)
+    
+    run_simulation_questa(args.mp7_tag, args.menu, args.testvector, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
 
     #with open('')
 if __name__ == '__main__':

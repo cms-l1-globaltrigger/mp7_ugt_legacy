@@ -14,7 +14,8 @@ from threading import Thread
 
 DefaultQuestaSimPath = '/opt/mentor/questasim'
 DefaultQuestaSimLibsPath = 'questasimlibs'
-pwd = os.path.dirname(__file__)
+pwd_script = os.path.dirname(__file__)
+pwd = os.getcwd()
 
 def run_command(*args):
     command = ' '.join(args)
@@ -30,12 +31,14 @@ def run_compile_simlib(vivado, questasim, questasimlib_path):
 
     settings64 = os.path.join(vivado_base_dir, vivado, 'settings64.sh')
     
+    # Simulation directory
+    sim_dir = os.path.join(pwd_script, '../firmware/sim')
     # Installation path of questasim (tcl syntax)
     questasim_path = "{" + questasim + "/bin}"
     # Variable for compile_simlib syntax
     questasimlib_path_tcl = "{" + "{questasimlib_path}".format(**locals()) + "}"
     # Path and compile_simlib command of tcl file used in Vivado
-    tcl_file = "scripts/compile_simlib.tcl"
+    tcl_file = os.path.join(sim_dir, 'scripts/compile_simlib.tcl')
     tcl_compile_cmd = "compile_simlib -simulator questa -simulator_exec_path {questasim_path} -family virtex7 -language vhdl -library all -dir {questasimlib_path_tcl}".format(**locals())
         
     # Writing commands to tcl file
@@ -47,8 +50,9 @@ def run_compile_simlib(vivado, questasim, questasimlib_path):
     # Checking if questasimlib_path exists
     if not os.path.isdir(questasimlib_path):
         logging.info("===========================================================================")
-        command = 'bash -c "source {}; vivado -mode batch -source {}/compile_simlib.tcl"'.format(settings64, pwd)
-        logging.info("Creating Questa sim libs in %s (running '%s/compile_simlib.tcl')", questasimlib_path, pwd)
+        # Remove modelsim.ini before creating sim libs to get correct modelsim.ini in $HOME/questasimlibs_<version>
+        command = 'bash -c "source {0}; rm {1}/modelsim.ini; vivado -mode batch -source {2}/../firmware/sim/scripts/compile_simlib.tcl; rm {1}/modelsim.ini"'.format(settings64, pwd, pwd_script)
+        logging.info("Creating Questa sim libs in %s (running '%s/../firmware/sim/scripts/compile_simlib.tcl')", questasimlib_path, pwd_script)
         run_command(command)
         logging.info("Done!")
         logging.info("===========================================================================")
@@ -59,7 +63,7 @@ def run_compile_simlib(vivado, questasim, questasimlib_path):
         logging.info("===========================================================================")
     
     # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
-    command = 'bash -c "cp {questasimlib_path}/modelsim.ini ."'.format(**locals())
+    command = 'bash -c "cp {questasimlib_path}/modelsim.ini {sim_dir}/modelsim.ini"'.format(**locals())
     run_command(command)
 
 def parse():
@@ -67,6 +71,7 @@ def parse():
     parser.add_argument('--vivado', help = "Vivado version", required = True)
     parser.add_argument('--questasim', default=DefaultQuestaSimPath, help = "Questasim installation path")
     parser.add_argument('--output', default=DefaultQuestaSimLibsPath, help = "Questasim Vivado libraries path")
+    parser.add_argument('--simdir', help = "Simulation directory")
     return parser.parse_args()
 
 def main():
@@ -76,7 +81,7 @@ def main():
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
     
-    run_compile_simlib(args.vivado, args.questasim, args.output)
+    run_compile_simlib(args.vivado, args.questasim, args.output, args.simdir)
     
 if __name__ == '__main__':
     main()

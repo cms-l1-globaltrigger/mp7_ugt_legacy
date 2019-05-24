@@ -81,7 +81,7 @@ def download_file_from_url(url, filename):
     with open(filename, 'wb') as fp:
         fp.write(d)
 
-def replace_vhdl_templates(vhdl_snippets_dir, ipbb_src_fw_dir, ipbb_dest_fw_dir):
+def replace_vhdl_templates(vhdl_snippets_dir, src_fw_dir, dest_fw_dir):
     """Replace VHDL templates with snippets from VHDL Producer."""
     #Read generated VHDL snippets
     logging.info("replace VHDL templates with snippets from VHDL Producer ...")
@@ -92,14 +92,14 @@ def replace_vhdl_templates(vhdl_snippets_dir, ipbb_src_fw_dir, ipbb_dest_fw_dir)
         '{{gtl_module_instances}}': tb.read_file(os.path.join(vhdl_snippets_dir, 'gtl_module_instances.vhd')),
     }
 
-    gtl_fdl_wrapper_dir = os.path.join(ipbb_src_fw_dir, 'hdl', 'gt_mp7_core', 'gtl_fdl_wrapper')
+    gtl_fdl_wrapper_dir = os.path.join(src_fw_dir, 'hdl', 'gt_mp7_core', 'gtl_fdl_wrapper')
     gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
     fdl_dir = os.path.join(gtl_fdl_wrapper_dir, 'fdl')
 
     #Patch VHDL files in IPBB area (
-    tb.template_replace(os.path.join(fdl_dir, 'algo_mapping_rop_tpl.vhd'), replace_map, os.path.join(ipbb_dest_fw_dir, 'algo_mapping_rop.vhd'))
-    tb.template_replace(os.path.join(gtl_dir, 'gtl_pkg_tpl.vhd'), replace_map, os.path.join(ipbb_dest_fw_dir, 'gtl_pkg.vhd'))
-    tb.template_replace(os.path.join(gtl_dir, 'gtl_module_tpl.vhd'), replace_map, os.path.join(ipbb_dest_fw_dir, 'gtl_module.vhd'))
+    tb.template_replace(os.path.join(fdl_dir, 'algo_mapping_rop_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'algo_mapping_rop.vhd'))
+    tb.template_replace(os.path.join(gtl_dir, 'gtl_pkg_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'gtl_pkg.vhd'))
+    tb.template_replace(os.path.join(gtl_dir, 'gtl_module_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'gtl_module.vhd'))
 
 def parse_args():
     """Parse command line arguments."""
@@ -147,13 +147,13 @@ def main():
     
     # Runnig simulation with Questa simulator, if args.sim is set    
     if args.sim:
+        logging.info("===========================================================================")
         logging.info("running simulation with Questa ...")
         run_simulation_questa(args.simmp7path, args.simmenu, args.testvector, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
     else:
+        logging.info("===========================================================================")
         logging.info("no simulation required ...")
                 
-    sys.exit()
-
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
     

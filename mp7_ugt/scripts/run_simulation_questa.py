@@ -2,6 +2,8 @@
 #20.07.2017
 #simultion program
 #all credit to Johannes Wittmann and Bernhard Arnold
+import toolbox as tb
+import urllib
 import re
 import xmlmenu
 import os, sys
@@ -12,6 +14,7 @@ import logging
 import argparse
 import time, datetime
 from threading import Thread
+from xmlmenu import XmlMenu
 from run_compile_simlib import run_compile_simlib
 
 o, ts = os.popen('stty size', 'r').read().split()#terminal size
@@ -203,6 +206,20 @@ class Module(object):#module class and nessesary information
         render_template(os.path.join(gtl_dir, 'gtl_pkg_tpl.vhd'), '%s/vhdl/gtl_pkg.vhd' % self.path, replace_map)
         render_template(os.path.join(gtl_dir, 'gtl_module_tpl.vhd'), '%s/vhdl/gtl_module.vhd' % self.path, replace_map)
 
+def download_file_from_url(url, filename):
+    """Download files from URL."""
+    # Remove existing file.
+    tb.remove(filename)
+    # Download file
+    logging.info("retrieving %s", url)
+    urllib.urlretrieve(url, filename)
+    tb.make_executable(filename)
+
+    d = open(filename).read()
+    d = d.replace(', default=os.getlogin()', '')
+    with open(filename, 'wb') as fp:
+        fp.write(d)
+
 def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
     # Check Questa sim version
     if a_questasim == '10.6a':
@@ -242,15 +259,35 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim
 
     _base = os.path.basename(os.path.abspath(a_menu))
 
-    menu_filepath = os.path.join(a_menu, ('xml/%s.xml' % (_base)))#gets xmlmenu
-    testvector_filepath = os.path.join(a_menu, ('testvectors/TestVector_%s.txt' % (_base)))#gets path to testvector file
+    logging.info("===========================================================================")
+    logging.info("download XML and testvector file from L1Menu repository ...")
+    # Get l1menus_path for URL
+    a_menu_split_arr = a_menu.split(os.sep)
+    a_menu_reverse_arr = a_menu_split_arr[::-1]
+    l1menus_path = a_menu_reverse_arr[2] + '/' + a_menu_reverse_arr[1]
+    url_menu = "https://raw.githubusercontent.com/{l1menus_path}/master/{_base}".format(**locals())
+    xml_name = "{}{}".format(_base, '.xml')    
+    menu_filepath = os.path.join(sim_dir, xml_name)
+    url = "{url_menu}/xml/{xml_name}".format(**locals())    
+    download_file_from_url(url, menu_filepath)
+    # Remove "distribution number" from _base for testvector file name
+    base_split_arr = [s for s in re.split("-", _base)]
+    tv_name = "TestVector_{}{}".format(base_split_arr[0], '.txt') 
+    testvector_filepath = os.path.join(sim_dir, tv_name)
+    url = "{url_menu}/testvectors/{tv_name}".format(**locals())    
+    download_file_from_url(url, testvector_filepath)
+         
+    #menu_filepath = os.path.join(a_menu, ('xml/%s.xml' % (_base)))#gets xmlmenu
+    #testvector_filepath = os.path.join(a_menu, ('testvectors/TestVector_%s.txt' % (_base)))#gets path to testvector file
+
     timestamp = time.time()#creates timestamp
     _time = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%dT%H-%M-%S')#changes time apperance
 
     base_dir = '%s/sim_results/%s_%s' % (a_output, _time, _base)#creates base directory for later use
 
-    if a_testvector:#checks if testvector file argument is given else uses default path
-        testvector_filepath = os.path.abspath(a_testvector)
+    #if a_testvector:#checks if testvector file argument is given else uses default path
+        #testvector_filepath = os.path.abspath(a_testvector)
+
     if not os.path.exists(menu_filepath):#checks for menu
         raise RuntimeError('Missing %s File' % menu_filepath)#help
     if not os.path.exists(testvector_filepath):#checks for testvector
@@ -260,6 +297,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim
 
     os.makedirs(base_dir)#makes folders
 
+    print "menu_filepath: ", menu_filepath
     menu = xmlmenu.XmlMenu(menu_filepath)
 
     modules = []
@@ -409,6 +447,11 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim
     else:
         logging.error(failed_red)
     
+    logging.info("===========================================================================")
+    logging.info("removed XML and testvector file from simulation directory ...")
+    if os.path.exists(menu_filepath): os.remove(menu_filepath)
+    if os.path.exists(testvector_filepath): os.remove(testvector_filepath)
+
 def parse():
     parser = argparse.ArgumentParser()
     parser.add_argument('--mp7_tag', type=os.path.abspath, help = "path to MP7 tag [required]", required = True)

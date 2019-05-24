@@ -14,8 +14,9 @@
     git clone https://github.com/herbberg/l1menus.git <local path>/l1menus 
     
     # Run simulation
-    cd <local path>/ugt/mp7_ugt/firmware/sim
-    python scripts/run_simulation_questa.py --mp7_tag <path local mp7> --menu <path to local L1Menu> --testvector <path to local testvector file> --vivado <Vivado version> --questasim <Questa sim version>
+    cd <local path>/ugt/
+    python mp7_ugt/scripts/run_simulation_questa.py --mp7_tag <path local mp7> --menu <path to local L1Menu> --testvector <path to local testvector file> --vivado <Vivado version> --questasim <Questa sim version>
     
     # Example
-    python scripts/run_simulation_questa.py --mp7_tag ~/gitlab/hbergaue/mp7 --menu ~/github/herbberg/l1menus/L1Menu_Collisions2018_v2_1_0-d98 --testvector ~/github/herbberg/l1menus/L1Menu_Collisions2018_v2_1_0-d98/testvectors/TestVector_L1Menu_Collisions2018_v2_1_0.txt --vivado 2018.3 --questasim 10.7c
+    cd <local path>/ugt/
+    python mp7_ugt/scripts/run_simulation_questa.py --mp7_tag ~/gitlab/hbergaue/mp7 --menu ~/github/herbberg/l1menus/L1Menu_Collisions2018_v2_1_0-d98 --testvector ~/github/herbberg/l1menus/L1Menu_Collisions2018_v2_1_0-d98/testvectors/TestVector_L1Menu_Collisions2018_v2_1_0.txt --vivado 2018.3 --questasim 10.7c

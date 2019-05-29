@@ -14,7 +14,9 @@ add wave -noupdate -radix decimal /algo_pre_scaler_fractional_tb/dut/counter
 add wave -noupdate /algo_pre_scaler_fractional_tb/dut/limit
 add wave -noupdate -radix decimal /algo_pre_scaler_fractional_tb/dut/index_sim
 add wave -noupdate /algo_pre_scaler_fractional_tb/algo
-add wave -noupdate /algo_pre_scaler_fractional_tb/dut/prescaled_algo_o
+add wave -noupdate -radix decimal /algo_pre_scaler_fractional_tb/dut/prescaled_algo_o
+add wave -noupdate -radix decimal /algo_pre_scaler_fractional_tb/dut/algo_cnt_sim
+add wave -noupdate -radix decimal /algo_pre_scaler_fractional_tb/dut/prescaled_algo_cnt_sim
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {47225281 ps} 0}
 quietly wave cursor active 1

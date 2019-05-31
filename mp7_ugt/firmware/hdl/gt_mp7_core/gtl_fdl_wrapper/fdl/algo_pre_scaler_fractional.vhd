@@ -1,6 +1,12 @@
 
 -- Desription:
--- Prescalers for algorithms in FDL
+-- Prescalers for algorithms in FDL with fractional prescale values
+-- bits 31:24 => fractional value (precision 2), bits 23:0 => integer digits
+-- (for backward compatibility)
+
+-- Version-history:
+-- HB 2019-05-31: updated for fractional prescale values (with precision 2)
+-- HB 2016-04-04: inhibit algo with factor=0 in "prescaled_algo_p" process.
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -9,10 +15,10 @@ use ieee.std_logic_unsigned.all;
 
 entity algo_pre_scaler is
    generic( 
-      SIM : boolean := false;
       COUNTER_WIDTH : integer := 24;
-      FRACTION_WIDTH : integer := 4;
-      PRESCALE_FACTOR_INIT : std_logic_vector(31 DOWNTO 0) := X"00000010" -- represents floting point notation of PRESCALE_FACTOR (=1.0)
+      PRESCALE_FACTOR_INIT : std_logic_vector(31 DOWNTO 0) := X"00000001"; -- represents floting point notation of PRESCALE_FACTOR (=1.0)
+      FRACTION_WIDTH : integer := 8;
+      SIM : boolean := false
    );
    port( 
       clk : in std_logic;
@@ -20,8 +26,9 @@ entity algo_pre_scaler is
       algo_i : in std_logic;
       request_update_factor_pulse : in std_logic;
       update_factor_pulse : in std_logic;
-      prescale_factor : in std_logic_vector (COUNTER_WIDTH+FRACTION_WIDTH-1 DOWNTO 0); -- why counter_width ???
+      prescale_factor : in std_logic_vector (FRACTION_WIDTH+COUNTER_WIDTH-1 DOWNTO 0); -- why counter_width ???
       prescaled_algo_o : out std_logic;
+      -- output for simulation
       index_sim : out integer := 0;
       prescaled_algo_cnt_sim : out natural := 0;
       algo_cnt_sim : out natural := 0  
@@ -32,12 +39,12 @@ architecture rtl of algo_pre_scaler is
   constant max_mode_len : natural := 100;
   constant max_lut_len : natural := 100;
   
---   type boolean_arr is array (0 to 9) of boolean;
   type mode_record is record
       length : natural;
       mode : std_logic_vector(0 to max_mode_len-1);
   end record mode_record;
   type mode_seq_lut_array is array (0 to max_lut_len-1) of mode_record;
+
 --   constant MODE_SEQ_LUT : mode_seq_lut_array := (
 --     (1,  "1000000000"),
 --     (10, "0111111111"),
@@ -156,9 +163,7 @@ architecture rtl of algo_pre_scaler is
 
    constant ZERO : std_logic_vector(COUNTER_WIDTH-1 downto 0) := (others => '0');
    
---    constant PATTERN : std_logic_vector(19 downto 0) := X"00001";
-
-   signal prescale_factor_int : std_logic_vector(COUNTER_WIDTH+FRACTION_WIDTH-1 downto 0) := PRESCALE_FACTOR_INIT(COUNTER_WIDTH+FRACTION_WIDTH-1 downto 0);
+   signal prescale_factor_int : std_logic_vector(FRACTION_WIDTH+COUNTER_WIDTH-1 downto 0) := PRESCALE_FACTOR_INIT(FRACTION_WIDTH+COUNTER_WIDTH-1 downto 0);
    signal counter : std_logic_vector(COUNTER_WIDTH-1 downto 0) := (others => '0');
    signal fraction : std_logic_vector(FRACTION_WIDTH-1 downto 0) := (others => '0');
    signal factor : std_logic_vector(COUNTER_WIDTH-1 downto 0) := (others => '0');
@@ -171,19 +176,19 @@ begin
 
     prescale_factor_update_i: entity work.update_process
     generic map(
-        WIDTH => COUNTER_WIDTH+FRACTION_WIDTH,
+        WIDTH => FRACTION_WIDTH+COUNTER_WIDTH,
         INIT_VALUE => PRESCALE_FACTOR_INIT
     )
     port map( 
         clk => clk,
         request_update_pulse => request_update_factor_pulse,
         update_pulse => update_factor_pulse,
-        data_i => prescale_factor(COUNTER_WIDTH+FRACTION_WIDTH-1 downto 0),
+        data_i => prescale_factor(FRACTION_WIDTH+COUNTER_WIDTH-1 downto 0),
         data_o => prescale_factor_int
     );
     
-    fraction <= prescale_factor_int(FRACTION_WIDTH-1 downto 0);
-    factor <= prescale_factor_int(COUNTER_WIDTH+FRACTION_WIDTH-1 downto FRACTION_WIDTH);
+    fraction <= prescale_factor_int(FRACTION_WIDTH+COUNTER_WIDTH-1 downto COUNTER_WIDTH);
+    factor <= prescale_factor_int(COUNTER_WIDTH-1 downto 0);
     mode_seq <= MODE_SEQ_LUT(conv_integer(fraction)).mode;
     mode_len <= MODE_SEQ_LUT(conv_integer(fraction)).length;
     

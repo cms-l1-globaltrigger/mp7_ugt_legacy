@@ -1,7 +1,11 @@
 
 -- Description:
+-- Testbench for prescalers (FDL) with fractional prescale values
+-- bits 31:24 => fractional value (precision 2), bits 23:0 => integer digits
+-- (for backward compatibility)
 
 -- Version history:
+-- HB 2019-05-31: first design
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -22,7 +26,9 @@ architecture beh of algo_pre_scaler_fractional_TB is
     constant SIM : boolean := true;
     constant COUNTER_WIDTH : natural := 24;
     constant FRACTION_WIDTH : natural := 8;
-    constant PRESCALE_FACTOR_INIT : std_logic_vector(31 downto 0) := X"00000010";
+    constant PRESCALE_FACTOR_INIT : std_logic_vector(31 downto 0) := X"00000001";
+    
+    constant PRESCALE_FACTOR_VAL : std_logic_vector(31 downto 0) := X"42000003"; -- actual factor for test = 3.66
     
     constant LHC_CLK_PERIOD  : time :=  25 ns;
 
@@ -46,13 +52,22 @@ begin
         wait for LHC_CLK_PERIOD/2;
     end process;
 
+    -- Algo
+    process
+    begin
+        algo  <=  '1';
+        wait for LHC_CLK_PERIOD;
+        algo  <=  '0';
+        wait for 10*LHC_CLK_PERIOD;
+    end process;
+
     process
     begin
 	wait for LHC_CLK_PERIOD; 
         sres_counter <= '1';
 	wait for LHC_CLK_PERIOD; 
         sres_counter <= '0';
-        prescale_factor <= X"0000101E";
+        prescale_factor <= PRESCALE_FACTOR_VAL;
 	wait for 5*LHC_CLK_PERIOD;
 	request_update_factor_pulse <= '1';
 	wait for LHC_CLK_PERIOD;
@@ -61,15 +76,13 @@ begin
 	update_factor_pulse <= '1';
 	wait for LHC_CLK_PERIOD;
 	update_factor_pulse <= '0';
--- 	wait for 10*LHC_CLK_PERIOD;	
--- 	algo <= '1';
         wait;
     end process;
 
  ------------------- Instantiate  modules  -----------------
 
   dut: entity work.algo_pre_scaler
-    generic map(SIM, COUNTER_WIDTH, FRACTION_WIDTH, PRESCALE_FACTOR_INIT)
+    generic map(COUNTER_WIDTH, PRESCALE_FACTOR_INIT, FRACTION_WIDTH, SIM)
     port map(
       clk => lhc_clk,
       sres_counter => sres_counter,
@@ -77,20 +90,11 @@ begin
       request_update_factor_pulse => request_update_factor_pulse,
       update_factor_pulse => update_factor_pulse,
       prescale_factor => prescale_factor,
---       prescaled_algo_o => algo_o,
---       index_sim => index_sim
       prescaled_algo_o => open,
       index_sim => open,
       prescaled_algo_cnt_sim => open,
       algo_cnt_sim => open
     );
  
---    algo_cnt_p: process (algo_o)
---    begin
---       if algo_o'event and algo_o = '1' then
--- 	  algo_cnt <= algo_cnt + 1;
---       end if;
---    end process algo_cnt_p;
-
 end beh;
 

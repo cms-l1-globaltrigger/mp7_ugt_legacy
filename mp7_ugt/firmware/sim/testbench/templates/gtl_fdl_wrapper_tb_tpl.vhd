@@ -271,8 +271,7 @@ dut : entity work.gtl_fdl_wrapper
     generic map(
         SIM_MODE => SIM_MODE
     )
-    port map
-    (
+    port map(
         ipb_clk            => '0',
         ipb_rst            => '0',
         ipb_in             => IPB_WBUS_NULL,

@@ -45,19 +45,6 @@ architecture rtl of algo_pre_scaler is
   end record mode_record;
   type mode_seq_lut_array is array (0 to max_lut_len-1) of mode_record;
 
---   constant MODE_SEQ_LUT : mode_seq_lut_array := (
---     (1,  "1000000000"),
---     (10, "0111111111"),
---     (5,  "0111100000"),
---     (10, "0110110111"),
---     (5,  "0101100000"),
---     (2,  "0100000000"),
---     (5,  "0010100000"),
---     (10, "0001001001"),
---     (5,  "0000100000"),
---     (10, "0000000001")
---   );
-
   constant MODE_SEQ_LUT : mode_seq_lut_array := (
     (  1, X"8000000000000000000000000"), -- .00
     (100, X"7ffffffffffffffffffffffff"), -- .01
@@ -184,7 +171,7 @@ begin
         request_update_pulse => request_update_factor_pulse,
         update_pulse => update_factor_pulse,
         data_i => prescale_factor(FRACTION_WIDTH+COUNTER_WIDTH-1 downto 0),
-        data_o => prescale_factor_int
+        data_o => prescale_factor_int(FRACTION_WIDTH+COUNTER_WIDTH-1 downto 0)
     );
     
     fraction <= prescale_factor_int(FRACTION_WIDTH+COUNTER_WIDTH-1 downto COUNTER_WIDTH);
@@ -238,17 +225,13 @@ begin
       variable algo_cnt : natural := 0;
     begin
       if clk'event and clk = '0' then 
--- 	if sres_counter = '1' or update_factor_pulse = '1' then
--- 	    algo_cnt := 0;
 	if factor = ZERO then
 	    prescaled_algo_o <= '0';
 	elsif limit = '1' and algo_i = '1' then
 	    prescaled_algo_o <= '1';
--- 	    algo_cnt := algo_cnt + 1;
 	else
 	    prescaled_algo_o <= '0';
 	end if;
--- 	algo_cnt_sim <= algo_cnt;
       end if;
     end process prescaled_algo_p; 
     

@@ -16,7 +16,7 @@ use UNISIM.VCOMPONENTS.ALL;
 library std;                  -- for Printing
 use std.textio.all;
 
-use work.gtl_pkg.all;
+-- use work.gtl_pkg.all;
 
 entity algo_pre_scaler_fractional_TB is
 end algo_pre_scaler_fractional_TB;
@@ -36,7 +36,7 @@ architecture beh of algo_pre_scaler_fractional_TB is
     signal sres_counter, request_update_factor_pulse, update_factor_pulse : std_logic := '0';
     signal algo : std_logic := '1';
     signal algo_o : std_logic;
-    signal prescale_factor : std_logic_vector(COUNTER_WIDTH+FRACTION_WIDTH-1 downto 0) := (others => '0');
+    signal prescale_factor : std_logic_vector(FRACTION_WIDTH+COUNTER_WIDTH-1 downto 0) := (others => '0');
     signal index_sim : integer;
     signal algo_cnt : integer := 0;
 

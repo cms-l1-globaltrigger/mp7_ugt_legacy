@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - fdl_module.vhd and algo_slice.vhd for algo_pre_scaler_fractional.vhd in fdl v1.2.3
 - gtl_pkg_tpl.vhd (inserted PRESCALER_FRACTION_WIDTH and types for cond_matrix) in gtl v1.7.0
-- renamed file names in gtl v1.7.0 (from now names without _vx used)
+- file names in gtl v1.7.0 (from now names without _vx used)
 - runIpbbSynth.py for possibility of simulation
 
 ## [mp7_ugt_v1_7_0] - 2019-04-03

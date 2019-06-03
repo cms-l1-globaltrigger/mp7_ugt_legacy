@@ -63,10 +63,10 @@ begin
 
     process
     begin
+-- 	wait for LHC_CLK_PERIOD; 
+--         sres_counter <= '1';
 	wait for LHC_CLK_PERIOD; 
-        sres_counter <= '1';
-	wait for LHC_CLK_PERIOD; 
-        sres_counter <= '0';
+--         sres_counter <= '0';
         prescale_factor <= PRESCALE_FACTOR_VAL;
 	wait for 5*LHC_CLK_PERIOD;
 	request_update_factor_pulse <= '1';

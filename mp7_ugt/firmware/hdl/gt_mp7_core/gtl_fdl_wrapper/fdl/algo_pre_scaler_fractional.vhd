@@ -5,6 +5,7 @@
 -- (for backward compatibility)
 
 -- Version-history:
+-- HB 2019-06-03: changed mode_b_sel default value
 -- HB 2019-05-31: updated for fractional prescale values (with precision 2)
 -- HB 2016-04-04: inhibit algo with factor=0 in "prescaled_algo_p" process.
 
@@ -37,13 +38,13 @@ end algo_pre_scaler;
 
 architecture rtl of algo_pre_scaler is
   constant max_mode_len : natural := 100;
-  constant max_lut_len : natural := 100;
+  constant mode_seq_lut_len : natural := max_mode_len;
   
   type mode_record is record
       length : natural;
       mode : std_logic_vector(0 to max_mode_len-1);
   end record mode_record;
-  type mode_seq_lut_array is array (0 to max_lut_len-1) of mode_record;
+  type mode_seq_lut_array is array (0 to mode_seq_lut_len-1) of mode_record;
 
   constant MODE_SEQ_LUT : mode_seq_lut_array := (
     (  1, X"8000000000000000000000000"), -- .00
@@ -157,7 +158,7 @@ architecture rtl of algo_pre_scaler is
    signal limit : std_logic := '0';
    signal mode_seq : std_logic_vector(0 to max_mode_len-1);
    signal mode_len : natural;
-   signal mode_b_sel : std_logic := '0';
+   signal mode_b_sel : std_logic := '1'; -- to get first algo occurrence correct in simulation
 
 begin
 
@@ -180,80 +181,80 @@ begin
     mode_len <= MODE_SEQ_LUT(conv_integer(fraction)).length;
     
     mode_sel_p: process (clk, sres_counter, update_factor_pulse, mode_seq, mode_len, algo_i, limit)
-      variable index : integer := 0;
+        variable index : integer := 0;
     begin
-	if clk'event and clk = '1' then
-	  if sres_counter = '1' or update_factor_pulse = '1' then
-	    index := 0;
-	  elsif (mode_len = index and limit = '1' and algo_i = '1') then
-	    index := 0;
-	    mode_b_sel <= mode_seq(index);
-	    index := index + 1;
-	  elsif (mode_len >= index and limit = '1' and algo_i = '1') then
-	    mode_b_sel <= mode_seq(index);
-	    index := index + 1;
-	  end if;
-	  if SIM then
-	    index_sim <= index - 1;
-	  end if;
-	end if;
+        if clk'event and clk = '1' then
+            if sres_counter = '1' or update_factor_pulse = '1' then
+                index := 0;
+            elsif (mode_len = index and limit = '1' and algo_i = '1') then
+                index := 0;
+                mode_b_sel <= mode_seq(index);
+                index := index + 1;
+            elsif (mode_len >= index and limit = '1' and algo_i = '1') then
+                mode_b_sel <= mode_seq(index);
+                index := index + 1;
+            end if;
+            if SIM then
+                index_sim <= index - 1;
+            end if;
+        end if;
     end process mode_sel_p;
     
     counter_p: process (clk, sres_counter, update_factor_pulse, algo_i, limit)
     begin
-      if clk'event and clk = '1' then
-	if (limit = '1' and algo_i = '1') or (sres_counter = '1') or (update_factor_pulse = '1') then
-	  counter <= (others => '0');
-	elsif (limit = '0' and algo_i = '1') then
-	  counter <= counter + 1;
-	end if;
-      end if;
+        if clk'event and clk = '1' then
+            if (limit = '1' and algo_i = '1') or (sres_counter = '1') or (update_factor_pulse = '1') then
+                counter <= (others => '0');
+            elsif (limit = '0' and algo_i = '1') then
+                counter <= counter + 1;
+            end if;
+        end if;
     end process counter_p;
     
     compare_p: process (counter, factor)
     begin
-      if (mode_b_sel = '1' and counter+1 = factor) then
-	limit <= '1';
-      elsif (mode_b_sel = '0' and counter+1 = factor+1) then
-	limit <= '1';
-      else
-	limit <= '0';
-      end if;
+        if (mode_b_sel = '1' and counter+1 = factor) then
+            limit <= '1';
+        elsif (mode_b_sel = '0' and counter+1 = factor+1) then
+            limit <= '1';
+        else
+            limit <= '0';
+        end if;
     end process compare_p;
 
     prescaled_algo_p: process (clk, algo_i, limit, factor, sres_counter, update_factor_pulse)
-      variable algo_cnt : natural := 0;
+        variable algo_cnt : natural := 0;
     begin
-      if clk'event and clk = '0' then 
-	if factor = ZERO then
-	    prescaled_algo_o <= '0';
-	elsif limit = '1' and algo_i = '1' then
-	    prescaled_algo_o <= '1';
-	else
-	    prescaled_algo_o <= '0';
-	end if;
-      end if;
+        if clk'event and clk = '0' then 
+            if factor = ZERO then
+                prescaled_algo_o <= '0';
+            elsif limit = '1' and algo_i = '1' then
+                prescaled_algo_o <= '1';
+            else
+                prescaled_algo_o <= '0';
+            end if;
+        end if;
     end process prescaled_algo_p; 
     
     prescaled_algo_cnt_i: if SIM generate
-      prescaled_algo_cnt_p: process (clk, algo_i, limit, sres_counter, update_factor_pulse)
-	variable algo_cnt : natural := 0;
-	variable prescaled_algo_cnt : natural := 0;
-      begin
-	if clk'event and clk = '0' then
-	  if sres_counter = '1' or update_factor_pulse = '1' then
-	      prescaled_algo_cnt := 0;
-	      algo_cnt := 0;
-	  elsif limit = '0' and algo_i = '1' then
-	      algo_cnt := algo_cnt + 1;
-	  elsif limit = '1' and algo_i = '1' then
-	      algo_cnt := algo_cnt + 1;
-	      prescaled_algo_cnt := prescaled_algo_cnt + 1;
-	  end if;
-	  algo_cnt_sim <= algo_cnt;
-	  prescaled_algo_cnt_sim <= prescaled_algo_cnt;
-	end if;
-      end process prescaled_algo_cnt_p; 
+        prescaled_algo_cnt_p: process (clk, algo_i, limit, sres_counter, update_factor_pulse)
+            variable algo_cnt : natural := 0;
+            variable prescaled_algo_cnt : natural := 0;
+        begin
+            if clk'event and clk = '0' then
+                if sres_counter = '1' or update_factor_pulse = '1' then
+                    prescaled_algo_cnt := 0;
+                    algo_cnt := 0;
+                elsif limit = '0' and algo_i = '1' then
+                    algo_cnt := algo_cnt + 1;
+                elsif limit = '1' and algo_i = '1' then
+                    algo_cnt := algo_cnt + 1;
+                    prescaled_algo_cnt := prescaled_algo_cnt + 1;
+                end if;
+                algo_cnt_sim <= algo_cnt;
+                prescaled_algo_cnt_sim <= prescaled_algo_cnt;
+            end if;
+        end process prescaled_algo_cnt_p; 
     end generate prescaled_algo_cnt_i;
 end architecture rtl;
 

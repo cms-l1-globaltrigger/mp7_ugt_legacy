@@ -8,8 +8,8 @@ use ieee.std_logic_unsigned.all;
 -- use ieee.std_logic_textio.all;
 use ieee.numeric_std.all;
 
-library UNISIM;
-use UNISIM.VCOMPONENTS.ALL;
+-- library UNISIM;
+-- use UNISIM.VCOMPONENTS.ALL;
 
 library std;                  -- for Printing
 use std.textio.all;
@@ -271,8 +271,7 @@ dut : entity work.gtl_fdl_wrapper
     generic map(
         SIM_MODE => SIM_MODE
     )
-    port map
-    (
+    port map(
         ipb_clk            => '0',
         ipb_rst            => '0',
         ipb_in             => IPB_WBUS_NULL,

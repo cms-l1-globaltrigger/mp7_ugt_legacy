@@ -3,7 +3,7 @@
 -- Condition module for calorimeter object types (eg, jet and tau) quad condition.
 
 -- Version history:
--- HB 2019-04-30: used instances "quad_cuts" and "quad_cond_matrix" (proposal Dinyar/Hannes) to reduce resources.
+-- HB 2019-04-30: used instances "calo_cuts" and "calo_cond_matrix" (proposal Dinyar/Hannes) to reduce resources.
 -- HB 2017-09-05: inserted slice ranges in generic for correct use of object slices.
 -- HB 2017-08-28: increased length of vector signals (to 4096).
 -- HB 2017-06-13: module for quad condition only.
@@ -31,7 +31,7 @@ entity calo_condition_v6_quad is
         calo_object_slice_4_high: natural;
         nr_templates: positive;
         et_ge_mode: boolean;
-	   obj_type : natural := EG_TYPE;
+        obj_type : natural := EG_TYPE;
         et_thresholds: calo_templates_array;
         eta_full_range : calo_templates_boolean_array;
         eta_w1_upper_limits: calo_templates_array;
@@ -52,7 +52,7 @@ entity calo_condition_v6_quad is
         clk: in std_logic;
         data_i: in calo_objects_array;
         condition_o: out std_logic
-   );
+    );
 end calo_condition_v6_quad;
 
 architecture rtl of calo_condition_v6_quad is
@@ -66,10 +66,10 @@ architecture rtl of calo_condition_v6_quad is
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
 
-    signal obj_slice_1_vs_templ, obj_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array;
-    signal obj_slice_2_vs_templ, obj_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array;
-    signal obj_slice_3_vs_templ, obj_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array;
-    signal obj_slice_4_vs_templ, obj_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array;
+    signal obj_slice_1_vs_templ, obj_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array(calo_object_slice_1_low to calo_object_slice_1_high, 1 to 1);
+    signal obj_slice_2_vs_templ, obj_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(calo_object_slice_2_low to calo_object_slice_2_high, 1 to 1);
+    signal obj_slice_3_vs_templ, obj_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(calo_object_slice_3_low to calo_object_slice_3_high, 1 to 1);
+    signal obj_slice_4_vs_templ, obj_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(calo_object_slice_4_low to calo_object_slice_4_high, 1 to 1);
     
     signal obj_vs_templ_vec_sig1: std_logic_vector(4095 downto 0) := (others => '0');
     signal obj_vs_templ_vec_sig2: std_logic_vector(4095 downto 0) := (others => '0');
@@ -90,58 +90,45 @@ architecture rtl of calo_condition_v6_quad is
     attribute keep of condition_and_or_sig2  : signal is true;
     attribute keep of condition_and_or_sig3  : signal is true;
 
+    signal twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : 
+        std_logic_2dim_array(calo_object_slice_1_low to calo_object_slice_1_high, calo_object_slice_2_low to calo_object_slice_2_high) := (others => (others => '1'));
+
 begin
 
-    cuts: entity work.quad_cuts
+    cuts: entity work.calo_obj_cuts
         generic map(
-            calo_object_slice_1_low,
-            calo_object_slice_1_high,
-            calo_object_slice_2_low,
-            calo_object_slice_2_high,
-            calo_object_slice_3_low,
-            calo_object_slice_3_high,
-            calo_object_slice_4_low,
-            calo_object_slice_4_high,
-            nr_templates,
-            et_ge_mode,
-            obj_type,
+            calo_object_slice_1_low, calo_object_slice_1_high,
+            calo_object_slice_2_low, calo_object_slice_2_high,
+            calo_object_slice_3_low, calo_object_slice_3_high,
+            calo_object_slice_4_low, calo_object_slice_4_high,
+            nr_templates, et_ge_mode, obj_type,
             et_thresholds,
-            eta_full_range,
-            eta_w1_upper_limits,
-            eta_w1_lower_limits,
-            eta_w2_ignore,
-            eta_w2_upper_limits,
-            eta_w2_lower_limits,
-            phi_full_range,
-            phi_w1_upper_limits,
-            phi_w1_lower_limits,
-            phi_w2_ignore,
-            phi_w2_upper_limits,
-            phi_w2_lower_limits,
+            eta_full_range, eta_w1_upper_limits, eta_w1_lower_limits,
+            eta_w2_ignore, eta_w2_upper_limits, eta_w2_lower_limits,
+            phi_full_range, phi_w1_upper_limits, phi_w1_lower_limits,
+            phi_w2_ignore, phi_w2_upper_limits, phi_w2_lower_limits,
             iso_luts
         )
         port map(
-           data_i => data_i,
-           obj_slice_1_vs_templ => obj_slice_1_vs_templ,
-           obj_slice_2_vs_templ => obj_slice_2_vs_templ,
-           obj_slice_3_vs_templ => obj_slice_3_vs_templ,
-           obj_slice_4_vs_templ => obj_slice_4_vs_templ
+           data_i, obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ, obj_slice_4_vs_templ
         );
 
-    -- Pipeline stage for obj_vs_templ
-    obj_vs_templ_pipeline_p: process(clk, obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ, obj_slice_4_vs_templ)
+-- Pipeline stage for obj_vs_templ and twobody_pt_comp
+    obj_vs_templ_pipeline_p: process(clk, obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ, twobody_pt_comp)
         begin
             if obj_vs_templ_pipeline_stage = false then
                 obj_slice_1_vs_templ_pipe <= obj_slice_1_vs_templ;
                 obj_slice_2_vs_templ_pipe <= obj_slice_2_vs_templ;
                 obj_slice_3_vs_templ_pipe <= obj_slice_3_vs_templ;
                 obj_slice_4_vs_templ_pipe <= obj_slice_4_vs_templ;
+                twobody_pt_comp_pipe <= twobody_pt_comp;
             else
                 if (clk'event and clk = '1') then
                     obj_slice_1_vs_templ_pipe <= obj_slice_1_vs_templ;
                     obj_slice_2_vs_templ_pipe <= obj_slice_2_vs_templ;
                     obj_slice_3_vs_templ_pipe <= obj_slice_3_vs_templ;
                     obj_slice_4_vs_templ_pipe <= obj_slice_4_vs_templ;
+                    twobody_pt_comp_pipe <= twobody_pt_comp;
                 end if;
             end if;
     end process;
@@ -149,16 +136,18 @@ begin
 -- "Matrix" of permutations in an and-or-structure.
 -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates' and 'double_wsc'.
 
-    cond_matrix: entity work.quad_cond_matrix
+    cond_matrix: entity work.calo_cond_matrix
         generic map(
-            nr_templates => nr_templates
+            calo_object_slice_1_low, calo_object_slice_1_high,
+            calo_object_slice_2_low, calo_object_slice_2_high,
+            calo_object_slice_3_low, calo_object_slice_3_high,
+            calo_object_slice_4_low, calo_object_slice_4_high,
+            nr_templates
         )
-        port map( clk => clk,
-            obj_slice_1_vs_templ_pipe => obj_slice_1_vs_templ_pipe,
-            obj_slice_2_vs_templ_pipe => obj_slice_2_vs_templ_pipe,
-            obj_slice_3_vs_templ_pipe => obj_slice_3_vs_templ_pipe,
-            obj_slice_4_vs_templ_pipe => obj_slice_4_vs_templ_pipe,
-            condition_o => condition_o
+        port map(clk,
+            obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, obj_slice_3_vs_templ_pipe, obj_slice_4_vs_templ_pipe,
+            twobody_pt_comp_pipe,
+            condition_o
         );
 
 end architecture rtl;

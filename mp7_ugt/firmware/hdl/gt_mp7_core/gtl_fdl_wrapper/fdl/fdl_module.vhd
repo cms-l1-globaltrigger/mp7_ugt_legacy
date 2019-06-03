@@ -2,6 +2,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2019-06-03: v1.2.3 - based on v1.2.3, updated for fractional pre-scaler values.
 -- HB 2017-01-10: v1.2.2 - based on v1.2.1, but fixed bug with 1 bx delay for "begin_lumi_per" (in algo_slice.vhd) for rate counter after pre-scaler.
 -- HB 2016-12-01: v1.2.1 - based on v1.2.0, but inserted rate counter and register for finor with "prescaler preview" in monitoring.
 -- HB 2016-11-17: v1.2.0 - based on v1.1.1, but inserted logic for "prescaler preview" in monitoring. Removed port "finor_mask".
@@ -244,21 +245,19 @@ begin
 --===============================================================================================--
 -- Version register
     read_versions_i: entity work.ipb_read_regs
-    generic map
-    (
-        addr_width => ADDR_WIDTH_READ_VERSIONS,
-        regs_beg_index => OFFSET_BEG_READ_VERSIONS,
-        regs_end_index => OFFSET_END_READ_VERSIONS
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_READ_VERSIONS),
-        ipbus_out => ipb_from_slaves(C_IPB_READ_VERSIONS),
-        ------------------
-        regs_i => versions_to_ipb
-    );
+        generic map(
+            addr_width => ADDR_WIDTH_READ_VERSIONS,
+            regs_beg_index => OFFSET_BEG_READ_VERSIONS,
+            regs_end_index => OFFSET_END_READ_VERSIONS
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_READ_VERSIONS),
+            ipbus_out => ipb_from_slaves(C_IPB_READ_VERSIONS),
+            ------------------
+            regs_i => versions_to_ipb
+        );
 
     l1tm_name_l: for i in 0 to L1TM_NAME'length/32-1 generate
 		versions_to_ipb(i+OFFSET_L1TM_NAME) <= L1TM_NAME(i*32+31 downto i*32);
@@ -326,8 +325,7 @@ begin
 -- HB 2016-02-11: 16 (MAX_NR_ALGOS/SW_DATA_WIDTH) memory-blocks instantiated, same as defined in XML for addresses
     algo_bx_mem_l: for i in 0 to 15 generate
         algo_bx_mem_i: entity work.ipb_dpmem_4096_32
-        port map
-        (
+        port map(
             ipbus_clk => ipb_clk,
             reset     => ipb_rst,
             ipbus_in  => ipb_to_slaves(C_IPB_ALGO_BX_MEM(i)),
@@ -352,79 +350,71 @@ begin
 --===============================================================================================--
 -- Rate counter before prescaler registers
     read_rate_cnt_before_prescaler_i: entity work.ipb_read_regs
-    generic map
-    (
-        addr_width => ADDR_WIDTH_RATE_CNT_BEFORE_PRESCALER,
-        regs_beg_index => OFFSET_BEG_RATE_CNT_BEFORE_PRESCALER,
-        regs_end_index => OFFSET_END_RATE_CNT_BEFORE_PRESCALER
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_BEFORE_PRESCALER),
-        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_BEFORE_PRESCALER),
-        ------------------
-        regs_i => rate_cnt_before_prescaler_reg
-    );
+        generic map(
+            addr_width => ADDR_WIDTH_RATE_CNT_BEFORE_PRESCALER,
+            regs_beg_index => OFFSET_BEG_RATE_CNT_BEFORE_PRESCALER,
+            regs_end_index => OFFSET_END_RATE_CNT_BEFORE_PRESCALER
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_BEFORE_PRESCALER),
+            ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_BEFORE_PRESCALER),
+            ------------------
+            regs_i => rate_cnt_before_prescaler_reg
+        );
 
 --===============================================================================================--
 -- Rate counter after finor-mask registers
     read_rate_cnt_after_prescaler_i: entity work.ipb_read_regs
-    generic map
-    (
-        addr_width => ADDR_WIDTH_RATE_CNT_AFTER_PRESCALER,
-        regs_beg_index => OFFSET_BEG_RATE_CNT_AFTER_PRESCALER,
-        regs_end_index => OFFSET_END_RATE_CNT_AFTER_PRESCALER
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_AFTER_PRESCALER),
-        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_AFTER_PRESCALER),
-        ------------------
-        regs_i => rate_cnt_after_prescaler_reg
-    );
+        generic map(
+            addr_width => ADDR_WIDTH_RATE_CNT_AFTER_PRESCALER,
+            regs_beg_index => OFFSET_BEG_RATE_CNT_AFTER_PRESCALER,
+            regs_end_index => OFFSET_END_RATE_CNT_AFTER_PRESCALER
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_AFTER_PRESCALER),
+            ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_AFTER_PRESCALER),
+            ------------------
+            regs_i => rate_cnt_after_prescaler_reg
+        );
 
 --===============================================================================================--
 -- Rate counter post dead time registers
     read_rate_cnt_post_dead_time_i: entity work.ipb_read_regs
-    generic map
-    (
-        addr_width => ADDR_WIDTH_RATE_CNT_POST_DEAD_TIME,
-        regs_beg_index => OFFSET_BEG_RATE_CNT_POST_DEAD_TIME,
-        regs_end_index => OFFSET_END_RATE_CNT_POST_DEAD_TIME
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_POST_DEAD_TIME),
-        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_POST_DEAD_TIME),
-        ------------------
-        regs_i => rate_cnt_post_dead_time_reg
-    );
+        generic map(
+            addr_width => ADDR_WIDTH_RATE_CNT_POST_DEAD_TIME,
+            regs_beg_index => OFFSET_BEG_RATE_CNT_POST_DEAD_TIME,
+            regs_end_index => OFFSET_END_RATE_CNT_POST_DEAD_TIME
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_POST_DEAD_TIME),
+            ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_POST_DEAD_TIME),
+            ------------------
+            regs_i => rate_cnt_post_dead_time_reg
+        );
 
 --===============================================================================================--
 -- L1A latency delay register
     l1a_latency_delay_reg_i: entity work.ipb_write_regs
-    generic map
-    (
-        init_value => L1A_LATENCY_DELAY_INIT,
-        addr_width => 2,
-        regs_beg_index => 0,
-        regs_end_index => 1
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_L1A_LATENCY_DELAY),
-        ipbus_out => ipb_from_slaves(C_IPB_L1A_LATENCY_DELAY),
-        ------------------
-        regs_o => l1a_latency_delay_reg
-    );
+        generic map(
+            init_value => L1A_LATENCY_DELAY_INIT,
+            addr_width => 2,
+            regs_beg_index => 0,
+            regs_end_index => 1
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_L1A_LATENCY_DELAY),
+            ipbus_out => ipb_from_slaves(C_IPB_L1A_LATENCY_DELAY),
+            ------------------
+            regs_o => l1a_latency_delay_reg
+        );
 
 --===============================================================================================--
 -- Calibration trigger gap register
@@ -432,22 +422,20 @@ begin
 -- bit 31..16: end of calibration trigger gap
 -- bit 15..0: begin of calibration trigger gap
     cal_trigger_gap_reg_i: entity work.ipb_write_regs
-    generic map
-    (
-        init_value => CAL_TRIGGER_GAP_INIT,
-        addr_width => 2,
-        regs_beg_index => 0,
-        regs_end_index => 1
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_CAL_TRIGGER_GAP),
-        ipbus_out => ipb_from_slaves(C_IPB_CAL_TRIGGER_GAP),
-        ------------------
-        regs_o => cal_trigger_gap_reg
-    );
+        generic map(
+            init_value => CAL_TRIGGER_GAP_INIT,
+            addr_width => 2,
+            regs_beg_index => 0,
+            regs_end_index => 1
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_CAL_TRIGGER_GAP),
+            ipbus_out => ipb_from_slaves(C_IPB_CAL_TRIGGER_GAP),
+            ------------------
+            regs_o => cal_trigger_gap_reg
+        );
 
     cal_trigger_gap_beg <= cal_trigger_gap_reg(0)(11 downto 0);
     cal_trigger_gap_end <= cal_trigger_gap_reg(0)(27 downto 16);
@@ -455,42 +443,38 @@ begin
 --===============================================================================================--
 -- Prescale factor registers
     prescale_factor_reg_i: entity work.ipb_write_regs
-    generic map
-    (
-        init_value => PRESCALE_FACTOR_INIT,
-        addr_width => ADDR_WIDTH_PRESCALE_FACTOR,
-        regs_beg_index => OFFSET_BEG_PRESCALE_FACTOR,
-        regs_end_index => OFFSET_END_PRESCALE_FACTOR
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR),
-        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR),
-        ------------------
-        regs_o => prescale_factor_reg
-    );
+        generic map(
+            init_value => PRESCALE_FACTOR_INIT,
+            addr_width => ADDR_WIDTH_PRESCALE_FACTOR,
+            regs_beg_index => OFFSET_BEG_PRESCALE_FACTOR,
+            regs_end_index => OFFSET_END_PRESCALE_FACTOR
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR),
+            ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR),
+            ------------------
+            regs_o => prescale_factor_reg
+        );
 
 --===============================================================================================--
 -- Prescale factor set index register
     prescale_factors_set_index_i: entity work.ipb_write_regs
-    generic map
-    (
-        init_value => PRESCALE_FACTOR_SET_INDEX_REG_INIT,
-        addr_width => 2,
-        regs_beg_index => 0,
-        regs_end_index => 1
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_SET_INDEX),
-        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_SET_INDEX),
-        ------------------
-        regs_o => prescale_factor_set_index_reg
-    );
+        generic map(
+            init_value => PRESCALE_FACTOR_SET_INDEX_REG_INIT,
+            addr_width => 2,
+            regs_beg_index => 0,
+            regs_end_index => 1
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_SET_INDEX),
+            ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_SET_INDEX),
+            ------------------
+            regs_o => prescale_factor_set_index_reg
+        );
 
     prescale_factor_set_index_update_0_i: entity work.update_process
         generic map(
@@ -525,53 +509,49 @@ begin
 -- HB 2016-04-06: requested for monitoring by TM
 -- HB 2016-10-24: inserted prescale_factor_set_index_reg_updated(1) for monitoring.
     prescale_factor_set_index_updated_reg_i: entity work.ipb_read_regs
-    generic map
-    (
-        addr_width => 2,
-        regs_beg_index => 0,
-        regs_end_index => 1
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_SET_INDEX_UPDATED),
-        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_SET_INDEX_UPDATED),
-        ------------------
-        regs_i => prescale_factor_set_index_reg_updated
-    );
+        generic map(
+            addr_width => 2,
+            regs_beg_index => 0,
+            regs_end_index => 1
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_SET_INDEX_UPDATED),
+            ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_SET_INDEX_UPDATED),
+            ------------------
+            regs_i => prescale_factor_set_index_reg_updated
+        );
 
 -- --===============================================================================================--
 -- Finor and veto masks registers (bit 0 = finor, bit 1 = veto)
     masks_reg_i: entity work.ipb_write_regs
-    generic map
-    (
-        init_value => MASKS_INIT,
-        addr_width => ADDR_WIDTH_MASKS,
-        regs_beg_index => OFFSET_BEG_MASKS,
-        regs_end_index => OFFSET_END_MASKS
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_MASKS),
-        ipbus_out => ipb_from_slaves(C_IPB_MASKS),
-        ------------------
-        regs_o => masks_reg
-    );
+        generic map(
+            init_value => MASKS_INIT,
+            addr_width => ADDR_WIDTH_MASKS,
+            regs_beg_index => OFFSET_BEG_MASKS,
+            regs_end_index => OFFSET_END_MASKS
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_MASKS),
+            ipbus_out => ipb_from_slaves(C_IPB_MASKS),
+            ------------------
+            regs_o => masks_reg
+        );
 
 --===============================================================================================--
 -- Command pulses register
     pulse_reg_i: entity work.ipb_pulse_regs
-    port map(
-        ipb_clk => ipb_clk,
-        ipb_reset => ipb_rst,
-        ipb_mosi_i => ipb_to_slaves(C_IPB_COMMAND_PULSES),
-        ipb_miso_o => ipb_from_slaves(C_IPB_COMMAND_PULSES),
-        lhc_clk => lhc_clk,
-        pulse_o => command_pulses
-    );
+        port map(
+            ipb_clk => ipb_clk,
+            ipb_reset => ipb_rst,
+            ipb_mosi_i => ipb_to_slaves(C_IPB_COMMAND_PULSES),
+            ipb_miso_o => ipb_from_slaves(C_IPB_COMMAND_PULSES),
+            lhc_clk => lhc_clk,
+            pulse_o => command_pulses
+        );
 
 -- HB 2015-08-31: "request_update_factor_pulse" is bit 0 of "pulseregister 0 (C_IPB_COMMAND_PULSES)";
     request_update_factor_pulse <= command_pulses(0);
@@ -580,137 +560,123 @@ begin
 -- Rate counter finor register
 -- HB 2016-02-11: requested for monitoring (in legacy system part of TCS). Has to be moved to FINOR-AMC502 !!!
     read_rate_cnt_finor_i: entity work.ipb_read_regs
-    generic map
-    (
-        addr_width => 1,
-        regs_beg_index => 0,
-        regs_end_index => 0
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_FINOR),
-        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_FINOR),
-        ------------------
-        regs_i => rate_cnt_finor_reg
-    );
+        generic map(
+            addr_width => 1,
+            regs_beg_index => 0,
+            regs_end_index => 0
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_FINOR),
+            ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_FINOR),
+            ------------------
+            regs_i => rate_cnt_finor_reg
+        );
 
 --===============================================================================================--
 -- Rate counter finor preview register
 -- HB 2016-12-01: register for rate counter finor for "prescaler preview" in monitoring
     read_rate_cnt_finor_preview_i: entity work.ipb_read_regs
-    generic map
-    (
-        addr_width => 1,
-        regs_beg_index => 0,
-        regs_end_index => 0
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_FINOR_PREVIEW),
-        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_FINOR_PREVIEW),
-        ------------------
-        regs_i => rate_cnt_finor_preview_reg
-    );
+        generic map(
+            addr_width => 1,
+            regs_beg_index => 0,
+            regs_end_index => 0
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_FINOR_PREVIEW),
+            ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_FINOR_PREVIEW),
+            ------------------
+            regs_i => rate_cnt_finor_preview_reg
+        );
 
 --===============================================================================================--
 -- Rate counter veto register
 -- HB 2016-03-02: for monitoring only
     read_rate_cnt_veto_i: entity work.ipb_read_regs
-    generic map
-    (
-        addr_width => 1,
-        regs_beg_index => 0,
-        regs_end_index => 0
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_VETO),
-        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_VETO),
-        ------------------
-        regs_i => rate_cnt_veto_reg
-    );
+        generic map(
+            addr_width => 1,
+            regs_beg_index => 0,
+            regs_end_index => 0
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_VETO),
+            ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_VETO),
+            ------------------
+            regs_i => rate_cnt_veto_reg
+        );
 
 --===============================================================================================--
 -- Rate counter L1A register
     read_rate_cnt_l1a_i: entity work.ipb_read_regs
-    generic map
-    (
-        addr_width => 1,
-        regs_beg_index => 0,
-        regs_end_index => 0
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_L1A),
-        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_L1A),
-        ------------------
-        regs_i => rate_cnt_l1a_reg
-    );
+        generic map(
+            addr_width => 1,
+            regs_beg_index => 0,
+            regs_end_index => 0
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_L1A),
+            ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_L1A),
+            ------------------
+            regs_i => rate_cnt_l1a_reg
+        );
 
 --===============================================================================================--
 
 -- ****************************************************************************************************
 -- HB 2016-11-17: register for "prescaler preview" in monitoring
     read_rate_cnt_after_prescaler_preview_i: entity work.ipb_read_regs
-    generic map
-    (
-        addr_width => ADDR_WIDTH_RATE_CNT_AFTER_PRESCALER_PREVIEW,
-        regs_beg_index => OFFSET_BEG_RATE_CNT_AFTER_PRESCALER_PREVIEW,
-        regs_end_index => OFFSET_END_RATE_CNT_AFTER_PRESCALER_PREVIEW
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_AFTER_PRESCALER_PREVIEW),
-        ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_AFTER_PRESCALER_PREVIEW),
-        ------------------
-        regs_i => rate_cnt_after_prescaler_preview_reg
-    );
+        generic map(
+            addr_width => ADDR_WIDTH_RATE_CNT_AFTER_PRESCALER_PREVIEW,
+            regs_beg_index => OFFSET_BEG_RATE_CNT_AFTER_PRESCALER_PREVIEW,
+            regs_end_index => OFFSET_END_RATE_CNT_AFTER_PRESCALER_PREVIEW
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_RATE_CNT_AFTER_PRESCALER_PREVIEW),
+            ipbus_out => ipb_from_slaves(C_IPB_RATE_CNT_AFTER_PRESCALER_PREVIEW),
+            ------------------
+            regs_i => rate_cnt_after_prescaler_preview_reg
+        );
 
     prescale_factor_preview_reg_i: entity work.ipb_write_regs
-    generic map
-    (
-        init_value => PRESCALE_FACTOR_INIT,
-        addr_width => ADDR_WIDTH_PRESCALE_FACTOR_PREVIEW,
-        regs_beg_index => OFFSET_BEG_PRESCALE_FACTOR_PREVIEW,
-        regs_end_index => OFFSET_END_PRESCALE_FACTOR_PREVIEW
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW),
-        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW),
-        ------------------
-        regs_o => prescale_factor_preview_reg
-    );
+        generic map(
+            init_value => PRESCALE_FACTOR_INIT,
+            addr_width => ADDR_WIDTH_PRESCALE_FACTOR_PREVIEW,
+            regs_beg_index => OFFSET_BEG_PRESCALE_FACTOR_PREVIEW,
+            regs_end_index => OFFSET_END_PRESCALE_FACTOR_PREVIEW
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW),
+            ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW),
+            ------------------
+            regs_o => prescale_factor_preview_reg
+        );
 
     prescale_factors_preview_set_index_i: entity work.ipb_write_regs
-    generic map
-    (
-        init_value => PRESCALE_FACTOR_SET_INDEX_REG_INIT,
-        addr_width => 2,
-        regs_beg_index => 0,
-        regs_end_index => 1
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX),
-        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX),
-        ------------------
-        regs_o => prescale_factor_preview_set_index_reg
-    );
+        generic map(
+            init_value => PRESCALE_FACTOR_SET_INDEX_REG_INIT,
+            addr_width => 2,
+            regs_beg_index => 0,
+            regs_end_index => 1
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX),
+            ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX),
+            ------------------
+            regs_o => prescale_factor_preview_set_index_reg
+        );
 
     prescale_factor_preview_set_index_update_0_i: entity work.update_process
         generic map(
@@ -739,38 +705,36 @@ begin
         );
 
     prescale_factor_preview_set_index_updated_reg_i: entity work.ipb_read_regs
-    generic map
-    (
-        addr_width => 2,
-        regs_beg_index => 0,
-        regs_end_index => 1
-    )
-    port map
-    (
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX_UPDATED),
-        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX_UPDATED),
-        ------------------
-        regs_i => prescale_factor_preview_set_index_reg_updated
-    );
+        generic map(
+            addr_width => 2,
+            regs_beg_index => 0,
+            regs_end_index => 1
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX_UPDATED),
+            ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX_UPDATED),
+            ------------------
+            regs_i => prescale_factor_preview_set_index_reg_updated
+        );
 
 ------ JW 4.7.2017:
     prescale_otf_flags_i: entity work.ipb_write_regs
-    generic map(
-        init_value => PRESCALE_OTF_FLAGS_REG_DEFAULT,
-        addr_width => 2,
-        regs_beg_index => 0,
-        regs_end_index => 1
-    )
-    port map(
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_OTF_FLAGS),
-        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_OTF_FLAGS),
-        ------------------
-        regs_o => prescale_otf_flags_reg
-    );
+        generic map(
+            init_value => PRESCALE_OTF_FLAGS_REG_DEFAULT,
+            addr_width => 2,
+            regs_beg_index => 0,
+            regs_end_index => 1
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_OTF_FLAGS),
+            ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_OTF_FLAGS),
+            ------------------
+            regs_o => prescale_otf_flags_reg
+        );
 
 ------ JW 4.7.2017:
     prescale_otf_update_0_i: entity work.update_process
@@ -800,19 +764,19 @@ begin
         );
 
     prescale_otf_update_reg_i: entity work.ipb_read_regs
-    generic map(
-        addr_width => 2,
-        regs_beg_index => 0,
-        regs_end_index => 1
-    )
-    port map(
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_OTF_UPDATED),
-        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_OTF_UPDATED),
-        ------------------
-        regs_i => prescale_otf_reg_updated
-    );
+        generic map(
+            addr_width => 2,
+            regs_beg_index => 0,
+            regs_end_index => 1
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_OTF_UPDATED),
+            ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_OTF_UPDATED),
+            ------------------
+            regs_i => prescale_otf_reg_updated
+        );
 
 ------ JW 4.7.2017:
     prescale_preview_otf_update_0_i: entity work.update_process
@@ -842,19 +806,19 @@ begin
         );
 
     prescale_preview_otf_update_reg_i: entity work.ipb_read_regs
-    generic map(
-        addr_width => 2,
-        regs_beg_index => 0,
-        regs_end_index => 1
-    )
-    port map(
-        clk => ipb_clk,
-        reset => ipb_rst,
-        ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_PREVIEW_OTF_UPDATED),
-        ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_PREVIEW_OTF_UPDATED),
-        ------------------
-        regs_i => prescale_preview_otf_reg_updated
-    );
+        generic map(
+            addr_width => 2,
+            regs_beg_index => 0,
+            regs_end_index => 1
+        )
+        port map(
+            clk => ipb_clk,
+            reset => ipb_rst,
+            ipbus_in => ipb_to_slaves(C_IPB_PRESCALE_PREVIEW_OTF_UPDATED),
+            ipbus_out => ipb_from_slaves(C_IPB_PRESCALE_PREVIEW_OTF_UPDATED),
+            ------------------
+            regs_i => prescale_preview_otf_reg_updated
+        );
 
 
 -- ****************************************************************************************************
@@ -905,24 +869,25 @@ begin
             RATE_COUNTER_WIDTH => RATE_COUNTER_WIDTH,
             PRESCALER_COUNTER_WIDTH => PRESCALER_COUNTER_WIDTH,
             PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT(i),
-            MAX_DELAY => MAX_DELAY_L1A_LATENCY
+            MAX_DELAY => MAX_DELAY_L1A_LATENCY,
+            PRESCALER_FRACTION_WIDTH => PRESCALER_FRACTION_WIDTH
         )
         port map(
             sys_clk => ipb_clk,
             lhc_clk => lhc_clk,
             lhc_rst => lhc_rst,
 -- HB 2015-09-17: added "sres_algo_rate_counter" and "sres_algo_pre_scaler"
-	    sres_algo_rate_counter => sres_algo_rate_counter,
-	    sres_algo_pre_scaler => sres_algo_pre_scaler,
-	    sres_algo_post_dead_time_counter => sres_algo_post_dead_time_counter,
-	    suppress_cal_trigger => suppress_cal_trigger,
-	    l1a => l1a,
-	    l1a_latency_delay => l1a_latency_delay_reg(0)(log2c(MAX_DELAY_L1A_LATENCY)-1 downto 0),
+            sres_algo_rate_counter => sres_algo_rate_counter,
+            sres_algo_pre_scaler => sres_algo_pre_scaler,
+            sres_algo_post_dead_time_counter => sres_algo_post_dead_time_counter,
+            suppress_cal_trigger => suppress_cal_trigger,
+            l1a => l1a,
+            l1a_latency_delay => l1a_latency_delay_reg(0)(log2c(MAX_DELAY_L1A_LATENCY)-1 downto 0),
             request_update_factor_pulse => request_update_factor_pulse,
             begin_lumi_per => begin_lumi_section,
             algo_i => algo_int(i),
-            prescale_factor => prescale_factor_local(i)(PRESCALER_COUNTER_WIDTH-1 downto 0),
-            prescale_factor_preview => prescale_factor_preview_local(i)(PRESCALER_COUNTER_WIDTH-1 downto 0),
+            prescale_factor => prescale_factor_local(i)(PRESCALER_FRACTION_WIDTH+PRESCALER_COUNTER_WIDTH-1 downto 0),
+            prescale_factor_preview => prescale_factor_preview_local(i)(PRESCALER_FRACTION_WIDTH+PRESCALER_COUNTER_WIDTH-1 downto 0),
             algo_bx_mask => algo_bx_mask_local(i),
             veto_mask => veto_masks_local(i),
             rate_cnt_before_prescaler => rate_cnt_before_prescaler_local(i),
@@ -1021,46 +986,46 @@ begin
 -- Rate counter finor
 -- HB 2016-02-26: requested for monitoring (in legacy system part of TCS). Has to be implemented in FINOR-AMC502, too - for vetoed finor for TCDS !!!
     rate_cnt_finor_i: entity work.algo_rate_counter
-	generic map(
-	    COUNTER_WIDTH => FINOR_RATE_COUNTER_WIDTH
-	)
-	port map(
-            sys_clk => ipb_clk,
-            lhc_clk => lhc_clk,
-            sres_counter => sres_finor_rate_counter,
-            store_cnt_value => begin_lumi_section,
-            algo_i => local_finor,
-            counter_o => rate_cnt_finor_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
-	);
+        generic map(
+            COUNTER_WIDTH => FINOR_RATE_COUNTER_WIDTH
+        )
+        port map(
+                sys_clk => ipb_clk,
+                lhc_clk => lhc_clk,
+                sres_counter => sres_finor_rate_counter,
+                store_cnt_value => begin_lumi_section,
+                algo_i => local_finor,
+                counter_o => rate_cnt_finor_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
+        );
 
 -- HB 2016-12-01: rate counter finor for "prescaler preview" in monitoring
     rate_cnt_finor_preview_i: entity work.algo_rate_counter
-	generic map(
-	    COUNTER_WIDTH => FINOR_RATE_COUNTER_WIDTH
-	)
-	port map(
-            sys_clk => ipb_clk,
-            lhc_clk => lhc_clk,
-            sres_counter => sres_finor_rate_counter,
-            store_cnt_value => begin_lumi_section,
-            algo_i => local_finor_preview,
-            counter_o => rate_cnt_finor_preview_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
-	);
+        generic map(
+            COUNTER_WIDTH => FINOR_RATE_COUNTER_WIDTH
+        )
+        port map(
+                sys_clk => ipb_clk,
+                lhc_clk => lhc_clk,
+                sres_counter => sres_finor_rate_counter,
+                store_cnt_value => begin_lumi_section,
+                algo_i => local_finor_preview,
+                counter_o => rate_cnt_finor_preview_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
+        );
 
 -- Rate counter veto
 -- HB 2016-03-02: for monitoring only
     rate_cnt_veto_i: entity work.algo_rate_counter
-	generic map(
-	    COUNTER_WIDTH => VETO_RATE_COUNTER_WIDTH
-	)
-	port map(
-            sys_clk => ipb_clk,
-            lhc_clk => lhc_clk,
-            sres_counter => sres_veto_rate_counter,
-            store_cnt_value => begin_lumi_section,
-            algo_i => local_veto,
-            counter_o => rate_cnt_veto_reg(0)(VETO_RATE_COUNTER_WIDTH-1 downto 0)
-	);
+        generic map(
+            COUNTER_WIDTH => VETO_RATE_COUNTER_WIDTH
+        )
+        port map(
+                sys_clk => ipb_clk,
+                lhc_clk => lhc_clk,
+                sres_counter => sres_veto_rate_counter,
+                store_cnt_value => begin_lumi_section,
+                algo_i => local_veto,
+                counter_o => rate_cnt_veto_reg(0)(VETO_RATE_COUNTER_WIDTH-1 downto 0)
+        );
 
 -- Rate counter L1A
 -- HB 2016-02-19: only for monitoring and verification of incoming L1As
@@ -1082,7 +1047,7 @@ begin
 
 -- Algorithms to ROP
     algo_mapping_rop_i: entity work.algo_mapping_rop
-        port map (
+        port map(
             lhc_clk => lhc_clk,
             algo_bx_masks_global => algo_bx_mask_global,
             algo_bx_masks_local => algo_bx_mask_local,

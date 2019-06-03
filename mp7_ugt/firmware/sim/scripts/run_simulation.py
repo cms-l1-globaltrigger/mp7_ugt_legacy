@@ -14,8 +14,13 @@ from threading import Thread
 o, ts = os.popen('stty size', 'r').read().split()#terminal size
 ts = int(ts)
 
-whitered = "\033[37;41;1m"#collor tags
-reset = "\033[0m"
+failed_red = ("\033[1;31m Failed! \033[0m")
+success_green = ("\033[1;32m Success! \033[0m")
+ok_green = ("\033[1;32m OK     \033[0m")
+ignore_yellow = ("\033[1;33m IGNORE \033[0m")
+error_red = ("\033[1;31m ERROR  \033[0m")
+
+#reset = "\033[0m"
 
 DEFAULT_XILINX_PATH = '/opt/xilinx/14.6'#default paths
 DEFAULT_MODELSIM_VERSION = '10.3b'
@@ -344,12 +349,12 @@ def main():
     algorithms = sorted(menu.algorithms, key = lambda algorithm: algorithm.index)#sorts all algorithms by index number
     success = True
     for algo in algorithms:
-        result = 'OK'
+        result = ok_green
         if algo.name in IGNORED_ALGOS:
-            result = 'IGNORE'
+            result = ignore_yellow
         #checks if algorithm trigger count is equal in both hardware and testvectors
         elif algos_tv[algo.index][0][1] != algos_sim[algo.index][0][1]:
-            result = 'ERROR'
+            result = error_red
             success = False
 
         sum_log.info('|{:>5}|{:>5}|{:<66}|{:>8}|{:>8}|{:>8}|'.format( #prints line with information about each algo present in the menu
@@ -403,9 +408,9 @@ def main():
     print ("")
 
     if success:
-        logging.info("Success!")
+        logging.info(success_green)
     else:
-        logging.error("Failed!")
+        logging.error(failed_red)
 
     #with open('')
 if __name__ == '__main__':

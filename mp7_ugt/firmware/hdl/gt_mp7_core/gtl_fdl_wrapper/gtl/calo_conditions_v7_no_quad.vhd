@@ -65,6 +65,10 @@ end calo_conditions_v7_no_quad;
 
 architecture rtl of calo_conditions_v7_no_quad is
 
+-- dummy
+    constant calo_object_slice_4_low : natural := 1;
+    constant calo_object_slice_4_high : natural := 1;
+
     constant nr_objects_slice_1_int: natural := calo_object_slice_1_high-calo_object_slice_1_low+1;
     constant nr_objects_slice_2_int: natural := calo_object_slice_2_high-calo_object_slice_2_low+1;
     constant nr_objects_slice_3_int: natural := calo_object_slice_3_high-calo_object_slice_3_low+1;
@@ -73,14 +77,11 @@ architecture rtl of calo_conditions_v7_no_quad is
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
 
-    type object_slice_1_vs_template_array is array (calo_object_slice_1_low to calo_object_slice_1_high, 1 to 1) of std_logic;
-    type object_slice_2_vs_template_array is array (calo_object_slice_2_low to calo_object_slice_2_high, 1 to 1) of std_logic;
-    type object_slice_3_vs_template_array is array (calo_object_slice_3_low to calo_object_slice_3_high, 1 to 1) of std_logic;
-
-    signal obj_slice_1_vs_templ, obj_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array;
-    signal obj_slice_2_vs_templ, obj_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array;
-    signal obj_slice_3_vs_templ, obj_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array;
-
+    signal obj_slice_1_vs_templ, obj_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array(calo_object_slice_1_low to calo_object_slice_1_high, 1 to 1);
+    signal obj_slice_2_vs_templ, obj_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(calo_object_slice_2_low to calo_object_slice_2_high, 1 to 1);
+    signal obj_slice_3_vs_templ, obj_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(calo_object_slice_3_low to calo_object_slice_3_high, 1 to 1);
+    signal obj_slice_4_vs_templ, obj_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(calo_object_slice_4_low to calo_object_slice_4_high, 1 to 1) := (others => (others => '1'));
+    
     signal condition_and_or : std_logic;
     
     signal twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : 
@@ -97,96 +98,40 @@ begin
     
 -- Instantiation of two-body pt cut.
     twobody_pt_cut_i: if twobody_pt_cut = true and nr_templates = 2 generate
-        twobody_pt_l_1: for i in calo_object_slice_1_low to calo_object_slice_1_high generate 
-            twobody_pt_l_2: for j in calo_object_slice_2_low to calo_object_slice_2_high generate
-                if_j_gr_i: if j > i generate
-                    twobody_pt_calculator_i: entity work.twobody_pt_calculator_v2
-                        generic map(
-                            pt1_width => pt_width, 
-                            pt2_width => pt_width, 
-                            pt_sq_threshold_vector => pt_sq_threshold_vector,
-                            sin_cos_width => sin_cos_width,
-                            pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
-                        )
-                        port map(
-                            pt1 => pt(i)(pt_width-1 downto 0),
-                            pt2 => pt(j)(pt_width-1 downto 0),
-                            cos_phi_1_integer => cos_phi_integer(i),
-                            cos_phi_2_integer => cos_phi_integer(j),
-                            sin_phi_1_integer => sin_phi_integer(i),
-                            sin_phi_2_integer => sin_phi_integer(j),
-                            pt_square_comp => twobody_pt_comp_temp(i,j)
-                    );
-                    twobody_pt_comp(i,j) <= twobody_pt_comp_temp(i,j);
-                    twobody_pt_comp(j,i) <= twobody_pt_comp_temp(i,j);
-                end generate if_j_gr_i;
-            end generate twobody_pt_l_2;
-        end generate twobody_pt_l_1;
+        twobody_pt_i: entity work.twobody_pt
+            generic map(
+                calo_object_slice_1_low, calo_object_slice_1_high,
+                calo_object_slice_2_low, calo_object_slice_2_high,
+                nr_templates,
+                
+                twobody_pt_cut,
+                pt_width, 
+                pt_sq_threshold_vector,
+                sin_cos_width,
+                pt_sq_sin_cos_precision
+            )
+            port map(
+                pt, cos_phi_integer, sin_phi_integer, twobody_pt_comp
+            );
     end generate twobody_pt_cut_i;
-    
--- Instance of comparators for calorimeter objects. All permutations between objects and thresholds/luts.
-    obj_slice_1_l: for i in calo_object_slice_1_low to calo_object_slice_1_high generate
-        comp_i: entity work.calo_comparators_v2
-            generic map(et_ge_mode, obj_type,
-                et_thresholds(1),
-                eta_full_range(1),
-                eta_w1_upper_limits(1),
-                eta_w1_lower_limits(1),
-                eta_w2_ignore(1),
-                eta_w2_upper_limits(1),
-                eta_w2_lower_limits(1),
-                phi_full_range(1),
-                phi_w1_upper_limits(1),
-                phi_w1_lower_limits(1),
-                phi_w2_ignore(1),
-                phi_w2_upper_limits(1),
-                phi_w2_lower_limits(1),
-                iso_luts(1)
-                )
-            port map(data_i(i), obj_slice_1_vs_templ(i,1));
-    end generate obj_slice_1_l;
 
-    obj_slice_2_l: for i in calo_object_slice_2_low to calo_object_slice_2_high generate
-        comp_i: entity work.calo_comparators_v2
-            generic map(et_ge_mode, obj_type,
-                et_thresholds(2),
-                eta_full_range(2),
-                eta_w1_upper_limits(2),
-                eta_w1_lower_limits(2),
-                eta_w2_ignore(2),
-                eta_w2_upper_limits(2),
-                eta_w2_lower_limits(2),
-                phi_full_range(2),
-                phi_w1_upper_limits(2),
-                phi_w1_lower_limits(2),
-                phi_w2_ignore(2),
-                phi_w2_upper_limits(2),
-                phi_w2_lower_limits(2),
-                iso_luts(2)
-                )
-            port map(data_i(i), obj_slice_2_vs_templ(i,1));
-    end generate obj_slice_2_l;
-
-    obj_slice_3_l: for i in calo_object_slice_3_low to calo_object_slice_3_high generate
-        comp_i: entity work.calo_comparators_v2
-            generic map(et_ge_mode, obj_type,
-                et_thresholds(3),
-                eta_full_range(3),
-                eta_w1_upper_limits(3),
-                eta_w1_lower_limits(3),
-                eta_w2_ignore(3),
-                eta_w2_upper_limits(3),
-                eta_w2_lower_limits(3),
-                phi_full_range(3),
-                phi_w1_upper_limits(3),
-                phi_w1_lower_limits(3),
-                phi_w2_ignore(3),
-                phi_w2_upper_limits(3),
-                phi_w2_lower_limits(3),
-                iso_luts(3)
-                )
-            port map(data_i(i), obj_slice_3_vs_templ(i,1));
-    end generate obj_slice_3_l;
+    cuts: entity work.calo_obj_cuts
+        generic map(
+            calo_object_slice_1_low, calo_object_slice_1_high,
+            calo_object_slice_2_low, calo_object_slice_2_high,
+            calo_object_slice_3_low, calo_object_slice_3_high,
+            calo_object_slice_4_low, calo_object_slice_4_high,
+            nr_templates, et_ge_mode, obj_type,
+            et_thresholds,
+            eta_full_range, eta_w1_upper_limits, eta_w1_lower_limits,
+            eta_w2_ignore, eta_w2_upper_limits, eta_w2_lower_limits,
+            phi_full_range, phi_w1_upper_limits, phi_w1_lower_limits,
+            phi_w2_ignore, phi_w2_upper_limits, phi_w2_lower_limits,
+            iso_luts
+        )
+        port map(
+           data_i, obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ, obj_slice_4_vs_templ
+        );
 
 -- Pipeline stage for obj_vs_templ and twobody_pt_comp
     obj_vs_templ_pipeline_p: process(clk, obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ, twobody_pt_comp)
@@ -209,81 +154,19 @@ begin
 -- "Matrix" of permutations in an and-or-structure.
 -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates' and 'double_wsc'.
 
--- Condition type: "single".
-    matrix_single_i: if nr_templates = 1 generate
-        matrix_single_p: process(obj_slice_1_vs_templ_pipe)
-            variable condition_and_or_tmp : std_logic := '0';
-        begin
-            condition_and_or_tmp := '0';
-            for i in calo_object_slice_1_low to calo_object_slice_1_high loop
-                condition_and_or_tmp := condition_and_or_tmp or obj_slice_1_vs_templ_pipe(i,1);
-            end loop;
-            condition_and_or <= condition_and_or_tmp;
-        end process matrix_single_p;
-    end generate matrix_single_i;
-
--- Condition type: "double".
-    matrix_double_i: if (nr_templates = 2) generate
-        matrix_double_p: process(obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, twobody_pt_comp_pipe)
-            variable index : integer := 0;
-            variable obj_vs_templ_vec : std_logic_vector((nr_objects_slice_1_int*nr_objects_slice_2_int) downto 1) := (others => '0');
-            variable condition_and_or_tmp : std_logic := '0';
-        begin
-            index := 0;
-            obj_vs_templ_vec := (others => '0');
-            condition_and_or_tmp := '0';
-            for i in calo_object_slice_1_low to calo_object_slice_1_high loop
-                for j in calo_object_slice_2_low to calo_object_slice_2_high loop
-                    if j/=i then
-                        index := index + 1;
-                        obj_vs_templ_vec(index) := obj_slice_1_vs_templ_pipe(i,1) and obj_slice_2_vs_templ_pipe(j,1) and twobody_pt_comp_pipe(i,j);
-                    end if;
-                end loop;
-            end loop;
-            for i in 1 to index loop
-                condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
-            end loop;
-            condition_and_or <= condition_and_or_tmp;
-        end process matrix_double_p;
-    end generate matrix_double_i;
-
--- Condition type: "triple".
-    matrix_triple_i: if nr_templates = 3 generate
-        matrix_triple_p: process(obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, obj_slice_3_vs_templ_pipe)
-            variable index : integer := 0;
-            variable obj_vs_templ_vec : std_logic_vector((nr_objects_slice_1_int*nr_objects_slice_2_int*nr_objects_slice_3_int) downto 1) := (others => '0');
-            variable condition_and_or_tmp : std_logic := '0';
-        begin
-            index := 0;
-            obj_vs_templ_vec := (others => '0');
-            condition_and_or_tmp := '0';
-            for i in calo_object_slice_1_low to calo_object_slice_1_high loop
-                for j in calo_object_slice_2_low to calo_object_slice_2_high loop
-                    for k in calo_object_slice_3_low to calo_object_slice_3_high loop
-                        if (j/=i and k/=i and k/=j) then
-                            index := index + 1;
-                            obj_vs_templ_vec(index) := obj_slice_1_vs_templ_pipe(i,1) and obj_slice_2_vs_templ_pipe(j,1) and obj_slice_3_vs_templ_pipe(k,1);
-                        end if;
-                    end loop;
-                end loop;
-            end loop;
-            for i in 1 to index loop
-                condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
-            end loop;
-            condition_and_or <= condition_and_or_tmp;
-        end process matrix_triple_p;
-    end generate matrix_triple_i;
-
--- Pipeline stage for condition output.
-    condition_o_pipeline_p: process(clk, condition_and_or)
-        begin
-            if conditions_pipeline_stage = false then
-                condition_o <= condition_and_or;
-            else
-                if (clk'event and clk = '1') then
-                    condition_o <= condition_and_or;
-                end if;
-            end if;
-    end process;
+    cond_matrix: entity work.calo_cond_matrix
+        generic map(
+            calo_object_slice_1_low, calo_object_slice_1_high,
+            calo_object_slice_2_low, calo_object_slice_2_high,
+            calo_object_slice_3_low, calo_object_slice_3_high,
+            1,
+            1,
+            nr_templates
+        )
+        port map(clk,
+            obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, obj_slice_3_vs_templ_pipe, obj_slice_4_vs_templ_pipe,
+            twobody_pt_comp_pipe,
+            condition_o
+        );
 
 end architecture rtl;

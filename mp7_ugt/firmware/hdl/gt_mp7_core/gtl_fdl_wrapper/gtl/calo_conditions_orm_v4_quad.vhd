@@ -1,5 +1,6 @@
 
 -- Description:
+-- Condition module for calorimeter object types (eg, jet and tau) conditions with "overlap removal (orm)".
 
 -- Version history:
 -- HB 2017-10-04: added limit vectors for correlation cuts.

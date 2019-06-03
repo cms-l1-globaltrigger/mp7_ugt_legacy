@@ -2,6 +2,7 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
+-- HB 2019-05-02: v1.7.0: Added new modules (calo_cond_matrix.vhd, calo_cuts.vhd), changed calo_condition_v6_quad.vhd and calo_condition_v7_no_quad.vhd.
 -- HB 2018-08-06: v1.6.0: Added ports and pipelines for "Asymmetry" (asymet_data, ...) and "Centrality" (centrality_data).
 -- HB 2017-10-06: v1.5.0: Used new modules for use of std_logic_vector for limits of correlation cuts 
 -- HB 2017-09-15: v1.4.1: Bug fix in calo_calo_correlation_condition_v3.vhd

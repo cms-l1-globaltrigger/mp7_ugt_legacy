@@ -1,11 +1,11 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name)
--- mp7_ugt (=FRAME_VERSION): v1.7.0
+-- mp7_ugt (=FRAME_VERSION): v1.8.1
 --
 -- frame: v1.2.3 (see frame.vhd)
--- gtl: v1.6.0 (see gtl_module_tpl.vhd)
--- fdl: v1.2.2 (see fdl_module.vhd)
+-- gtl: v1.7.0 (see gtl_module_tpl.vhd)
+-- fdl: v1.2.3 (see fdl_module.vhd)
 
 -- HB 2016-09-19: removed more unused constants
 -- HB 2016-06-30: removed unused constants and cleaned up
@@ -37,20 +37,20 @@ package gt_mp7_core_pkg is
 -- ==================================================================================================
 -- FRAME version (given by the editor of frame.vhd)
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 7;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 0;
+    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 8;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 1;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_REV_VERSION, 8));
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 6;
+    constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 7;
     constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 0;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 2;
-    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 2;
+    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 3;
 -- ==================================================================================================
 
     constant BUNCHES_PER_ORBIT : natural range 3564 to 3564 := LHC_BUNCH_COUNT;

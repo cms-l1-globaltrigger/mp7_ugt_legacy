@@ -3,6 +3,7 @@
 -- FDL structure for one algo (slice)
 -- algo-bx-mask at algo input
 
+-- HB 2019-06-03: updated for fractional pre-scaler values.
 -- HB 2017-01-10: fixed bug with 1 bx delay for "begin_lumi_per" for rate counter after pre-scaler.
 -- HB 2016-11-17: inserted prescaler, rate_cnt_after_prescaler and algo_after_prescaler for "prescaler preview" in monitoring. Removed port "finor_mask".
 -- HB 2016-08-31: removed logic with finor_mask. algo_rate_counter after prescaler. Removed port "algo_after_finor_mask".
@@ -26,26 +27,27 @@ entity algo_slice is
         RATE_COUNTER_WIDTH : integer := 32;
         PRESCALER_COUNTER_WIDTH : integer := 24;
         PRESCALE_FACTOR_INIT : std_logic_vector(31 DOWNTO 0) := X"00000001";
-        MAX_DELAY : integer := 128
+        MAX_DELAY : integer := 128;
+        PRESCALER_FRACTION_WIDTH : integer := 8
     );
     port( 
         sys_clk : in std_logic;
         lhc_clk : in std_logic;
         lhc_rst : in std_logic;
 -- HB 2015-09-17: added "sres_algo_rate_counter" and "sres_algo_pre_scaler"
-	sres_algo_rate_counter : in std_logic;
-	sres_algo_pre_scaler : in std_logic;
-	sres_algo_post_dead_time_counter : in std_logic;
+        sres_algo_rate_counter : in std_logic;
+        sres_algo_pre_scaler : in std_logic;
+        sres_algo_post_dead_time_counter : in std_logic;
 -- HB 2016-06-17: added suppress_cal_trigger, used to suppress counting algos caused by calibration trigger at bx=3490.
-	suppress_cal_trigger : in std_logic; -- pos. active signal: '1' = suppression of algos caused by calibration trigger !!!
+        suppress_cal_trigger : in std_logic; -- pos. active signal: '1' = suppression of algos caused by calibration trigger !!!
 -- HB 2015-09-2: added "l1a" and "l1a_latency_delay" for post-dead-time counter
-	l1a : in std_logic;
-	l1a_latency_delay : in std_logic_vector(log2c(MAX_DELAY)-1 downto 0);
+        l1a : in std_logic;
+        l1a_latency_delay : in std_logic_vector(log2c(MAX_DELAY)-1 downto 0);
         request_update_factor_pulse : in std_logic;
         begin_lumi_per : in std_logic;
         algo_i : in std_logic;
-        prescale_factor : in std_logic_vector(PRESCALER_COUNTER_WIDTH-1 DOWNTO 0);
-        prescale_factor_preview : in std_logic_vector(PRESCALER_COUNTER_WIDTH-1 DOWNTO 0);
+        prescale_factor : in std_logic_vector(PRESCALER_FRACTION_WIDTH+PRESCALER_COUNTER_WIDTH-1 DOWNTO 0);
+        prescale_factor_preview : in std_logic_vector(PRESCALER_FRACTION_WIDTH+PRESCALER_COUNTER_WIDTH-1 DOWNTO 0);
         algo_bx_mask : in std_logic;
         veto_mask : in std_logic;
         rate_cnt_before_prescaler : out std_logic_vector(RATE_COUNTER_WIDTH-1 DOWNTO 0);
@@ -94,8 +96,9 @@ begin
     prescaler_i: entity work.algo_pre_scaler
 	generic map( 
 	    COUNTER_WIDTH => PRESCALER_COUNTER_WIDTH,
-	    PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT
-	)
+	    PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT,
+        FRACTION_WIDTH => PRESCALER_FRACTION_WIDTH
+        )
 	port map( 
 	    clk => lhc_clk,
 	    sres_counter => sres_algo_pre_scaler,
@@ -129,7 +132,8 @@ begin
     prescaler_preview_i: entity work.algo_pre_scaler
 	generic map( 
 	    COUNTER_WIDTH => PRESCALER_COUNTER_WIDTH,
-	    PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT
+	    PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT,
+        FRACTION_WIDTH => PRESCALER_FRACTION_WIDTH
 	)
 	port map( 
 	    clk => lhc_clk,

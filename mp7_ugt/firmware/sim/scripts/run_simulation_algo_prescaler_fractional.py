@@ -13,6 +13,7 @@ def parse():
     parser.add_argument('--questasim', help = "Path to Questasim version [required]", required = True)
     parser.add_argument('--max_dec', help = "max. prescale value (decimal integer) [required]", required = True)
     parser.add_argument('--error_diff', help = "max. difference prescale values (float) [required]", required = True)
+    parser.add_argument('--sim_time', help = "simulation time in us [required]", required = True)
     
     return parser.parse_args()
 
@@ -36,24 +37,32 @@ def main():
     for whole in range (1, whole_value_max+1):
         for frac in range (0, nr_frac_values):
             prescale_value_required = float(whole + frac * 0.05)
-            #print "prescale_value_required: ", prescale_value_required
             prescale_value_tb = ("%0.2X" % frac) + ("%0.6X" % whole)
-            #print "prescale_value_tb: ", prescale_value_tb
-            
+             
+            # replace constant PRESCALE_FACTOR_VAL in pkg file 
             pkg_tpl_file = os.path.join(os.environ['PWD'], 'testbench/algo_pre_scaler_fractional_tb_pkg_tpl.vhd')
-            #print pkg_tpl_file
             with open(pkg_tpl_file, 'r') as f:
                 r_strg = f.read()
             w_strg = r_strg.format(prescale_value_tb, prescale_value_required)
             pkg_file = os.path.join(os.environ['PWD'], 'testbench/algo_pre_scaler_fractional_tb_pkg.vhd')
-            #print pkg_file
             with open(pkg_file, 'w') as f:
                 f.write(w_strg)
                     
-            cmd_vsim = "{} -msgmode wlf -modelsimini modelsim.ini -do scripts/algo_pre_scaler_fractional_no_gui.do".format(args.questasim)
+            # replace {{sim_time}} in do file 
+            do_tpl_file = os.path.join(os.environ['PWD'], 'scripts/algo_pre_scaler_fractional_loop_test_tpl.do')
+            with open(do_tpl_file, 'r') as f:
+                r_strg = f.read()
+            w_strg = r_strg.replace('{{sim_time}}', args.sim_time)
+            do_file = os.path.join(os.environ['PWD'], 'scripts/algo_pre_scaler_fractional_loop_test.do')
+            with open(do_file, 'w') as f:
+                f.write(w_strg)
+                    
+            # run simulation 
+            cmd_vsim = "{} -msgmode wlf -modelsimini modelsim.ini -do {}".format(args.questasim, do_file)
             cmd = 'bash -c "{}"'.format(cmd_vsim)
             run_command(cmd)
 
+            # calculate difference with prescale values from list.lst (last line)
             list_file = os.path.join(os.environ['PWD'], 'list.lst')
             with open(list_file, 'r') as f:
                 lines = f.readlines()
@@ -62,13 +71,10 @@ def main():
             diff = abs(prescale_value - prescale_value_required)
 
             print "=== Simulation No.: ", loop
-            #print "=== Algos:           ", data[2]
-            #print "=== Prescaled algos: ", data[3]
-            #print "=== Required rescale value (in testbench)    %.2f" % prescale_value_required
-            #print "=== Prescale value from simulation:          %.10f" % prescale_value
             print "=== Prescale values difference (simulation/testbench): %.10f" % diff        
             print ""        
 
+            # check calculated difference
             error_diff = float(args.error_diff)
             if diff > error_diff:
                 print "\033[1;31m=== ERROR: Difference > %.6f !!!\033[0m" % error_diff

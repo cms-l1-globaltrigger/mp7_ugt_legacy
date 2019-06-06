@@ -43,7 +43,7 @@ view list
 do $TESTBENCH/../scripts/algo_pre_scaler_fractional_list.do
 
 ##Run simulation
-run 91 us
+run {{sim_time}} us
 
 write list list.lst
 

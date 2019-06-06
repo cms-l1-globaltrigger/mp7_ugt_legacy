@@ -38,12 +38,12 @@ vcom -93 -work work $TESTBENCH/algo_pre_scaler_fractional_tb.vhd
 #Load Design
 vsim -t 1ps work.algo_pre_scaler_fractional_TB 
 
-##Load signals in wave window
+##Load signals in list window
 view list
 do $TESTBENCH/../scripts/algo_pre_scaler_fractional_list.do
 
 ##Run simulation
-run 9100000 ns
+run 91000 ns
 #run 2000 ms
 
 write list list.lst

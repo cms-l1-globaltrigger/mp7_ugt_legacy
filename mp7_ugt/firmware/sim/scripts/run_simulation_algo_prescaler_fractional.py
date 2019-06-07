@@ -61,7 +61,7 @@ def main():
                 f.write(w_strg)
                     
             # run simulation 
-            cmd_vsim = "{} -c -msgmode wlf -modelsimini modelsim.ini -do {}; ".format(args.questasim, do_file)
+            cmd_vsim = "{} -c -msgmode wlf -modelsimini modelsim.ini -do {} -nostdout".format(args.questasim, do_file)
             cmd = 'bash -c "{}"'.format(cmd_vsim)
             run_command(cmd)
 
@@ -73,7 +73,8 @@ def main():
             prescale_value = float(data[2])/float(data[3])            
             diff = abs(prescale_value - prescale_value_required)
 
-            print "=== Simulation %d/%d [prescale value: %.2f]" % (loop, max_loops, prescale_value_required)
+            print ""        
+            print "=== Simulation %d/%d [prescale value: %.2f] done" % (loop, max_loops, prescale_value_required)
             print "=== Prescale values difference (simulated - required): %.10f" % diff        
             print ""        
 

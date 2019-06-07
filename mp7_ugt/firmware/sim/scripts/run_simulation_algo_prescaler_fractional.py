@@ -61,7 +61,7 @@ def main():
                 f.write(w_strg)
                     
             # run simulation 
-            cmd_vsim = "{} -msgmode wlf -modelsimini modelsim.ini -do {}; ".format(args.questasim, do_file)
+            cmd_vsim = "{} -c -msgmode wlf -modelsimini modelsim.ini -do {}; ".format(args.questasim, do_file)
             cmd = 'bash -c "{}"'.format(cmd_vsim)
             run_command(cmd)
 

@@ -35,6 +35,7 @@ def main():
     nr_frac_values = 20 # MODE_SEQ_LUT in VHDL with length 20 (fraction values of prescale factor = .00, .05, ...) - floating point precision = 2
     max_loops = whole_value_max * nr_frac_values
     
+    diff_max = 0.0
     loop = 1
     
     for whole in range (1, whole_value_max+1):
@@ -74,22 +75,26 @@ def main():
             diff = abs(prescale_value - prescale_value_required)
 
             print ""        
-            print "=== Simulation %d/%d [prescale value: %.2f] done" % (loop, max_loops, prescale_value_required)
-            print "=== Prescale values difference (simulated - required): %.10f" % diff        
+            print "=== Simulation \033[1;32m%d/%d\033[0m [prescale value: \033[1;32m%.2f\033[0m] done" % (loop, max_loops, prescale_value_required)
+            print "=== Prescale values difference (simulated-required): \033[1;32m%.10f\033[0m" % diff        
             print ""        
 
             # check calculated difference
             error_diff = float(args.error_diff)
             if diff > error_diff:
                 print "\033[1;31m=== ERROR: Difference > %.6f !!!\033[0m" % error_diff
-                print "=== Required rescale value (in testbench):             %.2f" % prescale_value_required
-                print "=== Prescale value from simulation:                    %.10f" % prescale_value
-                print "=== Prescale valuesdifference (simulated - required): \033[1;31m%.10f\033[0m" % diff        
+                print "=== Required rescale value (in testbench): \033[1;32m%.2f\033[0m" % prescale_value_required
+                print "=== Prescale value from simulation: \033[1;32m%.10f\033[0m" % prescale_value
+                print "=== Prescale values difference (simulated-required): \033[1;31m%.10f\033[0m" % diff        
                 print ""        
                 exit()
                 
             loop = loop + 1
+            if diff > diff_max:
+                diff_max = diff
                 
+    print "=== \033[1;32mSuccess !!!\033[0m Max. difference: \033[1;32m%.10f\033[0m" % diff_max
+        
     #with open('')
 if __name__ == '__main__':
     main()

@@ -3,6 +3,11 @@ import os, sys
 import argparse
 import math
 
+do_tpl_file_name = 'scripts/algo_pre_scaler_fractional_loop_test_tpl.do'
+do_file_name = 'scripts/algo_pre_scaler_fractional_loop_test.do'
+#do_tpl_file_name = 'scripts/test_tpl.do'
+#do_file_name = 'scripts/test.do'
+
 def run_command(*args):
     command = ' '.join(args)
     logging.info(">$ %s", command)
@@ -29,8 +34,6 @@ def main():
     whole_value_max = int(args.max_dec) # max. integer value of prescale factor
     nr_frac_values = 20 # MODE_SEQ_LUT in VHDL with length 20 (fraction values of prescale factor = .00, .05, ...) - floating point precision = 2
     max_loops = whole_value_max * nr_frac_values
-    print "=== Number simulations: ", max_loops
-    print "" 
     
     loop = 1
     
@@ -49,16 +52,16 @@ def main():
                 f.write(w_strg)
                     
             # replace {{sim_time}} in do file 
-            do_tpl_file = os.path.join(os.environ['PWD'], 'scripts/algo_pre_scaler_fractional_loop_test_tpl.do')
+            do_tpl_file = os.path.join(os.environ['PWD'], do_tpl_file_name)
             with open(do_tpl_file, 'r') as f:
                 r_strg = f.read()
             w_strg = r_strg.replace('{{sim_time}}', args.sim_time)
-            do_file = os.path.join(os.environ['PWD'], 'scripts/algo_pre_scaler_fractional_loop_test.do')
+            do_file = os.path.join(os.environ['PWD'], do_file_name)
             with open(do_file, 'w') as f:
                 f.write(w_strg)
                     
             # run simulation 
-            cmd_vsim = "{} -msgmode wlf -modelsimini modelsim.ini -do {}".format(args.questasim, do_file)
+            cmd_vsim = "{} -msgmode wlf -modelsimini modelsim.ini -do {}; ".format(args.questasim, do_file)
             cmd = 'bash -c "{}"'.format(cmd_vsim)
             run_command(cmd)
 
@@ -70,8 +73,8 @@ def main():
             prescale_value = float(data[2])/float(data[3])            
             diff = abs(prescale_value - prescale_value_required)
 
-            print "=== Simulation No.: ", loop
-            print "=== Prescale values difference (simulation/testbench): %.10f" % diff        
+            print "=== Simulation %d/%d [prescale value: %.2f]" % (loop, max_loops, prescale_value_required)
+            print "=== Prescale values difference (simulated - required): %.10f" % diff        
             print ""        
 
             # check calculated difference
@@ -80,7 +83,7 @@ def main():
                 print "\033[1;31m=== ERROR: Difference > %.6f !!!\033[0m" % error_diff
                 print "=== Required rescale value (in testbench):             %.2f" % prescale_value_required
                 print "=== Prescale value from simulation:                    %.10f" % prescale_value
-                print "=== Prescale values difference (simulation/testbench): \033[1;31m%.10f\033[0m" % diff        
+                print "=== Prescale valuesdifference (simulated - required): \033[1;31m%.10f\033[0m" % diff        
                 print ""        
                 exit()
                 

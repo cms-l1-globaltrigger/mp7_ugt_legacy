@@ -29,7 +29,6 @@ vmap work work
 #Top Entity the design
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd
 vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler_fractional.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler_fractional.vhd
 
 #Testbench
 vcom -93 -work work $TESTBENCH/algo_pre_scaler_fractional_tb_pkg.vhd
@@ -39,7 +38,7 @@ vcom -93 -work work $TESTBENCH/algo_pre_scaler_fractional_tb.vhd
 vsim -t 1ps work.algo_pre_scaler_fractional_TB 
 
 ##Load signals in list window
-view list
+#view list
 do $TESTBENCH/../scripts/algo_pre_scaler_fractional_list.do
 
 ##Run simulation

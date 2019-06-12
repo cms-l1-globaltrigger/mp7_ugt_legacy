@@ -5,6 +5,7 @@
 -- (for backward compatibility)
 
 -- Version-history:
+-- HB 2019-06-12: moved LUTs to algo_pre_scaler_fractional_pkg, using PRESCALER_MODE_SEQ_LEN for LUT selection, using fractional prescale values for all 3 LUTs with precision 2
 -- HB 2019-06-03: changed mode_b_sel default value
 -- HB 2019-05-31: updated for fractional prescale values (with precision 2)
 -- HB 2016-04-04: inhibit algo with factor=0 in "prescaled_algo_p" process.
@@ -69,14 +70,18 @@ begin
     fraction <= prescale_factor_int(FRACTION_WIDTH+COUNTER_WIDTH-1 downto COUNTER_WIDTH);
     factor <= prescale_factor_int(COUNTER_WIDTH-1 downto 0);
     
+-- HB 2019-06-12: using fractional prescale values for all 3 LUTs with precision 2
     sel_lut_p: process (fraction)
+        variable fraction_10, fraction_20 : natural;
     begin
         if PRESCALER_MODE_SEQ_LEN = 10 then
-            mode_seq <= MODE_SEQ_LUT_10(conv_integer(fraction)).mode;
-            mode_len <= MODE_SEQ_LUT_10(conv_integer(fraction)).length;
+            fraction_10 := conv_integer(fraction) / 10;
+            mode_seq <= MODE_SEQ_LUT_10(conv_integer(fraction_10)).mode;
+            mode_len <= MODE_SEQ_LUT_10(conv_integer(fraction_10)).length;
         elsif PRESCALER_MODE_SEQ_LEN = 20 then
-            mode_seq <= MODE_SEQ_LUT_20(conv_integer(fraction)).mode;
-            mode_len <= MODE_SEQ_LUT_20(conv_integer(fraction)).length;
+            fraction_20 := conv_integer(fraction) / 5;
+            mode_seq <= MODE_SEQ_LUT_20(conv_integer(fraction_20)).mode;
+            mode_len <= MODE_SEQ_LUT_20(conv_integer(fraction_20)).length;
         elsif PRESCALER_MODE_SEQ_LEN = 100 then
             mode_seq <= MODE_SEQ_LUT_100(conv_integer(fraction)).mode;
             mode_len <= MODE_SEQ_LUT_100(conv_integer(fraction)).length;

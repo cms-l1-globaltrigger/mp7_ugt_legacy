@@ -12,9 +12,10 @@ use ieee.std_logic_unsigned.all;
 
 package algo_pre_scaler_fractional_pkg is
 -- HB 2019-06-12: inserted for fractional prescaler mode sequence length (10, 20 or 100)
-  constant PRESCALER_MODE_SEQ_LEN : integer := 20; -- selects MODE_SEQ_LUT_20
+  constant PRESCALER_MODE_SEQ_LEN : natural := 20; -- selects MODE_SEQ_LUT_20
 
 -- Mode sequence LUTs
+-- prescale value precision 2, steps 0.05
   constant max_mode_len_20 : natural := 20;
   constant mode_seq_lut_len_20 : natural := max_mode_len_20;
   
@@ -48,6 +49,7 @@ package algo_pre_scaler_fractional_pkg is
     ( 20, X"00001")  -- .95
   );
 
+-- prescale value precision 1, steps 0.1
   constant max_mode_len_10 : natural := 10;
   constant mode_seq_lut_len_10 : natural := max_mode_len_10;
   
@@ -58,18 +60,19 @@ package algo_pre_scaler_fractional_pkg is
   type mode_seq_lut_10_array is array (0 to mode_seq_lut_len_10-1) of mode_record_10;
 
   constant MODE_SEQ_LUT_10 : mode_seq_lut_10_array:= (
-    ( 1, "1000000000"),
-    (10, "0111111111"),
-    ( 5, "0111100000"),
-    (10, "0110110111"),
-    ( 5, "0101100000"),
-    ( 2, "0100000000"),
-    ( 5, "0010100000"),
-    (10, "0001001001"),
-    ( 5, "0000100000"),
-    (10, "0000000001")
+    ( 1, "1000000000"), -- .0
+    (10, "0111111111"), -- .1
+    ( 5, "0111100000"), -- .2
+    (10, "0110110111"), -- .3
+    ( 5, "0101100000"), -- .4
+    ( 2, "0100000000"), -- .5
+    ( 5, "0010100000"), -- .6
+    (10, "0001001001"), -- .7
+    ( 5, "0000100000"), -- .8
+    (10, "0000000001")  -- .9
   );
 
+-- prescale value precision 2, steps 0.01
   constant max_mode_len_100 : natural := 100;
   constant mode_seq_lut_len_100 : natural := max_mode_len_100;
   

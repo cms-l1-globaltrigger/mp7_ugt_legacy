@@ -7,8 +7,10 @@ questasimDefaultPath = '/opt/mentor/questasim/bin/vsim' # v10.7c
 
 do_tpl_file_name = 'scripts/algo_pre_scaler_fractional_loop_test_tpl.do'
 do_file_name = 'scripts/algo_pre_scaler_fractional_loop_test.do'
-#do_tpl_file_name = 'scripts/test_tpl.do'
-#do_file_name = 'scripts/test.do'
+
+#nr_frac_values = 100 # MODE_SEQ_LUT in VHDL with length 100 (fraction values of prescale factor = .01, .02, ...) - floating point precision = 2
+#nr_frac_values = 20 # MODE_SEQ_LUT in VHDL with length 20 (fraction values of prescale factor = .00, .05, ...) - floating point precision = 2
+#nr_frac_values = 10 # MODE_SEQ_LUT in VHDL with length 10 (fraction values of prescale factor = .10, .20, ...) - floating point precision = 2
 
 def run_command(*args):
     command = ' '.join(args)
@@ -17,6 +19,7 @@ def run_command(*args):
 
 def parse():
     parser = argparse.ArgumentParser()
+    parser.add_argument('mode', help = "prescale value steps (0.1, 0.05 or 0.01")
     parser.add_argument('max_dec', help = "last prescale value in simulation runs (decimal integer) [first is 1]")
     parser.add_argument('max_deviation', help = "max. allowed deviation in percent (float, max. precision = 6) [eg.: 0.1]")
     parser.add_argument('sim_time', help = "simulator run time in us")
@@ -33,8 +36,16 @@ def main():
     print "=== Running Questa simulator for checking prescale values"
     print ""        
 
+    if float(args.mode) == 0.1:
+        nr_frac_values = 10
+        frac_factor = 10
+    elif float(args.mode) == 0.05:
+        nr_frac_values = 20
+        frac_factor = 5
+    elif float(args.mode) == 0.01:
+        nr_frac_values = 100
+        frac_factor = 1
     whole_value_max = int(args.max_dec) # max. integer value of prescale factor
-    nr_frac_values = 20 # MODE_SEQ_LUT in VHDL with length 20 (fraction values of prescale factor = .00, .05, ...) - floating point precision = 2
     max_loops = whole_value_max * nr_frac_values
     
     diff_max = 0.0
@@ -52,8 +63,8 @@ def main():
        
     for whole in range (1, whole_value_max+1):
         for frac in range (0, nr_frac_values):
-            prescale_value_required = float(whole + frac * 0.05)
-            prescale_value_tb = ("%0.2X" % (frac * 5)) + ("%0.6X" % whole)
+            prescale_value_required = float(whole + frac * float(args.mode))
+            prescale_value_tb = ("%0.2X" % (frac * frac_factor)) + ("%0.6X" % whole)
             
             # replace constant PRESCALE_FACTOR_VAL in pkg file 
             pkg_tpl_file = os.path.join(os.environ['PWD'], 'testbench/algo_pre_scaler_fractional_tb_pkg_tpl.vhd')

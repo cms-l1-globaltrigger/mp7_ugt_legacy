@@ -51,9 +51,8 @@ def main():
                 prescaler_mode_seq_len = int(result.group(1))
                 break
             
-    print prescaler_mode_seq_len
     # check PRESCALER_MODE_SEQ_LEN
-    if not (prescaler_mode_seq_len == 10 or prescaler_mode_seq_len == 20 or prescaler_mode_seq_len == 100):
+    if not (prescaler_mode_seq_len == 1 or prescaler_mode_seq_len == 10 or prescaler_mode_seq_len == 20 or prescaler_mode_seq_len == 100):
         print "\033[1;31m=== ERROR: wrong value for PRESCALER_MODE_SEQ_LEN (= %d) in '../hdl/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler_fractional_pkg.vhd' !!!\033[0m" % prescaler_mode_seq_len
         exit()
         
@@ -81,6 +80,7 @@ def main():
 
     diff_max = 0.0
     diff_percent_max = 0.0
+    prescale_value_diff_percent_max = 0.0
     loop = 1
     
     for whole in range (1, whole_value_max+1):

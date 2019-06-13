@@ -35,7 +35,8 @@ entity algo_pre_scaler is
       -- output for simulation
       index_sim : out integer := 0;
       prescaled_algo_cnt_sim : out natural := 0;
-      algo_cnt_sim : out natural := 0  
+      algo_cnt_sim : out natural := 0;  
+      fraction_sim : out boolean 
    );
 end algo_pre_scaler;
 
@@ -54,7 +55,7 @@ architecture rtl of algo_pre_scaler is
 
 begin
 
-    assert (PRESCALER_MODE_SEQ_LEN = 10 or PRESCALER_MODE_SEQ_LEN = 20 or PRESCALER_MODE_SEQ_LEN = 100) report 
+    assert (PRESCALER_MODE_SEQ_LEN = 1 or PRESCALER_MODE_SEQ_LEN = 10 or PRESCALER_MODE_SEQ_LEN = 20 or PRESCALER_MODE_SEQ_LEN = 100) report 
         "Wrong value for PRESCALER_MODE_SEQ_LEN = " & integer'image(PRESCALER_MODE_SEQ_LEN) 
     severity failure;        
 
@@ -75,42 +76,68 @@ begin
     factor <= prescale_factor_int(COUNTER_WIDTH-1 downto 0);
     
 -- HB 2019-06-12: using fractional prescale values for all 3 LUTs with precision 2
-    sel_lut_p: process (fraction)
-        variable fraction_10, fraction_20 : natural;
-    begin
-        if PRESCALER_MODE_SEQ_LEN = 10 then
-            fraction_10 := conv_integer(fraction) / 10;
-            mode_seq <= MODE_SEQ_LUT_10(conv_integer(fraction_10)).mode;
-            mode_len <= MODE_SEQ_LUT_10(conv_integer(fraction_10)).length;
-        elsif PRESCALER_MODE_SEQ_LEN = 20 then
-            fraction_20 := conv_integer(fraction) / 5;
-            mode_seq <= MODE_SEQ_LUT_20(conv_integer(fraction_20)).mode;
-            mode_len <= MODE_SEQ_LUT_20(conv_integer(fraction_20)).length;
-        elsif PRESCALER_MODE_SEQ_LEN = 100 then
-            mode_seq <= MODE_SEQ_LUT_100(conv_integer(fraction)).mode;
-            mode_len <= MODE_SEQ_LUT_100(conv_integer(fraction)).length;
-        end if;
-    end process sel_lut_p;
+    sel_fraction_i: if PRESCALER_MODE_SEQ_LEN /= 1 generate
+        sel_lut_p: process (fraction)
+            variable fraction_10, fraction_20 : natural;
+        begin
+            if PRESCALER_MODE_SEQ_LEN = 10 then
+                fraction_10 := conv_integer(fraction) / 10;
+                mode_seq <= MODE_SEQ_LUT_10(conv_integer(fraction_10)).mode;
+                mode_len <= MODE_SEQ_LUT_10(conv_integer(fraction_10)).length;
+            elsif PRESCALER_MODE_SEQ_LEN = 20 then
+                fraction_20 := conv_integer(fraction) / 5;
+                mode_seq <= MODE_SEQ_LUT_20(conv_integer(fraction_20)).mode;
+                mode_len <= MODE_SEQ_LUT_20(conv_integer(fraction_20)).length;
+            elsif PRESCALER_MODE_SEQ_LEN = 100 then
+                mode_seq <= MODE_SEQ_LUT_100(conv_integer(fraction)).mode;
+                mode_len <= MODE_SEQ_LUT_100(conv_integer(fraction)).length;
+            end if;
+        end process sel_lut_p;
+        
+        mode_sel_b_p: process (clk, sres_counter, update_factor_pulse, mode_seq, mode_len, algo_i, limit)
+            variable index : integer := 0;
+        begin
+            if clk'event and clk = '1' then
+                if sres_counter = '1' or update_factor_pulse = '1' then
+                    index := 0;
+                elsif (mode_len = index and limit = '1' and algo_i = '1') then
+                    index := 0;
+                    mode_b_sel <= mode_seq(index);
+                    index := index + 1;
+                elsif (mode_len >= index and limit = '1' and algo_i = '1') then
+                    mode_b_sel <= mode_seq(index);
+                    index := index + 1;
+                end if;
+                if SIM then
+                    index_sim <= index - 1;
+                end if;
+            end if;
+        end process mode_sel_b_p;
+        
+        compare_p: process (clk, counter, factor)
+        begin
+            if clk'event and clk = '0' then 
+                if (mode_b_sel = '1' and counter+1 = factor) then
+                    limit <= '1';
+                elsif (mode_b_sel = '0' and counter+1 = factor+1) then
+                    limit <= '1';
+                else
+                    limit <= '0';
+                end if;
+            end if;
+        end process compare_p;
+    end generate sel_fraction_i;
     
-    mode_sel_b_p: process (clk, sres_counter, update_factor_pulse, mode_seq, mode_len, algo_i, limit)
-        variable index : integer := 0;
-    begin
-        if clk'event and clk = '1' then
-            if sres_counter = '1' or update_factor_pulse = '1' then
-                index := 0;
-            elsif (mode_len = index and limit = '1' and algo_i = '1') then
-                index := 0;
-                mode_b_sel <= mode_seq(index);
-                index := index + 1;
-            elsif (mode_len >= index and limit = '1' and algo_i = '1') then
-                mode_b_sel <= mode_seq(index);
-                index := index + 1;
+    sel_integer_i: if PRESCALER_MODE_SEQ_LEN = 1 generate
+        compare_p: process (counter, factor)
+        begin
+            if (counter+1 = factor) then
+                limit <= '1';
+            else
+                limit <= '0';
             end if;
-            if SIM then
-                index_sim <= index - 1;
-            end if;
-        end if;
-    end process mode_sel_b_p;
+        end process compare_p;
+    end generate sel_integer_i;
     
     counter_p: process (clk, sres_counter, update_factor_pulse, algo_i, limit)
     begin
@@ -123,20 +150,7 @@ begin
         end if;
     end process counter_p;
     
-    compare_p: process (clk, counter, factor)
-    begin
-        if clk'event and clk = '0' then 
-            if (mode_b_sel = '1' and counter+1 = factor) then
-                limit <= '1';
-            elsif (mode_b_sel = '0' and counter+1 = factor+1) then
-                limit <= '1';
-            else
-                limit <= '0';
-            end if;
-        end if;
-    end process compare_p;
-
-    prescaled_algo_p: process (clk, algo_i, limit, factor, sres_counter, update_factor_pulse)
+    prescaled_algo_p: process (clk, algo_i, limit)
         variable algo_cnt : natural := 0;
     begin
         if clk'event and clk = '0' then 
@@ -170,5 +184,6 @@ begin
             end if;
         end process prescaled_algo_cnt_p; 
     end generate prescaled_algo_cnt_i;
+    
 end architecture rtl;
 

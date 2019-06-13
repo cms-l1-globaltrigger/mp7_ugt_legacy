@@ -54,6 +54,10 @@ architecture rtl of algo_pre_scaler is
 
 begin
 
+    assert (PRESCALER_MODE_SEQ_LEN = 10 or PRESCALER_MODE_SEQ_LEN = 20 or PRESCALER_MODE_SEQ_LEN = 100) report 
+        "Wrong value for PRESCALER_MODE_SEQ_LEN = " & integer'image(PRESCALER_MODE_SEQ_LEN) 
+    severity failure;        
+
     prescale_factor_update_i: entity work.update_process
     generic map(
         WIDTH => FRACTION_WIDTH+COUNTER_WIDTH,

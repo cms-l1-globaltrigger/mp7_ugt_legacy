@@ -11,7 +11,7 @@ use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
 package algo_pre_scaler_fractional_pkg is
--- HB 2019-06-12: inserted for fractional prescaler mode sequence length (10, 20 or 100)
+-- HB 2019-06-12: inserted for fractional prescaler mode sequence length (valid values: 10, 20 or 100)
   constant PRESCALER_MODE_SEQ_LEN : natural := 20; -- selects MODE_SEQ_LUT_20
 
 -- Mode sequence LUTs

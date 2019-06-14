@@ -35,8 +35,7 @@ entity algo_pre_scaler is
       -- output for simulation
       index_sim : out integer := 0;
       prescaled_algo_cnt_sim : out natural := 0;
-      algo_cnt_sim : out natural := 0;  
-      fraction_sim : out boolean 
+      algo_cnt_sim : out natural := 0  
    );
 end algo_pre_scaler;
 
@@ -77,6 +76,7 @@ begin
     
 -- HB 2019-06-12: using fractional prescale values for all 3 LUTs with precision 2
     sel_fraction_i: if PRESCALER_MODE_SEQ_LEN /= 1 generate
+-- Selection of LUT
         sel_lut_p: process (fraction)
             variable fraction_10, fraction_20 : natural;
         begin
@@ -94,7 +94,8 @@ begin
             end if;
         end process sel_lut_p;
         
-        mode_sel_b_p: process (clk, sres_counter, update_factor_pulse, mode_seq, mode_len, algo_i, limit)
+-- Switching between mode A and B depending on mode sequences and mode length
+       mode_sel_b_p: process (clk, sres_counter, update_factor_pulse, mode_seq, mode_len, algo_i, limit)
             variable index : integer := 0;
         begin
             if clk'event and clk = '1' then
@@ -114,6 +115,7 @@ begin
             end if;
         end process mode_sel_b_p;
         
+-- Comparing counter and factor depending on mode
         compare_p: process (clk, counter, factor)
         begin
             if clk'event and clk = '0' then 
@@ -129,6 +131,7 @@ begin
     end generate sel_fraction_i;
     
     sel_integer_i: if PRESCALER_MODE_SEQ_LEN = 1 generate
+-- Comparing counter and factor (if only integer prescale values are taken)
         compare_p: process (counter, factor)
         begin
             if (counter+1 = factor) then
@@ -139,6 +142,7 @@ begin
         end process compare_p;
     end generate sel_integer_i;
     
+-- Counting algos
     counter_p: process (clk, sres_counter, update_factor_pulse, algo_i, limit)
     begin
         if clk'event and clk = '1' then
@@ -150,6 +154,7 @@ begin
         end if;
     end process counter_p;
     
+-- Generating prescaled algos (prescale factor value = 0 => no prescaled algos)
     prescaled_algo_p: process (clk, algo_i, limit)
         variable algo_cnt : natural := 0;
     begin
@@ -164,6 +169,7 @@ begin
         end if;
     end process prescaled_algo_p; 
     
+-- Generating signals for simulation
     prescaled_algo_cnt_i: if SIM generate
         prescaled_algo_cnt_p: process (clk, algo_i, limit, sres_counter, update_factor_pulse)
             variable algo_cnt : natural := 0;

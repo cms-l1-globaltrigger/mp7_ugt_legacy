@@ -136,6 +136,7 @@ type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic
 type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.iso_high-d_s_i_muon.iso_low+1))-1 downto 0);
 
 type muon_templates_boolean_array is array (1 to NR_MUON_TEMPLATES) of boolean;
+type calo_templates_natural_array is array (1 to NR_MUON_TEMPLATES) of natural;
 type muon_templates_string_array is array (1 to NR_MUON_TEMPLATES) of string(1 to 3);
 
 -- HB 2014-04-15: types for muon_charge_correlations.vhd
@@ -219,6 +220,7 @@ type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO
 constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
 type calo_templates_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 type calo_templates_boolean_array is array (1 to NR_CALO_TEMPLATES) of boolean;
+type calo_templates_natural_array is array (1 to NR_CALO_TEMPLATES) of natural;
 constant MAX_CALO_ISO_BITS : positive range 1 to 2 := max((D_S_I_EG_V2.iso_high-D_S_I_EG_V2.iso_low+1), (D_S_I_TAU_V2.iso_high-D_S_I_TAU_V2.iso_low+1));
 type calo_templates_iso_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 

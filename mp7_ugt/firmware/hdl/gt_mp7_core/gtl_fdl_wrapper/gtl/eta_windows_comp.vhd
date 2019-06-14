@@ -3,7 +3,7 @@
 -- Comparators for pseudorapidity
 
 -- Version history:
--- HB 2019-06-04: extended to five eta windows
+-- HB 2019-06-04: extended to "five eta cuts".
 
 library ieee;
 use ieee.std_logic_1164.all;

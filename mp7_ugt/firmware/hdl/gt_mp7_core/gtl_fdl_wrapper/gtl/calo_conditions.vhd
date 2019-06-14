@@ -3,6 +3,7 @@
 -- Condition module for calorimeter object types (eg, jet and tau) conditions.
 
 -- Version history:
+-- HB 2019-06-14: updated for "five eta cuts".
 -- HB 2019-05-03: used instances "calo_cuts" and "calo_cond_matrix" (proposal Dinyar/Hannes) to reduce resources. Inserted instance for twobody_pt.
 -- HB 2017-09-05: inserted slice ranges in generic for correct use of object slices.
 -- HB 2017-08-28: increased length of vector signals (to 4096).
@@ -33,12 +34,17 @@ entity calo_conditions is
         et_ge_mode: boolean;
         obj_type : natural := EG_TYPE;
         et_thresholds: calo_templates_array;
-        eta_full_range : calo_templates_boolean_array;
+        nr_eta_windows : calo_templates_natural_array;
         eta_w1_upper_limits: calo_templates_array;
         eta_w1_lower_limits: calo_templates_array;
-        eta_w2_ignore : calo_templates_boolean_array;
         eta_w2_upper_limits: calo_templates_array;
         eta_w2_lower_limits: calo_templates_array;
+        eta_w3_upper_limits: calo_templates_array;
+        eta_w3_lower_limits: calo_templates_array;
+        eta_w4_upper_limits: calo_templates_array;
+        eta_w4_lower_limits: calo_templates_array;
+        eta_w5_upper_limits: calo_templates_array;
+        eta_w5_lower_limits: calo_templates_array;
         phi_full_range : calo_templates_boolean_array;
         phi_w1_upper_limits: calo_templates_array;
         phi_w1_lower_limits: calo_templates_array;
@@ -109,8 +115,7 @@ begin
             generic map(
                 calo_object_slice_1_low, calo_object_slice_1_high,
                 calo_object_slice_2_low, calo_object_slice_2_high,
-                nr_templates,
-                
+                nr_templates,                
                 twobody_pt_cut,
                 pt_width, 
                 pt_sq_threshold_vector,
@@ -131,8 +136,12 @@ begin
             calo_object_slice_4_low, calo_object_slice_4_high,
             nr_templates, et_ge_mode, obj_type,
             et_thresholds,
-            eta_full_range, eta_w1_upper_limits, eta_w1_lower_limits,
-            eta_w2_ignore, eta_w2_upper_limits, eta_w2_lower_limits,
+            nr_eta_windows,
+            eta_w1_upper_limits, eta_w1_lower_limits,
+            eta_w2_upper_limits, eta_w2_lower_limits,
+            eta_w3_upper_limits, eta_w3_lower_limits,
+            eta_w4_upper_limits, eta_w4_lower_limits,
+            eta_w5_upper_limits, eta_w5_lower_limits,
             phi_full_range, phi_w1_upper_limits, phi_w1_lower_limits,
             phi_w2_ignore, phi_w2_upper_limits, phi_w2_lower_limits,
             iso_luts

@@ -11,9 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - algo_pre_scaler_fractional.vhd in fdl v1.2.3 for use of floating point prescale values with precision 2
+- algo_pre_scaler_fractional_pkg.vhd for mode sequence LUTs
 - calo_cond_matrix.vhd, calo_cond_matrix_orm.vhd, calo_obj_cuts.vhd, muon_cond_matrix.vhd and muon_obj_cuts.vhd (Dinyar/Hannes proposal for calo quad conditions) in gtl v1.7.0
 - run_simulation_questa.py to ../mp7_ugt/scripts for simulation
 - run_compile_simlib.py to ../mp7_ugt/scripts for generating Vivado simulation libs for Questa
+- run_simulation_algo_prescaler_fractional.py to ../mp7_ugt/firmware/sim/scripts for simulating algo_pre_scaler_fractional_tb.vhd in a loop
 
 ### Changed
 - fdl_module.vhd and algo_slice.vhd for algo_pre_scaler_fractional.vhd in fdl v1.2.3

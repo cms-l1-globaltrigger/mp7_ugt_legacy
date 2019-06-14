@@ -65,11 +65,8 @@ begin
 
     process
     begin
--- 	wait for LHC_CLK_PERIOD; 
---         sres_counter <= '1';
 	wait for LHC_CLK_PERIOD; 
---         sres_counter <= '0';
-        prescale_factor <= PRESCALE_FACTOR_VAL;
+    prescale_factor <= PRESCALE_FACTOR_VAL;
 	wait for 5*LHC_CLK_PERIOD;
 	request_update_factor_pulse <= '1';
 	wait for LHC_CLK_PERIOD;
@@ -83,8 +80,6 @@ begin
 
  ------------------- Instantiate  modules  -----------------
 
---     prescale_value_calc <= t_prescale_value(algo_cnt_sim) / t_prescale_value(prescaled_algo_cnt_sim);
-    
     dut: entity work.algo_pre_scaler
         generic map(COUNTER_WIDTH, PRESCALE_FACTOR_INIT, FRACTION_WIDTH, SIM)
         port map(

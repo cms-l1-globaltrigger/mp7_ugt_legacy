@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - modified calo, muon and correlation modules for "five eta cuts"
+- fdl version to v1.3.0 (v1.2.3 was not correct)
 
 ## [mp7_ugt_v1_8_1] - 2019-06-03
 ### Comment

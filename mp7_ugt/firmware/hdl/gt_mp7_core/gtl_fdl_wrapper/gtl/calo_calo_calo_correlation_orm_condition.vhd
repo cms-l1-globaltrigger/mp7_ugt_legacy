@@ -2,6 +2,7 @@
 -- Description:
 
 -- Version history:
+-- HB 2019-06-17: updated for "five eta cuts".
 -- HB 2019-05-06: updated instances.
 -- HB 2019-05-06: renamed from calo_calo_calo_correlation_orm_condition_v3 to calo_calo_calo_correlation_orm_condition.
 -- HB 2017-07-04: changed from calo_calo_calo_correlation_orm_condition to calo_calo_calo_correlation_orm_condition_v2 for correct use of different object slices. 
@@ -38,12 +39,17 @@ entity calo_calo_calo_correlation_orm_condition is
         et_ge_mode_calo1: boolean;
         obj_type_calo1: natural := EG_TYPE;
         et_threshold_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_full_range_calo1: boolean;
+        nr_eta_windows_calo1 : natural;
         eta_w1_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_w1_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_ignore_calo1: boolean;
         eta_w2_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_w2_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w3_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w3_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w4_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w4_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w5_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w5_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_full_range_calo1: boolean;
         phi_w1_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w1_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
@@ -57,12 +63,17 @@ entity calo_calo_calo_correlation_orm_condition is
         et_ge_mode_calo2: boolean;
         obj_type_calo2: natural := EG_TYPE;
         et_threshold_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_full_range_calo2: boolean;
+        nr_eta_windows_calo2 : natural;
         eta_w1_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_w1_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_ignore_calo2: boolean;
         eta_w2_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_w2_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w3_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w3_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w4_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w4_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w5_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w5_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_full_range_calo2: boolean;
         phi_w1_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w1_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
@@ -76,12 +87,17 @@ entity calo_calo_calo_correlation_orm_condition is
         et_ge_mode_calo3: boolean;
         obj_type_calo3: natural := JET_TYPE;
         et_threshold_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_full_range_calo3: boolean;
+        nr_eta_windows_calo3 : natural;
         eta_w1_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_w1_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_ignore_calo3: boolean;
         eta_w2_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_w2_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w3_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w3_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w4_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w4_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w5_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w5_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_full_range_calo3: boolean;
         phi_w1_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w1_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
@@ -173,12 +189,17 @@ begin
         calo1_comp_i: entity work.calo_comparators
             generic map(et_ge_mode_calo1, obj_type_calo1,
                 et_threshold_calo1,
-                eta_full_range_calo1,
+                nr_eta_windows_calo1,
                 eta_w1_upper_limit_calo1,
                 eta_w1_lower_limit_calo1,
-                eta_w2_ignore_calo1,
                 eta_w2_upper_limit_calo1,
                 eta_w2_lower_limit_calo1,
+                eta_w3_upper_limit_calo1,
+                eta_w3_lower_limit_calo1,
+                eta_w4_upper_limit_calo1,
+                eta_w4_lower_limit_calo1,
+                eta_w5_upper_limit_calo1,
+                eta_w5_lower_limit_calo1,
                 phi_full_range_calo1,
                 phi_w1_upper_limit_calo1,
                 phi_w1_lower_limit_calo1,
@@ -195,12 +216,17 @@ begin
             calo2_comp_i: entity work.calo_comparators
                 generic map(et_ge_mode_calo2, obj_type_calo2,
                     et_threshold_calo2,
-                    eta_full_range_calo2,
+                    nr_eta_windows_calo2,
                     eta_w1_upper_limit_calo2,
                     eta_w1_lower_limit_calo2,
-                    eta_w2_ignore_calo2,
                     eta_w2_upper_limit_calo2,
                     eta_w2_lower_limit_calo2,
+                    eta_w3_upper_limit_calo2,
+                    eta_w3_lower_limit_calo2,
+                    eta_w4_upper_limit_calo2,
+                    eta_w4_lower_limit_calo2,
+                    eta_w5_upper_limit_calo2,
+                    eta_w5_lower_limit_calo2,
                     phi_full_range_calo2,
                     phi_w1_upper_limit_calo2,
                     phi_w1_lower_limit_calo2,
@@ -217,12 +243,17 @@ begin
         calo3_comp_i: entity work.calo_comparators
             generic map(et_ge_mode_calo3, obj_type_calo3,
                 et_threshold_calo3,
-                eta_full_range_calo3,
+                nr_eta_windows_calo3,
                 eta_w1_upper_limit_calo3,
                 eta_w1_lower_limit_calo3,
-                eta_w2_ignore_calo3,
                 eta_w2_upper_limit_calo3,
                 eta_w2_lower_limit_calo3,
+                eta_w3_upper_limit_calo3,
+                eta_w3_lower_limit_calo3,
+                eta_w4_upper_limit_calo3,
+                eta_w4_lower_limit_calo3,
+                eta_w5_upper_limit_calo3,
+                eta_w5_lower_limit_calo3,
                 phi_full_range_calo3,
                 phi_w1_upper_limit_calo3,
                 phi_w1_lower_limit_calo3,

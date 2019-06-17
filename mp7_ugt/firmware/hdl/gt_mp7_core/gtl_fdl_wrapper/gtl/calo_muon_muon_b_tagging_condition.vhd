@@ -3,6 +3,7 @@
 -- Correlation Condition module for "b-tagging" (jet-mu-mu).
 
 -- Version history:
+-- HB 2019-06-17: updated for "five eta cuts".
 -- HB 2019-05-06: updated instances.
 -- HB 2017-02-07: used dr_calculator_v2.
 -- HB 2017-02-03: first design with dr_cut only
@@ -14,39 +15,49 @@ use ieee.std_logic_arith.all;
 use work.gtl_pkg.all;
 
 entity calo_muon_muon_b_tagging_condition is
-     generic(
+    generic(
 
-	dr_cut: boolean := true;
+        dr_cut: boolean := true;
 
-	calo_object_low: natural;
+        calo_object_low: natural;
         calo_object_high: natural;
         et_ge_mode_calo: boolean;
         obj_type_calo: natural := EG_TYPE;
         et_threshold_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_full_range_calo: boolean;
+        nr_eta_windows_calo: natural;
         eta_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_ignore_calo: boolean;
         eta_w2_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w3_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w3_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w4_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w4_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w5_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w5_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_full_range_calo: boolean;
         phi_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w2_ignore_calo: boolean;
         phi_w2_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-	iso_lut_calo: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
+        iso_lut_calo: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
-	muon_object_low: natural;
+        muon_object_low: natural;
         muon_object_high: natural;
         pt_ge_mode_muon_1: boolean;
         pt_threshold_muon_1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
-        eta_full_range_muon_1: boolean;
-        eta_w1_upper_limit_muon_1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
-        eta_w1_lower_limit_muon_1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
-        eta_w2_ignore_muon_1: boolean;
-        eta_w2_upper_limit_muon_1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
-        eta_w2_lower_limit_muon_1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        nr_eta_windows_muon1: natural;
+        eta_w1_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w1_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w2_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w2_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w3_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w3_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w4_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w4_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w5_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w5_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         phi_full_range_muon_1: boolean;
         phi_w1_upper_limit_muon_1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         phi_w1_lower_limit_muon_1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
@@ -59,12 +70,17 @@ entity calo_muon_muon_b_tagging_condition is
 
         pt_ge_mode_muon_2: boolean;
         pt_threshold_muon_2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
-        eta_full_range_muon_2: boolean;
-        eta_w1_upper_limit_muon_2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
-        eta_w1_lower_limit_muon_2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
-        eta_w2_ignore_muon_2: boolean;
-        eta_w2_upper_limit_muon_2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
-        eta_w2_lower_limit_muon_2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        nr_eta_windows_muon2: natural;
+        eta_w1_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w1_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w2_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w2_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w3_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w3_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w4_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w4_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w5_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        eta_w5_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         phi_full_range_muon_2: boolean;
         phi_w1_upper_limit_muon_2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         phi_w1_lower_limit_muon_2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
@@ -78,8 +94,8 @@ entity calo_muon_muon_b_tagging_condition is
         dr_upper_limit: dr_squared_range_real;
         dr_lower_limit: dr_squared_range_real;
 
-	DETA_DPHI_VECTOR_WIDTH: positive ;
-	DETA_DPHI_PRECISION: positive
+        DETA_DPHI_VECTOR_WIDTH: positive ;
+        DETA_DPHI_PRECISION: positive
 
     );
     port(
@@ -158,12 +174,17 @@ begin
 	calo_comp_i: entity work.calo_comparators
 	    generic map(et_ge_mode_calo, obj_type_calo,
                 et_threshold_calo,
-                eta_full_range_calo,
+                nr_eta_windows_calo,
                 eta_w1_upper_limit_calo,
                 eta_w1_lower_limit_calo,
-                eta_w2_ignore_calo,
                 eta_w2_upper_limit_calo,
                 eta_w2_lower_limit_calo,
+                eta_w3_upper_limit_calo,
+                eta_w3_lower_limit_calo,
+                eta_w4_upper_limit_calo,
+                eta_w4_lower_limit_calo,
+                eta_w5_upper_limit_calo,
+                eta_w5_lower_limit_calo,
                 phi_full_range_calo,
                 phi_w1_upper_limit_calo,
                 phi_w1_lower_limit_calo,
@@ -180,12 +201,17 @@ begin
         muon_1_comp_i: entity work.muon_comparators
             generic map(pt_ge_mode_muon_1,
                 pt_threshold_muon_1(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low downto 0),
-                eta_full_range_muon_1,
-                eta_w1_upper_limit_muon_1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w1_lower_limit_muon_1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w2_ignore_muon_1,
-                eta_w2_upper_limit_muon_1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w2_lower_limit_muon_1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                nr_eta_windows_muon1,
+                eta_w1_upper_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w1_lower_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w2_upper_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w2_lower_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w3_upper_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w3_lower_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w4_upper_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w4_lower_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w5_upper_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w5_lower_limit_muon1(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
                 phi_full_range_muon_1,
                 phi_w1_upper_limit_muon_1(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
                 phi_w1_lower_limit_muon_1(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
@@ -203,12 +229,17 @@ begin
         muon_2_comp_i: entity work.muon_comparators
             generic map(pt_ge_mode_muon_2,
                 pt_threshold_muon_2(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low downto 0),
-                eta_full_range_muon_2,
-                eta_w1_upper_limit_muon_2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w1_lower_limit_muon_2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w2_ignore_muon_2,
-                eta_w2_upper_limit_muon_2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w2_lower_limit_muon_2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                nr_eta_windows_muon2,
+                eta_w1_upper_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w1_lower_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w2_upper_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w2_lower_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w3_upper_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w3_lower_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w4_upper_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w4_lower_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w5_upper_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
+                eta_w5_lower_limit_muon2(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
                 phi_full_range_muon_2,
                 phi_w1_upper_limit_muon_2(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
                 phi_w1_lower_limit_muon_2(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),

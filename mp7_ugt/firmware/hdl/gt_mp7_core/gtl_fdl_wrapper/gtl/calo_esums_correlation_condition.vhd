@@ -3,6 +3,7 @@
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and esums (etm, etm_hf and htm).
 
 -- Version history:
+-- HB 2019-06-17: updated for "five eta cuts".
 -- HB 2019-05-06: updated instances.
 -- HB 2019-05-06: renamed from calo_esums_correlation_condition_v3 to calo_esums_correlation_condition.
 -- HB 2017-10-02: based on calo_esums_correlation_condition_v2 - used limit vectors for correlation cuts (mass_calculator_v2 and twobody_pt_calculator_v2 used).
@@ -34,12 +35,17 @@ entity calo_esums_correlation_condition is
         et_ge_mode_calo: boolean;
         obj_type_calo: natural := EG_TYPE;
         et_threshold_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_full_range_calo: boolean;
+        nr_eta_windows_calo : natural;
         eta_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_ignore_calo: boolean;
         eta_w2_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w3_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w3_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w4_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w4_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w5_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w5_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_full_range_calo: boolean;
         phi_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
@@ -180,12 +186,17 @@ begin
         obj_templ1_comp_i: entity work.calo_comparators
             generic map(et_ge_mode_calo, obj_type_calo,
                 et_threshold_calo,
-                eta_full_range_calo,
+                nr_eta_windows_calo,
                 eta_w1_upper_limit_calo,
                 eta_w1_lower_limit_calo,
-                eta_w2_ignore_calo,
                 eta_w2_upper_limit_calo,
                 eta_w2_lower_limit_calo,
+                eta_w3_upper_limit_calo,
+                eta_w3_lower_limit_calo,
+                eta_w4_upper_limit_calo,
+                eta_w4_lower_limit_calo,
+                eta_w5_upper_limit_calo,
+                eta_w5_lower_limit_calo,
                 phi_full_range_calo,
                 phi_w1_upper_limit_calo,
                 phi_w1_lower_limit_calo,

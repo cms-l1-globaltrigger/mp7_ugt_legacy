@@ -124,7 +124,8 @@ begin
             eta_w5_lower_limit(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0)
         )
         port map(
-            eta => eta(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+--             eta => eta(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
+            eta => eta(D_S_I_MUON.eta_high downto D_S_I_MUON.eta_low),
             eta_comp_o => eta_comp
         );
 

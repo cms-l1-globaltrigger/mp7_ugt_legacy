@@ -195,7 +195,7 @@ class Module(object):#module class and nessesary information
 
         uGTalgosPath = os.path.abspath(os.path.join(sim_dir, '..'))
         src_dir = os.path.join(menu_path, 'vhdl/module_%d/src' % self._id)
-        print "src_dir: ",src_dir
+        #print "src_dir: ",src_dir
         
         replace_map = {
             '{{algo_index}}': read_file(os.path.join(src_dir, 'algo_index.vhd')),

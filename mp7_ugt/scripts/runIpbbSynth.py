@@ -104,31 +104,30 @@ def replace_vhdl_templates(vhdl_snippets_dir, src_fw_dir, dest_fw_dir):
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('vivado', type=vivado_t, help="xilinx vivado version to run, eg. '2018.2'")
-    parser.add_argument('--ipbb', metavar='<version>', required=True, type=ipbb_version_t, help="IPBus builder version [tag] (eg. 0.4.3) [is required]")
+    parser.add_argument('vivado', type=vivado_t, help="xilinx vivado version to run, eg. '2018.3'")
+    parser.add_argument('ipbb', type=ipbb_version_t, help="IPBus builder version [tag] (eg. 0.4.3)")
+    parser.add_argument('mp7url', help="URL of MP7 firmware repo")
+    parser.add_argument('tag', help="MP7 firmware repo: tag name")
+    parser.add_argument('mp7tag', help="MP7 firmware repo: tag or branch for 'ipbb add'")
+    parser.add_argument('ugturl', help="URL of ugt firmware repo")
+    parser.add_argument('ugt', help='ugt firmware repo: tag or branch name')
+    parser.add_argument('menutag', help="L1Menu repository tag (eg. 'master')")
+    parser.add_argument('menudir', help="L1Menu repository directory (eg. 'herbberg/l1menus')")
+    parser.add_argument('menuname', help="L1Menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')")
+    parser.add_argument('--build', metavar='<version>', type=tb.build_t, help='menu build version (eg. 0x1001)')
     parser.add_argument('--ipburl', metavar='<path>', default=DefaultGitlabUrlIPB, help="URL of IPB firmware repo")
     parser.add_argument('-i', '--ipb', metavar='<tag>', default='master', help="IPBus firmware repo: tag or branch name (default is 'master')")
-    parser.add_argument('--mp7url', metavar='<path>', required=True, help="URL of MP7 firmware repo")
-    parser.add_argument('-t', '--tag', metavar='<tag>', required=True, help="MP7 firmware repo: tag name [is required]")
-    parser.add_argument('--mp7tag', metavar='<tag>', required=True, help="MP7 firmware repo: tag or branch for 'ipbb add' [is required]")
-    parser.add_argument('--ugturl', metavar='<path>', required=True, help="URL of ugt firmware repo")
-    parser.add_argument('-u', '--ugt', metavar='<tag>', required=True, help='ugt firmware repo: tag or branch name [is required]')
     parser.add_argument('--board', metavar='<type>', default=DefaultBoardType, choices=BoardAliases.keys(), help="set board type (default is {})".format(DefaultBoardType))
     parser.add_argument('-p', '--path', metavar='<path>', default=DefaultFirmwareDir, type=os.path.abspath, help="fw build path (default is {})".format(DefaultFirmwareDir))
-    parser.add_argument('--menutag', required=True, help="L1Menu repository tag (eg. 'master') [is required]")
-    parser.add_argument('--menudir', required=True, help="L1Menu repository directory (eg. 'herbberg/l1menus')[is required]")
-    parser.add_argument('--menuname', required=True, help="L1Menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')[is required]")
-    parser.add_argument('-b', '--build', metavar='<version>', required=True, type=tb.build_t, help='menu build version (eg. 0x1001) [is required]')
-    parser.add_argument('--sim', action='store_true', help='runnig simulation with Questa simulator')
-    parser.add_argument('--simmp7path', metavar='<tag>', help="local MP7 firmware repo")
-    parser.add_argument('--simmenu', metavar = 'path', help = 'local menu folder path [is required]', type = os.path.abspath)
-    parser.add_argument('--testvector', metavar = 'path', help = 'testvector file path')
+    parser.add_argument('--sim', action='store_true', help='running simulation with Questa simulator (before synthesis)')
+    parser.add_argument('--simmp7path', metavar='<tag>', help="local MP7 firmware repo [is required if sim is set]")
+    parser.add_argument('--questasim', metavar='<version>', help = "Questasim version [is required if sim is set]")
+    parser.add_argument('--questasimlibs', metavar='<path>', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}')".format(DefaultQuestaSimLibsName))
+    #parser.add_argument('--simmenu', metavar = 'path', help = 'menu name')
+    parser.add_argument('--output', metavar = '<path>', help = '', type = os.path.abspath)
     parser.add_argument('--view-wave', action = 'store_true', help = "shows the waveform")
     parser.add_argument('--wlf', action = 'store_true', help = "no console transcript info, warning and error messages (transcript output to vsim.wlf)")
     parser.add_argument('-v', '--verbose', action = 'store_const', const = logging.DEBUG, help = "enables debug prints to console", default = logging.INFO)
-    parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
-    parser.add_argument('--questasim', help = "Questasim version")
-    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}')".format(DefaultQuestaSimLibsName))
     return parser.parse_args()
 
 def main():
@@ -145,15 +144,6 @@ def main():
     if not vivado_base_dir:
         raise RuntimeError("Environment variable 'VIVADO_BASE_DIR' not set. Set with: 'export VIVADO_BASE_DIR=...'")
     
-    # Runnig simulation with Questa simulator, if args.sim is set    
-    if args.sim:
-        logging.info("===========================================================================")
-        logging.info("running simulation with Questa ...")
-        run_simulation_questa(args.simmp7path, args.simmenu, args.testvector, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
-    else:
-        logging.info("===========================================================================")
-        logging.info("no simulation required ...")
-                
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
     
@@ -166,6 +156,16 @@ def main():
     if os.path.isdir(ipbb_dir):
         raise RuntimeError("build area alredy exists: {}".format(ipbb_dir))
     
+    # Runnig simulation with Questa simulator, if args.sim is set    
+    if args.sim:
+        simmenu = args.menuname
+        logging.info("===========================================================================")
+        logging.info("running simulation with Questa ...")
+        run_simulation_questa(args.simmp7path, simmenu, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
+    else:
+        logging.info("===========================================================================")
+        logging.info("no simulation required ...")
+                
     ipbb_version = args.ipbb
     ipbb_version_path = os.path.join(os.getenv("HOME"),"ipbb-{}".format(ipbb_version))
     

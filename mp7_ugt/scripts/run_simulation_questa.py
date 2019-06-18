@@ -28,6 +28,10 @@ error_red = ("\033[1;31m ERROR  \033[0m")
 
 #reset = "\033[0m"
 
+vhdl_snippets_names = ['algo_index', 'gtl_module_instances', 'gtl_module_signals', 'ugt_constants']
+
+url_menu_default = 'https://raw.githubusercontent.com/herbberg/l1menus/master'
+
 DO_FILE = 'gtl_fdl_wrapper.do'
 TB_FILE_TPL = 'testbench/templates/gtl_fdl_wrapper_tb_tpl.vhd'
 TB_FILE = 'testbench/gtl_fdl_wrapper_tb.vhd'
@@ -191,13 +195,15 @@ class Module(object):#module class and nessesary information
 
         uGTalgosPath = os.path.abspath(os.path.join(sim_dir, '..'))
         src_dir = os.path.join(menu_path, 'vhdl/module_%d/src' % self._id)
-
+        print "src_dir: ",src_dir
+        
         replace_map = {
             '{{algo_index}}': read_file(os.path.join(src_dir, 'algo_index.vhd')),
             '{{ugt_constants}}': read_file(os.path.join(src_dir, 'ugt_constants.vhd')),
             '{{gtl_module_signals}}': read_file(os.path.join(src_dir, 'gtl_module_signals.vhd')),
             '{{gtl_module_instances}}': read_file(os.path.join(src_dir, 'gtl_module_instances.vhd')),
         }
+        
         gtl_fdl_wrapper_dir = os.path.join(uGTalgosPath, 'hdl', 'gt_mp7_core', 'gtl_fdl_wrapper')
         gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
         fdl_dir = os.path.join(gtl_fdl_wrapper_dir, 'fdl')
@@ -220,7 +226,8 @@ def download_file_from_url(url, filename):
     with open(filename, 'wb') as fp:
         fp.write(d)
 
-def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
+#def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
+def run_simulation_questa(a_mp7_tag, a_menu, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
     # Check Questa sim version
     if a_questasim == '10.6a':
         questasim_path = QuestaSimPathVersion106a
@@ -245,7 +252,6 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim
     questasimlib_path = os.path.join(os.environ['HOME'], questasimlibs_name, a_vivado)
     
     # Run compile Vivado sim libs for Questa (if not exist)
-    #run_compile_simlib(a_vivado, questasim_path, questasimlib_path, sim_dir)
     run_compile_simlib(a_vivado, questasim_path, questasimlib_path)
     
     # using SIM_ROOT dir as default output path
@@ -257,52 +263,63 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim
     # tran => output to console.
     msgmode = 'wlf' if a_wlf else 'tran'
 
-    _base = os.path.basename(os.path.abspath(a_menu))
+    #_base = os.path.basename(os.path.abspath(a_menu))
+    #_base = a_menu
 
+    temp_dir = os.path.join(sim_dir, "temp_dir")
+    if not os.path.exists(temp_dir): os.makedirs(temp_dir)#makes folders
+    
     logging.info("===========================================================================")
     logging.info("download XML and testvector file from L1Menu repository ...")
     # Get l1menus_path for URL
-    a_menu_split_arr = a_menu.split(os.sep)
-    a_menu_reverse_arr = a_menu_split_arr[::-1]
-    l1menus_path = a_menu_reverse_arr[2] + '/' + a_menu_reverse_arr[1]
-    url_menu = "https://raw.githubusercontent.com/{l1menus_path}/master/{_base}".format(**locals())
-    xml_name = "{}{}".format(_base, '.xml')    
-    menu_filepath = os.path.join(sim_dir, xml_name)
-    url = "{url_menu}/xml/{xml_name}".format(**locals())    
+    url_menu = "{}/{}".format(url_menu_default, a_menu)
+    xml_name = "{}{}".format(a_menu, '.xml')    
+    menu_filepath = os.path.join(temp_dir, xml_name)
+    url = "{}/xml/{}".format(url_menu, xml_name)    
     download_file_from_url(url, menu_filepath)
-    # Remove "distribution number" from _base for testvector file name
-    base_split_arr = [s for s in re.split("-", _base)]
-    tv_name = "TestVector_{}{}".format(base_split_arr[0], '.txt') 
-    testvector_filepath = os.path.join(sim_dir, tv_name)
-    url = "{url_menu}/testvectors/{tv_name}".format(**locals())    
+    # Remove "distribution number" from a_menu for testvector file name
+    tv_name = "TestVector_{}{}".format((re.split("-", a_menu)[0]), '.txt') 
+    testvector_filepath = os.path.join(temp_dir, tv_name)
+    url = "{}/testvectors/{}".format(url_menu, tv_name)    
     download_file_from_url(url, testvector_filepath)
-         
-    #menu_filepath = os.path.join(a_menu, ('xml/%s.xml' % (_base)))#gets xmlmenu
-    #testvector_filepath = os.path.join(a_menu, ('testvectors/TestVector_%s.txt' % (_base)))#gets path to testvector file
+    
+    # Get VHDL snippets from menu URL
+    #print "menu_filepath: ", menu_filepath
+    #print "testvector_filepath: ", testvector_filepath
 
     timestamp = time.time()#creates timestamp
     _time = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%dT%H-%M-%S')#changes time apperance
 
-    base_dir = '%s/sim_results/%s_%s' % (a_output, _time, _base)#creates base directory for later use
+    base_dir = '%s/sim_results/%s_%s' % (a_output, _time, a_menu)#creates base directory for later use
 
-    #if a_testvector:#checks if testvector file argument is given else uses default path
-        #testvector_filepath = os.path.abspath(a_testvector)
+    modules = []
+    menu = xmlmenu.XmlMenu(menu_filepath)
+    for _id in range(menu.n_modules):#makes list for each module
+        modules.append(Module(menu ,_id, base_dir))
 
+    # Get VHDL snippets from menu URL
+    for module in modules:
+        vhdl_src_path = "vhdl/module_{}/src".format(module._id)
+        temp_dir_module = os.path.join(temp_dir, vhdl_src_path)
+        if not os.path.exists(temp_dir_module): os.makedirs(temp_dir_module)#makes folders
+        #print "temp_dir_module: ", temp_dir_module
+        for vhdl_name in vhdl_snippets_names:
+            vhdl_name_ext = vhdl_name + ".vhd"
+            vhdl_file_local_path = os.path.join(temp_dir_module, vhdl_name_ext)
+            #print "vhdl_file_local_path: ", vhdl_file_local_path
+            vhdl_file_path = os.path.join(vhdl_src_path, vhdl_name_ext)
+            url = "{}/{}".format(url_menu, vhdl_file_path)    
+            #print "url: ", url
+            download_file_from_url(url, vhdl_file_local_path)
+ 
     if not os.path.exists(menu_filepath):#checks for menu
         raise RuntimeError('Missing %s File' % menu_filepath)#help
     if not os.path.exists(testvector_filepath):#checks for testvector
         raise RuntimeError('Missing %s' % testvector_filepath)#its not working as intended
     if os.path.exists(base_dir):#checks if directory alredy exists
-        raise RuntimeError('Directory exist alredy!')
+        raise RuntimeError('Directory already exists!')
 
     os.makedirs(base_dir)#makes folders
-
-    print "menu_filepath: ", menu_filepath
-    menu = xmlmenu.XmlMenu(menu_filepath)
-
-    modules = []
-    for _id in range(menu.n_modules):#makes list for each module
-        modules.append(Module(menu ,_id, base_dir))
 
     ini_file = os.path.join(sim_dir, INI_FILE)    
 
@@ -321,7 +338,8 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim
 
         logging.debug('Module_%d created at %s' % (module._id, base_dir))
 
-        module.make_files(sim_dir, a_view_wave, a_mp7_tag, a_menu)#sim_dir, view_wave, mp7_tag, menu_path
+        #module.make_files(sim_dir, a_view_wave, a_mp7_tag, a_menu)#sim_dir, view_wave, mp7_tag, menu_path
+        module.make_files(sim_dir, a_view_wave, a_mp7_tag, temp_dir)#sim_dir, view_wave, mp7_tag, temp_dir
 
     logging.info('finished creating modules and masks')
     logging.info("===========================================================================")
@@ -448,17 +466,15 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim
         logging.error(failed_red)
     
     logging.info("===========================================================================")
-    logging.info("removed XML and testvector file from simulation directory ...")
-    if os.path.exists(menu_filepath): os.remove(menu_filepath)
-    if os.path.exists(testvector_filepath): os.remove(testvector_filepath)
+    logging.info("removed temporary directory ('temp_dir') ...")
+    if os.path.exists(os.path.join(sim_dir, "temp_dir")): shutil.rmtree(os.path.join(sim_dir, "temp_dir"))
 
 def parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mp7_tag', type=os.path.abspath, help = "path to MP7 tag [required]", required = True)
-    parser.add_argument('--menu', metavar = 'path', help = 'menue folder path [required]', type = os.path.abspath, required = True)
-    parser.add_argument('--testvector', metavar = 'path', help = 'testvector file path [required]', required = True)
-    parser.add_argument('--vivado', help = "Vivado version [required]", required = True)
-    parser.add_argument('--questasim', help = "Questasim version [required]", required = True)
+    parser.add_argument('mp7_tag', type=os.path.abspath, help = "local path to MP7 tag (checkout tag before running simulation)")
+    parser.add_argument('menu', help = 'menu name [eg.: [L1Menu_Collisions2018_v2_1_0-d1]')
+    parser.add_argument('vivado', help = "Vivado version [eg.: 2018.3]")
+    parser.add_argument('questasim', help = "Questasim version [eg.: 10.7c]")
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}')".format(DefaultQuestaSimLibsName))
     parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
     parser.add_argument('--view-wave', action = 'store_true', help = "shows the waveform")
@@ -472,7 +488,8 @@ def main():
     # Setup console logging
     logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.INFO)
     
-    run_simulation_questa(args.mp7_tag, args.menu, args.testvector, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
+    #run_simulation_questa(args.mp7_tag, args.menu, args.testvector, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
+    run_simulation_questa(args.mp7_tag, args.menu, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
 
     #with open('')
 if __name__ == '__main__':

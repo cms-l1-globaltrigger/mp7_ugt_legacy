@@ -263,9 +263,6 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_vivado, a_questasim, a_questasiml
     # tran => output to console.
     msgmode = 'wlf' if a_wlf else 'tran'
 
-    #_base = os.path.basename(os.path.abspath(a_menu))
-    #_base = a_menu
-
     temp_dir = os.path.join(sim_dir, "temp_dir")
     if not os.path.exists(temp_dir): os.makedirs(temp_dir)#makes folders
     
@@ -471,10 +468,10 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_vivado, a_questasim, a_questasiml
 
 def parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument('mp7_tag', type=os.path.abspath, help = "local path to MP7 tag (checkout tag before running simulation)")
     parser.add_argument('menu', help = 'menu name [eg.: [L1Menu_Collisions2018_v2_1_0-d1]')
-    parser.add_argument('vivado', help = "Vivado version [eg.: 2018.3]")
-    parser.add_argument('questasim', help = "Questasim version [eg.: 10.7c]")
+    parser.add_argument('--mp7_tag', required=True, type=os.path.abspath, help = "local path to MP7 tag (checkout tag before running simulation)")
+    parser.add_argument('--vivado', required=True, help = "Vivado version [eg.: 2018.3]")
+    parser.add_argument('--questasim', required=True, help = "Questasim version [eg.: 10.7c]")
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}')".format(DefaultQuestaSimLibsName))
     parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
     parser.add_argument('--view-wave', action = 'store_true', help = "shows the waveform")

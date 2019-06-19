@@ -45,6 +45,14 @@ DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware.git'
 
 DefaultMenuUrl = 'https://raw.githubusercontent.com/herbberg/l1menus/master'
     
+DefaultVivadoVersion = '2018.3'
+    
+DefaultIpbbVersion = '0.2.8'
+
+DefaultIpbbTag = 'master'
+
+DefaultQuestasimVersion = '10.7c'
+
 mp7fw_ugt_suffix = '_mp7_ugt'
 
 vhdl_snippets = ('algo_index.vhd','gtl_module_instances.vhd','gtl_module_signals.vhd','ugt_constants.vhd')
@@ -58,18 +66,6 @@ def run_command(*args):
     command = ' '.join(args)
     logging.info(">$ %s", command)
     os.system(command)
-
-def vivado_t(version):
-    """Validates Xilinx Vivado version number."""
-    if not re.match(r'^\d{4}\.\d+$', version):
-        raise ValueError("not a xilinx vivado version: '{version}'".format(**locals()))
-    return version
-
-def ipbb_version_t(version):
-    """Validates IPBB version number."""
-    if not re.match(r'^\d\.\d\.\d+$', version):
-        raise ValueError("not a valid IPBB version: '{version}'".format(**locals()))
-    return version
 
 def download_file_from_url(url, filename):
     """Download files from URL."""
@@ -108,22 +104,22 @@ def replace_vhdl_templates(vhdl_snippets_dir, src_fw_dir, dest_fw_dir):
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('menuname', help="L1Menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')")
+    parser.add_argument('menuname', type=tb.menuname_t, help="L1Menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')")
     parser.add_argument('--menuurl', metavar='<path>', default=DefaultMenuUrl, help="L1Menu URL to retrieve files from (default is {})".format(DefaultMenuUrl))    
-    parser.add_argument('--vivado', metavar='<version>', required=True, type=vivado_t, help="Vivado version to run (eg. '2018.3)' [required]")
-    parser.add_argument('--ipbb', metavar='<version>', required=True, type=ipbb_version_t, help="IPBus builder version [tag] (eg. 0.4.3) [required]")
-    parser.add_argument('--ipburl', metavar='<path>', default=DefaultGitlabUrlIPB, help="URL of IPB firmware repo (default is {})".format(DefaultGitlabUrlIPB))
-    parser.add_argument('-i', '--ipb', metavar='<tag>', default='master', help="IPBus firmware repo: tag or branch name (default is 'master')")
+    parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version to run (default is '{}')".format(DefaultVivadoVersion))
+    parser.add_argument('--ipbb', metavar='<version>', default=DefaultIpbbVersion, type=tb.ipbb_version_t, help="IPBus builder version [tag] (default is '{}')".format(DefaultIpbbVersion))
+    parser.add_argument('--ipburl', metavar='<path>', default=DefaultGitlabUrlIPB, help="URL of IPB firmware repo (default is '{}')".format(DefaultGitlabUrlIPB))
+    parser.add_argument('-i', '--ipb', metavar='<tag>', default=DefaultIpbbTag, help="IPBus firmware repo: tag or branch name (default is '{}')".format(DefaultIpbbTag))
     parser.add_argument('--mp7url', metavar='<path>', required=True, help="URL of MP7 firmware repo [required]")
     parser.add_argument('--mp7tag', metavar='<path>',required=True, help="MP7 firmware repo: tag name [required]")
     parser.add_argument('--ugturl', metavar='<path>', required=True, help="URL of ugt firmware repo [required]")
     parser.add_argument('--ugt', metavar='<path>',required=True, help='ugt firmware repo: tag or branch name [required]')
-    parser.add_argument('--build', required=True, metavar='<version>', type=tb.build_t, help='menu build version (eg. 0x1001) [required]')
-    parser.add_argument('--board', metavar='<type>', default=DefaultBoardType, choices=BoardAliases.keys(), help="set board type (default is {})".format(DefaultBoardType))
-    parser.add_argument('-p', '--path', metavar='<path>', default=DefaultFirmwareDir, type=os.path.abspath, help="fw build path (default is {})".format(DefaultFirmwareDir))
+    parser.add_argument('--build', type=tb.build_str_t, required=True, metavar='<version>', help='menu build version (eg. 0x1001) [required]')
+    parser.add_argument('--board', metavar='<type>', default=DefaultBoardType, choices=BoardAliases.keys(), help="set board type (default is '{}')".format(DefaultBoardType))
+    parser.add_argument('-p', '--path', metavar='<path>', default=DefaultFirmwareDir, type=os.path.abspath, help="fw build path (default is '{}')".format(DefaultFirmwareDir))
     parser.add_argument('--sim', action='store_true', help='running simulation with Questa simulator (before synthesis)')
     parser.add_argument('--simmp7path', metavar='<tag>', help="local MP7 firmware repo [required if sim is set]")
-    parser.add_argument('--questasim', metavar='<version>', help = "Questasim version [required if sim is set]")
+    parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help = "Questasim version (default is  '{}')".format(DefaultQuestasimVersion))
     parser.add_argument('--questasimlibs', metavar='<path>', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}') [useful if sim is set]".format(DefaultQuestaSimLibsName))
     parser.add_argument('--output', metavar = '<path>', help = 'directory for sim results [useful if sim is set]', type = os.path.abspath)
     return parser.parse_args()
@@ -151,8 +147,7 @@ def main():
     # Create MP7 tag name for ugt    
     mp7fw_ugt = args.mp7tag + mp7fw_ugt_suffix
     
-    build_name = "0x{}".format(args.build)
-    ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, args.menuname, build_name)
+    ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, args.menuname, args.build)
 
     if os.path.isdir(ipbb_dir):
         raise RuntimeError("build area alredy exists: {}".format(ipbb_dir))
@@ -255,7 +250,7 @@ def main():
 
         logging.info("===========================================================================")
         logging.info("creating IPBB project for module %s ...", module_id)
-        cmd_ipbb_proj_create = "ipbb proj create vivado {project_type}_{build_name}_{module_id} mp7:../ugt/{project_type}".format(**locals())
+        cmd_ipbb_proj_create = "ipbb proj create vivado {project_type}_{args.build}_{module_id} mp7:../ugt/{project_type}".format(**locals())
         
         command = 'bash -c "cd; {cmd_source_ipbb}; cd {ipbb_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
         run_command(command)
@@ -270,9 +265,9 @@ def main():
         cmd_ipbb_bitfile = "ipbb vivado package"
         
         #Set variable "module_id" for tcl script (l1menu_files.tcl in uGT_algo.dep)
-        command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_dir}/proj/{project_type}_{build_name}_{module_id}; module_id={module_id} {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
+        command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_dir}/proj/{project_type}_{args.build}_{module_id}; module_id={module_id} {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
 
-        session = "build_{project_type}_{build_name}_{module_id}".format(**locals())
+        session = "build_{project_type}_{args.build}_{module_id}".format(**locals())
         logging.info("starting screen session '%s' for module %s ...", session, module_id)
         run_command('screen', '-dmS', session, command)
 

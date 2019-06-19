@@ -28,6 +28,10 @@ error_red = ("\033[1;31m ERROR  \033[0m")
 
 #reset = "\033[0m"
 
+DefaultVivadoVersion = '2018.3'
+    
+DefaultQuestasimVersion = '10.7c'
+
 vhdl_snippets_names = ['algo_index', 'gtl_module_instances', 'gtl_module_signals', 'ugt_constants']
 
 url_menu_default = 'https://raw.githubusercontent.com/herbberg/l1menus/master'
@@ -468,11 +472,11 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_vivado, a_questasim, a_questasiml
 
 def parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument('menu', help = 'menu name [eg.: [L1Menu_Collisions2018_v2_1_0-d1]')
+    parser.add_argument('menu', type=tb.menuname_t, help = "menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')")
     parser.add_argument('--mp7_tag', required=True, type=os.path.abspath, help = "local path to MP7 tag (checkout tag before running simulation)")
-    parser.add_argument('--vivado', required=True, help = "Vivado version [eg.: 2018.3]")
-    parser.add_argument('--questasim', required=True, help = "Questasim version [eg.: 10.7c]")
-    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}')".format(DefaultQuestaSimLibsName))
+    parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version (default is {})".format(DefaultVivadoVersion))
+    parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help = "Questasim version (default is  {})".format(DefaultQuestasimVersion))
+    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '~/{}')".format(DefaultQuestaSimLibsName))
     parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
     parser.add_argument('--view-wave', action = 'store_true', help = "shows the waveform")
     parser.add_argument('--wlf', action = 'store_true', help = "no console transcript info, warning and error messages (transcript output to vsim.wlf)")
@@ -485,7 +489,6 @@ def main():
     # Setup console logging
     logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.INFO)
     
-    #run_simulation_questa(args.mp7_tag, args.menu, args.testvector, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
     run_simulation_questa(args.mp7_tag, args.menu, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
 
     #with open('')

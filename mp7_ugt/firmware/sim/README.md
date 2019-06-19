@@ -1,9 +1,9 @@
-### Simulation of gtl_fdl_wrapper with Questa simulator for 6 ugt modules ###
+# Simulation of gtl_fdl_wrapper with Questa simulator for 6 ugt modules #
 
 * This is a description running script "run_simulation_questa.py" for simulation.
 * If Questa sim libraries for Vivado do not exist in $HOME/questasimlibs_xxx, they will be created for the selected Questa sim and Vivado versions.
 
-### Workflow ###
+#### Workflow ####
     # Clone git repositories
     git clone https://gitlab.cern.ch/hbergaue/mp7.git <local path>/mp7
     cd <local path>/mp7

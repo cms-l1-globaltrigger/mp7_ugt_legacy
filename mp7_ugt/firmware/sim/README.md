@@ -14,8 +14,8 @@
 
     # Run simulation
     cd <local path>/ugt/
-    python mp7_ugt/scripts/run_simulation_questa.py <path local mp7> <L1Menu name> <Vivado version> <Questa sim version>
+    python mp7_ugt/scripts/run_simulation_questa.py <L1Menu name> --mp7_tag <path local mp7>
     
     # Example
     cd ~/gitlab/hbergaue/ugt/mp7_ugt
-    python mp7_ugt/scripts/run_simulation_questa.py --mp7_tag ~/gitlab/hbergaue/mp7 L1Menu_Collisions2018_v2_1_0-d98 2018.3 10.7c
+    python mp7_ugt/scripts/run_simulation_questa.py L1Menu_Collisions2018_v2_1_0-d98 --mp7_tag ~/gitlab/hbergaue/mp7

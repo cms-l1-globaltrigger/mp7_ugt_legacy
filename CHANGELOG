@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [mp7_ugt_v1_9_0] - 2019-06-19
+### Comment
+
+- mp7_ugt firmware release v1.9.0 is created for use with IPBus builder and based on frame v1.2.3, gtl v1.8.0 and fdl v1.3.0.
+
+### Changed
+- calo, muon and correlation modules for "five eta cuts"
+- fdl version to v1.3.0 (v1.2.3 was not correct)
+- run_simulation_questa.py and runIpbbSynth.py (inserted arguments checks)
+
 ## [mp7_ugt_v1_8_1] - 2019-06-03
 ### Comment
 

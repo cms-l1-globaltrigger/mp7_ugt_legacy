@@ -2,7 +2,7 @@
 -- FDL structure
 
 -- Version-history:
--- HB 2019-06-03: v1.2.3 - based on v1.2.3, updated for fractional pre-scaler values.
+-- HB 2019-06-14: v1.3.0 - based on v1.2.2, implemented possibility for fractional pre-scaler values.
 -- HB 2017-01-10: v1.2.2 - based on v1.2.1, but fixed bug with 1 bx delay for "begin_lumi_per" (in algo_slice.vhd) for rate counter after pre-scaler.
 -- HB 2016-12-01: v1.2.1 - based on v1.2.0, but inserted rate counter and register for finor with "prescaler preview" in monitoring.
 -- HB 2016-11-17: v1.2.0 - based on v1.1.1, but inserted logic for "prescaler preview" in monitoring. Removed port "finor_mask".

@@ -277,7 +277,7 @@ def main():
 
     os.chdir(ipbb_dir)
 
-    # Creating configuration file.
+    ## Creating configuration file.
     config = ConfigParser.RawConfigParser()
     config.add_section('environment')
     config.set('environment', 'timestamp', tb.timestamp())
@@ -285,8 +285,12 @@ def main():
     config.set('environment', 'username', tb.username())
 
     config.add_section('menu')
-    config.set('menu', 'build', args.build)
-    config.set('menu', 'name', menu_name)
+    # Remove "0x" from args.build
+    build_raw = args.build.split("x", 1)
+    config.set('menu', 'build', build_raw[1])
+    # Take args.menuname with distribution number
+    #config.set('menu', 'name', menu_name)
+    config.set('menu', 'name', args.menuname)
     config.set('menu', 'location', url_menu)
     config.set('menu', 'modules', modules)
 
@@ -310,10 +314,10 @@ def main():
     config.set('device', 'alias', BoardAliases[args.board])
 
     # Writing configuration file
-    with open('build_0x{}.cfg'.format(args.build), 'wb') as fp:
+    with open('build_{}.cfg'.format(args.build), 'wb') as fp:
         config.write(fp)
 
-    logging.info("created configuration file: %s/build_0x%s.cfg.", ipbb_dir, args.build)
+    logging.info("created configuration file: %s/build_%s.cfg.", ipbb_dir, args.build)
     logging.info("done.")
 
 if __name__ == '__main__':

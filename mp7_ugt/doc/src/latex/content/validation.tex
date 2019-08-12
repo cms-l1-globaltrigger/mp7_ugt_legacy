@@ -1,0 +1,57 @@
+%------------------------------------------------------------------------------
+%
+% Repository path   : $HeadURL: https://hbergauer@forge.hephy.oeaw.ac.at/scm/svn/project-cmstrigger/GlobalTriggerUpgrade/doc/latex/gt-mp7-firmware-specification/content/validation.tex $
+% Last committed    : $Revision: 2885 $
+% Last changed by   : $Author: rahbaran $
+% Last changed date : $Date: 2014-04-23 13:41:33 +0200 (Wed, 23 Apr 2014) $
+% Description       : Validation
+% ------------------------------------------------------------------------------
+\section{Validation}\label{sec:val}
+
+Tables~\ref{tab:val} and \ref{tab:val2} show validaiton of the firmware base on requirements, which are released.
+
+\begin{table}[h]
+\scriptsize
+\begin{center}
+\begin{tabular}{p{2.5cm}p{1.5cm}p{9cm}p{1cm}}
+\toprule
+\\
+\textbf{requirement}  & \textbf{method} & \textbf{rationale/notes} & \textbf{result} \\
+\midrule
+\req{DGR}{1} & inspection & In \verb|/firmware/gt_amc514/../sim/| we have the testbench \verb|sim_top| which instantiates the top level entity also used for synthesis. & {\color{blue}\bf OK}\\
+\req{DGR}{2} & inspection & under construction .. &  {\color{blue}\bf OK}\\
+\req{DGR}{3} & inspection & under construction .. & {\color{blue}\bf OK}\\
+\req{DGR}{4} & inspection & under construction .. & {\color{blue}\bf OK}\\
+\req{DGR}{5} & test & under construction .. & {\color{blue}\bf OK}\\
+\req{DGR}{6} & inspection & under construction .. & {\color{blue}\bf OK}\\
+\req{MIF}{1} & inspection / test & under construction .. & {\color{blue}\bf OK}\\
+\req{MIF}{2} & inspection & The signal \verb|l1a_tcs| originating from the \ac{TCS} is synchronized by a 2 stage synchronizer & {\color{blue}\bf OK}\\
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{Validation, Part 1}
+\label{tab:val}
+\end{table}
+
+\begin{table}[h]
+\scriptsize
+\begin{center}
+\begin{tabular}{p{2.5cm}p{1.5cm}p{9cm}p{1cm}}
+\toprule
+\\
+\textbf{requirement}  & \textbf{method} & \textbf{rationale/notes} & \textbf{result} \\
+\midrule
+\req{TCM}{2} & test & The \ac{TCM} testbench and tests on the target (synthesized hardware) verify that a hardware error state is entered in case the \verb|bcres| signal and the bunch crossing counter do not agree. Any counting operation is ceased in case of an hardware error state. & {\color{blue}\bf OK}\\
+\req{TCM}{3} & inspection & under construction .. & {\color{blue}\bf OK}\\
+\req{MEM}{1} & test & under construction .. & {\color{blue}\bf OK} \\
+\req{MEM}{1.1} & test & SPY memory I and SPY memory II record one whole orbit data. & {\color{blue}\bf OK} \\
+
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{Validation, Part 2}
+\label{tab:val2}
+\end{table}
+
+
+\clearpage

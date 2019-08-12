@@ -1,0 +1,224 @@
+% ------------------------------------------------------------------------------
+%
+% Repository path   : $HeadURL: https://hbergauer@forge.hephy.oeaw.ac.at/scm/svn/project-cmstrigger/GlobalTriggerUpgrade/doc/latex/gt-mp7-firmware-specification/content/requirements.tex $
+% Last committed    : $Revision: 4401 $
+% Last changed by   : $Author: hbergauer $
+% Last changed date : $Date: 2016-11-03 14:48:50 +0100 (Thu, 03 Nov 2016) $
+% Description       : Requirements
+% ------------------------------------------------------------------------------
+\section{Requirements}\label{sec:req}
+\textbf{\textit{Under construction!!!}}
+
+% The following requirements are defined and released until end of LS1.
+% 
+% 
+% % ------------------------------------------------------------------------------
+% %
+% %  Design Guide Rules
+% %
+% % ------------------------------------------------------------------------------
+% \subsection{Design Guide Rules}
+% \textbf{R\_DGR\_1:} Same code for simulation as well as synthesis process.\\
+% \textbf{R\_DGR\_2:} Use records where beneficial.\\
+% \textbf{R\_DGR\_3:} All constants have to be defined in: \verb|gt_mp7_pkg.vhd|, \verb|rop_mp7_pkg.vhd|, \verb|gtl_mp7_pkg.vhd|, \verb|fdl_mp7_pkg.vhd|.\\
+% \textbf{R\_DGR\_4:} All components of the design should be defined in: \verb|gt_amc514_lib.vhd|.\\
+% \textbf{R\_DGR\_5:} All VHDL modules should be simulated as well as synthesized and tested at hardware.\\
+% \textbf{R\_DGR\_6:} The specification should be found in GlobalTriggerUpgrade repository.\\
+% \textbf{R\_DGR\_7:} The long term test as well as short term test should be specified together with software team. There are some scripts (e.g. pyhton, shell,etc) to start the test systematic for whole
+% design as well as for each module.\\
+% \textbf{R\_DGR\_8:} Python scripts, which allows to access and configure all modules in the firmware. It consists a general usage message that lists all subcommands
+% and the common optional and required arguments can be obtained by <gtmp7-control.py> -h\\
+% 
+% % ------------------------------------------------------------------------------
+% %
+% %  Module Interfacing
+% %
+% % ------------------------------------------------------------------------------
+% \subsection{Module Interfacing}\label{sec:minter}
+% \textbf{R\_MIF\_1:} \verb|ORBIT| signal will be received through AMC13 over Bgos. This signal is 25 ns with periode of 89.1 us. We will synhronize this signal, in oder to be sure that we have 25 ns signal. We will check it, if we get 0xdeb (3563),it 
+% means it is synchorn.\\
+% \textbf{R\_MIF\_2:} \verb|L1A| signal will be received over AMC13.\\
+% \textbf{R\_MIF\_3:} \verb|LHC clock| signal will be received over AMC13\\
+% \textbf{R\_MIF\_4:} \verb|Readout-record| will be sent to AMC13. The size of it is limited to 4 KBytes per slot. \\
+% \textbf{R\_MIF\_5:} \verb|TTC_decoder.vhd| deliver 2 data word named A and B over prot 3 (TTC). The word A is \verb|L1A| and word B is serial encoded data \verb|Bgos|\\
+% 
+% %------------------------------------------------------------------------------
+% %
+% %  SERDES
+% %
+% % ------------------------------------------------------------------------------
+% \subsection{\serdes} \label{sec:serdes}
+% is under construction...
+% 
+% \textbf{R\_SERDES\_1:} under construction \\
+% \textbf{R\_SERDES\_2:} under construction \\
+% ----------------------------------------------
+% %
+% %  IPBus
+% %
+% % ------------------------------------------------------------------------------
+% \subsection{IPbus}\label{sec:req-ad}
+% \textbf{R\_IBUS\_1:} under construction \\
+% \textbf{R\_IBUS\_2:} under construction \\
+% 
+% 
+% %------------------------------------------------------------------------------
+% %
+% %  Delay Manager
+% %
+% % ------------------------------------------------------------------------------
+% \subsection{Delay Manager (\ac{DM})} \label{sec:req-dm}
+% 
+% \textbf{R\_DM\_1:} Every object type must have an individual delay. \\
+% \textbf{R\_DM\_2:} The delay manager must produce two delayed versions of the bcres signal(for TCM and FDL). \\
+% \textbf{R\_DM\_3:} The delay (given in lhc\_clk cycles) can be changed by software registers. \\
+% \textbf{R\_DM\_4:} After the valid\_i signal is asserted, a valid lhc\_data is presented on the output after the longest individual delay. \\
+% \textbf{R\_DM\_5:} Valid output data is indicated by asserting valid\_o. \\
+% \textbf{R\_DM\_6:} If valid\_i is deasserted during operation valid\_o is also immediately deasserted. \\
+% \textbf{R\_DM\_7:} The maximum time an individual object can be delay, must be configurable by a genereic.\\
+% 
+% 
+% %------------------------------------------------------------------------------
+% %
+% %  SIM/SPY
+% %
+% % ------------------------------------------------------------------------------
+% \subsection{SIM/SPY Memories} \label{sec:req-sim_spy}
+% 
+% \textbf{R\_MEM\_1:} Access to SIM memory, SPY memory I and SPY memory II. \\
+% \textbf{R\_MEM\_1.1:} The SPY memory should be able to record one orbit data (3564). \\
+% \textbf{R\_MEM\_1.2:} The SPY memory should be readable through software register access. \\ 
+% \textbf{R\_MEM\_1.3:} The SIM memory should be writeable through software register access. \\
+% \textbf{R\_MEM\_1.4:} The SIM memory should provide (simulated) orbit data to the DSMUX \\
+% %\textbf{R\_MEM\_1.5:} The SIM memory and the SPY memory I should support multiple (parameterizable) channels. \\
+% 
+% %\textbf{R\_MEM\_2:} The port sizes should be customizable to the size of a single entry (16, 32 or 64). \\
+% %\textbf{R\_MEM\_2.1:} The size of memories and the number of the memories should be correlated to object size and object number. The number of objects represents the number of memories and the resolution of each objects represents data-width. \\
+% 
+% \textbf{R\_MEM\_2:} The SPY memory should record the next whole orbit data after receiving the SPY NEXT trigger. \\
+% \textbf{R\_MEM\_3:} The SPY memory should record a whole software selectable orbit data after receiving the SPY ONCE trigger. \\
+% \textbf{R\_MEM\_4:} It should be possible to trigger SPY ONCE/NEXT by software register access.  \\
+% \textbf{R\_MEM\_4.1:} The orbit number associated with the SPY ONCE trigger must also be software selectable. \\ 
+% \textbf{R\_MEM\_4.2:} The status of the SPY memory and trigger must be indicated to the software in form of busy, ready and error flags.  \\
+% \textbf{R\_MEM\_5:} The SPY trigger shall be issuable to multiple SPY memories (e.g., SPY memory I (all channels), SPY memory II) at once.
+% Then the same orbit should be considered for all of them. \\
+% 
+% \textbf{R\_MEM\_6:} To capture ROP data, a special SPY memory (SPY~memory~III) should be implemented, which records blocks (split in 64-bit entries). \\
+% \textbf{R\_MEM\_6.1:} The maximum size is 4kB (2048 16-bit words). Data is sent over Fabric A in 8b/10bG encoded packets of maximum length 4kB (2048 16-bit words). \\
+% \textbf{R\_MEM\_6.1:} The input of SPY memory III should be parametrized for 16-bit, 32-bit, 64-bit, in order to adapt with TX (AMC13). \\
+% \textbf{R\_MEM\_6.2:} The memory should record a single entry in case it's write enable signal is driven high. \\
+% \textbf{R\_MEM\_6.3:} The memory should be readable through software register access. \\
+% \textbf{R\_MEM\_6.4:} The memory should be able to record data from the DAQ clock domain. \\
+% 
+% %------------------------------------------------------------------------------
+% %
+% %  TCM
+% %
+% % ------------------------------------------------------------------------------
+% 
+% \subsection{Timing Counter Manager (TCM)} \label{sec:req-tcm}
+% 
+% \begin{itemize}
+% \item [\req{TCM}{1}] The \ac{TCM} must provide counters for bunch crossings (\verb|bx_nr|, 12 bits),
+% orbits (\verb|orbit_nr|, 48 bits), events (\verb|event_nr|, 32 bits) and luminosity segments (\verb|luminosity_seg_nr|, 32 bits) and tringger Nr (\verb|trigger_nr|, 48 bits).
+% 
+% \begin{itemize}
+% \item [\req{TCM}{1.1}] All counters will be set to 0 after the ROSE process.
+% \begin{itemize}
+%  \item \textbf{R} (Resync-0x1): \verb|event_nr| will be set to 0
+%  \item \textbf{O} (Oribit counter reset-0x8): \verb|orbit_nr| and \verb|luminosity_seg_nr| and tringger Nr (\verb|trigger_nr| will be set to 0
+%  \item \textbf{S} (Start Run-0x9):\verb|trigger_nr| will be set to 0
+%  \item \textbf{E} (Even counter reset): \verb|event_nr| will be set to 0
+% \end{itemize}
+% 
+% \item [\req{TCM}{1.2}] The bunch crossing counter \verb|bx_nr| will be increased by 1 with \verb|lhc_clk|, and it counts the orbit signal, which is maybe 25 ns with the periode of 89.1 us. Therefore the counters coutes from 0-3563 (0xdeb) 
+% It will be reset by \verb|BC0|, which we get over Bgos (0x1). 
+% \item [\req{TCM}{1.3}] The event counter \verb|event_nr| counts the number of L1A, it means it will be increased after each L1A.
+% \item [\req{TCM}{1.4}] The overflow of \verb|bx_nr| occures the increasing of the \verb|orbit_nr| by one.
+% \item [\req{TCM}{1.5}] The luminosity segment Nr \verb|luminosity_seg_nr| will be increase by 1, if \verb|orbit_nr(18)| asserts to one. It will be happen over a 32-bit count compare condition
+% (configurable through sofware register access). In case of bit(18)(lumisection = 23 sec = $2^{18} orbits)$, the compare condition of \verb|orbit_nr| is every 0x40000 (262144), which increases the \verb|luminosity_seg_nr| by one.
+% \item [\req{TCM}{1.6}] FDL should receive a signal called \verb|start_lumisection| which is a 25ns pulse. Each time \verb|luminosity_seg_nr| is increased by one, a 25 ns signal will be produced. It means a signal with 25 ns of 23 sec period. \\
+% 
+% \end{itemize}
+% 
+% \item [\req{TCM}{2}] The assertion of \verb|bcres(BC0)| could always coincide with
+% the counter \verb|bcres_nr| that it reaches the maximum number of bunch crossings (\verb|bcres_nr=3564(=0)|) or coincede with a
+% defined counter \verb|bcres_nr| reset request (see requirements \req{TCM}{3.1} and \req{TCM}{3.5}).
+% Moreover the \ac{TCM} enters a hardware error state and finsh any counting operation until the hardware error state is cleared (see \req{TCM}{3.2}).
+% 
+% \item [\req{TCM}{3}] TCM should handle BGos, which it gets from \utcs
+% 
+% 
+% \begin{itemize}
+% \item [\req{TCM}{3.1}] The command BC0 (''0001'') could coincide with the signal \verb|orbit| and should reset the counter \verb|bcres_nr| without triggering a hardware error state.
+% \item [\req{TCM}{3.2}] The command HardReset (''0110'') should clear the error state.
+% \item [\req{TCM}{3.3}] The command EC0 (''0111'') should reset the counter \verb|event_nr|.
+% \item [\req{TCM}{3.4}] The command OC0 (''1000'') should reset the counter \verb|orbit_nr|
+% \item [\req{TCM}{3.5}] The command RESYNC (''0101'') should reset the counter (see requirements \req{TCM}{1.1}).
+% \item [\req{TCM}{3.6}] The command NOP (''0000'') should indicate that no special operation needs to be carried out.
+% \item [\req{TCM}{3.7}] All BGOs commands are issued exactly one cycle with the exception of NOP.
+% \end{itemize}
+% %\item [\req{TCM}{4}] The \ac{TCM} must be implemented in its own VHDL module.
+% \end{itemize}
+% 
+% 
+% %-------------------------------------------------------------------------------
+% %  GTL
+% %
+% % ------------------------------------------------------------------------------
+% 
+% \subsection{\gtl (\ugtl)} \label{sec:gtl}
+% 
+% \begin{itemize}
+% \item [\req{GTL}{1}] \ugtl should receive data from \gct: 12 Electron/photon objects, 12 Jet objects, 8 Tau objects and 4 quantities of Energy summary information.
+% All with a 32-bit data structure.\\
+% \ugtl should receive data from \gmt: 8 objects with a 64-bit data structure. \\\ugtl should receive at least 256 External Conditions.
+% \item [\req{GTL}{2}] \ugtl should provide following conditions:
+% \begin{itemize}
+% \item Calorimeter objects conditions
+% \item Muon objects conditions
+% \item Energy Summary Information conditions
+% \item Correlation conditions
+% \item Invariant-Mass conditions and Delta-R conditions
+% \end{itemize}
+% \item [\req{GTL}{3}] All these conditions should be made with data from bunch crossings (bx) within a +/-2 bx-range, if required.
+% \item [\req{GTL}{4}] \ugtl should provide at least 512 Algorithms as output to \ufdl.
+% \end{itemize}
+% 
+% %------------------------------------------------------------------------------
+% %
+% %  FDL
+% %
+% % ------------------------------------------------------------------------------
+% \subsection{\fdl (\ufdl)} \label{sec:fdl}
+% 
+% \begin{itemize}
+% \item [\req{FDL}{1}] \ufdl should receive at least 512 Algorithms from \ugtl. \\\ufdl should send one \finor to \utcs. 
+% \item [\req{FDL}{2}] \ufdl should provide prescalers and rate-counters per Algorithm.
+% \item [\req{FDL}{3}] \ufdl should provide algo-bx-mask, \finor-mask and veto-mask per Algorithm.
+% \item [\req{FDL}{4}] \ufdl should provide Algorithms before prescalers, after prescalers, after masks and the local \finor and a total \finor for \record.
+% \item [\req{FDL}{5}] \ufdl should provide a logic for updating the values of prescale-factors, reading and reseting the rate-counters.
+% \item [\req{FDL}{6}] \ufdl should receive a signal called "begin\_lumi\_section" which is a 25ns pulse. With this signal updating the values of prescale-factors into prescalers, 
+% storing the values of rate-counters in registers for reading and reseting the rate-counters is done.
+% \item [\req{FDL}{7}] \ufdl should provide an interface to get software access to registers, counters and memories.
+% \item [\req{FDL}{8}] \ufdl should provide two \finor: a local \finor and a total \finor. Both are inputs of ROP. The local \finor is send to \ugt board, which is the "total \finor board",
+% if more than one \ugt boards are used.\\
+% \end{itemize}
+% %------------------------------------------------------------------------------
+% %
+% %  ROP
+% %
+% % ------------------------------------------------------------------------------
+% \subsection{\rop (\ac{ROP})} \label{sec:rop}
+% 
+% \begin{itemize}
+% \item [\req{ROP}{1}] 
+% \item [\req{ROP}{2}] 
+% \item [\req{ROP}{3}]
+% \item [\req{ROP}{4}] 
+% \end{itemize}
+% 
+% \clearpage
+
+\clearpage
+

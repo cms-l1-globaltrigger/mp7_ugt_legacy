@@ -1,0 +1,119 @@
+%% ------------------------------------------------------------------------------
+% Repository path   : $HeadURL: https://hbergauer@forge.hephy.oeaw.ac.at/scm/svn/project-cmstrigger/GlobalTriggerUpgrade/doc/latex/gt-mp7-firmware-specification/content/software-interface.tex $
+% Last committed    : $Revision: 2885 $
+% Last changed by   : $Author: rahbaran $
+% Last changed date : $Date: 2014-04-23 13:41:33 +0200 (Wed, 23 Apr 2014) $
+% Description       : Register map for framework design
+% ------------------------------------------------------------------------------
+
+\clearpage
+\section{Software Interface/Register Map}
+
+This section summarizes  all SW accessible registers in the MTCA-GT modules, which are described in previous sections. 
+
+\subsection {Framework}
+The framework of the design is based on different modules, which are described in last sections. The next sections show the register map address of
+each module. The addresses will be used from software for getting access of each registers in each module. The responsible .xml for each module can
+be found in \textit{xml} directory.
+
+
+\begin{figure}[ht]
+  \includegraphics[width=1.0\textwidth]{./figures/register-map/whole-design}
+  \caption{Framework design }
+  \label{fig:framework modules}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \includegraphics[width=1.0\textwidth]{./figures/register-map/module_info}
+  \caption{module\_info module}
+  \label{fig:Module.info modules}
+\end{figure}
+
+\begin{figure}[ht]
+  \includegraphics[width=1.0\textwidth]{./figures/register-map/dsmux}
+  \caption{dsmux module }
+  \label{fig:dsmux modules}
+\end{figure}
+
+\begin{figure}[ht]
+  \includegraphics[width=1.0\textwidth]{./figures/register-map/l1asim}
+  \caption{l1asim module}
+  \label{fig:l1asim modules}
+\end{figure}
+
+\begin{figure}[ht]
+  \includegraphics[width=1.0\textwidth]{./figures/register-map/spytrigger}
+  \caption{spytrigger module}
+  \label{fig:spytrigger modules}
+\end{figure}
+
+\begin{figure}[ht]
+  \includegraphics[width=1.0\textwidth]{./figures/register-map/sw_reset}
+  \caption{sw\_reset module}
+  \label{fig:sw.reset modules}
+\end{figure}
+
+\begin{figure}[ht]
+  \includegraphics[width=1.0\textwidth]{./figures/register-map/fmc_prototype}
+  \caption{fmc\_prototype design }
+  \label{fig:fmc.prototype modules}
+\end{figure}
+
+\begin{figure}[ht]
+  \includegraphics[width=1.0\textwidth]{./figures/register-map/dm}
+  \caption{dm design }
+  \label{fig:dm modules}
+\end{figure}
+
+\begin{figure}[ht]
+  \includegraphics[width=0.8\textwidth]{./figures/register-map/tcm}
+  \caption{tcm design }
+  \label{fig:tcm modules}
+\end{figure}
+
+\begin{figure}[ht]
+  \includegraphics[width=1.0\textwidth]{./figures/register-map/rop}
+  \caption{rop design }
+  \label{fig:rop modules}
+\end{figure}
+
+\subsection{FDL}
+
+The base address of the \ufdl module is: \verb|0x50000|.
+Table~\ref{tab:ufdl_register_layout_bx_mask} shows the software accessible register layout.
+
+\medskip
+\begin{table}[htdp]
+\footnotesize
+\begin{center}
+\begin{tabular}{c p{.3\columnwidth} c p{.4\columnwidth}}
+\toprule
+offset & {register name} & {access} & {description}\\
+\midrule      
+0x0 & \verb|algo_bx_masks(0)| & r/w & 4096 memory addresses of algo-bx-masks for Algorithms 0-31.\\
+0x4000 & \verb|algo_bx_masks(1)| & r/w & 4096 memory addresses of algo-bx-masks for Algorithms 32-63.\\
+... & ... & ... & ...\\
+0x3C000 & \verb|algo_bx_masks(15)| & r/w & 4096 memory addresses of algo-bx-masks for Algorithms 480-511.\\
+0x40000 & \verb|rate_cnt_before_pre| & r & 512 read-only registers for rate-counter values before prescalers.\\
+0x40800 & \verb|reserved| & r & 512 addresses reserved (former 512 read-only registers for rate-counter values after prescalers).\\
+0x41000 & \verb|prescale_factors| & r/w & 512 registers for pre-scale factors.\\
+0x41800 & \verb|finor_masks| & r/w & 16 registers for \finor-masks of 512 Algorithms.\\
+0x41840 & \verb|veto_masks| & r/w & 16 registers for veto-masks of 512 Algorithms.\\
+0x41880 & \verb|prescale_factors_index| & r/w & Register for prescale factors set index.\\
+0x41884 & \verb|command_pulse| & w & Register for command pulses (content has to be defined).\\
+0x41888 & \verb|control| & r/w & Register for control signals (content has to be defined).\\
+0x4188C & \verb|status| & r & Register for status information (content has to be defined).\\
+0x41890 & \verb|l1_trigger_menu_version| & r & Register for firmware version of actual L1 Trigger Menu in \ugtl.\\
+0x41894 & \verb|gtl_fw_version| & r & Register for firmware version of \ugtl VHDL code.\\
+0x41898 & \verb|fdl_fw_version| & r & Register for firmware version of \ufdl VHDL code.\\
+0x4189C & \verb|tme_sw_version| & r & Register for software version of Trigger Menu Editor (TME).\\
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{\ufdl register layout with algo-bx-masks and \finor-masks}
+\label{tab:ufdl_register_layout_bx_mask}
+\end{table}
+
+\clearpage
+

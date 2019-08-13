@@ -1,8 +1,8 @@
 % ------------------------------------------------------------------------------
 % Repository path   : $HeadURL: https://hbergauer@forge.hephy.oeaw.ac.at/scm/svn/project-cmstrigger/GlobalTriggerUpgrade/doc/latex/gt-mp7-firmware-specification/content/gtl.tex $
-% Last committed    : $Revision: 4487 $
+% Last committed    : $Revision: 4489 $
 % Last changed by   : $Author: hbergauer $
-% Last changed date : $Date: 2018-08-14 14:38:04 +0200 (Tue, 14 Aug 2018) $
+% Last changed date : $Date: 2019-08-13 15:24:24 +0200 (Tue, 13 Aug 2019) $
 % Description       : Specification of Global Trigger Logic.
 % ------------------------------------------------------------------------------
 
@@ -489,19 +489,17 @@ The "sub-conditions" created by VHDL Producer are the following:
 %     \end{itemize}
 \end{itemize}
 
-\subparagraph{Calorimeter conditions module - version 7 "no quad" and version 6 "quad"}
+\subparagraph{Calorimeter conditions module}
 
-Two module for conditions with calorimeter objects (\texttt{calo\_conditions\_v7\_no\_quad.vhd} and \texttt{calo\_conditions\_v6\_quad.vhd}) instantiates the calorimeter comparators module (\texttt{calo\_comparators\_v2.vhd}) as many times as
+The module for conditions with calorimeter objects (\texttt{calo\_conditions.vhd}) instantiates the calorimeter comparators module (\texttt{calo\_comparators.vhd}) as many times as
 the numbers of objects and requirements determine. Depending on the condition-type, different and-or-structures of object vs. requirement are selected.
 The selection of condition-type and the number of objects is done by parameters in the generic interface list of the module (see Listing~\ref{lst:calo_conditions_vhd},
 see also the explanations below).\\
 For comparison in $\eta$, $\varphi$ and the differences in $\eta$ and $\varphi$, "window"-comparators are used.\\
-In the calorimeter conditions module version 7 "no quad" a cut for two-body pt calculation can be selected (see ~\ref{sec:gtl:twobody_pt_calculation}). Therefore a threshold value two-body pt is required.\\
-In the calorimeter conditions module version 6 "quad" the architecture is different to prevent "segmentation faults" in Vivado, because of a to big array in VHDL code. The solution is to use
-smaller arrays in parallel.
+In the calorimeter conditions module a cut for two-body pt calculation can be selected (see ~\ref{sec:gtl:twobody_pt_calculation}). Therefore a threshold value for two-body pt is required.\\
 
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:calo_conditions_vhd,language=VHDL,caption=Entity declaration of \texttt{calo\_conditions\_v7\_no\_quad.vhd}]{interfaces/calo_conditions_v7_no_quad.vhd}
+\lstinputlisting[label=lst:calo_conditions_vhd,language=VHDL,caption=Entity declaration of \texttt{calo\_conditions.vhd}]{interfaces/calo_conditions.vhd}
 
 \medskip
 \begin{table}[htdp]
@@ -523,12 +521,17 @@ smaller arrays in parallel.
 \verb|et_ge_mode| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
 \verb|obj_type| & valid strings are 'EG\_TYPE', 'JET\_TYPE', and 'TAU\_TYPE'.\\
 \verb|et_thresholds| & array of four threshold values for comparison in \et (four thresholds, because of max. 4 requirements).\\
-\verb|eta_full_range| & array of four boolean to set full range of $\eta$.\\
+\verb|nr_eta_windows| & array of four integer values for number of $\eta$ cuts.\\
 \verb|eta_w1_upper_limits| & array of four "upper limits" of "window"-comparator 1 for $\eta$.\\
 \verb|eta_w1_lower_limits| & array of four "lower limits" of "window"-comparator 1 for $\eta$.\\
-\verb|eta_w2_ignore| & array of four boolean to ignore "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_upper_limits| & array of four "upper limits" of "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_lower_limits| & array of four "lower limits" of "window"-comparator 2 for $\eta$.\\
+\verb|eta_w3_upper_limits| & array of four "upper limits" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w3_lower_limits| & array of four "lower limits" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w4_upper_limits| & array of four "upper limits" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w4_lower_limits| & array of four "lower limits" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w5_upper_limits| & array of four "upper limits" of "window"-comparator 5 for $\eta$.\\
+\verb|eta_w5_lower_limits| & array of four "lower limits" of "window"-comparator 5 for $\eta$.\\
 \verb|phi_full_range| & array of four boolean to set full range of $\varphi$.\\
 \verb|phi_w1_upper_limits| & array of four "upper limits" of "window"-comparator 1 for $\varphi$.\\
 \verb|phi_w1_lower_limits| & array of four "lower limits" of "window"-comparator 1 for $\varphi$.\\
@@ -556,19 +559,18 @@ smaller arrays in parallel.
 
 \clearpage
 
-\subparagraph{Calorimeter conditions module - version 7 "no quad" and version 6 "quad" - template for VHDL-Producer}
+\subparagraph{Calorimeter conditions module - template for VHDL-Producer}
 See in Chapter \ref{sec:gtl:calo_conditions_tme} and in Listing~\ref{lst:instance_calo_condition_vhd} for a VHDL-template for VHDL-Producer of
-instantiating a calorimeter condition (\texttt{calo\_conditions\_v7\_no\_quad.vhd} and \texttt{calo\_conditions\_v6\_quad.vhd}).\\
+instantiating a calorimeter condition (\texttt{calo\_conditions.vhd}).\\
 
-\subparagraph{Calorimeter comparators module - version 2}\label{sec:gtl:calo_comp_module}
-A comparator between the energy (\et) and a threshold (et\_threshold) and a comparison in $\eta$ and $\varphi$ with two "window"-comparators each
+\subparagraph{Calorimeter comparators module}\label{sec:gtl:calo_comp_module}
+A comparator between the energy (\et) and a threshold (et\_threshold) and a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators
 is done in this basic module. The values for \et threshold, the 'mode-selection' for the \et comparator and the "limits" of the "window"-comparators 
 is given in the generic interface list of the module. Additionally the data-structure of input data (data\_i in port interface list) is provided
 as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
-The comparison in $\eta$ is done with two "window"-comparators, so one gets two ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed.\\
-There are two flags, one for "full-range" and one for "ignore-second-window" for the selection of the ranges. The flags are given for $\eta$ and also for $\varphi$.\\
-The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned.\\
-There are 2 cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator} and Listing~\ref{lst:phi_window_comparator_vhd}):
+The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
+The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. There are two flags, one for "full-range" and one for "ignore-second-window" for the selection of the ranges.\\
+There are two cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator} and Listing~\ref{lst:phi_window_comparator_vhd}):
 \begin{itemize}
 \item Upper limit is less than lower limit => $\varphi$ range between the limits, including the $\varphi$ bin with value = 0 (HW index).
 \item Upper limit is greater/equal than lower limit => $\varphi$ range between the limits, not including the $\varphi$ bin with value = 0 (HW index).
@@ -582,7 +584,7 @@ The comparison of isolation (for \egamma and tau) is done with LUTs.
                     else '0';
 \end{lstlisting}
 
-The values of $\eta$ and $\varphi$ have to be inside of only one of the two required ranges ("or").
+The values of $\eta$ and $\varphi$ have to be inside of only one of the required ranges ("or").
 
 The comparison of isolation (for \egamma and tau) is done with LUTs (see Table~\ref{tab:gtl:calo_lut_iso}).
 Only the least significant 4 bits of LUT are used, because currently 2 isolation bits are defined. 
@@ -1044,15 +1046,15 @@ To fulfill this condition, there must exist at least one object which fulfills t
 In addition requested charge correlation must be matched (except for "Single object requirement condition", there is no charge correlation).
 The calculation of charge correlations is done in an own module in the top-of-hierarchy module (\texttt{gtl\_module.vhd}).\\
 
-\subparagraph{Muon conditions module - version 7}
-A module for conditions with muon objects (\texttt{muon\_conditions\_v7.vhd}) instantiates the muon comparators module (\texttt{muon\_comparators\_v2.vhd}) as many times as
+\subparagraph{Muon conditions module}
+A module for conditions with muon objects (\texttt{muon\_conditions.vhd}) instantiates the muon comparators module (\texttt{muon\_comparators.vhd}) as many times as
 the numbers of objects and requirements determine. Depending on the condition-type different and-or-structures of object vs. requirement are selected.
 The selection of condition-type and the number of objects is done by parameters in the generic interface list of the module
 (see the following VHDL entity definition in Listing~\ref{lst:muon_conditions_vhd}).\\
 
 \clearpage
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:muon_conditions_vhd,language=VHDL,caption=Entity declaration of \texttt{muon\_conditions\_v7.vhd}]{interfaces/muon_conditions_v7.vhd}
+\lstinputlisting[label=lst:muon_conditions_vhd,language=VHDL,caption=Entity declaration of \texttt{muon\_conditions.vhd}]{interfaces/muon_conditions.vhd}
 
 \clearpage
 
@@ -1073,12 +1075,17 @@ The selection of condition-type and the number of objects is done by parameters 
 \verb|nr_templates| & number of requirements, selector of condition-type. Valid values are 1, 2, 3 and 4.\\
 \verb|pt_ge_mode| & 'mode-selection' for the \pt comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
 \verb|pt_thresholds| & array of four threshold values for comparison in pt (four threshold, because of max. 4 requirements).\\
-\verb|eta_full_range| & array of four boolean to set full range of $\eta$.\\
+\verb|nr_eta_windows| & array of four integer values for number of $\eta$ cuts.\\
 \verb|eta_w1_upper_limits| & array of four "upper limits" of "window"-comparator 1 for $\eta$.\\
 \verb|eta_w1_lower_limits| & array of four "lower limits" of "window"-comparator 1 for $\eta$.\\
-\verb|eta_w2_ignore| & array of four boolean to ignore "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_upper_limits| & array of four "upper limits" of "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_lower_limits| & array of four "lower limits" of "window"-comparator 2 for $\eta$.\\
+\verb|eta_w3_upper_limits| & array of four "upper limits" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w3_lower_limits| & array of four "lower limits" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w4_upper_limits| & array of four "upper limits" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w4_lower_limits| & array of four "lower limits" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w5_upper_limits| & array of four "upper limits" of "window"-comparator 5 for $\eta$.\\
+\verb|eta_w5_lower_limits| & array of four "lower limits" of "window"-comparator 5 for $\eta$.\\
 \verb|phi_full_range| & array of four boolean to set full range of $\varphi$.\\
 \verb|phi_w1_upper_limits| & array of four "upper limits" of "window"-comparator 1 for $\varphi$.\\
 \verb|phi_w1_lower_limits| & array of four "lower limits" of "window"-comparator 1 for $\varphi$.\\
@@ -1112,20 +1119,18 @@ The selection of condition-type and the number of objects is done by parameters 
 
 \clearpage
 
-\subparagraph{Muon conditions module - version 7 - template for VHDL-Producer}
+\subparagraph{Muon conditions module - template for VHDL-Producer}
 See in Chapter \ref{sec:gtl:templates_tme} and in Listing~\ref{lst:instance_muon_condition_vhd}) for a VHDL-template for VHDL-Producer of
-instantiating a muon condition (\texttt{muon\_conditions\_v7.vhd}).\\
+instantiating a muon condition (\texttt{muon\_conditions.vhd}).\\
 
-\subparagraph{Muon comparators module - version 2}\label{sec:gtl:muon_comp_module}
-
-A comparator between \pt and a threshold (pt\_threshold), a comparison in $\eta$ and $\varphi$ with two "window"-comparators each, a comparison of quality with LUT
+\subparagraph{Muon comparators module}\label{sec:gtl:muon_comp_module}
+A comparator between \pt and a threshold (pt\_threshold), a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators, a comparison of quality with LUT
 a comparison of isolation with LUT and a comparison of the requested charge is done in this basic module. The values for \pt threshold, the 'mode-selection' for the \pt comparator,
 the "limits" of the "window"-comparators, the quality LUTs, the isolation LUTs and the requested charge is given in the generic interface list of the module.
 Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
-The comparison in $\eta$ is done with two "window"-comparators, so one gets two ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed.\\
-There are two flags, one for "full-range" and one for "ignore-second-window" for the selection of the ranges. The flags are given for $\eta$ and also for $\varphi$.\\
-The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned.\\
-There are 2 cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator} and Listing~\ref{lst:phi_window_comparator_vhd}):
+The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
+The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. There are two flags, one for "full-range" and one for "ignore-second-window" for the selection of the ranges.\\
+There are two cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator} and Listing~\ref{lst:phi_window_comparator_vhd}):
 \begin{itemize}
 \item Upper limit is less than lower limit => $\varphi$ range between the limits, including the $\varphi$ bin with value = 0 (HW index).
 \item Upper limit is greater/equal than lower limit => $\varphi$ range between the limits, not including the $\varphi$ bin with value = 0 (HW index).
@@ -1262,21 +1267,21 @@ The comparison in VHDL is done with ${pt^2}$ (no square root in VHDL), threshold
 As described in section Correlation conditions (\ref{sec:gtl:correlation_conditions}), correlations of two object types are done. Therefore several modules are provided
 with possible correlations (objects 1-objects 2):
 \begin{itemize}
-\item Correlation condition with calorimeter objects\\(\texttt{calo\_calo\_correlation\_condition\_v4.vhd}:
+\item Correlation condition with calorimeter objects\\(\texttt{calo\_calo\_correlation\_condition.vhd}:
 \egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau are possible.)
-\item Correlation condition with calorimeter objects and muons objects\\(\texttt{calo\_muon\_correlation\_condition\_v3.vhd}: \egamma-muon, jet-muon and tau-muon are possible.)
-\item Correlation condition with muon objects\\(\texttt{muon\_muon\_correlation\_condition\_v4.vhd})
-\item Correlation condition with calorimeter objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\(\texttt{calo\_esums\_correlation\_condition\_v3.vhd}: \egamma-etm, jet-etm, tau-etm,
+\item Correlation condition with calorimeter objects and muons objects\\(\texttt{calo\_muon\_correlation\_condition.vhd}: \egamma-muon, jet-muon and tau-muon are possible.)
+\item Correlation condition with muon objects\\(\texttt{muon\_muon\_correlation\_condition.vhd})
+\item Correlation condition with calorimeter objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\(\texttt{calo\_esums\_correlation\_condition.vhd}: \egamma-etm, jet-etm, tau-etm,
 \egamma-htm, jet-htm, tau-htm, \egamma-etmhf, jet-etmhf and tau-etmhf are possible.)
-\item Correlation condition with muon objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\(\texttt{muon\_esums\_correlation\_condition\_v3.vhd}: muon-etm, muon-etmhf and muon-htm are possible.)
+\item Correlation condition with muon objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\(\texttt{muon\_esums\_correlation\_condition.vhd}: muon-etm, muon-etmhf and muon-htm are possible.)
 \end{itemize}
 
-\subparagraph{Calo Calo Correlation condition module - Version 4}
+\subparagraph{Calo Calo Correlation condition module}
 \label{sec:gtl:calo_calo_correlation_condition_module}
 
 The calo calo correlation condition module contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different
 bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the
-generic list of \texttt{calo\_calo\_correlation\_condition\_v4.vhd} named "same\_bx").\\
+generic list of \texttt{calo\_calo\_correlation\_condition.vhd} named "same\_bx").\\
 In addition there are "Cuts" for differences in $\eta$ (DETA) and $\varphi$ (DPHI) or a calculation of $\Delta$$R$ (DR) or a calculation of mass (MASS), see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
 The cut of mass is available for Invariant mass or Transverse mass or one of both with two-body pt.\\
 The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_EG\_DIFF\_ETA\_LUT, EG\_EG\_DIFF\_PHI\_LUT}\normalsize, ...),
@@ -1303,10 +1308,10 @@ and the results of selected "Cuts" are inside of a range (upper and lower limit)
 This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI
 are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR and MASS with 1\textsuperscript{st} position after decimal point.
 
-For the VHDL entity declaration of calo calo correlation condition module (version 4) in \texttt{calo\_calo\_correlation\_condition\_v4.vhd}, see Listing~\ref{lst:calo_calo_correlation_condition_vhd}.\\
+For the VHDL entity declaration of calo calo correlation condition module (version 4) in \texttt{calo\_calo\_correlation\_condition.vhd}, see Listing~\ref{lst:calo_calo_correlation_condition_vhd}.\\
 \clearpage
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:calo_calo_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{calo\_calo\_correlation\_condition\_v4.vhd}]{interfaces/calo_calo_correlation_condition_v4.vhd}
+\lstinputlisting[label=lst:calo_calo_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{calo\_calo\_correlation\_condition.vhd}]{interfaces/calo_calo_correlation_condition_v4.vhd}
 
 \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
 \caption{Explanation of Listing~\ref{lst:calo_calo_correlation_condition_vhd}}\\
@@ -1325,12 +1330,17 @@ For the VHDL entity declaration of calo calo correlation condition module (versi
 \verb|et_ge_mode_calo1| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only).\\
 \verb|obj_type_calo1| & selection of calo1 object type (EG\_TYPE, JET\_TYPE or TAU\_TYPE are allowed)\\
 \verb|et_threshold_calo1| & threshold value for comparison in \et.\\
-\verb|eta_full_range_calo1| & boolean to set full range of $\eta$.\\
+\verb|nr_eta_windows_calo1| & integer value for number of $\eta$ cuts.\\
 \verb|eta_w1_upper_limit_calo1| & "upper limit" of "window"-comparator 1 for $\eta$.\\
 \verb|eta_w1_lower_limit_calo1| & "lower limit" of "window"-comparator 1 for $\eta$.\\
-\verb|eta_w2_ignore_calo1| & boolean to ignore "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_upper_limit_calo1| & "upper limit" of "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_lower_limit_calo1| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+\verb|eta_w3_upper_limit_calo1| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w3_lower_limit_calo1| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w4_upper_limit_calo1| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w4_lower_limit_calo1| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w5_upper_limit_calo1| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+\verb|eta_w5_lower_limit_calo1| & "lower limit" of "window"-comparator 5 for $\eta$.\\
 \verb|phi_full_range_calo1| & boolean to set full range of $\varphi$.\\
 \verb|phi_w1_upper_limit_calo1| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
 \verb|phi_w1_lower_limit_calo1| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
@@ -1343,12 +1353,17 @@ For the VHDL entity declaration of calo calo correlation condition module (versi
 \verb|et_ge_mode_calo2| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
 \verb|obj_type_calo2| & selection of calo2 object type (EG\_TYPE, JET\_TYPE or TAU\_TYPE are allowed)\\
 \verb|et_threshold_calo2| & threshold value for comparison in \et.\\
-\verb|eta_full_range_calo2| & boolean to set full range of $\eta$.\\
+\verb|nr_eta_windows_calo2| & integer value for number of $\eta$ cuts.\\
 \verb|eta_w1_upper_limit_calo2| & "upper limit" of "window"-comparator 1 for $\eta$.\\
 \verb|eta_w1_lower_limit_calo2| & "lower limit" of "window"-comparator 1 for $\eta$.\\
-\verb|eta_w2_ignore_calo2| & boolean to ignore "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_upper_limit_calo2| & "upper limit" of "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_lower_limit_calo2| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+\verb|eta_w3_upper_limit_calo2| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w3_lower_limit_calo2| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w4_upper_limit_calo2| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w4_lower_limit_calo2| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w5_upper_limit_calo2| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+\verb|eta_w5_lower_limit_calo2| & "lower limit" of "window"-comparator 5 for $\eta$.\\
 \verb|phi_full_range_calo2| & boolean to set full range of $\varphi$.\\
 \verb|phi_w1_upper_limit_calo2| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
 \verb|phi_w1_lower_limit_calo2| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
@@ -1397,7 +1412,7 @@ For the VHDL entity declaration of calo calo correlation condition module (versi
 % See in Chapter \ref{sec:gtl:templates_tme} and in Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd} for a VHDL-template for VHDL-Producer of
 % instantiating a calorimeter-calorimeter-correlation condition (\texttt{calo\_calo\_correlation\_condition.vhd}).\\
 
-\subparagraph{Calo Muon Correlation condition module - Version 3}
+\subparagraph{Calo Muon Correlation condition module}
 \label{sec:gtl:calo_muon_correlation_condition_module}
 
 The calo muon correlation condition module contains a "Single object requirement condition" for one type of calo objects (\egamma, jet or tau) and a "Single object requirement condition" for muon objects.
@@ -1448,10 +1463,10 @@ The condition is complied, if at least one comparison between object parameters 
 a range (upper and lower limit). This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI
 are expressed with the 3\textsuperscript{rd} position after decimal point, for DR and MASS with the 1\textsuperscript{st} position after decimal point.
 
-For the VHDL entity declaration of calo muon correlation condition module (version 3) in \texttt{calo\_muon\_correlation\_condition\_v3.vhd}, see Listing~\ref{lst:calo_muon_correlation_condition_vhd}.\\
+For the VHDL entity declaration of calo muon correlation condition module (version 3) in \texttt{calo\_muon\_correlation\_condition.vhd}, see Listing~\ref{lst:calo_muon_correlation_condition_vhd}.\\
 \clearpage
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:calo_muon_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{calo\_muon\_correlation\_condition\_v3.vhd}]{interfaces/calo_muon_correlation_condition_v3.vhd}
+\lstinputlisting[label=lst:calo_muon_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{calo\_muon\_correlation\_condition.vhd}]{interfaces/calo_muon_correlation_condition.vhd}
 
 \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
 \caption{Explanation of Listing~\ref{lst:calo_muon_correlation_condition_vhd}}\\
@@ -1469,12 +1484,17 @@ For the VHDL entity declaration of calo muon correlation condition module (versi
 \verb|calo_et_ge_mode_calo| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only).\\
 \verb|obj_type_calo| & selection of calo object type (EG\_TYPE, JET\_TYPE or TAU\_TYPE are allowed)\\
 \verb|et_threshold_calo| & threshold value for comparison in \et.\\
-\verb|eta_full_range_calo| & boolean to set full range of $\eta$.\\
+\verb|nr_eta_windows_calo| & integer value for number of $\eta$ cuts.\\
 \verb|eta_w1_upper_limit_calo| & "upper limit" of "window"-comparator 1 for $\eta$.\\
 \verb|eta_w1_lower_limit_calo| & "lower limit" of "window"-comparator 1 for $\eta$.\\
-\verb|eta_w2_ignore_calo| & boolean to ignore "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_upper_limit_calo| & "upper limit" of "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_lower_limit_calo| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+\verb|eta_w3_upper_limit_calo| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w3_lower_limit_calo| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w4_upper_limit_calo| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w4_lower_limit_calo| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w5_upper_limit_calo| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+\verb|eta_w5_lower_limit_calo| & "lower limit" of "window"-comparator 5 for $\eta$.\\
 \verb|phi_full_range_calo| & boolean to set full range of $\varphi$.\\
 \verb|phi_w1_upper_limit_calo| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
 \verb|phi_w1_lower_limit_calo| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
@@ -1486,12 +1506,17 @@ For the VHDL entity declaration of calo muon correlation condition module (versi
 \verb|muon_object_high| & high index of object range (valid numbers: 0..7, but greater or equal muon\_object\_low).\\
 \verb|pt_ge_mode_muon| & 'mode-selection' for the \pt comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
 \verb|pt_threshold_muon| & threshold value for comparison in \pt.\\
-\verb|eta_full_range_muon| & boolean to set full range of $\eta$.\\
+\verb|nr_eta_windows_muon| & integer value for number of $\eta$ cuts.\\
 \verb|eta_w1_upper_limit_muon| & "upper limit" of "window"-comparator 1 for $\eta$.\\
 \verb|eta_w1_lower_limit_muon| & "lower limit" of "window"-comparator 1 for $\eta$.\\
-\verb|eta_w2_ignore_muon| & boolean to ignore "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_upper_limit_muon| & "upper limit" of "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_lower_limit_muon| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+\verb|eta_w3_upper_limit_muon| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w3_lower_limit_muon| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w4_upper_limit_muon| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w4_lower_limit_muon| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w5_upper_limit_muon| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+\verb|eta_w5_lower_limit_muon| & "lower limit" of "window"-comparator 5 for $\eta$.\\
 \verb|phi_full_range_muon| & boolean to set full range of $\varphi$.\\
 \verb|phi_w1_upper_limit_muon| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
 \verb|phi_w1_lower_limit_muon| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
@@ -1543,12 +1568,12 @@ For the VHDL entity declaration of calo muon correlation condition module (versi
 % See in Chapter \ref{sec:gtl:templates_tme} and in Listing~\ref{lst:instance_calo_muon_correlation_condition_vhd} for a VHDL-template for VHDL-Producer of
 % instantiating a calorimeter-muon-correlation condition (\texttt{calo\_muon\_correlation\_condition.vhd}).\\
 
-\subparagraph{Muon Muon Correlation condition module - Version 4}
+\subparagraph{Muon Muon Correlation condition module}
 \label{sec:gtl:muon_muon_correlation_condition_module}
 
 The muon muon correlation condition module contains two "Single object requirement conditions" for data from different bunch-crossings as one possible mode
 and a "Double objects requirement condition" for muon objects at same bunch-crossing as a second mode (selection is done by a parameter in the
-generic list of \texttt{muon\_muon\_correlation\_condition\_v4.vhd} named "same\_bx"). In the case of a "Double objects requirement condition", requirements for "requested charge correlations"
+generic list of \texttt{muon\_muon\_correlation\_condition.vhd} named "same\_bx"). In the case of a "Double objects requirement condition", requirements for "requested charge correlations"
 are used and a muon charge correlation module (see \ref{sec:gtl:muon_charge_correlation_module}) is required.\\
 In addition there are "Cuts" for differences in $\eta$ (DETA), $\varphi$ (DPHI) or a calculation of $\Delta$$R$ (DR) or a calculation of mass (MASS).\\
 The cut of mass is available for Invariant mass or Transverse mass or one of both with two-body pt.\\
@@ -1577,10 +1602,10 @@ and the results of selected "Cuts" are inside of a range (upper and lower limit)
 This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI
 are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR and MASS with 1\textsuperscript{st} position after decimal point.
 
-For the VHDL entity declaration of muon muon correlation condition module in \texttt{muon\_muon\_correlation\_condition\_v4.vhd}, see Listing~\ref{lst:muon_muon_correlation_condition_vhd}.\\
+For the VHDL entity declaration of muon muon correlation condition module in \texttt{muon\_muon\_correlation\_condition.vhd}, see Listing~\ref{lst:muon_muon_correlation_condition_vhd}.\\
 \clearpage
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:muon_muon_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{muon\_muon\_correlation\_condition\_v4.vhd}]{interfaces/muon_muon_correlation_condition_v4.vhd}
+\lstinputlisting[label=lst:muon_muon_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{muon\_muon\_correlation\_condition.vhd}]{interfaces/muon_muon_correlation_condition_v4.vhd}
 
 \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
 \caption{Explanation of Listing~\ref{lst:muon_muon_correlation_condition_vhd}}\\
@@ -1598,12 +1623,17 @@ For the VHDL entity declaration of muon muon correlation condition module in \te
 \verb|muon_object_high| & high index of object range (valid numbers: 0..7, but greater or equal muon\_object\_low).\\
 \verb|pt_ge_mode_muon1| & 'mode-selection' for the \pt comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
 \verb|pt_threshold_muon1| & threshold value for comparison in \pt.\\
-\verb|eta_full_range_muon1| & boolean to set full range of $\eta$.\\
+\verb|nr_eta_windows_muon1| & integer value for number of $\eta$ cuts.\\
 \verb|eta_w1_upper_limit_muon1| & "upper limit" of "window"-comparator 1 for $\eta$.\\
 \verb|eta_w1_lower_limit_muon1| & "lower limit" of "window"-comparator 1 for $\eta$.\\
-\verb|eta_w2_ignore_muon1| & boolean to ignore "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_upper_limit_muon1| & "upper limit" of "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_lower_limit_muon1| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+\verb|eta_w3_upper_limit_muon1| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w3_lower_limit_muon1| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w4_upper_limit_muon1| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w4_lower_limit_muon1| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w5_upper_limit_muon1| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+\verb|eta_w5_lower_limit_muon1| & "lower limit" of "window"-comparator 5 for $\eta$.\\
 \verb|phi_full_range_muon1| & boolean to set full range of $\varphi$.\\
 \verb|phi_w1_upper_limit_muon1| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
 \verb|phi_w1_lower_limit_muon1| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
@@ -1615,12 +1645,17 @@ For the VHDL entity declaration of muon muon correlation condition module in \te
 \verb|iso_lut_muon1| & content of LUT (4 bits) for isolation comparison.\\
 \verb|pt_ge_mode_muon2| & 'mode-selection' for the \pt comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
 \verb|pt_threshold_muon2| & threshold value for comparison in \pt.\\
-\verb|eta_full_range_muon2| & boolean to set full range of $\eta$.\\
+\verb|nr_eta_windows_muon2| & integer value for number of $\eta$ cuts.\\
 \verb|eta_w1_upper_limit_muon2| & "upper limit" of "window"-comparator 1 for $\eta$.\\
 \verb|eta_w1_lower_limit_muon2| & "lower limit" of "window"-comparator 1 for $\eta$.\\
-\verb|eta_w2_ignore_muon2| & boolean to ignore "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_upper_limit_muon2| & "upper limit" of "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_lower_limit_muon2| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+\verb|eta_w3_upper_limit_muon2| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w3_lower_limit_muon2| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w4_upper_limit_muon2| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w4_lower_limit_muon2| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w5_upper_limit_muon2| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+\verb|eta_w5_lower_limit_muon2| & "lower limit" of "window"-comparator 5 for $\eta$.\\
 \verb|phi_full_range_muon2| & boolean to set full range of $\varphi$.\\
 \verb|phi_w1_upper_limit_muon2| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
 \verb|phi_w1_lower_limit_muon2| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
@@ -1671,7 +1706,7 @@ For the VHDL entity declaration of muon muon correlation condition module in \te
 % See in Chapter \ref{sec:gtl:templates_tme} and in Listing~\ref{lst:instance_muon_muon_correlation_condition_vhd} for a VHDL-template for VHDL-Producer of
 % instantiating a calorimeter-calorimeter-correlation condition (\texttt{muon\_muon\_correlation\_condition.vhd}).\\
 
-\subparagraph{Calo Esums Correlation condition module - Version 3}
+\subparagraph{Calo Esums Correlation condition module}
 \label{sec:gtl:calo_esums_correlation_condition_module}
 
 The calo esums correlation condition module contains two "Single object requirement conditions", one of calo objects (\egamma, jet or tau) and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
@@ -1693,9 +1728,9 @@ and the results of selected "Cuts" are inside of a range (upper and lower limit)
 This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DPHI
 are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for MASS with 1\textsuperscript{st} position after decimal point.
 
-For VHDL entity declaration for calo esums correlation condition module in \texttt{calo\_esums\_correlation\_condition\_v3.vhd}, see Listing~\ref{lst:calo_esums_correlation_condition_vhd}.\\
+For VHDL entity declaration for calo esums correlation condition module in \texttt{calo\_esums\_correlation\_condition.vhd}, see Listing~\ref{lst:calo_esums_correlation_condition_vhd}.\\
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:calo_esums_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{calo\_esums\_correlation\_condition\_v3.vhd}]{interfaces/calo_esums_correlation_condition_v3.vhd}
+\lstinputlisting[label=lst:calo_esums_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{calo\_esums\_correlation\_condition.vhd}]{interfaces/calo_esums_correlation_condition.vhd}
 
 \clearpage
 
@@ -1713,12 +1748,17 @@ For VHDL entity declaration for calo esums correlation condition module in \text
 \verb|et_ge_mode_calo| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only).\\
 \verb|obj_type_calo| & selection of calo1 object type (EG\_TYPE, JET\_TYPE or TAU\_TYPE are allowed)\\
 \verb|et_threshold_calo| & threshold value for comparison in \et.\\
-\verb|eta_full_range_calo| & boolean to set full range of $\eta$.\\
+\verb|nr_eta_windows_calo| & integer value for number of $\eta$ cuts.\\
 \verb|eta_w1_upper_limit_calo| & "upper limit" of "window"-comparator 1 for $\eta$.\\
 \verb|eta_w1_lower_limit_calo| & "lower limit" of "window"-comparator 1 for $\eta$.\\
-\verb|eta_w2_ignore_calo| & boolean to ignore "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_upper_limit_calo| & "upper limit" of "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_lower_limit_calo| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+\verb|eta_w3_upper_limit_calo| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w3_lower_limit_calo| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w4_upper_limit_calo| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w4_lower_limit_calo| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w5_upper_limit_calo| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+\verb|eta_w5_lower_limit_calo| & "lower limit" of "window"-comparator 5 for $\eta$.\\
 \verb|phi_full_range_calo| & boolean to set full range of $\varphi$.\\
 \verb|phi_w1_upper_limit_calo| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
 \verb|phi_w1_lower_limit_calo| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
@@ -1766,7 +1806,7 @@ For VHDL entity declaration for calo esums correlation condition module in \text
 \label{tab:gtl:explanation_calo_calo_correlation_condition_vhd}
 \end{longtable}
 
-\subparagraph{Muon Esums Correlation condition module - Version 3}
+\subparagraph{Muon Esums Correlation condition module}
 \label{sec:gtl:muon_esums_correlation_condition_module}
 
 The muon esums correlation condition module contains two "Single object requirement conditions", one of muon objects and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
@@ -1805,9 +1845,9 @@ and the results of selected "Cuts" are inside of a range (upper and lower limit)
 This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DPHI
 are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for MASS with 1\textsuperscript{st} position after decimal point.
 
-For VHDL entity declaration for muon esums correlation condition module in \texttt{muon\_esums\_correlation\_condition\_v3.vhd}, see Listing~\ref{lst:muon_esums_correlation_condition_vhd}.\\
+For VHDL entity declaration for muon esums correlation condition module in \texttt{muon\_esums\_correlation\_condition.vhd}, see Listing~\ref{lst:muon_esums_correlation_condition_vhd}.\\
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:muon_esums_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{muon\_esums\_correlation\_condition\_v3.vhd}]{interfaces/muon_esums_correlation_condition_v3.vhd}
+\lstinputlisting[label=lst:muon_esums_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{muon\_esums\_correlation\_condition.vhd}]{interfaces/muon_esums_correlation_condition.vhd}
 
 \clearpage
 
@@ -1824,12 +1864,17 @@ For VHDL entity declaration for muon esums correlation condition module in \text
 \verb|muon_object_high| & high index of object range (valid numbers: 0..7, but greater or equal muon\_object\_low).\\
 \verb|pt_ge_mode_muon| & 'mode-selection' for the \pt comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
 \verb|pt_threshold_muon| & threshold value for comparison in \pt.\\
-\verb|eta_full_range_muon| & boolean to set full range of $\eta$.\\
+\verb|nr_eta_windows_muon| & integer value for number of $\eta$ cuts.\\
 \verb|eta_w1_upper_limit_muon| & "upper limit" of "window"-comparator 1 for $\eta$.\\
 \verb|eta_w1_lower_limit_muon| & "lower limit" of "window"-comparator 1 for $\eta$.\\
-\verb|eta_w2_ignore_muon| & boolean to ignore "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_upper_limit_muon| & "upper limit" of "window"-comparator 2 for $\eta$.\\
 \verb|eta_w2_lower_limit_muon| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+\verb|eta_w3_upper_limit_muon| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w3_lower_limit_muon| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+\verb|eta_w4_upper_limit_muon| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w4_lower_limit_muon| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+\verb|eta_w5_upper_limit_muon| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+\verb|eta_w5_lower_limit_muon| & "lower limit" of "window"-comparator 5 for $\eta$.\\
 \verb|phi_full_range_muon| & boolean to set full range of $\varphi$.\\
 \verb|phi_w1_upper_limit_muon| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
 \verb|phi_w1_lower_limit_muon| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
@@ -2021,10 +2066,10 @@ All the templates described in this section, are located in:\\\texttt{../cactusp
 %     \end{itemize}
 % \end{itemize}
 % \begin{itemize}
-% \item \textit{{\%- include "subTemplates/instance\_calo\_condition\_v3.vhd.j2"\%}} => replace with strings defined in template:\\
-% \texttt{instance\_calo\_condition\_v3.vhd.j2}.\\
-% \item \textit{{\%- include "subTemplates/instance\_muon\_condition\_v3.vhd.j2"\%}} => replace with strings defined in template:\\
-% \texttt{instance\_muon\_condition\_v3.vhd.j2}.\\
+% \item \textit{{\%- include "subTemplates/instance\_calo\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
+% \texttt{instance\_calo\_condition.vhd.j2}.\\
+% \item \textit{{\%- include "subTemplates/instance\_muon\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
+% \texttt{instance\_muon\_condition.vhd.j2}.\\
 % \item \textit{{\%- include "subTemplates/instance\_esums\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
 % \texttt{instance\_esums\_condition.vhd.j2}.\\
 % \item \textit{{\%- include "subTemplates/instance\_calo\_calo\_correlation\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
@@ -2043,8 +2088,8 @@ All the templates described in this section, are located in:\\\texttt{../cactusp
 % \label{sec:gtl:algo_mapping_tme}
 % The template of Algorithms mapping module (\texttt{subTemplates/algo\_mapping\_rop.vhd}) is used to create the VHDL-file \texttt{algo\_mapping\_rop.vhd}.
 % 
-\subsubsection{Calorimeter conditions - version 7 "no quad" and version 6 "quad" - template for VHDL-Producer}\label{sec:gtl:calo_conditions_tme}
-A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_conditions\_v7\_no\_quad.vhd} \\ and \\ \texttt{calo\_conditions\_v6\_quad.vhd}\\ is given below (see Listing~\ref{lst:instance_calo_condition_vhd}).\\
+\subsubsection{Calorimeter conditions - template for VHDL-Producer}\label{sec:gtl:calo_conditions_tme}
+A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_conditions.vhd} is given below (see Listing~\ref{lst:instance_calo_condition_vhd}).\\
 
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
 \lstinputlisting[label=lst:instance_calo_condition_vhd,language=VHDL,caption=Template of \texttt{calo\_conditions.vhd} for VHDL-Producer]{interfaces/instance_calo_condition.vhd.j2}
@@ -2064,9 +2109,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_conditions\_v
 \verb|operator| & valid strings are 'true' and 'false' - 'true' for greater/equal-, 'false' for equal-mode of \et comparator.\\
 \verb|type| & valid strings are 'EG', 'JET', and 'TAU'.\\
 \verb|threshold| & array with requirements for et\_thresholds (4x 16-bit values, hex notation). Valid values depending on the scales of \et.\\
-\verb|etaFullRange| & array to set full range of $\eta$ (4x boolean).\\
+\verb|nrEtaWindows| & array to set number of $\eta$ cuts.\\
 \verb|etaW1UpperLimit, ...| & arrays of limits for "window"-comparators for $\eta$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\eta$.\\
-\verb|etaW2Ignore| & array to ignore "window"-comparator 2 of $\eta$ (4x boolean).\\
 \verb|phiFullRange| & array to set full range of $\varphi$ (4x boolean).\\
 \verb|phiW1UpperLimit, ...| & arrays of limits for "window"-comparators for $\varphi$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\varphi$.\\
 \verb|[phiW2Ignore| & array to ignore "window"-comparator 2 of $\varphi$ (4x boolean).\\
@@ -2114,8 +2158,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{esums\_conditions.v
 
 \clearpage
 
-\subsubsection{Muon conditions - version 7 - template for VHDL-Producer}
-A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_conditions\_v7.vhd}\\ is given below (see Listing~\ref{lst:instance_muon_condition_vhd}).\\
+\subsubsection{Muon conditions - template for VHDL-Producer}
+A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_conditions.vhd}\\ is given below (see Listing~\ref{lst:instance_muon_condition_vhd}).\\
 
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
 \lstinputlisting[label=lst:instance_muon_condition_vhd,language=VHDL,caption=Template of \texttt{muon\_conditions.vhd} for VHDL-Producer]{interfaces/instance_muon_condition.vhd.j2}
@@ -2135,9 +2179,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_conditions\_v
 \verb|operator| & valid strings are 'true' and 'false' - 'true' for greater/equal-, 'false' for equal-mode of \et comparator.\\
 \verb|type| & valid strings are 'EG', 'JET', and 'TAU'.\\
 \verb|threshold| & array with requirements for et\_thresholds (4x 16-bit values, hex notation). Valid values depending on the scales of \et.\\
-\verb|etaFullRange| & array to set full range of $\eta$ (4x boolean).\\
+\verb|nrEtaWindows| & array to set number of $\eta$ cuts.\\
 \verb|etaW1UpperLimit, ...| & arrays of limits for "window"-comparators for $\eta$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\eta$.\\
-\verb|etaW2Ignore| & array to ignore "window"-comparator 2 of $\eta$ (4x boolean).\\
 \verb|phiFullRange| & array to set full range of $\varphi$ (4x boolean).\\
 \verb|phiW1UpperLimit, ...| & arrays of limits for "window"-comparators for $\varphi$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\varphi$.\\
 \verb|[phiW2Ignore| & array to ignore "window"-comparator 2 of $\varphi$ (4x boolean).\\
@@ -2155,8 +2198,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_conditions\_v
 
 \clearpage
 
-\subsubsection{Calo Calo Correlation condition - Version 4 - template for VHDL-Producer}
-A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_calo\_correlation\_condition\_v4.vhd}\\ is given below (see Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd}).\\
+\subsubsection{Calo Calo Correlation condition - template for VHDL-Producer}
+A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_calo\_correlation\_condition.vhd}\\ is given below (see Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd}).\\
 
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
 \lstinputlisting[label=lst:instance_calo_calo_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{calo\_calo\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_calo_calo_correlation_condition.vhd.j2}
@@ -2178,10 +2221,9 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_calo\_correla
 \verb|sliceLow| & low value of an object slice.\\
 \verb|sliceHigh| & high value of an object slice.\\
 \verb|operator| & valid strings are 'true' and 'false' - 'true' for greater/equal-, 'false' for equal-mode of \et comparator.\\
-\verb|threshold| & array with requirements for et\_thresholds (16-bit values, hex notation). Valid values depending on the scales of \et.\\
-\verb|etaFullRange| & array to set full range of $\eta$ (boolean).\\
+\verb|threshold| & requirements for et\_thresholds (16-bit values, hex notation). Valid values depending on the scales of \et.\\
+\verb|nrEtaWindows| & number of $\eta$ cuts.\\
 \verb|etaW1UpperLimit, ...| & limits for "window"-comparators for $\eta$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\eta$.\\
-\verb|etaW2Ignore| & ignore "window"-comparator 2 of $\eta$ (boolean).\\
 \verb|phiFullRange| & set full range of $\varphi$ (boolean).\\
 \verb|phiW1UpperLimit, ...| & limits for "window"-comparators for $\varphi$ (16-bit values, hex notation). Valid values depending on the scales for $\varphi$.\\
 \verb|[phiW2Ignore| & ignore "window"-comparator 2 of $\varphi$ (boolean).\\
@@ -2198,8 +2240,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_calo\_correla
 
 \clearpage
 
-\subsubsection{Calo Muon Correlation condition - Version 3 - template for VHDL-Producer}
-A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_muon\_correlation\_condition\_v3.vhd}\\ is given below (see Listing~\ref{lst:instance_calo_muon_correlation_condition_vhd}).\\
+\subsubsection{Calo Muon Correlation condition - template for VHDL-Producer}
+A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_muon\_correlation\_condition.vhd}\\ is given below (see Listing~\ref{lst:instance_calo_muon_correlation_condition_vhd}).\\
 
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
 \lstinputlisting[label=lst:instance_calo_muon_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{calo\_muon\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_calo_muon_correlation_condition.vhd.j2}
@@ -2221,9 +2263,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_muon\_correla
 \verb|sliceHigh| & high value of an object slice.\\
 \verb|operator| & valid strings are 'true' and 'false' - 'true' for greater/equal-, 'false' for equal-mode of \et comparator.\\
 \verb|threshold| & requirements for et\_thresholds (16-bit values, hex notation). Valid values depending on the scales of \et.\\
-\verb|etaFullRange| & set full range of $\eta$ (boolean).\\
+\verb|nrEtaWindows| & number of $\eta$ cuts.\\
 \verb|etaW1UpperLimit, ...| & limits for "window"-comparators for $\eta$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\eta$.\\
-\verb|etaW2Ignore| & ignore "window"-comparator 2 of $\eta$ (boolean).\\
 \verb|phiFullRange| & set full range of $\varphi$ (boolean).\\
 \verb|phiW1UpperLimit, ...| & limits for "window"-comparators for $\varphi$ (16-bit values, hex notation). Valid values depending on the scales for $\varphi$.\\
 \verb|[phiW2Ignore| & ignore "window"-comparator 2 of $\varphi$ (boolean).\\
@@ -2242,8 +2283,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_muon\_correla
 
 \clearpage
 
-\subsubsection{Muon Muon Correlation condition - Version 4 - template for VHDL-Producer}
-A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_muon\_correlation\_condition\_v4.vhd}\\ is given below (see Listing~\ref{lst:instance_muon_muon_correlation_condition_vhd}).\\
+\subsubsection{Muon Muon Correlation condition - template for VHDL-Producer}
+A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_muon\_correlation\_condition.vhd}\\ is given below (see Listing~\ref{lst:instance_muon_muon_correlation_condition_vhd}).\\
 
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
 \lstinputlisting[label=lst:instance_muon_muon_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{muon\_muon\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_muon_muon_correlation_condition.vhd.j2}
@@ -2266,9 +2307,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_muon\_correla
 \verb|sliceHigh| & high value of an object slice.\\
 \verb|operator| & valid strings are 'true' and 'false' - 'true' for greater/equal-, 'false' for equal-mode of \et comparator.\\
 \verb|threshold| & requirements for et\_thresholds (16-bit values, hex notation). Valid values depending on the scales of \et.\\
-\verb|etaFullRange| & set full range of $\eta$ (boolean).\\
+\verb|nrEtaWindows| & number of $\eta$ cuts.\\
 \verb|etaW1UpperLimit, ...| & limits for "window"-comparators for $\eta$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\eta$.\\
-\verb|etaW2Ignore| & ignore "window"-comparator 2 of $\eta$ (boolean).\\
 \verb|phiFullRange| & set full range of $\varphi$ (boolean).\\
 \verb|phiW1UpperLimit, ...| & limits for "window"-comparators for $\varphi$ (16-bit values, hex notation). Valid values depending on the scales for $\varphi$.\\
 \verb|[phiW2Ignore| & ignore "window"-comparator 2 of $\varphi$ (boolean).\\
@@ -2285,10 +2325,10 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_muon\_correla
 \label{tab:gtl:explanation_instance_muon_muon_correlation_condition_vhd}
 \end{longtable}
 
-\subsubsection{Calo Esums Correlation condition - Version 3 - template for VHDL-Producer}
+\subsubsection{Calo Esums Correlation condition - template for VHDL-Producer}
 \textbf{Insert new text !!!}
 
-\subsubsection{Muon Esums Correlation condition - Version 3 - template for VHDL-Producer}
+\subsubsection{Muon Esums Correlation condition - template for VHDL-Producer}
 \textbf{Insert new text !!!}
 
 \clearpage

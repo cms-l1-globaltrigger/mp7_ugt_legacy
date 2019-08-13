@@ -1,20 +1,28 @@
 {%- block instantiate_calo_muon_correlation_condition %}
   {%- set o1 = condition.objects[0] %}
   {%- set o2 = condition.objects[1] %}
-{{ condition.vhdl_signal }}_i: entity work.calo_muon_correlation_condition_v3
+{{ condition.vhdl_signal }}_i: entity work.calo_muon_correlation_condition
     generic map(
         {{ condition.deltaEta.enabled }}, {{ condition.deltaPhi.enabled }}, {{ condition.deltaR.enabled }}, {{ condition.mass.enabled }}, {{ condition.mass.type }}, {{ condition.twoBodyPt.enabled }},
         {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, {{ o1.type|upper }}_TYPE,
         X"{{ o1.threshold|X04 }}",
-        {{ o1.etaFullRange }}, X"{{ o1.etaW1UpperLimit|X04 }}",X"{{ o1.etaW1LowerLimit|X04 }}",
-        {{ o1.etaW2Ignore }}, X"{{ o1.etaW2UpperLimit|X04 }}", X"{{ o1.etaW2LowerLimit|X04 }}",
+        {{ o1.etaNrCuts }}, 
+        X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o1.etaW1LowerLimit|X04 }}",
+        X"{{ o1.etaW2UpperLimit|X04 }}", X"{{ o1.etaW2LowerLimit|X04 }}",
+        X"{{ o1.etaW3UpperLimit|X04 }}", X"{{ o1.etaW3LowerLimit|X04 }}",
+        X"{{ o1.etaW4UpperLimit|X04 }}", X"{{ o1.etaW4LowerLimit|X04 }}",
+        X"{{ o1.etaW5UpperLimit|X04 }}", X"{{ o1.etaW5LowerLimit|X04 }}",
         {{ o1.phiFullRange }}, X"{{ o1.phiW1UpperLimit|X04 }}", X"{{ o1.phiW1LowerLimit|X04 }}",
         {{ o1.phiW2Ignore }}, X"{{ o1.phiW2UpperLimit|X04 }}", X"{{ o1.phiW2LowerLimit|X04 }}",
         X"{{ o1.isolationLUT|X01 }}",
         {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o2.operator }},
         X"{{ o2.threshold|X04 }}",
-        {{ o2.etaFullRange }}, X"{{ o2.etaW1UpperLimit|X04 }}",X"{{ o2.etaW1LowerLimit|X04 }}",
-        {{ o2.etaW2Ignore }}, X"{{ o2.etaW2UpperLimit|X04 }}", X"{{ o2.etaW2LowerLimit|X04 }}",
+        {{ o2.etaNrCuts }}, 
+        X"{{ o2.etaW1UpperLimit|X04 }}", X"{{ o2.etaW1LowerLimit|X04 }}",
+        X"{{ o2.etaW2UpperLimit|X04 }}", X"{{ o2.etaW2LowerLimit|X04 }}",
+        X"{{ o2.etaW3UpperLimit|X04 }}", X"{{ o2.etaW3LowerLimit|X04 }}",
+        X"{{ o2.etaW4UpperLimit|X04 }}", X"{{ o2.etaW4LowerLimit|X04 }}",
+        X"{{ o2.etaW5UpperLimit|X04 }}", X"{{ o2.etaW5LowerLimit|X04 }}",
         {{ o2.phiFullRange }}, X"{{ o2.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}",
         {{ o2.phiW2Ignore }}, X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}",
         "{{ o2.charge }}", X"{{ o2.qualityLUT|X04 }}", X"{{ o2.isolationLUT|X01 }}",

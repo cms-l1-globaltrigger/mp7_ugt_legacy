@@ -2185,6 +2185,7 @@ constant HTM_SIN_PHI_LUT : calo_sin_cos_phi_lut_array := CALO_SIN_PHI_LUT;
 -- Center of phi bins for calculation of cosine and sine with 4 digits after decimal point
 type muon_sin_cos_phi_lut_array is array (0 to 2**MAX_MUON_PHI_BITS-1) of integer range -10000 to 10000;
 
+-- HB 2019-10-08: changed some values according to LUT from emulator (given by Len)
 constant MUON_COS_PHI_LUT : muon_sin_cos_phi_lut_array := (
 10000, 9999, 9996, 9993, 9988, 9982, 9975, 9967, 9957, 9946, 9934, 9921, 9907, 9892, 9875, 9857,
 9838, 9818, 9797, 9775, 9751, 9726, 9700, 9673, 9645, 9616, 9585, 9553, 9521, 9487, 9452, 9415,
@@ -2252,6 +2253,7 @@ constant MUON_COS_PHI_LUT : muon_sin_cos_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
+-- HB 2019-10-08: changed some values according to LUT from emulator (given by Len)
 constant MUON_SIN_PHI_LUT : muon_sin_cos_phi_lut_array := (
 55, 164, 273, 382, 491, 600, 708, 817, 926, 1034, 1143, 1251, 1359, 1467, 1575, 1683,
 1790, 1897, 2004, 2111, 2218, 2324, 2430, 2535, 2641, 2746, 2851, 2955, 3059, 3163, 3266, 3369,

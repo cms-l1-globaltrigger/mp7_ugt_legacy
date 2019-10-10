@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2019-10-10: Moved constants for prescaler to fdl_pkg.vhd
 -- HB 2019-10-08: Changed some values in LUTs MUON_COS_PHI_LUT and MUON_SIN_PHI_LUT according to LUTs from emulator (given by Len)
 -- HB 2019-06-03: inserted PRESCALER_FRACTION_WIDTH for fractional prescaler values
 -- HB 2019-05-02: inserted types for calo_cond_matrix.vhd.
@@ -67,16 +68,16 @@ constant FDL_FW_VERSION : std_logic_vector(31 downto 0) := X"00" &
 
 -- ==== FDL definitions - begin ============================================================
 -- Definitions for prescalers (for FDL !)
-constant PRESCALER_COUNTER_WIDTH : integer := 24;
--- HB 2019-06-03: inserted for fractional prescaler values
-constant PRESCALER_FRACTION_WIDTH : integer := 8;
+-- constant PRESCALER_COUNTER_WIDTH : integer := 24;
+-- -- HB 2019-06-03: inserted for fractional prescaler values
+-- constant PRESCALER_FRACTION_WIDTH : integer := 8;
 
 -- HB HB 2016-03-02: type definition for "global" index use.
 type prescale_factor_global_array is array (MAX_NR_ALGOS-1 downto 0) of std_logic_vector(31 downto 0);
 
 type prescale_factor_array is array (NR_ALGOS-1 downto 0) of std_logic_vector(31 downto 0); -- same width as PCIe data
 -- constant PRESCALE_FACTOR_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := ({AssignmentPrescaleFactors} others => X"00000001"); -- written by TME
-constant PRESCALE_FACTOR_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"00000001"); -- written by TME
+-- constant PRESCALE_FACTOR_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"00000001"); -- written by TME
 
 -- Definitions for rate counters
 constant RATE_COUNTER_WIDTH : integer := 32;

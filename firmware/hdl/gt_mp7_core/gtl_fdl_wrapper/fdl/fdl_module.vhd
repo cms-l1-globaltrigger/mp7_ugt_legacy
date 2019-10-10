@@ -2,6 +2,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2019-10-02: v1.3.6 - based on v1.3.5, removed use clause.
 -- HB 2019-10-02: v1.3.5 - based on v1.3.4, changed logic for fractional prescaler - using 32 bits including 2 fractional digits for prescale factor.
 -- HB 2019-10-02: v1.3.4 - based on v1.3.3, changed logic for fractional prescaler (in algo_pre_scaler_fractional_bocci.vhd) - using numerator and denominator for prescale factor.
 -- HB 2019-09-26: v1.3.3 - based on v1.3.2, changed algo_slice generic for fractional prescaler logic (proposal of A. Bocci).
@@ -73,7 +74,6 @@ use work.gt_mp7_core_pkg.ALL;
 use work.fdl_addr_decode.all;
 
 use work.math_pkg.all;
-use work.l1menu_pkg.ALL;
 
 entity fdl_module is
     generic(

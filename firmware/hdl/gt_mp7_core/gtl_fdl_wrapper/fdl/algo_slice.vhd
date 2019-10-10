@@ -3,6 +3,7 @@
 -- FDL structure for one algo (slice)
 -- algo-bx-mask at algo input
 
+-- Version-history:
 -- HB 2019-09-26: new generic parameter PRESCALE_FACTOR_WIDTH (removed PRESCALER_COUNTER_WIDTH amd PRESCALER_FRACTION_WIDTH).
 -- HB 2019-06-03: updated for fractional pre-scaler values.
 -- HB 2017-01-10: fixed bug with 1 bx delay for "begin_lumi_per" for rate counter after pre-scaler.

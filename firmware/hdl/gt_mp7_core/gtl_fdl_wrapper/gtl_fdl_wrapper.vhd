@@ -2,6 +2,7 @@
 -- Wrapper for GTL and FDL
 
 -- Version-history:
+-- HB 2019-10-10: inserted use clause fdl_pkg.
 -- HB 2018-08-08: changed names for internal signals.
 -- HB 2018-08-06: inserted signals for "Asymmetry" and "Centrality" (included in esums data structure).
 -- HB 2016-11-17: inserted port "finor_preview_2_mezz_lemo" for "prescaler preview" in monitoring.
@@ -24,6 +25,7 @@ use ieee.std_logic_arith.all;
 use work.ipbus.all;
 
 use work.gtl_pkg.all;
+use work.fdl_pkg.all;
 
 use work.gt_mp7_core_pkg.all;
 use work.lhc_data_pkg.all;

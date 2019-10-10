@@ -50,7 +50,7 @@ package gt_mp7_core_pkg is
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 3;
-    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 5;
+    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 6;
 -- ==================================================================================================
 
     constant BUNCHES_PER_ORBIT : natural range 3564 to 3564 := LHC_BUNCH_COUNT;

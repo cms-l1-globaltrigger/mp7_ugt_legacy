@@ -1,8 +1,9 @@
 
--- Desription:
+-- Description:
 -- FDL structure for one algo (slice)
 -- algo-bx-mask at algo input
 
+-- HB 2019-09-26: new generic parameter PRESCALE_FACTOR_WIDTH (removed PRESCALER_COUNTER_WIDTH amd PRESCALER_FRACTION_WIDTH).
 -- HB 2019-06-03: updated for fractional pre-scaler values.
 -- HB 2017-01-10: fixed bug with 1 bx delay for "begin_lumi_per" for rate counter after pre-scaler.
 -- HB 2016-11-17: inserted prescaler, rate_cnt_after_prescaler and algo_after_prescaler for "prescaler preview" in monitoring. Removed port "finor_mask".
@@ -24,11 +25,10 @@ use work.math_pkg.all;
 
 entity algo_slice is
     generic( 
-        RATE_COUNTER_WIDTH : integer := 32;
-        PRESCALER_COUNTER_WIDTH : integer := 24;
-        PRESCALE_FACTOR_INIT : std_logic_vector(31 DOWNTO 0) := X"00000001";
-        MAX_DELAY : integer := 128;
-        PRESCALER_FRACTION_WIDTH : integer := 8
+        RATE_COUNTER_WIDTH : integer;
+        PRESCALE_FACTOR_WIDTH : integer;
+        PRESCALE_FACTOR_INIT : std_logic_vector(31 DOWNTO 0);
+        MAX_DELAY : integer := 128
     );
     port( 
         sys_clk : in std_logic;
@@ -46,8 +46,8 @@ entity algo_slice is
         request_update_factor_pulse : in std_logic;
         begin_lumi_per : in std_logic;
         algo_i : in std_logic;
-        prescale_factor : in std_logic_vector(PRESCALER_FRACTION_WIDTH+PRESCALER_COUNTER_WIDTH-1 DOWNTO 0);
-        prescale_factor_preview : in std_logic_vector(PRESCALER_FRACTION_WIDTH+PRESCALER_COUNTER_WIDTH-1 DOWNTO 0);
+        prescale_factor : in std_logic_vector(PRESCALE_FACTOR_WIDTH-1 DOWNTO 0);
+        prescale_factor_preview : in std_logic_vector(PRESCALE_FACTOR_WIDTH-1 DOWNTO 0);
         algo_bx_mask : in std_logic;
         veto_mask : in std_logic;
         rate_cnt_before_prescaler : out std_logic_vector(RATE_COUNTER_WIDTH-1 DOWNTO 0);
@@ -95,10 +95,9 @@ begin
 
     prescaler_i: entity work.algo_pre_scaler
 	generic map( 
-	    COUNTER_WIDTH => PRESCALER_COUNTER_WIDTH,
-	    PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT,
-        FRACTION_WIDTH => PRESCALER_FRACTION_WIDTH
-        )
+	    PRESCALE_FACTOR_WIDTH => PRESCALE_FACTOR_WIDTH,
+	    PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT
+    )
 	port map( 
 	    clk => lhc_clk,
 	    sres_counter => sres_algo_pre_scaler,
@@ -131,10 +130,9 @@ begin
 
     prescaler_preview_i: entity work.algo_pre_scaler
 	generic map( 
-	    COUNTER_WIDTH => PRESCALER_COUNTER_WIDTH,
-	    PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT,
-        FRACTION_WIDTH => PRESCALER_FRACTION_WIDTH
-	)
+	    PRESCALE_FACTOR_WIDTH => PRESCALE_FACTOR_WIDTH,
+	    PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT
+    )
 	port map( 
 	    clk => lhc_clk,
 	    sres_counter => sres_algo_pre_scaler,

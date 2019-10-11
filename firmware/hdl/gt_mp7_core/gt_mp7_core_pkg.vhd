@@ -1,12 +1,13 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name)
--- mp7_ugt (=FRAME_VERSION): v1.9.2
+-- mp7_ugt (=FRAME_VERSION): v1.9.3
 --
 -- frame: v1.2.3 (see frame.vhd)
 -- gtl: v1.8.0 (see gtl_module_tpl.vhd)
--- fdl: v1.3.5 (see fdl_module.vhd)
+-- fdl: v1.3.6 (see fdl_module.vhd)
 
+-- [HB 2016-10-11: mp7_ugt v1.9.3 - for correct tag (typo in tag name in CHANGELOG.md)]
 -- HB 2016-09-19: removed more unused constants
 -- HB 2016-06-30: removed unused constants and cleaned up
 
@@ -38,7 +39,7 @@ package gt_mp7_core_pkg is
 -- FRAME version (given by the editor of frame.vhd)
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 9;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 2;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 3;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &

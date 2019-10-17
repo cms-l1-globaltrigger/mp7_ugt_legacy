@@ -200,7 +200,7 @@ begin
             muon_object_slice_2_low, muon_object_slice_2_high,
             muon_object_slice_3_low, muon_object_slice_3_high,
             muon_object_slice_4_low, muon_object_slice_4_high,
-            nr_templates, et_ge_mode_muon, obj_type_muon,
+            nr_templates, et_ge_mode_muon,
             et_thresholds_muon,
             nr_eta_windows_muon, 
             eta_w1_upper_limits_muon, eta_w1_lower_limits_muon,
@@ -299,7 +299,7 @@ begin
             nr_templates,
             requested_charge_correlation
         )
-        port map(lhc_clk,
+        port map(clk,
             ls_charcorr_double, os_charcorr_double,
             ls_charcorr_triple, os_charcorr_triple,
             ls_charcorr_quad, os_charcorr_quad,

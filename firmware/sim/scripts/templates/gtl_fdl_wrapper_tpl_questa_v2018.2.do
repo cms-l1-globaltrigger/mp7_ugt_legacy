@@ -68,6 +68,8 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_obj_cuts.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_corr_matrix.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_cond_matrix_orm.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_orm.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
@@ -100,7 +102,7 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_rate_counter.v
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_post_dead_time_counter.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_slice.vhd
 #vcom -93 -work work $NGC_DIR/dp_mem_4096x32/dp_mem_4096x32.vhd
-vcom -93 -work work $NGC_DIR/dp_mem_4096x32_blk_mem_gen_v8_4/synth/dp_mem_4096x32.vhd
+vcom -93 -work work $NGC_DIR/dp_mem_4096x32_blk_mem_gen_v8_4_2/synth/dp_mem_4096x32.vhd
 vcom -93 -work work $HDL_DIR/ipbus/slaves/ipb_dpmem_4096_32.vhd
 vcom -93 -work work $HDL_DIR/ipbus/slaves/ipb_read_regs.vhd
 vcom -93 -work work $HDL_DIR/ipbus/slaves/ipb_write_regs.vhd

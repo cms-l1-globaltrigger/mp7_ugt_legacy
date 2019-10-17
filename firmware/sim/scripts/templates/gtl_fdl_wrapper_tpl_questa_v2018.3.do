@@ -68,6 +68,8 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_obj_cuts.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_corr_matrix.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_cond_matrix_orm.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_orm.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd

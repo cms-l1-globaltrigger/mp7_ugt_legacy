@@ -19,6 +19,7 @@
 ----------------------------------------------------------------------------------
 
 -- Version history:
+-- HB 2019-10-17: bug fix at twobody_pt_comp port.
 -- HB 2019-04-30: first version (updated Dinyar/Hannes proposal).
 
 library IEEE;
@@ -55,18 +56,22 @@ entity calo_cond_matrix_orm is
 end calo_cond_matrix_orm;
 
 architecture Behavioral of calo_cond_matrix_orm is
+    constant and_partition_len: integer := 5280; 
+
     constant nr_objects_slice_1_int: natural := calo1_object_slice_1_high-calo1_object_slice_1_low+1;
     constant nr_objects_slice_2_int: natural := calo1_object_slice_2_high-calo1_object_slice_2_low+1;
     constant nr_objects_slice_3_int: natural := calo1_object_slice_3_high-calo1_object_slice_3_low+1;
     constant nr_calo2_objects_int: natural := calo2_object_high-calo2_object_low+1;
 
-    signal obj_vs_templ_vec_sig1: std_logic_vector(4095 downto 0) := (others => '0');
-    signal obj_vs_templ_vec_sig2: std_logic_vector(4095 downto 0) := (others => '0');
-    signal obj_vs_templ_vec_sig3: std_logic_vector(4095 downto 0) := (others => '0');
+    signal obj_vs_templ_vec_sig1: std_logic_vector(and_partition_len-1 downto 0) := (others => '0');
+    signal obj_vs_templ_vec_sig2: std_logic_vector(and_partition_len-1 downto 0) := (others => '0');
+    signal obj_vs_templ_vec_sig3: std_logic_vector(and_partition_len-1 downto 0) := (others => '0');
+    signal obj_vs_templ_vec_sig4: std_logic_vector(and_partition_len-1 downto 0) := (others => '0');
 
     signal condition_and_or_sig1: std_logic;
     signal condition_and_or_sig2: std_logic;
     signal condition_and_or_sig3: std_logic;
+    signal condition_and_or_sig4: std_logic;
 
     signal condition_and_or : std_logic;
 
@@ -138,9 +143,9 @@ begin
             variable index : integer := 0;
             variable index2 : integer := 0;
             variable test_index : integer := 0;
-            variable obj_vs_templ_vec1  : std_logic_vector(5279 downto 0) := (others => '0');
-            variable obj_vs_templ_vec2  : std_logic_vector(5279 downto 0) := (others => '0');
-            variable obj_vs_templ_vec3  : std_logic_vector(5279 downto 0) := (others => '0');
+            variable obj_vs_templ_vec1  : std_logic_vector(and_partition_len-1 downto 0) := (others => '0');
+            variable obj_vs_templ_vec2  : std_logic_vector(and_partition_len-1 downto 0) := (others => '0');
+            variable obj_vs_templ_vec3  : std_logic_vector(and_partition_len-1 downto 0) := (others => '0');
         begin
             index := 0;
             index2 := 0;
@@ -153,7 +158,7 @@ begin
                     for k in calo1_object_slice_3_low to calo1_object_slice_3_high loop
                         for l in calo2_object_low to calo2_object_high loop
                             if (j/=i and k/=i and k/=j) then
-                                if((index mod 5280) = 0) then
+                                if((index mod and_partition_len) = 0) then
                                     if(index /= 0) then
                                         index2 := 0;
                                         test_index := test_index + 1;
@@ -202,7 +207,7 @@ begin
             condition_and_or_tmp1  := '0';
             condition_and_or_tmp2  := '0';
             condition_and_or_tmp3  := '0';
-            for i in 0 to 5279 loop
+            for i in 0 to and_partition_len-1 loop
                 condition_and_or_tmp1 := condition_and_or_tmp1 or obj_vs_templ_vec_sig1(i);
                 condition_and_or_tmp2 := condition_and_or_tmp2 or obj_vs_templ_vec_sig2(i);
                 condition_and_or_tmp3 := condition_and_or_tmp3 or obj_vs_templ_vec_sig3(i);
@@ -214,7 +219,7 @@ begin
         condition_and_or <= condition_and_or_sig1 or condition_and_or_sig2 or condition_and_or_sig3;
     end generate matrix_triple_i;
 
--- -- HB 2017-09-06: max. 7 calo1 obj. and 12 calo2 obj. => max. length of obj_vs_templ_vec = 7*6*5*4*12 = 10080/4096=2.46
+-- -- HB 2019-10-17: max. 8 calo1 obj. and 12 calo2 obj. => max. length of obj_vs_templ_vec = 8*7*6*5*12 = 20160/5280=3.81
 -- Condition type: "quad".
     matrix_quad_i: if nr_templates = 4 generate
         matrix_quad_p_1: process(calo1_obj_slice_1_vs_templ, calo1_obj_slice_2_vs_templ, calo1_obj_slice_3_vs_templ, calo1_obj_slice_4_vs_templ, 
@@ -222,9 +227,10 @@ begin
             variable index : integer := 0;
             variable index2 : integer := 0;
             variable test_index : integer := 0;
-            variable obj_vs_templ_vec1 : std_logic_vector(4095 downto 0) := (others => '0');
-            variable obj_vs_templ_vec2 : std_logic_vector(4095 downto 0) := (others => '0');
-            variable obj_vs_templ_vec3 : std_logic_vector(4095 downto 0) := (others => '0');
+            variable obj_vs_templ_vec1 : std_logic_vector(and_partition_len-1 downto 0) := (others => '0');
+            variable obj_vs_templ_vec2 : std_logic_vector(and_partition_len-1 downto 0) := (others => '0');
+            variable obj_vs_templ_vec3 : std_logic_vector(and_partition_len-1 downto 0) := (others => '0');
+            variable obj_vs_templ_vec4 : std_logic_vector(and_partition_len-1 downto 0) := (others => '0');
         begin
             index := 0;
             index2 := 0;
@@ -238,7 +244,7 @@ begin
                         for l in calo1_object_slice_4_low to calo1_object_slice_4_high loop
                             for m in calo2_object_low to calo2_object_high loop
                                 if (j/=i and k/=i and k/=j and l/=i and l/=j and l/=k) then
-                                    if((index mod 4096) = 0) then
+                                    if((index mod and_partition_len) = 0) then
                                         if(index /= 0) then
                                             index2 := 0;
                                             test_index := test_index + 1;
@@ -268,6 +274,14 @@ begin
                                         dr_orm_comp(i,m) or dr_orm_comp(j,m) or dr_orm_comp(k,m) or dr_orm_comp(l,m))
                                         and calo2_obj_vs_templ(m,1)
                                         ); 
+                                    elsif(test_index = 4) then
+                                        obj_vs_templ_vec4(index2) := calo1_obj_slice_1_vs_templ(i,1) and calo1_obj_slice_2_vs_templ(j,1) and calo1_obj_slice_3_vs_templ(k,1) and calo1_obj_slice_4_vs_templ(l,1) and calo2_obj_vs_templ(m,1) and
+                                        not (
+                                        (diff_eta_orm_comp(i,m) or diff_eta_orm_comp(j,m) or diff_eta_orm_comp(k,m) or diff_eta_orm_comp(l,m) or
+                                        diff_phi_orm_comp(i,m) or diff_phi_orm_comp(j,m) or diff_phi_orm_comp(k,m) or diff_phi_orm_comp(l,m) or
+                                        dr_orm_comp(i,m) or dr_orm_comp(j,m) or dr_orm_comp(k,m) or dr_orm_comp(l,m))
+                                        and calo2_obj_vs_templ(m,1)
+                                        ); 
                                     end if;
                                     index := index + 1;
                                     index2 := index2 +1;
@@ -280,24 +294,28 @@ begin
             obj_vs_templ_vec_sig1 <= obj_vs_templ_vec1;
             obj_vs_templ_vec_sig2 <= obj_vs_templ_vec2;
             obj_vs_templ_vec_sig3 <= obj_vs_templ_vec3;
+            obj_vs_templ_vec_sig4 <= obj_vs_templ_vec4;
         end process matrix_quad_p_1;
 
-        matrix_quad_p_2: process(obj_vs_templ_vec_sig1, obj_vs_templ_vec_sig2, obj_vs_templ_vec_sig3)
+        matrix_quad_p_2: process(obj_vs_templ_vec_sig1, obj_vs_templ_vec_sig2, obj_vs_templ_vec_sig3, obj_vs_templ_vec_sig4)
             variable condition_and_or_tmp1, condition_and_or_tmp2, condition_and_or_tmp3, condition_and_or_tmp4 : std_logic := '0';
         begin
             condition_and_or_tmp1  := '0';
             condition_and_or_tmp2  := '0';
             condition_and_or_tmp3  := '0';
-            for i in 0 to 4095 loop
+            condition_and_or_tmp4  := '0';
+            for i in 0 to and_partition_len-1 loop
                 condition_and_or_tmp1 := condition_and_or_tmp1 or obj_vs_templ_vec_sig1(i);
                 condition_and_or_tmp2 := condition_and_or_tmp2 or obj_vs_templ_vec_sig2(i);
                 condition_and_or_tmp3 := condition_and_or_tmp3 or obj_vs_templ_vec_sig3(i);
+                condition_and_or_tmp4 := condition_and_or_tmp3 or obj_vs_templ_vec_sig4(i);
             end loop;
             condition_and_or_sig1 <= condition_and_or_tmp1;
             condition_and_or_sig2 <= condition_and_or_tmp2;
             condition_and_or_sig3 <= condition_and_or_tmp3;
+            condition_and_or_sig4 <= condition_and_or_tmp4;
         end process matrix_quad_p_2;
-        condition_and_or <= condition_and_or_sig1 or condition_and_or_sig2 or condition_and_or_sig3;
+        condition_and_or <= condition_and_or_sig1 or condition_and_or_sig2 or condition_and_or_sig3 or condition_and_or_sig4;
     end generate matrix_quad_i;
 
 -- Pipeline stage for condition output.

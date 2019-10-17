@@ -3,6 +3,7 @@
 -- Condition module for calorimeter object types (eg, jet and tau) conditions with "overlap removal (orm)".
 
 -- Version history:
+-- HB 2019-10-17: cleaned up.
 -- HB 2019-10-16: bug fix in cond_matrix_i (calo2_obj_vs_templ_pipe).
 -- HB 2019-06-17: updated for "five eta cuts".
 -- HB 2019-05-03: used instances "calo_cuts" and "calo_cond_matrix_orm" to reduce resources. Inserted instance for twobody_pt.
@@ -141,34 +142,10 @@ architecture rtl of calo_conditions_orm is
 
     signal condition_and_or : std_logic;
     
-    signal obj_vs_templ_vec_sig1: std_logic_vector(4095 downto 0) := (others => '0');
-    signal obj_vs_templ_vec_sig2: std_logic_vector(4095 downto 0) := (others => '0');
-    signal obj_vs_templ_vec_sig3: std_logic_vector(4095 downto 0) := (others => '0');
-
-    signal condition_and_or_sig1: std_logic;
-    signal condition_and_or_sig2: std_logic;
-    signal condition_and_or_sig3: std_logic;
-
-    attribute keep: boolean;    
-    attribute keep of obj_vs_templ_vec_sig1  : signal is true;
-    attribute keep of obj_vs_templ_vec_sig2  : signal is true;
-    attribute keep of obj_vs_templ_vec_sig3  : signal is true;
-
-    attribute keep of condition_and_or_sig1  : signal is true;
-    attribute keep of condition_and_or_sig2  : signal is true;
-    attribute keep of condition_and_or_sig3  : signal is true;
-
     signal twobody_pt_comp, twobody_pt_comp_pipe : 
-    std_logic_2dim_array(calo1_object_slice_1_low to calo1_object_slice_1_low, calo1_object_slice_2_low to calo1_object_slice_2_high) := (others => (others => '1'));
+    std_logic_2dim_array(calo1_object_slice_1_low to calo1_object_slice_1_high, calo1_object_slice_2_low to calo1_object_slice_2_high) := (others => (others => '1'));
 
 begin
-
-    assert_i: if nr_templates = 4 generate 
-    -- HB 2017-09-07: max. 7 calo1 objects are allowed for quad condition, because of length of obj_vs_templ_vec
-        assert (nr_objects_slice_1_int < 8 and nr_objects_slice_2_int < 8 and nr_objects_slice_3_int < 8 and nr_objects_slice_4_int < 8) report 
-            "number of objects to high for quad condition: max. 7 calo1 objects per slice allowed"
-        severity failure;
-    end generate;
 
 -- Instantiation of two-body pt cut.
     twobody_pt_cut_i: if twobody_pt_cut = true and nr_templates = 2 generate
@@ -176,8 +153,7 @@ begin
             generic map(
                 calo1_object_slice_1_low, calo1_object_slice_1_high,
                 calo1_object_slice_2_low, calo1_object_slice_2_high,
-                nr_templates,
-                
+                nr_templates,                
                 twobody_pt_cut,
                 pt_width, 
                 pt_sq_threshold_vector,

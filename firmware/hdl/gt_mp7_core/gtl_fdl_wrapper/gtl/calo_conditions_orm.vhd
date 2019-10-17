@@ -3,6 +3,7 @@
 -- Condition module for calorimeter object types (eg, jet and tau) conditions with "overlap removal (orm)".
 
 -- Version history:
+-- HB 2019-10-16: bug fix in cond_matrix_i (calo2_obj_vs_templ_pipe).
 -- HB 2019-06-17: updated for "five eta cuts".
 -- HB 2019-05-03: used instances "calo_cuts" and "calo_cond_matrix_orm" to reduce resources. Inserted instance for twobody_pt.
 -- HB 2017-10-04: added limit vectors for correlation cuts.
@@ -295,8 +296,10 @@ begin
             calo2_object_low, calo2_object_high
         )
         port map(clk,
-            calo1_obj_slice_1_vs_templ_pipe, calo1_obj_slice_2_vs_templ_pipe, calo1_obj_slice_3_vs_templ_pipe, calo1_obj_slice_4_vs_templ_pipe, calo2_obj_vs_templ,
-            twobody_pt_comp_pipe, diff_eta_orm_comp_pipe, diff_phi_orm_comp_pipe, dr_orm_comp_pipe,
+            calo1_obj_slice_1_vs_templ_pipe, calo1_obj_slice_2_vs_templ_pipe, calo1_obj_slice_3_vs_templ_pipe, calo1_obj_slice_4_vs_templ_pipe, 
+            calo2_obj_vs_templ_pipe,
+            twobody_pt_comp_pipe, 
+            diff_eta_orm_comp_pipe, diff_phi_orm_comp_pipe, dr_orm_comp_pipe,
             condition_o
         );
 

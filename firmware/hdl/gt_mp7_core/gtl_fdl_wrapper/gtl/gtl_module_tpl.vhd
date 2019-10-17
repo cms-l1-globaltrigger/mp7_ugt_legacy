@@ -2,7 +2,7 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
--- HB 2019-10-17: v1.9.0: Added overlap removel for muon combinatorial onditions (muon_conditions_orm.vhd).
+-- HB 2019-10-17: v1.9.0: Added overlap removal for muon combinatorial onditions (muon_conditions_orm.vhd).
 -- HB 2019-06-14: v1.8.0: Added possibility for "five eta cuts" in conditions.
 -- HB 2019-05-02: v1.7.0: Added new modules (calo_cond_matrix.vhd, calo_cuts.vhd), changed calo_condition_v6_quad.vhd and calo_condition_v7_no_quad.vhd.
 -- HB 2018-08-06: v1.6.0: Added ports and pipelines for "Asymmetry" (asymet_data, ...) and "Centrality" (centrality_data).

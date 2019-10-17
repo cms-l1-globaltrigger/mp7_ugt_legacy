@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.10.0] - 2019-10-17
+### Comment
+
+- mp7_ugt firmware release v1.10.0 is based on frame v1.2.3, gtl v1.9.0 and fdl v1.3.6.
+
+### Added
+
+- source files:
+  - ../gtl/muon_cond_matrix_orm.vhd
+  - ../gtl/muon_conditions_orm.vhd
+
+### Changed
+
+- source files:
+  - ../gtl/calo_conditions_orm.vhd
+  - ../gtl/calo_cond_matrix_orm.vhd
+
+- simulation files:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2018.2
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2018.3
+
+- dep file:
+  - ../cfg/uGT_algo.dep
+
 ## [v1.9.3] - 2019-10-11
 ### Comment
 

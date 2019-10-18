@@ -178,9 +178,10 @@ architecture rtl of calo_calo_calo_correlation_orm_condition is
     signal calo2_obj_vs_templ, calo2_obj_vs_templ_pipe : std_logic_2dim_array(calo2_object_low to calo2_object_high, 1 to 1) := (others => (others => '0'));
     signal calo3_obj_vs_templ, calo3_obj_vs_templ_pipe : std_logic_2dim_array(calo3_object_low to calo3_object_high, 1 to 1) := (others => (others => '0'));
 -- HB 2017-03-27: default values of cut comps -> '1' because of AND in formular of obj_vs_templ_vec
-    signal diff_eta_comp, diff_eta_comp_temp, diff_eta_comp_pipe, diff_phi_comp, diff_phi_comp_temp, diff_phi_comp_pipe, dr_comp, dr_comp_temp, dr_comp_pipe, 
-        mass_comp, mass_comp_temp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : 
+    signal diff_eta_comp_12, diff_eta_comp_12_temp, diff_eta_comp_12_pipe, diff_phi_comp_12, diff_phi_comp_12_temp, diff_phi_comp_12_pipe, dr_comp_12, dr_comp_12_temp, dr_comp_12_pipe, mass_comp_12, mass_comp_12_temp, mass_comp_12_pipe, twobody_pt_comp_12, twobody_pt_comp_12_temp, twobody_pt_comp_12_pipe : 
         std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) := (others => (others => '1'));
+    signal diff_eta_comp_13, diff_eta_comp_13_temp, diff_eta_comp_13_pipe, diff_phi_comp_13, diff_phi_comp_13_temp, diff_phi_comp_13_pipe, dr_comp_13, dr_comp_13_temp, dr_comp_13_pipe, mass_comp_13, mass_comp_13_temp, mass_comp_13_pipe, twobody_pt_comp_13, twobody_pt_comp_13_temp, twobody_pt_comp_13_pipe : 
+        std_logic_2dim_array(calo1_object_low to calo1_object_high, calo3_object_low to calo3_object_high) := (others => (others => '1'));
     signal condition_and_or : std_logic;
     
 begin
@@ -355,11 +356,11 @@ begin
                         cos_phi_2_integer => cos_phi_2_integer(j),
                         sin_phi_1_integer => sin_phi_1_integer(i),
                         sin_phi_2_integer => sin_phi_2_integer(j),
-                        diff_eta_comp => diff_eta_comp(i,j),
-                        diff_phi_comp => diff_phi_comp(i,j),
-                        dr_comp => dr_comp(i,j),
-                        mass_comp => mass_comp(i,j),
-                        twobody_pt_comp => twobody_pt_comp(i,j)
+                        diff_eta_comp => diff_eta_comp_12(i,j),
+                        diff_phi_comp => diff_phi_comp_12(i,j),
+                        dr_comp => dr_comp_12(i,j),
+                        mass_comp => mass_comp_12(i,j),
+                        twobody_pt_comp => twobody_pt_comp_12(i,j)
                     );
             end generate cuts_l_2;
         end generate cuts_l_1;
@@ -403,18 +404,18 @@ begin
                         cos_phi_2_integer => cos_phi_2_integer(j),
                         sin_phi_1_integer => sin_phi_1_integer(i),
                         sin_phi_2_integer => sin_phi_2_integer(j),
-                        diff_eta_comp => diff_eta_comp(i,j),
-                        diff_phi_comp => diff_phi_comp(i,j),
-                        dr_comp => dr_comp(i,j),
-                        mass_comp => mass_comp(i,j),
-                        twobody_pt_comp => twobody_pt_comp(i,j)
+                        diff_eta_comp => diff_eta_comp_13(i,j),
+                        diff_phi_comp => diff_phi_comp_13(i,j),
+                        dr_comp => dr_comp_13(i,j),
+                        mass_comp => mass_comp_13(i,j),
+                        twobody_pt_comp => twobody_pt_comp_13(i,j)
                     );
             end generate cuts_l_2;
         end generate cuts_l_1;
     end generate obj_2plus1_false_cuts_i;
 
     comb_cuts_pipeline_p: process(lhc_clk, calo1_obj_vs_templ, calo2_obj_vs_templ, calo3_obj_vs_templ, diff_eta_orm_comp_13, diff_phi_orm_comp_13, dr_orm_comp_13, 
-        diff_eta_orm_comp_23, diff_phi_orm_comp_23, dr_orm_comp_23, diff_eta_comp, diff_phi_comp, dr_comp, mass_comp, twobody_pt_comp)
+        diff_eta_orm_comp_23, diff_phi_orm_comp_23, dr_orm_comp_23, diff_eta_comp_12, diff_phi_comp_12, dr_comp_12, mass_comp_12, twobody_pt_comp_12, diff_eta_comp_13, diff_phi_comp_13, dr_comp_13, mass_comp_13, twobody_pt_comp_13)
         begin
         if obj_vs_templ_pipeline_stage = false then 
             calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
@@ -426,11 +427,16 @@ begin
             diff_eta_orm_comp_23_pipe <= diff_eta_orm_comp_23;
             diff_phi_orm_comp_23_pipe <= diff_phi_orm_comp_23;
             dr_orm_comp_23_pipe <= dr_orm_comp_23;
-            diff_eta_comp_pipe <= diff_eta_comp;
-            diff_phi_comp_pipe <= diff_phi_comp;
-            dr_comp_pipe <= dr_comp;
-            mass_comp_pipe <= mass_comp;
-            twobody_pt_comp_pipe <= twobody_pt_comp;
+            diff_eta_comp_12_pipe <= diff_eta_comp_12;
+            diff_phi_comp_12_pipe <= diff_phi_comp_12;
+            dr_comp_12_pipe <= dr_comp_12;
+            mass_comp_12_pipe <= mass_comp_12;
+            twobody_pt_comp_12_pipe <= twobody_pt_comp_12;
+            diff_eta_comp_13_pipe <= diff_eta_comp_13;
+            diff_phi_comp_13_pipe <= diff_phi_comp_13;
+            dr_comp_13_pipe <= dr_comp_13;
+            mass_comp_13_pipe <= mass_comp_13;
+            twobody_pt_comp_13_pipe <= twobody_pt_comp_13;
         else
             if (lhc_clk'event and lhc_clk = '1') then
                 calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
@@ -442,19 +448,23 @@ begin
                 diff_eta_orm_comp_23_pipe <= diff_eta_orm_comp_23;
                 diff_phi_orm_comp_23_pipe <= diff_phi_orm_comp_23;
                 dr_orm_comp_23_pipe <= dr_orm_comp_23;
-                diff_eta_comp_pipe <= diff_eta_comp;
-                diff_phi_comp_pipe <= diff_phi_comp;
-                dr_comp_pipe <= dr_comp;
-                mass_comp_pipe <= mass_comp;
-                twobody_pt_comp_pipe <= twobody_pt_comp;
+                diff_eta_comp_12_pipe <= diff_eta_comp_12;
+                diff_phi_comp_12_pipe <= diff_phi_comp_12;
+                dr_comp_12_pipe <= dr_comp_12;
+                mass_comp_12_pipe <= mass_comp_12;
+                twobody_pt_comp_12_pipe <= twobody_pt_comp_12;
+                diff_eta_comp_13_pipe <= diff_eta_comp_13;
+                diff_phi_comp_13_pipe <= diff_phi_comp_13;
+                dr_comp_13_pipe <= dr_comp_13;
+                mass_comp_13_pipe <= mass_comp_13;
+                twobody_pt_comp_13_pipe <= twobody_pt_comp_13;
             end if;
         end if;
     end process;
     
 -- HB 2017-03-27: values of orm cuts between orm limits -> removal !!!
     obj_2plus1_true_matrix_i: if obj_2plus1 = true generate
-        matrix_and_or_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, calo3_obj_vs_templ_pipe, diff_eta_orm_comp_13_pipe, diff_phi_orm_comp_13_pipe, dr_orm_comp_13_pipe, 
-                diff_eta_orm_comp_23_pipe, diff_phi_orm_comp_23_pipe, dr_orm_comp_23_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
+        matrix_and_or_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, calo3_obj_vs_templ_pipe, diff_eta_orm_comp_13_pipe, diff_phi_orm_comp_13_pipe, dr_orm_comp_13_pipe, diff_eta_orm_comp_23_pipe, diff_phi_orm_comp_23_pipe, dr_orm_comp_23_pipe, diff_eta_comp_12_pipe, diff_phi_comp_12_pipe, dr_comp_12_pipe, mass_comp_12_pipe, twobody_pt_comp_12_pipe)
             variable index : integer := 0;
             variable obj_vs_templ_vec, orm_vec: std_logic_3dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high, calo3_object_low to calo3_object_high) :=
                 (others => (others => (others => '0')));
@@ -476,8 +486,8 @@ begin
                     if j/=i then
                         for k in calo3_object_low to calo3_object_high loop
                             obj_vs_templ_vec(i,j,k) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and calo3_obj_vs_templ_pipe(k,1) and
-                                                      mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and 
-                                                      diff_eta_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
+                                                      mass_comp_12_pipe(i,j) and dr_comp_12_pipe(i,j) and diff_phi_comp_12_pipe(i,j) and 
+                                                      diff_eta_comp_12_pipe(i,j) and twobody_pt_comp_12_pipe(i,j);
                             sim_obj_vs_templ_vec(i,j,k) <= obj_vs_templ_vec(i,j,k);
                             orm_vec(i,j,k) := (dr_orm_comp_13_pipe(i,k) or dr_orm_comp_23_pipe(j,k) or diff_phi_orm_comp_13_pipe(i,k) or
                                               diff_phi_orm_comp_23_pipe(j,k) or diff_eta_orm_comp_13_pipe(i,k) or diff_eta_orm_comp_23_pipe(j,k)) and
@@ -504,8 +514,7 @@ begin
     end generate obj_2plus1_true_matrix_i;
 
     obj_2plus1_false_matrix_i: if obj_2plus1 = false generate
-        matrix_and_or_p: process(calo1_obj_vs_templ_pipe, calo3_obj_vs_templ_pipe, diff_eta_orm_comp_13_pipe, diff_phi_orm_comp_13_pipe, dr_orm_comp_13_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, 
-                dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
+        matrix_and_or_p: process(calo1_obj_vs_templ_pipe, calo3_obj_vs_templ_pipe, diff_eta_orm_comp_13_pipe, diff_phi_orm_comp_13_pipe, dr_orm_comp_13_pipe, diff_eta_comp_13_pipe,            diff_phi_comp_13_pipe, dr_comp_13_pipe, mass_comp_13_pipe, twobody_pt_comp_13_pipe)
             variable index : integer := 0;
             variable obj_vs_templ_vec : std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo3_object_high-calo3_object_low+1)) downto 1) := 
                 (others => '0');
@@ -518,7 +527,7 @@ begin
                 for j in calo3_object_low to calo3_object_high loop
                     index := index + 1;
                     obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo3_obj_vs_templ_pipe(j,1) and
-                                              mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and diff_eta_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j) and
+                                              mass_comp_13_pipe(i,j) and dr_comp_13_pipe(i,j) and diff_phi_comp_13_pipe(i,j) and diff_eta_comp_13_pipe(i,j) and twobody_pt_comp_13_pipe(i,j) and
                                               not ((dr_orm_comp_13_pipe(i,j) or diff_phi_orm_comp_13_pipe(i,j) or diff_eta_orm_comp_13_pipe(i,j)) and calo3_obj_vs_templ_pipe(j,1));
                 end loop;
             end loop;        

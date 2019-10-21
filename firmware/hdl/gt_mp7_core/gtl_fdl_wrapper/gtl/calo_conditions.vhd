@@ -3,6 +3,7 @@
 -- Condition module for calorimeter object types (eg, jet and tau) conditions.
 
 -- Version history:
+-- HB 2019-10-21: bug fix input ports.
 -- HB 2019-06-14: updated for "five eta cuts".
 -- HB 2019-05-03: used instances "calo_cuts" and "calo_cond_matrix" (proposal Dinyar/Hannes) to reduce resources. Inserted instance for twobody_pt.
 -- HB 2017-09-05: inserted slice ranges in generic for correct use of object slices.
@@ -63,12 +64,9 @@ entity calo_conditions is
         clk: in std_logic;
         data_i: in calo_objects_array;
         condition_o: out std_logic;
---         pt : in diff_inputs_array(0 to MAX_CALO_OBJECTS) := (others => (others => '0'));
---         cos_phi_integer : in sin_cos_integer_array(0 to MAX_CALO_OBJECTS) := (others => 0);
---         sin_phi_integer : in sin_cos_integer_array(0 to MAX_CALO_OBJECTS) := (others => 0)
-        pt : in diff_inputs_array;
-        cos_phi_integer : in sin_cos_integer_array;
-        sin_phi_integer : in sin_cos_integer_array
+        pt : in diff_inputs_array(0 to MAX_CALO_OBJECTS-1) := (others => (others => '0'));
+        cos_phi_integer : in sin_cos_integer_array(0 to MAX_CALO_OBJECTS-1) := (others => 0);
+        sin_phi_integer : in sin_cos_integer_array(0 to MAX_CALO_OBJECTS-1) := (others => 0)
     );
 end calo_conditions;
 

@@ -20,7 +20,7 @@ EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
 # Set correct FW_TYPE and BOARD_TYPE for each project!
-FW_TYPE = 'ugt'
+FW_TYPE = 'ugt_legacy'
 BOARD_TYPE = 'mp7'
 
 BoardAliases = {
@@ -148,6 +148,7 @@ def main():
     mp7fw_ugt = args.mp7tag + mp7fw_ugt_suffix
     
     ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, args.menuname, args.build)
+    print (" ipbb_dir = ",ipbb_dir)
 
     if os.path.isdir(ipbb_dir):
         raise RuntimeError("build area alredy exists: {}".format(ipbb_dir))
@@ -207,10 +208,10 @@ def main():
 
     # Removing unused AMC502 firmware directories
     logging.info("removing src directories of unused firmware ...")
-    command = 'bash -c "cd; cd {ipbb_dir}/src/ugt; rm -rf amc502_extcond && rm -rf amc502_finor && rm -rf amc502_finor_pre && rm -rf mp7_tdf"'.format(**locals())
+    command = 'bash -c "cd; cd {ipbb_dir}/src/{project_type}; rm -rf amc502_extcond && rm -rf amc502_finor && rm -rf amc502_finor_pre && rm -rf mp7_tdf"'.format(**locals())
     run_command(command)
 
-    ipbb_src_fw_dir = os.path.abspath(os.path.join(ipbb_dir, 'src', 'ugt', project_type, 'firmware'))
+    ipbb_src_fw_dir = os.path.abspath(os.path.join(ipbb_dir, 'src', project_type, 'firmware'))
     
     for module_id in range(modules):
         module_name = 'module_{}'.format(module_id)
@@ -250,7 +251,8 @@ def main():
 
         logging.info("===========================================================================")
         logging.info("creating IPBB project for module %s ...", module_id)
-        cmd_ipbb_proj_create = "ipbb proj create vivado {project_type}_{args.build}_{module_id} mp7:../ugt/{project_type}".format(**locals())
+        cmd_ipbb_proj_create = "ipbb proj create vivado {project_type}_{args.build}_{module_id} mp7:../{project_type}".format(**locals())
+        #cmd_ipbb_proj_create = "ipbb proj create vivado {project_type}_{args.build}_{module_id} mp7:../ugt/{project_type}".format(**locals())
         
         command = 'bash -c "cd; {cmd_source_ipbb}; cd {ipbb_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
         run_command(command)

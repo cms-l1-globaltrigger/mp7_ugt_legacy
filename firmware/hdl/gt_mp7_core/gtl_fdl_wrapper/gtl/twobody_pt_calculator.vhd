@@ -3,6 +3,7 @@
 -- Calculation of "twobody_pt" (pt**2) based on LUTs.
 
 -- Version history:
+-- HB 2019-10-21: changed attribute values use_dsp.
 -- HB 2019-05-03: changed name from  twobody_pt_calculator_v2 to twobody_pt_calculator.
 -- HB 2017-10-02: updated formular for pt1_square and pt2_square
 -- HB 2017-09-29: changed to "MAX_WIDTH_TBPT_LIMIT_VECTOR" in threshold vector
@@ -59,7 +60,7 @@ architecture rtl of twobody_pt_calculator is
     attribute use_dsp : string;
     attribute use_dsp of cos_plus_sin_integer : signal is "yes";
     attribute use_dsp of pt1_x_pt2_x_cos_plus_sin_temp : signal is "yes";
-    attribute use_dsp of pt_square : signal is "yes";
+--     attribute use_dsp of pt_square : signal is "yes";
 
 begin
 

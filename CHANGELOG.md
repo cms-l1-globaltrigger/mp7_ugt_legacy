@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.10.1] - 2019-10-21
+### Comment
+
+- mp7_ugt firmware release v1.10.1 is based on frame v1.2.3, gtl v1.9.1 and fdl v1.3.6.
+
+### Changed
+
+- source files:
+  - ../gtl/calo_conditions.vhd
+
 ## [v1.10.0] - 2019-10-17
 ### Comment
 

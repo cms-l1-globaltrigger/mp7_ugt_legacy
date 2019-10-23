@@ -19,10 +19,6 @@ from run_simulation_questa import run_simulation_questa
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
-# Set correct FW_TYPE and BOARD_TYPE for each project!
-FW_TYPE = 'ugt_legacy'
-BOARD_TYPE = 'mp7'
-
 BoardAliases = {
     #'mp7_690es': 'r1',
     'mp7xe_690': 'xe',
@@ -141,14 +137,24 @@ def main():
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
     
-    # Compile build root directory
-    project_type = "{}_{}".format(BOARD_TYPE, FW_TYPE)
+    # Board type taken from mp7url repo name
+    board_type_repo_name = os.path.basename(args.mp7url)
+    if board_type_repo_name.find(".") > 0:
+        board_type = board_type_repo_name.split('.')    # Remove ".git" from repo name
+    else:
+        board_type = board_type_repo_name
+        
+    # Project type taken from ugturl repo name
+    project_type_repo_name = os.path.basename(args.ugturl)
+    if project_type_repo_name.find(".") > 0:
+        project_type = project_type_repo_name.split('.')    # Remove ".git" from repo name
+    else:
+        project_type = project_type_repo_name
     
     # Create MP7 tag name for ugt    
     mp7fw_ugt = args.mp7tag + mp7fw_ugt_suffix
     
     ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, args.menuname, args.build)
-    print (" ipbb_dir = ",ipbb_dir)
 
     if os.path.isdir(ipbb_dir):
         raise RuntimeError("build area alredy exists: {}".format(ipbb_dir))
@@ -206,11 +212,6 @@ def main():
     if not modules:
         raise RuntimeError("Menu contains no modules")
 
-    # Removing unused AMC502 firmware directories
-    logging.info("removing src directories of unused firmware ...")
-    command = 'bash -c "cd; cd {ipbb_dir}/src/{project_type}; rm -rf amc502_extcond && rm -rf amc502_finor && rm -rf amc502_finor_pre && rm -rf mp7_tdf"'.format(**locals())
-    run_command(command)
-
     ipbb_src_fw_dir = os.path.abspath(os.path.join(ipbb_dir, 'src', project_type, 'firmware'))
     
     for module_id in range(modules):
@@ -252,7 +253,6 @@ def main():
         logging.info("===========================================================================")
         logging.info("creating IPBB project for module %s ...", module_id)
         cmd_ipbb_proj_create = "ipbb proj create vivado module_{module_id} mp7:../{project_type}".format(**locals())
-        #cmd_ipbb_proj_create = "ipbb proj create vivado {project_type}_{args.build}_{module_id} mp7:../ugt/{project_type}".format(**locals())
         
         command = 'bash -c "cd; {cmd_source_ipbb}; cd {ipbb_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
         run_command(command)
@@ -291,7 +291,6 @@ def main():
     build_raw = args.build.split("x", 1)
     config.set('menu', 'build', build_raw[1])
     # Take args.menuname with distribution number
-    #config.set('menu', 'name', menu_name)
     config.set('menu', 'name', args.menuname)
     config.set('menu', 'location', url_menu)
     config.set('menu', 'modules', modules)
@@ -312,7 +311,7 @@ def main():
 
     config.add_section('device')
     config.set('device', 'type', args.board)
-    config.set('device', 'name', BOARD_TYPE)
+    config.set('device', 'name', board_type[0])
     config.set('device', 'alias', BoardAliases[args.board])
 
     # Writing configuration file

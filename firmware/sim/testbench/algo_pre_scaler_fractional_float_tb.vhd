@@ -19,7 +19,7 @@ architecture beh of algo_pre_scaler_fractional_TB is
 
     constant SIM : boolean := true;
     
-    constant PRESCALE_FACTOR_VALUE : real := 3.27;
+    constant PRESCALE_FACTOR_VALUE : real := 2.48;
     constant PRESCALE_FACTOR_VALUE_INTEGER : integer := integer(PRESCALE_FACTOR_VALUE * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
     constant PRESCALE_FACTOR_VALUE_VEC : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_VALUE_INTEGER, 32);   
         

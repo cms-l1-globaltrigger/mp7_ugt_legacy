@@ -298,6 +298,9 @@ def main():
     config.add_section('ipbb')
     config.set('ipbb', 'version', ipbb_version)
     
+    config.add_section('vivado')
+    config.set('vivado', 'version', args.vivado)
+    
     config.add_section('firmware')
     config.set('firmware', 'ipburl', args.ipburl)
     config.set('firmware', 'ipbtag', args.ipb)

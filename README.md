@@ -1,4 +1,4 @@
-# Simulation of gtl_fdl_wrapper with Questa simulator for 6 ugt modules #
+## Simulation of gtl_fdl_wrapper with Questa simulator for 6 ugt modules #
 
 * This is a description running script "run_simulation_questa.py" for simulation.
 * If Questa sim libraries for Vivado do not exist in $HOME/questasimlibs_xxx, they will be created for the selected Questa sim and Vivado versions.
@@ -20,7 +20,7 @@
     cd ~/gitlab/hbergaue/ugt/mp7_ugt
     python mp7_ugt/scripts/run_simulation_questa.py L1Menu_Collisions2018_v2_1_0-d98 --mp7_tag ~/gitlab/hbergaue/mp7
     
-# Build mp7_ugt firmware with IPBB #
+## Build mp7_ugt firmware with IPBB #
 
 * This is a draft description with branches of MP7 and ugt repos.
 * A fork of [MP7](https://gitlab.cern.ch/hbergaue/mp7) firmware is available with three branches:

@@ -154,7 +154,10 @@ def main():
     # Create MP7 tag name for ugt    
     mp7fw_ugt = args.mp7tag + mp7fw_ugt_suffix
     
-    ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, args.menuname, args.build)
+    #ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, args.menuname, args.build)
+    # HB 2019-11-12: inserted mp7_ugt tag and vivado version in directory name and changed order
+    vivado_version = "vivado_" + args.vivado
+    ipbb_dir = os.path.join(args.path, args.menuname, args.build, project_type, args.ugt, args.mp7tag, vivado_version)
 
     if os.path.isdir(ipbb_dir):
         raise RuntimeError("build area alredy exists: {}".format(ipbb_dir))

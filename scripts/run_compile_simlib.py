@@ -71,7 +71,6 @@ def parse():
     parser.add_argument('--vivado', help = "Vivado version", required = True)
     parser.add_argument('--questasim', default=DefaultQuestaSimPath, help = "Questasim installation path")
     parser.add_argument('--output', default=DefaultQuestaSimLibsPath, help = "Questasim Vivado libraries path")
-    parser.add_argument('--simdir', help = "Simulation directory")
     return parser.parse_args()
 
 def main():
@@ -81,7 +80,7 @@ def main():
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
     
-    run_compile_simlib(args.vivado, args.questasim, args.output, args.simdir)
+    run_compile_simlib(args.vivado, args.questasim, args.output)
     
 if __name__ == '__main__':
     main()

@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.10.3] - 2019-11-12
+### Comment
+
+- mp7_ugt firmware release v1.10.3 is based on v1.10.2, but bug fixed in script.
+
+### Added
+
+- simulation files:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
+
+### Changed
+
+- script file:
+  - ../scripts/run_compile_simlib.py
+
 ## [v1.10.2] - 2019-10-23
 ### Comment
 
@@ -13,7 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - script file:
   - ../scripts/runIpbbSynth.py
-  
+
 ## [v1.10.1] - 2019-10-21
 ### Comment
 
@@ -42,8 +57,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../gtl/calo_cond_matrix_orm.vhd
 
 - simulation files:
-  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2018.2
-  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2018.3
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2018.2.do
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2018.3.do
 
 - dep file:
   - ../cfg/uGT_algo.dep

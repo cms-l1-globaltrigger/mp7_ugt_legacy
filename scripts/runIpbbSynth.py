@@ -118,6 +118,7 @@ def parse_args():
     parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help = "Questasim version (default is  '{}')".format(DefaultQuestasimVersion))
     parser.add_argument('--questasimlibs', metavar='<path>', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}') [useful if sim is set]".format(DefaultQuestaSimLibsName))
     parser.add_argument('--output', metavar = '<path>', help = 'directory for sim results [useful if sim is set]', type = os.path.abspath)
+    parser.add_argument('--tme', metavar='<version>', help = 'TME version [for Information only]')
     return parser.parse_args()
 
 def main():
@@ -303,6 +304,9 @@ def main():
     config.set('menu', 'location', url_menu)
     config.set('menu', 'modules', modules)
 
+    config.add_section('tme')
+    config.set('tme', 'version', args.tme)
+    
     config.add_section('ipbb')
     config.set('ipbb', 'version', ipbb_version)
     

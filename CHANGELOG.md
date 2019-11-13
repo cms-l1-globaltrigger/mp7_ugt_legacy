@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.10.4] - 2019-11-13
+### Comment
+
+- mp7_ugt firmware release v1.10.4 (bug fixed in script).
+
+### Changed
+
+- script file:
+  - ../scripts/fwpackerIpbb.py
+
 ## [v1.10.3] - 2019-11-12
 ### Comment
 

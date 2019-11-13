@@ -70,7 +70,8 @@ def main():
     #for i in range(len(glob.glob(os.path.join(buildarea, 'module_*')))):
         logging.info("collecting data from module %s", i)
         module_dir = 'module_{i}'.format(**locals())
-        proj_dir = 'proj/{}_{}_0x{}_{}'.format(device_name, fw_type, build, i)
+        #proj_dir = 'proj/{}_{}_0x{}_{}'.format(device_name, fw_type, build, i)
+        proj_dir = 'proj/{}'.format(module_dir)
         build_dir = os.path.join(tmpdir, module_dir, 'build')
         log_dir = os.path.join(tmpdir, module_dir, 'log')
         os.makedirs(build_dir)

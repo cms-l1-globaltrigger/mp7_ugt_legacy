@@ -273,7 +273,8 @@ def main():
     for index in check_modules:
         module_id = "module_{}".format(index)
         # IPBB 'proj' directory
-        project_path = os.path.join(build_path, 'proj', '{}_{}_0x{}_{}').format(device_name, fw_type, menu_build, index)
+        #project_path = os.path.join(build_path, 'proj', '{}_{}_0x{}_{}').format(device_name, fw_type, menu_build, index)
+        project_path = os.path.join(build_path, 'proj', module_id)
         log_hr("=")
         log_info("Module #{}".format(index))
         log_hr("=")

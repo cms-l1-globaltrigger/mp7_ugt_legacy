@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - script files:
   - ../scripts/runIpbbSynth.py
   - ../scripts/buildReport.py
+  - ../scripts/checkIpbbSynth.py
   
 ## [v1.10.4] - 2019-11-13
 ### Comment

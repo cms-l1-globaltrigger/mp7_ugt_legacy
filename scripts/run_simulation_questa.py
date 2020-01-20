@@ -231,7 +231,7 @@ def download_file_from_url(url, filename):
         fp.write(d)
 
 #def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
-def run_simulation_questa(a_mp7_tag, a_menu, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
+def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
     # Check Questa sim version
     if a_questasim == '10.6a':
         questasim_path = QuestaSimPathVersion106a
@@ -273,7 +273,8 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_vivado, a_questasim, a_questasiml
     logging.info("===========================================================================")
     logging.info("download XML and testvector file from L1Menu repository ...")
     # Get l1menus_path for URL
-    url_menu = "{}/{}".format(url_menu_default, a_menu)
+    #url_menu = "{}/{}".format(url_menu_default, a_menu)
+    url_menu = "{}/{}".format(a_url_menu, a_menu)
     xml_name = "{}{}".format(a_menu, '.xml')    
     menu_filepath = os.path.join(temp_dir, xml_name)
     url = "{}/xml/{}".format(url_menu, xml_name)    
@@ -473,6 +474,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_vivado, a_questasim, a_questasiml
 def parse():
     parser = argparse.ArgumentParser()
     parser.add_argument('menu', type=tb.menuname_t, help = "menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')")
+    parser.add_argument('--url', default=url_menu_default, help = "URL of menu")
     parser.add_argument('--mp7_tag', required=True, type=os.path.abspath, help = "local path to MP7 tag (checkout tag before running simulation)")
     parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version (default is {})".format(DefaultVivadoVersion))
     parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help = "Questasim version (default is  {})".format(DefaultQuestasimVersion))
@@ -489,7 +491,7 @@ def main():
     # Setup console logging
     logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.INFO)
     
-    run_simulation_questa(args.mp7_tag, args.menu, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
+    run_simulation_questa(args.mp7_tag, args.menu, args.url, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
 
     #with open('')
 if __name__ == '__main__':

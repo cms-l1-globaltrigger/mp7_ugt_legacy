@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - script files:
   - ../scripts/run_simulation_questa.py
+  - ../scripts/runIpbbSynth.py
   
 ## [v1.10.4] - 2019-11-14
 ### Comment

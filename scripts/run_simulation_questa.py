@@ -232,6 +232,12 @@ def download_file_from_url(url, filename):
 
 #def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
 def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
+    print "a_mp7_tag: ", a_mp7_tag
+    print "a_menu: ", a_menu
+    print "a_url_menu: ", a_url_menu
+    print "a_vivado: ", a_vivado
+    print "a_questasim: ", a_questasim
+    print "a_questasimlibs: ", a_questasimlibs
     # Check Questa sim version
     if a_questasim == '10.6a':
         questasim_path = QuestaSimPathVersion106a

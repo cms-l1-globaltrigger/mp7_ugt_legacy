@@ -167,7 +167,7 @@ def main():
     if args.sim:
         logging.info("===========================================================================")
         logging.info("running simulation with Questa ...")
-        run_simulation_questa(args.simmp7path, args.menuname, args.vivado, args.questasim, args.questasimlibs, args.output, False, False, False)
+        run_simulation_questa(args.simmp7path, args.menuname, args.menuurl, args.vivado, args.questasim, args.questasimlibs, args.output, False, False, False)
     else:
         logging.info("===========================================================================")
         logging.info("no simulation required ...")

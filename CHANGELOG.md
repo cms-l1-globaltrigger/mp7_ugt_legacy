@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v1.10.5] - 202-01-20
 ### Comment
 
-- mp7_ugt firmware release v1.10.5 (bug fixed in script).
+- mp7_ugt firmware release v1.10.5 (bugs fixed).
 
 ### Changed
 
+- source files:
+  - ../gtl/calo_calo_calo_correlation_orm_condition.vhd
 - script files:
   - ../scripts/run_simulation_questa.py
   - ../scripts/runIpbbSynth.py

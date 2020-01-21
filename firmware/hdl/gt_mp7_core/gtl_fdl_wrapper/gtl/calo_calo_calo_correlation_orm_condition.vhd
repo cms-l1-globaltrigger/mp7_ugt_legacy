@@ -2,6 +2,7 @@
 -- Description:
 
 -- Version history:
+-- HB 2020-01-21: inserted port calo2 (bug fix).
 -- HB 2019-06-17: updated for "five eta cuts".
 -- HB 2019-05-06: updated instances.
 -- HB 2019-05-06: renamed from calo_calo_calo_correlation_orm_condition_v3 to calo_calo_calo_correlation_orm_condition.
@@ -140,6 +141,7 @@ entity calo_calo_calo_correlation_orm_condition is
     port(
         lhc_clk: in std_logic;
         calo1: in calo_objects_array;
+        calo2: in calo_objects_array;
         calo3: in calo_objects_array;
         diff_eta_orm: in deta_dphi_vector_array;
         diff_phi_orm: in deta_dphi_vector_array;
@@ -236,7 +238,7 @@ begin
                     phi_w2_lower_limit_calo2,
                     iso_lut_calo2
                 )
-                port map(calo1(i), calo2_obj_vs_templ(i,1));
+                port map(calo2(i), calo2_obj_vs_templ(i,1));
         end generate calo2_obj_l;
     end generate obj_2plus1_true_comb_i;
 

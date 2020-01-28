@@ -19,6 +19,7 @@
 ----------------------------------------------------------------------------------
 
 -- Version history:
+-- HB 2020-01-28: bug fix in "matrix_quad_p_1".
 -- HB 2019-10-17: bug fix at twobody_pt_comp port.
 -- HB 2019-04-30: first version (updated Dinyar/Hannes proposal).
 
@@ -274,7 +275,7 @@ begin
                                         dr_orm_comp(i,m) or dr_orm_comp(j,m) or dr_orm_comp(k,m) or dr_orm_comp(l,m))
                                         and calo2_obj_vs_templ(m,1)
                                         ); 
-                                    elsif(test_index = 4) then
+                                    elsif(test_index = 3) then
                                         obj_vs_templ_vec4(index2) := calo1_obj_slice_1_vs_templ(i,1) and calo1_obj_slice_2_vs_templ(j,1) and calo1_obj_slice_3_vs_templ(k,1) and calo1_obj_slice_4_vs_templ(l,1) and calo2_obj_vs_templ(m,1) and
                                         not (
                                         (diff_eta_orm_comp(i,m) or diff_eta_orm_comp(j,m) or diff_eta_orm_comp(k,m) or diff_eta_orm_comp(l,m) or

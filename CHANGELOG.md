@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
   
+## [v1.10.6] - 202-01-28
+### Comment
+
+- mp7_ugt firmware release v1.10.6 (bugs fixed).
+
+### Changed
+
+- source files:
+  - ../gtl/calo_cond_matrix_orm.vhd
+  
 ## [v1.10.5] - 202-01-20
 ### Comment
 
@@ -13,7 +23,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - source files:
   - ../gtl/calo_calo_calo_correlation_orm_condition.vhd
-  - ../gtl/calo_cond_matrix_orm.vhd
 - script files:
   - ../scripts/run_simulation_questa.py
   - ../scripts/runIpbbSynth.py

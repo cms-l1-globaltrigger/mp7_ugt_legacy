@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - source files:
   - ../gtl/calo_calo_calo_correlation_orm_condition.vhd
+  - ../gtl/calo_cond_matrix_orm.vhd
 - script files:
   - ../scripts/run_simulation_questa.py
   - ../scripts/runIpbbSynth.py

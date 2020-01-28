@@ -239,6 +239,7 @@ begin
             obj_vs_templ_vec1 := (others => '0');
             obj_vs_templ_vec2 := (others => '0');
             obj_vs_templ_vec3 := (others => '0');
+            obj_vs_templ_vec4 := (others => '0');
             for i in calo1_object_slice_1_low to calo1_object_slice_1_high loop
                 for j in calo1_object_slice_2_low to calo1_object_slice_2_high loop
                     for k in calo1_object_slice_3_low to calo1_object_slice_3_high loop

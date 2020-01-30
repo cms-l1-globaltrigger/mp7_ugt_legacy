@@ -1,6 +1,7 @@
 
 -- Desription: minimum bias Hf conditions
 
+-- HB 2020-01-30: removed data_i compare with "ZERO".
 -- HB 2016-04-26: updated minimum bias Hf types to same notation as in grammar.
 
 library ieee;
@@ -25,7 +26,7 @@ end min_bias_hf_conditions;
 
 architecture rtl of min_bias_hf_conditions is
 
-    constant ZERO : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
+--     constant ZERO : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
 -- fixed pipeline structure, 2 stages total
     constant conditions_pipeline_stages: natural := 2; -- pipeline stages for output signal of esums_conditions.vhd (0 => no flip-flop) 
 
@@ -34,29 +35,25 @@ architecture rtl of min_bias_hf_conditions is
 begin
 
     mbt0hfp_sel: if obj_type=0 generate
-        comp_o <= '0' when data_i = ZERO else
-		  '1' when (data_i(D_S_I_MBT0HFP_V2.count_high downto D_S_I_MBT0HFP_V2.count_low) >= count_threshold) and et_ge_mode else            
+        comp_o <= '1' when (data_i(D_S_I_MBT0HFP_V2.count_high downto D_S_I_MBT0HFP_V2.count_low) >= count_threshold) and et_ge_mode else            
                   '1' when (data_i(D_S_I_MBT0HFP_V2.count_high downto D_S_I_MBT0HFP_V2.count_low) = count_threshold) and not et_ge_mode else
                   '0';            
     end generate mbt0hfp_sel;
     
     mbt0hfm_sel: if obj_type=1 generate
-        comp_o <= '0' when data_i = ZERO else
-		  '1' when (data_i(D_S_I_MBT0HFM_V2.count_high downto D_S_I_MBT0HFM_V2.count_low) >= count_threshold) and et_ge_mode else            
+        comp_o <= '1' when (data_i(D_S_I_MBT0HFM_V2.count_high downto D_S_I_MBT0HFM_V2.count_low) >= count_threshold) and et_ge_mode else            
                   '1' when (data_i(D_S_I_MBT0HFM_V2.count_high downto D_S_I_MBT0HFM_V2.count_low) = count_threshold) and not et_ge_mode else
                   '0';            
     end generate mbt0hfm_sel;
     
     mbt1hfp_sel: if obj_type=2 generate
-        comp_o <= '0' when data_i = ZERO else
-		  '1' when (data_i(D_S_I_MBT1HFP_V2.count_high downto D_S_I_MBT1HFP_V2.count_low) >= count_threshold) and et_ge_mode else            
+        comp_o <= '1' when (data_i(D_S_I_MBT1HFP_V2.count_high downto D_S_I_MBT1HFP_V2.count_low) >= count_threshold) and et_ge_mode else            
                   '1' when (data_i(D_S_I_MBT1HFP_V2.count_high downto D_S_I_MBT1HFP_V2.count_low) = count_threshold) and not et_ge_mode else
                   '0';            
     end generate mbt1hfp_sel;
     
     mbt1hfm_sel: if obj_type=3 generate
-        comp_o <= '0' when data_i = ZERO else
-		  '1' when (data_i(D_S_I_MBT1HFM_V2.count_high downto D_S_I_MBT1HFM_V2.count_low) >= count_threshold) and et_ge_mode else            
+        comp_o <= '1' when (data_i(D_S_I_MBT1HFM_V2.count_high downto D_S_I_MBT1HFM_V2.count_low) >= count_threshold) and et_ge_mode else            
                   '1' when (data_i(D_S_I_MBT1HFM_V2.count_high downto D_S_I_MBT1HFM_V2.count_low) = count_threshold) and not et_ge_mode else
                   '0';            
     end generate mbt1hfm_sel;

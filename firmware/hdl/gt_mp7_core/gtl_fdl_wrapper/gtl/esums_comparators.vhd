@@ -3,6 +3,7 @@
 -- Comparators fro esums
 
 -- Version history:
+-- HB 2020-01-30: removed "no_esums"
 -- HB 2018-08-09: updated for "htmhf" and "Asymmetry"
 -- HB 2015-06-29: updated for "ettem" and "etmhf"
 -- HB 2015-12-09: removed clk - not needed
@@ -35,7 +36,7 @@ end esums_comparators;
 
 architecture rtl of esums_comparators is
 
-    constant ZERO : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
+--     constant ZERO : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
 
     signal et_ett : std_logic_vector(D_S_I_ETT.et_high-D_S_I_ETT.et_low downto 0);
 
@@ -70,7 +71,7 @@ architecture rtl of esums_comparators is
 begin
 
 -- HB 2015-08-28: inserted "no calo" (all object parameters = 0)
-    no_esums <= '1' when data_i = ZERO else '0';
+--     no_esums <= '1' when data_i = ZERO else '0';
     
     ett_sel: if obj_type=ETT_TYPE generate
         et_ett  <= data_i(D_S_I_ETT.et_high downto D_S_I_ETT.et_low);
@@ -79,7 +80,8 @@ begin
         et_comp <= '1' when (et_ett >= et_threshold) and et_ge_mode else            
                    '1' when (et_ett = et_threshold) and not et_ge_mode else '0';            
     
-        comp_o <= et_comp and not no_esums;   
+--         comp_o <= et_comp and not no_esums;   
+        comp_o <= et_comp;   
 
     end generate ett_sel;
     
@@ -89,7 +91,8 @@ begin
         et_comp <= '1' when (et_htt >= et_threshold) and et_ge_mode else            
                    '1' when (et_htt = et_threshold) and not et_ge_mode  else '0';            
     
-        comp_o <= et_comp and not no_esums;   
+--         comp_o <= et_comp and not no_esums;   
+        comp_o <= et_comp;   
 
     end generate htt_sel;
     
@@ -115,7 +118,8 @@ begin
                 phi_comp_o => phi_comp
             );
 
-        comp_o <= et_comp and phi_comp and not no_esums;   
+--         comp_o <= et_comp and phi_comp and not no_esums;   
+        comp_o <= et_comp and phi_comp;   
 
     end generate etm_sel;
 
@@ -140,7 +144,8 @@ begin
                 phi_comp_o => phi_comp
             );
 
-        comp_o <= et_comp and phi_comp and not no_esums;   
+--         comp_o <= et_comp and phi_comp and not no_esums;   
+        comp_o <= et_comp and phi_comp;   
 
     end generate htm_sel;
 
@@ -176,7 +181,8 @@ begin
                 phi_comp_o => phi_comp
             );
 
-    comp_o <= et_comp and phi_comp and not no_esums;   
+--     comp_o <= et_comp and phi_comp and not no_esums;   
+    comp_o <= et_comp and phi_comp;   
 
     end generate etmhf_sel;
 
@@ -202,7 +208,8 @@ begin
                 phi_comp_o => phi_comp
             );
 
-    comp_o <= et_comp and phi_comp and not no_esums;   
+--     comp_o <= et_comp and phi_comp and not no_esums;   
+    comp_o <= et_comp and phi_comp;   
 
     end generate htmhf_sel;
 
@@ -212,7 +219,8 @@ begin
         et_comp <= '1' when (et_asymet >= et_threshold) and et_ge_mode else            
                    '1' when (et_asymet = et_threshold) and not et_ge_mode else '0';            
     
-        comp_o <= et_comp and not no_esums;   
+--         comp_o <= et_comp and not no_esums;   
+        comp_o <= et_comp;   
 
     end generate asymet_sel;
 
@@ -222,7 +230,8 @@ begin
         et_comp <= '1' when (et_asymht >= et_threshold) and et_ge_mode else            
                    '1' when (et_asymht = et_threshold) and not et_ge_mode else '0';            
     
-        comp_o <= et_comp and not no_esums;   
+--         comp_o <= et_comp and not no_esums;   
+        comp_o <= et_comp;   
 
     end generate asymht_sel;
 
@@ -232,7 +241,8 @@ begin
         et_comp <= '1' when (et_asymethf >= et_threshold) and et_ge_mode else            
                    '1' when (et_asymethf = et_threshold) and not et_ge_mode else '0';            
     
-        comp_o <= et_comp and not no_esums;   
+--         comp_o <= et_comp and not no_esums;   
+        comp_o <= et_comp;   
 
     end generate asymethf_sel;
 
@@ -242,7 +252,8 @@ begin
         et_comp <= '1' when (et_asymhthf >= et_threshold) and et_ge_mode else            
                    '1' when (et_asymhthf = et_threshold) and not et_ge_mode else '0';            
     
-        comp_o <= et_comp and not no_esums;   
+--         comp_o <= et_comp and not no_esums;   
+        comp_o <= et_comp;   
 
     end generate asymhthf_sel;
 

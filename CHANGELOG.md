@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
   
-## [v1.10.7] - 202-01-30
+## [v1.10.7] - 2020-01-30
 ### Comment
 
 - mp7_ugt firmware release v1.10.7 (cleaned up code).
@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../gtl/esums_comparators.vhd
   - ../gtl/min_bias_hf_conditions.vhd
   
-## [v1.10.6] - 202-01-28
+## [v1.10.6] - 2020-01-28
 ### Comment
 
 - mp7_ugt firmware release v1.10.6 (bugs fixed).
@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../gtl/calo_cond_matrix_orm.vhd
   
-## [v1.10.5] - 202-01-20
+## [v1.10.5] - 2020-01-20
 ### Comment
 
 - mp7_ugt firmware release v1.10.5 (bugs fixed).

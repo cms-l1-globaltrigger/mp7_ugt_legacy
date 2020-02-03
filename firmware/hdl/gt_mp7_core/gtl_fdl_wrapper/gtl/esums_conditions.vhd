@@ -2,6 +2,7 @@
 -- Desription:
 
 -- Version history:
+-- HB 2020-01-31: redesign output pipeline
 -- HB 2015-05-29: removed "use work.gtl_lib.all;" - using "entity work.xxx" for instances
 
 library ieee;
@@ -32,41 +33,50 @@ end esums_conditions;
 
 architecture rtl of esums_conditions is
 -- fixed pipeline structure, 2 stages total
-    constant conditions_pipeline_stages: natural := 2; -- pipeline stages for output signal of esums_conditions.vhd (0 => no flip-flop) 
+--     constant conditions_pipeline_stages: natural := 2; -- pipeline stages for output signal of esums_conditions.vhd (0 => no flip-flop) 
 
+    signal temp1, temp2 : std_logic;
     signal comp_o : std_logic;
 
 begin
     
     esums_comparators_i: entity work.esums_comparators
-	generic map(
-	    et_ge_mode => et_ge_mode,
-	    obj_type => obj_type,
-	    et_threshold => et_threshold,
-            phi_full_range => phi_full_range,
-            phi_w1_upper_limit => phi_w1_upper_limit,
-            phi_w1_lower_limit => phi_w1_lower_limit,
-            phi_w2_ignore => phi_w2_ignore,
-            phi_w2_upper_limit => phi_w2_upper_limit,
-            phi_w2_lower_limit => phi_w2_lower_limit	
-	)
-	port map(
--- 	    clk => clk,
-	    data_i => data_i,
-	    comp_o => comp_o
-	);
+    generic map(
+        et_ge_mode => et_ge_mode,
+        obj_type => obj_type,
+        et_threshold => et_threshold,
+        phi_full_range => phi_full_range,
+        phi_w1_upper_limit => phi_w1_upper_limit,
+        phi_w1_lower_limit => phi_w1_lower_limit,
+        phi_w2_ignore => phi_w2_ignore,
+        phi_w2_upper_limit => phi_w2_upper_limit,
+        phi_w2_lower_limit => phi_w2_lower_limit	
+    )
+    port map(
+        data_i => data_i,
+        comp_o => comp_o
+    );
     
--- Pipeline stages for condition output.
+-- -- Pipeline stages for condition output.
+--     condition_o_pipeline: process(clk, comp_o)
+--         variable pipeline_temp : std_logic_vector(0 to conditions_pipeline_stages+1) := (others => '0');
+--     begin
+--         pipeline_temp(conditions_pipeline_stages+1) := comp_o;
+--         if (conditions_pipeline_stages > 0) then 
+--             if (clk'event and (clk = '1') ) then
+--                 pipeline_temp(0 to conditions_pipeline_stages) := pipeline_temp(1 to conditions_pipeline_stages+1);
+--             end if;
+--         end if;
+--         condition_o <= pipeline_temp(1); -- used pipeline_temp(1) instead of pipeline_temp(0), to prevent warnings in compilation
+--     end process;
+
+-- Pipeline stages for condition output - 2 stages.
     condition_o_pipeline: process(clk, comp_o)
-	variable pipeline_temp : std_logic_vector(0 to conditions_pipeline_stages+1) := (others => '0');
     begin
-        pipeline_temp(conditions_pipeline_stages+1) := comp_o;
-        if (conditions_pipeline_stages > 0) then 
-            if (clk'event and (clk = '1') ) then
-                pipeline_temp(0 to conditions_pipeline_stages) := pipeline_temp(1 to conditions_pipeline_stages+1);
-            end if;
+        if (clk'event and clk = '1') then
+            temp1 <= comp_o;
+            condition_o <= temp1;
         end if;
-        condition_o <= pipeline_temp(1); -- used pipeline_temp(1) instead of pipeline_temp(0), to prevent warnings in compilation
     end process;
 
 end architecture rtl;

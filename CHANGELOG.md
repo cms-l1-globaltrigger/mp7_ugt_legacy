@@ -4,10 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
   
-## [v1.10.7] - 2020-01-30
+## [v1.10.7] - 2020-02-03
 ### Comment
 
-- mp7_ugt firmware release v1.10.7 (cleaned up code).
+- mp7_ugt firmware release v1.10.7 (bugs fixed - condition putput pipeline).
 
 ### Changed
 

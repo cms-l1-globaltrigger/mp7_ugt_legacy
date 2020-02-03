@@ -1,14 +1,15 @@
 
 -- actual versions:
--- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name)
+-- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
 -- mp7_ugt (=FRAME_VERSION): v1.10.7
 --
 -- frame: v1.2.3 (see frame.vhd)
--- gtl: v1.9.3 (see gtl_module_tpl.vhd)
+-- gtl: v1.9.4 (see gtl_module_tpl.vhd)
 -- fdl: v1.3.6 (see fdl_module.vhd)
 
 -- gtl history:
--- HB 2020-01-30: v1.9.3: cleaned up code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
+-- HB 2020-02-03: v1.9.4: Changed output pipeline code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
+-- HB 2020-01-30: v1.9.3: Cleaned up code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
 
 -- [HB 2016-10-11: mp7_ugt v1.9.3 - for correct tag (typo in tag name in CHANGELOG.md)]
 -- HB 2016-09-19: removed more unused constants

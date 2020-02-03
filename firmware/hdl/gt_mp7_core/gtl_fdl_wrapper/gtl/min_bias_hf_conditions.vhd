@@ -60,6 +60,7 @@ begin
                   '0';            
     end generate mbt1hfm_sel;
     
+-- This code did not work correctly (no minbias conditions in implementation) with Vivado versions 2018.3 and higher !!!
 -- -- Pipeline stages for condition output.
 --     condition_o_pipeline: process(clk, comp_o)
 --         variable pipeline_temp : std_logic_vector(0 to conditions_pipeline_stages+1) := (others => '0');

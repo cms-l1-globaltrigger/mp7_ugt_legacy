@@ -4,16 +4,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
   
+## [v1.11.0] - 2020-02-19
+### Comment
+
+- mp7_ugt firmware release v1.11.0 (added files for invariant mass with 3 objects).
+
+### Added
+- source files:
+  - ../gtl/sum_mass_calc.vhd
+  - ../gtl/muon_mass_3_obj_condition.vhd
+  
+### Changed
+- source files:
+  - ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
+- simulation files:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2018.2.do
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2018.3.do
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
+- dep file:
+  - ../cfg/uGT_algo.dep
+
 ## [v1.10.7] - 2020-02-03
 ### Comment
 
 - mp7_ugt firmware release v1.10.7 (bugs fixed - condition putput pipeline).
 
-### Changed
+### Added
 
 - source files:
-  - ../gtl/esums_comparators.vhd
-  - ../gtl/min_bias_hf_conditions.vhd
+  - ../gtl/muon_mass_3_obj_condition.vhd
+  - ../gtl/sum_mass_calc.vhd
   
 ## [v1.10.6] - 2020-01-28
 ### Comment

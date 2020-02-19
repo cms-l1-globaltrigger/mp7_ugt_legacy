@@ -1,5 +1,5 @@
 
--- Desription:
+-- Description:
 -- Condition for invariant mass with 3 muon objects.
 
 -- Version history:
@@ -121,6 +121,8 @@ architecture rtl of muon_mass_3_obj_condition is
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
+    constant mass_vector_width: positive := pt_width+pt_width+cosh_cos_width; 
+
     type muon1_object_vs_template_array is array (muon1_object_low to muon1_object_high, 1 to 1) of std_logic;
     type muon2_object_vs_template_array is array (muon2_object_low to muon2_object_high, 1 to 1) of std_logic;
     type muon3_object_vs_template_array is array (muon3_object_low to muon3_object_high, 1 to 1) of std_logic;
@@ -138,9 +140,9 @@ architecture rtl of muon_mass_3_obj_condition is
     signal mass_comp, mass_comp_pipe : 
         std_logic_3dim_array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) := (others => (others => (others => '0')));
 
-    type inv_mass_value_array is array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic_vector(MASS_VECTOR_WIDTH-1 downto 0);
+    type inv_mass_value_array is array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic_vector(mass_vector_width-1 downto 0);
     signal inv_mass_value_12, inv_mass_value_13, inv_mass_value_23 : inv_mass_value_array := (others => (others => (others => '0')));   
-    type sum_mass_array is array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic_vector(MASS_VECTOR_WIDTH+1 downto 0);
+    type sum_mass_array is array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic_vector(mass_vector_width+1 downto 0);
     signal sum_mass : sum_mass_array := (others => (others => (others => (others => '0'))));   
 
     signal condition_and_or : std_logic;
@@ -211,10 +213,10 @@ begin
             l3_sum_comp: for k in 0 to NR_MUON_OBJECTS-1 generate
                 sum_i: if j>i and k>i and k>j generate
                     sum_mass_calc_i: entity work.sum_mass_calc
-                        generic map(MASS_VECTOR_WIDTH)  
+                        generic map(mass_vector_width)  
                         port map(inv_mass_value_12(i,j), inv_mass_value_13(i,k), inv_mass_value_23(j,k), sum_mass(i,j,k));
-                    mass_comp(i,j,k) <= '1' when sum_mass(i,j,k) >= mass_lower_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) and
-                        sum_mass(i,j,k) <= mass_upper_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) else '0';
+                    mass_comp(i,j,k) <= '1' when sum_mass(i,j,k) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+                        sum_mass(i,j,k) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
             end generate l3_sum_comp;    
         end generate l2_sum_comp;
     end generate l1_sum_comp;
@@ -307,7 +309,7 @@ begin
 
     -- Charge correlation comparison
     charge_triple_i: if nr_templates = 3 generate
-        charge_triple_l_1: for i in 0 to muon_object_slice_1_high generate
+        charge_triple_l_1: for i in muon_object_slice_1_low to muon_object_slice_1_high generate
             charge_triple_l_2: for j in muon_object_slice_2_low to muon_object_slice_2_high generate
                 charge_triple_l_3: for k in muon_object_slice_3_low to muon_object_slice_3_high generate
                     charge_triple_if: if (j/=i and k/=i and k/=j) generate
@@ -341,9 +343,9 @@ begin
     end process;
 
     -- "Matrix" of permutations in an and-or-structure.
-    matrix_p: process(muon1_obj_vs_templ_pipe, muon2_obj_vs_templ_pipe, charge_comp_double_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
+    matrix_p: process(muon1_obj_vs_templ_pipe, muon2_obj_vs_templ_pipe, muon3_obj_vs_templ_pipe, charge_comp_triple_pipe, mass_comp_pipe)
         variable index : integer := 0;
-        variable obj_vs_templ_vec : std_logic_vector((muon1_object_high-muon1_object_low+1)*(muon2_object_high-muon2_object_low+1) downto 1) := (others => '0');
+        variable obj_vs_templ_vec : std_logic_vector((muon1_object_high-muon1_object_low+1)*(muon2_object_high-muon2_object_low+1)*(muon3_object_high-muon3_object_low+1) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
     begin
         index := 0;

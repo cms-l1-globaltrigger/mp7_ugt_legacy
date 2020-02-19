@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../gtl/sum_mass_calc.vhd
   - ../gtl/muon_mass_3_obj_condition.vhd
+  - ../gtl/calo_mass_3_obj_condition.vhd
   
 ### Changed
 - source files:

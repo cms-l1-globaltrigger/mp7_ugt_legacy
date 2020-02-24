@@ -3,6 +3,7 @@
 -- Condition for invariant mass with 3 muon objects.
 
 -- Version history:
+-- HB 2020-02-24: changed mass calculation and loop indices for sum.
 -- HB 2020-02-20: cleaned up code.
 -- HB 2020-02-19: first design.
 
@@ -96,7 +97,7 @@ entity muon_mass_3_obj_condition is
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
 
         pt_width: positive; 
-        cosh_cos_precision : positive;
+        mass_cosh_cos_precision : positive;
         cosh_cos_width: positive
 
     );
@@ -126,7 +127,7 @@ architecture rtl of muon_mass_3_obj_condition is
 
 --***************************************************************
 -- signals for charge correlation comparison:
-    signal charge_comp_triple : muon_charcorr_triple_array := (others => (others => (others => '0')));
+    signal charge_comp_triple : muon_charcorr_triple_array := (others => (others => '0'));
     signal charge_comp_triple_pipe : muon_charcorr_triple_array;
 --***************************************************************
 
@@ -138,7 +139,7 @@ architecture rtl of muon_mass_3_obj_condition is
         std_logic_3dim_array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) := (others => (others => (others => '0')));
 
     type inv_mass_value_array is array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic_vector(mass_vector_width-1 downto 0);
-    signal inv_mass_value : inv_mass_value_array := (others => (others => (others => '0')));   
+    signal inv_mass_value, inv_mass_value_temp : inv_mass_value_array := (others => (others => (others => '0')));   
     type sum_mass_array is array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic_vector(mass_vector_width+1 downto 0);
     signal sum_mass : sum_mass_array := (others => (others => (others => (others => '0'))));   
 
@@ -167,16 +168,18 @@ begin
                         pt2 => pt(j)(pt_width-1 downto 0),
                         cosh_deta => cosh_deta(i,j),
                         cos_dphi => cos_dphi(i,j),
-                        sim_invariant_mass_sq_div2 => inv_mass_value(i,j)
+                        sim_invariant_mass_sq_div2 => inv_mass_value_temp(i,j)
                     );
+                inv_mass_value(i,j) <= inv_mass_value_temp(i,j);
+                inv_mass_value(j,i) <= inv_mass_value_temp(i,j);
             end generate mass_calc_l;
         end generate mass_l_2;
     end generate mass_l_1;
 
-    l1_sum_comp: for i in 0 to NR_MUON_OBJECTS-1 generate
-        l2_sum_comp: for j in 0 to NR_MUON_OBJECTS-1 generate
-            l3_sum_comp: for k in 0 to NR_MUON_OBJECTS-1 generate
-                mass_comp_l: if j>i and k>i and k>j generate
+    l1_sum_comp: for i in muon1_object_low to muon1_object_high generate
+        l2_sum_comp: for j in muon2_object_low to muon2_object_high generate
+            l3_sum_comp: for k in muon3_object_low to muon3_object_high generate
+                mass_comp_l: if j=/i and k/=i and k=/j generate
                     sum_mass_calc_i: entity work.sum_mass_calc
                         generic map(mass_vector_width)  
                         port map(inv_mass_value(i,j), inv_mass_value(i,k), inv_mass_value(j,k), sum_mass(i,j,k));
@@ -245,7 +248,7 @@ begin
             port map(muon_data_i(i), muon2_obj_vs_templ(i,1));
     end generate obj_templ2_l_l;
 
-    obj_templ3_l_l: for i in muon2_object_low to muon2_object_high generate
+    obj_templ3_l_l: for i in muon3_object_low to muon3_object_high generate
         obj_templ3_comp_i: entity work.muon_comparators
             generic map(pt_ge_mode_muon3,
                 pt_threshold_muon3(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low downto 0),
@@ -274,18 +277,19 @@ begin
     end generate obj_templ3_l_l;
 
     -- Charge correlation comparison
-    charge_triple_l_1: for i in muon1_object_low to muon1_object_high generate
-        charge_triple_l_2: for j in muon2_object_low to muon2_object_high generate
-            charge_triple_l_3: for k in muon3_object_low to muon3_object_high generate
-                charge_triple_if: if (j/=i and k/=i and k/=j) generate
-                    charge_comp_triple(i,j,k) <= '1' when ls_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "ls" else
-                                                '1' when os_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "os" else
-                                                '1' when requested_charge_correlation = "ig" else
-                                                '0';
-                end generate charge_triple_if;
-            end generate charge_triple_l_3;
-        end generate charge_triple_l_2;
-    end generate charge_triple_l_1;
+    charge_triple_i: if nr_templates = 3 generate
+        charge_triple_l_1: for i in muon_object_slice_1_low to muon_object_slice_1_high generate
+            charge_triple_l_2: for j in muon_object_slice_2_low to muon_object_slice_2_high generate
+                charge_triple_l_3: for k in muon_object_slice_3_low to muon_object_slice_3_high generate
+                    charge_triple_if: if (j/=i and k/=i and k/=j) generate
+                        charge_comp_triple(i,j,k) <= '1' when ls_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "ls" else
+                                                    '1' when os_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "os" else
+                                                    '1' when requested_charge_correlation = "ig" else
+                                                    '0';
+                    end generate charge_triple_if;
+                end generate charge_triple_l_3;
+            end generate charge_triple_l_2;
+        end generate charge_triple_l_1;
 
     -- Pipeline stage for obj_vs_templ and mass_comp
     pipeline_p: process(lhc_clk, muon1_obj_vs_templ, muon2_obj_vs_templ, muon3_obj_vs_templ, mass_comp, charge_comp_triple)
@@ -321,7 +325,7 @@ begin
                 for k in muon3_object_low to muon3_object_high loop
                     if j/=i and i/=k and j/=k then
                         index := index + 1;
-                        obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and muon3_obj_vs_templ_pipe(k,1) and 
+                        obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) muon3_obj_vs_templ_pipe(k,1) and 
                             charge_comp_triple_pipe(i,j,k) and mass_comp_pipe(i,j,k);
                     end if;
                 end loop;
@@ -346,7 +350,7 @@ begin
             end if;
     end process;
     
-end rtl;
+end architecture rtl;
     
     
     

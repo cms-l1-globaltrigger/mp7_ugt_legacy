@@ -3,6 +3,7 @@
 -- Condition for invariant mass with 3 calo objects (same object type, same bx).
 
 -- Version history:
+-- HB 2020-02-24: changed mass calculation and loop indices for sum.
 -- HB 2020-02-19: first design.
 
 library ieee;
@@ -126,7 +127,7 @@ architecture rtl of calo_mass_3_obj_condition is
         std_logic_3dim_array(0 to nr_obj-1, 0 to nr_obj-1, 0 to nr_obj-1) := (others => (others => (others => '0')));
 
     type inv_mass_value_array is array(0 to nr_obj-1, 0 to nr_obj-1) of std_logic_vector(mass_vector_width-1 downto 0);
-    signal inv_mass_value_12, inv_mass_value_13, inv_mass_value_23 : inv_mass_value_array := (others => (others => (others => '0')));   
+    signal inv_mass_value, inv_mass_value_temp : inv_mass_value_array := (others => (others => (others => '0')));   
     type sum_mass_array is array(0 to nr_obj-1, 0 to nr_obj-1, 0 to nr_obj-1) of std_logic_vector(mass_vector_width+1 downto 0);
     signal sum_mass : sum_mass_array := (others => (others => (others => (others => '0'))));   
 
@@ -139,30 +140,34 @@ begin
     -- Comparison with limits.
     mass_l_1: for i in 0 to nr_obj-1 generate 
         mass_l_2: for j in 0 to nr_obj-1 generate
-            mass_calculator_12_i: entity work.mass_calculator
-                generic map(
-                    mass_type => 0,
-                    mass_upper_limit_vector => mass_upper_limit_vector,
-                    mass_lower_limit_vector => mass_lower_limit_vector,
-                    pt1_width => pt_width, 
-                    pt2_width => pt_width, 
-                    cosh_cos_width => cosh_cos_width,
-                    mass_cosh_cos_precision => cosh_cos_precision
-                )
-                port map(
-                    pt1 => pt(i)(pt_width-1 downto 0),
-                    pt2 => pt(j)(pt_width-1 downto 0),
-                    cosh_deta => cosh_deta(i,j),
-                    cos_dphi => cos_dphi(i,j),
-                    sim_invariant_mass_sq_div2 => inv_mass_value(i,j)
-                );
+            mass_calc_l: if j>i generate
+                mass_calculator_i: entity work.mass_calculator
+                    generic map(
+                        mass_type => 0,
+                        mass_upper_limit_vector => mass_upper_limit_vector,
+                        mass_lower_limit_vector => mass_lower_limit_vector,
+                        pt1_width => pt_width, 
+                        pt2_width => pt_width, 
+                        cosh_cos_width => cosh_cos_width,
+                        mass_cosh_cos_precision => cosh_cos_precision
+                    )
+                    port map(
+                        pt1 => pt(i)(pt_width-1 downto 0),
+                        pt2 => pt(j)(pt_width-1 downto 0),
+                        cosh_deta => cosh_deta(i,j),
+                        cos_dphi => cos_dphi(i,j),
+                        sim_invariant_mass_sq_div2 => inv_mass_value_temp(i,j)
+                    );
+                inv_mass_value(i,j) <= inv_mass_value_temp(i,j);
+                inv_mass_value(j,i) <= inv_mass_value_temp(i,j);
+            end generate mass_calc_l;
         end generate mass_l_2;
     end generate mass_l_1;
 
-    l1_sum_comp: for i in 0 to nr_obj-1 generate
-        l2_sum_comp: for j in 0 to nr_obj-1 generate
-            l3_sum_comp: for k in 0 to nr_obj-1 generate
-                mass_comp_l: if j>i and k>i and k>j generate
+    l1_sum_comp: for i in calo1_object_low to calo1_object_high generate
+        l2_sum_comp: for j in calo2_object_low to calo2_object_high generate
+            l3_sum_comp: for k in calo3_object_low to calo3_object_high generate
+                mass_comp_l: if j/=i and k/=i and k/=j generate
                     sum_mass_calc_i: entity work.sum_mass_calc
                         generic map(mass_vector_width)  
                         port map(inv_mass_value(i,j), inv_mass_value(i,k), inv_mass_value(j,k), sum_mass(i,j,k));
@@ -227,7 +232,7 @@ begin
             port map(calo2_data_i(i), calo2_obj_vs_templ(i,1));
     end generate obj_templ2_l_l;
 
-    obj_templ3_l_l: for i in calo2_object_low to calo2_object_high generate
+    obj_templ3_l_l: for i in calo3_object_low to calo3_object_high generate
         calo3_comp_i: entity work.calo_comparators
             generic map(et_ge_mode_calo3, obj_type,
                 et_threshold_calo3,

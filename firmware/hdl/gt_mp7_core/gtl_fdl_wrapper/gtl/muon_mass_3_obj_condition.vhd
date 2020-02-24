@@ -97,7 +97,7 @@ entity muon_mass_3_obj_condition is
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
 
         pt_width: positive; 
-        mass_cosh_cos_precision : positive;
+        cosh_cos_precision : positive;
         cosh_cos_width: positive
 
     );
@@ -127,7 +127,7 @@ architecture rtl of muon_mass_3_obj_condition is
 
 --***************************************************************
 -- signals for charge correlation comparison:
-    signal charge_comp_triple : muon_charcorr_triple_array := (others => (others => '0'));
+    signal charge_comp_triple : muon_charcorr_triple_array := (others => (others => (others => '0')));
     signal charge_comp_triple_pipe : muon_charcorr_triple_array;
 --***************************************************************
 
@@ -179,7 +179,7 @@ begin
     l1_sum_comp: for i in muon1_object_low to muon1_object_high generate
         l2_sum_comp: for j in muon2_object_low to muon2_object_high generate
             l3_sum_comp: for k in muon3_object_low to muon3_object_high generate
-                mass_comp_l: if j=/i and k/=i and k=/j generate
+                mass_comp_l: if j/=i and k/=i and k/=j generate
                     sum_mass_calc_i: entity work.sum_mass_calc
                         generic map(mass_vector_width)  
                         port map(inv_mass_value(i,j), inv_mass_value(i,k), inv_mass_value(j,k), sum_mass(i,j,k));

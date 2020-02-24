@@ -277,19 +277,18 @@ begin
     end generate obj_templ3_l_l;
 
     -- Charge correlation comparison
-    charge_triple_i: if nr_templates = 3 generate
-        charge_triple_l_1: for i in muon_object_slice_1_low to muon_object_slice_1_high generate
-            charge_triple_l_2: for j in muon_object_slice_2_low to muon_object_slice_2_high generate
-                charge_triple_l_3: for k in muon_object_slice_3_low to muon_object_slice_3_high generate
-                    charge_triple_if: if (j/=i and k/=i and k/=j) generate
-                        charge_comp_triple(i,j,k) <= '1' when ls_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "ls" else
-                                                    '1' when os_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "os" else
-                                                    '1' when requested_charge_correlation = "ig" else
-                                                    '0';
-                    end generate charge_triple_if;
-                end generate charge_triple_l_3;
-            end generate charge_triple_l_2;
-        end generate charge_triple_l_1;
+    charge_triple_l_1: for i in muon1_object_low to muon1_object_high generate
+        charge_triple_l_2: for j in muon2_object_low to muon2_object_high generate
+            charge_triple_l_3: for k in muon3_object_low to muon3_object_high generate
+                charge_triple_if: if (j/=i and k/=i and k/=j) generate
+                    charge_comp_triple(i,j,k) <= '1' when ls_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "ls" else
+                                                '1' when os_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "os" else
+                                                '1' when requested_charge_correlation = "ig" else
+                                                '0';
+                end generate charge_triple_if;
+            end generate charge_triple_l_3;
+        end generate charge_triple_l_2;
+    end generate charge_triple_l_1;
 
     -- Pipeline stage for obj_vs_templ and mass_comp
     pipeline_p: process(lhc_clk, muon1_obj_vs_templ, muon2_obj_vs_templ, muon3_obj_vs_templ, mass_comp, charge_comp_triple)

@@ -173,7 +173,7 @@ begin
                     );
                 inv_mass_value(i,j) <= inv_mass_value_temp(i,j);
                 inv_mass_value(j,i) <= inv_mass_value_temp(i,j);
-            end generate mass_calc_l;
+            end generate mass_calc_l;git commit -a
         end generate mass_l_2;
     end generate mass_l_1;
 

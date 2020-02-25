@@ -324,7 +324,7 @@ begin
                 for k in muon3_object_low to muon3_object_high loop
                     if j/=i and i/=k and j/=k then
                         index := index + 1;
-                        obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) muon3_obj_vs_templ_pipe(k,1) and 
+                        obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and muon3_obj_vs_templ_pipe(k,1) and 
                             charge_comp_triple_pipe(i,j,k) and mass_comp_pipe(i,j,k);
                     end if;
                 end loop;

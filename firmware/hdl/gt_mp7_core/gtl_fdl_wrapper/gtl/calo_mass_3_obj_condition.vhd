@@ -228,7 +228,7 @@ begin
                 phi_w2_lower_limit_calo1,
                 iso_lut_calo1
             )
-            port map(calo1_data_i(i), calo1_obj_vs_templ(i,1));
+            port map(calo_data_i(i), calo1_obj_vs_templ(i,1));
     end generate obj_templ1_l;
 
     obj_templ2_l_l: for i in calo2_object_low to calo2_object_high generate
@@ -254,7 +254,7 @@ begin
                 phi_w2_lower_limit_calo2,
                 iso_lut_calo2
             )
-            port map(calo2_data_i(i), calo2_obj_vs_templ(i,1));
+            port map(calo_data_i(i), calo2_obj_vs_templ(i,1));
     end generate obj_templ2_l_l;
 
     obj_templ3_l_l: for i in calo3_object_low to calo3_object_high generate
@@ -280,7 +280,7 @@ begin
                 phi_w2_lower_limit_calo3,
                 iso_lut_calo3
             )
-            port map(calo3_data_i(i), calo3_obj_vs_templ(i,1));
+            port map(calo_data_i(i), calo3_obj_vs_templ(i,1));
     end generate obj_templ3_l_l;
 
     -- Pipeline stage for obj_vs_templ and mass_comp

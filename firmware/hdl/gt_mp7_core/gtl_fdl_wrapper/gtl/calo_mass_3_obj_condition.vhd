@@ -3,6 +3,7 @@
 -- Condition for invariant mass with 3 calo objects (same object type, same bx).
 
 -- Version history:
+-- HB 2020-03-02: changed order in generic.
 -- HB 2020-02-24: changed mass calculation and loop indices for sum.
 -- HB 2020-02-19: first design.
 
@@ -14,10 +15,6 @@ use work.gtl_pkg.all;
 
 entity calo_mass_3_obj_condition is
      generic(
-
-        nr_obj: natural := 12;
-        obj_type: natural := EG_TYPE;
-        
         calo1_object_low: natural;
         calo1_object_high: natural;
         pt_ge_mode_calo1: boolean;
@@ -92,14 +89,15 @@ entity calo_mass_3_obj_condition is
 
         pt_width: positive; 
         mass_cosh_cos_precision : positive;
-        cosh_cos_width: positive
+        cosh_cos_width: positive;
+
+        nr_obj: natural := 12;
+        obj_type: natural := EG_TYPE
 
     );
     port(
         lhc_clk: in std_logic;
-        calo1_data_i: in calo_objects_array;
-        calo2_data_i: in calo_objects_array;
-        calo3_data_i: in calo_objects_array;
+        calo_data_i: in calo_objects_array;
         pt : in diff_inputs_array;
         cosh_deta : in calo_cosh_cos_vector_array;
         cos_dphi : in calo_cosh_cos_vector_array;

@@ -3,7 +3,7 @@
 -- Condition for invariant mass with 3 calo objects (same object type, same bx).
 
 -- Version history:
--- HB 2020-03-02: changed order in generic.
+-- HB 2020-03-02: changed order in generic, updated sum mass calculation.
 -- HB 2020-02-24: changed mass calculation and loop indices for sum.
 -- HB 2020-02-19: first design.
 
@@ -162,20 +162,47 @@ begin
         end generate mass_l_2;
     end generate mass_l_1;
 
-    l1_sum_comp: for i in calo1_object_low to calo1_object_high generate
-        l2_sum_comp: for j in calo2_object_low to calo2_object_high generate
-            l3_sum_comp: for k in calo3_object_low to calo3_object_high generate
-                mass_comp_l: if j/=i and k/=i and k/=j generate
+--     l1_sum_comp: for i in calo1_object_low to calo1_object_high generate
+--         l2_sum_comp: for j in calo2_object_low to calo2_object_high generate
+--             l3_sum_comp: for k in calo3_object_low to calo3_object_high generate
+--                 mass_comp_l: if j/=i and k/=i and k/=j generate
+--                     sum_mass_calc_i: entity work.sum_mass_calc
+--                         generic map(mass_vector_width)  
+--                         port map(inv_mass_value(i,j), inv_mass_value(i,k), inv_mass_value(j,k), sum_mass(i,j,k));
+--                     mass_comp(i,j,k) <= '1' when sum_mass(i,j,k) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+--                         sum_mass(i,j,k) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+--                 end generate mass_comp_l;    
+--             end generate l3_sum_comp;    
+--         end generate l2_sum_comp;
+--     end generate l1_sum_comp;
+    
+    l1_sum: for i in 0 to nr_obj-1 generate
+        l2_sum: for j in 0 to nr_obj-1 generate
+            l3_sum: for k in 0 to nr_obj-1 generate
+                sum_mass_l: if j>i and k>i and k>j generate
                     sum_mass_calc_i: entity work.sum_mass_calc
                         generic map(mass_vector_width)  
-                        port map(inv_mass_value(i,j), inv_mass_value(i,k), inv_mass_value(j,k), sum_mass(i,j,k));
-                    mass_comp(i,j,k) <= '1' when sum_mass(i,j,k) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
-                        sum_mass(i,j,k) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
-                end generate mass_comp_l;    
-            end generate l3_sum_comp;    
-        end generate l2_sum_comp;
-    end generate l1_sum_comp;
+                        port map(inv_mass_value(i,j), inv_mass_value(i,k), inv_mass_value(j,k), sum_mass_temp(i,j,k));
+                    sum_mass(i,j,k) <= sum_mass_temp(i,j,k);
+                    sum_mass(i,k,j) <= sum_mass_temp(i,j,k);
+                    sum_mass(j,i,k) <= sum_mass_temp(i,j,k);
+                    sum_mass(j,k,i) <= sum_mass_temp(i,j,k);
+                    sum_mass(k,i,j) <= sum_mass_temp(i,j,k);
+                    sum_mass(k,j,i) <= sum_mass_temp(i,j,k);
+                end generate sum_mass_l;
+            end generate l3_sum;    
+        end generate l2_sum;
+    end generate l1_sum;
     
+    l1_comp: for i in calo1_object_low to calo1_object_high generate
+        l2_comp: for j in calo2_object_low to calo2_object_high generate
+            l3_comp: for k in calo3_object_low to calo3_object_high generate
+                mass_comp(i,j,k) <= '1' when sum_mass(i,j,k) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+                    sum_mass(i,j,k) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+            end generate l3_comp;    
+        end generate l2_comp;
+    end generate l1_comp;
+
     -- *** section: CUTs - end ***************************************************************************************
 
     obj_templ1_l: for i in calo1_object_low to calo1_object_high generate

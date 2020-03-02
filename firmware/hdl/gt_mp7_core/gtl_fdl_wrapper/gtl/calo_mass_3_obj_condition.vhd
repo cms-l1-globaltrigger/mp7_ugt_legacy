@@ -1,10 +1,11 @@
 
 -- Description:
--- Condition for invariant mass with 3 calo objects (same object type, same bx).
+-- Condition for invariant mass with 3 calo objects.
 
 -- Version history:
--- HB 2020-03-02: changed order in generic, updated sum mass calculation.
+-- HB 2020-02-25: separated sum and comp.
 -- HB 2020-02-24: changed mass calculation and loop indices for sum.
+-- HB 2020-02-20: cleaned up code.
 -- HB 2020-02-19: first design.
 
 library ieee;
@@ -15,6 +16,7 @@ use work.gtl_pkg.all;
 
 entity calo_mass_3_obj_condition is
      generic(
+
         calo1_object_low: natural;
         calo1_object_high: natural;
         pt_ge_mode_calo1: boolean;
@@ -88,10 +90,10 @@ entity calo_mass_3_obj_condition is
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
 
         pt_width: positive; 
-        mass_cosh_cos_precision : positive;
+        cosh_cos_precision : positive;
         cosh_cos_width: positive;
-
-        nr_obj: natural := 12;
+        
+        nr_obj: natural := NR_EG_OBJECTS;
         obj_type: natural := EG_TYPE
 
     );
@@ -127,7 +129,7 @@ architecture rtl of calo_mass_3_obj_condition is
     type inv_mass_value_array is array(0 to nr_obj-1, 0 to nr_obj-1) of std_logic_vector(mass_vector_width-1 downto 0);
     signal inv_mass_value, inv_mass_value_temp : inv_mass_value_array := (others => (others => (others => '0')));   
     type sum_mass_array is array(0 to nr_obj-1, 0 to nr_obj-1, 0 to nr_obj-1) of std_logic_vector(mass_vector_width+1 downto 0);
-    signal sum_mass : sum_mass_array := (others => (others => (others => (others => '0'))));   
+    signal sum_mass, sum_mass_temp : sum_mass_array := (others => (others => (others => (others => '0'))));   
 
     signal condition_and_or : std_logic;
 
@@ -162,20 +164,6 @@ begin
         end generate mass_l_2;
     end generate mass_l_1;
 
---     l1_sum_comp: for i in calo1_object_low to calo1_object_high generate
---         l2_sum_comp: for j in calo2_object_low to calo2_object_high generate
---             l3_sum_comp: for k in calo3_object_low to calo3_object_high generate
---                 mass_comp_l: if j/=i and k/=i and k/=j generate
---                     sum_mass_calc_i: entity work.sum_mass_calc
---                         generic map(mass_vector_width)  
---                         port map(inv_mass_value(i,j), inv_mass_value(i,k), inv_mass_value(j,k), sum_mass(i,j,k));
---                     mass_comp(i,j,k) <= '1' when sum_mass(i,j,k) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
---                         sum_mass(i,j,k) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
---                 end generate mass_comp_l;    
---             end generate l3_sum_comp;    
---         end generate l2_sum_comp;
---     end generate l1_sum_comp;
-    
     l1_sum: for i in 0 to nr_obj-1 generate
         l2_sum: for j in 0 to nr_obj-1 generate
             l3_sum: for k in 0 to nr_obj-1 generate
@@ -206,9 +194,9 @@ begin
     -- *** section: CUTs - end ***************************************************************************************
 
     obj_templ1_l: for i in calo1_object_low to calo1_object_high generate
-        calo1_comp_i: entity work.calo_comparators
-            generic map(et_ge_mode_calo1, obj_type,
-                et_threshold_calo1,
+        obj_templ1_comp_i: entity work.calo_comparators
+            generic map(pt_ge_mode_calo1,
+                pt_threshold_calo1,
                 nr_eta_windows_calo1,
                 eta_w1_upper_limit_calo1,
                 eta_w1_lower_limit_calo1,
@@ -226,15 +214,17 @@ begin
                 phi_w2_ignore_calo1,
                 phi_w2_upper_limit_calo1,
                 phi_w2_lower_limit_calo1,
+                requested_charge_calo1,
+                qual_lut_calo1,
                 iso_lut_calo1
             )
             port map(calo_data_i(i), calo1_obj_vs_templ(i,1));
     end generate obj_templ1_l;
 
     obj_templ2_l_l: for i in calo2_object_low to calo2_object_high generate
-        calo2_comp_i: entity work.calo_comparators
-            generic map(et_ge_mode_calo2, obj_type,
-                et_threshold_calo2,
+        obj_templ2_comp_i: entity work.calo_comparators
+            generic map(pt_ge_mode_calo2,
+                pt_threshold_calo2,
                 nr_eta_windows_calo2,
                 eta_w1_upper_limit_calo2,
                 eta_w1_lower_limit_calo2,
@@ -252,15 +242,17 @@ begin
                 phi_w2_ignore_calo2,
                 phi_w2_upper_limit_calo2,
                 phi_w2_lower_limit_calo2,
+                requested_charge_calo2,
+                qual_lut_calo2,
                 iso_lut_calo2
             )
             port map(calo_data_i(i), calo2_obj_vs_templ(i,1));
     end generate obj_templ2_l_l;
 
     obj_templ3_l_l: for i in calo3_object_low to calo3_object_high generate
-        calo3_comp_i: entity work.calo_comparators
-            generic map(et_ge_mode_calo3, obj_type,
-                et_threshold_calo3,
+        obj_templ3_comp_i: entity work.calo_comparators
+            generic map(pt_ge_mode_calo3,
+                pt_threshold_calo3,
                 nr_eta_windows_calo3,
                 eta_w1_upper_limit_calo3,
                 eta_w1_lower_limit_calo3,
@@ -278,13 +270,15 @@ begin
                 phi_w2_ignore_calo3,
                 phi_w2_upper_limit_calo3,
                 phi_w2_lower_limit_calo3,
+                requested_charge_calo3,
+                qual_lut_calo3,
                 iso_lut_calo3
             )
             port map(calo_data_i(i), calo3_obj_vs_templ(i,1));
     end generate obj_templ3_l_l;
 
     -- Pipeline stage for obj_vs_templ and mass_comp
-    pipeline_p: process(lhc_clk, calo1_obj_vs_templ, calo2_obj_vs_templ, calo3_obj_vs_templ, mass_comp)
+    pipeline_p: process(lhc_clk, calo1_obj_vs_templ, calo2_obj_vs_templ, calo3_obj_vs_templ, mass_comp, charge_comp_triple)
         begin
         if obj_vs_templ_pipeline_stage = false then 
             calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
@@ -315,7 +309,8 @@ begin
                 for k in calo3_object_low to calo3_object_high loop
                     if j/=i and i/=k and j/=k then
                         index := index + 1;
-                        obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and calo3_obj_vs_templ_pipe(k,1) and mass_comp_pipe(i,j,k);
+                        obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and calo3_obj_vs_templ_pipe(k,1) and 
+                            mass_comp_pipe(i,j,k);
                     end if;
                 end loop;
             end loop;

@@ -214,8 +214,6 @@ begin
                 phi_w2_ignore_calo1,
                 phi_w2_upper_limit_calo1,
                 phi_w2_lower_limit_calo1,
-                requested_charge_calo1,
-                qual_lut_calo1,
                 iso_lut_calo1
             )
             port map(calo_data_i(i), calo1_obj_vs_templ(i,1));
@@ -242,8 +240,6 @@ begin
                 phi_w2_ignore_calo2,
                 phi_w2_upper_limit_calo2,
                 phi_w2_lower_limit_calo2,
-                requested_charge_calo2,
-                qual_lut_calo2,
                 iso_lut_calo2
             )
             port map(calo_data_i(i), calo2_obj_vs_templ(i,1));
@@ -270,15 +266,13 @@ begin
                 phi_w2_ignore_calo3,
                 phi_w2_upper_limit_calo3,
                 phi_w2_lower_limit_calo3,
-                requested_charge_calo3,
-                qual_lut_calo3,
                 iso_lut_calo3
             )
             port map(calo_data_i(i), calo3_obj_vs_templ(i,1));
     end generate obj_templ3_l_l;
 
     -- Pipeline stage for obj_vs_templ and mass_comp
-    pipeline_p: process(lhc_clk, calo1_obj_vs_templ, calo2_obj_vs_templ, calo3_obj_vs_templ, mass_comp, charge_comp_triple)
+    pipeline_p: process(lhc_clk, calo1_obj_vs_templ, calo2_obj_vs_templ, calo3_obj_vs_templ, mass_comp)
         begin
         if obj_vs_templ_pipeline_stage = false then 
             calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;

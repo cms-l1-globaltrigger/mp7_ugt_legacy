@@ -311,7 +311,7 @@ begin
     calos_i: if obj_type==0 or obj_type==1 or obj_type==2 generate
         obj_templ1_l: for i in obj1_object_low to obj1_object_high generate
             obj_templ1_comp_i: entity work.calo_comparators
-                generic map(pt_ge_mode_muon1,
+                generic map(pt_ge_mode_muon1, obj_type,
                     pt_threshold_obj1,
                     nr_eta_windows_obj1,
                     eta_w1_upper_limit_obj1,
@@ -337,7 +337,7 @@ begin
 
         obj_templ2_l_l: for i in obj2_object_low to obj2_object_high generate
             obj_templ2_comp_i: entity work.calo_comparators
-                generic map(pt_ge_mode_obj2,
+                generic map(pt_ge_mode_obj2, obj_type,
                     pt_threshold_obj2,
                     nr_eta_windows_obj2,
                     eta_w1_upper_limit_obj2,
@@ -363,7 +363,7 @@ begin
 
         obj_templ3_l_l: for i in obj3_object_low to obj3_object_high generate
             obj_templ3_comp_i: entity work.calo_comparators
-                generic map(pt_ge_mode_obj3,
+                generic map(pt_ge_mode_obj3, obj_type,
                     pt_threshold_obj3,
                     nr_eta_windows_obj3,
                     eta_w1_upper_limit_obj3,

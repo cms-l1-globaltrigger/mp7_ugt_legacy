@@ -89,7 +89,7 @@ entity mass_3_obj_condition is
         phi_w2_lower_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0);
         requested_charge_obj3: string(1 to 3);
         qual_lut_obj3: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0);
-        iso_lut_obj3: std_logic_vector(2**MAX_ISO_BITS-1 downto 0));
+        iso_lut_obj3: std_logic_vector(2**MAX_ISO_BITS-1 downto 0);
 
         requested_charge_correlation: string(1 to 2);
 

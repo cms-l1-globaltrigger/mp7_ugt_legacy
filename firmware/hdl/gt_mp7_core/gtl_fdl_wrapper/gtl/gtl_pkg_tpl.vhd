@@ -227,6 +227,8 @@ type calo_templates_natural_array is array (1 to NR_CALO_TEMPLATES) of natural;
 constant MAX_CALO_ISO_BITS : positive range 1 to 2 := max((D_S_I_EG_V2.iso_high-D_S_I_EG_V2.iso_low+1), (D_S_I_TAU_V2.iso_high-D_S_I_TAU_V2.iso_low+1));
 type calo_templates_iso_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
+constant MAX_TEMPLATES_BITS : positive := max(MAX_CALO_TEMPLATES_BITS, MAX_MUON_TEMPLATES_BITS);
+constant MAX_ISO_BITS : positive := max(MAX_CALO_ISO_BITS, (MUON_ISO_HIGH-MUON_ISO_LOW+1));
 -- *******************************************************************************************************
 -- ESUMs
 -- HB 2016-10-11: changed MAX_ESUMS_BITS to actual value

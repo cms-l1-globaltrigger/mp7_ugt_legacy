@@ -66,7 +66,9 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_orm.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_calo_correlation_orm_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sum_mass_calc.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_3_obj_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_3_obj_condition.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_3_obj_condition.vhd
 #
 src gt_mp7_core/frame/demux_lane/demux_lane_data.vhd
 src gt_mp7_core/frame/frame.vhd

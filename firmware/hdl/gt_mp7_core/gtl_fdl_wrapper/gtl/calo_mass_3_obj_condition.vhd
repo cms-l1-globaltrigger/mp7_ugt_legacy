@@ -17,6 +17,9 @@ use work.gtl_pkg.all;
 entity calo_mass_3_obj_condition is
      generic(
 
+        nr_obj: natural := NR_EG_OBJECTS;
+        obj_type: natural := EG_TYPE;
+
         calo1_object_low: natural;
         calo1_object_high: natural;
         pt_ge_mode_calo1: boolean;
@@ -91,11 +94,8 @@ entity calo_mass_3_obj_condition is
 
         pt_width: positive; 
         cosh_cos_precision : positive;
-        cosh_cos_width: positive;
+        cosh_cos_width: positive
         
-        nr_obj: natural := NR_EG_OBJECTS;
-        obj_type: natural := EG_TYPE
-
     );
     port(
         lhc_clk: in std_logic;

@@ -3,6 +3,7 @@
 -- Calculation of invariant mass divided by deltaR.
 
 -- Version history:
+-- HB 2020-03-10: using real
 -- HB 2020-03-06: first design
 
 library ieee;

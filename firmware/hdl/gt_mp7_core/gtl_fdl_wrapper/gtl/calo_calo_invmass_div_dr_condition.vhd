@@ -72,11 +72,12 @@ entity calo_calo_invmass_div_dr_condition is
         lhc_clk: in std_logic;
         calo1_data_i: in calo_objects_array;
         calo2_data_i: in calo_objects_array;
-        diff_eta: in deta_dphi_vector_array;
-        diff_phi: in deta_dphi_vector_array;
-        pt1 : in diff_inputs_array;
-        pt2 : in diff_inputs_array;
-        cosh_deta : in calo_cosh_cos_vector_array;
+        diff_eta: in dim2_max_eta_range_array;
+        diff_phi: in dim2_max_phi_range_array;
+        pt1 : in diff_integer_inputs_array;
+        pt2 : in diff_integer_inputs_array;
+        cosh_deta : in diff_2dim_integer_array;
+        cos_dphi : in diff_2dim_integer_array;
         condition_o: out std_logic
     );
 end calo_calo_invmass_div_dr_condition; 

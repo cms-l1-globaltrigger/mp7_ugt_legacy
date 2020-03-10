@@ -64,13 +64,8 @@ entity calo_calo_invmass_div_dr_condition is
         phi_w2_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         iso_lut_calo2: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
-        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
-        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
-
-        pt1_width: positive; 
-        pt2_width: positive; 
-        mass_cosh_cos_precision : positive;
-        cosh_cos_width: positive
+        mass_div_dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
+        mass_div_dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0)
 
     );
     port(
@@ -113,12 +108,8 @@ begin
                 if_j_gr_i: if j > i generate
                     cuts_instances_i: entity work.invmass_div_dr_calculator
                         generic map(
-                            mass_upper_limit_vector,
-                            mass_lower_limit_vector,
-                            pt1_width, 
-                            pt2_width, 
-                            mass_cosh_cos_precision,
-                            cosh_cos_width
+                            mass_div_dr_upper_limit_vector,
+                            mass_div_dr_lower_limit_vector
                         )
                         port map(
                             diff_eta(i,j),
@@ -136,12 +127,8 @@ begin
             diffrent_obj_type_different_bx_different_range_i: if obj_type_calo1 /= obj_type_calo2 or not same_bx or (calo1_object_low /= calo2_object_low) or (calo1_object_high /= calo2_object_high) generate
                 cuts_instances_i: entity work.invmass_div_dr_calculator
                     generic map(
-                        mass_upper_limit_vector,
-                        mass_lower_limit_vector,
-                        pt1_width, 
-                        pt2_width, 
-                        mass_cosh_cos_precision,
-                        cosh_cos_width
+                        mass_div_dr_upper_limit_vector,
+                        mass_div_dr_lower_limit_vector
                     )
                     port map(
                         diff_eta(i,j),

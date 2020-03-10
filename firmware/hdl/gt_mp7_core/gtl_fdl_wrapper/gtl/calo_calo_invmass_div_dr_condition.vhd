@@ -145,7 +145,7 @@ begin
     end generate cuts_l_1;
     
     -- Pipeline stage for cut comps
-    diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp, mass_comp, twobody_pt_comp)
+    diff_pipeline_p: process(lhc_clk, mass_comp)
         begin
         if obj_vs_templ_pipeline_stage = false then 
             mass_comp_pipe <= mass_comp;

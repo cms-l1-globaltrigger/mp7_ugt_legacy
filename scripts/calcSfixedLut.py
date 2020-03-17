@@ -15,6 +15,7 @@ import sys, os, re
 #import socket
 #from xmlmenu import XmlMenu
 #from run_simulation_questa import run_simulation_questa
+import math
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
@@ -23,11 +24,17 @@ EXIT_FAILURE = 1
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('inval', help="input value for calculation")
+    #parser.add_argument('inval', help="input value for calculation")
+    parser.add_argument('fract_bits_len', type=int, help="length of fraction bits")
+    parser.add_argument('result_len', type=int, help="length of result")
+    parser.add_argument('prec', type=int, help="precision of input values")
     return parser.parse_args()
 
 def main():
     """Main routine."""
+
+    # Parse command line arguments.
+    args = parse_args()
 
     inval_list = [
 10000, 9999, 9998, 9995, 9990, 9985, 9979, 9971, 9962, 9952, 9941, 9928, 9914, 9900, 9884, 9866,
@@ -96,33 +103,39 @@ def main():
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     ]
     
-    bits = [0] * 20
+    fract_bits = [0] * args.fract_bits_len
+    #print "args.fract_bits_len:",args.fract_bits_len
+    
     sign = 0
-    res_len = 22
-    prec = 4
+    res_len = args.result_len
+    prec = args.prec
     
     for inval in inval_list:
-      bits = [0] * 20
+      fract_bits = [0] * args.fract_bits_len
       sign = 0 
-      inval_int = int(inval)/10**prec
-      #print "inval_int",inval_int
-      inval_fract = float(inval)/10**prec-inval_int      
-      #print "inval_fract",inval_fract
-      temp = inval_fract
       if int(inval) < 0:
 	sign = 1      
-      for i in range(1,20):
+      #print "inval",inval
+      inval_float = float(inval)
+      #print "inval_float",inval_float
+      inval_float_div = float(inval)/10**prec
+      #print "inval_float_div",inval_float_div
+      inval_int = int(math.modf(inval_float_div)[1])
+      #print "inval_int",inval_int
+      inval_fract = abs(inval_float_div)-abs(inval_int)     
+      #print "inval_fract",inval_fract
+      temp = inval_fract
+      for i in range(1, args.fract_bits_len):
 	fract_equation = 1./2**i
 	if fract_equation < temp:
 	  temp = temp - fract_equation
-	  bits[i-1] = 1
+	  fract_bits[i-1] = 1
       #print "sign",sign      
       inval_int_bin_str = "{0:b}".format(abs(inval_int))
       #print "inval_int_bin_str",inval_int_bin_str      
-      bits_str = ''.join(map(str, bits))    
-      res = str(sign) + inval_int_bin_str + bits_str
+      fract_bits_str = ''.join(map(str, fract_bits))    
+      res = str(sign) + inval_int_bin_str + fract_bits_str
       res_l_z = str(res).zfill(res_len)
-      #print "res_l_z:",res_l_z
       print res_l_z + ","
 
 if __name__ == '__main__':

@@ -19,10 +19,10 @@ use work.math_pkg.all;
 use work.gtl_pkg.all;
 use work.sfixed_luts_pkg.all;
 
-entity invmass_div_dr_calculator_TB is
-end invmass_div_dr_calculator_TB;
+entity invmass_div_dr_calculator_muon_TB is
+end invmass_div_dr_calculator_muon_TB;
 
-architecture beh of invmass_div_dr_calculator_TB is
+architecture beh of invmass_div_dr_calculator_muon_TB is
 
     constant deta_int_digits: positive := 3;
     constant dphi_int_digits: positive := 3;

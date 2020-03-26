@@ -1,4 +1,4 @@
-type calo_calo_cos_dphi_lut_sfixed_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of sfixed(2 downto -20);
+type calo_calo_cos_dphi_lut_sfixed_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of sfixed(1 downto -20);
 constant CALO_CALO_COS_DPHI_LUT_SFIXED : calo_calo_cos_dphi_lut_sfixed_array := (
 1000, 999, 996, 991, 985, 976, 966, 954, 940, 924, 906, 887, 866, 843, 819, 793,
 766, 737, 707, 676, 643, 609, 574, 537, 500, 462, 423, 383, 342, 301, 259, 216,

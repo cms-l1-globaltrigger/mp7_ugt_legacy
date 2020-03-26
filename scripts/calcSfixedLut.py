@@ -26,8 +26,10 @@ def main():
     
     fin = "sfixed_luts/integer_sources/{}.txt".format(args.filename)
     num_lines = sum(1 for line in open(fin))
+    print "num_lines:",num_lines
+    
     num_val_line = 16
-    inval_list = [0] * num_lines * num_val_line
+    inval_list = [0] * (num_lines-3) * num_val_line
         
     line_index = 0
     inval_list_index = 0
@@ -50,8 +52,8 @@ def main():
     fract_bits_len_string = first_line_elem[1].split(")")
     fract_bits_len_elem = fract_bits_len_string[0].split(" downto ")
     fract_bits_len = abs(int(fract_bits_len_elem[1]))
-    int_bits_len = int(fract_bits_len_elem[0])
-    
+    int_bits_len = int(fract_bits_len_elem[0])+1
+    print "int_bits_len:",int_bits_len
     fract_bits = [0] * fract_bits_len
     res_l_z_list = [0] * len(inval_list)
     
@@ -88,15 +90,17 @@ def main():
     fout = open('sfixed_luts/sfixed/{}_sfixed.txt'.format(args.filename),'w+')
     fout.write("%s" % first_line)
     fout.write("%s" % sec_line)
+    print "len(inval_list):",len(inval_list)
+    
     for i in range(0, len(inval_list), 4):
       if i < (len(inval_list)-4):
         for j in range(0, 4):
-          fout.write("%s, " % res_l_z_list[i+j])
+          fout.write('"%s", ' % res_l_z_list[i+j])
         fout.write("\n")
       else:
         for j in range(0, 3):
-          fout.write("%s, " % res_l_z_list[i+j])
-        fout.write("%s " % res_l_z_list[i+3])
+          fout.write('"%s", ' % res_l_z_list[i+j])
+        fout.write('"%s"' % res_l_z_list[i+3])
         fout.write("\n")
     fout.write(");\n")
     fout.close()

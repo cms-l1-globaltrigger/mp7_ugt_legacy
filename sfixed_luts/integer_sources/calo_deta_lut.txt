@@ -1,4 +1,4 @@
-type calo_calo_diff_eta_lut_sfixed_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of sfixed(5 downto -20);
+type calo_calo_diff_eta_lut_sfixed_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of sfixed(4 downto -20);
 constant CALO_CALO_DIFF_ETA_LUT_SFIXED : calo_calo_diff_eta_lut_sfixed_array := (
 0, 44, 87, 131, 174, 217, 261, 305, 348, 391, 435, 479, 522, 566, 609, 653,
 696, 739, 783, 826, 870, 914, 957, 1001, 1044, 1088, 1131, 1174, 1218, 1261, 1305, 1348,

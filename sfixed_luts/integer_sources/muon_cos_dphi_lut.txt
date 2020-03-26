@@ -1,4 +1,4 @@
-type muon_muon_cos_dphi_lut_sfixed_array is array (0 to 2**(MUON_PHI_HIGH-MUON_PHI_LOW+1)-1) of sfixed(2 downto -20);
+type muon_muon_cos_dphi_lut_sfixed_array is array (0 to 2**(MUON_PHI_HIGH-MUON_PHI_LOW+1)-1) of sfixed(1 downto -20);
 constant MU_MU_COS_DPHI_LUT_SFIXED : muon_muon_cos_dphi_lut_sfixed_array := (
 10000, 9999, 9998, 9995, 9990, 9985, 9979, 9971, 9962, 9952, 9941, 9928, 9914, 9900, 9884, 9866,
 9848, 9829, 9808, 9786, 9763, 9739, 9713, 9687, 9659, 9630, 9600, 9569, 9537, 9504, 9469, 9434,

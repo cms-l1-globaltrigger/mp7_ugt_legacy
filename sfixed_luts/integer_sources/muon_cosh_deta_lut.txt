@@ -1,4 +1,4 @@
-type muon_muon_cosh_deta_lut_sfixed_array is array (0 to 2**(MUON_ETA_HIGH-MUON_ETA_LOW+1)-1) of sfixed(8 downto -20);
+type muon_muon_cosh_deta_lut_sfixed_array is array (0 to 2**(MUON_ETA_HIGH-MUON_ETA_LOW+1)-1) of sfixed(7 downto -20);
 constant MU_MU_COSH_DETA_LUT_SFIXED : muon_muon_cosh_deta_lut_sfixed_array := (
 10000, 10001, 10002, 10005, 10009, 10015, 10021, 10029, 10038, 10048, 10059, 10072, 10085, 10100, 10116, 10133,
 10152, 10171, 10192, 10214, 10237, 10262, 10288, 10314, 10343, 10372, 10402, 10434, 10467, 10501, 10537, 10574,

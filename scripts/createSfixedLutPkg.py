@@ -44,7 +44,7 @@ def main():
         ] 
     
     print "writing sfixed_luts/sfixed/sfixed_luts_pkg.vhd"
-    fout = open('sfixed_luts/sfixed/sfixed_luts_pkg.vhd','a')
+    fout = open('sfixed_luts/sfixed/sfixed_luts_pkg.vhd','w')
     for file_name in file_names:
         fin = "sfixed_luts/{}".format(file_name)
         with open(fin) as fp:

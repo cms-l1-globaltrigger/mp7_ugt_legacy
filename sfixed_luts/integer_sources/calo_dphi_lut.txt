@@ -1,4 +1,4 @@
-type calo_calo_diff_phi_lut_sfixed_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of sfixed(4 downto -20);
+type calo_calo_diff_phi_lut_sfixed_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of sfixed(3 downto -20);
 constant CALO_CALO_DIFF_PHI_LUT_SFIXED : calo_calo_diff_phi_lut_sfixed_array := (
 0, 44, 87, 131, 175, 218, 262, 305, 349, 393, 436, 480, 524, 567, 611, 654,
 698, 742, 785, 829, 873, 916, 960, 1004, 1047, 1091, 1134, 1178, 1222, 1265, 1309, 1353,

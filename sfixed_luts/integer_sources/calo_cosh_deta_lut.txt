@@ -1,4 +1,4 @@
-type calo_calo_cosh_deta_lut_sfixed_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of sfixed(15 downto -20);
+type calo_calo_cosh_deta_lut_sfixed_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of sfixed(14 downto -20);
 constant CALO_CALO_COSH_DETA_LUT_SFIXED : calo_calo_cosh_deta_lut_sfixed_array := (
 1000, 1001, 1004, 1009, 1015, 1024, 1034, 1047, 1061, 1078, 1096, 1117, 1139, 1164, 1191, 1221,
 1252, 1286, 1323, 1361, 1403, 1447, 1494, 1544, 1596, 1652, 1711, 1773, 1838, 1907, 1979, 2056,

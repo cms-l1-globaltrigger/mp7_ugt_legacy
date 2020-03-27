@@ -838,6 +838,25 @@ constant MAX_WIDTH_MASS_LIMIT_VECTOR : positive := 64;
 constant MAX_WIDTH_TBPT_LIMIT_VECTOR : positive := 64;
 
 -- ********************************************************
+-- definitions for invariant mass divided by deltaR
+constant FRACT_DIGITS_ALL: positive := 20;
+constant EG_DETA_INT_DIGITS : positive := 3;
+constant EG_DPHI_INT_DIGITS : positive := 2;
+constant JET_DETA_INT_DIGITS : positive := EG_DETA_INT_DIGITS;
+constant JET_DPHI_INT_DIGITS : positive := EG_DPHI_INT_DIGITS;
+constant TAU_DETA_INT_DIGITS : positive := EG_DETA_INT_DIGITS;
+constant TAU_DPHI_INT_DIGITS : positive := EG_DPHI_INT_DIGITS;
+constant EG_PT_INT_DIGITS : positive := 7;
+constant JET_PT_INT_DIGITS : positive := 9;
+constant TAU_PT_INT_DIGITS : positive := 7;
+constant EG_COSH_DETA_INT_DIGITS : positive := 13;
+constant JET_COSH_DETA_INT_DIGITS : positive := EG_COSH_DETA_INT_DIGITS;
+constant TAU_COSH_DETA_INT_DIGITS : positive := EG_COSH_DETA_INT_DIGITS;
+constant MU_DETA_INT_DIGITS : positive := 2;
+constant MU_DPHI_INT_DIGITS : positive := 2;
+constant MU_PT_INT_DIGITS : positive := 7;
+constant MU_COSH_DETA_INT_DIGITS : positive := 6;
+-- ********************************************************
 -- conversion LUTs
 type calo_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;
 -- type eg_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;

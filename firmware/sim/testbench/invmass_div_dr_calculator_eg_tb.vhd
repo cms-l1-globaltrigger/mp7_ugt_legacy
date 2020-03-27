@@ -24,11 +24,11 @@ end invmass_div_dr_calculator_eg_TB;
 
 architecture beh of invmass_div_dr_calculator_eg_TB is
 
-    constant deta_int_digits: positive := 3;
-    constant dphi_int_digits: positive := 2;
-    constant pt_int_digits: positive := 7;
-    constant cosh_deta_int_digits: positive := 13;
-    constant fract_digits: positive := 20;
+    constant deta_int_digits: positive := EG_DETA_INT_DIGITS;
+    constant dphi_int_digits: positive := EG_DPHI_INT_DIGITS;
+    constant pt_int_digits: positive := EG_PT_INT_DIGITS;
+    constant cosh_deta_int_digits: positive := EG_COSH_DETA_INT_DIGITS;
+    constant fract_digits: positive := FRACT_DIGITS_ALL;
     
     constant dr_sq_int_digits : positive := max(deta_int_digits*2, dphi_int_digits*2)+2;
     constant inv_mass_int_digits : positive := pt_int_digits*2+cosh_deta_int_digits+3;

@@ -24,11 +24,11 @@ end invmass_div_dr_calculator_muon_TB;
 
 architecture beh of invmass_div_dr_calculator_muon_TB is
 
-    constant deta_int_digits: positive := 2;
-    constant dphi_int_digits: positive := 2;
-    constant pt_int_digits: positive := 7;
-    constant cosh_deta_int_digits: positive := 6;
-    constant fract_digits: positive := 20;
+    constant deta_int_digits: positive := MU_DETA_INT_DIGITS;
+    constant dphi_int_digits: positive := MU_DPHI_INT_DIGITS;
+    constant pt_int_digits: positive := MU_PT_INT_DIGITS;
+    constant cosh_deta_int_digits: positive := MU_COSH_DETA_INT_DIGITS;
+    constant fract_digits: positive := FRACT_DIGITS_ALL;
     constant PHI_HALF_RANGE_BINS: positive := MUON_PHI_HALF_RANGE_BINS;
     
     constant dr_sq_int_digits : positive := max(deta_int_digits*2, dphi_int_digits*2)+2; -- = 8

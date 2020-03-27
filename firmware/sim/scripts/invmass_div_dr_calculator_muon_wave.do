@@ -10,23 +10,18 @@ add wave -noupdate -radix binary -radixshowbase 0 /invmass_div_dr_calculator_muo
 add wave -noupdate /invmass_div_dr_calculator_muon_tb/cos_dphi_sign
 add wave -noupdate -radix ufixed /invmass_div_dr_calculator_muon_tb/dut/mass_div_dr_upper_limit
 add wave -noupdate -radix ufixed /invmass_div_dr_calculator_muon_tb/dut/mass_div_dr_lower_limit
-add wave -noupdate -radix ufixed /invmass_div_dr_calculator_muon_tb/dut/dr_sq
-add wave -noupdate -radix ufixed -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/inv_mass_sq_div2_temp
-add wave -noupdate -radix ufixed -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/inv_mass_sq_div2
-add wave -noupdate -radix ufixed -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/inv_mass_sq_div2_div_dr_sq_temp
-add wave -noupdate -radix ufixed -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/inv_mass_sq_div2_div_dr_sq_temp_srl
-add wave -noupdate -radix ufixed -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/inv_mass_sq_div2_div_dr_sq
+add wave -noupdate -radix ufixed -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/dr
+add wave -noupdate -radix ufixed -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/mass
+add wave -noupdate -radix ufixed -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/mass_div_dr
 add wave -noupdate /invmass_div_dr_calculator_muon_tb/dut/mass_div_dr_comp
+add wave -noupdate -divider Constants
 add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/deta_int_digits
 add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/dphi_int_digits
 add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/pt_int_digits
 add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/cosh_deta_int_digits
 add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/fract_digits
-add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/sim_dr_sq_int_digits
-add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/sim_inv_mass_int_digits
-add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/sim_inv_mass_div_dr_int_digits
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {136349 ps} 0}
+WaveRestoreCursors {{Cursor 1} {33994 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 503
 configure wave -valuecolwidth 612

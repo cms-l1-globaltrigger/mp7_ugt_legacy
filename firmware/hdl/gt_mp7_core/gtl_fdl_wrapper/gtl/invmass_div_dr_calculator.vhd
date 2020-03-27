@@ -32,7 +32,10 @@ entity invmass_div_dr_calculator is
         cosh_deta : in ufixed(cosh_deta_int_digits downto -fract_digits);
         cos_dphi : in ufixed(0 downto -fract_digits);
         cos_dphi_sign : in boolean;
-        mass_div_dr_comp : out std_logic
+        mass_div_dr_comp : out std_logic;
+	sim_dr_sq_int_digits : out positive;
+	sim_inv_mass_int_digits : out positive;
+	sim_inv_mass_div_dr_int_digits : out positive
     );
 end invmass_div_dr_calculator;
 
@@ -45,39 +48,42 @@ architecture rtl of invmass_div_dr_calculator is
     constant zero : ufixed(dr_sq_int_digits downto -fract_digits*2) := (others => '0');
     constant zero_deta : ufixed(deta_int_digits downto -fract_digits) := (others => '0');
     constant zero_dphi : ufixed(dphi_int_digits downto -fract_digits) := (others => '0');
-    constant zero_invmass_sq_div2_div_dr_sq : ufixed(inv_mass_div_dr_int_digits downto -fract_digits) := (others => '0');
+--    constant zero_invmass_sq_div2_div_dr_sq : ufixed(inv_mass_div_dr_int_digits downto -fract_digits) := (others => '0');
+    constant zero_invmass_sq_div2_div_dr_sq : ufixed(inv_mass_div_dr_int_digits downto -fract_digits-dr_sq_int_digits) := (others => '0');
+--    constant two : ufixed(1 downto -0) := "10";
+
     signal dr_sq_temp : ufixed(dr_sq_int_digits downto -fract_digits*2);
     signal dr_sq : ufixed(dr_sq_int_digits downto -fract_digits);
-    signal invariant_mass_sq_div2_temp : ufixed(inv_mass_int_digits downto -fract_digits*3);
-    signal invariant_mass_sq_div2 : ufixed(inv_mass_int_digits downto -fract_digits);
-    signal invmass_sq_div2_div_dr_sq_temp : ufixed(inv_mass_div_dr_int_digits downto -fract_digits-dr_sq_int_digits);
-    signal invmass_sq_div2_div_dr_sq : ufixed(inv_mass_div_dr_int_digits downto -fract_digits) := (others => '0');
+    signal inv_mass_sq_div2_temp : ufixed(inv_mass_int_digits downto -fract_digits*3);
+    signal inv_mass_sq_div2 : ufixed(inv_mass_int_digits downto -fract_digits);
+    signal inv_mass_sq_div2_div_dr_sq_temp : ufixed(inv_mass_div_dr_int_digits downto -fract_digits-dr_sq_int_digits);
+    signal inv_mass_sq_div2_div_dr_sq_temp_srl : ufixed(inv_mass_div_dr_int_digits downto -fract_digits-dr_sq_int_digits);
+    signal inv_mass_sq_div2_div_dr_sq : ufixed(inv_mass_div_dr_int_digits downto -fract_digits) := (others => '0');
 
     attribute use_dsp : string;
     attribute use_dsp of dr_sq : signal is "yes";
-    attribute use_dsp of invariant_mass_sq_div2 : signal is "yes";
-    attribute use_dsp of invmass_sq_div2_div_dr_sq : signal is "yes";
+    attribute use_dsp of inv_mass_sq_div2 : signal is "yes";
+    attribute use_dsp of inv_mass_sq_div2_div_dr_sq : signal is "yes";
 
 begin
 
-    
+-- Calculation is done with M^2/2 divided by DR^2 !
+   
     dr_sq_temp <= diff_eta*diff_eta+diff_phi*diff_phi;
     dr_sq <= dr_sq_temp(dr_sq_int_digits downto -fract_digits);
     
-    invariant_mass_sq_div2_temp <= (pt1 * pt2 * (cosh_deta - cos_dphi)) when (cos_dphi_sign = false) else (pt1 * pt2 * (cosh_deta + cos_dphi));
-    invariant_mass_sq_div2 <= invariant_mass_sq_div2_temp(inv_mass_int_digits downto -fract_digits);
+    inv_mass_sq_div2_temp <= (pt1 * pt2 * (cosh_deta - cos_dphi)) when (cos_dphi_sign = false) else (pt1 * pt2 * (cosh_deta + cos_dphi));
+    inv_mass_sq_div2 <= inv_mass_sq_div2_temp(inv_mass_int_digits downto -fract_digits);
         
-    div_zero_p: process(dr_sq)
-    begin
---         if dr_sq /= zero then
-        if diff_eta = zero_deta and diff_phi = zero_dphi then
-            invmass_sq_div2_div_dr_sq <= zero_invmass_sq_div2_div_dr_sq;
-        else
-            invmass_sq_div2_div_dr_sq_temp <= invariant_mass_sq_div2 / dr_sq;
-            invmass_sq_div2_div_dr_sq <= invmass_sq_div2_div_dr_sq_temp(inv_mass_div_dr_int_digits downto -fract_digits);
-        end if;
-    end process div_zero_p;
+    inv_mass_sq_div2_div_dr_sq_temp <= inv_mass_sq_div2 / dr_sq when dr_sq /= zero else zero_invmass_sq_div2_div_dr_sq;
+-- Value of invmass_sq_div2_div_dr_sq_temp in simulation two times higher as expected, therefore "srl 1" !?
+    inv_mass_sq_div2_div_dr_sq_temp_srl <= inv_mass_sq_div2_div_dr_sq_temp srl 1;
+    inv_mass_sq_div2_div_dr_sq <= inv_mass_sq_div2_div_dr_sq_temp_srl(inv_mass_div_dr_int_digits downto -fract_digits);
     
-    mass_div_dr_comp <= '1' when invmass_sq_div2_div_dr_sq >= mass_div_dr_lower_limit and invmass_sq_div2_div_dr_sq <= mass_div_dr_upper_limit else '0';
+    mass_div_dr_comp <= '1' when inv_mass_sq_div2_div_dr_sq >= mass_div_dr_lower_limit and inv_mass_sq_div2_div_dr_sq <= mass_div_dr_upper_limit else '0';
+
+sim_dr_sq_int_digits <= dr_sq_int_digits;
+sim_inv_mass_int_digits <= inv_mass_int_digits;
+sim_inv_mass_div_dr_int_digits <= inv_mass_div_dr_int_digits;
         
 end architecture rtl;

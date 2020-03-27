@@ -140,7 +140,7 @@ dut: entity work.invmass_div_dr_calculator
         cosh_deta, 
         cos_dphi, 
         cos_dphi_sign, 
-        open);
+        open, open, open, open);
 
 end beh;
 

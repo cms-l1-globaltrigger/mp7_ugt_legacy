@@ -24,6 +24,10 @@ end invmass_div_dr_calculator_muon_TB;
 
 architecture beh of invmass_div_dr_calculator_muon_TB is
 
+    constant deta_dphi_prec : positive := 3;
+    constant cosh_cos_prec : positive := 4;
+    constant pt_prec : positive := 1;
+
     constant deta_int_digits: positive := MU_DETA_INT_DIGITS;
     constant dphi_int_digits: positive := MU_DPHI_INT_DIGITS;
     constant pt_int_digits: positive := MU_PT_INT_DIGITS;
@@ -35,8 +39,10 @@ architecture beh of invmass_div_dr_calculator_muon_TB is
     constant inv_mass_int_digits : positive := pt_int_digits*2+cosh_deta_int_digits+3; -- = 26
     constant inv_mass_div_dr_int_digits : positive := inv_mass_int_digits+fract_digits+1; -- = 47
     
-    constant mass_upper_limit: ufixed(inv_mass_div_dr_int_digits downto -1) := '0'&X"0000000073A"&'0'; -- 1850
-    constant mass_lower_limit: ufixed(inv_mass_div_dr_int_digits downto -1) := '0'&X"00000000708"&'0'; -- 1800
+--     constant mass_upper_limit: ufixed(inv_mass_div_dr_int_digits downto -1) := '0'&X"0000000073A"&'0'; -- 1850
+--     constant mass_lower_limit: ufixed(inv_mass_div_dr_int_digits downto -1) := '0'&X"00000000708"&'0'; -- 1800
+    constant mass_upper_limit: real := 18.9;
+    constant mass_lower_limit: real := 18.0;
     
     constant LHC_CLK_PERIOD  : time :=  25 ns;
 
@@ -135,7 +141,8 @@ cosh_deta_int <= MU_MU_COSH_DETA_LUT(diff_mu_mu_eta_integer(0,1));
 cos_dphi_int <= MU_MU_COS_DPHI_LUT(diff_mu_mu_phi_integer(0,1));
 
 dut: entity work.invmass_div_dr_calculator
-    generic map(deta_int_digits, dphi_int_digits, pt_int_digits, cosh_deta_int_digits,
+    generic map(deta_dphi_prec, cosh_cos_prec, pt_prec,
+        deta_int_digits, dphi_int_digits, pt_int_digits, cosh_deta_int_digits, fract_digits,
         mass_upper_limit, mass_lower_limit)
     port map(
         diff_eta_int,

@@ -2,21 +2,16 @@ onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate -radix ufixed /invmass_div_dr_calculator_muon_tb/dut/mass_div_dr_upper_limit
 add wave -noupdate -radix ufixed /invmass_div_dr_calculator_muon_tb/dut/mass_div_dr_lower_limit
-add wave -noupdate -radix decimal /invmass_div_dr_calculator_muon_tb/pt1_int
-add wave -noupdate /invmass_div_dr_calculator_muon_tb/pt2_int
-add wave -noupdate -radix decimal /invmass_div_dr_calculator_muon_tb/dut/pt1_pt2_temp
+add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/pt1_int
+add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/pt2_int
 add wave -noupdate -radix ufixed /invmass_div_dr_calculator_muon_tb/dut/pt1_pt2
 add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/diff_eta_int
 add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/diff_phi_int
 add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/cosh_deta_int
 add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/cos_dphi_int
-add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/cosh_cos_temp
 add wave -noupdate -radix ufixed /invmass_div_dr_calculator_muon_tb/dut/cosh_cos
-add wave -noupdate -radix decimal -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/dr_temp
 add wave -noupdate -radix ufixed -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/dr
-add wave -noupdate -radix ufixed -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/mass_temp
 add wave -noupdate -radix ufixed -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/mass
-add wave -noupdate -radix decimal /invmass_div_dr_calculator_muon_tb/dut/mass_div_dr_temp
 add wave -noupdate -radix ufixed -radixshowbase 0 /invmass_div_dr_calculator_muon_tb/dut/mass_div_dr
 add wave -noupdate /invmass_div_dr_calculator_muon_tb/dut/mass_div_dr_comp
 add wave -noupdate -divider Constants

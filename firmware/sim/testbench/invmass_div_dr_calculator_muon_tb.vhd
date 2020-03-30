@@ -58,6 +58,12 @@ architecture beh of invmass_div_dr_calculator_muon_TB is
     signal cos_dphi : ufixed(0 downto -fract_digits);
     signal cos_dphi_sign : boolean;
 
+    signal diff_eta_int : natural range 0 to 4894;
+    signal diff_phi_int : natural range 0 to 6272;
+    signal pt1_int : natural range 0 to 2553;
+    signal pt2_int : natural range 0 to 2553;
+    signal cosh_deta_int : natural range 0 to 667303;
+    signal cos_dphi_int : integer range -10000 to 10000;
 --*********************************Main Body of Code**********************************
 begin
     
@@ -107,8 +113,8 @@ mu_data(1)(9 downto 0) <= phi(1);
 mu_data(1)(18 downto 10) <= pt(1);
 mu_data(1)(31 downto 23) <= eta(1);
 
-pt1 <= MU_PT_LUT_UFIXED(CONV_INTEGER(mu_data(0)(D_S_I_MU_V2.pt_high downto D_S_I_MU_V2.pt_low)));
-pt2 <= MU_PT_LUT_UFIXED(CONV_INTEGER(mu_data(1)(D_S_I_MU_V2.pt_high downto D_S_I_MU_V2.pt_low)));
+pt1_int <= MU_PT_LUT(CONV_INTEGER(mu_data(0)(D_S_I_MU_V2.pt_high downto D_S_I_MU_V2.pt_low)));
+pt2_int <= MU_PT_LUT(CONV_INTEGER(mu_data(1)(D_S_I_MU_V2.pt_high downto D_S_I_MU_V2.pt_low)));
 
 mu_data_l: for i in 0 to 1 generate
     mu_eta_integer(i) <= CONV_INTEGER(signed(mu_data(i)(D_S_I_MU_V2.eta_high downto D_S_I_MU_V2.eta_low)));
@@ -122,25 +128,24 @@ diff_mu_mu_phi_i: entity work.sub_phi_integer_obj_vs_obj
     generic map(2, 2, PHI_HALF_RANGE_BINS)
     port map(mu_phi_integer, mu_phi_integer, diff_mu_mu_phi_integer);
 
-diff_eta <= MU_MU_DIFF_ETA_LUT_UFIXED(diff_mu_mu_eta_integer(0,1));
-diff_phi <= MU_MU_DIFF_PHI_LUT_UFIXED(diff_mu_mu_phi_integer(0,1));
+diff_eta_int <= MU_MU_DIFF_ETA_LUT(diff_mu_mu_eta_integer(0,1));
+diff_phi_int <= MU_MU_DIFF_PHI_LUT(diff_mu_mu_phi_integer(0,1));
 
-cosh_deta <= MU_MU_COSH_DETA_LUT_UFIXED(diff_mu_mu_eta_integer(0,1));
-cos_dphi <= MU_MU_COS_DPHI_LUT_UFIXED(diff_mu_mu_phi_integer(0,1));
-cos_dphi_sign <= MU_MU_COS_DPHI_SIGN_LUT(diff_mu_mu_phi_integer(0,1));
+cosh_deta_int <= MU_MU_COSH_DETA_LUT(diff_mu_mu_eta_integer(0,1));
+cos_dphi_int <= MU_MU_COS_DPHI_LUT(diff_mu_mu_phi_integer(0,1));
 
 dut: entity work.invmass_div_dr_calculator
     generic map(deta_int_digits, dphi_int_digits, pt_int_digits, cosh_deta_int_digits,
         mass_upper_limit, mass_lower_limit)
     port map(
-        diff_eta,
-        diff_phi,
-        pt1, 
-        pt2, 
-        cosh_deta, 
-        cos_dphi, 
-        cos_dphi_sign, 
-        open);
+        diff_eta_int,
+        diff_phi_int,
+        pt1_int, 
+        pt2_int, 
+        cosh_deta_int, 
+        cos_dphi_int, 
+        open
+    );
 
 end beh;
 

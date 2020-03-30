@@ -25,30 +25,37 @@ entity invmass_div_dr_calculator is
         fract_digits: positive := 20
     );
     port(
-        diff_eta : in ufixed(deta_int_digits downto -fract_digits);
-        diff_phi : in ufixed(dphi_int_digits downto -fract_digits);
-        pt1 : in ufixed(pt_int_digits downto -fract_digits);
-        pt2 : in ufixed(pt_int_digits downto -fract_digits);
-        cosh_deta : in ufixed(cosh_deta_int_digits downto -fract_digits);
-        cos_dphi : in ufixed(0 downto -fract_digits);
-        cos_dphi_sign : in boolean;
+        diff_eta_int : in natural;
+        diff_phi_int : in natural;
+        pt1_int : in natural;
+        pt2_int : in natural;
+        cosh_deta_int : in natural;
+        cos_dphi_int : in integer;
         mass_div_dr_comp : out std_logic
     );
 end invmass_div_dr_calculator;
 
 architecture rtl of invmass_div_dr_calculator is
 
+    constant deta_dphi_prec : positive := 3;
+    constant cosh_cos_prec : positive := 4;
+    constant pt_prec : positive := 1;
+
     constant dr_int_digits : positive := max(deta_int_digits*2, dphi_int_digits*2)+2;
-    constant mass_int_digits : positive := pt_int_digits*2+cosh_deta_int_digits+3;
+    constant mass_int_digits : positive := pt_int_digits*2+cosh_deta_int_digits+1;
     constant mass_div_dr_int_digits : positive := mass_int_digits+fract_digits;
     constant dr_temp_fract_digits : positive := fract_digits*2;
-    constant mass_temp_fract_digits : positive := fract_digits*3;
+    constant mass_temp_fract_digits : positive := fract_digits*2;
     constant mass_div_dr_temp_fract_digits : positive := fract_digits+dr_int_digits+1;
     
     constant zero : ufixed(mass_div_dr_int_digits downto -dr_temp_fract_digits) := (others => '0');
 
-    signal dr_temp : ufixed(dr_int_digits downto -dr_temp_fract_digits);
+    signal dr_temp : natural;
     signal dr : ufixed(dr_int_digits downto -fract_digits);
+    signal cosh_cos_temp : natural;
+    signal cosh_cos : ufixed(cosh_deta_int_digits downto -fract_digits);
+    signal pt1_pt2_temp : natural;
+    signal pt1_pt2 : ufixed(pt_int_digits*2 downto -fract_digits);
     signal mass_temp : ufixed(mass_int_digits downto -mass_temp_fract_digits);
     signal mass : ufixed(mass_int_digits downto -fract_digits);
     signal mass_div_dr_temp : ufixed(mass_div_dr_int_digits downto -mass_div_dr_temp_fract_digits);
@@ -63,10 +70,16 @@ begin
 
 -- Calculation is done with M^2/2 divided by DR^2 !
    
-    dr_temp <= diff_eta*diff_eta+diff_phi*diff_phi;
-    dr <= dr_temp(dr_int_digits downto -fract_digits);
+    dr_temp <= diff_eta_int*diff_eta_int+diff_phi_int*diff_phi_int;
+    dr <= to_ufixed((real(dr_temp)/real(10**(2*deta_dphi_prec))), dr);
     
-    mass_temp <= (pt1 * pt2 * (cosh_deta - cos_dphi)) when (cos_dphi_sign = false) else (pt1 * pt2 * (cosh_deta + cos_dphi));
+    pt1_pt2_temp <= pt1_int * pt2_int;
+    pt1_pt2 <= to_ufixed((real(pt1_pt2_temp)/real(10**(2*pt_prec))), pt1_pt2);
+    
+    cosh_cos_temp <= cosh_deta_int - cos_dphi_int;
+    cosh_cos <= to_ufixed((real(cosh_cos_temp)/real(10**cosh_cos_prec)), cosh_cos);    
+    
+    mass_temp <= pt1_pt2 * cosh_cos;
     mass <= mass_temp(mass_int_digits downto -fract_digits);
         
     mass_div_dr_temp <= (mass / dr) when (dr /= zero(dr_int_digits downto -fract_digits)) else zero(mass_div_dr_int_digits downto -mass_div_dr_temp_fract_digits);

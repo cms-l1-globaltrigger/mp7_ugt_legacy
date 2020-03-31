@@ -106,7 +106,7 @@ architecture rtl of muon_mass_div_dr_condition is
     signal muon2_obj_vs_templ, muon2_obj_vs_templ_pipe : muon2_object_vs_template_array;
     signal muon3_obj_vs_templ, muon3_obj_vs_templ_pipe : muon3_object_vs_template_array;
 -- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
-    signal mass_comp, mass_comp_pipe : 
+    signal mass_div_dr_comp_t, mass_div_dr_comp, mass_div_dr_comp_pipe : 
         std_logic_2dim_array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-12) := 2(others => (others => '0'));
 
     signal condition_and_or : std_logic;
@@ -123,17 +123,16 @@ begin
                     generic map(
                         MUON_PT_PRECISION, MUON_MUON_DETA_DPHI_PRECISION, MUON_MUON_COSH_COS_PRECISION, 
                         MU_PT_INT_DIGITS, MU_DETA_INT_DIGITS, MU_DPHI_INT_DIGITS, MU_COSH_DETA_INT_DIGITS,
-                        mass_div_dr_upper_limit_r => mass_div_dr_upper_limit,
-                        mass_div_dr_lower_limit_r => mass_div_dr_lower_limit
+                        mass_div_dr_upper_limit, mass_div_dr_lower_limit
                     )
                     port map(
-                        deta, dphi, 
                         pt(i), pt(j),
+                        diff_eta(i,j), diff_phi(i,j), 
                         cosh_deta(i,j), cos_dphi(i,j),
-                        mass_comp(i,j)
+                        mass_div_dr_comp_t(i,j)
                     );
-                inv_mass_value(i,j) <= inv_mass_value_temp(i,j);
-                inv_mass_value(j,i) <= inv_mass_value_temp(i,j);
+                mass_div_dr_comp(i,j) <= mass_div_dr_comp_t(i,j);
+                mass_div_dr_comp(j,i) <= mass_div_dr_comp_t(i,j);
             end generate mass_calc_l;
         end generate mass_l_2;
     end generate mass_l_1;
@@ -208,26 +207,26 @@ begin
         end generate charge_double_l_2;
     end generate charge_double_l_1;
 
-    -- Pipeline stage for obj_vs_templ and mass_comp
-    pipeline_p: process(lhc_clk, muon1_obj_vs_templ, muon2_obj_vs_templ, mass_comp, charge_comp_double)
+    -- Pipeline stage for obj_vs_templ and mass_div_dr_comp
+    pipeline_p: process(lhc_clk, muon1_obj_vs_templ, muon2_obj_vs_templ, mass_div_dr_comp, charge_comp_double)
         begin
         if obj_vs_templ_pipeline_stage = false then 
             muon1_obj_vs_templ_pipe <= muon1_obj_vs_templ;
             muon2_obj_vs_templ_pipe <= muon2_obj_vs_templ;
-            mass_comp_pipe <= mass_comp;
+            mass_div_dr_comp_pipe <= mass_div_dr_comp;
             charge_comp_double_pipe <= charge_comp_double;
         else
             if (lhc_clk'event and lhc_clk = '1') then
                 muon1_obj_vs_templ_pipe <= muon1_obj_vs_templ;
                 muon2_obj_vs_templ_pipe <= muon2_obj_vs_templ;
-                mass_comp_pipe <= mass_comp;
+                mass_div_dr_comp_pipe <= mass_div_dr_comp;
                 charge_comp_double_pipe <= charge_comp_double;
             end if;
         end if;
     end process;
 
     -- "Matrix" of permutations in an and-or-structure.
-    matrix_p: process(muon1_obj_vs_templ_pipe, muon2_obj_vs_templ_pipe, charge_comp_double_pipe, mass_comp_pipe)
+    matrix_p: process(muon1_obj_vs_templ_pipe, muon2_obj_vs_templ_pipe, charge_comp_double_pipe, mass_div_dr_comp_pipe)
         variable index : integer := 0;
         variable obj_vs_templ_vec : std_logic_vector((muon1_object_high-muon1_object_low+1)*(muon2_object_high-muon2_object_low+1) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
@@ -240,7 +239,7 @@ begin
                 for k in muon3_object_low to muon3_object_high loop
                     if j/=i and i/=k and j/=k then
                         index := index + 1;
-                        obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j,k) and mass_comp_pipe(i,j,k);
+                        obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j,k) and mass_div_dr_comp_pipe(i,j,k);
                     end if;
                 end loop;
             end loop;

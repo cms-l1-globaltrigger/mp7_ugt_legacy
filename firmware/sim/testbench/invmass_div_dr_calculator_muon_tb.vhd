@@ -141,14 +141,14 @@ cosh_deta_int <= MU_MU_COSH_DETA_LUT(diff_mu_mu_eta_integer(0,1));
 cos_dphi_int <= MU_MU_COS_DPHI_LUT(diff_mu_mu_phi_integer(0,1));
 
 dut: entity work.invmass_div_dr_calculator
-    generic map(deta_dphi_prec, cosh_cos_prec, pt_prec,
-        deta_int_digits, dphi_int_digits, pt_int_digits, cosh_deta_int_digits, fract_digits,
+    generic map(pt_prec, deta_dphi_prec, cosh_cos_prec,
+        pt_int_digits, deta_int_digits, dphi_int_digits, cosh_deta_int_digits, fract_digits,
         mass_upper_limit, mass_lower_limit)
     port map(
-        diff_eta_int,
-        diff_phi_int,
         pt1_int, 
         pt2_int, 
+        diff_eta_int,
+        diff_phi_int,
         cosh_deta_int, 
         cos_dphi_int, 
         open

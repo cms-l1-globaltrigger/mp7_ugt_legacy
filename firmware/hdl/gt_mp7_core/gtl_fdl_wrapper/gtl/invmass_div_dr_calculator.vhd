@@ -15,23 +15,23 @@ use work.gtl_pkg.all;
 
 entity invmass_div_dr_calculator is
     generic (
+        pt_prec: positive;
         deta_dphi_prec: positive;
         cosh_cos_prec: positive;
-        pt_prec: positive;
+        pt_int_digits: positive;
         deta_int_digits: positive;
         dphi_int_digits: positive;
-        pt_int_digits: positive;
         cosh_deta_int_digits: positive;
         fract_digits: positive;
 -- limits for comparison of invariant mass divided by deltaR
-        mass_div_dr_upper_limit_r: real;
-        mass_div_dr_lower_limit_r: real
+        mass_div_dr_upper_limit: real;
+        mass_div_dr_lower_limit: real
     );
     port(
-        diff_eta_int : in natural;
-        diff_phi_int : in natural;
         pt1_int : in natural;
         pt2_int : in natural;
+        diff_eta_int : in natural;
+        diff_phi_int : in natural;
         cosh_deta_int : in natural;
         cos_dphi_int : in integer;
         mass_div_dr_comp : out std_logic
@@ -47,10 +47,8 @@ architecture rtl of invmass_div_dr_calculator is
     constant mass_fract_digits : positive := fract_digits*2;
     constant mass_div_dr_fract_digits : positive := fract_digits+dr_int_digits+1;
     
-    constant zero : ufixed(mass_div_dr_int_digits downto -dr_fract_digits) := (others => '0');
-    
-    signal mass_div_dr_upper_limit: ufixed(mass_div_dr_int_digits downto -fract_digits);
-    signal mass_div_dr_lower_limit: ufixed(mass_div_dr_int_digits downto -fract_digits);
+    signal upper_limit: ufixed(mass_div_dr_int_digits downto -fract_digits);
+    signal lower_limit: ufixed(mass_div_dr_int_digits downto -fract_digits);
 
     signal dr_int : natural;
     signal dr : ufixed(dr_int_digits downto -fract_digits);
@@ -70,8 +68,8 @@ architecture rtl of invmass_div_dr_calculator is
     
 begin
 
-    mass_div_dr_upper_limit <= to_ufixed(mass_div_dr_upper_limit_r, mass_div_dr_upper_limit);
-    mass_div_dr_lower_limit <= to_ufixed(mass_div_dr_lower_limit_r, mass_div_dr_lower_limit);
+    upper_limit <= to_ufixed(mass_div_dr_upper_limit, upper_limit);
+    lower_limit <= to_ufixed(mass_div_dr_lower_limit, lower_limit);
 
 -- Calculation is done with M^2/2 divided by DR^2 !
    
@@ -90,6 +88,6 @@ begin
     mass_div_dr_uf <= (mass / dr) when (dr /= (to_ufixed((0), dr))) else (to_ufixed((0), mass_div_dr_uf));
     mass_div_dr <= mass_div_dr_uf(mass_div_dr_int_digits downto -fract_digits);
     
-    mass_div_dr_comp <= '1' when mass_div_dr >= mass_div_dr_lower_limit and mass_div_dr <= mass_div_dr_upper_limit else '0';
+    mass_div_dr_comp <= '1' when mass_div_dr >= lower_limit and mass_div_dr <= upper_limit else '0';
 
 end architecture rtl;

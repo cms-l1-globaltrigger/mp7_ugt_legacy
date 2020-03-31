@@ -69,7 +69,7 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/sum_mass_calc.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_3_obj_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_3_obj_condition.vhd
 ## HB 2020-03-31: fixed_generic_pkg_mod.vhd is used for ufixed type (ieee.fixed_pkg.all NOT supported in Vivado)
-src gt_mp7_core/gtl_fdl_wrapper/gtl/fixed_generic_pkg_mod.vhd
+#src gt_mp7_core/gtl_fdl_wrapper/gtl/fixed_generic_pkg_mod.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/invmass_div_dr_calculator.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_div_dr_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_div_dr_condition.vhd

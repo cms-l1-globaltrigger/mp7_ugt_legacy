@@ -17,16 +17,16 @@ use std.textio.all;
 
 use work.math_pkg.all;
 use work.gtl_pkg.all;
-use work.ufixed_luts_pkg.all;
+-- use work.ufixed_luts_pkg.all;
 
 entity invmass_div_dr_calculator_muon_TB is
 end invmass_div_dr_calculator_muon_TB;
 
 architecture beh of invmass_div_dr_calculator_muon_TB is
 
-    constant deta_dphi_prec : positive := 3;
-    constant cosh_cos_prec : positive := 4;
-    constant pt_prec : positive := 1;
+    constant deta_dphi_prec : positive := MUON_MUON_DETA_DPHI_PRECISION;
+    constant cosh_cos_prec : positive := MUON_MUON_COSH_COS_PRECISION;
+    constant pt_prec : positive := MUON_PT_PRECISION;
 
     constant deta_int_digits: positive := MU_DETA_INT_DIGITS;
     constant dphi_int_digits: positive := MU_DPHI_INT_DIGITS;
@@ -39,8 +39,6 @@ architecture beh of invmass_div_dr_calculator_muon_TB is
     constant inv_mass_int_digits : positive := pt_int_digits*2+cosh_deta_int_digits+3; -- = 26
     constant inv_mass_div_dr_int_digits : positive := inv_mass_int_digits+fract_digits+1; -- = 47
     
---     constant mass_upper_limit: ufixed(inv_mass_div_dr_int_digits downto -1) := '0'&X"0000000073A"&'0'; -- 1850
---     constant mass_lower_limit: ufixed(inv_mass_div_dr_int_digits downto -1) := '0'&X"00000000708"&'0'; -- 1800
     constant mass_upper_limit: real := 18.9;
     constant mass_lower_limit: real := 18.0;
     
@@ -53,16 +51,10 @@ architecture beh of invmass_div_dr_calculator_muon_TB is
     signal pt: pt_array;
     signal phi: phi_array;
     signal eta: eta_array;
-    signal pt1, pt2 : ufixed(pt_int_digits downto -fract_digits);
     signal mu_eta_integer: diff_integer_inputs_array(0 to 1) := (others => 0);
     signal mu_phi_integer: diff_integer_inputs_array(0 to 1) := (others => 0);
     signal diff_mu_mu_eta_integer: dim2_max_eta_range_array(0 to 1, 0 to 1) := (others => (others => 0));
     signal diff_mu_mu_phi_integer: dim2_max_phi_range_array(0 to 1, 0 to 1) := (others => (others => 0));
-    signal diff_eta : ufixed(deta_int_digits downto -fract_digits);
-    signal diff_phi : ufixed(dphi_int_digits downto -fract_digits);
-    signal cosh_deta : ufixed(cosh_deta_int_digits downto -fract_digits);
-    signal cos_dphi : ufixed(0 downto -fract_digits);
-    signal cos_dphi_sign : boolean;
 
     signal diff_eta_int : natural range 0 to 4894;
     signal diff_phi_int : natural range 0 to 6272;

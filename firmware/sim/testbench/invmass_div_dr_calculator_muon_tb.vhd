@@ -17,7 +17,6 @@ use std.textio.all;
 
 use work.math_pkg.all;
 use work.gtl_pkg.all;
--- use work.ufixed_luts_pkg.all;
 
 entity invmass_div_dr_calculator_muon_TB is
 end invmass_div_dr_calculator_muon_TB;
@@ -45,9 +44,9 @@ architecture beh of invmass_div_dr_calculator_muon_TB is
     constant LHC_CLK_PERIOD  : time :=  25 ns;
 
     signal mu_data : muon_objects_array(1 downto 0) := (X"0000000000000000", X"0000000000000000");
-    type pt_array is array (1 downto 0) of std_logic_vector(8 downto 0);
-    type phi_array is array (1 downto 0) of std_logic_vector(9 downto 0);
-    type eta_array is array (1 downto 0) of std_logic_vector(8 downto 0);
+    type pt_array is array (1 downto 0) of std_logic_vector(MUON_PT_HIGH-MUON_PT_LOW downto 0);
+    type phi_array is array (1 downto 0) of std_logic_vector(MUON_PHI_HIGH-MUON_PHI_LOW downto 0);
+    type eta_array is array (1 downto 0) of std_logic_vector(MUON_ETA_HIGH-MUON_ETA_HIGH downto 0);
     signal pt: pt_array;
     signal phi: phi_array;
     signal eta: eta_array;
@@ -62,6 +61,7 @@ architecture beh of invmass_div_dr_calculator_muon_TB is
     signal pt2_int : natural range 0 to 2553;
     signal cosh_deta_int : natural range 0 to 667303;
     signal cos_dphi_int : integer range -10000 to 10000;
+    
 --*********************************Main Body of Code**********************************
 begin
     

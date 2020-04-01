@@ -90,24 +90,20 @@ architecture rtl of muon_mass_div_dr_condition is
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
-    constant mass_vector_width: positive := pt_width+pt_width+cosh_cos_width; 
-
     type muon1_object_vs_template_array is array (muon1_object_low to muon1_object_high, 1 to 1) of std_logic;
     type muon2_object_vs_template_array is array (muon2_object_low to muon2_object_high, 1 to 1) of std_logic;
-    type muon3_object_vs_template_array is array (muon3_object_low to muon3_object_high, 1 to 1) of std_logic;
 
 --***************************************************************
 -- signals for charge correlation comparison:
-    signal charge_comp_double : muon_charcorr_double_array := (others => (others => (others => '0')));
+    signal charge_comp_double : muon_charcorr_double_array := (others => (others => '0'));
     signal charge_comp_double_pipe : muon_charcorr_double_array;
 --***************************************************************
 
     signal muon1_obj_vs_templ, muon1_obj_vs_templ_pipe : muon1_object_vs_template_array;
     signal muon2_obj_vs_templ, muon2_obj_vs_templ_pipe : muon2_object_vs_template_array;
-    signal muon3_obj_vs_templ, muon3_obj_vs_templ_pipe : muon3_object_vs_template_array;
 -- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
     signal mass_div_dr_comp_t, mass_div_dr_comp, mass_div_dr_comp_pipe : 
-        std_logic_2dim_array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-12) := 2(others => (others => '0'));
+        std_logic_2dim_array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) := (others => (others => '0'));
 
     signal condition_and_or : std_logic;
 
@@ -122,7 +118,7 @@ begin
                 invmass_div_dr_calculator_i: entity work.invmass_div_dr_calculator
                     generic map(
                         MUON_PT_PRECISION, MUON_MUON_DETA_DPHI_PRECISION, MUON_MUON_COSH_COS_PRECISION, 
-                        MU_PT_INT_DIGITS, MU_DETA_INT_DIGITS, MU_DPHI_INT_DIGITS, MU_COSH_DETA_INT_DIGITS,
+                        MU_PT_INT_DIGITS, MU_DETA_INT_DIGITS, MU_DPHI_INT_DIGITS, MU_COSH_DETA_INT_DIGITS, FRACT_DIGITS,
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit
                     )
                     port map(
@@ -236,12 +232,10 @@ begin
         condition_and_or_tmp := '0';
         for i in muon1_object_low to muon1_object_high loop 
             for j in muon2_object_low to muon2_object_high loop
-                for k in muon3_object_low to muon3_object_high loop
-                    if j/=i and i/=k and j/=k then
-                        index := index + 1;
-                        obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j,k) and mass_div_dr_comp_pipe(i,j,k);
-                    end if;
-                end loop;
+                if j/=i then
+                    index := index + 1;
+                    obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j,k) and mass_div_dr_comp_pipe(i,j,k);
+                end if;
             end loop;
         end loop;
         for i in 1 to index loop 

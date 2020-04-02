@@ -234,7 +234,7 @@ begin
             for j in muon2_object_low to muon2_object_high loop
                 if j/=i then
                     index := index + 1;
-                    obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j,k) and mass_div_dr_comp_pipe(i,j,k);
+                    obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and mass_div_dr_comp_pipe(i,j);
                 end if;
             end loop;
         end loop;

@@ -98,7 +98,7 @@ architecture rtl of calo_mass_div_dr_condition is
     signal calo2_obj_vs_templ, calo2_obj_vs_templ_pipe : std_logic_2dim_array(calo2_object_low to calo2_object_high, 1 to 1);
 
 -- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
-    signal mass_comp, mass_comp_temp, mass_comp_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) :=
+    signal mass_div_dr_comp_t, mass_div_dr_comp, mass_div_dr_comp_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) :=
     (others => (others => '1'));
 
     signal condition_and_or : std_logic;
@@ -190,19 +190,19 @@ begin
         if obj_vs_templ_pipeline_stage = false then 
             calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
             calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
-            mass_comp_pipe <= mass_comp;
+            mass_div_dr_comp_pipe <= mass_div_dr_comp;
         else
             if (lhc_clk'event and lhc_clk = '1') then
                 calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
                 calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
-                mass_comp_pipe <= mass_comp;
+                mass_div_dr_comp_pipe <= mass_div_dr_comp;
             end if;
         end if;
     end process;
 
     -- "Matrix" of permutations in an and-or-structure.
 
-    matrix_deta_dphi_dr_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, mass_comp_pipe)
+    matrix_deta_dphi_dr_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, mass_div_dr_comp_pipe)
         variable index : integer := 0;
         variable obj_vs_templ_vec : std_logic_vector(((calo1_object_high-calo1_object_low+1)*(calo2_object_high-calo2_object_low+1)) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
@@ -212,15 +212,10 @@ begin
         condition_and_or_tmp := '0';
         for i in calo1_object_low to calo1_object_high loop 
             for j in calo2_object_low to calo2_object_high loop
-            if obj_type_calo1 = obj_type_calo2 and same_bx = true then
                 if j/=i then
                 index := index + 1;
-                obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and mass_comp_pipe(i,j);
+                obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and mass_div_dr_comp_pipe(i,j);
                 end if;
-            else
-                index := index + 1;
-                obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and mass_comp_pipe(i,j);
-            end if;
             end loop;
         end loop;
         for i in 1 to index loop 

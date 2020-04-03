@@ -57,12 +57,12 @@ architecture rtl of invmass_div_dr_calculator is
     constant mass_int_digits : positive := pt1_pt2_int_digits+cosh_cos_int_digits+1;
     constant mass_div_dr_int_digits : positive := mass_int_digits+fract_digits;
 
-    constant pt_div_fract_digits : positive := fract_digits+5; -- ????
+    constant pt_div_fract_digits : positive := fract_digits+log2c(10**pt_prec)+1;
     constant pt1_pt2_t_fract_digits : positive := fract_digits*2;
-    constant deta_div_fract_digits : positive := fract_digits+3+8; -- ???? 
-    constant dphi_div_fract_digits : positive := fract_digits+3+8; -- ???? 
+    constant deta_div_fract_digits : positive := fract_digits+log2c(10**deta_dphi_prec)+1; 
+    constant dphi_div_fract_digits : positive := fract_digits+log2c(10**deta_dphi_prec)+1; 
     constant dr_calc_fract_digits : positive := fract_digits*2;
-    constant cosh_cos_fract_digits : positive := fract_digits+15; -- ????
+    constant cosh_cos_fract_digits : positive := fract_digits+log2c(10**cosh_cos_prec)+1;
     constant mass_fract_digits : positive := fract_digits*2;
     constant mass_div_dr_fract_digits : positive := fract_digits+dr_int_digits+1;
     

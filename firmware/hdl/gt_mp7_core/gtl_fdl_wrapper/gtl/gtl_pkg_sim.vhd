@@ -856,6 +856,13 @@ constant MU_DETA_INT_DIGITS : positive := 2;
 constant MU_DPHI_INT_DIGITS : positive := 2;
 constant MU_PT_INT_DIGITS : positive := 7;
 constant MU_COSH_DETA_INT_DIGITS : positive := 6;
+
+constant EG_PT_MAX_VALUE : positive := 2558;
+constant JET_PT_MAX_VALUE : positive := 10238;
+constant TAU_PT_MAX_VALUE : positive := 2558;
+constant MU_PT_MAX_VALUE : positive := 2553;
+constant CALO_COSH_DETA_MAX_VALUE : positive := 10597282;
+constant MU_COSH_DETA_MAX_VALUE : positive := 667303;
 -- ********************************************************
 -- conversion LUTs
 type calo_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;

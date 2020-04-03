@@ -46,7 +46,7 @@ architecture beh of invmass_div_dr_calculator_muon_TB is
     signal mu_data : muon_objects_array(1 downto 0) := (X"0000000000000000", X"0000000000000000");
     type pt_array is array (1 downto 0) of std_logic_vector(MUON_PT_HIGH-MUON_PT_LOW downto 0);
     type phi_array is array (1 downto 0) of std_logic_vector(MUON_PHI_HIGH-MUON_PHI_LOW downto 0);
-    type eta_array is array (1 downto 0) of std_logic_vector(MUON_ETA_HIGH-MUON_ETA_HIGH downto 0);
+    type eta_array is array (1 downto 0) of std_logic_vector(MUON_ETA_HIGH-MUON_ETA_LOW downto 0);
     signal pt: pt_array;
     signal phi: phi_array;
     signal eta: eta_array;
@@ -135,7 +135,7 @@ cos_dphi_int <= MU_MU_COS_DPHI_LUT(diff_mu_mu_phi_integer(0,1));
 dut: entity work.invmass_div_dr_calculator
     generic map(pt_prec, deta_dphi_prec, cosh_cos_prec,
         pt_int_digits, deta_int_digits, dphi_int_digits, cosh_deta_int_digits, fract_digits,
-        mass_upper_limit, mass_lower_limit)
+        mass_upper_limit, mass_lower_limit, MU_PT_MAX_VALUE, MU_COSH_DETA_MAX_VALUE)
     port map(
         pt1_int, 
         pt2_int, 
@@ -143,7 +143,7 @@ dut: entity work.invmass_div_dr_calculator
         diff_phi_int,
         cosh_deta_int, 
         cos_dphi_int, 
-        open
+        open 
     );
 
 end beh;

@@ -276,27 +276,27 @@ def main():
         cmd_ipbb_bitfile = "ipbb vivado package"
         
         #Set variable "module_id" for tcl script (l1menu_files.tcl in uGT_algo.dep)
-        command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_dir}/proj/module_{module_id}; module_id={module_id} {cmd_ipbb_project}"'.format(**locals())
-        run_command(command)
+        #command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_dir}/proj/module_{module_id}; module_id={module_id} {cmd_ipbb_project}"'.format(**locals())
+        #run_command(command)
         
-        logging.info("")
-        logging.info("===========================================================================")
-        logging.info("running TCL script: fixed_pkg_compile.tcl")
+        #logging.info("")
+        #logging.info("===========================================================================")
+        #logging.info("running TCL script: fixed_pkg_compile.tcl")
         
         cmd_fixed_pkg_tcl = "vivado -mode batch -source {ipbb_dir}/src/{project_type}/scripts/fixed_pkg_compile.tcl".format(**locals())
         
-        command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_dir}/proj/module_{module_id}; {cmd_fixed_pkg_tcl}"'.format(**locals())
-        run_command(command)
+        #command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_dir}/proj/module_{module_id}; {cmd_fixed_pkg_tcl}"'.format(**locals())
+        #run_command(command)
         
-        #command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_dir}/proj/module_{module_id}; module_id={module_id} {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
+        command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_dir}/proj/module_{module_id}; module_id={module_id} {cmd_ipbb_project} && {cmd_fixed_pkg_tcl} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
 
-        #session = "build_{project_type}_{args.build}_{module_id}".format(**locals())
-        #logging.info("starting screen session '%s' for module %s ...", session, module_id)
-        #run_command('screen', '-dmS', session, command)
+        session = "build_{project_type}_{args.build}_{module_id}".format(**locals())
+        logging.info("starting screen session '%s' for module %s ...", session, module_id)
+        run_command('screen', '-dmS', session, command)
 
-    ## list running screen sessions
-    #logging.info("===========================================================================")
-    #run_command('screen', '-ls')
+    # list running screen sessions
+    logging.info("===========================================================================")
+    run_command('screen', '-ls')
 
     os.chdir(ipbb_dir)
 

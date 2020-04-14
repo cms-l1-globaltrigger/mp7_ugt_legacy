@@ -32,12 +32,12 @@ entity invmass_div_dr_calculator is
         cos_dphi_int_digits : positive := 1
     );
     port(
-        pt1_int : in natural;
-        pt2_int : in natural;
-        diff_eta_int : in natural;
-        diff_phi_int : in natural;
-        cosh_deta_int : in natural;
-        cos_dphi_int : in integer range -(10**cosh_cos_prec) to +(10**cosh_cos_prec);
+        pt1_int : in integer;
+        pt2_int : in integer;
+        diff_eta_int : in integer;
+        diff_phi_int : in integer;
+        cosh_deta_int : in integer;
+        cos_dphi_int : in integer;
         mass_div_dr_comp : out std_logic
     );
 end invmass_div_dr_calculator;

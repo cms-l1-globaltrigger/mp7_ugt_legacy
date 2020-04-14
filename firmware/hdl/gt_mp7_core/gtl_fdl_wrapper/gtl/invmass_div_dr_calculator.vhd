@@ -112,9 +112,15 @@ architecture rtl of invmass_div_dr_calculator is
     signal div_cosh_cos : ufixed(log2c(10**cosh_cos_prec) downto -0);
 
     attribute use_dsp : string;
-    attribute use_dsp of dr : signal is "yes";
-    attribute use_dsp of mass : signal is "yes";
-    attribute use_dsp of mass_div_dr : signal is "yes";
+    attribute use_dsp of pt1_div : signal is "yes";
+    attribute use_dsp of pt2_div : signal is "yes";
+    attribute use_dsp of pt1_pt2_t : signal is "yes";
+    attribute use_dsp of diff_eta_div : signal is "yes";
+    attribute use_dsp of diff_phi_div : signal is "yes";
+    attribute use_dsp of dr_calc : signal is "yes";
+    attribute use_dsp of cosh_cos_div : signal is "yes";
+    attribute use_dsp of mass_uf : signal is "yes";
+    attribute use_dsp of mass_div_dr_uf : signal is "yes";
     
 begin
 

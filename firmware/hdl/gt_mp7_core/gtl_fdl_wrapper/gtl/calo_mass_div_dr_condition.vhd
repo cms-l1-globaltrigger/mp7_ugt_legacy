@@ -15,14 +15,10 @@ use work.gtl_pkg.all;
 entity calo_mass_div_dr_condition is
     generic(
 
-        pt_prec: positive;
-        deta_dphi_prec: positive;
-        cosh_cos_prec: positive;
-        pt_int_digits: positive;
-        deta_int_digits: positive;
-        dphi_int_digits: positive;
-        cosh_deta_int_digits: positive;
-        fract_digits: positive;
+        nr_objects : positive; 
+        pt_prec, deta_dphi_prec, cosh_cos_prec : positive;
+        pt_int_digits, deta_int_digits, dphi_int_digits, cosh_deta_int_digits, fract_digits : positive;
+        pt_max_value, cosh_deta_max_value : positive;
 
         calo1_object_low: natural;
         calo1_object_high: natural;
@@ -108,14 +104,14 @@ begin
     -- *** section: CUTs - begin ***************************************************************************************
 
     -- Comparison with limits.
-    mass_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
-        mass_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
+    mass_l_1: for i in 0 to nr_objects-1 generate 
+        mass_l_2: for j in 0 to nr_objects-1 generate
             mass_calc_l: if j>i generate
                 invmass_div_dr_calculator_i: entity work.invmass_div_dr_calculator
                     generic map(
                         pt_prec, deta_dphi_prec, cosh_cos_prec,
                         pt_int_digits, deta_int_digits, dphi_int_digits, cosh_deta_int_digits, fract_digits,
-                        mass_div_dr_upper_limit, mass_div_dr_lower_limit
+                        mass_div_dr_upper_limit, mass_div_dr_lower_limit, pt_max_value, cosh_deta_max_value
                     )
                     port map(
                         pt(i), pt(j),

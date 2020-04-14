@@ -119,7 +119,7 @@ begin
                     generic map(
                         MUON_PT_PRECISION, MUON_MUON_DETA_DPHI_PRECISION, MUON_MUON_COSH_COS_PRECISION, 
                         MU_PT_INT_DIGITS, MU_DETA_INT_DIGITS, MU_DPHI_INT_DIGITS, MU_COSH_DETA_INT_DIGITS, FRACT_DIGITS,
-                        mass_div_dr_upper_limit, mass_div_dr_lower_limit
+                        mass_div_dr_upper_limit, mass_div_dr_lower_limit, MU_PT_MAX_VALUE, MU_COSH_DETA_MAX_VALUE
                     )
                     port map(
                         pt(i), pt(j),

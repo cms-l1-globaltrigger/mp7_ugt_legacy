@@ -14,7 +14,10 @@ use work.gtl_pkg.all;
 
 entity calo_calo_invmass_div_dr_condition is
     generic(
-        same_bx: boolean; 
+        nr_objects, 
+        pt_precision, deta_dphi_precision, cosh_cos_precision, 
+        pt_int_digits, deta_int_digits, dphi_int_digits, cosh_deta_int_digits, fract_digits,
+        pt_max_value, cosh_deta_max_value : positive;
     
         calo1_object_low: natural;
         calo1_object_high: natural;
@@ -102,59 +105,27 @@ begin
     -- *** section: CUTs - begin ***************************************************************************************
     
     -- Comparison with limits.
-    cuts_l_1: for i in calo1_object_low to calo1_object_high generate 
-        cuts_l_2: for j in calo2_object_low to calo2_object_high generate
-            same_obj_type_same_bx_same_range_i: if obj_type_calo1 = obj_type_calo2 and same_bx and (calo1_object_low = calo2_object_low) and (calo1_object_high = calo2_object_high) generate
--- HB 2017-02-21: optimisation of LUTs and DSP resources: calculations of cuts only for one half of permutations, second half by assignment of "mirrored" indices.
-                if_j_gr_i: if j > i generate
-                    cuts_instances_i: entity work.invmass_div_dr_calculator
-                        generic map(
-                            mass_div_dr_upper_limit_vector,
-                            mass_div_dr_lower_limit_vector
-                        )
-                        port map(
-                            diff_eta(i,j),
-                            diff_phi(i,j),
-                            pt1(i),
-                            pt2(j),
-                            cosh_deta(i,j),
-                            cos_dphi(i,j),
-                            mass_comp_temp(i,j)
-                        );
-                    mass_comp(i,j) <= mass_comp_temp(i,j);
-                    mass_comp(j,i) <= mass_comp_temp(i,j);
-                end generate if_j_gr_i;
-            end generate same_obj_type_same_bx_same_range_i;
-            diffrent_obj_type_different_bx_different_range_i: if obj_type_calo1 /= obj_type_calo2 or not same_bx or (calo1_object_low /= calo2_object_low) or (calo1_object_high /= calo2_object_high) generate
-                cuts_instances_i: entity work.invmass_div_dr_calculator
+    mass_l_1: for i in 0 to nr_objects-1 generate 
+        mass_l_2: for j in 0 to nr_objects-1 generate
+            mass_calc_l: if j>i generate
+                invmass_div_dr_calculator_i: entity work.invmass_div_dr_calculator
                     generic map(
-                        mass_div_dr_upper_limit_vector,
-                        mass_div_dr_lower_limit_vector
+                        pt_precision, deta_dphi_precision, cosh_cos_precision, 
+                        pt_int_digits, deta_int_digits, dphi_int_digits, cosh_deta_int_digits, fract_digits,
+                        mass_div_dr_upper_limit, mass_div_dr_lower_limit, pt_max_value, cosh_deta_max_value
                     )
                     port map(
-                        diff_eta(i,j),
-                        diff_phi(i,j),
-                        pt1(i),
-                        pt2(j),
-                        cosh_deta(i,j),
-                        cos_dphi(i,j),
-                        mass_comp_temp(i,j)
+                        pt(i), pt(j),
+                        diff_eta(i,j), diff_phi(i,j), 
+                        cosh_deta(i,j), cos_dphi(i,j),
+                        mass_div_dr_comp_t(i,j)
                     );
-            end generate diffrent_obj_type_different_bx_different_range_i;
-        end generate cuts_l_2;
-    end generate cuts_l_1;
-    
-    -- Pipeline stage for cut comps
-    diff_pipeline_p: process(lhc_clk, mass_comp)
-        begin
-        if obj_vs_templ_pipeline_stage = false then 
-            mass_comp_pipe <= mass_comp;
-        else
-            if (lhc_clk'event and lhc_clk = '1') then
-                mass_comp_pipe <= mass_comp;
-            end if;
-        end if;
-    end process;
+                mass_div_dr_comp(i,j) <= mass_div_dr_comp_t(i,j);
+                mass_div_dr_comp(j,i) <= mass_div_dr_comp_t(i,j);
+            end generate mass_calc_l;
+        end generate mass_l_2;
+    end generate mass_l_1;
+
     -- *** section: CUTs - end ***************************************************************************************
 
     -- Instance of comparators for calorimeter objects.
@@ -216,10 +187,12 @@ begin
         if obj_vs_templ_pipeline_stage = false then 
             calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
             calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
+            mass_comp_pipe <= mass_comp;
         else
             if (lhc_clk'event and lhc_clk = '1') then
                 calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
                 calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
+                mass_comp_pipe <= mass_comp;
             end if;
         end if;
     end process;

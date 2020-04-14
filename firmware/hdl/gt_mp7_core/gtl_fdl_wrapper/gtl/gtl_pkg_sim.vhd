@@ -2,7 +2,8 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
--- HB 2019-10-08: Changed some values in LUTs MUON_COS_PHI_LUT and MUON_SIN_PHI_LUT according to LUTs from emulator (given by Len)
+-- HB 2020-04-14: added constants for invariant mass divided by deltaR.
+-- HB 2019-10-08: changed some values in LUTs MUON_COS_PHI_LUT and MUON_SIN_PHI_LUT according to LUTs from emulator (given by Len)
 -- HB 2019-06-03: inserted PRESCALER_FRACTION_WIDTH for fractional prescaler values
 -- HB 2019-05-02: inserted types for calo_cond_matrix.vhd.
 -- HB 2018-08-06: inserted constants and types for "Asymmetry" and "Centrality" (included in esums data structure).
@@ -861,7 +862,9 @@ constant EG_PT_MAX_VALUE : positive := 2558;
 constant JET_PT_MAX_VALUE : positive := 10238;
 constant TAU_PT_MAX_VALUE : positive := 2558;
 constant MU_PT_MAX_VALUE : positive := 2553;
-constant CALO_COSH_DETA_MAX_VALUE : positive := 10597282;
+constant EG_COSH_DETA_MAX_VALUE : positive := 10597282;
+constant JET_COSH_DETA_MAX_VALUE : positive := EG_COSH_DETA_MAX_VALUE;
+constant TAU_COSH_DETA_MAX_VALUE : positive := EG_COSH_DETA_MAX_VALUE;
 constant MU_COSH_DETA_MAX_VALUE : positive := 667303;
 -- ********************************************************
 -- conversion LUTs

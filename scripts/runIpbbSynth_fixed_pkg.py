@@ -283,9 +283,9 @@ def main():
         logging.info("===========================================================================")
         logging.info("running TCL script: fixed_pkg_compile.tcl")
         
-        cmd_fixed_pkg_tcl = "vivado -mode batch -source fixed_pkg_compile.tcl"
+        cmd_fixed_pkg_tcl = "vivado -mode batch -source {ipbb_dir}/src/{project_type}/scripts/fixed_pkg_compile.tcl".format(**locals())
         
-        command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_dir}/scripts; {cmd_fixed_pkg_tcl}"'.format(**locals())
+        command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_dir}/proj/module_{module_id}; {cmd_fixed_pkg_tcl}"'.format(**locals())
         run_command(command)
         
         #command = 'bash -c "cd; {cmd_source_ipbb}; source {settings64}; cd {ipbb_dir}/proj/module_{module_id}; module_id={module_id} {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())

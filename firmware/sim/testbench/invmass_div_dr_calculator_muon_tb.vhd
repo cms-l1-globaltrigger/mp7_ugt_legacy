@@ -38,7 +38,7 @@ architecture beh of invmass_div_dr_calculator_muon_TB is
     constant inv_mass_int_digits : positive := pt_int_digits*2+cosh_deta_int_digits+3; -- = 26
     constant inv_mass_div_dr_int_digits : positive := inv_mass_int_digits+fract_digits+1; -- = 47
     
-    constant mass_upper_limit: real := 18.9;
+    constant mass_upper_limit: real := 19.2;
     constant mass_lower_limit: real := 18.0;
     
     constant LHC_CLK_PERIOD  : time :=  25 ns;

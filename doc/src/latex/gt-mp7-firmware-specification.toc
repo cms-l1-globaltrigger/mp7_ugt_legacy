@@ -42,8 +42,9 @@
 \contentsline {paragraph}{\numberline {3.4.3.2}Calorimeter conditions definition}{41}{paragraph.3.4.3.2}
 \contentsline {subparagraph}{\numberline {3.4.3.2.1}Calorimeter conditions over bx}{42}{subparagraph.3.4.3.2.1}
 \contentsline {subparagraph}{\numberline {3.4.3.2.2}Calorimeter conditions module}{42}{subparagraph.3.4.3.2.2}
-\contentsline {subparagraph}{\numberline {3.4.3.2.3}Calorimeter conditions module - template for VHDL-Producer}{45}{subparagraph.3.4.3.2.3}
-\contentsline {subparagraph}{\numberline {3.4.3.2.4}Calorimeter comparators module}{45}{subparagraph.3.4.3.2.4}
+\contentsline {subparagraph}{\numberline {3.4.3.2.3}Calorimeter Overlap Remover conditions module}{45}{subparagraph.3.4.3.2.3}
+\contentsline {subparagraph}{\numberline {3.4.3.2.4}Calorimeter conditions module - template for VHDL-Producer}{45}{subparagraph.3.4.3.2.4}
+\contentsline {subparagraph}{\numberline {3.4.3.2.5}Calorimeter comparators module}{45}{subparagraph.3.4.3.2.5}
 \contentsline {subsubsection}{\numberline {3.4.4}Energy sum quantities conditions}{48}{subsubsection.3.4.4}
 \contentsline {paragraph}{\numberline {3.4.4.1}Energy sum quantities data}{48}{paragraph.3.4.4.1}
 \contentsline {paragraph}{\numberline {3.4.4.2}Energy sum quantities conditions module}{49}{paragraph.3.4.4.2}
@@ -70,8 +71,7 @@
 \contentsline {subparagraph}{\numberline {3.4.9.2.3}Muon Muon Correlation condition module}{81}{subparagraph.3.4.9.2.3}
 \contentsline {subparagraph}{\numberline {3.4.9.2.4}Calo Esums Correlation condition module}{88}{subparagraph.3.4.9.2.4}
 \contentsline {subparagraph}{\numberline {3.4.9.2.5}Muon Esums Correlation condition module}{93}{subparagraph.3.4.9.2.5}
-\contentsline {subparagraph}{\numberline {3.4.9.2.6}Calo Calo Overlap Remover condition module}{98}{subparagraph.3.4.9.2.6}
-\contentsline {subparagraph}{\numberline {3.4.9.2.7}Calo Muon Muon B-tagging condition module}{98}{subparagraph.3.4.9.2.7}
+\contentsline {subparagraph}{\numberline {3.4.9.2.6}Calo Calo Overlap Remover Correlation condition module}{98}{subparagraph.3.4.9.2.6}
 \contentsline {subsubsection}{\numberline {3.4.10}External Conditions}{98}{subsubsection.3.4.10}
 \contentsline {subsubsection}{\numberline {3.4.11}Algorithms logic}{98}{subsubsection.3.4.11}
 \contentsline {subsection}{\numberline {3.5}VHDL-Templates for VHDL-Producer}{99}{subsection.3.5}

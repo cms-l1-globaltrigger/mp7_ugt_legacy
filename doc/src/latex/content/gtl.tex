@@ -489,7 +489,7 @@ The "sub-conditions" created by VHDL Producer are the following:
 %     \end{itemize}
 \end{itemize}
 
-\subparagraph{Calorimeter conditions module}
+\subparagraph{Calorimeter conditions module}\label{sec:gtl:calo_conditions_module}
 
 The module for conditions with calorimeter objects (\texttt{calo\_conditions.vhd}) instantiates the calorimeter comparators module (\texttt{calo\_comparators.vhd}) as many times as
 the numbers of objects and requirements determine. Depending on the condition-type, different and-or-structures of object vs. requirement are selected.
@@ -558,6 +558,10 @@ In the calorimeter conditions module a cut for two-body pt calculation can be se
 \end{table}
 
 \clearpage
+
+\subparagraph{Calorimeter Overlap Remover conditions module}\label{sec:gtl:calo_conditions_orm_module}
+The Calorimeter Overlap Remover conditions consits of a Calorimeter condition (\ref{sec:gtl:calo_conditions_module}) and a single condition for a different calo object type. A correlation cut for overlap removal is required between objects of Calorimeter condition and objects of the different calo object type.
+Overlap Remover conditions \texttt{calo\_conditions\_orm.vhd} are implemented only for calo object types.
 
 \subparagraph{Calorimeter conditions module - template for VHDL-Producer}
 See in Chapter \ref{sec:gtl:calo_conditions_tme} and in Listing~\ref{lst:instance_calo_condition_vhd} for a VHDL-template for VHDL-Producer of
@@ -1926,15 +1930,17 @@ For VHDL entity declaration for muon esums correlation condition module in \text
 \label{tab:gtl:explanation_muon_muon_correlation_condition_vhd}
 \end{longtable}
 
-\subparagraph{Calo Calo Overlap Remover condition module}
+\subparagraph{Calo Calo Overlap Remover Correlation condition module}
 \label{sec:gtl:calo_calo_overlao_remover_condition_module}
 
-\textbf{Insert new text !!!}
+The Calo Calo Overlap Remover Correlation conditions consits of a Calo Calo Correlation condition with "Double objects requirement condition" for calo objects of same type and same bunch-crossing (\ref{sec:gtl:calo_calo_correlation_condition_module}) and a single condition for a different calo object type. There has to be at least one correlation cut or the objects of "Double objects requirement condition" and a correlation cut for overlap removal between objects
+of "Double objects requirement condition" and objects of the different calo object type.
+Overlap Remover Correlation conditions \texttt{calo\_calo\_calo\_correlation\_orm\_condition.vhd} are implemented only for calo object types.
 
-\subparagraph{Calo Muon Muon B-tagging condition module}
-\label{sec:gtl:calo_muon_muon_b_tagging_condition_module}
-
-\textbf{Insert new text !!!}
+% \subparagraph{Calo Muon Muon B-tagging condition module}
+% \label{sec:gtl:calo_muon_muon_b_tagging_condition_module}
+% 
+% \textbf{Insert new text !!!}
 
 \subsubsection{External Conditions}
 \label{sec:gtl:external_conditions}

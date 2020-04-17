@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2018.10.12)  17 APR 2020 14:14
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2018.10.12)  17 APR 2020 14:42
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1252,11 +1252,11 @@ File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
 LaTeX Warning: Reference `sec:ipbus' on page 11 undefined on input line 19.
 
 Package epstopdf Info: Source file: <figures/mGT_firmware.eps>
-(epstopdf)                    date: 2020-04-17 14:13:55
+(epstopdf)                    date: 2020-04-17 14:41:11
 (epstopdf)                    size: 1633508 bytes
 (epstopdf)             Output file: <figures/mGT_firmware-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2020-04-17 14:14:31
+(epstopdf)                    date: 2020-04-17 14:41:52
 (epstopdf)                    size: 534750 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/mGT_firmware-eps-co
 nverted-to.pdf figures/mGT_firmware.eps>
@@ -1294,11 +1294,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 10--14
  []
 
 Package epstopdf Info: Source file: <./figures/system_overview.eps>
-(epstopdf)                    date: 2020-04-17 14:14:24
+(epstopdf)                    date: 2020-04-17 14:41:43
 (epstopdf)                    size: 164151 bytes
 (epstopdf)             Output file: <./figures/system_overview-eps-converted-to
 .pdf>
-(epstopdf)                    date: 2020-04-17 14:14:32
+(epstopdf)                    date: 2020-04-17 14:41:52
 (epstopdf)                    size: 68657 bytes
 (epstopdf)             Command: <epstopdf --outfile=./figures/system_overview-e
 ps-converted-to.pdf ./figures/system_overview.eps>
@@ -1484,11 +1484,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 156--159
  []
 
 Package epstopdf Info: Source file: <./figures/dm_delay_element.eps>
-(epstopdf)                    date: 2020-04-17 14:13:35
+(epstopdf)                    date: 2020-04-17 14:40:49
 (epstopdf)                    size: 46559 bytes
 (epstopdf)             Output file: <./figures/dm_delay_element-eps-converted-t
 o.pdf>
-(epstopdf)                    date: 2020-04-17 14:14:32
+(epstopdf)                    date: 2020-04-17 14:41:52
 (epstopdf)                    size: 20105 bytes
 (epstopdf)             Command: <epstopdf --outfile=./figures/dm_delay_element-
 eps-converted-to.pdf ./figures/dm_delay_element.eps>
@@ -1541,10 +1541,10 @@ LaTeX Font Info:    Try loading font information for TS1+lmr on input line 253.
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 Package epstopdf Info: Source file: <./figures/simspy.eps>
-(epstopdf)                    date: 2020-04-17 14:14:20
+(epstopdf)                    date: 2020-04-17 14:41:39
 (epstopdf)                    size: 154478 bytes
 (epstopdf)             Output file: <./figures/simspy-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-04-17 14:14:32
+(epstopdf)                    date: 2020-04-17 14:41:53
 (epstopdf)                    size: 67550 bytes
 (epstopdf)             Command: <epstopdf --outfile=./figures/simspy-eps-conver
 ted-to.pdf ./figures/simspy.eps>
@@ -1614,11 +1614,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--5
  []
 
 Package epstopdf Info: Source file: <figures/mGTL_firmware.eps>
-(epstopdf)                    date: 2020-04-17 14:13:59
+(epstopdf)                    date: 2020-04-17 14:41:16
 (epstopdf)                    size: 237733 bytes
 (epstopdf)             Output file: <figures/mGTL_firmware-eps-converted-to.pdf
 >
-(epstopdf)                    date: 2020-04-17 14:14:33
+(epstopdf)                    date: 2020-04-17 14:41:53
 (epstopdf)                    size: 97022 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/mGTL_firmware-eps-c
 onverted-to.pdf figures/mGTL_firmware.eps>
@@ -1862,10 +1862,10 @@ Overfull \hbox (1.44019pt too wide) in paragraph at lines 145--145
 \width=\dimen157 (locally)
 [32]
 Package epstopdf Info: Source file: <figures/tme_gtl.eps>
-(epstopdf)                    date: 2020-04-17 14:14:26
+(epstopdf)                    date: 2020-04-17 14:41:45
 (epstopdf)                    size: 425829 bytes
 (epstopdf)             Output file: <figures/tme_gtl-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-04-17 14:14:33
+(epstopdf)                    date: 2020-04-17 14:41:54
 (epstopdf)                    size: 173111 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/tme_gtl-eps-convert
 ed-to.pdf figures/tme_gtl.eps>
@@ -1925,11 +1925,11 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 233.
 
 Package epstopdf Info: Source file: <figures/gtl_pipeline.eps>
-(epstopdf)                    date: 2020-04-17 14:13:47
+(epstopdf)                    date: 2020-04-17 14:41:02
 (epstopdf)                    size: 247789 bytes
 (epstopdf)             Output file: <figures/gtl_pipeline-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2020-04-17 14:14:34
+(epstopdf)                    date: 2020-04-17 14:41:54
 (epstopdf)                    size: 95770 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/gtl_pipeline-eps-co
 nverted-to.pdf figures/gtl_pipeline.eps>
@@ -2077,11 +2077,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 531--533
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 Package epstopdf Info: Source file: <figures/phi_windows_comparator.eps>
-(epstopdf)                    date: 2020-04-17 14:14:06
+(epstopdf)                    date: 2020-04-17 14:41:24
 (epstopdf)                    size: 86720 bytes
 (epstopdf)             Output file: <figures/phi_windows_comparator-eps-convert
 ed-to.pdf>
-(epstopdf)                    date: 2020-04-17 14:14:34
+(epstopdf)                    date: 2020-04-17 14:41:55
 (epstopdf)                    size: 34804 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/phi_windows_compara
 tor-eps-converted-to.pdf figures/phi_windows_comparator.eps>
@@ -2365,11 +2365,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 1166--1169
 
 Package epstopdf Info: Source file: <figures/scheme_vhdl_cuts_correllation_cond
 ition.eps>
-(epstopdf)                    date: 2020-04-17 14:14:18
+(epstopdf)                    date: 2020-04-17 14:41:36
 (epstopdf)                    size: 220382 bytes
 (epstopdf)             Output file: <figures/scheme_vhdl_cuts_correllation_cond
 ition-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-04-17 14:14:34
+(epstopdf)                    date: 2020-04-17 14:41:55
 (epstopdf)                    size: 89792 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/scheme_vhdl_cuts_co
 rrellation_condition-eps-converted-to.pdf figures/scheme_vhdl_cuts_correllation
@@ -2475,11 +2475,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 1388--1404
 [73]
 Package epstopdf Info: Source file: <figures/convert_scheme_calo_2_muon_eta_phi
 .eps>
-(epstopdf)                    date: 2020-04-17 14:13:29
+(epstopdf)                    date: 2020-04-17 14:40:36
 (epstopdf)                    size: 240902 bytes
 (epstopdf)             Output file: <figures/convert_scheme_calo_2_muon_eta_phi
 -eps-converted-to.pdf>
-(epstopdf)                    date: 2020-04-17 14:14:35
+(epstopdf)                    date: 2020-04-17 14:41:56
 (epstopdf)                    size: 94518 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/convert_scheme_calo
 _2_muon_eta_phi-eps-converted-to.pdf figures/convert_scheme_calo_2_muon_eta_phi
@@ -2715,11 +2715,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 2259--2260
 ]) [113]
 [114]) (./content/fdl.tex
 Package epstopdf Info: Source file: <figures/mFDL_firmware.eps>
-(epstopdf)                    date: 2020-04-17 14:13:51
+(epstopdf)                    date: 2020-04-17 14:41:06
 (epstopdf)                    size: 223249 bytes
 (epstopdf)             Output file: <figures/mFDL_firmware-eps-converted-to.pdf
 >
-(epstopdf)                    date: 2020-04-17 14:14:36
+(epstopdf)                    date: 2020-04-17 14:41:57
 (epstopdf)                    size: 96525 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/mFDL_firmware-eps-c
 onverted-to.pdf figures/mFDL_firmware.eps>
@@ -2745,11 +2745,11 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 
  <./figures/mFDL_firmware-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <figures/fdl_pipeline.eps>
-(epstopdf)                    date: 2020-04-17 14:13:39
+(epstopdf)                    date: 2020-04-17 14:40:54
 (epstopdf)                    size: 128249 bytes
 (epstopdf)             Output file: <figures/fdl_pipeline-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2020-04-17 14:14:36
+(epstopdf)                    date: 2020-04-17 14:41:57
 (epstopdf)                    size: 50988 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/fdl_pipeline-eps-co
 nverted-to.pdf figures/fdl_pipeline.eps>

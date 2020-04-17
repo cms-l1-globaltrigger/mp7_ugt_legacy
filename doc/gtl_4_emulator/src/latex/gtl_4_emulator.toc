@@ -9,42 +9,42 @@
 \contentsline {subsubsection}{\numberline {2.2.2}Global~Muon~Trigger\xspace optical interfaces}{10}{subsubsection.2.2.2}
 \contentsline {subsection}{\numberline {2.3}Implementation in firmware}{11}{subsection.2.3}
 \contentsline {subsubsection}{\numberline {2.3.1}Top-of-hierarchy module}{12}{subsubsection.2.3.1}
-\contentsline {subsubsection}{\numberline {2.3.2}Package module}{13}{subsubsection.2.3.2}
-\contentsline {subsection}{\numberline {2.4}\ensuremath {\mu \mathrm {GTL}}\xspace structure}{14}{subsection.2.4}
-\contentsline {subsubsection}{\numberline {2.4.1}Data $\pm $2bx}{14}{subsubsection.2.4.1}
-\contentsline {subsubsection}{\numberline {2.4.2}Calculation of differences in $\eta $ and $\varphi $}{14}{subsubsection.2.4.2}
-\contentsline {subsubsection}{\numberline {2.4.3}Calorimeter conditions}{15}{subsubsection.2.4.3}
-\contentsline {paragraph}{\numberline {2.4.3.1}Calorimeter data}{15}{paragraph.2.4.3.1}
-\contentsline {paragraph}{\numberline {2.4.3.2}Calorimeter conditions definition}{19}{paragraph.2.4.3.2}
-\contentsline {subparagraph}{\numberline {2.4.3.2.1}Calorimeter conditions over bx}{20}{subparagraph.2.4.3.2.1}
-\contentsline {subparagraph}{\numberline {2.4.3.2.2}Calorimeter conditions module}{20}{subparagraph.2.4.3.2.2}
-\contentsline {subparagraph}{\numberline {2.4.3.2.3}Calorimeter Overlap Remover conditions module}{23}{subparagraph.2.4.3.2.3}
-\contentsline {subparagraph}{\numberline {2.4.3.2.4}Calorimeter comparators module}{23}{subparagraph.2.4.3.2.4}
-\contentsline {subsubsection}{\numberline {2.4.4}Energy sum quantities conditions}{26}{subsubsection.2.4.4}
-\contentsline {paragraph}{\numberline {2.4.4.1}Energy sum quantities data}{26}{paragraph.2.4.4.1}
-\contentsline {paragraph}{\numberline {2.4.4.2}Energy sum quantities conditions module}{27}{paragraph.2.4.4.2}
-\contentsline {subsubsection}{\numberline {2.4.5}Minimum bias trigger conditions}{29}{subsubsection.2.4.5}
-\contentsline {subsubsection}{\numberline {2.4.6}Towercount condition}{29}{subsubsection.2.4.6}
-\contentsline {subsubsection}{\numberline {2.4.7}Centrality condition}{29}{subsubsection.2.4.7}
-\contentsline {subsubsection}{\numberline {2.4.8}Muon conditions}{29}{subsubsection.2.4.8}
-\contentsline {paragraph}{\numberline {2.4.8.1}Muon data}{29}{paragraph.2.4.8.1}
-\contentsline {paragraph}{\numberline {2.4.8.2}Muon charge correlation module}{32}{paragraph.2.4.8.2}
-\contentsline {paragraph}{\numberline {2.4.8.3}Muon conditions definition}{34}{paragraph.2.4.8.3}
-\contentsline {subparagraph}{\numberline {2.4.8.3.1}Muon conditions module}{35}{subparagraph.2.4.8.3.1}
-\contentsline {subparagraph}{\numberline {2.4.8.3.2}Muon comparators module}{40}{subparagraph.2.4.8.3.2}
-\contentsline {subsubsection}{\numberline {2.4.9}Correlation conditions}{42}{subsubsection.2.4.9}
-\contentsline {paragraph}{\numberline {2.4.9.1}Calculation of cuts}{42}{paragraph.2.4.9.1}
-\contentsline {subparagraph}{\numberline {2.4.9.1.1}$\Delta $$R$ calculation}{43}{subparagraph.2.4.9.1.1}
-\contentsline {subparagraph}{\numberline {2.4.9.1.2}Invariant mass calculation}{43}{subparagraph.2.4.9.1.2}
-\contentsline {subparagraph}{\numberline {2.4.9.1.3}Transverse mass calculation}{43}{subparagraph.2.4.9.1.3}
-\contentsline {subparagraph}{\numberline {2.4.9.1.4}Two-body pt calculation}{43}{subparagraph.2.4.9.1.4}
-\contentsline {paragraph}{\numberline {2.4.9.2}Correlation condition modules}{43}{paragraph.2.4.9.2}
-\contentsline {subparagraph}{\numberline {2.4.9.2.1}Calo Calo Correlation condition module}{44}{subparagraph.2.4.9.2.1}
-\contentsline {subparagraph}{\numberline {2.4.9.2.2}Calo Muon Correlation condition module}{50}{subparagraph.2.4.9.2.2}
-\contentsline {subparagraph}{\numberline {2.4.9.2.3}Muon Muon Correlation condition module}{58}{subparagraph.2.4.9.2.3}
-\contentsline {subparagraph}{\numberline {2.4.9.2.4}Calo Esums Correlation condition module}{65}{subparagraph.2.4.9.2.4}
-\contentsline {subparagraph}{\numberline {2.4.9.2.5}Muon Esums Correlation condition module}{70}{subparagraph.2.4.9.2.5}
-\contentsline {subparagraph}{\numberline {2.4.9.2.6}Calo Calo Overlap Remover Correlation condition module}{75}{subparagraph.2.4.9.2.6}
-\contentsline {subsubsection}{\numberline {2.4.10}External Conditions}{75}{subsubsection.2.4.10}
-\contentsline {subsubsection}{\numberline {2.4.11}Algorithms logic}{75}{subsubsection.2.4.11}
-\contentsline {section}{\numberline {3}Glossary}{76}{section.3}
+\contentsline {subsubsection}{\numberline {2.3.2}Package module}{12}{subsubsection.2.3.2}
+\contentsline {subsection}{\numberline {2.4}\ensuremath {\mu \mathrm {GTL}}\xspace structure}{13}{subsection.2.4}
+\contentsline {subsubsection}{\numberline {2.4.1}Data $\pm $2bx}{13}{subsubsection.2.4.1}
+\contentsline {subsubsection}{\numberline {2.4.2}Calculation of differences in $\eta $ and $\varphi $}{13}{subsubsection.2.4.2}
+\contentsline {subsubsection}{\numberline {2.4.3}Calorimeter conditions}{14}{subsubsection.2.4.3}
+\contentsline {paragraph}{\numberline {2.4.3.1}Calorimeter data}{14}{paragraph.2.4.3.1}
+\contentsline {paragraph}{\numberline {2.4.3.2}Calorimeter conditions definition}{18}{paragraph.2.4.3.2}
+\contentsline {subparagraph}{\numberline {2.4.3.2.1}Calorimeter conditions over bx}{19}{subparagraph.2.4.3.2.1}
+\contentsline {subparagraph}{\numberline {2.4.3.2.2}Calorimeter conditions module}{19}{subparagraph.2.4.3.2.2}
+\contentsline {subparagraph}{\numberline {2.4.3.2.3}Calorimeter Overlap Remover conditions module}{20}{subparagraph.2.4.3.2.3}
+\contentsline {subparagraph}{\numberline {2.4.3.2.4}Calorimeter comparators module}{20}{subparagraph.2.4.3.2.4}
+\contentsline {subsubsection}{\numberline {2.4.4}Energy sum quantities conditions}{23}{subsubsection.2.4.4}
+\contentsline {paragraph}{\numberline {2.4.4.1}Energy sum quantities data}{23}{paragraph.2.4.4.1}
+\contentsline {paragraph}{\numberline {2.4.4.2}Energy sum quantities conditions module}{25}{paragraph.2.4.4.2}
+\contentsline {subsubsection}{\numberline {2.4.5}Minimum bias trigger conditions}{25}{subsubsection.2.4.5}
+\contentsline {subsubsection}{\numberline {2.4.6}Towercount condition}{25}{subsubsection.2.4.6}
+\contentsline {subsubsection}{\numberline {2.4.7}Centrality condition}{25}{subsubsection.2.4.7}
+\contentsline {subsubsection}{\numberline {2.4.8}Muon conditions}{26}{subsubsection.2.4.8}
+\contentsline {paragraph}{\numberline {2.4.8.1}Muon data}{26}{paragraph.2.4.8.1}
+\contentsline {paragraph}{\numberline {2.4.8.2}Muon charge correlation module}{29}{paragraph.2.4.8.2}
+\contentsline {paragraph}{\numberline {2.4.8.3}Muon conditions definition}{31}{paragraph.2.4.8.3}
+\contentsline {subparagraph}{\numberline {2.4.8.3.1}Muon conditions module}{32}{subparagraph.2.4.8.3.1}
+\contentsline {subparagraph}{\numberline {2.4.8.3.2}Muon comparators module}{32}{subparagraph.2.4.8.3.2}
+\contentsline {subsubsection}{\numberline {2.4.9}Correlation conditions}{34}{subsubsection.2.4.9}
+\contentsline {paragraph}{\numberline {2.4.9.1}Calculation of cuts}{34}{paragraph.2.4.9.1}
+\contentsline {subparagraph}{\numberline {2.4.9.1.1}$\Delta $$R$ calculation}{35}{subparagraph.2.4.9.1.1}
+\contentsline {subparagraph}{\numberline {2.4.9.1.2}Invariant mass calculation}{35}{subparagraph.2.4.9.1.2}
+\contentsline {subparagraph}{\numberline {2.4.9.1.3}Transverse mass calculation}{35}{subparagraph.2.4.9.1.3}
+\contentsline {subparagraph}{\numberline {2.4.9.1.4}Two-body pt calculation}{35}{subparagraph.2.4.9.1.4}
+\contentsline {paragraph}{\numberline {2.4.9.2}Correlation condition modules}{35}{paragraph.2.4.9.2}
+\contentsline {subparagraph}{\numberline {2.4.9.2.1}Calo Calo Correlation condition module}{36}{subparagraph.2.4.9.2.1}
+\contentsline {subparagraph}{\numberline {2.4.9.2.2}Calo Muon Correlation condition module}{37}{subparagraph.2.4.9.2.2}
+\contentsline {subparagraph}{\numberline {2.4.9.2.3}Muon Muon Correlation condition module}{39}{subparagraph.2.4.9.2.3}
+\contentsline {subparagraph}{\numberline {2.4.9.2.4}Calo Esums Correlation condition module}{40}{subparagraph.2.4.9.2.4}
+\contentsline {subparagraph}{\numberline {2.4.9.2.5}Muon Esums Correlation condition module}{40}{subparagraph.2.4.9.2.5}
+\contentsline {subparagraph}{\numberline {2.4.9.2.6}Calo Calo Overlap Remover Correlation condition module}{41}{subparagraph.2.4.9.2.6}
+\contentsline {subsubsection}{\numberline {2.4.10}External Conditions}{42}{subsubsection.2.4.10}
+\contentsline {subsubsection}{\numberline {2.4.11}Algorithms logic}{42}{subsubsection.2.4.11}
+\contentsline {section}{\numberline {3}Glossary}{43}{section.3}

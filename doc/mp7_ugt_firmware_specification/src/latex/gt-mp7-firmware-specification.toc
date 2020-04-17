@@ -40,14 +40,13 @@
 \contentsline {subsubsection}{\numberline {3.4.3}Calorimeter conditions}{37}{subsubsection.3.4.3}
 \contentsline {paragraph}{\numberline {3.4.3.1}Calorimeter data}{37}{paragraph.3.4.3.1}
 \contentsline {paragraph}{\numberline {3.4.3.2}Calorimeter conditions definition}{41}{paragraph.3.4.3.2}
-\contentsline {subparagraph}{\numberline {3.4.3.2.1}Calorimeter conditions over bx}{42}{subparagraph.3.4.3.2.1}
-\contentsline {subparagraph}{\numberline {3.4.3.2.2}Calorimeter conditions module}{42}{subparagraph.3.4.3.2.2}
-\contentsline {subparagraph}{\numberline {3.4.3.2.3}Calorimeter Overlap Remover conditions module}{45}{subparagraph.3.4.3.2.3}
-\contentsline {subparagraph}{\numberline {3.4.3.2.4}Calorimeter conditions module - template for VHDL-Producer}{45}{subparagraph.3.4.3.2.4}
-\contentsline {subparagraph}{\numberline {3.4.3.2.5}Calorimeter comparators module}{45}{subparagraph.3.4.3.2.5}
+\contentsline {subparagraph}{\numberline {3.4.3.2.1}Calorimeter conditions module}{42}{subparagraph.3.4.3.2.1}
+\contentsline {subparagraph}{\numberline {3.4.3.2.2}Calorimeter Overlap Remover conditions module}{45}{subparagraph.3.4.3.2.2}
+\contentsline {subparagraph}{\numberline {3.4.3.2.3}Calorimeter conditions module - template for VHDL-Producer}{45}{subparagraph.3.4.3.2.3}
+\contentsline {subparagraph}{\numberline {3.4.3.2.4}Calorimeter comparators module}{45}{subparagraph.3.4.3.2.4}
 \contentsline {subsubsection}{\numberline {3.4.4}Energy sum quantities conditions}{48}{subsubsection.3.4.4}
 \contentsline {paragraph}{\numberline {3.4.4.1}Energy sum quantities data}{48}{paragraph.3.4.4.1}
-\contentsline {paragraph}{\numberline {3.4.4.2}Energy sum quantities conditions module}{49}{paragraph.3.4.4.2}
+\contentsline {paragraph}{\numberline {3.4.4.2}Energy sum quantities conditions module (including Asymmetry conditions)}{49}{paragraph.3.4.4.2}
 \contentsline {paragraph}{\numberline {3.4.4.3}Energy sum quantities conditions module - template for VHDL-Producer}{51}{paragraph.3.4.4.3}
 \contentsline {subsubsection}{\numberline {3.4.5}Minimum bias trigger conditions}{51}{subsubsection.3.4.5}
 \contentsline {subsubsection}{\numberline {3.4.6}Towercount condition}{51}{subsubsection.3.4.6}

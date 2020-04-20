@@ -30,11 +30,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - mp7_ugt firmware release v1.10.7 (bugs fixed - condition putput pipeline).
 
-### Changed
+### Added
 
 - source files:
-  - ../gtl/esums_comparators.vhd
-  - ../gtl/min_bias_hf_conditions.vhd
+  - ../gtl/muon_mass_3_obj_condition.vhd
+  - ../gtl/sum_mass_calc.vhd
   
 ## [v1.10.6] - 2020-01-28
 ### Comment

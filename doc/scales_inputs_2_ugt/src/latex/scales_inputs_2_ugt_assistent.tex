@@ -1,0 +1,52 @@
+%
+% Master LaTeX document.
+%
+% Repository path   : $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/utils/templates/document/__document__/__document__.tex $
+% Last committed    : $Revision: 574 $
+% Last changed by   : $Author: arnold $
+% Last changed date : $Date: 2012-03-30 10:59:11 +0200 (Fri, 30 Mar 2012) $
+% Description       : Master LaTeX document including all mandatory packages.
+%
+
+% Define document type.
+\documentclass[11pt,a4paper,english,titlepage]{article}
+
+% Include packages.
+\usepackage{gtupgrade}
+
+% Document information.
+\def\doctitle{}
+\def\docauthor{}
+\def\docdate{\today}
+
+% Begin document structure.
+\begin{document}
+
+% Title page.
+\doctitlepage{}
+
+% Document revision history.                  
+\input{content/revision_history.tex}
+
+% Table of contents.
+\doctoc{}
+
+% List of figures.
+\docfigures{}
+
+% List of tables.
+\doctables{}
+
+% Document content, add chapter files here.
+\input{content/preamble.tex}
+
+% Bibliography files.
+\docbib{bib/sample}
+
+% Index.
+\docindex{}
+
+% End of document structure.
+\end{document}
+
+% eof

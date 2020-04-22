@@ -14,6 +14,10 @@ use work.gtl_pkg.all;
 entity muon_mass_div_dr_condition is
      generic(
 
+        pt_vector_width : positive; 
+        cosh_cos_vector_width : positive; 
+        inv_dr_sq_vector_width : positive;
+
         muon1_object_low: natural;
         muon1_object_high: natural;
         pt_ge_mode_muon1: boolean;
@@ -66,8 +70,8 @@ entity muon_mass_div_dr_condition is
 
         requested_charge_correlation: string(1 to 2);
 
-        mass_div_dr_upper_limit: real;
-        mass_div_dr_lower_limit: real
+        mass_div_dr_upper_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
+        mass_div_dr_lower_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0)
 
     );
     port(
@@ -75,11 +79,10 @@ entity muon_mass_div_dr_condition is
         muon_data_i: in muon_objects_array;
         ls_charcorr_double: in muon_charcorr_double_array;
         os_charcorr_double: in muon_charcorr_double_array;
-        pt : in diff_integer_inputs_array;
-        diff_eta: in diff_2dim_integer_array;
-        diff_phi: in diff_2dim_integer_array;        
-        cosh_deta : in diff_2dim_integer_array;
-        cos_dphi : in diff_2dim_integer_array;
+        inv_dr_sq: in calo_inv_dr_sq_vector_array;      
+        pt : in diff_inputs_array;
+        cosh_deta : in calo_cosh_cos_vector_array;
+        cos_dphi : in calo_cosh_cos_vector_array;
         condition_o: out std_logic
     );
 end muon_mass_div_dr_condition; 
@@ -115,15 +118,14 @@ begin
     mass_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
         mass_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
             mass_calc_l: if j>i generate
-                invmass_div_dr_calculator_i: entity work.invmass_div_dr_calculator
+                calculator_i: entity work.invmass_div_dr_calculator
                     generic map(
-                        MUON_PT_PRECISION, MUON_MUON_DETA_DPHI_PRECISION, MUON_MUON_COSH_COS_PRECISION, 
-                        MU_PT_INT_DIGITS, MU_DETA_INT_DIGITS, MU_DPHI_INT_DIGITS, MU_COSH_DETA_INT_DIGITS, FRACT_DIGITS,
-                        mass_div_dr_upper_limit, mass_div_dr_lower_limit, MU_PT_MAX_VALUE, MU_COSH_DETA_MAX_VALUE
+                        mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
+                        pt_vector_width, pt_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
                     )
                     port map(
+                        inv_dr_sq(i,j), 
                         pt(i), pt(j),
-                        diff_eta(i,j), diff_phi(i,j), 
                         cosh_deta(i,j), cos_dphi(i,j),
                         mass_div_dr_comp_t(i,j)
                     );

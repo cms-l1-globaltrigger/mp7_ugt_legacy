@@ -24,27 +24,23 @@ end invmass_div_dr_calculator_muon_TB;
 
 architecture beh of invmass_div_dr_calculator_muon_TB is
 
-    constant deta_int_digits: positive := 3;
-    constant dphi_int_digits: positive := 3;
-    constant pt_int_digits: positive := 8;
-    constant cosh_deta_int_digits: positive := 7;
+    constant deta_int_digits: positive := 2;
+    constant dphi_int_digits: positive := 2;
+    constant pt_int_digits: positive := 7;
+    constant cosh_deta_int_digits: positive := 6;
     constant fract_digits: positive := 20;
     constant PHI_HALF_RANGE_BINS: positive := MUON_PHI_HALF_RANGE_BINS;
 
     constant dr_sq_int_digits : positive := max(deta_int_digits*2, dphi_int_digits*2)+2; -- = 8
     constant inv_mass_int_digits : positive := pt_int_digits*2+cosh_deta_int_digits+3; -- = 26
     constant inv_mass_div_dr_int_digits : positive := inv_mass_int_digits+fract_digits+1; -- = 47
-<<<<<<< HEAD
     
-    constant mass_upper_limit: real := 19.2;
-    constant mass_lower_limit: real := 18.0;
-    
-=======
+--    constant mass_upper_limit: real := 19.2;
+--    constant mass_lower_limit: real := 18.0;
 
-    constant mass_upper_limit: ufixed(inv_mass_div_dr_int_digits downto -1) := X"00000000073A"&'0'; -- 1850
-    constant mass_lower_limit: ufixed(inv_mass_div_dr_int_digits downto -1) := X"000000000708"&'0'; -- 1800
+    constant mass_upper_limit: ufixed(inv_mass_div_dr_int_digits downto -1) := '0'& X"0000000073A"&'0'; -- 1850
+    constant mass_lower_limit: ufixed(inv_mass_div_dr_int_digits downto -1) := '0'& X"00000000708"&'0'; -- 1800
 
->>>>>>> cf8549c8f5266fe4283b1cfa8e6ba8a88a1d7da5
     constant LHC_CLK_PERIOD  : time :=  25 ns;
 
     signal mu_data : muon_objects_array(1 downto 0) := (X"0000000000000000", X"0000000000000000");
@@ -63,6 +59,7 @@ architecture beh of invmass_div_dr_calculator_muon_TB is
     signal diff_phi : ufixed(dphi_int_digits downto -fract_digits);
     signal cosh_deta : ufixed(cosh_deta_int_digits downto -fract_digits);
     signal cos_dphi : ufixed(0 downto -fract_digits);
+    signal cos_dphi_sign : boolean;
 
 --*********************************Main Body of Code**********************************
 begin

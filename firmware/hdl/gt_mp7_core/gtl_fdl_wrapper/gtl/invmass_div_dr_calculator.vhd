@@ -47,6 +47,9 @@ architecture rtl of invmass_div_dr_calculator is
 
     signal invariant_mass_sq_div2 : std_logic_vector(MASS_VECTOR_WIDTH-1 downto 0) := (others => '0');
     signal invmass_sq_div2_div_dr_sq : std_logic_vector(MASS_DIV_DR_VECTOR_WIDTH-1 downto 0) := (others => '0');
+    
+    signal upper_limit : std_logic_vector(MASS_DIV_DR_VECTOR_WIDTH-1 downto 0);
+    signal lower_limit : std_logic_vector(MASS_DIV_DR_VECTOR_WIDTH-1 downto 0);
 
     attribute use_dsp : string;
     attribute use_dsp of invariant_mass_sq_div2 : signal is "yes";
@@ -54,12 +57,15 @@ architecture rtl of invmass_div_dr_calculator is
 
 begin
 
+    upper_limit <= mass_div_dr_upper_limit_vector(MASS_DIV_DR_VECTOR_WIDTH-1 downto 0);
+    lower_limit <= mass_div_dr_lower_limit_vector(MASS_DIV_DR_VECTOR_WIDTH-1 downto 0);
+
 -- HB 2015-10-01: calculation of invariant mass with formular M**2/2=pt1*pt2*(cosh(eta1-eta2)-cos(phi1-phi2))
     invariant_mass_sq_div2 <= pt1 * pt2 * (cosh_deta - cos_dphi);
 
     invmass_sq_div2_div_dr_sq <=  invariant_mass_sq_div2 * inv_dr_sq;
 
-    mass_div_dr_comp <= '1' when invmass_sq_div2_div_dr_sq >= mass_div_dr_upper_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) and invmass_sq_div2_div_dr_sq <= mass_div_dr_lower_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) else '0';
+    mass_div_dr_comp <= '1' when invmass_sq_div2_div_dr_sq >= lower_limit and invmass_sq_div2_div_dr_sq <= upper_limit else '0';
 
     sim_invariant_mass_sq_div2 <= invariant_mass_sq_div2;
     sim_invmass_sq_div2_div_dr_sq <= invmass_sq_div2_div_dr_sq;

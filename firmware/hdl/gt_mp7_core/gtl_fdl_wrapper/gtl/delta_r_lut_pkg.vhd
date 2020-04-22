@@ -14,10 +14,13 @@ use work.gtl_pkg.all;
 
 package delta_r_lut_pkg is
 
+constant CALO_DETA_BINS : positive := 230;
+constant CALO_DPHI_BINS : positive := 144;
+
 constant MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR : positive := 80;
 
 constant CALO_INV_DR_SQ_LUT_MAX_VAL : natural := 52847140;
-constant CALO_INV_DR_SQ_VECTOR_WIDTH : natural := 26 -- => log2(CALO_INV_DR_SQ_LUT_MAX_VAL)
+constant CALO_INV_DR_SQ_VECTOR_WIDTH : natural := 26; -- => log2(CALO_INV_DR_SQ_LUT_MAX_VAL)
 constant EG_EG_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
 constant EG_JET_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
 constant EG_TAU_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
@@ -27,7 +30,7 @@ constant TAU_TAU_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH
 
 -- Value of first LUT address has to be defined, it's the division by 0 (actually = 0) !!! 
 
-type calo_inv_dr_sq_lut_array is array (0 to 33120-1) of natural range 0 to CALO_INV_DR_SQ_LUT_MAX_VAL;
+type calo_inv_dr_sq_lut_array is array (0 to CALO_DETA_BINS-1, 0 to CALO_DPHI_BINS-1) of natural range 0 to CALO_INV_DR_SQ_LUT_MAX_VAL;
 constant CALO_INV_DR_SQ_LUT : calo_inv_dr_sq_lut_array := (
 (0, 52524902, 13131225, 5836100, 3282806, 2100996, 1459025, 1071937, 820702, 648456, 525249, 434090, 364756, 310798, 267984, 233443,
 205175, 181747, 162114, 145498, 131312, 119104, 108522, 99291, 91189, 84040, 77700, 72051, 66996, 62455, 58360, 54657,
@@ -2101,11 +2104,11 @@ constant CALO_INV_DR_SQ_LUT : calo_inv_dr_sq_lut_array := (
 767, 764, 761, 758, 755, 752, 750, 747, 744, 741, 738, 735, 732, 729, 727, 724)
 );
 
-constant EG_EG_INV_DR_SQ_LUT : calo_dr_lut_array := CALO_INV_DR_SQ_LUT;
-constant EG_JET_INV_DR_SQ_LUT : calo_dr_lut_array := CALO_INV_DR_SQ_LUT;
-constant EG_TAU_INV_DR_SQ_LUT : calo_dr_lut_array := CALO_INV_DR_SQ_LUT;
-constant JET_JET_INV_DR_SQ_LUT : calo_dr_lut_array := CALO_INV_DR_SQ_LUT;
-constant JET_TAU_INV_DR_SQ_LUT : calo_dr_lut_array := CALO_INV_DR_SQ_LUT;
-constant TAU_TAU_INV_DR_SQ_LUT : calo_dr_lut_array := CALO_INV_DR_SQ_LUT;
+constant EG_EG_INV_DR_SQ_LUT : calo_inv_dr_sq_lut_array := CALO_INV_DR_SQ_LUT;
+constant EG_JET_INV_DR_SQ_LUT : calo_inv_dr_sq_lut_array := CALO_INV_DR_SQ_LUT;
+constant EG_TAU_INV_DR_SQ_LUT : calo_inv_dr_sq_lut_array := CALO_INV_DR_SQ_LUT;
+constant JET_JET_INV_DR_SQ_LUT : calo_inv_dr_sq_lut_array := CALO_INV_DR_SQ_LUT;
+constant JET_TAU_INV_DR_SQ_LUT : calo_inv_dr_sq_lut_array := CALO_INV_DR_SQ_LUT;
+constant TAU_TAU_INV_DR_SQ_LUT : calo_inv_dr_sq_lut_array := CALO_INV_DR_SQ_LUT;
 
 end package;

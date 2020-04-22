@@ -17,6 +17,7 @@ use std.textio.all;
 
 use work.math_pkg.all;
 use work.gtl_pkg.all;
+use work.delta_r_lut_pkg.all;
 
 entity invmass_div_dr_calculator_eg_TB is
 end invmass_div_dr_calculator_eg_TB;
@@ -24,7 +25,7 @@ end invmass_div_dr_calculator_eg_TB;
 architecture beh of invmass_div_dr_calculator_eg_TB is
 
     constant mass_upper_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := X"0000_0000_8000_0000_0000";
-    constant mass_lower_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := X"0000_0000_0000_0000_0000";
+    constant mass_lower_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := X"0000_0000_0000_0000_8000";
     
     constant LHC_CLK_PERIOD  : time :=  25 ns;
 

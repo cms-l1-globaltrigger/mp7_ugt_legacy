@@ -1,81 +1,67 @@
+
 -- Description:
 -- Calculation of invariant mass divided by deltaR.
 
 -- Version history:
+-- HB 2020-04-22: used LUT (in delta_r_lut_pkg) for 1/DR**2 values for "division"
 -- HB 2020-03-06: first design
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
-use ieee.fixed_pkg.all;
-
+use ieee.std_logic_arith.all;
 use work.math_pkg.all;
+
 use work.gtl_pkg.all;
+use work.delta_r_lut_pkg.all;
 
 entity invmass_div_dr_calculator is
     generic (
-        deta_int_digits: positive;
-        dphi_int_digits: positive;
-        pt_int_digits: positive;
-        cosh_deta_int_digits: positive;
 -- limits for comparison of invariant mass divided by deltaR
-        mass_div_dr_upper_limit: ufixed;
-        mass_div_dr_lower_limit: ufixed;
-        fract_digits: positive := 20
+        mass_div_dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
+        mass_div_dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
+        pt1_width: positive := 12;
+        pt2_width: positive := 12;
+        cosh_cos_width: positive := 28;
+        inv_dr_sq_width : positive := 26
     );
     port(
-        diff_eta : in ufixed(deta_int_digits downto -fract_digits);
-        diff_phi : in ufixed(dphi_int_digits downto -fract_digits);
-        pt1 : in ufixed(pt_int_digits downto -fract_digits);
-        pt2 : in ufixed(pt_int_digits downto -fract_digits);
-        cosh_deta : in ufixed(cosh_deta_int_digits downto -fract_digits);
-        cos_dphi : in ufixed(0 downto -fract_digits);
-        cos_dphi_sign : in boolean;
-        mass_div_dr_comp : out std_logic
+        inv_dr_sq : in std_logic_vector(inv_dr_sq_width-1 downto 0);
+        pt1 : in std_logic_vector(pt1_width-1 downto 0);
+        pt2 : in std_logic_vector(pt2_width-1 downto 0);
+        cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
+        cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
+        mass_div_dr_comp : out std_logic;
+-- simulation outputs
+        sim_invariant_mass_sq_div2 : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0);
+        sim_invmass_sq_div2_div_dr_sq : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width+inv_dr_sq_width-1 downto 0)        
     );
 end invmass_div_dr_calculator;
 
 architecture rtl of invmass_div_dr_calculator is
 
-    constant dr_sq_int_digits : positive := max(deta_int_digits*2, dphi_int_digits*2)+2;
-    constant inv_mass_int_digits : positive := pt_int_digits*2+cosh_deta_int_digits+3;
-    constant inv_mass_div_dr_int_digits : positive := inv_mass_int_digits+fract_digits+1;
-    
-    constant zero : ufixed(dr_sq_int_digits downto -fract_digits*2) := (others => '0');
-    constant zero_deta : ufixed(deta_int_digits downto -fract_digits) := (others => '0');
-    constant zero_dphi : ufixed(dphi_int_digits downto -fract_digits) := (others => '0');
-    constant zero_invmass_sq_div2_div_dr_sq : ufixed(inv_mass_div_dr_int_digits downto -fract_digits) := (others => '0');
-    signal dr_sq_temp : ufixed(dr_sq_int_digits downto -fract_digits*2);
-    signal dr_sq : ufixed(dr_sq_int_digits downto -fract_digits);
-    signal invariant_mass_sq_div2_temp : ufixed(inv_mass_int_digits downto -fract_digits*3);
-    signal invariant_mass_sq_div2 : ufixed(inv_mass_int_digits downto -fract_digits);
-    signal invmass_sq_div2_div_dr_sq_temp : ufixed(inv_mass_div_dr_int_digits downto -fract_digits-dr_sq_int_digits);
-    signal invmass_sq_div2_div_dr_sq : ufixed(inv_mass_div_dr_int_digits downto -fract_digits) := (others => '0');
+-- HB 2015-10-21: length of std_logic_vector for invariant mass (invariant_mass_sq_div2).
+    constant MASS_VECTOR_WIDTH : positive := pt1_width+pt2_width+cosh_cos_width;
+-- HB 2020-04-22: length of std_logic_vector for invariant mass divided by DR (invmass_sq_div2_div_dr_sq) and limits.
+    constant MASS_DIV_DR_VECTOR_WIDTH : positive := pt1_width+pt2_width+cosh_cos_width+inv_dr_sq_width;
+
+    signal invariant_mass_sq_div2 : std_logic_vector(MASS_VECTOR_WIDTH-1 downto 0) := (others => '0');
+    signal invmass_sq_div2_div_dr_sq : std_logic_vector(MASS_DIV_DR_VECTOR_WIDTH-1 downto 0) := (others => '0');
 
     attribute use_dsp : string;
-    attribute use_dsp of dr_sq : signal is "yes";
     attribute use_dsp of invariant_mass_sq_div2 : signal is "yes";
     attribute use_dsp of invmass_sq_div2_div_dr_sq : signal is "yes";
 
 begin
-    
-    dr_sq_temp <= diff_eta*diff_eta+diff_phi*diff_phi;
-    dr_sq <= dr_sq_temp(dr_sq_int_digits downto -fract_digits);
-    
-    invariant_mass_sq_div2_temp <= (pt1 * pt2 * (cosh_deta - cos_dphi)) when (cos_dphi_sign = false) else (pt1 * pt2 * (cosh_deta + cos_dphi));
-    invariant_mass_sq_div2 <= invariant_mass_sq_div2_temp(inv_mass_int_digits downto -fract_digits);
-        
-    div_zero_p: process(dr_sq)
-    begin
---         if dr_sq /= zero then
-        if diff_eta = zero_deta and diff_phi = zero_dphi then
-            invmass_sq_div2_div_dr_sq <= zero_invmass_sq_div2_div_dr_sq;
-        else
-            invmass_sq_div2_div_dr_sq_temp <= invariant_mass_sq_div2 / dr_sq;
-            invmass_sq_div2_div_dr_sq <= invmass_sq_div2_div_dr_sq_temp(inv_mass_div_dr_int_digits downto -fract_digits);
-        end if;
-    end process div_zero_p;
-    
-    mass_div_dr_comp <= '1' when invmass_sq_div2_div_dr_sq >= mass_div_dr_lower_limit and invmass_sq_div2_div_dr_sq <= mass_div_dr_upper_limit else '0';
-        
+
+-- HB 2015-10-01: calculation of invariant mass with formular M**2/2=pt1*pt2*(cosh(eta1-eta2)-cos(phi1-phi2))
+    invariant_mass_sq_div2 <= pt1 * pt2 * (cosh_deta - cos_dphi);
+
+    invmass_sq_div2_div_dr_sq <=  invariant_mass_sq_div2 * inv_dr_sq;
+
+    mass_div_dr_comp <= '1' when invmass_sq_div2_div_dr_sq >= mass_div_dr_upper_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) and invmass_sq_div2_div_dr_sq <= mass_div_dr_lower_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) else '0';
+
+    sim_invariant_mass_sq_div2 <= invariant_mass_sq_div2;
+    sim_invmass_sq_div2_div_dr_sq <= invmass_sq_div2_div_dr_sq;
+
 end architecture rtl;

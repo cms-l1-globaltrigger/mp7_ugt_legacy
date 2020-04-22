@@ -27,8 +27,8 @@ entity invmass_div_dr_calculator is
     );
     port(
         inv_dr_sq : in std_logic_vector(inv_dr_sq_width-1 downto 0);
-        pt1 : in std_logic_vector(pt1_width-1 downto 0);
-        pt2 : in std_logic_vector(pt2_width-1 downto 0);
+        pt1 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0);
+        pt2 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0);
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
         mass_div_dr_comp : out std_logic;
@@ -61,7 +61,7 @@ begin
     lower_limit <= mass_div_dr_lower_limit_vector(MASS_DIV_DR_VECTOR_WIDTH-1 downto 0);
 
 -- HB 2015-10-01: calculation of invariant mass with formular M**2/2=pt1*pt2*(cosh(eta1-eta2)-cos(phi1-phi2))
-    invariant_mass_sq_div2 <= pt1 * pt2 * (cosh_deta - cos_dphi);
+    invariant_mass_sq_div2 <= pt1(pt1_width-1 downto 0) * pt2(pt2_width-1 downto 0) * (cosh_deta - cos_dphi);
 
     invmass_sq_div2_div_dr_sq <=  invariant_mass_sq_div2 * inv_dr_sq;
 

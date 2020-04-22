@@ -80,10 +80,10 @@ entity muon_mass_div_dr_condition is
         muon_data_i: in muon_objects_array;
         ls_charcorr_double: in muon_charcorr_double_array;
         os_charcorr_double: in muon_charcorr_double_array;
-        inv_dr_sq: in calo_inv_dr_sq_vector_array;      
+        inv_dr_sq: in muon_inv_dr_sq_vector_array;      
         pt : in diff_inputs_array;
-        cosh_deta : in calo_cosh_cos_vector_array;
-        cos_dphi : in calo_cosh_cos_vector_array;
+        cosh_deta : in muon_cosh_cos_vector_array;
+        cos_dphi : in muon_cosh_cos_vector_array;
         condition_o: out std_logic
     );
 end muon_mass_div_dr_condition; 

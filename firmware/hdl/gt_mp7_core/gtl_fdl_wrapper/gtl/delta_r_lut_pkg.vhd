@@ -19,6 +19,8 @@ constant CALO_DPHI_BINS : positive := 144;
 
 constant MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR : positive := 80;
 
+type calo_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
+
 constant CALO_INV_DR_SQ_LUT_MAX_VAL : natural := 52847140;
 constant CALO_INV_DR_SQ_VECTOR_WIDTH : natural := 26; -- => log2(CALO_INV_DR_SQ_LUT_MAX_VAL)
 constant EG_EG_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
@@ -27,6 +29,8 @@ constant EG_TAU_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
 constant JET_JET_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
 constant JET_TAU_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
 constant TAU_TAU_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
+
+type calo_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
 
 -- Value of first LUT address has to be defined, it's the division by 0 (actually = 0) !!! 
 

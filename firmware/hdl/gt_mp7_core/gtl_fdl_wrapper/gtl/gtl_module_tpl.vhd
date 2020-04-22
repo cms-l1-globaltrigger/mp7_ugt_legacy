@@ -2,6 +2,8 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
+-- HB 2020-02-22: v1.11.0: Added files for invariant mass divided by deltaR. Added use clause delta_r_lut_pkg.
+-- HB 2020-02-03: v1.10.0: Added files for invariant mass with 3 objects.
 -- HB 2020-02-03: v1.9.4: Changed output pipeline code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
 -- HB 2020-01-30: v1.9.3: Cleaned up code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
 -- HB 2020-01-28: v1.9.2: Bug fixed in calo_calo_calo_correlation_orm_condition.vhd and calo_cond_matrix_orm.vhd.
@@ -34,6 +36,7 @@ use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
 use work.gtl_pkg.all;
+use work.delta_r_lut_pkg.all;
 
 entity gtl_module is
     port(

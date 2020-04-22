@@ -10,6 +10,7 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
+use work.delta_r_lut_pkg.all;
 
 entity muon_mass_div_dr_condition is
      generic(

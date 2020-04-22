@@ -109,7 +109,7 @@ begin
     -- Comparison with limits.
     mass_l_1: for i in 0 to nr_objects_calo1-1 generate 
         mass_l_2: for j in 0 to nr_objects_calo2-1 generate
-            mass_calc_l1: if (obj_type_calo1 == obj_type_calo2) and j>i generate
+            mass_calc_l1: if (obj_type_calo1 = obj_type_calo2) and j>i generate
                 calculator_i: entity work.invmass_div_dr_calculator
                     generic map(
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit, 

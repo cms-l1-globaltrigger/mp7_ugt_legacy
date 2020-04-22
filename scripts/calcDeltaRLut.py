@@ -28,10 +28,7 @@ def main():
     fout = open('delta_r_lut/delta_r_lut.txt',"w+")
     index_dphi_len = 1 
 
-    fout.write("constant CALO_INV_DR_SQ_LUT_MAX_VAL : natural := 52847140;\n" % calo_inv_dr_sq_lut_max_val)
-    fout.write("constant CALO_INV_DR_SQ_VECTOR_WIDTH : natural := 26 -- => log2(CALO_INV_DR_SQ_LUT_MAX_VAL)\n\n")
-    fout.write("-- Value of first LUT address has to be defined, it's the division by 0 (actually = 0) !!!\n\n")
-    fout.write("type calo_inv_dr_sq_lut_array is array (0 to %s-1) of natural range 0 to CALO_INV_DR_SQ_LUT_MAX_VAL;\n" % dr_list_len)
+    fout.write("type calo_inv_dr_sq_lut_array is array (0 to %s-1, 0 to %s-1) of natural range 0 to CALO_INV_DR_SQ_LUT_MAX_VAL;\n" % (deta_len, dphi_len))
     fout.write("constant CALO_INV_DR_SQ_LUT : calo_inv_dr_sq_lut_array := (\n(")
     for i in range(0, deta_len):
       for j in range(0, dphi_len):

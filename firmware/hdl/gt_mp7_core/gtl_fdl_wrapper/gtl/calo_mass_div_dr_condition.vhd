@@ -11,15 +11,17 @@ use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
+use work.delta_r_lut_pkg.all;
 
 entity calo_mass_div_dr_condition is
     generic(
 
-        nr_objects : positive; 
-        pt_prec, deta_dphi_prec, cosh_cos_prec : positive;
-        pt_int_digits, deta_int_digits, dphi_int_digits, cosh_deta_int_digits, fract_digits : positive;
-        pt_max_value, cosh_deta_max_value : positive;
+        pt1_vector_width : positive; 
+        pt2_vector_width : positive; 
+        cosh_cos_vector_width : positive; 
+        inv_dr_sq_vector_width : positive;
 
+        nr_objects_calo1: natural;
         calo1_object_low: natural;
         calo1_object_high: natural;
         et_ge_mode_calo1: boolean;
@@ -44,6 +46,7 @@ entity calo_mass_div_dr_condition is
         phi_w2_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         iso_lut_calo1: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
+        nr_objects_calo2: natural;
         calo2_object_low: natural;
         calo2_object_high: natural;
         et_ge_mode_calo2: boolean;
@@ -68,18 +71,18 @@ entity calo_mass_div_dr_condition is
         phi_w2_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         iso_lut_calo2: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
-        mass_div_dr_upper_limit: real;
-        mass_div_dr_lower_limit: real
+        mass_div_dr_upper_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
+        mass_div_dr_lower_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0)
 
     );
     port(
         lhc_clk: in std_logic;
         calo_data_i: in calo_objects_array;
-        pt : in diff_integer_inputs_array;
-        diff_eta: in diff_2dim_integer_array;
-        diff_phi: in diff_2dim_integer_array;
-        cosh_deta : in diff_2dim_integer_array;
-        cos_dphi : in diff_2dim_integer_array;
+        inv_dr_sq: in calo_inv_dr_sq_vector_array;      
+        pt1 : in diff_inputs_array;
+        pt2 : in diff_inputs_array;
+        cosh_deta : in calo_cosh_cos_vector_array;
+        cos_dphi : in calo_cosh_cos_vector_array;
         condition_o: out std_logic
     );
 end calo_mass_div_dr_condition; 
@@ -104,24 +107,36 @@ begin
     -- *** section: CUTs - begin ***************************************************************************************
 
     -- Comparison with limits.
-    mass_l_1: for i in 0 to nr_objects-1 generate 
-        mass_l_2: for j in 0 to nr_objects-1 generate
-            mass_calc_l: if j>i generate
-                invmass_div_dr_calculator_i: entity work.invmass_div_dr_calculator
+    mass_l_1: for i in 0 to nr_objects_calo1-1 generate 
+        mass_l_2: for j in 0 to nr_objects_calo2-1 generate
+            mass_calc_l1: if (obj_type_calo1 == obj_type_calo2) and j>i generate
+                calculator_i: entity work.invmass_div_dr_calculator
                     generic map(
-                        pt_prec, deta_dphi_prec, cosh_cos_prec,
-                        pt_int_digits, deta_int_digits, dphi_int_digits, cosh_deta_int_digits, fract_digits,
-                        mass_div_dr_upper_limit, mass_div_dr_lower_limit, pt_max_value, cosh_deta_max_value
+                        mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
+                        pt1_vector_width, pt2_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
                     )
                     port map(
-                        pt(i), pt(j),
-                        diff_eta(i,j), diff_phi(i,j), 
+                        inv_dr_sq(i,j), 
+                        pt1(i), pt2(j),
                         cosh_deta(i,j), cos_dphi(i,j),
                         mass_div_dr_comp_t(i,j)
                     );
                 mass_div_dr_comp(i,j) <= mass_div_dr_comp_t(i,j);
                 mass_div_dr_comp(j,i) <= mass_div_dr_comp_t(i,j);
-            end generate mass_calc_l;
+            end generate mass_calc_l1;
+            mass_calc_l2: if (obj_type_calo1 /= obj_type_calo2) generate
+                calculator_i: entity work.invmass_div_dr_calculator
+                    generic map(
+                        mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
+                        pt1_vector_width, pt2_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
+                    )
+                    port map(
+                        inv_dr_sq(i,j), 
+                        pt1(i), pt2(j),
+                        cosh_deta(i,j), cos_dphi(i,j),
+                        mass_div_dr_comp(i,j)
+                    );
+            end generate mass_calc_l2;
         end generate mass_l_2;
     end generate mass_l_1;
     

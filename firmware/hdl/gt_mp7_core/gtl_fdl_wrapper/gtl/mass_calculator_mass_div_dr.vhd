@@ -95,8 +95,8 @@ begin
         mass_comp <= '1' when transverse_mass_comp = '1' else '0';
     end generate transverse_mass_sel;
 -- HB 2020-04-23: calculation of invariant mass divided by deltaR (M**2/2 multiplicated with inverse deltaR squared values)
-    transverse_mass_sel: if mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
+    invmass_div_dr_comp_sel: if mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
         mass_comp <= '1' when invmass_div_dr_comp = '1' else '0';
-    end generate transverse_mass_sel;
+    end generate invmass_div_dr_comp_sel;
     
 end architecture rtl;

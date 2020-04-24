@@ -137,8 +137,8 @@ architecture rtl of calo_mass_3_obj_condition is
 -- dummy values for unused parameters of invariant mass divided by deltaR
     constant inv_dr_sq_width_dummy: positive := 4; 
     constant inv_dr_sq_dummy: std_logic_vector(inv_dr_sq_width_dummy+1 downto 0) := (others => '0'); 
-    signal upper_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
-    signal lower_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
+    constant upper_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
+    constant lower_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
     
 begin
 

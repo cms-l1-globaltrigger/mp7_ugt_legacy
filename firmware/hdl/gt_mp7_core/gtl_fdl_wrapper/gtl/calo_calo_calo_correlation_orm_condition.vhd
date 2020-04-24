@@ -2,6 +2,7 @@
 -- Description:
 
 -- Version history:
+-- HB 2020-04-24: update instance of mass_calculator.
 -- HB 2020-01-21: inserted port calo2 (bug fix).
 -- HB 2019-06-17: updated for "five eta cuts".
 -- HB 2019-05-06: updated instances.
@@ -132,6 +133,7 @@ entity calo_calo_calo_correlation_orm_condition is
         pt2_width: positive; 
         mass_cosh_cos_precision : positive;
         cosh_cos_width: positive;
+        inv_dr_sq_width : positive;
 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
         sin_cos_width: positive;
@@ -151,6 +153,7 @@ entity calo_calo_calo_correlation_orm_condition is
         pt2 : in diff_inputs_array;
         cosh_deta : in calo_cosh_cos_vector_array;
         cos_dphi : in calo_cosh_cos_vector_array;
+        inv_dr_sq: in calo_inv_dr_sq_vector_array;      
         cos_phi_1_integer : in sin_cos_integer_array;
         cos_phi_2_integer : in sin_cos_integer_array;
         sin_phi_1_integer : in sin_cos_integer_array;
@@ -343,6 +346,7 @@ begin
                             pt2_width => pt2_width, 
                             cosh_cos_precision => mass_cosh_cos_precision,
                             cosh_cos_width => cosh_cos_width,
+                            inv_dr_sq_width => inv_dr_sq_width,
                             pt_sq_threshold_vector => pt_sq_threshold_vector,
                             sin_cos_width => sin_cos_width,
                             pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
@@ -354,6 +358,7 @@ begin
                         pt2 => pt2(j),
                         cosh_deta => cosh_deta(i,j),
                         cos_dphi => cos_dphi(i,j),
+                        inv_dr_sq => inv_dr_sq(i,j),
                         cos_phi_1_integer => cos_phi_1_integer(i),
                         cos_phi_2_integer => cos_phi_2_integer(j),
                         sin_phi_1_integer => sin_phi_1_integer(i),
@@ -391,6 +396,7 @@ begin
                             pt2_width => pt2_width, 
                             cosh_cos_precision => mass_cosh_cos_precision,
                             cosh_cos_width => cosh_cos_width,
+                            inv_dr_sq_width => inv_dr_sq_width,
                             pt_sq_threshold_vector => pt_sq_threshold_vector,
                             sin_cos_width => sin_cos_width,
                             pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
@@ -402,6 +408,7 @@ begin
                         pt2 => pt2(j),
                         cosh_deta => cosh_deta(i,j),
                         cos_dphi => cos_dphi(i,j),
+                        inv_dr_sq => inv_dr_sq(i,j),
                         cos_phi_1_integer => cos_phi_1_integer(i),
                         cos_phi_2_integer => cos_phi_2_integer(j),
                         sin_phi_1_integer => sin_phi_1_integer(i),

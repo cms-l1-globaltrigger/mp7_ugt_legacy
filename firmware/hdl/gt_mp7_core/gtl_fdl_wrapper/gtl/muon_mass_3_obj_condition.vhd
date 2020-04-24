@@ -3,6 +3,7 @@
 -- Condition for invariant mass with 3 muon objects.
 
 -- Version history:
+-- HB 2020-04-24: update instance of mass_calculator.
 -- HB 2020-02-25: separated sum and comp.
 -- HB 2020-02-24: changed mass calculation and loop indices for sum.
 -- HB 2020-02-20: cleaned up code.
@@ -146,7 +147,16 @@ architecture rtl of muon_mass_3_obj_condition is
 
     signal condition_and_or : std_logic;
 
+-- dummy values for unused parameters of invariant mass divided by deltaR
+    constant inv_dr_sq_width_dummy: positive := 4; 
+    constant inv_dr_sq_dummy: std_logic_vector(inv_dr_sq_width_dummy+1 downto 0) := (others => '0'); 
+    signal upper_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
+    signal lower_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
+    
 begin
+
+    upper_limit(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) <= mass_upper_limit_vector;
+    lower_limit(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) <= mass_lower_limit_vector;
 
     -- *** section: CUTs - begin ***************************************************************************************
 
@@ -157,11 +167,12 @@ begin
                 mass_calculator_i: entity work.mass_calculator
                     generic map(
                         mass_type => 0,
-                        mass_upper_limit_vector => mass_upper_limit_vector,
-                        mass_lower_limit_vector => mass_lower_limit_vector,
+                        mass_upper_limit_vector => upper_limit,
+                        mass_lower_limit_vector => lower_limit,
                         pt1_width => pt_width, 
                         pt2_width => pt_width, 
                         cosh_cos_width => cosh_cos_width,
+                        inv_dr_sq_width => inv_dr_sq_width_dummy, -- not used, dummy value
                         mass_cosh_cos_precision => cosh_cos_precision
                     )
                     port map(
@@ -169,6 +180,7 @@ begin
                         pt2 => pt(j)(pt_width-1 downto 0),
                         cosh_deta => cosh_deta(i,j),
                         cos_dphi => cos_dphi(i,j),
+                        inv_dr_sq => inv_dr_sq_dummy,
                         sim_invariant_mass_sq_div2 => inv_mass_value_temp(i,j)
                     );
                 inv_mass_value(i,j) <= inv_mass_value_temp(i,j);

@@ -106,7 +106,7 @@ entity calo_calo_correlation_condition is
         pt2_width: positive; 
         mass_cosh_cos_precision : positive;
         cosh_cos_width: positive;
-        inv_dr_sq_vector_width : positive;
+        inv_dr_sq_width : positive;
 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
         sin_cos_width: positive;
@@ -178,7 +178,7 @@ begin
                             pt2_width => pt2_width, 
                             cosh_cos_precision => mass_cosh_cos_precision,
                             cosh_cos_width => cosh_cos_width,
-                            inv_dr_sq_vector_width => inv_dr_sq_vector_width,
+                            inv_dr_sq_width => inv_dr_sq_width,
                             pt_sq_threshold_vector => pt_sq_threshold_vector,
                             sin_cos_width => sin_cos_width,
                             pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
@@ -234,7 +234,7 @@ begin
                         pt2_width => pt2_width, 
                         cosh_cos_precision => mass_cosh_cos_precision,
                         cosh_cos_width => cosh_cos_width,
-                        inv_dr_sq_vector_width => inv_dr_sq_vector_width,
+                        inv_dr_sq_width => inv_dr_sq_width,
                         pt_sq_threshold_vector => pt_sq_threshold_vector,
                         sin_cos_width => sin_cos_width,
                         pt_sq_sin_cos_precision => pt_sq_sin_cos_precision

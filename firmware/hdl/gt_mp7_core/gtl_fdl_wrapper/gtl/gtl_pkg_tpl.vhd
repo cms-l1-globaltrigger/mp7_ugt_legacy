@@ -844,6 +844,12 @@ constant MAX_WIDTH_TBPT_LIMIT_VECTOR : positive := 64;
 
 -- ********************************************************
 -- definitions for invariant mass divided by deltaR
+constant CALO_DETA_BINS : positive := 230;
+constant CALO_DPHI_BINS : positive := 144;
+
+constant MAX_INV_DR_SQ_VECTOR_WIDTH : positive := 26;
+constant MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR : positive := 80;
+
 constant FRACT_DIGITS: positive := 20;
 constant EG_DETA_INT_DIGITS : positive := 3;
 constant EG_DPHI_INT_DIGITS : positive := 2;

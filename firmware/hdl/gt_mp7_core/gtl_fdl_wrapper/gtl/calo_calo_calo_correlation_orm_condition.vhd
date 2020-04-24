@@ -19,6 +19,7 @@ use ieee.std_logic_arith.all;
 
 use work.math_pkg.all;
 use work.gtl_pkg.all;
+use work.delta_r_lut_pkg.all;
 
 entity calo_calo_calo_correlation_orm_condition is
      generic(

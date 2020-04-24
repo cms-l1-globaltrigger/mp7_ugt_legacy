@@ -39,7 +39,7 @@ entity mass_calculator is
         sim_transverse_mass_sq_div2 : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0); 
         sim_transverse_mass_comp : out std_logic;
         sim_invmass_sq_div2_div_dr_sq : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width+inv_dr_sq_width-1 downto 0); 
-        sim_invmass_div_dr_comp : out std_logic;
+        sim_invmass_div_dr_comp : out std_logic
     );
 end mass_calculator;
 

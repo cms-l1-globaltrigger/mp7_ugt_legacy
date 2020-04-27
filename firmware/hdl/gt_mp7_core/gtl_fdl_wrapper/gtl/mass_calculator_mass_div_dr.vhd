@@ -31,7 +31,7 @@ entity mass_calculator is
         pt2 : in std_logic_vector(pt2_width-1 downto 0);
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
-        inv_dr_sq : in std_logic_vector(inv_dr_sq_width-1 downto 0);
+        inv_dr_sq : in std_logic_vector(inv_dr_sq_width-1 downto 0) := (others => '0');
         mass_comp : out std_logic;
 -- HB 2016-11-08: simulation outputs
         sim_invariant_mass_sq_div2 : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0); 

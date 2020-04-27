@@ -3,7 +3,6 @@
 -- Condition for invariant mass with 3 calo objects.
 
 -- Version history:
--- HB 2020-04-24: update instance of mass_calculator.
 -- HB 2020-02-25: separated sum and comp.
 -- HB 2020-02-24: changed mass calculation and loop indices for sum.
 -- HB 2020-02-20: cleaned up code.
@@ -134,13 +133,6 @@ architecture rtl of calo_mass_3_obj_condition is
 
     signal condition_and_or : std_logic;
 
--- dummy values for unused parameters of invariant mass divided by deltaR
-    constant inv_dr_sq_width_dummy: positive := 4; 
-    constant inv_dr_sq_dummy: std_logic_vector(inv_dr_sq_width_dummy+1 downto 0) := (others => '0');
-    constant limits_leading: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto MAX_WIDTH_MASS_LIMIT_VECTOR) := (others => '0');
-    constant upper_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := limits_leading & mass_upper_limit_vector;
-    constant lower_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := limits_leading & mass_lower_limit_vector;
-    
 begin
 
     -- *** section: CUTs - begin ***************************************************************************************
@@ -157,7 +149,6 @@ begin
                         pt1_width => pt_width, 
                         pt2_width => pt_width, 
                         cosh_cos_width => cosh_cos_width,
-                        inv_dr_sq_width => inv_dr_sq_width_dummy, -- not used, dummy value
                         mass_cosh_cos_precision => cosh_cos_precision
                     )
                     port map(
@@ -165,7 +156,6 @@ begin
                         pt2 => pt(j)(pt_width-1 downto 0),
                         cosh_deta => cosh_deta(i,j),
                         cos_dphi => cos_dphi(i,j),
-                        inv_dr_sq => inv_dr_sq_dummy,
                         sim_invariant_mass_sq_div2 => inv_mass_value_temp(i,j)
                     );
                 inv_mass_value(i,j) <= inv_mass_value_temp(i,j);

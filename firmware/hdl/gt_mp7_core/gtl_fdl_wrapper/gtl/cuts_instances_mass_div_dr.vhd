@@ -42,7 +42,7 @@ entity cuts_instances is
         pt2_width: positive; 
         cosh_cos_precision : positive;
         cosh_cos_width: positive;
-        inv_dr_sq_width : positive;
+        inv_dr_sq_width : positive := 26;
 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
         sin_cos_width: positive;
@@ -56,7 +56,7 @@ entity cuts_instances is
         pt2 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0);
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
-        inv_dr_sq : in std_logic_vector(inv_dr_sq_width-1 downto 0);
+        inv_dr_sq : in std_logic_vector(inv_dr_sq_width-1 downto 0) := (others => '0');
         cos_phi_1_integer : in integer;
         cos_phi_2_integer : in integer;
         sin_phi_1_integer : in integer;

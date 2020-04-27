@@ -3,6 +3,7 @@
 -- Calculation of invariant mass, transverse mass and invariant mass divided by deltaR based on LUTs.
 
 -- Version history:
+-- HB 2019-04-27: used unconstrained std_logic_vector for limits.
 -- HB 2020-04-23: new design based on mass_calculator.vhd, inserted invarinat mass divided by deltaR.
 
 library ieee;
@@ -18,8 +19,10 @@ entity mass_calculator is
     generic (
         mass_type : natural;
 -- limits for comparison of invariant mass, transverse mass or invariant mass divided by deltaR
-        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
-        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
+--         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
+--         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
+        mass_upper_limit_vector: std_logic_vector;
+        mass_lower_limit_vector: std_logic_vector;
         pt1_width: positive := 12;
         pt2_width: positive := 12;
         cosh_cos_width: positive := 28;

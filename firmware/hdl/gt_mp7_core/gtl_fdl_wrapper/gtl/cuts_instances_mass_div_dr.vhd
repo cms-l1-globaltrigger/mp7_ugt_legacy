@@ -3,6 +3,7 @@
 -- Collection of cuts for correlations
 
 -- Version history:
+-- HB 2019-04-27: used unconstrained std_logic_vector for limits.
 -- HB 2019-04-23: added invariant mass divided by deltaR in mass_calculator.
 -- HB 2019-05-03: changed name from cuts_instances_v2 to cuts_instances.
 -- HB 2017-09-20: changed to cuts_instances_v2 - added limit_vectors.
@@ -35,8 +36,11 @@ entity cuts_instances is
         dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
         dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
 
-        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
-        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
+--         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
+--         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
+
+        mass_upper_limit_vector: std_logic_vector;
+        mass_lower_limit_vector: std_logic_vector;
 
         pt1_width: positive; 
         pt2_width: positive; 

@@ -3,6 +3,8 @@
 -- Condition for invariant mass with 3 calo objects.
 
 -- Version history:
+-- HB 2020-04-27: reverted to former version.
+-- HB 2020-04-24: update instance of mass_calculator.
 -- HB 2020-02-25: separated sum and comp.
 -- HB 2020-02-24: changed mass calculation and loop indices for sum.
 -- HB 2020-02-20: cleaned up code.
@@ -144,8 +146,8 @@ begin
                 mass_calculator_i: entity work.mass_calculator
                     generic map(
                         mass_type => 0,
-                        mass_upper_limit_vector => upper_limit,
-                        mass_lower_limit_vector => lower_limit,
+                        mass_upper_limit_vector => mass_upper_limit_vector,
+                        mass_lower_limit_vector => mass_lower_limit_vector,
                         pt1_width => pt_width, 
                         pt2_width => pt_width, 
                         cosh_cos_width => cosh_cos_width,

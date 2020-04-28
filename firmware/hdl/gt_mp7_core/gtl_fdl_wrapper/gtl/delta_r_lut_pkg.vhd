@@ -32,7 +32,7 @@ constant TAU_TAU_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH
 
 type calo_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
 
--- Value of first LUT address has to be defined, it's the division by 0 (actually = 0) !!! 
+-- Value of first LUT address (deta = 0 and dphi = 0 => 0, [is not 1/DR**2 !!]) points to the max. value for invariant mass divided by deltaR (max_invmass_sq_div2_div_dr_sq) in mass_calculator !!! 
 
 type calo_inv_dr_sq_lut_array is array (0 to CALO_DETA_BINS-1, 0 to CALO_DPHI_BINS-1) of natural range 0 to CALO_INV_DR_SQ_LUT_MAX_VAL;
 constant CALO_INV_DR_SQ_LUT : calo_inv_dr_sq_lut_array := (

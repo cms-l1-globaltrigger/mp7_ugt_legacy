@@ -52,10 +52,10 @@
 -- The following code must appear in the VHDL architecture header.
 
 ------------- Begin Cut here for COMPONENT Declaration ------ COMP_TAG
-COMPONENT inv_dr_sq_lut
+COMPONENT rom_lut_calo_inv_dr_sq
   PORT (
     clka : IN STD_LOGIC;
-    addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
+    addra : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     douta : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
   );
 END COMPONENT;
@@ -65,7 +65,7 @@ END COMPONENT;
 -- body. Substitute your own instance name and net names.
 
 ------------- Begin Cut here for INSTANTIATION Template ----- INST_TAG
-your_instance_name : inv_dr_sq_lut
+your_instance_name : rom_lut_calo_inv_dr_sq
   PORT MAP (
     clka => clka,
     addra => addra,
@@ -73,7 +73,7 @@ your_instance_name : inv_dr_sq_lut
   );
 -- INST_TAG_END ------ End INSTANTIATION Template ---------
 
--- You must compile the wrapper file inv_dr_sq_lut.vhd when simulating
--- the core, inv_dr_sq_lut. When compiling the wrapper file, be sure to
+-- You must compile the wrapper file rom_lut_calo_inv_dr_sq.vhd when simulating
+-- the core, rom_lut_calo_inv_dr_sq. When compiling the wrapper file, be sure to
 -- reference the VHDL simulation library.
 

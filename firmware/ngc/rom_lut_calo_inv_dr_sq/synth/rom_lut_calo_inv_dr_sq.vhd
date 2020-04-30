@@ -56,17 +56,17 @@ USE ieee.numeric_std.ALL;
 LIBRARY blk_mem_gen_v8_4_4;
 USE blk_mem_gen_v8_4_4.blk_mem_gen_v8_4_4;
 
-ENTITY inv_dr_sq_lut IS
+ENTITY rom_lut_calo_inv_dr_sq IS
   PORT (
     clka : IN STD_LOGIC;
-    addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
+    addra : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     douta : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
   );
-END inv_dr_sq_lut;
+END rom_lut_calo_inv_dr_sq;
 
-ARCHITECTURE inv_dr_sq_lut_arch OF inv_dr_sq_lut IS
+ARCHITECTURE rom_lut_calo_inv_dr_sq_arch OF rom_lut_calo_inv_dr_sq IS
   ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
-  ATTRIBUTE DowngradeIPIdentifiedWarnings OF inv_dr_sq_lut_arch: ARCHITECTURE IS "yes";
+  ATTRIBUTE DowngradeIPIdentifiedWarnings OF rom_lut_calo_inv_dr_sq_arch: ARCHITECTURE IS "yes";
   COMPONENT blk_mem_gen_v8_4_4 IS
     GENERIC (
       C_FAMILY : STRING;
@@ -151,7 +151,7 @@ ARCHITECTURE inv_dr_sq_lut_arch OF inv_dr_sq_lut IS
       ena : IN STD_LOGIC;
       regcea : IN STD_LOGIC;
       wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-      addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
+      addra : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
       dina : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
       douta : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       clkb : IN STD_LOGIC;
@@ -159,7 +159,7 @@ ARCHITECTURE inv_dr_sq_lut_arch OF inv_dr_sq_lut IS
       enb : IN STD_LOGIC;
       regceb : IN STD_LOGIC;
       web : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-      addrb : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
+      addrb : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
       dinb : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
       doutb : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       injectsbiterr : IN STD_LOGIC;
@@ -167,7 +167,7 @@ ARCHITECTURE inv_dr_sq_lut_arch OF inv_dr_sq_lut IS
       eccpipece : IN STD_LOGIC;
       sbiterr : OUT STD_LOGIC;
       dbiterr : OUT STD_LOGIC;
-      rdaddrecc : OUT STD_LOGIC_VECTOR(14 DOWNTO 0);
+      rdaddrecc : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
       sleep : IN STD_LOGIC;
       deepsleep : IN STD_LOGIC;
       shutdown : IN STD_LOGIC;
@@ -208,18 +208,18 @@ ARCHITECTURE inv_dr_sq_lut_arch OF inv_dr_sq_lut IS
       s_axi_injectdbiterr : IN STD_LOGIC;
       s_axi_sbiterr : OUT STD_LOGIC;
       s_axi_dbiterr : OUT STD_LOGIC;
-      s_axi_rdaddrecc : OUT STD_LOGIC_VECTOR(14 DOWNTO 0)
+      s_axi_rdaddrecc : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
     );
   END COMPONENT blk_mem_gen_v8_4_4;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF inv_dr_sq_lut_arch: ARCHITECTURE IS "blk_mem_gen_v8_4_4,Vivado 2019.2";
+  ATTRIBUTE X_CORE_INFO OF rom_lut_calo_inv_dr_sq_arch: ARCHITECTURE IS "blk_mem_gen_v8_4_4,Vivado 2019.2";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
-  ATTRIBUTE CHECK_LICENSE_TYPE OF inv_dr_sq_lut_arch : ARCHITECTURE IS "inv_dr_sq_lut,blk_mem_gen_v8_4_4,{}";
+  ATTRIBUTE CHECK_LICENSE_TYPE OF rom_lut_calo_inv_dr_sq_arch : ARCHITECTURE IS "rom_lut_calo_inv_dr_sq,blk_mem_gen_v8_4_4,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF inv_dr_sq_lut_arch: ARCHITECTURE IS "inv_dr_sq_lut,blk_mem_gen_v8_4_4,{x_ipProduct=Vivado 2019.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=blk_mem_gen,x_ipVersion=8.4,x_ipCoreRevision=4,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,C_FAMILY=virtex7,C_XDEVICEFAMILY=virtex7,C_ELABORATION_DIR=./,C_INTERFACE_TYPE=0,C_AXI_TYPE=1,C_AXI_SLAVE_TYPE=0,C_USE_BRAM_BLOCK=0,C_ENABLE_32BIT_ADDRESS=0,C_CTRL_ECC_ALGO=NONE,C_HAS_AXI_ID=0,C_AXI_ID_WIDTH=4,C_MEM_TYPE=3,C_BYTE_SIZE=9,C_ALGORITHM=1,C_PRIM_TYPE=1,C_LOAD_INIT_FILE=1,C_INIT_FILE_NAME=inv_dr" & 
-"_sq_lut.mif,C_INIT_FILE=inv_dr_sq_lut.mem,C_USE_DEFAULT_DATA=0,C_DEFAULT_DATA=0,C_HAS_RSTA=0,C_RST_PRIORITY_A=CE,C_RSTRAM_A=0,C_INITA_VAL=0,C_HAS_ENA=0,C_HAS_REGCEA=0,C_USE_BYTE_WEA=0,C_WEA_WIDTH=1,C_WRITE_MODE_A=WRITE_FIRST,C_WRITE_WIDTH_A=32,C_READ_WIDTH_A=32,C_WRITE_DEPTH_A=32768,C_READ_DEPTH_A=32768,C_ADDRA_WIDTH=15,C_HAS_RSTB=0,C_RST_PRIORITY_B=CE,C_RSTRAM_B=0,C_INITB_VAL=0,C_HAS_ENB=0,C_HAS_REGCEB=0,C_USE_BYTE_WEB=0,C_WEB_WIDTH=1,C_WRITE_MODE_B=WRITE_FIRST,C_WRITE_WIDTH_B=32,C_READ_WIDTH_B" & 
-"=32,C_WRITE_DEPTH_B=32768,C_READ_DEPTH_B=32768,C_ADDRB_WIDTH=15,C_HAS_MEM_OUTPUT_REGS_A=0,C_HAS_MEM_OUTPUT_REGS_B=0,C_HAS_MUX_OUTPUT_REGS_A=0,C_HAS_MUX_OUTPUT_REGS_B=0,C_MUX_PIPELINE_STAGES=0,C_HAS_SOFTECC_INPUT_REGS_A=0,C_HAS_SOFTECC_OUTPUT_REGS_B=0,C_USE_SOFTECC=0,C_USE_ECC=0,C_EN_ECC_PIPE=0,C_READ_LATENCY_A=1,C_READ_LATENCY_B=1,C_HAS_INJECTERR=0,C_SIM_COLLISION_CHECK=ALL,C_COMMON_CLK=0,C_DISABLE_WARN_BHV_COLL=0,C_EN_SLEEP_PIN=0,C_USE_URAM=0,C_EN_RDADDRA_CHG=0,C_EN_RDADDRB_CHG=0,C_EN_DEEPSLEEP" & 
-"_PIN=0,C_EN_SHUTDOWN_PIN=0,C_EN_SAFETY_CKT=0,C_DISABLE_WARN_BHV_RANGE=0,C_COUNT_36K_BRAM=29,C_COUNT_18K_BRAM=0,C_EST_POWER_SUMMARY=Estimated Power for IP     _     18.133548 mW}";
+  ATTRIBUTE CORE_GENERATION_INFO OF rom_lut_calo_inv_dr_sq_arch: ARCHITECTURE IS "rom_lut_calo_inv_dr_sq,blk_mem_gen_v8_4_4,{x_ipProduct=Vivado 2019.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=blk_mem_gen,x_ipVersion=8.4,x_ipCoreRevision=4,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,C_FAMILY=virtex7,C_XDEVICEFAMILY=virtex7,C_ELABORATION_DIR=./,C_INTERFACE_TYPE=0,C_AXI_TYPE=1,C_AXI_SLAVE_TYPE=0,C_USE_BRAM_BLOCK=0,C_ENABLE_32BIT_ADDRESS=0,C_CTRL_ECC_ALGO=NONE,C_HAS_AXI_ID=0,C_AXI_ID_WIDTH=4,C_MEM_TYPE=3,C_BYTE_SIZE=9,C_ALGORITHM=1,C_PRIM_TYPE=1,C_LOAD_INIT_FILE=1,C_INIT_FILE_NA" & 
+"ME=rom_lut_calo_inv_dr_sq.mif,C_INIT_FILE=rom_lut_calo_inv_dr_sq.mem,C_USE_DEFAULT_DATA=1,C_DEFAULT_DATA=0,C_HAS_RSTA=0,C_RST_PRIORITY_A=CE,C_RSTRAM_A=0,C_INITA_VAL=0,C_HAS_ENA=0,C_HAS_REGCEA=0,C_USE_BYTE_WEA=0,C_WEA_WIDTH=1,C_WRITE_MODE_A=WRITE_FIRST,C_WRITE_WIDTH_A=32,C_READ_WIDTH_A=32,C_WRITE_DEPTH_A=65536,C_READ_DEPTH_A=65536,C_ADDRA_WIDTH=16,C_HAS_RSTB=0,C_RST_PRIORITY_B=CE,C_RSTRAM_B=0,C_INITB_VAL=0,C_HAS_ENB=0,C_HAS_REGCEB=0,C_USE_BYTE_WEB=0,C_WEB_WIDTH=1,C_WRITE_MODE_B=WRITE_FIRST,C_WRIT" & 
+"E_WIDTH_B=32,C_READ_WIDTH_B=32,C_WRITE_DEPTH_B=65536,C_READ_DEPTH_B=65536,C_ADDRB_WIDTH=16,C_HAS_MEM_OUTPUT_REGS_A=0,C_HAS_MEM_OUTPUT_REGS_B=0,C_HAS_MUX_OUTPUT_REGS_A=0,C_HAS_MUX_OUTPUT_REGS_B=0,C_MUX_PIPELINE_STAGES=0,C_HAS_SOFTECC_INPUT_REGS_A=0,C_HAS_SOFTECC_OUTPUT_REGS_B=0,C_USE_SOFTECC=0,C_USE_ECC=0,C_EN_ECC_PIPE=0,C_READ_LATENCY_A=1,C_READ_LATENCY_B=1,C_HAS_INJECTERR=0,C_SIM_COLLISION_CHECK=ALL,C_COMMON_CLK=0,C_DISABLE_WARN_BHV_COLL=0,C_EN_SLEEP_PIN=0,C_USE_URAM=0,C_EN_RDADDRA_CHG=0,C_EN_R" & 
+"DADDRB_CHG=0,C_EN_DEEPSLEEP_PIN=0,C_EN_SHUTDOWN_PIN=0,C_EN_SAFETY_CKT=0,C_DISABLE_WARN_BHV_RANGE=0,C_COUNT_36K_BRAM=58,C_COUNT_18K_BRAM=0,C_EST_POWER_SUMMARY=Estimated Power for IP     _     17.809548 mW}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF douta: SIGNAL IS "xilinx.com:interface:bram:1.0 BRAM_PORTA DOUT";
@@ -245,9 +245,9 @@ BEGIN
       C_ALGORITHM => 1,
       C_PRIM_TYPE => 1,
       C_LOAD_INIT_FILE => 1,
-      C_INIT_FILE_NAME => "inv_dr_sq_lut.mif",
-      C_INIT_FILE => "inv_dr_sq_lut.mem",
-      C_USE_DEFAULT_DATA => 0,
+      C_INIT_FILE_NAME => "rom_lut_calo_inv_dr_sq.mif",
+      C_INIT_FILE => "rom_lut_calo_inv_dr_sq.mem",
+      C_USE_DEFAULT_DATA => 1,
       C_DEFAULT_DATA => "0",
       C_HAS_RSTA => 0,
       C_RST_PRIORITY_A => "CE",
@@ -260,9 +260,9 @@ BEGIN
       C_WRITE_MODE_A => "WRITE_FIRST",
       C_WRITE_WIDTH_A => 32,
       C_READ_WIDTH_A => 32,
-      C_WRITE_DEPTH_A => 32768,
-      C_READ_DEPTH_A => 32768,
-      C_ADDRA_WIDTH => 15,
+      C_WRITE_DEPTH_A => 65536,
+      C_READ_DEPTH_A => 65536,
+      C_ADDRA_WIDTH => 16,
       C_HAS_RSTB => 0,
       C_RST_PRIORITY_B => "CE",
       C_RSTRAM_B => 0,
@@ -274,9 +274,9 @@ BEGIN
       C_WRITE_MODE_B => "WRITE_FIRST",
       C_WRITE_WIDTH_B => 32,
       C_READ_WIDTH_B => 32,
-      C_WRITE_DEPTH_B => 32768,
-      C_READ_DEPTH_B => 32768,
-      C_ADDRB_WIDTH => 15,
+      C_WRITE_DEPTH_B => 65536,
+      C_READ_DEPTH_B => 65536,
+      C_ADDRB_WIDTH => 16,
       C_HAS_MEM_OUTPUT_REGS_A => 0,
       C_HAS_MEM_OUTPUT_REGS_B => 0,
       C_HAS_MUX_OUTPUT_REGS_A => 0,
@@ -301,9 +301,9 @@ BEGIN
       C_EN_SHUTDOWN_PIN => 0,
       C_EN_SAFETY_CKT => 0,
       C_DISABLE_WARN_BHV_RANGE => 0,
-      C_COUNT_36K_BRAM => "29",
+      C_COUNT_36K_BRAM => "58",
       C_COUNT_18K_BRAM => "0",
-      C_EST_POWER_SUMMARY => "Estimated Power for IP     :     18.133548 mW"
+      C_EST_POWER_SUMMARY => "Estimated Power for IP     :     17.809548 mW"
     )
     PORT MAP (
       clka => clka,
@@ -319,7 +319,7 @@ BEGIN
       enb => '0',
       regceb => '0',
       web => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 1)),
-      addrb => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 15)),
+      addrb => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 16)),
       dinb => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
       injectsbiterr => '0',
       injectdbiterr => '0',
@@ -350,4 +350,4 @@ BEGIN
       s_axi_injectsbiterr => '0',
       s_axi_injectdbiterr => '0'
     );
-END inv_dr_sq_lut_arch;
+END rom_lut_calo_inv_dr_sq_arch;

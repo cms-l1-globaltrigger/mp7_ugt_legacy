@@ -108,7 +108,6 @@ src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
 src -c components/mp7_ttc mp7_ttc_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd
 
-src ../ngc/inv_dr_sq_lut/inv_dr_sq_lut.xci
-src ../ngc/inv_dr_sq_lut/synth/inv_dr_sq_lut.vhd
+src ../ngc/rom_lut_calo_inv_dr_sq/rom_lut_calo_inv_dr_sq.xci
 
 

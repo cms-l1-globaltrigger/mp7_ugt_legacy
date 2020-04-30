@@ -55,6 +55,7 @@ architecture rtl of mass_calculator is
     signal transverse_mass_sq_div2 : std_logic_vector(mass_vector_width-1 downto 0) := (others => '0');
 -- HB 2020-04-23: calculation of invariant mass divided by deltaR (M**2/2 multiplicated with inverse deltaR squared values)
     signal invmass_sq_div2_div_dr_sq : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '0');
+    constant max_invmass_sq_div2_div_dr_sq : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '1');
     
     signal inv_mass_comp, transverse_mass_comp, invmass_div_dr_comp : std_logic := '0';
     
@@ -83,7 +84,7 @@ begin
     sim_transverse_mass_comp <= transverse_mass_comp;
     
 -- HB 2020-04-23: calculation of invariant mass divided by deltaR (M**2/2 multiplicated with inverse deltaR squared values)
-    invmass_sq_div2_div_dr_sq <= invariant_mass_sq_div2 * inv_dr_sq;
+    invmass_sq_div2_div_dr_sq <= invariant_mass_sq_div2 * inv_dr_sq when inv_dr_sq /= 0 else ;
     sim_invmass_sq_div2_div_dr_sq <= invmass_sq_div2_div_dr_sq;
     
     invmass_div_dr_comp <= '1' when invmass_sq_div2_div_dr_sq >= mass_lower_limit_vector(mass_div_dr_vector_width-1 downto 0) and invmass_sq_div2_div_dr_sq <= mass_upper_limit_vector(mass_div_dr_vector_width-1 downto 0) else '0';

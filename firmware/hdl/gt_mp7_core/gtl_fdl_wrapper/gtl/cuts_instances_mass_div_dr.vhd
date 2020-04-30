@@ -16,7 +16,6 @@ use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
-use work.delta_r_lut_pkg.all;
 
 entity cuts_instances is
      generic(

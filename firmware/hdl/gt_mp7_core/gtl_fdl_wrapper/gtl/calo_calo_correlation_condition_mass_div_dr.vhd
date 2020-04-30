@@ -122,7 +122,7 @@ entity calo_calo_correlation_condition is
         pt2 : in diff_inputs_array;
         cosh_deta : in calo_cosh_cos_vector_array;
         cos_dphi : in calo_cosh_cos_vector_array;
-        inv_dr_sq: in calo_inv_dr_sq_vector_array;      
+--         inv_dr_sq: in calo_inv_dr_sq_vector_array;      
         cos_phi_1_integer : in sin_cos_integer_array;
         cos_phi_2_integer : in sin_cos_integer_array;
         sin_phi_1_integer : in sin_cos_integer_array;
@@ -183,13 +183,14 @@ begin
                             pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
                         )
                         port map(
+                            clk => lhc_clk,
                             diff_eta => diff_eta(i,j),
                             diff_phi => diff_phi(i,j),
                             pt1 => pt1(i),
                             pt2 => pt2(j),
                             cosh_deta => cosh_deta(i,j),
                             cos_dphi => cos_dphi(i,j),
-                            inv_dr_sq => inv_dr_sq(i,j),
+--                             inv_dr_sq => inv_dr_sq(i,j),
                             cos_phi_1_integer => cos_phi_1_integer(i),
                             cos_phi_2_integer => cos_phi_2_integer(j),
                             sin_phi_1_integer => sin_phi_1_integer(i),
@@ -239,13 +240,14 @@ begin
                         pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
                     )
                     port map(
+                        clk => lhc_clk,
                         diff_eta => diff_eta(i,j),
                         diff_phi => diff_phi(i,j),
                         pt1 => pt1(i),
                         pt2 => pt2(j),
                         cosh_deta => cosh_deta(i,j),
                         cos_dphi => cos_dphi(i,j),
-                        inv_dr_sq => inv_dr_sq(i,j),
+--                         inv_dr_sq => inv_dr_sq(i,j),
                         cos_phi_1_integer => cos_phi_1_integer(i),
                         cos_phi_2_integer => cos_phi_2_integer(j),
                         sin_phi_1_integer => sin_phi_1_integer(i),
@@ -267,14 +269,15 @@ begin
             diff_eta_comp_pipe <= diff_eta_comp;
             diff_phi_comp_pipe <= diff_phi_comp;
             dr_comp_pipe <= dr_comp;
-            mass_comp_pipe <= mass_comp;
+-- HB 2020-04-30: one clk mass_comp in mass_calculator.vhd, because of one clk for ROM
+--             mass_comp_pipe <= mass_comp;
             twobody_pt_comp_pipe <= twobody_pt_comp;
         else
             if (lhc_clk'event and lhc_clk = '1') then
                 diff_eta_comp_pipe <= diff_eta_comp;
                 diff_phi_comp_pipe <= diff_phi_comp;
                 dr_comp_pipe <= dr_comp;
-                mass_comp_pipe <= mass_comp;
+--                 mass_comp_pipe <= mass_comp;
                 twobody_pt_comp_pipe <= twobody_pt_comp;
             end if;
         end if;

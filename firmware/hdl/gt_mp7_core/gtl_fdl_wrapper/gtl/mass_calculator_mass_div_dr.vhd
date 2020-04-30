@@ -29,11 +29,14 @@ entity mass_calculator is
         mass_cosh_cos_precision : positive := 3
     );
     port(
+        clk : in std_logic;
+        diff_eta : in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
+        diff_phi : in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
         pt1 : in std_logic_vector(pt1_width-1 downto 0);
         pt2 : in std_logic_vector(pt2_width-1 downto 0);
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
-        inv_dr_sq : in std_logic_vector(inv_dr_sq_width-1 downto 0) := (others => '0');
+--         inv_dr_sq : in std_logic_vector(inv_dr_sq_width-1 downto 0) := (others => '0');
         mass_comp : out std_logic;
 -- HB 2016-11-08: simulation outputs
         sim_invariant_mass_sq_div2 : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0); 
@@ -56,6 +59,8 @@ architecture rtl of mass_calculator is
 -- HB 2020-04-23: calculation of invariant mass divided by deltaR (M**2/2 multiplicated with inverse deltaR squared values)
     signal invmass_sq_div2_div_dr_sq : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '0');
     constant max_invmass_sq_div2_div_dr_sq : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '1');
+    signal addr_rom : std_logic_vector(15 downto 0);
+    signal inv_dr_sq : std_logic_vector(32 downto 0);
     
     signal inv_mass_comp, transverse_mass_comp, invmass_div_dr_comp : std_logic := '0';
     
@@ -84,7 +89,17 @@ begin
     sim_transverse_mass_comp <= transverse_mass_comp;
     
 -- HB 2020-04-23: calculation of invariant mass divided by deltaR (M**2/2 multiplicated with inverse deltaR squared values)
-    invmass_sq_div2_div_dr_sq <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_invmass_sq_div2_div_dr_sq;
+    addr_rom <= CONV_STD_LOGIC_VECTOR(diff_eta,8) & CONV_STD_LOGIC_VECTOR(diff_phi,8);
+    
+-- HB 2020-04-30: one clk for ROM, therefore also one clk for inv_mass_comp and inv_mass_comp
+    rom_lut_i : rom_lut_calo_inv_dr_sq
+        port map (
+            clka => clk,
+            addra => addr_rom,
+            douta => inv_dr_sq
+        );
+
+    invmass_sq_div2_div_dr_sq <= (invariant_mass_sq_div2 * inv_dr_sq(inv_dr_sq_width-1 downto 0)) when (inv_dr_sq > 0) else max_invmass_sq_div2_div_dr_sq;
     sim_invmass_sq_div2_div_dr_sq <= invmass_sq_div2_div_dr_sq;
     
     invmass_div_dr_comp <= '1' when invmass_sq_div2_div_dr_sq >= mass_lower_limit_vector(mass_div_dr_vector_width-1 downto 0) and invmass_sq_div2_div_dr_sq <= mass_upper_limit_vector(mass_div_dr_vector_width-1 downto 0) else '0';
@@ -92,10 +107,20 @@ begin
     
 -- HB 2016-12-13: selection of comparision for mass types
     invariant_mass_sel: if mass_type = INVARIANT_MASS_TYPE generate
-        mass_comp <= '1' when inv_mass_comp = '1' else '0';
+        clk_p: process(clk, inv_mass_comp)
+        begin
+            if (clk'event and clk = '1') then
+                mass_comp <= '1' when inv_mass_comp = '1' else '0';            
+            end if;
+        end process;
     end generate invariant_mass_sel;
     transverse_mass_sel: if mass_type = TRANSVERSE_MASS_TYPE generate
-        mass_comp <= '1' when transverse_mass_comp = '1' else '0';
+        clk_p: process(clk, transverse_mass_comp)
+        begin
+            if (clk'event and clk = '1') then
+                mass_comp <= '1' when transverse_mass_comp = '1' else '0';
+            end if;
+        end process;
     end generate transverse_mass_sel;
 -- HB 2020-04-23: calculation of invariant mass divided by deltaR (M**2/2 multiplicated with inverse deltaR squared values)
     invmass_div_dr_comp_sel: if mass_type = INVARIANT_MASS_DIV_DR_TYPE generate

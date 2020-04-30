@@ -53,13 +53,14 @@ entity cuts_instances is
 
     );
     port(
+        clk: in std_logic; -- for mass_calculator.vhd, used for ROM
         diff_eta: in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
         diff_phi: in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
         pt1 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0);
         pt2 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0);
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
-        inv_dr_sq : in std_logic_vector(inv_dr_sq_width-1 downto 0) := (others => '0');
+--         inv_dr_sq : in std_logic_vector(inv_dr_sq_width-1 downto 0) := (others => '0');
         cos_phi_1_integer : in integer;
         cos_phi_2_integer : in integer;
         sin_phi_1_integer : in integer;
@@ -109,11 +110,14 @@ begin
                 mass_cosh_cos_precision => cosh_cos_precision
             )
             port map(
+                clk => clk,
+                diff_eta => diff_eta,
+                diff_phi => diff_phi,
                 pt1 => pt1(pt1_width-1 downto 0),
                 pt2 => pt2(pt2_width-1 downto 0),
                 cosh_deta => cosh_deta,
                 cos_dphi => cos_dphi,
-                inv_dr_sq => inv_dr_sq,
+--                 inv_dr_sq => inv_dr_sq,
                 mass_comp => mass_comp
             );
     end generate mass_i;

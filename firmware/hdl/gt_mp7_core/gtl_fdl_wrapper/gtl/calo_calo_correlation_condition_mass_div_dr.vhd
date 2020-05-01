@@ -118,6 +118,8 @@ entity calo_calo_correlation_condition is
         calo2_data_i: in calo_objects_array;
         diff_eta: in deta_dphi_vector_array;
         diff_phi: in deta_dphi_vector_array;
+        deta_bin : in calo_deta_bin_vector_array;
+        dphi_bin : in calo_dphi_bin_vector_array;
         pt1 : in diff_inputs_array;
         pt2 : in diff_inputs_array;
         cosh_deta : in calo_cosh_cos_vector_array;

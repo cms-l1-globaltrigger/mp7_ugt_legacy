@@ -849,6 +849,11 @@ type addr_rom_lut_calo_inv_dr_sq_array is array (natural range <>, natural range
 constant CALO_DETA_BINS : positive := 230;
 constant CALO_DPHI_BINS : positive := 144;
 
+constant CALO_DETA_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DETA_BINS))+1 
+constant CALO_DPHI_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DPHI_BINS))+1
+type calo_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DETA_BINS_WIDTH-1 downto 0);
+type calo_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DPHI_BINS_WIDTH-1 downto 0);
+
 constant MAX_INV_DR_SQ_VECTOR_WIDTH : positive := 32;
 constant MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR : positive := 80;
 type max_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);

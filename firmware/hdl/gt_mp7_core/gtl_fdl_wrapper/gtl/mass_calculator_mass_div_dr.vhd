@@ -30,8 +30,8 @@ entity mass_calculator is
     );
     port(
         clk : in std_logic;
-        diff_eta : in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
-        diff_phi : in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
+        deta_bin : in std_logic_vector(CALO_DETA_BINS_WIDTH-1 downto 0);
+        dphi_bin : in std_logic_vector(CALO_DPHI_BINS_WIDTH-1 downto 0);
         pt1 : in std_logic_vector(pt1_width-1 downto 0);
         pt2 : in std_logic_vector(pt2_width-1 downto 0);
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
@@ -89,7 +89,7 @@ begin
     sim_transverse_mass_comp <= transverse_mass_comp;
     
 -- HB 2020-04-23: calculation of invariant mass divided by deltaR (M**2/2 multiplicated with inverse deltaR squared values)
-    addr_rom <= CONV_STD_LOGIC_VECTOR(diff_eta,8) & CONV_STD_LOGIC_VECTOR(diff_phi,8);
+    addr_rom <= deta_bin & dphi_bin;
     
 -- HB 2020-04-30: one clk for ROM, therefore also one clk for inv_mass_comp and inv_mass_comp
     rom_lut_i : rom_lut_calo_inv_dr_sq

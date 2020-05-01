@@ -56,6 +56,8 @@ entity cuts_instances is
         clk: in std_logic; -- for mass_calculator.vhd, used for ROM
         diff_eta: in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
         diff_phi: in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
+        deta_bin : in std_logic_vector(CALO_DETA_BINS_WIDTH-1 downto 0);
+        dphi_bin : in std_logic_vector(CALO_DPHI_BINS_WIDTH-1 downto 0);
         pt1 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0);
         pt2 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0);
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
@@ -111,8 +113,8 @@ begin
             )
             port map(
                 clk => clk,
-                diff_eta => diff_eta,
-                diff_phi => diff_phi,
+                deta_bin => deta_bin,
+                dphi_bin => dphi_bin,
                 pt1 => pt1(pt1_width-1 downto 0),
                 pt2 => pt2(pt2_width-1 downto 0),
                 cosh_deta => cosh_deta,

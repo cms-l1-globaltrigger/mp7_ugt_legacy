@@ -72,6 +72,14 @@ entity gtl_module is
 end gtl_module;
 
 architecture rtl of gtl_module is
+    COMPONENT rom_lut_calo_inv_dr_sq
+    PORT(
+        clka : IN STD_LOGIC;
+        addra : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        douta : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+    END COMPONENT;
+    
     constant external_conditions_pipeline_stages: natural := 2; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
     constant centrality_bits_pipeline_stages: natural := 2; -- pipeline stages for "Centrality" to get same pipeline to algos as conditions
 

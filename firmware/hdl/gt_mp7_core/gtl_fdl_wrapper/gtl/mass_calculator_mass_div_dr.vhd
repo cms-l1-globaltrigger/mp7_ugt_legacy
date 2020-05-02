@@ -50,6 +50,14 @@ end mass_calculator;
 
 architecture rtl of mass_calculator is
 
+    COMPONENT rom_lut_calo_inv_dr_sq
+    PORT (
+        clka : IN STD_LOGIC;
+        addra : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        douta : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+    END COMPONENT;
+    
 -- HB 2015-10-21: length of std_logic_vector for invariant mass (invariant_mass_sq_div2) and limits.
     constant mass_vector_width : positive := pt1_width+pt2_width+cosh_cos_width;
     constant mass_div_dr_vector_width : positive := mass_vector_width+inv_dr_sq_width;
@@ -62,7 +70,7 @@ architecture rtl of mass_calculator is
     signal addr_rom : std_logic_vector(15 downto 0);
     signal inv_dr_sq : std_logic_vector(32 downto 0);
     
-    signal inv_mass_comp, transverse_mass_comp, invmass_div_dr_comp : std_logic := '0';
+    signal inv_mass_comp, transverse_mass_comp, invmass_div_dr_comp, mass_comp_t : std_logic := '0';
     
 -- HB 2017-09-21: used attribute "use_dsp" instead of "use_dsp48" for "mass" - see warning below
 -- MP7 builds, synth_1, runme.log => WARNING: [Synth 8-5974] attribute "use_dsp48" has been deprecated, please use "use_dsp" instead
@@ -107,21 +115,19 @@ begin
     
 -- HB 2016-12-13: selection of comparision for mass types
     invariant_mass_sel: if mass_type = INVARIANT_MASS_TYPE generate
-        clk_p: process(clk, inv_mass_comp)
-        begin
-            if (clk'event and clk = '1') then
-                mass_comp <= '1' when inv_mass_comp = '1' else '0';            
-            end if;
-        end process;
+        mass_comp_t <= '1' when inv_mass_comp = '1' else '0';            
     end generate invariant_mass_sel;
     transverse_mass_sel: if mass_type = TRANSVERSE_MASS_TYPE generate
-        clk_p: process(clk, transverse_mass_comp)
-        begin
-            if (clk'event and clk = '1') then
-                mass_comp <= '1' when transverse_mass_comp = '1' else '0';
-            end if;
-        end process;
+        mass_comp_t <= '1' when transverse_mass_comp = '1' else '0';
     end generate transverse_mass_sel;
+-- HB 2020-05-02: one clk for inv_mass_comp or inv_mass_comp, because invmass_div_dr_comp has one clk in ROM
+    clk_p: process(clk, mass_comp_t)
+    begin
+        if (clk'event and clk = '1') then
+            mass_comp <= mass_comp_t;
+        end if;
+    end process;
+    
 -- HB 2020-04-23: calculation of invariant mass divided by deltaR (M**2/2 multiplicated with inverse deltaR squared values)
     invmass_div_dr_comp_sel: if mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
         mass_comp <= '1' when invmass_div_dr_comp = '1' else '0';

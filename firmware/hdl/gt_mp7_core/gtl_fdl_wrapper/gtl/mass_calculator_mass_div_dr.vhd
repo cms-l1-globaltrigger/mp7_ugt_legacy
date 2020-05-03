@@ -68,7 +68,7 @@ architecture rtl of mass_calculator is
     signal invmass_sq_div2_div_dr_sq : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '0');
     constant max_invmass_sq_div2_div_dr_sq : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '1');
     signal addr_rom : std_logic_vector(15 downto 0);
-    signal inv_dr_sq : std_logic_vector(32 downto 0);
+    signal inv_dr_sq : std_logic_vector(31 downto 0);
     
     signal inv_mass_comp, transverse_mass_comp, invmass_div_dr_comp : std_logic := '0';
     

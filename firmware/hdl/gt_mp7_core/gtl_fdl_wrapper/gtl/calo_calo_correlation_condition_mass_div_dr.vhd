@@ -275,15 +275,16 @@ begin
             diff_eta_comp_pipe <= diff_eta_comp;
             diff_phi_comp_pipe <= diff_phi_comp;
             dr_comp_pipe <= dr_comp;
--- HB 2020-04-30: one clk mass_comp in mass_calculator.vhd, because of one clk for ROM
---             mass_comp_pipe <= mass_comp;
+            mass_comp_pipe <= mass_comp;
             twobody_pt_comp_pipe <= twobody_pt_comp;
+        elsif obj_vs_templ_pipeline_stage = false and mass_type = INVARIANT_MASS_DIV_DR_TYPE then 
+            mass_comp_pipe <= mass_comp;
         else
             if (lhc_clk'event and lhc_clk = '1') then
                 diff_eta_comp_pipe <= diff_eta_comp;
                 diff_phi_comp_pipe <= diff_phi_comp;
                 dr_comp_pipe <= dr_comp;
---                 mass_comp_pipe <= mass_comp;
+                mass_comp_pipe <= mass_comp;
                 twobody_pt_comp_pipe <= twobody_pt_comp;
             end if;
         end if;

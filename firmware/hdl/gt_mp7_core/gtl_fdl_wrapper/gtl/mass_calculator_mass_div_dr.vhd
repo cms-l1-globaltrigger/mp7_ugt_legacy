@@ -3,6 +3,7 @@
 -- Calculation of invariant mass, transverse mass and invariant mass divided by deltaR based on LUTs.
 
 -- Version history:
+-- HB 2020-05-13: added logic for invariant mass divided by deltaR.
 -- HB 2019-04-27: used unconstrained std_logic_vector for limits.
 -- HB 2020-04-23: new design based on mass_calculator.vhd, inserted invarinat mass divided by deltaR.
 
@@ -16,10 +17,9 @@ use work.gtl_pkg.all;
 
 entity mass_calculator is
     generic (
+        obj_type : natural := EG_TYPE;
         mass_type : natural;
 -- limits for comparison of invariant mass, transverse mass or invariant mass divided by deltaR
---         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
---         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
         mass_upper_limit_vector: std_logic_vector;
         mass_lower_limit_vector: std_logic_vector;
         pt1_width: positive := 12;
@@ -36,7 +36,6 @@ entity mass_calculator is
         pt2 : in std_logic_vector(pt2_width-1 downto 0);
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
---         inv_dr_sq : in std_logic_vector(inv_dr_sq_width-1 downto 0) := (others => '0');
         mass_comp : out std_logic;
 -- HB 2016-11-08: simulation outputs
         sim_invariant_mass_sq_div2 : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0); 
@@ -50,11 +49,12 @@ end mass_calculator;
 
 architecture rtl of mass_calculator is
 
-    COMPONENT rom_lut_calo_inv_dr_sq
+    COMPONENT rom_lut_calo_inv_dr_sq_all
     PORT (
-        clka : IN STD_LOGIC;
-        addra : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-        douta : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+        clk : IN STD_LOGIC;
+        deta : in STD_LOGIC_VECTOR(7 DOWNTO 0);
+        dphi : in STD_LOGIC_VECTOR(7 DOWNTO 0);
+        dout : out STD_LOGIC_VECTOR(25 DOWNTO 0)
     );
     END COMPONENT;
     
@@ -64,11 +64,11 @@ architecture rtl of mass_calculator is
 
     signal invariant_mass_sq_div2 : std_logic_vector(mass_vector_width-1 downto 0) := (others => '0');
     signal transverse_mass_sq_div2 : std_logic_vector(mass_vector_width-1 downto 0) := (others => '0');
+
 -- HB 2020-04-23: calculation of invariant mass divided by deltaR (M**2/2 multiplicated with inverse deltaR squared values)
     signal invmass_sq_div2_div_dr_sq : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '0');
     constant max_invmass_sq_div2_div_dr_sq : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '1');
-    signal addr_rom : std_logic_vector(15 downto 0);
-    signal inv_dr_sq : std_logic_vector(31 downto 0);
+    signal inv_dr_sq : std_logic_vector(inv_dr_sq_width-1 downto 0);
     
     signal inv_mass_comp, transverse_mass_comp, invmass_div_dr_comp : std_logic := '0';
     
@@ -96,18 +96,29 @@ begin
     transverse_mass_comp <= '1' when transverse_mass_sq_div2 >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and transverse_mass_sq_div2 <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
     sim_transverse_mass_comp <= transverse_mass_comp;
     
--- HB 2020-04-23: calculation of invariant mass divided by deltaR (M**2/2 multiplicated with inverse deltaR squared values)
-    addr_rom <= deta_bin & dphi_bin;
-    
 -- HB 2020-04-30: one clk for ROM, therefore also one clk for inv_mass_comp and inv_mass_comp
-    rom_lut_i : rom_lut_calo_inv_dr_sq
-        port map (
-            clka => clk,
-            addra => addr_rom,
-            douta => inv_dr_sq
-        );
+    rom_lut_calo_sel: if obj_type = EG_TYPE or obj_type = JET_TYPE or obj_type = TAU_TYPE generate
+        rom_lut_i : rom_lut_calo_inv_dr_sq_all
+            port map (
+                clka => clk,
+                deta => deta_bin,
+                dphi => dphi_bin,
+                dout => inv_dr_sq
+            );
+    end generate rom_lut_calo_sel;
 
-    invmass_sq_div2_div_dr_sq <= (invariant_mass_sq_div2 * inv_dr_sq(inv_dr_sq_width-1 downto 0)) when (inv_dr_sq > 0) else max_invmass_sq_div2_div_dr_sq;
+-- -- HB 2020-05-13: NOT DONE YET! Module rom_lut_muon_inv_dr_sq_all not designed yet!
+--     rom_lut_muon_sel: if obj_type = MUON_TYPE generate
+--         rom_lut_i : rom_lut_muon_inv_dr_sq_all
+--             port map (
+--                 clka => clk,
+--                 deta => deta_bin,
+--                 dphi => dphi_bin,
+--                 dout => inv_dr_sq
+--             );
+--     end generate rom_lut_muon_sel;
+
+    invmass_sq_div2_div_dr_sq <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_invmass_sq_div2_div_dr_sq;
     sim_invmass_sq_div2_div_dr_sq <= invmass_sq_div2_div_dr_sq;
     
     invmass_div_dr_comp <= '1' when invmass_sq_div2_div_dr_sq >= mass_lower_limit_vector(mass_div_dr_vector_width-1 downto 0) and invmass_sq_div2_div_dr_sq <= mass_upper_limit_vector(mass_div_dr_vector_width-1 downto 0) else '0';

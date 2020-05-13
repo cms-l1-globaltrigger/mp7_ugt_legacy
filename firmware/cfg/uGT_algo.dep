@@ -108,6 +108,18 @@ src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
 src -c components/mp7_ttc mp7_ttc_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd
 
-src ../ngc/rom_lut_calo_inv_dr_sq/rom_lut_calo_inv_dr_sq.xci
+#src ../ngc/rom_lut_calo_inv_dr_sq/rom_lut_calo_inv_dr_sq.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_1/rom_lut_calo_inv_dr_sq_1.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_2/rom_lut_calo_inv_dr_sq_2.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_3/rom_lut_calo_inv_dr_sq_3.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_4/rom_lut_calo_inv_dr_sq_4.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_5/rom_lut_calo_inv_dr_sq_5.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_6/rom_lut_calo_inv_dr_sq_6.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_7/rom_lut_calo_inv_dr_sq_7.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_8/rom_lut_calo_inv_dr_sq_8.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_9/rom_lut_calo_inv_dr_sq_9.xci
+
+src gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_calo_inv_dr_sq_all.vhd
+
 
 

@@ -100,7 +100,7 @@ begin
     rom_lut_calo_sel: if obj_type = EG_TYPE or obj_type = JET_TYPE or obj_type = TAU_TYPE generate
         rom_lut_i : rom_lut_calo_inv_dr_sq_all
             port map (
-                clka => clk,
+                clk => clk,
                 deta => deta_bin,
                 dphi => dphi_bin,
                 dout => inv_dr_sq

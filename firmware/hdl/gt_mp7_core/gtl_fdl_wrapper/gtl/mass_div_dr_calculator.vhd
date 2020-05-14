@@ -70,6 +70,9 @@ architecture rtl of mass_div_dr_calculator is
 
 begin
 
+    upper_limit <= mass_upper_limit_vector(mass_div_dr_vector_width-1 downto 0);
+    lower_limit <= mass_lower_limit_vector(mass_div_dr_vector_width-1 downto 0);
+    
 -- calculation of invariant mass with formular M**2/2=pt1*pt2*(cosh(eta1-eta2)-cos(phi1-phi2))
     invariant_mass_sq_div2 <= pt1 * pt2 * (cosh_deta - cos_dphi);
     
@@ -97,9 +100,6 @@ begin
 
     mass_div_dr <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_mass_div_dr;
     sim_mass_div_dr <= mass_div_dr;
-    
-    upper_limit <= mass_upper_limit_vector(mass_div_dr_vector_width-1 downto 0);
-    lower_limit <= mass_lower_limit_vector(mass_div_dr_vector_width-1 downto 0);
     
 --     mass_comp <= '1' when mass_div_dr >= mass_lower_limit_vector(mass_div_dr_vector_width-1 downto 0) and mass_div_dr <= mass_upper_limit_vector(mass_div_dr_vector_width-1 downto 0) else '0';
     mass_comp <= '1' when mass_div_dr >= lower_limit and mass_div_dr <= upper_limit else '0';

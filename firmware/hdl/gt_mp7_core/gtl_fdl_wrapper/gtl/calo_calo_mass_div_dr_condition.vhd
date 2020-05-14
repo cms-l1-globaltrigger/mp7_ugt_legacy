@@ -101,7 +101,7 @@ architecture rtl of calo_calo_mass_div_dr_condition is
     signal calo2_obj_vs_templ, calo2_obj_vs_templ_pipe : std_logic_2dim_array(calo2_object_low to calo2_object_high, 1 to 1);
 
 -- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
-    signal mass_div_dr_comp_t, mass_div_dr_comp, mass_div_dr_comp_pipe : std_logic_2dim_array(calo1_object_low to calo1_object_high, calo2_object_low to calo2_object_high) :=
+    signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(0 to nr_objects_calo1-1, 0 to nr_objects_calo2-1) :=
     (others => (others => '1'));
 
     signal condition_and_or : std_logic;

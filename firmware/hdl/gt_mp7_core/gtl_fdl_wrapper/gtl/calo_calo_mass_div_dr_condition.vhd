@@ -77,7 +77,8 @@ entity calo_calo_mass_div_dr_condition is
     );
     port(
         lhc_clk: in std_logic;
-        calo_data_i: in calo_objects_array;
+        calo1_data_i: in calo_objects_array;
+        calo2_data_i: in calo_objects_array;
         deta_bin : in calo_deta_bin_vector_array;
         dphi_bin : in calo_dphi_bin_vector_array;
         pt1 : in diff_inputs_array;
@@ -141,7 +142,7 @@ begin
                         deta_bin(i,j), dphi_bin(i,j),
                         pt1(i), pt2(j),
                         cosh_deta(i,j), cos_dphi(i,j),
-                        mass_div_dr_comp_t(i,j)
+                        mass_div_dr_comp_pipe(i,j)
                     );
             end generate mass_calc_l2;
         end generate mass_l_2;
@@ -173,7 +174,7 @@ begin
                 phi_w2_lower_limit_calo1,
                 iso_lut_calo1
             )
-            port map(calo_data_i(i), calo1_obj_vs_templ(i,1));
+            port map(calo1_data_i(i), calo1_obj_vs_templ(i,1));
     end generate calo1_obj_l;
 
     calo2_obj_l: for i in calo2_object_low to calo2_object_high generate
@@ -199,7 +200,7 @@ begin
                 phi_w2_lower_limit_calo2,
                 iso_lut_calo2
             )
-            port map(calo_data_i(i), calo2_obj_vs_templ(i,1));
+            port map(calo2_data_i(i), calo2_obj_vs_templ(i,1));
     end generate calo2_obj_l;
 
     -- Pipeline stage for obj_vs_templ

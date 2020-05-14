@@ -35,9 +35,10 @@ entity mass_div_dr_calculator is
         pt2 : in std_logic_vector(pt2_width-1 downto 0);
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
-        mass_comp : out std_logic;
--- simulation output
-        sim_invmass_sq_div2_div_dr_sq : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width+inv_dr_sq_width-1 downto 0)
+        mass_comp : out std_logic
+--         mass_comp : out std_logic;
+-- -- simulation output
+--         sim_invmass_sq_div2_div_dr_sq : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width+inv_dr_sq_width-1 downto 0)
     );
 end mass_div_dr_calculator;
 
@@ -95,7 +96,7 @@ begin
 --     end generate rom_lut_muon_sel;
 
     invmass_sq_div2_div_dr_sq <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_invmass_sq_div2_div_dr_sq;
-    sim_invmass_sq_div2_div_dr_sq <= invmass_sq_div2_div_dr_sq;
+--     sim_invmass_sq_div2_div_dr_sq <= invmass_sq_div2_div_dr_sq;
     
     mass_comp <= '1' when invmass_sq_div2_div_dr_sq >= mass_lower_limit_vector(mass_div_dr_vector_width-1 downto 0) and invmass_sq_div2_div_dr_sq <= mass_upper_limit_vector(mass_div_dr_vector_width-1 downto 0) else '0';
     

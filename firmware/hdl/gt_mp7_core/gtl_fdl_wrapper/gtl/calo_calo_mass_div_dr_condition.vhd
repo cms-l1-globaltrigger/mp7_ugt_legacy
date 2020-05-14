@@ -123,7 +123,7 @@ begin
                     port map(
                         lhc_clk,
                         deta_bin(i,j), dphi_bin(i,j),
-                        pt1(i), pt2(j),
+                        pt1(i)(pt1_vector_width-1 downto 0), pt2(j)(pt2_vector_width-1 downto 0),
                         cosh_deta(i,j), cos_dphi(i,j),
                         mass_div_dr_comp_t(i,j)
                     );
@@ -140,7 +140,7 @@ begin
                     port map(
                         lhc_clk,
                         deta_bin(i,j), dphi_bin(i,j),
-                        pt1(i), pt2(j),
+                        pt1(i)(pt1_vector_width-1 downto 0), pt2(j)(pt2_vector_width-1 downto 0),
                         cosh_deta(i,j), cos_dphi(i,j),
                         mass_div_dr_comp_pipe(i,j)
                     );

@@ -99,6 +99,5 @@ begin
     sim_invmass_sq_div2_div_dr_sq <= invmass_sq_div2_div_dr_sq;
     
     mass_comp <= '1' when invmass_sq_div2_div_dr_sq >= mass_lower_limit_vector(mass_div_dr_vector_width-1 downto 0) and invmass_sq_div2_div_dr_sq <= mass_upper_limit_vector(mass_div_dr_vector_width-1 downto 0) else '0';
-    sim_invmass_div_dr_comp <= invmass_div_dr_comp;
     
 end architecture rtl;

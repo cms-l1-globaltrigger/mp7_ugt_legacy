@@ -37,7 +37,7 @@ entity mass_div_dr_calculator is
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
         mass_comp : out std_logic;
 -- simulation output
-        sim_invmass_sq_div2_div_dr_sq : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width+inv_dr_sq_width-1 downto 0);
+        sim_invmass_sq_div2_div_dr_sq : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width+inv_dr_sq_width-1 downto 0)
     );
 end mass_div_dr_calculator;
 

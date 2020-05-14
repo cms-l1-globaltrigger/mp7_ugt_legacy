@@ -36,7 +36,7 @@ entity mass_div_dr_calculator is
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
         mass_comp : out std_logic;
 -- simulation output
-        sim_invmass_sq_div2_div_dr_sq : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width+inv_dr_sq_width-1 downto 0)
+        sim_mass_div_dr : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width+inv_dr_sq_width-1 downto 0)
     );
 end mass_div_dr_calculator;
 
@@ -58,15 +58,15 @@ architecture rtl of mass_div_dr_calculator is
     signal invariant_mass_sq_div2 : std_logic_vector(mass_vector_width-1 downto 0) := (others => '0');
 
 -- HB 2020-04-23: calculation of invariant mass divided by deltaR (M**2/2 multiplicated with inverse deltaR squared values)
-    signal invmass_sq_div2_div_dr_sq : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '0');
-    constant max_invmass_sq_div2_div_dr_sq : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '1');
+    signal upper_limit : std_logic_vector(mass_div_dr_vector_width-1 downto 0);
+    signal lower_limit : std_logic_vector(mass_div_dr_vector_width-1 downto 0);
+    signal mass_div_dr : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '0');
+    constant max_mass_div_dr : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '1');
     signal inv_dr_sq : std_logic_vector(inv_dr_sq_width-1 downto 0);
-    
-    signal invmass_div_dr_comp : std_logic := '0';
     
     attribute use_dsp : string;
     attribute use_dsp of invariant_mass_sq_div2 : signal is "yes";
-    attribute use_dsp of invmass_sq_div2_div_dr_sq : signal is "yes";
+    attribute use_dsp of mass_div_dr : signal is "yes";
 
 begin
 
@@ -95,9 +95,13 @@ begin
 --             );
 --     end generate rom_lut_muon_sel;
 
-    invmass_sq_div2_div_dr_sq <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_invmass_sq_div2_div_dr_sq;
-    sim_invmass_sq_div2_div_dr_sq <= invmass_sq_div2_div_dr_sq;
+    mass_div_dr <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_mass_div_dr;
+    sim_mass_div_dr <= mass_div_dr;
     
-    mass_comp <= '1' when invmass_sq_div2_div_dr_sq >= mass_lower_limit_vector(mass_div_dr_vector_width-1 downto 0) and invmass_sq_div2_div_dr_sq <= mass_upper_limit_vector(mass_div_dr_vector_width-1 downto 0) else '0';
+    upper_limit <= mass_upper_limit_vector(mass_div_dr_vector_width-1 downto 0);
+    lower_limit <= mass_lower_limit_vector(mass_div_dr_vector_width-1 downto 0);
+    
+--     mass_comp <= '1' when mass_div_dr >= mass_lower_limit_vector(mass_div_dr_vector_width-1 downto 0) and mass_div_dr <= mass_upper_limit_vector(mass_div_dr_vector_width-1 downto 0) else '0';
+    mass_comp <= '1' when mass_div_dr >= lower_limit and mass_div_dr <= upper_limit else '0';
     
 end architecture rtl;

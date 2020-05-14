@@ -63,8 +63,6 @@ architecture rtl of mass_div_dr_calculator is
     constant max_invmass_sq_div2_div_dr_sq : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '1');
     signal inv_dr_sq : std_logic_vector(inv_dr_sq_width-1 downto 0);
     
-    signal invmass_div_dr_comp : std_logic := '0';
-    
     attribute use_dsp : string;
     attribute use_dsp of invariant_mass_sq_div2 : signal is "yes";
     attribute use_dsp of invmass_sq_div2_div_dr_sq : signal is "yes";
@@ -100,6 +98,5 @@ begin
     sim_invmass_sq_div2_div_dr_sq <= invmass_sq_div2_div_dr_sq;
     
     mass_comp <= '1' when invmass_sq_div2_div_dr_sq >= mass_lower_limit_vector(mass_div_dr_vector_width-1 downto 0) and invmass_sq_div2_div_dr_sq <= mass_upper_limit_vector(mass_div_dr_vector_width-1 downto 0) else '0';
-    sim_invmass_div_dr_comp <= invmass_div_dr_comp;
     
 end architecture rtl;

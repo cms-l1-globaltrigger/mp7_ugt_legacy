@@ -3,6 +3,7 @@
 -- Invariant mass divided by deltaR condition for calos (eg, jet and tau).
 
 -- Version history:
+-- HB 2020-05-14: updated for mass_div_dr_calculator.vhd, removed use clause work.delta_r_lut_pkg.all.
 -- HB 2020-03-06: first design.
 
 library ieee;
@@ -11,7 +12,6 @@ use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
-use work.delta_r_lut_pkg.all;
 
 entity calo_calo_mass_div_dr_condition is
     generic(

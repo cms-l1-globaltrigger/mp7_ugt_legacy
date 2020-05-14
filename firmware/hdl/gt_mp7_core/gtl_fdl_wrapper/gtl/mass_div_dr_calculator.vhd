@@ -24,8 +24,7 @@ entity mass_div_dr_calculator is
         pt1_width: positive := 12;
         pt2_width: positive := 12;
         cosh_cos_width: positive := 28;
-        inv_dr_sq_width: positive := 26;
-        mass_cosh_cos_precision : positive := 3
+        inv_dr_sq_width: positive := 26
     );
     port(
         clk : in std_logic := '0';

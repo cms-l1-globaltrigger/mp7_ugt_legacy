@@ -57,12 +57,9 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/min_bias_hf_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/towercount_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/twobody_pt_calculator.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/twobody_pt.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_calculator.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_calculator_mass_div_dr.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/gtl/cuts_instances.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/cuts_instances_mass_div_dr.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition_mass_div_dr.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_calculator.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/cuts_instances.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd
@@ -72,11 +69,8 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_calo_correlation_orm_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sum_mass_calc.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_3_obj_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_3_obj_condition.vhd
-## HB 2020-03-31: fixed_generic_pkg_mod.vhd is used for ufixed type (ieee.fixed_pkg.all NOT supported in Vivado)
-#src gt_mp7_core/gtl_fdl_wrapper/gtl/fixed_generic_pkg_mod.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/gtl/invmass_div_dr_calculator.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_div_dr_condition.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_div_dr_condition.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_calculator.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd
 #
 src gt_mp7_core/frame/demux_lane/demux_lane_data.vhd
 src gt_mp7_core/frame/frame.vhd
@@ -101,14 +95,10 @@ src ipbus/slaves/ipb_read_regs.vhd
 src ipbus/slaves/ipb_dpmem_4096_32.vhd
 src ../ngc/dp_mem_4096x32/dp_mem_4096x32.ngc
 src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
-
-#src ../ngc/dp_mem_4096x32_blk_mem_gen_v8_4/dp_mem_4096x32.xci
-#src ../ngc/dp_mem_4096x32_blk_mem_gen_v8_4/synth/dp_mem_4096x32.vhd
 #
 src -c components/mp7_ttc mp7_ttc_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd
-
-#src ../ngc/rom_lut_calo_inv_dr_sq/rom_lut_calo_inv_dr_sq.xci
+#
 src ../ngc/rom_lut_calo_inv_dr_sq_1/rom_lut_calo_inv_dr_sq_1.xci
 src ../ngc/rom_lut_calo_inv_dr_sq_2/rom_lut_calo_inv_dr_sq_2.xci
 src ../ngc/rom_lut_calo_inv_dr_sq_3/rom_lut_calo_inv_dr_sq_3.xci

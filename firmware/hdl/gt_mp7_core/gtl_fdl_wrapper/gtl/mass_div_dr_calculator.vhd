@@ -19,8 +19,8 @@ entity mass_div_dr_calculator is
         deta_bins_width : natural := CALO_DETA_BINS_WIDTH;
         dphi_bins_width : natural := CALO_DPHI_BINS_WIDTH;
 -- limits for comparison of invariant mass divided by deltaR
-        mass_upper_limit_vector: std_logic_vector;
-        mass_lower_limit_vector: std_logic_vector;
+        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
+        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
         pt1_width: positive := 12;
         pt2_width: positive := 12;
         cosh_cos_width: positive := 28;

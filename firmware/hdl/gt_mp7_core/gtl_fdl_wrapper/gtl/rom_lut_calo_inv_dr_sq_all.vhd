@@ -116,7 +116,7 @@ begin
     addr_lsb <= deta(5 downto 0) & dphi(5 downto 0);
     addr_lsb_9 <= deta(7 downto 0) & dphi(3 downto 0);
     addr_msb <= deta(7 downto 6) & dphi(7 downto 6);
-    addr_msb <= dphi(7 downto 4);
+    addr_msb_9 <= dphi(7 downto 4);
 
     lut1_i : rom_lut_calo_inv_dr_sq_1
         port map (
@@ -174,7 +174,7 @@ begin
             douta => dout8
         );
 
-     lut9_i : rom_lut_calo_inv_dr_sq_9
+    lut9_i : rom_lut_calo_inv_dr_sq_9
         port map (
             clka => clk,
             addra => addr_lsb_9,

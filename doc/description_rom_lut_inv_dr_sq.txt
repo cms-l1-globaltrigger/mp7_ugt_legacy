@@ -1,0 +1,25 @@
+Description of ROMs for LUTs with values for "inverted deltaR square (inv_dr_sq)"
+
+- The values of inv_dr_sq are used in "invariant mass divided by deltaR" conditions (for multiplication with invariant mass).
+- Formular for inv_dr_sq values: 1/(deta*0.0435)^2+(dphi*2*PI/144)^2
+- ROMs are implemented in BRAMs (36kb).
+- Address range splitted in 9 segments for reducing BRAM resources.
+- Addresses splitted by the maximum value of inv_dr_sq (datawidth of ROM) in a range.
+- For calos resulting the following 9 ROMs:
+-- ROM 1: 4096x26 (64x64 address bits, 26 databits from maximum value of inv_dr_sq in first segment)
+-- ROM 2: 4096x14 (64x64 address bits, 14 databits from maximum value of inv_dr_sq in second segment)
+-- ROM 3: 4096x12 ...
+-- ROM 4: 4096x11 ...
+-- ROM 5: 4096x14 ...
+-- ROM 6: 4096x13 ...
+-- ROM 7: 4096x12 ...
+-- ROM 8: 4096x11 ...
+-- ROM 9: 4096x12 (256x16 address bits, 12 databits from maximum value of inv_dr_sq in ninth segment)
+- ROMs are generated with Vivado "managed_ip_project" and stored in ../firmware/ngc
+- All 9 ROMs need 16 36kb BRAMs.
+- In Virtex 7 chip 1470 36kb BRAMs are available, where 597 are used for other applications. Therefore up to 873 are free for the ROMs.
+  A condition with calo objects of same type and same bx needs nr_obj*(nr_obj-1)/2 BRAMs. The maximum object number is 10 (10*9/2*16=720).
+- A VHDL module for a wrapper of all ROM segments (../firmware/../gtl/rom_lut_calo_inv_dr_sq_all.vhd) is used in
+  ../firmware/../gtl/mass_div_dr_calculator.
+- A "invariant mass divided by deltaR" condition is designed in ../firmware/../gtl/calo_calo_mass_div_dr_condition.vhd for calos.
+

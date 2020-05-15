@@ -1,3 +1,11 @@
+
+-- Description:
+-- Wrapper for all 9 ROM segments for LUTs with inv_dr_sq values.
+
+-- Version history:
+-- HB 2020-05-15: bug fixed for rom_lut_calo_inv_dr_sq_9 address.
+-- HB 2020-05-12: first design.
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
@@ -90,7 +98,9 @@ architecture rtl of rom_lut_calo_inv_dr_sq_all is
     END COMPONENT;
     
     signal addr_lsb : STD_LOGIC_VECTOR(11 DOWNTO 0);
+    signal addr_lsb_9 : STD_LOGIC_VECTOR(11 DOWNTO 0);
     signal addr_msb : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    signal addr_msb_9 : STD_LOGIC_VECTOR(3 DOWNTO 0);
     signal dout1 : STD_LOGIC_VECTOR(25 DOWNTO 0);
     signal dout2 : STD_LOGIC_VECTOR(13 DOWNTO 0);
     signal dout3 : STD_LOGIC_VECTOR(11 DOWNTO 0);
@@ -104,7 +114,9 @@ architecture rtl of rom_lut_calo_inv_dr_sq_all is
 begin
    
     addr_lsb <= deta(5 downto 0) & dphi(5 downto 0);
+    addr_lsb_9 <= deta(7 downto 0) & dphi(3 downto 0);
     addr_msb <= deta(7 downto 6) & dphi(7 downto 6);
+    addr_msb <= dphi(7 downto 4);
 
     lut1_i : rom_lut_calo_inv_dr_sq_1
         port map (
@@ -165,35 +177,11 @@ begin
      lut9_i : rom_lut_calo_inv_dr_sq_9
         port map (
             clka => clk,
-            addra => addr_lsb,
+            addra => addr_lsb_9,
             douta => dout9
         );
 
---     out_mux_p: process
---     begin
---         case addr_msb is
---             when "0000" => dout <= dout1;
---             when "0001" => dout <= X"000"&dout5;
---             when "0010" => dout(11 DOWNTO 0) <= dout9;
---             when "0011" => dout(11 DOWNTO 0) <= X"000";
---             when "0100" => dout(13 DOWNTO 0) <= dout2;
---             when "0101" => dout(12 DOWNTO 0) <= dout6;
---             when "0110" => dout(11 DOWNTO 0) <= dout9;
---             when "0111" => dout(11 DOWNTO 0) <= X"000";
---             when "1000" => dout(11 DOWNTO 0) <= dout3;
---             when "1001" => dout(11 DOWNTO 0) <= dout7;
---             when "1010" => dout(11 DOWNTO 0) <= dout9;
---             when "1011" => dout(11 DOWNTO 0) <= X"000";            
---             when "1100" => dout(10 DOWNTO 0) <= dout4;
---             when "1101" => dout(10 DOWNTO 0) <= dout8;
---             when "1110" => dout(11 DOWNTO 0) <= dout9;
---             when "1111" => dout(11 DOWNTO 0) <= X"000";
---             when others => dout <= "00"&X"000000";           
---         end case;
---     end process;
-    
-    dout <= 
-        dout1 when addr_msb = "0000" else 
+    dout1 when addr_msb = "0000" else 
         (X"000"&dout5) when addr_msb = "0001" else  
         ("00"&X"000"&dout9) when addr_msb = "0010" else 
         (X"000"&dout2) when addr_msb = "0100" else 
@@ -204,7 +192,7 @@ begin
         ("00"&X"000"&dout9) when addr_msb = "1010" else 
         ("000"&X"000"&dout4) when addr_msb = "1100" else 
         ("000"&X"000"&dout8) when addr_msb = "1101" else 
-        ("00"&X"000"&dout9) when addr_msb = "1110" else 
+        ("00"&X"000"&dout9) when addr_msb_9 = "1000" else 
         "00"&X"000000";
 
 end rtl;

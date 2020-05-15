@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2020-05-15: cleaned up constants for invariant mass divided by deltaR.
 -- HB 2020-04-14: added constants for invariant mass divided by deltaR.
 -- HB 2019-10-08: changed some values in LUTs MUON_COS_PHI_LUT and MUON_SIN_PHI_LUT according to LUTs from emulator (given by Len)
 -- HB 2019-06-03: inserted PRESCALER_FRACTION_WIDTH for fractional prescaler values
@@ -840,32 +841,56 @@ constant MAX_WIDTH_TBPT_LIMIT_VECTOR : positive := 64;
 
 -- ********************************************************
 -- definitions for invariant mass divided by deltaR
-constant FRACT_DIGITS_ALL: positive := 20;
-constant EG_DETA_INT_DIGITS : positive := 3;
-constant EG_DPHI_INT_DIGITS : positive := 2;
-constant JET_DETA_INT_DIGITS : positive := EG_DETA_INT_DIGITS;
-constant JET_DPHI_INT_DIGITS : positive := EG_DPHI_INT_DIGITS;
-constant TAU_DETA_INT_DIGITS : positive := EG_DETA_INT_DIGITS;
-constant TAU_DPHI_INT_DIGITS : positive := EG_DPHI_INT_DIGITS;
-constant EG_PT_INT_DIGITS : positive := 7;
-constant JET_PT_INT_DIGITS : positive := 9;
-constant TAU_PT_INT_DIGITS : positive := 7;
-constant EG_COSH_DETA_INT_DIGITS : positive := 13;
-constant JET_COSH_DETA_INT_DIGITS : positive := EG_COSH_DETA_INT_DIGITS;
-constant TAU_COSH_DETA_INT_DIGITS : positive := EG_COSH_DETA_INT_DIGITS;
-constant MU_DETA_INT_DIGITS : positive := 2;
-constant MU_DPHI_INT_DIGITS : positive := 2;
-constant MU_PT_INT_DIGITS : positive := 7;
-constant MU_COSH_DETA_INT_DIGITS : positive := 6;
+type addr_rom_lut_calo_inv_dr_sq_array is array (natural range <>, natural range <>) of std_logic_vector(15 downto 0);
 
-constant EG_PT_MAX_VALUE : positive := 2558;
-constant JET_PT_MAX_VALUE : positive := 10238;
-constant TAU_PT_MAX_VALUE : positive := 2558;
-constant MU_PT_MAX_VALUE : positive := 2553;
-constant EG_COSH_DETA_MAX_VALUE : positive := 10597282;
-constant JET_COSH_DETA_MAX_VALUE : positive := EG_COSH_DETA_MAX_VALUE;
-constant TAU_COSH_DETA_MAX_VALUE : positive := EG_COSH_DETA_MAX_VALUE;
-constant MU_COSH_DETA_MAX_VALUE : positive := 667303;
+constant CALO_DETA_BINS : positive := 230;
+constant CALO_DPHI_BINS : positive := 144;
+
+constant CALO_DETA_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DETA_BINS))+1 
+constant CALO_DPHI_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DPHI_BINS))+1
+type calo_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DETA_BINS_WIDTH-1 downto 0);
+type calo_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DPHI_BINS_WIDTH-1 downto 0);
+
+constant MAX_INV_DR_SQ_VECTOR_WIDTH : positive := 32;
+constant MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR : positive := 80;
+type max_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
+
+constant CALO_INV_DR_SQ_LUT_MAX_VAL : natural := 52847140;
+constant CALO_INV_DR_SQ_VECTOR_WIDTH : natural := 26; -- => log2(CALO_INV_DR_SQ_LUT_MAX_VAL)
+constant EG_EG_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
+constant EG_JET_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
+constant EG_TAU_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
+constant JET_JET_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
+constant JET_TAU_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
+constant TAU_TAU_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
+type calo_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
+
+-- constant FRACT_DIGITS: positive := 20;
+-- constant EG_DETA_INT_DIGITS : positive := 3;
+-- constant EG_DPHI_INT_DIGITS : positive := 2;
+-- constant JET_DETA_INT_DIGITS : positive := EG_DETA_INT_DIGITS;
+-- constant JET_DPHI_INT_DIGITS : positive := EG_DPHI_INT_DIGITS;
+-- constant TAU_DETA_INT_DIGITS : positive := EG_DETA_INT_DIGITS;
+-- constant TAU_DPHI_INT_DIGITS : positive := EG_DPHI_INT_DIGITS;
+-- constant EG_PT_INT_DIGITS : positive := 7;
+-- constant JET_PT_INT_DIGITS : positive := 9;
+-- constant TAU_PT_INT_DIGITS : positive := 7;
+-- constant EG_COSH_DETA_INT_DIGITS : positive := 13;
+-- constant JET_COSH_DETA_INT_DIGITS : positive := EG_COSH_DETA_INT_DIGITS;
+-- constant TAU_COSH_DETA_INT_DIGITS : positive := EG_COSH_DETA_INT_DIGITS;
+-- constant MU_DETA_INT_DIGITS : positive := 2;
+-- constant MU_DPHI_INT_DIGITS : positive := 2;
+-- constant MU_PT_INT_DIGITS : positive := 7;
+-- constant MU_COSH_DETA_INT_DIGITS : positive := 6;
+-- 
+-- constant EG_PT_MAX_VALUE : positive := 2558;
+-- constant JET_PT_MAX_VALUE : positive := 10238;
+-- constant TAU_PT_MAX_VALUE : positive := 2558;
+-- constant MU_PT_MAX_VALUE : positive := 2553;
+-- constant EG_COSH_DETA_MAX_VALUE : positive := 10597282;
+-- constant JET_COSH_DETA_MAX_VALUE : positive := EG_COSH_DETA_MAX_VALUE;
+-- constant TAU_COSH_DETA_MAX_VALUE : positive := EG_COSH_DETA_MAX_VALUE;
+-- constant MU_COSH_DETA_MAX_VALUE : positive := 667303;
 -- ********************************************************
 -- conversion LUTs
 type calo_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;

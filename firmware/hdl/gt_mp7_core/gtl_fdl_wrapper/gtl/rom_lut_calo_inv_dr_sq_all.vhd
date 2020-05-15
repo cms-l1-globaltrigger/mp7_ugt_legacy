@@ -181,7 +181,8 @@ begin
             douta => dout9
         );
 
-    dout1 when addr_msb = "0000" else 
+    dout <= 
+        dout1 when addr_msb = "0000" else 
         (X"000"&dout5) when addr_msb = "0001" else  
         ("00"&X"000"&dout9) when addr_msb = "0010" else 
         (X"000"&dout2) when addr_msb = "0100" else 

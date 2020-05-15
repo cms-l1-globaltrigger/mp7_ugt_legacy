@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="test_rom_lut_calo_inv_dr_sq_all_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="test_rom_lut_calo_inv_dr_sq_all_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="999993fs"></ZoomStartTime>
+      <ZoomEndTime time="1000002fs"></ZoomEndTime>
+      <Cursor1Time time="1000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="108"></NameColumnWidth>
+      <ValueColumnWidth column_width="66"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="4" />
+   <wvobject type="array" fp_name="/test_rom_lut_calo_inv_dr_sq_all_tb/deta_i">
+      <obj_property name="ElementShortName">deta_i[7:0]</obj_property>
+      <obj_property name="ObjectShortName">deta_i[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/test_rom_lut_calo_inv_dr_sq_all_tb/dphi_i">
+      <obj_property name="ElementShortName">dphi_i[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dphi_i[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/test_rom_lut_calo_inv_dr_sq_all_tb/inv_dr_sq">
+      <obj_property name="ElementShortName">inv_dr_sq[25:0]</obj_property>
+      <obj_property name="ObjectShortName">inv_dr_sq[25:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/test_rom_lut_calo_inv_dr_sq_all_tb/dut/clk40">
+      <obj_property name="ElementShortName">clk40</obj_property>
+      <obj_property name="ObjectShortName">clk40</obj_property>
+   </wvobject>
+</wave_config>

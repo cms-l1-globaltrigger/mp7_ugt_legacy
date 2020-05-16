@@ -1,4 +1,4 @@
-Description of ROMs for LUTs with values for "inverted deltaR square (inv_dr_sq)"
+Description of ROMs for LUTs with values for "inverted deltaR square (inv_dr_sq)" of calos
 
 - The values of inv_dr_sq are used in "invariant mass divided by deltaR" conditions (for multiplication with invariant mass).
 - Formular for inv_dr_sq values: 1/(deta*0.0435)^2+(dphi*2*PI/144)^2

@@ -17,8 +17,7 @@ entity muon_muon_mass_div_dr_condition is
 
         same_bx: boolean; 
 
-        pt1_vector_width : positive; 
-        pt2_vector_width : positive; 
+        pt_vector_width : positive; 
         cosh_cos_vector_width : positive; 
         inv_dr_sq_vector_width : positive;
 
@@ -119,12 +118,12 @@ begin
                     generic map(
                         MUON_TYPE, MUON_DETA_BINS_WIDTH, MUON_DPHI_BINS_WIDTH,
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
-                        pt1_vector_width, pt2_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
+                        pt_vector_width, pt_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
                     )
                     port map(
                         lhc_clk,
                         deta_bin(i,j), dphi_bin(i,j),
-                        pt1(i)(pt1_vector_width-1 downto 0), pt2(j)(pt2_vector_width-1 downto 0),
+                        pt1(i)(pt_vector_width-1 downto 0), pt2(j)(pt_vector_width-1 downto 0),
                         cosh_deta(i,j), cos_dphi(i,j),
                         mass_div_dr_comp_t(i,j)
                     );
@@ -136,12 +135,12 @@ begin
                     generic map(
                         MUON_TYPE, MUON_DETA_BINS_WIDTH, MUON_DPHI_BINS_WIDTH,
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
-                        pt1_vector_width, pt2_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
+                        pt_vector_width, pt_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
                     )
                     port map(
                         lhc_clk,
                         deta_bin(i,j), dphi_bin(i,j),
-                        pt1(i)(pt1_vector_width-1 downto 0), pt2(j)(pt2_vector_width-1 downto 0),
+                        pt1(i)(pt_vector_width-1 downto 0), pt2(j)(pt_vector_width-1 downto 0),
                         cosh_deta(i,j), cos_dphi(i,j),
                         mass_div_dr_comp_pipe(i,j)
                     );

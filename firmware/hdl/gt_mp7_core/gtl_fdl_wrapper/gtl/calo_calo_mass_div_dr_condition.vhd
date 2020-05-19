@@ -16,6 +16,8 @@ use work.gtl_pkg.all;
 entity calo_calo_mass_div_dr_condition is
     generic(
 
+        same_bx: boolean; 
+
         pt1_vector_width : positive; 
         pt2_vector_width : positive; 
         cosh_cos_vector_width : positive; 
@@ -113,7 +115,7 @@ begin
     -- Comparison with limits.
     mass_l_1: for i in 0 to nr_objects_calo1-1 generate 
         mass_l_2: for j in 0 to nr_objects_calo2-1 generate
-            mass_calc_l1: if (obj_type_calo1 = obj_type_calo2) and j>i generate
+            mass_calc_l1: if (obj_type_calo1 = obj_type_calo2) and (same_bx = true) and j>i generate
                 calculator_i: entity work.mass_div_dr_calculator
                     generic map(
                         obj_type_calo1, CALO_DETA_BINS_WIDTH, CALO_DPHI_BINS_WIDTH,
@@ -130,7 +132,7 @@ begin
                 mass_div_dr_comp_pipe(i,j) <= mass_div_dr_comp_t(i,j);
                 mass_div_dr_comp_pipe(j,i) <= mass_div_dr_comp_t(i,j);
             end generate mass_calc_l1;
-            mass_calc_l2: if (obj_type_calo1 /= obj_type_calo2) generate
+            mass_calc_l2: if (obj_type_calo1 /= obj_type_calo2) or (same_bx = false) generate
                 calculator_i: entity work.mass_div_dr_calculator
                     generic map(
                         obj_type_calo1, CALO_DETA_BINS_WIDTH, CALO_DPHI_BINS_WIDTH,
@@ -206,11 +208,6 @@ begin
     -- Pipeline stage for obj_vs_templ
     obj_vs_templ_pipeline_p: process(lhc_clk, calo1_obj_vs_templ, calo2_obj_vs_templ)
         begin
--- 
---         if obj_vs_templ_pipeline_stage = false then 
---             calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
---             calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
---             mass_div_dr_comp_pipe <= mass_div_dr_comp;
         if (lhc_clk'event and lhc_clk = '1') then
             calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
             calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
@@ -230,10 +227,15 @@ begin
         condition_and_or_tmp := '0';
         for i in calo1_object_low to calo1_object_high loop 
             for j in calo2_object_low to calo2_object_high loop
+            if (obj_type_calo1 = obj_type_calo2) and (same_bx = true) then
                 if j/=i then
                 index := index + 1;
                 obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and mass_div_dr_comp_pipe(i,j);
                 end if;
+            else
+                index := index + 1;
+                obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and mass_div_dr_comp_pipe(i,j);
+            end if;
             end loop;
         end loop;
         for i in 1 to index loop 

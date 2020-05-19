@@ -38,13 +38,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="47"/>
-    <Option Name="WTModelSimExportSim" Val="47"/>
-    <Option Name="WTQuestaExportSim" Val="47"/>
-    <Option Name="WTIesExportSim" Val="47"/>
-    <Option Name="WTVcsExportSim" Val="47"/>
-    <Option Name="WTRivieraExportSim" Val="47"/>
-    <Option Name="WTActivehdlExportSim" Val="47"/>
+    <Option Name="WTXSimExportSim" Val="106"/>
+    <Option Name="WTModelSimExportSim" Val="106"/>
+    <Option Name="WTQuestaExportSim" Val="106"/>
+    <Option Name="WTIesExportSim" Val="106"/>
+    <Option Name="WTVcsExportSim" Val="106"/>
+    <Option Name="WTRivieraExportSim" Val="106"/>
+    <Option Name="WTActivehdlExportSim" Val="106"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -120,14 +120,61 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/../rom_lut_calo_inv_dr_sq_1/rom_lut_calo_inv_dr_sq_1.xci">
+      <File Path="$PPRDIR/../rom_lut_muon_inv_dr_sq_part1.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/../rom_lut_calo_inv_dr_sq_2/rom_lut_calo_inv_dr_sq_2.xci">
+      <File Path="$PPRDIR/../rom_lut_muon_inv_dr_sq_part3.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../rom_lut_muon_inv_dr_sq_part4.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../rom_lut_muon_inv_dr_sq_part5.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../rom_lut_muon_inv_dr_sq_part6.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../rom_lut_muon_inv_dr_sq_part7.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../rom_lut_muon_inv_dr_sq_part8.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../rom_lut_muon_inv_dr_sq_part9.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../rom_lut_muon_inv_dr_sq_part2.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../rom_lut_muon_inv_dr_sq_9/rom_lut_muon_inv_dr_sq_9.xci">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>

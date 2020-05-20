@@ -850,7 +850,7 @@ constant MAX_WIDTH_TBPT_LIMIT_VECTOR : positive := 64;
 type addr_rom_lut_calo_inv_dr_sq_array is array (natural range <>, natural range <>) of std_logic_vector(15 downto 0);
 
 constant CALO_DETA_BINS : positive := 230;
-constant CALO_DPHI_BINS : positive := 144;
+constant CALO_DPHI_BINS : positive := CALO_PHI_BINS; -- 144
 
 constant CALO_DETA_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DETA_BINS))+1 
 constant CALO_DPHI_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DPHI_BINS))+1
@@ -867,22 +867,34 @@ constant JET_TAU_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH
 constant TAU_TAU_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
 type calo_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
 
-constant MUON_DETA_BINS : positive := 225; -- double resolution of calos
-constant MUON_DPHI_BINS : positive := 144; -- same resolution as calos
+constant MUON_DETA_BINS : positive := 451;
+constant MUON_DPHI_BINS : positive := MUON_PHI_BINS; -- 576
 
-constant MUON_DETA_BINS_WIDTH : positive := 8; -- => int(log2(MUON_DETA_BINS))+1 
-constant MUON_DPHI_BINS_WIDTH : positive := 8; -- => int(log2(MUON_DPHI_BINS))+1
-type muon_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MUON_DETA_BINS_WIDTH-1 downto 0);
-type muon_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MUON_DPHI_BINS_WIDTH-1 downto 0);
+constant MU_DETA_BINS_WIDTH : positive := 9; -- => int(log2(MUON_DETA_BINS))+1 
+constant MU_DPHI_BINS_WIDTH : positive := 10; -- => int(log2(MUON_DPHI_BINS))+1
+type muon_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DETA_BINS_WIDTH-1 downto 0);
+type muon_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DPHI_BINS_WIDTH-1 downto 0);
 
-constant MAX_INV_DR_SQ_VECTOR_WIDTH : positive := 32;
-constant MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR : positive := 80;
-type max_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
+-- full muon bins would exceed BRAM resources, therefore reduced bins for ROMs are used
+constant MUON_DETA_BINS_ROM : positive := 225; -- double resolution of calos (half of muon eta bins)
+constant MUON_DPHI_BINS_ROM : positive := 144; -- same resolution as calos (quarter of muon phi bins)
+
+constant MU_DETA_BINS_WIDTH_ROM : positive := 8; -- => int(log2(MUON_DETA_BINS_ROM))+1 
+constant MU_DPHI_BINS_WIDTH_ROM : positive := 8; -- => int(log2(MUON_DPHI_BINS_ROM))+1
 
 constant MUON_INV_DR_SQ_LUT_MAX_VAL : natural := 211388559;
 constant MUON_INV_DR_SQ_VECTOR_WIDTH : natural := 28; -- => log2(MUON_INV_DR_SQ_LUT_MAX_VAL)
 constant MU_INV_DR_SQ_VECTOR_WIDTH : natural := MUON_INV_DR_SQ_VECTOR_WIDTH;
 type muon_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MUON_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
+
+constant MAX_INV_DR_SQ_VECTOR_WIDTH : positive := MUON_INV_DR_SQ_VECTOR_WIDTH; -- 28, max(CALO_INV_DR_SQ_VECTOR_WIDTH, MU_INV_DR_SQ_VECTOR_WIDTH)
+-- constant MAX_CALO_PT_VECTOR_WIDTH : positive := max(EG_PT_VECTOR_WIDTH, JET_PT_VECTOR_WIDTH, TAU_PT_VECTOR_WIDTH);
+-- constant MAX_PT_VECTOR_WIDTH : positive := max(MAX_CALO_PT_VECTOR_WIDTH, MU_PT_VECTOR_WIDTH); -- 14 (JET_PT_VECTOR_WIDTH)
+-- constant MAX_COSH_COS_VECTOR_WIDTH : positive := max(CALO_COSH_COS_VECTOR_WIDTH, CALO_MUON_COSH_COS_VECTOR_WIDTH, MU_MU_COSH_COS_VECTOR_WIDTH); -- 27 (CALO_MUON_COSH_COS_VECTOR_WIDTH)
+
+constant MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR : positive := 84; -- 2*14+27+28=83, 2*MAX_PT_VECTOR_WIDTH+MAX_COSH_COS_VECTOR_WIDTH+MAX_INV_DR_SQ_VECTOR_WIDTH, width 84 used for hex notation !
+type max_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
+
 -- ********************************************************
 -- conversion LUTs
 type calo_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;

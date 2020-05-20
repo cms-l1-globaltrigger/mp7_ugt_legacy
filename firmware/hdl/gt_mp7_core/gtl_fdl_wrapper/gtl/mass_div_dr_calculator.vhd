@@ -16,8 +16,8 @@ use work.gtl_pkg.all;
 entity mass_div_dr_calculator is
     generic (
         obj_type : natural := EG_TYPE;
-        deta_bins_width : natural := CALO_DETA_BINS_WIDTH;
-        dphi_bins_width : natural := CALO_DPHI_BINS_WIDTH;
+        deta_bins_width : natural := 8;
+        dphi_bins_width : natural := 8;
 -- limits for comparison of invariant mass divided by deltaR
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
@@ -87,16 +87,15 @@ begin
             );
     end generate rom_lut_calo_sel;
 
--- -- HB 2020-05-13: NOT DONE YET! Module rom_lut_muon_inv_dr_sq_all not designed yet!
---     rom_lut_muon_sel: if obj_type = MUON_TYPE generate
---         rom_lut_i : rom_lut_muon_inv_dr_sq_all
---             port map (
---                 clka => clk,
---                 deta => deta_bin,
---                 dphi => dphi_bin,
---                 dout => inv_dr_sq
---             );
---     end generate rom_lut_muon_sel;
+    rom_lut_muon_sel: if obj_type = MUON_TYPE generate
+        rom_lut_i : rom_lut_muon_inv_dr_sq_all
+            port map (
+                clka => clk,
+                deta => deta_bin,
+                dphi => dphi_bin,
+                dout => inv_dr_sq
+            );
+    end generate rom_lut_muon_sel;
 
     mass_div_dr <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_mass_div_dr;
     sim_mass_div_dr <= mass_div_dr;

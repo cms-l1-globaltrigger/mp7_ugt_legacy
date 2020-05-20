@@ -116,13 +116,14 @@ begin
             mass_calc_l1: if (same_bx = true) and j>i generate
                 calculator_i: entity work.mass_div_dr_calculator
                     generic map(
-                        MUON_TYPE, MUON_DETA_BINS_WIDTH, MUON_DPHI_BINS_WIDTH,
+                        MUON_TYPE, MU_DETA_BINS_WIDTH_ROM, MU_DPHI_BINS_WIDTH_ROM,
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
                         pt_vector_width, pt_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
                     )
                     port map(
                         lhc_clk,
-                        deta_bin(i,j), dphi_bin(i,j),
+                        deta_bin(i,j)(MU_DETA_BINS_WIDTH-1 downto MU_DETA_BINS_WIDTH-MU_DETA_BINS_WIDTH_ROM), 
+                        dphi_bin(i,j)(MU_DPHI_BINS_WIDTH-1 downto MU_DPHI_BINS_WIDTH-MU_DPHI_BINS_WIDTH_ROM),
                         pt1(i)(pt_vector_width-1 downto 0), pt2(j)(pt_vector_width-1 downto 0),
                         cosh_deta(i,j), cos_dphi(i,j),
                         mass_div_dr_comp_t(i,j)
@@ -133,13 +134,14 @@ begin
             mass_calc_l2: if same_bx = false generate
                 calculator_i: entity work.mass_div_dr_calculator
                     generic map(
-                        MUON_TYPE, MUON_DETA_BINS_WIDTH, MUON_DPHI_BINS_WIDTH,
+                        MUON_TYPE, MU_DETA_BINS_WIDTH_ROM, MU_DPHI_BINS_WIDTH_ROM,
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
                         pt_vector_width, pt_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
                     )
                     port map(
                         lhc_clk,
-                        deta_bin(i,j), dphi_bin(i,j),
+                        deta_bin(i,j)(MU_DETA_BINS_WIDTH-1 downto MU_DETA_BINS_WIDTH-MU_DETA_BINS_WIDTH_ROM), 
+                        dphi_bin(i,j)(MU_DPHI_BINS_WIDTH-1 downto MU_DPHI_BINS_WIDTH-MU_DPHI_BINS_WIDTH_ROM),
                         pt1(i)(pt_vector_width-1 downto 0), pt2(j)(pt_vector_width-1 downto 0),
                         cosh_deta(i,j), cos_dphi(i,j),
                         mass_div_dr_comp_pipe(i,j)

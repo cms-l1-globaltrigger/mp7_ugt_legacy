@@ -864,10 +864,10 @@ type calo_inv_dr_sq_vector_array is array (natural range <>, natural range <>) o
 constant MUON_DETA_BINS : positive := 225; -- double resolution of calos
 constant MUON_DPHI_BINS : positive := 144; -- same resolution as calos
 
-constant MUON_DETA_BINS_WIDTH : positive := 8; -- => int(log2(MUON_DETA_BINS))+1 
-constant MUON_DPHI_BINS_WIDTH : positive := 8; -- => int(log2(MUON_DPHI_BINS))+1
-type muon_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MUON_DETA_BINS_WIDTH-1 downto 0);
-type muon_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MUON_DPHI_BINS_WIDTH-1 downto 0);
+constant MU_DETA_BINS_WIDTH : positive := 8; -- => int(log2(MUON_DETA_BINS))+1 
+constant MU_DPHI_BINS_WIDTH : positive := 8; -- => int(log2(MUON_DPHI_BINS))+1
+type muon_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DETA_BINS_WIDTH-1 downto 0);
+type muon_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DPHI_BINS_WIDTH-1 downto 0);
 
 constant MAX_INV_DR_SQ_VECTOR_WIDTH : positive := 32;
 constant MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR : positive := 80;

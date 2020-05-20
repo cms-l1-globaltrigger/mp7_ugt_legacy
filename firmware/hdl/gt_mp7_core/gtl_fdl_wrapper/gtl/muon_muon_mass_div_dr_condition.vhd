@@ -24,8 +24,8 @@ entity muon_muon_mass_div_dr_condition is
 
         muon1_object_low: natural;
         muon1_object_high: natural;
-        et_ge_mode_muon1: boolean;
-        et_threshold_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        pt_ge_mode_muon1: boolean;
+        pt_threshold_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         nr_eta_windows_muon1 : natural;
         eta_w1_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         eta_w1_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
@@ -49,8 +49,8 @@ entity muon_muon_mass_div_dr_condition is
 
         muon2_object_low: natural;
         muon2_object_high: natural;
-        et_ge_mode_muon2: boolean;
-        et_threshold_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        pt_ge_mode_muon2: boolean;
+        pt_threshold_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         nr_eta_windows_muon2 : natural;
         eta_w1_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         eta_w1_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
@@ -71,6 +71,8 @@ entity muon_muon_mass_div_dr_condition is
         requested_charge_muon2: string(1 to 3);
         qual_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0);
         iso_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0);
+
+        requested_charge_correlation: string(1 to 2);
 
         mass_div_dr_upper_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
         mass_div_dr_lower_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0)
@@ -100,6 +102,12 @@ architecture rtl of muon_muon_mass_div_dr_condition is
 
     signal muon1_obj_vs_templ, muon1_obj_vs_templ_pipe : std_logic_2dim_array(muon1_object_low to muon1_object_high, 1 to 1);
     signal muon2_obj_vs_templ, muon2_obj_vs_templ_pipe : std_logic_2dim_array(muon2_object_low to muon2_object_high, 1 to 1);
+
+--***************************************************************
+-- signals for charge correlation comparison:
+    signal charge_comp_double : muon_charcorr_double_array := (others => (others => '0'));
+    signal charge_comp_double_pipe : muon_charcorr_double_array;
+--***************************************************************
 
 -- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
     signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) :=

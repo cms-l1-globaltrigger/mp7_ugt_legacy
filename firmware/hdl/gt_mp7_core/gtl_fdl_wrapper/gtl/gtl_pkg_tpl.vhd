@@ -895,6 +895,11 @@ constant MAX_INV_DR_SQ_VECTOR_WIDTH : positive := MUON_INV_DR_SQ_VECTOR_WIDTH; -
 constant MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR : positive := 84; -- 2*14+27+28=83, 2*MAX_PT_VECTOR_WIDTH+MAX_COSH_COS_VECTOR_WIDTH+MAX_INV_DR_SQ_VECTOR_WIDTH, width 84 used for hex notation !
 type max_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
 
+-- ROM selection
+constant CALO_CALO_ROM : natural range 0 to 2 := 0;
+constant MU_MU_ROM : natural range 0 to 2 := 1;
+constant CALO_MU_ROM : natural range 0 to 2 := 2;
+
 -- ********************************************************
 -- conversion LUTs
 type calo_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;

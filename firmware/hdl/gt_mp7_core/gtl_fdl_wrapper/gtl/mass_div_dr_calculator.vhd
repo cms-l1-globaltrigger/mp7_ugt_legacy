@@ -15,7 +15,7 @@ use work.gtl_pkg.all;
 
 entity mass_div_dr_calculator is
     generic (
-        obj_type : natural := EG_TYPE;
+        rom_sel : natural := CALO_CALO_ROM;
         deta_bins_width : natural := 8;
         dphi_bins_width : natural := 8;
 -- limits for comparison of invariant mass divided by deltaR
@@ -51,6 +51,15 @@ architecture rtl of mass_div_dr_calculator is
     );
     END COMPONENT;
     
+    COMPONENT rom_lut_muon_inv_dr_sq_all
+    PORT (
+        clk : IN STD_LOGIC;
+        deta : in STD_LOGIC_VECTOR(7 DOWNTO 0);
+        dphi : in STD_LOGIC_VECTOR(7 DOWNTO 0);
+        dout : out STD_LOGIC_VECTOR(25 DOWNTO 0)
+    );
+    END COMPONENT;
+    
 -- HB 2015-10-21: length of std_logic_vector for invariant mass (invariant_mass_sq_div2) and limits.
     constant mass_vector_width : positive := pt1_width+pt2_width+cosh_cos_width;
     constant mass_div_dr_vector_width : positive := mass_vector_width+inv_dr_sq_width;
@@ -77,7 +86,7 @@ begin
     invariant_mass_sq_div2 <= pt1 * pt2 * (cosh_deta - cos_dphi);
     
 -- one clk for ROM
-    rom_lut_calo_sel: if obj_type = EG_TYPE or obj_type = JET_TYPE or obj_type = TAU_TYPE generate
+    rom_lut_calo_sel: if rom_sel = CALO_CALO_ROM generate
         rom_lut_i : rom_lut_calo_inv_dr_sq_all
             port map (
                 clk => clk,
@@ -87,7 +96,7 @@ begin
             );
     end generate rom_lut_calo_sel;
 
-    rom_lut_muon_sel: if obj_type = MUON_TYPE generate
+    rom_lut_muon_sel: if rom_sel = MU_MU_ROM generate
         rom_lut_i : rom_lut_muon_inv_dr_sq_all
             port map (
                 clka => clk,

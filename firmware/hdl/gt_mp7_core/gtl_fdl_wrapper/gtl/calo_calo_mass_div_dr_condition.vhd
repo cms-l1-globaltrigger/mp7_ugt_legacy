@@ -118,7 +118,7 @@ begin
             mass_calc_l1: if (obj_type_calo1 = obj_type_calo2) and (same_bx = true) and j>i generate
                 calculator_i: entity work.mass_div_dr_calculator
                     generic map(
-                        obj_type_calo1, CALO_DETA_BINS_WIDTH, CALO_DPHI_BINS_WIDTH,
+                        CALO_CALO_ROM, CALO_DETA_BINS_WIDTH, CALO_DPHI_BINS_WIDTH,
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
                         pt1_vector_width, pt2_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
                     )
@@ -135,7 +135,7 @@ begin
             mass_calc_l2: if (obj_type_calo1 /= obj_type_calo2) or (same_bx = false) generate
                 calculator_i: entity work.mass_div_dr_calculator
                     generic map(
-                        obj_type_calo1, CALO_DETA_BINS_WIDTH, CALO_DPHI_BINS_WIDTH,
+                        CALO_CALO_ROM, CALO_DETA_BINS_WIDTH, CALO_DPHI_BINS_WIDTH,
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
                         pt1_vector_width, pt2_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
                     )

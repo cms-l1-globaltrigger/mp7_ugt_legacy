@@ -116,7 +116,7 @@ begin
             mass_calc_l1: if (same_bx = true) and j>i generate
                 calculator_i: entity work.mass_div_dr_calculator
                     generic map(
-                        MUON_TYPE, MU_DETA_BINS_WIDTH_ROM, MU_DPHI_BINS_WIDTH_ROM,
+                        MU_MU_ROM, MU_DETA_BINS_WIDTH_ROM, MU_DPHI_BINS_WIDTH_ROM,
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
                         pt_vector_width, pt_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
                     )
@@ -134,7 +134,7 @@ begin
             mass_calc_l2: if same_bx = false generate
                 calculator_i: entity work.mass_div_dr_calculator
                     generic map(
-                        MUON_TYPE, MU_DETA_BINS_WIDTH_ROM, MU_DPHI_BINS_WIDTH_ROM,
+                        MU_MU_ROM, MU_DETA_BINS_WIDTH_ROM, MU_DPHI_BINS_WIDTH_ROM,
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
                         pt_vector_width, pt_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
                     )

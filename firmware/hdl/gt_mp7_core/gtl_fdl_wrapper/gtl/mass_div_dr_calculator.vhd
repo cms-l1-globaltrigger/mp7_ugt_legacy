@@ -56,7 +56,7 @@ architecture rtl of mass_div_dr_calculator is
         clk : IN STD_LOGIC;
         deta : in STD_LOGIC_VECTOR(7 DOWNTO 0);
         dphi : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-        dout : out STD_LOGIC_VECTOR(25 DOWNTO 0)
+        dout : out STD_LOGIC_VECTOR(27 DOWNTO 0)
     );
     END COMPONENT;
     

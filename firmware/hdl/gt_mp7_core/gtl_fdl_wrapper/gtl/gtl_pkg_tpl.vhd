@@ -98,6 +98,7 @@ constant MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"000000
 -- MUONs
 constant NR_MUON_TEMPLATES : positive range 1 to 4 := 4; -- number of max. templates for muon conditions
 constant NR_MUON_OBJECTS : positive := MUON_ARRAY_LENGTH; -- from lhc_data_pkg.vhd
+constant NR_MU_OBJECTS : positive := NR_MUON_OBJECTS;
 constant MAX_MUON_BITS : positive := MUON_DATA_WIDTH; -- from lhc_data_pkg.vhd
 constant MAX_MUON_TEMPLATES_BITS : positive range 1 to MUON_DATA_WIDTH := 16;
 
@@ -515,6 +516,7 @@ constant CALO_PHI_BINS : positive := 144; -- values from scales
 constant MUON_PHI_BINS : positive := 576; -- values from scales
 constant CALO_PHI_HALF_RANGE_BINS : positive := CALO_PHI_BINS/2; -- 144/2, because of phi bin width = 2*PI/144
 constant MUON_PHI_HALF_RANGE_BINS : positive := MUON_PHI_BINS/2; -- 576/2, because of phi bin width = 2*PI/576
+constant MU_PHI_HALF_RANGE_BINS : positive := MUON_PHI_HALF_RANGE_BINS;
 
 constant PHI_MIN : real := 0.0; -- phi min.: 0.0
 constant PHI_MAX : real := 2.0*PI; -- phi max.: 2*PI
@@ -879,6 +881,7 @@ type max_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of
 
 constant MUON_INV_DR_SQ_LUT_MAX_VAL : natural := 211388559;
 constant MUON_INV_DR_SQ_VECTOR_WIDTH : natural := 28; -- => log2(MUON_INV_DR_SQ_LUT_MAX_VAL)
+constant MU_INV_DR_SQ_VECTOR_WIDTH : natural := MUON_INV_DR_SQ_VECTOR_WIDTH;
 type muon_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MUON_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
 -- ********************************************************
 -- conversion LUTs
@@ -2363,5 +2366,8 @@ constant MUON_SIN_PHI_LUT : muon_sin_cos_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
+
+constant MU_COS_PHI_LUT : muon_sin_cos_phi_lut_array := MUON_COS_PHI_LUT;
+constant MU_SIN_PHI_LUT : muon_sin_cos_phi_lut_array := MUON_SIN_PHI_LUT;
 
 end package;

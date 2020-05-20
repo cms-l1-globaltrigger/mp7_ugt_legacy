@@ -82,6 +82,8 @@ entity muon_muon_mass_div_dr_condition is
         lhc_clk: in std_logic;
         muon1_data_i: in muon_objects_array;
         muon2_data_i: in muon_objects_array;
+        ls_charcorr_double: in muon_charcorr_double_array;
+        os_charcorr_double: in muon_charcorr_double_array;
         deta_bin : in muon_deta_bin_vector_array;
         dphi_bin : in muon_dphi_bin_vector_array;
         pt1 : in diff_inputs_array;

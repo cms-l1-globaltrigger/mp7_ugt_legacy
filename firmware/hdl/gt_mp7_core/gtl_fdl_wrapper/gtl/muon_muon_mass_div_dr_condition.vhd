@@ -3,6 +3,7 @@
 -- Invariant mass divided by deltaR condition for muons.
 
 -- Version history:
+-- HB 2020-05-20: reduced deta_bin and dphi_bin width for mass_div_dr_calculator to get 8 bits width (ROM address) for both.
 -- HB 2020-05-19: first design.
 
 library ieee;

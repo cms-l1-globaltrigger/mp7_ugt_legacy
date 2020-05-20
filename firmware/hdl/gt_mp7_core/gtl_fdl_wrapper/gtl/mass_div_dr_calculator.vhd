@@ -99,7 +99,7 @@ begin
     rom_lut_muon_sel: if rom_sel = MU_MU_ROM generate
         rom_lut_i : rom_lut_muon_inv_dr_sq_all
             port map (
-                clka => clk,
+                clk => clk,
                 deta => deta_bin,
                 dphi => dphi_bin,
                 dout => inv_dr_sq

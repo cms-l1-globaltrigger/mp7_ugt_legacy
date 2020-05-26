@@ -13,12 +13,12 @@
     git checkout master
 
     # Run simulation
-    cd <local path>/ugt/
-    python mp7_ugt/scripts/run_simulation_questa_<vivado version>.py <L1Menu name> --mp7_tag <local mp7 path>
+    cd <local path>/mp7_ugt_legacy
+    python scripts/run_simulation_questa.py <L1Menu name> --url <url l1menu> --mp7_tag <local mp7 path>
     
     # Example
     cd ~/github/cms-l1-globaltrigger/mp7_ugt_legacy
-    python mp7_ugt/scripts/run_simulation_questa_2019.2.py L1Menu_Collisions2018_v2_1_0-d2 --mp7_tag ~/gitlab/hbergaue/mp7
+    python scripts/run_simulation_questa.py L1Menu_Collisions2018_v2_1_0-d5 --url https://raw.githubusercontent.com/herbberg/l1menus/master --mp7_tag ~/gitlab/hbergaue/mp7
     
 ## Build mp7_ugt firmware with IPBB #
 

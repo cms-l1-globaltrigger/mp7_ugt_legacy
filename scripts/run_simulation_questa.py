@@ -281,9 +281,13 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
     # Get l1menus_path for URL
     #url_menu = "{}/{}".format(url_menu_default, a_menu)
     url_menu = "{}/{}".format(a_url_menu, a_menu)
+    print "=== url_menu: ", url_menu
     xml_name = "{}{}".format(a_menu, '.xml')    
+    print "=== xml_name: ", xml_name
     menu_filepath = os.path.join(temp_dir, xml_name)
+    print "=== menu_filepath: ", menu_filepath
     url = "{}/xml/{}".format(url_menu, xml_name)    
+    print "=== url: ", url
     download_file_from_url(url, menu_filepath)
     # Remove "distribution number" from a_menu for testvector file name
     tv_name = "TestVector_{}{}".format((re.split("-", a_menu)[0]), '.txt') 

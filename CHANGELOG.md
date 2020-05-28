@@ -4,6 +4,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
   
+## [v1.12.0] - 2020-05-28
+### Comment
+
+- mp7_ugt firmware release v1.12.0 (added files for invariant mass divided by deltaR).
+
+### Added
+- source files:
+  - ../gtl/calo_calo_mass_div_dr_condition.vhd
+  - ../gtl/muon_muon_mass_div_dr_condition.vhd
+  - ../gtl/mass_div_dr_calculator.vhd
+  - ../gtl/rom_lut_calo_inv_dr_sq_all.vhd
+  - ../gtl/rom_lut_muon_inv_dr_sq_all.vhd
+  - ../ngc/rom_lut_calo_inv_dr_sq_1/*.*
+  ...
+  - ../ngc/rom_lut_calo_inv_dr_sq_9/*.*
+  - ../ngc/rom_lut_muon_inv_dr_sq_1/*.*
+  ...
+  - ../ngc/rom_lut_muon_inv_dr_sq_9/*.*
+
+### Changed
+- source files:
+  - ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
+  - ../gtl/gtl_module_tpl.vhd
+  - ../gtl/gtl_pkg_tpl.vhd
+  - ../gtl/gtl_pkg_sim.vhd
+- simulation files:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
+- dep file:
+  - ../cfg/uGT_algo.dep
+- script files:
+  - ../scripts/checkIpbbSynth.py
+
 ## [v1.11.0] - 2020-02-19
 ### Comment
 
@@ -14,7 +46,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../gtl/sum_mass_calc.vhd
   - ../gtl/muon_mass_3_obj_condition.vhd
   - ../gtl/calo_mass_3_obj_condition.vhd
-  
+
 ### Changed
 - source files:
   - ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
@@ -24,7 +56,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
 - dep file:
   - ../cfg/uGT_algo.dep
-  
+
 ## [v1.10.7] - 2020-02-03
 ### Comment
 
@@ -35,7 +67,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../gtl/muon_mass_3_obj_condition.vhd
   - ../gtl/sum_mass_calc.vhd
-  
+
 ## [v1.10.6] - 2020-01-28
 ### Comment
 

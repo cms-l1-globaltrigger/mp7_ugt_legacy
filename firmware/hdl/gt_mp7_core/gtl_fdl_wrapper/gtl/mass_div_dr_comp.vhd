@@ -21,7 +21,7 @@ entity mass_div_dr_comp is
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0)
     );
     port(
-        mass_div_dr : in std_logic_vector(cosh_cos_width-1 downto 0);
+        mass_div_dr : in std_logic_vector(mass_div_dr_vector_width-1 downto 0);
         mass_comp : out std_logic
     );
 end mass_div_dr_comp;

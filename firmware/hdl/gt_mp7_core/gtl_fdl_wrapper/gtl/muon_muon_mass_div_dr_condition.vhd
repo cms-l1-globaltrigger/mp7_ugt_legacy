@@ -3,6 +3,7 @@
 -- Invariant mass divided by deltaR condition for muons.
 
 -- Version history:
+-- HB 2020-05-29: changed instance of mass_div_dr_calculator to mass_div_dr_comp.
 -- HB 2020-05-20: reduced deta_bin and dphi_bin width for mass_div_dr_calculator to get 8 bits width (ROM address) for both.
 -- HB 2020-05-19: first design.
 
@@ -17,10 +18,6 @@ entity muon_muon_mass_div_dr_condition is
     generic(
 
         same_bx: boolean; 
-
-        pt_vector_width : positive; 
-        cosh_cos_vector_width : positive; 
-        inv_dr_sq_vector_width : positive;
 
         muon1_object_low: natural;
         muon1_object_high: natural;
@@ -84,12 +81,7 @@ entity muon_muon_mass_div_dr_condition is
         muon2_data_i: in muon_objects_array;
         ls_charcorr_double: in muon_charcorr_double_array;
         os_charcorr_double: in muon_charcorr_double_array;
-        deta_bin : in muon_deta_bin_vector_array;
-        dphi_bin : in muon_dphi_bin_vector_array;
-        pt1 : in diff_inputs_array;
-        pt2 : in diff_inputs_array;
-        cosh_deta : in muon_cosh_cos_vector_array;
-        cos_dphi : in muon_cosh_cos_vector_array;
+        mass_div_dr : in mu_mu_mass_div_dr_vector_array;
         condition_o: out std_logic
     );
 end muon_muon_mass_div_dr_condition; 
@@ -98,7 +90,7 @@ architecture rtl of muon_muon_mass_div_dr_condition is
 
 -- fixed pipeline structure, 2 stages total
 --     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
--- obj_vs_templ_pipeline_stage not used, because of 1 bx pipeline of ROMs (for LUTs of inv_dr_sq values in mass_div_dr_calculator.vhd)
+-- obj_vs_templ_pipeline_stage not used, because of 1 bx pipeline of ROMs (for LUTs of inv_dr_sq values in mass_div_dr_comp.vhd)
 
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
@@ -125,36 +117,26 @@ begin
     mass_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
         mass_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
             mass_calc_l1: if (same_bx = true) and j>i generate
-                calculator_i: entity work.mass_div_dr_calculator
+                calculator_i: entity work.mass_div_dr_comp
                     generic map(
-                        MU_MU_ROM, MU_DETA_BINS_WIDTH_ROM, MU_DPHI_BINS_WIDTH_ROM,
-                        mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
-                        pt_vector_width, pt_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
+                        MU_MU_MASS_DIV_DR_VECTOR_WIDTH,
+                        mass_div_dr_upper_limit, mass_div_dr_lower_limit 
                     )
                     port map(
-                        lhc_clk,
-                        deta_bin(i,j)(MU_DETA_BINS_WIDTH-1 downto MU_DETA_BINS_WIDTH-MU_DETA_BINS_WIDTH_ROM), 
-                        dphi_bin(i,j)(MU_DPHI_BINS_WIDTH-1 downto MU_DPHI_BINS_WIDTH-MU_DPHI_BINS_WIDTH_ROM),
-                        pt1(i)(pt_vector_width-1 downto 0), pt2(j)(pt_vector_width-1 downto 0),
-                        cosh_deta(i,j), cos_dphi(i,j),
+                        mass_div_dr(i,j),
                         mass_div_dr_comp_t(i,j)
                     );
                 mass_div_dr_comp_pipe(i,j) <= mass_div_dr_comp_t(i,j);
                 mass_div_dr_comp_pipe(j,i) <= mass_div_dr_comp_t(i,j);
             end generate mass_calc_l1;
             mass_calc_l2: if same_bx = false generate
-                calculator_i: entity work.mass_div_dr_calculator
+                calculator_i: entity work.mass_div_dr_comp
                     generic map(
-                        MU_MU_ROM, MU_DETA_BINS_WIDTH_ROM, MU_DPHI_BINS_WIDTH_ROM,
-                        mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
-                        pt_vector_width, pt_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
+                        MU_MU_MASS_DIV_DR_VECTOR_WIDTH,
+                        mass_div_dr_upper_limit, mass_div_dr_lower_limit 
                     )
                     port map(
-                        lhc_clk,
-                        deta_bin(i,j)(MU_DETA_BINS_WIDTH-1 downto MU_DETA_BINS_WIDTH-MU_DETA_BINS_WIDTH_ROM), 
-                        dphi_bin(i,j)(MU_DPHI_BINS_WIDTH-1 downto MU_DPHI_BINS_WIDTH-MU_DPHI_BINS_WIDTH_ROM),
-                        pt1(i)(pt_vector_width-1 downto 0), pt2(j)(pt_vector_width-1 downto 0),
-                        cosh_deta(i,j), cos_dphi(i,j),
+                        mass_div_dr(i,j),
                         mass_div_dr_comp_pipe(i,j)
                     );
             end generate mass_calc_l2;
@@ -225,7 +207,7 @@ begin
         if (lhc_clk'event and lhc_clk = '1') then
             muon1_obj_vs_templ_pipe <= muon1_obj_vs_templ;
             muon2_obj_vs_templ_pipe <= muon2_obj_vs_templ;
--- mass_div_dr_comp_pipe: 1 bx pipeline done with ROMs for LUTs of inv_dr_sq values in mass_div_dr_calculator.vhd
+-- mass_div_dr_comp_pipe: 1 bx pipeline done with ROMs for LUTs of inv_dr_sq values in mass_div_dr_comp.vhd
         end if;
     end process;
 

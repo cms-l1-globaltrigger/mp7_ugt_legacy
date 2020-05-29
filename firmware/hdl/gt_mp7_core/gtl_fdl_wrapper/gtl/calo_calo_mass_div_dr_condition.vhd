@@ -3,6 +3,7 @@
 -- Invariant mass divided by deltaR condition for calos (eg, jet and tau).
 
 -- Version history:
+-- HB 2020-05-29: changed instance of mass_div_dr_calculator to mass_div_dr_comp.
 -- HB 2020-05-14: updated for mass_div_dr_calculator.vhd, removed use clause work.delta_r_lut_pkg.all.
 -- HB 2020-03-06: first design.
 
@@ -18,10 +19,7 @@ entity calo_calo_mass_div_dr_condition is
 
         same_bx: boolean; 
 
-        pt1_vector_width : positive; 
-        pt2_vector_width : positive; 
-        cosh_cos_vector_width : positive; 
-        inv_dr_sq_vector_width : positive;
+        mass_div_dr_vector_width : positive;
 
         nr_objects_calo1: natural;
         calo1_object_low: natural;
@@ -75,18 +73,13 @@ entity calo_calo_mass_div_dr_condition is
 
         mass_div_dr_upper_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
         mass_div_dr_lower_limit: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0)
-
+        
     );
     port(
         lhc_clk: in std_logic;
         calo1_data_i: in calo_objects_array;
         calo2_data_i: in calo_objects_array;
-        deta_bin : in calo_deta_bin_vector_array;
-        dphi_bin : in calo_dphi_bin_vector_array;
-        pt1 : in diff_inputs_array;
-        pt2 : in diff_inputs_array;
-        cosh_deta : in calo_cosh_cos_vector_array;
-        cos_dphi : in calo_cosh_cos_vector_array;
+        mass_div_dr : in calo_calo_mass_div_dr_vector_array;
         condition_o: out std_logic
     );
 end calo_calo_mass_div_dr_condition; 
@@ -95,7 +88,7 @@ architecture rtl of calo_calo_mass_div_dr_condition is
 
 -- fixed pipeline structure, 2 stages total
 --     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
--- obj_vs_templ_pipeline_stage not used, because of 1 bx pipeline of ROMs (for LUTs of inv_dr_sq values in mass_div_dr_calculator.vhd)
+-- obj_vs_templ_pipeline_stage not used, because of 1 bx pipeline of ROMs (for LUTs of inv_dr_sq values in mass_div_dr_comp.vhd)
 
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
@@ -116,34 +109,26 @@ begin
     mass_l_1: for i in 0 to nr_objects_calo1-1 generate 
         mass_l_2: for j in 0 to nr_objects_calo2-1 generate
             mass_calc_l1: if (obj_type_calo1 = obj_type_calo2) and (same_bx = true) and j>i generate
-                calculator_i: entity work.mass_div_dr_calculator
+                calculator_i: entity work.mass_div_dr_comp
                     generic map(
-                        CALO_CALO_ROM, CALO_DETA_BINS_WIDTH, CALO_DPHI_BINS_WIDTH,
-                        mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
-                        pt1_vector_width, pt2_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
+                        mass_div_dr_vector_width,
+                        mass_div_dr_upper_limit, mass_div_dr_lower_limit 
                     )
                     port map(
-                        lhc_clk,
-                        deta_bin(i,j), dphi_bin(i,j),
-                        pt1(i)(pt1_vector_width-1 downto 0), pt2(j)(pt2_vector_width-1 downto 0),
-                        cosh_deta(i,j), cos_dphi(i,j),
+                        mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0),
                         mass_div_dr_comp_t(i,j)
                     );
                 mass_div_dr_comp_pipe(i,j) <= mass_div_dr_comp_t(i,j);
                 mass_div_dr_comp_pipe(j,i) <= mass_div_dr_comp_t(i,j);
             end generate mass_calc_l1;
             mass_calc_l2: if (obj_type_calo1 /= obj_type_calo2) or (same_bx = false) generate
-                calculator_i: entity work.mass_div_dr_calculator
+                calculator_i: entity work.mass_div_dr_comp
                     generic map(
-                        CALO_CALO_ROM, CALO_DETA_BINS_WIDTH, CALO_DPHI_BINS_WIDTH,
-                        mass_div_dr_upper_limit, mass_div_dr_lower_limit, 
-                        pt1_vector_width, pt2_vector_width, cosh_cos_vector_width, inv_dr_sq_vector_width
+                        mass_div_dr_vector_width,
+                        mass_div_dr_upper_limit, mass_div_dr_lower_limit 
                     )
                     port map(
-                        lhc_clk,
-                        deta_bin(i,j), dphi_bin(i,j),
-                        pt1(i)(pt1_vector_width-1 downto 0), pt2(j)(pt2_vector_width-1 downto 0),
-                        cosh_deta(i,j), cos_dphi(i,j),
+                        mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0),
                         mass_div_dr_comp_pipe(i,j)
                     );
             end generate mass_calc_l2;
@@ -211,7 +196,7 @@ begin
         if (lhc_clk'event and lhc_clk = '1') then
             calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
             calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
--- mass_div_dr_comp_pipe: 1 bx pipeline done with ROMs for LUTs of inv_dr_sq values in mass_div_dr_calculator.vhd
+-- mass_div_dr_comp_pipe: 1 bx pipeline done with ROMs for LUTs of inv_dr_sq values in mass_div_dr_comp.vhd
         end if;
     end process;
 

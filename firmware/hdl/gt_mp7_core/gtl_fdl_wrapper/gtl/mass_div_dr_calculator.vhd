@@ -3,6 +3,7 @@
 -- Calculation of invariant mass divided by deltaR based on LUTs (ROMs).
 
 -- Version history:
+-- HB 2020-05-29: moved comparison to mass_div_dr_comp.vhd.
 -- HB 2020-05-14: first design.
 
 library ieee;
@@ -18,9 +19,9 @@ entity mass_div_dr_calculator is
         rom_sel : natural := CALO_CALO_ROM;
         deta_bins_width : natural := 8;
         dphi_bins_width : natural := 8;
--- limits for comparison of invariant mass divided by deltaR
-        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
-        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
+-- -- limits for comparison of invariant mass divided by deltaR
+--         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
+--         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
         pt1_width: positive := 12;
         pt2_width: positive := 12;
         cosh_cos_width: positive := 28;
@@ -34,9 +35,10 @@ entity mass_div_dr_calculator is
         pt2 : in std_logic_vector(pt2_width-1 downto 0);
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
-        mass_comp : out std_logic;
+--         mass_comp : out std_logic;
 -- simulation output
-        sim_mass_div_dr : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width+inv_dr_sq_width-1 downto 0)
+--         sim_mass_div_dr : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width+inv_dr_sq_width-1 downto 0)
+        mass_div_dr : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width+inv_dr_sq_width-1 downto 0)
     );
 end mass_div_dr_calculator;
 
@@ -66,10 +68,10 @@ architecture rtl of mass_div_dr_calculator is
 
     signal invariant_mass_sq_div2 : std_logic_vector(mass_vector_width-1 downto 0) := (others => '0');
 
--- HB 2020-04-23: calculation of invariant mass divided by deltaR (M**2/2 multiplicated with inverse deltaR squared values)
-    signal upper_limit : std_logic_vector(mass_div_dr_vector_width-1 downto 0);
-    signal lower_limit : std_logic_vector(mass_div_dr_vector_width-1 downto 0);
-    signal mass_div_dr : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '0');
+-- -- HB 2020-04-23: calculation of invariant mass divided by deltaR (M**2/2 multiplicated with inverse deltaR squared values)
+--     signal upper_limit : std_logic_vector(mass_div_dr_vector_width-1 downto 0);
+--     signal lower_limit : std_logic_vector(mass_div_dr_vector_width-1 downto 0);
+--     signal mass_div_dr : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '0');
     constant max_mass_div_dr : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '1');
     signal inv_dr_sq : std_logic_vector(inv_dr_sq_width-1 downto 0);
     
@@ -107,9 +109,9 @@ begin
     end generate rom_lut_muon_sel;
 
     mass_div_dr <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_mass_div_dr;
-    sim_mass_div_dr <= mass_div_dr;
+--     sim_mass_div_dr <= mass_div_dr;
     
 --     mass_comp <= '1' when mass_div_dr >= mass_lower_limit_vector(mass_div_dr_vector_width-1 downto 0) and mass_div_dr <= mass_upper_limit_vector(mass_div_dr_vector_width-1 downto 0) else '0';
-    mass_comp <= '1' when mass_div_dr >= lower_limit and mass_div_dr <= upper_limit else '0';
+--     mass_comp <= '1' when mass_div_dr >= lower_limit and mass_div_dr <= upper_limit else '0';
     
 end architecture rtl;

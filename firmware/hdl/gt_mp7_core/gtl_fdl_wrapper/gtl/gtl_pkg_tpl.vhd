@@ -867,6 +867,12 @@ constant JET_TAU_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH
 constant TAU_TAU_INV_DR_SQ_VECTOR_WIDTH : natural := CALO_INV_DR_SQ_VECTOR_WIDTH;
 type calo_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
 
+constant CALO_CALO_MASS_DIV_DR_VECTOR_WIDTH = 2*JET_PT_VECTOR_WIDTH+JET_JET_COSH_COS_VECTOR_WIDTH+JET_JET_INV_DR_SQ_VECTOR_WIDTH;
+type calo_calo_mass_div_dr_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_CALO_MASS_DIV_DR_VECTOR_WIDTH-1 downto 0);
+constant EG_EG_MASS_DIV_DR_VECTOR_WIDTH = 2*EG_PT_VECTOR_WIDTH+EG_EG_COSH_COS_VECTOR_WIDTH+EG_EG_INV_DR_SQ_VECTOR_WIDTH;
+constant JET_JET_MASS_DIV_DR_VECTOR_WIDTH = 2*JET_PT_VECTOR_WIDTH+JET_JET_COSH_COS_VECTOR_WIDTH+JET_JET_INV_DR_SQ_VECTOR_WIDTH;
+constant TAU_TAU_MASS_DIV_DR_VECTOR_WIDTH = 2*TAU_PT_VECTOR_WIDTH+TAU_TAU_COSH_COS_VECTOR_WIDTH+TAU_TAU_INV_DR_SQ_VECTOR_WIDTH;
+
 constant MUON_DETA_BINS : positive := 451;
 constant MUON_DPHI_BINS : positive := MUON_PHI_BINS; -- 576
 
@@ -882,15 +888,17 @@ constant MUON_DPHI_BINS_ROM : positive := 144; -- same resolution as calos (quar
 constant MU_DETA_BINS_WIDTH_ROM : positive := 8; -- => int(log2(MUON_DETA_BINS_ROM))+1 
 constant MU_DPHI_BINS_WIDTH_ROM : positive := 8; -- => int(log2(MUON_DPHI_BINS_ROM))+1
 
-constant MUON_INV_DR_SQ_LUT_MAX_VAL : natural := 211388559;
-constant MUON_INV_DR_SQ_VECTOR_WIDTH : natural := 28; -- => log2(MUON_INV_DR_SQ_LUT_MAX_VAL)
-constant MU_INV_DR_SQ_VECTOR_WIDTH : natural := MUON_INV_DR_SQ_VECTOR_WIDTH;
-type muon_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MUON_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
+constant MU_MU_INV_DR_SQ_LUT_MAX_VAL : natural := 211388559;
+constant MU_MU_INV_DR_SQ_VECTOR_WIDTH : natural := 28; -- => log2(MU_MU_INV_DR_SQ_LUT_MAX_VAL)
+type muon_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_MU_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
 
 constant MAX_INV_DR_SQ_VECTOR_WIDTH : positive := MUON_INV_DR_SQ_VECTOR_WIDTH; -- 28, max(CALO_INV_DR_SQ_VECTOR_WIDTH, MU_INV_DR_SQ_VECTOR_WIDTH)
 -- constant MAX_CALO_PT_VECTOR_WIDTH : positive := max(EG_PT_VECTOR_WIDTH, JET_PT_VECTOR_WIDTH, TAU_PT_VECTOR_WIDTH);
 -- constant MAX_PT_VECTOR_WIDTH : positive := max(MAX_CALO_PT_VECTOR_WIDTH, MU_PT_VECTOR_WIDTH); -- 14 (JET_PT_VECTOR_WIDTH)
 -- constant MAX_COSH_COS_VECTOR_WIDTH : positive := max(CALO_COSH_COS_VECTOR_WIDTH, CALO_MUON_COSH_COS_VECTOR_WIDTH, MU_MU_COSH_COS_VECTOR_WIDTH); -- 27 (CALO_MUON_COSH_COS_VECTOR_WIDTH)
+
+constant MU_MU_MASS_DIV_DR_VECTOR_WIDTH = 2*MU_PT_VECTOR_WIDTH+MU_MU_COSH_COS_VECTOR_WIDTH+MU_MU_INV_DR_SQ_VECTOR_WIDTH;
+type mu_mu_mass_div_dr_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_MU_MASS_DIV_DR_VECTOR_WIDTH-1 downto 0);
 
 constant MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR : positive := 84; -- 2*14+27+28=83, 2*MAX_PT_VECTOR_WIDTH+MAX_COSH_COS_VECTOR_WIDTH+MAX_INV_DR_SQ_VECTOR_WIDTH, width 84 used for hex notation !
 type max_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);

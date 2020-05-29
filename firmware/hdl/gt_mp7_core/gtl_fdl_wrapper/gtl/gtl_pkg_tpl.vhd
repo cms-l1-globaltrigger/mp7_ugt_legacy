@@ -873,11 +873,14 @@ constant EG_EG_MASS_DIV_DR_VECTOR_WIDTH : positive := 2*EG_PT_VECTOR_WIDTH+EG_EG
 constant JET_JET_MASS_DIV_DR_VECTOR_WIDTH : positive := 2*JET_PT_VECTOR_WIDTH+JET_JET_COSH_COS_VECTOR_WIDTH+JET_JET_INV_DR_SQ_VECTOR_WIDTH;
 constant TAU_TAU_MASS_DIV_DR_VECTOR_WIDTH : positive := 2*TAU_PT_VECTOR_WIDTH+TAU_TAU_COSH_COS_VECTOR_WIDTH+TAU_TAU_INV_DR_SQ_VECTOR_WIDTH;
 
--- constant MUON_DETA_BINS : positive := 451;
--- constant MUON_DPHI_BINS : positive := MUON_PHI_BINS; -- 576
+constant MUON_DETA_BINS : positive := 451;
+constant MUON_DPHI_BINS : positive := MUON_PHI_BINS; -- 576
 
--- constant MU_DETA_BINS_WIDTH : positive := 9; -- => int(log2(MUON_DETA_BINS))+1 
--- constant MU_DPHI_BINS_WIDTH : positive := 10; -- => int(log2(MUON_DPHI_BINS))+1
+constant MU_DETA_BINS_WIDTH : positive := 9; -- => int(log2(MUON_DETA_BINS))+1 
+constant MU_DPHI_BINS_WIDTH : positive := 10; -- => int(log2(MUON_DPHI_BINS))+1
+
+type muon_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DETA_BINS_WIDTH-1 downto 0);
+type muon_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DPHI_BINS_WIDTH-1 downto 0);
 
 -- full muon bins would exceed BRAM resources, therefore reduced bins for ROMs are used
 constant MUON_DETA_BINS_ROM : positive := 225; -- double resolution of calos (half of muon eta bins)
@@ -885,9 +888,6 @@ constant MUON_DPHI_BINS_ROM : positive := 144; -- same resolution as calos (quar
 
 constant MU_DETA_BINS_WIDTH_ROM : positive := 8; -- => int(log2(MUON_DETA_BINS_ROM))+1 
 constant MU_DPHI_BINS_WIDTH_ROM : positive := 8; -- => int(log2(MUON_DPHI_BINS_ROM))+1
-
-type muon_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DETA_BINS_WIDTH_ROM-1 downto 0);
-type muon_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DPHI_BINS_WIDTH_ROM-1 downto 0);
 
 constant MU_MU_INV_DR_SQ_LUT_MAX_VAL : natural := 211388559;
 constant MU_MU_INV_DR_SQ_VECTOR_WIDTH : natural := 28; -- => log2(MU_MU_INV_DR_SQ_LUT_MAX_VAL)

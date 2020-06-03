@@ -116,8 +116,8 @@ begin
     -- Comparison with limits.
     mass_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
         mass_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
-            mass_calc_l1: if (same_bx = true) and j>i generate
-                calculator_i: entity work.mass_div_dr_comp
+            mass_comp_l1: if (same_bx = true) and j>i generate
+                comp_i: entity work.mass_div_dr_comp
                     generic map(
                         MU_MU_MASS_DIV_DR_VECTOR_WIDTH,
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit 
@@ -128,9 +128,9 @@ begin
                     );
                 mass_div_dr_comp_pipe(i,j) <= mass_div_dr_comp_t(i,j);
                 mass_div_dr_comp_pipe(j,i) <= mass_div_dr_comp_t(i,j);
-            end generate mass_calc_l1;
-            mass_calc_l2: if same_bx = false generate
-                calculator_i: entity work.mass_div_dr_comp
+            end generate mass_comp_l1;
+            mass_comp_l2: if same_bx = false generate
+                comp_i: entity work.mass_div_dr_comp
                     generic map(
                         MU_MU_MASS_DIV_DR_VECTOR_WIDTH,
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit 
@@ -139,7 +139,7 @@ begin
                         mass_div_dr(i,j),
                         mass_div_dr_comp_pipe(i,j)
                     );
-            end generate mass_calc_l2;
+            end generate mass_comp_l2;
         end generate mass_l_2;
     end generate mass_l_1;
     

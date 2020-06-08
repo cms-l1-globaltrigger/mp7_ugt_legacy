@@ -65,8 +65,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - source files:
-  - ../gtl/muon_mass_3_obj_condition.vhd
-  - ../gtl/sum_mass_calc.vhd
+  - ../gtl/esums_comparators.vhd
+  - ../gtl/min_bias_hf_conditions.vhd
 
 ## [v1.10.6] - 2020-01-28
 ### Comment

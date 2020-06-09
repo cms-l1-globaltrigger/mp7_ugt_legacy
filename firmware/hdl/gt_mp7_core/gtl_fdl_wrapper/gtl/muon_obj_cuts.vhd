@@ -138,7 +138,8 @@ begin
                 iso_luts(1),
                 ptu_cuts(1),
                 ptu_upper_limits(1)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0),
-                ptu_lower_limits(1)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0)
+                ptu_lower_limits(1)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0),
+                ip_luts(1)
             )
             port map(data_i(i), obj_slice_1_vs_templ(i,1));
     end generate obj_slice_1_l;
@@ -169,7 +170,8 @@ begin
                 iso_luts(3),
                 ptu_cuts(3),
                 ptu_upper_limits(3)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0),
-                ptu_lower_limits(3)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0)
+                ptu_lower_limits(3)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0),
+                ip_luts(2)
                 )
             port map(data_i(i), obj_slice_2_vs_templ(i,1));
     end generate obj_slice_2_l;
@@ -200,7 +202,8 @@ begin
                 iso_luts(3),
                 ptu_cuts(3),
                 ptu_upper_limits(3)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0),
-                ptu_lower_limits(3)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0)
+                ptu_lower_limits(3)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0),
+                ip_luts(3)
                 )
             port map(data_i(i), obj_slice_3_vs_templ(i,1));
     end generate obj_slice_3_l;
@@ -231,7 +234,8 @@ begin
                 iso_luts(4),
                 ptu_cuts(4),
                 ptu_upper_limits(4)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0),
-                ptu_lower_limits(4)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0)
+                ptu_lower_limits(4)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0),
+                ip_luts(4)
                 )
             port map(data_i(i), obj_slice_4_vs_templ(i,1));
     end generate obj_slice_4_l;

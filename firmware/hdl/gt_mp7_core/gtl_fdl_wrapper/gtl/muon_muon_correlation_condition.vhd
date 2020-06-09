@@ -63,6 +63,7 @@ entity muon_muon_correlation_condition is
         requested_charge_muon1: string(1 to 3);
         qual_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0);
         iso_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0);
+        ptu_cut_muon1 : boolean;
         ptu_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         ptu_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         ip_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0);
@@ -91,6 +92,7 @@ entity muon_muon_correlation_condition is
         requested_charge_muon2: string(1 to 3);
         qual_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0);
         iso_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0);
+        ptu_cut_muon2 : boolean;
         ptu_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         ptu_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         ip_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0);
@@ -318,6 +320,7 @@ begin
                 requested_charge_muon1,
                 qual_lut_muon1,
                 iso_lut_muon1,
+                ptu_cut_muon1,
                 ptu_upper_limit_muon1(D_S_I_MUON_V2.ptu_high-D_S_I_MUON_V2.ptu_low downto 0),
                 ptu_lower_limit_muon1(D_S_I_MUON_V2.ptu_high-D_S_I_MUON_V2.ptu_low downto 0),
                 ip_lut_muon1
@@ -349,6 +352,7 @@ begin
                 requested_charge_muon2,
                 qual_lut_muon2,
                 iso_lut_muon2,
+                ptu_cut_muon2,
                 ptu_upper_limit_muon2(D_S_I_MUON_V2.ptu_high-D_S_I_MUON_V2.ptu_low downto 0),
                 ptu_lower_limit_muon2(D_S_I_MUON_V2.ptu_high-D_S_I_MUON_V2.ptu_low downto 0),
                 ip_lut_muon2

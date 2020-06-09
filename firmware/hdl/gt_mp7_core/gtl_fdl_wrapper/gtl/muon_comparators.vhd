@@ -41,6 +41,7 @@ entity muon_comparators is
         requested_charge: string(1 to 3);
         qual_lut : std_logic_vector;
         iso_lut : std_logic_vector;
+        ptu_cut : boolean;
         ptu_upper_limit : std_logic_vector;
         ptu_lower_limit : std_logic_vector;
         ip_lut : std_logic_vector        
@@ -140,7 +141,6 @@ begin
             eta_w5_lower_limit(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0)
         )
         port map(
---             eta => eta(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
             eta => eta(D_S_I_MUON.eta_high downto D_S_I_MUON.eta_low),
             eta_comp_o => eta_comp
         );
@@ -173,7 +173,18 @@ begin
     iso_comp <= iso_lut(CONV_INTEGER(iso)); -- 4 bit LUT for isolation, because of 2 bits isolation
 
 -- Comparator for Pt unconstraint
-    ptu_comp <= '1' when (ptu >= ptu_lower_limit and ptu <= ptu_lower_limit) else '0';
+    ptu_cut_p: process(ptu, ptu_lower_limit, ptu_upper_limit, ptu_cut)
+    begin
+        if not ptu_cut then 
+            ptu_comp <= '1';
+        else
+            if (ptu >= ptu_lower_limit and ptu <= ptu_upper_limit) then 
+                ptu_comp <= '1';
+            else
+                ptu_comp <= '0';
+            end if;
+        end if;
+    end process;
 
 -- Comparator for IP bits with LUT
     ip_comp <= ip_lut(CONV_INTEGER(ip)); -- 4 bit LUT for impact parameter, because of 2 bits impact parameter

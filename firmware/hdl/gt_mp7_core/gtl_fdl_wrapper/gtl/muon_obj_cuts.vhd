@@ -43,6 +43,7 @@ entity muon_obj_cuts is
         requested_charges: muon_templates_string_array;
         qual_luts: muon_templates_quality_array;
         iso_luts: muon_templates_iso_array;
+        ptu_cuts : muon_templates_boolean_array;
         ptu_upper_limits : muon_templates_array;
         ptu_lower_limits : muon_templates_array;
         ip_luts : muon_templates_ip_array        
@@ -64,7 +65,7 @@ architecture behavioral of muon_obj_cuts is
     signal muon_object_slices_low : muon_object_slices_array;
     signal muon_object_slices_high : muon_object_slices_array;    
     
-    type obj_slices_vs_templ_array (1 to 4, natural range <>, natural range <>) of std_logic;
+    type obj_slices_vs_templ_array is array (1 to 4, natural range <>, natural range <>) of std_logic;
     signal obj_slices_vs_templ : obj_slices_vs_templ_array;
 
 begin
@@ -95,6 +96,7 @@ begin
                     requested_charges(i),
                     qual_luts(i),
                     iso_luts(i),
+                    ptu_cuts(i),
                     ptu_upper_limits(i)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0),
                     ptu_lower_limits(i)(D_S_I_MUON.ptu_high-D_S_I_MUON.ptu_low downto 0),
                     ip_luts(i)

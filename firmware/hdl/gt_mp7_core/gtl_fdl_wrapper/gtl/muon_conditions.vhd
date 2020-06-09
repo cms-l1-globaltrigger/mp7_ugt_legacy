@@ -58,6 +58,7 @@ entity muon_conditions is
         requested_charges: muon_templates_string_array;
         qual_luts: muon_templates_quality_array;
         iso_luts: muon_templates_iso_array;
+        ptu_cuts: muon_templates_boolean_array;
         ptu_upper_limits: muon_templates_array;
         ptu_lower_limits: muon_templates_array;
         ip_luts: muon_templates_ip_array;
@@ -162,7 +163,7 @@ begin
             phi_full_range, phi_w1_upper_limits, phi_w1_lower_limits,
             phi_w2_ignore, phi_w2_upper_limits, phi_w2_lower_limits,
             requested_charges, qual_luts, iso_luts,
-            ptu_upper_limits, ptu_lower_limits,
+            ptu_cuts, ptu_upper_limits, ptu_lower_limits,
             ip_luts            
         )
         port map(

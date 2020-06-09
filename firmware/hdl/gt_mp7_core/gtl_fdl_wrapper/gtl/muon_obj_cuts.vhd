@@ -65,7 +65,7 @@ architecture behavioral of muon_obj_cuts is
     signal muon_object_slices_low : muon_object_slices_array;
     signal muon_object_slices_high : muon_object_slices_array;    
     
-    type obj_slices_vs_templ_array is array (1 to 4, natural range <>, natural range <>) of std_logic;
+    type obj_slices_vs_templ_array is array (1 to 4, 0 to NR_MUON_OBJECTS-1, 1 to 1) of std_logic;
     signal obj_slices_vs_templ : obj_slices_vs_templ_array;
 
 begin

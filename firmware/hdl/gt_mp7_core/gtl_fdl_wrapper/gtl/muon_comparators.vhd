@@ -173,7 +173,7 @@ begin
     iso_comp <= iso_lut(CONV_INTEGER(iso)); -- 4 bit LUT for isolation, because of 2 bits isolation
 
 -- Comparator for Pt unconstraint
-    ptu_cut_p: process(ptu, ptu_lower_limit, ptu_upper_limit, ptu_cut)
+    ptu_cut_p: process(ptu)
     begin
         if not ptu_cut then 
             ptu_comp <= '1';

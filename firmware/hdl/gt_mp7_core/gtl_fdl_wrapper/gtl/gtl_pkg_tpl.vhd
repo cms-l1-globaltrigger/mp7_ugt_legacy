@@ -627,7 +627,7 @@ subtype dr_squared_range_real is real range 0.0 to ((ETA_RANGE_REAL*(real(10**DE
 -- 0 => invariant mass
 -- 1 => transverse mass
 -- 2 => invariant mass with unconstraint pt
-constant MASS_TYPE_MAX_VALUE : natural := 1;
+constant MASS_TYPE_MAX_VALUE : natural := 2;
 constant INVARIANT_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 0;
 constant TRANSVERSE_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 1;
 constant UPT_INVARIANT_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 2;

@@ -122,11 +122,11 @@ constant MUON_PHI_RAW_HIGH : natural := 52;
 -- constant MUON_ETA_RAW_LOW : natural := 53;
 -- constant MUON_ETA_RAW_HIGH : natural := 61;
 -- HB 2020-06-08: updated for new muon structure with "unconstraint pt" and "impact parameter".
--- 8 bit "unconstraint pt" [PTU] (requirements with lower and upper limit - window), bits 60..53
+-- 8 bit "unconstraint pt" [UPT] (requirements with lower and upper limit - window), bits 60..53
 -- 2 bit "impact parameter" [IP] (requirements given by LUT), bits 63..62
 -- bit 61 is reserved
-constant MUON_PTU_LOW : natural := 53;
-constant MUON_PTU_HIGH : natural := 60;
+constant MUON_UPT_LOW : natural := 53;
+constant MUON_UPT_HIGH : natural := 60;
 constant MUON_IP_LOW : natural := 62;
 constant MUON_IP_HIGH : natural := 63;
 
@@ -140,11 +140,11 @@ constant MUON_IP_HIGH : natural := 63;
 --     MUON_ETA_HIGH,MUON_ETA_LOW,MUON_QUAL_HIGH,MUON_QUAL_LOW,MUON_PT_HIGH,MUON_PT_LOW,MUON_PHI_HIGH,MUON_PHI_LOW);
 -- 
 type d_s_i_muon_record is record
-    ip_high, ip_low, ptu_high, ptu_low, phi_raw_high, phi_raw_low, idx_bits_high, idx_bits_low, charge_high, charge_low, iso_high, iso_low, eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MAX_MUON_BITS-1 downto 0;
+    ip_high, ip_low, upt_high, upt_low, phi_raw_high, phi_raw_low, idx_bits_high, idx_bits_low, charge_high, charge_low, iso_high, iso_low, eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MAX_MUON_BITS-1 downto 0;
 end record d_s_i_muon_record;
 
 constant d_s_i_muon : d_s_i_muon_record :=
-    (MUON_IP_HIGH,MUON_IP_LOW,MUON_PTU_HIGH,MUON_PTU_LOW,MUON_PHI_RAW_HIGH,MUON_PHI_RAW_LOW,MUON_IDX_BITS_HIGH,MUON_IDX_BITS_LOW,MUON_CHARGE_HIGH,MUON_CHARGE_LOW,MUON_ISO_HIGH,MUON_ISO_LOW,MUON_ETA_HIGH,MUON_ETA_LOW,MUON_QUAL_HIGH,MUON_QUAL_LOW,MUON_PT_HIGH,MUON_PT_LOW,MUON_PHI_HIGH,MUON_PHI_LOW);
+    (MUON_IP_HIGH,MUON_IP_LOW,MUON_UPT_HIGH,MUON_UPT_LOW,MUON_PHI_RAW_HIGH,MUON_PHI_RAW_LOW,MUON_IDX_BITS_HIGH,MUON_IDX_BITS_LOW,MUON_CHARGE_HIGH,MUON_CHARGE_LOW,MUON_ISO_HIGH,MUON_ISO_LOW,MUON_ETA_HIGH,MUON_ETA_LOW,MUON_QUAL_HIGH,MUON_QUAL_LOW,MUON_PT_HIGH,MUON_PT_LOW,MUON_PHI_HIGH,MUON_PHI_LOW);
 
 constant D_S_I_MUON_V2 : d_s_i_muon_record := d_s_i_muon;
 constant D_S_I_MU_V2 : d_s_i_muon_record := d_s_i_muon; -- dummy for VHDL-Producer output (correlation conditions)

@@ -63,9 +63,9 @@ entity muon_muon_correlation_condition is
         requested_charge_muon1: string(1 to 3);
         qual_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0);
         iso_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0);
-        ptu_cut_muon1 : boolean;
-        ptu_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
-        ptu_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        upt_cut_muon1 : boolean;
+        upt_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        upt_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         ip_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0);
 
         muon2_object_low: natural;
@@ -92,9 +92,9 @@ entity muon_muon_correlation_condition is
         requested_charge_muon2: string(1 to 3);
         qual_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0);
         iso_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0);
-        ptu_cut_muon2 : boolean;
-        ptu_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
-        ptu_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        upt_cut_muon2 : boolean;
+        upt_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        upt_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
         ip_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0);
 
         requested_charge_correlation: string(1 to 2);
@@ -112,6 +112,7 @@ entity muon_muon_correlation_condition is
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
 
         pt_width: positive; 
+        upt_width: positive; 
         mass_cosh_cos_precision : positive;
         cosh_cos_width: positive;
 
@@ -130,6 +131,8 @@ entity muon_muon_correlation_condition is
         diff_phi: in deta_dphi_vector_array;
         pt1 : in diff_inputs_array;
         pt2 : in diff_inputs_array;
+        upt1 : in diff_inputs_array;
+        upt2 : in diff_inputs_array;
         cosh_deta : in muon_cosh_cos_vector_array;
         cos_dphi : in muon_cosh_cos_vector_array;
         cos_phi_1_integer : in sin_cos_integer_array;
@@ -194,6 +197,8 @@ begin
                             mass_lower_limit_vector => mass_lower_limit_vector,
                             pt1_width => pt_width, 
                             pt2_width => pt_width, 
+                            upt1_width => upt_width, 
+                            upt2_width => upt_width, 
                             cosh_cos_precision => mass_cosh_cos_precision,
                             cosh_cos_width => cosh_cos_width,
                             pt_sq_threshold_vector => pt_sq_threshold_vector,
@@ -205,6 +210,8 @@ begin
                             diff_phi => diff_phi(i,j),
                             pt1 => pt1(i),
                             pt2 => pt2(j),
+                            upt1 => upt1(i),
+                            upt2 => upt2(j),
                             cosh_deta => cosh_deta(i,j),
                             cos_dphi => cos_dphi(i,j),
                             cos_phi_1_integer => cos_phi_1_integer(i),
@@ -248,6 +255,8 @@ begin
                         mass_lower_limit_vector => mass_lower_limit_vector,
                         pt1_width => pt_width, 
                         pt2_width => pt_width, 
+                        upt1_width => upt_width, 
+                        upt2_width => upt_width, 
                         cosh_cos_precision => mass_cosh_cos_precision,
                         cosh_cos_width => cosh_cos_width,
                         pt_sq_threshold_vector => pt_sq_threshold_vector,
@@ -259,6 +268,8 @@ begin
                         diff_phi => diff_phi(i,j),
                         pt1 => pt1(i),
                         pt2 => pt2(j),
+                        upt1 => upt1(i),
+                        upt2 => upt2(j),
                         cosh_deta => cosh_deta(i,j),
                         cos_dphi => cos_dphi(i,j),
                         cos_phi_1_integer => cos_phi_1_integer(i),
@@ -320,9 +331,9 @@ begin
                 requested_charge_muon1,
                 qual_lut_muon1,
                 iso_lut_muon1,
-                ptu_cut_muon1,
-                ptu_upper_limit_muon1(D_S_I_MUON_V2.ptu_high-D_S_I_MUON_V2.ptu_low downto 0),
-                ptu_lower_limit_muon1(D_S_I_MUON_V2.ptu_high-D_S_I_MUON_V2.ptu_low downto 0),
+                upt_cut_muon1,
+                upt_upper_limit_muon1(D_S_I_MUON_V2.upt_high-D_S_I_MUON_V2.upt_low downto 0),
+                upt_lower_limit_muon1(D_S_I_MUON_V2.upt_high-D_S_I_MUON_V2.upt_low downto 0),
                 ip_lut_muon1
             )
             port map(muon1_data_i(i), muon1_obj_vs_templ(i,1));
@@ -352,9 +363,9 @@ begin
                 requested_charge_muon2,
                 qual_lut_muon2,
                 iso_lut_muon2,
-                ptu_cut_muon2,
-                ptu_upper_limit_muon2(D_S_I_MUON_V2.ptu_high-D_S_I_MUON_V2.ptu_low downto 0),
-                ptu_lower_limit_muon2(D_S_I_MUON_V2.ptu_high-D_S_I_MUON_V2.ptu_low downto 0),
+                upt_cut_muon2,
+                upt_upper_limit_muon2(D_S_I_MUON_V2.upt_high-D_S_I_MUON_V2.upt_low downto 0),
+                upt_lower_limit_muon2(D_S_I_MUON_V2.upt_high-D_S_I_MUON_V2.upt_low downto 0),
                 ip_lut_muon2
             )
             port map(muon2_data_i(i), muon2_obj_vs_templ(i,1));

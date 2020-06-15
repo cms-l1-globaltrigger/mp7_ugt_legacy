@@ -3,7 +3,7 @@
 -- Comparators for transverse momentum, pseudorapidity, azimuth angle, quality and isolation of muon objects
 
 -- Version history:
--- HB 2020-06-08: inserted comparators for "unconstraint pt" and "impact parameter" of new muon structure.
+-- HB 2020-06-08: inserted comparators for "unconstraint pt" [upt] and "impact parameter" [ip] of new muon structure.
 -- HB 2019-06-14: updated for "five eta cuts". Used phi_windows_comp.
 -- HB 2019-06-14: updated for "five eta cuts". Used phi_windows_comp.
 -- HB 2019-05-06: renamed from muon_comparators_v2 to muon_comparators.
@@ -41,9 +41,9 @@ entity muon_comparators is
         requested_charge: string(1 to 3);
         qual_lut : std_logic_vector;
         iso_lut : std_logic_vector;
-        ptu_cut : boolean;
-        ptu_upper_limit : std_logic_vector;
-        ptu_lower_limit : std_logic_vector;
+        upt_cut : boolean;
+        upt_upper_limit : std_logic_vector;
+        upt_lower_limit : std_logic_vector;
         ip_lut : std_logic_vector        
     );
     port(
@@ -62,7 +62,7 @@ architecture rtl of muon_comparators is
     signal qual : std_logic_vector(D_S_I_MUON.qual_high downto D_S_I_MUON.qual_low);
     signal iso : std_logic_vector(D_S_I_MUON.iso_high downto D_S_I_MUON.iso_low);
     signal charge : std_logic_vector(D_S_I_MUON.charge_high downto D_S_I_MUON.charge_low);
-    signal ptu : std_logic_vector(D_S_I_MUON.ptu_high downto D_S_I_MUON.ptu_low);
+    signal upt : std_logic_vector(D_S_I_MUON.upt_high downto D_S_I_MUON.upt_low);
     signal ip : std_logic_vector(D_S_I_MUON.ip_high downto D_S_I_MUON.ip_low);
 
     signal pt_comp : std_logic;
@@ -71,7 +71,7 @@ architecture rtl of muon_comparators is
     signal qual_comp : std_logic;
     signal iso_comp : std_logic;
     signal charge_comp : std_logic;
-    signal ptu_comp : std_logic;
+    signal upt_comp : std_logic;
     signal ip_comp : std_logic;
     
     signal no_muon : std_logic;
@@ -110,7 +110,7 @@ begin
     qual <= data_i(D_S_I_MUON.qual_high downto D_S_I_MUON.qual_low);
     iso <= data_i(D_S_I_MUON.iso_high downto D_S_I_MUON.iso_low);
     charge <= data_i(D_S_I_MUON.charge_high downto D_S_I_MUON.charge_low);
-    ptu <= data_i(D_S_I_MUON.ptu_high downto D_S_I_MUON.ptu_low);
+    upt <= data_i(D_S_I_MUON.upt_high downto D_S_I_MUON.upt_low);
     ip <= data_i(D_S_I_MUON.ip_high downto D_S_I_MUON.ip_low);
     
 -- HB 2015-08-28: inserted check for "no muon" (all object parameters = 0)
@@ -173,15 +173,15 @@ begin
     iso_comp <= iso_lut(CONV_INTEGER(iso)); -- 4 bit LUT for isolation, because of 2 bits isolation
 
 -- Comparator for Pt unconstraint
-    ptu_cut_p: process(ptu)
+    upt_cut_p: process(upt)
     begin
-        if not ptu_cut then 
-            ptu_comp <= '1';
+        if not upt_cut then 
+            upt_comp <= '1';
         else
-            if (ptu >= ptu_lower_limit and ptu <= ptu_upper_limit) then 
-                ptu_comp <= '1';
+            if (upt >= upt_lower_limit and upt <= upt_upper_limit) then 
+                upt_comp <= '1';
             else
-                ptu_comp <= '0';
+                upt_comp <= '0';
             end if;
         end if;
     end process;
@@ -190,6 +190,6 @@ begin
     ip_comp <= ip_lut(CONV_INTEGER(ip)); -- 4 bit LUT for impact parameter, because of 2 bits impact parameter
 
 -- Comparators AND
-    comp_o <= pt_comp and eta_comp and phi_comp and qual_comp and iso_comp and charge_comp and ptu_comp and ip_comp and not no_muon;
+    comp_o <= pt_comp and eta_comp and phi_comp and qual_comp and iso_comp and charge_comp and upt_comp and ip_comp and not no_muon;
 
 end architecture rtl;

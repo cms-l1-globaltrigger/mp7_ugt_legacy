@@ -623,12 +623,14 @@ subtype dr_squared_range_real is real range 0.0 to ((ETA_RANGE_REAL*(real(10**DE
 
 -- ********************************************************
 -- mass parameters
--- HB 2017-04-26: definition of mass_type:
+-- HB 2020-06-15: definition of mass_type:
 -- 0 => invariant mass
 -- 1 => transverse mass
+-- 2 => invariant mass with unconstraint pt
 constant MASS_TYPE_MAX_VALUE : natural := 1;
 constant INVARIANT_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 0;
 constant TRANSVERSE_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 1;
+constant UPT_INVARIANT_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 2;
 
 -- HB 2105-10-21: INV_MASS_LIMITS_PRECISION_ALL must be less than 2*INV_MASS_PT_PRECISION+INV_MASS_COSH_COS_PRECISION !!!
 -- constant INV_MASS_LIMITS_PRECISION_ALL : positive range 1 to 3 := 1; -- 1 => first digit after decimal point

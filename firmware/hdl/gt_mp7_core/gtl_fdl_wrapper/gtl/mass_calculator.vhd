@@ -99,9 +99,9 @@ begin
     invariant_mass_sel: if mass_type = INVARIANT_MASS_TYPE generate
         mass_comp <= '1' when inv_mass_comp = '1' else '0';
     end generate invariant_mass_sel;
-    invariant_mass_sel: if mass_type = UPT_INVARIANT_MASS_TYPE generate
+    upt_invariant_mass_sel: if mass_type = UPT_INVARIANT_MASS_TYPE generate
         mass_comp <= '1' when upt_inv_mass_comp = '1' else '0';
-    end generate invariant_mass_sel;
+    end generate upt_invariant_mass_sel;
     transverse_mass_sel: if mass_type = TRANSVERSE_MASS_TYPE generate
         mass_comp <= '1' when transverse_mass_comp = '1' else '0';
     end generate transverse_mass_sel;

@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - script files:
   - ../scripts/checkIpbbSynth.py
 
-## [v1.12.0] - 2020-02-19
+## [v1.12.0] - 2020-06-17
 ### Comment
 
 - mp7_ugt firmware release v1.12.0 (added files for invariant mass with 3 objects).
@@ -78,7 +78,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v1.10.7] - 2020-02-03
 ### Comment
 
-- mp7_ugt firmware release v1.10.7 (bugs fixed - condition putput pipeline).
+- mp7_ugt firmware release v1.10.7 (bugs fixed - condition output pipeline).
 
 ### Added
 

@@ -2,6 +2,8 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
+-- HB 2020-06-17: v1.11.0: Added files for invariant mass with 3 objects.
+-- HB 2020-06-08: v1.10.0: Implemented new muon structure with "unconstraint pt" and "impact parameter".
 -- HB 2020-02-03: v1.9.4: Changed output pipeline code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
 -- HB 2020-01-30: v1.9.3: Cleaned up code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
 -- HB 2020-01-28: v1.9.2: Bug fixed in calo_calo_calo_correlation_orm_condition.vhd and calo_cond_matrix_orm.vhd.

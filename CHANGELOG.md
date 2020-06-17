@@ -4,10 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
   
-## [v1.12.0] - 2020-05-28
+## [v1.13.0] - 2020-02-19
 ### Comment
 
-- mp7_ugt firmware release v1.12.0 (added files for invariant mass divided by deltaR).
+- mp7_ugt firmware release v1.13.0 (added files for invariant mass divided by deltaR).
 
 ### Added
 - source files:
@@ -36,10 +36,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - script files:
   - ../scripts/checkIpbbSynth.py
 
-## [v1.11.0] - 2020-02-19
+## [v1.12.0] - 2020-02-19
 ### Comment
 
-- mp7_ugt firmware release v1.11.0 (added files for invariant mass with 3 objects).
+- mp7_ugt firmware release v1.12.0 (added files for invariant mass with 3 objects).
 
 ### Added
 - source files:
@@ -56,6 +56,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
 - dep file:
   - ../cfg/uGT_algo.dep
+
+## [v1.11.0] - 2020-06-09
+### Comment
+
+- mp7_ugt firmware release v1.11.0 (implemented new muon structure with "unconstraint pt" and "impact parameter").
+
+### Changed
+
+- source files:
+  - ../gtl/muon_comparators.vhd
+  - ../gtl/muon_obj_cuts.vhd
+  - ../gtl/muon_conditions.vhd
+  - ../gtl/muon_conditions_orm.vhd
+  - ../gtl/muon_muon_correlation_condition.vhd
+  - ../gtl/calo_muon_correlation_condition.vhd
+  - ../gtl/muon_esums_correlation_condition.vhd
+  - ../gtl/gtl_pkg.vhd
+  - ../gtl/gt_mp7_core_pkg.vhd
 
 ## [v1.10.7] - 2020-02-03
 ### Comment

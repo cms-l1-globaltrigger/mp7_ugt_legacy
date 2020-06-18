@@ -85,7 +85,7 @@ begin
     
     inv_mass_upt_sq_div2 <= upt1 * upt2 * (cosh_deta - cos_dphi);
     
-    inv_mass_upt_comp <= '1' when inv_mass_upt_sq_div2 >= mass_lower_limit_vector(MASS_UPT_VECTOR_WIDTH-1 downto 0) and upt_inv_mass_sq_div2 <= mass_upper_limit_vector(MASS_UPT_VECTOR_WIDTH-1 downto 0) else '0';
+    inv_mass_upt_comp <= '1' when inv_mass_upt_sq_div2 >= mass_lower_limit_vector(MASS_UPT_VECTOR_WIDTH-1 downto 0) and inv_mass_upt_sq_div2 <= mass_upper_limit_vector(MASS_UPT_VECTOR_WIDTH-1 downto 0) else '0';
     
 -- HB 2016-12-12: calculation of transverse mass with formular M**2/2=pt1*pt2*(1-cos(phi1-phi2))
 --                "conv_std_logic_vector((10**mass_cosh_cos_precision), cosh_cos_width)" means 1 multiplied with 10**mass_cosh_cos_precision, converted to std_logic_vector with cosh_cos_width

@@ -3,6 +3,7 @@
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and muon.
 
 -- Version history:
+-- HB 2020-06-09: implemented new muon structure with "unconstraint pt" and "impact parameter".
 -- HB 2019-06-17: updated for "five eta cuts".
 -- HB 2019-05-06: updated instances.
 -- HB 2019-05-06: renamed from calo_muon_correlation_condition_v3 to calo_muon_correlation_condition.
@@ -78,6 +79,10 @@ entity calo_muon_correlation_condition is
         requested_charge_muon: string(1 to 3);
         qual_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0);
         iso_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0);
+        upt_cut_muon : boolean;
+        upt_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        upt_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+        ip_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0);
 
         diff_eta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0);
         diff_eta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0);
@@ -261,7 +266,11 @@ begin
                 phi_w2_lower_limit_muon(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
                 requested_charge_muon,
                 qual_lut_muon,
-                iso_lut_muon
+                iso_lut_muon,
+                upt_cut_muon,
+                upt_upper_limit_muon(D_S_I_MUON_V2.upt_high-D_S_I_MUON_V2.upt_low downto 0),
+                upt_lower_limit_muon(D_S_I_MUON_V2.upt_high-D_S_I_MUON_V2.upt_low downto 0),
+                ip_lut_muon
                 )
             port map(muon_data_i(i), muon_obj_vs_templ(i,1));
      end generate muon_obj_l;

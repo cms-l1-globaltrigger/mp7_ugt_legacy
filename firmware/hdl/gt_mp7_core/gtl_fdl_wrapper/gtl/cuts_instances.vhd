@@ -3,6 +3,7 @@
 -- Collection of cuts for correlations
 
 -- Version history:
+-- HB 2020-06-15: inserted cuts for "unconstraint pt" [upt] of new muon structure.
 -- HB 2019-05-03: changed name from  cuts_instances_v2 to cuts_instances.
 -- HB 2017-09-20: changed to cuts_instances_v2 - added limit_vectors.
 -- HB 2017-09-19: used mass_calculator_v2 (instead of mass_calculator) for instance mass_calculator_i.
@@ -38,6 +39,8 @@ entity cuts_instances is
 
         pt1_width: positive; 
         pt2_width: positive; 
+        upt1_width: positive := 12; 
+        upt2_width: positive := 12; 
         cosh_cos_precision : positive;
         cosh_cos_width: positive;
 
@@ -51,6 +54,8 @@ entity cuts_instances is
         diff_phi: in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
         pt1 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0);
         pt2 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0);
+        upt1 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0) := (others => '0');
+        upt2 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0) := (others => '0');
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_phi_1_integer : in integer;
@@ -97,12 +102,16 @@ begin
                 mass_lower_limit_vector => mass_lower_limit_vector,
                 pt1_width => pt1_width, 
                 pt2_width => pt2_width, 
+                upt1_width => upt1_width, 
+                upt2_width => upt2_width, 
                 cosh_cos_width => cosh_cos_width,
                 mass_cosh_cos_precision => cosh_cos_precision
             )
             port map(
                 pt1 => pt1(pt1_width-1 downto 0),
                 pt2 => pt2(pt2_width-1 downto 0),
+                upt1 => upt1(upt1_width-1 downto 0),
+                upt2 => upt2(upt2_width-1 downto 0),
                 cosh_deta => cosh_deta,
                 cos_dphi => cos_dphi,
                 mass_comp => mass_comp

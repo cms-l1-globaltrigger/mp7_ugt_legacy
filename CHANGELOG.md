@@ -53,7 +53,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../gtl/esums_comparators.vhd
   - ../gtl/min_bias_hf_conditions.vhd
-  
+
 ## [v1.10.6] - 2020-01-28
 ### Comment
 

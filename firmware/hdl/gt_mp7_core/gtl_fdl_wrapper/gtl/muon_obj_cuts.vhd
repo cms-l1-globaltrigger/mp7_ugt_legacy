@@ -2,6 +2,7 @@
 -- Muon object cuts
 
 -- Version history:
+-- HB 2020-06-09: implemented new muon structure with "unconstraint pt" and "impact parameter".
 -- HB 2019-04-30: first version (proposed by Dinyar/Hannes for calos).
 
 library IEEE;
@@ -41,7 +42,11 @@ entity muon_obj_cuts is
         phi_w2_lower_limits: muon_templates_array;
         requested_charges: muon_templates_string_array;
         qual_luts: muon_templates_quality_array;
-        iso_luts: muon_templates_iso_array
+        iso_luts: muon_templates_iso_array;
+        upt_cuts : muon_templates_boolean_array;
+        upt_upper_limits : muon_templates_array;
+        upt_lower_limits : muon_templates_array;
+        ip_luts : muon_templates_ip_array        
 
     );
     port(
@@ -54,7 +59,7 @@ entity muon_obj_cuts is
 
 end muon_obj_cuts;
 
-architecture Behavioral of muon_obj_cuts is
+architecture behavioral of muon_obj_cuts is
 
 begin
 
@@ -82,8 +87,12 @@ begin
                 phi_w2_lower_limits(1)(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
                 requested_charges(1),
                 qual_luts(1),
-                iso_luts(1)
-                )
+                iso_luts(1),
+                upt_cuts(1),
+                upt_upper_limits(1)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
+                upt_lower_limits(1)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
+                ip_luts(1)
+            )
             port map(data_i(i), obj_slice_1_vs_templ(i,1));
     end generate obj_slice_1_l;
 
@@ -110,7 +119,11 @@ begin
                 phi_w2_lower_limits(2)(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
                 requested_charges(2),
                 qual_luts(2),
-                iso_luts(2)
+                iso_luts(2),
+                upt_cuts(2),
+                upt_upper_limits(2)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
+                upt_lower_limits(2)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
+                ip_luts(2)
                 )
             port map(data_i(i), obj_slice_2_vs_templ(i,1));
     end generate obj_slice_2_l;
@@ -138,7 +151,11 @@ begin
                 phi_w2_lower_limits(3)(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
                 requested_charges(3),
                 qual_luts(3),
-                iso_luts(3)
+                iso_luts(3),
+                upt_cuts(3),
+                upt_upper_limits(3)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
+                upt_lower_limits(3)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
+                ip_luts(3)
                 )
             port map(data_i(i), obj_slice_3_vs_templ(i,1));
     end generate obj_slice_3_l;
@@ -166,9 +183,12 @@ begin
                 phi_w2_lower_limits(4)(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
                 requested_charges(4),
                 qual_luts(4),
-                iso_luts(4)
+                iso_luts(4),
+                upt_cuts(4),
+                upt_upper_limits(4)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
+                upt_lower_limits(4)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
+                ip_luts(4)
                 )
             port map(data_i(i), obj_slice_4_vs_templ(i,1));
     end generate obj_slice_4_l;
-
-end Behavioral;
+end behavioral;

@@ -6,6 +6,7 @@
 -- Charge correlation selection implemented with "LS" and "OS" (charge correlation calculated in muon_charge_correlations.vhd)
 
 -- Version history:
+-- HB 2020-06-09: implemented new muon structure with "unconstraint pt" [upt] and "impact parameter" [ip].
 -- HB 2019-06-14: updated for "five eta cuts".
 -- HB 2019-05-06: updated instances.
 -- HB 2019-05-06: renamed from muon_conditions_v7 to muon_conditions.
@@ -57,6 +58,10 @@ entity muon_conditions is
         requested_charges: muon_templates_string_array;
         qual_luts: muon_templates_quality_array;
         iso_luts: muon_templates_iso_array;
+        upt_cuts: muon_templates_boolean_array;
+        upt_upper_limits: muon_templates_array;
+        upt_lower_limits: muon_templates_array;
+        ip_luts: muon_templates_ip_array;
         requested_charge_correlation: string(1 to 2);
         
         twobody_pt_cut: boolean := false;
@@ -157,7 +162,9 @@ begin
             eta_w5_upper_limits, eta_w5_lower_limits,
             phi_full_range, phi_w1_upper_limits, phi_w1_lower_limits,
             phi_w2_ignore, phi_w2_upper_limits, phi_w2_lower_limits,
-            requested_charges, qual_luts, iso_luts
+            requested_charges, qual_luts, iso_luts,
+            upt_cuts, upt_upper_limits, upt_lower_limits,
+            ip_luts            
         )
         port map(
             data_i, obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ, obj_slice_4_vs_templ

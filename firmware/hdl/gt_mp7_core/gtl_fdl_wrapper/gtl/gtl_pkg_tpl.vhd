@@ -2,8 +2,10 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
--- HB 2019-10-10: Moved constants for prescaler to fdl_pkg.vhd
--- HB 2019-10-08: Changed some values in LUTs MUON_COS_PHI_LUT and MUON_SIN_PHI_LUT according to LUTs from emulator (given by Len)
+-- HB 2020-06-16: inserted LUT for "unconstraint pt" (MU_UPT_LUT).
+-- HB 2020-06-08: changes for new muon structure with "unconstraint pt" and "impact parameter".
+-- HB 2019-10-10: moved constants for prescaler to fdl_pkg.vhd
+-- HB 2019-10-08: changed some values in LUTs MUON_COS_PHI_LUT and MUON_SIN_PHI_LUT according to LUTs from emulator (given by Len)
 -- HB 2019-06-03: inserted PRESCALER_FRACTION_WIDTH for fractional prescaler values
 -- HB 2019-05-02: inserted types for calo_cond_matrix.vhd.
 -- HB 2018-08-06: inserted constants and types for "Asymmetry" and "Centrality" (included in esums data structure).
@@ -112,22 +114,38 @@ constant MUON_ISO_LOW : natural := 32;
 constant MUON_ISO_HIGH : natural := 33;
 constant MUON_CHARGE_LOW : natural := 34;
 constant MUON_CHARGE_HIGH : natural := 35;
--- HB 2017-04-11: updated muon structure for "raw" ann "extrapolated" phi and eta bits (phi_high, phi_low, eta_high and eta_low => for "extrapolated").
+-- HB 2017-04-11: updated muon structure for "raw" and "extrapolated" phi and eta bits (phi_high, phi_low, eta_high and eta_low => for "extrapolated").
 constant MUON_IDX_BITS_LOW : natural := 36;
 constant MUON_IDX_BITS_HIGH : natural := 42;
 constant MUON_PHI_RAW_LOW : natural := 43;
 constant MUON_PHI_RAW_HIGH : natural := 52;
-constant MUON_ETA_RAW_LOW : natural := 53;
-constant MUON_ETA_RAW_HIGH : natural := 61;
+-- HB 2020-06-08: MUON_ETA_RAW not used anymore in GT.
+-- constant MUON_ETA_RAW_LOW : natural := 53;
+-- constant MUON_ETA_RAW_HIGH : natural := 61;
+-- HB 2020-06-08: updated for new muon structure with "unconstraint pt" and "impact parameter".
+-- 8 bit "unconstraint pt" [UPT] (requirements with lower and upper limit - window), bits 60..53
+-- 2 bit "impact parameter" [IP] (requirements given by LUT), bits 63..62
+-- bit 61 is reserved
+constant MUON_UPT_LOW : natural := 53;
+constant MUON_UPT_HIGH : natural := 60;
+constant MUON_IP_LOW : natural := 62;
+constant MUON_IP_HIGH : natural := 63;
 
+-- type d_s_i_muon_record is record
+--     eta_raw_high, eta_raw_low, phi_raw_high, phi_raw_low, idx_bits_high, idx_bits_low, charge_high, charge_low, iso_high, iso_low,
+--     eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MAX_MUON_BITS-1 downto 0;
+-- end record d_s_i_muon_record;
+-- 
+-- constant d_s_i_muon : d_s_i_muon_record :=
+--     (MUON_ETA_RAW_HIGH,MUON_ETA_RAW_LOW,MUON_PHI_RAW_HIGH,MUON_PHI_RAW_LOW,MUON_IDX_BITS_HIGH,MUON_IDX_BITS_LOW,MUON_CHARGE_HIGH,MUON_CHARGE_LOW,MUON_ISO_HIGH,MUON_ISO_LOW,
+--     MUON_ETA_HIGH,MUON_ETA_LOW,MUON_QUAL_HIGH,MUON_QUAL_LOW,MUON_PT_HIGH,MUON_PT_LOW,MUON_PHI_HIGH,MUON_PHI_LOW);
+-- 
 type d_s_i_muon_record is record
-    eta_raw_high, eta_raw_low, phi_raw_high, phi_raw_low, idx_bits_high, idx_bits_low, charge_high, charge_low, iso_high, iso_low,
-    eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MAX_MUON_BITS-1 downto 0;
+    ip_high, ip_low, upt_high, upt_low, phi_raw_high, phi_raw_low, idx_bits_high, idx_bits_low, charge_high, charge_low, iso_high, iso_low, eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MAX_MUON_BITS-1 downto 0;
 end record d_s_i_muon_record;
 
 constant d_s_i_muon : d_s_i_muon_record :=
-    (MUON_ETA_RAW_HIGH,MUON_ETA_RAW_LOW,MUON_PHI_RAW_HIGH,MUON_PHI_RAW_LOW,MUON_IDX_BITS_HIGH,MUON_IDX_BITS_LOW,MUON_CHARGE_HIGH,MUON_CHARGE_LOW,MUON_ISO_HIGH,MUON_ISO_LOW,
-    MUON_ETA_HIGH,MUON_ETA_LOW,MUON_QUAL_HIGH,MUON_QUAL_LOW,MUON_PT_HIGH,MUON_PT_LOW,MUON_PHI_HIGH,MUON_PHI_LOW);
+    (MUON_IP_HIGH,MUON_IP_LOW,MUON_UPT_HIGH,MUON_UPT_LOW,MUON_PHI_RAW_HIGH,MUON_PHI_RAW_LOW,MUON_IDX_BITS_HIGH,MUON_IDX_BITS_LOW,MUON_CHARGE_HIGH,MUON_CHARGE_LOW,MUON_ISO_HIGH,MUON_ISO_LOW,MUON_ETA_HIGH,MUON_ETA_LOW,MUON_QUAL_HIGH,MUON_QUAL_LOW,MUON_PT_HIGH,MUON_PT_LOW,MUON_PHI_HIGH,MUON_PHI_LOW);
 
 constant D_S_I_MUON_V2 : d_s_i_muon_record := d_s_i_muon;
 constant D_S_I_MU_V2 : d_s_i_muon_record := d_s_i_muon; -- dummy for VHDL-Producer output (correlation conditions)
@@ -137,6 +155,8 @@ type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(
 
 type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.qual_high-d_s_i_muon.qual_low+1))-1 downto 0);
 type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.iso_high-d_s_i_muon.iso_low+1))-1 downto 0);
+-- HB 2020-06-08: updated for new muon structure with "unconstraint pt" and "impact parameter".
+type muon_templates_ip_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.ip_high-d_s_i_muon.ip_low+1))-1 downto 0);
 
 type muon_templates_boolean_array is array (1 to NR_MUON_TEMPLATES) of boolean;
 type muon_templates_natural_array is array (1 to NR_MUON_TEMPLATES) of natural;
@@ -606,12 +626,14 @@ subtype dr_squared_range_real is real range 0.0 to ((ETA_RANGE_REAL*(real(10**DE
 
 -- ********************************************************
 -- mass parameters
--- HB 2017-04-26: definition of mass_type:
+-- HB 2020-06-15: definition of mass_type:
 -- 0 => invariant mass
 -- 1 => transverse mass
-constant MASS_TYPE_MAX_VALUE : natural := 1;
+-- 2 => invariant mass with unconstraint pt
+constant MASS_TYPE_MAX_VALUE : natural := 2;
 constant INVARIANT_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 0;
 constant TRANSVERSE_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 1;
+constant UPT_INVARIANT_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 2;
 
 -- HB 2105-10-21: INV_MASS_LIMITS_PRECISION_ALL must be less than 2*INV_MASS_PT_PRECISION+INV_MASS_COSH_COS_PRECISION !!!
 -- constant INV_MASS_LIMITS_PRECISION_ALL : positive range 1 to 3 := 1; -- 1 => first digit after decimal point
@@ -773,6 +795,9 @@ constant MU_HTM_COSH_COS_PRECISION : positive := MUON_HTM_COSH_COS_PRECISION;
 constant MUON_PT_VECTOR_WIDTH: positive := log2c((2**(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low+1)-1)*(10**MUON_PT_PRECISION)); -- max. value 255.5 GeV => 2555 => 0x9FB
 constant MU_PT_VECTOR_WIDTH: positive := MUON_PT_VECTOR_WIDTH; -- dummy for VHDL-Producer output (correlation conditions)
 -- constant MUON_PT_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 (255.5 * 10**MUON_INV_MASS_PT_PRECISION) => 0x9FB
+
+constant MUON_UPT_PRECISION : positive := 1; -- 1 digit after decimal point
+constant MU_UPT_VECTOR_WIDTH: positive := 12; -- max. value 255.0 GeV => 2550 (255.0 * 10**MUON_UPT_PRECISION) => 0x9F6 
 
 constant MUON_MUON_COSH_COS_VECTOR_WIDTH: positive := log2c(677303); -- max. value cosh_deta-cos_dphi => [667303-(-10000)]=677303 => 0xA55B7 - highest value in LUT
 constant MU_MU_COSH_COS_VECTOR_WIDTH: positive := MUON_MUON_COSH_COS_VECTOR_WIDTH; -- max. value cosh_deta-cos_dphi => [667303-(-10000)]=677303 => 0xA55B7 - highest value in LUT
@@ -1765,6 +1790,28 @@ constant MU_PT_LUT : muon_pt_lut_array := (
 2398, 2403, 2408, 2413, 2418, 2423, 2428, 2433, 2438, 2443, 2448, 2453, 2458, 2463, 2468, 2473,
 -- 2478, 2483, 2488, 2493, 2498, 2503, 2508, 2513, 2518, 2523, 2528, 2533, 2538, 2543, 2548, 2555
 2478, 2483, 2488, 2493, 2498, 2503, 2508, 2513, 2518, 2523, 2528, 2533, 2538, 2543, 2548, 2553
+);
+
+-- muon unconstraint pt LUT
+type muon_upt_lut_array is array (0 to 2**(D_S_I_MUON_V2.upt_high-D_S_I_MUON_V2.upt_low+1)-1) of natural range 0 to 2545;
+
+constant MU_UPT_LUT : muon_upt_lut_array := (
+0, 5, 15, 25, 35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145,
+155, 165, 175, 185, 195, 205, 215, 225, 235, 245, 255, 265, 275, 285, 295, 305,
+315, 325, 335, 345, 355, 365, 375, 385, 395, 405, 415, 425, 435, 445, 455, 465,
+475, 485, 495, 505, 515, 525, 535, 545, 555, 565, 575, 585, 595, 605, 615, 625,
+635, 645, 655, 665, 675, 685, 695, 705, 715, 725, 735, 745, 755, 765, 775, 785,
+795, 805, 815, 825, 835, 845, 855, 865, 875, 885, 895, 905, 915, 925, 935, 945,
+955, 965, 975, 985, 995, 1005, 1015, 1025, 1035, 1045, 1055, 1065, 1075, 1085, 1095, 1105,
+1115, 1125, 1135, 1145, 1155, 1165, 1175, 1185, 1195, 1205, 1215, 1225, 1235, 1245, 1255, 1265,
+1275, 1285, 1295, 1305, 1315, 1325, 1335, 1345, 1355, 1365, 1375, 1385, 1395, 1405, 1415, 1425,
+1435, 1445, 1455, 1465, 1475, 1485, 1495, 1505, 1515, 1525, 1535, 1545, 1555, 1565, 1575, 1585,
+1595, 1605, 1615, 1625, 1635, 1645, 1655, 1665, 1675, 1685, 1695, 1705, 1715, 1725, 1735, 1745,
+1755, 1765, 1775, 1785, 1795, 1805, 1815, 1825, 1835, 1845, 1855, 1865, 1875, 1885, 1895, 1905,
+1915, 1925, 1935, 1945, 1955, 1965, 1975, 1985, 1995, 2005, 2015, 2025, 2035, 2045, 2055, 2065,
+2075, 2085, 2095, 2105, 2115, 2125, 2135, 2145, 2155, 2165, 2175, 2185, 2195, 2205, 2215, 2225,
+2235, 2245, 2255, 2265, 2275, 2285, 2295, 2305, 2315, 2325, 2335, 2345, 2355, 2365, 2375, 2385,
+2395, 2405, 2415, 2425, 2435, 2445, 2455, 2465, 2475, 2485, 2495, 2505, 2515, 2525, 2535, 2545
 );
 
 -- calo-calo cosh deta LUTs

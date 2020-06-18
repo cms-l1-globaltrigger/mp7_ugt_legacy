@@ -639,7 +639,7 @@ subtype dr_squared_range_real is real range 0.0 to ((ETA_RANGE_REAL*(real(10**DE
 constant MASS_TYPE_MAX_VALUE : natural := 3;
 constant INVARIANT_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 0;
 constant TRANSVERSE_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 1;
-constant UPT_INVARIANT_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 2;
+constant INVARIANT_MASS_UPT_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 2;
 constant INVARIANT_MASS_DIV_DR_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 3;
 
 -- HB 2105-10-21: INV_MASS_LIMITS_PRECISION_ALL must be less than 2*INV_MASS_PT_PRECISION+INV_MASS_COSH_COS_PRECISION !!!

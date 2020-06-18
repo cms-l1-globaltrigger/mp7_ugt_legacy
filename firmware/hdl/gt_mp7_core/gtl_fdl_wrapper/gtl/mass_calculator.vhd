@@ -59,19 +59,19 @@ architecture rtl of mass_calculator is
 
 -- HB 2015-10-21: length of std_logic_vector for invariant mass (invariant_mass_sq_div2) and limits.
     constant MASS_VECTOR_WIDTH : positive := pt1_width+pt2_width+cosh_cos_width;
-    constant UPTMASS_VECTOR_WIDTH : positive := upt1_width+upt2_width+cosh_cos_width;
+    constant MASS_UPT_VECTOR_WIDTH : positive := upt1_width+upt2_width+cosh_cos_width;
 
     signal invariant_mass_sq_div2 : std_logic_vector(MASS_VECTOR_WIDTH-1 downto 0) := (others => '0');
-    signal upt_inv_mass_sq_div2 : std_logic_vector(UPTMASS_VECTOR_WIDTH-1 downto 0) := (others => '0');
+    signal inv_mass_upt_sq_div2 : std_logic_vector(MASS_UPT_VECTOR_WIDTH-1 downto 0) := (others => '0');
     signal transverse_mass_sq_div2 : std_logic_vector(MASS_VECTOR_WIDTH-1 downto 0) := (others => '0');
     
-    signal inv_mass_comp, upt_inv_mass_comp, transverse_mass_comp : std_logic := '0';
+    signal inv_mass_comp, inv_mass_upt_comp, transverse_mass_comp : std_logic := '0';
     
 -- HB 2017-09-21: used attribute "use_dsp" instead of "use_dsp48" for "mass" - see warning below
 -- MP7 builds, synth_1, runme.log => WARNING: [Synth 8-5974] attribute "use_dsp48" has been deprecated, please use "use_dsp" instead
     attribute use_dsp : string;
     attribute use_dsp of invariant_mass_sq_div2 : signal is "yes";
-    attribute use_dsp of upt_inv_mass_sq_div2 : signal is "yes";
+    attribute use_dsp of inv_mass_upt_sq_div2 : signal is "yes";
     attribute use_dsp of transverse_mass_sq_div2 : signal is "yes";
 
 begin
@@ -83,9 +83,9 @@ begin
     inv_mass_comp <= '1' when invariant_mass_sq_div2 >= mass_lower_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) and invariant_mass_sq_div2 <= mass_upper_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) else '0';
     sim_inv_mass_comp <= inv_mass_comp;
     
-    upt_inv_mass_sq_div2 <= upt1 * upt2 * (cosh_deta - cos_dphi);
+    inv_mass_upt_sq_div2 <= upt1 * upt2 * (cosh_deta - cos_dphi);
     
-    upt_inv_mass_comp <= '1' when upt_inv_mass_sq_div2 >= mass_lower_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) and upt_inv_mass_sq_div2 <= mass_upper_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) else '0';
+    inv_mass_upt_comp <= '1' when inv_mass_upt_sq_div2 >= mass_lower_limit_vector(MASS_UPT_VECTOR_WIDTH-1 downto 0) and upt_inv_mass_sq_div2 <= mass_upper_limit_vector(MASS_UPT_VECTOR_WIDTH-1 downto 0) else '0';
     
 -- HB 2016-12-12: calculation of transverse mass with formular M**2/2=pt1*pt2*(1-cos(phi1-phi2))
 --                "conv_std_logic_vector((10**mass_cosh_cos_precision), cosh_cos_width)" means 1 multiplied with 10**mass_cosh_cos_precision, converted to std_logic_vector with cosh_cos_width
@@ -99,9 +99,9 @@ begin
     invariant_mass_sel: if mass_type = INVARIANT_MASS_TYPE generate
         mass_comp <= '1' when inv_mass_comp = '1' else '0';
     end generate invariant_mass_sel;
-    upt_invariant_mass_sel: if mass_type = UPT_INVARIANT_MASS_TYPE generate
-        mass_comp <= '1' when upt_inv_mass_comp = '1' else '0';
-    end generate upt_invariant_mass_sel;
+    invariant_mass_upt_sel: if mass_type = INVARIANT_MASS_UPT_TYPE generate
+        mass_comp <= '1' when inv_mass_upt_comp = '1' else '0';
+    end generate invariant_mass_upt_sel;
     transverse_mass_sel: if mass_type = TRANSVERSE_MASS_TYPE generate
         mass_comp <= '1' when transverse_mass_comp = '1' else '0';
     end generate transverse_mass_sel;

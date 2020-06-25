@@ -137,7 +137,6 @@ vcom -93 -work work $HDL_DIR/ipbus/slaves/ipb_pulse_regs.vhd
 vcom -93 -work work $MENU_DIR/algo_mapping_rop.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
-vcom -93 -work work $NGC_DIR/rom_lut_calo_inv_dr_sq_1/simulation/blk_mem_gen_v8_4.v
 
 ##TB_DIR
 vcom -93 -work work $MOD_TB_DIR/gtl_fdl_wrapper_tb.vhd

@@ -109,6 +109,7 @@ vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_9/synth/rom_lut_muon_inv_dr_
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_calo_inv_dr_sq_all.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_muon_inv_dr_sq_all.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_calculator.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_comp.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_mass_div_dr_condition.vhd
 vcom -93 -work work $MENU_DIR/gtl_module.vhd

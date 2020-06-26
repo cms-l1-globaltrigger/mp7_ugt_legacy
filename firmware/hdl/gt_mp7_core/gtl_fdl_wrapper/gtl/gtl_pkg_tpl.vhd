@@ -950,9 +950,9 @@ constant EG_TAU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH;
 constant JET_JET_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
 constant JET_TAU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
 constant TAU_TAU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
--- constant EG_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
--- constant JET_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
--- constant TAU_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
+constant EG_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
+constant JET_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
+constant TAU_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
 constant MU_MU_DPHI_BINS_WIDTH : positive := MU_DPHI_BINS_WIDTH; 
 
 constant EG_EG_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 

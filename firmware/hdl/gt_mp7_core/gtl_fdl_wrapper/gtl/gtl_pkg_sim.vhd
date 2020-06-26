@@ -883,13 +883,7 @@ constant CALO_DPHI_BINS : positive := CALO_PHI_BINS; -- 144
 
 constant CALO_DETA_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DETA_BINS))+1 
 constant CALO_DPHI_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DPHI_BINS))+1
--- constant EG_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
--- constant JET_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
--- constant TAU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
-constant CALO_DPHI_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DPHI_BINS))+1
--- constant EG_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH;
--- constant JET_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH;
--- constant TAU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH;
+
 type calo_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DETA_BINS_WIDTH-1 downto 0);
 type calo_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DPHI_BINS_WIDTH-1 downto 0);
 

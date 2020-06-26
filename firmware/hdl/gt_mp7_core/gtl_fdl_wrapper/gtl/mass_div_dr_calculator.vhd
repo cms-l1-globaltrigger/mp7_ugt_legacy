@@ -32,7 +32,7 @@ entity mass_div_dr_calculator is
         pt2 : in std_logic_vector(pt2_width-1 downto 0);
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
-        mass_div_dr : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width+inv_dr_sq_width-1 downto 0)
+        mass_div_dr : out std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0')
     );
 end mass_div_dr_calculator;
 
@@ -62,7 +62,8 @@ architecture rtl of mass_div_dr_calculator is
 
     signal invariant_mass_sq_div2 : std_logic_vector(mass_vector_width-1 downto 0) := (others => '0');
 
-    constant max_mass_div_dr : std_logic_vector(mass_div_dr_vector_width-1 downto 0) := (others => '1');
+    constant max_mass_div_dr : std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '1');
+    
     signal inv_dr_sq : std_logic_vector(inv_dr_sq_width-1 downto 0);
     
     attribute use_dsp : string;
@@ -96,6 +97,15 @@ begin
     end generate rom_lut_muon_sel;
 
 -- LUT value for deta=0 and dphi=0 (dR=0, 1/dR=undefined) => 0, which means mass_div_dr is on it's maximum
-    mass_div_dr <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_mass_div_dr;
+--     mass_div_dr <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_mass_div_dr;
     
+    mass_div_dr_p: process(invariant_mass_sq_div2, inv_dr_sq, max_mass_div_dr)
+        begin
+        if inv_dr_sq > 0 then
+            mass_div_dr(mass_div_dr_vector_width-1 downto 0) <= invariant_mass_sq_div2 * inv_dr_sq;
+        else
+            mass_div_dr <= max_mass_div_dr;
+        end if;
+    end process;
+
 end architecture rtl;

@@ -936,6 +936,7 @@ constant MU_MU_MASS_DIV_DR_VECTOR_WIDTH : positive := 2*MU_PT_VECTOR_WIDTH+MU_MU
 type mu_mu_mass_div_dr_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_MU_MASS_DIV_DR_VECTOR_WIDTH-1 downto 0);
 
 constant MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR : positive := 84; -- 2*14+27+28=83, 2*MAX_PT_VECTOR_WIDTH+MAX_COSH_COS_VECTOR_WIDTH+MAX_INV_DR_SQ_VECTOR_WIDTH, width 84 used for hex notation !
+type mass_div_dr_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
 type max_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
 
 constant EG_EG_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 

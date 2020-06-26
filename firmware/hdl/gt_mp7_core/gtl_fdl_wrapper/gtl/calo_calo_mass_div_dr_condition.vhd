@@ -79,7 +79,7 @@ entity calo_calo_mass_div_dr_condition is
         lhc_clk: in std_logic;
         calo1_data_i: in calo_objects_array;
         calo2_data_i: in calo_objects_array;
-        mass_div_dr : in calo_calo_mass_div_dr_vector_array;
+        mass_div_dr : in mass_div_dr_vector_array;
         condition_o: out std_logic
     );
 end calo_calo_mass_div_dr_condition; 

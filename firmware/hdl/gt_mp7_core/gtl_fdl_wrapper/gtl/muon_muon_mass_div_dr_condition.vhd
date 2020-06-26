@@ -89,7 +89,7 @@ entity muon_muon_mass_div_dr_condition is
         muon2_data_i: in muon_objects_array;
         ls_charcorr_double: in muon_charcorr_double_array;
         os_charcorr_double: in muon_charcorr_double_array;
-        mass_div_dr : in mu_mu_mass_div_dr_vector_array;
+        mass_div_dr : in mass_div_dr_vector_array;
         condition_o: out std_logic
     );
 end muon_muon_mass_div_dr_condition; 

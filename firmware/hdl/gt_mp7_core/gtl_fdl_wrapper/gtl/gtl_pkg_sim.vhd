@@ -940,9 +940,9 @@ constant EG_TAU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH;
 constant JET_JET_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
 constant JET_TAU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
 constant TAU_TAU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
--- constant EG_MU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
--- constant JET_MU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
--- constant TAU_MU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
+constant EG_MU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
+constant JET_MU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
+constant TAU_MU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
 constant MU_MU_DETA_BINS_WIDTH : positive := MU_DETA_BINS_WIDTH; 
 
 constant EG_EG_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
@@ -951,9 +951,9 @@ constant EG_TAU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH;
 constant JET_JET_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
 constant JET_TAU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
 constant TAU_TAU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
--- constant EG_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
--- constant JET_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
--- constant TAU_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
+constant EG_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
+constant JET_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
+constant TAU_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
 constant MU_MU_DPHI_BINS_WIDTH : positive := MU_DPHI_BINS_WIDTH; 
 
 constant EG_EG_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
@@ -962,9 +962,9 @@ constant EG_TAU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH;
 constant JET_JET_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
 constant JET_TAU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
 constant TAU_TAU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
--- constant EG_MU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
--- constant JET_MU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
--- constant TAU_MU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
+constant EG_MU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
+constant JET_MU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
+constant TAU_MU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
 constant MU_MU_DETA_BINS_WIDTH_ROM : positive := MU_DETA_BINS_WIDTH_ROM; 
 
 constant EG_EG_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
@@ -973,9 +973,9 @@ constant EG_TAU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH;
 constant JET_JET_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
 constant JET_TAU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
 constant TAU_TAU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
--- constant EG_MU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
--- constant JET_MU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
--- constant TAU_MU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
+constant EG_MU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
+constant JET_MU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
+constant TAU_MU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
 constant MU_MU_DPHI_BINS_WIDTH_ROM : positive := MU_DPHI_BINS_WIDTH_ROM; 
 
 -- ROM selection
@@ -988,9 +988,9 @@ constant JET_TAU_ROM : natural range 0 to 2 := CALO_CALO_ROM;
 constant TAU_TAU_ROM : natural range 0 to 2 := CALO_CALO_ROM;
 constant MU_MU_ROM : natural range 0 to 2 := 1;
 -- constant CALO_MU_ROM : natural range 0 to 2 := 2;
--- constant EG_MU_ROM : natural range 0 to 2 := CALO_MU_ROM;
--- constant JET_MU_ROM : natural range 0 to 2 := CALO_MU_ROM;
--- constant TAU_MU_ROM : natural range 0 to 2 := CALO_MU_ROM;
+constant EG_MU_ROM : natural range 0 to 2 := CALO_MU_ROM;
+constant JET_MU_ROM : natural range 0 to 2 := CALO_MU_ROM;
+constant TAU_MU_ROM : natural range 0 to 2 := CALO_MU_ROM;
 
 -- ********************************************************
 -- conversion LUTs

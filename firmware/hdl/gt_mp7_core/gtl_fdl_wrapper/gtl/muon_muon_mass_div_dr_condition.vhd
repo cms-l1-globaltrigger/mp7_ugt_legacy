@@ -131,7 +131,7 @@ begin
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit 
                     )
                     port map(
-                        mass_div_dr(i,j),
+                        mass_div_dr(i,j)(MU_MU_MASS_DIV_DR_VECTOR_WIDTH-1 downto 0),
                         mass_div_dr_comp_t(i,j)
                     );
                 mass_div_dr_comp_pipe(i,j) <= mass_div_dr_comp_t(i,j);
@@ -144,7 +144,7 @@ begin
                         mass_div_dr_upper_limit, mass_div_dr_lower_limit 
                     )
                     port map(
-                        mass_div_dr(i,j),
+                        mass_div_dr(i,j)(MU_MU_MASS_DIV_DR_VECTOR_WIDTH-1 downto 0),
                         mass_div_dr_comp_pipe(i,j)
                     );
             end generate mass_comp_l2;

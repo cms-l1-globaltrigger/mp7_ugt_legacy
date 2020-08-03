@@ -152,14 +152,14 @@ The data structure of "missing Ht including HF" (HT$_{miss}^{HF}$) quantity [inc
 \subsubsection{\gmt optical interfaces}
 \label{sec:gtl:gmt_optical_interfaces}
 
-The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = charge valid, bits 62 and 63 are spare bits):
+The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = charge valid, bit 61 is a spare bit, bit 63..62 = impact parameter):
 
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
         \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
-        \bitbox {2}     {\small  \texttt{impact parameter}}       &
-        \bitbox {1}     {\small  \texttt{res}}       &
-        \bitbox {8}     {\texttt{unconstraint \pt}}       &
+        \bitbox {2}     {\small  \texttt{imp para}}       &
+        \bitbox {1}     {\small  \texttt{r}}       &
+        \bitbox {8}     {\texttt{unconst.\pt}}       &
         \bitbox {10}    {\texttt{$\varphi$} (out)}
         \bitbox {7}     {\texttt{index bits}}
         \bitbox {2}     {\small  \texttt{ch}}       &
@@ -779,15 +779,20 @@ Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data stru
 \item 2 bits isolation, 4 types for isolation (meaning not defined yet!)
 \item 1 bit charge sign, charge sign = '0' means "positive" charge, charge sign = '1' means "negative" charge
 \item 1 bit charge valid (='1' means "valid")
-\item 28 bits tag and spare (not defined yet!)
+\item 7 index bits
+\item 10 bits azimuth angle ($\varphi$) position, raw data
+\item 8 bits unconstraint \pt, range = 0..255 GeV (HW index = 0..0xFF), step = 1.0, the highest bin will mark an overflow (HW index 0xFF)
+\item 1 spare bit
+\item 2 bits impact parameter
 \end{itemize}
 
-The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = charge valid, bits 62 and 63 are spare bits):
+The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = charge valid, bit 61 is a spare bit, bit 63..62 = impact parameter):
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
-        \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,61,62,63} \\
-        \bitbox {2}     {\small  \texttt{res}}       &
-        \bitbox {9}     {\texttt{$\eta$} (out)}       &
+        \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
+        \bitbox {2}     {\small  \texttt{imp para}}       &
+        \bitbox {1}     {\small  \texttt{r}}       &
+        \bitbox {8}     {\texttt{unconst.\pt}}       &
         \bitbox {10}    {\texttt{$\varphi$} (out)}
         \bitbox {7}     {\texttt{index bits}}
         \bitbox {2}     {\small  \texttt{ch}}       &

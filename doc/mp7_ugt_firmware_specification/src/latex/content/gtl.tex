@@ -156,9 +156,10 @@ The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = ch
 
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
-        \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,61,62,63} \\
-        \bitbox {2}     {\small  \texttt{res}}       &
-        \bitbox {9}     {\texttt{$\eta$} (out)}       &
+        \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
+        \bitbox {2}     {\small  \texttt{impact parameter}}       &
+        \bitbox {1}     {\small  \texttt{res}}       &
+        \bitbox {8}     {\texttt{unconstraint \pt}}       &
         \bitbox {10}    {\texttt{$\varphi$} (out)}
         \bitbox {7}     {\texttt{index bits}}
         \bitbox {2}     {\small  \texttt{ch}}       &

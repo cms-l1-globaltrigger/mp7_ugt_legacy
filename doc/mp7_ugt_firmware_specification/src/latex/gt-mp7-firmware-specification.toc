@@ -81,22 +81,22 @@
 \contentsline {subsubsection}{\numberline {3.5.5}Calo Muon Correlation condition - template for VHDL-Producer}{109}{subsubsection.3.5.5}
 \contentsline {subsubsection}{\numberline {3.5.6}Muon Muon Correlation condition - template for VHDL-Producer}{112}{subsubsection.3.5.6}
 \contentsline {subsubsection}{\numberline {3.5.7}Calo Esums Correlation condition - template for VHDL-Producer}{114}{subsubsection.3.5.7}
-\contentsline {subsubsection}{\numberline {3.5.8}Muon Esums Correlation condition - template for VHDL-Producer}{114}{subsubsection.3.5.8}
-\contentsline {section}{\numberline {4}Final Desicion Logic}{115}{section.4}
-\contentsline {subsection}{\numberline {4.1}\ensuremath {\mu \mathrm {FDL}}\xspace Interface}{115}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}MP7 Final-OR\xspace hardware solution}{116}{subsection.4.2}
-\contentsline {subsection}{\numberline {4.3}Data flow}{116}{subsection.4.3}
-\contentsline {subsection}{\numberline {4.4}Main parts}{117}{subsection.4.4}
-\contentsline {subsubsection}{\numberline {4.4.1}Registers and memories}{118}{subsubsection.4.4.1}
-\contentsline {paragraph}{\numberline {4.4.1.1}Register map}{118}{paragraph.4.4.1.1}
-\contentsline {subsubsection}{\numberline {4.4.2}Algo-bx-masks}{127}{subsubsection.4.4.2}
-\contentsline {subsubsection}{\numberline {4.4.3}Rate-counters}{127}{subsubsection.4.4.3}
-\contentsline {subsubsection}{\numberline {4.4.4}Prescalers}{127}{subsubsection.4.4.4}
-\contentsline {subsubsection}{\numberline {4.4.5}Finor-masks}{127}{subsubsection.4.4.5}
-\contentsline {subsubsection}{\numberline {4.4.6}Veto-masks}{127}{subsubsection.4.4.6}
-\contentsline {subsubsection}{\numberline {4.4.7}Finor}{128}{subsubsection.4.4.7}
-\contentsline {subsection}{\numberline {4.5}Implementation in firmware}{128}{subsection.4.5}
-\contentsline {section}{\numberline {5}Readout-Process}{130}{section.5}
-\contentsline {section}{\numberline {6}Glossary}{131}{section.6}
-\contentsline {section}{Bibliography}{133}{section*.3}
-\contentsline {section}{Index}{133}{section*.4}
+\contentsline {subsubsection}{\numberline {3.5.8}Muon Esums Correlation condition - template for VHDL-Producer}{116}{subsubsection.3.5.8}
+\contentsline {section}{\numberline {4}Final Desicion Logic}{119}{section.4}
+\contentsline {subsection}{\numberline {4.1}\ensuremath {\mu \mathrm {FDL}}\xspace Interface}{119}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}MP7 Final-OR\xspace hardware solution}{120}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Data flow}{120}{subsection.4.3}
+\contentsline {subsection}{\numberline {4.4}Main parts}{121}{subsection.4.4}
+\contentsline {subsubsection}{\numberline {4.4.1}Registers and memories}{122}{subsubsection.4.4.1}
+\contentsline {paragraph}{\numberline {4.4.1.1}Register map}{122}{paragraph.4.4.1.1}
+\contentsline {subsubsection}{\numberline {4.4.2}Algo-bx-masks}{131}{subsubsection.4.4.2}
+\contentsline {subsubsection}{\numberline {4.4.3}Rate-counters}{131}{subsubsection.4.4.3}
+\contentsline {subsubsection}{\numberline {4.4.4}Prescalers}{131}{subsubsection.4.4.4}
+\contentsline {subsubsection}{\numberline {4.4.5}Finor-masks}{131}{subsubsection.4.4.5}
+\contentsline {subsubsection}{\numberline {4.4.6}Veto-masks}{131}{subsubsection.4.4.6}
+\contentsline {subsubsection}{\numberline {4.4.7}Finor}{132}{subsubsection.4.4.7}
+\contentsline {subsection}{\numberline {4.5}Implementation in firmware}{132}{subsection.4.5}
+\contentsline {section}{\numberline {5}Readout-Process}{134}{section.5}
+\contentsline {section}{\numberline {6}Glossary}{135}{section.6}
+\contentsline {section}{Bibliography}{137}{section*.3}
+\contentsline {section}{Index}{137}{section*.4}

@@ -20,6 +20,12 @@ entity gtl_module is
 -- HB 2016-09-16: inserted HTMHF and TOWERCNT
         htmhf_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         towercount_data : in std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
+-- HB 2018-08-06: inserted signals for "Asymmetry" and "Centrality" (included in esums data structure).
+        asymet_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        asymht_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        asymethf_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        asymhthf_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        centrality_data : in std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
 -- ****************************************************************************************
         muon_data : in muon_objects_array(0 to NR_MUON_OBJECTS-1);
         external_conditions : in std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);

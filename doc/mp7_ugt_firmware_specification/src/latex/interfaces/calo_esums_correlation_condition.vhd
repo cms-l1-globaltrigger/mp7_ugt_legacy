@@ -11,12 +11,17 @@ entity calo_esums_correlation_condition is
         et_ge_mode_calo: boolean;
         obj_type_calo: natural := EG_TYPE;
         et_threshold_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_full_range_calo: boolean;
+        nr_eta_windows_calo : natural;
         eta_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_ignore_calo: boolean;
         eta_w2_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         eta_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w3_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w3_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w4_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w4_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w5_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
+        eta_w5_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_full_range_calo: boolean;
         phi_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         phi_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
@@ -59,10 +64,10 @@ entity calo_esums_correlation_condition is
         pt1 : in diff_inputs_array;
         pt2 : in diff_inputs_array;
         cos_dphi : in calo_cosh_cos_vector_array;
-        cos_phi_1_integer : in calo_sin_cos_integer_array;
-        cos_phi_2_integer : in calo_sin_cos_integer_array;
-        sin_phi_1_integer : in calo_sin_cos_integer_array;
-        sin_phi_2_integer : in calo_sin_cos_integer_array;
+        cos_phi_1_integer : in sin_cos_integer_array;
+        cos_phi_2_integer : in sin_cos_integer_array;
+        sin_phi_1_integer : in sin_cos_integer_array;
+        sin_phi_2_integer : in sin_cos_integer_array;
         condition_o: out std_logic
     );
 end calo_esums_correlation_condition;

@@ -3,6 +3,7 @@
 -- Collection of cuts for correlations
 
 -- Version history:
+-- HB 2020-08-10: inserted cut for "twobody xunconstraint pt" of new muon structure.
 -- HB 2020-06-15: inserted cuts for "unconstraint pt" [upt] of new muon structure.
 -- HB 2019-05-03: changed name from  cuts_instances_v2 to cuts_instances.
 -- HB 2017-09-20: changed to cuts_instances_v2 - added limit_vectors.
@@ -24,6 +25,7 @@ entity cuts_instances is
         mass_cut: boolean;
         mass_type: natural;
         twobody_pt_cut: boolean;
+        twobody_upt_cut: boolean;
 
         diff_eta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0);
         diff_eta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0);
@@ -45,6 +47,7 @@ entity cuts_instances is
         cosh_cos_width: positive;
 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
+        upt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
         sin_cos_width: positive;
         pt_sq_sin_cos_precision : positive
 
@@ -66,7 +69,8 @@ entity cuts_instances is
         diff_phi_comp: out std_logic := '1';
         dr_comp: out std_logic := '1';
         mass_comp: out std_logic := '1';
-        twobody_pt_comp: out std_logic := '1'
+        twobody_pt_comp: out std_logic := '1';
+        twobody_upt_comp: out std_logic := '1'
     );
 end cuts_instances; 
 
@@ -134,6 +138,25 @@ begin
                 sin_phi_1_integer => sin_phi_1_integer,
                 sin_phi_2_integer => sin_phi_2_integer,
                 pt_square_comp => twobody_pt_comp
+        );
+    end generate twobody_pt_i;
+    twobody_upt_i: if twobody_upt_cut = true generate
+        twobody_upt_calculator_i: entity work.twobody_pt_calculator
+            generic map(
+                pt1_width => upt1_width, 
+                pt2_width => upt2_width, 
+                pt_sq_threshold_vector => upt_sq_threshold_vector,
+                sin_cos_width => sin_cos_width,
+                pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
+            )
+            port map(
+                pt1 => upt1(upt1_width-1 downto 0),
+                pt2 => upt2(upt2_width-1 downto 0),
+                cos_phi_1_integer => cos_phi_1_integer,
+                cos_phi_2_integer => cos_phi_2_integer,
+                sin_phi_1_integer => sin_phi_1_integer,
+                sin_phi_2_integer => sin_phi_2_integer,
+                pt_square_comp => twobody_upt_comp
         );
     end generate twobody_pt_i;
     

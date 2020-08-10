@@ -158,13 +158,13 @@ The data structure of "missing Ht including HF" (HT$_{miss}^{HF}$) quantity [inc
 \subsubsection{\gmt optical interfaces}
 \label{sec:gtl:gmt_optical_interfaces}
 
-The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = charge valid, bits 62 and 63 are spare bits):
-
+The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = charge valid, bit 61 is a spare bit, bit 63..62 = impact parameter):
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
-        \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,61,62,63} \\
-        \bitbox {2}     {\small  \texttt{res}}       &
-        \bitbox {9}     {\texttt{$\eta$} (out)}       &
+        \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
+        \bitbox {2}     {\small  \texttt{imp para}}       &
+        \bitbox {1}     {\small  \texttt{r}}       &
+        \bitbox {8}     {\texttt{unconst.\pt}}       &
         \bitbox {10}    {\texttt{$\varphi$} (out)}
         \bitbox {7}     {\texttt{index bits}}
         \bitbox {2}     {\small  \texttt{ch}}       &
@@ -665,16 +665,20 @@ Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data stru
 \item 2 bits isolation, 4 types for isolation (meaning not defined yet!)
 \item 1 bit charge sign, charge sign = '0' means "positive" charge, charge sign = '1' means "negative" charge
 \item 1 bit charge valid (='1' means "valid")
-\item 28 bits tag and spare (not defined yet!)
+\item 7 index bits
+\item 10 bits azimuth angle ($\varphi$) position, raw data
+\item 8 bits unconstraint \pt, range = 0..255 GeV (HW index = 0..0xFF), step = 1.0, the highest bin will mark an overflow (HW index 0xFF)
+\item 1 spare bit
+\item 2 bits impact parameter
 \end{itemize}
 
-The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = charge valid, bits 62 and 63 are spare bits):
-
+The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = charge valid, bit 61 is a spare bit, bit 63..62 = impact parameter):
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
-        \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,61,62,63} \\
-        \bitbox {2}     {\small  \texttt{res}}       &
-        \bitbox {9}     {\texttt{$\eta$} (out)}       &
+        \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
+        \bitbox {2}     {\small  \texttt{imp para}}       &
+        \bitbox {1}     {\small  \texttt{r}}       &
+        \bitbox {8}     {\texttt{unconst.\pt}}       &
         \bitbox {10}    {\texttt{$\varphi$} (out)}
         \bitbox {7}     {\texttt{index bits}}
         \bitbox {2}     {\small  \texttt{ch}}       &
@@ -771,6 +775,22 @@ bits [33..32] & definition \\\hline\hline
 \label{tab:gtl:muon_iso_bits}
 \end{table}
 
+The representation of the 2 bits for impact parameter is expected as shown in Table~\ref{tab:gtl:muon_iso_bits}.\\
+ 
+\begin{table}[ht]
+\caption{Definition of muon impact parameter bits}
+\vspace{5mm}
+\centering
+\begin{tabular}{|c|c|}\hline
+bits [63..62] & definition \\\hline\hline
+00 & TBD \\
+01 & TBD \\
+10 & TBD \\
+11 & TBD \\\hline
+\end{tabular}
+\label{tab:gtl:muon_iso_bits}
+\end{table}
+
 \clearpage
 
 \paragraph{Muon charge correlation module}\label{sec:gtl:muon_charge_correlation_module}
@@ -783,6 +803,39 @@ of objects are the same, "0S" means that at least one object has different charg
 There is no charge correlation for single type conditions.\\
 In all cases the "charge valid" bit of the objects must be set.\\
 In TME one can select "LS", "0S" or ignore for charge correlation in muon conditions.\\
+
+% % Insert as table !!!
+% Double Muon
+% 
+% x x : I ignore (charge x = +, -, I)
+% + + : LS both positive muons
+% - - : LS both negative muons
+% I I : LS both muons with the same sign, positive or negative
+% + - : OS two muons of opposite sign
+% - + : OS idem
+% I I : OS idem
+% 
+% TripleMuon:
+% 
+% x x x : I  ignore (charge x = +, -, I)
+% + + + : LS three muons of positive charge
+% - - - : LS three muons of negative charge
+% I I I : LS three muons of the same sign (positive or negative)
+% + + - : OS a pair plus a positive muon
+% + - - : OS a pair plus a negative muon
+% + - I : OS a pair plus a negative or positive muon
+% 
+% QuadMuon
+% 
+% x x x x : I  ignore (charge x = +, -, I)
+% + + + + : LS four muons of positive charge
+% - - - - : LS four muons of negative charge
+% I I I I : LS four muons of the same sign (positive or negative)
+% + + + - : OS a pair plus two positive muons
+% + + - - : OS two pairs
+% + - - - : OS a pair plus two negative muons
+% + - I I : OS a pair plus two negative or positive muons
+% 
 
 \begin{table}[ht]
 \caption{Muon charge correlation - Double Muon}
@@ -874,11 +927,10 @@ The calculation of charge correlations is done in an own module in the top-of-hi
 \subparagraph{Muon conditions module}
 A module for conditions with muon objects (\texttt{muon\_conditions.vhd}) instantiates the muon comparators module (\texttt{muon\_comparators.vhd}) as many times as
 the numbers of objects and requirements determine. Depending on the condition-type different and-or-structures of object vs. requirement are selected.
+The selection of condition-type and the number of objects is done by parameters in the generic interface list of the module.
 
 \subparagraph{Muon comparators module}\label{sec:gtl:muon_comp_module}
-A comparator between \pt and a threshold (pt\_threshold), a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators, a comparison of quality with LUT
-a comparison of isolation with LUT and a comparison of the requested charge is done in this basic module. The values for \pt threshold, the 'mode-selection' for the \pt comparator,
-the "limits" of the "window"-comparators, the quality LUTs, the isolation LUTs and the requested charge is given in the generic interface list of the module.
+A comparator between \pt and a threshold (pt\_threshold), a comparator between unconstraint \pt and a threshold (upt\_threshold), a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators, a comparison of quality with LUT, a comparison of isolation with LUT and a comparison of the requested charge is done in this basic module. The values for \pt threshold, unconstraint \pt threshold, the 'mode-selection' for the \pt comparator, the "limits" of the "window"-comparators, the quality LUTs, the isolation LUTs and the requested charge is given in the generic interface list of the module.
 Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
 The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
 The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. There are two flags, one for "full-range" and one for "ignore-second-window" for the selection of the ranges.\\

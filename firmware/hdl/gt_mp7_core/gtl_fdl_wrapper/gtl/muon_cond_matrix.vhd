@@ -2,6 +2,7 @@
 -- Muon condition matrix
 
 -- Version history:
+-- HB 2020-08-10: inserted "twobody unconstraint pt".
 -- HB 2019-04-30: first version (updated Dinyar/Hannes proposal).
 
 library IEEE;
@@ -30,6 +31,7 @@ entity muon_cond_matrix is
         charge_comp_triple : in muon_charcorr_triple_array;
         charge_comp_quad : in muon_charcorr_quad_array;
         twobody_pt_comp : in std_logic_2dim_array(muon_object_slice_1_low to muon_object_slice_1_high, muon_object_slice_2_low to muon_object_slice_2_high);
+        twobody_upt_comp : in std_logic_2dim_array(muon_object_slice_1_low to muon_object_slice_1_high, muon_object_slice_2_low to muon_object_slice_2_high);
         condition_o : out std_logic
     );
 end muon_cond_matrix;
@@ -72,7 +74,7 @@ begin
     -- Condition type: "double".
     -- matrix_double_i: if (nr_templates = 2 and double_wsc = false) generate
     matrix_double_i: if nr_templates = 2 generate
-        matrix_double_p: process(obj_slice_1_vs_templ, obj_slice_2_vs_templ, charge_comp_double, twobody_pt_comp)
+        matrix_double_p: process(obj_slice_1_vs_templ, obj_slice_2_vs_templ, charge_comp_double, twobody_pt_comp, twobody_upt_comp)
             variable index : integer := 0;
             variable obj_vs_templ_vec : std_logic_vector((nr_objects_slice_1_int*nr_objects_slice_2_int) downto 1) := (others => '0');
             variable condition_and_or_tmp : std_logic := '0';
@@ -84,7 +86,7 @@ begin
                 for j in muon_object_slice_2_low to muon_object_slice_2_high loop
                     if j/=i then
                         index := index + 1;
-                        obj_vs_templ_vec(index) := obj_slice_1_vs_templ(i,1) and obj_slice_2_vs_templ(j,1) and charge_comp_double(i,j) and twobody_pt_comp(i,j);
+                        obj_vs_templ_vec(index) := obj_slice_1_vs_templ(i,1) and obj_slice_2_vs_templ(j,1) and charge_comp_double(i,j) and twobody_pt_comp(i,j) and twobody_upt_comp(i,j);
                     end if;
                 end loop;
             end loop;

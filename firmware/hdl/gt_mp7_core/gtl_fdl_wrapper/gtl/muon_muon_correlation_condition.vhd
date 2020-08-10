@@ -3,6 +3,7 @@
 -- Correlation Condition module for muon objects.
 
 -- Version history:
+-- HB 2020-08-10: inserted "twobody unconstraint pt".
 -- HB 2020-06-09: implemented new muon structure with "unconstraint pt" and "impact parameter".
 -- HB 2019-06-17: updated for "five eta cuts".
 -- HB 2019-05-06: updated instances.
@@ -38,6 +39,7 @@ entity muon_muon_correlation_condition is
         mass_cut: boolean;
         mass_type : natural;
         twobody_pt_cut: boolean;
+        twobody_upt_cut: boolean;
 
         muon1_object_low: natural;
         muon1_object_high: natural;
@@ -117,6 +119,7 @@ entity muon_muon_correlation_condition is
         cosh_cos_width: positive;
 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
+        upt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
         sin_cos_width: positive;
         pt_sq_sin_cos_precision : positive
 
@@ -187,6 +190,7 @@ begin
                             mass_cut => mass_cut,
                             mass_type => mass_type,
                             twobody_pt_cut => twobody_pt_cut,
+                            twobody_upt_cut => twobody_upt_cut,
                             diff_eta_upper_limit_vector => diff_eta_upper_limit_vector,
                             diff_eta_lower_limit_vector => diff_eta_lower_limit_vector,
                             diff_phi_upper_limit_vector => diff_phi_upper_limit_vector,
@@ -202,6 +206,7 @@ begin
                             cosh_cos_precision => mass_cosh_cos_precision,
                             cosh_cos_width => cosh_cos_width,
                             pt_sq_threshold_vector => pt_sq_threshold_vector,
+                            upt_sq_threshold_vector => upt_sq_threshold_vector,
                             sin_cos_width => sin_cos_width,
                             pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
                         )
@@ -222,7 +227,8 @@ begin
                             diff_phi_comp => diff_phi_comp_temp(i,j),
                             dr_comp => dr_comp_temp(i,j),
                             mass_comp => mass_comp_temp(i,j),
-                            twobody_pt_comp => twobody_pt_comp_temp(i,j)
+                            twobody_pt_comp => twobody_pt_comp_temp(i,j),
+                            twobody_upt_comp => twobody_upt_comp_temp(i,j)
                         );
                     diff_eta_comp(i,j) <= diff_eta_comp_temp(i,j);
                     diff_eta_comp(j,i) <= diff_eta_comp_temp(i,j);
@@ -234,6 +240,8 @@ begin
                     mass_comp(j,i) <= mass_comp_temp(i,j);
                     twobody_pt_comp(i,j) <= twobody_pt_comp_temp(i,j);
                     twobody_pt_comp(j,i) <= twobody_pt_comp_temp(i,j);
+                    twobody_upt_comp(i,j) <= twobody_upt_comp_temp(i,j);
+                    twobody_upt_comp(j,i) <= twobody_upt_comp_temp(i,j);
                 end generate if_j_gr_i;
             end generate same_bx_same_range_i;
             different_bx_different_range_i: if not same_bx or (muon1_object_low /= muon2_object_low) or (muon1_object_high /= muon2_object_high) generate
@@ -245,6 +253,7 @@ begin
                         mass_cut => mass_cut,
                         mass_type => mass_type,
                         twobody_pt_cut => twobody_pt_cut,
+                        twobody_upt_cut => twobody_upt_cut,
                         diff_eta_upper_limit_vector => diff_eta_upper_limit_vector,
                         diff_eta_lower_limit_vector => diff_eta_lower_limit_vector,
                         diff_phi_upper_limit_vector => diff_phi_upper_limit_vector,
@@ -260,6 +269,7 @@ begin
                         cosh_cos_precision => mass_cosh_cos_precision,
                         cosh_cos_width => cosh_cos_width,
                         pt_sq_threshold_vector => pt_sq_threshold_vector,
+                        upt_sq_threshold_vector => upt_sq_threshold_vector,
                         sin_cos_width => sin_cos_width,
                         pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
                     )
@@ -280,14 +290,15 @@ begin
                         diff_phi_comp => diff_phi_comp(i,j),
                         dr_comp => dr_comp(i,j),
                         mass_comp => mass_comp(i,j),
-                        twobody_pt_comp => twobody_pt_comp(i,j)
+                        twobody_pt_comp => twobody_pt_comp(i,j),
+                        twobody_upt_comp => twobody_upt_comp(i,j)
                     );
             end generate different_bx_different_range_i;
         end generate delta_l_2;
     end generate delta_l_1;
 
     -- Pipeline stage for cut comps
-    diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp, mass_comp, twobody_pt_comp)
+    diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp, mass_comp, twobody_pt_comp, twobody_upt_comp)
         begin
         if obj_vs_templ_pipeline_stage = false then 
             diff_eta_comp_pipe <= diff_eta_comp;
@@ -295,6 +306,7 @@ begin
             dr_comp_pipe <= dr_comp;
             mass_comp_pipe <= mass_comp;
             twobody_pt_comp_pipe <= twobody_pt_comp;
+            twobody_upt_comp_pipe <= twobody_upt_comp;
         else
             if (lhc_clk'event and lhc_clk = '1') then
                 diff_eta_comp_pipe <= diff_eta_comp;
@@ -302,6 +314,7 @@ begin
                 dr_comp_pipe <= dr_comp;
                 mass_comp_pipe <= mass_comp;
                 twobody_pt_comp_pipe <= twobody_pt_comp;
+                twobody_upt_comp_pipe <= twobody_upt_comp;
             end if;
         end if;
     end process;
@@ -418,7 +431,7 @@ begin
     end process;
     
     -- "Matrix" of permutations in an and-or-structure.
-    matrix_p: process(muon1_obj_vs_templ_pipe, muon2_obj_vs_templ_pipe, charge_comp_double_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
+    matrix_p: process(muon1_obj_vs_templ_pipe, muon2_obj_vs_templ_pipe, charge_comp_double_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe, twobody_upt_comp_pipe)
         variable index : integer := 0;
         variable obj_vs_templ_vec : std_logic_vector((muon1_object_high-muon1_object_low+1)*(muon2_object_high-muon2_object_low+1) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
@@ -432,12 +445,12 @@ begin
                     if j/=i then
                         index := index + 1;
                         obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j) and 
-                                                   diff_phi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
+                                                   diff_phi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j) and twobody_upt_comp_pipe(i,j);
                     end if;
                 else
                     index := index + 1;
                     obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j) and
-                                               diff_phi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
+                                               diff_phi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j) and twobody_upt_comp_pipe(i,j);
                 end if;
             end loop;
         end loop;

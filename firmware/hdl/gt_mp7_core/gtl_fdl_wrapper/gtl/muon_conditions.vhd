@@ -6,6 +6,7 @@
 -- Charge correlation selection implemented with "LS" and "OS" (charge correlation calculated in muon_charge_correlations.vhd)
 
 -- Version history:
+-- HB 2020-08-10: inserted "twobody unconstraint pt".
 -- HB 2020-06-09: implemented new muon structure with "unconstraint pt" [upt] and "impact parameter" [ip].
 -- HB 2019-06-14: updated for "five eta cuts".
 -- HB 2019-05-06: updated instances.
@@ -67,6 +68,9 @@ entity muon_conditions is
         twobody_pt_cut: boolean := false;
         pt_width: positive := 1; 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        twobody_upt_cut: boolean := false;
+        upt_width: positive := 1; 
+        upt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := 1;
         pt_sq_sin_cos_precision : positive := 1
 
@@ -118,6 +122,9 @@ architecture rtl of muon_conditions is
     signal twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : 
         std_logic_2dim_array(muon_object_slice_1_low to muon_object_slice_1_high, muon_object_slice_2_low to muon_object_slice_2_high) := (others => (others => '1'));
 
+    signal twobody_upt_comp, twobody_upt_comp_temp, twobody_upt_comp_pipe : 
+        std_logic_2dim_array(muon_object_slice_1_low to muon_object_slice_1_high, muon_object_slice_2_low to muon_object_slice_2_high) := (others => (others => '1'));
+
 begin
 
 -- HB 2017-05-16: TBPT only for Double condition
@@ -144,6 +151,24 @@ begin
                 pt, cos_phi_integer, sin_phi_integer, twobody_pt_comp
             );
     end generate twobody_pt_cut_i;
+
+-- Instantiation of two-body unconstraint pt cut.
+    twobody_upt_cut_i: if twobody_upt_cut = true and nr_templates = 2 generate
+        twobody_upt_i: entity work.twobody_pt
+            generic map(
+                muon_object_slice_1_low, muon_object_slice_1_high,
+                muon_object_slice_2_low, muon_object_slice_2_high,
+                nr_templates,                
+                twobody_upt_cut,
+                upt_width, 
+                upt_sq_threshold_vector,
+                sin_cos_width,
+                pt_sq_sin_cos_precision
+            )
+            port map(
+                pt, cos_phi_integer, sin_phi_integer, twobody_upt_comp
+            );
+    end generate twobody_upt_cut_i;
 
 -- Instantiation of object cuts.
     obj_cuts_i: entity work.muon_obj_cuts
@@ -179,6 +204,7 @@ begin
                 obj_slice_3_vs_templ_pipe <= obj_slice_3_vs_templ;
                 obj_slice_4_vs_templ_pipe <= obj_slice_4_vs_templ;
                 twobody_pt_comp_pipe <= twobody_pt_comp;
+                twobody_upt_comp_pipe <= twobody_upt_comp;
             else
                 if (lhc_clk'event and lhc_clk = '1') then
                     obj_slice_1_vs_templ_pipe <= obj_slice_1_vs_templ;
@@ -186,6 +212,7 @@ begin
                     obj_slice_3_vs_templ_pipe <= obj_slice_3_vs_templ;
                     obj_slice_4_vs_templ_pipe <= obj_slice_4_vs_templ;
                     twobody_pt_comp_pipe <= twobody_pt_comp;
+                    twobody_upt_comp_pipe <= twobody_upt_comp;
                 end if;
             end if;
     end process;
@@ -220,7 +247,7 @@ begin
         )
         port map(lhc_clk,
             obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, obj_slice_3_vs_templ_pipe, obj_slice_4_vs_templ_pipe,
-            charge_comp_double_pipe, charge_comp_triple_pipe, charge_comp_quad_pipe, twobody_pt_comp_pipe,
+            charge_comp_double_pipe, charge_comp_triple_pipe, charge_comp_quad_pipe, twobody_pt_comp_pipe, twobody_upt_comp_pipe,
             condition_o
         );
 

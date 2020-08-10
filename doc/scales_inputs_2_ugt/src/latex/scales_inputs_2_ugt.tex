@@ -16,7 +16,7 @@
 
 \begin{titlepage}
 
-\date{16 April 2020}
+\date{3 August 2020}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -93,7 +93,11 @@ So, for muons, which use 9 bits for coding $\eta$, the central value of the bin 
 
 For calo objects, which use 8 bits for coding $\eta$, the left edge of the bins range from $-128 \times 0.0435 = -5.568000$ to $127 \times 0.0435 = 5.524500$ (left edge of the bin 0 = 0.0). The central value of the bins ranges between $\pm 5.546260$. The physical $\eta$ range of the calorimeters is about $\pm5$, so that not all possible $\eta$ bins are used. 
 
-6) The $p_t$/$E_t$ scale is identical in step width (0.5 GeV for all systems), starts from 0 (zero) but reaches up to different maximum values for different objects. The highest bin (such as 0x1ff for 9 bits, or 0x7ff for 11 bits, etc.) marks an overflow. 
+6) The $p_t$/$E_t$ scale is identical in step width (0.5 GeV for all systems), starts from 0 (zero) but reaches up to different maximum values for different objects. The highest bin (such as 0x1ff for 9 bits, or 0x7ff for 11 bits, etc.) marks an overflow.
+
+The new muon structure contains:\\
+- "unconstraint $p_t$" scale (8 bits) in steps of 1.0 GeV starting from 0 (zero), the highest bin 0xff marks an overflow.\\ 
+- "impact parameter" with 2 bits.
 
 7) This system allows us to keep a sufficient number of bits for each object free for future use (quality, isolation, possibly tag bits to match uGMT muons to isolation information from the Calorimeter Trigger, etc).
 
@@ -129,8 +133,9 @@ muon	&	1 * 8	&	$\varphi$ (extrapolated)&	2$\pi$	&	2$\pi$/576$\sim$0.011	&	10 \\
 	&		&	charge valid	&		&		&	1                    \\
 	&		&	index bits	&		&		&	7                    \\
 	&		&	$\varphi$ (out) &	2$\pi$	&	2$\pi$/576$\sim$0.011	&	10 \\
-	&		&	$\eta$ (out)	&	-2.45..2.45	&	0.0870/8=0.010875	&	8+1 = 9 \\
-	&		&	reserved	&		&		&	2                    \\
+	&		&	unconatraint $p_t$	&	0..256 GeV 	&	1.0	&	8                    \\
+	&		&	reserved	&		&		&	1                    \\
+	&		&	impact parameter	&		&		&	2                    \\
 	&		&	TOTAL	&		&		&	64                    \\
 % 	&		&		&		&		&	                    \\
 \hline
@@ -273,8 +278,9 @@ bins are "narrower" than other bins.
 \centering
 \begin{tabular}{|c|c|}\hline
 bit(s) & parameter \\\hline\hline
-63..62 & reserved \\
-61..53 & $\eta$ (out) \\
+63..62 & impact parameter \\
+61 & reserved \\
+60..53 & unconstraint $p_t$ \\
 52..43 & $\varphi$ (out) \\
 42..36 & index bits \\
 35 & charge valid \\
@@ -355,6 +361,20 @@ bits [22..19] & definition \\\hline\hline
 bits [33..32] & definition \\\hline\hline
 00 & not isolated \\
 01 & isolated \\
+10 & TBD \\
+11 & TBD \\\hline
+\end{tabular}
+\label{table:muon_iso_bits}
+\end{table}
+
+\begin{table}[ht]
+\caption{\bf Definition of muon impact parameter}
+\vspace{5mm}
+\centering
+\begin{tabular}{|c|c|}\hline
+bits [63..62] & definition \\\hline\hline
+00 & TBD \\
+01 & TBD \\
 10 & TBD \\
 11 & TBD \\\hline
 \end{tabular}

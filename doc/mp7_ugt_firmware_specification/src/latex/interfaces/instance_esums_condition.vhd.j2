@@ -1,11 +1,17 @@
 {%- block instantiate_esums_condition %}
   {%- set o = condition.objects[0] %}
+    {%- if o.is_esums_type  %}
 {{ condition.vhdl_signal }}_i: entity work.esums_conditions
     generic map({{ o.operator }}, {{ o.type|upper }}_TYPE,
+    {%- if o.hasCount  %}
+        X"{{ o.count|X04 }}",
+    {%- else %}
         X"{{ o.threshold|X04 }}",
+    {%- endif %}
         {{ o.phiFullRange }}, X"{{ o.phiW1UpperLimit|X04 }}", X"{{ o.phiW1LowerLimit|X04 }}",
         {{ o.phiW2Ignore }}, X"{{ o.phiW2UpperLimit|X04 }}", X"{{ o.phiW2LowerLimit|X04 }}"
         )
     port map(lhc_clk, {{ o.type|lower }}_bx_{{ o.bx }}, {{ condition.vhdl_signal }});
+    {%- endif %}
 {% endblock instantiate_esums_condition %}
 {# eof #}

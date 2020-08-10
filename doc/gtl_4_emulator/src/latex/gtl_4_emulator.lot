@@ -6,10 +6,11 @@
 \contentsline {table}{\numberline {6}{\ignorespaces LUT contents for isolation comparison of electron/$\gamma $\xspace and tau objects}}{20}{table.6}
 \contentsline {table}{\numberline {7}{\ignorespaces $\eta $ scale of muon objects}}{26}{table.7}
 \contentsline {table}{\numberline {8}{\ignorespaces $\varphi $ scale of muon objects}}{26}{table.8}
-\contentsline {table}{\numberline {9}{\ignorespaces Definition of muon quality bits}}{26}{table.9}
+\contentsline {table}{\numberline {9}{\ignorespaces Definition of muon quality bits}}{27}{table.9}
 \contentsline {table}{\numberline {10}{\ignorespaces Definition of muon isolation bits}}{27}{table.10}
-\contentsline {table}{\numberline {11}{\ignorespaces Muon charge correlation - Double Muon}}{28}{table.11}
-\contentsline {table}{\numberline {12}{\ignorespaces Muon charge correlation - Triple Muon}}{28}{table.12}
-\contentsline {table}{\numberline {13}{\ignorespaces Muon charge correlation - Quad Muon}}{29}{table.13}
-\contentsline {table}{\numberline {14}{\ignorespaces LUT contents for quality comparison of muon objects}}{32}{table.14}
-\contentsline {table}{\numberline {15}{\ignorespaces LUT contents for isolation comparison of muon objects}}{32}{table.15}
+\contentsline {table}{\numberline {11}{\ignorespaces Definition of muon impact parameter bits}}{27}{table.11}
+\contentsline {table}{\numberline {12}{\ignorespaces Muon charge correlation - Double Muon}}{28}{table.12}
+\contentsline {table}{\numberline {13}{\ignorespaces Muon charge correlation - Triple Muon}}{28}{table.13}
+\contentsline {table}{\numberline {14}{\ignorespaces Muon charge correlation - Quad Muon}}{29}{table.14}
+\contentsline {table}{\numberline {15}{\ignorespaces LUT contents for quality comparison of muon objects}}{32}{table.15}
+\contentsline {table}{\numberline {16}{\ignorespaces LUT contents for isolation comparison of muon objects}}{32}{table.16}

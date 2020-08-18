@@ -158,6 +158,6 @@ begin
                 sin_phi_2_integer => sin_phi_2_integer,
                 pt_square_comp => twobody_upt_comp
         );
-    end generate twobody_pt_i;
+    end generate twobody_upt_i;
     
 end architecture rtl;

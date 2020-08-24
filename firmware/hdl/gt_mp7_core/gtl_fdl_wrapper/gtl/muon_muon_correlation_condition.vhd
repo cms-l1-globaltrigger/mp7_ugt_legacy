@@ -113,15 +113,15 @@ entity muon_muon_correlation_condition is
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
 
-        pt_width: positive; 
-        upt_width: positive; 
-        mass_cosh_cos_precision : positive;
-        cosh_cos_width: positive;
+        pt_width: positive := 12; 
+        upt_width: positive := 12; 
+        mass_cosh_cos_precision : positive := MU_MU_COSH_COS_PRECISION;
+        cosh_cos_width: positive := MU_MU_COSH_COS_VECTOR_WIDTH;
 
-        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
-        upt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
-        sin_cos_width: positive;
-        pt_sq_sin_cos_precision : positive
+        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        upt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
+        pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION
 
     );
     port(
@@ -167,7 +167,7 @@ architecture rtl of muon_muon_correlation_condition is
     signal muon2_obj_vs_templ_pipe : muon2_object_vs_template_array;
 -- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
     signal diff_eta_comp, diff_eta_comp_temp, diff_eta_comp_pipe, diff_phi_comp, diff_phi_comp_temp, diff_phi_comp_pipe, dr_comp, dr_comp_temp, dr_comp_pipe, 
-        mass_comp, mass_comp_temp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : 
+        mass_comp, mass_comp_temp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe, twobody_upt_comp, twobody_upt_comp_temp, twobody_upt_comp_pipe : 
         std_logic_2dim_array(muon1_object_low to muon1_object_high, muon2_object_low to muon2_object_high) := (others => (others => '1'));
 
     signal condition_and_or : std_logic;

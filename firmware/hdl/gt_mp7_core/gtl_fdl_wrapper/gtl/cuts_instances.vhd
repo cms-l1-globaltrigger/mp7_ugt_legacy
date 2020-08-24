@@ -19,37 +19,37 @@ use work.gtl_pkg.all;
 
 entity cuts_instances is
      generic(
-        deta_cut: boolean;
-        dphi_cut: boolean;
-        dr_cut: boolean;
-        mass_cut: boolean;
-        mass_type: natural;
-        twobody_pt_cut: boolean;
-        twobody_upt_cut: boolean;
+        deta_cut: boolean := false;
+        dphi_cut: boolean := false;
+        dr_cut: boolean := false;
+        mass_cut: boolean := false;
+        mass_type: natural := 0;
+        twobody_pt_cut: boolean := false;
+        twobody_upt_cut: boolean := false;
 
-        diff_eta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0);
-        diff_eta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0);
+        diff_eta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        diff_eta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        diff_phi_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0);
-        diff_phi_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0);
+        diff_phi_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        diff_phi_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
-        dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
+        dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
-        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
+        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        pt1_width: positive; 
-        pt2_width: positive; 
+        pt1_width: positive := 12; 
+        pt2_width: positive := 12; 
         upt1_width: positive := 12; 
         upt2_width: positive := 12; 
-        cosh_cos_precision : positive;
-        cosh_cos_width: positive;
+        cosh_cos_precision : positive := EG_EG_COSH_COS_PRECISION;
+        cosh_cos_width: positive := EG_EG_COSH_COS_VECTOR_WIDTH;
 
-        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
-        upt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
-        sin_cos_width: positive;
-        pt_sq_sin_cos_precision : positive
+        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        upt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
+        pt_sq_sin_cos_precision : positive := EG_EG_SIN_COS_PRECISION
 
     );
     port(

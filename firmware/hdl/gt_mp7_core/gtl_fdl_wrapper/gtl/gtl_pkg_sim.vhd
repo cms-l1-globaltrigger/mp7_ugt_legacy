@@ -122,11 +122,6 @@ constant MUON_IDX_BITS_LOW : natural := 36;
 constant MUON_IDX_BITS_HIGH : natural := 42;
 constant MUON_PHI_RAW_LOW : natural := 43;
 constant MUON_PHI_RAW_HIGH : natural := 52;
--- HB 2017-04-11: updated muon structure for "raw" ann "extrapolated" phi and eta bits (phi_high, phi_low, eta_high and eta_low => for "extrapolated").
-constant MUON_IDX_BITS_LOW : natural := 36;
-constant MUON_IDX_BITS_HIGH : natural := 42;
-constant MUON_PHI_RAW_LOW : natural := 43;
-constant MUON_PHI_RAW_HIGH : natural := 52;
 -- HB 2020-06-08: MUON_ETA_RAW not used anymore in GT.
 -- constant MUON_ETA_RAW_LOW : natural := 53;
 -- constant MUON_ETA_RAW_HIGH : natural := 61;

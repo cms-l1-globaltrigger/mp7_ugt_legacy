@@ -11,12 +11,17 @@ entity muon_conditions is
         nr_templates: positive;
         pt_ge_mode : boolean;
         pt_thresholds: muon_templates_array;
-        eta_full_range : muon_templates_boolean_array;
+        nr_eta_windows : muon_templates_natural_array;
         eta_w1_upper_limits: muon_templates_array;
         eta_w1_lower_limits: muon_templates_array;
-        eta_w2_ignore : muon_templates_boolean_array;
         eta_w2_upper_limits: muon_templates_array;
         eta_w2_lower_limits: muon_templates_array;
+        eta_w3_upper_limits: muon_templates_array;
+        eta_w3_lower_limits: muon_templates_array;
+        eta_w4_upper_limits: muon_templates_array;
+        eta_w4_lower_limits: muon_templates_array;
+        eta_w5_upper_limits: muon_templates_array;
+        eta_w5_lower_limits: muon_templates_array;
         phi_full_range : muon_templates_boolean_array;
         phi_w1_upper_limits: muon_templates_array;
         phi_w1_lower_limits: muon_templates_array;
@@ -26,6 +31,10 @@ entity muon_conditions is
         requested_charges: muon_templates_string_array;
         qual_luts: muon_templates_quality_array;
         iso_luts: muon_templates_iso_array;
+        upt_cuts: muon_templates_boolean_array;
+        upt_upper_limits: muon_templates_array;
+        upt_lower_limits: muon_templates_array;
+        ip_luts: muon_templates_ip_array;
         requested_charge_correlation: string(1 to 2);
         
         twobody_pt_cut: boolean := false;
@@ -46,7 +55,7 @@ entity muon_conditions is
         ls_charcorr_quad: in muon_charcorr_quad_array := (others => (others => (others => (others => '0'))));
         os_charcorr_quad: in muon_charcorr_quad_array := (others => (others => (others => (others => '0'))));
         pt : in diff_inputs_array(0 to NR_MUON_OBJECTS-1) := (others => (others => '0'));
-        cos_phi_integer : in muon_sin_cos_integer_array(0 to NR_MUON_OBJECTS-1) := (others => 0);
-        sin_phi_integer : in muon_sin_cos_integer_array(0 to NR_MUON_OBJECTS-1) := (others => 0)
+        cos_phi_integer : in sin_cos_integer_array(0 to NR_MUON_OBJECTS-1) := (others => 0);
+        sin_phi_integer : in sin_cos_integer_array(0 to NR_MUON_OBJECTS-1) := (others => 0)
     );
 end muon_conditions;

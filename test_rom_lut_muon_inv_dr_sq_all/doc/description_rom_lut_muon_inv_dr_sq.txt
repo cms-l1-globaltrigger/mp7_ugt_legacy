@@ -1,0 +1,35 @@
+Description of ROMs for LUTs with values for "inverted deltaR square (inv_dr_sq)" of muons
+
+- The values of inv_dr_sq are used in "invariant mass divided by deltaR" conditions (for multiplication with invariant mass).
+- Formular for inv_dr_sq values: 1/(deta*0.0435)^2+(dphi*2*PI/144)^2 [
+- ROMs are implemented in BRAMs (36kb).
+- Address range splitted in 9 segments for reducing BRAM resources.
+- Addresses (8 bit deta_bin & 8 bit dphi_bin) splitted by the maximum value of inv_dr_sq (datawidth of ROM) in a range.
+- For muons resulting the following 9 ROMs:
+-- ROM 1: 4096x26 (64x64 address bits, 28 databits from maximum value of inv_dr_sq in first segment)
+   Address range: deta "00xxxxxx", dphi "00xxxxxx".
+-- ROM 2: 4096x16 (64x64 address bits, 16 databits from maximum value of inv_dr_sq in second segment)
+   Address range: deta "01xxxxxx", dphi "00xxxxxx".
+-- ROM 3: 4096x14 ...
+   Address range: deta "10xxxxxx", dphi "00xxxxxx".
+-- ROM 4: 4096x13 ...
+   Address range: deta "11xxxxxx", dphi "00xxxxxx".
+-- ROM 5: 4096x14 ...
+   Address range: deta "00xxxxxx", dphi "01xxxxxx".
+-- ROM 6: 4096x14 ...
+   Address range: deta "01xxxxxx", dphi "01xxxxxx".
+-- ROM 7: 4096x13 ...
+   Address range: deta "10xxxxxx", dphi "01xxxxxx".
+-- ROM 8: 4096x12 ...
+   Address range: deta "11xxxxxx", dphi "01xxxxxx".
+-- ROM 9: 4096x12 (256x16 address bits, 12 databits from maximum value of inv_dr_sq in ninth segment)
+   Address range: deta "xxxxxxxx", dphi "1000xxxx".
+- ROMs are generated with Vivado "managed_ip_project" and stored in ../firmware/ngc
+- All 9 ROMs need 17.5x36kb-BRAMs.
+- In Virtex 7 chip 1470 36kb-BRAMs are available, where in mp7_ugt 597 are used for other applications. Therefore up to 873 are free for
+  ROMs.
+  A condition with muon objects of same bx needs nr_obj*(nr_obj-1)/2 BRAMs, so for all 8 muon objects this are 490 BRAMs (8*7/2*17.5=490).
+- A VHDL module for a wrapper of all ROM segments (../firmware/../gtl/rom_lut_muon_inv_dr_sq_all.vhd) is used in
+  ../firmware/../gtl/mass_div_dr_calculator.
+- A "invariant mass divided by deltaR" condition is designed in ../firmware/../gtl/muon_muon_mass_div_dr_condition.vhd for muons.
+

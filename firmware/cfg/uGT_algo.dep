@@ -28,6 +28,7 @@ src gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/pulse_converter.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_slice.vhd
 #
+#src gt_mp7_core/gtl_fdl_wrapper/gtl/delta_r_lut_pkg.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/p_m_2_bx_pipeline.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/eta_comp_signed.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/eta_windows_comp.vhd
@@ -65,6 +66,13 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_orm.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_calo_correlation_orm_condition.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/sum_mass_calc.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_3_obj_condition.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_3_obj_condition.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_calculator.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_comp.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_mass_div_dr_condition.vhd
 #
 src gt_mp7_core/frame/demux_lane/demux_lane_data.vhd
 src gt_mp7_core/frame/frame.vhd
@@ -89,10 +97,33 @@ src ipbus/slaves/ipb_read_regs.vhd
 src ipbus/slaves/ipb_dpmem_4096_32.vhd
 src ../ngc/dp_mem_4096x32/dp_mem_4096x32.ngc
 src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
-
-#src ../ngc/dp_mem_4096x32_blk_mem_gen_v8_4/dp_mem_4096x32.xci
-#src ../ngc/dp_mem_4096x32_blk_mem_gen_v8_4/synth/dp_mem_4096x32.vhd
 #
 src -c components/mp7_ttc mp7_ttc_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd
+#
+src ../ngc/rom_lut_calo_inv_dr_sq_1/rom_lut_calo_inv_dr_sq_1.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_2/rom_lut_calo_inv_dr_sq_2.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_3/rom_lut_calo_inv_dr_sq_3.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_4/rom_lut_calo_inv_dr_sq_4.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_5/rom_lut_calo_inv_dr_sq_5.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_6/rom_lut_calo_inv_dr_sq_6.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_7/rom_lut_calo_inv_dr_sq_7.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_8/rom_lut_calo_inv_dr_sq_8.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_9/rom_lut_calo_inv_dr_sq_9.xci
+
+src gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_calo_inv_dr_sq_all.vhd
+
+src ../ngc/rom_lut_muon_inv_dr_sq_1/rom_lut_muon_inv_dr_sq_1.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_2/rom_lut_muon_inv_dr_sq_2.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_3/rom_lut_muon_inv_dr_sq_3.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_4/rom_lut_muon_inv_dr_sq_4.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_5/rom_lut_muon_inv_dr_sq_5.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_6/rom_lut_muon_inv_dr_sq_6.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_7/rom_lut_muon_inv_dr_sq_7.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_8/rom_lut_muon_inv_dr_sq_8.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_9/rom_lut_muon_inv_dr_sq_9.xci
+
+src gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_muon_inv_dr_sq_all.vhd
+
+
 

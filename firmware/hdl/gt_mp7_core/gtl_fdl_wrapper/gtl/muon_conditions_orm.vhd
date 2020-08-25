@@ -49,6 +49,10 @@ entity muon_conditions_orm is
         requested_charges_muon: muon_templates_string_array;
         qual_luts_muon: muon_templates_quality_array;
         iso_luts_muon: muon_templates_iso_array;
+        ptu_cuts_muon: muon_templates_boolean_array;
+        ptu_upper_limits_muon: muon_templates_array;
+        ptu_lower_limits_muon: muon_templates_array;
+        ip_luts_muon: muon_templates_ip_array;
         requested_charge_correlation: string(1 to 2);
 
         calo_object_low: natural;
@@ -210,7 +214,9 @@ begin
             eta_w5_upper_limits_muon, eta_w5_lower_limits_muon,
             phi_full_range_muon, phi_w1_upper_limits_muon, phi_w1_lower_limits_muon,
             phi_w2_ignore_muon, phi_w2_upper_limits_muon, phi_w2_lower_limits_muon,
-            requested_charges_muon, qual_luts_muon, iso_luts_muon
+            requested_charges_muon, qual_luts_muon, iso_luts_muon,
+            ptu_cuts_muon, ptu_upper_limits_muon, ptu_lower_limits_muon,
+            ip_luts_muon            
         )
         port map(
             muon, muon_obj_slice_1_vs_templ, muon_obj_slice_2_vs_templ, muon_obj_slice_3_vs_templ, muon_obj_slice_4_vs_templ

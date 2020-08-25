@@ -193,6 +193,8 @@ def find_errors(module_path, module_id, args):
         for line in fp:
             if line.startswith("| Slice LUTs"):
                 utilization[module_id].append(parse_utilization(line))
+            if line.startswith("| Block RAM"):
+                utilization[module_id].append(parse_utilization(line))
             if line.startswith("| DSPs"):
                 utilization[module_id].append(parse_utilization(line))
 
@@ -209,23 +211,35 @@ def find_errors(module_path, module_id, args):
 
 def dump_utilization_report():
     """Dumps utilization summary table."""
-    log_info("+--------------------------------------------------------------------+")
-    log_info("|                                                                    |")
-    log_info("|                     Utilization Design Summary                     |")
-    log_info("|                                                                    |")
-    log_info("+--------+-----------------------------+-----------------------------+")
-    log_info("|        |         Slice LUTs          |            DSPs             |")
-    log_info("| Module +------------------+----------+------------------+----------+")
-    log_info("|        | Used/Available   | Percent  | Used/Available   | Percent  |")
-    log_info("+--------+------------------+----------+------------------+----------+")
+    #log_info("+--------------------------------------------------------------------+")
+    #log_info("|                                                                    |")
+    #log_info("|                     Utilization Design Summary                     |")
+    #log_info("|                                                                    |")
+    #log_info("+--------+-----------------------------+-----------------------------+")
+    #log_info("|        |         Slice LUTs          |            DSPs             |")
+    #log_info("| Module +------------------+----------+------------------+----------+")
+    #log_info("|        | Used/Available   | Percent  | Used/Available   | Percent  |")
+    #log_info("+--------+------------------+----------+------------------+----------+")
+    log_info("+------------------------------------------------------------------------------------+")
+    log_info("|                                                                                    |")
+    log_info("|                            Utilization Design Summary                              |")
+    log_info("|                                                                                    |")
+    log_info("+--------+---------------------------+-----------------------+-----------------------+")
+    log_info("|        |         Slice LUTs        |          BRAMs        |           DSPs        |")
+    log_info("| Module +----------------+----------+------------+----------+------------+----------+")
+    log_info("|        | Used/Available | Percent  | Used/Avail | Percent  | Used/Avail | Percent  |")
+    log_info("+--------+----------------+--------- +------------+----------+------------+----------+")
     for module_id, utils in utilization.items():
         row = "| {:>6} ".format(module_id)
         for util in utils:
             ratio = "{}/{}".format(util.used, util.available)
-            row += "| {:>16} | {:>6} % ".format(ratio, util.percent)
+	    if util.site_type == 'Slice LUTs':
+            	row += "| {:>14} | {:>6} % ".format(ratio, util.percent)
+	    else:
+            	row += "| {:>10} | {:>6} % ".format(ratio, util.percent)
         row += "|"
         log_info(row)
-    log_info("+--------+------------------+----------+------------------+----------+")
+    log_info("+--------+----------------+----------+------------+----------+------------+----------+")
 
 def parse():
     parser = argparse.ArgumentParser(description="Check synthesis result logs")

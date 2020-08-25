@@ -3,6 +3,7 @@
 -- Calculation of invariant mass or transverse mass based on LUTs.
 
 -- Version history:
+-- HB 2020-06-15: inserted cuts for "unconstraint pt" [upt] of new muon structure.
 -- HB 2017-09-29: changed to "MAX_WIDTH_MASS_LIMIT_VECTOR" in limit vectors
 -- HB 2017-09-21: changed attribute "use_dsp48" to "use_dsp"
 -- HB 2017-09-20: based on "mass_calculator.vhd" but added mass_upper_limit_vector and mass_lower_limit_vector to generic.
@@ -33,12 +34,16 @@ entity mass_calculator is
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
         pt1_width: positive := 12;
         pt2_width: positive := 12;
+        upt1_width: positive := 12;
+        upt2_width: positive := 12;
         cosh_cos_width: positive := 28;
         mass_cosh_cos_precision : positive := 3
     );
     port(
         pt1 : in std_logic_vector(pt1_width-1 downto 0);
         pt2 : in std_logic_vector(pt2_width-1 downto 0);
+        upt1 : in std_logic_vector(upt1_width-1 downto 0) := (others => '0');
+        upt2 : in std_logic_vector(upt2_width-1 downto 0) := (others => '0');
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
         mass_comp : out std_logic;
@@ -54,16 +59,19 @@ architecture rtl of mass_calculator is
 
 -- HB 2015-10-21: length of std_logic_vector for invariant mass (invariant_mass_sq_div2) and limits.
     constant MASS_VECTOR_WIDTH : positive := pt1_width+pt2_width+cosh_cos_width;
+    constant MASS_UPT_VECTOR_WIDTH : positive := upt1_width+upt2_width+cosh_cos_width;
 
     signal invariant_mass_sq_div2 : std_logic_vector(MASS_VECTOR_WIDTH-1 downto 0) := (others => '0');
+    signal inv_mass_upt_sq_div2 : std_logic_vector(MASS_UPT_VECTOR_WIDTH-1 downto 0) := (others => '0');
     signal transverse_mass_sq_div2 : std_logic_vector(MASS_VECTOR_WIDTH-1 downto 0) := (others => '0');
     
-    signal inv_mass_comp, transverse_mass_comp : std_logic := '0';
+    signal inv_mass_comp, inv_mass_upt_comp, transverse_mass_comp : std_logic := '0';
     
 -- HB 2017-09-21: used attribute "use_dsp" instead of "use_dsp48" for "mass" - see warning below
 -- MP7 builds, synth_1, runme.log => WARNING: [Synth 8-5974] attribute "use_dsp48" has been deprecated, please use "use_dsp" instead
     attribute use_dsp : string;
     attribute use_dsp of invariant_mass_sq_div2 : signal is "yes";
+    attribute use_dsp of inv_mass_upt_sq_div2 : signal is "yes";
     attribute use_dsp of transverse_mass_sq_div2 : signal is "yes";
 
 begin
@@ -74,6 +82,10 @@ begin
     
     inv_mass_comp <= '1' when invariant_mass_sq_div2 >= mass_lower_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) and invariant_mass_sq_div2 <= mass_upper_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) else '0';
     sim_inv_mass_comp <= inv_mass_comp;
+    
+    inv_mass_upt_sq_div2 <= upt1 * upt2 * (cosh_deta - cos_dphi);
+    
+    inv_mass_upt_comp <= '1' when inv_mass_upt_sq_div2 >= mass_lower_limit_vector(MASS_UPT_VECTOR_WIDTH-1 downto 0) and inv_mass_upt_sq_div2 <= mass_upper_limit_vector(MASS_UPT_VECTOR_WIDTH-1 downto 0) else '0';
     
 -- HB 2016-12-12: calculation of transverse mass with formular M**2/2=pt1*pt2*(1-cos(phi1-phi2))
 --                "conv_std_logic_vector((10**mass_cosh_cos_precision), cosh_cos_width)" means 1 multiplied with 10**mass_cosh_cos_precision, converted to std_logic_vector with cosh_cos_width
@@ -87,6 +99,9 @@ begin
     invariant_mass_sel: if mass_type = INVARIANT_MASS_TYPE generate
         mass_comp <= '1' when inv_mass_comp = '1' else '0';
     end generate invariant_mass_sel;
+    invariant_mass_upt_sel: if mass_type = INVARIANT_MASS_UPT_TYPE generate
+        mass_comp <= '1' when inv_mass_upt_comp = '1' else '0';
+    end generate invariant_mass_upt_sel;
     transverse_mass_sel: if mass_type = TRANSVERSE_MASS_TYPE generate
         mass_comp <= '1' when transverse_mass_comp = '1' else '0';
     end generate transverse_mass_sel;

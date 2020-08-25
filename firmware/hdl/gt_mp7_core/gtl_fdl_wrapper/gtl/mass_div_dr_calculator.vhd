@@ -99,13 +99,16 @@ begin
 -- LUT value for deta=0 and dphi=0 (dR=0, 1/dR=undefined) => 0, which means mass_div_dr is on it's maximum
 --     mass_div_dr <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_mass_div_dr;
     
-    mass_div_dr_p: process(invariant_mass_sq_div2, inv_dr_sq)
-        begin
-        if inv_dr_sq > 0 then
-            mass_div_dr(mass_div_dr_vector_width-1 downto 0) <= invariant_mass_sq_div2 * inv_dr_sq;
-        else
-            mass_div_dr <= max_mass_div_dr;
-        end if;
-    end process;
+--     mass_div_dr_p: process(invariant_mass_sq_div2, inv_dr_sq)
+--         begin
+--         if inv_dr_sq > 0 then
+--             mass_div_dr(mass_div_dr_vector_width-1 downto 0) <= invariant_mass_sq_div2 * inv_dr_sq;
+--         else
+--             mass_div_dr <= max_mass_div_dr;
+--         end if;
+--     end process;
 
+-- LUT value for deta=0 and dphi=0 (dR=0, 1/dR=undefined) => 0, which means mass_div_dr is on it's maximum
+    mass_div_dr(mass_div_dr_vector_width-1 downto 0) <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_mass_div_dr;
+    
 end architecture rtl;

@@ -3,6 +3,7 @@
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and muon.
 
 -- Version history:
+-- HB 2020-08-27: implemented invariant mass div by delta R comparison.
 -- HB 2020-06-09: implemented new muon structure with "unconstraint pt" and "impact parameter".
 -- HB 2019-06-17: updated for "five eta cuts".
 -- HB 2019-05-06: updated instances.
@@ -96,14 +97,16 @@ entity calo_muon_correlation_condition is
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
 
-        pt1_width: positive; 
-        pt2_width: positive; 
-        mass_cosh_cos_precision : positive;
-        cosh_cos_width: positive;
+        mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        
+        pt1_width: positive := 12; 
+        pt2_width: positive := 12; 
+        mass_cosh_cos_precision : positive := EG_MU_COSH_COS_PRECISION;
+        cosh_cos_width: positive := EG_MU_COSH_COS_VECTOR_WIDTH;
 
-        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
-        sin_cos_width: positive;
-        pt_sq_sin_cos_precision : positive
+        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
+        pt_sq_sin_cos_precision : positive := EG_MU_SIN_COS_PRECISION
 
     );
     port(
@@ -120,6 +123,7 @@ entity calo_muon_correlation_condition is
         cos_phi_2_integer : in sin_cos_integer_array;
         sin_phi_1_integer : in sin_cos_integer_array;
         sin_phi_2_integer : in sin_cos_integer_array;
+        mass_div_dr : in mass_div_dr_vector_array := (others => (others => '0'));
         condition_o: out std_logic
     );
 end calo_muon_correlation_condition; 
@@ -143,6 +147,9 @@ architecture rtl of calo_muon_correlation_condition is
 -- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
     signal diff_eta_comp, diff_eta_comp_pipe, diff_phi_comp, diff_phi_comp_pipe, dr_comp, dr_comp_pipe, mass_comp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_pipe : 
         std_logic_2dim_array(calo_object_low to calo_object_high, muon_object_low to muon_object_high) := (others => (others => '1'));
+
+    signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(0 to nr_objects_calo1-1, 0 to nr_objects_calo2-1) :=
+    (others => (others => '1'));
 
     signal condition_and_or : std_logic;
 
@@ -195,6 +202,23 @@ begin
         end generate delta_l_2;
     end generate delta_l_1;
 
+-- HB 2020-08-27: comparison for invariant mass divided by delta R.
+    mass_div_dr_sel: if mass_cut and mass_type == INVARIANT_MASS_DIV_DR_TYPE generate
+        mass_l_1: for i in calo_object_low to calo_object_high generate 
+            mass_l_2: for j in muon_object_low to muon_object_high generate
+                comp_i: entity work.mass_div_dr_comp
+                    generic map(
+                        mass_div_dr_vector_width,
+                        mass_div_dr_threshold 
+                    )
+                    port map(
+                        mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0),
+                        mass_div_dr_comp_pipe(i,j)
+                    );
+            end generate mass_l_2;
+        end generate mass_l_1;
+    end generate mass_div_dr_sel;
+    
     -- Pipeline stage for cut comps
     diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp, mass_comp, twobody_pt_comp)
         begin
@@ -291,7 +315,7 @@ begin
 
 -- "Matrix" of permutations in an and-or-structure.
 
-    matrix_deta_dphi_dr_p: process(calo_obj_vs_templ_pipe, muon_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
+    matrix_deta_dphi_dr_p: process(calo_obj_vs_templ_pipe, muon_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, mass_comp_pipe, mass_div_dr_comp_pipe, twobody_pt_comp_pipe)
         variable index : integer := 0;
         variable obj_vs_templ_vec : std_logic_vector(((calo_object_high-calo_object_low+1)*(muon_object_high-muon_object_low+1)) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
@@ -303,7 +327,7 @@ begin
             for j in muon_object_low to muon_object_high loop
                 index := index + 1;
                obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and 
-                                          dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
+                                          dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
             end loop;
         end loop;
         for i in 1 to index loop 

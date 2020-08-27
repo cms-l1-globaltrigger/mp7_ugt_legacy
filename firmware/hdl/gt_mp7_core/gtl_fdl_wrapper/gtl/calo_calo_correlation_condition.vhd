@@ -127,7 +127,7 @@ entity calo_calo_correlation_condition is
         cos_phi_2_integer : in sin_cos_integer_array;
         sin_phi_1_integer : in sin_cos_integer_array;
         sin_phi_2_integer : in sin_cos_integer_array;
-        mass_div_dr : in mass_div_dr_vector_array := (others => (others => '0'));
+        mass_div_dr : in mass_div_dr_vector_array := (others => (others => (others => '0')));
         condition_o: out std_logic
     );
 end calo_calo_correlation_condition; 

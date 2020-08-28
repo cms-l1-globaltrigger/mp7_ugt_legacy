@@ -148,7 +148,7 @@ architecture rtl of calo_muon_correlation_condition is
     signal diff_eta_comp, diff_eta_comp_pipe, diff_phi_comp, diff_phi_comp_pipe, dr_comp, dr_comp_pipe, mass_comp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_pipe : 
         std_logic_2dim_array(calo_object_low to calo_object_high, muon_object_low to muon_object_high) := (others => (others => '1'));
 
-    signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(0 to nr_objects_calo1-1, 0 to nr_objects_calo2-1) :=
+    signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(calo_object_low to calo_object_high, muon_object_low to muon_object_high) :=
     (others => (others => '1'));
 
     signal condition_and_or : std_logic;

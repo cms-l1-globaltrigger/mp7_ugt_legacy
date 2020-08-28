@@ -174,7 +174,7 @@ architecture rtl of muon_muon_correlation_condition is
         mass_comp, mass_comp_temp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe, twobody_upt_comp, twobody_upt_comp_temp, twobody_upt_comp_pipe : 
         std_logic_2dim_array(muon1_object_low to muon1_object_high, muon2_object_low to muon2_object_high) := (others => (others => '1'));
 
-    signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(0 to nr_objects_calo1-1, 0 to nr_objects_calo2-1) :=
+    signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(muon1_object_low to muon1_object_high, muon2_object_low to muon2_object_high) :=
     (others => (others => '1'));
 
     signal condition_and_or : std_logic;

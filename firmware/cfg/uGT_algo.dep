@@ -71,8 +71,6 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_3_obj_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_3_obj_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_calculator.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_comp.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_mass_div_dr_condition.vhd
 #
 src gt_mp7_core/frame/demux_lane/demux_lane_data.vhd
 src gt_mp7_core/frame/frame.vhd

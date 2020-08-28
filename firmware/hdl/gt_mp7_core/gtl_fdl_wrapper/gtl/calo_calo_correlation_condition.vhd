@@ -262,7 +262,7 @@ begin
     
 
 -- HB 2020-08-27: comparison for invariant mass divided by delta R.
-    mass_div_dr_sel: if mass_cut and mass_type == INVARIANT_MASS_DIV_DR_TYPE generate
+    mass_div_dr_sel: if mass_cut == true and mass_type == INVARIANT_MASS_DIV_DR_TYPE generate
         mass_l_1: for i in calo1_object_low to calo1_object_high generate 
             mass_l_2: for j in calo2_object_low to calo2_object_high generate
                 mass_comp_l1: if (obj_type_calo1 = obj_type_calo2) and (same_bx = true) and j>i generate

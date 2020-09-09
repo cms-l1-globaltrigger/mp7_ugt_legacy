@@ -26,32 +26,34 @@
 \contentsline {table}{\numberline {25}{Explanation of Listing~\ref {lst:calo_calo_correlation_condition_vhd}}}{71}{table.25}
 \contentsline {table}{\numberline {25}{Explanation of Listing~\ref {lst:calo_calo_correlation_condition_vhd}}}{72}{table.25}
 \contentsline {table}{\numberline {25}{Explanation of Listing~\ref {lst:calo_calo_correlation_condition_vhd}}}{73}{table.25}
-\contentsline {table}{\numberline {26}{Explanation of Listing~\ref {lst:calo_muon_correlation_condition_vhd}}}{78}{table.26}
+\contentsline {table}{\numberline {25}{Explanation of Listing~\ref {lst:calo_calo_correlation_condition_vhd}}}{74}{table.25}
 \contentsline {table}{\numberline {26}{Explanation of Listing~\ref {lst:calo_muon_correlation_condition_vhd}}}{79}{table.26}
 \contentsline {table}{\numberline {26}{Explanation of Listing~\ref {lst:calo_muon_correlation_condition_vhd}}}{80}{table.26}
 \contentsline {table}{\numberline {26}{Explanation of Listing~\ref {lst:calo_muon_correlation_condition_vhd}}}{81}{table.26}
-\contentsline {table}{\numberline {27}{Explanation of Listing~\ref {lst:muon_muon_correlation_condition_vhd}}}{85}{table.27}
+\contentsline {table}{\numberline {26}{Explanation of Listing~\ref {lst:calo_muon_correlation_condition_vhd}}}{82}{table.26}
 \contentsline {table}{\numberline {27}{Explanation of Listing~\ref {lst:muon_muon_correlation_condition_vhd}}}{86}{table.27}
 \contentsline {table}{\numberline {27}{Explanation of Listing~\ref {lst:muon_muon_correlation_condition_vhd}}}{87}{table.27}
 \contentsline {table}{\numberline {27}{Explanation of Listing~\ref {lst:muon_muon_correlation_condition_vhd}}}{88}{table.27}
-\contentsline {table}{\numberline {28}{Explanation of Listing~\ref {lst:calo_esums_correlation_condition_vhd}}}{91}{table.28}
-\contentsline {table}{\numberline {28}{Explanation of Listing~\ref {lst:calo_esums_correlation_condition_vhd}}}{92}{table.28}
-\contentsline {table}{\numberline {29}{Explanation of Listing~\ref {lst:muon_muon_correlation_condition_vhd}}}{96}{table.29}
-\contentsline {table}{\numberline {29}{Explanation of Listing~\ref {lst:muon_muon_correlation_condition_vhd}}}{97}{table.29}
+\contentsline {table}{\numberline {27}{Explanation of Listing~\ref {lst:muon_muon_correlation_condition_vhd}}}{89}{table.27}
+\contentsline {table}{\numberline {27}{Explanation of Listing~\ref {lst:muon_muon_correlation_condition_vhd}}}{90}{table.27}
+\contentsline {table}{\numberline {28}{Explanation of Listing~\ref {lst:calo_esums_correlation_condition_vhd}}}{93}{table.28}
+\contentsline {table}{\numberline {28}{Explanation of Listing~\ref {lst:calo_esums_correlation_condition_vhd}}}{94}{table.28}
 \contentsline {table}{\numberline {29}{Explanation of Listing~\ref {lst:muon_muon_correlation_condition_vhd}}}{98}{table.29}
-\contentsline {table}{\numberline {30}{\ignorespaces Explanation of Listing~\ref {lst:instance_calo_condition_vhd}}}{101}{table.30}
-\contentsline {table}{\numberline {31}{\ignorespaces Explanation of Listing~\ref {lst:instance_esums_condition_vhd}}}{102}{table.31}
-\contentsline {table}{\numberline {32}{\ignorespaces Explanation of Listing~\ref {lst:instance_muon_condition_vhd}}}{105}{table.32}
-\contentsline {table}{\numberline {33}{Explanation of Listing~\ref {lst:instance_calo_calo_correlation_condition_vhd}}}{107}{table.33}
-\contentsline {table}{\numberline {33}{Explanation of Listing~\ref {lst:instance_calo_calo_correlation_condition_vhd}}}{108}{table.33}
-\contentsline {table}{\numberline {34}{Explanation of Listing~\ref {lst:instance_calo_muon_correlation_condition_vhd}}}{110}{table.34}
-\contentsline {table}{\numberline {34}{Explanation of Listing~\ref {lst:instance_calo_muon_correlation_condition_vhd}}}{111}{table.34}
-\contentsline {table}{\numberline {35}{Explanation of Listing~\ref {lst:instance_muon_muon_correlation_condition_vhd}}}{113}{table.35}
-\contentsline {table}{\numberline {35}{Explanation of Listing~\ref {lst:instance_muon_muon_correlation_condition_vhd}}}{114}{table.35}
-\contentsline {table}{\numberline {36}{Explanation of Listing~\ref {lst:instance_calo_calo_correlation_condition_vhd}}}{115}{table.36}
-\contentsline {table}{\numberline {36}{Explanation of Listing~\ref {lst:instance_calo_calo_correlation_condition_vhd}}}{116}{table.36}
-\contentsline {table}{\numberline {37}{Explanation of Listing~\ref {lst:instance_calo_muon_correlation_condition_vhd}}}{117}{table.37}
-\contentsline {table}{\numberline {37}{Explanation of Listing~\ref {lst:instance_calo_muon_correlation_condition_vhd}}}{118}{table.37}
-\contentsline {table}{\numberline {38}{\ensuremath {\mu \mathrm {FDL}}\xspace register map}}{122}{table.38}
-\contentsline {table}{\numberline {38}{\ensuremath {\mu \mathrm {FDL}}\xspace register map}}{123}{table.38}
+\contentsline {table}{\numberline {29}{Explanation of Listing~\ref {lst:muon_muon_correlation_condition_vhd}}}{99}{table.29}
+\contentsline {table}{\numberline {29}{Explanation of Listing~\ref {lst:muon_muon_correlation_condition_vhd}}}{100}{table.29}
+\contentsline {table}{\numberline {30}{\ignorespaces Explanation of Listing~\ref {lst:instance_calo_condition_vhd}}}{103}{table.30}
+\contentsline {table}{\numberline {31}{\ignorespaces Explanation of Listing~\ref {lst:instance_esums_condition_vhd}}}{104}{table.31}
+\contentsline {table}{\numberline {32}{\ignorespaces Explanation of Listing~\ref {lst:instance_muon_condition_vhd}}}{107}{table.32}
+\contentsline {table}{\numberline {33}{Explanation of Listing~\ref {lst:instance_calo_calo_correlation_condition_vhd}}}{109}{table.33}
+\contentsline {table}{\numberline {33}{Explanation of Listing~\ref {lst:instance_calo_calo_correlation_condition_vhd}}}{110}{table.33}
+\contentsline {table}{\numberline {34}{Explanation of Listing~\ref {lst:instance_calo_muon_correlation_condition_vhd}}}{112}{table.34}
+\contentsline {table}{\numberline {34}{Explanation of Listing~\ref {lst:instance_calo_muon_correlation_condition_vhd}}}{113}{table.34}
+\contentsline {table}{\numberline {35}{Explanation of Listing~\ref {lst:instance_muon_muon_correlation_condition_vhd}}}{115}{table.35}
+\contentsline {table}{\numberline {35}{Explanation of Listing~\ref {lst:instance_muon_muon_correlation_condition_vhd}}}{116}{table.35}
+\contentsline {table}{\numberline {36}{Explanation of Listing~\ref {lst:instance_calo_calo_correlation_condition_vhd}}}{117}{table.36}
+\contentsline {table}{\numberline {36}{Explanation of Listing~\ref {lst:instance_calo_calo_correlation_condition_vhd}}}{118}{table.36}
+\contentsline {table}{\numberline {37}{Explanation of Listing~\ref {lst:instance_calo_muon_correlation_condition_vhd}}}{119}{table.37}
+\contentsline {table}{\numberline {37}{Explanation of Listing~\ref {lst:instance_calo_muon_correlation_condition_vhd}}}{120}{table.37}
 \contentsline {table}{\numberline {38}{\ensuremath {\mu \mathrm {FDL}}\xspace register map}}{124}{table.38}
+\contentsline {table}{\numberline {38}{\ensuremath {\mu \mathrm {FDL}}\xspace register map}}{125}{table.38}
+\contentsline {table}{\numberline {38}{\ensuremath {\mu \mathrm {FDL}}\xspace register map}}{126}{table.38}

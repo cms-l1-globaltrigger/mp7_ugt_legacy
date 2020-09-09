@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2018.10.12)  3 AUG 2020 14:11
-=======
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2018.10.12)  3 AUG 2020 13:55
->>>>>>> master
-=======
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2018.10.12)  4 AUG 2020 10:41
->>>>>>> mass_inv_3_obj
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2018.10.12)  9 SEP 2020 10:29
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1272,38 +1264,11 @@ File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
 LaTeX Warning: Reference `sec:ipbus' on page 11 undefined on input line 19.
 
 Package epstopdf Info: Source file: <figures/mGT_firmware.eps>
-<<<<<<< HEAD
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:11:41
+(epstopdf)                    date: 2020-09-09 10:29:06
 (epstopdf)                    size: 1633508 bytes
 (epstopdf)             Output file: <figures/mGT_firmware-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2020-08-03 14:11:50
-=======
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:09:37
-(epstopdf)                    size: 1633508 bytes
-(epstopdf)             Output file: <figures/mGT_firmware-eps-converted-to.pdf>
-
-(epstopdf)                    date: 2020-08-03 14:09:45
->>>>>>> mass_inv_3_obj
-=======
-(epstopdf)                    date: 2020-08-03 13:55:04
-(epstopdf)                    size: 1633508 bytes
-(epstopdf)             Output file: <figures/mGT_firmware-eps-converted-to.pdf>
-
-(epstopdf)                    date: 2020-08-03 13:55:15
->>>>>>> master
-<<<<<<< HEAD
-=======
-=======
-(epstopdf)                    date: 2020-08-04 10:40:54
-(epstopdf)                    size: 1633508 bytes
-(epstopdf)             Output file: <figures/mGT_firmware-eps-converted-to.pdf>
-
-(epstopdf)                    date: 2020-08-04 10:41:03
->>>>>>> new_muon_structure
->>>>>>> mass_inv_3_obj
+(epstopdf)                    date: 2020-09-09 10:29:16
 (epstopdf)                    size: 534750 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/mGT_firmware-eps-co
 nverted-to.pdf figures/mGT_firmware.eps>
@@ -1313,7 +1278,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./figures/mGT_firmware-eps-converted-to.pdf): PD
 F inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<figures/mGT_firmware-eps-converted-to.pdf, id=851, 623.32875pt x 437.635pt>
+<figures/mGT_firmware-eps-converted-to.pdf, id=855, 623.32875pt x 437.635pt>
 File: figures/mGT_firmware-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/mGT_firmware-eps-converted-to.pdf>
@@ -1341,38 +1306,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 10--14
  []
 
 Package epstopdf Info: Source file: <./figures/system_overview.eps>
-<<<<<<< HEAD
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:11:47
+(epstopdf)                    date: 2020-09-09 10:29:13
 (epstopdf)                    size: 164151 bytes
 (epstopdf)             Output file: <./figures/system_overview-eps-converted-to
 .pdf>
-(epstopdf)                    date: 2020-08-03 14:11:50
-=======
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:09:42
-(epstopdf)                    size: 164151 bytes
-(epstopdf)             Output file: <./figures/system_overview-eps-converted-to
-.pdf>
-(epstopdf)                    date: 2020-08-03 14:09:45
->>>>>>> mass_inv_3_obj
-=======
-(epstopdf)                    date: 2020-08-03 13:55:10
-(epstopdf)                    size: 164151 bytes
-(epstopdf)             Output file: <./figures/system_overview-eps-converted-to
-.pdf>
-(epstopdf)                    date: 2020-08-03 13:55:16
->>>>>>> master
-<<<<<<< HEAD
-=======
-=======
-(epstopdf)                    date: 2020-08-04 10:41:00
-(epstopdf)                    size: 164151 bytes
-(epstopdf)             Output file: <./figures/system_overview-eps-converted-to
-.pdf>
-(epstopdf)                    date: 2020-08-04 10:41:04
->>>>>>> new_muon_structure
->>>>>>> mass_inv_3_obj
+(epstopdf)                    date: 2020-09-09 10:29:16
 (epstopdf)                    size: 68657 bytes
 (epstopdf)             Command: <epstopdf --outfile=./figures/system_overview-e
 ps-converted-to.pdf ./figures/system_overview.eps>
@@ -1383,7 +1321,7 @@ Package epstopdf Info: Output file is already uptodate.
 pdfTeX warning: pdflatex (file ./figures/system_overview-eps-converted-to.pdf):
  PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
 
-<./figures/system_overview-eps-converted-to.pdf, id=889, 1646.15pt x 976.64874p
+<./figures/system_overview-eps-converted-to.pdf, id=893, 1646.15pt x 976.64874p
 t>
 File: ./figures/system_overview-eps-converted-to.pdf Graphic file (type pdf)
  <use ./figures/system_overview-eps-converted-to.pdf>
@@ -1558,38 +1496,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 156--159
  []
 
 Package epstopdf Info: Source file: <./figures/dm_delay_element.eps>
-<<<<<<< HEAD
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:11:36
+(epstopdf)                    date: 2020-09-09 10:29:02
 (epstopdf)                    size: 46559 bytes
 (epstopdf)             Output file: <./figures/dm_delay_element-eps-converted-t
 o.pdf>
-(epstopdf)                    date: 2020-08-03 14:11:50
-=======
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:09:33
-(epstopdf)                    size: 46559 bytes
-(epstopdf)             Output file: <./figures/dm_delay_element-eps-converted-t
-o.pdf>
-(epstopdf)                    date: 2020-08-03 14:09:45
->>>>>>> mass_inv_3_obj
-=======
-(epstopdf)                    date: 2020-08-03 13:54:59
-(epstopdf)                    size: 46559 bytes
-(epstopdf)             Output file: <./figures/dm_delay_element-eps-converted-t
-o.pdf>
-(epstopdf)                    date: 2020-08-03 13:55:16
->>>>>>> master
-<<<<<<< HEAD
-=======
-=======
-(epstopdf)                    date: 2020-08-04 10:40:50
-(epstopdf)                    size: 46559 bytes
-(epstopdf)             Output file: <./figures/dm_delay_element-eps-converted-t
-o.pdf>
-(epstopdf)                    date: 2020-08-04 10:41:04
->>>>>>> new_muon_structure
->>>>>>> mass_inv_3_obj
+(epstopdf)                    date: 2020-09-09 10:29:16
 (epstopdf)                    size: 20105 bytes
 (epstopdf)             Command: <epstopdf --outfile=./figures/dm_delay_element-
 eps-converted-to.pdf ./figures/dm_delay_element.eps>
@@ -1600,7 +1511,7 @@ Package epstopdf Info: Output file is already uptodate.
 pdfTeX warning: pdflatex (file ./figures/dm_delay_element-eps-converted-to.pdf)
 : PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
 
-<./figures/dm_delay_element-eps-converted-to.pdf, id=903, 519.9425pt x 430.6087
+<./figures/dm_delay_element-eps-converted-to.pdf, id=907, 519.9425pt x 430.6087
 5pt>
 File: ./figures/dm_delay_element-eps-converted-to.pdf Graphic file (type pdf)
  <use ./figures/dm_delay_element-eps-converted-to.pdf>
@@ -1642,34 +1553,10 @@ LaTeX Font Info:    Try loading font information for TS1+lmr on input line 253.
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 Package epstopdf Info: Source file: <./figures/simspy.eps>
-<<<<<<< HEAD
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:11:46
+(epstopdf)                    date: 2020-09-09 10:29:12
 (epstopdf)                    size: 154478 bytes
 (epstopdf)             Output file: <./figures/simspy-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-03 14:11:51
-=======
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:09:41
-(epstopdf)                    size: 154478 bytes
-(epstopdf)             Output file: <./figures/simspy-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-03 14:09:45
->>>>>>> mass_inv_3_obj
-=======
-(epstopdf)                    date: 2020-08-03 13:55:09
-(epstopdf)                    size: 154478 bytes
-(epstopdf)             Output file: <./figures/simspy-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-03 13:55:16
->>>>>>> master
-<<<<<<< HEAD
-=======
-=======
-(epstopdf)                    date: 2020-08-04 10:41:00
-(epstopdf)                    size: 154478 bytes
-(epstopdf)             Output file: <./figures/simspy-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-04 10:41:04
->>>>>>> new_muon_structure
->>>>>>> mass_inv_3_obj
+(epstopdf)                    date: 2020-09-09 10:29:16
 (epstopdf)                    size: 67550 bytes
 (epstopdf)             Command: <epstopdf --outfile=./figures/simspy-eps-conver
 ted-to.pdf ./figures/simspy.eps>
@@ -1679,7 +1566,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./figures/simspy-eps-converted-to.pdf): PDF incl
 usion: found PDF version <1.7>, but at most version <1.5> allowed
-<./figures/simspy-eps-converted-to.pdf, id=931, 1128.215pt x 769.87625pt>
+<./figures/simspy-eps-converted-to.pdf, id=935, 1128.215pt x 769.87625pt>
 File: ./figures/simspy-eps-converted-to.pdf Graphic file (type pdf)
 
 <use ./figures/simspy-eps-converted-to.pdf>
@@ -1699,14 +1586,14 @@ LaTeX Warning: Hyper reference `sec_rb' on page 18 undefined on input line 267.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 570.
  [23]
-<./figures/bx_start.png, id=992, 772.5077pt x 106.45175pt>
+<./figures/bx_start.png, id=996, 772.5077pt x 106.45175pt>
 File: ./figures/bx_start.png Graphic file (type png)
 
 <use ./figures/bx_start.png>
 Package pdftex.def Info: ./figures/bx_start.png used on input line 588.
 (pdftex.def)             Requested size: 442.65375pt x 60.99811pt.
 
-<./figures/bx_normal_operation.png, id=993, 752.97527pt x 114.26472pt>
+<./figures/bx_normal_operation.png, id=997, 752.97527pt x 114.26472pt>
 File: ./figures/bx_normal_operation.png Graphic file (type png)
 
 <use ./figures/bx_normal_operation.png>
@@ -1714,14 +1601,14 @@ Package pdftex.def Info: ./figures/bx_normal_operation.png used on input line 5
 94.
 (pdftex.def)             Requested size: 442.65375pt x 67.17323pt.
 
-<./figures/err_det.png, id=998, 802.78297pt x 152.35297pt>
+<./figures/err_det.png, id=1002, 802.78297pt x 152.35297pt>
 File: ./figures/err_det.png Graphic file (type png)
 
 <use ./figures/err_det.png>
 Package pdftex.def Info: ./figures/err_det.png used on input line 609.
 (pdftex.def)             Requested size: 442.65375pt x 84.00826pt.
 
-<./figures/err_det_reset.png, id=999, 652.38324pt x 147.46986pt>
+<./figures/err_det_reset.png, id=1003, 652.38324pt x 147.46986pt>
 File: ./figures/err_det_reset.png Graphic file (type png)
 
 <use ./figures/err_det_reset.png>
@@ -1739,38 +1626,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--5
  []
 
 Package epstopdf Info: Source file: <figures/mGTL_firmware.eps>
-<<<<<<< HEAD
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:11:42
+(epstopdf)                    date: 2020-09-09 10:29:07
 (epstopdf)                    size: 237733 bytes
 (epstopdf)             Output file: <figures/mGTL_firmware-eps-converted-to.pdf
 >
-(epstopdf)                    date: 2020-08-03 14:11:51
-=======
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:09:38
-(epstopdf)                    size: 237733 bytes
-(epstopdf)             Output file: <figures/mGTL_firmware-eps-converted-to.pdf
->
-(epstopdf)                    date: 2020-08-03 14:09:46
->>>>>>> mass_inv_3_obj
-=======
-(epstopdf)                    date: 2020-08-03 13:55:05
-(epstopdf)                    size: 237733 bytes
-(epstopdf)             Output file: <figures/mGTL_firmware-eps-converted-to.pdf
->
-(epstopdf)                    date: 2020-08-03 13:55:17
->>>>>>> master
-<<<<<<< HEAD
-=======
-=======
-(epstopdf)                    date: 2020-08-04 10:40:55
-(epstopdf)                    size: 237733 bytes
-(epstopdf)             Output file: <figures/mGTL_firmware-eps-converted-to.pdf
->
-(epstopdf)                    date: 2020-08-04 10:41:05
->>>>>>> new_muon_structure
->>>>>>> mass_inv_3_obj
+(epstopdf)                    date: 2020-09-09 10:29:17
 (epstopdf)                    size: 97022 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/mGTL_firmware-eps-c
 onverted-to.pdf figures/mGTL_firmware.eps>
@@ -1781,7 +1641,7 @@ Package epstopdf Info: Output file is already uptodate.
 pdfTeX warning: pdflatex (file ./figures/mGTL_firmware-eps-converted-to.pdf): P
 DF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
 
-<figures/mGTL_firmware-eps-converted-to.pdf, id=1043, 684.5575pt x 304.13625pt>
+<figures/mGTL_firmware-eps-converted-to.pdf, id=1047, 684.5575pt x 304.13625pt>
 File: figures/mGTL_firmware-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/mGTL_firmware-eps-converted-to.pdf>
 Package pdftex.def Info: figures/mGTL_firmware-eps-converted-to.pdf used on inp
@@ -2018,34 +1878,10 @@ Overfull \hbox (1.44019pt too wide) in paragraph at lines 145--145
 \width=\dimen157 (locally)
 [32]
 Package epstopdf Info: Source file: <figures/tme_gtl.eps>
-<<<<<<< HEAD
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:11:47
+(epstopdf)                    date: 2020-09-09 10:29:13
 (epstopdf)                    size: 425829 bytes
 (epstopdf)             Output file: <figures/tme_gtl-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-03 14:11:52
-=======
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:09:42
-(epstopdf)                    size: 425829 bytes
-(epstopdf)             Output file: <figures/tme_gtl-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-03 14:09:47
->>>>>>> mass_inv_3_obj
-=======
-(epstopdf)                    date: 2020-08-03 13:55:10
-(epstopdf)                    size: 425829 bytes
-(epstopdf)             Output file: <figures/tme_gtl-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-03 13:55:18
->>>>>>> master
-<<<<<<< HEAD
-=======
-=======
-(epstopdf)                    date: 2020-08-04 10:41:01
-(epstopdf)                    size: 425829 bytes
-(epstopdf)             Output file: <figures/tme_gtl-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-04 10:41:05
->>>>>>> new_muon_structure
->>>>>>> mass_inv_3_obj
+(epstopdf)                    date: 2020-09-09 10:29:17
 (epstopdf)                    size: 173111 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/tme_gtl-eps-convert
 ed-to.pdf figures/tme_gtl.eps>
@@ -2055,7 +1891,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./figures/tme_gtl-eps-converted-to.pdf): PDF inc
 lusion: found PDF version <1.7>, but at most version <1.5> allowed
-<figures/tme_gtl-eps-converted-to.pdf, id=1068, 583.17876pt x 437.635pt>
+<figures/tme_gtl-eps-converted-to.pdf, id=1072, 583.17876pt x 437.635pt>
 File: figures/tme_gtl-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/tme_gtl-eps-converted-to.pdf>
@@ -2105,38 +1941,11 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 234.
 
 Package epstopdf Info: Source file: <figures/gtl_pipeline.eps>
-<<<<<<< HEAD
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:11:39
+(epstopdf)                    date: 2020-09-09 10:29:05
 (epstopdf)                    size: 247789 bytes
 (epstopdf)             Output file: <figures/gtl_pipeline-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2020-08-03 14:11:52
-=======
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:09:35
-(epstopdf)                    size: 247789 bytes
-(epstopdf)             Output file: <figures/gtl_pipeline-eps-converted-to.pdf>
-
-(epstopdf)                    date: 2020-08-03 14:09:47
->>>>>>> mass_inv_3_obj
-=======
-(epstopdf)                    date: 2020-08-03 13:55:02
-(epstopdf)                    size: 247789 bytes
-(epstopdf)             Output file: <figures/gtl_pipeline-eps-converted-to.pdf>
-
-(epstopdf)                    date: 2020-08-03 13:55:18
->>>>>>> master
-<<<<<<< HEAD
-=======
-=======
-(epstopdf)                    date: 2020-08-04 10:40:52
-(epstopdf)                    size: 247789 bytes
-(epstopdf)             Output file: <figures/gtl_pipeline-eps-converted-to.pdf>
-
-(epstopdf)                    date: 2020-08-04 10:41:06
->>>>>>> new_muon_structure
->>>>>>> mass_inv_3_obj
+(epstopdf)                    date: 2020-09-09 10:29:18
 (epstopdf)                    size: 95770 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/gtl_pipeline-eps-co
 nverted-to.pdf figures/gtl_pipeline.eps>
@@ -2146,7 +1955,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./figures/gtl_pipeline-eps-converted-to.pdf): PD
 F inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<figures/gtl_pipeline-eps-converted-to.pdf, id=1122, 498.86375pt x 437.635pt>
+<figures/gtl_pipeline-eps-converted-to.pdf, id=1126, 498.86375pt x 437.635pt>
 File: figures/gtl_pipeline-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/gtl_pipeline-eps-converted-to.pdf>
@@ -2284,38 +2093,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 532--534
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 Package epstopdf Info: Source file: <figures/phi_windows_comparator.eps>
-<<<<<<< HEAD
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:11:43
+(epstopdf)                    date: 2020-09-09 10:29:09
 (epstopdf)                    size: 86720 bytes
 (epstopdf)             Output file: <figures/phi_windows_comparator-eps-convert
 ed-to.pdf>
-(epstopdf)                    date: 2020-08-03 14:11:52
-=======
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:09:39
-(epstopdf)                    size: 86720 bytes
-(epstopdf)             Output file: <figures/phi_windows_comparator-eps-convert
-ed-to.pdf>
-(epstopdf)                    date: 2020-08-03 14:09:47
->>>>>>> mass_inv_3_obj
-=======
-(epstopdf)                    date: 2020-08-03 13:55:06
-(epstopdf)                    size: 86720 bytes
-(epstopdf)             Output file: <figures/phi_windows_comparator-eps-convert
-ed-to.pdf>
-(epstopdf)                    date: 2020-08-03 13:55:19
->>>>>>> master
-<<<<<<< HEAD
-=======
-=======
-(epstopdf)                    date: 2020-08-04 10:40:57
-(epstopdf)                    size: 86720 bytes
-(epstopdf)             Output file: <figures/phi_windows_comparator-eps-convert
-ed-to.pdf>
-(epstopdf)                    date: 2020-08-04 10:41:06
->>>>>>> new_muon_structure
->>>>>>> mass_inv_3_obj
+(epstopdf)                    date: 2020-09-09 10:29:18
 (epstopdf)                    size: 34804 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/phi_windows_compara
 tor-eps-converted-to.pdf figures/phi_windows_comparator.eps>
@@ -2327,7 +2109,7 @@ pdfTeX warning: pdflatex (file ./figures/phi_windows_comparator-eps-converted-t
 o.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allow
 ed
 
-<figures/phi_windows_comparator-eps-converted-to.pdf, id=1229, 684.5575pt x 274
+<figures/phi_windows_comparator-eps-converted-to.pdf, id=1233, 684.5575pt x 274
 .02374pt>
 File: figures/phi_windows_comparator-eps-converted-to.pdf Graphic file (type pd
 f)
@@ -2608,38 +2390,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 1190--1193
 
 Package epstopdf Info: Source file: <figures/scheme_vhdl_cuts_correllation_cond
 ition.eps>
-<<<<<<< HEAD
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:11:45
+(epstopdf)                    date: 2020-09-09 10:29:11
 (epstopdf)                    size: 220382 bytes
 (epstopdf)             Output file: <figures/scheme_vhdl_cuts_correllation_cond
 ition-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-03 14:11:53
-=======
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:09:41
-(epstopdf)                    size: 220382 bytes
-(epstopdf)             Output file: <figures/scheme_vhdl_cuts_correllation_cond
-ition-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-03 14:09:48
->>>>>>> mass_inv_3_obj
-=======
-(epstopdf)                    date: 2020-08-03 13:55:09
-(epstopdf)                    size: 220382 bytes
-(epstopdf)             Output file: <figures/scheme_vhdl_cuts_correllation_cond
-ition-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-03 13:55:19
->>>>>>> master
-<<<<<<< HEAD
-=======
-=======
-(epstopdf)                    date: 2020-08-04 10:40:59
-(epstopdf)                    size: 220382 bytes
-(epstopdf)             Output file: <figures/scheme_vhdl_cuts_correllation_cond
-ition-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-04 10:41:06
->>>>>>> new_muon_structure
->>>>>>> mass_inv_3_obj
+(epstopdf)                    date: 2020-09-09 10:29:19
 (epstopdf)                    size: 89792 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/scheme_vhdl_cuts_co
 rrellation_condition-eps-converted-to.pdf figures/scheme_vhdl_cuts_correllation
@@ -2652,7 +2407,7 @@ pdfTeX warning: pdflatex (file ./figures/scheme_vhdl_cuts_correllation_conditio
 n-eps-converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most ve
 rsion <1.5> allowed
 
-<figures/scheme_vhdl_cuts_correllation_condition-eps-converted-to.pdf, id=1427,
+<figures/scheme_vhdl_cuts_correllation_condition-eps-converted-to.pdf, id=1431,
  684.5575pt x 380.42125pt>
 File: figures/scheme_vhdl_cuts_correllation_condition-eps-converted-to.pdf Grap
 hic file (type pdf)
@@ -2708,9 +2463,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 1305--1306
 
  []
 
-[68] (./interfaces/calo_calo_correlation_condition_v4.vhd [69
+[68] (./interfaces/calo_calo_correlation_condition.vhd [69
 
-])
+] [70])
 Underfull \hbox (badness 6428) in paragraph at lines 1321--1322
 []|\T1/lmr/m/n/9 selection of mass type (IN-VARI-ANT_-MASS_-TYPE, IN-VARI-
  []
@@ -2720,7 +2475,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1321--1322
 \T1/lmr/m/n/9 ANT_-MASS_-PT_-TYPE, TRANS-VERSE_-MASS_-TYPE or
  []
 
-[70] [71]
+[71]
 Underfull \hbox (badness 3746) in paragraph at lines 1390--1391
 []|\T1/lmr/m/n/9 differences in $\OML/lmm/m/it/9 ^^Q$\T1/lmr/m/n/9 , cal-cu-lat
 ed in an in-stance of mod-ule \T1/pcr/m/n/9 sub_-
@@ -2732,7 +2487,7 @@ Underfull \hbox (badness 3492) in paragraph at lines 1391--1392
  in an in-stance of mod-ule \T1/pcr/m/n/9 sub_-
  []
 
-[72]
+[72] [73]
 Underfull \hbox (badness 10000) in paragraph at lines 1412--1428
 
  []
@@ -2742,41 +2497,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 1412--1428
 
  []
 
-[73]
+[74]
 Package epstopdf Info: Source file: <figures/convert_scheme_calo_2_muon_eta_phi
 .eps>
-<<<<<<< HEAD
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:11:35
+(epstopdf)                    date: 2020-09-09 10:29:01
 (epstopdf)                    size: 240902 bytes
 (epstopdf)             Output file: <figures/convert_scheme_calo_2_muon_eta_phi
 -eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-03 14:11:53
-=======
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:09:31
-(epstopdf)                    size: 240902 bytes
-(epstopdf)             Output file: <figures/convert_scheme_calo_2_muon_eta_phi
--eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-03 14:09:48
->>>>>>> mass_inv_3_obj
-=======
-(epstopdf)                    date: 2020-08-03 13:54:58
-(epstopdf)                    size: 240902 bytes
-(epstopdf)             Output file: <figures/convert_scheme_calo_2_muon_eta_phi
--eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-03 13:55:20
->>>>>>> master
-<<<<<<< HEAD
-=======
-=======
-(epstopdf)                    date: 2020-08-04 10:40:49
-(epstopdf)                    size: 240902 bytes
-(epstopdf)             Output file: <figures/convert_scheme_calo_2_muon_eta_phi
--eps-converted-to.pdf>
-(epstopdf)                    date: 2020-08-04 10:41:07
->>>>>>> new_muon_structure
->>>>>>> mass_inv_3_obj
+(epstopdf)                    date: 2020-09-09 10:29:19
 (epstopdf)                    size: 94518 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/convert_scheme_calo
 _2_muon_eta_phi-eps-converted-to.pdf figures/convert_scheme_calo_2_muon_eta_phi
@@ -2789,7 +2517,7 @@ pdfTeX warning: pdflatex (file ./figures/convert_scheme_calo_2_muon_eta_phi-eps
 -converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version
  <1.5> allowed
 
-<figures/convert_scheme_calo_2_muon_eta_phi-eps-converted-to.pdf, id=1590, 632.
+<figures/convert_scheme_calo_2_muon_eta_phi-eps-converted-to.pdf, id=1610, 632.
 3625pt x 437.635pt>
 File: figures/convert_scheme_calo_2_muon_eta_phi-eps-converted-to.pdf Graphic f
 ile (type pdf)
@@ -2811,15 +2539,14 @@ Overfull \hbox (79.19868pt too wide) in paragraph at lines 1448--1459
 -ply-ing by 10000 (10$[]$)
  []
 
-[74]
+[75 <./figures/convert_scheme_calo_2_muon_eta_phi-eps-converted-to.pdf>]
 Underfull \hbox (badness 10000) in paragraph at lines 1460--1461
 
  []
 
-[75 <./figures/convert_scheme_calo_2_muon_eta_phi-eps-converted-to.pdf>]
-(./interfaces/calo_muon_correlation_condition.vhd [76
+[76] (./interfaces/calo_muon_correlation_condition.vhd [77
 
-] [77])
+] [78])
 Underfull \hbox (badness 6428) in paragraph at lines 1475--1476
 []|\T1/lmr/m/n/9 selection of mass type (IN-VARI-ANT_-MASS_-TYPE, IN-VARI-
  []
@@ -2829,31 +2556,31 @@ Underfull \hbox (badness 10000) in paragraph at lines 1475--1476
 \T1/lmr/m/n/9 ANT_-MASS_-PT_-TYPE, TRANS-VERSE_-MASS_-TYPE or
  []
 
-[78]
+[79]
 Underfull \hbox (badness 3746) in paragraph at lines 1550--1551
 []|\T1/lmr/m/n/9 differences in $\OML/lmm/m/it/9 ^^Q$\T1/lmr/m/n/9 , cal-cu-lat
 ed in an in-stance of mod-ule \T1/pcr/m/n/9 sub_-
  []
 
-[79]
+[80]
 Underfull \hbox (badness 3492) in paragraph at lines 1551--1552
 []|\T1/lmr/m/n/9 differences in $\OML/lmm/m/it/9 '$\T1/lmr/m/n/9 , cal-cu-lated
  in an in-stance of mod-ule \T1/pcr/m/n/9 sub_-
  []
 
-[80]
+[81]
 Underfull \hbox (badness 10000) in paragraph at lines 1572--1582
 
  []
 
-[81]
+[82]
 Underfull \hbox (badness 10000) in paragraph at lines 1603--1604
 
  []
 
-[82] (./interfaces/muon_muon_correlation_condition_v4.vhd [83
+[83] (./interfaces/muon_muon_correlation_condition.vhd [84
 
-] [84])
+] [85])
 Overfull \hbox (20.26833pt too wide) in alignment at lines 1608--1613
  [] [] 
  []
@@ -2878,12 +2605,12 @@ Overfull \hbox (20.26833pt too wide) in alignment at lines 1634--1654
  [] [] 
  []
 
-
+[86]
 Overfull \hbox (20.26833pt too wide) in alignment at lines 1654--1674
  [] [] 
  []
 
-[85]
+[87]
 Overfull \hbox (20.26833pt too wide) in alignment at lines 1674--1694
  [] [] 
  []
@@ -2905,25 +2632,25 @@ Overfull \hbox (20.26833pt too wide) in alignment at lines 1694--1713
  [] [] 
  []
 
-[86] [87]
+[88] [89]
 Underfull \hbox (badness 10000) in paragraph at lines 1722--1729
 
  []
 
-[88]
+
 Underfull \hbox (badness 10000) in paragraph at lines 1741--1743
 
  []
 
-(./interfaces/calo_esums_correlation_condition.vhd [89]) [90]
+(./interfaces/calo_esums_correlation_condition.vhd [90] [91]) [92]
 Underfull \hbox (badness 3492) in paragraph at lines 1806--1807
 []|\T1/lmr/m/n/9 differences in $\OML/lmm/m/it/9 '$\T1/lmr/m/n/9 , cal-cu-lated
  in an in-stance of mod-ule \T1/pcr/m/n/9 sub_-
  []
 
-[91
+[93
 
-] [92]
+] [94]
 Underfull \hbox (badness 10000) in paragraph at lines 1822--1836
 
  []
@@ -2945,21 +2672,21 @@ Underfull \hbox (badness 10000) in paragraph at lines 1858--1860
 
  []
 
-[93] (./interfaces/muon_esums_correlation_condition.vhd [94]) [95]
+[95] (./interfaces/muon_esums_correlation_condition.vhd [96]) [97]
 Underfull \hbox (badness 3492) in paragraph at lines 1930--1931
 []|\T1/lmr/m/n/9 differences in $\OML/lmm/m/it/9 '$\T1/lmr/m/n/9 , cal-cu-lated
  in an in-stance of mod-ule \T1/pcr/m/n/9 sub_-
  []
 
-[96
+[98
 
-] [97]
+] [99]
 Overfull \hbox (38.6895pt too wide) in paragraph at lines 1948--1949
 []\T1/lmr/m/n/10.95 Overlap Re-mover Cor-re-la-tion con-di-tions \T1/pcr/m/n/10
 .95 calo_-calo_-calo_-correlation_-orm_-condition.vhd
  []
 
-[98]
+[100]
 Overfull \hbox (7.11624pt too wide) in paragraph at lines 1971--1974
 \T1/lmr/m/n/10.95 The VHDL-Producer soft-ware gen-er-ates a set of VHDL files (
 \T1/pcr/m/n/10.95 gtl_-module_-instances.vhd,
@@ -2976,46 +2703,46 @@ Underfull \hbox (badness 10000) in paragraph at lines 2108--2109
 
  []
 
-(./interfaces/instance_calo_condition.vhd.j2 [99
+(./interfaces/instance_calo_condition.vhd.j2 [101
 
-]) [100] [101]
+]) [102] [103]
 Underfull \hbox (badness 10000) in paragraph at lines 2147--2148
 
  []
 
-(./interfaces/instance_esums_condition.vhd.j2) [102
+(./interfaces/instance_esums_condition.vhd.j2) [104
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 2178--2179
 
  []
 
-(./interfaces/instance_muon_condition.vhd.j2 [103
+(./interfaces/instance_muon_condition.vhd.j2 [105
 
-]) [104] [105]
+]) [106] [107]
 Underfull \hbox (badness 10000) in paragraph at lines 2218--2219
 
  []
 
-(./interfaces/instance_calo_calo_correlation_condition.vhd.j2 [106
+(./interfaces/instance_calo_calo_correlation_condition.vhd.j2 [108
 
-]) [107]
-[108]
+]) [109]
+[110]
 Underfull \hbox (badness 10000) in paragraph at lines 2260--2261
 
  []
 
-(./interfaces/instance_calo_muon_correlation_condition.vhd.j2 [109
+(./interfaces/instance_calo_muon_correlation_condition.vhd.j2 [111
 
-]) [110]
-[111]
+]) [112]
+[113]
 Underfull \hbox (badness 10000) in paragraph at lines 2306--2307
 
  []
 
-(./interfaces/instance_muon_muon_correlation_condition.vhd.j2 [112
+(./interfaces/instance_muon_muon_correlation_condition.vhd.j2 [114
 
-]) [113]
+]) [115]
 Underfull \hbox (badness 10000) in paragraph at lines 2351--2352
 
  []
@@ -3026,7 +2753,7 @@ Underfull \hbox (badness 1748) in paragraph at lines 2354--2354
 relation_-condition.vhd \T1/lmr/m/n/10.95 for VHDL-
  []
 
-(./interfaces/instance_calo_esums_correlation_condition.vhd.j2 [114]) [115]
+(./interfaces/instance_calo_esums_correlation_condition.vhd.j2 [116]) [117]
 Underfull \hbox (badness 10000) in paragraph at lines 2387--2388
 
  []
@@ -3037,41 +2764,14 @@ Underfull \hbox (badness 1748) in paragraph at lines 2390--2390
 relation_-condition.vhd \T1/lmr/m/n/10.95 for VHDL-
  []
 
-(./interfaces/instance_muon_esums_correlation_condition.vhd.j2 [116]) [117]
-[118]) (./content/fdl.tex
+(./interfaces/instance_muon_esums_correlation_condition.vhd.j2 [118]) [119]
+[120]) (./content/fdl.tex
 Package epstopdf Info: Source file: <figures/mFDL_firmware.eps>
-<<<<<<< HEAD
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:11:40
+(epstopdf)                    date: 2020-09-09 10:29:05
 (epstopdf)                    size: 223249 bytes
 (epstopdf)             Output file: <figures/mFDL_firmware-eps-converted-to.pdf
 >
-(epstopdf)                    date: 2020-08-03 14:11:54
-=======
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:09:36
-(epstopdf)                    size: 223249 bytes
-(epstopdf)             Output file: <figures/mFDL_firmware-eps-converted-to.pdf
->
-(epstopdf)                    date: 2020-08-03 14:09:49
->>>>>>> mass_inv_3_obj
-=======
-(epstopdf)                    date: 2020-08-03 13:55:03
-(epstopdf)                    size: 223249 bytes
-(epstopdf)             Output file: <figures/mFDL_firmware-eps-converted-to.pdf
->
-(epstopdf)                    date: 2020-08-03 13:55:21
->>>>>>> master
-<<<<<<< HEAD
-=======
-=======
-(epstopdf)                    date: 2020-08-04 10:40:53
-(epstopdf)                    size: 223249 bytes
-(epstopdf)             Output file: <figures/mFDL_firmware-eps-converted-to.pdf
->
-(epstopdf)                    date: 2020-08-04 10:41:08
->>>>>>> new_muon_structure
->>>>>>> mass_inv_3_obj
+(epstopdf)                    date: 2020-09-09 10:29:20
 (epstopdf)                    size: 96525 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/mFDL_firmware-eps-c
 onverted-to.pdf figures/mFDL_firmware.eps>
@@ -3082,7 +2782,7 @@ Package epstopdf Info: Output file is already uptodate.
 pdfTeX warning: pdflatex (file ./figures/mFDL_firmware-eps-converted-to.pdf): P
 DF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
 
-<figures/mFDL_firmware-eps-converted-to.pdf, id=2535, 684.5575pt x 326.21875pt>
+<figures/mFDL_firmware-eps-converted-to.pdf, id=2581, 684.5575pt x 326.21875pt>
 File: figures/mFDL_firmware-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/mFDL_firmware-eps-converted-to.pdf>
 Package pdftex.def Info: figures/mFDL_firmware-eps-converted-to.pdf used on inp
@@ -3093,42 +2793,15 @@ ut line 16.
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\mu' on input line 21.
 
-[119
+[121
 
  <./figures/mFDL_firmware-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <figures/fdl_pipeline.eps>
-<<<<<<< HEAD
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:11:37
+(epstopdf)                    date: 2020-09-09 10:29:03
 (epstopdf)                    size: 128249 bytes
 (epstopdf)             Output file: <figures/fdl_pipeline-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2020-08-03 14:11:54
-=======
-<<<<<<< HEAD
-(epstopdf)                    date: 2020-08-03 14:09:33
-(epstopdf)                    size: 128249 bytes
-(epstopdf)             Output file: <figures/fdl_pipeline-eps-converted-to.pdf>
-
-(epstopdf)                    date: 2020-08-03 14:09:49
->>>>>>> mass_inv_3_obj
-=======
-(epstopdf)                    date: 2020-08-03 13:55:00
-(epstopdf)                    size: 128249 bytes
-(epstopdf)             Output file: <figures/fdl_pipeline-eps-converted-to.pdf>
-
-(epstopdf)                    date: 2020-08-03 13:55:21
->>>>>>> master
-<<<<<<< HEAD
-=======
-=======
-(epstopdf)                    date: 2020-08-04 10:40:51
-(epstopdf)                    size: 128249 bytes
-(epstopdf)             Output file: <figures/fdl_pipeline-eps-converted-to.pdf>
-
-(epstopdf)                    date: 2020-08-04 10:41:08
->>>>>>> new_muon_structure
->>>>>>> mass_inv_3_obj
+(epstopdf)                    date: 2020-09-09 10:29:20
 (epstopdf)                    size: 50988 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/fdl_pipeline-eps-co
 nverted-to.pdf figures/fdl_pipeline.eps>
@@ -3139,19 +2812,19 @@ Package epstopdf Info: Output file is already uptodate.
 pdfTeX warning: pdflatex (file ./figures/fdl_pipeline-eps-converted-to.pdf): PD
 F inclusion: found PDF version <1.7>, but at most version <1.5> allowed
 
-<figures/fdl_pipeline-eps-converted-to.pdf, id=2542, 684.5575pt x 380.42125pt>
+<figures/fdl_pipeline-eps-converted-to.pdf, id=2588, 684.5575pt x 380.42125pt>
 File: figures/fdl_pipeline-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/fdl_pipeline-eps-converted-to.pdf>
 Package pdftex.def Info: figures/fdl_pipeline-eps-converted-to.pdf used on inpu
 t line 64.
 (pdftex.def)             Requested size: 426.79134pt x 237.1822pt.
- [120 <./figures/fdl_pipeline-eps-converted-to.pdf>]
+ [122 <./figures/fdl_pipeline-eps-converted-to.pdf>]
 
-LaTeX Warning: Reference `sec:gtl:algo_mapping_tme' on page 121 undefined on in
+LaTeX Warning: Reference `sec:gtl:algo_mapping_tme' on page 123 undefined on in
 put line 79.
 
-[121]
+[123]
 Overfull \hbox (19.54956pt too wide) in alignment at lines 140--146
  [] [] [] [] 
  []
@@ -3276,7 +2949,7 @@ Overfull \hbox (19.54956pt too wide) in alignment at lines 168--178
  [] [] [] [] 
  []
 
-[122] [123] [124] [125] [126] [127] [128] [129] [130] [131
+[124] [125] [126] [127] [128] [129] [130] [131] [132] [133
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 522--523
@@ -3288,7 +2961,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 524--525
 
  []
 
-(./interfaces/fdl_module.vhd [132]) [133]) (./content/rop.tex [134
+(./interfaces/fdl_module.vhd [134]) [135]) (./content/rop.tex [136
 
 ])
 (./content/glossary.tex
@@ -3297,9 +2970,9 @@ Overfull \hbox (21.71692pt too wide) in paragraph at lines 20--21
 MBT1HFM) 
  []
 
-[135
+[137
 
-]) (./content/acronyms.tex) [136
+]) (./content/acronyms.tex) [138
 
 ] (./gt-mp7-firmware-specification.bbl
 (./gt-mp7-firmware-specification.brf)
@@ -3314,7 +2987,7 @@ LaTeX Warning: Empty `thebibliography' environment on input line 3.
 No file gt-mp7-firmware-specification.ind.
 
 AED: lastpage setting LastPage
-[137
+[139
 
 ]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 89.
@@ -3338,10 +3011,10 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 89.
  ) 
 Here is how much of TeX's memory you used:
- 17244 strings out of 495028
- 251273 string characters out of 6181496
- 658617 words of memory out of 5000000
- 18666 multiletter control sequences out of 15000+600000
+ 17304 strings out of 495028
+ 252407 string characters out of 6181496
+ 658624 words of memory out of 5000000
+ 18693 multiletter control sequences out of 15000+600000
  110552 words of font info for 85 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  49i,14n,45p,1158b,1924s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -3368,26 +3041,11 @@ blic/lm/lmss8.pfb></usr/share/texmf/fonts/type1/public/lm/lmss9.pfb></usr/share
 fonts/type1/public/lm/lmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/
 courier/ucrb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8
 a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb>
-<<<<<<< HEAD
-<<<<<<< HEAD
-Output written on gt-mp7-firmware-specification.pdf (134 pages, 2146376 bytes).
-=======
-Output written on gt-mp7-firmware-specification.pdf (134 pages, 2146377 bytes).
->>>>>>> master
-=======
-<<<<<<< HEAD
-Output written on gt-mp7-firmware-specification.pdf (134 pages, 2146371 bytes).
-=======
-Output written on gt-mp7-firmware-specification.pdf (134 pages, 2146377 bytes).
->>>>>>> master
-=======
-Output written on gt-mp7-firmware-specification.pdf (138 pages, 2166100 bytes).
->>>>>>> new_muon_structure
->>>>>>> mass_inv_3_obj
+Output written on gt-mp7-firmware-specification.pdf (140 pages, 2169473 bytes).
 
 PDF statistics:
- 3080 PDF objects out of 3580 (max. 8388607)
- 2866 compressed objects within 29 object streams
- 1368 named destinations out of 1440 (max. 500000)
+ 3134 PDF objects out of 3580 (max. 8388607)
+ 2917 compressed objects within 30 object streams
+ 1401 named destinations out of 1440 (max. 500000)
  894 words of extra memory for PDF output out of 10000 (max. 10000000)
 

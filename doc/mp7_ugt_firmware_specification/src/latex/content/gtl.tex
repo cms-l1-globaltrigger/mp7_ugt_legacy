@@ -781,7 +781,7 @@ Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data stru
 \item 1 bit charge valid (='1' means "valid")
 \item 7 index bits
 \item 10 bits azimuth angle ($\varphi$) position, raw data
-\item 8 bits unconstraint \pt, range = 0..255 GeV (HW index = 0..0xFF), step = 1.0, the highest bin will mark an overflow (HW index 0xFF)
+\item 8 bits unconstrained \pt, range = 0..255 GeV (HW index = 0..0xFF), step = 1.0, the highest bin will mark an overflow (HW index 0xFF)
 \item 1 spare bit
 \item 2 bits impact parameter
 \end{itemize}
@@ -1087,9 +1087,9 @@ The selection of condition-type and the number of objects is done by parameters 
 \verb|requested_charges| & array of four strings for requested charge ("pos" means "positive charge", "neg" means "negative charge" and "ign" means "ignore charge").\\
 \verb|qual_luts| & array of four LUTs (16 bits) for quality.\\
 \verb|iso_luts| & array of four LUTs (4 bits) for isolation.\\
-\verb|upt_cuts| & array of four boolean for using unconstraint \pt cuts.\\
-\verb|upt_upper_limits| & array of four "upper limits" of unconstraint \pt.\\
-\verb|upt_lower_limits| & array of four "lower limits" of unconstraint \pt.\\
+\verb|upt_cuts| & array of four boolean for using unconstrained \pt cuts.\\
+\verb|upt_upper_limits| & array of four "upper limits" of unconstrained \pt.\\
+\verb|upt_lower_limits| & array of four "lower limits" of unconstrained \pt.\\
 \verb|ip_luts| & array of four LUTs (4 bits) for impact parameter.\\
 \verb|requested_charge_correlation| & string (2 characters) for requested charge correlation ("ls" means "like sign", "os" means "opposite sign" or "ig" means "ignore").\\
 \verb|twobody_pt_cut| & valid strings are 'true' and 'false' (type is boolean).\\
@@ -1120,7 +1120,7 @@ See in Chapter \ref{sec:gtl:templates_tme} and in Listing~\ref{lst:instance_muon
 instantiating a muon condition (\texttt{muon\_conditions.vhd}).\\
 
 \subparagraph{Muon comparators module}\label{sec:gtl:muon_comp_module}
-A comparator between \pt and a threshold (pt\_threshold), a comparator between unconstraint \pt and a threshold (upt\_threshold), a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators, a comparison of quality with LUT, a comparison of isolation with LUT and a comparison of the requested charge is done in this basic module. The values for \pt threshold, unconstraint \pt threshold, the 'mode-selection' for the \pt comparator, the "limits" of the "window"-comparators, the quality LUTs, the isolation LUTs and the requested charge is given in the generic interface list of the module.
+A comparator between \pt and a threshold (pt\_threshold), a comparator between unconstrained \pt and a threshold (upt\_threshold), a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators, a comparison of quality with LUT, a comparison of isolation with LUT and a comparison of the requested charge is done in this basic module. The values for \pt threshold, unconstrained \pt threshold, the 'mode-selection' for the \pt comparator, the "limits" of the "window"-comparators, the quality LUTs, the isolation LUTs and the requested charge is given in the generic interface list of the module.
 Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
 The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
 The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. There are two flags, one for "full-range" and one for "ignore-second-window" for the selection of the ranges.\\
@@ -1520,9 +1520,9 @@ For the VHDL entity declaration of calo muon correlation condition module (versi
 \verb|requested_charge_muon| & string for requested charge ("pos" means "positive charge", "neg" means "negative charge" and "ign" means "ignore charge").\\
 \verb|qual_lut_muon| & content of LUT (16 bits) for quality comparison.\\
 \verb|iso_lut_muon| & content of LUT (4 bits) for isolation comparison.\\
-\verb|upt_cut_muon| & boolean for using unconstraint \pt cuts.\\
-\verb|upt_upper_limit_muon| & "upper limit" of unconstraint \pt.\\
-\verb|upt_lower_limit_muon| & "lower limit" of unconstraint \pt.\\
+\verb|upt_cut_muon| & boolean for using unconstrained \pt cuts.\\
+\verb|upt_upper_limit_muon| & "upper limit" of unconstrained \pt.\\
+\verb|upt_lower_limit_muon| & "lower limit" of unconstrained \pt.\\
 \verb|ip_lut_muon| & content of LUTs (4 bits) for impact parameter.\\
 \verb|diff_eta_upper_limit| & "upper limit" of "window"-comparator for comparison of differences in $\eta$ (hex value).\\
 \verb|diff_eta_lower_limit| & "lower limit" of "window"-comparator for comparison of differences in $\eta$ (hex value).\\
@@ -1641,9 +1641,9 @@ For the VHDL entity declaration of muon muon correlation condition module in \te
 \verb|requested_charge_muon1| & string for requested charge ("pos" means "positive charge", "neg" means "negative charge" and "ign" means "ignore charge").\\
 \verb|qual_lut_muon1| & content of LUT (16 bits) for quality comparison.\\
 \verb|iso_lut_muon1| & content of LUT (4 bits) for isolation comparison.\\
-\verb|upt_cut_muon1| & boolean for using unconstraint \pt cuts.\\
-\verb|upt_upper_limit_muon1| & "upper limit" of unconstraint \pt.\\
-\verb|upt_lower_limit_muon1| & "lower limit" of unconstraint \pt.\\
+\verb|upt_cut_muon1| & boolean for using unconstrained \pt cuts.\\
+\verb|upt_upper_limit_muon1| & "upper limit" of unconstrained \pt.\\
+\verb|upt_lower_limit_muon1| & "lower limit" of unconstrained \pt.\\
 \verb|ip_lut_muon1| & content of LUTs (4 bits) for impact parameter.\\
 \verb|pt_ge_mode_muon2| & 'mode-selection' for the \pt comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
 \verb|pt_threshold_muon2| & threshold value for comparison in \pt.\\
@@ -1667,9 +1667,9 @@ For the VHDL entity declaration of muon muon correlation condition module in \te
 \verb|requested_charge_muon2| & string for requested charge ("pos" means "positive charge", "neg" means "negative charge" and "ign" means "ignore charge").\\
 \verb|qual_lut_muon2| & content of LUT (16 bits) for quality comparison.\\
 \verb|iso_lut_muon2| & content of LUT (4 bits) for isolation comparison.\\
-\verb|upt_cut_muon2| & boolean for using unconstraint \pt cuts.\\
-\verb|upt_upper_limit_muon2| & "upper limit" of unconstraint \pt.\\
-\verb|upt_lower_limit_muon2| & "lower limit" of unconstraint \pt.\\
+\verb|upt_cut_muon2| & boolean for using unconstrained \pt cuts.\\
+\verb|upt_upper_limit_muon2| & "upper limit" of unconstrained \pt.\\
+\verb|upt_lower_limit_muon2| & "lower limit" of unconstrained \pt.\\
 \verb|ip_lut_muon2| & content of LUTs (4 bits) for impact parameter.\\
 \verb|requested_charge_correlation| & string (2 characters) for requested charge correlation ("ls" means "like sign", "os" means "opposite sign" or "ig" means "ignore").\\
 \verb|diff_eta_upper_limit| & "upper limit" of "window"-comparator for comparison of differences in $\eta$ (hex value).\\
@@ -1699,8 +1699,8 @@ For the VHDL entity declaration of muon muon correlation condition module in \te
 \verb|diff_phi| & differences in $\varphi$, calculated in an instance of module \texttt{sub\_phi\_integer\_obj\_vs\_obj.vhd} in top-of-hierarchy module (\texttt{gtl\_module.vhd}).\\
 \verb|pt1| & muon1 \pt values [from LUT, in $GeV\times$10].\footnote{value 10 from 10\textsuperscript{\tiny{MUON\_MUON\_INV\_MASS\_PT\_PRECISION}}}\\
 \verb|pt2| & muon2 \pt values [from LUT, in $GeV\times$10].\\
-\verb|upt1| & muon1 unconstraint \pt values [from LUT, in $GeV\times$10].\footnote{value 10 from 10\textsuperscript{\tiny{MUON\_MUON\_INV\_MASS\_PT\_PRECISION}}}\\
-\verb|upt2| & muon2 unconstraint \pt values [from LUT, in $GeV\times$10].\\
+\verb|upt1| & muon1 unconstrained \pt values [from LUT, in $GeV\times$10].\footnote{value 10 from 10\textsuperscript{\tiny{MUON\_MUON\_INV\_MASS\_PT\_PRECISION}}}\\
+\verb|upt2| & muon2 unconstrained \pt values [from LUT, in $GeV\times$10].\\
 \verb|cosh_deta| & $\cosh(\Delta\eta)$ values [from LUT, $\cosh(\Delta\eta)\times$10000].\footnote{value 10000 from 10\textsuperscript{\tiny{MUON\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}}}\\
 \verb|cos_dphi| & $\cos(\Delta\varphi)$ values [from LUT, $\cosh(\Delta\varphi)\times$10000].\\
 \verb|cos_phi_1| & $\cos(\varphi)$ values from LUT for muon.\\
@@ -1894,9 +1894,9 @@ For VHDL entity declaration for muon esums correlation condition module in \text
 \verb|requested_charge_muon| & string for requested charge ("pos" means "positive charge", "neg" means "negative charge" and "ign" means "ignore charge").\\
 \verb|qual_lut_muon| & content of LUT (16 bits) for quality comparison.\\
 \verb|iso_lut_muon| & content of LUT (4 bits) for isolation comparison.\\
-\verb|upt_cut_muon| & boolean for using unconstraint \pt cuts.\\
-\verb|upt_upper_limit_muon| & "upper limit" of unconstraint \pt.\\
-\verb|upt_lower_limit_muon| & "lower limit" of unconstraint \pt.\\
+\verb|upt_cut_muon| & boolean for using unconstrained \pt cuts.\\
+\verb|upt_upper_limit_muon| & "upper limit" of unconstrained \pt.\\
+\verb|upt_lower_limit_muon| & "lower limit" of unconstrained \pt.\\
 \verb|ip_lut_muon| & content of LUTs (4 bits) for impact parameter.\\
 \verb|et_ge_mode_esums| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
 \verb|obj_type_esums| & selection of esums type (ETM\_TYPE or HTM\_TYPE are allowed)\\
@@ -2287,8 +2287,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_muon\_correla
 \verb|charge| & requested charge. Valid strings are 'pos' ("positive charge") and 'neg' ("negative charge") and 'ign' ("ignore").\\
 \verb|qualityLUT| & LUT (16 bits) of quality.\\
 \verb|isolationLUT| & LUT (4 bits) of isolation).\\
-\verb|uptCutSel| & set use of unconstraint \pt.\\
-\verb|uptUpperLimit, ...| & limits for unconstraint \pt.\\
+\verb|uptCutSel| & set use of unconstrained \pt.\\
+\verb|uptUpperLimit, ...| & limits for unconstrained \pt.\\
 \verb|impactParameterLUT| & LUT (4 bits) of impact parameter).\\
 \verb|deltaEta.upper, ...| & limits for "window"-comparator for comparison of differences in $\eta$ (hex notation). Valid values depending on the scales for $\eta$.\\
 \verb|deltaPhi.upper, ...| & limits for "window"-comparator for comparison of differences in $\varphi$ (hex notation). Valid values depending on the scales for $\varphi$.\\
@@ -2334,8 +2334,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_muon\_correla
 \verb|charge| & requested charge. Valid strings are 'pos' ("positive charge") and 'neg' ("negative charge") and 'ign' ("ignore").\\
 \verb|qualityLUT| & LUT (16 bits) of quality.\\
 \verb|isolationLUT| & LUT (4 bits) of isolation).\\
-\verb|uptCutSel| & set use of unconstraint \pt.\\
-\verb|uptUpperLimit, ...| & limits for unconstraint \pt.\\
+\verb|uptCutSel| & set use of unconstrained \pt.\\
+\verb|uptUpperLimit, ...| & limits for unconstrained \pt.\\
 \verb|impactParameterLUT| & LUT (4 bits) of impact parameter).\\
 \verb|deltaEta.upper, ...| & limits for "window"-comparator for comparison of differences in $\eta$ (hex notation). Valid values depending on the scales for $\eta$.\\
 \verb|deltaPhi.upper, ...| & limits for "window"-comparator for comparison of differences in $\varphi$ (hex notation). Valid values depending on the scales for $\varphi$.\\
@@ -2412,8 +2412,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_esums\_correl
 \verb|charge| & requested charge. Valid strings are 'pos' ("positive charge") and 'neg' ("negative charge") and 'ign' ("ignore").\\
 \verb|qualityLUT| & LUT (16 bits) of quality.\\
 \verb|isolationLUT| & LUT (4 bits) of isolation).\\
-\verb|uptCutSel| & set use of unconstraint \pt.\\
-\verb|uptUpperLimit, ...| & limits for unconstraint \pt.\\
+\verb|uptCutSel| & set use of unconstrained \pt.\\
+\verb|uptUpperLimit, ...| & limits for unconstrained \pt.\\
 \verb|impactParameterLUT| & LUT (4 bits) of impact parameter).\\
 \verb|deltaPhi.upper, ...| & limits for "window"-comparator for comparison of differences in $\varphi$ (hex notation). Valid values depending on the scales for $\varphi$.\\
 \verb|mass.upper, ...| & limits for "window"-comparator for comparison of $\frac{M^2}{2}$ (hex notation).\\

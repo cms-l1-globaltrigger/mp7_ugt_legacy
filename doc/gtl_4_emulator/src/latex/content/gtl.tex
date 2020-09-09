@@ -667,7 +667,7 @@ Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data stru
 \item 1 bit charge valid (='1' means "valid")
 \item 7 index bits
 \item 10 bits azimuth angle ($\varphi$) position, raw data
-\item 8 bits unconstraint \pt, range = 0..255 GeV (HW index = 0..0xFF), step = 1.0, the highest bin will mark an overflow (HW index 0xFF)
+\item 8 bits unconstrained \pt, range = 0..255 GeV (HW index = 0..0xFF), step = 1.0, the highest bin will mark an overflow (HW index 0xFF)
 \item 1 spare bit
 \item 2 bits impact parameter
 \end{itemize}
@@ -930,7 +930,7 @@ the numbers of objects and requirements determine. Depending on the condition-ty
 The selection of condition-type and the number of objects is done by parameters in the generic interface list of the module.
 
 \subparagraph{Muon comparators module}\label{sec:gtl:muon_comp_module}
-A comparator between \pt and a threshold (pt\_threshold), a comparator between unconstraint \pt and a threshold (upt\_threshold), a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators, a comparison of quality with LUT, a comparison of isolation with LUT and a comparison of the requested charge is done in this basic module. The values for \pt threshold, unconstraint \pt threshold, the 'mode-selection' for the \pt comparator, the "limits" of the "window"-comparators, the quality LUTs, the isolation LUTs and the requested charge is given in the generic interface list of the module.
+A comparator between \pt and a threshold (pt\_threshold), a comparator between unconstrained \pt and a threshold (upt\_threshold), a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators, a comparison of quality with LUT, a comparison of isolation with LUT and a comparison of the requested charge is done in this basic module. The values for \pt threshold, unconstrained \pt threshold, the 'mode-selection' for the \pt comparator, the "limits" of the "window"-comparators, the quality LUTs, the isolation LUTs and the requested charge is given in the generic interface list of the module.
 Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
 The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
 The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. There are two flags, one for "full-range" and one for "ignore-second-window" for the selection of the ranges.\\

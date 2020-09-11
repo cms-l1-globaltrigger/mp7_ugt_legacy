@@ -32,18 +32,21 @@
 \contentsline {subparagraph}{\numberline {2.4.8.3.1}Muon conditions module}{31}{subparagraph.2.4.8.3.1}
 \contentsline {subparagraph}{\numberline {2.4.8.3.2}Muon comparators module}{31}{subparagraph.2.4.8.3.2}
 \contentsline {subsubsection}{\numberline {2.4.9}Correlation conditions}{33}{subsubsection.2.4.9}
-\contentsline {paragraph}{\numberline {2.4.9.1}Calculation of cuts}{33}{paragraph.2.4.9.1}
+\contentsline {paragraph}{\numberline {2.4.9.1}Calculation of cuts}{34}{paragraph.2.4.9.1}
 \contentsline {subparagraph}{\numberline {2.4.9.1.1}$\Delta $$R$ calculation}{34}{subparagraph.2.4.9.1.1}
 \contentsline {subparagraph}{\numberline {2.4.9.1.2}Invariant mass calculation}{34}{subparagraph.2.4.9.1.2}
 \contentsline {subparagraph}{\numberline {2.4.9.1.3}Transverse mass calculation}{34}{subparagraph.2.4.9.1.3}
 \contentsline {subparagraph}{\numberline {2.4.9.1.4}Two-body pt calculation}{34}{subparagraph.2.4.9.1.4}
-\contentsline {paragraph}{\numberline {2.4.9.2}Correlation condition modules}{34}{paragraph.2.4.9.2}
-\contentsline {subparagraph}{\numberline {2.4.9.2.1}Calo Calo Correlation condition module}{35}{subparagraph.2.4.9.2.1}
-\contentsline {subparagraph}{\numberline {2.4.9.2.2}Calo Muon Correlation condition module}{36}{subparagraph.2.4.9.2.2}
-\contentsline {subparagraph}{\numberline {2.4.9.2.3}Muon Muon Correlation condition module}{38}{subparagraph.2.4.9.2.3}
-\contentsline {subparagraph}{\numberline {2.4.9.2.4}Calo Esums Correlation condition module}{39}{subparagraph.2.4.9.2.4}
-\contentsline {subparagraph}{\numberline {2.4.9.2.5}Muon Esums Correlation condition module}{39}{subparagraph.2.4.9.2.5}
-\contentsline {subparagraph}{\numberline {2.4.9.2.6}Calo Calo Overlap Remover Correlation condition module}{40}{subparagraph.2.4.9.2.6}
-\contentsline {subsubsection}{\numberline {2.4.10}External Conditions}{41}{subsubsection.2.4.10}
-\contentsline {subsubsection}{\numberline {2.4.11}Algorithms logic}{41}{subsubsection.2.4.11}
-\contentsline {section}{\numberline {3}Glossary}{42}{section.3}
+\contentsline {subparagraph}{\numberline {2.4.9.1.5}Invariant mass divided by $\Delta $$R$ calculation}{35}{subparagraph.2.4.9.1.5}
+\contentsline {subparagraph}{\numberline {2.4.9.1.6}Invariant mass calculation for three objects}{35}{subparagraph.2.4.9.1.6}
+\contentsline {paragraph}{\numberline {2.4.9.2}Correlation condition modules}{35}{paragraph.2.4.9.2}
+\contentsline {subparagraph}{\numberline {2.4.9.2.1}Overview of possible correlation cuts in conditions}{36}{subparagraph.2.4.9.2.1}
+\contentsline {subparagraph}{\numberline {2.4.9.2.2}Calo Calo Correlation condition module}{38}{subparagraph.2.4.9.2.2}
+\contentsline {subparagraph}{\numberline {2.4.9.2.3}Calo Muon Correlation condition module}{39}{subparagraph.2.4.9.2.3}
+\contentsline {subparagraph}{\numberline {2.4.9.2.4}Muon Muon Correlation condition module}{41}{subparagraph.2.4.9.2.4}
+\contentsline {subparagraph}{\numberline {2.4.9.2.5}Calo Esums Correlation condition module}{42}{subparagraph.2.4.9.2.5}
+\contentsline {subparagraph}{\numberline {2.4.9.2.6}Muon Esums Correlation condition module}{42}{subparagraph.2.4.9.2.6}
+\contentsline {subparagraph}{\numberline {2.4.9.2.7}Calo Calo Overlap Remover Correlation condition module}{43}{subparagraph.2.4.9.2.7}
+\contentsline {subsubsection}{\numberline {2.4.10}External Conditions}{44}{subsubsection.2.4.10}
+\contentsline {subsubsection}{\numberline {2.4.11}Algorithms logic}{44}{subsubsection.2.4.11}
+\contentsline {section}{\numberline {3}Glossary}{45}{section.3}

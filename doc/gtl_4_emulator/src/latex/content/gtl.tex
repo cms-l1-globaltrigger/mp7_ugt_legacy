@@ -201,9 +201,9 @@ for the mapping of Algorithms (\texttt{algo\_mapping\_rop.vhd}) for \ufdl.
 \label{fig:gtl:tme_gtl}
 \end{figure}
 
-The latency of \ugtl is fixed to 5 bunch crossings,
-2 bunch crossings for the pipeline of $\pm$2bx data (for data with +2bx and +1bx), 2 bunch crossings for conditions (fixed), also for the conditions requested in the future,
-1 bunch crossing for the logic of Algorithms (See Figure \ref{fig:gtl:gtl_pipeline}).\\
+The latency of \ugtl is fixed to 5 bunch-crossings,
+2 bunch-crossings for the pipeline of $\pm$2bx data (for data with +2bx and +1bx), 2 bunch-crossings for conditions (fixed), also for the conditions requested in the future,
+1 bunch-crossing for the logic of Algorithms (See Figure \ref{fig:gtl:gtl_pipeline}).\\
 
 If there are not enough firmware resources in FPGA of one AMC board for 512 Algorithms, more boards could be used. Therefore the 512 Algorithms are \textbf{partitioned by TME} (\eg the first board covers
 Algorithms 0..200 and the second Algorithms 201..511). Trigger Menu Editor (TME) will give the number of Algorithms per module as constant in the package module \texttt{gtl\_pkg.vhd}.
@@ -235,10 +235,10 @@ All the declarations for arrays ('type'), parameters ('constant') and look-up-ta
 \label{sec:gtl:data_p_m_2bx}
 
 The \ugtl input data flow through a register pipeline of four stages. With those data it is possible to have conditions with objects from
-different bunch crossings (within $\pm$2 bunch crossings), \eg for Correlation conditions.\\
-See Figure \ref{fig:gtl:gtl_pipeline} for a scheme of \ugtl pipeline structure. The data "data\_p\_1bx" and "data\_p\_2bx" occur 1 respectively 2 bunch crossings
-after data for a certain bunch crossing, therefore we got 2 bunch crossings of latency from those data. The data "data\_m\_1bx" and "data\_m\_2bx" have no influence
-on latency, because coming before data for a certain bunch crossing.
+different bunch-crossings (within $\pm$2 bunch-crossings), \eg for Correlation conditions.\\
+See Figure \ref{fig:gtl:gtl_pipeline} for a scheme of \ugtl pipeline structure. The data "data\_p\_1bx" and "data\_p\_2bx" occur 1 respectively 2 bunch-crossings
+after data for a certain bunch-crossing, therefore we got 2 bunch-crossings of latency from those data. The data "data\_m\_1bx" and "data\_m\_2bx" have no influence
+on latency, because coming before data for a certain bunch-crossing.
 
 \begin{figure}[htb]
 \centering
@@ -997,21 +997,27 @@ X"F" & 00 or 01 or 10 or 11 & trigger on isolation bits = 00 or 01 or 10 or 11 (
 
 \subsubsection{Correlation conditions}
 \label{sec:gtl:correlation_conditions}
-The correlation conditions contain a combination of two "Single object requirement conditions" of two object types or one "Double objects requirement condition" of objects of the same type.
-In addition with "object requirements" there are cuts for $\Delta\eta$, $\Delta\varphi$, $\Delta$$R$ and mass.
-Only one correlation cut is allowed in a condition, except the combination of one $\Delta\eta$ and one $\Delta\varphi$ cut.\\
+
+The correlation conditions contain a combination of two "Single object requirement conditions" of two object types or one "Double objects requirement condition" of objects of the same type. In addition with "object requirements" there are cuts for $\Delta\eta$, $\Delta\varphi$, $\Delta$R, mass and "two-body pt".\\
 
 The following cuts can be used:
 \begin{itemize}
-\item Cuts for $\Delta\eta$ (DETA) and/or $\Delta\varphi$ (DPHI).
-\item Cut for $\Delta$$R$ (DR).
+\item Cut for $\Delta\eta$ (DETA).
+\item Cut for $\Delta\varphi$ (DPHI).
+\item Cut for $\Delta$R (DR).
 \item Cuts for mass (MASS) of following mass types:
   \begin{itemize}
   \item Cut for Invariant mass.
-  \item Cut for Invariant mass with "two-body pt".
+  \item Cut for Invariant mass with unconstrained pt (only for muons).
+  \item Cut for Invariant mass divided by $\Delta$R.
   \item Cut for Transverse mass.
-  \item Cut for Transverse mass with "two-body pt".
   \end{itemize}
+\item Cut for Two-body pt.
+\end{itemize}
+
+There is one correlation condition type for a mass cut with three objects:
+\begin{itemize}
+\item Cut for invariant mass for three objects (MASS).
 \end{itemize}
 
 \begin{figure}[htb]
@@ -1026,67 +1032,194 @@ The following cuts can be used:
 
 Calculation of $\Delta\eta$ and $\Delta\varphi$ see section "Calculation of differences in $\eta$ and $\varphi$" (\ref{sec:gtl:calculation_differences}).
 
-\subparagraph{$\Delta$$R$ calculation}
+\subparagraph{$\Delta$R calculation}
 \label{sec:gtl:delta_r_calculation}
 
-The calculation of $\Delta$$R$ of two objects is done with formula:\\ $\Delta$$R=\sqrt{(\eta_1-\eta_2)^2+(\varphi_1-\varphi_2)^2}$.\\
-In the TME there are two thresholds for $\Delta$$R$: "greater/equal lower limit" and "less/equal upper limit", given in floating point notation
+The calculation of \textit{$\Delta$R} of two objects is done with formula:\\ 
+
+$\Delta$$R=\sqrt{(\eta_1-\eta_2)^2+(\varphi_1-\varphi_2)^2}$.\\
+
+In the TME there are two thresholds for $\Delta$R: "greater/equal lower limit" and "less/equal upper limit", given in floating point notation
 with one position after decimal point.
 The comparison in VHDL is done with $\Delta$$R^2$ (no square root in VHDL), thresholds for $\Delta$$R^2$ are provided by VHDL-Producer.
 
 \subparagraph{Invariant mass calculation}
 \label{sec:gtl:inv_mass_calculation}
 
-The calculation of Invariant mass of two objects is done with formula:\\
+The calculation of \textit{invariant mass of two objects} is done with formula:\\
+
 M=$\sqrt{2 pt_1  pt_2 (\cosh(\eta_1-\eta_2)-\cos(\varphi_1-\varphi_2))}$.\\
-In the TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV (floating point notation)
-with one position after decimal point in even numbers.\footnote{even numbers to get a precision of one position after decimal point after dividion by 2,
-because VHDL-Producer calculates thresholds for $\frac{M^2}{2}$, which includes a division by 2.}
+
+In the TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV (floating point notation) with one position after decimal point in even numbers.\footnote{even numbers to get a precision of one position after decimal point after dividion by 2, because VHDL-Producer calculates thresholds for $\frac{M^2}{2}$, which includes a division by 2.}
 The comparison in VHDL is done with $\frac{M^2}{2}$ (no square root in VHDL), thresholds for $\frac{M^2}{2}$ are provided by VHDL-Producer.
 
 \subparagraph{Transverse mass calculation}
 \label{sec:gtl:transverse_mass_calculation}
 
-The calculation of Transverse mass of two objects is done with formula:\\
+The calculation of \textit{transverse mass of two objects} is done with formula:\\
+
 M=$\sqrt{2 pt_1 pt_2 (1-\cos(\varphi_1-\varphi_2))}$.\\
-In the TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV (floating point notation)
-with one position after decimal point in even numbers.
+
+In the TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV (floating point notation) with one position after decimal point in even numbers.\\
 The comparison in VHDL is done with $\frac{M^2}{2}$ (no square root in VHDL), thresholds for $\frac{M^2}{2}$ are provided by VHDL-Producer.
 
 \subparagraph{Two-body pt calculation}
 \label{sec:gtl:twobody_pt_calculation}
 
-The calculation of two-body pt is done with formula:\\
-pt=$\sqrt{pt^2_1 + pt^2_2 + 2  pt_1 pt_2 (\cos(\varphi_1) \cos(\varphi_2) + \sin(\varphi_1) \sin(\varphi_2))}$
+The calculation of \textit{two-body pt} is done with formula:\\
+
+pt=$\sqrt{pt^2_1 + pt^2_2 + 2  pt_1 pt_2 (\cos(\varphi_1) \cos(\varphi_2) + \sin(\varphi_1) \sin(\varphi_2))}$\\
 
 In the TME there is one threshold for pt, given in GeV (floating point notation) with one position after decimal point.
 The comparison in VHDL is done with ${pt^2}$ (no square root in VHDL), threshold for ${pt^2}$ is provided by VHDL-Producer.
 
+\subparagraph{Invariant mass divided by $\Delta$R calculation}
+\label{sec:gtl:inv_mass_div_dr_calculation}
+
+The formulas for \textit{invariant mass divided by $\Delta$R of two objects} are:\\
+
+M=$\sqrt{2 pt_1  pt_2 (\cosh(\eta_1-\eta_2)-\cos(\varphi_1-\varphi_2))}$.\\
+
+$\Delta$$R=\sqrt{(\eta_1-\eta_2)^2+(\varphi_1-\varphi_2)^2}$.\\
+
+In the TME there is one threshold for M/$\Delta$R, given in GeV (floating point notation) with one position after decimal point.
+The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}) with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL). This module is instantiated once for every object type bunch-crossing combination.\\  
+The values of 1/$\Delta$$R^2$ in VHDL are given by LUTs stored in BRAMs (as ROMs). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$.
+
+\subparagraph{Invariant mass calculation for three objects}
+\label{sec:gtl:inv_mass_3_obj_calculation}
+
+The calculation of \textit{invariant mass calculation for three objects} is done by calculating the invariant mass for all two object combinations and make a summary of three invariant mass of two object combinations.\\
+In the TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV (floating point notation) with one position after decimal point in even numbers.
+
 \paragraph{Correlation condition modules}
 \label{sec:gtl:correlation_condition_modules}
 
-As described in section Correlation conditions (\ref{sec:gtl:correlation_conditions}), correlations of two object types are done. Therefore several modules are provided
-with possible correlations (objects 1-objects 2):
+As described in section Correlation conditions (\ref{sec:gtl:correlation_conditions}), correlations of two object types are available. Therefore several modules are provided with possible correlations (objects 1-objects 2):
 \begin{itemize}
 \item Correlation condition with calorimeter objects\\(\texttt{calo\_calo\_correlation\_condition.vhd}:
 \egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau are possible.)
-\item Correlation condition with calorimeter objects and muons objects\\(\texttt{calo\_muon\_correlation\_condition.vhd}: \egamma-muon, jet-muon and tau-muon are possible.)
+\item Correlation condition for mass divided by $\Delta$R with calorimeter objects\\(\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}:
+\egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau are possible.)
+item Correlation condition with calorimeter objects and muons objects\\(\texttt{calo\_muon\_correlation\_condition.vhd}: \egamma-muon, jet-muon and tau-muon are possible.)
 \item Correlation condition with muon objects\\(\texttt{muon\_muon\_correlation\_condition.vhd})
-\item Correlation condition with calorimeter objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\(\texttt{calo\_esums\_correlation\_condition.vhd}: \egamma-etm, jet-etm, tau-etm,
-\egamma-htm, jet-htm, tau-htm, \egamma-etmhf, jet-etmhf and tau-etmhf are possible.)
+\item Correlation condition with calorimeter objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\(\texttt{calo\_esums\_correlation\_condition.vhd}: \egamma-etm, jet-etm, tau-etm, \egamma-htm, jet-htm, tau-htm, \egamma-etmhf, jet-etmhf and tau-etmhf are possible.)
+\item Correlation condition with muon objects\\(\texttt{muon\_muon\_correlation\_condition.vhd})
+\item Correlation condition for mass divided by $\Delta$R with muon objects\\(\texttt{muon\_muon\_mass\_div\_dr\_condition.vhd}
 \item Correlation condition with muon objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\(\texttt{muon\_esums\_correlation\_condition.vhd}: muon-etm, muon-etmhf and muon-htm are possible.)
+\end{itemize}
+
+There are two modules for mass with three objects:
+\begin{itemize}
+\item Correlation condition for mass with three objects with calorimeter objects (same type, same bunch-crossing)\\(\texttt{calo\_mass\_3\_obj\_condition.vhd}
+\item Correlation condition for mass with three objects with muon objects\\(\texttt{muon\_mass\_3\_obj\_condition.vhd})
+\end{itemize}
+
+\subparagraph{Overview of possible correlation cuts in conditions}
+\label{sec:gtl:overview_correlation_cuts}
+
+The following list gives an overview of possible correlation cuts in conditions:
+
+\begin{itemize}
+\item Calo conditions (calo\_conditions.vhd):
+\begin{itemize}
+\item two-body pt (for double condition)
+\end{itemize}
+\item Calo conditions overlap removal (calo\_conditions\_orm.vhd):
+\begin{itemize}
+\item $\Delta\eta$ overlap removal
+\item $\Delta\varphi$ overlap removal
+\item $\Delta$R overlap removal
+\item two-body pt (for double condition)
+\end{itemize}
+\item Muon conditions (muon\_conditions.vhd):
+\begin{itemize}
+\item charge correlation
+\item two-body pt (for double condition)
+\end{itemize}
+% % HB 2020-09-11: MJ checks whether it makes sense!
+% Muon conditions overlap removal (muon\_conditions\_orm.vhd):
+% \begin{itemize}
+% \item charge correlation
+% \item $\Delta\eta$ overlap removal
+% \item $\Delta\varphi$ overlap removal
+% \item $\Delta$R overlap removal
+% \item two-body pt (for double condition)
+% \end{itemize} 
+\item Calo calo correlation condition with calo overlap removal (calo\_calo\_calo\_correlation\_orm\_condition.vhd):
+\begin{itemize}
+\item $\Delta\eta$ overlap removal
+\item $\Delta\varphi$ overlap removal
+\item $\Delta$R overlap removal
+\item $\Delta\eta$
+\item $\Delta\varphi$
+\item $\Delta$R
+\item invariant mass
+\item two-body pt
+\end{itemize} 
+\item Calo calo correlation condition (calo\_calo\_correlation\_condition.vhd):
+\begin{itemize}
+\item $\Delta\eta$
+\item $\Delta\varphi$
+\item $\Delta$R
+\item invariant mass
+\item two-body pt
+\end{itemize}
+\item Calo calo correlation condition for invariant mass divided by $\Delta$R (calo\_calo\_mass\_div\_dr\_condition.vhd):
+\begin{itemize}
+\item invariant mass divided by $\Delta$R
+\end{itemize}
+\item Calo calo correlation condition mass with three objects (calo\_mass\_3\_obj\_condition.vhd):
+\begin{itemize}
+\item invariant mass with three objects
+\end{itemize} 
+\item Calo muon correlation condition (calo\_muon\_correlation\_condition.vhd):
+\begin{itemize}
+\item $\Delta\eta$
+\item $\Delta\varphi$
+\item $\Delta$R
+\item invariant mass
+\item two-body pt
+\end{itemize} 
+\item Calo esums correlation condition (calo\_esums\_correlation\_condition.vhd):
+\begin{itemize}
+\item $\Delta\varphi$
+\item transverse mass
+\item two-body pt
+\end{itemize}
+\item Muon muon correlation condition (muon\_muon\_correlation\_condition.vhd):
+\begin{itemize}
+\item charge correlation
+\item $\Delta\eta$
+\item $\Delta\varphi$
+\item $\Delta$R
+\item invariant mass or invariant mass unconstraint pt
+\item two-body pt
+\end{itemize}
+\item Muon muon correlation condition for invariant mass divided by $\Delta$R (muon\_muon\_mass\_div\_dr\_condition.vhd):
+\begin{itemize}
+\item charge correlation
+\item invariant mass divided by $\Delta$R
+\end{itemize}
+\item Muon muon correlation condition mass with three objects (muon\_mass\_3\_obj\_condition.vhd):
+\begin{itemize}
+\item charge correlation
+\item invariant mass with three objects
+\end{itemize} 
+\item Muon esums correlation condition (muon\_esums\_correlation\_condition.vhd):
+\begin{itemize}
+\item $\Delta\varphi$
+\item transverse mass
+\item two-body pt
+\end{itemize}
 \end{itemize}
 
 \subparagraph{Calo Calo Correlation condition module}
 \label{sec:gtl:calo_calo_correlation_condition_module}
 
-The calo calo correlation condition module contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different
-bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the
-generic list of \texttt{calo\_calo\_correlation\_condition.vhd} named "same\_bx").\\
-In addition there are "Cuts" for differences in $\eta$ (DETA) and $\varphi$ (DPHI) or a calculation of $\Delta$$R$ (DR) or a calculation of mass (MASS), see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
-The cut of mass is available for Invariant mass or Transverse mass or one of both with two-body pt.\\
-The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_EG\_DIFF\_ETA\_LUT, EG\_EG\_DIFF\_PHI\_LUT}\normalsize, ...),
-which represents values of differences (multiples of units in $\eta$ and $\varphi$).
+The calo calo correlation condition module contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \texttt{calo\_calo\_correlation\_condition.vhd} named "same\_bx").\\
+In addition there are "Cuts" for differences in $\eta$ (DETA) and $\varphi$ (DPHI), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
+The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_EG\_DIFF\_ETA\_LUT, EG\_EG\_DIFF\_PHI\_LUT}\normalsize, ...), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
 These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
 So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
 
@@ -1097,26 +1230,65 @@ So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{p
 \item $\phi$ bin width = $\frac{2\pi}{144}$ (bin 0 from 0.0 to $\frac{2\pi}{144}$)
 \end{itemize}
 
-The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_EG\_COSH\_DETA\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_EG\_COS\_DPHI\_LUT}\normalsize, ...) for Invariant mass
-(formular see \ref{sec:gtl:inv_mass_calculation}) and Transverse mass (formular see \ref{sec:gtl:transverse_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 3\textsuperscript{rd} position after decimal point,
-and multiplying by 1000 to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize ..."} in file \texttt{gtl\_pkg.vhd}.
-1000 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
+The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_EG\_COSH\_DETA\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_EG\_COS\_DPHI\_LUT}\normalsize, ...) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 3\textsuperscript{rd} position after decimal point, and multiplying by 1000 to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize ..."} in file \texttt{gtl\_pkg.vhd}. Value 1000 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
 The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT}\normalsize) for two-body pt
 (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and 
 multiplying by 1000 to get integer values.\\
-The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" or the "Double objects requirement condition"
-and the results of selected "Cuts" are inside of a range (upper and lower limit).
+The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" or the "Double objects requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt).
 This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI
-are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR and MASS with 1\textsuperscript{st} position after decimal point.
+are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
+
+\subparagraph{Calo Calo Overlap Remover Correlation condition module}
+\label{sec:gtl:calo_calo_overlap_remover_condition_module}
+
+The Calo Calo Overlap Remover Correlation conditions consits of two modes. One with a Calo Calo Correlation condition with "Double objects requirement condition" for calo objects of same type and same bunch-crossing (\ref{sec:gtl:calo_calo_correlation_condition_module}) and a single condition for a different calo object type (can have different bunch-crossing too). There has to be at least one correlation cut for the objects of "Double objects requirement condition" and a correlation cut for overlap removal between objects (one or more cut(s) of $\Delta\eta$, $\Delta\varphi$ and $\Delta$R) of different object types ("2plus1"). A second mode ("1plus1") with a Calo Calo Correlation condition with a single condition and a different calo object type (can have different bunch-crossing too) also with a single condition. There has to be at least one correlation cut for the different objects (e.g. invariant mass) and a correlation cut for overlap removal between the objects (one or more cut(s) of $\Delta\eta$, $\Delta\varphi$ and $\Delta$R).\\
+Overlap Remover Correlation conditions \texttt{calo\_calo\_calo\_correlation\_orm\_condition.vhd} are implemented only for calo object types.
+
+\subparagraph{Calo Calo Correlation condition module for Invariant Mass Divided by $\Delta$R}
+\label{sec:gtl:calo_calo_correlation_condition_module_mass_div_dr}
+
+The calo calo correlation condition module for invariant mass divided by $\Delta$R contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \texttt{calo\_calo\_mass\_div\_dr\_condition.vhd} named "same\_bx").\\
+The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}), see \ref{sec:gtl:inv_mass_div_dr_calculation}. This module is instantiated once for every object type bunch-crossing combination.\\  
+The comparison of calculated values and threshold is done inside the module (\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}).\\
+In the TME there is one threshold for M/$\Delta$R: "greater/equal threshold", given in GeV (floating point notation).\\
+The threshold for comparison with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL) is provided by VHDL-Producer.\\
+No other correlation cuts available in this condition type.
+
+\subparagraph{Calo Correlation condition module for Invariant Mass with Three Objects}
+\label{sec:gtl:calo_correlation_condition_module_mass_3_obj}
+
+The calo correlation condition module for invariant mass with three objects (\texttt{calo\_mass\_3\_obj\_condition.vhd)} contains a "Triple objects requirement condition" for calo objects of same type and same bunch-crossing.\\
+In addition a "Cut" for calculation of \textit{invariant mass with three objects} (see \ref{sec:gtl:inv_mass_3_obj_calculation}) is mandatory.\\
+No other correlation cuts available in this condition type.
+
+\subparagraph{Calo Esums Correlation condition module}
+\label{sec:gtl:calo_esums_correlation_condition_module}
+
+The calo esums correlation condition module contains two "Single object requirement conditions", one of calo objects (\egamma, jet or tau) and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
+In addition there are "Cuts" for differences in $\varphi$ (DPHI) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
+The differences in $\varphi$ are calculated in bins. 
+These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_ETM\_DIFF\_PHI\_LUT}\normalsize, ...),
+which represents values of differences (multiples of units in $\varphi$).
+These values given in the LUTs are calculated as floating-point values (based on the scales of $\varphi$), which are multiplied by a factor and truncated to an integer value.
+So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}.\\
+
+The contents of the LUTs $\cos(\Delta\varphi)$ (\small{EG\_ETM\_COS\_DPHI\_LUT}\normalsize, ...) for Transverse mass (formular see \ref{sec:gtl:transverse_mass_calculation}) 
+are created by calculating cosine, rounding-up at the 3\textsuperscript{rd}
+position after decimal point and multiplying by 1000 to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize ..."} in file \texttt{gtl\_pkg.vhd}.
+1000 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
+The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT}\normalsize) for two-body pt 
+(formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
+The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition"
+and the results of selected "Cuts" are inside of a range (upper and lower limit).
+This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DPHI
+are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for MASS with 1\textsuperscript{st} position after decimal point.
 
 \subparagraph{Calo Muon Correlation condition module}
 \label{sec:gtl:calo_muon_correlation_condition_module}
 
 The calo muon correlation condition module contains a "Single object requirement condition" for one type of calo objects (\egamma, jet or tau) and a "Single object requirement condition" for muon objects.
-In addition with "Cuts" for differences in $\eta$ (DETA), $\varphi$ (DPHI) or a calculation of $\Delta$$R$ (DR) or a calculation of mass (MASS).\\
-The cut of mass is available for Invariant mass or Transverse mass or one of both with two-body pt.\\
-The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_MUON\_DIFF\_ETA\_LUT, EG\_MUON\_DIFF\_PHI\_LUT}\normalsize, ...),
-which represents values of differences (multiples of units in $\eta$ and $\varphi$).
+In addition there are "Cuts" for differences in $\eta$ (DETA) and $\varphi$ (DPHI), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
+The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_MU\_DIFF\_ETA\_LUT, EG\_MU\_DIFF\_PHI\_LUT}\normalsize, ...), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
 These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
 So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
 Because of the different scales of calorimeter and muon objects in $\eta$ and $\varphi$, there are LUTs for conversion the calorimeter bins to muon bins (in \texttt{gtl\_pkg.vhd}:
@@ -1148,29 +1320,20 @@ Definitions of scales (see Tables \ref{tab:gtl:calo_eta_scale}, \ref{tab:gtl:cal
 \label{fig:gtl:convert_scheme_calo_2_muon_eta_phi}
 \end{figure}
 
-The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_MUON\_COSH\_DETA\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_MUON\_COS\_DPHI\_LUT}\normalsize, ...) for Invariant mass
-(formular see \ref{sec:gtl:inv_mass_calculation}) and Transverse mass (formular see \ref{sec:gtl:transverse_mass_calculation}) are created by calculating hyperbolic cosine and cosine, 
-rounding-up at the 4\textsuperscript{th} position after decimal point, and multiplying by 10000
-(10\textsuperscript{\tiny{CALO\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize) to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize} ...",
-"\texttt{constant \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize} ..." and "\texttt{constant \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize} ..." in file \texttt{gtl\_pkg.vhd}.}\\
-The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT and MUON\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT and MUON\_SIN\_PHI\_LUT}\normalsize) for two-body pt 
-(formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point,
-and multiplying by 1000 to get integer values.\\
-The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" and the results of selected "Cuts" are inside of
-a range (upper and lower limit). This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI
-are expressed with the 3\textsuperscript{rd} position after decimal point, for DR and MASS with the 1\textsuperscript{st} position after decimal point.
+The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_MUON\_COSH\_DETA\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_MUON\_COS\_DPHI\_LUT}\normalsize, ...) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 4\textsuperscript{th} position after decimal point, and multiplying by 10000(10\textsuperscript{\tiny{CALO\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize) to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize} ...", "\texttt{constant \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize} ..." and "\texttt{constant \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize} ..." in file \texttt{gtl\_pkg.vhd}.}\\
+The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT and MUON\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT and MUON\_SIN\_PHI\_LUT}\normalsize) for two-body pt (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point, and multiplying by 1000 to get integer values.\\
+The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt). 
+This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI
+are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
 
 \subparagraph{Muon Muon Correlation condition module}
 \label{sec:gtl:muon_muon_correlation_condition_module}
 
 The muon muon correlation condition module contains two "Single object requirement conditions" for data from different bunch-crossings as one possible mode
 and a "Double objects requirement condition" for muon objects at same bunch-crossing as a second mode (selection is done by a parameter in the
-generic list of \texttt{muon\_muon\_correlation\_condition.vhd} named "same\_bx"). In the case of a "Double objects requirement condition", requirements for "requested charge correlations"
-are used and a muon charge correlation module (see \ref{sec:gtl:muon_charge_correlation_module}) is required.\\
-In addition there are "Cuts" for differences in $\eta$ (DETA), $\varphi$ (DPHI) or a calculation of $\Delta$$R$ (DR) or a calculation of mass (MASS).\\
-The cut of mass is available for Invariant mass or Transverse mass or one of both with two-body pt.\\
-The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{MUON\_MUON\_DIFF\_ETA\_LUT, MUON\_MUON\_DIFF\_PHI\_LUT}\normalsize),
-which represents values of differences (multiples of units in $\eta$ and $\varphi$).
+generic list of \texttt{muon\_muon\_correlation\_condition.vhd} named "same\_bx"). In the case of a "Double objects requirement condition", requirements for "requested charge correlations" are used and a muon charge correlation module (see \ref{sec:gtl:muon_charge_correlation_module}) is required.\\
+In addition there are "Cuts" for differences in $\eta$ (DETA) and $\varphi$ (DPHI), a calculation of $\Delta$R (DR), a calculation of invariant mass with pt or of invariant mass with unconstrained pt (MASS), a calculation of two-body pt.\\
+The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{MUON\_MUON\_DIFF\_ETA\_LUT, MUON\_MUON\_DIFF\_PHI\_LUT}\normalsize), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
 These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
 So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
 
@@ -1181,40 +1344,30 @@ So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{p
 \item $\phi$ bin width = $\frac{2\pi}{576}$ (bin 0 from 0.0 to $\frac{2\pi}{576}$)
 \end{itemize}
 
-The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{MUON\_MUON\_COSH\_DETA\_LUT}\normalsize) and $\cos(\Delta\varphi)$ (\small{MUON\_MUON\_COS\_DPHI\_LUT}\normalsize) for Invariant mass
-(formular see \ref{sec:gtl:inv_mass_calculation}) and Transverse mass (formular see \ref{sec:gtl:transverse_mass_calculation}) are created by calculating hyperbolic cosine and cosine, 
-rounding-up at the 4\textsuperscript{th} position after decimal point,
-and multiplying by 10000 to get integer values.\footnote{Definition of "\texttt{constant \small{MUON\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize"} in file \texttt{gtl\_pkg.vhd}.
-10000 from 10\textsuperscript{\tiny{MUON\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
+The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{MUON\_MUON\_COSH\_DETA\_LUT}\normalsize) and $\cos(\Delta\varphi)$ (\small{MUON\_MUON\_COS\_DPHI\_LUT}\normalsize) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 4\textsuperscript{th} position after decimal point, and multiplying by 10000 to get integer values.\footnote{Definition of "\texttt{constant \small{MUON\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize"} in file \texttt{gtl\_pkg.vhd}. Value 10000 from 10\textsuperscript{\tiny{MUON\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
 The contents of the LUTs for $\cos(\varphi)$ (\small{MUON\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{MUON\_SIN\_PHI\_LUT}\normalsize) for two-body pt 
 (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point,
 and multiplying by 1000 to get integer values.\\
-The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" or the "Double objects requirement condition"
-and the results of selected "Cuts" are inside of a range (upper and lower limit).
+The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" or the "Double objects requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt).
 This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI
 are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR and MASS with 1\textsuperscript{st} position after decimal point.
 
-\subparagraph{Calo Esums Correlation condition module}
-\label{sec:gtl:calo_esums_correlation_condition_module}
+\subparagraph{Muon Muon Correlation condition module for Invariant Mass Divided by $\Delta$R}
+\label{sec:gtl:muon_muon_correlation_condition_module_mass_div_dr}
 
-The calo esums correlation condition module contains two "Single object requirement conditions", one of calo objects (\egamma, jet or tau) and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
-In addition there are "Cuts" for differences in $\varphi$ (DPHI) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
-The differences in $\varphi$ are calculated in bins. 
-These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_ETM\_DIFF\_PHI\_LUT}\normalsize, ...),
-which represents values of differences (multiples of units in $\varphi$).
-These values given in the LUTs are calculated as floating-point values (based on the scales of $\varphi$), which are multiplied by a factor and truncated to an integer value.
-So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}.\\
+The muon muon correlation condition module for invariant mass divided by $\Delta$R contains two "Single object requirement conditions" from different bunch-crossings as one possible mode and a "Double objects requirement condition" for objects of same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \texttt{muon\_muon\_mass\_div\_dr\_condition.vhd} named "same\_bx").\\
+The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}), see \ref{sec:gtl:inv_mass_div_dr_calculation}. This module is instantiated once for every object type bunch-crossing combination.\\  
+The comparison of calculated values and threshold is done inside the module (\texttt{muon\_muon\_mass\_div\_dr\_condition.vhd}).\\
+In the TME there is one threshold for M/$\Delta$R: "greater/equal threshold", given in GeV (floating point notation).\\
+The threshold for comparison with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL) is provided by VHDL-Producer.\\
+No other correlation cuts, except "charge correlation", available in this condition type.
 
-The contents of the LUTs $\cos(\Delta\varphi)$ (\small{EG\_ETM\_COS\_DPHI\_LUT}\normalsize, ...) for Transverse mass (formular see \ref{sec:gtl:transverse_mass_calculation}) 
-are created by calculating cosine, rounding-up at the 3\textsuperscript{rd}
-position after decimal point and multiplying by 1000 to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize ..."} in file \texttt{gtl\_pkg.vhd}.
-1000 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
-The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT}\normalsize) for two-body pt 
-(formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
-The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition"
-and the results of selected "Cuts" are inside of a range (upper and lower limit).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DPHI
-are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for MASS with 1\textsuperscript{st} position after decimal point.
+\subparagraph{Muon Correlation condition module for Invariant Mass with Three Objects}
+\label{sec:gtl:muon_correlation_condition_module_mass_3_obj}
+
+The muon correlation condition module for invariant mass with three objects (\texttt{muon\_mass\_3\_obj\_condition.vhd)} contains a "Triple objects requirement condition" for objects of same type and same bunch-crossing.\\
+In addition a "Cut" for calculation of \textit{invariant mass with three objects} (see \ref{sec:gtl:inv_mass_3_obj_calculation}) is mandatory.\\
+No other correlation cuts, except "charge correlation", available in this condition type.
 
 \subparagraph{Muon Esums Correlation condition module}
 \label{sec:gtl:muon_esums_correlation_condition_module}
@@ -1254,12 +1407,6 @@ The condition is complied, if at least one comparison between object parameters 
 and the results of selected "Cuts" are inside of a range (upper and lower limit).
 This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DPHI
 are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for MASS with 1\textsuperscript{st} position after decimal point.
-
-\subparagraph{Calo Calo Overlap Remover Correlation condition module}
-\label{sec:gtl:calo_calo_overlap_remover_condition_module}
-
-The Calo Calo Overlap Remover Correlation conditions consits of two modes. One with a Calo Calo Correlation condition with "Double objects requirement condition" for calo objects of same type and same bunch-crossing (\ref{sec:gtl:calo_calo_correlation_condition_module}) and a single condition for a different calo object type (can have different bunch-crossing too). There has to be at least one correlation cut for the objects of "Double objects requirement condition" and a correlation cut for overlap removal between objects (one or more cut(s) of $\Delta\eta$, $\Delta\varphi$ and $\Delta$$R$)
-of different object types ("2plus1"). A second mode ("1plus1") with a Calo Calo Correlation condition with a single condition and a different calo object type (can have different bunch-crossing too) also with a single condition. There has to be at least one correlation cut for the different objects (e.g. invariant mass) and a correlation cut for overlap removal between the objects (one or more cut(s) of $\Delta\eta$, $\Delta\varphi$ and $\Delta$$R$). 
 
 \subsubsection{External Conditions}
 \label{sec:gtl:external_conditions}

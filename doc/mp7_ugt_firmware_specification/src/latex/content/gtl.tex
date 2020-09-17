@@ -1,7 +1,7 @@
 \section{Global Trigger Logic}
 \label{sec:gtl:global_trigger_logic}
 \textbf{Remark:}\\
-this description is for version 1.11.0 of Global Trigger Logic.\\
+This description is for version 1.10.0 of Global Trigger Logic.\\
 
 The Global Trigger Logic (\ugtl) firmware contains conditions and Algorithms for trigger decision.
 
@@ -182,16 +182,17 @@ The firmware of \ugtl consists of two main parts:
 \begin{itemize}
 \item A top-of-hierarchy file (\texttt{gtl\_module.vhd}), which contains the pipeline for $\pm$2bx data, the instantiations of calculators for differences in $\eta$ and $\varphi$, the instantiations of conditions, the instantiations of charge correlation logic of muons and the Algorithms logic for 512 Algorithms, as well as a package file (\texttt{gtl\_pkg.vhd}) for declarations. 
 Actually 6 AMC board are used to contain 512 Algorithms. Therefore the 512 Algorithms are \textbf{partitioned by VHDL Producer}.
-The VHDL Producer for every Trigger Menu (see Figure~\ref{fig:gtl:tme_gtl}) creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}), these snippets are inserted into templates for \texttt{gtl\_module.vhd} and \texttt{gtl\_pkg.vhd} during simulation and synthesis.
+% The VHDL Producer for every Trigger Menu (see Figure~\ref{fig:gtl:tme_gtl}) creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}), these snippets are inserted into templates for \texttt{gtl\_module.vhd} and \texttt{gtl\_pkg.vhd} during simulation and synthesis.
+The VHDL Producer for every Trigger Menu creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}), these snippets are inserted into templates for \texttt{gtl\_module.vhd} and \texttt{gtl\_pkg.vhd} during simulation and synthesis.
 \item A set of VHDL-files exists for all the modules instantiated in top-of-hierarchy and the modules in the hierarchy. These files, called the "fixed part", are not influenced by VHDL Producer. 
 \end{itemize}
 
-\begin{figure}[htb]
-\centering
-\includegraphics[width=15cm]{figures/tme_gtl}
-\caption{VHDL file generation by VHDL Producer} 
-\label{fig:gtl:tme_gtl}
-\end{figure}
+% \begin{figure}[htb]
+% \centering
+% \includegraphics[width=15cm]{figures/tme_gtl}
+% \caption{VHDL file generation by VHDL Producer} 
+% \label{fig:gtl:tme_gtl}
+% \end{figure}
 
 The latency of \ugtl is fixed to 5 bunch-crossings,
 2 bunch-crossings for the pipeline of $\pm$2bx data (for data with +2bx and +1bx), 2 bunch-crossings for conditions (fixed), also for the conditions requested in the future,
@@ -1257,7 +1258,7 @@ $\Delta$$R=\sqrt{(\eta_1-\eta_2)^2+(\varphi_1-\varphi_2)^2}$.\\
 
 In the TME there is one threshold for M/$\Delta$R, given in GeV (floating point notation) with one position after decimal point.
 The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}) with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL). This module is instantiated once for every object type bunch-crossing combination.\\  
-The values of 1/$\Delta$$R^2$ in VHDL are given by LUTs stored in BRAMs (as ROMs). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$.
+The values of 1/$\Delta$$R^2$ in VHDL are given by LUTs stored in BRAMs (as ROMs). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. The contents of the LUTs are created by calculating 1/$\Delta$$R^2$, rounding-up at the 5\textsuperscript{th} position after decimal point and multiplying by 100000 to get integer values.\\
 
 \subparagraph{Invariant mass calculation for three objects}
 \label{sec:gtl:inv_mass_3_obj_calculation}
@@ -1404,12 +1405,9 @@ So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{p
 \end{itemize}
 
 The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_EG\_COSH\_DETA\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_EG\_COS\_DPHI\_LUT}\normalsize, ...) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 3\textsuperscript{rd} position after decimal point, and multiplying by 1000 to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize ..."} in file \texttt{gtl\_pkg.vhd}. Value 1000 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
-The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT}\normalsize) for two-body pt
-(formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and 
-multiplying by 1000 to get integer values.\\
+The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT}\normalsize) for two-body pt (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
 The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" or the "Double objects requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI
-are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
+This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
 
 For the VHDL entity declaration of calo calo correlation condition module (version 4) in \texttt{calo\_calo\_correlation\_condition.vhd}, see Listing~\ref{lst:calo_calo_correlation_condition_vhd}.\\
 \clearpage
@@ -2474,82 +2472,82 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_muon\_correla
 \label{tab:gtl:explanation_instance_muon_muon_correlation_condition_vhd}
 \end{longtable}
 
-\subsubsection{Calo Esums Correlation condition - template for VHDL-Producer}
-A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_esums\_correlation\_condition.vhd}\\ is given below (see Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd}).\\
-
-%% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:instance_calo_esums_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{calo\_esums\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_calo_esums_correlation_condition.vhd.j2}
-
-\begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
-\caption{Explanation of Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd}}\\
-\hline 
-{Item} & {Explanation}\\
-\hline 
-\endhead
-\verb|vhdl_signal| & condition name.\\
-\verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of DPHI.\\
-\verb|mass.enabled| & valid strings are 'true' and 'false' - 'true' for use of MASS.\\
-\verb|mass.type| & valid string: 'TRANSVERSE\_MASS\_TYPE'.\\
-\verb|twoBodyPt.enabled| & valid strings are 'true' and 'false' - 'true' for use of two-body pt.\\
-\verb|sliceLow| & low value of an object slice.\\
-\verb|sliceHigh| & high value of an object slice.\\
-\verb|operator| & valid strings are 'true' and 'false' - 'true' for greater/equal-, 'false' for equal-mode of \et comparator.\\
-\verb|threshold| & requirements for et\_thresholds (16-bit values, hex notation). Valid values depending on the scales of \et.\\
-\verb|nrEtaWindows| & number of $\eta$ cuts.\\
-\verb|etaW1UpperLimit, ...| & limits for "window"-comparators for $\eta$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\eta$.\\
-\verb|phiFullRange| & set full range of $\varphi$ (boolean).\\
-\verb|phiW1UpperLimit, ...| & limits for "window"-comparators for $\varphi$ (16-bit values, hex notation). Valid values depending on the scales for $\varphi$.\\
-\verb|[phiW2Ignore| & ignore "window"-comparator 2 of $\varphi$ (boolean).\\
-\verb|isolationLUT| & LUT (4 bits) of isolation).\\
-\verb|deltaPhi.upper, ...| & limits for "window"-comparator for comparison of differences in $\varphi$ (hex notation). Valid values depending on the scales for $\varphi$.\\
-\verb|mass.upper, ...| & limits for "window"-comparator for comparison of $\frac{M^2}{2}$ (hex notation).\\
-\verb|twoBodyPt.threshold| & value of threshold for two-body pt comparison.\\
-\verb|bx| & valid strings are 'p2', 'p1', '0', 'm1' and 'm2'. This indicates which data in a range of plus/minus 2 bunch-crossing is used in the condition.\\
-\hline 
-\label{tab:gtl:explanation_instance_calo_calo_correlation_condition_vhd}
-\end{longtable}
-
-
-\subsubsection{Muon Esums Correlation condition - template for VHDL-Producer}
-A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_esums\_correlation\_condition.vhd}\\ is given below (see Listing~\ref{lst:instance_muon_esums_correlation_condition_vhd}).\\
-
-%% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:instance_muon_esums_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{muon\_esums\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_muon_esums_correlation_condition.vhd.j2}
-
-\begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
-\caption{Explanation of Listing~\ref{lst:instance_calo_muon_correlation_condition_vhd}}\\
-\hline 
-{Item} & {Explanation}\\
-\hline 
-\endhead
-\verb|vhdl_signal| & condition name.\\
-\verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of DPHI.\\
-\verb|mass.enabled| & valid strings are 'true' and 'false' - 'true' for use of MASS.\\
-\verb|mass.type| & valid string: 'TRANSVERSE\_MASS\_TYPE'.\\
-\verb|twoBodyPt.enabled| & valid strings are 'true' and 'false' - 'true' for use of two-body pt.\\
-\verb|sliceLow| & low value of an object slice.\\
-\verb|sliceHigh| & high value of an object slice.\\
-\verb|operator| & valid strings are 'true' and 'false' - 'true' for greater/equal-, 'false' for equal-mode of \et comparator.\\
-\verb|threshold| & requirements for pt\_thresholds and et\_thresholds (16-bit values, hex notation). Valid values depending on the scales of \et.\\
-\verb|nrEtaWindows| & number of $\eta$ cuts.\\
-\verb|etaW1UpperLimit, ...| & limits for "window"-comparators for $\eta$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\eta$.\\
-\verb|phiFullRange| & set full range of $\varphi$ (boolean).\\
-\verb|phiW1UpperLimit, ...| & limits for "window"-comparators for $\varphi$ (16-bit values, hex notation). Valid values depending on the scales for $\varphi$.\\
-\verb|[phiW2Ignore| & ignore "window"-comparator 2 of $\varphi$ (boolean).\\
-\verb|charge| & requested charge. Valid strings are 'pos' ("positive charge") and 'neg' ("negative charge") and 'ign' ("ignore").\\
-\verb|qualityLUT| & LUT (16 bits) of quality.\\
-\verb|isolationLUT| & LUT (4 bits) of isolation).\\
-\verb|uptCutSel| & set use of unconstrained \pt.\\
-\verb|uptUpperLimit, ...| & limits for unconstrained \pt.\\
-\verb|impactParameterLUT| & LUT (4 bits) of impact parameter).\\
-\verb|deltaPhi.upper, ...| & limits for "window"-comparator for comparison of differences in $\varphi$ (hex notation). Valid values depending on the scales for $\varphi$.\\
-\verb|mass.upper, ...| & limits for "window"-comparator for comparison of $\frac{M^2}{2}$ (hex notation).\\
-\verb|twoBodyPt.threshold| & value of threshold for two-body pt comparison.\\
-\verb|bx| & valid strings are 'p2', 'p1', '0', 'm1' and 'm2'. This indicates which data in a range of plus/minus 2 bunch-crossing is used in the condition.\\
-\hline 
-\label{tab:gtl:explanation_instance_calo_muon_correlation_condition_vhd}
-\end{longtable}
-
+% \subsubsection{Calo Esums Correlation condition - template for VHDL-Producer}
+% A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_esums\_correlation\_condition.vhd}\\ is given below (see Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd}).\\
+% 
+% %% "automatic generation" of listings (see /scripts/extract_entities.sh)
+% \lstinputlisting[label=lst:instance_calo_esums_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{calo\_esums\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_calo_esums_correlation_condition.vhd.j2}
+% 
+% \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
+% \caption{Explanation of Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd}}\\
+% \hline 
+% {Item} & {Explanation}\\
+% \hline 
+% \endhead
+% \verb|vhdl_signal| & condition name.\\
+% \verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of DPHI.\\
+% \verb|mass.enabled| & valid strings are 'true' and 'false' - 'true' for use of MASS.\\
+% \verb|mass.type| & valid string: 'TRANSVERSE\_MASS\_TYPE'.\\
+% \verb|twoBodyPt.enabled| & valid strings are 'true' and 'false' - 'true' for use of two-body pt.\\
+% \verb|sliceLow| & low value of an object slice.\\
+% \verb|sliceHigh| & high value of an object slice.\\
+% \verb|operator| & valid strings are 'true' and 'false' - 'true' for greater/equal-, 'false' for equal-mode of \et comparator.\\
+% \verb|threshold| & requirements for et\_thresholds (16-bit values, hex notation). Valid values depending on the scales of \et.\\
+% \verb|nrEtaWindows| & number of $\eta$ cuts.\\
+% \verb|etaW1UpperLimit, ...| & limits for "window"-comparators for $\eta$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\eta$.\\
+% \verb|phiFullRange| & set full range of $\varphi$ (boolean).\\
+% \verb|phiW1UpperLimit, ...| & limits for "window"-comparators for $\varphi$ (16-bit values, hex notation). Valid values depending on the scales for $\varphi$.\\
+% \verb|[phiW2Ignore| & ignore "window"-comparator 2 of $\varphi$ (boolean).\\
+% \verb|isolationLUT| & LUT (4 bits) of isolation).\\
+% \verb|deltaPhi.upper, ...| & limits for "window"-comparator for comparison of differences in $\varphi$ (hex notation). Valid values depending on the scales for $\varphi$.\\
+% \verb|mass.upper, ...| & limits for "window"-comparator for comparison of $\frac{M^2}{2}$ (hex notation).\\
+% \verb|twoBodyPt.threshold| & value of threshold for two-body pt comparison.\\
+% \verb|bx| & valid strings are 'p2', 'p1', '0', 'm1' and 'm2'. This indicates which data in a range of plus/minus 2 bunch-crossing is used in the condition.\\
+% \hline 
+% \label{tab:gtl:explanation_instance_calo_calo_correlation_condition_vhd}
+% \end{longtable}
+% 
+% 
+% \subsubsection{Muon Esums Correlation condition - template for VHDL-Producer}
+% A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_esums\_correlation\_condition.vhd}\\ is given below (see Listing~\ref{lst:instance_muon_esums_correlation_condition_vhd}).\\
+% 
+% %% "automatic generation" of listings (see /scripts/extract_entities.sh)
+% \lstinputlisting[label=lst:instance_muon_esums_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{muon\_esums\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_muon_esums_correlation_condition.vhd.j2}
+% 
+% \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
+% \caption{Explanation of Listing~\ref{lst:instance_calo_muon_correlation_condition_vhd}}\\
+% \hline 
+% {Item} & {Explanation}\\
+% \hline 
+% \endhead
+% \verb|vhdl_signal| & condition name.\\
+% \verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of DPHI.\\
+% \verb|mass.enabled| & valid strings are 'true' and 'false' - 'true' for use of MASS.\\
+% \verb|mass.type| & valid string: 'TRANSVERSE\_MASS\_TYPE'.\\
+% \verb|twoBodyPt.enabled| & valid strings are 'true' and 'false' - 'true' for use of two-body pt.\\
+% \verb|sliceLow| & low value of an object slice.\\
+% \verb|sliceHigh| & high value of an object slice.\\
+% \verb|operator| & valid strings are 'true' and 'false' - 'true' for greater/equal-, 'false' for equal-mode of \et comparator.\\
+% \verb|threshold| & requirements for pt\_thresholds and et\_thresholds (16-bit values, hex notation). Valid values depending on the scales of \et.\\
+% \verb|nrEtaWindows| & number of $\eta$ cuts.\\
+% \verb|etaW1UpperLimit, ...| & limits for "window"-comparators for $\eta$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\eta$.\\
+% \verb|phiFullRange| & set full range of $\varphi$ (boolean).\\
+% \verb|phiW1UpperLimit, ...| & limits for "window"-comparators for $\varphi$ (16-bit values, hex notation). Valid values depending on the scales for $\varphi$.\\
+% \verb|[phiW2Ignore| & ignore "window"-comparator 2 of $\varphi$ (boolean).\\
+% \verb|charge| & requested charge. Valid strings are 'pos' ("positive charge") and 'neg' ("negative charge") and 'ign' ("ignore").\\
+% \verb|qualityLUT| & LUT (16 bits) of quality.\\
+% \verb|isolationLUT| & LUT (4 bits) of isolation).\\
+% \verb|uptCutSel| & set use of unconstrained \pt.\\
+% \verb|uptUpperLimit, ...| & limits for unconstrained \pt.\\
+% \verb|impactParameterLUT| & LUT (4 bits) of impact parameter).\\
+% \verb|deltaPhi.upper, ...| & limits for "window"-comparator for comparison of differences in $\varphi$ (hex notation). Valid values depending on the scales for $\varphi$.\\
+% \verb|mass.upper, ...| & limits for "window"-comparator for comparison of $\frac{M^2}{2}$ (hex notation).\\
+% \verb|twoBodyPt.threshold| & value of threshold for two-body pt comparison.\\
+% \verb|bx| & valid strings are 'p2', 'p1', '0', 'm1' and 'm2'. This indicates which data in a range of plus/minus 2 bunch-crossing is used in the condition.\\
+% \hline 
+% \label{tab:gtl:explanation_instance_calo_muon_correlation_condition_vhd}
+% \end{longtable}
+% 
 
 \clearpage
 

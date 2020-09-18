@@ -49,7 +49,8 @@ missing Ht including HF (HT$_{miss}^{HF}$) and "Asymmetry" information (ASYMET, 
 \subsection{Definition of optical interfaces}
 \label{sec:gtl:optical_interfaces}
 
-Remark: all definitions for scales in the following chapters are from a CMS Detector Note: "Scales for inputs to $\mu$GT" (see actual version in \url{https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf}).
+\textbf{Remark:}\\
+All definitions for scales in the following chapters are from a CMS Detector Note: "Scales for inputs to $\mu$GT" (see actual version in \url{https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf}).
 
 \subsubsection{Calo-Layer2 optical interfaces}
 \label{sec:gtl:gct_optical_interfaces}
@@ -192,7 +193,7 @@ The firmware of \ugtl consists of two main parts:
 \item A top-of-hierarchy file (\texttt{gtl\_module.vhd}), which contains the pipeline for $\pm$2bx data, the instantiations of calculators for differences in $\eta$ and $\varphi$, the instantiations of conditions, the instantiations of charge correlation logic of muons and the Algorithms logic for 512 Algorithms, as well as a package file (\texttt{gtl\_pkg.vhd}) for declarations. 
 Actually 6 AMC board are used to contain 512 Algorithms. Therefore the 512 Algorithms are \textbf{partitioned by VHDL Producer}.
 % The VHDL Producer for every Trigger Menu (see Figure~\ref{fig:gtl:tme_gtl}) creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}), these snippets are inserted into templates for \texttt{gtl\_module.vhd} and \texttt{gtl\_pkg.vhd} during simulation and synthesis.
-The VHDL Producer for every Trigger Menu creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}), these snippets are inserted into templates for \texttt{gtl\_module.vhd} and \texttt{gtl\_pkg.vhd} during simulation and synthesis.
+The VHDL Producer for every Trigger Menu creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}), these snippets are inserted into templates for \texttt{gtl\_module.vhd}  (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_module_tpl.vhd}{\texttt{gtl\_module\_tpl.vhd}}) and \texttt{gtl\_pkg.vhd} (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg_tpl.vhd}{\texttt{gtl\_pkg\_tpl.vhd}}) during simulation and synthesis.
 \item A set of VHDL-files exists for all the modules instantiated in top-of-hierarchy and the modules in the hierarchy. These files, called the "fixed part", are not influenced by VHDL Producer. 
 \end{itemize}
 
@@ -253,18 +254,17 @@ on latency, because coming before data for a certain bunch-crossing.
 \subsubsection{Calculation of differences in $\eta$ and $\varphi$}
 \label{sec:gtl:calculation_differences}
 
-Some condition types namely correlation conditions uses differences in $\eta$ and $\varphi$ to make the decision.
+Some condition types namely correlation conditions uses differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$) to make the decision.
 Therefore these differences are calculated out of these conditions, because the differences can be used several times in different condition types.
 The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs),
 which represents values of differences (multiples of units in $\eta$ and $\varphi$).
-Differences in $\varphi$ are provided by module \texttt{sub\_phi\_integer\_obj\_vs\_obj.vhd}, which instantiates the module \texttt{sub\_unsigned\_phi.vhd} as many times as
+Differences in $\varphi$ are provided by module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd}{\texttt{sub\_phi\_integer\_obj\_vs\_obj.vhd}}, which instantiates the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd}{\texttt{sub\_unsigned\_phi.vhd}} as many times as
 the numbers of both objects determine.\\
-In the module \texttt{sub\_unsigned\_phi.vhd} a calculation of a difference of two objects is done, both objects must have the same resolution, namely the higher one.
+In the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd}{\texttt{sub\_unsigned\_phi.vhd}} a calculation of a difference of two objects is done, both objects must have the same resolution, namely the higher one.
 The result is the absolute value of the difference.
 There are two differences in $\varphi$, one "clockwise" and one "anti-clockwise". For the final result the smaller difference is taken.\\
-Differences in $\eta$ are provided by module \texttt{sub\_eta\_integer\_obj\_vs\_obj.vhd}, which instantiates the module \texttt{sub\_signed\_eta.vhd} as many times as
-the numbers of both objects determine.\\
-In the module \texttt{sub\_signed\_eta.vhd} a calculation of a difference of two objects is done with a signed subtraction, because of the Two's Complement notation of $\eta$ values.
+Differences in $\eta$ are provided by module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd}{\texttt{sub\_eta\_integer\_obj\_vs\_obj.vhd}}, which instantiates the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_eta.vhd}{\texttt{sub\_unsigned\_eta.vhd}} as many times as the numbers of both objects determine.\\
+In the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_eta.vhd}{\texttt{sub\_unsigned\_eta.vhd}} a calculation of a difference of two objects is done with a signed subtraction, because of the Two's Complement notation of $\eta$ values.
 The result is the absolute value of the difference. 
 
 \subsubsection{Calorimeter conditions}
@@ -411,7 +411,8 @@ bits [26..25] & definition \\\hline\hline
 
 \clearpage
 
-\paragraph{Calorimeter conditions definition}\label{sec:gtl:calo_cond_def}
+\paragraph{Calorimeter conditions definition}
+\label{sec:gtl:calo_cond_def}
 
 A condition consists of calorimeter objects as input data and a set of requirements, which contain the requirements to be complied.
 
@@ -446,26 +447,24 @@ To fulfill this condition, there must exist at least one object which fulfills t
 The selection of the mode of \et-comparator (greater/equal or equal), the \et-threshold-value, ranges for $\eta$ and $\varphi$ set with thresholds, LUTs for isolation and ranges for differences in $\eta$ and $\varphi$ set with thresholds are fixed values given by VHDL Producer for every Trigger Menu.
 The objects have to be of same type and same bunch-crossing.
 
-\subparagraph{Calorimeter conditions module}\label{sec:gtl:calo_conditions_module}
+\subparagraph{Calorimeter conditions module}
+\label{sec:gtl:calo_conditions_module}
 
-The module for conditions with calorimeter objects (\texttt{calo\_conditions.vhd}) instantiates the calorimeter comparators module (\texttt{calo\_comparators.vhd}) as many times as
-the numbers of objects and requirements determine. Depending on the condition-type, different and-or-structures of object vs. requirement are selected.
+The module for conditions with calorimeter objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions.vhd}{\texttt{calo\_conditions.vhd}}) instantiates the calorimeter comparators module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators.vhd}{\texttt{calo\_comparators.vhd}}) as many times as the numbers of objects and requirements determine. Depending on the condition-type, different and-or-structures of object vs. requirement are selected.
 The selection of condition-type and the number of objects is done by parameters in the generic interface list of the module (see Listing~\ref{lst:calo_conditions_vhd},
 see also the explanations below).\\
 For comparison in $\eta$, $\varphi$ and the differences in $\eta$ and $\varphi$, "window"-comparators are used.\\
-\subparagraph{Calorimeter Overlap Remover conditions module}\label{sec:gtl:calo_conditions_orm_module}
+In the calorimeter conditions module a cut for two-body pt calculation can be selected. Therefore a threshold value for two-body pt is required.
+
+\subparagraph{Calorimeter Overlap Remover conditions module}
+\label{sec:gtl:calo_conditions_orm_module}
 The Calorimeter Overlap Remover conditions consits of a Calorimeter condition (\ref{sec:gtl:calo_conditions_module}) and a single condition for a different calo object type. One or more correlation cut(s) ($\Delta\eta$, $\Delta\varphi$ and $\Delta$R - \ref{sec:gtl:correlation_conditions}) for overlap removal is required between different calo object types.
-Overlap Remover conditions \texttt{calo\_conditions\_orm.vhd} are implemented only for calo object types.
+Overlap Remover conditions \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_orm.vhd}{\texttt{calo\_conditions\_orm.vhd}} are implemented only for calo object types.
 
-\subparagraph{Calorimeter conditions module - template for VHDL-Producer}
-See in Chapter \ref{sec:gtl:calo_conditions_tme} and in Listing~\ref{lst:instance_calo_condition_vhd} for a VHDL-template for VHDL-Producer of
-instantiating a calorimeter condition (\texttt{calo\_conditions.vhd}).\\
-
-\subparagraph{Calorimeter comparators module}\label{sec:gtl:calo_comp_module}
+\subparagraph{Calorimeter comparators module}
+\label{sec:gtl:calo_comp_module}
 A comparator between the energy (\et) and a threshold (et\_threshold) and a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators
-is done in this basic module. The values for \et threshold, the 'mode-selection' for the \et comparator and the "limits" of the "window"-comparators 
-is given in the generic interface list of the module. Additionally the data-structure of input data (data\_i in port interface list) is provided
-as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
+is done in this basic module. The values for \et threshold, the 'mode-selection' for the \et comparator and the "limits" of the "window"-comparators is given in the generic interface list of the module. Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
 The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
 The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. There are two flags, one for "full-range" and one for "ignore-second-window" for the selection of the ranges.\\
 There are two cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator} and Listing~\ref{lst:phi_window_comparator_vhd}):
@@ -622,6 +621,7 @@ Frame5: The data structure of "missing Ht including HF" (HT$_{miss}^{HF}$) quant
 
 \paragraph{Energy sum quantities conditions module (including Asymmetry conditions)}
 
+For the entity-declaration see \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd}{\texttt{esums\_conditions.vhd}}.\\
 A comparator between \et and a threshold (et\_threshold) and, depending on object type, a comparison in $\varphi$ with 
 two "window"-comparators is done in this module. 
 The value for \et threshold, the 'mode-selection' for the \et comparator and the limits for the "window"-comparators are given in the generic interface list of the module.
@@ -632,9 +632,6 @@ Additionally the data-structure of input data (data\_i in port interface list) i
 as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
 Data for Asymmetry trigger are received on 4 frames on bits 27..20 (8 bits). For every type a comparision with an 8-bit threshold (greater-equal [or equal]) is done.
 Asymmetry data are interpreted as counts.
-
-\paragraph{Energy sum quantities conditions module - template for VHDL-Producer}
-A VHDL-template for VHDL-Producer of instantiating \texttt{esums\_conditions.vhd} is given below (see Listing~\ref{lst:instance_esums_condition_vhd}).\\
 
 \subsubsection{Minimum bias trigger conditions}
 \label{sec:gtl:min_bias_conditions}
@@ -648,13 +645,13 @@ Data for Minimum bias trigger are received on the 4 MSBs of 4 frames used for En
 \item MBT1HFM: "minimum bias HF- threshold 1" bits
 \end{itemize}
 
-In the min\_bias\_hf\_conditions.vhd module there is a comparision with a 4-bit threshold (greater-equal [or equal]).
+In minimum bias trigger conditions module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/min_bias_hf_conditions.vhd}{\texttt{min\_bias\_hf\_conditions.vhd}}) there is a comparision with a 4-bit threshold (greater-equal [or equal]).
 
 \subsubsection{Towercount condition}
 \label{sec:gtl:towercount_cond}
 
-Data for Towercount trigger (number of firing HCAL towers) are received on frame \htt (see \ref{sec:gtl:esums_conditions}) on bits 24..12 (13 bits) of \htt data structure. 
-In the towercount\_condition.vhd module there is a comparision with a 13-bit threshold (greater-equal [or equal]).
+Data for Towercount trigger (number of firing HCAL towers) are received on frame \htt (see \ref{sec:gtl:esums_conditions}) on bits 24..12 (13 bits) of \htt data structure.\\ 
+In towercount condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/towercount\_condition.vhd}{\texttt{towercount\_condition.vhd}}) there is a comparision with a 13-bit threshold (greater-equal [or equal]).
 
 \subsubsection{Centrality condition}
 \label{sec:gtl:centrality_cond}
@@ -803,10 +800,11 @@ bits [63..62] & definition \\\hline\hline
 
 \clearpage
 
-\paragraph{Muon charge correlation module}\label{sec:gtl:muon_charge_correlation_module}
+\paragraph{Muon charge correlation module}
+\label{sec:gtl:muon_charge_correlation_module}
 
 For definition of muon charge, see \ref{sec:gtl:muon_conditions}.\\
-In the muon charge correlation module, the charge correlations are made for different muon conditions-types. The module is instantiated in the top-of-hierarchy module (\texttt{gtl\_module.vhd})
+In the muon charge correlation module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd}{\texttt{muon\_charge\_correlations.vhd}}), the charge correlations are made for different muon conditions-types. The module is instantiated in the top-of-hierarchy module (\texttt{gtl\_module.vhd})
 and not inside of a muon conditions module. 
 The charges of objects (number of objects depends on muon condition type) are compared to get "like sign charge" ("LS") or "opposite sign charge" ("0S"), "LS" means that the charges (charge sign)
 of objects are the same, "0S" means that at least one object has different charge than the others. This information is used in all instatiated muon conditions.
@@ -898,14 +896,15 @@ In TME one can select "LS", "0S" or ignore for charge correlation in muon condit
 
 \clearpage
 
-\paragraph{Muon conditions definition}\label{sec:gtl:muon_cond_def}
+\paragraph{Muon conditions definition}
+\label{sec:gtl:muon_cond_def}
 
 A condition consists of input-data and a set of requirements, which contain the requirements to be complied.
 
 The requirement for muon conditions contains:\\
 a threshold for \pt, a threshold for unconstrained \pt, ranges for $\eta$ and $\varphi$, a LUT for quality, a LUT for isolation, 
-a requsted charge.
-The condition is complied, if every comparison between object parameters and requirements is valid for the following equation:
+a requsted charge, a LUT for impact parameter.
+The condition is complied, if every comparison between object parameters and requirements is valid for the following object cuts (only for requested cuts):
 \begin{itemize}
 \item \pt greater-equal (or equal) threshold
 \item unconstrained \pt greater-equal (or equal) threshold
@@ -914,6 +913,7 @@ The condition is complied, if every comparison between object parameters and req
 \item requested charge 
 \item quality LUT
 \item iso LUT
+\item impact parameter LUT
 \end{itemize}
 
 There are different types of calorimeter conditions implemented, depending of how many objects have to comply the requirements.
@@ -929,20 +929,21 @@ For each object the requirements can be different. To fulfill this condition, th
 each of which fulfills at least one of the requirements.\footnote{"Double objects requirements condition with spatial correlation" not used anymore, replaced by Correlation conditions}
 \item "Single object requirement condition": this condition type consists of one requirement for one trigger object of a given object type. 
 To fulfill this condition, there must exist at least one object which fulfills the requirement.
+
 \end{itemize}
 
 In addition requested charge correlation must be matched (except for "Single object requirement condition", there is no charge correlation).
 The calculation of charge correlations is done in an own module in the top-of-hierarchy module (\texttt{gtl\_module.vhd}).\\
 
 \subparagraph{Muon conditions module}
-A module for conditions with muon objects (\texttt{muon\_conditions.vhd}) instantiates the muon comparators module (\texttt{muon\_comparators.vhd}) as many times as
-the numbers of objects and requirements determine. Depending on the condition-type different and-or-structures of object vs. requirement are selected.
+\label{sec:gtl:muon_condidions_module}
 
-\subparagraph{Muon conditions module - template for VHDL-Producer}
-See in Chapter \ref{sec:gtl:templates_tme} and in Listing~\ref{lst:instance_muon_condition_vhd}) for a VHDL-template for VHDL-Producer of
-instantiating a muon condition (\texttt{muon\_conditions.vhd}).\\
+A module for conditions with muon objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd}{\texttt{muon\_conditions.vhd}}) instantiates the muon comparators module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators.vhd}{\texttt{muon\_comparators.vhd}}) as many times as the numbers of objects and requirements determine. Depending on the condition-type different and-or-structures of object vs. requirement are selected.
+The selection of condition-type and the number of objects is done by parameters in the generic interface list of the module.
 
-\subparagraph{Muon comparators module}\label{sec:gtl:muon_comp_module}
+\subparagraph{Muon comparators module}
+\label{sec:gtl:muon_comp_module}
+
 A comparator between \pt and a threshold (pt\_threshold), a comparator between unconstrained \pt and a threshold (upt\_threshold), a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators, a comparison of quality with LUT, a comparison of isolation with LUT and a comparison of the requested charge is done in this basic module. The values for \pt threshold, unconstrained \pt threshold, the 'mode-selection' for the \pt comparator, the "limits" of the "window"-comparators, the quality LUTs, the isolation LUTs and the requested charge is given in the generic interface list of the module.
 Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
 The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
@@ -1015,9 +1016,9 @@ The correlation conditions contain a combination of two "Single object requireme
 
 The following cuts can be used:
 \begin{itemize}
-\item Cut for $\Delta\eta$ (DETA).
-\item Cut for $\Delta\varphi$ (DPHI).
-\item Cut for $\Delta$R (DR).
+\item Cut for $\Delta\eta$.
+\item Cut for $\Delta\varphi$.
+\item Cut for $\Delta$R.
 \item Cuts for mass (MASS) of following mass types:
   \begin{itemize}
   \item Cut for Invariant mass.
@@ -1096,7 +1097,7 @@ M=$\sqrt{2 pt_1  pt_2 (\cosh(\eta_1-\eta_2)-\cos(\varphi_1-\varphi_2))}$.\\
 $\Delta$$R=\sqrt{(\eta_1-\eta_2)^2+(\varphi_1-\varphi_2)^2}$.\\
 
 In the TME there is one threshold for M/$\Delta$R, given in GeV (floating point notation) with one position after decimal point.
-The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}) with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL). This module is instantiated once for every object type bunch-crossing combination.\\  
+The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_calculator.vhd}{\texttt{mass\_div\_dr\_calculator.vhd}}) with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL). This module is instantiated once for every object type bunch-crossing combination.\\  
 The values of 1/$\Delta$$R^2$ in VHDL are given by LUTs stored in BRAMs (as ROMs). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. The contents of the LUTs are created by calculating 1/$\Delta$$R^2$, rounding-up at the 5\textsuperscript{th} position after decimal point and multiplying by 100000 to get integer values.\\
 
 \subparagraph{Invariant mass calculation for three objects}
@@ -1110,22 +1111,28 @@ In the TME there are two thresholds for M: "greater/equal lower limit" and "less
 
 As described in section Correlation conditions (\ref{sec:gtl:correlation_conditions}), correlations of two object types are available. Therefore several modules are provided with possible correlations (objects 1-objects 2):
 \begin{itemize}
-\item Correlation condition with calorimeter objects\\(\texttt{calo\_calo\_correlation\_condition.vhd}:
-\egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau are possible.)
-\item Correlation condition for mass divided by $\Delta$R with calorimeter objects\\(\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}:
-\egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau are possible.)
-item Correlation condition with calorimeter objects and muons objects\\(\texttt{calo\_muon\_correlation\_condition.vhd}: \egamma-muon, jet-muon and tau-muon are possible.)
-\item Correlation condition with muon objects\\(\texttt{muon\_muon\_correlation\_condition.vhd})
-\item Correlation condition with calorimeter objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\(\texttt{calo\_esums\_correlation\_condition.vhd}: \egamma-etm, jet-etm, tau-etm, \egamma-htm, jet-htm, tau-htm, \egamma-etmhf, jet-etmhf and tau-etmhf are possible.)
-\item Correlation condition with muon objects\\(\texttt{muon\_muon\_correlation\_condition.vhd})
-\item Correlation condition for mass divided by $\Delta$R with muon objects\\(\texttt{muon\_muon\_mass\_div\_dr\_condition.vhd}
-\item Correlation condition with muon objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\(\texttt{muon\_esums\_correlation\_condition.vhd}: muon-etm, muon-etmhf and muon-htm are possible.)
+\item Correlation condition with calorimeter objects\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd}{\texttt{calo\_calo\_correlation\_condition.vhd}}: \egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau are possible.)
+\item Correlation condition for mass divided by $\Delta$R with calorimeter objects\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd}{\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}}: \egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau are possible.)
+\item Correlation condition with calorimeter objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd}{\texttt{calo\_esums\_correlation\_condition.vhd}}: \egamma-etm, jet-etm, tau-etm, \egamma-htm, jet-htm, tau-htm, \egamma-etmhf, jet-etmhf and tau-etmhf are possible.)
+\item Correlation condition with calorimeter objects and muons objects\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd}{\texttt{calo\_muon\_correlation\_condition.vhd}}: \egamma-muon, jet-muon and tau-muon are possible.)
+\item Correlation condition with muon objects\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd}{\texttt{muon\_muon\_correlation\_condition.vhd}})
+\item Correlation condition for mass divided by $\Delta$R with muon objects\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_mass_div_dr_condition.vhd}{\texttt{muon\_muon\_mass\_div\_dr\_condition.vhd}})
+\item Correlation condition with muon objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd}{\texttt{muon\_esums\_correlation\_condition.vhd}}: muon-etm, muon-etmhf and muon-htm are possible.)
 \end{itemize}
 
 There are two modules for mass with three objects:
 \begin{itemize}
-\item Correlation condition for mass with three objects with calorimeter objects (same type, same bunch-crossing)\\(\texttt{calo\_mass\_3\_obj\_condition.vhd}
-\item Correlation condition for mass with three objects with muon objects\\(\texttt{muon\_mass\_3\_obj\_condition.vhd})
+\item Correlation condition for mass with three objects with calorimeter objects (same type, same bunch-crossing)\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_3_obj_condition.vhd}{\texttt{calo\_mass\_3\_obj\_condition.vhd}}
+\item Correlation condition for mass with three objects with muon objects\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_3_obj_condition.vhd}{\texttt{muon\_mass\_3\_obj\_condition.vhd}})
 \end{itemize}
 
 \subparagraph{Overview of possible correlation cuts in conditions}
@@ -1134,18 +1141,18 @@ There are two modules for mass with three objects:
 The following list gives an overview of possible correlation cuts in conditions:
 
 \begin{itemize}
-\item Calo conditions (calo\_conditions.vhd):
+\item Calo conditions:
 \begin{itemize}
 \item two-body pt (for double condition)
 \end{itemize}
-\item Calo conditions overlap removal (calo\_conditions\_orm.vhd):
+\item Calo conditions overlap removal:
 \begin{itemize}
 \item $\Delta\eta$ overlap removal
 \item $\Delta\varphi$ overlap removal
 \item $\Delta$R overlap removal
 \item two-body pt (for double condition)
 \end{itemize}
-\item Muon conditions (muon\_conditions.vhd):
+\item Muon conditions:
 \begin{itemize}
 \item charge correlation
 \item two-body pt (for double condition)
@@ -1159,7 +1166,7 @@ The following list gives an overview of possible correlation cuts in conditions:
 % \item $\Delta$R overlap removal
 % \item two-body pt (for double condition)
 % \end{itemize} 
-\item Calo calo correlation condition with calo overlap removal (calo\_calo\_calo\_correlation\_orm\_condition.vhd):
+\item Calo calo correlation condition with calo overlap removal:
 \begin{itemize}
 \item $\Delta\eta$ overlap removal
 \item $\Delta\varphi$ overlap removal
@@ -1170,7 +1177,7 @@ The following list gives an overview of possible correlation cuts in conditions:
 \item invariant mass
 \item two-body pt
 \end{itemize} 
-\item Calo calo correlation condition (calo\_calo\_correlation\_condition.vhd):
+\item Calo calo correlation condition:
 \begin{itemize}
 \item $\Delta\eta$
 \item $\Delta\varphi$
@@ -1178,15 +1185,15 @@ The following list gives an overview of possible correlation cuts in conditions:
 \item invariant mass
 \item two-body pt
 \end{itemize}
-\item Calo calo correlation condition for invariant mass divided by $\Delta$R (calo\_calo\_mass\_div\_dr\_condition.vhd):
+\item Calo calo correlation condition for invariant mass divided by $\Delta$R:
 \begin{itemize}
 \item invariant mass divided by $\Delta$R
 \end{itemize}
-\item Calo calo correlation condition mass with three objects (calo\_mass\_3\_obj\_condition.vhd):
+\item Calo calo correlation condition mass with three objects:
 \begin{itemize}
 \item invariant mass with three objects
 \end{itemize} 
-\item Calo muon correlation condition (calo\_muon\_correlation\_condition.vhd):
+\item Calo muon correlation condition:
 \begin{itemize}
 \item $\Delta\eta$
 \item $\Delta\varphi$
@@ -1194,13 +1201,13 @@ The following list gives an overview of possible correlation cuts in conditions:
 \item invariant mass
 \item two-body pt
 \end{itemize} 
-\item Calo esums correlation condition (calo\_esums\_correlation\_condition.vhd):
+\item Calo esums correlation condition:
 \begin{itemize}
 \item $\Delta\varphi$
 \item transverse mass
 \item two-body pt
 \end{itemize}
-\item Muon muon correlation condition (muon\_muon\_correlation\_condition.vhd):
+\item Muon muon correlation condition:
 \begin{itemize}
 \item charge correlation
 \item $\Delta\eta$
@@ -1209,17 +1216,17 @@ The following list gives an overview of possible correlation cuts in conditions:
 \item invariant mass or invariant mass unconstraint pt
 \item two-body pt
 \end{itemize}
-\item Muon muon correlation condition for invariant mass divided by $\Delta$R (muon\_muon\_mass\_div\_dr\_condition.vhd):
+\item Muon muon correlation condition for invariant mass divided by $\Delta$R:
 \begin{itemize}
 \item charge correlation
 \item invariant mass divided by $\Delta$R
 \end{itemize}
-\item Muon muon correlation condition mass with three objects (muon\_mass\_3\_obj\_condition.vhd):
+\item Muon muon correlation condition mass with three objects:
 \begin{itemize}
 \item charge correlation
 \item invariant mass with three objects
 \end{itemize} 
-\item Muon esums correlation condition (muon\_esums\_correlation\_condition.vhd):
+\item Muon esums correlation condition:
 \begin{itemize}
 \item $\Delta\varphi$
 \item transverse mass
@@ -1230,8 +1237,8 @@ The following list gives an overview of possible correlation cuts in conditions:
 \subparagraph{Calo Calo Correlation condition module}
 \label{sec:gtl:calo_calo_correlation_condition_module}
 
-The calo calo correlation condition module contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \texttt{calo\_calo\_correlation\_condition.vhd} named "same\_bx").\\
-In addition there are "Cuts" for differences in $\eta$ (DETA) and $\varphi$ (DPHI), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
+The calo calo correlation condition module contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd}{\texttt{calo\_calo\_correlation\_condition.vhd}} named "same\_bx").\\
+In addition there are "Cuts" for differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
 The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_EG\_DIFF\_ETA\_LUT, EG\_EG\_DIFF\_PHI\_LUT}\normalsize, ...), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
 These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
 So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
@@ -1243,24 +1250,24 @@ So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{p
 \item $\phi$ bin width = $\frac{2\pi}{144}$ (bin 0 from 0.0 to $\frac{2\pi}{144}$)
 \end{itemize}
 
-The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_EG\_COSH\_DETA\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_EG\_COS\_DPHI\_LUT}\normalsize, ...) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 3\textsuperscript{rd} position after decimal point, and multiplying by 1000 to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize ..."} in file \texttt{gtl\_pkg.vhd}. Value 1000 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
+The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_EG\_COSH\_$\Delta\eta$\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_EG\_COS\_DPHI\_LUT}\normalsize, ...) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 3\textsuperscript{rd} position after decimal point, and multiplying by 1000 to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize ..."} in file \texttt{gtl\_pkg.vhd}. Value 1000 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
 The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT}\normalsize) for two-body pt (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
 The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" or the "Double objects requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
+This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\eta$ and $\Delta\varphi$ are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
 
 \subparagraph{Calo Calo Overlap Remover Correlation condition module}
 \label{sec:gtl:calo_calo_overlap_remover_condition_module}
 
 The Calo Calo Overlap Remover Correlation conditions consits of two modes. One with a Calo Calo Correlation condition with "Double objects requirement condition" for calo objects of same type and same bunch-crossing (\ref{sec:gtl:calo_calo_correlation_condition_module}) and a single condition for a different calo object type (can have different bunch-crossing too). There has to be at least one correlation cut for the objects of "Double objects requirement condition" and a correlation cut for overlap removal between objects (one or more cut(s) of $\Delta\eta$, $\Delta\varphi$ and $\Delta$R) of different object types ("2plus1"). A second mode ("1plus1") with a Calo Calo Correlation condition with a single condition and a different calo object type (can have different bunch-crossing too) also with a single condition. There has to be at least one correlation cut for the different objects (e.g. invariant mass) and a correlation cut for overlap removal between the objects (one or more cut(s) of $\Delta\eta$, $\Delta\varphi$ and $\Delta$R). 
 
-Overlap Remover Correlation conditions \texttt{calo\_calo\_calo\_correlation\_orm\_condition.vhd} are implemented only for calo object types.
+Overlap Remover Correlation conditions \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_calo_correlation_orm_condition.vhd}{\texttt{calo\_calo\_calo\_correlation\_orm\_condition.vhd}} are implemented only for calo object types.
 
 \subparagraph{Calo Calo Correlation condition module for Invariant Mass Divided by $\Delta$R}
 \label{sec:gtl:calo_calo_correlation_condition_module_mass_div_dr}
 
-The calo calo correlation condition module for invariant mass divided by $\Delta$R contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \texttt{calo\_calo\_mass\_div\_dr\_condition.vhd} named "same\_bx").\\
+The calo calo correlation condition module for invariant mass divided by $\Delta$R contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd}{\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}} named "same\_bx").\\
 The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}), see \ref{sec:gtl:inv_mass_div_dr_calculation}. This module is instantiated once for every object type bunch-crossing combination.\\  
-The comparison of calculated values and threshold is done inside the module (\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}).\\
+The comparison of calculated values and threshold is done inside the module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd}{\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}}).\\
 In the TME there is one threshold for M/$\Delta$R: "greater/equal threshold", given in GeV (floating point notation).\\
 The threshold for comparison with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL) is provided by VHDL-Producer.\\
 No other correlation cuts available in this condition type.
@@ -1268,15 +1275,15 @@ No other correlation cuts available in this condition type.
 \subparagraph{Calo Correlation condition module for Invariant Mass with Three Objects}
 \label{sec:gtl:calo_correlation_condition_module_mass_3_obj}
 
-The calo correlation condition module for invariant mass with three objects (\texttt{calo\_mass\_3\_obj\_condition.vhd)} contains a "Triple objects requirement condition" for calo objects of same type and same bunch-crossing.\\
+The calo correlation condition module for invariant mass with three objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_3_obj_condition.vhd}{\texttt{calo\_mass\_3\_obj\_condition.vhd)}} contains a "Triple objects requirement condition" for calo objects of same type and same bunch-crossing.\\
 In addition a "Cut" for calculation of \textit{invariant mass with three objects} (see \ref{sec:gtl:inv_mass_3_obj_calculation}) is mandatory.\\
 No other correlation cuts available in this condition type.
 
 \subparagraph{Calo Esums Correlation condition module}
 \label{sec:gtl:calo_esums_correlation_condition_module}
 
-The calo esums correlation condition module contains two "Single object requirement conditions", one of calo objects (\egamma, jet or tau) and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
-In addition there are "Cuts" for differences in $\varphi$ (DPHI) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
+The calo esums correlation condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd}{\texttt{calo\_esums\_correlation\_condition.vhd}}) contains two "Single object requirement conditions", one of calo objects (\egamma, jet or tau) and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
+In addition there are "Cuts" for differences in $\varphi$ ($\Delta\varphi$) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
 The differences in $\varphi$ are calculated in bins. 
 These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_ETM\_DIFF\_PHI\_LUT}\normalsize, ...),
 which represents values of differences (multiples of units in $\varphi$).
@@ -1291,14 +1298,14 @@ The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT}\normal
 (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
 The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition"
 and the results of selected "Cuts" are inside of a range (upper and lower limit).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DPHI
+This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\varphi$
 are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for MASS with 1\textsuperscript{st} position after decimal point.
 
 \subparagraph{Calo Muon Correlation condition module}
 \label{sec:gtl:calo_muon_correlation_condition_module}
 
-The calo muon correlation condition module contains a "Single object requirement condition" for one type of calo objects (\egamma, jet or tau) and a "Single object requirement condition" for muon objects.
-In addition there are "Cuts" for differences in $\eta$ (DETA) and $\varphi$ (DPHI), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
+The calo muon correlation condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd}{\texttt{calo\_muon\_correlation\_condition.vhd}}) contains a "Single object requirement condition" for one type of calo objects (\egamma, jet or tau) and a "Single object requirement condition" for muon objects.
+In addition there are "Cuts" for differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
 The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_MU\_DIFF\_ETA\_LUT, EG\_MU\_DIFF\_PHI\_LUT}\normalsize, ...), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
 These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
 So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
@@ -1334,16 +1341,14 @@ Definitions of scales (see Tables \ref{tab:gtl:calo_eta_scale}, \ref{tab:gtl:cal
 The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_MUON\_COSH\_DETA\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_MUON\_COS\_DPHI\_LUT}\normalsize, ...) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 4\textsuperscript{th} position after decimal point, and multiplying by 10000(10\textsuperscript{\tiny{CALO\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize) to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize} ...", "\texttt{constant \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize} ..." and "\texttt{constant \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize} ..." in file \texttt{gtl\_pkg.vhd}.}\\
 The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT and MUON\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT and MUON\_SIN\_PHI\_LUT}\normalsize) for two-body pt (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point, and multiplying by 1000 to get integer values.\\
 The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt). 
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI
-are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
+This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\eta$ and $\Delta\varphi$ are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
 
 \subparagraph{Muon Muon Correlation condition module}
 \label{sec:gtl:muon_muon_correlation_condition_module}
 
 The muon muon correlation condition module contains two "Single object requirement conditions" for data from different bunch-crossings as one possible mode
-and a "Double objects requirement condition" for muon objects at same bunch-crossing as a second mode (selection is done by a parameter in the
-generic list of \texttt{muon\_muon\_correlation\_condition.vhd} named "same\_bx"). In the case of a "Double objects requirement condition", requirements for "requested charge correlations" are used and a muon charge correlation module (see \ref{sec:gtl:muon_charge_correlation_module}) is required.\\
-In addition there are "Cuts" for differences in $\eta$ (DETA) and $\varphi$ (DPHI), a calculation of $\Delta$R (DR), a calculation of invariant mass with pt or of invariant mass with unconstrained pt (MASS), a calculation of two-body pt.\\
+and a "Double objects requirement condition" for muon objects at same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd}{\texttt{muon\_muon\_correlation\_condition.vhd}} named "same\_bx"). In the case of a "Double objects requirement condition", requirements for "requested charge correlations" are used and a muon charge correlation module (see \ref{sec:gtl:muon_charge_correlation_module}) is required.\\
+In addition there are "Cuts" for differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$), a calculation of $\Delta$R (DR), a calculation of invariant mass with pt or of invariant mass with unconstrained pt (MASS), a calculation of two-body pt.\\
 The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{MUON\_MUON\_DIFF\_ETA\_LUT, MUON\_MUON\_DIFF\_PHI\_LUT}\normalsize), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
 These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
 So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
@@ -1360,7 +1365,7 @@ The contents of the LUTs for $\cos(\varphi)$ (\small{MUON\_COS\_PHI\_LUT}\normal
 (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point,
 and multiplying by 1000 to get integer values.\\
 The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" or the "Double objects requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI
+This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\eta$ and $\Delta\varphi$
 are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR and MASS with 1\textsuperscript{st} position after decimal point.
 
 \subparagraph{Muon Muon Correlation condition module for Invariant Mass Divided by $\Delta$R}
@@ -1368,7 +1373,7 @@ are expressed with a precision of 3\textsuperscript{rd} position after decimal p
 
 The muon muon correlation condition module for invariant mass divided by $\Delta$R contains two "Single object requirement conditions" from different bunch-crossings as one possible mode and a "Double objects requirement condition" for objects of same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \texttt{muon\_muon\_mass\_div\_dr\_condition.vhd} named "same\_bx").\\
 The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}), see \ref{sec:gtl:inv_mass_div_dr_calculation}. This module is instantiated once for every object type bunch-crossing combination.\\  
-The comparison of calculated values and threshold is done inside the module (\texttt{muon\_muon\_mass\_div\_dr\_condition.vhd}).\\
+The comparison of calculated values and threshold is done inside the module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_mass_div_dr_condition.vhd}{texttt{muon\_muon\_mass\_div\_dr\_condition.vhd}}).\\
 In the TME there is one threshold for M/$\Delta$R: "greater/equal threshold", given in GeV (floating point notation).\\
 The threshold for comparison with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL) is provided by VHDL-Producer.\\
 No other correlation cuts, except "charge correlation", available in this condition type.
@@ -1376,15 +1381,15 @@ No other correlation cuts, except "charge correlation", available in this condit
 \subparagraph{Muon Correlation condition module for Invariant Mass with Three Objects}
 \label{sec:gtl:muon_correlation_condition_module_mass_3_obj}
 
-The muon correlation condition module for invariant mass with three objects (\texttt{muon\_mass\_3\_obj\_condition.vhd)} contains a "Triple objects requirement condition" for objects of same type and same bunch-crossing.\\
+The muon correlation condition module for invariant mass with three objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_3_obj_condition.vhd}{\texttt{muon\_mass\_3\_obj\_condition.vhd}}) contains a "Triple objects requirement condition" for objects of same type and same bunch-crossing.\\
 In addition a "Cut" for calculation of \textit{invariant mass with three objects} (see \ref{sec:gtl:inv_mass_3_obj_calculation}) is mandatory.\\
 No other correlation cuts, except "charge correlation", available in this condition type.
 
 \subparagraph{Muon Esums Correlation condition module}
 \label{sec:gtl:muon_esums_correlation_condition_module}
 
-The muon esums correlation condition module contains two "Single object requirement conditions", one of muon objects and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
-In addition there are "Cuts" for differences in $\varphi$ (DPHI) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
+The muon esums correlation condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd}{\texttt{muon\_esums\_correlation\_condition.vhd}}) contains two "Single object requirement conditions", one of muon objects and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
+In addition there are "Cuts" for differences in $\varphi$ ($\Delta\varphi$) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
 The differences in $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{MUON\_ETM\_DIFF\_PHI\_LUT}\normalsize, ...),
 which represents values of differences (multiples of units in $\varphi$).
 These values given in the LUTs are calculated as floating-point values (based on the scales of $\varphi$), which are multiplied by a factor and truncated to an integer value.
@@ -1416,7 +1421,7 @@ The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT and MUO
 (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
 The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition"
 and the results of selected "Cuts" are inside of a range (upper and lower limit).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DPHI
+This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\varphi$
 are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for MASS with 1\textsuperscript{st} position after decimal point.
 
 \subsubsection{External Conditions}

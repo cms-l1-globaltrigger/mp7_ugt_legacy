@@ -1,16 +1,16 @@
 \select@language {english}
-\contentsline {figure}{\numberline {1}{\ignorespaces \ensuremath {\mu \mathrm {GT}}\xspace firmware. It consists of framework, SERDES module, ALGORITHM LOGIC, ROP and IPBus. The Readout-Process\xspace is the module, which is responsible to send the Readout-record\xspace to AMC13.}}{11}{figure.1}
-\contentsline {figure}{\numberline {2}{\ignorespaces System architecture overview}}{13}{figure.2}
-\contentsline {figure}{\numberline {3}{\ignorespaces Delay Manager: delay\_element}}{17}{figure.3}
-\contentsline {figure}{\numberline {4}{\ignorespaces Memory subsystem}}{19}{figure.4}
-\contentsline {figure}{\numberline {5}{\ignorespaces start of the bunch crossing number with the first bcres\_d}}{24}{figure.5}
-\contentsline {figure}{\numberline {6}{\ignorespaces normal operation of the bunch crossing number}}{24}{figure.6}
-\contentsline {figure}{\numberline {7}{\ignorespaces set of the software register err\_det when bc\_res\_d is not asserted correctly}}{25}{figure.7}
-\contentsline {figure}{\numberline {8}{\ignorespaces reset of the software register err\_det when err\_det\_reset\_event toggles}}{25}{figure.8}
-\contentsline {figure}{\numberline {9}{\ignorespaces \ensuremath {\mu \mathrm {GTL}}\xspace firmware}}{30}{figure.9}
-\contentsline {figure}{\numberline {10}{\ignorespaces Scheme of \ensuremath {\mu \mathrm {GTL}}\xspace pipeline structure}}{35}{figure.10}
-\contentsline {figure}{\numberline {11}{\ignorespaces Setting the limits for "window"-comparators for $\varphi $}}{46}{figure.11}
-\contentsline {figure}{\numberline {12}{\ignorespaces VHDL structure of cuts for correlation conditions}}{65}{figure.12}
-\contentsline {figure}{\numberline {13}{\ignorespaces Conversion of calorimeter $\eta $ and $\varphi $ to muon scales}}{83}{figure.13}
-\contentsline {figure}{\numberline {14}{\ignorespaces \ensuremath {\mu \mathrm {FDL}}\xspace firmware v1.0.1}}{120}{figure.14}
-\contentsline {figure}{\numberline {15}{\ignorespaces \ensuremath {\mu \mathrm {FDL}}\xspace pipeline v1.0.1}}{121}{figure.15}
+\contentsline {figure}{\numberline {1}{\ignorespaces \ensuremath {\mu \mathrm {GT}}\xspace firmware. It consists of framework, SERDES module, ALGORITHM LOGIC, ROP and IPBus. The Readout-Process\xspace is the module, which is responsible to send the Readout-record\xspace to AMC13.}}{12}{figure.1}
+\contentsline {figure}{\numberline {2}{\ignorespaces System architecture overview}}{14}{figure.2}
+\contentsline {figure}{\numberline {3}{\ignorespaces Delay Manager: delay\_element}}{18}{figure.3}
+\contentsline {figure}{\numberline {4}{\ignorespaces Memory subsystem}}{20}{figure.4}
+\contentsline {figure}{\numberline {5}{\ignorespaces start of the bunch crossing number with the first bcres\_d}}{25}{figure.5}
+\contentsline {figure}{\numberline {6}{\ignorespaces normal operation of the bunch crossing number}}{25}{figure.6}
+\contentsline {figure}{\numberline {7}{\ignorespaces set of the software register err\_det when bc\_res\_d is not asserted correctly}}{26}{figure.7}
+\contentsline {figure}{\numberline {8}{\ignorespaces reset of the software register err\_det when err\_det\_reset\_event toggles}}{26}{figure.8}
+\contentsline {figure}{\numberline {9}{\ignorespaces \ensuremath {\mu \mathrm {GTL}}\xspace firmware}}{31}{figure.9}
+\contentsline {figure}{\numberline {10}{\ignorespaces Scheme of \ensuremath {\mu \mathrm {GTL}}\xspace pipeline structure}}{36}{figure.10}
+\contentsline {figure}{\numberline {11}{\ignorespaces Setting the limits for "window"-comparators for $\varphi $}}{47}{figure.11}
+\contentsline {figure}{\numberline {12}{\ignorespaces VHDL structure of cuts for correlation conditions}}{66}{figure.12}
+\contentsline {figure}{\numberline {13}{\ignorespaces Conversion of calorimeter $\eta $ and $\varphi $ to muon scales}}{84}{figure.13}
+\contentsline {figure}{\numberline {14}{\ignorespaces \ensuremath {\mu \mathrm {FDL}}\xspace firmware v1.0.1}}{128}{figure.14}
+\contentsline {figure}{\numberline {15}{\ignorespaces \ensuremath {\mu \mathrm {FDL}}\xspace pipeline v1.0.1}}{129}{figure.15}

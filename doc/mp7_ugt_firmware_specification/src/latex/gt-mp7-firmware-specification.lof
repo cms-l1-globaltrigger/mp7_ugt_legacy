@@ -1,5 +1,5 @@
 \select@language {english}
-\contentsline {figure}{\numberline {1}{\ignorespaces \ensuremath {\mu \mathrm {GT}}\xspace firmware. It consists of framework, SERDES module, ALGORITHM LOGIC, ROP and IPBus. The Readout-Process\xspace is the module, which is responsible to send the Readout-record\xspace to AMC13.}}{12}{figure.1}
+\contentsline {figure}{\numberline {1}{\ignorespaces \ensuremath {\mu \mathrm {GT}}\xspace payload}}{12}{figure.1}
 \contentsline {figure}{\numberline {2}{\ignorespaces System architecture overview}}{14}{figure.2}
 \contentsline {figure}{\numberline {3}{\ignorespaces Delay Manager: delay\_element}}{18}{figure.3}
 \contentsline {figure}{\numberline {4}{\ignorespaces Memory subsystem}}{20}{figure.4}

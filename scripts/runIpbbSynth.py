@@ -39,7 +39,7 @@ DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware.git'
 #DefaultGitlabUrlUgt = 'https://:@gitlab.cern.ch:8443/hbergaue/ugt.git'
 """Default URL of gitlab ugt repo."""
 
-DefaultMenuUrl = 'https://raw.githubusercontent.com/herbberg/l1menus/master'
+#DefaultMenuUrl = 'https://raw.githubusercontent.com/herbberg/l1menus/master'
     
 DefaultVivadoVersion = '2018.3'
     
@@ -101,7 +101,7 @@ def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('menuname', type=tb.menuname_t, help="L1Menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')")
-    parser.add_argument('--menuurl', metavar='<path>', default=DefaultMenuUrl, help="L1Menu URL to retrieve files from (default is {})".format(DefaultMenuUrl))    
+    parser.add_argument('--menuurl', metavar='<path>', required=True, help="L1Menu URL to retrieve files from repo [required]")    
     parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version to run (default is '{}')".format(DefaultVivadoVersion))
     parser.add_argument('--ipbb', metavar='<version>', default=DefaultIpbbVersion, type=tb.ipbb_version_t, help="IPBus builder version [tag] (default is '{}')".format(DefaultIpbbVersion))
     parser.add_argument('--ipburl', metavar='<path>', default=DefaultGitlabUrlIPB, help="URL of IPB firmware repo (default is '{}')".format(DefaultGitlabUrlIPB))
@@ -141,7 +141,7 @@ def main():
     # Board type taken from mp7url repo name
     board_type_repo_name = os.path.basename(args.mp7url)
     if board_type_repo_name.find(".") > 0:
-        board_type = board_type_repo_name.split('.')    # Remove ".git" from repo name
+        board_type = board_type_repo_name.split('.')[0]    # Remove ".git" from repo name
     else:
         board_type = board_type_repo_name
         
@@ -326,7 +326,7 @@ def main():
 
     config.add_section('device')
     config.set('device', 'type', args.board)
-    config.set('device', 'name', board_type[0])
+    config.set('device', 'name', board_type)
     config.set('device', 'alias', BoardAliases[args.board])
 
     # Writing configuration file

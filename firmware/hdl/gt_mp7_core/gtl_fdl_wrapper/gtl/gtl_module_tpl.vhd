@@ -2,6 +2,8 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
+-- HB 2020-09-10: v1.11.1: Added module pipelines (including modules for ext_cond_pipe and centrality_pipe processes).
+-- HB 2020-09-10: v1.11.0: Added files for new structure of correlation cuts outside of conditions.
 -- HB 2020-08-25: v1.10.0: Implemented new muon structure with "unconstraint pt" and "impact parameter". Added files for "invariant mass with 3 objects" and "invariant mass divided by delta R".
 -- HB 2020-02-03: v1.9.4: Changed output pipeline code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
 -- HB 2020-01-30: v1.9.3: Cleaned up code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
@@ -79,9 +81,6 @@ architecture rtl of gtl_module is
     );
     END COMPONENT;
     
-    constant external_conditions_pipeline_stages: natural := 2; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
-    constant centrality_bits_pipeline_stages: natural := 2; -- pipeline stages for "Centrality" to get same pipeline to algos as conditions
-
 -- HB 2016-03-08: "workaraound" for VHDL-Producer output
     constant NR_MU_OBJECTS: positive := NR_MUON_OBJECTS;
 
@@ -132,7 +131,7 @@ architecture rtl of gtl_module is
 
 begin
 
-p_m_2_bx_pipeline_i: entity work.p_m_2_bx_pipeline
+pipelines_i: entity work.pipelines
     port map(
         lhc_clk,
         muon_data, mu_bx_p2, mu_bx_p1, mu_bx_0, mu_bx_m1, mu_bx_m2,
@@ -143,132 +142,27 @@ p_m_2_bx_pipeline_i: entity work.p_m_2_bx_pipeline
         ht_data, htt_bx_p2, htt_bx_p1, htt_bx_0, htt_bx_m1, htt_bx_m2,
         etm_data, etm_bx_p2, etm_bx_p1, etm_bx_0, etm_bx_m1, etm_bx_m2,
         htm_data, htm_bx_p2, htm_bx_p1, htm_bx_0, htm_bx_m1, htm_bx_m2,
--- ****************************************************************************************
--- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
         mbt1hfp_data, mbt1hfp_bx_p2, mbt1hfp_bx_p1, mbt1hfp_bx_0, mbt1hfp_bx_m1, mbt1hfp_bx_m2,
         mbt1hfm_data, mbt1hfm_bx_p2, mbt1hfm_bx_p1, mbt1hfm_bx_0, mbt1hfm_bx_m1, mbt1hfm_bx_m2,
         mbt0hfp_data, mbt0hfp_bx_p2, mbt0hfp_bx_p1, mbt0hfp_bx_0, mbt0hfp_bx_m1, mbt0hfp_bx_m2,
         mbt0hfm_data, mbt0hfm_bx_p2, mbt0hfm_bx_p1, mbt0hfm_bx_0, mbt0hfm_bx_m1, mbt0hfm_bx_m2,
--- HB 2016-06-07: inserted new esums quantities (ETTEM and ETMHF).
         ettem_data, ettem_bx_p2, ettem_bx_p1, ettem_bx_0, ettem_bx_m1, ettem_bx_m2,
         etmhf_data, etmhf_bx_p2, etmhf_bx_p1, etmhf_bx_0, etmhf_bx_m1, etmhf_bx_m2,
--- HB 2016-09-16: inserted HTMHF and TOWERCNT
         htmhf_data, htmhf_bx_p2, htmhf_bx_p1, htmhf_bx_0, htmhf_bx_m1, htmhf_bx_m2,
         towercount_data, towercount_bx_p2, towercount_bx_p1, towercount_bx_0, towercount_bx_m1, towercount_bx_m2,
--- HB 2018-08-06: inserted "Asymmetry" and "Centrality"
         asymet_data, asymet_bx_p2, asymet_bx_p1, asymet_bx_0, asymet_bx_m1, asymet_bx_m2,
         asymht_data, asymht_bx_p2, asymht_bx_p1, asymht_bx_0, asymht_bx_m1, asymht_bx_m2,
         asymethf_data, asymethf_bx_p2, asymethf_bx_p1, asymethf_bx_0, asymethf_bx_m1, asymethf_bx_m2,
         asymhthf_data, asymhthf_bx_p2, asymhthf_bx_p1, asymhthf_bx_0, asymhthf_bx_m1, asymhthf_bx_m2,
-        centrality_data, centrality_bx_p2_int, centrality_bx_p1_int, centrality_bx_0_int, centrality_bx_m1_int, centrality_bx_m2_int,
--- ****************************************************************************************
--- HB 2016-01-08: renamed ext_cond after +/-2bx to ext_cond_bx_p2_int, etc., because ext_cond_bx_p2, etc. used in algos (names coming from TME grammar).
-        external_conditions, ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_cond_bx_0_int, ext_cond_bx_m1_int, ext_cond_bx_m2_int
+        centrality_data,
+        cent0_bx_p2, cent1_bx_p2, cent2_bx_p2, cent3_bx_p2, cent4_bx_p2, cent5_bx_p2, cent6_bx_p2, cent7_bx_p2,
+        cent0_bx_p1, cent1_bx_p1, cent2_bx_p1, cent3_bx_p1, cent4_bx_p1, cent5_bx_p1, cent6_bx_p1, cent7_bx_p1,
+        cent0_bx_0, cent1_bx_0, cent2_bx_0, cent3_bx_0, cent4_bx_0, cent5_bx_0, cent6_bx_0, cent7_bx_0,
+        cent0_bx_m1, cent1_bx_m1, cent2_bx_m1, cent3_bx_m1, cent4_bx_m1, cent5_bx_m1, cent6_bx_m1, cent7_bx_m1,
+        cent0_bx_m2, cent1_bx_m2, cent2_bx_m2, cent3_bx_m2, cent4_bx_m2, cent5_bx_m2, cent6_bx_m2, cent7_bx_m2,
+        external_conditions, ext_cond_bx_p2, ext_cond_bx_p1, ext_cond_bx_0, ext_cond_bx_m1, ext_cond_bx_m2
     );
-
--- Parameterized pipeline stages for External conditions, actually 2 stages (fixed) in conditions, see "constant external_conditions_pipeline_stages ..."
--- HB 2016-01-08: renamed ext_cond after +/-2bx to ext_cond_bx_p2_int, etc., because ext_cond_bx_p2, etc. used in algos (names coming from TME grammar).
-ext_cond_pipe_p: process(lhc_clk, ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_cond_bx_0_int, ext_cond_bx_m1_int, ext_cond_bx_m2_int)
-    type ext_cond_pipe_array is array (0 to external_conditions_pipeline_stages+1) of std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
-    variable ext_cond_bx_p2_pipe_temp : ext_cond_pipe_array := (others => (others => '0'));
-    variable ext_cond_bx_p1_pipe_temp : ext_cond_pipe_array := (others => (others => '0'));
-    variable ext_cond_bx_0_pipe_temp : ext_cond_pipe_array := (others => (others => '0'));
-    variable ext_cond_bx_m1_pipe_temp : ext_cond_pipe_array := (others => (others => '0'));
-    variable ext_cond_bx_m2_pipe_temp : ext_cond_pipe_array := (others => (others => '0'));
-    begin
-        ext_cond_bx_p2_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_p2_int;
-        ext_cond_bx_p1_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_p1_int;
-        ext_cond_bx_0_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_0_int;
-        ext_cond_bx_m1_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_m1_int;
-        ext_cond_bx_m2_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_m2_int;
-        if (external_conditions_pipeline_stages > 0) then 
-            if (lhc_clk'event and (lhc_clk = '1') ) then
-                ext_cond_bx_p2_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_p2_pipe_temp(1 to external_conditions_pipeline_stages+1);
-                ext_cond_bx_p1_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_p1_pipe_temp(1 to external_conditions_pipeline_stages+1);
-                ext_cond_bx_0_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_0_pipe_temp(1 to external_conditions_pipeline_stages+1);
-                ext_cond_bx_m1_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_m1_pipe_temp(1 to external_conditions_pipeline_stages+1);
-                ext_cond_bx_m2_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_m2_pipe_temp(1 to external_conditions_pipeline_stages+1);
-            end if;
-        end if;
-        ext_cond_bx_p2 <= ext_cond_bx_p2_pipe_temp(1); -- used pipe_temp(1) instead of pipe_temp(0), to prevent warnings in compilation
-        ext_cond_bx_p1 <= ext_cond_bx_p1_pipe_temp(1);
-        ext_cond_bx_0 <= ext_cond_bx_0_pipe_temp(1);
-        ext_cond_bx_m1 <= ext_cond_bx_m1_pipe_temp(1);
-        ext_cond_bx_m2 <= ext_cond_bx_m2_pipe_temp(1);
-end process;
-
--- Parameterized pipeline stages for Centrality bits, actually 2 stages (fixed) in conditions, see "constant centrality_bits_pipeline_stages ..."
-centrality_pipe_p: process(lhc_clk, centrality_bx_p2_int, centrality_bx_p1_int, centrality_bx_0_int, centrality_bx_m1_int, centrality_bx_m2_int)
-    type centrality_pipe_array is array (0 to centrality_bits_pipeline_stages+1) of std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
-    variable centrality_bx_p2_pipe_temp : centrality_pipe_array := (others => (others => '0'));
-    variable centrality_bx_p1_pipe_temp : centrality_pipe_array := (others => (others => '0'));
-    variable centrality_bx_0_pipe_temp : centrality_pipe_array := (others => (others => '0'));
-    variable centrality_bx_m1_pipe_temp : centrality_pipe_array := (others => (others => '0'));
-    variable centrality_bx_m2_pipe_temp : centrality_pipe_array := (others => (others => '0'));
-    begin
-        centrality_bx_p2_pipe_temp(centrality_bits_pipeline_stages+1) := centrality_bx_p2_int;
-        centrality_bx_p1_pipe_temp(centrality_bits_pipeline_stages+1) := centrality_bx_p1_int;
-        centrality_bx_0_pipe_temp(centrality_bits_pipeline_stages+1) := centrality_bx_0_int;
-        centrality_bx_m1_pipe_temp(centrality_bits_pipeline_stages+1) := centrality_bx_m1_int;
-        centrality_bx_m2_pipe_temp(centrality_bits_pipeline_stages+1) := centrality_bx_m2_int;
-        if (centrality_bits_pipeline_stages > 0) then 
-            if (lhc_clk'event and (lhc_clk = '1') ) then
-                centrality_bx_p2_pipe_temp(0 to centrality_bits_pipeline_stages) := centrality_bx_p2_pipe_temp(1 to centrality_bits_pipeline_stages+1);
-                centrality_bx_p1_pipe_temp(0 to centrality_bits_pipeline_stages) := centrality_bx_p1_pipe_temp(1 to centrality_bits_pipeline_stages+1);
-                centrality_bx_0_pipe_temp(0 to centrality_bits_pipeline_stages) := centrality_bx_0_pipe_temp(1 to centrality_bits_pipeline_stages+1);
-                centrality_bx_m1_pipe_temp(0 to centrality_bits_pipeline_stages) := centrality_bx_m1_pipe_temp(1 to centrality_bits_pipeline_stages+1);
-                centrality_bx_m2_pipe_temp(0 to centrality_bits_pipeline_stages) := centrality_bx_m2_pipe_temp(1 to centrality_bits_pipeline_stages+1);
-            end if;
-        end if;
-        centrality_bx_p2 <= centrality_bx_p2_pipe_temp(1); -- used pipe_temp(1) instead of pipe_temp(0), to prevent warnings in compilation
-        centrality_bx_p1 <= centrality_bx_p1_pipe_temp(1);
-        centrality_bx_0 <= centrality_bx_0_pipe_temp(1);
-        centrality_bx_m1 <= centrality_bx_m1_pipe_temp(1);
-        centrality_bx_m2 <= centrality_bx_m2_pipe_temp(1);
-end process;
-
--- Centrality bit assignment
-cent0_bx_p2 <= centrality_bx_p2(0);
-cent1_bx_p2 <= centrality_bx_p2(1);
-cent2_bx_p2 <= centrality_bx_p2(2);
-cent3_bx_p2 <= centrality_bx_p2(3);
-cent4_bx_p2 <= centrality_bx_p2(4);
-cent5_bx_p2 <= centrality_bx_p2(5);
-cent6_bx_p2 <= centrality_bx_p2(6);
-cent7_bx_p2 <= centrality_bx_p2(7);
-cent0_bx_p1 <= centrality_bx_p1(0);
-cent1_bx_p1 <= centrality_bx_p1(1);
-cent2_bx_p1 <= centrality_bx_p1(2);
-cent3_bx_p1 <= centrality_bx_p1(3);
-cent4_bx_p1 <= centrality_bx_p1(4);
-cent5_bx_p1 <= centrality_bx_p1(5);
-cent6_bx_p1 <= centrality_bx_p1(6);
-cent7_bx_p1 <= centrality_bx_p1(7);
-cent0_bx_0 <= centrality_bx_0(0);
-cent1_bx_0 <= centrality_bx_0(1);
-cent2_bx_0 <= centrality_bx_0(2);
-cent3_bx_0 <= centrality_bx_0(3);
-cent4_bx_0 <= centrality_bx_0(4);
-cent5_bx_0 <= centrality_bx_0(5);
-cent6_bx_0 <= centrality_bx_0(6);
-cent7_bx_0 <= centrality_bx_0(7);
-cent0_bx_m1 <= centrality_bx_m1(0);
-cent1_bx_m1 <= centrality_bx_m1(1);
-cent2_bx_m1 <= centrality_bx_m1(2);
-cent3_bx_m1 <= centrality_bx_m1(3);
-cent4_bx_m1 <= centrality_bx_m1(4);
-cent5_bx_m1 <= centrality_bx_m1(5);
-cent6_bx_m1 <= centrality_bx_m1(6);
-cent7_bx_m1 <= centrality_bx_m1(7);
-cent0_bx_m2 <= centrality_bx_m2(0);
-cent1_bx_m2 <= centrality_bx_m2(1);
-cent2_bx_m2 <= centrality_bx_m2(2);
-cent3_bx_m2 <= centrality_bx_m2(3);
-cent4_bx_m2 <= centrality_bx_m2(4);
-cent5_bx_m2 <= centrality_bx_m2(5);
-cent6_bx_m2 <= centrality_bx_m2(6);
-cent7_bx_m2 <= centrality_bx_m2(7);
-
+        
 {{gtl_module_instances}}
 
 -- One pipeline stages for algorithms

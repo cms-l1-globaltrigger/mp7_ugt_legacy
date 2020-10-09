@@ -28,8 +28,10 @@ src gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/pulse_converter.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_slice.vhd
 #
-#src gt_mp7_core/gtl_fdl_wrapper/gtl/delta_r_lut_pkg.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/centrality_pipeline.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/ext_cond_pipeline.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/p_m_2_bx_pipeline.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/pipelines.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/eta_comp_signed.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/eta_windows_comp.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd

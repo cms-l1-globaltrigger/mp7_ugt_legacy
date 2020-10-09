@@ -1,5 +1,8 @@
+-- Description:
+-- Module for +/- 2 bx pipeline.
 
 -- Version-history:
+-- HB 2020-09-08: changed signal names of asym.
 -- HB 2016-09-16: inserted new esums.
 
 library ieee;
@@ -8,8 +11,8 @@ use ieee.std_logic_1164.all;
 use work.gtl_pkg.all;
 
 entity p_m_2_bx_pipeline is
-	port(
-        clk		     : in std_logic;
+    port(
+        clk          : in std_logic;
         muon_data    : in muon_objects_array(0 to nr_muon_objects-1);
         muon_bx_p2  : out muon_objects_array(0 to nr_muon_objects-1);
         muon_bx_p1  : out muon_objects_array(0 to nr_muon_objects-1);
@@ -111,30 +114,30 @@ entity p_m_2_bx_pipeline is
         towercount_bx_m1   : out std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
         towercount_bx_m2   : out std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
 -- HB 2018-08-06: inserted "Asymmetry" and "Centrality"
-        asym0_data    : in std_logic_vector(max_esums_bits-1 downto 0);
-        asym0_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym0_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym0_bx_0    : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym0_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym0_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym1_data    : in std_logic_vector(max_esums_bits-1 downto 0);
-        asym1_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym1_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym1_bx_0    : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym1_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym1_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym2_data    : in std_logic_vector(max_esums_bits-1 downto 0);
-        asym2_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym2_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym2_bx_0    : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym2_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym2_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym3_data    : in std_logic_vector(max_esums_bits-1 downto 0);
-        asym3_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym3_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym3_bx_0    : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym3_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
-        asym3_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymet_data    : in std_logic_vector(max_esums_bits-1 downto 0);
+        asymet_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymet_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymet_bx_0    : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymet_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymet_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymht_data    : in std_logic_vector(max_esums_bits-1 downto 0);
+        asymht_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymht_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymht_bx_0    : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymht_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymht_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymethf_data    : in std_logic_vector(max_esums_bits-1 downto 0);
+        asymethf_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymethf_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymethf_bx_0    : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymethf_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymethf_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymhthf_data    : in std_logic_vector(max_esums_bits-1 downto 0);
+        asymhthf_bx_p2   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymhthf_bx_p1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymhthf_bx_0    : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymhthf_bx_m1   : out std_logic_vector(max_esums_bits-1 downto 0);
+        asymhthf_bx_m2   : out std_logic_vector(max_esums_bits-1 downto 0);
         cent_data    : in std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
         cent_bx_p2   : out std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
         cent_bx_p1   : out std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
@@ -174,10 +177,10 @@ architecture rtl of p_m_2_bx_pipeline is
     signal htmhf_bx_p1_tmp, htmhf_bx_0_tmp, htmhf_bx_m1_tmp, htmhf_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
     signal towercount_bx_p1_tmp, towercount_bx_0_tmp, towercount_bx_m1_tmp, towercount_bx_m2_tmp : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0) := (others => '0');
 -- HB 2018-08-06: inserted "Asymmetry" and "Centrality"
-    signal asym0_bx_p1_tmp, asym0_bx_0_tmp, asym0_bx_m1_tmp, asym0_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
-    signal asym1_bx_p1_tmp, asym1_bx_0_tmp, asym1_bx_m1_tmp, asym1_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
-    signal asym2_bx_p1_tmp, asym2_bx_0_tmp, asym2_bx_m1_tmp, asym2_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
-    signal asym3_bx_p1_tmp, asym3_bx_0_tmp, asym3_bx_m1_tmp, asym3_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
+    signal asymet_bx_p1_tmp, asymet_bx_0_tmp, asymet_bx_m1_tmp, asymet_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
+    signal asymht_bx_p1_tmp, asymht_bx_0_tmp, asymht_bx_m1_tmp, asymht_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
+    signal asymethf_bx_p1_tmp, asymethf_bx_0_tmp, asymethf_bx_m1_tmp, asymethf_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
+    signal asymhthf_bx_p1_tmp, asymhthf_bx_0_tmp, asymhthf_bx_m1_tmp, asymhthf_bx_m2_tmp : std_logic_vector(max_esums_bits-1 downto 0) := (others => '0');
     signal cent_bx_p1_tmp, cent_bx_0_tmp, cent_bx_m1_tmp, cent_bx_m2_tmp : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0) := (others => '0');
 -- ****************************************************************************************
     signal ext_cond_bx_p1_tmp, ext_cond_bx_0_tmp, ext_cond_bx_m1_tmp, ext_cond_bx_m2_tmp : std_logic_vector(nr_external_conditions-1 downto 0) := (others => '0');
@@ -185,7 +188,7 @@ architecture rtl of p_m_2_bx_pipeline is
 begin
 
 process(clk, eg_data, jet_data, tau_data, muon_data, ett_data, ht_data, etm_data, htm_data, ettem_data, etmhf_data, htmhf_data, towercount_data, ext_cond_data,
-    asym0_data, asym1_data, asym2_data, asym3_data, cent_data)
+    asymet_data, asymht_data, asymethf_data, asymhthf_data, cent_data)
     begin
     if (clk'event and clk = '1') then
         muon_bx_p1_tmp <= muon_data;
@@ -273,25 +276,25 @@ process(clk, eg_data, jet_data, tau_data, muon_data, ett_data, ht_data, etm_data
         ext_cond_bx_m1_tmp <= ext_cond_bx_0_tmp;
         ext_cond_bx_m2_tmp <= ext_cond_bx_m1_tmp;
 
-        asym0_bx_p1_tmp <= asym0_data;
-        asym0_bx_0_tmp <= asym0_bx_p1_tmp;
-        asym0_bx_m1_tmp <= asym0_bx_0_tmp;
-        asym0_bx_m2_tmp <= asym0_bx_m1_tmp;
+        asymet_bx_p1_tmp <= asymet_data;
+        asymet_bx_0_tmp <= asymet_bx_p1_tmp;
+        asymet_bx_m1_tmp <= asymet_bx_0_tmp;
+        asymet_bx_m2_tmp <= asymet_bx_m1_tmp;
 
-        asym1_bx_p1_tmp <= asym1_data;
-        asym1_bx_0_tmp <= asym1_bx_p1_tmp;
-        asym1_bx_m1_tmp <= asym1_bx_0_tmp;
-        asym1_bx_m2_tmp <= asym1_bx_m1_tmp;
+        asymht_bx_p1_tmp <= asymht_data;
+        asymht_bx_0_tmp <= asymht_bx_p1_tmp;
+        asymht_bx_m1_tmp <= asymht_bx_0_tmp;
+        asymht_bx_m2_tmp <= asymht_bx_m1_tmp;
 
-        asym2_bx_p1_tmp <= asym2_data;
-        asym2_bx_0_tmp <= asym2_bx_p1_tmp;
-        asym2_bx_m1_tmp <= asym2_bx_0_tmp;
-        asym2_bx_m2_tmp <= asym2_bx_m1_tmp;
+        asymethf_bx_p1_tmp <= asymethf_data;
+        asymethf_bx_0_tmp <= asymethf_bx_p1_tmp;
+        asymethf_bx_m1_tmp <= asymethf_bx_0_tmp;
+        asymethf_bx_m2_tmp <= asymethf_bx_m1_tmp;
 
-        asym3_bx_p1_tmp <= asym3_data;
-        asym3_bx_0_tmp <= asym3_bx_p1_tmp;
-        asym3_bx_m1_tmp <= asym3_bx_0_tmp;
-        asym3_bx_m2_tmp <= asym3_bx_m1_tmp;
+        asymhthf_bx_p1_tmp <= asymhthf_data;
+        asymhthf_bx_0_tmp <= asymhthf_bx_p1_tmp;
+        asymhthf_bx_m1_tmp <= asymhthf_bx_0_tmp;
+        asymhthf_bx_m2_tmp <= asymhthf_bx_m1_tmp;
 
         cent_bx_p1_tmp <= cent_data;
         cent_bx_0_tmp <= cent_bx_p1_tmp;
@@ -403,29 +406,29 @@ end process;
     ext_cond_bx_m1 <= ext_cond_bx_m1_tmp;
     ext_cond_bx_m2 <= ext_cond_bx_m2_tmp;
 
-    asym0_bx_p2 <= asym0_data;
-    asym0_bx_p1 <= asym0_bx_p1_tmp;
-    asym0_bx_0 <= asym0_bx_0_tmp;
-    asym0_bx_m1 <= asym0_bx_m1_tmp;
-    asym0_bx_m2 <= asym0_bx_m2_tmp;
+    asymet_bx_p2 <= asymet_data;
+    asymet_bx_p1 <= asymet_bx_p1_tmp;
+    asymet_bx_0 <= asymet_bx_0_tmp;
+    asymet_bx_m1 <= asymet_bx_m1_tmp;
+    asymet_bx_m2 <= asymet_bx_m2_tmp;
 
-    asym1_bx_p2 <= asym1_data;
-    asym1_bx_p1 <= asym1_bx_p1_tmp;
-    asym1_bx_0 <= asym1_bx_0_tmp;
-    asym1_bx_m1 <= asym1_bx_m1_tmp;
-    asym1_bx_m2 <= asym1_bx_m2_tmp;
+    asymht_bx_p2 <= asymht_data;
+    asymht_bx_p1 <= asymht_bx_p1_tmp;
+    asymht_bx_0 <= asymht_bx_0_tmp;
+    asymht_bx_m1 <= asymht_bx_m1_tmp;
+    asymht_bx_m2 <= asymht_bx_m2_tmp;
 
-    asym2_bx_p2 <= asym2_data;
-    asym2_bx_p1 <= asym2_bx_p1_tmp;
-    asym2_bx_0 <= asym2_bx_0_tmp;
-    asym2_bx_m1 <= asym2_bx_m1_tmp;
-    asym2_bx_m2 <= asym2_bx_m2_tmp;
+    asymethf_bx_p2 <= asymethf_data;
+    asymethf_bx_p1 <= asymethf_bx_p1_tmp;
+    asymethf_bx_0 <= asymethf_bx_0_tmp;
+    asymethf_bx_m1 <= asymethf_bx_m1_tmp;
+    asymethf_bx_m2 <= asymethf_bx_m2_tmp;
 
-    asym3_bx_p2 <= asym3_data;
-    asym3_bx_p1 <= asym3_bx_p1_tmp;
-    asym3_bx_0 <= asym3_bx_0_tmp;
-    asym3_bx_m1 <= asym3_bx_m1_tmp;
-    asym3_bx_m2 <= asym3_bx_m2_tmp;
+    asymhthf_bx_p2 <= asymhthf_data;
+    asymhthf_bx_p1 <= asymhthf_bx_p1_tmp;
+    asymhthf_bx_0 <= asymhthf_bx_0_tmp;
+    asymhthf_bx_m1 <= asymhthf_bx_m1_tmp;
+    asymhthf_bx_m2 <= asymhthf_bx_m2_tmp;
 
     cent_bx_p2 <= cent_data;
     cent_bx_p1 <= cent_bx_p1_tmp;

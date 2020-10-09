@@ -46,7 +46,10 @@ vcom -93 -work work $MENU_DIR/gtl_pkg.vhd
 vcom -93 -work work $TB_DIR/lhc_data_debug_util_pkg.vhd
 vcom -93 -work work $TB_DIR/txt_util_pkg.vhd
 
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/centrality_pipeline.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/ext_cond_pipeline.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/p_m_2_bx_pipeline.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/pipelines.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/phi_windows_comp.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_comp_signed.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_windows_comp.vhd

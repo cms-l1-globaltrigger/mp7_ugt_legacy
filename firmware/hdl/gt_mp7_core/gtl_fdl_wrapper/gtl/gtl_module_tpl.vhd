@@ -2,8 +2,7 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
--- HB 2020-09-10: v1.11.1: Added module pipelines (including modules for ext_cond_pipe and centrality_pipe processes).
--- HB 2020-09-10: v1.11.0: Added files for new structure of correlation cuts outside of conditions.
+-- HB 2020-10-09: v1.10.1: Added module pipelines (including modules for ext_cond_pipe and centrality_pipe processes).
 -- HB 2020-08-25: v1.10.0: Implemented new muon structure with "unconstraint pt" and "impact parameter". Added files for "invariant mass with 3 objects" and "invariant mass divided by delta R".
 -- HB 2020-02-03: v1.9.4: Changed output pipeline code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
 -- HB 2020-01-30: v1.9.3: Cleaned up code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
@@ -127,6 +126,9 @@ architecture rtl of gtl_module is
 
     signal algo : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
 
+-- ===============================================================================================
+-- VHDL Producer inserted following signals 
+-- ===============================================================================================
 {{gtl_module_signals}}
 
 begin
@@ -163,6 +165,9 @@ pipelines_i: entity work.pipelines
         external_conditions, ext_cond_bx_p2, ext_cond_bx_p1, ext_cond_bx_0, ext_cond_bx_m1, ext_cond_bx_m2
     );
         
+-- ===============================================================================================
+-- VHDL Producer inserted following instances (for calculations, conditions and algos)
+-- ===============================================================================================
 {{gtl_module_instances}}
 
 -- One pipeline stages for algorithms

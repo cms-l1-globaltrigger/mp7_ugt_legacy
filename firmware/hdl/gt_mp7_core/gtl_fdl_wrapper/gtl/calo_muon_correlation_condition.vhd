@@ -3,7 +3,7 @@
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and muon.
 
 -- Version history:
--- HB 2020-10-09: added parameter for invariant mass div by delta R comparison.
+-- HB 2020-10-09: added parameter for invariant mass div by delta R comparison. Changed names for mass limits.
 -- HB 2020-08-27: implemented invariant mass div by delta R comparison.
 -- HB 2020-06-09: implemented new muon structure with "unconstraint pt" and "impact parameter".
 -- HB 2019-06-17: updated for "five eta cuts".
@@ -33,7 +33,6 @@ entity calo_muon_correlation_condition is
         mass_type : natural;
         twobody_pt_cut: boolean;
 
-        nr_calo_objects: natural := NR_EG_OBJECTS;
         calo_object_low: natural;
         calo_object_high: natural;
         et_ge_mode_calo: boolean;
@@ -96,9 +95,10 @@ entity calo_muon_correlation_condition is
         dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
         dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
 
-        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
-        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
+        mass_upper_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
+        mass_lower_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
 
+        nr_calo_objects: natural := NR_EG_OBJECTS;
         mass_div_dr_vector_width: positive := 84;
         mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         
@@ -175,8 +175,8 @@ begin
                     diff_phi_lower_limit_vector => diff_phi_lower_limit_vector,
                     dr_upper_limit_vector => dr_upper_limit_vector,
                     dr_lower_limit_vector => dr_lower_limit_vector,
-                    mass_upper_limit_vector => mass_upper_limit_vector,
-                    mass_lower_limit_vector => mass_lower_limit_vector,
+                    mass_upper_limit_vector => mass_upper_limit,
+                    mass_lower_limit_vector => mass_lower_limit,
                     pt1_width => pt1_width, 
                     pt2_width => pt2_width, 
                     cosh_cos_precision => mass_cosh_cos_precision,

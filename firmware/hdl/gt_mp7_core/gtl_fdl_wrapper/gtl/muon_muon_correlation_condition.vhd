@@ -3,7 +3,7 @@
 -- Correlation Condition module for muon objects.
 
 -- Version history:
--- HB 2020-10-09: added parameter for invariant mass div by delta R comparison.
+-- HB 2020-10-09: added parameter for invariant mass div by delta R comparison. Changed names for mass limits.
 -- HB 2020-08-27: implemented invariant mass div by delta R comparison.
 -- HB 2020-08-10: inserted "twobody unconstraint pt".
 -- HB 2020-06-09: implemented new muon structure with "unconstraint pt" and "impact parameter".
@@ -112,8 +112,8 @@ entity muon_muon_correlation_condition is
         dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
         dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
 
-        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
-        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
+        mass_upper_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
+        mass_lower_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
 
         mass_div_dr_vector_width: positive := MU_MU_MASS_DIV_DR_VECTOR_WIDTH;
         mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -206,8 +206,8 @@ begin
                             diff_phi_lower_limit_vector => diff_phi_lower_limit_vector,
                             dr_upper_limit_vector => dr_upper_limit_vector,
                             dr_lower_limit_vector => dr_lower_limit_vector,
-                            mass_upper_limit_vector => mass_upper_limit_vector,
-                            mass_lower_limit_vector => mass_lower_limit_vector,
+                            mass_upper_limit_vector => mass_upper_limit,
+                            mass_lower_limit_vector => mass_lower_limit,
                             pt1_width => pt_width, 
                             pt2_width => pt_width, 
                             upt1_width => upt_width, 
@@ -269,8 +269,8 @@ begin
                         diff_phi_lower_limit_vector => diff_phi_lower_limit_vector,
                         dr_upper_limit_vector => dr_upper_limit_vector,
                         dr_lower_limit_vector => dr_lower_limit_vector,
-                        mass_upper_limit_vector => mass_upper_limit_vector,
-                        mass_lower_limit_vector => mass_lower_limit_vector,
+                        mass_upper_limit_vector => mass_upper_limit,
+                        mass_lower_limit_vector => mass_lower_limit,
                         pt1_width => pt_width, 
                         pt2_width => pt_width, 
                         upt1_width => upt_width, 

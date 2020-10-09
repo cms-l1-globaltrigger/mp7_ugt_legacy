@@ -3,7 +3,7 @@
 -- Correlation Condition module for two calorimeter object types (eg, jet and tau).
 
 -- Version history:
--- HB 2020-10-09: added parameter for invariant mass div by delta R comparison.
+-- HB 2020-10-09: added parameter for invariant mass div by delta R comparison. Changed names for mass limits.
 -- HB 2020-08-27: implemented invariant mass div by delta R comparison.
 -- HB 2019-06-17: updated for "five eta cuts".
 -- HB 2019-05-06: updated instances.
@@ -42,7 +42,6 @@ entity calo_calo_correlation_condition is
         mass_type : natural;
         twobody_pt_cut: boolean;
 
-        nr_calo1_objects: natural := NR_EG_OBJECTS;
         calo1_object_low: natural;
         calo1_object_high: natural;
         et_ge_mode_calo1: boolean;
@@ -67,7 +66,6 @@ entity calo_calo_correlation_condition is
         phi_w2_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
         iso_lut_calo1: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
-        nr_calo2_objects: natural := NR_JET_OBJECTS;
         calo2_object_low: natural;
         calo2_object_high: natural;
         et_ge_mode_calo2: boolean;
@@ -101,10 +99,12 @@ entity calo_calo_correlation_condition is
         dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
         dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
 
-        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        mass_upper_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        mass_lower_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        mass_div_dr_vector_width: positive := EG_EG_MASS_DIV_DR_VECTOR_WIDTH;
+        nr_calo1_objects: natural := NR_EG_OBJECTS;
+        nr_calo2_objects: natural := NR_JET_OBJECTS;
+        mass_div_dr_vector_width: positive := EG_JET_MASS_DIV_DR_VECTOR_WIDTH;
         mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         
         pt1_width: positive := 12; 
@@ -179,8 +179,8 @@ begin
                             diff_phi_lower_limit_vector => diff_phi_lower_limit_vector,
                             dr_upper_limit_vector => dr_upper_limit_vector,
                             dr_lower_limit_vector => dr_lower_limit_vector,
-                            mass_upper_limit_vector => mass_upper_limit_vector,
-                            mass_lower_limit_vector => mass_lower_limit_vector,
+                            mass_upper_limit_vector => mass_upper_limit,
+                            mass_lower_limit_vector => mass_lower_limit,
                             pt1_width => pt1_width, 
                             pt2_width => pt2_width, 
                             cosh_cos_precision => mass_cosh_cos_precision,
@@ -233,8 +233,8 @@ begin
                         diff_phi_lower_limit_vector => diff_phi_lower_limit_vector,
                         dr_upper_limit_vector => dr_upper_limit_vector,
                         dr_lower_limit_vector => dr_lower_limit_vector,
-                        mass_upper_limit_vector => mass_upper_limit_vector,
-                        mass_lower_limit_vector => mass_lower_limit_vector,
+                        mass_upper_limit_vector => mass_upper_limit,
+                        mass_lower_limit_vector => mass_lower_limit,
                         pt1_width => pt1_width, 
                         pt2_width => pt2_width, 
                         cosh_cos_precision => mass_cosh_cos_precision,

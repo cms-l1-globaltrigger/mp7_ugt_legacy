@@ -18,22 +18,19 @@
 \contentsline {paragraph}{\numberline {2.4.3.2}Calorimeter conditions definition}{18}{paragraph.2.4.3.2}
 \contentsline {subparagraph}{\numberline {2.4.3.2.1}Calorimeter conditions module}{19}{subparagraph.2.4.3.2.1}
 \contentsline {subparagraph}{\numberline {2.4.3.2.2}Calorimeter Overlap Remover conditions module}{19}{subparagraph.2.4.3.2.2}
-\contentsline {subparagraph}{\numberline {2.4.3.2.3}Calorimeter conditions module - template for VHDL-Producer}{19}{subparagraph.2.4.3.2.3}
-\contentsline {subparagraph}{\numberline {2.4.3.2.4}Calorimeter comparators module}{19}{subparagraph.2.4.3.2.4}
+\contentsline {subparagraph}{\numberline {2.4.3.2.3}Calorimeter comparators module}{19}{subparagraph.2.4.3.2.3}
 \contentsline {subsubsection}{\numberline {2.4.4}Energy sum quantities conditions}{22}{subsubsection.2.4.4}
 \contentsline {paragraph}{\numberline {2.4.4.1}Energy sum quantities data}{22}{paragraph.2.4.4.1}
 \contentsline {paragraph}{\numberline {2.4.4.2}Energy sum quantities conditions module (including Asymmetry conditions)}{24}{paragraph.2.4.4.2}
-\contentsline {paragraph}{\numberline {2.4.4.3}Energy sum quantities conditions module - template for VHDL-Producer}{24}{paragraph.2.4.4.3}
 \contentsline {subsubsection}{\numberline {2.4.5}Minimum bias trigger conditions}{24}{subsubsection.2.4.5}
 \contentsline {subsubsection}{\numberline {2.4.6}Towercount condition}{24}{subsubsection.2.4.6}
-\contentsline {subsubsection}{\numberline {2.4.7}Centrality condition}{25}{subsubsection.2.4.7}
+\contentsline {subsubsection}{\numberline {2.4.7}Centrality condition}{24}{subsubsection.2.4.7}
 \contentsline {subsubsection}{\numberline {2.4.8}Muon conditions}{25}{subsubsection.2.4.8}
 \contentsline {paragraph}{\numberline {2.4.8.1}Muon data}{25}{paragraph.2.4.8.1}
 \contentsline {paragraph}{\numberline {2.4.8.2}Muon charge correlation module}{28}{paragraph.2.4.8.2}
 \contentsline {paragraph}{\numberline {2.4.8.3}Muon conditions definition}{30}{paragraph.2.4.8.3}
 \contentsline {subparagraph}{\numberline {2.4.8.3.1}Muon conditions module}{31}{subparagraph.2.4.8.3.1}
-\contentsline {subparagraph}{\numberline {2.4.8.3.2}Muon conditions module - template for VHDL-Producer}{31}{subparagraph.2.4.8.3.2}
-\contentsline {subparagraph}{\numberline {2.4.8.3.3}Muon comparators module}{31}{subparagraph.2.4.8.3.3}
+\contentsline {subparagraph}{\numberline {2.4.8.3.2}Muon comparators module}{31}{subparagraph.2.4.8.3.2}
 \contentsline {subsubsection}{\numberline {2.4.9}Correlation conditions}{33}{subsubsection.2.4.9}
 \contentsline {paragraph}{\numberline {2.4.9.1}Calculation of cuts}{33}{paragraph.2.4.9.1}
 \contentsline {subparagraph}{\numberline {2.4.9.1.1}$\Delta $R calculation}{33}{subparagraph.2.4.9.1.1}
@@ -46,12 +43,12 @@
 \contentsline {subparagraph}{\numberline {2.4.9.2.1}Overview of possible correlation cuts in conditions}{36}{subparagraph.2.4.9.2.1}
 \contentsline {subparagraph}{\numberline {2.4.9.2.2}Calo Calo Correlation condition module}{38}{subparagraph.2.4.9.2.2}
 \contentsline {subparagraph}{\numberline {2.4.9.2.3}Calo Calo Overlap Remover Correlation condition module}{39}{subparagraph.2.4.9.2.3}
-\contentsline {subparagraph}{\numberline {2.4.9.2.4}Calo Calo Correlation condition module for Invariant Mass Divided by $\Delta $R}{40}{subparagraph.2.4.9.2.4}
+\contentsline {subparagraph}{\numberline {2.4.9.2.4}Calo Calo Correlation condition module for Invariant Mass Divided by $\Delta $R}{39}{subparagraph.2.4.9.2.4}
 \contentsline {subparagraph}{\numberline {2.4.9.2.5}Calo Correlation condition module for Invariant Mass with Three Objects}{40}{subparagraph.2.4.9.2.5}
 \contentsline {subparagraph}{\numberline {2.4.9.2.6}Calo Esums Correlation condition module}{40}{subparagraph.2.4.9.2.6}
 \contentsline {subparagraph}{\numberline {2.4.9.2.7}Calo Muon Correlation condition module}{41}{subparagraph.2.4.9.2.7}
-\contentsline {subparagraph}{\numberline {2.4.9.2.8}Muon Muon Correlation condition module}{43}{subparagraph.2.4.9.2.8}
-\contentsline {subparagraph}{\numberline {2.4.9.2.9}Muon Muon Correlation condition module for Invariant Mass Divided by $\Delta $R}{44}{subparagraph.2.4.9.2.9}
+\contentsline {subparagraph}{\numberline {2.4.9.2.8}Muon Muon Correlation condition module}{42}{subparagraph.2.4.9.2.8}
+\contentsline {subparagraph}{\numberline {2.4.9.2.9}Muon Muon Correlation condition module for Invariant Mass Divided by $\Delta $R}{43}{subparagraph.2.4.9.2.9}
 \contentsline {subparagraph}{\numberline {2.4.9.2.10}Muon Correlation condition module for Invariant Mass with Three Objects}{44}{subparagraph.2.4.9.2.10}
 \contentsline {subparagraph}{\numberline {2.4.9.2.11}Muon Esums Correlation condition module}{44}{subparagraph.2.4.9.2.11}
 \contentsline {subsubsection}{\numberline {2.4.10}External Conditions}{45}{subsubsection.2.4.10}

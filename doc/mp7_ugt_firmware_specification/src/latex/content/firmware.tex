@@ -8,19 +8,19 @@
 % ------------------------------------------------------------------------------
 \section{Firmware overview}\label{sec:fw}
 
-The figure \ref{fig:mgt} shows the architecture of \ugt. It consists of framework , SERDES, Tx, IPBus, \rop and the ALGORITHM LOGIC, which it consists of the following modules:
+The figure \ref{fig:mgt} shows the architecture of \ugt payload. It consists of framework, IPBus, output mux and the ALGORITHM LOGIC, which it consists of the following modules:
 \begin{enumerate}
 \item \ugtl
 \item \ufdl
 \end{enumerate}
 
-\rop is responsible sending the Read-out record over \gbe to AMC13, which will be sent it from there to DAQ.
+The output mux collects data for read-out record which are send via MP7 read-out to AMC13.
  
 The IPBus system allows the control of hardware via a ‘virtual bus’, using a standard IP-over-gigabit-Ethernet network connection (section [\ref{sec:ipbus}]).
 \begin{figure}[h!]
    \centering
-    \includegraphics[width=1.0\textwidth]{figures/mGT_firmware}
-    \caption{\ugt firmware. It consists of framework, SERDES module, ALGORITHM LOGIC, ROP and IPBus. The \rop is the module, which is responsible to send the \record to  AMC13.}\label{fig:mgt}
+    \includegraphics[width=1.0\textwidth]{figures/mGT_payload}
+    \caption{\ugt payload}\label{fig:mgt}
  \end{figure}
  
 Moreover the \verb|Tx_AMC13| should be instanitate for sending the readout-record to AMC13. This part is outside of framework functionality.

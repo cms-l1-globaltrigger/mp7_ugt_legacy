@@ -40,7 +40,8 @@ missing Ht including HF (HT$_{miss}^{HF}$) and "Asymmetry" information (ASYMET, 
 \subsection{Definition of optical interfaces}
 \label{sec:gtl:optical_interfaces}
 
-Remark: all definitions for scales in the following chapters are from a CMS Detector Note: "Scales for inputs to $\mu$GT" (see actual version in \url{https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf}).
+\textbf{Remark:}\\
+All definitions for scales in the following chapters are from a CMS Detector Note: "Scales for inputs to $\mu$GT" (see actual version in \url{https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf}).
 
 \subsubsection{Calo-Layer2 optical interfaces}
 \label{sec:gtl:gct_optical_interfaces}
@@ -183,16 +184,16 @@ The firmware of \ugtl consists of two main parts:
 \item A top-of-hierarchy file (\texttt{gtl\_module.vhd}), which contains the pipeline for $\pm$2bx data, the instantiations of calculators for differences in $\eta$ and $\varphi$, the instantiations of conditions, the instantiations of charge correlation logic of muons and the Algorithms logic for 512 Algorithms, as well as a package file (\texttt{gtl\_pkg.vhd}) for declarations. 
 Actually 6 AMC board are used to contain 512 Algorithms. Therefore the 512 Algorithms are \textbf{partitioned by VHDL Producer}.
 % The VHDL Producer for every Trigger Menu (see Figure~\ref{fig:gtl:tme_gtl}) creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}), these snippets are inserted into templates for \texttt{gtl\_module.vhd} and \texttt{gtl\_pkg.vhd} during simulation and synthesis.
-The VHDL Producer for every Trigger Menu creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}), these snippets are inserted into templates for \texttt{gtl\_module.vhd} and \texttt{gtl\_pkg.vhd} during simulation and synthesis.
+The VHDL Producer for every Trigger Menu creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}), these snippets are inserted into templates for \texttt{gtl\_module.vhd} (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_module_tpl.vhd}{\texttt{gtl\_module\_tpl.vhd}}) and \texttt{gtl\_pkg.vhd} (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg_tpl.vhd}{\texttt{gtl\_pkg\_tpl.vhd}}) during simulation and synthesis.
 \item A set of VHDL-files exists for all the modules instantiated in top-of-hierarchy and the modules in the hierarchy. These files, called the "fixed part", are not influenced by VHDL Producer. 
 \end{itemize}
 
-% \begin{figure}[htb]
-% \centering
-% \includegraphics[width=15cm]{figures/tme_gtl}
-% \caption{VHDL file generation by VHDL Producer} 
-% \label{fig:gtl:tme_gtl}
-% \end{figure}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/tme_gtl}
+\caption{VHDL file generation by VHDL Producer} 
+\label{fig:gtl:tme_gtl}
+\end{figure}
 
 The latency of \ugtl is fixed to 5 bunch-crossings,
 2 bunch-crossings for the pipeline of $\pm$2bx data (for data with +2bx and +1bx), 2 bunch-crossings for conditions (fixed), also for the conditions requested in the future,
@@ -248,14 +249,13 @@ Some condition types namely correlation conditions uses differences in $\eta$ an
 Therefore these differences are calculated out of these conditions, because the differences can be used several times in different condition types.
 The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs),
 which represents values of differences (multiples of units in $\eta$ and $\varphi$).
-Differences in $\varphi$ are provided by module \texttt{sub\_phi\_integer\_obj\_vs\_obj.vhd}, which instantiates the module \texttt{sub\_unsigned\_phi.vhd} as many times as
+Differences in $\varphi$ are provided by module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd}{\texttt{sub\_phi\_integer\_obj\_vs\_obj.vhd}}, which instantiates the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd}{\texttt{sub\_unsigned\_phi.vhd}} as many times as
 the numbers of both objects determine.\\
-In the module \texttt{sub\_unsigned\_phi.vhd} a calculation of a difference of two objects is done, both objects must have the same resolution, namely the higher one.
+In the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd}{\texttt{sub\_unsigned\_phi.vhd}} a calculation of a difference of two objects is done, both objects must have the same resolution, namely the higher one.
 The result is the absolute value of the difference.
 There are two differences in $\varphi$, one "clockwise" and one "anti-clockwise". For the final result the smaller difference is taken.\\
-Differences in $\eta$ are provided by module \texttt{sub\_eta\_integer\_obj\_vs\_obj.vhd}, which instantiates the module \texttt{sub\_signed\_eta.vhd} as many times as
-the numbers of both objects determine.\\
-In the module \texttt{sub\_signed\_eta.vhd} a calculation of a difference of two objects is done with a signed subtraction, because of the Two's Complement notation of $\eta$ values.
+Differences in $\eta$ are provided by module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd}{\texttt{sub\_eta\_integer\_obj\_vs\_obj.vhd}}, which instantiates the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_eta.vhd}{\texttt{sub\_unsigned\_eta.vhd}} as many times as the numbers of both objects determine.\\
+In the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_eta.vhd}{\texttt{sub\_unsigned\_eta.vhd}} a calculation of a difference of two objects is done with a signed subtraction, because of the Two's Complement notation of $\eta$ values.
 The result is the absolute value of the difference. 
 
 \subsubsection{Calorimeter conditions}
@@ -402,7 +402,8 @@ bits [26..25] & definition \\\hline\hline
 
 \clearpage
 
-\paragraph{Calorimeter conditions definition}\label{sec:gtl:calo_cond_def}
+\paragraph{Calorimeter conditions definition}
+\label{sec:gtl:calo_cond_def}
 
 A condition consists of calorimeter objects as input data and a set of requirements, which contain the requirements to be complied.
 
@@ -437,10 +438,10 @@ To fulfill this condition, there must exist at least one object which fulfills t
 The selection of the mode of \et-comparator (greater/equal or equal), the \et-threshold-value, ranges for $\eta$ and $\varphi$ set with thresholds, LUTs for isolation and ranges for differences in $\eta$ and $\varphi$ set with thresholds are fixed values given by VHDL Producer for every Trigger Menu.
 The objects have to be of same type and same bunch-crossing.
 
-\subparagraph{Calorimeter conditions module}\label{sec:gtl:calo_conditions_module}
+\subparagraph{Calorimeter conditions module}
+\label{sec:gtl:calo_conditions_module}
 
-The module for conditions with calorimeter objects (\texttt{calo\_conditions.vhd}) instantiates the calorimeter comparators module (\texttt{calo\_comparators.vhd}) as many times as
-the numbers of objects and requirements determine. Depending on the condition-type, different and-or-structures of object vs. requirement are selected.
+The module for conditions with calorimeter objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions.vhd}{\texttt{calo\_conditions.vhd}}) instantiates the calorimeter comparators module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators.vhd}{\texttt{calo\_comparators.vhd}}) as many times as the numbers of objects and requirements determine. Depending on the condition-type, different and-or-structures of object vs. requirement are selected.
 The selection of condition-type and the number of objects is done by parameters in the generic interface list of the module (see Listing~\ref{lst:calo_conditions_vhd},
 see also the explanations below).\\
 For comparison in $\eta$, $\varphi$ and the differences in $\eta$ and $\varphi$, "window"-comparators are used.\\
@@ -507,19 +508,17 @@ In the calorimeter conditions module a cut for two-body pt calculation can be se
 
 \clearpage
 
-\subparagraph{Calorimeter Overlap Remover conditions module}\label{sec:gtl:calo_conditions_orm_module}
+\subparagraph{Calorimeter Overlap Remover conditions module}
+\label{sec:gtl:calo_conditions_orm_module}
 The Calorimeter Overlap Remover conditions consits of a Calorimeter condition (\ref{sec:gtl:calo_conditions_module}) and a single condition for a different calo object type. One or more correlation cut(s) ($\Delta\eta$, $\Delta\varphi$ and $\Delta$R - \ref{sec:gtl:correlation_conditions}) for overlap removal is required between different calo object types.
-Overlap Remover conditions \texttt{calo\_conditions\_orm.vhd} are implemented only for calo object types.
+Overlap Remover conditions \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_orm.vhd}{\texttt{calo\_conditions\_orm.vhd}} are implemented only for calo object types.
 
 \subparagraph{Calorimeter conditions module - template for VHDL-Producer}
-See in Chapter \ref{sec:gtl:calo_conditions_tme} and in Listing~\ref{lst:instance_calo_condition_vhd} for a VHDL-template for VHDL-Producer of
-instantiating a calorimeter condition (\texttt{calo\_conditions.vhd}).\\
+See in Chapter \ref{sec:gtl:calo_conditions_tme} and in Listing~\ref{lst:instance_calo_condition_vhd} for a VHDL-template for VHDL-Producer of instantiating a calorimeter condition (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions.vhd}{\texttt{calo\_conditions.vhd}}).\\
 
 \subparagraph{Calorimeter comparators module}\label{sec:gtl:calo_comp_module}
 A comparator between the energy (\et) and a threshold (et\_threshold) and a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators
-is done in this basic module. The values for \et threshold, the 'mode-selection' for the \et comparator and the "limits" of the "window"-comparators 
-is given in the generic interface list of the module. Additionally the data-structure of input data (data\_i in port interface list) is provided
-as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
+is done in this basic module. The values for \et threshold, the 'mode-selection' for the \et comparator and the "limits" of the "window"-comparators is given in the generic interface list of the module. Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
 The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
 The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. There are two flags, one for "full-range" and one for "ignore-second-window" for the selection of the ranges.\\
 There are two cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator} and Listing~\ref{lst:phi_window_comparator_vhd}):
@@ -676,7 +675,7 @@ Frame5: The data structure of "missing Ht including HF" (HT$_{miss}^{HF}$) quant
 
 \paragraph{Energy sum quantities conditions module (including Asymmetry conditions)}
 
-For the entity-declaration of \texttt{esums\_conditions.vhd}, see Listing~\ref{lst:esums_conditions_vhd}.
+For the entity-declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd}{\texttt{esums\_conditions.vhd}}, see Listing~\ref{lst:esums_conditions_vhd}.
 
 % "automatic generation" of listings (see /scripts/extract_entities.sh)
 %% REMARK: HB 2015-04-29: esums_conditions.vhd is not in ../firmware/gt_mp7/trunk/src and (scripts/extract_entities.sh) now, so interfaces/esums_conditions.vhd was copied and edited by hand.
@@ -735,13 +734,13 @@ Data for Minimum bias trigger are received on the 4 MSBs of 4 frames used for En
 \item MBT1HFM: "minimum bias HF- threshold 1" bits
 \end{itemize}
 
-In the min\_bias\_hf\_conditions.vhd module there is a comparision with a 4-bit threshold (greater-equal [or equal]).
+In minimum bias trigger conditions module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/min_bias_hf_conditions.vhd}{\texttt{min\_bias\_hf\_conditions.vhd}}) there is a comparision with a 4-bit threshold (greater-equal [or equal]).
 
 \subsubsection{Towercount condition}
 \label{sec:gtl:towercount_cond}
 
-Data for Towercount trigger (number of firing HCAL towers) are received on frame \htt (see \ref{sec:gtl:esums_conditions}) on bits 24..12 (13 bits) of \htt data structure. 
-In the towercount\_condition.vhd module there is a comparision with a 13-bit threshold (greater-equal [or equal]).
+Data for Towercount trigger (number of firing HCAL towers) are received on frame \htt (see \ref{sec:gtl:esums_conditions}) on bits 24..12 (13 bits) of \htt data structure.\\ 
+In towercount condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/towercount\_condition.vhd}{\texttt{towercount\_condition.vhd}}) there is a comparision with a 13-bit threshold (greater-equal [or equal]).
 
 \subsubsection{Centrality condition}
 \label{sec:gtl:centrality_cond}
@@ -890,10 +889,11 @@ bits [63..62] & definition \\\hline\hline
 
 \clearpage
 
-\paragraph{Muon charge correlation module}\label{sec:gtl:muon_charge_correlation_module}
+\paragraph{Muon charge correlation module}
+\label{sec:gtl:muon_charge_correlation_module}
 
 For definition of muon charge, see \ref{sec:gtl:muon_conditions}.\\
-In the muon charge correlation module, the charge correlations are made for different muon conditions-types. The module is instantiated in the top-of-hierarchy module (\texttt{gtl\_module.vhd})
+In the muon charge correlation module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd}{\texttt{muon\_charge\_correlations.vhd}}), the charge correlations are made for different muon conditions-types. The module is instantiated in the top-of-hierarchy module (\texttt{gtl\_module.vhd})
 and not inside of a muon conditions module. 
 The charges of objects (number of objects depends on muon condition type) are compared to get "like sign charge" ("LS") or "opposite sign charge" ("0S"), "LS" means that the charges (charge sign)
 of objects are the same, "0S" means that at least one object has different charge than the others. This information is used in all instatiated muon conditions.
@@ -985,14 +985,15 @@ In TME one can select "LS", "0S" or ignore for charge correlation in muon condit
 
 \clearpage
 
-\paragraph{Muon conditions definition}\label{sec:gtl:muon_cond_def}
+\paragraph{Muon conditions definition}
+\label{sec:gtl:muon_cond_def}
 
 A condition consists of input-data and a set of requirements, which contain the requirements to be complied.
 
 The requirement for muon conditions contains:\\
 a threshold for \pt, a threshold for unconstrained \pt, ranges for $\eta$ and $\varphi$, a LUT for quality, a LUT for isolation, 
-a requsted charge.
-The condition is complied, if every comparison between object parameters and requirements is valid for the following equation:
+a requsted charge, a LUT for impact parameter.
+The condition is complied, if every comparison between object parameters and requirements is valid for the following object cuts (only for requested cuts):
 \begin{itemize}
 \item \pt greater-equal (or equal) threshold
 \item unconstrained \pt greater-equal (or equal) threshold
@@ -1001,6 +1002,7 @@ The condition is complied, if every comparison between object parameters and req
 \item requested charge 
 \item quality LUT
 \item iso LUT
+\item impact parameter LUT
 \end{itemize}
 
 There are different types of calorimeter conditions implemented, depending of how many objects have to comply the requirements.
@@ -1023,8 +1025,9 @@ In addition requested charge correlation must be matched (except for "Single obj
 The calculation of charge correlations is done in an own module in the top-of-hierarchy module (\texttt{gtl\_module.vhd}).\\
 
 \subparagraph{Muon conditions module}
-A module for conditions with muon objects (\texttt{muon\_conditions.vhd}) instantiates the muon comparators module (\texttt{muon\_comparators.vhd}) as many times as
-the numbers of objects and requirements determine. Depending on the condition-type different and-or-structures of object vs. requirement are selected.
+\label{sec:gtl:muon_condidions_module}
+
+A module for conditions with muon objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd}{\texttt{muon\_conditions.vhd}}) instantiates the muon comparators module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators.vhd}{\texttt{muon\_comparators.vhd}}) as many times as the numbers of objects and requirements determine. Depending on the condition-type different and-or-structures of object vs. requirement are selected.
 The selection of condition-type and the number of objects is done by parameters in the generic interface list of the module
 (see the following VHDL entity definition in Listing~\ref{lst:muon_conditions_vhd}).\\
 
@@ -1100,10 +1103,11 @@ The selection of condition-type and the number of objects is done by parameters 
 \clearpage
 
 \subparagraph{Muon conditions module - template for VHDL-Producer}
-See in Chapter \ref{sec:gtl:templates_tme} and in Listing~\ref{lst:instance_muon_condition_vhd}) for a VHDL-template for VHDL-Producer of
-instantiating a muon condition (\texttt{muon\_conditions.vhd}).\\
+See in Chapter \ref{sec:gtl:templates_tme} and in Listing~\ref{lst:instance_muon_condition_vhd} for a VHDL-template for VHDL-Producer of instantiating a muon condition (\texttt{muon\_conditions.vhd}).\\
 
-\subparagraph{Muon comparators module}\label{sec:gtl:muon_comp_module}
+\subparagraph{Muon comparators module}
+\label{sec:gtl:muon_comp_module}
+
 A comparator between \pt and a threshold (pt\_threshold), a comparator between unconstrained \pt and a threshold (upt\_threshold), a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators, a comparison of quality with LUT, a comparison of isolation with LUT and a comparison of the requested charge is done in this basic module. The values for \pt threshold, unconstrained \pt threshold, the 'mode-selection' for the \pt comparator, the "limits" of the "window"-comparators, the quality LUTs, the isolation LUTs and the requested charge is given in the generic interface list of the module.
 Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
 The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
@@ -1257,7 +1261,7 @@ M=$\sqrt{2 pt_1  pt_2 (\cosh(\eta_1-\eta_2)-\cos(\varphi_1-\varphi_2))}$.\\
 $\Delta$$R=\sqrt{(\eta_1-\eta_2)^2+(\varphi_1-\varphi_2)^2}$.\\
 
 In the TME there is one threshold for M/$\Delta$R, given in GeV (floating point notation) with one position after decimal point.
-The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}) with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL). This module is instantiated once for every object type bunch-crossing combination.\\  
+The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_calculator.vhd}{\texttt{mass\_div\_dr\_calculator.vhd}}) with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL). This module is instantiated once for every object type bunch-crossing combination.\\  
 The values of 1/$\Delta$$R^2$ in VHDL are given by LUTs stored in BRAMs (as ROMs). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. The contents of the LUTs are created by calculating 1/$\Delta$$R^2$, rounding-up at the 5\textsuperscript{th} position after decimal point and multiplying by 100000 to get integer values.\\
 
 \subparagraph{Invariant mass calculation for three objects}
@@ -1271,22 +1275,28 @@ In the TME there are two thresholds for M: "greater/equal lower limit" and "less
 
 As described in section Correlation conditions (\ref{sec:gtl:correlation_conditions}), correlations of two object types are available. Therefore several modules are provided with possible correlations (objects 1-objects 2):
 \begin{itemize}
-\item Correlation condition with calorimeter objects\\(\texttt{calo\_calo\_correlation\_condition.vhd}:
-\egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau are possible.)
-\item Correlation condition for mass divided by $\Delta$R with calorimeter objects\\(\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}:
-\egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau are possible.)
-item Correlation condition with calorimeter objects and muons objects\\(\texttt{calo\_muon\_correlation\_condition.vhd}: \egamma-muon, jet-muon and tau-muon are possible.)
-\item Correlation condition with muon objects\\(\texttt{muon\_muon\_correlation\_condition.vhd})
-\item Correlation condition with calorimeter objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\(\texttt{calo\_esums\_correlation\_condition.vhd}: \egamma-etm, jet-etm, tau-etm, \egamma-htm, jet-htm, tau-htm, \egamma-etmhf, jet-etmhf and tau-etmhf are possible.)
-\item Correlation condition with muon objects\\(\texttt{muon\_muon\_correlation\_condition.vhd})
-\item Correlation condition for mass divided by $\Delta$R with muon objects\\(\texttt{muon\_muon\_mass\_div\_dr\_condition.vhd}
-\item Correlation condition with muon objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\(\texttt{muon\_esums\_correlation\_condition.vhd}: muon-etm, muon-etmhf and muon-htm are possible.)
+\item Correlation condition with calorimeter objects\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd}{\texttt{calo\_calo\_correlation\_condition.vhd}}: \egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau are possible.)
+\item Correlation condition for mass divided by $\Delta$R with calorimeter objects\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd}{\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}}: \egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau are possible.)
+\item Correlation condition with calorimeter objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd}{\texttt{calo\_esums\_correlation\_condition.vhd}}: \egamma-etm, jet-etm, tau-etm, \egamma-htm, jet-htm, tau-htm, \egamma-etmhf, jet-etmhf and tau-etmhf are possible.)
+\item Correlation condition with calorimeter objects and muons objects\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd}{\texttt{calo\_muon\_correlation\_condition.vhd}}: \egamma-muon, jet-muon and tau-muon are possible.)
+\item Correlation condition with muon objects\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd}{\texttt{muon\_muon\_correlation\_condition.vhd}})
+\item Correlation condition for mass divided by $\Delta$R with muon objects\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_mass_div_dr_condition.vhd}{\texttt{muon\_muon\_mass\_div\_dr\_condition.vhd}})
+\item Correlation condition with muon objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd}{\texttt{muon\_esums\_correlation\_condition.vhd}}: muon-etm, muon-etmhf and muon-htm are possible.)
 \end{itemize}
 
 There are two modules for mass with three objects:
 \begin{itemize}
-\item Correlation condition for mass with three objects with calorimeter objects (same type, same bunch-crossing)\\(\texttt{calo\_mass\_3\_obj\_condition.vhd}
-\item Correlation condition for mass with three objects with muon objects\\(\texttt{muon\_mass\_3\_obj\_condition.vhd})
+\item Correlation condition for mass with three objects with calorimeter objects (same type, same bunch-crossing)\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_3_obj_condition.vhd}{\texttt{calo\_mass\_3\_obj\_condition.vhd}}
+\item Correlation condition for mass with three objects with muon objects\\
+(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_3_obj_condition.vhd}{\texttt{muon\_mass\_3\_obj\_condition.vhd}})
 \end{itemize}
 
 \subparagraph{Overview of possible correlation cuts in conditions}
@@ -1295,18 +1305,18 @@ There are two modules for mass with three objects:
 The following list gives an overview of possible correlation cuts in conditions:
 
 \begin{itemize}
-\item Calo conditions (calo\_conditions.vhd):
+\item Calo conditions:
 \begin{itemize}
 \item two-body pt (for double condition)
 \end{itemize}
-\item Calo conditions overlap removal (calo\_conditions\_orm.vhd):
+\item Calo conditions overlap removal:
 \begin{itemize}
 \item $\Delta\eta$ overlap removal
 \item $\Delta\varphi$ overlap removal
 \item $\Delta$R overlap removal
 \item two-body pt (for double condition)
 \end{itemize}
-\item Muon conditions (muon\_conditions.vhd):
+\item Muon conditions:
 \begin{itemize}
 \item charge correlation
 \item two-body pt (for double condition)
@@ -1320,7 +1330,7 @@ The following list gives an overview of possible correlation cuts in conditions:
 % \item $\Delta$R overlap removal
 % \item two-body pt (for double condition)
 % \end{itemize} 
-\item Calo calo correlation condition with calo overlap removal (calo\_calo\_calo\_correlation\_orm\_condition.vhd):
+\item Calo calo correlation condition with calo overlap removal:
 \begin{itemize}
 \item $\Delta\eta$ overlap removal
 \item $\Delta\varphi$ overlap removal
@@ -1331,7 +1341,7 @@ The following list gives an overview of possible correlation cuts in conditions:
 \item invariant mass
 \item two-body pt
 \end{itemize} 
-\item Calo calo correlation condition (calo\_calo\_correlation\_condition.vhd):
+\item Calo calo correlation condition:
 \begin{itemize}
 \item $\Delta\eta$
 \item $\Delta\varphi$
@@ -1339,15 +1349,15 @@ The following list gives an overview of possible correlation cuts in conditions:
 \item invariant mass
 \item two-body pt
 \end{itemize}
-\item Calo calo correlation condition for invariant mass divided by $\Delta$R (calo\_calo\_mass\_div\_dr\_condition.vhd):
+\item Calo calo correlation condition for invariant mass divided by $\Delta$R:
 \begin{itemize}
 \item invariant mass divided by $\Delta$R
 \end{itemize}
-\item Calo calo correlation condition mass with three objects (calo\_mass\_3\_obj\_condition.vhd):
+\item Calo calo correlation condition mass with three objects:
 \begin{itemize}
 \item invariant mass with three objects
 \end{itemize} 
-\item Calo muon correlation condition (calo\_muon\_correlation\_condition.vhd):
+\item Calo muon correlation condition:
 \begin{itemize}
 \item $\Delta\eta$
 \item $\Delta\varphi$
@@ -1355,13 +1365,13 @@ The following list gives an overview of possible correlation cuts in conditions:
 \item invariant mass
 \item two-body pt
 \end{itemize} 
-\item Calo esums correlation condition (calo\_esums\_correlation\_condition.vhd):
+\item Calo esums correlation condition:
 \begin{itemize}
 \item $\Delta\varphi$
 \item transverse mass
 \item two-body pt
 \end{itemize}
-\item Muon muon correlation condition (muon\_muon\_correlation\_condition.vhd):
+\item Muon muon correlation condition:
 \begin{itemize}
 \item charge correlation
 \item $\Delta\eta$
@@ -1370,17 +1380,17 @@ The following list gives an overview of possible correlation cuts in conditions:
 \item invariant mass or invariant mass unconstraint pt
 \item two-body pt
 \end{itemize}
-\item Muon muon correlation condition for invariant mass divided by $\Delta$R (muon\_muon\_mass\_div\_dr\_condition.vhd):
+\item Muon muon correlation condition for invariant mass divided by $\Delta$R:
 \begin{itemize}
 \item charge correlation
 \item invariant mass divided by $\Delta$R
 \end{itemize}
-\item Muon muon correlation condition mass with three objects (muon\_mass\_3\_obj\_condition.vhd):
+\item Muon muon correlation condition mass with three objects:
 \begin{itemize}
 \item charge correlation
 \item invariant mass with three objects
 \end{itemize} 
-\item Muon esums correlation condition (muon\_esums\_correlation\_condition.vhd):
+\item Muon esums correlation condition:
 \begin{itemize}
 \item $\Delta\varphi$
 \item transverse mass
@@ -1391,8 +1401,8 @@ The following list gives an overview of possible correlation cuts in conditions:
 \subparagraph{Calo Calo Correlation condition module}
 \label{sec:gtl:calo_calo_correlation_condition_module}
 
-The calo calo correlation condition module contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \texttt{calo\_calo\_correlation\_condition.vhd} named "same\_bx").\\
-In addition there are "Cuts" for differences in $\eta$ (DETA) and $\varphi$ (DPHI), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
+The calo calo correlation condition module contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd}{\texttt{calo\_calo\_correlation\_condition.vhd}} named "same\_bx").\\
+In addition there are "Cuts" for differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
 The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_EG\_DIFF\_ETA\_LUT, EG\_EG\_DIFF\_PHI\_LUT}\normalsize, ...), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
 These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
 So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
@@ -1407,12 +1417,12 @@ So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{p
 The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_EG\_COSH\_DETA\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_EG\_COS\_DPHI\_LUT}\normalsize, ...) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 3\textsuperscript{rd} position after decimal point, and multiplying by 1000 to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize ..."} in file \texttt{gtl\_pkg.vhd}. Value 1000 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
 The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT}\normalsize) for two-body pt (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
 The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" or the "Double objects requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
+This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\eta$ and $\Delta\varphi$ are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
 
-For the VHDL entity declaration of calo calo correlation condition module (version 4) in \texttt{calo\_calo\_correlation\_condition.vhd}, see Listing~\ref{lst:calo_calo_correlation_condition_vhd}.\\
+For the VHDL entity declaration of calo calo correlation condition module in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd}{\texttt{calo\_calo\_correlation\_condition.vhd}}, see Listing~\ref{lst:calo_calo_correlation_condition_vhd}.\\
 \clearpage
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:calo_calo_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{calo\_calo\_correlation\_condition.vhd}]{interfaces/calo_calo_correlation_condition.vhd}
+\lstinputlisting[label=lst:calo_calo_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd}{\texttt{calo\_calo\_correlation\_condition.vhd}}]{interfaces/calo_calo_correlation_condition.vhd}
 
 \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
 \caption{Explanation of Listing~\ref{lst:calo_calo_correlation_condition_vhd}}\\
@@ -1421,8 +1431,8 @@ For the VHDL entity declaration of calo calo correlation condition module (versi
 \hline 
 \endhead
 \verb|same_bx| & boolean indicating whether data are from same Bx - 'true' for same Bx.\\
-\verb|deta_cut| & boolean for using DETA cut.\\
-\verb|dphi_cut| & boolean for using DPHI cut.\\
+\verb|deta_cut| & boolean for using $\Delta\eta$ cut.\\
+\verb|dphi_cut| & boolean for using $\Delta\varphi$ cut.\\
 \verb|dr_cut| & boolean for using DR cut.\\
 \verb|mass_cut| & boolean for using MASS cut.\\
 \verb|mass_type| & selection of mass type (INVARIANT\_MASS\_TYPE, INVARIANT\_MASS\_PT\_TYPE, TRANSVERSE\_MASS\_TYPE or TRANSVERSE\_MASS\_PT\_TYPE are allowed).\\
@@ -1479,7 +1489,7 @@ For the VHDL entity declaration of calo calo correlation condition module (versi
 \verb|dr_upper_limit| & "upper limit" of "window"-comparator for comparison of $\Delta$$R^2$ (hex value).\\
 \verb|dr_lower_limit| & "lower limit" of "window"-comparator for comparison of $\Delta$$R^2$ (hex value).\\
 \verb|DETA_DPHI_VECTOR_WIDTH| & vector width of $\Delta\eta$ and $\Delta\varphi$ for calculation of $\Delta$$R^2$.\\
-\verb|DETA_DPHI_PRECISION| & position after decimal point for DETA and DPHI.\\
+\verb|DETA_DPHI_PRECISION| & position after decimal point for $\Delta\eta$ and $\Delta\varphi$.\\
 \verb|mass_upper_limit| & "upper limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
 \verb|mass_lower_limit| & "lower limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
 \verb|MASS_PRECISION| & position after decimal point for $\frac{M^2}{2}$.\\
@@ -1518,14 +1528,14 @@ For the VHDL entity declaration of calo calo correlation condition module (versi
 
 The Calo Calo Overlap Remover Correlation conditions consits of two modes. One with a Calo Calo Correlation condition with "Double objects requirement condition" for calo objects of same type and same bunch-crossing (\ref{sec:gtl:calo_calo_correlation_condition_module}) and a single condition for a different calo object type (can have different bunch-crossing too). There has to be at least one correlation cut for the objects of "Double objects requirement condition" and a correlation cut for overlap removal between objects (one or more cut(s) of $\Delta\eta$, $\Delta\varphi$ and $\Delta$R) of different object types ("2plus1"). A second mode ("1plus1") with a Calo Calo Correlation condition with a single condition and a different calo object type (can have different bunch-crossing too) also with a single condition. There has to be at least one correlation cut for the different objects (e.g. invariant mass) and a correlation cut for overlap removal between the objects (one or more cut(s) of $\Delta\eta$, $\Delta\varphi$ and $\Delta$R). 
 
-Overlap Remover Correlation conditions \texttt{calo\_calo\_calo\_correlation\_orm\_condition.vhd} are implemented only for calo object types.
+Overlap Remover Correlation conditions \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_calo_correlation_orm_condition.vhd}{\texttt{calo\_calo\_calo\_correlation\_orm\_condition.vhd}} are implemented only for calo object types.
 
 \subparagraph{Calo Calo Correlation condition module for Invariant Mass Divided by $\Delta$R}
 \label{sec:gtl:calo_calo_correlation_condition_module_mass_div_dr}
 
-The calo calo correlation condition module for invariant mass divided by $\Delta$R contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \texttt{calo\_calo\_mass\_div\_dr\_condition.vhd} named "same\_bx").\\
+The calo calo correlation condition module for invariant mass divided by $\Delta$R contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd}{\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}} named "same\_bx").\\
 The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}), see \ref{sec:gtl:inv_mass_div_dr_calculation}. This module is instantiated once for every object type bunch-crossing combination.\\  
-The comparison of calculated values and threshold is done inside the module (\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}).\\
+The comparison of calculated values and threshold is done inside the module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd}{\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}}).\\
 In the TME there is one threshold for M/$\Delta$R: "greater/equal threshold", given in GeV (floating point notation).\\
 The threshold for comparison with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL) is provided by VHDL-Producer.\\
 No other correlation cuts available in this condition type.
@@ -1533,15 +1543,15 @@ No other correlation cuts available in this condition type.
 \subparagraph{Calo Correlation condition module for Invariant Mass with Three Objects}
 \label{sec:gtl:calo_correlation_condition_module_mass_3_obj}
 
-The calo correlation condition module for invariant mass with three objects (\texttt{calo\_mass\_3\_obj\_condition.vhd)} contains a "Triple objects requirement condition" for calo objects of same type and same bunch-crossing.\\
+The calo correlation condition module for invariant mass with three objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_3_obj_condition.vhd}{\texttt{calo\_mass\_3\_obj\_condition.vhd)}} contains a "Triple objects requirement condition" for calo objects of same type and same bunch-crossing.\\
 In addition a "Cut" for calculation of \textit{invariant mass with three objects} (see \ref{sec:gtl:inv_mass_3_obj_calculation}) is mandatory.\\
 No other correlation cuts available in this condition type.
 
 \subparagraph{Calo Esums Correlation condition module}
 \label{sec:gtl:calo_esums_correlation_condition_module}
 
-The calo esums correlation condition module contains two "Single object requirement conditions", one of calo objects (\egamma, jet or tau) and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
-In addition there are "Cuts" for differences in $\varphi$ (DPHI) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
+The calo esums correlation condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd}{\texttt{calo\_esums\_correlation\_condition.vhd}}) contains two "Single object requirement conditions", one of calo objects (\egamma, jet or tau) and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
+In addition there are "Cuts" for differences in $\varphi$ ($\Delta\varphi$) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
 The differences in $\varphi$ are calculated in bins. 
 These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_ETM\_DIFF\_PHI\_LUT}\normalsize, ...),
 which represents values of differences (multiples of units in $\varphi$).
@@ -1556,12 +1566,12 @@ The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT}\normal
 (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
 The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition"
 and the results of selected "Cuts" are inside of a range (upper and lower limit).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DPHI
+This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\varphi$
 are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for MASS with 1\textsuperscript{st} position after decimal point.
 
-For VHDL entity declaration for calo esums correlation condition module in \texttt{calo\_esums\_correlation\_condition.vhd}, see Listing~\ref{lst:calo_esums_correlation_condition_vhd}.\\
+For VHDL entity declaration for calo esums correlation condition module in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd}{\texttt{calo\_esums\_correlation\_condition.vhd}}, see Listing~\ref{lst:calo_esums_correlation_condition_vhd}.\\
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:calo_esums_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{calo\_esums\_correlation\_condition.vhd}]{interfaces/calo_esums_correlation_condition.vhd}
+\lstinputlisting[label=lst:calo_esums_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd}{\texttt{calo\_esums\_correlation\_condition.vhd}}]{interfaces/calo_esums_correlation_condition.vhd}
 
 \clearpage
 
@@ -1571,7 +1581,7 @@ For VHDL entity declaration for calo esums correlation condition module in \text
 {Item} & {Explanation}\\
 \hline 
 \endhead
-\verb|dphi_cut| & boolean for using DPHI cut.\\
+\verb|dphi_cut| & boolean for using $\Delta\varphi$ cut.\\
 \verb|mass_cut| & boolean for using MASS cut.\\
 \verb|mass_type| & selection of mass type (TRANSVERSE\_MASS\_TYPE or TRANSVERSE\_MASS\_PT\_TYPE are allowed).\\
 \verb|calo_object_low| & low index of object range (valid numbers: 0..11).\\
@@ -1609,7 +1619,7 @@ For VHDL entity declaration for calo esums correlation condition module in \text
 \verb|diff_phi_upper_limit| & "upper limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
 \verb|diff_phi_lower_limit| & "lower limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
 \verb|DETA_DPHI_VECTOR_WIDTH| & vector width of $\Delta\varphi$.\\
-\verb|DETA_DPHI_PRECISION| & position after decimal point for DPHI.\\
+\verb|DETA_DPHI_PRECISION| & position after decimal point for $\Delta\varphi$.\\
 \verb|mass_upper_limit| & "upper limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
 \verb|mass_lower_limit| & "lower limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
 \verb|MASS_PRECISION| & position after decimal point for $\frac{M^2}{2}$.\\
@@ -1640,8 +1650,8 @@ For VHDL entity declaration for calo esums correlation condition module in \text
 \subparagraph{Calo Muon Correlation condition module}
 \label{sec:gtl:calo_muon_correlation_condition_module}
 
-The calo muon correlation condition module contains a "Single object requirement condition" for one type of calo objects (\egamma, jet or tau) and a "Single object requirement condition" for muon objects.
-In addition there are "Cuts" for differences in $\eta$ (DETA) and $\varphi$ (DPHI), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
+The calo muon correlation condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd}{\texttt{calo\_muon\_correlation\_condition.vhd}}) contains a "Single object requirement condition" for one type of calo objects (\egamma, jet or tau) and a "Single object requirement condition" for muon objects.
+In addition there are "Cuts" for differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
 The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_MU\_DIFF\_ETA\_LUT, EG\_MU\_DIFF\_PHI\_LUT}\normalsize, ...), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
 These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
 So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
@@ -1677,13 +1687,13 @@ Definitions of scales (see Tables \ref{tab:gtl:calo_eta_scale}, \ref{tab:gtl:cal
 The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_MUON\_COSH\_DETA\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_MUON\_COS\_DPHI\_LUT}\normalsize, ...) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 4\textsuperscript{th} position after decimal point, and multiplying by 10000(10\textsuperscript{\tiny{CALO\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize) to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize} ...", "\texttt{constant \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize} ..." and "\texttt{constant \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize} ..." in file \texttt{gtl\_pkg.vhd}.}\\
 The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT and MUON\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT and MUON\_SIN\_PHI\_LUT}\normalsize) for two-body pt (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point, and multiplying by 1000 to get integer values.\\
 The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt). 
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI
+This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\eta$ and $\Delta\varphi$
 are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
 
-For the VHDL entity declaration of calo muon correlation condition module (version 3) in \texttt{calo\_muon\_correlation\_condition.vhd}, see Listing~\ref{lst:calo_muon_correlation_condition_vhd}.\\
+For the VHDL entity declaration of calo muon correlation condition module in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd}{\texttt{calo\_muon\_correlation\_condition.vhd}}, see Listing~\ref{lst:calo_muon_correlation_condition_vhd}.\\
 \clearpage
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:calo_muon_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{calo\_muon\_correlation\_condition.vhd}]{interfaces/calo_muon_correlation_condition.vhd}
+\lstinputlisting[label=lst:calo_muon_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd}{\texttt{calo\_muon\_correlation\_condition.vhd}}]{interfaces/calo_muon_correlation_condition.vhd}
 
 \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
 \caption{Explanation of Listing~\ref{lst:calo_muon_correlation_condition_vhd}}\\
@@ -1691,8 +1701,8 @@ For the VHDL entity declaration of calo muon correlation condition module (versi
 {Item} & {Explanation}\\
 \hline 
 \endhead
-\verb|deta_cut| & boolean for using DETA cut.\\
-\verb|dphi_cut| & boolean for using DPHI cut.\\
+\verb|deta_cut| & boolean for using $\Delta\eta$ cut.\\
+\verb|dphi_cut| & boolean for using $\Delta\varphi$ cut.\\
 \verb|dr_cut| & boolean for using DR cut.\\
 \verb|mass_cut| & boolean for using MASS cut.\\
 \verb|mass_type| & selection of mass type (INVARIANT\_MASS\_TYPE, INVARIANT\_MASS\_PT\_TYPE, TRANSVERSE\_MASS\_TYPE or TRANSVERSE\_MASS\_PT\_TYPE are allowed).\\
@@ -1754,7 +1764,7 @@ For the VHDL entity declaration of calo muon correlation condition module (versi
 \verb|dr_upper_limit| & "upper limit" of "window"-comparator for comparison of $\Delta$$R^2$ (hex value).\\
 \verb|dr_lower_limit| & "lower limit" of "window"-comparator for comparison of $\Delta$$R^2$ (hex value).\\
 \verb|DETA_DPHI_VECTOR_WIDTH| & vector width of $\Delta\eta$ and $\Delta\varphi$ for calculation of $\Delta$$R^2$.\\
-\verb|DETA_DPHI_PRECISION| & position after decimal point for DETA and DPHI.\\
+\verb|DETA_DPHI_PRECISION| & position after decimal point for $\Delta\eta$ and $\Delta\varphi$.\\
 \verb|mass_upper_limit| & "upper limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
 \verb|mass_lower_limit| & "lower limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
 \verb|MASS_PRECISION| & position after decimal point for $\frac{M^2}{2}$.\\
@@ -1793,9 +1803,8 @@ For the VHDL entity declaration of calo muon correlation condition module (versi
 \label{sec:gtl:muon_muon_correlation_condition_module}
 
 The muon muon correlation condition module contains two "Single object requirement conditions" for data from different bunch-crossings as one possible mode
-and a "Double objects requirement condition" for muon objects at same bunch-crossing as a second mode (selection is done by a parameter in the
-generic list of \texttt{muon\_muon\_correlation\_condition.vhd} named "same\_bx"). In the case of a "Double objects requirement condition", requirements for "requested charge correlations" are used and a muon charge correlation module (see \ref{sec:gtl:muon_charge_correlation_module}) is required.\\
-In addition there are "Cuts" for differences in $\eta$ (DETA) and $\varphi$ (DPHI), a calculation of $\Delta$R (DR), a calculation of invariant mass with pt or of invariant mass with unconstrained pt (MASS), a calculation of two-body pt.\\
+and a "Double objects requirement condition" for muon objects at same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd}{\texttt{muon\_muon\_correlation\_condition.vhd}} named "same\_bx"). In the case of a "Double objects requirement condition", requirements for "requested charge correlations" are used and a muon charge correlation module (see \ref{sec:gtl:muon_charge_correlation_module}) is required.\\
+In addition there are "Cuts" for differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$), a calculation of $\Delta$R (DR), a calculation of invariant mass with pt or of invariant mass with unconstrained pt (MASS), a calculation of two-body pt.\\
 The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{MUON\_MUON\_DIFF\_ETA\_LUT, MUON\_MUON\_DIFF\_PHI\_LUT}\normalsize), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
 These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
 So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
@@ -1812,13 +1821,13 @@ The contents of the LUTs for $\cos(\varphi)$ (\small{MUON\_COS\_PHI\_LUT}\normal
 (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point,
 and multiplying by 1000 to get integer values.\\
 The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" or the "Double objects requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DETA and DPHI
+This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\eta$ and $\Delta\varphi$
 are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR and MASS with 1\textsuperscript{st} position after decimal point.
 
-For the VHDL entity declaration of muon muon correlation condition module in \texttt{muon\_muon\_correlation\_condition.vhd}, see Listing~\ref{lst:muon_muon_correlation_condition_vhd}.\\
+For the VHDL entity declaration of muon muon correlation condition module in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd}{\texttt{muon\_muon\_correlation\_condition.vhd}}, see Listing~\ref{lst:muon_muon_correlation_condition_vhd}.\\
 \clearpage
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:muon_muon_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{muon\_muon\_correlation\_condition.vhd}]{interfaces/muon_muon_correlation_condition.vhd}
+\lstinputlisting[label=lst:muon_muon_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd}{\texttt{muon\_muon\_correlation\_condition.vhd}}]{interfaces/muon_muon_correlation_condition.vhd}
 
 \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
 \caption{Explanation of Listing~\ref{lst:muon_muon_correlation_condition_vhd}}\\
@@ -1827,8 +1836,8 @@ For the VHDL entity declaration of muon muon correlation condition module in \te
 \hline 
 \endhead
 \verb|same_bx| & boolean indicating whether data are from same Bx - 'true' for same Bx.\\
-\verb|deta_cut| & boolean for using DETA cut.\\
-\verb|dphi_cut| & boolean for using DPHI cut.\\
+\verb|deta_cut| & boolean for using $\Delta\eta$ cut.\\
+\verb|dphi_cut| & boolean for using $\Delta\varphi$ cut.\\
 \verb|dr_cut| & boolean for using DR cut.\\
 \verb|mass_cut| & boolean for using MASS cut.\\
 \verb|mass_type| & selection of mass type (INVARIANT\_MASS\_TYPE, INVARIANT\_MASS\_PT\_TYPE, TRANSVERSE\_MASS\_TYPE or TRANSVERSE\_MASS\_PT\_TYPE are allowed).\\
@@ -1894,7 +1903,7 @@ For the VHDL entity declaration of muon muon correlation condition module in \te
 \verb|dr_upper_limit| & "upper limit" of "window"-comparator for comparison of $\Delta$$R^2$ (hex value).\\
 \verb|dr_lower_limit| & "lower limit" of "window"-comparator for comparison of $\Delta$$R^2$ (hex value).\\
 \verb|DETA_DPHI_VECTOR_WIDTH| & vector width of $\Delta\eta$ and $\Delta\varphi$ for calculation of $\Delta$$R^2$.\\
-\verb|DETA_DPHI_PRECISION| & position after decimal point for DETA and DPHI.\\
+\verb|DETA_DPHI_PRECISION| & position after decimal point for $\Delta\eta$ and $\Delta\varphi$.\\
 \verb|mass_upper_limit| & "upper limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
 \verb|mass_lower_limit| & "lower limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
 \verb|MASS_PRECISION| & position after decimal point for $\frac{M^2}{2}$.\\
@@ -1936,7 +1945,7 @@ For the VHDL entity declaration of muon muon correlation condition module in \te
 
 The muon muon correlation condition module for invariant mass divided by $\Delta$R contains two "Single object requirement conditions" from different bunch-crossings as one possible mode and a "Double objects requirement condition" for objects of same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \texttt{muon\_muon\_mass\_div\_dr\_condition.vhd} named "same\_bx").\\
 The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}), see \ref{sec:gtl:inv_mass_div_dr_calculation}. This module is instantiated once for every object type bunch-crossing combination.\\  
-The comparison of calculated values and threshold is done inside the module (\texttt{muon\_muon\_mass\_div\_dr\_condition.vhd}).\\
+The comparison of calculated values and threshold is done inside the module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_mass_div_dr_condition.vhd}{texttt{muon\_muon\_mass\_div\_dr\_condition.vhd}}).\\
 In the TME there is one threshold for M/$\Delta$R: "greater/equal threshold", given in GeV (floating point notation).\\
 The threshold for comparison with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL) is provided by VHDL-Producer.\\
 No other correlation cuts, except "charge correlation", available in this condition type.
@@ -1944,15 +1953,15 @@ No other correlation cuts, except "charge correlation", available in this condit
 \subparagraph{Muon Correlation condition module for Invariant Mass with Three Objects}
 \label{sec:gtl:muon_correlation_condition_module_mass_3_obj}
 
-The muon correlation condition module for invariant mass with three objects (\texttt{muon\_mass\_3\_obj\_condition.vhd)} contains a "Triple objects requirement condition" for objects of same type and same bunch-crossing.\\
+The muon correlation condition module for invariant mass with three objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_3_obj_condition.vhd}{\texttt{muon\_mass\_3\_obj\_condition.vhd}}) contains a "Triple objects requirement condition" for objects of same type and same bunch-crossing.\\
 In addition a "Cut" for calculation of \textit{invariant mass with three objects} (see \ref{sec:gtl:inv_mass_3_obj_calculation}) is mandatory.\\
 No other correlation cuts, except "charge correlation", available in this condition type.
 
 \subparagraph{Muon Esums Correlation condition module}
 \label{sec:gtl:muon_esums_correlation_condition_module}
 
-The muon esums correlation condition module contains two "Single object requirement conditions", one of muon objects and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
-In addition there are "Cuts" for differences in $\varphi$ (DPHI) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
+The muon esums correlation condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd}{\texttt{muon\_esums\_correlation\_condition.vhd}}) contains two "Single object requirement conditions", one of muon objects and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
+In addition there are "Cuts" for differences in $\varphi$ ($\Delta\varphi$) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
 The differences in $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{MUON\_ETM\_DIFF\_PHI\_LUT}\normalsize, ...),
 which represents values of differences (multiples of units in $\varphi$).
 These values given in the LUTs are calculated as floating-point values (based on the scales of $\varphi$), which are multiplied by a factor and truncated to an integer value.
@@ -1984,12 +1993,12 @@ The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT and MUO
 (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
 The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition"
 and the results of selected "Cuts" are inside of a range (upper and lower limit).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for DPHI
+This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\varphi$
 are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for MASS with 1\textsuperscript{st} position after decimal point.
 
-For VHDL entity declaration for muon esums correlation condition module in \texttt{muon\_esums\_correlation\_condition.vhd}, see Listing~\ref{lst:muon_esums_correlation_condition_vhd}.\\
+For VHDL entity declaration for muon esums correlation condition module in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd}{\texttt{muon\_esums\_correlation\_condition.vhd}}, see Listing~\ref{lst:muon_esums_correlation_condition_vhd}.\\
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:muon_esums_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \texttt{muon\_esums\_correlation\_condition.vhd}]{interfaces/muon_esums_correlation_condition.vhd}
+\lstinputlisting[label=lst:muon_esums_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd}{\texttt{muon\_esums\_correlation\_condition.vhd}}]{interfaces/muon_esums_correlation_condition.vhd}
 
 \clearpage
 
@@ -1999,7 +2008,7 @@ For VHDL entity declaration for muon esums correlation condition module in \text
 {Item} & {Explanation}\\
 \hline 
 \endhead
-\verb|dphi_cut| & boolean for using DPHI cut.\\
+\verb|dphi_cut| & boolean for using $\Delta\varphi$ cut.\\
 \verb|mass_cut| & boolean for using MASS cut.\\
 \verb|mass_type| & selection of mass type (TRANSVERSE\_MASS\_TYPE or TRANSVERSE\_MASS\_PT\_TYPE are allowed).\\
 \verb|muon_object_low| & low index of object range (valid numbers: 0..7).\\
@@ -2042,7 +2051,7 @@ For VHDL entity declaration for muon esums correlation condition module in \text
 \verb|diff_phi_upper_limit| & "upper limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
 \verb|diff_phi_lower_limit| & "lower limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
 \verb|DETA_DPHI_VECTOR_WIDTH| & vector width of $\Delta\varphi$.\\
-\verb|DETA_DPHI_PRECISION| & position after decimal point for DPHI.\\
+\verb|DETA_DPHI_PRECISION| & position after decimal point for $\Delta\varphi$.\\
 \verb|mass_upper_limit| & "upper limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
 \verb|mass_lower_limit| & "lower limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
 \verb|MASS_PRECISION| & position after decimal point for $\frac{M^2}{2}$.\\
@@ -2093,142 +2102,134 @@ as inputs for \fdl.
 \subsection{VHDL-Templates for VHDL-Producer}
 \label{sec:gtl:templates_tme}
 
-The VHDL-Producer software generates a set of VHDL files (\texttt{gtl\_module\_instances.vhd, gtl\_module\_signals.vhd, ugt\_constants.vhd and algo\_index.vhd}) which contain the requirements
-of a certain L1Menu, set in the TME. The templates are created in "Jinja2" (a template engine for python).
-All the templates described in this section, are located in:\\\texttt{../cactusprojects/utm/tmVhdlProducer/templates/vhdl}.
+The VHDL-Producer software generates a set of VHDL files (\texttt{gtl\_module\_instances.vhd, gtl\_module\_signals.vhd, ugt\_constants.vhd and algo\_index.vhd}) which contain the requirements of a certain L1Menu, set in the TME. 
+The templates are created in "Jinja2" (a template engine for python).
+All the templates described in this section, are located in \url{https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/tree/master/tmVhdlProducer/templates/vhdl}.
 
-\textbf{Insert new text !!!}
+\subsubsection{Global Trigger Logic module - template for VHDL-Producer}
+\label{sec:gtl:gtl_module_tme}
+In the Trigger Menu Editor one can generate a set of conditions, which are instantiated in the top-of-hierarchy module (\texttt{gtl\_module.vhd}). This is done by reading a VHDL-template of a condition module and replacing substitution parameters with values given in VHDL Producer.\\
+In the template of Global Trigger Logic module (\texttt{gtl\_module\_instances.vhd}), the inserting of instances is specified by Jinja2 substitution parameters.
 
-% \subsubsection{Global Trigger Logic module - template for VHDL-Producer}
-% In the Trigger Menu Editor one can generate a set of conditions, which are instantiated in the top-of-hierarchy module (\texttt{gtl\_module.vhd}). This is done by reading a
-% VHDL-template of a condition module and replacing substitution parameters with values given to VHDL Producer.\\
-% % In the template of Global Trigger Logic module (\texttt{gtl\_module\_instances.vhd}), the inserting of signal declarations and instances is specified by Jinja2 substitution parameters.
-% 
-% \paragraph{Signal declarations}
-% \begin{itemize}
-% \item \textit{{\%- include "subTemplates/signal\_correlation\_conditions\_pt\_eta\_phi.vhd.j2"\%}} => replace with string defined in template:\\
-% \texttt{signal\_correlation\_conditions\_pt\_eta\_phi.vhd.j2}.\\
-% Insert template as often as an ObjectType at a certain Bx is used in a correlation condition.
-%     \begin{itemize}
-%     \item Parameters in template\\ \texttt{signal\_correlation\_conditions\_pt\_eta\_phi.vhd.j2}:\\
-%     \textit{\{\{objName\}\}} => ObjectType used in a correlation condition.\\ 
-%     \textit{\{\{Bx\}\}} => bunch-crossing within $\pm$2 of ObjectType used in a correlation condition.\\
-%     \end{itemize}
-% \end{itemize}
-% \begin{itemize}
-% \item \textit{{\%- include "subTemplates/signal\_correlation\_conditions\_differences.vhd.j2"\%}} => replace with string defined in template:\\
-% \texttt{signal\_correlation\_conditions\_differences.vhd.j2}.\\
-% Insert template once for correlation conditions of different ObjectTypes and Bx combinations.    
-% \begin{itemize}
-%     \item Parameters in template\\ \texttt{signal\_correlation\_conditions\_differences.vhd.j2}:\\
-%     \textit{\{\{objName1\}\}} => ObjectType of objects 1 used in a correlation condition.\\ 
-%     \textit{\{\{objName2\}\}} => ObjectType of objects 2 used in a correlation condition.\\ 
-%     \textit{\{\{Bx1\}\}} => bunch-crossing within $\pm$2 of objects 1.\\
-%     \textit{\{\{Bx2\}\}} => bunch-crossing within $\pm$2 of objects 2.\\
-%     \end{itemize}
-% \end{itemize}
-% \begin{itemize}
-% \item \textit{{\%- include "subTemplates/signal\_muon\_charge\_correlations.ja.vhd"\%}} => replace with string defined in template:\\
-% \texttt{signal\_muon\_charge\_correlations.vhd} for at least one occurance of a DoubleMuon, TripleMuon or QuadMuon condition in a certain bunch-crossing.
-%     \begin{itemize}
-%     \item Parameters in template\\ \texttt{signal\_muon\_charge\_correlations.vhd}:\\
-%     \textit{\{\{Bx\}\}} => bunch-crossing within $\pm$2.
-%     \end{itemize}
-% \end{itemize}
-% \begin{itemize}
-% \item \textit{{\%- include "subTemplates/signal\_condition.ja.vhd"\%}} => replace with string defined in template:\\
-% \texttt{signal\_condition.ja.vhd} as often as conditions are used.
-%     \begin{itemize}
-%     \item Parameters in template\\ \texttt{signal\_condition.ja.vhd}:\\
-%     \textit{\{\{ConditionName\}\}} => unique condition name given by physicist to TME.
-%     \end{itemize}
-% \end{itemize}
-% \begin{itemize}
-% \item \textit{{\%- include "subTemplates/signal\_algorithm.ja.vhd"\%}} => replace with string defined in template:\\
-% \texttt{signal\_algorithm.ja.vhd} as often as algorithms are used.
-%     \begin{itemize}
-%     \item Parameters in template\\ \texttt{signal\_algorithm.ja.vhd}:\\
-%     \textit{\{\{AlgoName\}\}} => unique algorithm name given by physicist to TME.
-%     \end{itemize}
-% \end{itemize}
-% 
-% \paragraph{Instances}
-% \begin{itemize}
-% \item \textit{{\%- include "subTemplates/instance\_correlation\_conditions\_pt\_eta\_phi.vhd.j2"\%}} => replace with strings defined in template:\\
-% \texttt{instance\_correlation\_conditions\_pt\_eta\_phi.vhd.j2}.\\
-% Instantiations of loops for pt, eta and phi signals for correlation conditions (used for DETA, DPHI and DR) - once for every ObjectType in certain Bx used in correlation conditions.
-%     \begin{itemize}
-%     \item Parameters in template\\ \texttt{instance\_correlation\_conditions\_pt\_eta\_phi.vhd.j2}:\\
-%     \textit{\{\{objName\}\}} => ObjectType used in a correlation condition.\\ 
-%     \textit{\{\{Bx\}\}} => bunch-crossing within $\pm$2 of ObjectType used in a correlation condition.\\
-%     \end{itemize}
-% \end{itemize}
-% \begin{itemize}
-% \item \textit{{\%- include "subTemplates/instance\_correlation\_conditions\_eta\_phi\_conversion.vhd.j2"\%}} => replace with strings defined in template:\\
-% \texttt{instance\_correlation\_conditions\_eta\_phi\_conversion.vhd.j2}.\\
-% Instantiations of loops for eta and phi converted signals (to muon scale) for calo-muon correlation conditions - once for every calo ObjectType in certain Bx used in calo-muon correlation conditions
-%     \begin{itemize}
-%     \item Parameters in template\\ \texttt{instance\_correlation\_conditions\_eta\_phi\_conversion.vhd.j2}:\\
-%     \textit{\{\{objName\}\}} => ObjectType used in a correlation condition.\\ 
-%     \textit{\{\{Bx\}\}} => bunch-crossing within $\pm$2 of ObjectType used in a correlation condition.\\
-%     \end{itemize}
-% \end{itemize}
-% \begin{itemize}
-% \item \textit{{\%- include "subTemplates/subTemplates/instance\_correlation\_conditions\_differences.vhd.j2"\%}} => replace with strings defined in template:\\
-% \texttt{instance\_correlation\_conditions\_differences.vhd.j2}.\\ 
-% Instantiations of differences for correlation conditions (used for DETA, DPHI and DR) - once for correlation conditions with two ObjectTypes in certain Bxs
-%     \begin{itemize}
-%     \item Parameters in template\\ \texttt{instance\_correlation\_conditions\_differences.vhd.j2}:\\
-%     \textit{\{\{objName1\}\}} => ObjectType of object 1 of correlation condition.\\ 
-%     \textit{\{\{objName2\}\}} => ObjectType of object 2 of correlation condition.\\ 
-%     \textit{\{\{Bx1\}\}} => bunch-crossing within $\pm$2 of object 1.\\
-%     \textit{\{\{Bx2\}\}} => bunch-crossing within $\pm$2 of object 2.
-%     \end{itemize}
-% \end{itemize}
-% \begin{itemize}
-% \item \textit{{\%- include "subTemplates/instance\_correlation\_conditions\_inv\_mass.vhd.j2"\%}} => replace with strings defined in template:\\
-% \texttt{instance\_correlation\_conditions\_inv\_mass.vhd.j2}.\\ 
-% Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for invariant mass) - once for correlation conditions with two ObjectTypes in certain Bxs
-%     \begin{itemize}
-%     \item Parameters in template\\ \texttt{instance\_correlation\_conditions\_inv\_mass.vhd.j2}:\\
-%     \textit{\{\{objName1\}\}} => ObjectType of object 1 of correlation condition.\\ 
-%     \textit{\{\{objName2\}\}} => ObjectType of object 2 of correlation condition.\\ 
-%     \textit{\{\{Bx1\}\}} => bunch-crossing within $\pm$2 of object 1.\\
-%     \textit{\{\{Bx2\}\}} => bunch-crossing within $\pm$2 of object 2.
-%     \end{itemize}
-% \end{itemize}
-% \begin{itemize}
-% \item \textit{{\%- include "subTemplates/instance\_muon\_charge\_correlation.ja.vhd"\%}} => replace with string defined in template:\\
-% \texttt{instance\_muon\_charge\_correlations.ja.vhd} only once in a certain Bx,
-% if there is at least one DoubleMuon, TripleMuon or QuadMuon condition. Instantiations of muon charge correlations.
-%     \begin{itemize}
-%     \item Parameters in template\\ \texttt{instance\_muon\_charge\_correlations.vhd}:\\
-%     \textit{\{\{Bx\}\}} => bunch-crossing within $\pm$2.
-%     \end{itemize}
-% \end{itemize}
-% \begin{itemize}
-% \item \textit{{\%- include "subTemplates/instance\_calo\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
-% \texttt{instance\_calo\_condition.vhd.j2}.\\
-% \item \textit{{\%- include "subTemplates/instance\_muon\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
-% \texttt{instance\_muon\_condition.vhd.j2}.\\
-% \item \textit{{\%- include "subTemplates/instance\_esums\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
-% \texttt{instance\_esums\_condition.vhd.j2}.\\
-% \item \textit{{\%- include "subTemplates/instance\_calo\_calo\_correlation\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
-% \texttt{instance\_calo\_calo\_correlation\_condition.vhd.j2}.\\
-% \item \textit{{\%- include "subTemplates/instance\_calo\_muon\_correlation\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
-% \texttt{instance\_calo\_muon\_correlation\_condition.vhd.j2}.\\
-% \item \textit{{\%- include "subTemplates/instance\_muon\_muon\_correlation\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
-% \texttt{instance\_muon\_muon\_correlation\_condition.vhd.j2}.\\
-% \item \textit{{\%- include "subTemplates/instance\_algorithm.vhd.j2"\%}} => replace with strings defined in template:\\
-% \texttt{instance\_algorithm.vhd.j2}.\\
-% \end{itemize}
-% 
-% Additionally there are lines with comments which VHDL-Producer should replace as described in \ref{sec:gtl:gtl_pkg_template_tme}.
-% 
-% \subsubsection{Algorithms mapping module - template for VHDL-Producer}
-% \label{sec:gtl:algo_mapping_tme}
-% The template of Algorithms mapping module (\texttt{subTemplates/algo\_mapping\_rop.vhd}) is used to create the VHDL-file \texttt{algo\_mapping\_rop.vhd}.
-% 
+\paragraph{Instances}
+\begin{itemize}
+\item \textit{{\%- include "instances/instance\_correlation\_conditions\_pt\_eta\_phi.vhd.j2"\%}} => replace with strings defined in template:\\
+\texttt{instance\_correlation\_conditions\_pt\_eta\_phi.vhd.j2}.\\
+Instantiations of loops for pt, eta and phi signals for correlation conditions (used for DETA, DPHI and DR) - once for every object type in certain bunch-crossing used in correlation conditions.
+    \begin{itemize}
+    \item Parameters in template\\ \texttt{instance\_correlation\_conditions\_pt\_eta\_phi.vhd.j2}:\\
+    \textit{\{\{o.type\}\}} => object type used in a correlation condition.\\ 
+    \textit{\{\{o.bx\}\}} => bunch-crossing within $\pm$2 of object type used in a correlation condition.\\
+    \end{itemize}
+\end{itemize}
+\begin{itemize}
+\item \textit{{\%- include "instances/instance\_correlation\_conditions\_eta\_phi\_conversion.vhd.j2"\%}} => replace with strings defined in template:\\
+\texttt{instance\_correlation\_conditions\_eta\_phi\_conversion.vhd.j2}.\\
+Instantiations of loops for eta and phi converted signals (to muon scale) for calo-muon correlation conditions - once for every calo object type in certain bunch-crossing used in calo-muon correlation conditions
+    \begin{itemize}
+    \item Parameters in template\\ \texttt{instance\_correlation\_conditions\_eta\_phi\_conversion.vhd.j2}:\\
+    \textit{\{\{o.type\}\}} => object type used in a correlation condition.\\ 
+    \textit{\{\{o.bx\}\}} => bunch-crossing within $\pm$2 of object type used in a correlation condition.\\
+    \end{itemize}
+\end{itemize}
+\begin{itemize}
+\item \textit{{\%- include "instances/instances/instance\_correlation\_conditions\_differences.vhd.j2"\%}} => replace with strings defined in template:\\
+\texttt{instance\_correlation\_conditions\_differences.vhd.j2}.\\ 
+Instantiations of differences for correlation conditions (used for DETA, DPHI and DR) - once for correlation conditions with two object types in certain bunch-crossings
+    \begin{itemize}
+    \item Parameters in template\\ \texttt{instance\_correlation\_conditions\_differences.vhd.j2}:\\
+    \textit{\{\{o1.type\}\}} => object type of object 1 of correlation condition.\\ 
+    \textit{\{\{o2.type\}\}} => object type of object 2 of correlation condition.\\ 
+    \textit{\{\{o1.bx\}\}} => bunch-crossing within $\pm$2 of object 1.\\
+    \textit{\{\{o2.bx\}\}} => bunch-crossing within $\pm$2 of object 2.
+    \end{itemize}
+\end{itemize}
+\begin{itemize}
+\item \textit{{\%- include "instances/instance\_correlation\_conditions\_inv\_mass.vhd.j2"\%}} => replace with strings defined in template:\\
+\texttt{instance\_correlation\_conditions\_inv\_mass.vhd.j2}.\\ 
+Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for invariant mass) - once for correlation conditions with two object types in certain bunch-crossings
+    \begin{itemize}
+    \item Parameters in template\\ \texttt{instance\_correlation\_conditions\_inv\_mass.vhd.j2}:\\
+    \textit{\{\{o1.type\}\}} => object type of object 1 of correlation condition.\\ 
+    \textit{\{\{o2.type\}\}} => object type of object 2 of correlation condition.\\ 
+    \textit{\{\{o1.bx\}\}} => bunch-crossing within $\pm$2 of object 1.\\
+    \textit{\{\{o2.bx\}\}} => bunch-crossing within $\pm$2 of object 2.
+    \end{itemize}
+\end{itemize}
+\begin{itemize}
+\item \textit{{\%- include "instances/instance\_muon\_charge\_correlation.vhd.j2"\%}} => replace with string defined in template:\\
+\texttt{instance\_muon\_charge\_correlations.vhd.j2} only once in a certain bunch-crossing,
+if there is at least one DoubleMuon, TripleMuon or QuadMuon condition. Instantiations of muon charge correlations.
+    \begin{itemize}
+    \item Parameters in template\\ \texttt{instance\_muon\_charge\_correlations.vhd}:\\
+    \textit{\{\{o.bx\}\}} => bunch-crossing within $\pm$2.
+    \end{itemize}
+\end{itemize}
+\begin{itemize}
+\item \textit{{\%- include "instances/instance\_calo\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
+\texttt{instance\_calo\_condition.vhd.j2}.\\
+\item \textit{{\%- include "instances/instance\_muon\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
+\texttt{instance\_muon\_condition.vhd.j2}.\\
+\item \textit{{\%- include "instances/instance\_esums\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
+\texttt{instance\_esums\_condition.vhd.j2}.\\
+\item \textit{{\%- include "instances/instance\_calo\_calo\_correlation\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
+\texttt{instance\_calo\_calo\_correlation\_condition.vhd.j2}.\\
+\item \textit{{\%- include "instances/instance\_calo\_muon\_correlation\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
+\texttt{instance\_calo\_muon\_correlation\_condition.vhd.j2}.\\
+\item \textit{{\%- include "instances/instance\_muon\_muon\_correlation\_condition.vhd.j2"\%}} => replace with strings defined in template:\\
+\texttt{instance\_muon\_muon\_correlation\_condition.vhd.j2}.\\
+\item \textit{{\%- include "instances/instance\_algorithm.vhd.j2"\%}} => replace with strings defined in template:\\
+\texttt{instance\_algorithm.vhd.j2}.\\
+\end{itemize}
+
+\paragraph{Signal declarations}
+In the template of Global Trigger Logic module (\texttt{gtl\_module\_signals.vhd}), the inserting of signal declarations is specified by Jinja2 substitution parameters.
+
+\begin{itemize}
+\item \textit{{\%- include "signals/correlation\_conditions\_pt\_eta\_phi\_cos\_sin\_phi.vhd.j2"\%}} => replace with string defined in template:\\
+\texttt{signal\_correlation\_conditions\_pt\_eta\_phi\_cos\_sin\_phi.vhd.j2}.\\
+Insert template as often as an object type at a certain bunch-crossing is used in a correlation condition.
+    \begin{itemize}
+    \item Parameters in template\\ \texttt{signal\_correlation\_conditions\_pt\_eta\_phi\_cos\_sin\_phi.vhd.j2}:\\
+    \textit{\{\{o.type\}\}} => object type used in a correlation condition.\\ 
+    \textit{\{\{o.bx\}\}} => bunch-crossing within $\pm$2 of object type used in a correlation condition.\\
+    \end{itemize}
+\end{itemize}
+\begin{itemize}
+\item \textit{{\%- include "signals/signal\_correlation\_conditions\_differences.vhd.j2"\%}} => replace with string defined in template:\\
+\texttt{signal\_correlation\_conditions\_differences.vhd.j2}.\\
+Insert template once for correlation conditions of different object types and Bx combinations.    
+\begin{itemize}
+    \item Parameters in template\\ \texttt{signal\_correlation\_conditions\_differences.vhd.j2}:\\
+    \textit{\{\{o1.type\}\}} => object type of objects 1 used in a correlation condition.\\ 
+    \textit{\{\{o2.type\}\}} => object type of objects 2 used in a correlation condition.\\ 
+    \textit{\{\{o1.bx\}\}} => bunch-crossing within $\pm$2 of objects 1.\\
+    \textit{\{\{o2.bx\}\}} => bunch-crossing within $\pm$2 of objects 2.\\
+    \end{itemize}
+\end{itemize}
+\begin{itemize}
+\item \textit{{\%- include "signals/signal\_muon\_charge\_correlations.vhd.j2"\%}} => replace with string defined in template:\\
+\texttt{signal\_muon\_charge\_correlations.vhd} for at least one occurance of a DoubleMuon, TripleMuon or QuadMuon condition in a certain bunch-crossing.
+    \begin{itemize}
+    \item Parameters in template\\ \texttt{signal\_muon\_charge\_correlations.vhd.j2}:\\
+    \textit{\{\{bx1\}\}} => bunch-crossing within $\pm$2 of objects 1.\\
+    \textit{\{\{bx2\}\}} => bunch-crossing within $\pm$2 of objects 2.\\
+    \end{itemize}
+\end{itemize}
+\begin{itemize}
+    \item Parameters in template\\ \texttt{gtl\_module\_signals.vhd}:\\
+    \textit{\{\{ConditionName\}\}} => unique condition name given by physicist to TME.\\
+    \textit{\{\{AlgoName\}\}} => unique algorithm name given by physicist to TME.
+\end{itemize}
+
+\subsubsection{Global Trigger Logic package module - template for VHDL-Producer}
+\label{sec:gtl:gtl_pkg_tme}
+The Global Trigger Logic package module VHDL template (\texttt{gtl\_pkg\_tpl.vhd}) has parts which are replaced by the content of (\texttt{ugt\_constants.vhd}), the inserting of constants is done by Jinja2 substitution parameters.
+
+\subsubsection{Algorithms mapping module - template for VHDL-Producer}
+\label{sec:gtl:algo_mapping_tme}
+The template of Algorithms mapping module VHDL template (\texttt{instances/algo\_mapping\_rop\_tpl.vhd}) has parts which are replaced by the content of (\texttt{algo\_index.vhd}), the inserting is done by Jinja2 substitution parameters.
+
 \subsubsection{Calorimeter conditions - template for VHDL-Producer}\label{sec:gtl:calo_conditions_tme}
 A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_conditions.vhd} is given below (see Listing~\ref{lst:instance_calo_condition_vhd}).\\
 
@@ -2269,7 +2270,7 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_conditions.vh
 
 \subsubsection{Energy sum quantities conditions - template for VHDL-Producer}
 \label{sec:gtl:esums_conditions_tme}
-A VHDL-template for VHDL-Producer of instantiating\\ \texttt{esums\_conditions.vhd}\\ is given below (see Listing~\ref{lst:instance_esums_condition_vhd}).\\
+A VHDL-template for VHDL-Producer of instantiating \texttt{esums\_conditions.vhd} is given below (see Listing~\ref{lst:instance_esums_condition_vhd}).\\
 
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
 \lstinputlisting[label=lst:instance_esums_condition_vhd,language=VHDL,caption=Template of \texttt{esums\_conditions.vhd} for VHDL-Producer]{interfaces/instance_esums_condition.vhd.j2}
@@ -2300,7 +2301,7 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{esums\_conditions.v
 \clearpage
 
 \subsubsection{Muon conditions - template for VHDL-Producer}
-A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_conditions.vhd}\\ is given below (see Listing~\ref{lst:instance_muon_condition_vhd}).\\
+A VHDL-template for VHDL-Producer of instantiating \texttt{muon\_conditions.vhd} is given below (see Listing~\ref{lst:instance_muon_condition_vhd}).\\
 
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
 \lstinputlisting[label=lst:instance_muon_condition_vhd,language=VHDL,caption=Template of \texttt{muon\_conditions.vhd} for VHDL-Producer]{interfaces/instance_muon_condition.vhd.j2}
@@ -2340,7 +2341,7 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_conditions.vh
 \clearpage
 
 \subsubsection{Calo Calo Correlation condition - template for VHDL-Producer}
-A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_calo\_correlation\_condition.vhd}\\ is given below (see Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd}).\\
+A VHDL-template for VHDL-Producer of instantiating \texttt{calo\_calo\_correlation\_condition.vhd} is given below (see Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd}).\\
 
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
 \lstinputlisting[label=lst:instance_calo_calo_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{calo\_calo\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_calo_calo_correlation_condition.vhd.j2}
@@ -2353,8 +2354,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_calo\_correla
 \endhead
 \verb|vhdl_signal| & condition name.\\
 \verb|objectsInSameBx| & valid strings are 'true' and 'false' - 'true' for data with same Bx.\\
-\verb|deltaEta.enabled| & valid strings are 'true' and 'false' - 'true' for use of DETA.\\
-\verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of DPHI.\\
+\verb|deltaEta.enabled| & valid strings are 'true' and 'false' - 'true' for use of $\Delta\eta$.\\
+\verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of $\Delta\varphi$.\\
 \verb|deltaR.enabled| & valid strings are 'true' and 'false' - 'true' for use of DR.\\
 \verb|mass.enabled| & valid strings are 'true' and 'false' - 'true' for use of MASS.\\
 \verb|mass.type| & valid strings are 'INVARIANT\_MASS\_TYPE' and 'TRANSVERSE\_MASS\_TYPE'.\\
@@ -2382,7 +2383,7 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_calo\_correla
 \clearpage
 
 \subsubsection{Calo Muon Correlation condition - template for VHDL-Producer}
-A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_muon\_correlation\_condition.vhd}\\ is given below (see Listing~\ref{lst:instance_calo_muon_correlation_condition_vhd}).\\
+A VHDL-template for VHDL-Producer of instantiating \texttt{calo\_muon\_correlation\_condition.vhd} is given below (see Listing~\ref{lst:instance_calo_muon_correlation_condition_vhd}).\\
 
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
 \lstinputlisting[label=lst:instance_calo_muon_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{calo\_muon\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_calo_muon_correlation_condition.vhd.j2}
@@ -2394,8 +2395,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_muon\_correla
 \hline 
 \endhead
 \verb|vhdl_signal| & condition name.\\
-\verb|deltaEta.enabled| & valid strings are 'true' and 'false' - 'true' for use of DETA.\\
-\verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of DPHI.\\
+\verb|deltaEta.enabled| & valid strings are 'true' and 'false' - 'true' for use of $\Delta\eta$.\\
+\verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of $\Delta\varphi$.\\
 \verb|deltaR.enabled| & valid strings are 'true' and 'false' - 'true' for use of DR.\\
 \verb|mass.enabled| & valid strings are 'true' and 'false' - 'true' for use of MASS.\\
 \verb|mass.type| & valid strings are 'INVARIANT\_MASS\_TYPE' and 'TRANSVERSE\_MASS\_TYPE'.\\
@@ -2428,7 +2429,7 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_muon\_correla
 \clearpage
 
 \subsubsection{Muon Muon Correlation condition - template for VHDL-Producer}
-A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_muon\_correlation\_condition.vhd}\\ is given below (see Listing~\ref{lst:instance_muon_muon_correlation_condition_vhd}).\\
+A VHDL-template for VHDL-Producer of instantiating \texttt{muon\_muon\_correlation\_condition.vhd} is given below (see Listing~\ref{lst:instance_muon_muon_correlation_condition_vhd}).\\
 
 %% "automatic generation" of listings (see /scripts/extract_entities.sh)
 \lstinputlisting[label=lst:instance_muon_muon_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{muon\_muon\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_muon_muon_correlation_condition.vhd.j2}
@@ -2441,8 +2442,8 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_muon\_correla
 \endhead
 \verb|vhdl_signal| & condition name.\\
 \verb|objectsInSameBx| & valid strings are 'true' and 'false' - 'true' for data with same Bx.\\
-\verb|deltaEta.enabled| & valid strings are 'true' and 'false' - 'true' for use of DETA.\\
-\verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of DPHI.\\
+\verb|deltaEta.enabled| & valid strings are 'true' and 'false' - 'true' for use of $\Delta\eta$.\\
+\verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of $\Delta\varphi$.\\
 \verb|deltaR.enabled| & valid strings are 'true' and 'false' - 'true' for use of DR.\\
 \verb|mass.enabled| & valid strings are 'true' and 'false' - 'true' for use of MASS.\\
 \verb|mass.type| & valid strings are 'INVARIANT\_MASS\_TYPE' and 'TRANSVERSE\_MASS\_TYPE'.\\
@@ -2472,82 +2473,82 @@ A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_muon\_correla
 \label{tab:gtl:explanation_instance_muon_muon_correlation_condition_vhd}
 \end{longtable}
 
-% \subsubsection{Calo Esums Correlation condition - template for VHDL-Producer}
-% A VHDL-template for VHDL-Producer of instantiating\\ \texttt{calo\_esums\_correlation\_condition.vhd}\\ is given below (see Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd}).\\
-% 
-% %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-% \lstinputlisting[label=lst:instance_calo_esums_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{calo\_esums\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_calo_esums_correlation_condition.vhd.j2}
-% 
-% \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
-% \caption{Explanation of Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd}}\\
-% \hline 
-% {Item} & {Explanation}\\
-% \hline 
-% \endhead
-% \verb|vhdl_signal| & condition name.\\
-% \verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of DPHI.\\
-% \verb|mass.enabled| & valid strings are 'true' and 'false' - 'true' for use of MASS.\\
-% \verb|mass.type| & valid string: 'TRANSVERSE\_MASS\_TYPE'.\\
-% \verb|twoBodyPt.enabled| & valid strings are 'true' and 'false' - 'true' for use of two-body pt.\\
-% \verb|sliceLow| & low value of an object slice.\\
-% \verb|sliceHigh| & high value of an object slice.\\
-% \verb|operator| & valid strings are 'true' and 'false' - 'true' for greater/equal-, 'false' for equal-mode of \et comparator.\\
-% \verb|threshold| & requirements for et\_thresholds (16-bit values, hex notation). Valid values depending on the scales of \et.\\
-% \verb|nrEtaWindows| & number of $\eta$ cuts.\\
-% \verb|etaW1UpperLimit, ...| & limits for "window"-comparators for $\eta$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\eta$.\\
-% \verb|phiFullRange| & set full range of $\varphi$ (boolean).\\
-% \verb|phiW1UpperLimit, ...| & limits for "window"-comparators for $\varphi$ (16-bit values, hex notation). Valid values depending on the scales for $\varphi$.\\
-% \verb|[phiW2Ignore| & ignore "window"-comparator 2 of $\varphi$ (boolean).\\
-% \verb|isolationLUT| & LUT (4 bits) of isolation).\\
-% \verb|deltaPhi.upper, ...| & limits for "window"-comparator for comparison of differences in $\varphi$ (hex notation). Valid values depending on the scales for $\varphi$.\\
-% \verb|mass.upper, ...| & limits for "window"-comparator for comparison of $\frac{M^2}{2}$ (hex notation).\\
-% \verb|twoBodyPt.threshold| & value of threshold for two-body pt comparison.\\
-% \verb|bx| & valid strings are 'p2', 'p1', '0', 'm1' and 'm2'. This indicates which data in a range of plus/minus 2 bunch-crossing is used in the condition.\\
-% \hline 
-% \label{tab:gtl:explanation_instance_calo_calo_correlation_condition_vhd}
-% \end{longtable}
-% 
-% 
-% \subsubsection{Muon Esums Correlation condition - template for VHDL-Producer}
-% A VHDL-template for VHDL-Producer of instantiating\\ \texttt{muon\_esums\_correlation\_condition.vhd}\\ is given below (see Listing~\ref{lst:instance_muon_esums_correlation_condition_vhd}).\\
-% 
-% %% "automatic generation" of listings (see /scripts/extract_entities.sh)
-% \lstinputlisting[label=lst:instance_muon_esums_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{muon\_esums\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_muon_esums_correlation_condition.vhd.j2}
-% 
-% \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
-% \caption{Explanation of Listing~\ref{lst:instance_calo_muon_correlation_condition_vhd}}\\
-% \hline 
-% {Item} & {Explanation}\\
-% \hline 
-% \endhead
-% \verb|vhdl_signal| & condition name.\\
-% \verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of DPHI.\\
-% \verb|mass.enabled| & valid strings are 'true' and 'false' - 'true' for use of MASS.\\
-% \verb|mass.type| & valid string: 'TRANSVERSE\_MASS\_TYPE'.\\
-% \verb|twoBodyPt.enabled| & valid strings are 'true' and 'false' - 'true' for use of two-body pt.\\
-% \verb|sliceLow| & low value of an object slice.\\
-% \verb|sliceHigh| & high value of an object slice.\\
-% \verb|operator| & valid strings are 'true' and 'false' - 'true' for greater/equal-, 'false' for equal-mode of \et comparator.\\
-% \verb|threshold| & requirements for pt\_thresholds and et\_thresholds (16-bit values, hex notation). Valid values depending on the scales of \et.\\
-% \verb|nrEtaWindows| & number of $\eta$ cuts.\\
-% \verb|etaW1UpperLimit, ...| & limits for "window"-comparators for $\eta$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\eta$.\\
-% \verb|phiFullRange| & set full range of $\varphi$ (boolean).\\
-% \verb|phiW1UpperLimit, ...| & limits for "window"-comparators for $\varphi$ (16-bit values, hex notation). Valid values depending on the scales for $\varphi$.\\
-% \verb|[phiW2Ignore| & ignore "window"-comparator 2 of $\varphi$ (boolean).\\
-% \verb|charge| & requested charge. Valid strings are 'pos' ("positive charge") and 'neg' ("negative charge") and 'ign' ("ignore").\\
-% \verb|qualityLUT| & LUT (16 bits) of quality.\\
-% \verb|isolationLUT| & LUT (4 bits) of isolation).\\
-% \verb|uptCutSel| & set use of unconstrained \pt.\\
-% \verb|uptUpperLimit, ...| & limits for unconstrained \pt.\\
-% \verb|impactParameterLUT| & LUT (4 bits) of impact parameter).\\
-% \verb|deltaPhi.upper, ...| & limits for "window"-comparator for comparison of differences in $\varphi$ (hex notation). Valid values depending on the scales for $\varphi$.\\
-% \verb|mass.upper, ...| & limits for "window"-comparator for comparison of $\frac{M^2}{2}$ (hex notation).\\
-% \verb|twoBodyPt.threshold| & value of threshold for two-body pt comparison.\\
-% \verb|bx| & valid strings are 'p2', 'p1', '0', 'm1' and 'm2'. This indicates which data in a range of plus/minus 2 bunch-crossing is used in the condition.\\
-% \hline 
-% \label{tab:gtl:explanation_instance_calo_muon_correlation_condition_vhd}
-% \end{longtable}
-% 
+\subsubsection{Calo Esums Correlation condition - template for VHDL-Producer}
+A VHDL-template for VHDL-Producer of instantiating \texttt{calo\_esums\_correlation\_condition.vhd} is given below (see Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd}).\\
+
+%% "automatic generation" of listings (see /scripts/extract_entities.sh)
+\lstinputlisting[label=lst:instance_calo_esums_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{calo\_esums\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_calo_esums_correlation_condition.vhd.j2}
+
+\begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
+\caption{Explanation of Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd}}\\
+\hline 
+{Item} & {Explanation}\\
+\hline 
+\endhead
+\verb|vhdl_signal| & condition name.\\
+\verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of DPHI.\\
+\verb|mass.enabled| & valid strings are 'true' and 'false' - 'true' for use of MASS.\\
+\verb|mass.type| & valid string: 'TRANSVERSE\_MASS\_TYPE'.\\
+\verb|twoBodyPt.enabled| & valid strings are 'true' and 'false' - 'true' for use of two-body pt.\\
+\verb|sliceLow| & low value of an object slice.\\
+\verb|sliceHigh| & high value of an object slice.\\
+\verb|operator| & valid strings are 'true' and 'false' - 'true' for greater/equal-, 'false' for equal-mode of \et comparator.\\
+\verb|threshold| & requirements for et\_thresholds (16-bit values, hex notation). Valid values depending on the scales of \et.\\
+\verb|nrEtaWindows| & number of $\eta$ cuts.\\
+\verb|etaW1UpperLimit, ...| & limits for "window"-comparators for $\eta$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\eta$.\\
+\verb|phiFullRange| & set full range of $\varphi$ (boolean).\\
+\verb|phiW1UpperLimit, ...| & limits for "window"-comparators for $\varphi$ (16-bit values, hex notation). Valid values depending on the scales for $\varphi$.\\
+\verb|[phiW2Ignore| & ignore "window"-comparator 2 of $\varphi$ (boolean).\\
+\verb|isolationLUT| & LUT (4 bits) of isolation).\\
+\verb|deltaPhi.upper, ...| & limits for "window"-comparator for comparison of differences in $\varphi$ (hex notation). Valid values depending on the scales for $\varphi$.\\
+\verb|mass.upper, ...| & limits for "window"-comparator for comparison of $\frac{M^2}{2}$ (hex notation).\\
+\verb|twoBodyPt.threshold| & value of threshold for two-body pt comparison.\\
+\verb|bx| & valid strings are 'p2', 'p1', '0', 'm1' and 'm2'. This indicates which data in a range of plus/minus 2 bunch-crossing is used in the condition.\\
+\hline 
+\label{tab:gtl:explanation_instance_calo_calo_correlation_condition_vhd}
+\end{longtable}
+
+
+\subsubsection{Muon Esums Correlation condition - template for VHDL-Producer}
+A VHDL-template for VHDL-Producer of instantiating \texttt{muon\_esums\_correlation\_condition.vhd} is given below (see Listing~\ref{lst:instance_muon_esums_correlation_condition_vhd}).\\
+
+%% "automatic generation" of listings (see /scripts/extract_entities.sh)
+\lstinputlisting[label=lst:instance_muon_esums_correlation_condition_vhd,language=VHDL,caption=Template of \texttt{muon\_esums\_correlation\_condition.vhd} for VHDL-Producer]{interfaces/instance_muon_esums_correlation_condition.vhd.j2}
+
+\begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
+\caption{Explanation of Listing~\ref{lst:instance_calo_muon_correlation_condition_vhd}}\\
+\hline 
+{Item} & {Explanation}\\
+\hline 
+\endhead
+\verb|vhdl_signal| & condition name.\\
+\verb|deltaPhi.enabled| & valid strings are 'true' and 'false' - 'true' for use of DPHI.\\
+\verb|mass.enabled| & valid strings are 'true' and 'false' - 'true' for use of MASS.\\
+\verb|mass.type| & valid string: 'TRANSVERSE\_MASS\_TYPE'.\\
+\verb|twoBodyPt.enabled| & valid strings are 'true' and 'false' - 'true' for use of two-body pt.\\
+\verb|sliceLow| & low value of an object slice.\\
+\verb|sliceHigh| & high value of an object slice.\\
+\verb|operator| & valid strings are 'true' and 'false' - 'true' for greater/equal-, 'false' for equal-mode of \et comparator.\\
+\verb|threshold| & requirements for pt\_thresholds and et\_thresholds (16-bit values, hex notation). Valid values depending on the scales of \et.\\
+\verb|nrEtaWindows| & number of $\eta$ cuts.\\
+\verb|etaW1UpperLimit, ...| & limits for "window"-comparators for $\eta$ (4x 16-bit values, hex notation). Valid values depending on the scales for $\eta$.\\
+\verb|phiFullRange| & set full range of $\varphi$ (boolean).\\
+\verb|phiW1UpperLimit, ...| & limits for "window"-comparators for $\varphi$ (16-bit values, hex notation). Valid values depending on the scales for $\varphi$.\\
+\verb|[phiW2Ignore| & ignore "window"-comparator 2 of $\varphi$ (boolean).\\
+\verb|charge| & requested charge. Valid strings are 'pos' ("positive charge") and 'neg' ("negative charge") and 'ign' ("ignore").\\
+\verb|qualityLUT| & LUT (16 bits) of quality.\\
+\verb|isolationLUT| & LUT (4 bits) of isolation).\\
+\verb|uptCutSel| & set use of unconstrained \pt.\\
+\verb|uptUpperLimit, ...| & limits for unconstrained \pt.\\
+\verb|impactParameterLUT| & LUT (4 bits) of impact parameter).\\
+\verb|deltaPhi.upper, ...| & limits for "window"-comparator for comparison of differences in $\varphi$ (hex notation). Valid values depending on the scales for $\varphi$.\\
+\verb|mass.upper, ...| & limits for "window"-comparator for comparison of $\frac{M^2}{2}$ (hex notation).\\
+\verb|twoBodyPt.threshold| & value of threshold for two-body pt comparison.\\
+\verb|bx| & valid strings are 'p2', 'p1', '0', 'm1' and 'm2'. This indicates which data in a range of plus/minus 2 bunch-crossing is used in the condition.\\
+\hline 
+\label{tab:gtl:explanation_instance_calo_muon_correlation_condition_vhd}
+\end{longtable}
+
 
 \clearpage
 

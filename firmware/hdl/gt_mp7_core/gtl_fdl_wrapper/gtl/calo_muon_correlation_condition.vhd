@@ -3,6 +3,7 @@
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and muon.
 
 -- Version history:
+-- HB 2020-10-09: added parameter for invariant mass div by delta R comparison.
 -- HB 2020-08-27: implemented invariant mass div by delta R comparison.
 -- HB 2020-06-09: implemented new muon structure with "unconstraint pt" and "impact parameter".
 -- HB 2019-06-17: updated for "five eta cuts".
@@ -32,6 +33,7 @@ entity calo_muon_correlation_condition is
         mass_type : natural;
         twobody_pt_cut: boolean;
 
+        nr_calo_objects: natural := NR_EG_OBJECTS;
         calo_object_low: natural;
         calo_object_high: natural;
         et_ge_mode_calo: boolean;
@@ -97,6 +99,7 @@ entity calo_muon_correlation_condition is
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
 
+        mass_div_dr_vector_width: positive := 84;
         mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         
         pt1_width: positive := 12; 
@@ -123,7 +126,7 @@ entity calo_muon_correlation_condition is
         cos_phi_2_integer : in sin_cos_integer_array;
         sin_phi_1_integer : in sin_cos_integer_array;
         sin_phi_2_integer : in sin_cos_integer_array;
-        mass_div_dr : in mass_div_dr_vector_array := (others => (others => (others => '0')));
+        mass_div_dr : in mass_div_dr_vector_array(0 to nr_calo_objects-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
         condition_o: out std_logic
     );
 end calo_muon_correlation_condition; 
@@ -203,7 +206,7 @@ begin
     end generate delta_l_1;
 
 -- HB 2020-08-27: comparison for invariant mass divided by delta R.
-    mass_div_dr_sel: if mass_cut and mass_type == INVARIANT_MASS_DIV_DR_TYPE generate
+    mass_div_dr_sel: if mass_cut and mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
         mass_l_1: for i in calo_object_low to calo_object_high generate 
             mass_l_2: for j in muon_object_low to muon_object_high generate
                 comp_i: entity work.mass_div_dr_comp

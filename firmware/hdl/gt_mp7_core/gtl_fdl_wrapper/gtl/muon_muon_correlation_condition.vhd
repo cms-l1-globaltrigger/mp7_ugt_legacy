@@ -3,6 +3,7 @@
 -- Correlation Condition module for muon objects.
 
 -- Version history:
+-- HB 2020-10-09: added parameter for invariant mass div by delta R comparison.
 -- HB 2020-08-27: implemented invariant mass div by delta R comparison.
 -- HB 2020-08-10: inserted "twobody unconstraint pt".
 -- HB 2020-06-09: implemented new muon structure with "unconstraint pt" and "impact parameter".
@@ -114,6 +115,7 @@ entity muon_muon_correlation_condition is
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
 
+        mass_div_dr_vector_width: positive := MU_MU_MASS_DIV_DR_VECTOR_WIDTH;
         mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         
         pt_width: positive := 12; 
@@ -145,7 +147,7 @@ entity muon_muon_correlation_condition is
         cos_phi_2_integer : in sin_cos_integer_array;
         sin_phi_1_integer : in sin_cos_integer_array;
         sin_phi_2_integer : in sin_cos_integer_array;
-        mass_div_dr : in mass_div_dr_vector_array := (others => (others => (others => '0')));
+        mass_div_dr : in mass_div_dr_vector_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
         condition_o: out std_logic
     );
 end muon_muon_correlation_condition; 
@@ -305,10 +307,10 @@ begin
     end generate delta_l_1;
 
 -- HB 2020-08-27: comparison for invariant mass divided by delta R.
-    mass_div_dr_sel: if mass_cut and mass_type == INVARIANT_MASS_DIV_DR_TYPE generate
+    mass_div_dr_sel: if mass_cut and mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
         mass_l_1: for i in muon1_object_low to muon1_object_high generate 
-            mass_l_1: for j in muon2_object_low to muon2_object_high generate
-                mass_comp_l1: if (obj_type_calo1 = obj_type_calo2) and (same_bx = true) and j>i generate
+            mass_l_2: for j in muon2_object_low to muon2_object_high generate
+                mass_comp_l1: if same_bx = true and j>i generate
                     comp_i: entity work.mass_div_dr_comp
                         generic map(
                             mass_div_dr_vector_width,
@@ -321,7 +323,7 @@ begin
                     mass_div_dr_comp_pipe(i,j) <= mass_div_dr_comp_t(i,j);
                     mass_div_dr_comp_pipe(j,i) <= mass_div_dr_comp_t(i,j);
                 end generate mass_comp_l1;
-                mass_comp_l2: if (obj_type_calo1 /= obj_type_calo2) or (same_bx = false) generate
+                mass_comp_l2: if same_bx = false generate
                     comp_i: entity work.mass_div_dr_comp
                         generic map(
                             mass_div_dr_vector_width,

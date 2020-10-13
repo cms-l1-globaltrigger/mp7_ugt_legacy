@@ -127,10 +127,10 @@ entity calo_calo_correlation_condition is
         pt2 : in diff_inputs_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
         cosh_deta : in calo_cosh_cos_vector_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
         cos_dphi : in calo_cosh_cos_vector_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
-        cos_phi_1_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => 0)));
-        cos_phi_2_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => 0)));
-        sin_phi_1_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => 0)));
-        sin_phi_2_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => 0)));
+        cos_phi_1_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => 0));
+        cos_phi_2_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => 0));
+        sin_phi_1_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => 0));
+        sin_phi_2_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => 0));
         mass_div_dr : in mass_div_dr_vector_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
         condition_o: out std_logic
     );

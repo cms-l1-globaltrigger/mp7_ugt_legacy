@@ -42,6 +42,7 @@ entity calo_calo_correlation_condition is
         mass_type : natural := INVARIANT_MASS_TYPE;
         twobody_pt_cut: boolean := false;
 
+        nr_calo1_objects: natural := NR_EG_OBJECTS;
         calo1_object_low: natural := 0;
         calo1_object_high: natural := 11;
         et_ge_mode_calo1: boolean := true;
@@ -66,6 +67,7 @@ entity calo_calo_correlation_condition is
         phi_w2_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_calo1: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '0');
 
+        nr_calo2_objects: natural := NR_JET_OBJECTS;
         calo2_object_low: natural := 0;
         calo2_object_high: natural := 11;
         et_ge_mode_calo2: boolean := true;
@@ -102,8 +104,6 @@ entity calo_calo_correlation_condition is
         mass_upper_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_lower_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        nr_calo1_objects: natural := NR_EG_OBJECTS;
-        nr_calo2_objects: natural := NR_JET_OBJECTS;
         mass_div_dr_vector_width: positive := EG_JET_MASS_DIV_DR_VECTOR_WIDTH;
         mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         
@@ -121,16 +121,16 @@ entity calo_calo_correlation_condition is
         lhc_clk: in std_logic;
         calo1_data_i: in calo_objects_array;
         calo2_data_i: in calo_objects_array;
-        diff_eta: in deta_dphi_vector_array := (others => (others => (others => '0')));
-        diff_phi: in deta_dphi_vector_array := (others => (others => (others => '0')));
-        pt1 : in diff_inputs_array := (others => (others => (others => '0')));
-        pt2 : in diff_inputs_array := (others => (others => (others => '0')));
-        cosh_deta : in calo_cosh_cos_vector_array := (others => (others => (others => '0')));
-        cos_dphi : in calo_cosh_cos_vector_array := (others => (others => (others => '0')));
-        cos_phi_1_integer : in sin_cos_integer_array := (others => (others => (others => 0)));
-        cos_phi_2_integer : in sin_cos_integer_array := (others => (others => (others => 0)));
-        sin_phi_1_integer : in sin_cos_integer_array := (others => (others => (others => 0)));
-        sin_phi_2_integer : in sin_cos_integer_array := (others => (others => (others => 0)));
+        diff_eta: in deta_dphi_vector_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
+        diff_phi: in deta_dphi_vector_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
+        pt1 : in diff_inputs_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
+        pt2 : in diff_inputs_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
+        cosh_deta : in calo_cosh_cos_vector_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
+        cos_dphi : in calo_cosh_cos_vector_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
+        cos_phi_1_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => 0)));
+        cos_phi_2_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => 0)));
+        sin_phi_1_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => 0)));
+        sin_phi_2_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => 0)));
         mass_div_dr : in mass_div_dr_vector_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
         condition_o: out std_logic
     );

@@ -113,18 +113,10 @@ entity muon_muon_correlation_condition is
         mass_upper_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_lower_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        mass_div_dr_vector_width: positive := MU_MU_MASS_DIV_DR_VECTOR_WIDTH;
         mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         
-        pt_width: positive := 12; 
-        upt_width: positive := 12; 
-        mass_cosh_cos_precision : positive := MU_MU_COSH_COS_PRECISION;
-        cosh_cos_width: positive := MU_MU_COSH_COS_VECTOR_WIDTH;
-
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         upt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION;
 
         same_bx: boolean 
     );
@@ -132,8 +124,8 @@ entity muon_muon_correlation_condition is
         lhc_clk: in std_logic;
         muon1_data_i: in muon_objects_array;
         muon2_data_i: in muon_objects_array;
-        ls_charcorr_double: in muon_charcorr_double_array;
-        os_charcorr_double: in muon_charcorr_double_array;
+        ls_charcorr_double: in muon_charcorr_double_array := (others => (others => '0'));
+        os_charcorr_double: in muon_charcorr_double_array := (others => (others => '0'));
         diff_eta: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
         diff_phi: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
@@ -207,16 +199,16 @@ begin
                             dr_lower_limit_vector => dr_lower_limit_vector,
                             mass_upper_limit_vector => mass_upper_limit,
                             mass_lower_limit_vector => mass_lower_limit,
-                            pt1_width => pt_width, 
-                            pt2_width => pt_width, 
-                            upt1_width => upt_width, 
-                            upt2_width => upt_width, 
-                            cosh_cos_precision => mass_cosh_cos_precision,
-                            cosh_cos_width => cosh_cos_width,
+                            pt1_width => MU_PT_VECTOR_WIDTH, 
+                            pt2_width => MU_PT_VECTOR_WIDTH, 
+                            upt1_width => MU_UPT_VECTOR_WIDTH, 
+                            upt2_width => MU_UPT_VECTOR_WIDTH, 
+                            cosh_cos_precision => MU_MU_COSH_COS_PRECISION,
+                            cosh_cos_width => MU_MU_COSH_COS_VECTOR_WIDTH,
                             pt_sq_threshold_vector => pt_sq_threshold_vector,
                             upt_sq_threshold_vector => upt_sq_threshold_vector,
-                            sin_cos_width => sin_cos_width,
-                            pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
+                            sin_cos_width => MUON_SIN_COS_VECTOR_WIDTH,
+                            pt_sq_sin_cos_precision => MU_MU_SIN_COS_PRECISION
                         )
                         port map(
                             diff_eta => diff_eta(i,j),
@@ -270,16 +262,16 @@ begin
                         dr_lower_limit_vector => dr_lower_limit_vector,
                         mass_upper_limit_vector => mass_upper_limit,
                         mass_lower_limit_vector => mass_lower_limit,
-                        pt1_width => pt_width, 
-                        pt2_width => pt_width, 
-                        upt1_width => upt_width, 
-                        upt2_width => upt_width, 
-                        cosh_cos_precision => mass_cosh_cos_precision,
-                        cosh_cos_width => cosh_cos_width,
+                        pt1_width => MU_PT_VECTOR_WIDTH, 
+                        pt2_width => MU_PT_VECTOR_WIDTH, 
+                        upt1_width => MU_UPT_VECTOR_WIDTH, 
+                        upt2_width => MU_UPT_VECTOR_WIDTH, 
+                        cosh_cos_precision => MU_MU_COSH_COS_PRECISION,
+                        cosh_cos_width => MU_MU_COSH_COS_VECTOR_WIDTH,
                         pt_sq_threshold_vector => pt_sq_threshold_vector,
                         upt_sq_threshold_vector => upt_sq_threshold_vector,
-                        sin_cos_width => sin_cos_width,
-                        pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
+                        sin_cos_width => MUON_SIN_COS_VECTOR_WIDTH,
+                        pt_sq_sin_cos_precision => MU_MU_SIN_COS_PRECISION
                     )
                     port map(
                         diff_eta => diff_eta(i,j),
@@ -312,11 +304,11 @@ begin
                 mass_comp_l1: if same_bx = true and j>i generate
                     comp_i: entity work.mass_div_dr_comp
                         generic map(
-                            mass_div_dr_vector_width,
+                            MU_MU_MASS_DIV_DR_VECTOR_WIDTH,
                             mass_div_dr_threshold 
                         )
                         port map(
-                            mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0),
+                            mass_div_dr(i,j)(MU_MU_MASS_DIV_DR_VECTOR_WIDTH-1 downto 0),
                             mass_div_dr_comp_t(i,j)
                         );
                     mass_div_dr_comp_pipe(i,j) <= mass_div_dr_comp_t(i,j);
@@ -325,11 +317,11 @@ begin
                 mass_comp_l2: if same_bx = false generate
                     comp_i: entity work.mass_div_dr_comp
                         generic map(
-                            mass_div_dr_vector_width,
+                            MU_MU_MASS_DIV_DR_VECTOR_WIDTH,
                             mass_div_dr_threshold 
                         )
                         port map(
-                            mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0),
+                            mass_div_dr(i,j)(MU_MU_MASS_DIV_DR_VECTOR_WIDTH-1 downto 0),
                             mass_div_dr_comp_pipe(i,j)
                         );
                 end generate mass_comp_l2;

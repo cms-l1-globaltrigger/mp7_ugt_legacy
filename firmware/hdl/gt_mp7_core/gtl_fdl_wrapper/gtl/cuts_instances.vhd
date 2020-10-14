@@ -43,13 +43,13 @@ entity cuts_instances is
         pt2_width: positive := 12; 
         upt1_width: positive := 12; 
         upt2_width: positive := 12; 
-        cosh_cos_precision : positive := EG_MUON_COSH_COS_PRECISION;
-        cosh_cos_width: positive := CALO_MUON_COSH_COS_VECTOR_WIDTH;
+        cosh_cos_precision : positive := EG_EG_COSH_COS_PRECISION;
+        cosh_cos_width: positive := EG_EG_COSH_COS_VECTOR_WIDTH;
 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         upt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := EG_MU_SIN_COS_PRECISION
+        sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
+        pt_sq_sin_cos_precision : positive := EG_EG_SIN_COS_PRECISION
 
     );
     port(

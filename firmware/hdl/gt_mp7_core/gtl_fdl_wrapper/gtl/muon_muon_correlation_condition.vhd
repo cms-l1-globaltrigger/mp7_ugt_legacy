@@ -33,16 +33,6 @@ use work.gtl_pkg.all;
 
 entity muon_muon_correlation_condition is
      generic(
-        same_bx: boolean; 
-
-        deta_cut: boolean := false;
-        dphi_cut: boolean := false;
-        dr_cut: boolean := false;
-        mass_cut: boolean := false;
-        mass_type : natural := INVARIANT_MASS_TYPE;
-        twobody_pt_cut: boolean := false;
-        twobody_upt_cut: boolean := false;
-
         muon1_object_low: natural := 0;
         muon1_object_high: natural := 7;
         pt_ge_mode_muon1: boolean := true;
@@ -58,7 +48,7 @@ entity muon_muon_correlation_condition is
         eta_w4_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_full_range_muon1: boolean := false;
+        phi_full_range_muon1: boolean := true;
         phi_w1_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_ignore_muon1: boolean := true;
@@ -87,7 +77,7 @@ entity muon_muon_correlation_condition is
         eta_w4_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_full_range_muon2: boolean := false;
+        phi_full_range_muon2: boolean := true;
         phi_w1_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_ignore_muon2: boolean := true;
@@ -102,6 +92,14 @@ entity muon_muon_correlation_condition is
         ip_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0) := (others => '0');
 
         requested_charge_correlation: string(1 to 2) := "ig";
+
+        deta_cut: boolean := false;
+        dphi_cut: boolean := false;
+        dr_cut: boolean := false;
+        mass_cut: boolean := false;
+        mass_type : natural := INVARIANT_MASS_TYPE;
+        twobody_pt_cut: boolean := false;
+        twobody_upt_cut: boolean := false;
 
         diff_eta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
         diff_eta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -126,8 +124,9 @@ entity muon_muon_correlation_condition is
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         upt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION
+        pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION;
 
+        same_bx: boolean 
     );
     port(
         lhc_clk: in std_logic;

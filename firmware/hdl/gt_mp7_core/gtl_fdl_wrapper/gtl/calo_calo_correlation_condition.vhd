@@ -33,21 +33,12 @@ use work.gtl_pkg.all;
 
 entity calo_calo_correlation_condition is
     generic(
-        same_bx: boolean := false; 
-    
-        deta_cut: boolean := false;
-        dphi_cut: boolean := false;
-        dr_cut: boolean := false;
-        mass_cut: boolean := false;
-        mass_type : natural := INVARIANT_MASS_TYPE;
-        twobody_pt_cut: boolean := false;
-
         nr_calo1_objects: natural := NR_EG_OBJECTS;
         calo1_object_low: natural := 0;
         calo1_object_high: natural := 11;
-        et_ge_mode_calo1: boolean := true;
+        pt_ge_mode_calo1: boolean := true;
         obj_type_calo1: natural := EG_TYPE;
-        et_threshold_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        pt_threshold_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_calo1 : natural := 0;
         eta_w1_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w1_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -59,10 +50,10 @@ entity calo_calo_correlation_condition is
         eta_w4_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_full_range_calo1: boolean := false;
+        phi_full_range_calo1: boolean := true;
         phi_w1_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_w2_ignore_calo1: boolean := false;
+        phi_w2_ignore_calo1: boolean := true;
         phi_w2_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_calo1: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '0');
@@ -70,9 +61,9 @@ entity calo_calo_correlation_condition is
         nr_calo2_objects: natural := NR_JET_OBJECTS;
         calo2_object_low: natural := 0;
         calo2_object_high: natural := 11;
-        et_ge_mode_calo2: boolean := true;
+        pt_ge_mode_calo2: boolean := true;
         obj_type_calo2: natural := JET_TYPE;
-        et_threshold_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        pt_threshold_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_calo2 : natural := 0;
         eta_w1_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w1_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -84,13 +75,20 @@ entity calo_calo_correlation_condition is
         eta_w4_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_full_range_calo2: boolean := false;
+        phi_full_range_calo2: boolean := true;
         phi_w1_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_w2_ignore_calo2: boolean := false;
+        phi_w2_ignore_calo2: boolean := true;
         phi_w2_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_calo2: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '0');
+
+        deta_cut: boolean := false;
+        dphi_cut: boolean := false;
+        dr_cut: boolean := false;
+        mass_cut: boolean := false;
+        mass_type : natural := INVARIANT_MASS_TYPE;
+        twobody_pt_cut: boolean := false;
 
         diff_eta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
         diff_eta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -114,8 +112,9 @@ entity calo_calo_correlation_condition is
 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := EG_EG_SIN_COS_PRECISION
+        pt_sq_sin_cos_precision : positive := EG_EG_SIN_COS_PRECISION;
 
+        same_bx: boolean := false 
     );
     port(
         lhc_clk: in std_logic;
@@ -321,8 +320,8 @@ begin
     -- Instance of comparators for calorimeter objects.
     calo1_obj_l: for i in calo1_object_low to calo1_object_high generate
         calo1_comp_i: entity work.calo_comparators
-            generic map(et_ge_mode_calo1, obj_type_calo1,
-                et_threshold_calo1,
+            generic map(pt_ge_mode_calo1, obj_type_calo1,
+                pt_threshold_calo1,
                 nr_eta_windows_calo1,
                 eta_w1_upper_limit_calo1,
                 eta_w1_lower_limit_calo1,
@@ -347,8 +346,8 @@ begin
 
     calo2_obj_l: for i in calo2_object_low to calo2_object_high generate
         calo2_comp_i: entity work.calo_comparators
-            generic map(et_ge_mode_calo2, obj_type_calo2,
-                et_threshold_calo2,
+            generic map(pt_ge_mode_calo2, obj_type_calo2,
+                pt_threshold_calo2,
                 nr_eta_windows_calo2,
                 eta_w1_upper_limit_calo2,
                 eta_w1_lower_limit_calo2,

@@ -26,19 +26,11 @@ use work.gtl_pkg.all;
 
 entity calo_muon_correlation_condition is
      generic(
-        deta_cut: boolean := false;
-        dphi_cut: boolean := false;
-        dr_cut: boolean := false;
-        mass_cut: boolean := false;
-        mass_type : natural := INVARIANT_MASS_TYPE;
-        twobody_pt_cut: boolean := false;
-
-        nr_calo_objects: natural := NR_EG_OBJECTS;
         calo_object_low: natural := 0;
         calo_object_high: natural := 11;
-        et_ge_mode_calo: boolean := true;
+        pt_ge_mode_calo: boolean := true;
         obj_type_calo: natural := EG_TYPE;
-        et_threshold_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        pt_threshold_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_calo : natural := 0;
         eta_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -50,10 +42,10 @@ entity calo_muon_correlation_condition is
         eta_w4_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_full_range_calo: boolean := false;
+        phi_full_range_calo: boolean := true;
         phi_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_w2_ignore_calo: boolean := false;
+        phi_w2_ignore_calo: boolean := true;
         phi_w2_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_calo: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '0');
@@ -73,7 +65,7 @@ entity calo_muon_correlation_condition is
         eta_w4_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_full_range_muon: boolean := false;
+        phi_full_range_muon: boolean := true;
         phi_w1_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_ignore_muon: boolean := true;
@@ -86,6 +78,13 @@ entity calo_muon_correlation_condition is
         upt_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         upt_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         ip_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0) := (others => '0');
+
+        deta_cut: boolean := false;
+        dphi_cut: boolean := false;
+        dr_cut: boolean := false;
+        mass_cut: boolean := false;
+        mass_type : natural := INVARIANT_MASS_TYPE;
+        twobody_pt_cut: boolean := false;
 
         diff_eta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
         diff_eta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -109,8 +108,9 @@ entity calo_muon_correlation_condition is
 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := EG_MU_SIN_COS_PRECISION
+        pt_sq_sin_cos_precision : positive := EG_MU_SIN_COS_PRECISION;
 
+        nr_calo_objects: natural := NR_EG_OBJECTS
     );
     port(
         lhc_clk: in std_logic;
@@ -245,8 +245,8 @@ begin
 -- Instance of comparators for calorimeter objects.
     calo_obj_l: for i in calo_object_low to calo_object_high generate
         calo_comp_i: entity work.calo_comparators
-            generic map(et_ge_mode_calo, obj_type_calo,
-                et_threshold_calo,
+            generic map(pt_ge_mode_calo, obj_type_calo,
+                pt_threshold_calo,
                 nr_eta_windows_calo,
                 eta_w1_upper_limit_calo,
                 eta_w1_lower_limit_calo,

@@ -48,7 +48,7 @@ entity calo_muon_correlation_condition is
         phi_w2_ignore_calo: boolean := true;
         phi_w2_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        iso_lut_calo: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '0');
+        iso_lut_calo: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
 
         muon_object_low: natural := 0;
         muon_object_high: natural := 7;
@@ -72,12 +72,12 @@ entity calo_muon_correlation_condition is
         phi_w2_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         requested_charge_muon: string(1 to 3) := "ign";
-        qual_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0) := (others => '0');
-        iso_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0) := (others => '0');
+        qual_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0) := (others => '1');
+        iso_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0) := (others => '1');
         upt_cut_muon : boolean := false;
         upt_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         upt_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        ip_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0) := (others => '0');
+        ip_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0) := (others => '1');
 
         deta_cut: boolean := false;
         dphi_cut: boolean := false;

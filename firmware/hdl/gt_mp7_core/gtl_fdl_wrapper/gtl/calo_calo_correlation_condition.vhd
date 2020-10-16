@@ -56,7 +56,7 @@ entity calo_calo_correlation_condition is
         phi_w2_ignore_calo1: boolean := true;
         phi_w2_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        iso_lut_calo1: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '0');
+        iso_lut_calo1: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
 
         nr_calo2_objects: natural := NR_JET_OBJECTS;
         calo2_object_low: natural := 0;
@@ -81,7 +81,7 @@ entity calo_calo_correlation_condition is
         phi_w2_ignore_calo2: boolean := true;
         phi_w2_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        iso_lut_calo2: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '0');
+        iso_lut_calo2: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
 
         deta_cut: boolean := false;
         dphi_cut: boolean := false;

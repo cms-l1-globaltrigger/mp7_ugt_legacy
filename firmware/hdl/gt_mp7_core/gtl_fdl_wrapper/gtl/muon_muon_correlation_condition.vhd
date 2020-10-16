@@ -3,6 +3,7 @@
 -- Correlation Condition module for muon objects.
 
 -- Version history:
+-- HB 2020-10-16: removed parameters from generic.
 -- HB 2020-10-09: added parameter for invariant mass div by delta R comparison. Changed names for mass limits.
 -- HB 2020-08-27: implemented invariant mass div by delta R comparison.
 -- HB 2020-08-10: inserted "twobody unconstraint pt".
@@ -55,12 +56,12 @@ entity muon_muon_correlation_condition is
         phi_w2_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         requested_charge_muon1: string(1 to 3) := "ign";
-        qual_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0) := (others => '0');
-        iso_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0) := (others => '0');
+        qual_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0) := (others => '1');
+        iso_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0) := (others => '1');
         upt_cut_muon1 : boolean := false;
         upt_upper_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         upt_lower_limit_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        ip_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0) := (others => '0');
+        ip_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0) := (others => '1');
 
         muon2_object_low: natural := 0;
         muon2_object_high: natural := 7;
@@ -84,12 +85,12 @@ entity muon_muon_correlation_condition is
         phi_w2_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         requested_charge_muon2: string(1 to 3) := "ign";
-        qual_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0) := (others => '0');
-        iso_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0) := (others => '0');
+        qual_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0) := (others => '1');
+        iso_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0) := (others => '1');
         upt_cut_muon2 : boolean := false;
         upt_upper_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         upt_lower_limit_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        ip_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0) := (others => '0');
+        ip_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0) := (others => '1');
 
         requested_charge_correlation: string(1 to 2) := "ig";
 
@@ -163,12 +164,18 @@ architecture rtl of muon_muon_correlation_condition is
     signal muon2_obj_vs_templ : muon2_object_vs_template_array;
     signal muon2_obj_vs_templ_pipe : muon2_object_vs_template_array;
 -- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
-    signal diff_eta_comp, diff_eta_comp_temp, diff_eta_comp_pipe, diff_phi_comp, diff_phi_comp_temp, diff_phi_comp_pipe, dr_comp, dr_comp_temp, dr_comp_pipe, 
-        mass_comp, mass_comp_temp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe, twobody_upt_comp, twobody_upt_comp_temp, twobody_upt_comp_pipe : 
-        std_logic_2dim_array(muon1_object_low to muon1_object_high, muon2_object_low to muon2_object_high) := (others => (others => '1'));
+    signal diff_eta_comp, diff_eta_comp_temp, diff_eta_comp_pipe, 
+        diff_phi_comp, diff_phi_comp_temp, diff_phi_comp_pipe, 
+        dr_comp,   dr_comp_temp, dr_comp_pipe, 
+        mass_comp, mass_comp_temp, mass_comp_pipe, 
+        twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe, 
+        twobody_upt_comp, twobody_upt_comp_temp, twobody_upt_comp_pipe : 
+        std_logic_2dim_array(muon1_object_low to muon1_object_high, muon2_object_low to muon2_object_high) :=
+        (others => (others => '1'));
 
-    signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(muon1_object_low to muon1_object_high, muon2_object_low to muon2_object_high) :=
-    (others => (others => '1'));
+    signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : 
+        std_logic_2dim_array(muon1_object_low to muon1_object_high, muon2_object_low to muon2_object_high) :=
+        (others => (others => '1'));
 
     signal condition_and_or : std_logic;
 
@@ -476,13 +483,19 @@ begin
                 if same_bx = true then
                     if j/=i then
                         index := index + 1;
-                        obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j) and 
-                                                   diff_phi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j) and twobody_upt_comp_pipe(i,j);
+                        obj_vs_templ_vec(index) := 
+                            muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and  
+                            charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j) and 
+                            diff_phi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and 
+                            mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j) and twobody_upt_comp_pipe(i,j);
                     end if;
                 else
                     index := index + 1;
-                    obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j) and
-                                               diff_phi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j) and twobody_upt_comp_pipe(i,j);
+                    obj_vs_templ_vec(index) := 
+                        muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and 
+                        charge_comp_double_pipe(i,j) and diff_eta_comp_pipe(i,j) and
+                        diff_phi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and 
+                        mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j) and twobody_upt_comp_pipe(i,j);
                 end if;
             end loop;
         end loop;

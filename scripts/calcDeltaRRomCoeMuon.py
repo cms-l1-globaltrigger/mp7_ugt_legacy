@@ -24,7 +24,7 @@ def main():
     prec = 5 # precision of delta R values (digits after comma, rounded)
     line_len = 16
     
-    print "writing to firmware/ngc/lut_inv_dr_sq_rom_muon.coe"
+    print("writing to firmware/ngc/lut_inv_dr_sq_rom_muon.coe")
     fout = open('firmware/ngc/lut_inv_dr_sq_rom_muon.coe',"w+")
     index = 1 
 
@@ -50,7 +50,7 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except RuntimeError, message:
+    except RuntimeError as message:
         logging.error(message)
         sys.exit(EXIT_FAILURE)
     sys.exit(EXIT_SUCCESS)

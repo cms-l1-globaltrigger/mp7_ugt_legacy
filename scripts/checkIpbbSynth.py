@@ -8,7 +8,7 @@
 #
 
 import argparse
-import ConfigParser
+import configparser
 import logging
 import re
 import sys, os
@@ -29,21 +29,21 @@ utilization = {}
 
 def log_info(message):
     messages.append(message)
-    print message
+    print(message)
 
 def log_warning(message):
     messages.append(message)
     # Apply TTY colors
     if sys.stdout.isatty():
         message = "{}{}{}".format(ColorYellowWhite, message, ColorReset)
-    print message
+    print(message)
 
 def log_error(message):
     messages.append(message)
     # Apply TTY colors
     if sys.stdout.isatty():
         message = "{}{}{}".format(ColorWhiteRed, message, ColorReset)
-    print message
+    print(message)
 
 def log_hr(pattern):
     """Print horizontal line to logger."""
@@ -69,8 +69,12 @@ def find_errors(module_path, module_id, args):
     #
 
     # uses runme.log files for checks (vivado.log do not exist with IPBB)
-    runme_log_synth = os.path.join(module_path, 'top', 'top.runs', 'synth_1', 'runme.log')
-    runme_log_impl = os.path.join(module_path, 'top', 'top.runs', 'impl_1', 'runme.log')
+    #runme_log_synth = os.path.join(module_path, 'top', 'top.runs', 'synth_1', 'runme.log')
+    #runme_log_impl = os.path.join(module_path, 'top', 'top.runs', 'impl_1', 'runme.log')
+    proj_name = 'module_{}'.format(module_id)
+    runs = 'module_{}.runs'.format(module_id)
+    runme_log_synth = os.path.join(module_path, proj_name, runs, 'synth_1', 'runme.log')
+    runme_log_impl = os.path.join(module_path, proj_name, runs, 'impl_1', 'runme.log')
 
     # opens file as .log
     with open(runme_log_synth) as fp:
@@ -134,7 +138,7 @@ def find_errors(module_path, module_id, args):
     # Parse timing summary\
     #
 
-    impl_path = os.path.join(module_path, 'top', 'top.runs', 'impl_1')
+    impl_path = os.path.join(module_path, runs, 'impl_1')
 
     # Try to lacate timing summary, first try
     timing_summary = os.path.join(impl_path, 'top_timing_summary_postroute_physopted.rpt')
@@ -202,6 +206,7 @@ def find_errors(module_path, module_id, args):
     # Check for existing bitfile
     #
 
+    bit_file = 'module_{}.bit'.format(module_id)
     bit_filename = os.path.join(impl_path, 'top.bit')
 
     if not os.path.isfile(bit_filename):
@@ -229,7 +234,7 @@ def dump_utilization_report():
     log_info("| Module +----------------+----------+------------+----------+------------+----------+")
     log_info("|        | Used/Available | Percent  | Used/Avail | Percent  | Used/Avail | Percent  |")
     log_info("+--------+----------------+--------- +------------+----------+------------+----------+")
-    for module_id, utils in utilization.items():
+    for module_id, utils in list(utilization.items()):
         row = "| {:>6} ".format(module_id)
         for util in utils:
             ratio = "{}/{}".format(util.used, util.available)
@@ -264,7 +269,7 @@ def main():
         raise RuntimeError("no such file: {}".format(args.config))
 
     # Read build configuration.
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(args.config)
     menu_name = config.get('menu', 'name')
     menu_modules = int(config.get('menu', 'modules'))
@@ -281,7 +286,7 @@ def main():
             raise RuntimeError("module {} not available. There are only {} modules registed".format(args.m, menu_modules))
         check_modules = [args.m]
     else:
-        check_modules = range(menu_modules)
+        check_modules = list(range(menu_modules))
 
     # Check modules
     for index in check_modules:

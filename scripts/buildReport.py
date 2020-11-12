@@ -3,7 +3,7 @@
 # and bitfile table in redmine.
 #
 
-import ConfigParser
+import configparser
 import argparse
 import subprocess
 import re
@@ -58,7 +58,7 @@ def detect_gt_versions(filename):
                 if key not in versions:
                     versions[key] = {}
                 versions[key][m.group(2)] = m.group(3)
-    for k, v in versions.iteritems():
+    for k, v in versions.items():
         versions[k] = "{MAJOR}.{MINOR}.{REV}".format(**v)
     return versions
 
@@ -71,7 +71,7 @@ def parse_args():
 def main():
     args = parse_args()
 
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(args.filename)
 
     menu_dir = config.get('menu', 'location')
@@ -122,7 +122,7 @@ def main():
     print("Insert into ISSUE description:\n")
 
     for row in table:
-        print("|_<.{0} |{1} |".format(*row))
+        print(("|_<.{0} |{1} |".format(*row)))
 
     def textile_strong(s):
         return "*{0}*".format(s)
@@ -146,7 +146,7 @@ def main():
     ]
     print("\nPrepend BITFILES table:\n")
     print("|_.Menu |_.Build |_.Creator |_.Vivado |_.MP7 tag |_.uGT tag |_.uGT |_.GTL |_.FDL |_.Modules |_.Issue |_.Notes |")
-    print("|{0} |".format(" |".join(row)))
+    print(("|{0} |".format(" |".join(row))))
 
 if __name__ == '__main__':
     main()

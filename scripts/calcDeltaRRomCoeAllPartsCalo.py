@@ -26,7 +26,7 @@ def main():
     
     for k in range(0,4):
         for l in range(0,2):            
-            print "writing to firmware/ngc/rom_lut_calo_inv_dr_sq_part{}.coe".format(k+1+l*4)
+            print("writing to firmware/ngc/rom_lut_calo_inv_dr_sq_part{}.coe".format(k+1+l*4))
             coe_file_path = 'firmware/ngc/rom_lut_calo_inv_dr_sq_part%s.coe' % str(k+1+l*4)
             fout = open(coe_file_path,"w+")
             index = 1 
@@ -47,7 +47,7 @@ def main():
             fout.close()
     
     dr_list9 = [0] * 256 * 16
-    print "writing to firmware/ngc/rom_lut_calo_inv_dr_sq_part9.coe"
+    print("writing to firmware/ngc/rom_lut_calo_inv_dr_sq_part9.coe")
     fout = open('firmware/ngc/rom_lut_calo_inv_dr_sq_part9.coe',"w+")
     index = 1 
     fout.write("memory_initialization_radix=10;\n")
@@ -69,7 +69,7 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except RuntimeError, message:
+    except RuntimeError as message:
         logging.error(message)
         sys.exit(EXIT_FAILURE)
     sys.exit(EXIT_SUCCESS)

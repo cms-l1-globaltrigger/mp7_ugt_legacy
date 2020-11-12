@@ -26,7 +26,7 @@ def main():
     
     for k in range(0,4):
         for l in range(0,2):            
-            print "writing to firmware/ngc/rom_lut_muon_inv_dr_sq_part{}.coe".format(k+1+l*4)
+            print("writing to firmware/ngc/rom_lut_muon_inv_dr_sq_part{}.coe".format(k+1+l*4))
             coe_file_path = 'firmware/ngc/rom_lut_muon_inv_dr_sq_part%s.coe' % str(k+1+l*4)
             fout = open(coe_file_path,"w+")
             index = 1 
@@ -36,10 +36,10 @@ def main():
                 for j in range(dphi_addr*l, dphi_addr*l+dphi_addr):
                     if (i == 0 and j == 0) or i >= deta_len:
                         dr_list[i*j+j] = 0
-                        print dr_list[i*j+j]
+                        print(dr_list[i*j+j])
                     else:
                         dr_list[i*j+j] = int(10**prec * round(1/(((i*deta_bin)**2)+((j*dphi_bin)**2)), prec))                        
-                        print dr_list[i*j+j]
+                        print(dr_list[i*j+j])
                     fout.write('%s,' % dr_list[i*j+j])                    
                     if not (index % line_len):
                         fout.write("\n")                        
@@ -49,7 +49,7 @@ def main():
             fout.close()
     
     dr_list9 = [0] * 256 * 16
-    print "writing to firmware/ngc/rom_lut_muon_inv_dr_sq_part9.coe"
+    print("writing to firmware/ngc/rom_lut_muon_inv_dr_sq_part9.coe")
     fout = open('firmware/ngc/rom_lut_muon_inv_dr_sq_part9.coe',"w+")
     index = 1 
     fout.write("memory_initialization_radix=10;\n")
@@ -71,7 +71,7 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except RuntimeError, message:
+    except RuntimeError as message:
         logging.error(message)
         sys.exit(EXIT_FAILURE)
     sys.exit(EXIT_SUCCESS)

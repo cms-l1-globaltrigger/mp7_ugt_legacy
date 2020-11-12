@@ -85,7 +85,7 @@ def main():
     args = parse_args()
 
     if os.path.abspath(args.src) == os.path.abspath(args.dest):
-        print "for safety reasons it is not allowed to overwrite the source template."
+        print("for safety reasons it is not allowed to overwrite the source template.")
         sys.exit(1)
 
     try:
@@ -101,7 +101,7 @@ def main():
             lines = src.readlines()
 
         # Replace placeholders.
-        for key, value in replace_map.items():
+        for key, value in list(replace_map.items()):
             for i, line in enumerate(lines):
                 if not line.strip().startswith('--'):
                     lines[i] = line.replace(key, value)
@@ -111,8 +111,8 @@ def main():
             dest.write(''.join(lines))
 
         return 0
-    except IOError, message:
-        print "{0}: {1}".format(name, message)
+    except IOError as message:
+        print("{0}: {1}".format(name, message))
     return 1
 
 if __name__ == '__main__':

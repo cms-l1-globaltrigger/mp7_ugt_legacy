@@ -45,7 +45,7 @@ __version__ = '1.0.0'
 
 def filter_first(function, sequence):
     """Retruns first match of filter() result or None if nothing was found."""
-    return list(filter(function, sequence) or [None])[0]
+    return list(list(filter(function, sequence)) or [None])[0]
 
 def get_xpath(elem, path, fmt=str):
     """Easy access using etree elem xpath method."""
@@ -108,11 +108,11 @@ class AlgorithmContainer(list):
 
     def byModuleId(self, id):
         """Returns list of algorithms assigned to module id or empty list if none found."""
-        return filter(lambda algorithm: algorithm.module_id == id, self)
+        return [algorithm for algorithm in self if algorithm.module_id == id]
 
     def byModuleIndex(self, index):
         """Returns list of algorithms assigned to module index or empty list if none found."""
-        return filter(lambda algorithm: algorithm.module_index == index, self)
+        return [algorithm for algorithm in self if algorithm.module_index == index]
 
     def byName(self, name):
         """Retruns algorithm by name or None if not found."""

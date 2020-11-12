@@ -283,7 +283,7 @@ def main():
         logging.info("running IPBB project, synthesis and implementation, creating bitfile for module %s ...", module_id)
         
         #IPBB commands: running IPBB project, synthesis and implementation, creating bitfile
-        cmd_ipbb_project = "ipbb vivado make-project --single"
+        cmd_ipbb_project = "ipbb vivado make-project --single" # workaround to prevent "hang-up" in make-project with IPBB v0.5.2
         cmd_ipbb_synth = "ipbb vivado synth"
         cmd_ipbb_impl = "ipbb vivado impl"
         cmd_ipbb_bitfile = "ipbb vivado package"

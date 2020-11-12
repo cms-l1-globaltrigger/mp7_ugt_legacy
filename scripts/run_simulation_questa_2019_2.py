@@ -3,7 +3,7 @@
 #simultion program
 #all credit to Johannes Wittmann and Bernhard Arnold
 import toolbox as tb
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import re
 import xmlmenu
 import os, sys
@@ -72,7 +72,7 @@ def render_template(src, dst, args):
     logging.debug("rendering template %s as %s", src, dst)
     with open(src) as src:
         content = src.read()
-    for needle, subst in args.items():
+    for needle, subst in list(args.items()):
           logging.debug("  replacing `%s' by `%s'", needle, subst)
           content = content.replace(needle, subst)
     with open(dst, 'w') as dst:
@@ -227,7 +227,7 @@ def download_file_from_url(url, filename):
     tb.remove(filename)
     # Download file
     logging.info("retrieving %s", url)
-    urllib.urlretrieve(url, filename)
+    urllib.request.urlretrieve(url, filename)
     tb.make_executable(filename)
 
     d = open(filename).read()
@@ -237,12 +237,12 @@ def download_file_from_url(url, filename):
 
 #def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
 def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
-    print "a_mp7_tag: ", a_mp7_tag
-    print "a_menu: ", a_menu
-    print "a_url_menu: ", a_url_menu
-    print "a_vivado: ", a_vivado
-    print "a_questasim: ", a_questasim
-    print "a_questasimlibs: ", a_questasimlibs
+    print("a_mp7_tag: ", a_mp7_tag)
+    print("a_menu: ", a_menu)
+    print("a_url_menu: ", a_url_menu)
+    print("a_vivado: ", a_vivado)
+    print("a_questasim: ", a_questasim)
+    print("a_questasimlibs: ", a_questasimlibs)
     # Check Questa sim version
     if a_questasim == '10.6a':
         questasim_path = QuestaSimPathVersion106a
@@ -270,7 +270,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
 
     # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
     command = 'bash -c "cp /opt/mentor/questasim/modelsim.ini {sim_dir}/modelsim.ini"'.format(**locals())
-    print "command cp modelsim.ini: ", command
+    print("command cp modelsim.ini: ", command)
     run_command(command)
     
     ## Run compile Vivado sim libs for Questa (if not exist)
@@ -293,13 +293,13 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
     # Get l1menus_path for URL
     #url_menu = "{}/{}".format(url_menu_default, a_menu)
     url_menu = "{}/{}".format(a_url_menu, a_menu)
-    print "=== url_menu: ", url_menu
+    print("=== url_menu: ", url_menu)
     xml_name = "{}{}".format(a_menu, '.xml')    
-    print "=== xml_name: ", xml_name
+    print("=== xml_name: ", xml_name)
     menu_filepath = os.path.join(temp_dir, xml_name)
-    print "=== menu_filepath: ", menu_filepath
+    print("=== menu_filepath: ", menu_filepath)
     url = "{}/xml/{}".format(url_menu, xml_name)    
-    print "=== url: ", url
+    print("=== url: ", url)
     download_file_from_url(url, menu_filepath)
     # Remove "distribution number" from a_menu for testvector file name
     tv_name = "TestVector_{}{}".format((re.split("-", a_menu)[0]), '.txt') 

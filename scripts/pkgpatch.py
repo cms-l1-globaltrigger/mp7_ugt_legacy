@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #
 # Update IPbus VHDL creation timestamp, username and hostname (defined by placeholder).
@@ -97,17 +97,17 @@ def main():
         }
 
         # Read content of source file.
-        with open(args.src, 'r') as src:
+        with open(args.src, 'rb') as src:
             lines = src.readlines()
 
         # Replace placeholders.
         for key, value in list(replace_map.items()):
             for i, line in enumerate(lines):
                 if not line.strip().startswith('--'):
-                    lines[i] = line.replace(str(key), str(value))
+                    lines[i] = line.replace(key, value)
 
         # Write content to destination file.
-        with open(args.dest, 'w') as dest:
+        with open(args.dest, 'wb') as dest:
             dest.write(''.join(lines))
 
         return 0

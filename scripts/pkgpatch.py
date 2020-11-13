@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # Update IPbus VHDL creation timestamp, username and hostname (defined by placeholder).

@@ -107,7 +107,7 @@ def main():
                     lines[i] = line.replace(str(key), str(value))
 
         # Write content to destination file.
-        with open(args.dest, 'wb') as dest:
+        with open(args.dest, 'w') as dest:
             dest.write(''.join(lines))
 
         return 0

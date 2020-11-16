@@ -70,23 +70,23 @@ def main():
     #for i in range(len(glob.glob(os.path.join(buildarea, 'module_*')))):
         logging.info("collecting data from module %s", i)
         module_dir = 'module_{i}'.format(**locals())
-        
-        # for IPBB v0.5.2 directory structure
-        proj_name = 'module_{}'.format(module_id)
-        runs = 'module_{}.runs'.format(module_id)
-        bit_file = 'module_{}.bit'.format(module_id)
-        
+
         #proj_dir = 'proj/{}_{}_0x{}_{}'.format(device_name, fw_type, build, i)
         proj_dir = 'proj/{}'.format(module_dir)
         build_dir = os.path.join(tmpdir, module_dir, 'build')
         log_dir = os.path.join(tmpdir, module_dir, 'log')
+        
+        # for IPBB v0.5.2 directory structure
+        proj_runs = '{}/{}.runs'.format(module_dir)
+        bit_file = '{}.bit'.format(module_dir)
+        
         os.makedirs(build_dir)
         os.makedirs(log_dir)
-        shutil.copy(os.path.join(buildarea, proj_dir, proj_name, runs, 'impl_1', bit_file),
+        shutil.copy(os.path.join(buildarea, proj_dir, proj_runs, 'impl_1', bit_file),
             os.path.join(build_dir, 'gt_mp7_{board}_v{build}_module_{i}.bit'.format(**locals())))
-        shutil.copy(os.path.join(buildarea, proj_dir, proj_name, runs, 'synth_1', 'runme.log'),
+        shutil.copy(os.path.join(buildarea, proj_dir, proj_runs, 'synth_1', 'runme.log'),
             os.path.join(log_dir, 'runme_synth_1.log'))
-        shutil.copy(os.path.join(buildarea, proj_dir, proj_name, runs, 'impl_1', 'runme.log'),
+        shutil.copy(os.path.join(buildarea, proj_dir, proj_runs, 'impl_1', 'runme.log'),
             os.path.join(log_dir, 'runme_impl_1.log'))
 
     logging.info("adding build configuration: %s", args.config)

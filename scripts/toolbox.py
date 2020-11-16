@@ -64,7 +64,7 @@ def read_file(filename):
     >>> read_file('spanish_inquisition.txt')
     'NO-body expects the Spanish Inquisition!\n'
     """
-    with open(filename, 'rb') as fp:
+    with open(filename, 'r') as fp:
         return fp.read()
 
 def make_executable(filename):
@@ -81,7 +81,7 @@ def template_replace(template, replace_map, result):
 
     """
     # Read content of source file.
-    with open(template, 'rb') as fp:
+    with open(template, 'r') as fp:
         lines = fp.readlines()
     # Replace placeholders.
     for key, value in list(replace_map.items()):
@@ -90,7 +90,7 @@ def template_replace(template, replace_map, result):
             if not line.strip().startswith('--'):
                 lines[i] = line.replace(key, value)
     # Write content to destination file.
-    with open(result, 'wb') as fp:
+    with open(result, 'w') as fp:
         fp.write(''.join(lines))
 
 def count_modules(menu):

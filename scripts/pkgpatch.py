@@ -97,7 +97,7 @@ def main():
         }
 
         # Read content of source file.
-        with open(args.src, 'rb') as src:
+        with open(args.src, 'r') as src:
             lines = src.readlines()
 
         # Replace placeholders.
@@ -107,7 +107,7 @@ def main():
                     lines[i] = line.replace(key, value)
 
         # Write content to destination file.
-        with open(args.dest, 'wb') as dest:
+        with open(args.dest, 'w') as dest:
             dest.write(''.join(lines))
 
         return 0

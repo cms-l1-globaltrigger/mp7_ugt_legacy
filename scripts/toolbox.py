@@ -86,7 +86,6 @@ def template_replace(template, replace_map, result):
     # Replace placeholders.
     for key, value in list(replace_map.items()):
         for i, line in enumerate(lines):
-            print("lines[{0}]: {1}".format(i, lines[i]))
             # Ignore VHDL comments
             if not line.strip().startswith('--'):
                 lines[i] = line.replace(key, value)

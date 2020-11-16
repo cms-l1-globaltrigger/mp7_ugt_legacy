@@ -103,7 +103,6 @@ def main():
         # Replace placeholders.
         for key, value in list(replace_map.items()):
             for i, line in enumerate(lines):
-                print("lines[{0}]: {1}".format(i, lines[i]))
                 if not line.strip().startswith('--'):
                     lines[i] = line.replace(key, value)
 

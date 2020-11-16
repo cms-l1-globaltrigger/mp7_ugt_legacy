@@ -97,17 +97,18 @@ def main():
         }
 
         # Read content of source file.
-        with open(args.src, 'rb') as src:
+        with open(args.src, 'r') as src:
             lines = src.readlines()
 
         # Replace placeholders.
         for key, value in list(replace_map.items()):
             for i, line in enumerate(lines):
+                print("lines[{0}]: {1}".format(i, lines[i]))
                 if not line.strip().startswith('--'):
                     lines[i] = line.replace(key, value)
 
         # Write content to destination file.
-        with open(args.dest, 'wb') as dest:
+        with open(args.dest, 'w') as dest:
             dest.write(''.join(lines))
 
         return 0

@@ -103,7 +103,7 @@ def main():
         # Replace placeholders.
         for key, value in list(replace_map.items()):
             for i, line in enumerate(lines):
-                if not line.strip().startswith(b'--'):
+                if not line.strip().startswith('--'):
                     lines[i] = line.replace(key, value)
 
         # Write content to destination file.

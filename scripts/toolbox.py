@@ -87,7 +87,7 @@ def template_replace(template, replace_map, result):
     for key, value in list(replace_map.items()):
         for i, line in enumerate(lines):
             # Ignore VHDL comments
-            if not line.strip().startswith(b'--'):
+            if not line.strip().startswith('--'):
                 lines[i] = line.replace(key, value)
     # Write content to destination file.
     with open(result, 'wb') as fp:

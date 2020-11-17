@@ -33,14 +33,15 @@ Filter algorithms by attributes:
 
 """
 
-import sys, os
+import os
+import sys
 
 try:
     from lxml import etree
 except ImportError:
     raise RuntimeError("package `lxml` is missing, please install `python-lxml` using your favorite package manager.")
 
-__all__ = ['XmlMenu', '__doc__', '__version__']
+__all__ = ['XmlMenu', '__version__']
 __version__ = '1.0.0'
 
 def filter_first(function, sequence):
@@ -150,7 +151,8 @@ class XmlMenu(object):
         self.n_modules = 0
         self.comment = ""
         self.algorithms = AlgorithmContainer()
-        if filename: self.read(filename)
+        if filename:
+            self.read(filename)
 
     def asdict(self):
         """Retrun content as dictionary."""
@@ -162,7 +164,7 @@ class XmlMenu(object):
         """Read XML from file and parse its content."""
         self.filename = os.path.abspath(filename)
         self.algorithms = AlgorithmContainer()
-        with open(self.filename, 'rb') as fp:
+        with open(self.filename) as fp:
             # Access static elements
             context = etree.parse(fp)
             self.name = get_xpath(context, 'name')

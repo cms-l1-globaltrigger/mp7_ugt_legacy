@@ -1,24 +1,30 @@
-#philipp wanggo
-#20.07.2017
-#simultion program
-#all credit to Johannes Wittmann and Bernhard Arnold
-import toolbox as tb
-import urllib.request, urllib.parse, urllib.error
-import re
-import xmlmenu
-import os, sys
-import shutil
-import json
-import subprocess
-import logging
+"""Run simulation by Philipp Wanggo, credit to
+Johannes Wittmann and Bernhard Arnold, 20.07.2017
+"""
+
 import argparse
-import time, datetime
+import datetime
+import json
+import logging
+import os
+import re
+import shutil
+import subprocess
+import sys
+import time
+import urllib.request
+import urllib.parse
+import urllib.error
+
 from threading import Thread
-from xmlmenu import XmlMenu
+
+import toolbox as tb
+import xmlmenu
 from run_compile_simlib import run_compile_simlib
 
-o, ts = os.popen('stty size', 'r').read().split()#terminal size
-ts = int(ts)
+# terminal size
+with os.popen('stty size') as fp:
+    ts = int(fp.read().split()[1])
 
 failed_red = ("\033[1;31m Failed! \033[0m")
 success_green = ("\033[1;32m Success! \033[0m")
@@ -29,7 +35,7 @@ error_red = ("\033[1;31m ERROR  \033[0m")
 #reset = "\033[0m"
 
 DefaultVivadoVersion = '2018.3'
-    
+
 DefaultQuestasimVersion = '10.7c'
 
 vhdl_snippets_names = ['algo_index', 'gtl_module_instances', 'gtl_module_signals', 'ugt_constants']
@@ -74,20 +80,19 @@ def render_template(src, dst, args):
         dst.write(content)
 
 def make_testvector(mask, testvectorfile, new_testvector):#uses mask of the module, testvector file and the path of the new testvector file where the masked testvectors are stored
-    with open(testvectorfile, 'r') as tvf:
-        with open(new_testvector,'w') as opf:
-            for line in tvf:
-                colums = line.strip().split()
-                mask_trigger = int(colums[-2], 16) & mask
-                colums[-2] = '%0128x' % mask_trigger
-                colums[-1] = '1' if mask_trigger else '0'
-                opf.write(' '.join(colums))
-                opf.write('\n')
+    with open(testvectorfile) as tvf, open(new_testvector,'w') as opf:
+        for line in tvf:
+            colums = line.strip().split()
+            mask_trigger = int(colums[-2], 16) & mask
+            colums[-2] = '%0128x' % mask_trigger
+            colums[-1] = '1' if mask_trigger else '0'
+            opf.write(' '.join(colums))
+            opf.write('\n')
 
 def trigger_list(testvectorfile):
     """makes a list of all triggers in testvectorfile eg. [1,0,0,1,0,1,0,0,1,1,1]"""
     out_list = [0] * algonum
-    with open(testvectorfile, 'r') as tvf:
+    with open(testvectorfile) as tvf:
         for line in tvf:
             colums = line.strip().split()
             trigger_list = bitfield(int(colums[-2], 16))
@@ -103,8 +108,8 @@ def bitfield(i, n=algonum):
 
 def run_vsim(vsim, module, msgmode, ini_file):#uses class module, arg msgmode and ini file path to start the simulation
     vsim_bin = vsim + '/bin/vsim'
-    with open(module.results_log,'w') as logfile:
-        cmd = [vsim_bin, '-c', '-msgmode', msgmode, '-modelsimini', ini_file, '-do', 'do {filename}; quit -f'.format(vsim, filename = os.path.join(module.path, DO_FILE))]
+    with open(module.results_log, 'w') as logfile:
+        cmd = [vsim_bin, '-c', '-msgmode', msgmode, '-modelsimini', ini_file, '-do', 'do {filename}; quit -f'.format(filename=os.path.join(module.path, DO_FILE))]
         logging.info("starting simulation for module_%d..." % module._id)
         logging.info("executing: %s", ' '.join(['"{0}"'.format(arg) if ' ' in str(arg) else str(arg) for arg in cmd]))
         subprocess.check_call(cmd, stdout = logfile)
@@ -173,9 +178,6 @@ class Module(object):#module class and nessesary information
         self.results_log = '%s/results_module_%d.log' % (self.path, self._id)
         self.results_txt = '%s/results_module_%d.txt' % (self.path, self._id)
 
-    def algo_name(self):#gets name of algorithm based on index
-        return module.menu.algorithms.byIndex(index).name
-
     def get_mask(self):#makes mask and saves it
         mask = 0
         for algo in self.menu.algorithms.byModuleId(self._id):
@@ -200,14 +202,14 @@ class Module(object):#module class and nessesary information
         uGTalgosPath = os.path.abspath(os.path.join(sim_dir, '..'))
         src_dir = os.path.join(menu_path, 'vhdl/module_%d/src' % self._id)
         #print "src_dir: ",src_dir
-        
+
         replace_map = {
             '{{algo_index}}': read_file(os.path.join(src_dir, 'algo_index.vhd')),
             '{{ugt_constants}}': read_file(os.path.join(src_dir, 'ugt_constants.vhd')),
             '{{gtl_module_signals}}': read_file(os.path.join(src_dir, 'gtl_module_signals.vhd')),
             '{{gtl_module_instances}}': read_file(os.path.join(src_dir, 'gtl_module_instances.vhd')),
         }
-        
+
         gtl_fdl_wrapper_dir = os.path.join(uGTalgosPath, 'hdl', 'gt_mp7_core', 'gtl_fdl_wrapper')
         gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
         fdl_dir = os.path.join(gtl_fdl_wrapper_dir, 'fdl')
@@ -225,9 +227,10 @@ def download_file_from_url(url, filename):
     urllib.request.urlretrieve(url, filename)
     tb.make_executable(filename)
 
-    d = open(filename).read()
+    with open(filename) as fp:
+        d = fp.read()
     d = d.replace(', default=os.getlogin()', '')
-    with open(filename, 'wb') as fp:
+    with open(filename, 'w') as fp:
         fp.write(d)
 
 #def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
@@ -243,27 +246,27 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
         questasim_path = QuestaSimPathVersion106a
     elif a_questasim == '10.7c':
         questasim_path = QuestaSimPathVersion107c
-    else:    
+    else:
         raise RuntimeError("Questa sim version '%s' does NOT exist" % a_questasim)
-    
+
     if not os.path.isdir(questasim_path):
         raise RuntimeError("No installation of Questa sim in '%s'" % questasim_path)
-        
+
     # Set sim_dir
     sim_dir = os.path.join(os.path.dirname(__file__), '../firmware/sim')
-    
+
     # Copy dofile from gtl_fdl_wrapper_tpl_questa_v<vivado version>.do to gtl_fdl_wrapper_tpl_questa.do
     src_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa_v{}.do'.format(a_vivado))
     dest_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do')
     shutil.copyfile(src_do, dest_do)
-    
+
     # Path to Questa sim libs for selected vivado version
     questasimlibs_name = a_questasimlibs + '_' + a_questasim
     questasimlib_path = os.path.join(os.environ['HOME'], questasimlibs_name, a_vivado)
-    
+
     # Run compile Vivado sim libs for Questa (if not exist)
     run_compile_simlib(a_vivado, questasim_path, questasimlib_path)
-    
+
     # using SIM_ROOT dir as default output path
     if not a_output:
         a_output = sim_dir
@@ -274,27 +277,28 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
     msgmode = 'wlf' if a_wlf else 'tran'
 
     temp_dir = os.path.join(sim_dir, "temp_dir")
-    if not os.path.exists(temp_dir): os.makedirs(temp_dir)#makes folders
-    
+    if not os.path.exists(temp_dir):
+        os.makedirs(temp_dir)#makes folders
+
     logging.info("===========================================================================")
     logging.info("download XML and testvector file from L1Menu repository ...")
     # Get l1menus_path for URL
     #url_menu = "{}/{}".format(url_menu_default, a_menu)
     url_menu = "{}/{}".format(a_url_menu, a_menu)
     print("=== url_menu: ", url_menu)
-    xml_name = "{}{}".format(a_menu, '.xml')    
+    xml_name = "{}{}".format(a_menu, '.xml')
     print("=== xml_name: ", xml_name)
     menu_filepath = os.path.join(temp_dir, xml_name)
     print("=== menu_filepath: ", menu_filepath)
-    url = "{}/xml/{}".format(url_menu, xml_name)    
+    url = "{}/xml/{}".format(url_menu, xml_name)
     print("=== url: ", url)
     download_file_from_url(url, menu_filepath)
     # Remove "distribution number" from a_menu for testvector file name
-    tv_name = "TestVector_{}{}".format((re.split("-", a_menu)[0]), '.txt') 
+    tv_name = "TestVector_{}{}".format((re.split("-", a_menu)[0]), '.txt')
     testvector_filepath = os.path.join(temp_dir, tv_name)
-    url = "{}/testvectors/{}".format(url_menu, tv_name)    
+    url = "{}/testvectors/{}".format(url_menu, tv_name)
     download_file_from_url(url, testvector_filepath)
-    
+
     # Get VHDL snippets from menu URL
     #print "menu_filepath: ", menu_filepath
     #print "testvector_filepath: ", testvector_filepath
@@ -313,17 +317,18 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
     for module in modules:
         vhdl_src_path = "vhdl/module_{}/src".format(module._id)
         temp_dir_module = os.path.join(temp_dir, vhdl_src_path)
-        if not os.path.exists(temp_dir_module): os.makedirs(temp_dir_module)#makes folders
+        if not os.path.exists(temp_dir_module):
+            os.makedirs(temp_dir_module)#makes folders
         #print "temp_dir_module: ", temp_dir_module
         for vhdl_name in vhdl_snippets_names:
             vhdl_name_ext = vhdl_name + ".vhd"
             vhdl_file_local_path = os.path.join(temp_dir_module, vhdl_name_ext)
             #print "vhdl_file_local_path: ", vhdl_file_local_path
             vhdl_file_path = os.path.join(vhdl_src_path, vhdl_name_ext)
-            url = "{}/{}".format(url_menu, vhdl_file_path)    
+            url = "{}/{}".format(url_menu, vhdl_file_path)
             #print "url: ", url
             download_file_from_url(url, vhdl_file_local_path)
- 
+
     if not os.path.exists(menu_filepath):#checks for menu
         raise RuntimeError('Missing %s File' % menu_filepath)#help
     if not os.path.exists(testvector_filepath):#checks for testvector
@@ -333,7 +338,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
 
     os.makedirs(base_dir)#makes folders
 
-    ini_file = os.path.join(sim_dir, INI_FILE)    
+    ini_file = os.path.join(sim_dir, INI_FILE)
 
     logging.info('Creating Modules and Masks...')
 
@@ -476,10 +481,11 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
         logging.info(success_green)
     else:
         logging.error(failed_red)
-    
+
     logging.info("===========================================================================")
     logging.info("removed temporary directory ('temp_dir') ...")
-    if os.path.exists(os.path.join(sim_dir, "temp_dir")): shutil.rmtree(os.path.join(sim_dir, "temp_dir"))
+    if os.path.exists(os.path.join(sim_dir, "temp_dir")):
+        shutil.rmtree(os.path.join(sim_dir, "temp_dir"))
 
 def parse():
     parser = argparse.ArgumentParser()
@@ -497,12 +503,11 @@ def parse():
 
 def main():
     args = parse()
-    
+
     # Setup console logging
-    logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.INFO)
-    
+    logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
+
     run_simulation_questa(args.mp7_tag, args.menu, args.url, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
 
-    #with open('')
 if __name__ == '__main__':
     main()

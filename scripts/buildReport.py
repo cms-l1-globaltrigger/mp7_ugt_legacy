@@ -5,15 +5,14 @@
 
 import configparser
 import argparse
-import subprocess
 import re
-import sys, os
+import os
 
 def detect_tm_reporter_version(filename):
     """Try to detect tm-reporter version from L1Menu-HTML file.
 
     Required format:
-  <meta name="generator" content="tm-reporter 2.7.2">    
+  <meta name="generator" content="tm-reporter 2.7.2">
     """
     regex = re.compile(r'^.*tm-reporter\s+(\d+\.\d+\.\d+)')
     with open(filename) as fp:
@@ -88,7 +87,7 @@ def main():
     mp7fw_tag = config.get('firmware', 'mp7tag')
     ugt_tag = config.get('firmware', 'ugttag')
     l1menu_html = menu_name + ".html"
-    
+
     versions = {}
     #versions['tm-vhdlproducer'] = detect_vhdl_producer_version(os.path.join(menu_dir, 'vhdl', 'module_0', 'src', 'ugt_constants.vhd'))
     versions['tm-vhdlproducer'] = detect_vhdl_producer_version(os.path.join(buildarea_dir, 'src', 'module_0', 'vhdl_snippets', 'ugt_constants.vhd'))
@@ -150,4 +149,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

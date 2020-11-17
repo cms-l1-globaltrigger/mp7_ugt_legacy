@@ -6,15 +6,18 @@ import shutil
 import stat
 import pwd
 import socket
-import sys, os, re
+import os
+import re
 
 def build_t(value):
     """Custom build type validator for argparse. Argument value must be of
     format 0x1234, else an exception of type ValueError is raised.
     >>> parser.add_argument('-b', type=built_t)
     """
-    try: return "{0:04x}".format(int(value, 16))
-    except ValueError: raise TypeError("Invalid build version: `{0}'".format(value))
+    try:
+        return "{0:04x}".format(int(value, 16))
+    except ValueError:
+        raise TypeError("Invalid build version: `{0}'".format(value))
 
 def menuname_t(name):
     """Validates Xilinx Vivado version number."""
@@ -57,14 +60,15 @@ def remove(filename):
 
 def clear_file(filename):
     """Create an empty file and clears its content if the file already exists."""
-    with open(filename, 'w'): pass
+    with open(filename, 'w'):
+        pass
 
 def read_file(filename):
     """Returns contents of a file.
     >>> read_file('spanish_inquisition.txt')
     'NO-body expects the Spanish Inquisition!\n'
     """
-    with open(filename, 'r') as fp:
+    with open(filename) as fp:
         return fp.read()
 
 def make_executable(filename):
@@ -81,7 +85,7 @@ def template_replace(template, replace_map, result):
 
     """
     # Read content of source file.
-    with open(template, 'r') as fp:
+    with open(template) as fp:
         lines = fp.readlines()
     # Replace placeholders.
     for key, value in list(replace_map.items()):

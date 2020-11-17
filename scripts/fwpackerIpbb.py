@@ -1,17 +1,16 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-from makeProject import BoardAliases
-import toolbox as tb
-
-import tarfile
 import argparse
-import logging
-import shutil
-import glob
-import tempfile
 import configparser
-import sys, os
+import logging
+import os
+import shutil
+import sys
+import tempfile
+import tarfile
+
+import toolbox as tb
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
@@ -75,11 +74,11 @@ def main():
         proj_dir = 'proj/{}'.format(module_dir)
         build_dir = os.path.join(tmpdir, module_dir, 'build')
         log_dir = os.path.join(tmpdir, module_dir, 'log')
-        
+
         # for IPBB v0.5.2 directory structure
-        proj_runs = '{}/{}.runs'.format(module_dir)
+        proj_runs = '{0}/{0}.runs'.format(module_dir)
         bit_file = '{}.bit'.format(module_dir)
-        
+
         os.makedirs(build_dir)
         os.makedirs(log_dir)
         shutil.copy(os.path.join(buildarea, proj_dir, proj_runs, 'impl_1', bit_file),
@@ -97,11 +96,10 @@ def main():
     shutil.copy(xml_file, tmpdir)
 
     logging.info("creating tarball: %s", filename)
-    tar = tarfile.open(filename, "w:gz")
-    logging.info("adding to tarball: %s", tmpdir)
-    tar.add(tmpdir, arcname=basename, recursive=True)
-    logging.info("closing tarball: %s", filename)
-    tar.close()
+    with tarfile.open(filename, "w:gz") as tar:
+        logging.info("adding to tarball: %s", tmpdir)
+        tar.add(tmpdir, arcname=basename, recursive=True)
+    logging.info("closed tarball: %s", filename)
 
     logging.info("removing temporary directory %s.", tmpdir)
     shutil.rmtree(tmpdir)

@@ -46,9 +46,9 @@ def main():
     # Create name of do-file template.
     dofile_tpl = ''.join([args.dofile, '_tpl.do'])
     if debug == 'prints':
-	print "dofile_tpl: {dofile_tpl}".format(**locals())
-	print "path_mp7_tag: {args.path_mp7_tag}".format(**locals())
-    
+        print("dofile_tpl: {dofile_tpl}".format(**locals()))
+        print("path_mp7_tag: {args.path_mp7_tag}".format(**locals()))
+
     testvector = (args.testvector)
     if debug == 'prints':
 	print "testvector_path: {args.testvector}".format(**locals())
@@ -56,7 +56,7 @@ def main():
     testvector_name = os.path.basename(args.testvector)
     if debug == 'prints':
 	print "testvector_name: {testvector_name}".format(**locals())
- 
+
     menu_name_array = testvector.split("/")
     # revers order of array
 #    menu_name_array_inv = menu_name_array.reverse()
@@ -69,7 +69,7 @@ def main():
 	menu_name_array_inv.pop(0)
 	#if debug == 'prints':
 	    #print "menu_name_array_inv {i}: {menu_name_array_inv}".format(**locals())
-    
+
     menu_name = menu_name_array_inv[0]
     #if debug == 'prints':
 	#print "menu_name: {menu_name}".format(**locals())

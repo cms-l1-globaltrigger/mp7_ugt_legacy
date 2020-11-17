@@ -9,9 +9,8 @@
 
 import argparse
 import configparser
-import logging
-import re
-import sys, os
+import os
+import sys
 
 from collections import namedtuple
 
@@ -48,7 +47,8 @@ def log_error(message):
 def log_hr(pattern):
     """Print horizontal line to logger."""
     # TTY size
-    o, ts = os.popen('stty size', 'r').read().split()
+    with os.popen('stty size') as fp:
+        o, ts = fp.read().split()
     log_info(pattern * int(ts))
 
 def parse_utilization(line):
@@ -238,10 +238,10 @@ def dump_utilization_report():
         row = "| {:>6} ".format(module_id)
         for util in utils:
             ratio = "{}/{}".format(util.used, util.available)
-	    if util.site_type == 'Slice LUTs':
-            	row += "| {:>14} | {:>6} % ".format(ratio, util.percent)
-	    else:
-            	row += "| {:>10} | {:>6} % ".format(ratio, util.percent)
+            if util.site_type == 'Slice LUTs':
+                row += "| {:>14} | {:>6} % ".format(ratio, util.percent)
+            else:
+                row += "| {:>10} | {:>6} % ".format(ratio, util.percent)
         row += "|"
         log_info(row)
     log_info("+--------+----------------+----------+------------+----------+------------+----------+")
@@ -273,13 +273,13 @@ def main():
     config.read(args.config)
     menu_name = config.get('menu', 'name')
     menu_modules = int(config.get('menu', 'modules'))
-    
+
     # Definitions for name of IPBB 'proj' directory
     fw_type = config.get('firmware', 'type')
     device_name = config.get('device', 'name')
     menu_build = config.get('menu', 'build')
     build_path = config.get('firmware', 'buildarea')
-    
+
     # Select only a single module
     if args.m != None:
         if not 0 <= args.m < menu_modules:

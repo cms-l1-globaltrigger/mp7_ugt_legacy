@@ -138,7 +138,7 @@ class XmlMenu(object):
         """Read XML from file and parse its content."""
         self.filename = os.path.abspath(filename)
         self.algorithms = AlgorithmContainer()
-        with open(self.filename, 'rb') as fp:
+        with open(self.filename) as fp:
             # Access static elements
             context = etree.parse(fp)
             self.name = get_xpath(context, 'name')

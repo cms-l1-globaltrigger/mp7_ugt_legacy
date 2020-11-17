@@ -56,7 +56,7 @@ def template_replace(template, replace_map, result):
     Example:
     >>> template_replace('sample.tpl.vhd', {'name': "title"}, 'sample.vhd')"""
     # Read content of source file.
-    with open(template, 'rb') as fp:
+    with open(template) as fp:
         lines = fp.readlines()
     # Replace placeholders.
     for key, value in replace_map.items():
@@ -64,13 +64,12 @@ def template_replace(template, replace_map, result):
             if not line.strip().startswith('--'):
                 lines[i] = line.replace(key, value)
     # Write content to destination file.
-    with open(result, 'wb') as fp:
+    with open(result, 'w') as fp:
         fp.write(''.join(lines))
 ## *****************************************************************************************************
 def read_file(filename):
     """Returns contents of a file."""
-#    with open(os.path.join(src_dir, 'gtl_module_instances.vhd'), 'rb') as fp:
-    with open(filename, 'rb') as fp:
+    with open(filename) as fp:
         return fp.write()
 ## *****************************************************************************************************
 def parse():

@@ -53,7 +53,7 @@ def main():
 
     # check PRESCALER_MODE_SEQ_LEN
     if not (prescaler_mode_seq_len == 1 or prescaler_mode_seq_len == 10 or prescaler_mode_seq_len == 20 or prescaler_mode_seq_len == 100):
-        print "\033[1;31m=== ERROR: wrong value for PRESCALER_MODE_SEQ_LEN (= %d) in '../hdl/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler_fractional_pkg.vhd' !!!\033[0m" % prescaler_mode_seq_len
+        print("\033[1;31m=== ERROR: wrong value for PRESCALER_MODE_SEQ_LEN (= %d) in '../hdl/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler_fractional_pkg.vhd' !!!\033[0m" % prescaler_mode_seq_len)
         exit()
 
     #sys.exit()
@@ -75,8 +75,8 @@ def main():
     with open(do_file, 'w') as f:
         f.write(w_strg)
 
-    print "=== Running Questa simulator for checking prescale values"
-    print ""
+    print("=== Running Questa simulator for checking prescale values")
+    print()
 
     diff_max = 0.0
     diff_percent_max = 0.0
@@ -113,22 +113,22 @@ def main():
             diff = abs(prescale_value_sim - prescale_value_required)
             diff_percent = float((diff / prescale_value_required) * 100.0)
 
-            print ""
-            print '=== Prescale value in testbench (and register): \033[1;32mX"{}"\033[0m'.format(prescale_value_tb)
-            print "=== Simulation \033[1;32m%d/%d\033[0m [prescale value: \033[1;32m%.2f\033[0m] done" % (loop, max_loops, prescale_value_required)
-            print "=== Prescale values difference (simulated minus required): \033[1;32m%.10f\033[0m" % diff
-            print "=== Deviation [in %s]: \033[1;32m%.10f\033[0m" % (chr(37), diff_percent)
-            print ""
+            print()
+            print('=== Prescale value in testbench (and register): \033[1;32mX"{}"\033[0m'.format(prescale_value_tb))
+            print("=== Simulation \033[1;32m%d/%d\033[0m [prescale value: \033[1;32m%.2f\033[0m] done" % (loop, max_loops, prescale_value_required))
+            print("=== Prescale values difference (simulated minus required): \033[1;32m%.10f\033[0m" % diff)
+            print("=== Deviation [in %s]: \033[1;32m%.10f\033[0m" % (chr(37), diff_percent))
+            print()
 
             # check calculated difference
             max_deviation = args.max_deviation
             if diff_percent > max_deviation:
-                print "\033[1;31m=== ERROR: Deviation > %.6f %s !!!\033[0m" % (max_deviation, chr(37))
-                print "=== Required rescale value: \033[1;32m%.2f\033[0m" % prescale_value_required
-                print "=== Prescale value from simulation: \033[1;32m%.10f\033[0m" % prescale_value_sim
-                print "=== Prescale values difference (simulated minus required): \033[1;31m%.10f\033[0m" % diff
-                print "=== Deviation [in %s]: \033[1;31m%.10f\033[0m" % (chr(37), diff_percent)
-                print ""
+                print("\033[1;31m=== ERROR: Deviation > %.6f %s !!!\033[0m" % (max_deviation, chr(37)))
+                print("=== Required rescale value: \033[1;32m%.2f\033[0m" % prescale_value_required)
+                print("=== Prescale value from simulation: \033[1;32m%.10f\033[0m" % prescale_value_sim)
+                print("=== Prescale values difference (simulated minus required): \033[1;31m%.10f\033[0m" % diff)
+                print("=== Deviation [in %s]: \033[1;31m%.10f\033[0m" % (chr(37), diff_percent))
+                print()
                 error_file = os.path.join(pwd, error_file_name)
                 with open(error_file, 'w') as f:
                     f.write("=== ERROR: Deviation > %.6f %s !!!\n" % (max_deviation, chr(37)))
@@ -145,8 +145,8 @@ def main():
                 diff_percent_max = diff_percent
                 prescale_value_diff_percent_max = prescale_value_required
 
-    print "=== \033[1;32mSuccess !!!\033[0m"
-    print "=== Max. deviation [in %s]: \033[1;32m%.5f\033[0m at prescale value \033[1;32m%.2f\033[0m" % (chr(37), diff_percent_max, prescale_value_diff_percent_max)
+    print("=== \033[1;32mSuccess !!!\033[0m")
+    print("=== Max. deviation [in %s]: \033[1;32m%.5f\033[0m at prescale value \033[1;32m%.2f\033[0m" % (chr(37), diff_percent_max, prescale_value_diff_percent_max))
     error_file = os.path.join(pwd, error_file_name)
     with open(error_file, 'w') as f:
         f.write("=== Success !!! Max. deviation [in %s]: %.5f at prescale value %.2f\n" % (chr(37), diff_percent_max, prescale_value_diff_percent_max))

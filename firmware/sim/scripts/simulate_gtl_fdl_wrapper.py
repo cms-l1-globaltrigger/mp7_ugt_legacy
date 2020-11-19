@@ -1,4 +1,3 @@
-#!/usr/bin/env python2
 #
 # This script runs Modelsim on given trigger menu for gtl_fdl_wrapper.vhd
 #
@@ -108,10 +107,11 @@ def main():
     msgmode = 'wlf' if args.wlf else 'tran'
     # Testvector name (basename without extension).
     if not args.testvector:
-
-    else: testvector_name = os.path.splitext(os.path.basename(args.testvector))[0]
+        pass # TODO!
+    else:
+        testvector_name = os.path.splitext(os.path.basename(args.testvector))[0]
     if debug == 'prints':
-        print "testvector_name: {testvector_name}".format(**locals())
+        print("testvector_name: {testvector_name}".format(**locals()))
     # As things are getting serious let's start logging to file.
     handler = logging.FileHandler('sum_{testvector_name}.log'.format(**locals()), mode = 'w')
     handler.setFormatter(logging.Formatter(fmt = '%(asctime)s %(levelname)s : %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
@@ -177,10 +177,10 @@ def main():
     template_replace(os.path.join(gtl_dir, 'gtl_module_tpl.vhd'), replace_map, os.path.join(sim_dir_vhdl_temp, 'gtl_module.vhd'))
     # Run Modelsim with makefile, on fail (1) raise error.
     if 0 != call_process('vsim', '-c', '-msgmode', msgmode, '-do', 'do {filename}; quit -f'.format(filename = DO_FILE)):
-        print "something went wrong"
-    print
-    print " ==> see 'sim_results_gtl_fdl_wrapper_{testvector_name}.txt' for detailed information !!!".format(**locals())
-    print
+        print("something went wrong")
+    print()
+    print(" ==> see 'sim_results_gtl_fdl_wrapper_{testvector_name}.txt' for detailed information !!!".format(**locals()))
+    print()
 ## HB 2016-11-16: remove temporary directory 'vhdl_temp'
     #print " ==> removed temporary directory 'vhdl_temp'"
 #    shutil.rmtree('vhdl_temp')

@@ -4,7 +4,6 @@
 """startSynth.py -- starting module synthesis using screens
 """
 
-import subprocess
 import argparse
 import logging
 import ConfigParser

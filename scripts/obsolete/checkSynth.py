@@ -46,7 +46,8 @@ def log_error(message):
 def log_hr(pattern):
     """Print horizontal line to logger."""
     # TTY size
-    o, ts = os.popen('stty size', 'r').read().split()
+    with os.popen('stty size') as fp:
+        o, ts = fp.read().split()
     log_info(pattern * int(ts))
 
 def parse_utilization(line):

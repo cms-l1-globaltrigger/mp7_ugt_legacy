@@ -1,12 +1,9 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-
-import toolbox as tb
-
 import argparse
 import logging
+import os
 import re
-import os, sys
+
+import toolbox as tb
 
 def replace_area_constraints(filename):
     content = tb.read_file(filename)

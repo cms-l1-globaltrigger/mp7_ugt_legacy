@@ -3,17 +3,16 @@
 # and bitfile table in redmine.
 #
 
-import ConfigParser
+import configparser
 import argparse
-import subprocess
 import re
-import sys, os
+import os
 
 def detect_tm_reporter_version(filename):
     """Try to detect tm-reporter version from L1Menu-HTML file.
 
     Required format:
-  <meta name="generator" content="tm-reporter 2.7.2">    
+  <meta name="generator" content="tm-reporter 2.7.2">
     """
     regex = re.compile(r'^.*tm-reporter\s+(\d+\.\d+\.\d+)')
     with open(filename) as fp:
@@ -58,7 +57,7 @@ def detect_gt_versions(filename):
                 if key not in versions:
                     versions[key] = {}
                 versions[key][m.group(2)] = m.group(3)
-    for k, v in versions.iteritems():
+    for k, v in versions.items():
         versions[k] = "{MAJOR}.{MINOR}.{REV}".format(**v)
     return versions
 
@@ -71,7 +70,7 @@ def parse_args():
 def main():
     args = parse_args()
 
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(args.filename)
 
     menu_dir = config.get('menu', 'location')
@@ -88,7 +87,7 @@ def main():
     mp7fw_tag = config.get('firmware', 'mp7tag')
     ugt_tag = config.get('firmware', 'ugttag')
     l1menu_html = menu_name + ".html"
-    
+
     versions = {}
     #versions['tm-vhdlproducer'] = detect_vhdl_producer_version(os.path.join(menu_dir, 'vhdl', 'module_0', 'src', 'ugt_constants.vhd'))
     versions['tm-vhdlproducer'] = detect_vhdl_producer_version(os.path.join(buildarea_dir, 'src', 'module_0', 'vhdl_snippets', 'ugt_constants.vhd'))
@@ -122,7 +121,7 @@ def main():
     print("Insert into ISSUE description:\n")
 
     for row in table:
-        print("|_<.{0} |{1} |".format(*row))
+        print(("|_<.{0} |{1} |".format(*row)))
 
     def textile_strong(s):
         return "*{0}*".format(s)
@@ -146,8 +145,7 @@ def main():
     ]
     print("\nPrepend BITFILES table:\n")
     print("|_.Menu |_.Build |_.Creator |_.Vivado |_.MP7 tag |_.uGT tag |_.uGT |_.GTL |_.FDL |_.Modules |_.Issue |_.Notes |")
-    print("|{0} |".format(" |".join(row)))
+    print(("|{0} |".format(" |".join(row))))
 
 if __name__ == '__main__':
     main()
-

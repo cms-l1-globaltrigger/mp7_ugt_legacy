@@ -33,20 +33,19 @@ Filter algorithms by attributes:
 
 """
 
-import os
-import sys
+import sys, os
 
 try:
     from lxml import etree
 except ImportError:
     raise RuntimeError("package `lxml` is missing, please install `python-lxml` using your favorite package manager.")
 
-__all__ = ['XmlMenu', '__version__']
+__all__ = ['XmlMenu', '__doc__', '__version__']
 __version__ = '1.0.0'
 
 def filter_first(function, sequence):
     """Retruns first match of filter() result or None if nothing was found."""
-    return list(list(filter(function, sequence)) or [None])[0]
+    return list(filter(function, sequence) or [None])[0]
 
 def get_xpath(elem, path, fmt=str):
     """Easy access using etree elem xpath method."""
@@ -109,11 +108,11 @@ class AlgorithmContainer(list):
 
     def byModuleId(self, id):
         """Returns list of algorithms assigned to module id or empty list if none found."""
-        return [algorithm for algorithm in self if algorithm.module_id == id]
+        return filter(lambda algorithm: algorithm.module_id == id, self)
 
     def byModuleIndex(self, index):
         """Returns list of algorithms assigned to module index or empty list if none found."""
-        return [algorithm for algorithm in self if algorithm.module_index == index]
+        return filter(lambda algorithm: algorithm.module_index == index, self)
 
     def byName(self, name):
         """Retruns algorithm by name or None if not found."""
@@ -151,8 +150,7 @@ class XmlMenu(object):
         self.n_modules = 0
         self.comment = ""
         self.algorithms = AlgorithmContainer()
-        if filename:
-            self.read(filename)
+        if filename: self.read(filename)
 
     def asdict(self):
         """Retrun content as dictionary."""
@@ -164,7 +162,7 @@ class XmlMenu(object):
         """Read XML from file and parse its content."""
         self.filename = os.path.abspath(filename)
         self.algorithms = AlgorithmContainer()
-        with open(self.filename) as fp:
+        with open(self.filename, 'rb') as fp:
             # Access static elements
             context = etree.parse(fp)
             self.name = get_xpath(context, 'name')

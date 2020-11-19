@@ -69,12 +69,12 @@ def find_errors(module_path, module_id, args):
     #
 
     # uses runme.log files for checks (vivado.log do not exist with IPBB)
-    #runme_log_synth = os.path.join(module_path, 'top', 'top.runs', 'synth_1', 'runme.log')
-    #runme_log_impl = os.path.join(module_path, 'top', 'top.runs', 'impl_1', 'runme.log')
     proj_name = 'module_{}'.format(module_id)
-    runs = 'module_{}.runs'.format(module_id)
-    runme_log_synth = os.path.join(module_path, proj_name, runs, 'synth_1', 'runme.log')
-    runme_log_impl = os.path.join(module_path, proj_name, runs, 'impl_1', 'runme.log')
+    runs = '{}/{}.runs'.format(proj_name, proj_name)
+    synth_path = os.path.join(module_path, runs, 'synth_1')
+    impl_path = os.path.join(module_path, runs, 'impl_1')
+    runme_log_synth = os.path.join(synth_path, 'runme.log')
+    runme_log_impl = os.path.join(impl_path, 'runme.log')
 
     # opens file as .log
     with open(runme_log_synth) as fp:
@@ -137,8 +137,6 @@ def find_errors(module_path, module_id, args):
     #
     # Parse timing summary\
     #
-
-    impl_path = os.path.join(module_path, runs, 'impl_1')
 
     # Try to lacate timing summary, first try
     timing_summary = os.path.join(impl_path, 'top_timing_summary_postroute_physopted.rpt')

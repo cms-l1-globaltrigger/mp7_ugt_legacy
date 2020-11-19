@@ -181,20 +181,6 @@ def main():
         logging.info("no simulation required ...")
 
     ipbb_version = args.ipbb
-    ipbb_version_path = os.path.join(os.getenv("HOME"),"env_ipbb-{}".format(ipbb_version))
-
-    if not os.path.isdir(ipbb_version_path):
-        logging.info("===========================================================================")
-        logging.info("creating IPBB environment ...")
-        cmd_venv = "python3 -m venv env_ipbb-v0.5.2"
-        cmd_activate_env = ". env_ipbb-v0.5.2/bin/activate"
-        cmd_pip = "pip install -U pip"
-        cmd_install = "pip install https://github.com/ipbus/ipbb/archive/v0.5.2.tar.gz"
-        command = 'bash -c "cd; {cmd_venv} && {cmd_activate_env} && {cmd_pip} && {cmd_install}"'.format(**locals())
-        run_command(command)
-    else:
-        logging.info("===========================================================================")
-        logging.info("IPBB environment exists")
 
     # IPBB commands: creating IPBB area
     cmd_ipbb_init = "ipbb init {ipbb_dir}".format(**locals())
@@ -204,7 +190,7 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("creating IPBB area ...")
-    command = 'bash -c "cd; {cmd_activate_env}; {cmd_ipbb_init}; cd {ipbb_dir}; {cmd_ipbb_add_ipb} && {cmd_ipbb_add_mp7} && {cmd_ipbb_add_ugt}"'.format(**locals())
+    command = 'bash -c "cd; {cmd_ipbb_init}; cd {ipbb_dir}; {cmd_ipbb_add_ipb} && {cmd_ipbb_add_mp7} && {cmd_ipbb_add_ugt}"'.format(**locals())
     run_command(command)
 
     logging.info("===========================================================================")
@@ -277,7 +263,8 @@ def main():
         logging.info("creating IPBB project for module %s ...", module_id)
         cmd_ipbb_proj_create = "ipbb proj create vivado {module_name} {board_type}:../{project_type}".format(**locals())
 
-        command = 'bash -c "cd; {cmd_activate_env}; cd {ipbb_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
+        #command = 'bash -c "cd; {cmd_activate_env}; cd {ipbb_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
+        command = 'bash -c "cd; cd {ipbb_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
         run_command(command)
 
         logging.info("===========================================================================")
@@ -290,7 +277,7 @@ def main():
         cmd_ipbb_bitfile = "ipbb vivado package"
 
         #Set variable "module_id" for tcl script (l1menu_files.tcl in uGT_algo.dep)
-        command = 'bash -c "cd; {cmd_activate_env}; source {settings64}; cd {ipbb_dir}/proj/{module_name}; module_id={module_id} {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
+        command = 'bash -c "cd; source {settings64}; cd {ipbb_dir}/proj/{module_name}; module_id={module_id} {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
 
         session = "build_{project_type}_{args.build}_{module_id}".format(**locals())
         logging.info("starting screen session '%s' for module %s ...", session, module_id)

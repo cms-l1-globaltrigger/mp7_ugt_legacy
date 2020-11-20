@@ -76,7 +76,7 @@ def main():
         log_dir = os.path.join(tmpdir, module_dir, 'log')
 
         # for IPBB v0.5.2 directory structure
-        proj_runs = '{}/{}.runs'.format(module_dir)
+        proj_runs = '{0}/{0}.runs'.format(module_dir)
         #bit_file = '{}.bit'.format(module_dir)
         bit_file = 'top.bit'
 

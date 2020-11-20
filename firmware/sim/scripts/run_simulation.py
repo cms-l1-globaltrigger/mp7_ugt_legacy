@@ -159,9 +159,6 @@ class Module(object):#module class and nessesary information
         self.results_log = '%s/results_module_%d.log' % (self.path, self._id)
         self.results_txt = '%s/results_module_%d.txt' % (self.path, self._id)
 
-    def algo_name(self):#gets name of algorithm based on index
-        return module.menu.algorithms.byIndex(index).name
-
     def get_mask(self):#makes mask and saves it
         mask = 0
         for algo in self.menu.algorithms.byModuleId(self._id):

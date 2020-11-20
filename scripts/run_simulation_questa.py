@@ -20,7 +20,7 @@ from threading import Thread
 
 import toolbox as tb
 import xmlmenu
-from run_compile_simlib import run_compile_simlib
+# from run_compile_simlib import run_compile_simlib
 
 # terminal size
 with os.popen('stty size') as fp:
@@ -34,7 +34,7 @@ error_red = ("\033[1;31m ERROR  \033[0m")
 
 #reset = "\033[0m"
 
-DefaultVivadoVersion = '2018.3'
+DefaultVivadoVersion = '2019.2'
 
 DefaultQuestasimVersion = '10.7c'
 
@@ -51,7 +51,7 @@ DO_FILE_TPL = 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do'
 
 QuestaSimPathVersion107c = '/opt/mentor/questasim'
 QuestaSimPathVersion106a = '/opt/mentor/questa_core_prime_10.6a/questasim'
-DefaultQuestaSimLibsName = 'questasimlibs' # generated im $HOME
+DefaultQuestaSimLibsName = 'questalibs_vivado_v' # generated im /opt/mentor/
 
 mp7_tag = 'cactusupgrades'
 algonum = 512#numbers of bits
@@ -59,6 +59,11 @@ IGNORED_ALGOS = [
   'L1_FirstBunchInTrain',
   'L1_SecondBunchInTrain',
   ]
+
+def run_command(*args):
+    command = ' '.join(args)
+    logging.info(">$ %s", command)
+    os.system(command)
 
 def read_file(filename):
     """Returns contents of a file."""
@@ -108,7 +113,7 @@ def bitfield(i, n=algonum):
 
 def run_vsim(vsim, module, msgmode, ini_file):#uses class module, arg msgmode and ini file path to start the simulation
     vsim_bin = vsim + '/bin/vsim'
-    with open(module.results_log, 'w') as logfile:
+    with open(module.results_log,'w') as logfile:
         cmd = [vsim_bin, '-c', '-msgmode', msgmode, '-modelsimini', ini_file, '-do', 'do {filename}; quit -f'.format(filename=os.path.join(module.path, DO_FILE))]
         logging.info("starting simulation for module_%d..." % module._id)
         logging.info("executing: %s", ' '.join(['"{0}"'.format(arg) if ' ' in str(arg) else str(arg) for arg in cmd]))
@@ -260,12 +265,19 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
     dest_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do')
     shutil.copyfile(src_do, dest_do)
 
-    # Path to Questa sim libs for selected vivado version
-    questasimlibs_name = a_questasimlibs + '_' + a_questasim
-    questasimlib_path = os.path.join(os.environ['HOME'], questasimlibs_name, a_vivado)
+    ## Path to Questa sim libs for selected vivado version
+    #questasimlibs_name = a_questasimlibs + a_vivado
+    #questasimlib_path = os.path.join('/opt/mentor/', questasimlibs_name)
 
-    # Run compile Vivado sim libs for Questa (if not exist)
-    run_compile_simlib(a_vivado, questasim_path, questasimlib_path)
+    #print "questasimlib_path: ", questasimlib_path
+
+    # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
+    command = 'bash -c "cp /opt/mentor/questasim/modelsim.ini {sim_dir}/modelsim.ini"'.format(**locals())
+    print("command cp modelsim.ini: ", command)
+    run_command(command)
+
+    ## Run compile Vivado sim libs for Questa (if not exist)
+    #run_compile_simlib(a_vivado, questasim_path, questasimlib_path)
 
     # using SIM_ROOT dir as default output path
     if not a_output:

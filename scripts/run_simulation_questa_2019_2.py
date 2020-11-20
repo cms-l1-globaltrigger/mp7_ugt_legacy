@@ -232,9 +232,10 @@ def download_file_from_url(url, filename):
     urllib.request.urlretrieve(url, filename)
     tb.make_executable(filename)
 
-    d = open(filename).read()
+    with open(filename) as fp:
+        d = fp.read()
     d = d.replace(', default=os.getlogin()', '')
-    with open(filename, 'wb') as fp:
+    with open(filename, 'w') as fp:
         fp.write(d)
 
 #def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):

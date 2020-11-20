@@ -63,7 +63,7 @@ IGNORED_ALGOS = [
 def read_file(filename):
     """Returns contents of a file."""
 #    with open(os.path.join(src_dir, 'gtl_module_instances.vhd'), 'rb') as fp:
-    with open(filename, 'rb') as fp:
+    with open(filename, 'r') as fp:
         return fp.read()
 
 def render_template(src, dst, args):
@@ -71,8 +71,8 @@ def render_template(src, dst, args):
     >>> render_template("template.txt", "sample.txt", { 'foo' : "bar", })
     """
     logging.debug("rendering template %s as %s", src, dst)
-    with open(src) as src:
-        content = src.read()
+    with open(src) as f:
+        content = f.read()
     for needle, subst in list(args.items()):
           logging.debug("  replacing `%s' by `%s'", needle, subst)
           content = content.replace(needle, subst)

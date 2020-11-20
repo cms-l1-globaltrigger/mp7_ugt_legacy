@@ -68,7 +68,7 @@ def run_command(*args):
 def read_file(filename):
     """Returns contents of a file."""
 #    with open(os.path.join(src_dir, 'gtl_module_instances.vhd'), 'rb') as fp:
-    with open(filename, 'rb') as fp:
+    with open(filename, 'r') as fp:
         return fp.read()
 
 def render_template(src, dst, args):
@@ -76,8 +76,8 @@ def render_template(src, dst, args):
     >>> render_template("template.txt", "sample.txt", { 'foo' : "bar", })
     """
     logging.debug("rendering template %s as %s", src, dst)
-    with open(src) as src:
-        content = src.read()
+    with open(src) as f:
+        content = f.read()
     for needle, subst in list(args.items()):
           logging.debug("  replacing `%s' by `%s'", needle, subst)
           content = content.replace(needle, subst)
@@ -85,7 +85,7 @@ def render_template(src, dst, args):
         dst.write(content)
 
 def make_testvector(mask, testvectorfile, new_testvector):#uses mask of the module, testvector file and the path of the new testvector file where the masked testvectors are stored
-    with open(testvectorfile, 'r') as tvf, open(new_testvector, 'w') as opf:
+    with open(testvectorfile) as tvf, open(new_testvector,'w') as opf:
         for line in tvf:
             colums = line.strip().split()
             mask_trigger = int(colums[-2], 16) & mask
@@ -97,7 +97,7 @@ def make_testvector(mask, testvectorfile, new_testvector):#uses mask of the modu
 def trigger_list(testvectorfile):
     """makes a list of all triggers in testvectorfile eg. [1,0,0,1,0,1,0,0,1,1,1]"""
     out_list = [0] * algonum
-    with open(testvectorfile, 'r') as tvf:
+    with open(testvectorfile) as tvf:
         for line in tvf:
             colums = line.strip().split()
             trigger_list = bitfield(int(colums[-2], 16))
@@ -278,7 +278,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
     ## Run compile Vivado sim libs for Questa (if not exist)
     #run_compile_simlib(a_vivado, questasim_path, questasimlib_path)
 
-   # using SIM_ROOT dir as default output path
+    # using SIM_ROOT dir as default output path
     if not a_output:
         a_output = sim_dir
 
@@ -516,7 +516,7 @@ def main():
     args = parse()
 
     # Setup console logging
-    logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.INFO)
+    logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
     run_simulation_questa(args.mp7_tag, args.menu, args.url, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
 

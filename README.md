@@ -9,15 +9,15 @@ Simulation of gtl_fdl_wrapper with Questa simulator for 6 ugt modules
 
 Clone git repositories for mp7 and ugt.
 ```bash
-git clone https://gitlab.cern.ch/hbergaue/mp7.git mp7
+git clone https://gitlab.cern.ch/hbergaue/mp7.git
 cd mp7
 git checkout mp7fw_v2_4_1_mp7_ugt
-git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git mp7_ugt_legacy
+git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git
 cd mp7_ugt_legacy
-git checkout master
+git checkout <branch|tag>
 ```
 
-Create Python 3 virtual environment.
+If not already done create a Python virtual environment and install required dependencies including [IPBB](https://github.com/ipbus/ipbb).
 ```bash
 python3 -m venv env
 . env/bin/activate
@@ -33,8 +33,10 @@ python scripts/run_simulation_questa.py <L1Menu name> --url <url l1menu> --mp7_t
 
 Example
 ```bash
-cd ~/github/cms-l1-globaltrigger/mp7_ugt_legacy
-python scripts/run_simulation_questa.py L1Menu_Collisions2018_v2_1_0-d5 --url https://raw.githubusercontent.com/herbberg/l1menus/master --mp7_tag ~/gitlab/hbergaue/mp7
+cd mp7_ugt_legacy
+python scripts/run_simulation_questa.py L1Menu_Collisions2018_v2_1_0-d5 \
+  --url https://raw.githubusercontent.com/herbberg/l1menus/master \
+  --mp7_tag ~/gitlab/hbergaue/mp7
 ```
 
 ## Build

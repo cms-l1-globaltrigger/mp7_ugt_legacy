@@ -54,7 +54,7 @@ python scripts/run_simulation_questa.py L1Menu_Collisions2018_v2_1_0-d4 \
 Build `mp7_ugt` firmware using IPBB.
 
 * This is a draft description with branches of MP7 and ugt repos.
-* A fork of [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware is available in [MP7](https://gitlab.cern.ch/hbergaue/mp7) with branch:
+* A fork of [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware is available in [MP74UGT](https://gitlab.cern.ch/hbergaue/mp7) with branch:
   - "mp7fw_v3_0_0_mp7_ugt" created from tag mp7fw_v3_0_0.
 * This branch contains patched MP7 files for mp7_ugt:
   - area_constraints.tcl

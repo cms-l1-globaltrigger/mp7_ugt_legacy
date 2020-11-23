@@ -56,7 +56,7 @@ Build `mp7_ugt` firmware using IPBB.
 * This is a draft description with branches of MP7 and ugt repos.
 * A fork of [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware is available in [MP74UGT](https://gitlab.cern.ch/hbergaue/mp7) with branch:
   - "mp7fw_v3_0_0_mp7_ugt" created from tag mp7fw_v3_0_0.
-* This branch contains patched MP7 files for mp7_ugt:
+* This branch contains patched MP7 files for mp7_ugt_legacy (patched with [mp7patch.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/mp7patch.py)):
   - area_constraints.tcl
   - mp7_brd_decl.vhd
   - mp7xe_690.vhd

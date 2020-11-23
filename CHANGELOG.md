@@ -4,13 +4,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
   
-## [v1.13.0] - 2020-02-19
+## [v1.11.1] - 2020-11-23
 ### Comment
 
-- mp7_ugt firmware release v1.13.0 (added files for invariant mass divided by deltaR).
+- mp7_ugt firmware release v1.11.1 (conerted scripts to python3 [for IPBB v0.5.2])
+
+### Changed
+
+- script files:
+  - ../scripts/buildReport.py
+  - ../scripts/calcDeltaRRomCoeAllPartsCalo.py
+  - ../scripts/calcDeltaRRomCoeAllPartsMuon.py
+  - ../scripts/calcDeltaRRomCoeCalo.py
+  - ../scripts/calcDeltaRRomCoeMuon.py
+  - ../scripts/checkIpbbSynth.py
+  - ../scripts/fwpackerIpbb.py
+  - ../scripts/mp7patch.py
+  - ../scripts/pkgpatch.py
+  - ../scripts/requirements.txt
+  - ../scripts/run_compile_simlib.py
+  - ../scripts/runIpbbSynth_laptop.py
+  - ../scripts/runIpbbSynth.py
+  - ../scripts/run_simulation_questa.py
+  - ../scripts/toolbox.py
+  - ../scripts/xmlmenu.py
+
+
+## [v1.11.0] - 2020-06-19
+### Comment
+
+- mp7_ugt firmware release v1.11.0
+- implemented new muon structure with "unconstraint pt" and "impact parameter"
+- added files for invariant mass with 3 objects
+- added files for invariant mass divided by deltaR
 
 ### Added
 - source files:
+  - ../gtl/sum_mass_calc.vhd
+  - ../gtl/muon_mass_3_obj_condition.vhd
+  - ../gtl/calo_mass_3_obj_condition.vhd
   - ../gtl/calo_calo_mass_div_dr_condition.vhd
   - ../gtl/muon_muon_mass_div_dr_condition.vhd
   - ../gtl/mass_div_dr_calculator.vhd
@@ -24,45 +56,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../ngc/rom_lut_muon_inv_dr_sq_9/*.*
 
 ### Changed
-- source files:
-  - ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
-  - ../gtl/gtl_module_tpl.vhd
-  - ../gtl/gtl_pkg_tpl.vhd
-  - ../gtl/gtl_pkg_sim.vhd
-- simulation files:
-  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
-- dep file:
-  - ../cfg/uGT_algo.dep
-- script files:
-  - ../scripts/checkIpbbSynth.py
-
-## [v1.12.0] - 2020-06-17
-### Comment
-
-- mp7_ugt firmware release v1.12.0 (added files for invariant mass with 3 objects).
-
-### Added
-- source files:
-  - ../gtl/sum_mass_calc.vhd
-  - ../gtl/muon_mass_3_obj_condition.vhd
-  - ../gtl/calo_mass_3_obj_condition.vhd
-
-### Changed
-- source files:
-  - ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
-- simulation files:
-  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2018.2.do
-  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2018.3.do
-  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
-- dep file:
-  - ../cfg/uGT_algo.dep
-
-## [v1.11.0] - 2020-06-09
-### Comment
-
-- mp7_ugt firmware release v1.11.0 (implemented new muon structure with "unconstraint pt" and "impact parameter").
-
-### Changed
 
 - source files:
   - ../gtl/muon_comparators.vhd
@@ -72,8 +65,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../gtl/muon_muon_correlation_condition.vhd
   - ../gtl/calo_muon_correlation_condition.vhd
   - ../gtl/muon_esums_correlation_condition.vhd
+  - ../gtl/gtl_module_tpl.vhd
+  - ../gtl/gtl_pkg_sim.vhd
   - ../gtl/gtl_pkg.vhd
-  - ../gtl/gt_mp7_core_pkg.vhd
+  - ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
+- simulation files:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2018.2.do
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2018.3.do
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
+- dep file:
+  - ../cfg/uGT_algo.dep
+- script files:
+  - ../scripts/checkIpbbSynth.py
 
 ## [v1.10.7] - 2020-02-03
 ### Comment

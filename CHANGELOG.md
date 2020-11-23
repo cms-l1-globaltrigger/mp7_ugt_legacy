@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
   
+## [v1.11.2] - 2020-11-23
+### Comment
+
+- mp7_ugt firmware release v1.11.2 (added "pipelines.vhd")
+
+### Added
+- source files:
+  - ../gtl/pipelines.vhd
+  - ../gtl/ext_cond_pipeline.vhd
+  - ../gtl/centrality_pipeline.vhd
+
+### Changed
+
+- source files:
+  - ../gtl/gtl_module_tpl.vhd
+  - ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
+
 ## [v1.11.1] - 2020-11-23
 ### Comment
 

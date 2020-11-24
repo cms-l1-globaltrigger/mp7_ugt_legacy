@@ -51,7 +51,11 @@ python scripts/run_simulation_questa.py L1Menu_Collisions2018_v2_1_0-d4 \
 
 ## Build
 
-Build `mp7_ugt` firmware using IPBB.
+#### Remarks
+- FW versions greater or equal 0x1130 are used for uGMT v6.1.0 and unpacker (with bug fix for shifted raw eta).
+- FW versions greater or equal 0x1120 and lower 0x1130 are used for uGMT v6.0.0_patch1 and unpacker (with bug: shifted raw eta).
+
+### Build `mp7_ugt` firmware using IPBB
 
 * This is a draft description with branches of MP7 and ugt repos.
 * A fork of [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware is available in [MP74UGT](https://gitlab.cern.ch/hbergaue/mp7) with branch:

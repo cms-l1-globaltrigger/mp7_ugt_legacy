@@ -51,7 +51,11 @@ python scripts/run_simulation_questa.py L1Menu_Collisions2018_v2_1_0-d4 \
 
 ## Build
 
-Build `mp7_ugt` firmware using IPBB.
+#### Remarks
+- FW versions greater or equal 0x1130 are used for versions with updated unpacker (see email thread "uGT fw version and displaced muons" from Dinyar Rabady, 23.11.2020) and uGMT v6.1.0.
+- FW versions greater or equal 0x1120 and lower 0x1130 are used for versions with new muon bit structure from GMT to correspond with the unpacker (agreed with Dinyar Rabady on 26.2.2020) and uGMT v6.0.0_patch1 (bit shift in raw eta for unpacker, see email "uGT fw version and displaced muons" from Dinyar Rabady, 23.11.2020).
+
+### Build `mp7_ugt` firmware using IPBB
 
 * This is a draft description with branches of MP7 and ugt repos.
 * A fork of [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware is available in [MP74UGT](https://gitlab.cern.ch/hbergaue/mp7) with branch:

@@ -52,8 +52,8 @@ python scripts/run_simulation_questa.py L1Menu_Collisions2018_v2_1_0-d4 \
 ## Build
 
 #### Remarks
-- FW versions greater or equal 0x1130 are used for versions with updated unpacker (see email thread "uGT fw version and displaced muons" from Dinyar Rabady, 23.11.2020) and uGMT v6.1.0.
-- FW versions greater or equal 0x1120 and lower 0x1130 are used for versions with new muon bit structure from GMT to correspond with the unpacker (agreed with Dinyar Rabady on 26.2.2020) and uGMT v6.0.0_patch1 (bit shift in raw eta for unpacker, see email "uGT fw version and displaced muons" from Dinyar Rabady, 23.11.2020).
+- FW versions greater or equal 0x1130 are used for uGMT v6.1.0 and unpacker (with bug fix for shifted raw eta).
+- FW versions greater or equal 0x1120 and lower 0x1130 are used for uGMT v6.0.0_patch1 and unpacker (with bug: shifted raw eta).
 
 ### Build `mp7_ugt` firmware using IPBB
 

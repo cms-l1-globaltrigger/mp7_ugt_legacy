@@ -3,7 +3,7 @@
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and esums (etm, etm_hf and htm).
 
 -- Version history:
--- HB 2020-11-26: added default parameters.
+-- HB 2020-11-26: added default parameters. Bug fixed.
 -- HB 2019-06-17: updated for "five eta cuts".
 -- HB 2019-05-06: updated instances.
 -- HB 2019-05-06: renamed from calo_esums_correlation_condition_v3 to calo_esums_correlation_condition.
@@ -185,8 +185,8 @@ begin
     -- Instance of comparators for calorimeter objects.
     obj_templ1_l: for i in calo_object_low to calo_object_high generate
         obj_templ1_comp_i: entity work.calo_comparators
-            generic map(et_ge_mode_calo, obj_type_calo,
-                et_threshold_calo,
+            generic map(pt_ge_mode_calo, obj_type_calo,
+                pt_threshold_calo,
                 nr_eta_windows_calo,
                 eta_w1_upper_limit_calo,
                 eta_w1_lower_limit_calo,

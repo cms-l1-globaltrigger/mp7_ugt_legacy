@@ -3,6 +3,7 @@
 -- Correlation Condition module for muon objects.
 
 -- Version history:
+-- HB 2020-11-26: updated default parameters.
 -- HB 2020-10-16: removed parameters from generic.
 -- HB 2020-10-09: added parameter for invariant mass div by delta R comparison. Changed names for mass limits.
 -- HB 2020-08-27: implemented invariant mass div by delta R comparison.
@@ -35,7 +36,7 @@ use work.gtl_pkg.all;
 entity muon_muon_correlation_condition is
      generic(
         muon1_object_low: natural := 0;
-        muon1_object_high: natural := 7;
+        muon1_object_high: natural := NR_MU_OBJECTS-1;
         pt_ge_mode_muon1: boolean := true;
         pt_threshold_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_muon1: natural := 0;
@@ -64,7 +65,7 @@ entity muon_muon_correlation_condition is
         ip_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0) := (others => '1');
 
         muon2_object_low: natural := 0;
-        muon2_object_high: natural := 7;
+        muon2_object_high: natural := NR_MU_OBJECTS-1;
         pt_ge_mode_muon2: boolean := true;
         pt_threshold_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_muon2: natural := 0;

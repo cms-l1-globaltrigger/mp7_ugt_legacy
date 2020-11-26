@@ -3,6 +3,7 @@
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and muon.
 
 -- Version history:
+-- HB 2020-11-26: updated default parameters.
 -- HB 2020-10-09: added parameter for invariant mass div by delta R comparison. Changed names for mass limits.
 -- HB 2020-08-27: implemented invariant mass div by delta R comparison.
 -- HB 2020-06-09: implemented new muon structure with "unconstraint pt" and "impact parameter".
@@ -27,7 +28,7 @@ use work.gtl_pkg.all;
 entity calo_muon_correlation_condition is
      generic(
         calo_object_low: natural := 0;
-        calo_object_high: natural := 11;
+        calo_object_high: natural := NR_EG_OBJECTS-1;
         pt_ge_mode_calo: boolean := true;
         obj_type_calo: natural := EG_TYPE;
         pt_threshold_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -51,7 +52,7 @@ entity calo_muon_correlation_condition is
         iso_lut_calo: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
 
         muon_object_low: natural := 0;
-        muon_object_high: natural := 7;
+        muon_object_high: natural := NR_MU_OBJECTS-1;
         pt_ge_mode_muon: boolean := true;
         pt_threshold_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_muon: natural := 0;
@@ -98,11 +99,11 @@ entity calo_muon_correlation_condition is
         mass_upper_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_lower_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        mass_div_dr_vector_width: positive := 84;
+        mass_div_dr_vector_width: positive := MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1;
         mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         
-        pt1_width: positive := 12; 
-        pt2_width: positive := 12; 
+        pt1_width: positive := EG_PT_VECTOR_WIDTH; 
+        pt2_width: positive := MU_PT_VECTOR_WIDTH; 
         mass_cosh_cos_precision : positive := EG_MU_COSH_COS_PRECISION;
         cosh_cos_width: positive := EG_MU_COSH_COS_VECTOR_WIDTH;
 

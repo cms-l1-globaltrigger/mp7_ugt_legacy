@@ -3,6 +3,7 @@
 -- Correlation Condition module for two calorimeter object types (eg, jet and tau).
 
 -- Version history:
+-- HB 2020-11-26: updated default parameters.
 -- HB 2020-10-09: added parameter for invariant mass div by delta R comparison. Changed names for mass limits.
 -- HB 2020-08-27: implemented invariant mass div by delta R comparison.
 -- HB 2019-06-17: updated for "five eta cuts".
@@ -35,7 +36,7 @@ entity calo_calo_correlation_condition is
     generic(
         nr_calo1_objects: natural := NR_EG_OBJECTS;
         calo1_object_low: natural := 0;
-        calo1_object_high: natural := 11;
+        calo1_object_high: natural := NR_EG_OBJECTS-1;
         pt_ge_mode_calo1: boolean := true;
         obj_type_calo1: natural := EG_TYPE;
         pt_threshold_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -60,7 +61,7 @@ entity calo_calo_correlation_condition is
 
         nr_calo2_objects: natural := NR_JET_OBJECTS;
         calo2_object_low: natural := 0;
-        calo2_object_high: natural := 11;
+        calo2_object_high: natural := NR_JET_OBJECTS-1;
         pt_ge_mode_calo2: boolean := true;
         obj_type_calo2: natural := JET_TYPE;
         pt_threshold_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -105,14 +106,14 @@ entity calo_calo_correlation_condition is
         mass_div_dr_vector_width: positive := EG_JET_MASS_DIV_DR_VECTOR_WIDTH;
         mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         
-        pt1_width: positive := 12; 
-        pt2_width: positive := 12; 
-        mass_cosh_cos_precision : positive := EG_EG_COSH_COS_PRECISION;
-        cosh_cos_width: positive := EG_EG_COSH_COS_VECTOR_WIDTH;
+        pt1_width: positive := EG_PT_VECTOR_WIDTH; 
+        pt2_width: positive := JET_PT_VECTOR_WIDTH; 
+        mass_cosh_cos_precision : positive := EG_JET_COSH_COS_PRECISION;
+        cosh_cos_width: positive := EG_JET_COSH_COS_VECTOR_WIDTH;
 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := EG_EG_SIN_COS_PRECISION;
+        pt_sq_sin_cos_precision : positive := EG_JET_SIN_COS_PRECISION;
 
         same_bx: boolean := false 
     );

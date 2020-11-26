@@ -3,6 +3,7 @@
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and esums (etm, etm_hf and htm).
 
 -- Version history:
+-- HB 2020-11-26: added default parameters.
 -- HB 2019-06-17: updated for "five eta cuts".
 -- HB 2019-05-06: updated instances.
 -- HB 2019-05-06: renamed from calo_esums_correlation_condition_v3 to calo_esums_correlation_condition.
@@ -25,73 +26,73 @@ use work.gtl_pkg.all;
 entity calo_esums_correlation_condition is
      generic(
 
-        dphi_cut: boolean;
-        mass_cut: boolean;
-        mass_type : natural;
-        twobody_pt_cut: boolean;
+        dphi_cut: boolean := false;
+        mass_cut: boolean := false;
+        mass_type : natural := TRANSVERSE_MASS_TYPE;
+        twobody_pt_cut: boolean := false;
 
-        calo_object_low: natural;
-        calo_object_high: natural;
-        et_ge_mode_calo: boolean;
+        calo_object_low: natural := 0;
+        calo_object_high: natural := NR_EG_OBJECTS-1;
+        pt_ge_mode_calo: boolean := true;
         obj_type_calo: natural := EG_TYPE;
-        et_threshold_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        nr_eta_windows_calo : natural;
-        eta_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w3_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w3_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w4_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w4_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w5_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w5_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_full_range_calo: boolean;
-        phi_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_w2_ignore_calo: boolean;
-        phi_w2_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        iso_lut_calo: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
+        pt_threshold_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        nr_eta_windows_calo : natural := 0;
+        eta_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w2_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w3_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w3_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w4_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w4_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w5_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w5_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_full_range_calo: boolean := true;
+        phi_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w2_ignore_calo: boolean := true;
+        phi_w2_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        iso_lut_calo: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
 
-        et_ge_mode_esums: boolean;
+        et_ge_mode_esums: boolean := true;
         obj_type_esums: natural := ETM_TYPE;
-        et_threshold_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0);
-        phi_full_range_esums: boolean;
-        phi_w1_upper_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0);
-        phi_w1_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0);
-        phi_w2_ignore_esums: boolean;
-        phi_w2_upper_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0);
-        phi_w2_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0);
+        et_threshold_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_full_range_esums: boolean := true;
+        phi_w1_upper_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w1_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w2_ignore_esums: boolean := true;
+        phi_w2_upper_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w2_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
 
-        diff_phi_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0);
-        diff_phi_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0);
+        diff_phi_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        diff_phi_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
-        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
+        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        pt1_width: positive; 
-        pt2_width: positive; 
-        mass_cosh_cos_precision : positive;
-        cosh_cos_width: positive;
+        pt1_width: positive := EG_PT_VECTOR_WIDTH; 
+        pt2_width: positive := ETM_PT_VECTOR_WIDTH; 
+        mass_cosh_cos_precision : positive := EG_ETM_COSH_COS_PRECISION;
+        cosh_cos_width: positive := EG_ETM_COSH_COS_VECTOR_WIDTH;
 
-        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
-        sin_cos_width: positive;
-        pt_sq_sin_cos_precision : positive
+        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
+        pt_sq_sin_cos_precision : positive := EG_ETM_SIN_COS_PRECISION
 
     );
     port(
         lhc_clk: in std_logic;
         calo_data_i: in calo_objects_array;
         esums_data_i: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        diff_phi: in deta_dphi_vector_array;
-        pt1 : in diff_inputs_array;
-        pt2 : in diff_inputs_array;
-        cos_dphi : in calo_cosh_cos_vector_array;
-        cos_phi_1_integer : in sin_cos_integer_array;
-        cos_phi_2_integer : in sin_cos_integer_array;
-        sin_phi_1_integer : in sin_cos_integer_array;
-        sin_phi_2_integer : in sin_cos_integer_array;
+        diff_phi: in deta_dphi_vector_array := (others => (others => (others => '0')));
+        pt1 : in diff_inputs_array := (others => (others => '0'));
+        pt2 : in diff_inputs_array := (others => (others => '0'));
+        cos_dphi : in calo_cosh_cos_vector_array := (others => (others => (others => '0')));
+        cos_phi_1_integer : in sin_cos_integer_array := (others => 0);
+        cos_phi_2_integer : in sin_cos_integer_array := (others => 0);
+        sin_phi_1_integer : in sin_cos_integer_array := (others => 0);
+        sin_phi_2_integer : in sin_cos_integer_array := (others => 0);
         condition_o: out std_logic
     );
 end calo_esums_correlation_condition;

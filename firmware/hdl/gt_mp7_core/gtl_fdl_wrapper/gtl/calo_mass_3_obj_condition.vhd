@@ -1,8 +1,9 @@
 
 -- Description:
--- Condition for invariant mass with 3 calo objects.
+-- Condition for invariant mass with 3 calo objects (from same type).
 
 -- Version history:
+-- HB 2020-11-30: added default parameters.
 -- HB 2020-04-27: reverted to former version.
 -- HB 2020-04-24: update instance of mass_calculator.
 -- HB 2020-02-25: separated sum and comp.
@@ -22,81 +23,81 @@ entity calo_mass_3_obj_condition is
         nr_obj: natural := NR_EG_OBJECTS;
         obj_type: natural := EG_TYPE;
 
-        calo1_object_low: natural;
-        calo1_object_high: natural;
-        pt_ge_mode_calo1: boolean;
-        pt_threshold_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        nr_eta_windows_calo1: natural;
-        eta_w1_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w1_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w3_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w3_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w4_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w4_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w5_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w5_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_full_range_calo1: boolean;
-        phi_w1_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_w1_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_w2_ignore_calo1: boolean;
-        phi_w2_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_w2_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        iso_lut_calo1: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
+        calo1_object_low: natural := 0;
+        calo1_object_high: natural := NR_EG_OBJECTS-1;
+        pt_ge_mode_calo1: boolean := true;
+        pt_threshold_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        nr_eta_windows_calo1: natural := 0;
+        eta_w1_upper_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w1_lower_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w2_upper_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w2_lower_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w3_upper_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w3_lower_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w4_upper_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w4_lower_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w5_upper_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w5_lower_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        phi_full_range_calo1: boolean := true;
+        phi_w1_upper_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        phi_w1_lower_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        phi_w2_ignore_calo1: boolean := true;
+        phi_w2_upper_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        phi_w2_lower_limit_calo1: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        iso_lut_calo1: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
 
-        calo2_object_low: natural;
-        calo2_object_high: natural;
-        pt_ge_mode_calo2: boolean;
-        pt_threshold_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        nr_eta_windows_calo2: natural;
-        eta_w1_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w1_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w3_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w3_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w4_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w4_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w5_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w5_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_full_range_calo2: boolean;
-        phi_w1_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_w1_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_w2_ignore_calo2: boolean;
-        phi_w2_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_w2_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        iso_lut_calo2: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
+        calo2_object_low: natural := 0;
+        calo2_object_high: natural := NR_EG_OBJECTS-1;
+        pt_ge_mode_calo2: boolean := true;
+        pt_threshold_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        nr_eta_windows_calo2: natural := 0;
+        eta_w1_upper_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w1_lower_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w2_upper_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w2_lower_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w3_upper_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w3_lower_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w4_upper_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w4_lower_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w5_upper_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w5_lower_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        phi_full_range_calo2: boolean := true;
+        phi_w1_upper_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        phi_w1_lower_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        phi_w2_ignore_calo2: boolean := true;
+        phi_w2_upper_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        phi_w2_lower_limit_calo2: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        iso_lut_calo2: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
 
-        calo3_object_low: natural;
-        calo3_object_high: natural;
-        pt_ge_mode_calo3: boolean;
-        pt_threshold_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        nr_eta_windows_calo3: natural;
-        eta_w1_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w1_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w2_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w3_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w3_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w4_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w4_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w5_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        eta_w5_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_full_range_calo3: boolean;
-        phi_w1_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_w1_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_w2_ignore_calo3: boolean;
-        phi_w2_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        phi_w2_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-        iso_lut_calo3: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
+        calo3_object_low: natural := 0;
+        calo3_object_high: natural := NR_EG_OBJECTS-1;
+        pt_ge_mode_calo3: boolean := true;
+        pt_threshold_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        nr_eta_windows_calo3: natural := 0;
+        eta_w1_upper_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w1_lower_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w2_upper_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w2_lower_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w3_upper_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w3_lower_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w4_upper_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w4_lower_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w5_upper_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        eta_w5_lower_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        phi_full_range_calo3: boolean := true;
+        phi_w1_upper_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        phi_w1_lower_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        phi_w2_ignore_calo3: boolean := true;
+        phi_w2_upper_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        phi_w2_lower_limit_calo3: std_logic_vector((MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0'));
+        iso_lut_calo3: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
 
-        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
-        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
+        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0'));
+        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0'));
 
-        pt_width: positive; 
-        cosh_cos_precision : positive;
-        cosh_cos_width: positive
+        pt_width: positive := EG_PT_VECTOR_WIDTH; 
+        cosh_cos_precision : positive := EG_EG_COSH_COS_PRECISION;
+        cosh_cos_width: positive := EG_EG_COSH_COS_VECTOR_WIDTH
         
     );
     port(

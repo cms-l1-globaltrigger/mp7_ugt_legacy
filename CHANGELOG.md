@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
   
-## [v1.11.2] - 2020-11-28
+## [v1.11.2] - 2020-11-30
 ### Comment
 
 - mp7_ugt firmware release v1.11.2
@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../gtl/gtl_pkg_tpl.vhd
   - ../gtl/mass_div_dr_comp.vhd
   - ../gtl/muon_muon_correlation_condition.vhd
+  - ../gtl/calo_conditions_orm.vhd
+  - ../gtl/calo_mass_3_obj_condition.vhd
+  - ../gtl/muon_mass_3_obj_condition.vhd
   - ../gtl/p_m_2_bx_pipeline.vhd
 - dep file:
   - ../cfg/uGT_algo.dep

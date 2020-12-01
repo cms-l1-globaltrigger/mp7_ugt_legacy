@@ -91,14 +91,14 @@ entity muon_esums_correlation_condition is
         lhc_clk: in std_logic;
         muon_data_i: in muon_objects_array;
         esums_data_i: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        diff_phi: in deta_dphi_vector_array := (others => (others => (others => '0')));
-        pt1 : in diff_inputs_array := (others => (others => '0'));
-        pt2 : in diff_inputs_array := (others => (others => '0'));
-        cos_dphi : in calo_cosh_cos_vector_array := (others => (others => (others => '0')));
-        cos_phi_1_integer : in sin_cos_integer_array := (others => 0);
-        cos_phi_2_integer : in sin_cos_integer_array := (others => 0);
-        sin_phi_1_integer : in sin_cos_integer_array := (others => 0);
-        sin_phi_2_integer : in sin_cos_integer_array := (others => 0);
+        diff_phi: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to 0) := (others => (others => (others => '0')));
+        pt1 : in diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
+        pt2 : in diff_inputs_array(0 to 0) := (others => (others => '0'));
+        cos_dphi : in calo_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to 0) := (others => (others => (others => '0')));
+        cos_phi_1_integer : in sin_cos_integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
+        cos_phi_2_integer : in sin_cos_integer_array(0 to 0) := (others => 0);
+        sin_phi_1_integer : in sin_cos_integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
+        sin_phi_2_integer : in sin_cos_integer_array(0 to 0) := (others => 0);
         condition_o: out std_logic
     );
 end muon_esums_correlation_condition;

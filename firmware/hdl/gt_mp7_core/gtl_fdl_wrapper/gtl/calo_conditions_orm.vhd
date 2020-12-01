@@ -3,7 +3,7 @@
 -- Condition module for calorimeter object types (eg, jet and tau) conditions with "overlap removal (orm)".
 
 -- Version history:
--- HB 2020-12-01: moved "nr_templates" to end of generic.
+-- HB 2020-12-01: moved "nr_templates" to end of generic. Updated default values in port.
 -- HB 2020-11-30: added default parameters.
 -- HB 2019-10-17: cleaned up.
 -- HB 2019-10-16: bug fix in cond_matrix_i (calo2_obj_vs_templ_pipe).
@@ -36,6 +36,7 @@ entity calo_conditions_orm is
         dphi_orm_cut: boolean := false;
         dr_orm_cut: boolean := true;
 
+        nr_calo1_objects: natural := NR_EG_OBJECTS;
         calo1_object_slice_1_low: natural := 0;
         calo1_object_slice_1_high: natural := NR_EG_OBJECTS-1;
         calo1_object_slice_2_low: natural := 0;
@@ -66,6 +67,7 @@ entity calo_conditions_orm is
         phi_w2_lower_limits_calo1: calo_templates_array := (others => (others => '0'));
         iso_luts_calo1: calo_templates_iso_array := (others => (others => '1'));
 
+        nr_calo2_objects: natural := NR_TAU_OBJECTS;
         calo2_object_low: natural := 0;
         calo2_object_high: natural := NR_TAU_OBJECTS-1;
         pt_ge_mode_calo2: boolean := true;
@@ -105,17 +107,17 @@ entity calo_conditions_orm is
         sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
         pt_sq_sin_cos_precision : positive := EG_JET_SIN_COS_PRECISION;
         
-        nr_templates: positive := NR_CALO_TEMPLATES;
+        nr_templates: positive := NR_CALO_TEMPLATES
     );
     port(
         clk: in std_logic;
         calo1: in calo_objects_array;
         calo2: in calo_objects_array;
-        diff_eta_orm: in deta_dphi_vector_array := (others => (others => (others => '0')));
-        diff_phi_orm: in deta_dphi_vector_array := (others => (others => (others => '0')));
-        pt : in diff_inputs_array(0 to MAX_CALO_OBJECTS-1) := (others => (others => '0'));
-        cos_phi_integer : in sin_cos_integer_array(0 to MAX_CALO_OBJECTS-1) := (others => 0);
-        sin_phi_integer : in sin_cos_integer_array(0 to MAX_CALO_OBJECTS-1) := (others => 0);
+        diff_eta_orm: in deta_dphi_vector_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
+        diff_phi_orm: in deta_dphi_vector_array(0 to nr_calo1_objects-1, 0 to nr_calo2_objects-1) := (others => (others => (others => '0')));
+        pt : in diff_inputs_array(0 to nr_calo1_objects-1) := (others => (others => '0'));
+        cos_phi_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1) := (others => 0);
+        sin_phi_integer : in sin_cos_integer_array(0 to nr_calo1_objects-1) := (others => 0);
         condition_o: out std_logic
     );
 end calo_conditions_orm;

@@ -3,6 +3,7 @@
 -- Condition module for calorimeter object types (eg, jet and tau) conditions with "overlap removal (orm)".
 
 -- Version history:
+-- HB 2020-12-01: moved "nr_templates" to end of generic.
 -- HB 2020-11-30: added default parameters.
 -- HB 2019-10-17: cleaned up.
 -- HB 2019-10-16: bug fix in cond_matrix_i (calo2_obj_vs_templ_pipe).
@@ -43,7 +44,6 @@ entity calo_conditions_orm is
         calo1_object_slice_3_high: natural := NR_EG_OBJECTS-1;
         calo1_object_slice_4_low: natural := 0;
         calo1_object_slice_4_high: natural := NR_EG_OBJECTS-1;
-        nr_templates: positive := 2;
         pt_ge_mode_calo1: boolean := true;
         obj_type_calo1 : natural := EG_TYPE;
         pt_thresholds_calo1: calo_templates_array := (others => (others => '0'));
@@ -103,7 +103,9 @@ entity calo_conditions_orm is
         pt_width: positive := EG_PT_VECTOR_WIDTH; 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := EG_JET_SIN_COS_PRECISION
+        pt_sq_sin_cos_precision : positive := EG_JET_SIN_COS_PRECISION;
+        
+        nr_templates: positive := NR_CALO_TEMPLATES;
     );
     port(
         clk: in std_logic;

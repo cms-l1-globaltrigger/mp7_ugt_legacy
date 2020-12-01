@@ -3,7 +3,7 @@
 -- Condition module for esums object types (ett, etm, htt, htm, etmhf, htmhf) conditions.
 
 -- Version history:
--- HB 2020-11-27: added default parameters.
+-- HB 2020-11-27: added default parameters. Changed order in generic.
 -- HB 2020-01-31: redesign output pipeline
 -- HB 2015-05-29: removed "use work.gtl_lib.all;" - using "entity work.xxx" for instances
 
@@ -17,14 +17,14 @@ use work.gtl_pkg.all;
 entity esums_conditions is
     generic	(
         et_ge_mode: boolean := true;
-        obj_type: natural := ETT_TYPE;
         et_threshold: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => 0);
         phi_full_range: boolean := true;
         phi_w1_upper_limit: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => 0);
         phi_w1_lower_limit: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => 0);
         phi_w2_ignore: boolean := true;
         phi_w2_upper_limit: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => 0);
-        phi_w2_lower_limit: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => 0)
+        phi_w2_lower_limit: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => 0);
+        obj_type: natural := ETT_TYPE
    );
     port(
         clk: in std_logic;

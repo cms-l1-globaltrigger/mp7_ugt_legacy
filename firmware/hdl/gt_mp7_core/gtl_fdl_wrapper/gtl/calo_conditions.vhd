@@ -32,7 +32,6 @@ entity calo_conditions is
         object_slice_3_high: natural := NR_EG_OBJECTS-1;
         object_slice_4_low: natural := 0;
         object_slice_4_high: natural := NR_EG_OBJECTS-1;
-        nr_templates: positive := 4;
         pt_ge_mode: boolean := true;
         obj_type : natural := EG_TYPE;
         pt_thresholds: calo_templates_array := (others => (others => '0'));
@@ -59,7 +58,9 @@ entity calo_conditions is
         pt_width: positive := EG_PT_VECTOR_WIDTH; 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := EG_EG_SIN_COS_PRECISION
+        pt_sq_sin_cos_precision : positive := EG_EG_SIN_COS_PRECISION;
+        
+        nr_templates: positive := 4
     );
     port(
         clk: in std_logic;

@@ -6,6 +6,7 @@
 -- Charge correlation selection implemented with "LS" and "OS" (charge correlation calculated in muon_charge_correlations.vhd)
 
 -- Version history:
+-- HB 2020-12-01: changed order in generic.
 -- HB 2020-11-27: added default parameters. Changed order in port.
 -- HB 2020-08-10: inserted "twobody unconstraint pt".
 -- HB 2020-06-09: implemented new muon structure with "unconstraint pt" [upt] and "impact parameter" [ip].
@@ -37,7 +38,6 @@ entity muon_conditions is
         object_slice_3_high: natural := NR_MU_OBJECTS-1;
         object_slice_4_low: natural := 0;
         object_slice_4_high: natural := NR_MU_OBJECTS-1;
-        nr_templates: positive := 4;
         pt_ge_mode : boolean := true;
         pt_thresholds: muon_templates_array := (others => (others => '0'));
         nr_eta_windows : muon_templates_natural_array := (others => 0);
@@ -73,7 +73,9 @@ entity muon_conditions is
         upt_width: positive := MU_UPT_VECTOR_WIDTH; 
         upt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION
+        pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION;
+        
+        nr_templates: positive := 4
 
     );
     port(

@@ -36,7 +36,6 @@ entity calo_conditions_orm is
         dphi_orm_cut: boolean := false;
         dr_orm_cut: boolean := true;
 
-        nr_calo1_objects: natural := NR_EG_OBJECTS;
         calo1_object_slice_1_low: natural := 0;
         calo1_object_slice_1_high: natural := NR_EG_OBJECTS-1;
         calo1_object_slice_2_low: natural := 0;
@@ -67,7 +66,6 @@ entity calo_conditions_orm is
         phi_w2_lower_limits_calo1: calo_templates_array := (others => (others => '0'));
         iso_luts_calo1: calo_templates_iso_array := (others => (others => '1'));
 
-        nr_calo2_objects: natural := NR_TAU_OBJECTS;
         calo2_object_low: natural := 0;
         calo2_object_high: natural := NR_TAU_OBJECTS-1;
         pt_ge_mode_calo2: boolean := true;
@@ -107,6 +105,8 @@ entity calo_conditions_orm is
         sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
         pt_sq_sin_cos_precision : positive := EG_JET_SIN_COS_PRECISION;
         
+        nr_calo1_objects: natural := NR_EG_OBJECTS;
+        nr_calo2_objects: natural := NR_TAU_OBJECTS;
         nr_templates: positive := NR_CALO_TEMPLATES
     );
     port(

@@ -78,21 +78,23 @@ entity calo_esums_correlation_condition is
 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := EG_ETM_SIN_COS_PRECISION
+        pt_sq_sin_cos_precision : positive := EG_ETM_SIN_COS_PRECISION;
 
+        nr_calo_objects: natural := NR_EG_OBJECTS
+        
     );
     port(
         lhc_clk: in std_logic;
         calo_data_i: in calo_objects_array;
         esums_data_i: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        diff_phi: in deta_dphi_vector_array := (others => (others => (others => '0')));
-        pt1 : in diff_inputs_array := (others => (others => '0'));
-        pt2 : in diff_inputs_array := (others => (others => '0'));
-        cos_dphi : in calo_cosh_cos_vector_array := (others => (others => (others => '0')));
-        cos_phi_1_integer : in sin_cos_integer_array := (others => 0);
-        cos_phi_2_integer : in sin_cos_integer_array := (others => 0);
-        sin_phi_1_integer : in sin_cos_integer_array := (others => 0);
-        sin_phi_2_integer : in sin_cos_integer_array := (others => 0);
+        diff_phi: in deta_dphi_vector_array(0 to nr_calo_objects-1, 0 to 0) := (others => (others => (others => '0')));
+        pt1 : in diff_inputs_array(0 to nr_calo_objects-1) := (others => (others => '0'));
+        pt2 : in diff_inputs_array(0 to 0) := (others => (others => '0'));
+        cos_dphi : in calo_cosh_cos_vector_array(0 to nr_calo_objects-1, 0 to 0) := (others => (others => (others => '0')));
+        cos_phi_1_integer : in sin_cos_integer_array(0 to nr_calo_objects-1) := (others => 0);
+        cos_phi_2_integer : in sin_cos_integer_array(0 to 0) := (others => 0);
+        sin_phi_1_integer : in sin_cos_integer_array(0 to nr_calo_objects-1) := (others => 0);
+        sin_phi_2_integer : in sin_cos_integer_array(0 to 0) := (others => 0);
         condition_o: out std_logic
     );
 end calo_esums_correlation_condition;

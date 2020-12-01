@@ -57,14 +57,14 @@ entity muon_conditions is
         phi_w2_ignore : muon_templates_boolean_array := (others => true);
         phi_w2_upper_limits: muon_templates_array := (others => (others => '0'));
         phi_w2_lower_limits: muon_templates_array := (others => (others => '0'));
-        requested_charges: muon_templates_string_array := (others => 'ign');
+        requested_charges: muon_templates_string_array := (others => "ign");
         qual_luts: muon_templates_quality_array := (others => (others => '1'));
         iso_luts: muon_templates_iso_array := (others => (others => '1'));
         upt_cuts: muon_templates_boolean_array := (others => false);
         upt_upper_limits: muon_templates_array := (others => (others => '0'));
         upt_lower_limits: muon_templates_array := (others => (others => '0'));
         ip_luts: muon_templates_ip_array := (others => (others => '1'));
-        requested_charge_correlation: string(1 to 2) := 'ig';
+        requested_charge_correlation: string(1 to 2) := "ig";
         
         twobody_pt_cut: boolean := false;
         pt_width: positive := MU_PT_VECTOR_WIDTH; 
@@ -90,7 +90,7 @@ entity muon_conditions is
         pt : in diff_inputs_array(0 to NR_MUON_OBJECTS-1) := (others => (others => '0'));
         cos_phi_integer : in sin_cos_integer_array(0 to NR_MUON_OBJECTS-1) := (others => 0);
         sin_phi_integer : in sin_cos_integer_array(0 to NR_MUON_OBJECTS-1) := (others => 0);
-        condition_o : out std_logic;
+        condition_o : out std_logic
     );
 end muon_conditions;
 

@@ -68,11 +68,10 @@ entity calo_esums_correlation_condition is
         diff_phi_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
         diff_phi_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
-
         pt1_width: positive := EG_PT_VECTOR_WIDTH; 
         pt2_width: positive := ETM_PT_VECTOR_WIDTH; 
+        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_cosh_cos_precision : positive := EG_ETM_COSH_COS_PRECISION;
         cosh_cos_width: positive := EG_ETM_COSH_COS_VECTOR_WIDTH;
 

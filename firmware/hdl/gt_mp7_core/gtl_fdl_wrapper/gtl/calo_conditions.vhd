@@ -3,6 +3,7 @@
 -- Condition module for calorimeter object types (eg, jet and tau) conditions.
 
 -- Version history:
+-- HB 2020-11-27: added default parameters. Changed order in port.
 -- HB 2019-10-21: bug fix input ports.
 -- HB 2019-06-14: updated for "five eta cuts".
 -- HB 2019-05-03: used instances "calo_cuts" and "calo_cond_matrix" (proposal Dinyar/Hannes) to reduce resources. Inserted instance for twobody_pt.
@@ -23,68 +24,69 @@ use work.gtl_pkg.all;
 
 entity calo_conditions is
      generic(
-        calo_object_slice_1_low: natural;
-        calo_object_slice_1_high: natural;
-        calo_object_slice_2_low: natural;
-        calo_object_slice_2_high: natural;
-        calo_object_slice_3_low: natural;
-        calo_object_slice_3_high: natural;
-        calo_object_slice_4_low: natural;
-        calo_object_slice_4_high: natural;
-        nr_templates: positive;
-        et_ge_mode: boolean;
+        object_slice_1_low: natural := 0;
+        object_slice_1_high: natural := NR_EG_OBJECTS-1;
+        object_slice_2_low: natural := 0;
+        object_slice_2_high: natural := NR_EG_OBJECTS-1;
+        object_slice_3_low: natural := 0;
+        object_slice_3_high: natural := NR_EG_OBJECTS-1;
+        object_slice_4_low: natural := 0;
+        object_slice_4_high: natural := NR_EG_OBJECTS-1;
+        pt_ge_mode: boolean := true;
         obj_type : natural := EG_TYPE;
-        et_thresholds: calo_templates_array;
-        nr_eta_windows : calo_templates_natural_array;
-        eta_w1_upper_limits: calo_templates_array;
-        eta_w1_lower_limits: calo_templates_array;
-        eta_w2_upper_limits: calo_templates_array;
-        eta_w2_lower_limits: calo_templates_array;
-        eta_w3_upper_limits: calo_templates_array;
-        eta_w3_lower_limits: calo_templates_array;
-        eta_w4_upper_limits: calo_templates_array;
-        eta_w4_lower_limits: calo_templates_array;
-        eta_w5_upper_limits: calo_templates_array;
-        eta_w5_lower_limits: calo_templates_array;
-        phi_full_range : calo_templates_boolean_array;
-        phi_w1_upper_limits: calo_templates_array;
-        phi_w1_lower_limits: calo_templates_array;
-        phi_w2_ignore : calo_templates_boolean_array;
-        phi_w2_upper_limits: calo_templates_array;
-        phi_w2_lower_limits: calo_templates_array;
-        iso_luts: calo_templates_iso_array;
+        pt_thresholds: calo_templates_array := (others => (others => '0'));
+        nr_eta_windows : calo_templates_natural_array := (others => 0);
+        eta_w1_upper_limits: calo_templates_array := (others => (others => '0'));
+        eta_w1_lower_limits: calo_templates_array := (others => (others => '0'));
+        eta_w2_upper_limits: calo_templates_array := (others => (others => '0'));
+        eta_w2_lower_limits: calo_templates_array := (others => (others => '0'));
+        eta_w3_upper_limits: calo_templates_array := (others => (others => '0'));
+        eta_w3_lower_limits: calo_templates_array := (others => (others => '0'));
+        eta_w4_upper_limits: calo_templates_array := (others => (others => '0'));
+        eta_w4_lower_limits: calo_templates_array := (others => (others => '0'));
+        eta_w5_upper_limits: calo_templates_array := (others => (others => '0'));
+        eta_w5_lower_limits: calo_templates_array := (others => (others => '0'));
+        phi_full_range : calo_templates_boolean_array := (others => true);
+        phi_w1_upper_limits: calo_templates_array := (others => (others => '0'));
+        phi_w1_lower_limits: calo_templates_array := (others => (others => '0'));
+        phi_w2_ignore : calo_templates_boolean_array := (others => true);
+        phi_w2_upper_limits: calo_templates_array := (others => (others => '0'));
+        phi_w2_lower_limits: calo_templates_array := (others => (others => '0'));
+        iso_luts: calo_templates_iso_array := (others => (others => '1'));
         
         twobody_pt_cut: boolean := false;
-        pt_width: positive := 1; 
+        pt_width: positive := EG_PT_VECTOR_WIDTH; 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        sin_cos_width: positive := 1;
-        pt_sq_sin_cos_precision : positive := 1
+        sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
+        pt_sq_sin_cos_precision : positive := EG_EG_SIN_COS_PRECISION;
+        
+        nr_templates: positive := 4
     );
     port(
         clk: in std_logic;
         data_i: in calo_objects_array;
-        condition_o: out std_logic;
-        pt : in diff_inputs_array(0 to MAX_CALO_OBJECTS-1) := (others => (others => '0'));
-        cos_phi_integer : in sin_cos_integer_array(0 to MAX_CALO_OBJECTS-1) := (others => 0);
-        sin_phi_integer : in sin_cos_integer_array(0 to MAX_CALO_OBJECTS-1) := (others => 0)
+        pt: in diff_inputs_array(0 to MAX_CALO_OBJECTS-1) := (others => (others => '0'));
+        cos_phi_integer: in sin_cos_integer_array(0 to MAX_CALO_OBJECTS-1) := (others => 0);
+        sin_phi_integer: in sin_cos_integer_array(0 to MAX_CALO_OBJECTS-1) := (others => 0);
+        condition_o: out std_logic
     );
 end calo_conditions;
 
 architecture rtl of calo_conditions is
 
-    constant nr_objects_slice_1_int: natural := calo_object_slice_1_high-calo_object_slice_1_low+1;
-    constant nr_objects_slice_2_int: natural := calo_object_slice_2_high-calo_object_slice_2_low+1;
-    constant nr_objects_slice_3_int: natural := calo_object_slice_3_high-calo_object_slice_3_low+1;
-    constant nr_objects_slice_4_int: natural := calo_object_slice_4_high-calo_object_slice_4_low+1;
+    constant nr_objects_slice_1_int: natural := object_slice_1_high-object_slice_1_low+1;
+    constant nr_objects_slice_2_int: natural := object_slice_2_high-object_slice_2_low+1;
+    constant nr_objects_slice_3_int: natural := object_slice_3_high-object_slice_3_low+1;
+    constant nr_objects_slice_4_int: natural := object_slice_4_high-object_slice_4_low+1;
 
 -- fixed pipeline structure, 2 stages total
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
 
-    signal obj_slice_1_vs_templ, obj_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array(calo_object_slice_1_low to calo_object_slice_1_high, 1 to 1);
-    signal obj_slice_2_vs_templ, obj_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(calo_object_slice_2_low to calo_object_slice_2_high, 1 to 1);
-    signal obj_slice_3_vs_templ, obj_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(calo_object_slice_3_low to calo_object_slice_3_high, 1 to 1);
-    signal obj_slice_4_vs_templ, obj_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(calo_object_slice_4_low to calo_object_slice_4_high, 1 to 1);
+    signal obj_slice_1_vs_templ, obj_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array(object_slice_1_low to object_slice_1_high, 1 to 1);
+    signal obj_slice_2_vs_templ, obj_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(object_slice_2_low to object_slice_2_high, 1 to 1);
+    signal obj_slice_3_vs_templ, obj_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(object_slice_3_low to object_slice_3_high, 1 to 1);
+    signal obj_slice_4_vs_templ, obj_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(object_slice_4_low to object_slice_4_high, 1 to 1);
     
     signal obj_vs_templ_vec_sig1: std_logic_vector(4095 downto 0) := (others => '0');
     signal obj_vs_templ_vec_sig2: std_logic_vector(4095 downto 0) := (others => '0');
@@ -106,7 +108,7 @@ architecture rtl of calo_conditions is
     attribute keep of condition_and_or_sig3  : signal is true;
 
     signal twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : 
-        std_logic_2dim_array(calo_object_slice_1_low to calo_object_slice_1_high, calo_object_slice_2_low to calo_object_slice_2_high) := (others => (others => '1'));
+        std_logic_2dim_array(object_slice_1_low to object_slice_1_high, object_slice_2_low to object_slice_2_high) := (others => (others => '1'));
 
 begin
 
@@ -114,8 +116,8 @@ begin
     twobody_pt_cut_i: if twobody_pt_cut = true and nr_templates = 2 generate
         twobody_pt_i: entity work.twobody_pt
             generic map(
-                calo_object_slice_1_low, calo_object_slice_1_high,
-                calo_object_slice_2_low, calo_object_slice_2_high,
+                object_slice_1_low, object_slice_1_high,
+                object_slice_2_low, object_slice_2_high,
                 nr_templates,                
                 twobody_pt_cut,
                 pt_width, 
@@ -131,12 +133,12 @@ begin
 -- Instantiation of object cuts.
     obj_cuts_i: entity work.calo_obj_cuts
         generic map(
-            calo_object_slice_1_low, calo_object_slice_1_high,
-            calo_object_slice_2_low, calo_object_slice_2_high,
-            calo_object_slice_3_low, calo_object_slice_3_high,
-            calo_object_slice_4_low, calo_object_slice_4_high,
-            nr_templates, et_ge_mode, obj_type,
-            et_thresholds,
+            object_slice_1_low, object_slice_1_high,
+            object_slice_2_low, object_slice_2_high,
+            object_slice_3_low, object_slice_3_high,
+            object_slice_4_low, object_slice_4_high,
+            nr_templates, pt_ge_mode, obj_type,
+            pt_thresholds,
             nr_eta_windows,
             eta_w1_upper_limits, eta_w1_lower_limits,
             eta_w2_upper_limits, eta_w2_lower_limits,
@@ -173,10 +175,10 @@ begin
 -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates'.
     cond_matrix_i: entity work.calo_cond_matrix
         generic map(
-            calo_object_slice_1_low, calo_object_slice_1_high,
-            calo_object_slice_2_low, calo_object_slice_2_high,
-            calo_object_slice_3_low, calo_object_slice_3_high,
-            calo_object_slice_4_low, calo_object_slice_4_high,
+            object_slice_1_low, object_slice_1_high,
+            object_slice_2_low, object_slice_2_high,
+            object_slice_3_low, object_slice_3_high,
+            object_slice_4_low, object_slice_4_high,
             nr_templates
         )
         port map(clk,

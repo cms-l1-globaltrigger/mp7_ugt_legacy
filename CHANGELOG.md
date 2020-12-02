@@ -4,13 +4,61 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
   
+## [v1.11.2] - 2020-12-01
+### Comment
+
+- mp7_ugt firmware release v1.11.2
+
+### Added
+- source files:
+  - ../gtl/pipelines.vhd
+  - ../gtl/ext_cond_pipeline.vhd
+  - ../gtl/centrality_pipeline.vhd
+
+### Changed
+- source files:
+  - ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
+  - ../gtl/calo_calo_correlation_condition.vhd
+  - ../gtl/calo_muon_correlation_condition.vhd
+  - ../gtl/gtl_module_tpl.vhd
+  - ../gtl/gtl_pkg_tpl.vhd
+  - ../gtl/mass_div_dr_comp.vhd
+  - ../gtl/muon_muon_correlation_condition.vhd
+  - ../gtl/calo_conditions.vhd
+  - ../gtl/calo_conditions_orm.vhd
+  - ../gtl/esums_conditions.vhd
+  - ../gtl/muon_conditions.vhd
+  - ../gtl/calo_mass_3_obj_condition.vhd
+  - ../gtl/muon_mass_3_obj_condition.vhd
+  - ../gtl/p_m_2_bx_pipeline.vhd
+- dep file:
+  - ../cfg/uGT_algo.dep
+- simulation files:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
+
+### Removed
+- source files:
+  - ../gtl/bs_muon_muon_eg_condition.vhd
+  - ../gtl/calo_calo_mass_div_dr_condition.vhd (included in calo_calo_correlation_condition.vhd)
+  - ../gtl/calo_collection_builder.vhd
+  - ../gtl/calo_muon_muon_b_tagging_condition.vhd
+  - ../gtl/muon_muon_mass_div_dr_condition.vhd (included in muon_muon_correlation_condition.vhd)
+  - ../frame/crc/*
+  - ../frame/dsmux/*
+  - ../frame/dyndl/*
+  - ../frame/fifo/*
+  - ../frame/l1asim/*
+  - ../frame/ram/*
+  - ../frame/rop/*
+  - ../frame/sw_reset/*
+  - ../frame/synchronizer/*
+
 ## [v1.11.1] - 2020-11-23
 ### Comment
 
-- mp7_ugt firmware release v1.11.1 (conerted scripts to python3 [for IPBB v0.5.2])
+- mp7_ugt firmware release v1.11.1 (converted scripts to python3 [for IPBB v0.5.2])
 
 ### Changed
-
 - script files:
   - ../scripts/buildReport.py
   - ../scripts/calcDeltaRRomCoeAllPartsCalo.py
@@ -56,7 +104,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../ngc/rom_lut_muon_inv_dr_sq_9/*.*
 
 ### Changed
-
 - source files:
   - ../gtl/muon_comparators.vhd
   - ../gtl/muon_obj_cuts.vhd
@@ -84,7 +131,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - mp7_ugt firmware release v1.10.7 (bugs fixed - condition output pipeline).
 
 ### Added
-
 - source files:
   - ../gtl/esums_comparators.vhd
   - ../gtl/min_bias_hf_conditions.vhd

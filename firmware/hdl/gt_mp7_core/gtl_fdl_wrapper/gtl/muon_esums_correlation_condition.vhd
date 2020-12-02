@@ -62,7 +62,6 @@ entity muon_esums_correlation_condition is
         ip_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0) := (others => '1');
 
         et_ge_mode_esums: boolean := true;
-        obj_type_esums: natural := ETM_TYPE;
         et_threshold_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_full_range_esums: boolean := true;
         phi_w1_upper_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -84,8 +83,10 @@ entity muon_esums_correlation_condition is
 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := MU_ETM_SIN_COS_PRECISION
+        pt_sq_sin_cos_precision : positive := MU_ETM_SIN_COS_PRECISION;
 
+        obj_type_esums: natural := ETM_TYPE
+        
     );
     port(
         lhc_clk: in std_logic;

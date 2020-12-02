@@ -37,9 +37,9 @@ entity calo_calo_calo_correlation_orm_condition is
         nr_calo1_objects: natural := NR_EG_OBJECTS;
         calo1_object_low: natural := 0;
         calo1_object_high: natural := NR_EG_OBJECTS-1;
-        et_ge_mode_calo1: boolean := true;
+        pt_ge_mode_calo1: boolean := true;
         obj_type_calo1: natural := EG_TYPE;
-        et_threshold_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        pt_threshold_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_calo1 : natural := 0;
         eta_w1_upper_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w1_lower_limit_calo1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -62,9 +62,9 @@ entity calo_calo_calo_correlation_orm_condition is
         nr_calo2_objects: natural := NR_EG_OBJECTS;
         calo2_object_low: natural := 0;
         calo2_object_high: natural := NR_EG_OBJECTS-1;
-        et_ge_mode_calo2: boolean := true;
+        pt_ge_mode_calo2: boolean := true;
         obj_type_calo2: natural := EG_TYPE;
-        et_threshold_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        pt_threshold_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_calo2 : natural := 0;
         eta_w1_upper_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w1_lower_limit_calo2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -86,9 +86,9 @@ entity calo_calo_calo_correlation_orm_condition is
 
         calo3_object_low: natural := 0;
         calo3_object_high: natural := NR_EG_OBJECTS-1;
-        et_ge_mode_calo3: boolean := true;
+        pt_ge_mode_calo3: boolean := true;
         obj_type_calo3: natural := JET_TYPE;
-        et_threshold_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        pt_threshold_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_calo3 : natural := 0;
         eta_w1_upper_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w1_lower_limit_calo3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -193,8 +193,8 @@ begin
 
     calo1_obj_l: for i in calo1_object_low to calo1_object_high generate
         calo1_comp_i: entity work.calo_comparators
-            generic map(et_ge_mode_calo1, obj_type_calo1,
-                et_threshold_calo1,
+            generic map(pt_ge_mode_calo1, obj_type_calo1,
+                pt_threshold_calo1,
                 nr_eta_windows_calo1,
                 eta_w1_upper_limit_calo1,
                 eta_w1_lower_limit_calo1,
@@ -220,8 +220,8 @@ begin
     obj_2plus1_true_comb_i: if obj_2plus1 = true generate
         calo2_obj_l: for i in calo2_object_low to calo2_object_high generate
             calo2_comp_i: entity work.calo_comparators
-                generic map(et_ge_mode_calo2, obj_type_calo2,
-                    et_threshold_calo2,
+                generic map(pt_ge_mode_calo2, obj_type_calo2,
+                    pt_threshold_calo2,
                     nr_eta_windows_calo2,
                     eta_w1_upper_limit_calo2,
                     eta_w1_lower_limit_calo2,
@@ -247,8 +247,8 @@ begin
 
     calo3_obj_l: for i in calo3_object_low to calo3_object_high generate
         calo3_comp_i: entity work.calo_comparators
-            generic map(et_ge_mode_calo3, obj_type_calo3,
-                et_threshold_calo3,
+            generic map(pt_ge_mode_calo3, obj_type_calo3,
+                pt_threshold_calo3,
                 nr_eta_windows_calo3,
                 eta_w1_upper_limit_calo3,
                 eta_w1_lower_limit_calo3,

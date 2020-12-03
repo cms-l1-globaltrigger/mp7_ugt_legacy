@@ -31,84 +31,84 @@
 \contentsline {subsection}{\numberline {3.2}Definition of optical interfaces}{32}{subsection.3.2}
 \contentsline {subsubsection}{\numberline {3.2.1}Calo-Layer2 optical interfaces}{32}{subsubsection.3.2.1}
 \contentsline {subsubsection}{\numberline {3.2.2}Global~Muon~Trigger\xspace optical interfaces}{33}{subsubsection.3.2.2}
-\contentsline {subsection}{\numberline {3.3}Implementation in firmware}{34}{subsection.3.3}
-\contentsline {subsubsection}{\numberline {3.3.1}Top-of-hierarchy module}{34}{subsubsection.3.3.1}
-\contentsline {subsubsection}{\numberline {3.3.2}Package module}{35}{subsubsection.3.3.2}
-\contentsline {subsection}{\numberline {3.4}\ensuremath {\mu \mathrm {GTL}}\xspace structure}{36}{subsection.3.4}
-\contentsline {subsubsection}{\numberline {3.4.1}Data $\pm $2bx}{36}{subsubsection.3.4.1}
-\contentsline {subsubsection}{\numberline {3.4.2}Calculation of differences in $\eta $ and $\varphi $}{37}{subsubsection.3.4.2}
-\contentsline {subsubsection}{\numberline {3.4.3}Calorimeter conditions}{37}{subsubsection.3.4.3}
-\contentsline {paragraph}{\numberline {3.4.3.1}Calorimeter data}{37}{paragraph.3.4.3.1}
-\contentsline {paragraph}{\numberline {3.4.3.2}Calorimeter conditions definition}{41}{paragraph.3.4.3.2}
-\contentsline {subparagraph}{\numberline {3.4.3.2.1}Calorimeter conditions module}{42}{subparagraph.3.4.3.2.1}
-\contentsline {subparagraph}{\numberline {3.4.3.2.2}Calorimeter Overlap Remover conditions module}{45}{subparagraph.3.4.3.2.2}
-\contentsline {subparagraph}{\numberline {3.4.3.2.3}Calorimeter conditions module - template for VHDL-Producer}{45}{subparagraph.3.4.3.2.3}
-\contentsline {subparagraph}{\numberline {3.4.3.2.4}Calorimeter comparators module}{45}{subparagraph.3.4.3.2.4}
-\contentsline {subsubsection}{\numberline {3.4.4}Energy sum quantities conditions}{48}{subsubsection.3.4.4}
-\contentsline {paragraph}{\numberline {3.4.4.1}Energy sum quantities data}{48}{paragraph.3.4.4.1}
-\contentsline {paragraph}{\numberline {3.4.4.2}Energy sum quantities conditions module (including Asymmetry conditions)}{49}{paragraph.3.4.4.2}
-\contentsline {paragraph}{\numberline {3.4.4.3}Energy sum quantities conditions module - template for VHDL-Producer}{51}{paragraph.3.4.4.3}
-\contentsline {subsubsection}{\numberline {3.4.5}Minimum bias trigger conditions}{51}{subsubsection.3.4.5}
-\contentsline {subsubsection}{\numberline {3.4.6}Towercount condition}{51}{subsubsection.3.4.6}
-\contentsline {subsubsection}{\numberline {3.4.7}Centrality condition}{51}{subsubsection.3.4.7}
-\contentsline {subsubsection}{\numberline {3.4.8}Muon conditions}{51}{subsubsection.3.4.8}
-\contentsline {paragraph}{\numberline {3.4.8.1}Muon data}{51}{paragraph.3.4.8.1}
-\contentsline {paragraph}{\numberline {3.4.8.2}Muon charge correlation module}{55}{paragraph.3.4.8.2}
-\contentsline {paragraph}{\numberline {3.4.8.3}Muon conditions definition}{57}{paragraph.3.4.8.3}
-\contentsline {subparagraph}{\numberline {3.4.8.3.1}Muon conditions module}{58}{subparagraph.3.4.8.3.1}
-\contentsline {subparagraph}{\numberline {3.4.8.3.2}Muon conditions module - template for VHDL-Producer}{63}{subparagraph.3.4.8.3.2}
-\contentsline {subparagraph}{\numberline {3.4.8.3.3}Muon comparators module}{63}{subparagraph.3.4.8.3.3}
-\contentsline {subsubsection}{\numberline {3.4.9}Correlation conditions}{65}{subsubsection.3.4.9}
-\contentsline {paragraph}{\numberline {3.4.9.1}Calculation of cuts}{65}{paragraph.3.4.9.1}
-\contentsline {subparagraph}{\numberline {3.4.9.1.1}$\Delta $R calculation}{65}{subparagraph.3.4.9.1.1}
-\contentsline {subparagraph}{\numberline {3.4.9.1.2}Invariant mass calculation}{66}{subparagraph.3.4.9.1.2}
-\contentsline {subparagraph}{\numberline {3.4.9.1.3}Transverse mass calculation}{66}{subparagraph.3.4.9.1.3}
-\contentsline {subparagraph}{\numberline {3.4.9.1.4}Two-body pt calculation}{67}{subparagraph.3.4.9.1.4}
-\contentsline {subparagraph}{\numberline {3.4.9.1.5}Invariant mass divided by $\Delta $R calculation}{67}{subparagraph.3.4.9.1.5}
-\contentsline {subparagraph}{\numberline {3.4.9.1.6}Invariant mass calculation for three objects}{67}{subparagraph.3.4.9.1.6}
-\contentsline {paragraph}{\numberline {3.4.9.2}Correlation condition modules}{67}{paragraph.3.4.9.2}
-\contentsline {subparagraph}{\numberline {3.4.9.2.1}Overview of possible correlation cuts in conditions}{68}{subparagraph.3.4.9.2.1}
-\contentsline {subparagraph}{\numberline {3.4.9.2.2}Calo Calo Correlation condition module}{70}{subparagraph.3.4.9.2.2}
-\contentsline {subparagraph}{\numberline {3.4.9.2.3}Calo Calo Overlap Remover Correlation condition module}{77}{subparagraph.3.4.9.2.3}
-\contentsline {subparagraph}{\numberline {3.4.9.2.4}Calo Calo Correlation condition module for Invariant Mass Divided by $\Delta $R}{77}{subparagraph.3.4.9.2.4}
-\contentsline {subparagraph}{\numberline {3.4.9.2.5}Calo Correlation condition module for Invariant Mass with Three Objects}{78}{subparagraph.3.4.9.2.5}
-\contentsline {subparagraph}{\numberline {3.4.9.2.6}Calo Esums Correlation condition module}{78}{subparagraph.3.4.9.2.6}
-\contentsline {subparagraph}{\numberline {3.4.9.2.7}Calo Muon Correlation condition module}{83}{subparagraph.3.4.9.2.7}
-\contentsline {subparagraph}{\numberline {3.4.9.2.8}Muon Muon Correlation condition module}{90}{subparagraph.3.4.9.2.8}
-\contentsline {subparagraph}{\numberline {3.4.9.2.9}Muon Muon Correlation condition module for Invariant Mass Divided by $\Delta $R}{98}{subparagraph.3.4.9.2.9}
-\contentsline {subparagraph}{\numberline {3.4.9.2.10}Muon Correlation condition module for Invariant Mass with Three Objects}{98}{subparagraph.3.4.9.2.10}
-\contentsline {subparagraph}{\numberline {3.4.9.2.11}Muon Esums Correlation condition module}{98}{subparagraph.3.4.9.2.11}
-\contentsline {subsubsection}{\numberline {3.4.10}External Conditions}{104}{subsubsection.3.4.10}
-\contentsline {subsubsection}{\numberline {3.4.11}Algorithms logic}{104}{subsubsection.3.4.11}
-\contentsline {subsection}{\numberline {3.5}VHDL-Templates for VHDL-Producer}{105}{subsection.3.5}
-\contentsline {subsubsection}{\numberline {3.5.1}Global Trigger Logic module - template for VHDL-Producer}{105}{subsubsection.3.5.1}
-\contentsline {paragraph}{\numberline {3.5.1.1}Instances}{105}{paragraph.3.5.1.1}
-\contentsline {paragraph}{\numberline {3.5.1.2}Signal declarations}{107}{paragraph.3.5.1.2}
-\contentsline {subsubsection}{\numberline {3.5.2}Global Trigger Logic package module - template for VHDL-Producer}{108}{subsubsection.3.5.2}
-\contentsline {subsubsection}{\numberline {3.5.3}Algorithms mapping module - template for VHDL-Producer}{108}{subsubsection.3.5.3}
-\contentsline {subsubsection}{\numberline {3.5.4}Calorimeter conditions - template for VHDL-Producer}{108}{subsubsection.3.5.4}
-\contentsline {subsubsection}{\numberline {3.5.5}Energy sum quantities conditions - template for VHDL-Producer}{111}{subsubsection.3.5.5}
-\contentsline {subsubsection}{\numberline {3.5.6}Muon conditions - template for VHDL-Producer}{112}{subsubsection.3.5.6}
-\contentsline {subsubsection}{\numberline {3.5.7}Calo Calo Correlation condition - template for VHDL-Producer}{115}{subsubsection.3.5.7}
-\contentsline {subsubsection}{\numberline {3.5.8}Calo Muon Correlation condition - template for VHDL-Producer}{118}{subsubsection.3.5.8}
-\contentsline {subsubsection}{\numberline {3.5.9}Muon Muon Correlation condition - template for VHDL-Producer}{121}{subsubsection.3.5.9}
-\contentsline {subsubsection}{\numberline {3.5.10}Calo Esums Correlation condition - template for VHDL-Producer}{123}{subsubsection.3.5.10}
+\contentsline {subsection}{\numberline {3.3}Implementation in firmware}{35}{subsection.3.3}
+\contentsline {subsubsection}{\numberline {3.3.1}Top-of-hierarchy module}{35}{subsubsection.3.3.1}
+\contentsline {subsubsection}{\numberline {3.3.2}Package module}{36}{subsubsection.3.3.2}
+\contentsline {subsection}{\numberline {3.4}\ensuremath {\mu \mathrm {GTL}}\xspace structure}{38}{subsection.3.4}
+\contentsline {subsubsection}{\numberline {3.4.1}Data $\pm $2bx}{38}{subsubsection.3.4.1}
+\contentsline {subsubsection}{\numberline {3.4.2}Calculation of differences in $\eta $ and $\varphi $}{39}{subsubsection.3.4.2}
+\contentsline {subsubsection}{\numberline {3.4.3}Calorimeter conditions}{39}{subsubsection.3.4.3}
+\contentsline {paragraph}{\numberline {3.4.3.1}Calorimeter data}{39}{paragraph.3.4.3.1}
+\contentsline {paragraph}{\numberline {3.4.3.2}Calorimeter conditions definition}{43}{paragraph.3.4.3.2}
+\contentsline {subparagraph}{\numberline {3.4.3.2.1}Calorimeter conditions module}{44}{subparagraph.3.4.3.2.1}
+\contentsline {subparagraph}{\numberline {3.4.3.2.2}Calorimeter Overlap Remover conditions module}{47}{subparagraph.3.4.3.2.2}
+\contentsline {subparagraph}{\numberline {3.4.3.2.3}Calorimeter conditions module - template for VHDL-Producer}{47}{subparagraph.3.4.3.2.3}
+\contentsline {subparagraph}{\numberline {3.4.3.2.4}Calorimeter comparators module}{47}{subparagraph.3.4.3.2.4}
+\contentsline {subsubsection}{\numberline {3.4.4}Energy sum quantities conditions}{50}{subsubsection.3.4.4}
+\contentsline {paragraph}{\numberline {3.4.4.1}Energy sum quantities data}{50}{paragraph.3.4.4.1}
+\contentsline {paragraph}{\numberline {3.4.4.2}Energy sum quantities conditions module (including Asymmetry conditions)}{51}{paragraph.3.4.4.2}
+\contentsline {paragraph}{\numberline {3.4.4.3}Energy sum quantities conditions module - template for VHDL-Producer}{53}{paragraph.3.4.4.3}
+\contentsline {subsubsection}{\numberline {3.4.5}Minimum bias trigger conditions}{53}{subsubsection.3.4.5}
+\contentsline {subsubsection}{\numberline {3.4.6}Towercount condition}{53}{subsubsection.3.4.6}
+\contentsline {subsubsection}{\numberline {3.4.7}Centrality condition}{53}{subsubsection.3.4.7}
+\contentsline {subsubsection}{\numberline {3.4.8}Muon conditions}{53}{subsubsection.3.4.8}
+\contentsline {paragraph}{\numberline {3.4.8.1}Muon data}{53}{paragraph.3.4.8.1}
+\contentsline {paragraph}{\numberline {3.4.8.2}Muon charge correlation module}{57}{paragraph.3.4.8.2}
+\contentsline {paragraph}{\numberline {3.4.8.3}Muon conditions definition}{59}{paragraph.3.4.8.3}
+\contentsline {subparagraph}{\numberline {3.4.8.3.1}Muon conditions module}{60}{subparagraph.3.4.8.3.1}
+\contentsline {subparagraph}{\numberline {3.4.8.3.2}Muon conditions module - template for VHDL-Producer}{65}{subparagraph.3.4.8.3.2}
+\contentsline {subparagraph}{\numberline {3.4.8.3.3}Muon comparators module}{65}{subparagraph.3.4.8.3.3}
+\contentsline {subsubsection}{\numberline {3.4.9}Correlation conditions}{67}{subsubsection.3.4.9}
+\contentsline {paragraph}{\numberline {3.4.9.1}Calculation of cuts}{67}{paragraph.3.4.9.1}
+\contentsline {subparagraph}{\numberline {3.4.9.1.1}$\Delta $R calculation}{67}{subparagraph.3.4.9.1.1}
+\contentsline {subparagraph}{\numberline {3.4.9.1.2}Invariant mass calculation}{68}{subparagraph.3.4.9.1.2}
+\contentsline {subparagraph}{\numberline {3.4.9.1.3}Transverse mass calculation}{68}{subparagraph.3.4.9.1.3}
+\contentsline {subparagraph}{\numberline {3.4.9.1.4}Two-body pt calculation}{69}{subparagraph.3.4.9.1.4}
+\contentsline {subparagraph}{\numberline {3.4.9.1.5}Invariant mass divided by $\Delta $R calculation}{69}{subparagraph.3.4.9.1.5}
+\contentsline {subparagraph}{\numberline {3.4.9.1.6}Invariant mass calculation for three objects}{69}{subparagraph.3.4.9.1.6}
+\contentsline {paragraph}{\numberline {3.4.9.2}Correlation condition modules}{70}{paragraph.3.4.9.2}
+\contentsline {subparagraph}{\numberline {3.4.9.2.1}Overview of possible correlation cuts in conditions}{70}{subparagraph.3.4.9.2.1}
+\contentsline {subparagraph}{\numberline {3.4.9.2.2}Calo Calo Correlation condition module}{72}{subparagraph.3.4.9.2.2}
+\contentsline {subparagraph}{\numberline {3.4.9.2.3}Calo Calo Overlap Remover Correlation condition module}{79}{subparagraph.3.4.9.2.3}
+\contentsline {subparagraph}{\numberline {3.4.9.2.4}Calo Calo Correlation condition module for Invariant Mass Divided by $\Delta $R}{79}{subparagraph.3.4.9.2.4}
+\contentsline {subparagraph}{\numberline {3.4.9.2.5}Calo Correlation condition module for Invariant Mass with Three Objects}{80}{subparagraph.3.4.9.2.5}
+\contentsline {subparagraph}{\numberline {3.4.9.2.6}Calo Esums Correlation condition module}{80}{subparagraph.3.4.9.2.6}
+\contentsline {subparagraph}{\numberline {3.4.9.2.7}Calo Muon Correlation condition module}{85}{subparagraph.3.4.9.2.7}
+\contentsline {subparagraph}{\numberline {3.4.9.2.8}Muon Muon Correlation condition module}{92}{subparagraph.3.4.9.2.8}
+\contentsline {subparagraph}{\numberline {3.4.9.2.9}Muon Muon Correlation condition module for Invariant Mass Divided by $\Delta $R}{100}{subparagraph.3.4.9.2.9}
+\contentsline {subparagraph}{\numberline {3.4.9.2.10}Muon Correlation condition module for Invariant Mass with Three Objects}{100}{subparagraph.3.4.9.2.10}
+\contentsline {subparagraph}{\numberline {3.4.9.2.11}Muon Esums Correlation condition module}{100}{subparagraph.3.4.9.2.11}
+\contentsline {subsubsection}{\numberline {3.4.10}External Conditions}{106}{subsubsection.3.4.10}
+\contentsline {subsubsection}{\numberline {3.4.11}Algorithms logic}{106}{subsubsection.3.4.11}
+\contentsline {subsection}{\numberline {3.5}VHDL-Templates for VHDL-Producer}{107}{subsection.3.5}
+\contentsline {subsubsection}{\numberline {3.5.1}Global Trigger Logic module - template for VHDL-Producer}{107}{subsubsection.3.5.1}
+\contentsline {paragraph}{\numberline {3.5.1.1}Instances}{107}{paragraph.3.5.1.1}
+\contentsline {paragraph}{\numberline {3.5.1.2}Signal declarations}{109}{paragraph.3.5.1.2}
+\contentsline {subsubsection}{\numberline {3.5.2}Global Trigger Logic package module - template for VHDL-Producer}{110}{subsubsection.3.5.2}
+\contentsline {subsubsection}{\numberline {3.5.3}Algorithms mapping module - template for VHDL-Producer}{110}{subsubsection.3.5.3}
+\contentsline {subsubsection}{\numberline {3.5.4}Calorimeter conditions - template for VHDL-Producer}{110}{subsubsection.3.5.4}
+\contentsline {subsubsection}{\numberline {3.5.5}Energy sum quantities conditions - template for VHDL-Producer}{113}{subsubsection.3.5.5}
+\contentsline {subsubsection}{\numberline {3.5.6}Muon conditions - template for VHDL-Producer}{114}{subsubsection.3.5.6}
+\contentsline {subsubsection}{\numberline {3.5.7}Calo Calo Correlation condition - template for VHDL-Producer}{117}{subsubsection.3.5.7}
+\contentsline {subsubsection}{\numberline {3.5.8}Calo Muon Correlation condition - template for VHDL-Producer}{120}{subsubsection.3.5.8}
+\contentsline {subsubsection}{\numberline {3.5.9}Muon Muon Correlation condition - template for VHDL-Producer}{123}{subsubsection.3.5.9}
+\contentsline {subsubsection}{\numberline {3.5.10}Calo Esums Correlation condition - template for VHDL-Producer}{125}{subsubsection.3.5.10}
 \contentsline {subsubsection}{\numberline {3.5.11}Muon Esums Correlation condition - template for VHDL-Producer}{125}{subsubsection.3.5.11}
-\contentsline {section}{\numberline {4}Final Desicion Logic}{128}{section.4}
-\contentsline {subsection}{\numberline {4.1}\ensuremath {\mu \mathrm {FDL}}\xspace Interface}{128}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}MP7 Final-OR\xspace hardware solution}{129}{subsection.4.2}
-\contentsline {subsection}{\numberline {4.3}Data flow}{129}{subsection.4.3}
-\contentsline {subsection}{\numberline {4.4}Main parts}{130}{subsection.4.4}
-\contentsline {subsubsection}{\numberline {4.4.1}Registers and memories}{131}{subsubsection.4.4.1}
-\contentsline {paragraph}{\numberline {4.4.1.1}Register map}{131}{paragraph.4.4.1.1}
-\contentsline {subsubsection}{\numberline {4.4.2}Algo-bx-masks}{140}{subsubsection.4.4.2}
-\contentsline {subsubsection}{\numberline {4.4.3}Rate-counters}{140}{subsubsection.4.4.3}
-\contentsline {subsubsection}{\numberline {4.4.4}Prescalers}{140}{subsubsection.4.4.4}
-\contentsline {subsubsection}{\numberline {4.4.5}Finor-masks}{140}{subsubsection.4.4.5}
-\contentsline {subsubsection}{\numberline {4.4.6}Veto-masks}{140}{subsubsection.4.4.6}
-\contentsline {subsubsection}{\numberline {4.4.7}Finor}{141}{subsubsection.4.4.7}
-\contentsline {subsection}{\numberline {4.5}Implementation in firmware}{141}{subsection.4.5}
-\contentsline {section}{\numberline {5}Readout-Process}{143}{section.5}
-\contentsline {section}{\numberline {6}Glossary}{144}{section.6}
-\contentsline {section}{Bibliography}{146}{section*.3}
-\contentsline {section}{Index}{146}{section*.4}
+\contentsline {section}{\numberline {4}Final Desicion Logic}{126}{section.4}
+\contentsline {subsection}{\numberline {4.1}\ensuremath {\mu \mathrm {FDL}}\xspace Interface}{126}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}MP7 Final-OR\xspace hardware solution}{127}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Data flow}{127}{subsection.4.3}
+\contentsline {subsection}{\numberline {4.4}Main parts}{128}{subsection.4.4}
+\contentsline {subsubsection}{\numberline {4.4.1}Registers and memories}{129}{subsubsection.4.4.1}
+\contentsline {paragraph}{\numberline {4.4.1.1}Register map}{129}{paragraph.4.4.1.1}
+\contentsline {subsubsection}{\numberline {4.4.2}Algo-bx-masks}{138}{subsubsection.4.4.2}
+\contentsline {subsubsection}{\numberline {4.4.3}Rate-counters}{138}{subsubsection.4.4.3}
+\contentsline {subsubsection}{\numberline {4.4.4}Prescalers}{138}{subsubsection.4.4.4}
+\contentsline {subsubsection}{\numberline {4.4.5}Finor-masks}{138}{subsubsection.4.4.5}
+\contentsline {subsubsection}{\numberline {4.4.6}Veto-masks}{138}{subsubsection.4.4.6}
+\contentsline {subsubsection}{\numberline {4.4.7}Finor}{139}{subsubsection.4.4.7}
+\contentsline {subsection}{\numberline {4.5}Implementation in firmware}{139}{subsection.4.5}
+\contentsline {section}{\numberline {5}Readout-Process}{141}{section.5}
+\contentsline {section}{\numberline {6}Glossary}{142}{section.6}
+\contentsline {section}{Bibliography}{144}{section*.3}
+\contentsline {section}{Index}{144}{section*.4}

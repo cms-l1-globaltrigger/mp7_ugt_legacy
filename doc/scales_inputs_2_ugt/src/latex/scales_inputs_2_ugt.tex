@@ -16,7 +16,7 @@
 
 \begin{titlepage}
 
-\date{9 September 2020}
+\date{11 December 2020}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -92,6 +92,8 @@ $\eta$ values, which can be positive or negative, are expressed in Two's Complem
 So, for muons, which use 9 bits for coding $\eta$, the central value of the bin 0 (-0.010875/2 to +0.010875/2) = 0.0, the left edge of the bins ranges from $-255 \times 0.010875 - 0.010875/2 = -2.7785625$ to $+255 \times 0.010875 - 0.010875/2 = 2.7676875$. The central value of the bins ranges between $\pm 2.773125$ .  The physical $\eta$ range of the muon detectors is about $\pm2.45$, so that not all possible $\eta$ bins are used. 
 
 For calo objects, which use 8 bits for coding $\eta$, the left edge of the bins range from $-128 \times 0.0435 = -5.568000$ to $127 \times 0.0435 = 5.524500$ (left edge of the bin 0 = 0.0). The central value of the bins ranges between $\pm 5.546260$. The physical $\eta$ range of the calorimeters is about $\pm5$, so that not all possible $\eta$ bins are used. 
+
+\textbf{Remark:} Muon $\eta$ and $\varphi$ raw bits currently not used in uGT. Muon $\varphi$ raw bits [$\varphi$ (out)] are part of the 64 bit muon structure on frames 2 to 6, $\eta$ raw bits are transmitted on frame 1 (see Table~\ref{table:sum_opt_links}).
 
 6) The $p_t$/$E_t$ scale is identical in step width (0.5 GeV for all systems), starts from 0 (zero) but reaches up to different maximum values for different objects. The highest bin (such as 0x1ff for 9 bits, or 0x7ff for 11 bits, etc.) marks an overflow.
 
@@ -225,7 +227,7 @@ definition)	&		&	ASYMHTHF	&	0..255 &	1 &	8                    \\
 The following pages contain tables for data structure of objects and the data flow of objects on the optical links.
 
 \begin{itemize}
-\item A summary of the optical links is shown in Table~\ref{table:sum_opt_links}.
+\item A summary of the optical links is shown in Table~\ref{table:sum_opt_links}. (Remark: Muon eta raw bits currently not used in uGT!)
 \end{itemize}
 
 \begin{table}[ht]
@@ -242,19 +244,21 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \makebox[2.4cm][c]{10} \\\hline\
 0 & free & free & free & free & EG0 & EG6  & JET0 & JET6 & TAU0 & TAU6 & ET, \\ 
  &  &  &  &  &  &  &  &  &  &  & ETTEM, \\ 
  &  &  &  &  &  &  &  &  &  &  & MBT0HFP \\ 
-1 & free & free & free & free & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7 & HT, \\
- &  &  &  &  &  &  &  &  &  &  & TOWERCOUNT, \\ 
- &  &  &  &  &  &  &  &  &  &  & MBT0HFM \\ 
-2 & MU0 [low]  & MU2 [low]  & MU4 [low]  & MU6 [low]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8  & ET$_{miss}$, \\
+1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7 & HT, \\
+ & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & & & TOWERCOUNT, \\
+ & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & & & MBT0HFM \\
+ & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & & & \\
+ &  &  &  &  &  &  &  &  &  &  & \\ 
+2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8  & ET$_{miss}$, \\
  &  &  &  &  &  &  &  &  &  &  & ASYMET, \\ 
  &  &  &  &  &  &  &  &  &  &  & MBT1HFP \\ 
-3 & MU0 [high] & MU2 [high] & MU4 [high] & MU6 [high] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9  & HT$_{miss}$, \\ 
+3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9  & HT$_{miss}$, \\ 
  &  &  &  &  &  &  &  &  &  &  & ASYMHT, \\ 
  &  &  &  &  &  &  &  &  &  &  & MBT1HFM \\ 
-4 & MU1 [low]  & MU3 [low]  & MU5 [low]  & MU7 [low]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10 & ET$_{miss}^{HF}$ \\
+4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10 & ET$_{miss}^{HF}$ \\
  &  &  &  &  &  &  &  &  &  &  & ASYMETHF, \\ 
  &  &  &  &  &  &  &  &  &  &  & CENT[3:0] \\ 
-5 & MU1 [high] & MU3 [high] & MU5 [high] & MU7 [high] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11 & HT$_{miss}^{HF}$ \\
+5 & MU1 [63:32] & MU3 [63:32] & MU5 [63:32] & MU7 [63:32] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11 & HT$_{miss}^{HF}$ \\
  &  &  &  &  &  &  &  &  &  &  & ASYMHTHF, \\ 
  &  &  &  &  &  &  &  &  &  &  & CENT[7:4] \\\hline  
 \end{tabular}

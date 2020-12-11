@@ -1,4 +1,3 @@
-#!/usr/bin/env python2
 #
 # This script runs Modelsim on given trigger menu for gtl_fdl_wrapper.vhd
 #
@@ -41,85 +40,85 @@ def main():
     # Parse command line arguments.
     args = parse()
 
-    debug = 'prints' if args.p else ''
+    debug = args.p
 
     # Create name of do-file template.
     dofile_tpl = ''.join([args.dofile, '_tpl.do'])
-    if debug == 'prints':
-	print "dofile_tpl: {dofile_tpl}".format(**locals())
-	print "path_mp7_tag: {args.path_mp7_tag}".format(**locals())
-    
+    if debug:
+        print(("dofile_tpl: {dofile_tpl}".format(**locals())))
+        print(("path_mp7_tag: {args.path_mp7_tag}".format(**locals())))
+
     testvector = (args.testvector)
-    if debug == 'prints':
-	print "testvector_path: {args.testvector}".format(**locals())
+    if debug:
+        print("testvector_path: {args.testvector}".format(**locals()))
     # Get string of testvector.
     testvector_name = os.path.basename(args.testvector)
-    if debug == 'prints':
-	print "testvector_name: {testvector_name}".format(**locals())
- 
+    if debug:
+        print("testvector_name: {testvector_name}".format(**locals()))
+
     menu_name_array = testvector.split("/")
     # revers order of array
 #    menu_name_array_inv = menu_name_array.reverse()
     menu_name_array_inv = menu_name_array[::-1]
-    #if debug == 'prints':
-	#print "menu_name_array: {menu_name_array}".format(**locals())
-	#print "menu_name_array_inv: {menu_name_array_inv}".format(**locals())
+    #if debug:
+        #print "menu_name_array: {menu_name_array}".format(**locals())
+        #print "menu_name_array_inv: {menu_name_array_inv}".format(**locals())
 
     for i in range(1,3):
-	menu_name_array_inv.pop(0)
-	#if debug == 'prints':
-	    #print "menu_name_array_inv {i}: {menu_name_array_inv}".format(**locals())
-    
+        menu_name_array_inv.pop(0)
+        #if debug:
+             #print "menu_name_array_inv {i}: {menu_name_array_inv}".format(**locals())
+
     menu_name = menu_name_array_inv[0]
-    #if debug == 'prints':
-	#print "menu_name: {menu_name}".format(**locals())
-    
+    #if debug:
+        #print "menu_name: {menu_name}".format(**locals())
+
     menu_path_array = menu_name_array_inv[::-1]
-    if debug == 'prints':
-	print "menu_path_array: {menu_path_array}".format(**locals())
+    if debug:
+        print("menu_path_array: {menu_path_array}".format(**locals()))
 
     temp = []
     for i in range(len(menu_path_array)+1):
-	temp.append(0)
-    #if debug == 'prints':
-	#print "temp: {temp}".format(**locals())
+        temp.append(0)
+    #if debug:
+        #print "temp: {temp}".format(**locals())
     temp[0] = ''
-    #if debug == 'prints':
-	#print "temp[0]: {temp[0]}".format(**locals())
+    #if debug:
+        #print "temp[0]: {temp[0]}".format(**locals())
 
     for i in range(len(menu_path_array)):
-	if i == len(menu_path_array)-1:
-	    temp[i+1] = ''.join([temp[i], menu_path_array[i]]) # no '/' at end of path
-	else:
-	    temp[i+1] = ''.join([temp[i], menu_path_array[i], '/'])    
-	    
-    #if debug == 'prints':
-	#print "temp after loop: {temp}".format(**locals())    
+        if i == len(menu_path_array)-1:
+            temp[i+1] = ''.join([temp[i], menu_path_array[i]]) # no '/' at end of path
+        else:
+            temp[i+1] = ''.join([temp[i], menu_path_array[i], '/'])
+
+    #if debug:
+        #print "temp after loop: {temp}".format(**locals())
     menu_path = temp[len(menu_path_array)]
-    if debug == 'prints':
-	print "menu_path: {menu_path}".format(**locals())    
-    
+    if debug:
+        print("menu_path: {menu_path}".format(**locals()))
+
     dofile_out = ''.join([args.dofile, '_', menu_name, '.do'])
-    if debug == 'prints':
-	print "***********************************************************"
-	print "==> dofile for use in vsim (ModelSim): {dofile_out}".format(**locals())
-	print "***********************************************************"
+    if debug:
+        print("***********************************************************")
+        print("==> dofile for use in vsim (ModelSim): {dofile_out}".format(**locals()))
+        print("***********************************************************")
 
     tbfile_tpl = ''.join([args.dofile, '_tb_tpl.vhd'])
-    if debug == 'prints':
-	print "tbfile_tpl: {tbfile_tpl}".format(**locals())
+    if debug:
+        print("tbfile_tpl: {tbfile_tpl}".format(**locals()))
     tbfile_out = ''.join([args.dofile, '_tb.vhd'])
-    if debug == 'prints':
-	print "tbfile: {tbfile_out}".format(**locals())
+    if debug:
+        print("tbfile: {tbfile_out}".format(**locals()))
 
     # ---------------------------------------------------------------------
     #  Substitute variables in do file template.
     # ---------------------------------------------------------------------
-    
+
     render_template((os.path.join(SCRIPTS_DIR, dofile_tpl)), (os.path.join(SCRIPTS_DIR, dofile_out)), {
-	'_MP7_TAG_' : args.path_mp7_tag,
-	'_MENU_PATH_' : menu_path,
-	'_MENU_NAME_' : menu_name,
+        '_MP7_TAG_' : args.path_mp7_tag,
+        '_MENU_PATH_' : menu_path,
+        '_MENU_NAME_' : menu_name,
     })
 
     # ---------------------------------------------------------------------

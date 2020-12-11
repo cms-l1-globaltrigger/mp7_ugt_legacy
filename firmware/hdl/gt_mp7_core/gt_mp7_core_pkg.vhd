@@ -1,13 +1,14 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.11.1
+-- mp7_ugt (=FRAME_VERSION): v1.11.2
 --
 -- frame: v1.2.4 (see frame.vhd)
--- gtl: v1.10.0 (see gtl_module_tpl.vhd)
+-- gtl: v1.10.1 (see gtl_module_tpl.vhd)
 -- fdl: v1.3.6 (see fdl_module.vhd)
 
 -- gtl history:
+-- HB 2020-10-09: v1.10.1: Added module pipelines (including modules for ext_cond_pipe and centrality_pipe processes). Changed files for correlation conditions of calos and muons.
 -- HB 2020-08-25: v1.10.0: Implemented new muon structure with "unconstraint pt" and "impact parameter". Added files for "invariant mass with 3 objects" and "invariant mass divided by delta R".
 -- HB 2020-02-03: v1.9.4: Changed output pipeline code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
 -- HB 2020-01-30: v1.9.3: Cleaned up code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
@@ -44,15 +45,15 @@ package gt_mp7_core_pkg is
 -- FRAME version (given by the editor of frame.vhd)
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 11;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 1;
-	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 2;
+    constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_REV_VERSION, 8));
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 10;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 0;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 1;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 3;
@@ -143,18 +144,18 @@ end package;
 package body gt_mp7_core_pkg is
 
     function to_obrit_nr(i : integer) return orbit_nr_t is
-	variable ret_value : orbit_nr_t := (others=>'0');
+        variable ret_value : orbit_nr_t := (others=>'0');
     begin
-	ret_value := std_logic_vector(to_unsigned(i, ret_value'length));
-	return ret_value;
+        ret_value := std_logic_vector(to_unsigned(i, ret_value'length));
+        return ret_value;
     end function;
 
     function to_bx_nr(i : integer) return bx_nr_t is
-	variable ret_value : bx_nr_t := (others=>'0');
+        variable ret_value : bx_nr_t := (others=>'0');
     begin
-	assert(i < BUNCHES_PER_ORBIT) report "Unable to convert integer to bx_nr_t: value too large" severity error;
-	ret_value := std_logic_vector(to_unsigned(i, ret_value'length));
-	return ret_value;
+        assert(i < BUNCHES_PER_ORBIT) report "Unable to convert integer to bx_nr_t: value too large" severity error;
+        ret_value := std_logic_vector(to_unsigned(i, ret_value'length));
+        return ret_value;
     end function;
 
 end;

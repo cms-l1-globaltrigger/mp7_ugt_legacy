@@ -8,10 +8,9 @@
 #
 
 import argparse
-import ConfigParser
-import logging
-import re
-import sys, os
+import configparser
+import os
+import sys
 
 from collections import namedtuple
 
@@ -29,26 +28,27 @@ utilization = {}
 
 def log_info(message):
     messages.append(message)
-    print message
+    print(message)
 
 def log_warning(message):
     messages.append(message)
     # Apply TTY colors
     if sys.stdout.isatty():
         message = "{}{}{}".format(ColorYellowWhite, message, ColorReset)
-    print message
+    print(message)
 
 def log_error(message):
     messages.append(message)
     # Apply TTY colors
     if sys.stdout.isatty():
         message = "{}{}{}".format(ColorWhiteRed, message, ColorReset)
-    print message
+    print(message)
 
 def log_hr(pattern):
     """Print horizontal line to logger."""
     # TTY size
-    o, ts = os.popen('stty size', 'r').read().split()
+    with os.popen('stty size') as fp:
+        o, ts = fp.read().split()
     log_info(pattern * int(ts))
 
 def parse_utilization(line):
@@ -69,8 +69,12 @@ def find_errors(module_path, module_id, args):
     #
 
     # uses runme.log files for checks (vivado.log do not exist with IPBB)
-    runme_log_synth = os.path.join(module_path, 'top', 'top.runs', 'synth_1', 'runme.log')
-    runme_log_impl = os.path.join(module_path, 'top', 'top.runs', 'impl_1', 'runme.log')
+    proj_name = 'module_{}'.format(module_id)
+    runs = '{}/{}.runs'.format(proj_name, proj_name)
+    synth_path = os.path.join(module_path, runs, 'synth_1')
+    impl_path = os.path.join(module_path, runs, 'impl_1')
+    runme_log_synth = os.path.join(synth_path, 'runme.log')
+    runme_log_impl = os.path.join(impl_path, 'runme.log')
 
     # opens file as .log
     with open(runme_log_synth) as fp:
@@ -133,8 +137,6 @@ def find_errors(module_path, module_id, args):
     #
     # Parse timing summary\
     #
-
-    impl_path = os.path.join(module_path, 'top', 'top.runs', 'impl_1')
 
     # Try to lacate timing summary, first try
     timing_summary = os.path.join(impl_path, 'top_timing_summary_postroute_physopted.rpt')
@@ -202,6 +204,7 @@ def find_errors(module_path, module_id, args):
     # Check for existing bitfile
     #
 
+    bit_file = 'module_{}.bit'.format(module_id)
     bit_filename = os.path.join(impl_path, 'top.bit')
 
     if not os.path.isfile(bit_filename):
@@ -229,14 +232,14 @@ def dump_utilization_report():
     log_info("| Module +----------------+----------+------------+----------+------------+----------+")
     log_info("|        | Used/Available | Percent  | Used/Avail | Percent  | Used/Avail | Percent  |")
     log_info("+--------+----------------+--------- +------------+----------+------------+----------+")
-    for module_id, utils in utilization.items():
+    for module_id, utils in list(utilization.items()):
         row = "| {:>6} ".format(module_id)
         for util in utils:
             ratio = "{}/{}".format(util.used, util.available)
-	    if util.site_type == 'Slice LUTs':
-            	row += "| {:>14} | {:>6} % ".format(ratio, util.percent)
-	    else:
-            	row += "| {:>10} | {:>6} % ".format(ratio, util.percent)
+            if util.site_type == 'Slice LUTs':
+                row += "| {:>14} | {:>6} % ".format(ratio, util.percent)
+            else:
+                row += "| {:>10} | {:>6} % ".format(ratio, util.percent)
         row += "|"
         log_info(row)
     log_info("+--------+----------------+----------+------------+----------+------------+----------+")
@@ -264,24 +267,24 @@ def main():
         raise RuntimeError("no such file: {}".format(args.config))
 
     # Read build configuration.
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(args.config)
     menu_name = config.get('menu', 'name')
     menu_modules = int(config.get('menu', 'modules'))
-    
+
     # Definitions for name of IPBB 'proj' directory
     fw_type = config.get('firmware', 'type')
     device_name = config.get('device', 'name')
     menu_build = config.get('menu', 'build')
     build_path = config.get('firmware', 'buildarea')
-    
+
     # Select only a single module
     if args.m != None:
         if not 0 <= args.m < menu_modules:
             raise RuntimeError("module {} not available. There are only {} modules registed".format(args.m, menu_modules))
         check_modules = [args.m]
     else:
-        check_modules = range(menu_modules)
+        check_modules = list(range(menu_modules))
 
     # Check modules
     for index in check_modules:

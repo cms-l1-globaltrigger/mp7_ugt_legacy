@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Copyright 2013-2017 Bernhard Arnold <bernahrd.arnold@cern.ch>
 #                     Johannes Wittmann <johannes.wittmann@cern.ch>
@@ -33,18 +32,17 @@ Filter algorithms by attributes:
 
 """
 
-import sys, os
+import logging
+import sys
+import os
 
-try:
-    from lxml import etree
-except ImportError:
-    raise RuntimeError("package lxml is missing, please install \"python-lxml\" using your package manager")
+from lxml import etree
 
-__all__ = [ 'XmlMenu', '__doc__' ]
+__all__ = ['XmlMenu',]
 
 def filter_first(function, sequence):
     """Retruns first match of filter() result or None if nothing was found."""
-    return list(filter(function, sequence) or [None])[0]
+    return (list(filter(function, sequence)) or [None])[0]
 
 def get_xpath(elem, path, fmt=str, default=None):
     """Easy access using etree elem xpath method. Returns value of 'default' if
@@ -95,10 +93,10 @@ class AlgorithmContainer(list):
         return filter_first(lambda algorithm: algorithm.index == index, self)
     def byModuleId(self, id):
         """Returns list of algorithms assigned to module id or empty list if none found."""
-        return filter(lambda algorithm: algorithm.module_id == id, self)
+        return [algorithm for algorithm in self if algorithm.module_id == id]
     def byModuleIndex(self, index):
         """Returns list of algorithms assigned to module index or empty list if none found."""
-        return filter(lambda algorithm: algorithm.module_index == index, self)
+        return [algorithm for algorithm in self if algorithm.module_index == index]
     def byName(self, name):
         """Retruns algorithm by name or None if not found."""
         return filter_first(lambda algorithm: algorithm.name == name, self)
@@ -132,13 +130,14 @@ class XmlMenu(object):
         self.n_modules = 0
         self.comment = ""
         self.algorithms = AlgorithmContainer()
-        if filename: self.read(filename)
+        if filename:
+            self.read(filename)
 
     def read(self, filename):
         """Read XML from file and parse its content."""
         self.filename = os.path.abspath(filename)
         self.algorithms = AlgorithmContainer()
-        with open(self.filename, 'rb') as fp:
+        with open(self.filename) as fp:
             # Access static elements
             context = etree.parse(fp)
             self.name = get_xpath(context, 'name')
@@ -168,7 +167,6 @@ class XmlMenu(object):
 if __name__ == '__main__':
     """Basic unittest..."""
 
-    import logging
     logging.getLogger().setLevel(logging.DEBUG)
 
     filename = sys.argv[1]

@@ -14,7 +14,7 @@ use work.gtl_pkg.all;
 
 entity min_bias_hf_conditions is
     generic(
-        et_ge_mode : boolean;
+        et_ge_mode : boolean := true;
         obj_type : natural := MBT0HFP_TYPE;
         count_threshold: std_logic_vector(MAX_MBHF_TEMPLATES_BITS-1 downto 0)
    );

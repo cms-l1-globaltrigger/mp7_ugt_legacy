@@ -12,7 +12,7 @@ use work.gtl_pkg.all;
 
 entity towercount_condition is
     generic	(
-        et_ge_mode : boolean;
+        et_ge_mode : boolean := true;
         count_threshold: std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0)
    );
     port(

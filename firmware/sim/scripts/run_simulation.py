@@ -11,8 +11,9 @@ import argparse
 import time, datetime
 from threading import Thread
 
-o, ts = os.popen('stty size', 'r').read().split()#terminal size
-ts = int(ts)
+# terminal size
+with os.popen('stty size') as fp:
+    ts = int(fp.read().split()[1])
 
 failed_red = ("\033[1;31m Failed! \033[0m")
 success_green = ("\033[1;32m Success! \033[0m")
@@ -43,8 +44,7 @@ IGNORED_ALGOS = [
 
 def read_file(filename):
     """Returns contents of a file."""
-#    with open(os.path.join(src_dir, 'gtl_module_instances.vhd'), 'rb') as fp:
-    with open(filename, 'rb') as fp:
+    with open(filename) as fp:
         return fp.read()
 
 def render_template(src, dst, args):
@@ -61,20 +61,19 @@ def render_template(src, dst, args):
         dst.write(content)
 
 def make_testvector(mask, testvectorfile, new_testverctor):#uses mask of the module, testvector file and the path of the new testvector file where the masked testvectors are stored
-    with open(testvectorfile, 'r') as tvf:
-        with open(new_testverctor,'w') as opf:
-            for line in tvf:
-                colums = line.strip().split()
-                mask_trigger = int(colums[-2], 16) & mask
-                colums[-2] = '%0128x' % mask_trigger
-                colums[-1] = '1' if mask_trigger else '0'
-                opf.write(' '.join(colums))
-                opf.write('\n')
+    with open(testvectorfile) as tvf, open(new_testverctor, 'w') as opf:
+        for line in tvf:
+            colums = line.strip().split()
+            mask_trigger = int(colums[-2], 16) & mask
+            colums[-2] = '%0128x' % mask_trigger
+            colums[-1] = '1' if mask_trigger else '0'
+            opf.write(' '.join(colums))
+            opf.write('\n')
 
 def trigger_list(testvectorfile):
     """makes a list of all triggers in testvectorfile eg. [1,0,0,1,0,1,0,0,1,1,1]"""
     out_list = [0] * algonum
-    with open(testvectorfile, 'r') as tvf:
+    with open(testvectorfile) as tvf:
         for line in tvf:
             colums = line.strip().split()
             trigger_list = bitfield(int(colums[-2], 16))
@@ -89,15 +88,16 @@ def bitfield(i, n=algonum):
     return [int(digit) for digit in '{0:0{1}b}'.format(i, n)][::-1]
 
 def run_vsim(module, msgmode, ini_file):#uses class module, arg msgmode and ini file path to start the simulation
-    with open(module.results_log,'w') as logfile:
+    with open(module.results_log, 'w') as logfile:
         cmd = ['vsim', '-c', '-msgmode', msgmode, '-modelsimini', ini_file, '-do', 'do {filename}; quit -f'.format(filename = os.path.join(module.path, DO_FILE))]
         logging.info("starting simulation for module_%d..." % module._id)
         logging.info("executing: %s", ' '.join(['"{0}"'.format(arg) if ' ' in str(arg) else str(arg) for arg in cmd]))
         subprocess.check_call(cmd, stdout = logfile)
     while not os.path.exists(module.results_json): # checks for the json file
         pass
+    with open(module.results_json) as fp:
+        jsonf = json.load(fp)
     with open(module.results_txt, 'w') as results_txt: # writes to results.txt what bx number triggert which algorithm and how often
-        jsonf = json.load(open(module.results_json))
         errors = jsonf['errors']
         for error in errors:
             results_txt.write('#' * 80 + '\n')
@@ -158,9 +158,6 @@ class Module(object):#module class and nessesary information
         self.results_json = '%s/results_module_%d.json' % (self.path, self._id)
         self.results_log = '%s/results_module_%d.log' % (self.path, self._id)
         self.results_txt = '%s/results_module_%d.txt' % (self.path, self._id)
-
-    def algo_name(self):#gets name of algorithm based on index
-        return module.menu.algorithms.byIndex(index).name
 
     def get_mask(self):#makes mask and saves it
         mask = 0
@@ -310,7 +307,8 @@ def main():
     algos_tv = {}
 
     for module in modules:#steps through all modules and makes a list with trigger count and module
-        jsonf = json.load(open(module.results_json))
+        with open(module.results_json) as fp:
+            jsonf = json.load(fp)
         counts = jsonf['counts']
         for count in counts:
             index = count['algo_index']
@@ -412,6 +410,5 @@ def main():
     else:
         logging.error(failed_red)
 
-    #with open('')
 if __name__ == '__main__':
     main()

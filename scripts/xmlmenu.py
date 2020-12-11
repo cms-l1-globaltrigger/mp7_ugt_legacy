@@ -45,7 +45,7 @@ __version__ = '1.0.0'
 
 def filter_first(function, sequence):
     """Retruns first match of filter() result or None if nothing was found."""
-    return list(filter(function, sequence) or [None])[0]
+    return list(list(filter(function, sequence)) or [None])[0]
 
 def get_xpath(elem, path, fmt=str):
     """Easy access using etree elem xpath method."""

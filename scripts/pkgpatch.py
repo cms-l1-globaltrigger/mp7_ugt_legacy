@@ -28,10 +28,10 @@ Supported replacement parameters:
 
 """
 
-import sys, os
 import argparse
+import os
+import sys
 import time
-import shutil
 
 from getpass import getuser # for username
 from socket import gethostname # for machines hostname
@@ -41,8 +41,10 @@ name = os.path.basename(__file__)
 
 def build_t(value):
     """Custom build type validator for argparse."""
-    try: return int(value, 16)
-    except ValueError: raise TypeError("Invalid build version: `{0}'".format(value))
+    try:
+        return int(value, 16)
+    except ValueError:
+        raise TypeError("Invalid build version: `{0}'".format(value))
 
 def unix_timestamp():
     """Returns current UNIX timestamp (integer)."""
@@ -57,7 +59,8 @@ def hex_timestamp(timestamp = None):
     """Returns hex-string representation of current UNIX timestamp.
     If no timestamp is give, the current time is used.
     """
-    if not timestamp: timestamp = unix_timestamp()
+    if not timestamp:
+        timestamp = unix_timestamp()
     return hex_value(timestamp, width = 8)
 
 def hex_string(s, n = 32):
@@ -85,7 +88,7 @@ def main():
     args = parse_args()
 
     if os.path.abspath(args.src) == os.path.abspath(args.dest):
-        print "for safety reasons it is not allowed to overwrite the source template."
+        print("for safety reasons it is not allowed to overwrite the source template.")
         sys.exit(1)
 
     try:
@@ -97,22 +100,22 @@ def main():
         }
 
         # Read content of source file.
-        with open(args.src, 'rb') as src:
+        with open(args.src) as src:
             lines = src.readlines()
 
         # Replace placeholders.
-        for key, value in replace_map.items():
+        for key, value in list(replace_map.items()):
             for i, line in enumerate(lines):
                 if not line.strip().startswith('--'):
                     lines[i] = line.replace(key, value)
 
         # Write content to destination file.
-        with open(args.dest, 'wb') as dest:
+        with open(args.dest, 'w') as dest:
             dest.write(''.join(lines))
 
         return 0
-    except IOError, message:
-        print "{0}: {1}".format(name, message)
+    except IOError as message:
+        print("{0}: {1}".format(name, message))
     return 1
 
 if __name__ == '__main__':

@@ -2,6 +2,7 @@
 -- Calo objects cuts
 
 -- Version history:
+-- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
 -- HB 2019-06-14: updated for "five eta cuts".
 -- HB 2019-04-30: first version proposed by Dinyar/Hannes.
 
@@ -35,10 +36,9 @@ entity calo_obj_cuts is
         eta_w4_lower_limits: calo_templates_array;
         eta_w5_upper_limits: calo_templates_array;
         eta_w5_lower_limits: calo_templates_array;
-        phi_full_range : calo_templates_boolean_array;
+        nr_phi_windows : calo_templates_natural_array;
         phi_w1_upper_limits: calo_templates_array;
         phi_w1_lower_limits: calo_templates_array;
-        phi_w2_ignore : calo_templates_boolean_array;
         phi_w2_upper_limits: calo_templates_array;
         phi_w2_lower_limits: calo_templates_array;
         iso_luts: calo_templates_iso_array
@@ -74,10 +74,9 @@ begin
                 eta_w4_lower_limits(1),
                 eta_w5_upper_limits(1),
                 eta_w5_lower_limits(1),
-                phi_full_range(1),
+                nr_phi_windows(1),
                 phi_w1_upper_limits(1),
                 phi_w1_lower_limits(1),
-                phi_w2_ignore(1),
                 phi_w2_upper_limits(1),
                 phi_w2_lower_limits(1),
                 iso_luts(1)
@@ -100,10 +99,9 @@ begin
                 eta_w4_lower_limits(2),
                 eta_w5_upper_limits(2),
                 eta_w5_lower_limits(2),
-                phi_full_range(2),
+                nr_phi_windows(2),
                 phi_w1_upper_limits(2),
                 phi_w1_lower_limits(2),
-                phi_w2_ignore(2),
                 phi_w2_upper_limits(2),
                 phi_w2_lower_limits(2),
                 iso_luts(2)
@@ -126,10 +124,9 @@ begin
                 eta_w4_lower_limits(3),
                 eta_w5_upper_limits(3),
                 eta_w5_lower_limits(3),
-                phi_full_range(3),
+                nr_phi_windows(3),
                 phi_w1_upper_limits(3),
                 phi_w1_lower_limits(3),
-                phi_w2_ignore(3),
                 phi_w2_upper_limits(3),
                 phi_w2_lower_limits(3),
                 iso_luts(3)
@@ -152,10 +149,9 @@ begin
                 eta_w4_lower_limits(4),
                 eta_w5_upper_limits(4),
                 eta_w5_lower_limits(4),
-                phi_full_range(4),
+                nr_phi_windows(4),
                 phi_w1_upper_limits(4),
                 phi_w1_lower_limits(4),
-                phi_w2_ignore(4),
                 phi_w2_upper_limits(4),
                 phi_w2_lower_limits(4),
                 iso_luts(4)

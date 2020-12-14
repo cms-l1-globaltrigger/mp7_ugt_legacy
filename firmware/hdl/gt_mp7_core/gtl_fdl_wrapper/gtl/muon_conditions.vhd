@@ -6,6 +6,7 @@
 -- Charge correlation selection implemented with "LS" and "OS" (charge correlation calculated in muon_charge_correlations.vhd)
 
 -- Version history:
+-- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now and new order in generic.
 -- HB 2020-12-01: changed order in generic.
 -- HB 2020-11-27: added default parameters. Changed order in port.
 -- HB 2020-08-10: inserted "twobody unconstraint pt".
@@ -30,42 +31,42 @@ use work.gtl_pkg.all;
 
 entity muon_conditions is
     generic (
-        object_slice_1_low: natural := 0;
-        object_slice_1_high: natural := NR_MU_OBJECTS-1;
-        object_slice_2_low: natural := 0;
-        object_slice_2_high: natural := NR_MU_OBJECTS-1;
-        object_slice_3_low: natural := 0;
-        object_slice_3_high: natural := NR_MU_OBJECTS-1;
-        object_slice_4_low: natural := 0;
-        object_slice_4_high: natural := NR_MU_OBJECTS-1;
-        pt_ge_mode : boolean := true;
-        pt_thresholds: muon_templates_array := (others => (others => '0'));
-        nr_eta_windows : muon_templates_natural_array := (others => 0);
-        eta_w1_upper_limits: muon_templates_array := (others => (others => '0'));
-        eta_w1_lower_limits: muon_templates_array := (others => (others => '0'));
-        eta_w2_upper_limits: muon_templates_array := (others => (others => '0'));
-        eta_w2_lower_limits: muon_templates_array := (others => (others => '0'));
-        eta_w3_upper_limits: muon_templates_array := (others => (others => '0'));
-        eta_w3_lower_limits: muon_templates_array := (others => (others => '0'));
-        eta_w4_upper_limits: muon_templates_array := (others => (others => '0'));
-        eta_w4_lower_limits: muon_templates_array := (others => (others => '0'));
-        eta_w5_upper_limits: muon_templates_array := (others => (others => '0'));
-        eta_w5_lower_limits: muon_templates_array := (others => (others => '0'));
-        phi_full_range : muon_templates_boolean_array := (others => true);
-        phi_w1_upper_limits: muon_templates_array := (others => (others => '0'));
-        phi_w1_lower_limits: muon_templates_array := (others => (others => '0'));
-        phi_w2_ignore : muon_templates_boolean_array := (others => true);
-        phi_w2_upper_limits: muon_templates_array := (others => (others => '0'));
-        phi_w2_lower_limits: muon_templates_array := (others => (others => '0'));
+    
+        slice_1_low_obj1: natural := 0;
+        slice_1_high_obj1: natural := NR_MU_OBJECTS-1;
+        slice_2_low_obj1: natural := 0;
+        slice_2_high_obj1: natural := NR_MU_OBJECTS-1;
+        slice_3_low_obj1: natural := 0;
+        slice_3_high_obj1: natural := NR_MU_OBJECTS-1;
+        slice_4_low_obj1: natural := 0;
+        slice_4_high_obj1: natural := NR_MU_OBJECTS-1;
+        pt_ge_mode_obj1: boolean := true;
+        pt_thresholds_obj1: muon_templates_array := (others => (others => '0'));
+        nr_eta_windows_obj1: muon_templates_natural_array := (others => 0);
+        eta_w1_upper_limits_obj1: muon_templates_array := (others => (others => '0'));
+        eta_w1_lower_limits_obj1: muon_templates_array := (others => (others => '0'));
+        eta_w2_upper_limits_obj1: muon_templates_array := (others => (others => '0'));
+        eta_w2_lower_limits_obj1: muon_templates_array := (others => (others => '0'));
+        eta_w3_upper_limits_obj1: muon_templates_array := (others => (others => '0'));
+        eta_w3_lower_limits_obj1: muon_templates_array := (others => (others => '0'));
+        eta_w4_upper_limits_obj1: muon_templates_array := (others => (others => '0'));
+        eta_w4_lower_limits_obj1: muon_templates_array := (others => (others => '0'));
+        eta_w5_upper_limits_obj1: muon_templates_array := (others => (others => '0'));
+        eta_w5_lower_limits_obj1: muon_templates_array := (others => (others => '0'));
+        nr_phi_windows_obj1: muon_templates_natural_array := (others => 0);
+        phi_w1_upper_limits_obj1: muon_templates_array := (others => (others => '0'));
+        phi_w1_lower_limits_obj1: muon_templates_array := (others => (others => '0'));
+        phi_w2_upper_limits_obj1: muon_templates_array := (others => (others => '0'));
+        phi_w2_lower_limits_obj1: muon_templates_array := (others => (others => '0'));
+        iso_luts_obj1: muon_templates_iso_array := (others => (others => '1'));
         requested_charges: muon_templates_string_array := (others => "ign");
         qual_luts: muon_templates_quality_array := (others => (others => '1'));
-        iso_luts: muon_templates_iso_array := (others => (others => '1'));
         upt_cuts: muon_templates_boolean_array := (others => false);
         upt_upper_limits: muon_templates_array := (others => (others => '0'));
         upt_lower_limits: muon_templates_array := (others => (others => '0'));
         ip_luts: muon_templates_ip_array := (others => (others => '1'));
         requested_charge_correlation: string(1 to 2) := "ig";
-        
+
         twobody_pt_cut: boolean := false;
         pt_width: positive := MU_PT_VECTOR_WIDTH; 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -76,7 +77,7 @@ entity muon_conditions is
         pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION;
         
         nr_templates: positive := 4
-
+        
     );
     port(
         lhc_clk : in std_logic;
@@ -96,18 +97,18 @@ end muon_conditions;
 
 architecture rtl of muon_conditions is
 
-    constant nr_objects_slice_1_int: natural := object_slice_1_high-object_slice_1_low+1;
-    constant nr_objects_slice_2_int: natural := object_slice_2_high-object_slice_2_low+1;
-    constant nr_objects_slice_3_int: natural := object_slice_3_high-object_slice_3_low+1;
-    constant nr_objects_slice_4_int: natural := object_slice_4_high-object_slice_4_low+1;
+    constant nr_objects_slice_1_int: natural := slice_1_high_obj1-slice_1_low_obj1+1;
+    constant nr_objects_slice_2_int: natural := slice_2_high_obj1-slice_2_low_obj1+1;
+    constant nr_objects_slice_3_int: natural := slice_3_high_obj1-slice_3_low_obj1+1;
+    constant nr_objects_slice_4_int: natural := slice_4_high_obj1-slice_4_low_obj1+1;
 
 -- fixed pipeline structure, 2 stages total
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
 
-    signal obj_slice_1_vs_templ, obj_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array(object_slice_1_low to object_slice_1_high, 1 to 1);
-    signal obj_slice_2_vs_templ, obj_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(object_slice_2_low to object_slice_2_high, 1 to 1);
-    signal obj_slice_3_vs_templ, obj_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(object_slice_3_low to object_slice_3_high, 1 to 1);
-    signal obj_slice_4_vs_templ, obj_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(object_slice_4_low to object_slice_4_high, 1 to 1);
+    signal obj_slice_1_vs_templ, obj_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array(slice_1_low_obj1 to slice_1_high_obj1, 1 to 1);
+    signal obj_slice_2_vs_templ, obj_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(slice_2_low_obj1 to slice_2_high_obj1, 1 to 1);
+    signal obj_slice_3_vs_templ, obj_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(slice_3_low_obj1 to slice_3_high_obj1, 1 to 1);
+    signal obj_slice_4_vs_templ, obj_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(slice_4_low_obj1 to slice_4_high_obj1, 1 to 1);
     
 --***************************************************************
 -- signals for charge correlation comparison:
@@ -123,10 +124,10 @@ architecture rtl of muon_conditions is
     signal condition_and_or : std_logic;
 
     signal twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : 
-        std_logic_2dim_array(object_slice_1_low to object_slice_1_high, object_slice_2_low to object_slice_2_high) := (others => (others => '1'));
+        std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_2_low_obj1 to slice_2_high_obj1) := (others => (others => '1'));
 
     signal twobody_upt_comp, twobody_upt_comp_temp, twobody_upt_comp_pipe : 
-        std_logic_2dim_array(object_slice_1_low to object_slice_1_high, object_slice_2_low to object_slice_2_high) := (others => (others => '1'));
+        std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_2_low_obj1 to slice_2_high_obj1) := (others => (others => '1'));
 
 begin
 
@@ -141,8 +142,8 @@ begin
     twobody_pt_cut_i: if twobody_pt_cut = true and nr_templates = 2 generate
         twobody_pt_i: entity work.twobody_pt
             generic map(
-                object_slice_1_low, object_slice_1_high,
-                object_slice_2_low, object_slice_2_high,
+                slice_1_low_obj1, slice_1_high_obj1,
+                slice_2_low_obj1, slice_2_high_obj1,
                 nr_templates,                
                 twobody_pt_cut,
                 pt_width, 
@@ -159,8 +160,8 @@ begin
     twobody_upt_cut_i: if twobody_upt_cut = true and nr_templates = 2 generate
         twobody_upt_i: entity work.twobody_pt
             generic map(
-                object_slice_1_low, object_slice_1_high,
-                object_slice_2_low, object_slice_2_high,
+                slice_1_low_obj1, slice_1_high_obj1,
+                slice_2_low_obj1, slice_2_high_obj1,
                 nr_templates,                
                 twobody_upt_cut,
                 upt_width, 
@@ -176,22 +177,23 @@ begin
 -- Instantiation of object cuts.
     obj_cuts_i: entity work.muon_obj_cuts
         generic map(
-            object_slice_1_low, object_slice_1_high,
-            object_slice_2_low, object_slice_2_high,
-            object_slice_3_low, object_slice_3_high,
-            object_slice_4_low, object_slice_4_high,
-            nr_templates, pt_ge_mode,
-            pt_thresholds,
-            nr_eta_windows,
-            eta_w1_upper_limits, eta_w1_lower_limits,
-            eta_w2_upper_limits, eta_w2_lower_limits,
-            eta_w3_upper_limits, eta_w3_lower_limits,
-            eta_w4_upper_limits, eta_w4_lower_limits,
-            eta_w5_upper_limits, eta_w5_lower_limits,
-            phi_full_range, phi_w1_upper_limits, phi_w1_lower_limits,
-            phi_w2_ignore, phi_w2_upper_limits, phi_w2_lower_limits,
-            requested_charges, qual_luts, iso_luts,
-            upt_cuts, upt_upper_limits, upt_lower_limits,
+            slice_1_low_obj1, slice_1_high_obj1,
+            slice_2_low_obj1, slice_2_high_obj1,
+            slice_3_low_obj1, slice_3_high_obj1,
+            slice_4_low_obj1, slice_4_high_obj1,
+            nr_templates, pt_ge_mode_obj1,
+            pt_thresholds_obj1,
+            nr_eta_windows_obj1,
+            eta_w1_upper_limits_obj1, eta_w1_lower_limits_obj1,
+            eta_w2_upper_limits_obj1, eta_w2_lower_limits_obj1,
+            eta_w3_upper_limits_obj1, eta_w3_lower_limits_obj1,
+            eta_w4_upper_limits_obj1, eta_w4_lower_limits_obj1,
+            eta_w5_upper_limits_obj1, eta_w5_lower_limits_obj1,
+            nr_phi_windows_obj1, 
+            phi_w1_upper_limits_obj1, phi_w1_lower_limits_obj1,
+            phi_w2_upper_limits_obj1, phi_w2_lower_limits_obj1,
+            requested_charges_obj1, qual_luts_obj1, iso_luts_obj1,
+            upt_cuts_obj1, upt_upper_limits_obj1, upt_lower_limits_obj1,
             ip_luts            
         )
         port map(
@@ -224,10 +226,10 @@ begin
     charge_corr_matrix_i: entity work.muon_charge_corr_matrix
         generic map(
             obj_vs_templ_pipeline_stage,
-            object_slice_1_low, object_slice_1_high,
-            object_slice_2_low, object_slice_2_high,
-            object_slice_3_low, object_slice_3_high,
-            object_slice_4_low, object_slice_4_high,
+            slice_1_low_obj1, slice_1_high_obj1,
+            slice_2_low_obj1, slice_2_high_obj1,
+            slice_3_low_obj1, slice_3_high_obj1,
+            slice_4_low_obj1, slice_4_high_obj1,
             nr_templates,
             requested_charge_correlation
         )
@@ -242,10 +244,10 @@ begin
 -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates'.
     cond_matrix_i: entity work.muon_cond_matrix
         generic map(
-            object_slice_1_low, object_slice_1_high,
-            object_slice_2_low, object_slice_2_high,
-            object_slice_3_low, object_slice_3_high,
-            object_slice_4_low, object_slice_4_high,
+            slice_1_low_obj1, slice_1_high_obj1,
+            slice_2_low_obj1, slice_2_high_obj1,
+            slice_3_low_obj1, slice_3_high_obj1,
+            slice_4_low_obj1, slice_4_high_obj1,
             nr_templates
         )
         port map(lhc_clk,

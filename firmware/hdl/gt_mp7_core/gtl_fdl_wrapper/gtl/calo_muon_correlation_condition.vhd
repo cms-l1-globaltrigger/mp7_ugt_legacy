@@ -3,6 +3,7 @@
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and muon.
 
 -- Version history:
+-- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now. New order in generic.
 -- HB 2020-11-26: updated default parameters.
 -- HB 2020-10-09: added parameter for invariant mass div by delta R comparison. Changed names for mass limits.
 -- HB 2020-08-27: implemented invariant mass div by delta R comparison.
@@ -27,86 +28,83 @@ use work.gtl_pkg.all;
 
 entity calo_muon_correlation_condition is
      generic(
-        calo_object_low: natural := 0;
-        calo_object_high: natural := NR_EG_OBJECTS-1;
-        pt_ge_mode_calo: boolean := true;
-        obj_type_calo: natural := EG_TYPE;
-        pt_threshold_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        nr_eta_windows_calo : natural := 0;
-        eta_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w2_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w3_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w3_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w4_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w4_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w5_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w5_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_full_range_calo: boolean := true;
-        phi_w1_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_w1_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_w2_ignore_calo: boolean := true;
-        phi_w2_upper_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_w2_lower_limit_calo: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        iso_lut_calo: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
+        type_obj1: natural := EG_TYPE;
 
-        muon_object_low: natural := 0;
-        muon_object_high: natural := NR_MU_OBJECTS-1;
-        pt_ge_mode_muon: boolean := true;
-        pt_threshold_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        nr_eta_windows_muon: natural := 0;
-        eta_w1_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w1_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w2_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w2_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w3_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w3_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w4_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w4_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w5_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        eta_w5_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_full_range_muon: boolean := true;
-        phi_w1_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_w1_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_w2_ignore_muon: boolean := true;
-        phi_w2_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_w2_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        requested_charge_muon: string(1 to 3) := "ign";
-        qual_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.qual_high-D_S_I_MUON_V2.qual_low+1)-1 downto 0) := (others => '1');
-        iso_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.iso_high-D_S_I_MUON_V2.iso_low+1)-1 downto 0) := (others => '1');
+        slice_low_obj1: natural := 0;
+        slice_high_obj1: natural := NR_EG_OBJECTS-1;
+        pt_ge_mode_obj1: boolean := true;
+        pt_threshold_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        nr_eta_windows_obj1 : natural := 0;
+        eta_w1_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w1_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w2_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w2_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w3_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w3_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w4_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w4_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w5_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w5_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        nr_phi_windows_obj1: natural := 0;
+        phi_w1_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w1_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w2_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w2_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        iso_lut_obj1: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
+
+        slice_low_obj2: natural := 0;
+        slice_high_obj2: natural := NR_MU_OBJECTS-1;
+        pt_ge_mode_obj2: boolean := true;
+        pt_threshold_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        nr_eta_windows_obj2: natural := 0;
+        eta_w1_upper_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w1_lower_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w2_upper_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w2_lower_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w3_upper_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w3_lower_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w4_upper_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w4_lower_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w5_upper_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        eta_w5_lower_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        nr_phi_windows_obj2: natural := 0;
+        phi_w1_upper_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w1_lower_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w2_upper_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w2_lower_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        iso_lut_obj2: std_logic_vector(2**(MUON_ISO_HIGH-MUON_ISO_LOW+1)-1 downto 0) := (others => '1');
+        requested_charge_obj2: string(1 to 3) := "ign";
+        qual_lut_obj2: std_logic_vector(2**(MUON_QUAL_HIGH-MUON_QUAL_LOW+1)-1 downto 0) := (others => '1');
         upt_cut_muon : boolean := false;
-        upt_upper_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        upt_lower_limit_muon: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        ip_lut_muon: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0) := (others => '1');
+        upt_upper_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        upt_lower_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        ip_lut_obj2: std_logic_vector(2**(MUON_IP_HIGH-MUON_IP_LOW+1)-1 downto 0) := (others => '1');
 
         deta_cut: boolean := false;
-        dphi_cut: boolean := false;
-        dr_cut: boolean := false;
-        mass_cut: boolean := false;
-        mass_type : natural := INVARIANT_MASS_TYPE;
-        twobody_pt_cut: boolean := false;
-
         diff_eta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
         diff_eta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
+        dphi_cut: boolean := false;
         diff_phi_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
         diff_phi_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
+        dr_cut: boolean := false;
         dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        mass_upper_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        mass_lower_limit: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
-
-        mass_div_dr_vector_width: positive := MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1;
-        mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        
         pt1_width: positive := EG_PT_VECTOR_WIDTH; 
         pt2_width: positive := MU_PT_VECTOR_WIDTH; 
-        mass_cosh_cos_precision : positive := EG_MU_COSH_COS_PRECISION;
+
+        mass_cut: boolean := false;
+        mass_type : natural := INVARIANT_MASS_TYPE;
+        mass_div_dr_vector_width: positive := MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1;
+        mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        mass_cosh_cos_precision: positive := EG_MU_COSH_COS_PRECISION;
         cosh_cos_width: positive := EG_MU_COSH_COS_VECTOR_WIDTH;
 
+        twobody_pt_cut: boolean := false;
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
         pt_sq_sin_cos_precision : positive := EG_MU_SIN_COS_PRECISION;
@@ -141,8 +139,8 @@ architecture rtl of calo_muon_correlation_condition is
 -- fixed to 1 for current implementation of correlation conditions
     constant nr_templates: positive := 1;  
 
-    type calo_object_vs_template_array is array (calo_object_low to calo_object_high, 1 to nr_templates) of std_logic;
-    type muon_object_vs_template_array is array (muon_object_low to muon_object_high, 1 to nr_templates) of std_logic;
+    type calo_object_vs_template_array is array (slice_low_obj1 to slice_high_obj1, 1 to nr_templates) of std_logic;
+    type muon_object_vs_template_array is array (slice_low_obj2 to slice_high_obj2, 1 to nr_templates) of std_logic;
 
     signal calo_obj_vs_templ : calo_object_vs_template_array;
     signal calo_obj_vs_templ_pipe : calo_object_vs_template_array;
@@ -150,9 +148,9 @@ architecture rtl of calo_muon_correlation_condition is
     signal muon_obj_vs_templ_pipe : muon_object_vs_template_array;
 -- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
     signal diff_eta_comp, diff_eta_comp_pipe, diff_phi_comp, diff_phi_comp_pipe, dr_comp, dr_comp_pipe, mass_comp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_pipe : 
-        std_logic_2dim_array(calo_object_low to calo_object_high, muon_object_low to muon_object_high) := (others => (others => '1'));
+        std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
 
-    signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(calo_object_low to calo_object_high, muon_object_low to muon_object_high) :=
+    signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) :=
     (others => (others => '1'));
 
     signal condition_and_or : std_logic;
@@ -160,8 +158,8 @@ architecture rtl of calo_muon_correlation_condition is
 begin
 
 -- Comparison with limits.
-    delta_l_1: for i in calo_object_low to calo_object_high generate 
-        delta_l_2: for j in muon_object_low to muon_object_high generate
+    delta_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
+        delta_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
             cuts_instances_i: entity work.cuts_instances
                 generic map(
                     deta_cut => deta_cut,
@@ -208,8 +206,8 @@ begin
 
 -- HB 2020-08-27: comparison for invariant mass divided by delta R.
     mass_div_dr_sel: if mass_cut and mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
-        mass_l_1: for i in calo_object_low to calo_object_high generate 
-            mass_l_2: for j in muon_object_low to muon_object_high generate
+        mass_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
+            mass_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
                 comp_i: entity work.mass_div_dr_comp
                     generic map(
                         mass_div_dr_vector_width,
@@ -244,61 +242,59 @@ begin
     end process;
 
 -- Instance of comparators for calorimeter objects.
-    calo_obj_l: for i in calo_object_low to calo_object_high generate
+    calo_obj_l: for i in slice_low_obj1 to slice_high_obj1 generate
         calo_comp_i: entity work.calo_comparators
-            generic map(pt_ge_mode_calo, obj_type_calo,
-                pt_threshold_calo,
-                nr_eta_windows_calo,
-                eta_w1_upper_limit_calo,
-                eta_w1_lower_limit_calo,
-                eta_w2_upper_limit_calo,
-                eta_w2_lower_limit_calo,
-                eta_w3_upper_limit_calo,
-                eta_w3_lower_limit_calo,
-                eta_w4_upper_limit_calo,
-                eta_w4_lower_limit_calo,
-                eta_w5_upper_limit_calo,
-                eta_w5_lower_limit_calo,
-                phi_full_range_calo,
-                phi_w1_upper_limit_calo,
-                phi_w1_lower_limit_calo,
-                phi_w2_ignore_calo,
-                phi_w2_upper_limit_calo,
-                phi_w2_lower_limit_calo,
-                iso_lut_calo
+            generic map(pt_ge_mode_obj1, type_obj1,
+                pt_threshold_obj1,
+                nr_eta_windows_obj1,
+                eta_w1_upper_limit_obj1,
+                eta_w1_lower_limit_obj1,
+                eta_w2_upper_limit_obj1,
+                eta_w2_lower_limit_obj1,
+                eta_w3_upper_limit_obj1,
+                eta_w3_lower_limit_obj1,
+                eta_w4_upper_limit_obj1,
+                eta_w4_lower_limit_obj1,
+                eta_w5_upper_limit_obj1,
+                eta_w5_lower_limit_obj1,
+                nr_phi_windows_obj1,
+                phi_w1_upper_limit_obj1,
+                phi_w1_lower_limit_obj1,
+                phi_w2_upper_limit_obj1,
+                phi_w2_lower_limit_obj1,
+                iso_lut_obj1
             )
             port map(calo_data_i(i), calo_obj_vs_templ(i,1));
     end generate calo_obj_l;
 
 -- Instance of comparators for muon objects.
-    muon_obj_l: for i in muon_object_low to muon_object_high generate
+    muon_obj_l: for i in slice_low_obj2 to slice_high_obj2 generate
         muon_comp_i: entity work.muon_comparators
-            generic map(pt_ge_mode_muon,
-                pt_threshold_muon(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low downto 0),
-                nr_eta_windows_muon,
-                eta_w1_upper_limit_muon(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w1_lower_limit_muon(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w2_upper_limit_muon(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w2_lower_limit_muon(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w3_upper_limit_muon(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w3_lower_limit_muon(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w4_upper_limit_muon(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w4_lower_limit_muon(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w5_upper_limit_muon(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                eta_w5_lower_limit_muon(D_S_I_MUON_V2.eta_high-D_S_I_MUON_V2.eta_low downto 0),
-                phi_full_range_muon,
-                phi_w1_upper_limit_muon(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
-                phi_w1_lower_limit_muon(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
-                phi_w2_ignore_muon,
-                phi_w2_upper_limit_muon(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
-                phi_w2_lower_limit_muon(D_S_I_MUON_V2.phi_high-D_S_I_MUON_V2.phi_low downto 0),
-                requested_charge_muon,
-                qual_lut_muon,
-                iso_lut_muon,
-                upt_cut_muon,
-                upt_upper_limit_muon(D_S_I_MUON_V2.upt_high-D_S_I_MUON_V2.upt_low downto 0),
-                upt_lower_limit_muon(D_S_I_MUON_V2.upt_high-D_S_I_MUON_V2.upt_low downto 0),
-                ip_lut_muon
+            generic map(pt_ge_mode_obj2,
+                pt_threshold_obj2,
+                nr_eta_windows_obj2,
+                eta_w1_upper_limit_obj2,
+                eta_w1_lower_limit_obj2,
+                eta_w2_upper_limit_obj2,
+                eta_w2_lower_limit_obj2,
+                eta_w3_upper_limit_obj2,
+                eta_w3_lower_limit_obj2,
+                eta_w4_upper_limit_obj2,
+                eta_w4_lower_limit_obj2,
+                eta_w5_upper_limit_obj2,
+                eta_w5_lower_limit_obj2,
+                nr_phi_windows_obj2,
+                phi_w1_upper_limit_obj2,
+                phi_w1_lower_limit_obj2,
+                phi_w2_upper_limit_obj2,
+                phi_w2_lower_limit_obj2,
+                requested_charge_obj2,
+                qual_lut_obj2,
+                iso_lut_obj2,
+                upt_cut_obj2,
+                upt_upper_limit_obj2,
+                upt_lower_limit_obj2,
+                ip_lut_obj2
                 )
             port map(muon_data_i(i), muon_obj_vs_templ(i,1));
      end generate muon_obj_l;
@@ -321,14 +317,14 @@ begin
 
     matrix_deta_dphi_dr_p: process(calo_obj_vs_templ_pipe, muon_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, mass_comp_pipe, mass_div_dr_comp_pipe, twobody_pt_comp_pipe)
         variable index : integer := 0;
-        variable obj_vs_templ_vec : std_logic_vector(((calo_object_high-calo_object_low+1)*(muon_object_high-muon_object_low+1)) downto 1) := (others => '0');
+        variable obj_vs_templ_vec : std_logic_vector(((slice_high_obj1-slice_low_obj1+1)*(slice_high_obj2-slice_low_obj2+1)) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
     begin
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
-        for i in calo_object_low to calo_object_high loop 
-            for j in muon_object_low to muon_object_high loop
+        for i in slice_low_obj1 to slice_high_obj1 loop 
+            for j in slice_low_obj2 to slice_high_obj2 loop
                 index := index + 1;
                obj_vs_templ_vec(index) := calo_obj_vs_templ_pipe(i,1) and muon_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j) and 
                                           dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);

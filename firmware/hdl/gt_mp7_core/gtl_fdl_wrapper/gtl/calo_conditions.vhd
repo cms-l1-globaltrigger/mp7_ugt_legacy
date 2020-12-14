@@ -3,6 +3,7 @@
 -- Condition module for calorimeter object types (eg, jet and tau) conditions.
 
 -- Version history:
+-- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
 -- HB 2020-11-27: added default parameters. Changed order in port.
 -- HB 2019-10-21: bug fix input ports.
 -- HB 2019-06-14: updated for "five eta cuts".
@@ -12,8 +13,8 @@
 -- HB 2017-06-13: module for quad condition only.
 -- HB 2017-05-16: inserted check for "twobody_pt" cut use only for Double condition.
 -- HB 2017-05-11: changed order in port for instances without "twobody_pt" cut.
--- HB 2017-04-20: based on muon_conditions_v4.vhd, but inserted "twobody_pt" cut for Double condition.
--- HB 2017-02-01: based on muon_conditions_v3.vhd, but inserted "calo_object_low" and "calo_object_high" in generic (and replaced "nr_objects" by those).
+-- HB 2017-04-20: based on calo_conditions_v4.vhd, but inserted "twobody_pt" cut for Double condition.
+-- HB 2017-02-01: based on calo_conditions_v3.vhd, but inserted "calo_object_low" and "calo_object_high" in generic (and replaced "nr_objects" by those).
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -24,43 +25,44 @@ use work.gtl_pkg.all;
 
 entity calo_conditions is
      generic(
-        object_slice_1_low: natural := 0;
-        object_slice_1_high: natural := NR_EG_OBJECTS-1;
-        object_slice_2_low: natural := 0;
-        object_slice_2_high: natural := NR_EG_OBJECTS-1;
-        object_slice_3_low: natural := 0;
-        object_slice_3_high: natural := NR_EG_OBJECTS-1;
-        object_slice_4_low: natural := 0;
-        object_slice_4_high: natural := NR_EG_OBJECTS-1;
-        pt_ge_mode: boolean := true;
-        obj_type : natural := EG_TYPE;
-        pt_thresholds: calo_templates_array := (others => (others => '0'));
-        nr_eta_windows : calo_templates_natural_array := (others => 0);
-        eta_w1_upper_limits: calo_templates_array := (others => (others => '0'));
-        eta_w1_lower_limits: calo_templates_array := (others => (others => '0'));
-        eta_w2_upper_limits: calo_templates_array := (others => (others => '0'));
-        eta_w2_lower_limits: calo_templates_array := (others => (others => '0'));
-        eta_w3_upper_limits: calo_templates_array := (others => (others => '0'));
-        eta_w3_lower_limits: calo_templates_array := (others => (others => '0'));
-        eta_w4_upper_limits: calo_templates_array := (others => (others => '0'));
-        eta_w4_lower_limits: calo_templates_array := (others => (others => '0'));
-        eta_w5_upper_limits: calo_templates_array := (others => (others => '0'));
-        eta_w5_lower_limits: calo_templates_array := (others => (others => '0'));
-        phi_full_range : calo_templates_boolean_array := (others => true);
-        phi_w1_upper_limits: calo_templates_array := (others => (others => '0'));
-        phi_w1_lower_limits: calo_templates_array := (others => (others => '0'));
-        phi_w2_ignore : calo_templates_boolean_array := (others => true);
-        phi_w2_upper_limits: calo_templates_array := (others => (others => '0'));
-        phi_w2_lower_limits: calo_templates_array := (others => (others => '0'));
-        iso_luts: calo_templates_iso_array := (others => (others => '1'));
         
+        slice_1_low_obj1: natural := 0;
+        slice_1_high_obj1: natural := NR_EG_OBJECTS-1;
+        slice_2_low_obj1: natural := 0;
+        slice_2_high_obj1: natural := NR_EG_OBJECTS-1;
+        slice_3_low_obj1: natural := 0;
+        slice_3_high_obj1: natural := NR_EG_OBJECTS-1;
+        slice_4_low_obj1: natural := 0;
+        slice_4_high_obj1: natural := NR_EG_OBJECTS-1;
+        pt_ge_mode_obj1: boolean := true;
+        pt_thresholds_obj1: calo_templates_array := (others => (others => '0'));
+        nr_eta_windows_obj1: calo_templates_natural_array := (others => 0);
+        eta_w1_upper_limits_obj1: calo_templates_array := (others => (others => '0'));
+        eta_w1_lower_limits_obj1: calo_templates_array := (others => (others => '0'));
+        eta_w2_upper_limits_obj1: calo_templates_array := (others => (others => '0'));
+        eta_w2_lower_limits_obj1: calo_templates_array := (others => (others => '0'));
+        eta_w3_upper_limits_obj1: calo_templates_array := (others => (others => '0'));
+        eta_w3_lower_limits_obj1: calo_templates_array := (others => (others => '0'));
+        eta_w4_upper_limits_obj1: calo_templates_array := (others => (others => '0'));
+        eta_w4_lower_limits_obj1: calo_templates_array := (others => (others => '0'));
+        eta_w5_upper_limits_obj1: calo_templates_array := (others => (others => '0'));
+        eta_w5_lower_limits_obj1: calo_templates_array := (others => (others => '0'));
+        nr_phi_windows_obj1: calo_templates_natural_array := (others => 0);
+        phi_w1_upper_limits_obj1: calo_templates_array := (others => (others => '0'));
+        phi_w1_lower_limits_obj1: calo_templates_array := (others => (others => '0'));
+        phi_w2_upper_limits_obj1: calo_templates_array := (others => (others => '0'));
+        phi_w2_lower_limits_obj1: calo_templates_array := (others => (others => '0'));
+        iso_luts_obj1: calo_templates_iso_array := (others => (others => '1'));
+
         twobody_pt_cut: boolean := false;
         pt_width: positive := EG_PT_VECTOR_WIDTH; 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
         pt_sq_sin_cos_precision : positive := EG_EG_SIN_COS_PRECISION;
         
+        type_obj1 : natural := EG_TYPE;
         nr_templates: positive := 4
+        
     );
     port(
         clk: in std_logic;
@@ -133,21 +135,22 @@ begin
 -- Instantiation of object cuts.
     obj_cuts_i: entity work.calo_obj_cuts
         generic map(
-            object_slice_1_low, object_slice_1_high,
-            object_slice_2_low, object_slice_2_high,
-            object_slice_3_low, object_slice_3_high,
-            object_slice_4_low, object_slice_4_high,
-            nr_templates, pt_ge_mode, obj_type,
-            pt_thresholds,
-            nr_eta_windows,
-            eta_w1_upper_limits, eta_w1_lower_limits,
-            eta_w2_upper_limits, eta_w2_lower_limits,
-            eta_w3_upper_limits, eta_w3_lower_limits,
-            eta_w4_upper_limits, eta_w4_lower_limits,
-            eta_w5_upper_limits, eta_w5_lower_limits,
-            phi_full_range, phi_w1_upper_limits, phi_w1_lower_limits,
-            phi_w2_ignore, phi_w2_upper_limits, phi_w2_lower_limits,
-            iso_luts
+            slice_1_low_obj1, slice_1_high_obj1,
+            slice_2_low_obj1, slice_2_high_obj1,
+            slice_3_low_obj1, slice_3_high_obj1,
+            slice_4_low_obj1, slice_4_high_obj1,
+            nr_templates, pt_ge_mode_obj1, type_obj1,
+            pt_thresholds_obj1,
+            nr_eta_windows_obj1, 
+            eta_w1_upper_limits_obj1, eta_w1_lower_limits_obj1,
+            eta_w2_upper_limits_obj1, eta_w2_lower_limits_obj1,
+            eta_w3_upper_limits_obj1, eta_w3_lower_limits_obj1,
+            eta_w4_upper_limits_obj1, eta_w4_lower_limits_obj1,
+            eta_w5_upper_limits_obj1, eta_w5_lower_limits_obj1,
+            nr_phi_windows_obj1, 
+            phi_w1_upper_limits_obj1, phi_w1_lower_limits_obj1,
+            phi_w2_upper_limits_obj1, phi_w2_lower_limits_obj1,
+            iso_luts_obj1
         )
         port map(
             data_i, obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ, obj_slice_4_vs_templ

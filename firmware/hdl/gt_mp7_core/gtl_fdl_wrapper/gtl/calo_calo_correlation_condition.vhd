@@ -36,8 +36,8 @@ use work.gtl_pkg.all;
 entity calo_calo_correlation_condition is
     generic(
         nr_obj1: natural := NR_EG_OBJECTS;
-        nr_obj2: natural := NR_EG_OBJECTS;
         type_obj1: natural := EG_TYPE;
+        nr_obj2: natural := NR_EG_OBJECTS;
         type_obj2: natural := EG_TYPE;
 
         slice_low_obj1: natural := 0;

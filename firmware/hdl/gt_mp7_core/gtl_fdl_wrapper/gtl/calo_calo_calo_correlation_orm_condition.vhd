@@ -74,7 +74,7 @@ entity calo_calo_calo_correlation_orm_condition is
         iso_lut_obj2: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
 
         slice_low_obj3: natural := 0;
-        slice_high_obj3: natural := NR_EG_OBJECTS-1;
+        slice_high_obj3: natural := NR_JET_OBJECTS-1;
         pt_ge_mode_obj3: boolean := true;
         pt_threshold_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_obj3 : natural := 0;

@@ -84,6 +84,12 @@ entity calo_conditions_orm is
         phi_w2_lower_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_obj2: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
 
+        twobody_pt_cut: boolean := false;
+        pt_width: positive := EG_PT_VECTOR_WIDTH; 
+        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
+        pt_sq_sin_cos_precision : positive := EG_JET_SIN_COS_PRECISION;
+        
         deta_orm_cut: boolean := false;
         deta_orm_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
         deta_orm_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -96,12 +102,6 @@ entity calo_conditions_orm is
         dr_orm_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         dr_orm_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        twobody_pt_cut: boolean := false;
-        pt_width: positive := EG_PT_VECTOR_WIDTH; 
-        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := EG_JET_SIN_COS_PRECISION;
-        
         type_obj1 : natural := EG_TYPE;
         type_obj2 : natural := TAU_TYPE;
         nr_obj1: natural := NR_EG_OBJECTS;

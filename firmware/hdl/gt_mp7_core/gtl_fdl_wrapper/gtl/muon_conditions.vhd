@@ -65,7 +65,6 @@ entity muon_conditions is
         upt_upper_limits: muon_templates_array := (others => (others => '0'));
         upt_lower_limits: muon_templates_array := (others => (others => '0'));
         ip_luts: muon_templates_ip_array := (others => (others => '1'));
-        requested_charge_correlation: string(1 to 2) := "ig";
 
         twobody_pt_cut: boolean := false;
         pt_width: positive := MU_PT_VECTOR_WIDTH; 
@@ -76,6 +75,8 @@ entity muon_conditions is
         sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
         pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION;
         
+        requested_charge_correlation: string(1 to 2) := "ig";
+
         nr_templates: positive := 4
         
     );

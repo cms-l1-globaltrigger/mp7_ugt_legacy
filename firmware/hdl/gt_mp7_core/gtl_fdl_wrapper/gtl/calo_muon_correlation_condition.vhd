@@ -28,7 +28,6 @@ use work.gtl_pkg.all;
 
 entity calo_muon_correlation_condition is
      generic(
-        type_obj1: natural := EG_TYPE;
 
         slice_low_obj1: natural := 0;
         slice_high_obj1: natural := NR_EG_OBJECTS-1;
@@ -75,7 +74,7 @@ entity calo_muon_correlation_condition is
         iso_lut_obj2: std_logic_vector(2**(MUON_ISO_HIGH-MUON_ISO_LOW+1)-1 downto 0) := (others => '1');
         requested_charge_obj2: string(1 to 3) := "ign";
         qual_lut_obj2: std_logic_vector(2**(MUON_QUAL_HIGH-MUON_QUAL_LOW+1)-1 downto 0) := (others => '1');
-        upt_cut_muon : boolean := false;
+        upt_cut_muon: boolean := false;
         upt_upper_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         upt_lower_limit_obj2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         ip_lut_obj2: std_logic_vector(2**(MUON_IP_HIGH-MUON_IP_LOW+1)-1 downto 0) := (others => '1');
@@ -84,11 +83,11 @@ entity calo_muon_correlation_condition is
         diff_eta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
         diff_eta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        dphi_cut: boolean := false;
+        dphi_cut: boolean:= false;
         diff_phi_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
         diff_phi_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        dr_cut: boolean := false;
+        dr_cut: boolean:= false;
         dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
@@ -96,7 +95,7 @@ entity calo_muon_correlation_condition is
         pt2_width: positive := MU_PT_VECTOR_WIDTH; 
 
         mass_cut: boolean := false;
-        mass_type : natural := INVARIANT_MASS_TYPE;
+        mass_type: natural := INVARIANT_MASS_TYPE;
         mass_div_dr_vector_width: positive := MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1;
         mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -107,8 +106,9 @@ entity calo_muon_correlation_condition is
         twobody_pt_cut: boolean := false;
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := EG_MU_SIN_COS_PRECISION;
+        pt_sq_sin_cos_precision: positive := EG_MU_SIN_COS_PRECISION;
 
+        type_obj1: natural := EG_TYPE;
         nr_calo_objects: natural := NR_EG_OBJECTS
     );
     port(

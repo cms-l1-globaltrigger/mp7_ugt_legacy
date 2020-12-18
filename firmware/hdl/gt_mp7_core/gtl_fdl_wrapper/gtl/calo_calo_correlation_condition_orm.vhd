@@ -2,6 +2,7 @@
 -- Description:
 
 -- Version history:
+-- HB 2020-12-18: changed file- and entity-name to "calo_calo_correlation_condition_orm".
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now. New order in generic.
 -- HB 2020-11-26: added default parameters.
 -- HB 2020-01-21: inserted port calo2 (bug fix).
@@ -21,7 +22,7 @@ use ieee.std_logic_arith.all;
 use work.math_pkg.all;
 use work.gtl_pkg.all;
 
-entity calo_calo_calo_correlation_orm_condition is
+entity calo_calo_correlation_condition_orm is
      generic(
         nr_obj1: natural := NR_EG_OBJECTS;
         type_obj1: natural := EG_TYPE;
@@ -162,9 +163,9 @@ entity calo_calo_calo_correlation_orm_condition is
         sim_obj_vs_templ_or_tmp: out std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
         sim_obj_vs_templ_orm_vec: out std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'))
     );
-end calo_calo_calo_correlation_orm_condition; 
+end calo_calo_correlation_condition_orm; 
 
-architecture rtl of calo_calo_calo_correlation_orm_condition is
+architecture rtl of calo_calo_correlation_condition_orm is
 
 -- fixed pipeline structure
         nr_obj1: natural := NR_EG_OBJECTS;

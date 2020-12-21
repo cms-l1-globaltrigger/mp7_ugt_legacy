@@ -110,6 +110,7 @@ entity calo_muon_correlation_condition is
 
         type_obj1: natural := EG_TYPE;
         nr_calo_objects: natural := NR_EG_OBJECTS
+        
     );
     port(
         lhc_clk: in std_logic;

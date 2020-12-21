@@ -2,6 +2,7 @@
 -- Description:
 
 -- Version history:
+-- HB 2020-12-21: reordered generic.
 -- HB 2020-12-18: changed file- and entity-name to "calo_calo_correlation_condition_orm".
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now. New order in generic.
 -- HB 2020-11-26: added default parameters.
@@ -24,12 +25,6 @@ use work.gtl_pkg.all;
 
 entity calo_calo_correlation_condition_orm is
      generic(
-        nr_obj1: natural := NR_EG_OBJECTS;
-        type_obj1: natural := EG_TYPE;
-        nr_obj2: natural := NR_EG_OBJECTS;
-        type_obj2: natural := EG_TYPE;
-        nr_obj3: natural := NR_JET_OBJECTS;
-        type_obj3: natural := JET_TYPE;
 
         slice_low_obj1: natural := 0;
         slice_high_obj1: natural := NR_EG_OBJECTS-1;
@@ -135,6 +130,13 @@ entity calo_calo_correlation_condition_orm is
         dr_orm_cut: boolean := false;
         dr_orm_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         dr_orm_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
+
+        nr_obj1: natural := NR_EG_OBJECTS;
+        type_obj1: natural := EG_TYPE;
+        nr_obj2: natural := NR_EG_OBJECTS;
+        type_obj2: natural := EG_TYPE;
+        nr_obj3: natural := NR_JET_OBJECTS;
+        type_obj3: natural := JET_TYPE;
 
         obj_2plus1: boolean := true
 

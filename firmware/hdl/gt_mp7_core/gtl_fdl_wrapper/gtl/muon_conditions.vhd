@@ -6,6 +6,7 @@
 -- Charge correlation selection implemented with "LS" and "OS" (charge correlation calculated in muon_charge_correlations.vhd)
 
 -- Version history:
+-- HB 2020-12-21: reordered generic.
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now and new order in generic.
 -- HB 2020-12-01: changed order in generic.
 -- HB 2020-11-27: added default parameters. Changed order in port.
@@ -66,6 +67,8 @@ entity muon_conditions is
         upt_lower_limits: muon_templates_array := (others => (others => '0'));
         ip_luts: muon_templates_ip_array := (others => (others => '1'));
 
+        requested_charge_correlation: string(1 to 2) := "ig";
+
         twobody_pt_cut: boolean := false;
         pt_width: positive := MU_PT_VECTOR_WIDTH; 
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -75,8 +78,6 @@ entity muon_conditions is
         sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
         pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION;
         
-        requested_charge_correlation: string(1 to 2) := "ig";
-
         nr_templates: positive := 4
         
     );

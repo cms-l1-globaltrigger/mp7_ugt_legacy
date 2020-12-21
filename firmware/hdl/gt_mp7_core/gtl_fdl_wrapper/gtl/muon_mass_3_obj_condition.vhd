@@ -3,6 +3,7 @@
 -- Condition for invariant mass with 3 muon objects.
 
 -- Version history:
+-- HB 2020-12-21: inserted "mass_type" as constant.
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now. New order in generic.
 -- HB 2020-11-30: added default parameters. Currently no mass with 3 muon objects for "unconstraint pt".
 -- HB 2020-04-27: reverted to former version.
@@ -134,6 +135,9 @@ architecture rtl of muon_mass_3_obj_condition is
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
+-- mass type fixed to "INVARIANT_MASS_TYPE"
+    constant mass_type: natural := INVARIANT_MASS_TYPE; 
+    
     constant mass_vector_width: positive := pt_width+pt_width+cosh_cos_width; 
 
     type muon1_object_vs_template_array is array (slice_low_obj1 to slice_high_obj1, 1 to 1) of std_logic;
@@ -170,7 +174,7 @@ begin
             mass_calc_l: if j>i generate
                 mass_calculator_i: entity work.mass_calculator
                     generic map(
-                        mass_type => 0,
+                        mass_type => mass_type,
                         mass_upper_limit_vector => mass_upper_limit_vector,
                         mass_lower_limit_vector => mass_lower_limit_vector,
                         pt1_width => pt_width, 

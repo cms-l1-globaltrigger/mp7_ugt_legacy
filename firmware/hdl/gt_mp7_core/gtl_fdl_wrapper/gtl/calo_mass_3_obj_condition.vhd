@@ -3,6 +3,7 @@
 -- Condition for invariant mass with 3 calo objects (from same type).
 
 -- Version history:
+-- HB 2020-12-21: inserted "mass_type" as constant (removed from generic).
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now. New order in generic.
 -- HB 2020-11-30: added default parameters.
 -- HB 2020-04-27: reverted to former version.
@@ -91,8 +92,6 @@ entity calo_mass_3_obj_condition is
         pt1_width: positive := EG_PT_VECTOR_WIDTH; 
         pt2_width: positive := EG_PT_VECTOR_WIDTH; 
 
-        mass_cut: boolean := false;
-        mass_type : natural := INVARIANT_MASS_TYPE;
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_cosh_cos_precision : positive := EG_EG_COSH_COS_PRECISION;
@@ -118,6 +117,9 @@ architecture rtl of calo_mass_3_obj_condition is
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
+-- mass type fixed to "INVARIANT_MASS_TYPE"
+    constant mass_type: natural := INVARIANT_MASS_TYPE; 
+    
     constant mass_vector_width: positive := pt1_width+pt1_width+cosh_cos_width; 
 
     type calo1_object_vs_template_array is array (slice_low_obj1 to slice_high_obj1, 1 to 1) of std_logic;
@@ -148,7 +150,7 @@ begin
             mass_calc_l: if j>i generate
                 mass_calculator_i: entity work.mass_calculator
                     generic map(
-                        mass_type => 0,
+                        mass_type => mass_type,
                         mass_upper_limit_vector => mass_upper_limit_vector,
                         mass_lower_limit_vector => mass_lower_limit_vector,
                         pt1_width => pt1_width, 

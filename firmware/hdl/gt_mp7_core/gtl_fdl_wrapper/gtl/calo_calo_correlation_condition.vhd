@@ -3,6 +3,7 @@
 -- Correlation Condition module for two calorimeter object types (eg, jet and tau).
 
 -- Version history:
+-- HB 2020-12-21: reordered generic.
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now. New order in generic.
 -- HB 2020-11-26: updated default parameters.
 -- HB 2020-10-09: added parameter for invariant mass div by delta R comparison. Changed names for mass limits.
@@ -35,11 +36,6 @@ use work.gtl_pkg.all;
 
 entity calo_calo_correlation_condition is
     generic(
-        nr_obj1: natural := NR_EG_OBJECTS;
-        type_obj1: natural := EG_TYPE;
-        nr_obj2: natural := NR_EG_OBJECTS;
-        type_obj2: natural := EG_TYPE;
-
         slice_low_obj1: natural := 0;
         slice_high_obj1: natural := NR_EG_OBJECTS-1;
         pt_ge_mode_obj1: boolean := true;
@@ -112,6 +108,11 @@ entity calo_calo_correlation_condition is
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
         pt_sq_sin_cos_precision : positive := EG_EG_SIN_COS_PRECISION;
+
+        nr_obj1: natural := NR_EG_OBJECTS;
+        type_obj1: natural := EG_TYPE;
+        nr_obj2: natural := NR_EG_OBJECTS;
+        type_obj2: natural := EG_TYPE;
 
         same_bx: boolean := false 
     );

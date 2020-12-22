@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
   
+## [v1.12.0] - 2020-12-22
+### Comment
+
+- mp7_ugt firmware release v1.12.0
+- implemented new phi comp (similar to eta comp)
+- unified generic and port structures
+
+### Changed
+- source files:
+  - ../gt_mp7_core/gt_mp7_core_pkg.vhd
+  - ../gtl/gtl_module_tpl.vhd
+  - ../gtl/calo_conditions.vhd
+  - ../gtl/calo_conditions_orm.vhd
+  - ../gtl/muon_conditions.vhd
+  - ../gtl/esums_conditions.vhd
+  - ../gtl/calo_calo_correlation_condition_orm.vhd (new name)
+  - ../gtl/calo_calo_correlation_condition.vhd
+  - ../gtl/calo_esums_correlation_condition.vhd
+  - ../gtl/calo_mass_3_obj_condition.vhd
+  - ../gtl/muon_esums_correlation_condition.vhd
+  - ../gtl/muon_mass_3_obj_condition.vhd
+  - ../gtl/calo_muon_correlation_condition.vhd
+  - ../gtl/muon_muon_correlation_condition.vhd
+- dep file:
+  - ../cfg/uGT_algo.dep
+- simulation files:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
+
 ## [v1.11.2] - 2020-12-01
 ### Comment
 
@@ -17,7 +45,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - source files:
-  - ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
+  - ../gt_mp7_core/gt_mp7_core_pkg.vhd
   - ../gtl/calo_calo_correlation_condition.vhd
   - ../gtl/calo_muon_correlation_condition.vhd
   - ../gtl/gtl_module_tpl.vhd

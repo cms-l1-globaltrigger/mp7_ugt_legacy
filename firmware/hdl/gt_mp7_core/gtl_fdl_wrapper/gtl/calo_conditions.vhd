@@ -76,19 +76,19 @@ end calo_conditions;
 
 architecture rtl of calo_conditions is
 
-    constant nr_objects_slice_1_int: natural := object_slice_1_high-object_slice_1_low+1;
-    constant nr_objects_slice_2_int: natural := object_slice_2_high-object_slice_2_low+1;
-    constant nr_objects_slice_3_int: natural := object_slice_3_high-object_slice_3_low+1;
-    constant nr_objects_slice_4_int: natural := object_slice_4_high-object_slice_4_low+1;
+    constant nr_objects_slice_1_int: natural := slice_1_high_obj1-slice_1_low_obj1+1;
+    constant nr_objects_slice_2_int: natural := slice_2_high_obj1-slice_2_low_obj1+1;
+    constant nr_objects_slice_3_int: natural := slice_3_high_obj1-slice_3_low_obj1+1;
+    constant nr_objects_slice_4_int: natural := slice_4_high_obj1-slice_4_low_obj1+1;
 
 -- fixed pipeline structure, 2 stages total
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
 
-    signal obj_slice_1_vs_templ, obj_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array(object_slice_1_low to object_slice_1_high, 1 to 1);
-    signal obj_slice_2_vs_templ, obj_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(object_slice_2_low to object_slice_2_high, 1 to 1);
-    signal obj_slice_3_vs_templ, obj_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(object_slice_3_low to object_slice_3_high, 1 to 1);
-    signal obj_slice_4_vs_templ, obj_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(object_slice_4_low to object_slice_4_high, 1 to 1);
+    signal obj_slice_1_vs_templ, obj_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array(slice_1_low_obj1 to slice_1_high_obj1, 1 to 1);
+    signal obj_slice_2_vs_templ, obj_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(slice_2_low_obj1 to slice_2_high_obj1, 1 to 1);
+    signal obj_slice_3_vs_templ, obj_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(slice_3_low_obj1 to slice_3_high_obj1, 1 to 1);
+    signal obj_slice_4_vs_templ, obj_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(slice_4_low_obj1 to slice_4_high_obj1, 1 to 1);
     
     signal obj_vs_templ_vec_sig1: std_logic_vector(4095 downto 0) := (others => '0');
     signal obj_vs_templ_vec_sig2: std_logic_vector(4095 downto 0) := (others => '0');
@@ -110,7 +110,7 @@ architecture rtl of calo_conditions is
     attribute keep of condition_and_or_sig3  : signal is true;
 
     signal twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : 
-        std_logic_2dim_array(object_slice_1_low to object_slice_1_high, object_slice_2_low to object_slice_2_high) := (others => (others => '1'));
+        std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_2_low_obj1 to slice_2_high_obj1) := (others => (others => '1'));
 
 begin
 
@@ -118,8 +118,8 @@ begin
     twobody_pt_cut_i: if twobody_pt_cut = true and nr_templates = 2 generate
         twobody_pt_i: entity work.twobody_pt
             generic map(
-                object_slice_1_low, object_slice_1_high,
-                object_slice_2_low, object_slice_2_high,
+                slice_1_low_obj1, slice_1_high_obj1,
+                slice_2_low_obj1, slice_2_high_obj1,
                 nr_templates,                
                 twobody_pt_cut,
                 pt_width, 
@@ -178,10 +178,10 @@ begin
 -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates'.
     cond_matrix_i: entity work.calo_cond_matrix
         generic map(
-            object_slice_1_low, object_slice_1_high,
-            object_slice_2_low, object_slice_2_high,
-            object_slice_3_low, object_slice_3_high,
-            object_slice_4_low, object_slice_4_high,
+            slice_1_low_obj1, slice_1_high_obj1,
+            slice_2_low_obj1, slice_2_high_obj1,
+            slice_3_low_obj1, slice_3_high_obj1,
+            slice_4_low_obj1, slice_4_high_obj1,
             nr_templates
         )
         port map(clk,

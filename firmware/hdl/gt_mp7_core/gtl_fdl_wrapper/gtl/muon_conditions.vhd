@@ -60,12 +60,12 @@ entity muon_conditions is
         phi_w2_upper_limits_obj1: muon_templates_array := (others => (others => '0'));
         phi_w2_lower_limits_obj1: muon_templates_array := (others => (others => '0'));
         iso_luts_obj1: muon_templates_iso_array := (others => (others => '1'));
-        requested_charges: muon_templates_string_array := (others => "ign");
-        qual_luts: muon_templates_quality_array := (others => (others => '1'));
-        upt_cuts: muon_templates_boolean_array := (others => false);
-        upt_upper_limits: muon_templates_array := (others => (others => '0'));
-        upt_lower_limits: muon_templates_array := (others => (others => '0'));
-        ip_luts: muon_templates_ip_array := (others => (others => '1'));
+        requested_charges_obj1: muon_templates_string_array := (others => "ign");
+        qual_luts_obj1: muon_templates_quality_array := (others => (others => '1'));
+        upt_cuts_obj1: muon_templates_boolean_array := (others => false);
+        upt_upper_limits_obj1: muon_templates_array := (others => (others => '0'));
+        upt_lower_limits_obj1: muon_templates_array := (others => (others => '0'));
+        ip_luts_obj1: muon_templates_ip_array := (others => (others => '1'));
 
         requested_charge_correlation: string(1 to 2) := "ig";
 
@@ -196,7 +196,7 @@ begin
             phi_w2_upper_limits_obj1, phi_w2_lower_limits_obj1,
             requested_charges_obj1, qual_luts_obj1, iso_luts_obj1,
             upt_cuts_obj1, upt_upper_limits_obj1, upt_lower_limits_obj1,
-            ip_luts            
+            ip_luts_obj1            
         )
         port map(
             data_i, obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ, obj_slice_4_vs_templ

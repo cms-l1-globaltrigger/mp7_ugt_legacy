@@ -142,12 +142,11 @@ begin
 -- HB 2015-04-23: implemented phi_windows_comp for better modularity
     jet_phi_windows_comp_i: entity work.phi_windows_comp
         generic map(
-            phi_full_range => phi_full_range,
-            phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_JET_V2.phi_high-D_S_I_JET_V2.phi_low downto 0),
-            phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_JET_V2.phi_high-D_S_I_JET_V2.phi_low downto 0),
-            phi_w2_ignore => phi_w2_ignore,
-            phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_JET_V2.phi_high-D_S_I_JET_V2.phi_low downto 0),
-            phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_JET_V2.phi_high-D_S_I_JET_V2.phi_low downto 0)
+            nr_phi_windows => nr_phi_windows,
+            phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
+            phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
+            phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
+            phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0)
         )
         port map(
             phi => data_i(D_S_I_JET_V2.phi_high downto D_S_I_JET_V2.phi_low),
@@ -185,12 +184,11 @@ begin
 -- HB 2015-04-23: implemented phi_windows_comp for better modularity
     tau_phi_windows_comp_i: entity work.phi_windows_comp
         generic map(
-            phi_full_range => phi_full_range,
-            phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_TAU_V2.phi_high-D_S_I_TAU_V2.phi_low downto 0),
-            phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_TAU_V2.phi_high-D_S_I_TAU_V2.phi_low downto 0),
-            phi_w2_ignore => phi_w2_ignore,
-            phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_TAU_V2.phi_high-D_S_I_TAU_V2.phi_low downto 0),
-            phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_TAU_V2.phi_high-D_S_I_TAU_V2.phi_low downto 0)
+            nr_phi_windows => nr_phi_windows,
+            phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
+            phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
+            phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
+            phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0)
         )
         port map(
             phi => data_i(D_S_I_TAU_V2.phi_high downto D_S_I_TAU_V2.phi_low),

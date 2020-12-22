@@ -41,7 +41,7 @@ entity calo_calo_correlation_condition_orm is
         eta_w4_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        nr_phi_windows_obj1: boolean := true;
+        nr_phi_windows_obj1: natural := 0;
         phi_w1_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -63,7 +63,7 @@ entity calo_calo_correlation_condition_orm is
         eta_w4_lower_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        nr_phi_windows_obj2: boolean := true;
+        nr_phi_windows_obj2: natural := 0;
         phi_w1_upper_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_upper_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -85,7 +85,7 @@ entity calo_calo_correlation_condition_orm is
         eta_w4_lower_limit_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        nr_phi_windows_obj3: boolean := true;
+        nr_phi_windows_obj3: natural := 0;
         phi_w1_upper_limit_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_upper_limit_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -170,7 +170,6 @@ end calo_calo_correlation_condition_orm;
 architecture rtl of calo_calo_correlation_condition_orm is
 
 -- fixed pipeline structure
-        nr_obj1: natural := NR_EG_OBJECTS;
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 

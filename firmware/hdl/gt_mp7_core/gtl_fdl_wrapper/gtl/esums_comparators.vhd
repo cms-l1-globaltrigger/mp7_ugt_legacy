@@ -45,61 +45,61 @@ architecture rtl of esums_comparators is
 begin
 
     ett_sel: if obj_type=ETT_TYPE generate
-        et_data  <= data_i(D_S_I_ETT.et_high downto D_S_I_ETT.et_low);
+        et_data(D_S_I_ETT.et_high-D_S_I_ETT.et_low downto 0) <= data_i(D_S_I_ETT.et_high downto D_S_I_ETT.et_low);
         comp_o <= et_comp;   
     end generate ett_sel;
     
     htt_sel: if obj_type=HTT_TYPE generate
-        et_data  <= data_i(D_S_I_HTT.et_high downto D_S_I_HTT.et_low);
+        et_data(D_S_I_HTT.et_high-D_S_I_HTT.et_low downto 0) <= data_i(D_S_I_HTT.et_high downto D_S_I_HTT.et_low);
         comp_o <= et_comp;   
     end generate htt_sel;
     
     ettem_sel: if obj_type=ETTEM_TYPE generate
-        et_data  <= data_i(D_S_I_ETTEM.et_high downto D_S_I_ETTEM.et_low);
+        et_data(D_S_I_ETTEM.et_high-D_S_I_ETTEM.et_low downto 0) <= data_i(D_S_I_ETTEM.et_high downto D_S_I_ETTEM.et_low);
         comp_o <= et_comp;   
     end generate ettem_sel;
     
     etm_sel: if obj_type=ETM_TYPE generate
-        et_data  <= data_i(D_S_I_ETM.et_high downto D_S_I_ETM.et_low);
-        phi_data <= data_i(D_S_I_ETM.phi_high downto D_S_I_ETM.phi_low);
+        et_data(D_S_I_ETM.et_high-D_S_I_ETM.et_low downto 0) <= data_i(D_S_I_ETM.et_high downto D_S_I_ETM.et_low);
+        phi_data(D_S_I_ETM.phi_high-D_S_I_ETM.phi_low downto 0) <= data_i(D_S_I_ETM.phi_high downto D_S_I_ETM.phi_low);
         comp_o <= et_comp and phi_comp;   
     end generate etm_sel;
     
-    htm_phi_sel: if obj_type=HTM_TYPE generate
-        et_data  <= data_i(D_S_I_HTM.et_high downto D_S_I_HTM.et_low);
-        phi_data <= data_i(D_S_I_HTM.phi_high downto D_S_I_HTM.phi_low);
+    htm_sel: if obj_type=HTM_TYPE generate
+        et_data(D_S_I_HTM.et_high-D_S_I_HTM.et_low downto 0) <= data_i(D_S_I_HTM.et_high downto D_S_I_HTM.et_low);
+        phi_data(D_S_I_HTM.phi_high-D_S_I_HTM.phi_low downto 0) <= data_i(D_S_I_HTM.phi_high downto D_S_I_HTM.phi_low);
         comp_o <= et_comp and phi_comp;   
-    end generate htm_phi_sel;
+    end generate htm_sel;
     
-    etmhf_phi_sel: if obj_type=ETMHF_TYPE generate
-        et_data  <= data_i(D_S_I_ETMHF.et_high downto D_S_I_ETMHF.et_low);
-        phi_data <= data_i(D_S_I_ETMHF.phi_high downto D_S_I_ETMHF.phi_low);
+    etmhf_sel: if obj_type=ETMHF_TYPE generate
+        et_data(D_S_I_ETMHF.et_high-D_S_I_ETMHF.et_low downto 0) <= data_i(D_S_I_ETMHF.et_high downto D_S_I_ETMHF.et_low);
+        phi_data(D_S_I_ETMHF.phi_high-D_S_I_ETMHF.phi_low downto 0) <= data_i(D_S_I_ETMHF.phi_high downto D_S_I_ETMHF.phi_low);
         comp_o <= et_comp and phi_comp;   
-    end generate etmhf_phi_sel;
+    end generate etmhf_sel;
     
-    htmhf_phi_sel: if obj_type=HTMHF_TYPE generate
-        et_data  <= data_i(D_S_I_HTMHF.et_high downto D_S_I_HTMHF.et_low);
-        phi_data <= data_i(D_S_I_HTMHF.phi_high downto D_S_I_HTMHF.phi_low);;
+    htmhf_sel: if obj_type=HTMHF_TYPE generate
+        et_data(D_S_I_HTMHF.et_high-D_S_I_HTMHF.et_low downto 0) <= data_i(D_S_I_HTMHF.et_high downto D_S_I_HTMHF.et_low);
+        phi_data(D_S_I_HTMHF.phi_high-D_S_I_HTMHF.phi_low downto 0) <= data_i(D_S_I_HTMHF.phi_high downto D_S_I_HTMHF.phi_low);
         comp_o <= et_comp and phi_comp;   
-    end generate htmhf_phi_sel;
+    end generate htmhf_sel;
     
     asymet_sel: if obj_type=ASYMET_TYPE generate
-        et_data  <= data_i(D_S_I_ASYMET.high downto D_S_I_ASYMET.low);
+        et_data(D_S_I_ASYMET.high-D_S_I_ASYMET.low-1 downto 0) <= data_i(D_S_I_ASYMET.high downto D_S_I_ASYMET.low);
         comp_o <= et_comp;   
     end generate asymet_sel;
 
     asymht_sel: if obj_type=ASYMHT_TYPE generate
-        et_data  <= data_i(D_S_I_ASYMHT.high downto D_S_I_ASYMHT.low);
+        et_data(D_S_I_ASYMHT.high-D_S_I_ASYMHT.low-1 downto 0) <= data_i(D_S_I_ASYMHT.high downto D_S_I_ASYMHT.low);
         comp_o <= et_comp;   
     end generate asymht_sel;
 
     asymethf_sel: if obj_type=ASYMETHF_TYPE generate
-        et_data  <= data_i(D_S_I_ASYMETHF.high downto D_S_I_ASYMETHF.low);
+        et_data(D_S_I_ASYMETHF.high-D_S_I_ASYMETHF.low-1 downto 0) <= data_i(D_S_I_ASYMETHF.high downto D_S_I_ASYMETHF.low);
         comp_o <= et_comp;   
     end generate asymethf_sel;
 
     asymhthf_sel: if obj_type=ASYMHTHF_TYPE generate
-        et_data  <= data_i(D_S_I_ASYMHTHF.high downto D_S_I_ASYMHTHF.low);
+        et_data(D_S_I_ASYMHTHF.high-D_S_I_ASYMHTHF.low-1 downto 0) <= data_i(D_S_I_ASYMHTHF.high downto D_S_I_ASYMHTHF.low);
         comp_o <= et_comp;   
     end generate asymhthf_sel;
 

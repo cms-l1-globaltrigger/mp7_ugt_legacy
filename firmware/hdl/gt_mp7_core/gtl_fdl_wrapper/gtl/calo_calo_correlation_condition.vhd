@@ -3,7 +3,7 @@
 -- Correlation Condition module for two calorimeter object types (eg, jet and tau).
 
 -- Version history:
--- HB 2020-12-21: reordered generic.
+-- HB 2020-12-21: reordered generic. Changed names.
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now. New order in generic.
 -- HB 2020-11-26: updated default parameters.
 -- HB 2020-10-09: added parameter for invariant mass div by delta R comparison. Changed names for mass limits.
@@ -51,7 +51,7 @@ entity calo_calo_correlation_condition is
         eta_w4_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        nr_phi_windows_obj1: boolean := true;
+        nr_phi_windows_obj1: natural := 0;
         phi_w1_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -73,7 +73,7 @@ entity calo_calo_correlation_condition is
         eta_w4_lower_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        nr_phi_windows_obj2: boolean := true;
+        nr_phi_windows_obj2: natural := 0;
         phi_w1_upper_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_upper_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -81,12 +81,12 @@ entity calo_calo_correlation_condition is
         iso_lut_obj2: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
 
         deta_cut: boolean := false;
-        diff_eta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        diff_eta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        deta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        deta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
         dphi_cut: boolean := false;
-        diff_phi_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        diff_phi_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        dphi_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        dphi_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
         dr_cut: boolean := false;
         dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -120,8 +120,8 @@ entity calo_calo_correlation_condition is
         lhc_clk: in std_logic;
         calo1_data_i: in calo_objects_array;
         calo2_data_i: in calo_objects_array;
-        diff_eta: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        diff_phi: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        deta: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        dphi: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
         pt2 : in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
         cosh_deta : in calo_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
@@ -145,7 +145,7 @@ architecture rtl of calo_calo_correlation_condition is
     signal calo2_obj_vs_templ, calo2_obj_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1);
 
 -- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
-    signal diff_eta_comp, diff_eta_comp_temp, diff_eta_comp_pipe, diff_phi_comp, diff_phi_comp_temp, diff_phi_comp_pipe, dr_comp, dr_comp_temp, dr_comp_pipe, 
+    signal deta_comp, deta_comp_temp, deta_comp_pipe, dphi_comp, dphi_comp_temp, dphi_comp_pipe, dr_comp, dr_comp_temp, dr_comp_pipe, 
         mass_comp, mass_comp_temp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : 
         std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
 
@@ -172,14 +172,14 @@ begin
                             mass_cut => mass_cut,
                             mass_type => mass_type,
                             twobody_pt_cut => twobody_pt_cut,
-                            diff_eta_upper_limit_vector => diff_eta_upper_limit_vector,
-                            diff_eta_lower_limit_vector => diff_eta_lower_limit_vector,
-                            diff_phi_upper_limit_vector => diff_phi_upper_limit_vector,
-                            diff_phi_lower_limit_vector => diff_phi_lower_limit_vector,
+                            deta_upper_limit_vector => deta_upper_limit_vector,
+                            deta_lower_limit_vector => deta_lower_limit_vector,
+                            dphi_upper_limit_vector => dphi_upper_limit_vector,
+                            dphi_lower_limit_vector => dphi_lower_limit_vector,
                             dr_upper_limit_vector => dr_upper_limit_vector,
                             dr_lower_limit_vector => dr_lower_limit_vector,
-                            mass_upper_limit_vector => mass_upper_limit,
-                            mass_lower_limit_vector => mass_lower_limit,
+                            mass_upper_limit_vector => mass_upper_limit_vector,
+                            mass_lower_limit_vector => mass_lower_limit_vector,
                             pt1_width => pt1_width, 
                             pt2_width => pt2_width, 
                             cosh_cos_precision => mass_cosh_cos_precision,
@@ -189,8 +189,8 @@ begin
                             pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
                         )
                         port map(
-                            diff_eta => diff_eta(i,j),
-                            diff_phi => diff_phi(i,j),
+                            deta => deta(i,j),
+                            dphi => dphi(i,j),
                             pt1 => pt1(i),
                             pt2 => pt2(j),
                             cosh_deta => cosh_deta(i,j),
@@ -199,16 +199,16 @@ begin
                             cos_phi_2_integer => cos_phi_2_integer(j),
                             sin_phi_1_integer => sin_phi_1_integer(i),
                             sin_phi_2_integer => sin_phi_2_integer(j),
-                            diff_eta_comp => diff_eta_comp_temp(i,j),
-                            diff_phi_comp => diff_phi_comp_temp(i,j),
+                            deta_comp => deta_comp_temp(i,j),
+                            dphi_comp => dphi_comp_temp(i,j),
                             dr_comp => dr_comp_temp(i,j),
                             mass_comp => mass_comp_temp(i,j),
                             twobody_pt_comp => twobody_pt_comp_temp(i,j)
                         );
-                    diff_eta_comp(i,j) <= diff_eta_comp_temp(i,j);
-                    diff_eta_comp(j,i) <= diff_eta_comp_temp(i,j);
-                    diff_phi_comp(i,j) <= diff_phi_comp_temp(i,j);
-                    diff_phi_comp(j,i) <= diff_phi_comp_temp(i,j);
+                    deta_comp(i,j) <= deta_comp_temp(i,j);
+                    deta_comp(j,i) <= deta_comp_temp(i,j);
+                    dphi_comp(i,j) <= dphi_comp_temp(i,j);
+                    dphi_comp(j,i) <= dphi_comp_temp(i,j);
                     dr_comp(i,j) <= dr_comp_temp(i,j);
                     dr_comp(j,i) <= dr_comp_temp(i,j);
                     mass_comp(i,j) <= mass_comp_temp(i,j);
@@ -226,14 +226,14 @@ begin
                         mass_cut => mass_cut,
                         mass_type => mass_type,
                         twobody_pt_cut => twobody_pt_cut,
-                        diff_eta_upper_limit_vector => diff_eta_upper_limit_vector,
-                        diff_eta_lower_limit_vector => diff_eta_lower_limit_vector,
-                        diff_phi_upper_limit_vector => diff_phi_upper_limit_vector,
-                        diff_phi_lower_limit_vector => diff_phi_lower_limit_vector,
+                        deta_upper_limit_vector => deta_upper_limit_vector,
+                        deta_lower_limit_vector => deta_lower_limit_vector,
+                        dphi_upper_limit_vector => dphi_upper_limit_vector,
+                        dphi_lower_limit_vector => dphi_lower_limit_vector,
                         dr_upper_limit_vector => dr_upper_limit_vector,
                         dr_lower_limit_vector => dr_lower_limit_vector,
-                        mass_upper_limit_vector => mass_upper_limit,
-                        mass_lower_limit_vector => mass_lower_limit,
+                        mass_upper_limit_vector => mass_upper_limit_vector,
+                        mass_lower_limit_vector => mass_lower_limit_vector,
                         pt1_width => pt1_width, 
                         pt2_width => pt2_width, 
                         cosh_cos_precision => mass_cosh_cos_precision,
@@ -243,8 +243,8 @@ begin
                         pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
                     )
                     port map(
-                        diff_eta => diff_eta(i,j),
-                        diff_phi => diff_phi(i,j),
+                        deta => deta(i,j),
+                        dphi => dphi(i,j),
                         pt1 => pt1(i),
                         pt2 => pt2(j),
                         cosh_deta => cosh_deta(i,j),
@@ -253,8 +253,8 @@ begin
                         cos_phi_2_integer => cos_phi_2_integer(j),
                         sin_phi_1_integer => sin_phi_1_integer(i),
                         sin_phi_2_integer => sin_phi_2_integer(j),
-                        diff_eta_comp => diff_eta_comp(i,j),
-                        diff_phi_comp => diff_phi_comp(i,j),
+                        deta_comp => deta_comp(i,j),
+                        dphi_comp => dphi_comp(i,j),
                         dr_comp => dr_comp(i,j),
                         mass_comp => mass_comp(i,j),
                         twobody_pt_comp => twobody_pt_comp(i,j)
@@ -297,18 +297,18 @@ begin
     end generate mass_div_dr_sel;
     
     -- Pipeline stage for cut comps
-    diff_pipeline_p: process(lhc_clk, diff_eta_comp, diff_phi_comp, dr_comp, mass_comp, twobody_pt_comp)
+    diff_pipeline_p: process(lhc_clk, deta_comp, dphi_comp, dr_comp, mass_comp, twobody_pt_comp)
         begin
         if obj_vs_templ_pipeline_stage = false then 
-            diff_eta_comp_pipe <= diff_eta_comp;
-            diff_phi_comp_pipe <= diff_phi_comp;
+            deta_comp_pipe <= deta_comp;
+            dphi_comp_pipe <= dphi_comp;
             dr_comp_pipe <= dr_comp;
             mass_comp_pipe <= mass_comp;
             twobody_pt_comp_pipe <= twobody_pt_comp;
         else
             if (lhc_clk'event and lhc_clk = '1') then
-                diff_eta_comp_pipe <= diff_eta_comp;
-                diff_phi_comp_pipe <= diff_phi_comp;
+                deta_comp_pipe <= deta_comp;
+                dphi_comp_pipe <= dphi_comp;
                 dr_comp_pipe <= dr_comp;
                 mass_comp_pipe <= mass_comp;
                 twobody_pt_comp_pipe <= twobody_pt_comp;
@@ -333,10 +333,9 @@ begin
                 eta_w4_lower_limit_obj1,
                 eta_w5_upper_limit_obj1,
                 eta_w5_lower_limit_obj1,
-                phi_full_range_obj1,
+                nr_phi_windows_obj1,
                 phi_w1_upper_limit_obj1,
                 phi_w1_lower_limit_obj1,
-                phi_w2_ignore_obj1,
                 phi_w2_upper_limit_obj1,
                 phi_w2_lower_limit_obj1,
                 iso_lut_obj1
@@ -359,10 +358,9 @@ begin
                 eta_w4_lower_limit_obj2,
                 eta_w5_upper_limit_obj2,
                 eta_w5_lower_limit_obj2,
-                phi_full_range_obj2,
+                nr_phi_windows_obj2,
                 phi_w1_upper_limit_obj2,
                 phi_w1_lower_limit_obj2,
-                phi_w2_ignore_obj2,
                 phi_w2_upper_limit_obj2,
                 phi_w2_lower_limit_obj2,
                 iso_lut_obj2
@@ -386,7 +384,7 @@ begin
 
     -- "Matrix" of permutations in an and-or-structure.
 
-    matrix_deta_dphi_dr_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, diff_eta_comp_pipe, diff_phi_comp_pipe, dr_comp_pipe, mass_comp_pipe, mass_div_dr_comp_pipe, twobody_pt_comp_pipe)
+    matrix_deta_dphi_dr_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, mass_div_dr_comp_pipe, twobody_pt_comp_pipe)
         variable index : integer := 0;
         variable obj_vs_templ_vec : std_logic_vector(((slice_high_obj1-slice_low_obj1+1)*(slice_high_obj2-slice_low_obj2+1)) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
@@ -399,12 +397,12 @@ begin
                 if type_obj1 = type_obj2 and same_bx = true then
                     if j/=i then
                     index := index + 1;
-                    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j)
+                    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and deta_comp_pipe(i,j) and dphi_comp_pipe(i,j)
                                             and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
                     end if;
                 else
                     index := index + 1;
-                    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and diff_eta_comp_pipe(i,j) and diff_phi_comp_pipe(i,j)
+                    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and deta_comp_pipe(i,j) and dphi_comp_pipe(i,j)
                                             and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
                 end if;
             end loop;

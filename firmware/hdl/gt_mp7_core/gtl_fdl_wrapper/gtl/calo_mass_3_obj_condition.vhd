@@ -37,7 +37,7 @@ entity calo_mass_3_obj_condition is
         eta_w4_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        nr_phi_windows_obj1: boolean := true;
+        nr_phi_windows_obj1: natural := 0;
         phi_w1_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_upper_limit_obj1: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -59,7 +59,7 @@ entity calo_mass_3_obj_condition is
         eta_w4_lower_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        nr_phi_windows_obj2: boolean := true;
+        nr_phi_windows_obj2: natural := 0;
         phi_w1_upper_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_upper_limit_obj2: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -81,10 +81,9 @@ entity calo_mass_3_obj_condition is
         eta_w4_lower_limit_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_full_range_obj3: boolean := true;
+        nr_phi_windows_obj3: natural := 0;
         phi_w1_upper_limit_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
-        phi_w2_ignore_obj3: boolean := true;
         phi_w2_upper_limit_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_obj3: std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_obj3: std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0) := (others => '1');
@@ -156,7 +155,7 @@ begin
                         pt1_width => pt1_width, 
                         pt2_width => pt1_width, 
                         cosh_cos_width => cosh_cos_width,
-                        mass_cosh_cos_precision => cosh_cos_precision
+                        mass_cosh_cos_precision => mass_cosh_cos_precision
                     )
                     port map(
                         pt1 => pt(i)(pt1_width-1 downto 0),
@@ -202,7 +201,7 @@ begin
 
     obj_templ1_l: for i in slice_low_obj1 to slice_high_obj1 generate
         obj_templ1_comp_i: entity work.calo_comparators
-            generic map(pt_ge_mode_calo1, obj_type,
+            generic map(pt_ge_mode_obj1, type_obj,
                 pt_threshold_obj1,
                 nr_eta_windows_obj1,
                 eta_w1_upper_limit_obj1,
@@ -215,10 +214,9 @@ begin
                 eta_w4_lower_limit_obj1,
                 eta_w5_upper_limit_obj1,
                 eta_w5_lower_limit_obj1,
-                phi_full_range_obj1,
+                nr_phi_windows_obj1,
                 phi_w1_upper_limit_obj1,
                 phi_w1_lower_limit_obj1,
-                phi_w2_ignore_obj1,
                 phi_w2_upper_limit_obj1,
                 phi_w2_lower_limit_obj1,
                 iso_lut_obj1
@@ -228,7 +226,7 @@ begin
 
     obj_templ2_l_l: for i in slice_low_obj2 to slice_high_obj2 generate
         obj_templ2_comp_i: entity work.calo_comparators
-            generic map(pt_ge_mode_obj2, obj_type,
+            generic map(pt_ge_mode_obj2, type_obj,
                 pt_threshold_obj2,
                 nr_eta_windows_obj2,
                 eta_w1_upper_limit_obj2,
@@ -241,10 +239,9 @@ begin
                 eta_w4_lower_limit_obj2,
                 eta_w5_upper_limit_obj2,
                 eta_w5_lower_limit_obj2,
-                phi_full_range_obj2,
+                nr_phi_windows_obj2,
                 phi_w1_upper_limit_obj2,
                 phi_w1_lower_limit_obj2,
-                phi_w2_ignore_obj2,
                 phi_w2_upper_limit_obj2,
                 phi_w2_lower_limit_obj2,
                 iso_lut_obj2
@@ -254,7 +251,7 @@ begin
 
     obj_templ3_l_l: for i in slice_low_obj3 to slice_high_obj3 generate
         obj_templ3_comp_i: entity work.calo_comparators
-            generic map(pt_ge_mode_obj3, obj_type,
+            generic map(pt_ge_mode_obj3, type_obj,
                 pt_threshold_obj3,
                 nr_eta_windows_obj3,
                 eta_w1_upper_limit_obj3,
@@ -267,10 +264,9 @@ begin
                 eta_w4_lower_limit_obj3,
                 eta_w5_upper_limit_obj3,
                 eta_w5_lower_limit_obj3,
-                phi_full_range_obj3,
+                nr_phi_windows_obj3,
                 phi_w1_upper_limit_obj3,
                 phi_w1_lower_limit_obj3,
-                phi_w2_ignore_obj3,
                 phi_w2_upper_limit_obj3,
                 phi_w2_lower_limit_obj3,
                 iso_lut_obj3

@@ -3,6 +3,7 @@
 -- Comparators for azimuth angle of calo objects
 
 -- Version history:
+-- HB 2020-12-21: bug fixed.
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
 -- HB 2015-05-29: removed "use work.gtl_lib.all;" - using "entity work.xxx" for instances
 
@@ -39,7 +40,7 @@ begin
 -- Changed logic: if upper_limit = lower_limit than phi must be equal upper_limit (= lower_limit).
 
     no_phi_window_i: if nr_phi_windows = 0 generate
-        phi_comp <= '1';
+        phi_comp_o <= '1';
     end generate no_phi_window_i;
 
     phi_w1_sel_i: if nr_phi_windows >= 1 generate

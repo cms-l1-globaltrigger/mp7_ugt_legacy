@@ -102,10 +102,10 @@ entity calo_conditions_orm is
         dr_orm_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         dr_orm_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        type_obj1 : natural := EG_TYPE;
-        type_obj2 : natural := TAU_TYPE;
         nr_obj1: natural := NR_EG_OBJECTS;
+        type_obj1 : natural := EG_TYPE;
         nr_obj2: natural := NR_TAU_OBJECTS;
+        type_obj2 : natural := TAU_TYPE;
         nr_templates: positive := NR_CALO_TEMPLATES
         
     );
@@ -195,7 +195,7 @@ begin
 -- Instantiation of object cuts for calo2.
     calo2_obj_l: for i in slice_low_obj2 to slice_high_obj2 generate
         calo2_comp_i: entity work.calo_comparators
-            generic map(pt_ge_mode_obj2, obj_type_obj2,
+            generic map(pt_ge_mode_obj2, type_obj2,
                 pt_threshold_obj2,
                 nr_eta_windows_obj2,
                 eta_w1_upper_limit_obj2, eta_w1_lower_limit_obj2,

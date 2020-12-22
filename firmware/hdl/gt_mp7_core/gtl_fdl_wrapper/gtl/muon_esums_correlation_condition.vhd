@@ -3,6 +3,8 @@
 -- Correlation Condition module for muon and esums (etm and htm).
 
 -- Version history:
+-- HB 2020-12-21: changed names.
+-- HB 2020-12-21: changed names.
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now. New order in generic.
 -- HB 2020-11-26: added default parameters.
 -- HB 2020-06-09: implemented new muon structure with "unconstraint pt" and "impact parameter".
@@ -51,7 +53,7 @@ entity muon_esums_correlation_condition is
         iso_lut_obj1: std_logic_vector(2**(MUON_ISO_HIGH-MUON_ISO_LOW+1)-1 downto 0) := (others => '1');
         requested_charge_obj1: string(1 to 3) := "ign";
         qual_lut_obj1: std_logic_vector(2**(MUON_QUAL_HIGH-MUON_QUAL_LOW+1)-1 downto 0) := (others => '1');
-        upt_cut_muon : boolean := false;
+        upt_cut_obj1 : boolean := false;
         upt_upper_limit_obj1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         upt_lower_limit_obj1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         ip_lut_obj1: std_logic_vector(2**(MUON_IP_HIGH-MUON_IP_LOW+1)-1 downto 0) := (others => '1');
@@ -65,8 +67,8 @@ entity muon_esums_correlation_condition is
         phi_w2_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
 
         dphi_cut: boolean := false;
-        diff_phi_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        diff_phi_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        dphi_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        dphi_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
         pt1_width: positive := MU_PT_VECTOR_WIDTH; 
         pt2_width: positive := ETM_PT_VECTOR_WIDTH; 
@@ -90,7 +92,7 @@ entity muon_esums_correlation_condition is
         lhc_clk: in std_logic;
         muon_data_i: in muon_objects_array;
         esums_data_i: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        diff_phi: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to 0) := (others => (others => (others => '0')));
+        dphi: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to 0) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
         pt2 : in diff_inputs_array(0 to 0) := (others => (others => '0'));
         cos_dphi : in calo_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to 0) := (others => (others => (others => '0')));
@@ -115,7 +117,7 @@ architecture rtl of muon_esums_correlation_condition is
     signal obj_vs_templ : object_vs_template_array;
     signal obj_vs_templ_pipe : object_vs_template_array;
 -- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
-    signal diff_phi_comp, diff_phi_comp_pipe, mass_comp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_pipe : 
+    signal dphi_comp, dphi_comp_pipe, mass_comp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_pipe : 
         std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 0 to 0) := (others => (others => '1'));
 
     signal esums_comp_o, esums_comp_o_pipe : std_logic;
@@ -126,10 +128,10 @@ begin
     -- *** section: CUTs - begin ***************************************************************************************
     -- Comparison with limits.
     delta_l: for i in slice_low_obj1 to slice_high_obj1 generate
-        diff_phi_i: if dphi_cut = true generate
-            diff_phi_comp(i,0) <= '1' when diff_phi(i,0) >= diff_phi_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
-                                  diff_phi(i,0) <= diff_phi_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
-        end generate diff_phi_i;
+        dphi_i: if dphi_cut = true generate
+            dphi_comp(i,0) <= '1' when dphi(i,0) >= dphi_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
+                                  dphi(i,0) <= dphi_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
+        end generate dphi_i;
         mass_i: if mass_cut = true generate
             mass_calculator_i: entity work.mass_calculator
                 generic map(
@@ -171,15 +173,15 @@ begin
     end generate delta_l;
 
     -- Pipeline stage for cut comps
-    diff_pipeline_p: process(lhc_clk, diff_phi_comp, mass_comp, twobody_pt_comp)
+    diff_pipeline_p: process(lhc_clk, dphi_comp, mass_comp, twobody_pt_comp)
     begin
         if obj_vs_templ_pipeline_stage = false then
-            diff_phi_comp_pipe <= diff_phi_comp;
+            dphi_comp_pipe <= dphi_comp;
             mass_comp_pipe <= mass_comp;
             twobody_pt_comp_pipe <= twobody_pt_comp;
         else
             if (lhc_clk'event and lhc_clk = '1') then
-                diff_phi_comp_pipe <= diff_phi_comp;
+                dphi_comp_pipe <= dphi_comp;
                 mass_comp_pipe <= mass_comp;
                 twobody_pt_comp_pipe <= twobody_pt_comp;
             end if;
@@ -250,7 +252,7 @@ begin
     end process;
 
     -- "Matrix" of permutations in an and-or-structure.
-    matrix_dphi_mass_p: process(obj_vs_templ_pipe, esums_comp_o_pipe, diff_phi_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
+    matrix_dphi_mass_p: process(obj_vs_templ_pipe, esums_comp_o_pipe, dphi_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
         variable index : integer := 0;
         variable obj_vs_templ_vec : std_logic_vector((slice_high_obj1-slice_low_obj1+1) downto 1) := (others => '0');
         variable condition_and_or_tmp : std_logic := '0';
@@ -260,7 +262,7 @@ begin
         condition_and_or_tmp := '0';
         for i in slice_low_obj1 to slice_high_obj1 loop
                 index := index + 1;
-                obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o_pipe and diff_phi_comp_pipe(i,0) and mass_comp_pipe(i,0) and twobody_pt_comp_pipe(i,0);
+                obj_vs_templ_vec(index) := obj_vs_templ_pipe(i,1) and esums_comp_o_pipe and dphi_comp_pipe(i,0) and mass_comp_pipe(i,0) and twobody_pt_comp_pipe(i,0);
         end loop;
         for i in 1 to index loop
             -- ORs for matrix

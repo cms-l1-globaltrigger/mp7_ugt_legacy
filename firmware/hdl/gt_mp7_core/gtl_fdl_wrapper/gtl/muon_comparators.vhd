@@ -33,7 +33,7 @@ entity muon_comparators is
         eta_w4_lower_limit : std_logic_vector;
         eta_w5_upper_limit : std_logic_vector;
         eta_w5_lower_limit : std_logic_vector;
-        nr_phi_windows : boolean;
+        nr_phi_windows : natural;
         phi_w1_upper_limit : std_logic_vector;
         phi_w1_lower_limit : std_logic_vector;
         phi_w2_upper_limit : std_logic_vector;

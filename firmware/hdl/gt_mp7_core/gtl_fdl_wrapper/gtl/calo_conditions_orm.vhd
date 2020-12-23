@@ -192,7 +192,7 @@ begin
             calo1, calo1_obj_slice_1_vs_templ, calo1_obj_slice_2_vs_templ, calo1_obj_slice_3_vs_templ, calo1_obj_slice_4_vs_templ
         );
 
--- Instantiation of object cuts for calo2.
+-- Instantiation of object cuts for calo2 - overlap removal object.
     calo2_obj_l: for i in slice_low_obj2 to slice_high_obj2 generate
         calo2_comp_i: entity work.calo_comparators
             generic map(pt_ge_mode_obj2, type_obj2,

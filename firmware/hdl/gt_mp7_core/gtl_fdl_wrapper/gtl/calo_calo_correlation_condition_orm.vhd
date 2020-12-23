@@ -144,12 +144,12 @@ entity calo_calo_correlation_condition_orm is
     port(
         lhc_clk: in std_logic;
         calo1: in calo_objects_array;
-        calo2: in calo_objects_array;
+        calo2: in calo_objects_array(0 to nr_obj1-1) := (others => (others => '0'));
         calo3: in calo_objects_array;
-        deta_orm: in deta_dphi_vector_array;
-        dphi_orm: in deta_dphi_vector_array;
-        deta: in deta_dphi_vector_array;
-        dphi: in deta_dphi_vector_array;
+        deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
+        dphi_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
+        deta: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        dphi: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
         pt2 : in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
         cosh_deta : in calo_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));

@@ -1,7 +1,9 @@
 
 -- Description:
+-- Correlation Condition module for one or two calorimeter objects (eg, jet and tau) with calo overlap removal.
 
 -- Version history:
+-- HB 2020-01-07: updated order of instances for both modes (two objects with orm/one object with orm).
 -- HB 2020-12-21: reordered generic.
 -- HB 2020-12-18: changed file- and entity-name to "calo_calo_correlation_condition_orm".
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now. New order in generic.
@@ -144,10 +146,10 @@ entity calo_calo_correlation_condition_orm is
     port(
         lhc_clk: in std_logic;
         calo1: in calo_objects_array;
-        calo2: in calo_objects_array(0 to nr_obj1-1) := (others => (others => '0'));
-        calo3: in calo_objects_array;
-        deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
-        dphi_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
+        calo2: in calo_objects_array;
+        calo3: in calo_objects_array(0 to nr_obj3-1) := (others => (others => '0'));
+        deta_orm: in deta_dphi_vector_array;
+        dphi_orm: in deta_dphi_vector_array;
         deta: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dphi: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
@@ -173,24 +175,24 @@ architecture rtl of calo_calo_correlation_condition_orm is
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
+    signal deta_orm_comp_12, deta_orm_comp_12_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
     signal deta_orm_comp_13, deta_orm_comp_13_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
     signal deta_orm_comp_23, deta_orm_comp_23_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
+    signal dphi_orm_comp_12, dphi_orm_comp_12_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
     signal dphi_orm_comp_13, dphi_orm_comp_13_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
     signal dphi_orm_comp_23, dphi_orm_comp_23_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
+    signal dr_orm_comp_12, dr_orm_comp_12_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
     signal dr_orm_comp_13, dr_orm_comp_13_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
     signal dr_orm_comp_23, dr_orm_comp_23_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
     signal calo1_obj_vs_templ, calo1_obj_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));
     signal calo2_obj_vs_templ, calo2_obj_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
     signal calo3_obj_vs_templ, calo3_obj_vs_templ_pipe : std_logic_2dim_array(slice_low_obj3 to slice_high_obj3, 1 to 1) := (others => (others => '0'));
 -- HB 2017-03-27: default values of cut comps -> '1' because of AND in formular of obj_vs_templ_vec
-    signal deta_comp_12, deta_comp_12_temp, deta_comp_12_pipe, dphi_comp_12, dphi_comp_12_temp, dphi_comp_12_pipe, dr_comp_12, dr_comp_12_temp, dr_comp_12_pipe, mass_comp_12, mass_comp_12_temp, mass_comp_12_pipe, twobody_pt_comp_12, twobody_pt_comp_12_temp, twobody_pt_comp_12_pipe : 
-        std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
-    signal deta_comp_13, deta_comp_13_temp, deta_comp_13_pipe, dphi_comp_13, dphi_comp_13_temp, dphi_comp_13_pipe, dr_comp_13, dr_comp_13_temp, dr_comp_13_pipe, mass_comp_13, mass_comp_13_temp, mass_comp_13_pipe, twobody_pt_comp_13, twobody_pt_comp_13_temp, twobody_pt_comp_13_pipe : 
-        std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '1'));
+    signal deta_comp_12, deta_comp_12_temp, deta_comp_12_pipe, dphi_comp_12, dphi_comp_12_temp, dphi_comp_12_pipe, dr_comp_12, dr_comp_12_temp, dr_comp_12_pipe, mass_comp_12, mass_comp_12_temp, mass_comp_12_pipe, twobody_pt_comp_12, twobody_pt_comp_12_temp, twobody_pt_comp_12_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
     signal condition_and_or : std_logic;
     
 begin
-
+    
     calo1_obj_l: for i in slice_low_obj1 to slice_high_obj1 generate
         calo1_comp_i: entity work.calo_comparators
             generic map(pt_ge_mode_obj1, type_obj1,
@@ -216,84 +218,171 @@ begin
             port map(calo1(i), calo1_obj_vs_templ(i,1));
     end generate calo1_obj_l;
 
-    obj_2plus1_true_comb_i: if obj_2plus1 = true generate
-        calo2_obj_l: for i in slice_low_obj2 to slice_high_obj2 generate
-            calo2_comp_i: entity work.calo_comparators
-                generic map(pt_ge_mode_obj2, type_obj2,
-                    pt_threshold_obj2,
-                    nr_eta_windows_obj2,
-                    eta_w1_upper_limit_obj2,
-                    eta_w1_lower_limit_obj2,
-                    eta_w2_upper_limit_obj2,
-                    eta_w2_lower_limit_obj2,
-                    eta_w3_upper_limit_obj2,
-                    eta_w3_lower_limit_obj2,
-                    eta_w4_upper_limit_obj2,
-                    eta_w4_lower_limit_obj2,
-                    eta_w5_upper_limit_obj2,
-                    eta_w5_lower_limit_obj2,
-                    nr_phi_windows_obj2,
-                    phi_w1_upper_limit_obj2,
-                    phi_w1_lower_limit_obj2,
-                    phi_w2_upper_limit_obj2,
-                    phi_w2_lower_limit_obj2,
-                    iso_lut_obj2
-                )
-                port map(calo2(i), calo2_obj_vs_templ(i,1));
-        end generate calo2_obj_l;
-    end generate obj_2plus1_true_comb_i;
-
-    calo3_obj_l: for i in slice_low_obj3 to slice_high_obj3 generate
-        calo3_comp_i: entity work.calo_comparators
-            generic map(pt_ge_mode_obj3, type_obj3,
-                pt_threshold_obj3,
-                nr_eta_windows_obj3,
-                eta_w1_upper_limit_obj3,
-                eta_w1_lower_limit_obj3,
-                eta_w2_upper_limit_obj3,
-                eta_w2_lower_limit_obj3,
-                eta_w3_upper_limit_obj3,
-                eta_w3_lower_limit_obj3,
-                eta_w4_upper_limit_obj3,
-                eta_w4_lower_limit_obj3,
-                eta_w5_upper_limit_obj3,
-                eta_w5_lower_limit_obj3,
-                nr_phi_windows_obj3,
-                phi_w1_upper_limit_obj3,
-                phi_w1_lower_limit_obj3,
-                phi_w2_upper_limit_obj3,
-                phi_w2_lower_limit_obj3,
-                iso_lut_obj3
+    calo2_obj_l: for i in slice_low_obj2 to slice_high_obj2 generate
+        calo2_comp_i: entity work.calo_comparators
+            generic map(pt_ge_mode_obj2, type_obj2,
+                pt_threshold_obj2,
+                nr_eta_windows_obj2,
+                eta_w1_upper_limit_obj2,
+                eta_w1_lower_limit_obj2,
+                eta_w2_upper_limit_obj2,
+                eta_w2_lower_limit_obj2,
+                eta_w3_upper_limit_obj2,
+                eta_w3_lower_limit_obj2,
+                eta_w4_upper_limit_obj2,
+                eta_w4_lower_limit_obj2,
+                eta_w5_upper_limit_obj2,
+                eta_w5_lower_limit_obj2,
+                nr_phi_windows_obj2,
+                phi_w1_upper_limit_obj2,
+                phi_w1_lower_limit_obj2,
+                phi_w2_upper_limit_obj2,
+                phi_w2_lower_limit_obj2,
+                iso_lut_obj2
             )
-            port map(calo3(i), calo3_obj_vs_templ(i,1));
-    end generate calo3_obj_l;
+            port map(calo2(i), calo2_obj_vs_templ(i,1));
+    end generate calo2_obj_l;
 
-    cuts_orm_13_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
-        cuts_orm_13_l_2: for k in slice_low_obj3 to slice_high_obj3 generate
-            deta_orm_cut_i: if deta_orm_cut = true generate
-                deta_orm_comp_13(i,k) <= '1' when deta_orm(i,k) >= deta_orm_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
-                                     deta_orm(i,k) <= deta_orm_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
-            end generate deta_orm_cut_i;
-            dphi_orm_cut_i: if dphi_orm_cut = true generate
-                dphi_orm_comp_13(i,k) <= '1' when dphi_orm(i,k) >= dphi_orm_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
-                                     dphi_orm(i,k) <= dphi_orm_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
-            end generate dphi_orm_cut_i;
-            dr_orm_cut_i: if dr_orm_cut = true generate
-                dr_calculator_i: entity work.dr_calculator
+    cuts_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
+        cuts_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
+            cuts_instances_i: entity work.cuts_instances
                 generic map(
-                    upper_limit_vector => dr_orm_upper_limit_vector,
-                    lower_limit_vector => dr_orm_lower_limit_vector
+                    deta_cut => deta_cut,
+                    dphi_cut => dphi_cut,
+                    dr_cut => dr_cut,
+                    mass_cut => mass_cut,
+                    mass_type => mass_type,
+                    twobody_pt_cut => twobody_pt_cut,
+                    deta_upper_limit_vector => deta_upper_limit_vector,
+                    deta_lower_limit_vector => deta_lower_limit_vector,
+                    dphi_upper_limit_vector => dphi_upper_limit_vector,
+                    dphi_lower_limit_vector => dphi_lower_limit_vector,
+                    dr_upper_limit_vector => dr_upper_limit_vector,
+                    dr_lower_limit_vector => dr_lower_limit_vector,
+                    mass_upper_limit_vector => mass_upper_limit_vector,
+                    mass_lower_limit_vector => mass_lower_limit_vector,
+                    pt1_width => pt1_width, 
+                    pt2_width => pt2_width, 
+                    cosh_cos_precision => mass_cosh_cos_precision,
+                    cosh_cos_width => cosh_cos_width,
+                    pt_sq_threshold_vector => pt_sq_threshold_vector,
+                    sin_cos_width => sin_cos_width,
+                    pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
                 )
                 port map(
-                    deta => deta_orm(i,k),
-                    dphi => dphi_orm(i,k),
-                    dr_comp => dr_orm_comp_13(i,k)
+                    deta => deta(i,j),
+                    dphi => dphi(i,j),
+                    pt1 => pt1(i),
+                    pt2 => pt2(j),
+                    cosh_deta => cosh_deta(i,j),
+                    cos_dphi => cos_dphi(i,j),
+                    cos_phi_1_integer => cos_phi_1_integer(i),
+                    cos_phi_2_integer => cos_phi_2_integer(j),
+                    sin_phi_1_integer => sin_phi_1_integer(i),
+                    sin_phi_2_integer => sin_phi_2_integer(j),
+                    deta_comp => deta_comp_12(i,j),
+                    dphi_comp => dphi_comp_12(i,j),
+                    dr_comp => dr_comp_12(i,j),
+                    mass_comp => mass_comp_12(i,j),
+                    twobody_pt_comp => twobody_pt_comp_12(i,j)
                 );
-            end generate dr_orm_cut_i;
-        end generate cuts_orm_13_l_2;
-    end generate cuts_orm_13_l_1;
+        end generate cuts_l_2;
+    end generate cuts_l_1;
 
-    cuts_orm_2plus1_true_i: if obj_2plus1 = true generate
+    pipeline_p: process(lhc_clk, calo1_obj_vs_templ, calo2_obj_vs_templ, calo3_obj_vs_templ, deta_orm_comp_12, dphi_orm_comp_12, dr_orm_comp_12, deta_orm_comp_13, dphi_orm_comp_13, dr_orm_comp_13, deta_orm_comp_23, dphi_orm_comp_23, dr_orm_comp_23, deta_comp_12, dphi_comp_12, dr_comp_12, mass_comp_12, twobody_pt_comp_12)
+        begin
+        if obj_vs_templ_pipeline_stage = false then 
+            calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
+            calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
+            calo3_obj_vs_templ_pipe <= calo3_obj_vs_templ;
+            deta_orm_comp_12_pipe <= deta_orm_comp_12;
+            dphi_orm_comp_12_pipe <= dphi_orm_comp_12;
+            dr_orm_comp_12_pipe <= dr_orm_comp_12;
+            deta_orm_comp_13_pipe <= deta_orm_comp_13;
+            dphi_orm_comp_13_pipe <= dphi_orm_comp_13;
+            dr_orm_comp_13_pipe <= dr_orm_comp_13;
+            deta_orm_comp_23_pipe <= deta_orm_comp_23;
+            dphi_orm_comp_23_pipe <= dphi_orm_comp_23;
+            dr_orm_comp_23_pipe <= dr_orm_comp_23;
+            deta_comp_12_pipe <= deta_comp_12;
+            dphi_comp_12_pipe <= dphi_comp_12;
+            dr_comp_12_pipe <= dr_comp_12;
+            mass_comp_12_pipe <= mass_comp_12;
+            twobody_pt_comp_12_pipe <= twobody_pt_comp_12;
+        else
+            if (lhc_clk'event and lhc_clk = '1') then
+                calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
+                calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
+                calo3_obj_vs_templ_pipe <= calo3_obj_vs_templ;
+                deta_orm_comp_12_pipe <= deta_orm_comp_12;
+                dphi_orm_comp_12_pipe <= dphi_orm_comp_12;
+                dr_orm_comp_12_pipe <= dr_orm_comp_12;
+                deta_orm_comp_13_pipe <= deta_orm_comp_13;
+                dphi_orm_comp_13_pipe <= dphi_orm_comp_13;
+                dr_orm_comp_13_pipe <= dr_orm_comp_13;
+                deta_orm_comp_23_pipe <= deta_orm_comp_23;
+                dphi_orm_comp_23_pipe <= dphi_orm_comp_23;
+                dr_orm_comp_23_pipe <= dr_orm_comp_23;
+                deta_comp_12_pipe <= deta_comp_12;
+                dphi_comp_12_pipe <= dphi_comp_12;
+                dr_comp_12_pipe <= dr_comp_12;
+                mass_comp_12_pipe <= mass_comp_12;
+                twobody_pt_comp_12_pipe <= twobody_pt_comp_12;
+            end if;
+        end if;
+    end process;
+    
+-- obj_2plus1 = true
+    obj_2plus1_true_i: if obj_2plus1 = true generate
+    
+        calo3_obj_l: for i in slice_low_obj3 to slice_high_obj3 generate
+            calo3_comp_i: entity work.calo_comparators
+                generic map(pt_ge_mode_obj3, type_obj3,
+                    pt_threshold_obj3,
+                    nr_eta_windows_obj3,
+                    eta_w1_upper_limit_obj3,
+                    eta_w1_lower_limit_obj3,
+                    eta_w2_upper_limit_obj3,
+                    eta_w2_lower_limit_obj3,
+                    eta_w3_upper_limit_obj3,
+                    eta_w3_lower_limit_obj3,
+                    eta_w4_upper_limit_obj3,
+                    eta_w4_lower_limit_obj3,
+                    eta_w5_upper_limit_obj3,
+                    eta_w5_lower_limit_obj3,
+                    nr_phi_windows_obj3,
+                    phi_w1_upper_limit_obj3,
+                    phi_w1_lower_limit_obj3,
+                    phi_w2_upper_limit_obj3,
+                    phi_w2_lower_limit_obj3,
+                    iso_lut_obj3
+                )
+                port map(calo3(i), calo3_obj_vs_templ(i,1));
+        end generate calo3_obj_l;
+
+        cuts_orm_13_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
+            cuts_orm_13_l_2: for k in slice_low_obj3 to slice_high_obj3 generate
+                deta_orm_cut_i: if deta_orm_cut = true generate
+                    deta_orm_comp_13(i,k) <= '1' when deta_orm(i,k) >= deta_orm_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and deta_orm(i,k) <= deta_orm_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
+                end generate deta_orm_cut_i;
+                dphi_orm_cut_i: if dphi_orm_cut = true generate
+                    dphi_orm_comp_13(i,k) <= '1' when dphi_orm(i,k) >= dphi_orm_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and dphi_orm(i,k) <= dphi_orm_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
+                end generate dphi_orm_cut_i;
+                dr_orm_cut_i: if dr_orm_cut = true generate
+                    dr_calculator_i: entity work.dr_calculator
+                    generic map(
+                        upper_limit_vector => dr_orm_upper_limit_vector,
+                        lower_limit_vector => dr_orm_lower_limit_vector
+                    )
+                    port map(
+                        deta => deta_orm(i,k),
+                        dphi => dphi_orm(i,k),
+                        dr_comp => dr_orm_comp_13(i,k)
+                    );
+                end generate dr_orm_cut_i;
+            end generate cuts_orm_13_l_2;
+        end generate cuts_orm_13_l_1;
+
         cuts_orm_23_l_1: for i in slice_low_obj2 to slice_high_obj2 generate 
             cuts_orm_23_l_2: for k in slice_low_obj3 to slice_high_obj3 generate
                 deta_orm_cut_i: if deta_orm_cut = true generate
@@ -316,153 +405,7 @@ begin
                 end generate dr_orm_cut_i;
             end generate cuts_orm_23_l_2;
         end generate cuts_orm_23_l_1;
-    end generate cuts_orm_2plus1_true_i;
 
-    obj_2plus1_true_cuts_i: if obj_2plus1 = true generate
-        cuts_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
-            cuts_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
-                cuts_instances_i: entity work.cuts_instances
-                    generic map(
-                            deta_cut => deta_cut,
-                            dphi_cut => dphi_cut,
-                            dr_cut => dr_cut,
-                            mass_cut => mass_cut,
-                            mass_type => mass_type,
-                            twobody_pt_cut => twobody_pt_cut,
-                            deta_upper_limit_vector => deta_upper_limit_vector,
-                            deta_lower_limit_vector => deta_lower_limit_vector,
-                            dphi_upper_limit_vector => dphi_upper_limit_vector,
-                            dphi_lower_limit_vector => dphi_lower_limit_vector,
-                            dr_upper_limit_vector => dr_upper_limit_vector,
-                            dr_lower_limit_vector => dr_lower_limit_vector,
-                            mass_upper_limit_vector => mass_upper_limit_vector,
-                            mass_lower_limit_vector => mass_lower_limit_vector,
-                            pt1_width => pt1_width, 
-                            pt2_width => pt2_width, 
-                            cosh_cos_precision => mass_cosh_cos_precision,
-                            cosh_cos_width => cosh_cos_width,
-                            pt_sq_threshold_vector => pt_sq_threshold_vector,
-                            sin_cos_width => sin_cos_width,
-                            pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
-                    )
-                    port map(
-                        deta => deta(i,j),
-                        dphi => dphi(i,j),
-                        pt1 => pt1(i),
-                        pt2 => pt2(j),
-                        cosh_deta => cosh_deta(i,j),
-                        cos_dphi => cos_dphi(i,j),
-                        cos_phi_1_integer => cos_phi_1_integer(i),
-                        cos_phi_2_integer => cos_phi_2_integer(j),
-                        sin_phi_1_integer => sin_phi_1_integer(i),
-                        sin_phi_2_integer => sin_phi_2_integer(j),
-                        deta_comp => deta_comp_12(i,j),
-                        dphi_comp => dphi_comp_12(i,j),
-                        dr_comp => dr_comp_12(i,j),
-                        mass_comp => mass_comp_12(i,j),
-                        twobody_pt_comp => twobody_pt_comp_12(i,j)
-                    );
-            end generate cuts_l_2;
-        end generate cuts_l_1;
-    end generate obj_2plus1_true_cuts_i;
-
-    obj_2plus1_false_cuts_i: if obj_2plus1 = false generate
-        cuts_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
-            cuts_l_2: for j in slice_low_obj3 to slice_high_obj3 generate
-                cuts_instances_i: entity work.cuts_instances
-                    generic map(
-                            deta_cut => deta_cut,
-                            dphi_cut => dphi_cut,
-                            dr_cut => dr_cut,
-                            mass_cut => mass_cut,
-                            mass_type => mass_type,
-                            twobody_pt_cut => twobody_pt_cut,
-                            deta_upper_limit_vector => deta_upper_limit_vector,
-                            deta_lower_limit_vector => deta_lower_limit_vector,
-                            dphi_upper_limit_vector => dphi_upper_limit_vector,
-                            dphi_lower_limit_vector => dphi_lower_limit_vector,
-                            dr_upper_limit_vector => dr_upper_limit_vector,
-                            dr_lower_limit_vector => dr_lower_limit_vector,
-                            mass_upper_limit_vector => mass_upper_limit_vector,
-                            mass_lower_limit_vector => mass_lower_limit_vector,
-                            pt1_width => pt1_width, 
-                            pt2_width => pt2_width, 
-                            cosh_cos_precision => mass_cosh_cos_precision,
-                            cosh_cos_width => cosh_cos_width,
-                            pt_sq_threshold_vector => pt_sq_threshold_vector,
-                            sin_cos_width => sin_cos_width,
-                            pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
-                    )
-                    port map(
-                        deta => deta(i,j),
-                        dphi => dphi(i,j),
-                        pt1 => pt1(i),
-                        pt2 => pt2(j),
-                        cosh_deta => cosh_deta(i,j),
-                        cos_dphi => cos_dphi(i,j),
-                        cos_phi_1_integer => cos_phi_1_integer(i),
-                        cos_phi_2_integer => cos_phi_2_integer(j),
-                        sin_phi_1_integer => sin_phi_1_integer(i),
-                        sin_phi_2_integer => sin_phi_2_integer(j),
-                        deta_comp => deta_comp_13(i,j),
-                        dphi_comp => dphi_comp_13(i,j),
-                        dr_comp => dr_comp_13(i,j),
-                        mass_comp => mass_comp_13(i,j),
-                        twobody_pt_comp => twobody_pt_comp_13(i,j)
-                    );
-            end generate cuts_l_2;
-        end generate cuts_l_1;
-    end generate obj_2plus1_false_cuts_i;
-
-    comb_cuts_pipeline_p: process(lhc_clk, calo1_obj_vs_templ, calo2_obj_vs_templ, calo3_obj_vs_templ, deta_orm_comp_13, dphi_orm_comp_13, dr_orm_comp_13, deta_orm_comp_23, dphi_orm_comp_23, dr_orm_comp_23, deta_comp_12, dphi_comp_12, dr_comp_12, mass_comp_12, twobody_pt_comp_12, deta_comp_13, dphi_comp_13, dr_comp_13, mass_comp_13, twobody_pt_comp_13)
-        begin
-        if obj_vs_templ_pipeline_stage = false then 
-            calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
-            calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
-            calo3_obj_vs_templ_pipe <= calo3_obj_vs_templ;
-            deta_orm_comp_13_pipe <= deta_orm_comp_13;
-            dphi_orm_comp_13_pipe <= dphi_orm_comp_13;
-            dr_orm_comp_13_pipe <= dr_orm_comp_13;
-            deta_orm_comp_23_pipe <= deta_orm_comp_23;
-            dphi_orm_comp_23_pipe <= dphi_orm_comp_23;
-            dr_orm_comp_23_pipe <= dr_orm_comp_23;
-            deta_comp_12_pipe <= deta_comp_12;
-            dphi_comp_12_pipe <= dphi_comp_12;
-            dr_comp_12_pipe <= dr_comp_12;
-            mass_comp_12_pipe <= mass_comp_12;
-            twobody_pt_comp_12_pipe <= twobody_pt_comp_12;
-            deta_comp_13_pipe <= deta_comp_13;
-            dphi_comp_13_pipe <= dphi_comp_13;
-            dr_comp_13_pipe <= dr_comp_13;
-            mass_comp_13_pipe <= mass_comp_13;
-            twobody_pt_comp_13_pipe <= twobody_pt_comp_13;
-        else
-            if (lhc_clk'event and lhc_clk = '1') then
-                calo1_obj_vs_templ_pipe <= calo1_obj_vs_templ;
-                calo2_obj_vs_templ_pipe <= calo2_obj_vs_templ;
-                calo3_obj_vs_templ_pipe <= calo3_obj_vs_templ;
-                deta_orm_comp_13_pipe <= deta_orm_comp_13;
-                dphi_orm_comp_13_pipe <= dphi_orm_comp_13;
-                dr_orm_comp_13_pipe <= dr_orm_comp_13;
-                deta_orm_comp_23_pipe <= deta_orm_comp_23;
-                dphi_orm_comp_23_pipe <= dphi_orm_comp_23;
-                dr_orm_comp_23_pipe <= dr_orm_comp_23;
-                deta_comp_12_pipe <= deta_comp_12;
-                dphi_comp_12_pipe <= dphi_comp_12;
-                dr_comp_12_pipe <= dr_comp_12;
-                mass_comp_12_pipe <= mass_comp_12;
-                twobody_pt_comp_12_pipe <= twobody_pt_comp_12;
-                deta_comp_13_pipe <= deta_comp_13;
-                dphi_comp_13_pipe <= dphi_comp_13;
-                dr_comp_13_pipe <= dr_comp_13;
-                mass_comp_13_pipe <= mass_comp_13;
-                twobody_pt_comp_13_pipe <= twobody_pt_comp_13;
-            end if;
-        end if;
-    end process;
-    
--- HB 2017-03-27: values of orm cuts between orm limits -> removal !!!
-    obj_2plus1_true_matrix_i: if obj_2plus1 = true generate
         matrix_and_or_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, calo3_obj_vs_templ_pipe, deta_orm_comp_13_pipe, dphi_orm_comp_13_pipe, dr_orm_comp_13_pipe, deta_orm_comp_23_pipe, dphi_orm_comp_23_pipe, dr_orm_comp_23_pipe, deta_comp_12_pipe, dphi_comp_12_pipe, dr_comp_12_pipe, mass_comp_12_pipe, twobody_pt_comp_12_pipe)
             variable index : integer := 0;
             variable obj_vs_templ_vec, orm_vec: std_logic_3dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) :=
@@ -484,9 +427,7 @@ begin
                 for j in slice_low_obj2 to slice_high_obj2 loop
                     if j/=i then
                         for k in slice_low_obj3 to slice_high_obj3 loop
-                            obj_vs_templ_vec(i,j,k) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and calo3_obj_vs_templ_pipe(k,1) and
-                                                      mass_comp_12_pipe(i,j) and dr_comp_12_pipe(i,j) and dphi_comp_12_pipe(i,j) and 
-                                                      deta_comp_12_pipe(i,j) and twobody_pt_comp_12_pipe(i,j);
+                            obj_vs_templ_vec(i,j,k) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and calo3_obj_vs_templ_pipe(k,1) and mass_comp_12_pipe(i,j) and dr_comp_12_pipe(i,j) and dphi_comp_12_pipe(i,j) and deta_comp_12_pipe(i,j) and twobody_pt_comp_12_pipe(i,j);
                             sim_obj_vs_templ_vec(i,j,k) <= obj_vs_templ_vec(i,j,k);
                             orm_vec(i,j,k) := (dr_orm_comp_13_pipe(i,k) or dr_orm_comp_23_pipe(j,k) or dphi_orm_comp_13_pipe(i,k) or
                                               dphi_orm_comp_23_pipe(j,k) or deta_orm_comp_13_pipe(i,k) or deta_orm_comp_23_pipe(j,k)) and
@@ -510,12 +451,39 @@ begin
             end loop;
             condition_and_or <= condition_and_or_tmp;
         end process;
-    end generate obj_2plus1_true_matrix_i;
+    end generate obj_2plus1_true_i;
 
-    obj_2plus1_false_matrix_i: if obj_2plus1 = false generate
-        matrix_and_or_p: process(calo1_obj_vs_templ_pipe, calo3_obj_vs_templ_pipe, deta_orm_comp_13_pipe, dphi_orm_comp_13_pipe, dr_orm_comp_13_pipe, deta_comp_13_pipe, dphi_comp_13_pipe, dr_comp_13_pipe, mass_comp_13_pipe, twobody_pt_comp_13_pipe)
+-- obj_2plus1 = false
+    obj_2plus1_false_i: if obj_2plus1 = false generate
+
+        cuts_orm_12_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
+            cuts_orm_12_l_2: for k in slice_low_obj2 to slice_high_obj2 generate
+                deta_orm_cut_i: if deta_orm_cut = true generate
+                    deta_orm_comp_12(i,k) <= '1' when deta_orm(i,k) >= deta_orm_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
+                                        deta_orm(i,k) <= deta_orm_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
+                end generate deta_orm_cut_i;
+                dphi_orm_cut_i: if dphi_orm_cut = true generate
+                    dphi_orm_comp_12(i,k) <= '1' when dphi_orm(i,k) >= dphi_orm_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
+                                        dphi_orm(i,k) <= dphi_orm_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
+                end generate dphi_orm_cut_i;
+                dr_orm_cut_i: if dr_orm_cut = true generate
+                    dr_calculator_i: entity work.dr_calculator
+                    generic map(
+                        upper_limit_vector => dr_orm_upper_limit_vector,
+                        lower_limit_vector => dr_orm_lower_limit_vector
+                    )
+                    port map(
+                        deta => deta_orm(i,k),
+                        dphi => dphi_orm(i,k),
+                        dr_comp => dr_orm_comp_12(i,k)
+                    );
+                end generate dr_orm_cut_i;
+            end generate cuts_orm_12_l_2;
+        end generate cuts_orm_12_l_1;
+
+        matrix_and_or_p: process(calo1_obj_vs_templ_pipe, calo2_obj_vs_templ_pipe, deta_orm_comp_12_pipe, dphi_orm_comp_12_pipe, dr_orm_comp_12_pipe, deta_comp_12_pipe, dphi_comp_12_pipe, dr_comp_12_pipe, mass_comp_12_pipe, twobody_pt_comp_12_pipe)
             variable index : integer := 0;
-            variable obj_vs_templ_vec : std_logic_vector(((slice_high_obj1-slice_low_obj1+1)*(slice_high_obj3-slice_low_obj3+1)) downto 1) := 
+            variable obj_vs_templ_vec : std_logic_vector(((slice_high_obj1-slice_low_obj1+1)*(slice_high_obj2-slice_low_obj2+1)) downto 1) := 
                 (others => '0');
             variable condition_and_or_tmp : std_logic := '0';
         begin
@@ -523,11 +491,11 @@ begin
             obj_vs_templ_vec := (others => '0');
             condition_and_or_tmp := '0';
             for i in slice_low_obj1 to slice_high_obj1 loop 
-                for j in slice_low_obj3 to slice_high_obj3 loop
+                for j in slice_low_obj2 to slice_high_obj2 loop
                     index := index + 1;
-                    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo3_obj_vs_templ_pipe(j,1) and
-                                              mass_comp_13_pipe(i,j) and dr_comp_13_pipe(i,j) and dphi_comp_13_pipe(i,j) and deta_comp_13_pipe(i,j) and twobody_pt_comp_13_pipe(i,j) and
-                                              not ((dr_orm_comp_13_pipe(i,j) or dphi_orm_comp_13_pipe(i,j) or deta_orm_comp_13_pipe(i,j)) and calo3_obj_vs_templ_pipe(j,1));
+                    obj_vs_templ_vec(index) := calo1_obj_vs_templ_pipe(i,1) and calo2_obj_vs_templ_pipe(j,1) and
+                                              mass_comp_12_pipe(i,j) and dr_comp_12_pipe(i,j) and dphi_comp_12_pipe(i,j) and deta_comp_12_pipe(i,j) and twobody_pt_comp_12_pipe(i,j) and
+                                              not ((dr_orm_comp_12_pipe(i,j) or dphi_orm_comp_12_pipe(i,j) or deta_orm_comp_12_pipe(i,j)) and calo2_obj_vs_templ_pipe(j,1));
                 end loop;
             end loop;        
             for i in 1 to index loop 
@@ -536,7 +504,7 @@ begin
             end loop;
             condition_and_or <= condition_and_or_tmp;
         end process;
-    end generate obj_2plus1_false_matrix_i;
+    end generate obj_2plus1_false_i;
 
 -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(lhc_clk, condition_and_or)

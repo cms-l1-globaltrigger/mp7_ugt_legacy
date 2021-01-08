@@ -21,69 +21,22 @@ def detect_tm_reporter_version(filename):
             if m:
                 return m.group(1)
 
-def detect_vhdl_producer_version(filename):
-    """Try to detect VHDL producer version from comments of generated output
+def detect_versions_vx_y_z(filename, needle):
+    """Try to detect versions of VHDL producer, tmEventSetup, etc. from comments of generated output
     VHDL files. Returns version string or None if no information was found.
-    Required format:
-    ...
-    -- VHDL producer version
-    -- vX.Y.Z
-    ...
-    >>> detect_vhdl_producer_version('/path/to/ugt_constants.vhd')
-    '2.4.0'
     """
-    needle = "-- vhdl producer version"
     with open(filename) as fp:
         prev = ""
         for line in fp:
             if prev.startswith(needle):
                 return line.strip(' -v').strip()
             prev = line.strip().lower()
-
-def detect_tme_version(filename):
-    """Try to detect TME (=tmEventSetup) version from comments of generated output
-    VHDL files. Returns version string or None if no information was found.
-    Required format:
-    ...
-    -- VHDL producer version
-    -- vX.Y.Z
-    ...
-    >>> detect_tme_version('/path/to/ugt_constants.vhd')
-    '2.4.0'
-    """
-    needle = "-- tmEventSetup version"
-    with open(filename) as fp:
-        prev = ""
-        for line in fp:
-            if prev.startswith(needle):
-                return line.strip(' -v').strip()
-            prev = line.strip().lower()
-
+    
 def detect_gt_versions(filename):
     """Try to detect uGT, FDL and GTL versions from VHDL statements. Returns a
     dictionary containing version strings with keys used in VHDL constants.
-
     >>> detect_gt_versions('/path/to/gt_mp7_core_pkg.vhd')
-    {'FRAME': '1.2.3', 'FDL_FW': '1.2.2def detect_vhdl_producer_version(filename):
-    """Try to detect VHDL producer version from comments of generated output
-    VHDL files. Returns version string or None if no information was found.
-    Required format:
-    ...
-    -- VHDL producer version
-    -- vX.Y.Z
-    ...
-    >>> detect_vhdl_producer_version('/path/to/ugt_constants.vhd')
-    '2.4.0'
-    """
-    needle = "-- vhdl producer version"
-    with open(filename) as fp:
-        prev = ""
-        for line in fp:
-            if prev.startswith(needle):
-                return line.strip(' -v').strip()
-            prev = line.strip().lower()
-
-', 'GTL_FW': '1.5.0'}
+    {'FRAME': '1.2.3', 'FDL_FW': '1.2.2', 'GTL_FW': '1.5.0'}
     """
     versions = {}
     regex = re.compile(r'^\s*\w+\s+(\w+)_(\w+)_VERSION.*\:\=\s*(\d+)')
@@ -98,7 +51,6 @@ def detect_gt_versions(filename):
     for k, v in versions.items():
         versions[k] = "{MAJOR}.{MINOR}.{REV}".format(**v)
     return versions
-
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -127,11 +79,12 @@ def main():
     l1menu_html = menu_name + ".html"
 
     versions = {}
-    #versions['tm-vhdlproducer'] = detect_vhdl_producer_version(os.path.join(menu_dir, 'vhdl', 'module_0', 'src', 'ugt_constants.vhd'))
-    versions['tm-vhdlproducer'] = detect_vhdl_producer_version(os.path.join(buildarea_dir, 'src', 'module_0', 'vhdl_snippets', 'ugt_constants.vhd'))
+    ugt_constants_path = os.path.join(buildarea_dir, 'src', 'module_0', 'vhdl_snippets', 'ugt_constants.vhd')
+    needle = "-- tmeventsetup version"
+    versions['tm-eventsetup'] = detect_versions_vx_y_z(ugt_constants_path, needle)
+    needle = "-- vhdl producer version"
+    versions['tm-vhdlproducer'] = detect_versions_vx_y_z(ugt_constants_path, needle)
     versions['tm-reporter'] = detect_tm_reporter_version(os.path.join(buildarea_dir, 'src', l1menu_html))
-    versions['tm-editor'] = detect_tme_version(os.path.join(buildarea_dir, 'src', 'module_0', 'vhdl_snippets', 'ugt_constants.vhd'))
-    #versions['tm-editor'] = ''
     versions.update(detect_gt_versions(os.path.join(buildarea_dir, 'src', 'mp7_ugt_legacy', 'firmware', 'hdl', 'gt_mp7_core', 'gt_mp7_core_pkg.vhd')))
     #versions['vivado'] = detect_vivado_version(os.path.join(buildarea_dir, 'module_0', 'vivado.log'))
     vivado_version = config.get('vivado', 'version')
@@ -152,7 +105,7 @@ def main():
         ("uGT", versions['FRAME']),
         ("FDL", versions['FDL_FW']),
         ("GTL", versions['GTL_FW']),
-        ("tm-editor", versions['tm-editor']),
+        ("tm-eventsetup", versions['tm-eventsetup']),
         ("tm-vhdlproducer", versions['tm-vhdlproducer']),
         ("tm-reporter", versions['tm-reporter']),
     ]

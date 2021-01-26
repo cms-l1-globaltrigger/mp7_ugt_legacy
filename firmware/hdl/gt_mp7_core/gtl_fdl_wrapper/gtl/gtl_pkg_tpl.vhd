@@ -840,6 +840,9 @@ constant MU_HTM_COSH_COS_VECTOR_WIDTH: positive := MUON_HTM_COSH_COS_VECTOR_WIDT
 constant CALO_MUON_COSH_COS_VECTOR_WIDTH: positive := log2c(109487199-(-10000));
 type calo_muon_cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_MUON_COSH_COS_VECTOR_WIDTH-1 downto 0);
 
+constant COMMON_COSH_COS_VECTOR_WIDTH: positive := max(CALO_COSH_COS_VECTOR_WIDTH, MUON_MUON_COSH_COS_VECTOR_WIDTH, CALO_MUON_COSH_COS_VECTOR_WIDTH);
+type common_cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(COMMON_COSH_COS_VECTOR_WIDTH-1 downto 0);
+
 -- HB 2017-03-29: Muon -> type definition for twobody-pt calculation in mass_cuts.vhd
 constant MU_ETM_PT_PRECISION : positive := 1;
 constant MU_ETMHF_PT_PRECISION : positive := 1;
@@ -872,6 +875,7 @@ constant MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR : positive := 32;
 constant MAX_WIDTH_DR_LIMIT_VECTOR : positive := 64;
 constant MAX_WIDTH_MASS_LIMIT_VECTOR : positive := 64;
 constant MAX_WIDTH_TBPT_LIMIT_VECTOR : positive := 64;
+type mass_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
 
 -- ********************************************************
 -- definitions for invariant mass divided by deltaR

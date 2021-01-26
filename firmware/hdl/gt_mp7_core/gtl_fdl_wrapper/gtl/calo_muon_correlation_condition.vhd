@@ -115,8 +115,8 @@ entity calo_muon_correlation_condition is
     );
     port(
         lhc_clk: in std_logic;
-        calo_data_i: in calo_objects_array;
-        muon_data_i: in muon_objects_array;
+        calo: in calo_objects_array;
+        muon: in muon_objects_array;
         deta: in deta_dphi_vector_array(0 to nr_calo_objects-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
         dphi: in deta_dphi_vector_array(0 to nr_calo_objects-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to nr_calo_objects-1) := (others => (others => '0'));
@@ -266,7 +266,7 @@ begin
                 phi_w2_lower_limit_obj1,
                 iso_lut_obj1
             )
-            port map(calo_data_i(i), calo_obj_vs_templ(i,1));
+            port map(calo(i), calo_obj_vs_templ(i,1));
     end generate calo_obj_l;
 
 -- Instance of comparators for muon objects.
@@ -298,7 +298,7 @@ begin
                 upt_lower_limit_obj2,
                 ip_lut_obj2
                 )
-            port map(muon_data_i(i), muon_obj_vs_templ(i,1));
+            port map(muon(i), muon_obj_vs_templ(i,1));
      end generate muon_obj_l;
 
 -- Pipeline stage for obj_vs_templ

@@ -3,6 +3,7 @@
 -- Collection of cuts for correlations
 
 -- Version history:
+-- HB 2021-01-18: inserted new output port "invariant_mass" (for invariant mass of 3 objects).
 -- HB 2020-12-14: changed names.
 -- HB 2020-08-10: inserted cut for "twobody xunconstraint pt" of new muon structure.
 -- HB 2020-06-15: inserted cuts for "unconstraint pt" [upt] of new muon structure.
@@ -60,8 +61,8 @@ entity cuts_instances is
         pt2 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0);
         upt1 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0) := (others => '0');
         upt2 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0) := (others => '0');
-        cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
-        cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
+        cosh_deta : in std_logic_vector(COMMON_COSH_COS_VECTOR_WIDTH-1 downto 0);
+        cos_dphi : in std_logic_vector(COMMON_COSH_COS_VECTOR_WIDTH-1 downto 0);
         cos_phi_1_integer : in integer;
         cos_phi_2_integer : in integer;
         sin_phi_1_integer : in integer;
@@ -70,6 +71,7 @@ entity cuts_instances is
         dphi_comp: out std_logic := '1';
         dr_comp: out std_logic := '1';
         mass_comp: out std_logic := '1';
+        invariant_mass: out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0) := (others => '0');
         twobody_pt_comp: out std_logic := '1';
         twobody_upt_comp: out std_logic := '1'
     );
@@ -117,9 +119,10 @@ begin
                 pt2 => pt2(pt2_width-1 downto 0),
                 upt1 => upt1(upt1_width-1 downto 0),
                 upt2 => upt2(upt2_width-1 downto 0),
-                cosh_deta => cosh_deta,
-                cos_dphi => cos_dphi,
-                mass_comp => mass_comp
+                cosh_deta => cosh_deta(cosh_cos_width-1 downto 0),
+                cos_dphi => cos_dphi(cosh_cos_width-1 downto 0),
+                mass_comp => mass_comp,
+                invariant_mass_o => invariant_mass
             );
     end generate mass_i;
     twobody_pt_i: if twobody_pt_cut = true generate

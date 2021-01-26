@@ -84,12 +84,12 @@ entity calo_esums_correlation_condition is
     );
     port(
         lhc_clk: in std_logic;
-        calo_data_i: in calo_objects_array;
-        esums_data_i: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        calo: in calo_objects_array;
+        esums: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         dphi: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to 0) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
         pt2 : in diff_inputs_array(0 to 0) := (others => (others => '0'));
-        cos_dphi : in calo_cosh_cos_vector_array(0 to nr_obj1-1, 0 to 0) := (others => (others => (others => '0')));
+        cos_dphi : in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to 0) := (others => (others => (others => '0')));
         cos_phi_1_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
         cos_phi_2_integer : in sin_cos_integer_array(0 to 0) := (others => 0);
         sin_phi_1_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
@@ -206,7 +206,7 @@ begin
                 phi_w2_lower_limit_obj1,
                 iso_lut_obj1
             )
-            port map(calo_data_i(i), obj_vs_templ(i,1));
+            port map(calo(i), obj_vs_templ(i,1));
     end generate obj_templ1_l;
 
     esums_comparators_i: entity work.esums_comparators
@@ -221,7 +221,7 @@ begin
             phi_w2_lower_limit => phi_w2_lower_limit_esums
         )
         port map(
-            data_i => esums_data_i,
+            data_i => esums,
             comp_o => esums_comp_o
         );
 

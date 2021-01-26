@@ -3,6 +3,7 @@
 -- Calculation of invariant mass or transverse mass based on LUTs.
 
 -- Version history:
+-- HB 2021-01-18: inserted output "invariant_mass_o".
 -- HB 2020-06-15: inserted cuts for "unconstraint pt" [upt] of new muon structure.
 -- HB 2017-09-29: changed to "MAX_WIDTH_MASS_LIMIT_VECTOR" in limit vectors
 -- HB 2017-09-21: changed attribute "use_dsp48" to "use_dsp"
@@ -47,6 +48,7 @@ entity mass_calculator is
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
         mass_comp : out std_logic;
+        invariant_mass_o : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0); 
 -- HB 2016-11-08: simulation outputs
         sim_invariant_mass_sq_div2 : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0); 
         sim_inv_mass_comp : out std_logic;
@@ -78,6 +80,7 @@ begin
 
 -- HB 2015-10-01: calculation of invariant mass with formular M**2/2=pt1*pt2*(cosh(eta1-eta2)-cos(phi1-phi2))
     invariant_mass_sq_div2 <= pt1 * pt2 * (cosh_deta - cos_dphi);
+    invariant_mass_o <= invariant_mass_sq_div2;
     sim_invariant_mass_sq_div2 <= invariant_mass_sq_div2;
     
     inv_mass_comp <= '1' when invariant_mass_sq_div2 >= mass_lower_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) and invariant_mass_sq_div2 <= mass_upper_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) else '0';

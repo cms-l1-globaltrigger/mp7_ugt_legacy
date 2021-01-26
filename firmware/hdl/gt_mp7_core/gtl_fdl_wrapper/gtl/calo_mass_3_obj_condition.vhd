@@ -104,8 +104,8 @@ entity calo_mass_3_obj_condition is
         lhc_clk: in std_logic;
         calo_data_i: in calo_objects_array;
         pt : in diff_inputs_array;
-        cosh_deta : in calo_cosh_cos_vector_array;
-        cos_dphi : in calo_cosh_cos_vector_array;
+        cosh_deta : in common_cosh_cos_vector_array;
+        cos_dphi : in common_cosh_cos_vector_array;
         condition_o: out std_logic
     );
 end calo_mass_3_obj_condition; 

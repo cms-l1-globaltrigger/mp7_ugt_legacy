@@ -121,8 +121,8 @@ entity muon_mass_3_obj_condition is
         lhc_clk: in std_logic;
         muon_data_i: in muon_objects_array;
         pt : in diff_inputs_array;
-        cosh_deta : in muon_cosh_cos_vector_array;
-        cos_dphi : in muon_cosh_cos_vector_array;
+        cosh_deta : in common_cosh_cos_vector_array;
+        cos_dphi : in common_cosh_cos_vector_array;
         ls_charcorr_triple: in muon_charcorr_triple_array := (others => (others => (others => '0')));
         os_charcorr_triple: in muon_charcorr_triple_array := (others => (others => (others => '0')));
         condition_o: out std_logic

@@ -120,7 +120,7 @@ entity correlation_conditions_calo is
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_cosh_cos_precision: positive := EG_EG_COSH_COS_PRECISION;
-        cosh_cos_width: positive := EG_EG_COSH_COS_VECTOR_WIDTH;
+        cosh_cos_width: positive := COMMON_COSH_COS_VECTOR_WIDTH;
 
         twobody_pt_cut: boolean := false;
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -258,7 +258,7 @@ begin
 
     cuts_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
         cuts_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
-            same_obj_type_same_bx_same_range_i: if type_obj1 = type_obj2 and same_bx and (slice_low_obj1 = slice_low_obj2) and (slice_high_obj1 = slice_high_obj2) generate
+            same_obj_bx_range_i: if type_obj1 = type_obj2 and same_bx and (slice_low_obj1 = slice_low_obj2) and (slice_high_obj1 = slice_high_obj2) generate
 -- HB 2017-02-21: optimisation of LUTs and DSP resources: calculations of cuts only for one half of permutations, second half by assignment of "mirrored" indices.
                 if_j_gr_i: if j > i generate
                     cuts_instances_i: entity work.cuts_instances
@@ -316,9 +316,9 @@ begin
                     twobody_pt_comp(i,j) <= twobody_pt_comp_temp(i,j);
                     twobody_pt_comp(j,i) <= twobody_pt_comp_temp(i,j);
                 end generate if_j_gr_i;
-            end generate same_obj_type_same_bx_same_range_i;
+            end generate same_obj_bx_range_i;
             
-            diffrent_obj_type_different_bx_different_range_i: if type_obj1 /= type_obj2 or not same_bx or (slice_low_obj1 /= slice_low_obj2) or (slice_high_obj1 /= slice_high_obj2) generate
+            diffrent_obj_bx_range_i: if type_obj1 /= type_obj2 or not same_bx or (slice_low_obj1 /= slice_low_obj2) or (slice_high_obj1 /= slice_high_obj2) generate
                 cuts_instances_i: entity work.cuts_instances
                     generic map(
                         deta_cut => deta_cut,
@@ -361,7 +361,7 @@ begin
                         invariant_mass => invariant_mass(i,j)(pt1_width+pt2_width+cosh_cos_width-1 downto 0),
                         twobody_pt_comp => twobody_pt_comp(i,j)
                     );
-            end generate diffrent_obj_type_different_bx_different_range_i;
+            end generate diffrent_obj_bx_range_i;
         end generate cuts_l_2;
     end generate cuts_l_1;
     

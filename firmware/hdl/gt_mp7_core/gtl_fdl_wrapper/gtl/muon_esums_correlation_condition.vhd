@@ -147,7 +147,7 @@ begin
                     pt1 => pt1(i)(pt1_width-1 downto 0),
                     pt2 => pt2(0)(pt2_width-1 downto 0),
                     cosh_deta => cosh_deta_zero_vector(i,0),
-                    cos_dphi => cos_dphi(i,0),
+                    cos_dphi => cos_dphi(i,0)(cosh_cos_width-1 downto 0),
                     mass_comp => mass_comp(i,0)
                 );
         end generate mass_i;

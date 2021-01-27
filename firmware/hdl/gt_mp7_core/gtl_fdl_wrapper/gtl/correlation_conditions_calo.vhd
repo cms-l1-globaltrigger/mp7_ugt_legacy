@@ -45,7 +45,7 @@ entity correlation_conditions_calo is
         iso_lut_obj1: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
 
         slice_low_obj2: natural := 0;
-        slice_high_obj2: natural := NR_EG_OBJECTS-1;
+        slice_high_obj2: natural := 0; -- for esums as "obj2"
         pt_ge_mode_obj2: boolean := true;
         pt_threshold_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_obj2 : natural := 0;

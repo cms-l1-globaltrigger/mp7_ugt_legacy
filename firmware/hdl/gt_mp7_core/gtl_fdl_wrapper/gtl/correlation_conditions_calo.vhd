@@ -4,22 +4,12 @@
 -- 1. two calorimeter objects (eg, jet and tau).
 -- 2. one or two calorimeter objects with calo overlap removal.
 -- 3. mass for 3 objects (same type).
+-- 4. calo esums.
 
 -- Version history:
--- HB 2020-01-15: changed to correlation_conditions_calo with and without overlap removal in one module.
--- HB 2020-01-07: updated order of instances for both modes (two objects with orm/one object with orm).
--- HB 2020-12-21: reordered generic.
--- HB 2020-12-18: changed file- and entity-name to "calo_calo_correlation_condition_orm".
--- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now. New order in generic.
--- HB 2020-11-26: added default parameters.
--- HB 2020-01-21: inserted port calo2 (bug fix).
--- HB 2019-06-17: updated for "five eta cuts".
--- HB 2019-05-06: updated instances.
--- HB 2019-05-06: renamed from calo_calo_calo_correlation_orm_condition_v3 to calo_calo_calo_correlation_orm_condition.
--- HB 2017-07-04: changed from calo_calo_calo_correlation_orm_condition to calo_calo_calo_correlation_orm_condition_v2 for correct use of different object slices. 
---                Object types and bx of calo1 and calo2 are the same. Only one collection of input data (port "calo1") for calo1 and calo2.
--- HB 2017-05-18: updated and-structure for correct use with orm.
--- HB 2017-05-03: first design.
+-- HB 2020-01-27: added calo esums correlation.
+-- HB 2020-01-15: added mass for 3 objects (same type).
+-- HB 2020-01-15: new design correlation_conditions_calo with and without overlap removal in one module.
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -98,6 +88,16 @@ entity correlation_conditions_calo is
         phi_w2_lower_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_obj3: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
 
+        sel_esums: boolean := false;
+        obj_type_esums: natural := ETM_TYPE;
+        et_ge_mode_esums: boolean := true;
+        et_threshold_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        nr_phi_windows_esums: natural := 0;
+        phi_w1_upper_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w1_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w2_upper_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        phi_w2_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
+
         deta_cut: boolean := false;
         deta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
         deta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -156,6 +156,7 @@ entity correlation_conditions_calo is
         obj1: in calo_objects_array(0 to nr_obj1-1) := (others => (others => '0'));
         obj2: in calo_objects_array(0 to nr_obj2-1) := (others => (others => '0'));
         obj3: in calo_objects_array(0 to nr_obj3-1) := (others => (others => '0'));
+        esums: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
         deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
         dphi_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
         deta: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
@@ -195,6 +196,7 @@ architecture rtl of correlation_conditions_calo is
     signal obj1_vs_templ, obj1_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));
     signal obj2_vs_templ, obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
     signal obj3_vs_templ, obj3_vs_templ_pipe : std_logic_2dim_array(slice_low_obj3 to slice_high_obj3, 1 to 1) := (others => (others => '0'));
+    signal esums_comp, esums_comp_pipe : std_logic := '0';
 -- HB 2017-03-27: default values of cut comps -> '1' because of AND in formular of obj_vs_templ_vec
     signal deta_comp, deta_comp_temp, deta_comp_pipe, dphi_comp, dphi_comp_temp, dphi_comp_pipe, dr_comp, dr_comp_temp, dr_comp_pipe, mass_comp, mass_comp_temp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
     signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) :=
@@ -231,30 +233,50 @@ begin
             port map(obj1(i), obj1_vs_templ(i,1));
     end generate obj1_l;
 
-    obj2_l: for i in slice_low_obj2 to slice_high_obj2 generate
-        obj2_comp_i: entity work.calo_comparators
-            generic map(pt_ge_mode_obj2, type_obj2,
-                pt_threshold_obj2,
-                nr_eta_windows_obj2,
-                eta_w1_upper_limit_obj2,
-                eta_w1_lower_limit_obj2,
-                eta_w2_upper_limit_obj2,
-                eta_w2_lower_limit_obj2,
-                eta_w3_upper_limit_obj2,
-                eta_w3_lower_limit_obj2,
-                eta_w4_upper_limit_obj2,
-                eta_w4_lower_limit_obj2,
-                eta_w5_upper_limit_obj2,
-                eta_w5_lower_limit_obj2,
-                nr_phi_windows_obj2,
-                phi_w1_upper_limit_obj2,
-                phi_w1_lower_limit_obj2,
-                phi_w2_upper_limit_obj2,
-                phi_w2_lower_limit_obj2,
-                iso_lut_obj2
+    comp_obj2_sel: if not sel_esums generate
+        obj2_l: for i in slice_low_obj2 to slice_high_obj2 generate
+            obj2_comp_i: entity work.calo_comparators
+                generic map(pt_ge_mode_obj2, type_obj2,
+                    pt_threshold_obj2,
+                    nr_eta_windows_obj2,
+                    eta_w1_upper_limit_obj2,
+                    eta_w1_lower_limit_obj2,
+                    eta_w2_upper_limit_obj2,
+                    eta_w2_lower_limit_obj2,
+                    eta_w3_upper_limit_obj2,
+                    eta_w3_lower_limit_obj2,
+                    eta_w4_upper_limit_obj2,
+                    eta_w4_lower_limit_obj2,
+                    eta_w5_upper_limit_obj2,
+                    eta_w5_lower_limit_obj2,
+                    nr_phi_windows_obj2,
+                    phi_w1_upper_limit_obj2,
+                    phi_w1_lower_limit_obj2,
+                    phi_w2_upper_limit_obj2,
+                    phi_w2_lower_limit_obj2,
+                    iso_lut_obj2
+                )
+                port map(obj2(i), obj2_vs_templ(i,1));
+        end generate obj2_l;
+    end generate comp_obj2_sel;
+
+    comp_esums_sel: if sel_esums generate
+        esums_comp_i: entity work.esums_comparators
+            generic map(
+                et_ge_mode => et_ge_mode_esums,
+                obj_type => obj_type_esums,
+                et_threshold => et_threshold_esums,
+                nr_phi_windows => nr_phi_windows_esums,
+                phi_w1_upper_limit => phi_w1_upper_limit_esums,
+                phi_w1_lower_limit => phi_w1_lower_limit_esums,
+                phi_w2_upper_limit => phi_w2_upper_limit_esums,
+                phi_w2_lower_limit => phi_w2_lower_limit_esums
             )
-            port map(obj2(i), obj2_vs_templ(i,1));
-    end generate obj2_l;
+            port map(
+                data_i => esums,
+                comp_o => esums_comp
+            );
+    end generate comp_esums_sel;
 
     cuts_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
         cuts_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
@@ -371,6 +393,7 @@ begin
             obj1_vs_templ_pipe <= obj1_vs_templ;
             obj2_vs_templ_pipe <= obj2_vs_templ;
             obj3_vs_templ_pipe <= obj3_vs_templ;
+            esums_comp_pipe <= esums_comp;
             deta_orm_comp_12_pipe <= deta_orm_comp_12;
             dphi_orm_comp_12_pipe <= dphi_orm_comp_12;
             dr_orm_comp_12_pipe <= dr_orm_comp_12;
@@ -391,6 +414,7 @@ begin
                 obj1_vs_templ_pipe <= obj1_vs_templ;
                 obj2_vs_templ_pipe <= obj2_vs_templ;
                 obj3_vs_templ_pipe <= obj3_vs_templ;
+                esums_comp_pipe <= esums_comp;
                 deta_orm_comp_12_pipe <= deta_orm_comp_12;
                 dphi_orm_comp_12_pipe <= dphi_orm_comp_12;
                 dr_orm_comp_12_pipe <= dr_orm_comp_12;
@@ -445,7 +469,7 @@ begin
             end generate mass_l_1;
         end generate mass_div_dr_sel;
     
-        matrix_and_or_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, mass_div_dr_comp_pipe, twobody_pt_comp_pipe)
+        matrix_and_or_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, esums_comp_pipe, deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, mass_div_dr_comp_pipe, twobody_pt_comp_pipe)
             variable index : integer := 0;
             variable obj_vs_templ_vec : std_logic_vector(((slice_high_obj1-slice_low_obj1+1)*(slice_high_obj2-slice_low_obj2+1)) downto 1) := (others => '0');
             variable condition_and_or_tmp : std_logic := '0';
@@ -455,14 +479,17 @@ begin
             condition_and_or_tmp := '0';
             for i in slice_low_obj1 to slice_high_obj1 loop 
                 for j in slice_low_obj2 to slice_high_obj2 loop
-                    if type_obj1 = type_obj2 and same_bx = true then
+                    if type_obj1 = type_obj2 and same_bx and not sel_esums then
                         if j/=i then
                         index := index + 1;
                         obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and deta_comp_pipe(i,j) and dphi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
                         end if;
-                    else
+                    elsif (type_obj1 /= type_obj2 or not same_bx) and not sel_esums then
                         index := index + 1;
-                        obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and deta_comp_pipe(i,j) and dphi_comp_pipe(i,j)  and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
+                        obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and deta_comp_pipe(i,j) and dphi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
+                    elsif sel_esums then
+                        index := index + 1;
+                        obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and esums_comp_pipe and dphi_comp_pipe(i,j) and mass_comp_pipe(i,j) and  twobody_pt_comp_pipe(i,j);
                     end if;
                 end loop;
             end loop;

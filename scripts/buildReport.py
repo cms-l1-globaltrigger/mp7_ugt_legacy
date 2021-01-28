@@ -80,7 +80,7 @@ def main():
 
     versions = {}
     ugt_constants_path = os.path.join(buildarea_dir, 'src', 'module_0', 'vhdl_snippets', 'ugt_constants.vhd')
-    needle = "-- tmeventsetup version"
+    needle = "-- tmEventSetup version"
     versions['tm-eventsetup'] = detect_versions_vx_y_z(ugt_constants_path, needle)
     needle = "-- vhdl producer version"
     versions['tm-vhdlproducer'] = detect_versions_vx_y_z(ugt_constants_path, needle)

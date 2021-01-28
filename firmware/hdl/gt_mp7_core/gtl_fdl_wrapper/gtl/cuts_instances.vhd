@@ -61,8 +61,8 @@ entity cuts_instances is
         pt2 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0);
         upt1 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0) := (others => '0');
         upt2 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0) := (others => '0');
-        cosh_deta : in std_logic_vector(COMMON_COSH_COS_VECTOR_WIDTH-1 downto 0);
-        cos_dphi : in std_logic_vector(COMMON_COSH_COS_VECTOR_WIDTH-1 downto 0);
+        cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
+        cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
         cos_phi_1_integer : in integer;
         cos_phi_2_integer : in integer;
         sin_phi_1_integer : in integer;

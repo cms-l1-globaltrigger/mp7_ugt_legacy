@@ -3,6 +3,7 @@
 -- Calculation of invariant mass or transverse mass based on LUTs.
 
 -- Version history:
+-- HB 2021-01-28: added default value for input "cosh_deta".
 -- HB 2021-01-18: inserted output "invariant_mass_o".
 -- HB 2020-06-15: inserted cuts for "unconstraint pt" [upt] of new muon structure.
 -- HB 2017-09-29: changed to "MAX_WIDTH_MASS_LIMIT_VECTOR" in limit vectors
@@ -45,7 +46,7 @@ entity mass_calculator is
         pt2 : in std_logic_vector(pt2_width-1 downto 0);
         upt1 : in std_logic_vector(upt1_width-1 downto 0) := (others => '0');
         upt2 : in std_logic_vector(upt2_width-1 downto 0) := (others => '0');
-        cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0);
+        cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0) := (others => '0');
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
         mass_comp : out std_logic;
         invariant_mass_o : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0); 

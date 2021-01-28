@@ -163,8 +163,8 @@ entity correlation_conditions_calo is
         dphi: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
         pt2 : in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
-        cosh_deta : in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        cos_dphi : in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        cosh_deta : in calo_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        cos_dphi : in calo_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         cos_phi_1_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
         cos_phi_2_integer : in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
         sin_phi_1_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
@@ -233,7 +233,7 @@ begin
             port map(obj1(i), obj1_vs_templ(i,1));
     end generate obj1_l;
 
-    comp_obj2_sel: if not sel_esums generate
+    not_esums_sel: if not sel_esums generate
         obj2_l: for i in slice_low_obj2 to slice_high_obj2 generate
             obj2_comp_i: entity work.calo_comparators
                 generic map(pt_ge_mode_obj2, type_obj2,
@@ -258,31 +258,70 @@ begin
                 )
                 port map(obj2(i), obj2_vs_templ(i,1));
         end generate obj2_l;
-    end generate comp_obj2_sel;
-
-    comp_esums_sel: if sel_esums generate
-        esums_comp_i: entity work.esums_comparators
-            generic map(
-                et_ge_mode => et_ge_mode_esums,
-                obj_type => obj_type_esums,
-                et_threshold => et_threshold_esums,
-                nr_phi_windows => nr_phi_windows_esums,
-                phi_w1_upper_limit => phi_w1_upper_limit_esums,
-                phi_w1_lower_limit => phi_w1_lower_limit_esums,
-                phi_w2_upper_limit => phi_w2_upper_limit_esums,
-                phi_w2_lower_limit => phi_w2_lower_limit_esums
-            )
-            port map(
-                data_i => esums,
-                comp_o => esums_comp
-            );
-    end generate comp_esums_sel;
-
-    cuts_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
-        cuts_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
-            same_obj_bx_range_i: if type_obj1 = type_obj2 and same_bx and (slice_low_obj1 = slice_low_obj2) and (slice_high_obj1 = slice_high_obj2) generate
--- HB 2017-02-21: optimisation of LUTs and DSP resources: calculations of cuts only for one half of permutations, second half by assignment of "mirrored" indices.
-                if_j_gr_i: if j > i generate
+        
+        cuts_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
+            cuts_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
+                same_obj_bx_range_i: if type_obj1 = type_obj2 and same_bx and (slice_low_obj1 = slice_low_obj2) and (slice_high_obj1 = slice_high_obj2) generate
+    -- HB 2017-02-21: optimisation of LUTs and DSP resources: calculations of cuts only for one half of permutations, second half by assignment of "mirrored" indices.
+                    if_j_gr_i: if j > i generate
+                        cuts_instances_i: entity work.cuts_instances
+                            generic map(
+                                deta_cut => deta_cut,
+                                dphi_cut => dphi_cut,
+                                dr_cut => dr_cut,
+                                mass_cut => mass_cut,
+                                mass_type => mass_type,
+                                twobody_pt_cut => twobody_pt_cut,
+                                deta_upper_limit_vector => deta_upper_limit_vector,
+                                deta_lower_limit_vector => deta_lower_limit_vector,
+                                dphi_upper_limit_vector => dphi_upper_limit_vector,
+                                dphi_lower_limit_vector => dphi_lower_limit_vector,
+                                dr_upper_limit_vector => dr_upper_limit_vector,
+                                dr_lower_limit_vector => dr_lower_limit_vector,
+                                mass_upper_limit_vector => mass_upper_limit_vector,
+                                mass_lower_limit_vector => mass_lower_limit_vector,
+                                pt1_width => pt1_width, 
+                                pt2_width => pt2_width, 
+                                cosh_cos_precision => mass_cosh_cos_precision,
+                                cosh_cos_width => cosh_cos_width,
+                                pt_sq_threshold_vector => pt_sq_threshold_vector,
+                                sin_cos_width => sin_cos_width,
+                                pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
+                            )
+                            port map(
+                                deta => deta(i,j),
+                                dphi => dphi(i,j),
+                                pt1 => pt1(i),
+                                pt2 => pt2(j),
+                                cosh_deta => cosh_deta(i,j),
+                                cos_dphi => cos_dphi(i,j),
+                                cos_phi_1_integer => cos_phi_1_integer(i),
+                                cos_phi_2_integer => cos_phi_2_integer(j),
+                                sin_phi_1_integer => sin_phi_1_integer(i),
+                                sin_phi_2_integer => sin_phi_2_integer(j),
+                                deta_comp => deta_comp_temp(i,j),
+                                dphi_comp => dphi_comp_temp(i,j),
+                                dr_comp => dr_comp_temp(i,j),
+                                mass_comp => mass_comp_temp(i,j),
+                                invariant_mass => invariant_mass_temp(i,j)(pt1_width+pt2_width+cosh_cos_width-1 downto 0),
+                                twobody_pt_comp => twobody_pt_comp_temp(i,j)
+                            );
+                        deta_comp(i,j) <= deta_comp_temp(i,j);
+                        deta_comp(j,i) <= deta_comp_temp(i,j);
+                        dphi_comp(i,j) <= dphi_comp_temp(i,j);
+                        dphi_comp(j,i) <= dphi_comp_temp(i,j);
+                        dr_comp(i,j) <= dr_comp_temp(i,j);
+                        dr_comp(j,i) <= dr_comp_temp(i,j);
+                        mass_comp(i,j) <= mass_comp_temp(i,j);
+                        mass_comp(j,i) <= mass_comp_temp(i,j);
+                        invariant_mass(i,j) <= invariant_mass_temp(i,j);
+                        invariant_mass(j,i) <= invariant_mass_temp(i,j);
+                        twobody_pt_comp(i,j) <= twobody_pt_comp_temp(i,j);
+                        twobody_pt_comp(j,i) <= twobody_pt_comp_temp(i,j);
+                    end generate if_j_gr_i;
+                end generate same_obj_bx_range_i;
+                
+                diffrent_obj_bx_range_i: if type_obj1 /= type_obj2 or not same_bx or (slice_low_obj1 /= slice_low_obj2) or (slice_high_obj1 /= slice_high_obj2) generate
                     cuts_instances_i: entity work.cuts_instances
                         generic map(
                             deta_cut => deta_cut,
@@ -318,74 +357,80 @@ begin
                             cos_phi_2_integer => cos_phi_2_integer(j),
                             sin_phi_1_integer => sin_phi_1_integer(i),
                             sin_phi_2_integer => sin_phi_2_integer(j),
-                            deta_comp => deta_comp_temp(i,j),
-                            dphi_comp => dphi_comp_temp(i,j),
-                            dr_comp => dr_comp_temp(i,j),
-                            mass_comp => mass_comp_temp(i,j),
-                            invariant_mass => invariant_mass_temp(i,j)(pt1_width+pt2_width+cosh_cos_width-1 downto 0),
-                            twobody_pt_comp => twobody_pt_comp_temp(i,j)
+                            deta_comp => deta_comp(i,j),
+                            dphi_comp => dphi_comp(i,j),
+                            dr_comp => dr_comp(i,j),
+                            mass_comp => mass_comp(i,j),
+                            invariant_mass => invariant_mass(i,j)(pt1_width+pt2_width+cosh_cos_width-1 downto 0),
+                            twobody_pt_comp => twobody_pt_comp(i,j)
                         );
-                    deta_comp(i,j) <= deta_comp_temp(i,j);
-                    deta_comp(j,i) <= deta_comp_temp(i,j);
-                    dphi_comp(i,j) <= dphi_comp_temp(i,j);
-                    dphi_comp(j,i) <= dphi_comp_temp(i,j);
-                    dr_comp(i,j) <= dr_comp_temp(i,j);
-                    dr_comp(j,i) <= dr_comp_temp(i,j);
-                    mass_comp(i,j) <= mass_comp_temp(i,j);
-                    mass_comp(j,i) <= mass_comp_temp(i,j);
-                    invariant_mass(i,j) <= invariant_mass_temp(i,j);
-                    invariant_mass(j,i) <= invariant_mass_temp(i,j);
-                    twobody_pt_comp(i,j) <= twobody_pt_comp_temp(i,j);
-                    twobody_pt_comp(j,i) <= twobody_pt_comp_temp(i,j);
-                end generate if_j_gr_i;
-            end generate same_obj_bx_range_i;
+                end generate diffrent_obj_bx_range_i;
+            end generate cuts_l_2;
+        end generate cuts_l_1;
+    end generate not_esums_sel;
+
+    esums_sel: if sel_esums generate
+        esums_comp_i: entity work.esums_comparators
+            generic map(
+                et_ge_mode => et_ge_mode_esums,
+                obj_type => obj_type_esums,
+                et_threshold => et_threshold_esums,
+                nr_phi_windows => nr_phi_windows_esums,
+                phi_w1_upper_limit => phi_w1_upper_limit_esums,
+                phi_w1_lower_limit => phi_w1_lower_limit_esums,
+                phi_w2_upper_limit => phi_w2_upper_limit_esums,
+                phi_w2_lower_limit => phi_w2_lower_limit_esums
+            )
+            port map(
+                data_i => esums,
+                comp_o => esums_comp
+            );
             
-            diffrent_obj_bx_range_i: if type_obj1 /= type_obj2 or not same_bx or (slice_low_obj1 /= slice_low_obj2) or (slice_high_obj1 /= slice_high_obj2) generate
-                cuts_instances_i: entity work.cuts_instances
+        cuts_l: for i in slice_low_obj1 to slice_high_obj1 generate
+            dphi_i: if dphi_cut = true generate
+                dphi_comp(i,0) <= '1' when dphi(i,0) >= dphi_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
+                                    dphi(i,0) <= dphi_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
+            end generate dphi_i;
+            mass_i: if mass_cut = true generate
+                mass_calculator_i: entity work.mass_calculator
                     generic map(
-                        deta_cut => deta_cut,
-                        dphi_cut => dphi_cut,
-                        dr_cut => dr_cut,
-                        mass_cut => mass_cut,
                         mass_type => mass_type,
-                        twobody_pt_cut => twobody_pt_cut,
-                        deta_upper_limit_vector => deta_upper_limit_vector,
-                        deta_lower_limit_vector => deta_lower_limit_vector,
-                        dphi_upper_limit_vector => dphi_upper_limit_vector,
-                        dphi_lower_limit_vector => dphi_lower_limit_vector,
-                        dr_upper_limit_vector => dr_upper_limit_vector,
-                        dr_lower_limit_vector => dr_lower_limit_vector,
                         mass_upper_limit_vector => mass_upper_limit_vector,
                         mass_lower_limit_vector => mass_lower_limit_vector,
                         pt1_width => pt1_width, 
                         pt2_width => pt2_width, 
-                        cosh_cos_precision => mass_cosh_cos_precision,
                         cosh_cos_width => cosh_cos_width,
+                        mass_cosh_cos_precision => mass_cosh_cos_precision
+                    )
+                    port map(
+                        pt1 => pt1(i)(pt1_width-1 downto 0),
+                        pt2 => pt2(0)(pt2_width-1 downto 0),
+                        cosh_deta => cosh_deta_zero_vector(i,0),
+                        cos_dphi => cos_dphi(i,0),
+                        mass_comp => mass_comp(i,0)
+                    );
+            end generate mass_i;
+            twobody_pt_i: if twobody_pt_cut = true generate
+                twobody_pt_calculator_i: entity work.twobody_pt_calculator
+                    generic map(
+                        pt1_width => pt1_width, 
+                        pt2_width => pt2_width, 
                         pt_sq_threshold_vector => pt_sq_threshold_vector,
                         sin_cos_width => sin_cos_width,
                         pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
                     )
                     port map(
-                        deta => deta(i,j),
-                        dphi => dphi(i,j),
-                        pt1 => pt1(i),
-                        pt2 => pt2(j),
-                        cosh_deta => cosh_deta(i,j),
-                        cos_dphi => cos_dphi(i,j),
+                        pt1 => pt1(i)(pt1_width-1 downto 0),
+                        pt2 => pt2(0)(pt2_width-1 downto 0),
                         cos_phi_1_integer => cos_phi_1_integer(i),
-                        cos_phi_2_integer => cos_phi_2_integer(j),
+                        cos_phi_2_integer => cos_phi_2_integer(0),
                         sin_phi_1_integer => sin_phi_1_integer(i),
-                        sin_phi_2_integer => sin_phi_2_integer(j),
-                        deta_comp => deta_comp(i,j),
-                        dphi_comp => dphi_comp(i,j),
-                        dr_comp => dr_comp(i,j),
-                        mass_comp => mass_comp(i,j),
-                        invariant_mass => invariant_mass(i,j)(pt1_width+pt2_width+cosh_cos_width-1 downto 0),
-                        twobody_pt_comp => twobody_pt_comp(i,j)
-                    );
-            end generate diffrent_obj_bx_range_i;
-        end generate cuts_l_2;
-    end generate cuts_l_1;
+                        sin_phi_2_integer => sin_phi_2_integer(0),
+                        pt_square_comp => twobody_pt_comp(i,0)
+                );
+            end generate twobody_pt_i;
+        end generate cuts_l;
+    end generate esums_sel;
     
     pipeline_p: process(lhc_clk, obj1_vs_templ, obj2_vs_templ, obj3_vs_templ, deta_orm_comp_12, dphi_orm_comp_12, dr_orm_comp_12, deta_orm_comp_13, dphi_orm_comp_13, dr_orm_comp_13, deta_orm_comp_23, dphi_orm_comp_23, dr_orm_comp_23, deta_comp, dphi_comp, dr_comp, mass_comp, mass_3_obj_comp, twobody_pt_comp)
         begin

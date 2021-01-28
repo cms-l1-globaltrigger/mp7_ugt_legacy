@@ -95,7 +95,7 @@ entity muon_esums_correlation_condition is
         dphi: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to 0) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
         pt2 : in diff_inputs_array(0 to 0) := (others => (others => '0'));
-        cos_dphi : in common_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to 0) := (others => (others => (others => '0')));
+        cos_dphi : in calo_muon_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to 0) := (others => (others => (others => '0')));
         cos_phi_1_integer : in sin_cos_integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
         cos_phi_2_integer : in sin_cos_integer_array(0 to 0) := (others => 0);
         sin_phi_1_integer : in sin_cos_integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);

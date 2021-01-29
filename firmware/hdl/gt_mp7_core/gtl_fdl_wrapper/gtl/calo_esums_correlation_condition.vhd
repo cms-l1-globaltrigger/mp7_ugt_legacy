@@ -1,5 +1,5 @@
 
--- Desription:
+-- Description:
 -- Correlation Condition module for calorimeter object types (eg, jet and tau) and esums (etm, etm_hf and htm).
 
 -- Version history:

@@ -292,30 +292,68 @@ begin
     end process;
 
     not_esums_sel: if not sel_esums generate
-        obj2_l: for i in slice_low_obj2 to slice_high_obj2 generate
-            obj2_comp_i: entity work.calo_comparators
-                generic map(pt_ge_mode_obj2, type_obj2,
-                    pt_threshold_obj2,
-                    nr_eta_windows_obj2,
-                    eta_w1_upper_limit_obj2,
-                    eta_w1_lower_limit_obj2,
-                    eta_w2_upper_limit_obj2,
-                    eta_w2_lower_limit_obj2,
-                    eta_w3_upper_limit_obj2,
-                    eta_w3_lower_limit_obj2,
-                    eta_w4_upper_limit_obj2,
-                    eta_w4_lower_limit_obj2,
-                    eta_w5_upper_limit_obj2,
-                    eta_w5_lower_limit_obj2,
-                    nr_phi_windows_obj2,
-                    phi_w1_upper_limit_obj2,
-                    phi_w1_lower_limit_obj2,
-                    phi_w2_upper_limit_obj2,
-                    phi_w2_lower_limit_obj2,
-                    iso_lut_obj2
-                )
-                port map(obj2(i), obj2_vs_templ(i,1));
-        end generate obj2_l;
+        calo_obj2_i: if type_obj2 /= MU_TYPE generate
+            obj2_l: for i in slice_low_obj2 to slice_high_obj2 generate
+                obj2_comp_i: entity work.calo_comparators
+                    generic map(
+                        pt_ge_mode_obj2, 
+                        type_obj2,
+                        pt_threshold_obj2,
+                        nr_eta_windows_obj2,
+                        eta_w1_upper_limit_obj2,
+                        eta_w1_lower_limit_obj2,
+                        eta_w2_upper_limit_obj2,
+                        eta_w2_lower_limit_obj2,
+                        eta_w3_upper_limit_obj2,
+                        eta_w3_lower_limit_obj2,
+                        eta_w4_upper_limit_obj2,
+                        eta_w4_lower_limit_obj2,
+                        eta_w5_upper_limit_obj2,
+                        eta_w5_lower_limit_obj2,
+                        nr_phi_windows_obj2,
+                        phi_w1_upper_limit_obj2,
+                        phi_w1_lower_limit_obj2,
+                        phi_w2_upper_limit_obj2,
+                        phi_w2_lower_limit_obj2,
+                        iso_lut_obj2
+                    )
+                    port map(obj2(i), obj2_vs_templ(i,1));
+            end generate obj2_l;
+        end generate calo_obj2_i;
+        
+        muon_obj2_i: if type_obj2 = MU_TYPE generate
+            obj2_l: for i in slice_low_obj2 to slice_high_obj2 generate
+                muon_comp_i: entity work.muon_comparators
+                    generic map(
+                        pt_ge_mode_obj2,
+                        pt_threshold_obj2,
+                        nr_eta_windows_obj2,
+                        eta_w1_upper_limit_obj2,
+                        eta_w1_lower_limit_obj2,
+                        eta_w2_upper_limit_obj2,
+                        eta_w2_lower_limit_obj2,
+                        eta_w3_upper_limit_obj2,
+                        eta_w3_lower_limit_obj2,
+                        eta_w4_upper_limit_obj2,
+                        eta_w4_lower_limit_obj2,
+                        eta_w5_upper_limit_obj2,
+                        eta_w5_lower_limit_obj2,
+                        nr_phi_windows_obj2,
+                        phi_w1_upper_limit_obj2,
+                        phi_w1_lower_limit_obj2,
+                        phi_w2_upper_limit_obj2,
+                        phi_w2_lower_limit_obj2,
+                        requested_charge_obj2,
+                        qual_lut_obj2,
+                        iso_lut_obj2,
+                        upt_cut_obj2,
+                        upt_upper_limit_obj2,
+                        upt_lower_limit_obj2,
+                        ip_lut_obj2
+                        )
+                    port map(muon(i), obj2_vs_templ(i,1));
+            end generate obj2_l;
+        end generate muon_obj2_i;
         
         cuts_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
             cuts_l_2: for j in slice_low_obj2 to slice_high_obj2 generate

@@ -125,54 +125,50 @@ entity correlation_conditions_muon is
         dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        pt1_width: positive := EG_PT_VECTOR_WIDTH; 
-        pt2_width: positive := EG_PT_VECTOR_WIDTH; 
+        pt1_width: positive := MU_PT_VECTOR_WIDTH; 
+        pt2_width: positive := MU_PT_VECTOR_WIDTH; 
 
         mass_cut: boolean := false;
         mass_type : natural := INVARIANT_MASS_TYPE;
-        mass_div_dr_vector_width: positive := EG_EG_MASS_DIV_DR_VECTOR_WIDTH;
+        mass_div_dr_vector_width: positive := MU_MU_MASS_DIV_DR_VECTOR_WIDTH;
         mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        mass_cosh_cos_precision: positive := EG_EG_COSH_COS_PRECISION;
-        cosh_cos_width: positive := EG_EG_COSH_COS_VECTOR_WIDTH;
+        mass_cosh_cos_precision: positive := MU_MU_COSH_COS_PRECISION;
+        cosh_cos_width: positive := MU_MU_COSH_COS_VECTOR_WIDTH;
 
         twobody_pt_cut: boolean := false;
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := EG_EG_SIN_COS_PRECISION;
+        sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
+        pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION;
 
---         nr_obj1: natural := NR_EG_OBJECTS;
---         type_obj1: natural := EG_TYPE;
---         nr_obj2: natural := NR_EG_OBJECTS;
---         type_obj2: natural := EG_TYPE;
---         nr_obj3: natural := NR_JET_OBJECTS;
---         type_obj3: natural := JET_TYPE;
+        nr_obj2: natural := NR_MU_OBJECTS;
 
---         obj_2plus1: boolean := true;
         mass_3_obj: boolean := false;
         same_bx: boolean := false 
 
     );
     port(
         lhc_clk: in std_logic;
-        obj1: in muon_objects_array(0 to nr_obj1-1) := (others => (others => '0'));
+        obj1: in muon_objects_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
         obj2: in muon_objects_array(0 to nr_obj2-1) := (others => (others => '0'));
-        obj3: in muon_objects_array(0 to nr_obj3-1) := (others => (others => '0'));
+        obj3: in muon_objects_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
         esums: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
-        deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
-        dphi_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
-        deta: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        dphi: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        pt1 : in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
+        ls_charcorr_double: in muon_charcorr_double_array := (others => (others => '0'));
+        os_charcorr_double: in muon_charcorr_double_array := (others => (others => '0'));
+        ls_charcorr_triple: in muon_charcorr_triple_array := (others => (others => (others => '0')));
+        os_charcorr_triple: in muon_charcorr_triple_array := (others => (others => (others => '0')));
+        deta: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        dphi: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        pt1 : in diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
         pt2 : in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
-        cosh_deta : in calo_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        cos_dphi : in calo_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        cos_phi_1_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
+        cosh_deta : in calo_muon_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        cos_dphi : in calo_muon_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        cos_phi_1_integer : in sin_cos_integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
         cos_phi_2_integer : in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
-        sin_phi_1_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
+        sin_phi_1_integer : in sin_cos_integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
         sin_phi_2_integer : in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
-        mass_div_dr : in mass_div_dr_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        mass_div_dr : in mass_div_dr_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         condition_o: out std_logic
     );
 end correlation_conditions_muon; 
@@ -184,7 +180,7 @@ architecture rtl of correlation_conditions_muon is
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
 
     constant mass_vector_width: positive := pt1_width+pt1_width+cosh_cos_width; 
-    type sum_mass_array is array(0 to nr_obj1-1, 0 to nr_obj1-1, 0 to nr_obj1-1) of std_logic_vector(mass_vector_width+1 downto 0);
+    type sum_mass_array is array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) of std_logic_vector(mass_vector_width+1 downto 0);
     signal sum_mass, sum_mass_temp : sum_mass_array := (others => (others => (others => (others => '0'))));   
 
     signal obj1_vs_templ, obj1_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));
@@ -196,7 +192,7 @@ architecture rtl of correlation_conditions_muon is
     (others => (others => '1'));
     signal invariant_mass, invariant_mass_temp, invariant_mass_pipe : mass_dim2_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => (others => '0')));
     signal mass_3_obj_comp, mass_3_obj_comp_pipe : 
-        std_logic_3dim_array(0 to nr_obj1-1, 0 to nr_obj1-1, 0 to nr_obj1-1) := (others => (others => (others => '0')));
+        std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
     signal condition_and_or : std_logic;
 
     signal esums_comp, esums_comp_pipe : std_logic := '0';
@@ -497,9 +493,9 @@ begin
             end generate obj3_l;
 
     -- condition with mass of 3 objects        
-            l1_sum: for i in 0 to nr_obj1-1 generate
-                l2_sum: for j in 0 to nr_obj1-1 generate
-                    l3_sum: for k in 0 to nr_obj1-1 generate
+            l1_sum: for i in 0 to NR_MU_OBJECTS-1 generate
+                l2_sum: for j in 0 to NR_MU_OBJECTS-1 generate
+                    l3_sum: for k in 0 to NR_MU_OBJECTS-1 generate
                         sum_mass_l: if j>i and k>i and k>j generate
                             sum_mass_calc_i: entity work.sum_mass_calc
                                 generic map(mass_vector_width)  

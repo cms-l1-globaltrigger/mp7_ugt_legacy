@@ -302,7 +302,6 @@ constant MAX_CALO_PHI_BITS : positive := max(EG_PHI_BITS, JET_PHI_BITS, TAU_PHI_
 constant MAX_CALO_ISO_BITS : positive := max(EG_ISO_BITS, TAU_ISO_BITS);
 type calo_templates_iso_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
-constant MAX_TEMPLATES_BITS : positive := max(MAX_CALO_TEMPLATES_BITS, MAX_MUON_TEMPLATES_BITS);
 -- *******************************************************************************************************
 constant MAX_OBJECT_BITS : positive := max(MAX_CALO_BITS, MAX_MUON_BITS);
 type common_objects_array is array (natural range <>) of std_logic_vector(MAX_OBJECT_BITS-1 downto 0);
@@ -573,13 +572,13 @@ constant MAX_ETA_BITS : positive := max(MUON_ETA_BITS, MAX_CALO_ETA_BITS);
 constant MAX_PHI_BITS : positive := max(MUON_PHI_BITS, MAX_CALO_PHI_BITS, MAX_ESUMS_PHI_BITS);
 constant MAX_ISO_BITS : positive := max(MUON_ISO_BITS, MAX_CALO_ISO_BITS);
 
-constant NR_COMMON_TEMPLATES : positive range 1 to 4 := 4; -- number of max. templates
-type common_templates_iso_array is array (1 to NR_COMMON_TEMPLATES) of std_logic_vector(2**MAX_ISO_BITS-1 downto 0);
-type common_templates_quality_array is array (1 to NR_COMMON_TEMPLATES) of std_logic_vector(2**MUON_QUAL_BITS-1 downto 0);
-type common_templates_ip_array is array (1 to NR_COMMON_TEMPLATES) of std_logic_vector(2**MUON_IP_BITS-1 downto 0);
-type common_templates_boolean_array is array (1 to NR_COMMON_TEMPLATES) of boolean;
-type common_templates_natural_array is array (1 to NR_COMMON_TEMPLATES) of natural;
-type common_templates_string_array is array (1 to NR_COMMON_TEMPLATES) of string(1 to 3);
+constant COMMON_NR_TEMPLATES : positive range 1 to 4 := 4; -- number of max. templates
+type common_templates_iso_array is array (1 to COMMON_NR_TEMPLATES) of std_logic_vector(2**MAX_ISO_BITS-1 downto 0);
+type common_templates_quality_array is array (1 to COMMON_NR_TEMPLATES) of std_logic_vector(2**MUON_QUAL_BITS-1 downto 0);
+type common_templates_ip_array is array (1 to COMMON_NR_TEMPLATES) of std_logic_vector(2**MUON_IP_BITS-1 downto 0);
+type common_templates_boolean_array is array (1 to COMMON_NR_TEMPLATES) of boolean;
+type common_templates_natural_array is array (1 to COMMON_NR_TEMPLATES) of natural;
+type common_templates_string_array is array (1 to COMMON_NR_TEMPLATES) of string(1 to 3);
 
 -- ==== CALOs - end ============================================================
 

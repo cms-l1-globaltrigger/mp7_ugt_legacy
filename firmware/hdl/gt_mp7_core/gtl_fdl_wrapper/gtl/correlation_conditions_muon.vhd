@@ -113,6 +113,8 @@ entity correlation_conditions_muon is
         phi_w2_upper_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
 
+        requested_charge_correlation: string(1 to 2) := "ig";
+
         deta_cut: boolean := false;
         deta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
         deta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -162,8 +164,9 @@ entity correlation_conditions_muon is
         dphi: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
         pt2 : in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
-        cosh_deta : in calo_muon_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        cos_dphi : in calo_muon_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        cosh_deta : in muon_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        cos_dphi : in muon_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        cos_dphi_esums : in calo_muon_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to 0) := (others => (others => (others => '0')));
         cos_phi_1_integer : in sin_cos_integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
         cos_phi_2_integer : in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
         sin_phi_1_integer : in sin_cos_integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
@@ -178,6 +181,12 @@ architecture rtl of correlation_conditions_muon is
 -- fixed pipeline structure
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
     constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
+
+--***************************************************************
+-- signals for charge correlation comparison:
+    signal charge_comp_double, charge_comp_double_pipe : muon_charcorr_double_array := (others => (others => '1'));
+    signal charge_comp_triple, charge_comp_triple_pipe : muon_charcorr_triple_array := (others => (others => (others => '1')));
+--***************************************************************
 
     constant mass_vector_width: positive := pt1_width+pt1_width+cosh_cos_width; 
     type sum_mass_array is array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) of std_logic_vector(mass_vector_width+1 downto 0);
@@ -231,7 +240,7 @@ begin
             port map(obj1(i), obj1_vs_templ(i,1));
     end generate obj1_l;
 
-    pipeline_p: process(lhc_clk, obj1_vs_templ, obj2_vs_templ, obj3_vs_templ, esums_comp, deta_orm_comp_12, dphi_orm_comp_12, dr_orm_comp_12, deta_orm_comp_13, dphi_orm_comp_13, dr_orm_comp_13, deta_orm_comp_23, dphi_orm_comp_23, dr_orm_comp_23, deta_comp, dphi_comp, dr_comp, mass_comp, mass_3_obj_comp, twobody_pt_comp)
+    pipeline_p: process(lhc_clk, obj1_vs_templ, obj2_vs_templ, obj3_vs_templ, esums_comp, deta_comp, dphi_comp, dr_comp, mass_comp, mass_3_obj_comp, twobody_pt_comp, charge_comp_double, charge_comp_triple)
         begin
         if obj_vs_templ_pipeline_stage = false then 
             obj1_vs_templ_pipe <= obj1_vs_templ;
@@ -244,6 +253,8 @@ begin
             mass_comp_pipe <= mass_comp;
             mass_3_obj_comp_pipe <= mass_3_obj_comp;
             twobody_pt_comp_pipe <= twobody_pt_comp;
+            charge_comp_double_pipe <= charge_comp_double;
+            charge_comp_triple_pipe <= charge_comp_triple;
         else
             if (lhc_clk'event and lhc_clk = '1') then
                 obj1_vs_templ_pipe <= obj1_vs_templ;
@@ -256,6 +267,8 @@ begin
                 mass_comp_pipe <= mass_comp;
                 mass_3_obj_comp_pipe <= mass_3_obj_comp;
                 twobody_pt_comp_pipe <= twobody_pt_comp;
+                charge_comp_double_pipe <= charge_comp_double;
+                charge_comp_triple_pipe <= charge_comp_triple;
             end if;
         end if;
     end process;
@@ -402,40 +415,60 @@ begin
             end generate cuts_l_2;
         end generate cuts_l_1;
 
-        -- HB 2020-08-27: comparison for invariant mass divided by delta R (one pipeline delay inside of the calculation of "mass_div_dr").
-        mass_div_dr_sel: if mass_cut = true and mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
-            mass_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
-                mass_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
-                    mass_comp_l1: if same_bx and j>i generate
-                        comp_i: entity work.mass_div_dr_comp
-                            generic map(
-                                mass_div_dr_vector_width,
-                                mass_div_dr_threshold 
-                            )
-                            port map(
-                                mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0),
-                                mass_div_dr_comp_t(i,j)
-                            );
-                        mass_div_dr_comp_pipe(i,j) <= mass_div_dr_comp_t(i,j);
-                        mass_div_dr_comp_pipe(j,i) <= mass_div_dr_comp_t(i,j);
-                    end generate mass_comp_l1;
-                    mass_comp_l2: if not same_bx generate
-                        comp_i: entity work.mass_div_dr_comp
-                            generic map(
-                                mass_div_dr_vector_width,
-                                mass_div_dr_threshold 
-                            )
-                            port map(
-                                mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0),
-                                mass_div_dr_comp_pipe(i,j)
-                            );
-                    end generate mass_comp_l2;
-                end generate mass_l_2;
-            end generate mass_l_1;
-        end generate mass_div_dr_sel;
-        
         matrix_2_obj_i: if not mass_3_obj generate
-            matrix_and_or_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, mass_div_dr_comp_pipe, twobody_pt_comp_pipe)
+        -- HB 2020-08-27: comparison for invariant mass divided by delta R (one pipeline delay inside of the calculation of "mass_div_dr").
+            mass_div_dr_sel: if mass_cut = true and mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
+                mass_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
+                    mass_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
+                        mass_comp_l1: if same_bx and j>i generate
+                            comp_i: entity work.mass_div_dr_comp
+                                generic map(
+                                    mass_div_dr_vector_width,
+                                    mass_div_dr_threshold 
+                                )
+                                port map(
+                                    mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0),
+                                    mass_div_dr_comp_t(i,j)
+                                );
+                            mass_div_dr_comp_pipe(i,j) <= mass_div_dr_comp_t(i,j);
+                            mass_div_dr_comp_pipe(j,i) <= mass_div_dr_comp_t(i,j);
+                        end generate mass_comp_l1;
+                        mass_comp_l2: if not same_bx generate
+                            comp_i: entity work.mass_div_dr_comp
+                                generic map(
+                                    mass_div_dr_vector_width,
+                                    mass_div_dr_threshold 
+                                )
+                                port map(
+                                    mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0),
+                                    mass_div_dr_comp_pipe(i,j)
+                                );
+                        end generate mass_comp_l2;
+                    end generate mass_l_2;
+                end generate mass_l_1;
+            end generate mass_div_dr_sel;
+        
+            charge_double_i: if requested_charge_correlation /= "ig" generate
+            -- Charge correlation comparison
+                charge_double_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
+                    charge_double_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
+                        obj_same_bx_l: if same_bx = true generate
+                            charge_double_if: if j/=i generate
+                                charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
+                                    '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
+                                    '1' when requested_charge_correlation = "ig" else '0';
+                            end generate charge_double_if;
+                        end generate obj_same_bx_l;
+                        obj_different_bx_l: if same_bx = false generate
+                            charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
+                                '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
+                                '1' when requested_charge_correlation = "ig" else '0';
+                        end generate obj_different_bx_l;
+                    end generate charge_double_l_2;
+                end generate charge_double_l_1;
+            end generate charge_double_i;
+
+            matrix_and_or_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, mass_div_dr_comp_pipe, twobody_pt_comp_pipe, charge_comp_double_pipe)
                 variable index : integer := 0;
                 variable obj_vs_templ_vec : std_logic_vector(((slice_high_obj1-slice_low_obj1+1)*(slice_high_obj2-slice_low_obj2+1)) downto 1) := (others => '0');
                 variable condition_and_or_tmp : std_logic := '0';
@@ -448,11 +481,11 @@ begin
                         if same_bx then
                             if j/=i then
                             index := index + 1;
-                            obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and deta_comp_pipe(i,j) and dphi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
+                            obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and deta_comp_pipe(i,j) and dphi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j) and charge_comp_double_pipe(i,j);
                             end if;
                         else
                             index := index + 1;
-                            obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and deta_comp_pipe(i,j) and dphi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
+                            obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and deta_comp_pipe(i,j) and dphi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j) and charge_comp_double_pipe(i,j);
                         end if;
                     end loop;
                 end loop;
@@ -462,14 +495,14 @@ begin
                 end loop;
                 condition_and_or <= condition_and_or_tmp;
             end process;
+        end generate matrix_2_obj_i;
 
         mass_3_obj_i: if mass_3_obj generate
     -- comparator for obj3        
             obj3_l: for i in slice_low_obj3 to slice_high_obj3 generate
-                obj3_comp_i: entity work.calo_comparators
+                comp_i: entity work.muon_comparators
                     generic map(
                         pt_ge_mode_obj3,
-                        type_obj3,
                         pt_threshold_obj3,
                         nr_eta_windows_obj3,
                         eta_w1_upper_limit_obj3,
@@ -487,8 +520,14 @@ begin
                         phi_w1_lower_limit_obj3,
                         phi_w2_upper_limit_obj3,
                         phi_w2_lower_limit_obj3,
-                        iso_lut_obj3
-                    )
+                        requested_charge_obj3,
+                        qual_lut_obj3,
+                        iso_lut_obj3,
+                        upt_cut_obj3,
+                        upt_upper_limit_obj3,
+                        upt_lower_limit_obj3,
+                        ip_lut_obj3
+                        )
                     port map(obj3(i), obj3_vs_templ(i,1));
             end generate obj3_l;
 
@@ -520,8 +559,30 @@ begin
                 end generate l2_comp;
             end generate l1_comp;
             
+            charge_triple_i: if requested_charge_correlation /= "ig" generate
+            -- Charge correlation comparison
+                charge_triple_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
+                    charge_triple_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
+                        charge_triple_l_3: for k in slice_low_obj3 to slice_high_obj3 generate
+                            obj_same_bx_l: if same_bx = true generate
+                                charge_triple_if: if (j/=i and k/=i and k/=j) generate
+                                    charge_comp_triple(i,j,k) <= '1' when ls_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "ls" else
+                                        '1' when os_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "os" else
+                                        '1' when requested_charge_correlation = "ig" else '0';
+                                end generate charge_triple_if;
+                            end generate obj_same_bx_l;
+                            obj_different_bx_l: if same_bx = false generate
+                                charge_comp_triple(i,j,k) <= '1' when ls_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "ls" else
+                                    '1' when os_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "os" else
+                                    '1' when requested_charge_correlation = "ig" else '0';
+                            end generate obj_different_bx_l;
+                        end generate charge_triple_l_3;
+                    end generate charge_triple_l_2;
+                end generate charge_triple_l_1;
+            end generate charge_triple_i;
+
             -- "Matrix" of permutations in an and-or-structure.
-            matrix_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, obj3_vs_templ_pipe, mass_3_obj_comp_pipe)
+            matrix_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, obj3_vs_templ_pipe, mass_3_obj_comp_pipe, charge_comp_triple_pipe)
                 variable index : integer := 0;
                 variable obj_vs_templ_vec : std_logic_vector((slice_high_obj1-slice_low_obj1+1)*(slice_high_obj2-slice_low_obj2+1)*(slice_high_obj3-slice_low_obj3+1) downto 1) := (others => '0');
                 variable condition_and_or_tmp : std_logic := '0';
@@ -535,7 +596,7 @@ begin
                             if j/=i and i/=k and j/=k then
                                 index := index + 1;
                                 obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and obj3_vs_templ_pipe(k,1) and 
-                                    mass_3_obj_comp_pipe(i,j,k);
+                                    mass_3_obj_comp_pipe(i,j,k) and charge_comp_triple_pipe(i,j,k);
                             end if;
                         end loop;
                     end loop;
@@ -572,7 +633,7 @@ begin
                     port map(
                         pt1 => pt1(i)(pt1_width-1 downto 0),
                         pt2 => pt2(0)(pt2_width-1 downto 0),
-                        cos_dphi => cos_dphi(i,0)(cosh_cos_width-1 downto 0),
+                        cos_dphi => cos_dphi_esums(i,0)(cosh_cos_width-1 downto 0),
                         mass_comp => mass_comp(i,0)
                     );
             end generate mass_i;

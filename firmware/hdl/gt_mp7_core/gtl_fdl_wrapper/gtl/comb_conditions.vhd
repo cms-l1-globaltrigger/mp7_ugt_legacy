@@ -36,7 +36,7 @@ entity comb_conditions is
         eta_w4_lower_limits_obj1: common_templates_array := (others => (others => '0'));
         eta_w5_upper_limits_obj1: common_templates_array := (others => (others => '0'));
         eta_w5_lower_limits_obj1: common_templates_array := (others => (others => '0'));
-        nr_phi_windows_obj1: calo_templates_natural_array := (others => 0);
+        nr_phi_windows_obj1: common_templates_natural_array := (others => 0);
         phi_w1_upper_limits_obj1: common_templates_array := (others => (others => '0'));
         phi_w1_lower_limits_obj1: common_templates_array := (others => (others => '0'));
         phi_w2_upper_limits_obj1: common_templates_array := (others => (others => '0'));
@@ -102,10 +102,10 @@ entity comb_conditions is
         
     );
     port(
-        clk: in std_logic;
+        lhc_clk: in std_logic;
         obj1_calo: in calo_objects_array(0 to nr_obj1-1) := (others => (others => '0'));
         obj1_muon: in muon_objects_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
-        obj2_orm: in calo_objects_array(0 to nr_obj2-1) := (others => (others => '0'));
+        obj2: in calo_objects_array(0 to nr_obj2-1) := (others => (others => '0'));
         ls_charcorr_double: in muon_charcorr_double_array := (others => (others => '0'));
         os_charcorr_double: in muon_charcorr_double_array := (others => (others => '0'));
         ls_charcorr_triple: in muon_charcorr_triple_array := (others => (others => (others => '0')));
@@ -153,14 +153,14 @@ architecture rtl of comb_conditions is
     signal dr_orm_comp, dr_orm_comp_pipe : std_logic_2dim_array(0 to MAX_CALO_OBJECTS-1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
     signal obj2_vs_templ, obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
 
+    signal condition_and_or : std_logic;
+    
     signal twobody_pt_comp, twobody_pt_comp_pipe : 
-        std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_2_low_obj1 to slice_2_high_obj1) := (others => (others => '1'));
+    std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_2_low_obj1 to slice_2_high_obj1) := (others => (others => '1'));
 
     signal twobody_upt_comp, twobody_upt_comp_temp, twobody_upt_comp_pipe : 
         std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_2_low_obj1 to slice_2_high_obj1) := (others => (others => '1'));
 
-    signal condition_and_or : std_logic;
-    
 begin
 
     calo_i: if not (deta_orm_cut and dphi_orm_cut and dr_orm_cut) and type_obj1 /= MU_TYPE generate
@@ -198,8 +198,8 @@ begin
                 slice_4_low_obj1, slice_4_high_obj1,
                 nr_templates
             )
-            port map(clk,
-                obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, obj_slice_3_vs_templ_pipe, obj_slice_4_vs_templ_pipe,
+            port map(lhc_clk,
+                obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe,
                 twobody_pt_comp_pipe,
                 condition_o
             );
@@ -226,7 +226,7 @@ begin
                     iso_lut_obj2
                 )
                 port map(
-                    obj2_orm(i), obj2_vs_templ(i,1)
+                    obj2(i), obj2_vs_templ(i,1)
                 );
         end generate obj2_l;
 
@@ -265,7 +265,7 @@ begin
                 nr_templates,
                 slice_low_obj2, slice_high_obj2
             )
-            port map(clk,
+            port map(lhc_clk,
                 obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe, 
                 obj2_vs_templ_pipe,
                 twobody_pt_comp_pipe, 
@@ -298,7 +298,7 @@ begin
                 ip_luts_obj1            
             )
             port map(
-                obj1_muon, obj_slice_1_vs_templ, obj_slice_2_vs_templ, obj_slice_3_vs_templ, obj_slice_4_vs_templ
+                obj1_muon, obj1_slice_1_vs_templ, obj1_slice_2_vs_templ, obj1_slice_3_vs_templ, obj1_slice_4_vs_templ
             );
 
         -- Instantiation of charge correlation matrix.
@@ -330,14 +330,14 @@ begin
                 nr_templates
             )
             port map(lhc_clk,
-                obj_slice_1_vs_templ_pipe, obj_slice_2_vs_templ_pipe, obj_slice_3_vs_templ_pipe, obj_slice_4_vs_templ_pipe,
+                obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe,
                 charge_comp_double_pipe, charge_comp_triple_pipe, charge_comp_quad_pipe, twobody_pt_comp_pipe, twobody_upt_comp_pipe,
                 condition_o
             );
     end generate muon_i;
 
 -- Pipeline stage for obj_vs_templ
-    obj_vs_templ_pipeline_p: process(clk, obj1_slice_1_vs_templ, obj1_slice_2_vs_templ, obj1_slice_3_vs_templ, obj1_slice_4_vs_templ, obj2_vs_templ, deta_orm_comp, dphi_orm_comp, dr_orm_comp)
+    obj_vs_templ_pipeline_p: process(lhc_clk, obj1_slice_1_vs_templ, obj1_slice_2_vs_templ, obj1_slice_3_vs_templ, obj1_slice_4_vs_templ, obj2_vs_templ, deta_orm_comp, dphi_orm_comp, dr_orm_comp)
     begin
         if obj_vs_templ_pipeline_stage = false then
             obj1_slice_1_vs_templ_pipe <= obj1_slice_1_vs_templ;
@@ -350,7 +350,7 @@ begin
             dr_orm_comp_pipe <= dr_orm_comp;
             twobody_pt_comp_pipe <= twobody_pt_comp;
             twobody_upt_comp_pipe <= twobody_upt_comp;
-        elsif (clk'event and clk = '1') then
+        elsif (lhc_clk'event and lhc_clk = '1') then
             obj1_slice_1_vs_templ_pipe <= obj1_slice_1_vs_templ;
             obj1_slice_2_vs_templ_pipe <= obj1_slice_2_vs_templ;
             obj1_slice_3_vs_templ_pipe <= obj1_slice_3_vs_templ;

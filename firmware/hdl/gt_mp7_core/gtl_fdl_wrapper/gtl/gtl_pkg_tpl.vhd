@@ -303,9 +303,6 @@ constant MAX_CALO_ISO_BITS : positive := max(EG_ISO_BITS, TAU_ISO_BITS);
 type calo_templates_iso_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
 -- *******************************************************************************************************
-constant MAX_OBJECT_BITS : positive := max(MAX_CALO_BITS, MAX_MUON_BITS);
-type common_objects_array is array (natural range <>) of std_logic_vector(MAX_OBJECT_BITS-1 downto 0);
--- *******************************************************************************************************
 -- ESUMs
 -- HB 2016-10-11: changed MAX_ESUMS_BITS to actual value
 -- constant MAX_ESUMS_BITS_TEMP : positive := max(ETT_DATA_WIDTH, HT_DATA_WIDTH, ETM_DATA_WIDTH);
@@ -565,6 +562,7 @@ constant MBT1HFM_COUNT_LOW : natural := 0;
 constant MBT1HFM_COUNT_HIGH : natural := 3;
 constant D_S_I_MBT1HFM_V2 : d_s_i_mbt1hfm_record := (MBT1HFM_COUNT_HIGH,MBT1HFM_COUNT_LOW);
 
+-- *******************************************************************************************************
 -- max bits for comparators.vhd
 constant MAX_PT_BITS_1 : positive := max(MUON_PT_BITS, MAX_CALO_ET_BITS, MAX_ESUMS_ET_BITS);
 constant MAX_PT_BITS : positive := max(MAX_PT_BITS_1, MAX_ASYM_BITS);
@@ -573,12 +571,16 @@ constant MAX_PHI_BITS : positive := max(MUON_PHI_BITS, MAX_CALO_PHI_BITS, MAX_ES
 constant MAX_ISO_BITS : positive := max(MUON_ISO_BITS, MAX_CALO_ISO_BITS);
 
 constant COMMON_NR_TEMPLATES : positive range 1 to 4 := 4; -- number of max. templates
+constant MAX_TEMPLATES_BITS : positive := max(MAX_CALO_TEMPLATES_BITS, MAX_MUON_TEMPLATES_BITS);
+type common_templates_array is array (1 to COMMON_NR_TEMPLATES) of std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0);
 type common_templates_iso_array is array (1 to COMMON_NR_TEMPLATES) of std_logic_vector(2**MAX_ISO_BITS-1 downto 0);
 type common_templates_quality_array is array (1 to COMMON_NR_TEMPLATES) of std_logic_vector(2**MUON_QUAL_BITS-1 downto 0);
 type common_templates_ip_array is array (1 to COMMON_NR_TEMPLATES) of std_logic_vector(2**MUON_IP_BITS-1 downto 0);
 type common_templates_boolean_array is array (1 to COMMON_NR_TEMPLATES) of boolean;
 type common_templates_natural_array is array (1 to COMMON_NR_TEMPLATES) of natural;
 type common_templates_string_array is array (1 to COMMON_NR_TEMPLATES) of string(1 to 3);
+constant MAX_OBJECT_BITS : positive := max(MAX_CALO_BITS, MAX_MUON_BITS);
+type common_objects_array is array (natural range <>) of std_logic_vector(MAX_OBJECT_BITS-1 downto 0);
 
 -- ==== CALOs - end ============================================================
 

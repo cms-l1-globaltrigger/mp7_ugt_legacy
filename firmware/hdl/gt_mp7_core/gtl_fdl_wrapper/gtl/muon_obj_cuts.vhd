@@ -23,30 +23,30 @@ entity muon_obj_cuts is
         muon_object_slice_4_high: natural;
         nr_templates: positive;
         pt_ge_mode : boolean;
-        pt_thresholds: muon_templates_array;
-        nr_eta_windows : muon_templates_natural_array;
-        eta_w1_upper_limits: muon_templates_array;
-        eta_w1_lower_limits: muon_templates_array;
-        eta_w2_upper_limits: muon_templates_array;
-        eta_w2_lower_limits: muon_templates_array;
-        eta_w3_upper_limits: muon_templates_array;
-        eta_w3_lower_limits: muon_templates_array;
-        eta_w4_upper_limits: muon_templates_array;
-        eta_w4_lower_limits: muon_templates_array;
-        eta_w5_upper_limits: muon_templates_array;
-        eta_w5_lower_limits: muon_templates_array;
-        nr_phi_windows : muon_templates_natural_array;
-        phi_w1_upper_limits: muon_templates_array;
-        phi_w1_lower_limits: muon_templates_array;
-        phi_w2_upper_limits: muon_templates_array;
-        phi_w2_lower_limits: muon_templates_array;
-        requested_charges: muon_templates_string_array;
-        qual_luts: muon_templates_quality_array;
-        iso_luts: muon_templates_iso_array;
-        upt_cuts : muon_templates_boolean_array;
-        upt_upper_limits : muon_templates_array;
-        upt_lower_limits : muon_templates_array;
-        ip_luts : muon_templates_ip_array        
+        pt_thresholds: common_templates_array;
+        nr_eta_windows : common_templates_natural_array;
+        eta_w1_upper_limits: common_templates_array;
+        eta_w1_lower_limits: common_templates_array;
+        eta_w2_upper_limits: common_templates_array;
+        eta_w2_lower_limits: common_templates_array;
+        eta_w3_upper_limits: common_templates_array;
+        eta_w3_lower_limits: common_templates_array;
+        eta_w4_upper_limits: common_templates_array;
+        eta_w4_lower_limits: common_templates_array;
+        eta_w5_upper_limits: common_templates_array;
+        eta_w5_lower_limits: common_templates_array;
+        nr_phi_windows : common_templates_natural_array;
+        phi_w1_upper_limits: common_templates_array;
+        phi_w1_lower_limits: common_templates_array;
+        phi_w2_upper_limits: common_templates_array;
+        phi_w2_lower_limits: common_templates_array;
+        requested_charges: common_templates_string_array;
+        qual_luts: common_templates_quality_array;
+        iso_luts: common_templates_iso_array;
+        upt_cuts : common_templates_boolean_array;
+        upt_upper_limits : common_templates_array;
+        upt_lower_limits : common_templates_array;
+        ip_luts : common_templates_ip_array        
 
     );
     port(

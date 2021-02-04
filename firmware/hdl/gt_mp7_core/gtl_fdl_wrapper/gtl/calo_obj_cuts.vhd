@@ -24,24 +24,24 @@ entity calo_obj_cuts is
         nr_templates: positive;
         et_ge_mode: boolean;
     	obj_type : natural := EG_TYPE;
-        et_thresholds: calo_templates_array;
-        nr_eta_windows : calo_templates_natural_array;
-        eta_w1_upper_limits: calo_templates_array;
-        eta_w1_lower_limits: calo_templates_array;
-        eta_w2_upper_limits: calo_templates_array;
-        eta_w2_lower_limits: calo_templates_array;
-        eta_w3_upper_limits: calo_templates_array;
-        eta_w3_lower_limits: calo_templates_array;
-        eta_w4_upper_limits: calo_templates_array;
-        eta_w4_lower_limits: calo_templates_array;
-        eta_w5_upper_limits: calo_templates_array;
-        eta_w5_lower_limits: calo_templates_array;
-        nr_phi_windows : calo_templates_natural_array;
-        phi_w1_upper_limits: calo_templates_array;
-        phi_w1_lower_limits: calo_templates_array;
-        phi_w2_upper_limits: calo_templates_array;
-        phi_w2_lower_limits: calo_templates_array;
-        iso_luts: calo_templates_iso_array
+        et_thresholds: common_templates_array;
+        nr_eta_windows : common_templates_natural_array;
+        eta_w1_upper_limits: common_templates_array;
+        eta_w1_lower_limits: common_templates_array;
+        eta_w2_upper_limits: common_templates_array;
+        eta_w2_lower_limits: common_templates_array;
+        eta_w3_upper_limits: common_templates_array;
+        eta_w3_lower_limits: common_templates_array;
+        eta_w4_upper_limits: common_templates_array;
+        eta_w4_lower_limits: common_templates_array;
+        eta_w5_upper_limits: common_templates_array;
+        eta_w5_lower_limits: common_templates_array;
+        nr_phi_windows : common_templates_natural_array;
+        phi_w1_upper_limits: common_templates_array;
+        phi_w1_lower_limits: common_templates_array;
+        phi_w2_upper_limits: common_templates_array;
+        phi_w2_lower_limits: common_templates_array;
+        iso_luts: common_templates_iso_array
 
     );
     port(

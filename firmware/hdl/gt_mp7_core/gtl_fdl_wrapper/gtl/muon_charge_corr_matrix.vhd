@@ -54,9 +54,8 @@ begin
             charge_double_l_2: for j in muon_object_slice_2_low to muon_object_slice_2_high generate
                 charge_double_if: if j/=i generate
                     charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
-                                              '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
-                                              '1' when requested_charge_correlation = "ig" else
-                                              '0';
+                        '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
+                        '1' when requested_charge_correlation = "ig" else '0';
                 end generate charge_double_if;
             end generate charge_double_l_2;
         end generate charge_double_l_1;
@@ -80,9 +79,8 @@ begin
                 charge_triple_l_3: for k in muon_object_slice_3_low to muon_object_slice_3_high generate
                     charge_triple_if: if (j/=i and k/=i and k/=j) generate
                         charge_comp_triple(i,j,k) <= '1' when ls_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "ls" else
-                                                    '1' when os_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "os" else
-                                                    '1' when requested_charge_correlation = "ig" else
-                                                    '0';
+                            '1' when os_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "os" else
+                            '1' when requested_charge_correlation = "ig" else '0';
                     end generate charge_triple_if;
                 end generate charge_triple_l_3;
             end generate charge_triple_l_2;
@@ -108,9 +106,8 @@ begin
                     charge_quad_l_4: for l in muon_object_slice_4_low to muon_object_slice_4_high generate
                         charge_quad_if: if (j/=i and k/=i and k/=j and l/=i and l/=j and l/=k) generate
                             charge_comp_quad(i,j,k,l) <= '1' when ls_charcorr_quad(i,j,k,l) = '1' and requested_charge_correlation = "ls" else
-                                                        '1' when os_charcorr_quad(i,j,k,l) = '1' and requested_charge_correlation = "os" else
-                                                        '1' when requested_charge_correlation = "ig" else
-                                                        '0';
+                                '1' when os_charcorr_quad(i,j,k,l) = '1' and requested_charge_correlation = "os" else
+                                '1' when requested_charge_correlation = "ig" else '0';
                         end generate charge_quad_if;
                     end generate charge_quad_l_4;
                 end generate charge_quad_l_3;

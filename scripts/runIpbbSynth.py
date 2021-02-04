@@ -301,7 +301,9 @@ def main():
     config.set('menu', 'build', build_raw[1])
     # Take args.menuname with distribution number
     config.set('menu', 'name', args.menuname)
-    config.set('menu', 'location', url_menu)
+    # Location of menu XML file
+    menu_xml_loc = "{}/xml/{}.xml".format(url_menu, args.menuname)    
+    config.set('menu', 'location', menu_xml_loc)
     config.set('menu', 'modules', modules)
 
     config.add_section('ipbb')

@@ -45,11 +45,10 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/gt_mp7_core_pkg_sim.vhd
 vcom -93 -work work $MENU_DIR/gtl_pkg.vhd
 vcom -93 -work work $TB_DIR/lhc_data_debug_util_pkg.vhd
 vcom -93 -work work $TB_DIR/txt_util_pkg.vhd
-
+#
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/centrality_pipeline.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/ext_cond_pipeline.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/p_m_2_bx_pipeline.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/pipelines.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/phi_windows_comp.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_comp_signed.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/eta_windows_comp.vhd
@@ -61,7 +60,6 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators.vh
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_cond_matrix.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_cond_matrix_orm.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_obj_cuts.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_comparators.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/min_bias_hf_conditions.vhd
@@ -70,7 +68,6 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_cond_matrix.vh
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_obj_cuts.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_corr_matrix.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_signed_eta.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
@@ -82,21 +79,12 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/towercount_conditio
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_calculator.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_comp.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/sum_mass_calc.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_orm.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_cond_matrix_orm.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions_orm.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition_orm.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_3_obj_condition.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_3_obj_condition.vhd
+#
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/pipelines.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/comb_conditions.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/correlation_conditions_calo.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/correlation_conditions_muon.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/comb_conditions.vhd
-
+#
 vcom -93 -work work $NGC_DIR/rom_lut_calo_inv_dr_sq_1/synth/rom_lut_calo_inv_dr_sq_1.vhd
 vcom -93 -work work $NGC_DIR/rom_lut_calo_inv_dr_sq_2/synth/rom_lut_calo_inv_dr_sq_2.vhd
 vcom -93 -work work $NGC_DIR/rom_lut_calo_inv_dr_sq_3/synth/rom_lut_calo_inv_dr_sq_3.vhd
@@ -117,7 +105,7 @@ vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_8/synth/rom_lut_muon_inv_dr_
 vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_9/synth/rom_lut_muon_inv_dr_sq_9.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_calo_inv_dr_sq_all.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_muon_inv_dr_sq_all.vhd
-vcom -93 -work work $MENU_DIR/gtl_module.vhd
+#
 vcom -93 -work work $HDL_DIR/gt_mp7_core/frame/dm/delay_element.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/fdl/pulse_converter.vhd
@@ -133,13 +121,16 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler_fra
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_rate_counter.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_post_dead_time_counter.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/fdl/algo_slice.vhd
+#
 #vcom -93 -work work $NGC_DIR/dp_mem_4096x32/dp_mem_4096x32.vhd
 vcom -93 -work work $NGC_DIR/dp_mem_4096x32_blk_mem_gen_v8_4_2/synth/dp_mem_4096x32.vhd
 vcom -93 -work work $HDL_DIR/ipbus/slaves/ipb_dpmem_4096_32.vhd
 vcom -93 -work work $HDL_DIR/ipbus/slaves/ipb_read_regs.vhd
 vcom -93 -work work $HDL_DIR/ipbus/slaves/ipb_write_regs.vhd
 vcom -93 -work work $HDL_DIR/ipbus/slaves/ipb_pulse_regs.vhd
+#
 vcom -93 -work work $MENU_DIR/algo_mapping_rop.vhd
+vcom -93 -work work $MENU_DIR/gtl_module.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
 

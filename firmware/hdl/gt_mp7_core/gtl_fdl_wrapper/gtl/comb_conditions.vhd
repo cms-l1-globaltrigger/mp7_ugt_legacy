@@ -16,13 +16,13 @@ entity comb_conditions is
      generic(
 
         slice_1_low_obj1: natural := 0;
-        slice_1_high_obj1: natural := NR_EG_OBJECTS-1;
+        slice_1_high_obj1: natural := NR_MU_OBJECTS-1;
         slice_2_low_obj1: natural := 0;
-        slice_2_high_obj1: natural := NR_EG_OBJECTS-1;
+        slice_2_high_obj1: natural := NR_MU_OBJECTS-1;
         slice_3_low_obj1: natural := 0;
-        slice_3_high_obj1: natural := NR_EG_OBJECTS-1;
+        slice_3_high_obj1: natural := NR_MU_OBJECTS-1;
         slice_4_low_obj1: natural := 0;
-        slice_4_high_obj1: natural := NR_EG_OBJECTS-1;
+        slice_4_high_obj1: natural := NR_MU_OBJECTS-1;
         pt_ge_mode_obj1: boolean := true;
         pt_thresholds_obj1: common_templates_array := (others => (others => '0'));
         nr_eta_windows_obj1: common_templates_natural_array := (others => 0);

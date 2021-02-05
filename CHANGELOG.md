@@ -4,17 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
   
-## [v1.12.0] - 2021-01-07
+## [v1.12.0] - 2021-02-05
 ### Comment
 
 - mp7_ugt firmware release v1.12.0
 - implemented new phi comp (similar to eta comp)
 - unified generic and port structures
+- implemented comb_conditions.vhd, correlation_conditions_calo.vhd and correlation_conditions_muon
+
+### Added
+- source files:
+  - ../gtl/comb_conditions.vhd
+  - ../gtl/correlation_conditions_calo.vhd
+  - ../gtl/correlation_conditions_muon.vhd
 
 ### Changed
 - source files:
   - ../gt_mp7_core/gt_mp7_core_pkg.vhd
   - ../gtl/gtl_module_tpl.vhd
+  - ../gtl/gtl_pkg_tpl.vhd
   - ../gtl/calo_conditions.vhd
   - ../gtl/calo_conditions_orm.vhd
   - ../gtl/muon_conditions.vhd
@@ -27,6 +35,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../gtl/muon_mass_3_obj_condition.vhd
   - ../gtl/calo_muon_correlation_condition.vhd
   - ../gtl/muon_muon_correlation_condition.vhd
+  - ../gtl/calo_obj_cuts.vhd
+  - ../gtl/cuts_instances.vhd 
+  - ../gtl/mass_calculator.vhd 
+  - ../gtl/muon_charge_corr_matrix.vhd 
+  - ../gtl/muon_obj_cuts.vhd 
+  - ../gtl/muon_obj_cuts.vhd 
 - dep file:
   - ../cfg/uGT_algo.dep
 - simulation files:

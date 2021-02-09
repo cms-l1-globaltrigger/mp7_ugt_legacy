@@ -3,6 +3,7 @@
 -- Comparators for transverse momentum, pseudorapidity, azimuth angle, quality and isolation of muon objects
 
 -- Version history:
+-- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
 -- HB 2020-06-08: inserted comparators for "unconstraint pt" [upt] and "impact parameter" [ip] of new muon structure.
 -- HB 2019-06-14: updated for "five eta cuts". Used phi_windows_comp.
 -- HB 2019-06-14: updated for "five eta cuts". Used phi_windows_comp.
@@ -32,10 +33,9 @@ entity muon_comparators is
         eta_w4_lower_limit : std_logic_vector;
         eta_w5_upper_limit : std_logic_vector;
         eta_w5_lower_limit : std_logic_vector;
-        phi_full_range : boolean;
+        nr_phi_windows : natural;
         phi_w1_upper_limit : std_logic_vector;
         phi_w1_lower_limit : std_logic_vector;
-        phi_w2_ignore : boolean;
         phi_w2_upper_limit : std_logic_vector;
         phi_w2_lower_limit : std_logic_vector;
         requested_charge: string(1 to 3);
@@ -148,10 +148,9 @@ begin
 -- HB 2015-04-23: implemented phi_windows_comp for better modularity
     phi_windows_comp_i: entity work.phi_windows_comp
         generic map(
-            phi_full_range => phi_full_range,
+            nr_phi_windows => nr_phi_windows,
             phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
             phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-            phi_w2_ignore => phi_w2_ignore,
             phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
             phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0)
         )

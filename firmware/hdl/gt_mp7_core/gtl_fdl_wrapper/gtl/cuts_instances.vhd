@@ -3,6 +3,8 @@
 -- Collection of cuts for correlations
 
 -- Version history:
+-- HB 2021-01-18: inserted new output port "invariant_mass" (for invariant mass of 3 objects).
+-- HB 2020-12-14: changed names.
 -- HB 2020-08-10: inserted cut for "twobody xunconstraint pt" of new muon structure.
 -- HB 2020-06-15: inserted cuts for "unconstraint pt" [upt] of new muon structure.
 -- HB 2019-05-03: changed name from  cuts_instances_v2 to cuts_instances.
@@ -27,11 +29,11 @@ entity cuts_instances is
         twobody_pt_cut: boolean := false;
         twobody_upt_cut: boolean := false;
 
-        diff_eta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        diff_eta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        deta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        deta_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        diff_phi_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        diff_phi_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        dphi_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        dphi_lower_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
         dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -53,8 +55,8 @@ entity cuts_instances is
 
     );
     port(
-        diff_eta: in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
-        diff_phi: in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
+        deta: in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
+        dphi: in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
         pt1 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0);
         pt2 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0);
         upt1 : in std_logic_vector(MAX_DIFF_BITS-1 downto 0) := (others => '0');
@@ -65,10 +67,11 @@ entity cuts_instances is
         cos_phi_2_integer : in integer;
         sin_phi_1_integer : in integer;
         sin_phi_2_integer : in integer;
-        diff_eta_comp: out std_logic := '1';
-        diff_phi_comp: out std_logic := '1';
+        deta_comp: out std_logic := '1';
+        dphi_comp: out std_logic := '1';
         dr_comp: out std_logic := '1';
         mass_comp: out std_logic := '1';
+        invariant_mass: out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0) := (others => '0');
         twobody_pt_comp: out std_logic := '1';
         twobody_upt_comp: out std_logic := '1'
     );
@@ -78,14 +81,14 @@ architecture rtl of cuts_instances is
 
 begin
 
-    deta_diff_i: if deta_cut = true generate
-        diff_eta_comp <= '1' when diff_eta >= diff_eta_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
-                         diff_eta <= diff_eta_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
-    end generate deta_diff_i;
-    dphi_diff_i: if dphi_cut = true generate
-        diff_phi_comp <= '1' when diff_phi >= diff_phi_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
-                         diff_phi <= diff_phi_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
-    end generate dphi_diff_i;
+    deta_i: if deta_cut = true generate
+        deta_comp <= '1' when deta >= deta_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
+                         deta <= deta_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
+    end generate deta_i;
+    dphi_i: if dphi_cut = true generate
+        dphi_comp <= '1' when dphi >= dphi_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
+                         dphi <= dphi_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
+    end generate dphi_i;
     dr_i: if dr_cut = true generate
         dr_calculator_i: entity work.dr_calculator
             generic map(
@@ -93,8 +96,8 @@ begin
                 lower_limit_vector => dr_lower_limit_vector
             )
             port map(
-                diff_eta => diff_eta,
-                diff_phi => diff_phi,
+                deta => deta,
+                dphi => dphi,
                 dr_comp => dr_comp
             );
     end generate dr_i;
@@ -116,9 +119,10 @@ begin
                 pt2 => pt2(pt2_width-1 downto 0),
                 upt1 => upt1(upt1_width-1 downto 0),
                 upt2 => upt2(upt2_width-1 downto 0),
-                cosh_deta => cosh_deta,
-                cos_dphi => cos_dphi,
-                mass_comp => mass_comp
+                cosh_deta => cosh_deta(cosh_cos_width-1 downto 0),
+                cos_dphi => cos_dphi(cosh_cos_width-1 downto 0),
+                mass_comp => mass_comp,
+                invariant_mass_o => invariant_mass
             );
     end generate mass_i;
     twobody_pt_i: if twobody_pt_cut = true generate

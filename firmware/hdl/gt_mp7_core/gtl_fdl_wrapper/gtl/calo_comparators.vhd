@@ -3,6 +3,7 @@
 -- Comparators for energy, pseudorapidity, azimuth angle and isolation of calo objects
 
 -- Version history:
+-- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
 -- HB 2019-06-14: updated for "five eta cuts".
 -- HB 2019-05-03: changed name from  calo_comparators_v2 to calo_comparators.
 -- HB 2015-08-28: inserted "no calo" (all object parameters = 0)
@@ -31,10 +32,9 @@ entity calo_comparators is
         eta_w4_lower_limit : std_logic_vector;
         eta_w5_upper_limit : std_logic_vector;
         eta_w5_lower_limit : std_logic_vector;
-        phi_full_range : boolean;
+        nr_phi_windows : natural;
         phi_w1_upper_limit : std_logic_vector;
         phi_w1_lower_limit : std_logic_vector;
-        phi_w2_ignore : boolean;
         phi_w2_upper_limit : std_logic_vector;
         phi_w2_lower_limit : std_logic_vector;
         iso_lut: std_logic_vector
@@ -101,10 +101,9 @@ begin
 -- HB 2015-04-23: implemented phi_windows_comp for better modularity
     eg_phi_windows_comp_i: entity work.phi_windows_comp
         generic map(
-            phi_full_range => phi_full_range,
+            nr_phi_windows => nr_phi_windows,
             phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
             phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
-            phi_w2_ignore => phi_w2_ignore,
             phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
             phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0)
         )
@@ -143,12 +142,11 @@ begin
 -- HB 2015-04-23: implemented phi_windows_comp for better modularity
     jet_phi_windows_comp_i: entity work.phi_windows_comp
         generic map(
-            phi_full_range => phi_full_range,
-            phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_JET_V2.phi_high-D_S_I_JET_V2.phi_low downto 0),
-            phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_JET_V2.phi_high-D_S_I_JET_V2.phi_low downto 0),
-            phi_w2_ignore => phi_w2_ignore,
-            phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_JET_V2.phi_high-D_S_I_JET_V2.phi_low downto 0),
-            phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_JET_V2.phi_high-D_S_I_JET_V2.phi_low downto 0)
+            nr_phi_windows => nr_phi_windows,
+            phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
+            phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
+            phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
+            phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0)
         )
         port map(
             phi => data_i(D_S_I_JET_V2.phi_high downto D_S_I_JET_V2.phi_low),
@@ -186,12 +184,11 @@ begin
 -- HB 2015-04-23: implemented phi_windows_comp for better modularity
     tau_phi_windows_comp_i: entity work.phi_windows_comp
         generic map(
-            phi_full_range => phi_full_range,
-            phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_TAU_V2.phi_high-D_S_I_TAU_V2.phi_low downto 0),
-            phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_TAU_V2.phi_high-D_S_I_TAU_V2.phi_low downto 0),
-            phi_w2_ignore => phi_w2_ignore,
-            phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_TAU_V2.phi_high-D_S_I_TAU_V2.phi_low downto 0),
-            phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_TAU_V2.phi_high-D_S_I_TAU_V2.phi_low downto 0)
+            nr_phi_windows => nr_phi_windows,
+            phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
+            phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
+            phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
+            phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0)
         )
         port map(
             phi => data_i(D_S_I_TAU_V2.phi_high downto D_S_I_TAU_V2.phi_low),

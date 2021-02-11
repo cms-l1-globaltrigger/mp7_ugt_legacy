@@ -54,6 +54,7 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/common/mass_div_dr_comp.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/sum_mass_calc.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/sum_mass.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/orm_cuts.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/common/correlation_cuts.vhd
 #
 src gt_mp7_core/gtl_fdl_wrapper/gtl/pipelines.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd

@@ -14,7 +14,7 @@ use work.gtl_pkg.all;
 
 entity sum_mass is
      generic(
-        slice_low_obj1: natura;
+        slice_low_obj1: natural;
         slice_high_obj1: natural;
         slice_low_obj2: natural;
         slice_high_obj2: natural;
@@ -29,8 +29,8 @@ entity sum_mass is
     );
     port(
         lhc_clk: in std_logic;
-        invariant_mass in: mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj1-1) := (others => (others => (others => '0')));
-        mass_3_obj_comp_pipe out: std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'))
+        invariant_mass: in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj1-1) := (others => (others => (others => '0')));
+        mass_3_obj_comp_pipe: out std_logic_3dim_array(0 to nr_obj1-1, 0 to nr_obj1-1, 0 to nr_obj1-1) := (others => (others => (others => '0')))
     );
 end sum_mass;
 
@@ -38,6 +38,7 @@ architecture rtl of sum_mass is
 
     type sum_mass_array is array(0 to nr_obj1-1, 0 to nr_obj1-1, 0 to nr_obj1-1) of std_logic_vector(mass_vector_width+1 downto 0);
     signal sum_mass, sum_mass_temp : sum_mass_array := (others => (others => (others => (others => '0'))));
+    signal mass_3_obj_comp : std_logic_3dim_array(0 to nr_obj1-1, 0 to nr_obj1-1, 0 to nr_obj1-1) := (others => (others => (others => '0')));
 
 begin
 
@@ -68,7 +69,7 @@ begin
         end generate l2_comp;
     end generate l1_comp;
 
-    pipeline_p: process(lhc_clk, deta_orm_comp, dphi_orm_comp, dr_orm_comp)
+    pipeline_p: process(lhc_clk, mass_3_obj_comp)
         begin
         if INTERMEDIATE_PIPELINE = false then
             mass_3_obj_comp_pipe <= mass_3_obj_comp;

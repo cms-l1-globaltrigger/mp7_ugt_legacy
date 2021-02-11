@@ -543,7 +543,7 @@ begin
                     mass_upper_limit_vector,
                     mass_lower_limit_vector,
                     mass_vector_width,
-                    nr_obj1
+                    NR_MU_OBJECTS
                 )
                 port map(
                     lhc_clk,

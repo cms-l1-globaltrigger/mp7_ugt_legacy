@@ -255,43 +255,11 @@ begin
             obj1_vs_templ_pipe <= obj1_vs_templ;
             obj2_vs_templ_pipe <= obj2_vs_templ;
             obj3_vs_templ_pipe <= obj3_vs_templ;
-            esums_comp_pipe <= esums_comp;
---             deta_orm_comp_12_pipe <= deta_orm_comp_12;
---             dphi_orm_comp_12_pipe <= dphi_orm_comp_12;
---             dr_orm_comp_12_pipe <= dr_orm_comp_12;
---             deta_orm_comp_13_pipe <= deta_orm_comp_13;
---             dphi_orm_comp_13_pipe <= dphi_orm_comp_13;
---             dr_orm_comp_13_pipe <= dr_orm_comp_13;
---             deta_orm_comp_23_pipe <= deta_orm_comp_23;
---             dphi_orm_comp_23_pipe <= dphi_orm_comp_23;
---             dr_orm_comp_23_pipe <= dr_orm_comp_23;
---             deta_comp_pipe <= deta_comp;
---             dphi_comp_pipe <= dphi_comp;
---             dr_comp_pipe <= dr_comp;
---             mass_comp_pipe <= mass_comp;
---             mass_3_obj_comp_pipe <= mass_3_obj_comp;
---             twobody_pt_comp_pipe <= twobody_pt_comp;
         else
             if (lhc_clk'event and lhc_clk = '1') then
                 obj1_vs_templ_pipe <= obj1_vs_templ;
                 obj2_vs_templ_pipe <= obj2_vs_templ;
                 obj3_vs_templ_pipe <= obj3_vs_templ;
-                esums_comp_pipe <= esums_comp;
---                 deta_orm_comp_12_pipe <= deta_orm_comp_12;
---                 dphi_orm_comp_12_pipe <= dphi_orm_comp_12;
---                 dr_orm_comp_12_pipe <= dr_orm_comp_12;
---                 deta_orm_comp_13_pipe <= deta_orm_comp_13;
---                 dphi_orm_comp_13_pipe <= dphi_orm_comp_13;
---                 dr_orm_comp_13_pipe <= dr_orm_comp_13;
---                 deta_orm_comp_23_pipe <= deta_orm_comp_23;
---                 dphi_orm_comp_23_pipe <= dphi_orm_comp_23;
---                 dr_orm_comp_23_pipe <= dr_orm_comp_23;
---                 deta_comp_pipe <= deta_comp;
---                 dphi_comp_pipe <= dphi_comp;
---                 dr_comp_pipe <= dr_comp;
---                 mass_comp_pipe <= mass_comp;
---                 mass_3_obj_comp_pipe <= mass_3_obj_comp;
---                 twobody_pt_comp_pipe <= twobody_pt_comp;
             end if;
         end if;
     end process;
@@ -781,6 +749,23 @@ begin
                 data_i => esums,
                 comp_o => esums_comp
             );
+
+        pipeline_p: process(lhc_clk, dphi_comp, mass_comp, twobody_pt_comp)
+            begin
+            if obj_vs_templ_pipeline_stage = false then
+                esums_comp_pipe <= esums_comp;
+                dphi_comp_pipe <= dphi_comp;
+                mass_comp_pipe <= mass_comp;
+                twobody_pt_comp_pipe <= twobody_pt_comp;
+            else
+                if (lhc_clk'event and lhc_clk = '1') then
+                    esums_comp_pipe <= esums_comp;
+                    dphi_comp_pipe <= dphi_comp;
+                    mass_comp_pipe <= mass_comp;
+                    twobody_pt_comp_pipe <= twobody_pt_comp;
+                end if;
+            end if;
+        end process;
 
         -- "Matrix" of permutations in an and-or-structure.
         matrix_dphi_mass_p: process(obj1_vs_templ_pipe, esums_comp_pipe, dphi_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)

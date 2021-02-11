@@ -253,13 +253,6 @@ begin
             obj1_vs_templ_pipe <= obj1_vs_templ;
             obj2_vs_templ_pipe <= obj2_vs_templ;
             obj3_vs_templ_pipe <= obj3_vs_templ;
-            esums_comp_pipe <= esums_comp;
---             deta_comp_pipe <= deta_comp;
---             dphi_comp_pipe <= dphi_comp;
---             dr_comp_pipe <= dr_comp;
---             mass_comp_pipe <= mass_comp;
---             mass_3_obj_comp_pipe <= mass_3_obj_comp;
---             twobody_pt_comp_pipe <= twobody_pt_comp;
             charge_comp_double_pipe <= charge_comp_double;
             charge_comp_triple_pipe <= charge_comp_triple;
         else
@@ -267,13 +260,6 @@ begin
                 obj1_vs_templ_pipe <= obj1_vs_templ;
                 obj2_vs_templ_pipe <= obj2_vs_templ;
                 obj3_vs_templ_pipe <= obj3_vs_templ;
-                esums_comp_pipe <= esums_comp;
---                 deta_comp_pipe <= deta_comp;
---                 dphi_comp_pipe <= dphi_comp;
---                 dr_comp_pipe <= dr_comp;
---                 mass_comp_pipe <= mass_comp;
---                 mass_3_obj_comp_pipe <= mass_3_obj_comp;
---                 twobody_pt_comp_pipe <= twobody_pt_comp;
                 charge_comp_double_pipe <= charge_comp_double;
                 charge_comp_triple_pipe <= charge_comp_triple;
             end if;
@@ -622,6 +608,23 @@ begin
                 data_i => esums,
                 comp_o => esums_comp
             );
+
+        pipeline_p: process(lhc_clk, dphi_comp, mass_comp, twobody_pt_comp)
+            begin
+            if obj_vs_templ_pipeline_stage = false then
+                esums_comp_pipe <= esums_comp;
+                dphi_comp_pipe <= dphi_comp;
+                mass_comp_pipe <= mass_comp;
+                twobody_pt_comp_pipe <= twobody_pt_comp;
+            else
+                if (lhc_clk'event and lhc_clk = '1') then
+                    esums_comp_pipe <= esums_comp;
+                    dphi_comp_pipe <= dphi_comp;
+                    mass_comp_pipe <= mass_comp;
+                    twobody_pt_comp_pipe <= twobody_pt_comp;
+                end if;
+            end if;
+        end process;
 
         -- "Matrix" of permutations in an and-or-structure.
         matrix_dphi_mass_p: process(obj1_vs_templ_pipe, esums_comp_pipe, dphi_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)

@@ -3,6 +3,7 @@
 -- Condition module for all combination conditions.
 
 -- Version history:
+-- HB 2020-02-11: replaced code with "orm_cuts" instances.
 -- HB 2021-02-03: first design.
 
 library ieee;
@@ -74,10 +75,10 @@ entity comb_conditions is
         iso_lut_obj2: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
 
         twobody_pt_cut: boolean := false;
-        pt_width: positive := EG_PT_VECTOR_WIDTH; 
+        pt_width: positive := EG_PT_VECTOR_WIDTH;
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         twobody_upt_cut: boolean := false;
-        upt_width: positive := MU_UPT_VECTOR_WIDTH; 
+        upt_width: positive := MU_UPT_VECTOR_WIDTH;
         upt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
         pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION;
@@ -99,7 +100,7 @@ entity comb_conditions is
         nr_obj2: natural := NR_TAU_OBJECTS;
         type_obj2 : natural := TAU_TYPE;
         nr_templates: positive := COMMON_NR_TEMPLATES
-        
+
     );
     port(
         lhc_clk: in std_logic;
@@ -136,7 +137,7 @@ architecture rtl of comb_conditions is
     signal obj1_slice_2_vs_templ, obj1_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(slice_2_low_obj1 to slice_2_high_obj1, 1 to 1);
     signal obj1_slice_3_vs_templ, obj1_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(slice_3_low_obj1 to slice_3_high_obj1, 1 to 1);
     signal obj1_slice_4_vs_templ, obj1_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(slice_4_low_obj1 to slice_4_high_obj1, 1 to 1);
-    
+
 --***************************************************************
 -- signals for charge correlation comparison:
 -- charge correlation inputs are compared with requested charge (given by TME)
@@ -154,11 +155,11 @@ architecture rtl of comb_conditions is
     signal obj2_vs_templ, obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
 
     signal condition_and_or : std_logic;
-    
-    signal twobody_pt_comp, twobody_pt_comp_pipe : 
+
+    signal twobody_pt_comp, twobody_pt_comp_pipe :
     std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_2_low_obj1 to slice_2_high_obj1) := (others => (others => '1'));
 
-    signal twobody_upt_comp, twobody_upt_comp_temp, twobody_upt_comp_pipe : 
+    signal twobody_upt_comp, twobody_upt_comp_temp, twobody_upt_comp_pipe :
         std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_2_low_obj1 to slice_2_high_obj1) := (others => (others => '1'));
 
 begin
@@ -173,13 +174,13 @@ begin
                 slice_4_low_obj1, slice_4_high_obj1,
                 nr_templates, pt_ge_mode_obj1, type_obj1,
                 pt_thresholds_obj1,
-                nr_eta_windows_obj1, 
+                nr_eta_windows_obj1,
                 eta_w1_upper_limits_obj1, eta_w1_lower_limits_obj1,
                 eta_w2_upper_limits_obj1, eta_w2_lower_limits_obj1,
                 eta_w3_upper_limits_obj1, eta_w3_lower_limits_obj1,
                 eta_w4_upper_limits_obj1, eta_w4_lower_limits_obj1,
                 eta_w5_upper_limits_obj1, eta_w5_lower_limits_obj1,
-                nr_phi_windows_obj1, 
+                nr_phi_windows_obj1,
                 phi_w1_upper_limits_obj1, phi_w1_lower_limits_obj1,
                 phi_w2_upper_limits_obj1, phi_w2_lower_limits_obj1,
                 iso_luts_obj1
@@ -230,29 +231,30 @@ begin
                 );
         end generate obj2_l;
 
-        -- HB 2017-09-05: for optimisation - splitting to different loops with "slice_1_low_obj1 to slice_1_high_obj1", etc.
-        cuts_orm_l_1: for i in 0 to MAX_CALO_OBJECTS-1 generate 
-            cuts_orm_l_2: for k in slice_low_obj2 to slice_high_obj2 generate
-                deta_orm_cut_i: if deta_orm_cut = true generate
-                    deta_orm_comp(i,k) <= '1' when deta_orm(i,k) >= deta_orm_lower_limit_vector and deta_orm(i,k) <= deta_orm_upper_limit_vector else '0';
-                end generate deta_orm_cut_i;
-                dphi_orm_cut_i: if dphi_orm_cut = true generate
-                    dphi_orm_comp(i,k) <= '1' when dphi_orm(i,k) >= dphi_orm_lower_limit_vector and dphi_orm(i,k) <= dphi_orm_upper_limit_vector else '0';
-                end generate dphi_orm_cut_i;
-                dr_orm_cut_i: if dr_orm_cut = true generate
-                    dr_calculator_i: entity work.dr_calculator
-                        generic map(
-                            upper_limit_vector => dr_orm_upper_limit_vector,
-                            lower_limit_vector => dr_orm_lower_limit_vector
-                        )
-                        port map(
-                            deta => deta_orm(i,k),
-                            dphi => dphi_orm(i,k),
-                            dr_comp => dr_orm_comp(i,k)
-                        );
-                end generate dr_orm_cut_i;
-            end generate cuts_orm_l_2;
-        end generate cuts_orm_l_1;
+        orm_cuts_12_i: entity work.orm_cuts
+            generic map(
+                0,
+                MAX_CALO_OBJECTS-1,
+                slice_low_obj2,
+                slice_high_obj2,
+                deta_orm_cut,
+                deta_orm_upper_limit_vector,
+                deta_orm_lower_limit_vector,
+                dphi_orm_cut,
+                dphi_orm_upper_limit_vector,
+                dphi_orm_lower_limit_vector,
+                dr_orm_cut,
+                dr_orm_upper_limit_vector,
+                dr_orm_lower_limit_vector
+            )
+            port map(
+                lhc_clk,
+                deta_orm,
+                dphi_orm,
+                deta_orm_comp_pipe,
+                dphi_orm_comp_pipe,
+                dr_orm_comp_pipe
+            );
 
         -- "Matrix" of permutations in an and-or-structure.
         -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates'.
@@ -266,9 +268,9 @@ begin
                 slice_low_obj2, slice_high_obj2
             )
             port map(lhc_clk,
-                obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe, 
+                obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe,
                 obj2_vs_templ_pipe,
-                twobody_pt_comp_pipe, 
+                twobody_pt_comp_pipe,
                 deta_orm_comp_pipe, dphi_orm_comp_pipe, dr_orm_comp_pipe,
                 condition_o
             );
@@ -290,12 +292,12 @@ begin
                 eta_w3_upper_limits_obj1, eta_w3_lower_limits_obj1,
                 eta_w4_upper_limits_obj1, eta_w4_lower_limits_obj1,
                 eta_w5_upper_limits_obj1, eta_w5_lower_limits_obj1,
-                nr_phi_windows_obj1, 
+                nr_phi_windows_obj1,
                 phi_w1_upper_limits_obj1, phi_w1_lower_limits_obj1,
                 phi_w2_upper_limits_obj1, phi_w2_lower_limits_obj1,
                 requested_charges_obj1, qual_luts_obj1, iso_luts_obj1,
                 upt_cuts_obj1, upt_upper_limits_obj1, upt_lower_limits_obj1,
-                ip_luts_obj1            
+                ip_luts_obj1
             )
             port map(
                 obj1_muon, obj1_slice_1_vs_templ, obj1_slice_2_vs_templ, obj1_slice_3_vs_templ, obj1_slice_4_vs_templ
@@ -345,22 +347,24 @@ begin
             obj1_slice_3_vs_templ_pipe <= obj1_slice_3_vs_templ;
             obj1_slice_4_vs_templ_pipe <= obj1_slice_4_vs_templ;
             obj2_vs_templ_pipe <= obj2_vs_templ;
-            deta_orm_comp_pipe <= deta_orm_comp;
-            dphi_orm_comp_pipe <= dphi_orm_comp;
-            dr_orm_comp_pipe <= dr_orm_comp;
+--             deta_orm_comp_pipe <= deta_orm_comp;
+--             dphi_orm_comp_pipe <= dphi_orm_comp;
+--             dr_orm_comp_pipe <= dr_orm_comp;
             twobody_pt_comp_pipe <= twobody_pt_comp;
             twobody_upt_comp_pipe <= twobody_upt_comp;
-        elsif (lhc_clk'event and lhc_clk = '1') then
-            obj1_slice_1_vs_templ_pipe <= obj1_slice_1_vs_templ;
-            obj1_slice_2_vs_templ_pipe <= obj1_slice_2_vs_templ;
-            obj1_slice_3_vs_templ_pipe <= obj1_slice_3_vs_templ;
-            obj1_slice_4_vs_templ_pipe <= obj1_slice_4_vs_templ;
-            obj2_vs_templ_pipe <= obj2_vs_templ;
-            deta_orm_comp_pipe <= deta_orm_comp;
-            dphi_orm_comp_pipe <= dphi_orm_comp;
-            dr_orm_comp_pipe <= dr_orm_comp;
-            twobody_pt_comp_pipe <= twobody_pt_comp;
-            twobody_upt_comp_pipe <= twobody_upt_comp;
+        else
+            if (lhc_clk'event and lhc_clk = '1') then
+                obj1_slice_1_vs_templ_pipe <= obj1_slice_1_vs_templ;
+                obj1_slice_2_vs_templ_pipe <= obj1_slice_2_vs_templ;
+                obj1_slice_3_vs_templ_pipe <= obj1_slice_3_vs_templ;
+                obj1_slice_4_vs_templ_pipe <= obj1_slice_4_vs_templ;
+                obj2_vs_templ_pipe <= obj2_vs_templ;
+    --             deta_orm_comp_pipe <= deta_orm_comp;
+    --             dphi_orm_comp_pipe <= dphi_orm_comp;
+    --             dr_orm_comp_pipe <= dr_orm_comp;
+                twobody_pt_comp_pipe <= twobody_pt_comp;
+                twobody_upt_comp_pipe <= twobody_upt_comp;
+            end if;
         end if;
     end process;
 
@@ -370,9 +374,9 @@ begin
             generic map(
                 slice_1_low_obj1, slice_1_high_obj1,
                 slice_2_low_obj1, slice_2_high_obj1,
-                nr_templates,                
+                nr_templates,
                 twobody_pt_cut,
-                pt_width, 
+                pt_width,
                 pt_sq_threshold_vector,
                 sin_cos_width,
                 pt_sq_sin_cos_precision
@@ -388,9 +392,9 @@ begin
             generic map(
                 slice_1_low_obj1, slice_1_high_obj1,
                 slice_2_low_obj1, slice_2_high_obj1,
-                nr_templates,                
+                nr_templates,
                 twobody_upt_cut,
-                upt_width, 
+                upt_width,
                 upt_sq_threshold_vector,
                 sin_cos_width,
                 pt_sq_sin_cos_precision

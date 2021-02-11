@@ -6,6 +6,7 @@
 -- 3. muon esums.
 
 -- Version history:
+-- HB 2020-02-11: replaced code with "sum_mass" instance.
 -- HB 2020-02-02: first design.
 
 library ieee;
@@ -127,8 +128,8 @@ entity correlation_conditions_muon is
         dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        pt1_width: positive := MU_PT_VECTOR_WIDTH; 
-        pt2_width: positive := MU_PT_VECTOR_WIDTH; 
+        pt1_width: positive := MU_PT_VECTOR_WIDTH;
+        pt2_width: positive := MU_PT_VECTOR_WIDTH;
 
         mass_cut: boolean := false;
         mass_type : natural := INVARIANT_MASS_TYPE;
@@ -147,7 +148,7 @@ entity correlation_conditions_muon is
         nr_obj2: natural := NR_MU_OBJECTS;
 
         mass_3_obj: boolean := false;
-        same_bx: boolean := false 
+        same_bx: boolean := false
 
     );
     port(
@@ -174,13 +175,13 @@ entity correlation_conditions_muon is
         mass_div_dr : in mass_div_dr_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         condition_o: out std_logic
     );
-end correlation_conditions_muon; 
+end correlation_conditions_muon;
 
 architecture rtl of correlation_conditions_muon is
 
 -- fixed pipeline structure
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
-    constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
+    constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
 
 --***************************************************************
 -- signals for charge correlation comparison:
@@ -188,9 +189,9 @@ architecture rtl of correlation_conditions_muon is
     signal charge_comp_triple, charge_comp_triple_pipe : muon_charcorr_triple_array := (others => (others => (others => '1')));
 --***************************************************************
 
-    constant mass_vector_width: positive := pt1_width+pt1_width+cosh_cos_width; 
+    constant mass_vector_width: positive := pt1_width+pt1_width+cosh_cos_width;
     type sum_mass_array is array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) of std_logic_vector(mass_vector_width+1 downto 0);
-    signal sum_mass, sum_mass_temp : sum_mass_array := (others => (others => (others => (others => '0'))));   
+    signal sum_mass, sum_mass_temp : sum_mass_array := (others => (others => (others => (others => '0'))));
 
     signal obj1_vs_templ, obj1_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));
     signal obj2_vs_templ, obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
@@ -200,14 +201,14 @@ architecture rtl of correlation_conditions_muon is
     signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) :=
     (others => (others => '1'));
     signal invariant_mass, invariant_mass_temp, invariant_mass_pipe : mass_dim2_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => (others => '0')));
-    signal mass_3_obj_comp, mass_3_obj_comp_pipe : 
+    signal mass_3_obj_comp, mass_3_obj_comp_pipe :
         std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
     signal condition_and_or : std_logic;
 
     signal esums_comp, esums_comp_pipe : std_logic := '0';
-    
+
 begin
-    
+
     obj1_l: for i in slice_low_obj1 to slice_high_obj1 generate
         comp_i: entity work.muon_comparators
             generic map(
@@ -242,7 +243,7 @@ begin
 
     pipeline_p: process(lhc_clk, obj1_vs_templ, obj2_vs_templ, obj3_vs_templ, esums_comp, deta_comp, dphi_comp, dr_comp, mass_comp, mass_3_obj_comp, twobody_pt_comp, charge_comp_double, charge_comp_triple)
         begin
-        if obj_vs_templ_pipeline_stage = false then 
+        if obj_vs_templ_pipeline_stage = false then
             obj1_vs_templ_pipe <= obj1_vs_templ;
             obj2_vs_templ_pipe <= obj2_vs_templ;
             obj3_vs_templ_pipe <= obj3_vs_templ;
@@ -251,7 +252,7 @@ begin
             dphi_comp_pipe <= dphi_comp;
             dr_comp_pipe <= dr_comp;
             mass_comp_pipe <= mass_comp;
-            mass_3_obj_comp_pipe <= mass_3_obj_comp;
+--             mass_3_obj_comp_pipe <= mass_3_obj_comp;
             twobody_pt_comp_pipe <= twobody_pt_comp;
             charge_comp_double_pipe <= charge_comp_double;
             charge_comp_triple_pipe <= charge_comp_triple;
@@ -265,7 +266,7 @@ begin
                 dphi_comp_pipe <= dphi_comp;
                 dr_comp_pipe <= dr_comp;
                 mass_comp_pipe <= mass_comp;
-                mass_3_obj_comp_pipe <= mass_3_obj_comp;
+--                 mass_3_obj_comp_pipe <= mass_3_obj_comp;
                 twobody_pt_comp_pipe <= twobody_pt_comp;
                 charge_comp_double_pipe <= charge_comp_double;
                 charge_comp_triple_pipe <= charge_comp_triple;
@@ -305,8 +306,8 @@ begin
                     )
                 port map(obj2(i), obj2_vs_templ(i,1));
         end generate obj2_l;
-        
-        cuts_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
+
+        cuts_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
             cuts_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
                 same_obj_bx_range_i: if same_bx and (slice_low_obj1 = slice_low_obj2) and (slice_high_obj1 = slice_high_obj2) generate
     -- HB 2017-02-21: optimisation of LUTs and DSP resources: calculations of cuts only for one half of permutations, second half by assignment of "mirrored" indices.
@@ -327,8 +328,8 @@ begin
                                 dr_lower_limit_vector => dr_lower_limit_vector,
                                 mass_upper_limit_vector => mass_upper_limit_vector,
                                 mass_lower_limit_vector => mass_lower_limit_vector,
-                                pt1_width => pt1_width, 
-                                pt2_width => pt2_width, 
+                                pt1_width => pt1_width,
+                                pt2_width => pt2_width,
                                 cosh_cos_precision => mass_cosh_cos_precision,
                                 cosh_cos_width => cosh_cos_width,
                                 pt_sq_threshold_vector => pt_sq_threshold_vector,
@@ -367,7 +368,7 @@ begin
                         twobody_pt_comp(j,i) <= twobody_pt_comp_temp(i,j);
                     end generate if_j_gr_i;
                 end generate same_obj_bx_range_i;
-                
+
                 diffrent_obj_bx_range_i: if not same_bx or (slice_low_obj1 /= slice_low_obj2) or (slice_high_obj1 /= slice_high_obj2) generate
                     cuts_instances_i: entity work.cuts_instances
                         generic map(
@@ -385,8 +386,8 @@ begin
                             dr_lower_limit_vector => dr_lower_limit_vector,
                             mass_upper_limit_vector => mass_upper_limit_vector,
                             mass_lower_limit_vector => mass_lower_limit_vector,
-                            pt1_width => pt1_width, 
-                            pt2_width => pt2_width, 
+                            pt1_width => pt1_width,
+                            pt2_width => pt2_width,
                             cosh_cos_precision => mass_cosh_cos_precision,
                             cosh_cos_width => cosh_cos_width,
                             pt_sq_threshold_vector => pt_sq_threshold_vector,
@@ -418,13 +419,13 @@ begin
         matrix_2_obj_i: if not mass_3_obj generate
         -- HB 2020-08-27: comparison for invariant mass divided by delta R (one pipeline delay inside of the calculation of "mass_div_dr").
             mass_div_dr_sel: if mass_cut = true and mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
-                mass_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
+                mass_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
                     mass_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
                         mass_comp_l1: if same_bx and j>i generate
                             comp_i: entity work.mass_div_dr_comp
                                 generic map(
                                     mass_div_dr_vector_width,
-                                    mass_div_dr_threshold 
+                                    mass_div_dr_threshold
                                 )
                                 port map(
                                     mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0),
@@ -437,7 +438,7 @@ begin
                             comp_i: entity work.mass_div_dr_comp
                                 generic map(
                                     mass_div_dr_vector_width,
-                                    mass_div_dr_threshold 
+                                    mass_div_dr_threshold
                                 )
                                 port map(
                                     mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0),
@@ -447,10 +448,10 @@ begin
                     end generate mass_l_2;
                 end generate mass_l_1;
             end generate mass_div_dr_sel;
-        
+
             charge_double_i: if requested_charge_correlation /= "ig" generate
             -- Charge correlation comparison
-                charge_double_l_1: for i in slice_low_obj1 to slice_high_obj1 generate 
+                charge_double_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
                     charge_double_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
                         obj_same_bx_l: if same_bx = true generate
                             charge_double_if: if j/=i generate
@@ -476,7 +477,7 @@ begin
                 index := 0;
                 obj_vs_templ_vec := (others => '0');
                 condition_and_or_tmp := '0';
-                for i in slice_low_obj1 to slice_high_obj1 loop 
+                for i in slice_low_obj1 to slice_high_obj1 loop
                     for j in slice_low_obj2 to slice_high_obj2 loop
                         if same_bx then
                             if j/=i then
@@ -489,7 +490,7 @@ begin
                         end if;
                     end loop;
                 end loop;
-                for i in 1 to index loop 
+                for i in 1 to index loop
                     -- ORs for matrix
                     condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
                 end loop;
@@ -498,7 +499,7 @@ begin
         end generate matrix_2_obj_i;
 
         mass_3_obj_i: if mass_3_obj generate
-    -- comparator for obj3        
+    -- comparator for obj3
             obj3_l: for i in slice_low_obj3 to slice_high_obj3 generate
                 comp_i: entity work.muon_comparators
                     generic map(
@@ -531,34 +532,25 @@ begin
                     port map(obj3(i), obj3_vs_templ(i,1));
             end generate obj3_l;
 
-    -- condition with mass of 3 objects        
-            l1_sum: for i in 0 to NR_MU_OBJECTS-1 generate
-                l2_sum: for j in 0 to NR_MU_OBJECTS-1 generate
-                    l3_sum: for k in 0 to NR_MU_OBJECTS-1 generate
-                        sum_mass_l: if j>i and k>i and k>j generate
-                            sum_mass_calc_i: entity work.sum_mass_calc
-                                generic map(mass_vector_width)  
-                                port map(invariant_mass(i,j), invariant_mass(i,k), invariant_mass(j,k), sum_mass_temp(i,j,k));
-                            sum_mass(i,j,k) <= sum_mass_temp(i,j,k);
-                            sum_mass(i,k,j) <= sum_mass_temp(i,j,k);
-                            sum_mass(j,i,k) <= sum_mass_temp(i,j,k);
-                            sum_mass(j,k,i) <= sum_mass_temp(i,j,k);
-                            sum_mass(k,i,j) <= sum_mass_temp(i,j,k);
-                            sum_mass(k,j,i) <= sum_mass_temp(i,j,k);
-                        end generate sum_mass_l;
-                    end generate l3_sum;    
-                end generate l2_sum;
-            end generate l1_sum;
-            
-            l1_comp: for i in slice_low_obj1 to slice_high_obj1 generate
-                l2_comp: for j in slice_low_obj2 to slice_high_obj2 generate
-                    l3_comp: for k in slice_low_obj3 to slice_high_obj3 generate
-                        mass_3_obj_comp(i,j,k) <= '1' when sum_mass(i,j,k) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
-                            sum_mass(i,j,k) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
-                    end generate l3_comp;    
-                end generate l2_comp;
-            end generate l1_comp;
-            
+            sum_mass_i: entity work.sum_mass
+                generic map(
+                    slice_low_obj1,
+                    slice_high_obj1,
+                    slice_low_obj2,
+                    slice_high_obj2,
+                    slice_low_obj3,
+                    slice_high_obj3,
+                    mass_upper_limit_vector,
+                    mass_lower_limit_vector,
+                    mass_vector_width,
+                    nr_obj1
+                )
+                port map(
+                    lhc_clk,
+                    invariant_mass,
+                    mass_3_obj_comp_pipe
+                );
+
             charge_triple_i: if requested_charge_correlation /= "ig" generate
             -- Charge correlation comparison
                 charge_triple_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
@@ -590,18 +582,18 @@ begin
                 index := 0;
                 obj_vs_templ_vec := (others => '0');
                 condition_and_or_tmp := '0';
-                for i in slice_low_obj1 to slice_high_obj1 loop 
+                for i in slice_low_obj1 to slice_high_obj1 loop
                     for j in slice_low_obj2 to slice_high_obj2 loop
                         for k in slice_low_obj3 to slice_high_obj3 loop
                             if j/=i and i/=k and j/=k then
                                 index := index + 1;
-                                obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and obj3_vs_templ_pipe(k,1) and 
+                                obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and obj3_vs_templ_pipe(k,1) and
                                     mass_3_obj_comp_pipe(i,j,k) and charge_comp_triple_pipe(i,j,k);
                             end if;
                         end loop;
                     end loop;
                 end loop;
-                for i in 1 to index loop 
+                for i in 1 to index loop
                     -- ORs for matrix
                     condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
                 end loop;
@@ -612,11 +604,11 @@ begin
     end generate not_esums_sel;
 
     esums_sel: if sel_esums generate
-    
+
         -- Comparison with limits.
         delta_l: for i in slice_low_obj1 to slice_high_obj1 generate
             dphi_i: if dphi_cut = true generate
-                dphi_comp(i,0) <= '1' when dphi(i,0) >= dphi_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
+                dphi_comp(i,0) <= '1' when dphi(i,0) >= dphi_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and
                     dphi(i,0) <= dphi_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
             end generate dphi_i;
             mass_i: if mass_cut = true generate
@@ -625,8 +617,8 @@ begin
                         mass_type => mass_type,
                         mass_upper_limit_vector => mass_upper_limit_vector,
                         mass_lower_limit_vector => mass_lower_limit_vector,
-                        pt1_width => pt1_width, 
-                        pt2_width => pt2_width, 
+                        pt1_width => pt1_width,
+                        pt2_width => pt2_width,
                         cosh_cos_width => cosh_cos_width,
                         mass_cosh_cos_precision => mass_cosh_cos_precision
                     )
@@ -640,8 +632,8 @@ begin
             twobody_pt_i: if twobody_pt_cut = true generate
                 twobody_pt_calculator_i: entity work.twobody_pt_calculator
                     generic map(
-                        pt1_width => pt1_width, 
-                        pt2_width => pt2_width, 
+                        pt1_width => pt1_width,
+                        pt2_width => pt2_width,
                         pt_sq_threshold_vector => pt_sq_threshold_vector,
                         sin_cos_width => sin_cos_width,
                         pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
@@ -695,11 +687,11 @@ begin
         end process matrix_dphi_mass_p;
 
     end generate esums_sel;
-    
+
 -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(lhc_clk, condition_and_or)
         begin
-            if conditions_pipeline_stage = false then 
+            if conditions_pipeline_stage = false then
                 condition_o <= condition_and_or;
             else
                 if (lhc_clk'event and lhc_clk = '1') then
@@ -707,5 +699,5 @@ begin
                 end if;
             end if;
     end process;
-    
+
 end architecture rtl;

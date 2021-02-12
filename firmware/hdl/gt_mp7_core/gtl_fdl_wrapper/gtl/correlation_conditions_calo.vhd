@@ -171,10 +171,10 @@ entity correlation_conditions_calo is
         dphi: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
         pt2 : in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
-        cosh_deta : in calo_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        cos_dphi : in calo_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
---         cosh_deta : in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
---         cos_dphi : in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+--         cosh_deta : in calo_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+--         cos_dphi : in calo_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        cosh_deta : in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        cos_dphi : in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         cos_phi_1_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
         cos_phi_2_integer : in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
         sin_phi_1_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
@@ -219,8 +219,8 @@ architecture rtl of correlation_conditions_calo is
 
     signal esums_comp, esums_comp_pipe : std_logic := '0';
 
-    signal cosh_deta_int : common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-    signal cos_dphi_int : common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+--     signal cosh_deta_int : common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+--     signal cos_dphi_int : common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
 
 begin
 
@@ -328,13 +328,13 @@ begin
             end generate obj2_l;
         end generate muon_obj2_i;
 
-        type_conv_l_1: for i in 0 to nr_obj1-1 generate
-            type_conv_l_2: for j in 0 to nr_obj2-1 generate
-                cosh_deta_int(i,j)(cosh_cos_width-1 downto 0) <= cosh_deta(i,j)(cosh_cos_width-1 downto 0);
-                cos_dphi_int(i,j)(cosh_cos_width-1 downto 0) <= cos_dphi(i,j)(cosh_cos_width-1 downto 0);
-            end generate type_conv_l_2;
-        end generate type_conv_l_1;
-
+--         type_conv_l_1: for i in 0 to nr_obj1-1 generate
+--             type_conv_l_2: for j in 0 to nr_obj2-1 generate
+--                 cosh_deta_int(i,j)(cosh_cos_width-1 downto 0) <= cosh_deta(i,j)(cosh_cos_width-1 downto 0);
+--                 cos_dphi_int(i,j)(cosh_cos_width-1 downto 0) <= cos_dphi(i,j)(cosh_cos_width-1 downto 0);
+--             end generate type_conv_l_2;
+--         end generate type_conv_l_1;
+--
         correlation_cuts_i: entity work.correlation_cuts
             generic map(
                 slice_low_obj1,
@@ -374,8 +374,8 @@ begin
                 dphi => dphi,
                 pt1 => pt1,
                 pt2 => pt2,
-                cosh_deta => cosh_deta_int,
-                cos_dphi => cos_dphi_int,
+                cosh_deta => cosh_deta,
+                cos_dphi => cos_dphi,
                 cos_phi_1_integer => cos_phi_1_integer,
                 cos_phi_2_integer => cos_phi_2_integer,
                 sin_phi_1_integer => sin_phi_1_integer,
@@ -689,10 +689,10 @@ begin
 
     esums_sel: if sel_esums generate
 
-        type_conv_l_1: for i in 0 to nr_obj1-1 generate
-            cos_dphi_int(i,0)(cosh_cos_width-1 downto 0) <= cos_dphi(i,0)(cosh_cos_width-1 downto 0);
-        end generate type_conv_l_1;
-
+--         type_conv_l_1: for i in 0 to nr_obj1-1 generate
+--             cos_dphi_int(i,0)(cosh_cos_width-1 downto 0) <= cos_dphi(i,0)(cosh_cos_width-1 downto 0);
+--         end generate type_conv_l_1;
+--
         esums_i: entity work.esums_4_corr_cond
             generic map(
                 slice_low_obj1,
@@ -729,7 +729,8 @@ begin
                 dphi,
                 pt1,
                 pt2,
-                cos_dphi_int,
+--                 cos_dphi_int,
+                cos_dphi,
                 cos_phi_1_integer,
                 cos_phi_2_integer,
                 sin_phi_1_integer,

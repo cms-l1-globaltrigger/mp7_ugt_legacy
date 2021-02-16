@@ -58,6 +58,7 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/common/correlation_cuts.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/esums_4_corr_cond.vhd
 #
 src gt_mp7_core/gtl_fdl_wrapper/gtl/pipelines.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/obj_parameter.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd

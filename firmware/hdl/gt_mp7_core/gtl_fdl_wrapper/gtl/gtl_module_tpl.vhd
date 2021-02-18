@@ -2,9 +2,9 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
--- HB 2021-02-08: v1.13.0: Changed directory structure in gtl (created sub dir "common" for modules, wihich are not instantiated in gtl_module.vhd). 
--- HB 2021-02-05: v1.12.0: Implemented comb_conditions.vhd, correlation_conditions_calo.vhd and correlation_conditions_muon.vhd instead of calo_conditions.vhd, muon_conditions.vhd and calo_calo_correlation_condition.vhd, muon_muon_correlation_condition.vhd, etc. 
--- HB 2020-12-14: v1.11.0: Changes logic for phi cuts (similar to eta cuts). Same order in generics calo and muon conditions and for all correlation conditions (simplifies templates of VHDL Producer). 
+-- HB 2021-02-18: v1.13.0: Changed directory structure in gtl (created sub dir "common" for modules, which are not instantiated in gtl_module.vhd). Added new modules: conv_eta_phi.vhd, obj_parameter.vhd, differences.vhd and cosh_deta_cos_dphi.vhd.
+-- HB 2021-02-05: v1.12.0: Implemented comb_conditions.vhd, correlation_conditions_calo.vhd and correlation_conditions_muon.vhd instead of calo_conditions.vhd, muon_conditions.vhd and calo_calo_correlation_condition.vhd, muon_muon_correlation_condition.vhd, etc.
+-- HB 2020-12-14: v1.11.0: Changes logic for phi cuts (similar to eta cuts). Same order in generics calo and muon conditions and for all correlation conditions (simplifies templates of VHDL Producer).
 -- HB 2020-10-09: v1.10.1: Added module pipelines (including modules for ext_cond_pipe and centrality_pipe processes).
 -- HB 2020-08-25: v1.10.0: Implemented new muon structure with "unconstraint pt" and "impact parameter". Added files for "invariant mass with 3 objects" and "invariant mass divided by delta R".
 -- HB 2020-02-03: v1.9.4: Changed output pipeline code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
@@ -15,7 +15,7 @@
 -- HB 2019-06-14: v1.8.0: Added possibility for "five eta cuts" in conditions.
 -- HB 2019-05-02: v1.7.0: Added new modules (calo_cond_matrix.vhd, calo_cuts.vhd), changed calo_condition_v6_quad.vhd and calo_condition_v7_no_quad.vhd.
 -- HB 2018-08-06: v1.6.0: Added ports and pipelines for "Asymmetry" (asymet_data, ...) and "Centrality" (centrality_data).
--- HB 2017-10-06: v1.5.0: Used new modules for use of std_logic_vector for limits of correlation cuts 
+-- HB 2017-10-06: v1.5.0: Used new modules for use of std_logic_vector for limits of correlation cuts
 -- HB 2017-09-15: v1.4.1: Bug fix in calo_calo_correlation_condition_v3.vhd
 -- HB 2017-09-08: v1.4.0: Updated modules for correct use of object slices
 -- HB 2017-07-03: v1.3.3: Charge correlation comparison inserted for different bx data (bug fix) in muon_muon_correlation_condition_v2.vhd
@@ -82,7 +82,7 @@ architecture rtl of gtl_module is
         douta : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
     END COMPONENT;
-    
+
 -- HB 2016-03-08: "workaraound" for VHDL-Producer output
     constant NR_MU_OBJECTS: positive := NR_MUON_OBJECTS;
 
@@ -130,7 +130,7 @@ architecture rtl of gtl_module is
     signal algo : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
 
 -- ===============================================================================================
--- VHDL Producer inserted following signals 
+-- VHDL Producer inserted following signals
 -- ===============================================================================================
 {{gtl_module_signals}}
 
@@ -167,7 +167,7 @@ pipelines_i: entity work.pipelines
         cent0_bx_m2, cent1_bx_m2, cent2_bx_m2, cent3_bx_m2, cent4_bx_m2, cent5_bx_m2, cent6_bx_m2, cent7_bx_m2,
         external_conditions, ext_cond_bx_p2, ext_cond_bx_p1, ext_cond_bx_0, ext_cond_bx_m1, ext_cond_bx_m2
     );
-        
+
 -- ===============================================================================================
 -- VHDL Producer inserted following instances (for calculations, conditions and algos)
 -- ===============================================================================================

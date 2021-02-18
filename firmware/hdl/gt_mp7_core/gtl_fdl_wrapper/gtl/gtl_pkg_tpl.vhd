@@ -2,7 +2,8 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
--- HB 2021-02-16: addeditional constants for HTMHF.
+-- HB 2021-02-18: additional constants and types (for cosh_deta_cos_dphi.vhd).
+-- HB 2021-02-16: additional constants for HTMHF.
 -- HB 2021-02-11: added constant for intermediate pipeline in conditions.
 -- HB 2021-01-25: added constants for bit width and types of all object cuts (MAX_PT_BITS, etc., renamed MAX_MUON_PHI_BITS to MUON_PHI_BITS).
 -- HB 2021-01-22: added constant (MAX_OBJECT_BITS) and type (common_objects_array).
@@ -1020,6 +1021,12 @@ constant MU_DPHI_BINS_WIDTH : positive := 10; -- => int(log2(MUON_DPHI_BINS))+1
 
 type muon_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DETA_BINS_WIDTH-1 downto 0);
 type muon_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DPHI_BINS_WIDTH-1 downto 0);
+
+constant COMMON_DETA_BINS_WIDTH : positive := max(CALO_DETA_BINS_WIDTH, MU_DETA_BINS_WIDTH);
+constant COMMON_DPHI_BINS_WIDTH : positive := max(CALO_DPHI_BINS_WIDTH, MU_DPHI_BINS_WIDTH);
+
+type common_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(COMMON_DETA_BINS_WIDTH-1 downto 0);
+type common_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(COMMON_DPHI_BINS_WIDTH-1 downto 0);
 
 -- full muon bins would exceed BRAM resources, therefore reduced bins for ROMs are used
 constant MUON_DETA_BINS_ROM : positive := 225; -- double resolution of calos (half of muon eta bins)

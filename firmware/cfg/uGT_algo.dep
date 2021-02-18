@@ -36,6 +36,8 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/common/eta_windows_comp.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/sub_signed_eta.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/phi_windows_comp.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/sub_unsigned_phi.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/common/sub_eta_integer_obj_vs_obj.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/common/sub_phi_integer_obj_vs_obj.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/calo_comparators.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/calo_cond_matrix.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/calo_cond_matrix_orm.vhd
@@ -61,8 +63,6 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/pipelines.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/conv_eta_phi.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/obj_parameter.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/differences.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/cosh_deta_cos_dphi.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_calculator.vhd

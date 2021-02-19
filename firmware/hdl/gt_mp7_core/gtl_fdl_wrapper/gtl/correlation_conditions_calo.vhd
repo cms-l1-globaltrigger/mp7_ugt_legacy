@@ -7,6 +7,7 @@
 -- 4. calo esums.
 
 -- Version history:
+-- HB 2021-02-19: updated instances of comparator modules and condition output pipeline.
 -- HB 2020-02-11: replaced code with "orm_cuts", "sum_mass" and "correlation_cuts" instances.
 -- HB 2020-01-27: added calo esums correlation.
 -- HB 2020-01-15: added mass for 3 objects (same type).
@@ -186,47 +187,39 @@ end correlation_conditions_calo;
 
 architecture rtl of correlation_conditions_calo is
 
--- fixed pipeline structure
-    constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
-    constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
-
     constant mass_vector_width: positive := pt1_width+pt1_width+cosh_cos_width;
     type sum_mass_array is array(0 to nr_obj1-1, 0 to nr_obj1-1, 0 to nr_obj1-1) of std_logic_vector(mass_vector_width+1 downto 0);
     signal sum_mass, sum_mass_temp : sum_mass_array := (others => (others => (others => (others => '0'))));
 
-    signal deta_orm_comp_12, deta_orm_comp_12_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
-    signal deta_orm_comp_13, deta_orm_comp_13_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
-    signal deta_orm_comp_23, deta_orm_comp_23_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
-    signal dphi_orm_comp_12, dphi_orm_comp_12_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
-    signal dphi_orm_comp_13, dphi_orm_comp_13_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
-    signal dphi_orm_comp_23, dphi_orm_comp_23_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
-    signal dr_orm_comp_12, dr_orm_comp_12_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
-    signal dr_orm_comp_13, dr_orm_comp_13_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
-    signal dr_orm_comp_23, dr_orm_comp_23_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
-    signal obj1_vs_templ, obj1_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));
-    signal obj2_vs_templ, obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
-    signal obj3_vs_templ, obj3_vs_templ_pipe : std_logic_2dim_array(slice_low_obj3 to slice_high_obj3, 1 to 1) := (others => (others => '0'));
+    signal deta_orm_comp_12_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
+    signal deta_orm_comp_13_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
+    signal deta_orm_comp_23_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
+    signal dphi_orm_comp_12_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
+    signal dphi_orm_comp_13_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
+    signal dphi_orm_comp_23_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
+    signal dr_orm_comp_12_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
+    signal dr_orm_comp_13_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
+    signal dr_orm_comp_23_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
+    signal obj1_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));
+    signal obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
+    signal obj3_vs_templ_pipe : std_logic_2dim_array(slice_low_obj3 to slice_high_obj3, 1 to 1) := (others => (others => '0'));
 -- HB 2017-03-27: default values of cut comps -> '1' because of AND in formular of obj_vs_templ_vec
-    signal deta_comp, deta_comp_temp, deta_comp_pipe, dphi_comp, dphi_comp_temp, dphi_comp_pipe, dr_comp, dr_comp_temp, dr_comp_pipe, mass_comp, mass_comp_temp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
+    signal deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
     signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) :=
     (others => (others => '1'));
--- HB 2021-02-11: invariant_mass used for 3 object (body) mass.
+-- HB 2021-02-11: invariant_mass used for 3 object  (body) mass.
 -- Remark: actually 3 object (body) mass only for objects of same type and bunch-crossing !!!
-    signal invariant_mass, invariant_mass_temp : mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj1-1) := (others => (others => (others => '0')));
-    signal mass_3_obj_comp, mass_3_obj_comp_pipe :
-        std_logic_3dim_array(0 to nr_obj1-1, 0 to nr_obj1-1, 0 to nr_obj1-1) := (others => (others => (others => '0')));
+    signal invariant_mass: mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj1-1) := (others => (others => (others => '0')));
+    signal mass_3_obj_comp_pipe : std_logic_3dim_array(0 to nr_obj1-1, 0 to nr_obj1-1, 0 to nr_obj1-1) := (others => (others => (others => '0')));
     signal condition_and_or : std_logic;
-
-    signal esums_comp, esums_comp_pipe : std_logic := '0';
-
---     signal cosh_deta_int : common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
---     signal cos_dphi_int : common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
 
 begin
 
     obj1_l: for i in slice_low_obj1 to slice_high_obj1 generate
         obj1_comp_i: entity work.calo_comparators
-            generic map(pt_ge_mode_obj1, type_obj1,
+            generic map(
+                pt_ge_mode_obj1,
+                type_obj1,
                 pt_threshold_obj1,
                 nr_eta_windows_obj1,
                 eta_w1_upper_limit_obj1,
@@ -246,23 +239,8 @@ begin
                 phi_w2_lower_limit_obj1,
                 iso_lut_obj1
             )
-            port map(obj1(i), obj1_vs_templ(i,1));
+            port map(lhc_clk, obj1(i), obj1_vs_templ_pipe(i,1));
     end generate obj1_l;
-
-    pipeline_p: process(lhc_clk, obj1_vs_templ, obj2_vs_templ, obj3_vs_templ, esums_comp, deta_orm_comp_12, dphi_orm_comp_12, dr_orm_comp_12, deta_orm_comp_13, dphi_orm_comp_13, dr_orm_comp_13, deta_orm_comp_23, dphi_orm_comp_23, dr_orm_comp_23, deta_comp, dphi_comp, dr_comp, mass_comp, mass_3_obj_comp, twobody_pt_comp)
-        begin
-        if obj_vs_templ_pipeline_stage = false then
-            obj1_vs_templ_pipe <= obj1_vs_templ;
-            obj2_vs_templ_pipe <= obj2_vs_templ;
-            obj3_vs_templ_pipe <= obj3_vs_templ;
-        else
-            if (lhc_clk'event and lhc_clk = '1') then
-                obj1_vs_templ_pipe <= obj1_vs_templ;
-                obj2_vs_templ_pipe <= obj2_vs_templ;
-                obj3_vs_templ_pipe <= obj3_vs_templ;
-            end if;
-        end if;
-    end process;
 
     not_esums_sel: if not sel_esums generate
         calo_obj2_i: if type_obj2 /= MU_TYPE generate
@@ -290,7 +268,7 @@ begin
                         phi_w2_lower_limit_obj2,
                         iso_lut_obj2
                     )
-                    port map(obj2(i), obj2_vs_templ(i,1));
+                    port map(lhc_clk, obj2(i), obj2_vs_templ_pipe(i,1));
             end generate obj2_l;
         end generate calo_obj2_i;
 
@@ -324,17 +302,10 @@ begin
                         upt_lower_limit_obj2,
                         ip_lut_obj2
                         )
-                    port map(muon(i), obj2_vs_templ(i,1));
+                    port map(lhc_clk, muon(i), obj2_vs_templ_pipe(i,1));
             end generate obj2_l;
         end generate muon_obj2_i;
 
---         type_conv_l_1: for i in 0 to nr_obj1-1 generate
---             type_conv_l_2: for j in 0 to nr_obj2-1 generate
---                 cosh_deta_int(i,j)(cosh_cos_width-1 downto 0) <= cosh_deta(i,j)(cosh_cos_width-1 downto 0);
---                 cos_dphi_int(i,j)(cosh_cos_width-1 downto 0) <= cos_dphi(i,j)(cosh_cos_width-1 downto 0);
---             end generate type_conv_l_2;
---         end generate type_conv_l_1;
---
         correlation_cuts_i: entity work.correlation_cuts
             generic map(
                 slice_low_obj1,
@@ -380,11 +351,11 @@ begin
                 cos_phi_2_integer => cos_phi_2_integer,
                 sin_phi_1_integer => sin_phi_1_integer,
                 sin_phi_2_integer => sin_phi_2_integer,
+                invariant_mass => invariant_mass,
                 deta_comp_pipe => deta_comp_pipe,
                 dphi_comp_pipe => dphi_comp_pipe,
                 dr_comp_pipe => dr_comp_pipe,
                 mass_comp_pipe => mass_comp_pipe,
-                invariant_mass => invariant_mass,
                 twobody_pt_comp_pipe => twobody_pt_comp_pipe
             );
 
@@ -479,7 +450,7 @@ begin
                         phi_w2_lower_limit_obj3,
                         iso_lut_obj3
                     )
-                    port map(obj3(i), obj3_vs_templ(i,1));
+                    port map(lhc_clk, obj3(i), obj3_vs_templ_pipe(i,1));
             end generate obj3_l;
         end generate comp_obj3_i;
 
@@ -689,10 +660,6 @@ begin
 
     esums_sel: if sel_esums generate
 
---         type_conv_l_1: for i in 0 to nr_obj1-1 generate
---             cos_dphi_int(i,0)(cosh_cos_width-1 downto 0) <= cos_dphi(i,0)(cosh_cos_width-1 downto 0);
---         end generate type_conv_l_1;
---
         esums_i: entity work.esums_4_corr_cond
             generic map(
                 slice_low_obj1,
@@ -738,110 +705,12 @@ begin
                 condition_and_or
             );
 
---         -- Comparison with limits.
---         delta_l: for i in slice_low_obj1 to slice_high_obj1 generate
---             dphi_i: if dphi_cut = true generate
---                 dphi_comp(i,0) <= '1' when dphi(i,0) >= dphi_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and
---                     dphi(i,0) <= dphi_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
---             end generate dphi_i;
---             mass_i: if mass_cut = true generate
---                 mass_calculator_i: entity work.mass_calculator
---                     generic map(
---                         mass_type => mass_type,
---                         mass_upper_limit_vector => mass_upper_limit_vector,
---                         mass_lower_limit_vector => mass_lower_limit_vector,
---                         pt1_width => pt1_width,
---                         pt2_width => pt2_width,
---                         cosh_cos_width => cosh_cos_width,
---                         mass_cosh_cos_precision => mass_cosh_cos_precision
---                     )
---                     port map(
---                         pt1 => pt1(i)(pt1_width-1 downto 0),
---                         pt2 => pt2(0)(pt2_width-1 downto 0),
---                         cos_dphi => cos_dphi(i,0)(cosh_cos_width-1 downto 0),
---                         mass_comp => mass_comp(i,0)
---                     );
---             end generate mass_i;
---             twobody_pt_i: if twobody_pt_cut = true generate
---                 twobody_pt_calculator_i: entity work.twobody_pt_calculator
---                     generic map(
---                         pt1_width => pt1_width,
---                         pt2_width => pt2_width,
---                         pt_sq_threshold_vector => pt_sq_threshold_vector,
---                         sin_cos_width => sin_cos_width,
---                         pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
---                     )
---                     port map(
---                         pt1 => pt1(i)(pt1_width-1 downto 0),
---                         pt2 => pt2(0)(pt2_width-1 downto 0),
---                         cos_phi_1_integer => cos_phi_1_integer(i),
---                         cos_phi_2_integer => cos_phi_2_integer(0),
---                         sin_phi_1_integer => sin_phi_1_integer(i),
---                         sin_phi_2_integer => sin_phi_2_integer(0),
---                         pt_square_comp => twobody_pt_comp(i,0)
---                 );
---             end generate twobody_pt_i;
---         end generate delta_l;
-
---         esums_comparators_i: entity work.esums_comparators
---             generic map(
---                 et_ge_mode => et_ge_mode_esums,
---                 obj_type => obj_type_esums,
---                 et_threshold => et_threshold_esums,
---                 nr_phi_windows => nr_phi_windows_esums,
---                 phi_w1_upper_limit => phi_w1_upper_limit_esums,
---                 phi_w1_lower_limit => phi_w1_lower_limit_esums,
---                 phi_w2_upper_limit => phi_w2_upper_limit_esums,
---                 phi_w2_lower_limit => phi_w2_lower_limit_esums
---             )
---             port map(
---                 data_i => esums,
---                 comp_o => esums_comp
---             );
---
---         pipeline_p: process(lhc_clk, dphi_comp, mass_comp, twobody_pt_comp)
---             begin
---             if obj_vs_templ_pipeline_stage = false then
---                 esums_comp_pipe <= esums_comp;
---                 dphi_comp_pipe <= dphi_comp;
---                 mass_comp_pipe <= mass_comp;
---                 twobody_pt_comp_pipe <= twobody_pt_comp;
---             else
---                 if (lhc_clk'event and lhc_clk = '1') then
---                     esums_comp_pipe <= esums_comp;
---                     dphi_comp_pipe <= dphi_comp;
---                     mass_comp_pipe <= mass_comp;
---                     twobody_pt_comp_pipe <= twobody_pt_comp;
---                 end if;
---             end if;
---         end process;
---
---         -- "Matrix" of permutations in an and-or-structure.
---         matrix_dphi_mass_p: process(obj1_vs_templ_pipe, esums_comp_pipe, dphi_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
---             variable index : integer := 0;
---             variable obj_vs_templ_vec : std_logic_vector((slice_high_obj1-slice_low_obj1+1) downto 1) := (others => '0');
---             variable condition_and_or_tmp : std_logic := '0';
---         begin
---             index := 0;
---             obj_vs_templ_vec := (others => '0');
---             condition_and_or_tmp := '0';
---             for i in slice_low_obj1 to slice_high_obj1 loop
---                     index := index + 1;
---                     obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and esums_comp_pipe and dphi_comp_pipe(i,0) and mass_comp_pipe(i,0) and twobody_pt_comp_pipe(i,0);
---             end loop;
---             for i in 1 to index loop
---                 -- ORs for matrix
---                 condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
---             end loop;
---             condition_and_or <= condition_and_or_tmp;
---         end process matrix_dphi_mass_p;
---
     end generate esums_sel;
 
 -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(lhc_clk, condition_and_or)
         begin
-            if conditions_pipeline_stage = false then
+            if CONDITIONS_PIPELINE = false then
                 condition_o <= condition_and_or;
             else
                 if (lhc_clk'event and lhc_clk = '1') then

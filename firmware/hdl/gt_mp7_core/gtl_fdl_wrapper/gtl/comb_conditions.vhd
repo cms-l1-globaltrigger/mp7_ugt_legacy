@@ -3,6 +3,7 @@
 -- Condition module for all combination conditions.
 
 -- Version history:
+-- HB 2021-02-19: updated condition output.
 -- HB 2020-02-11: replaced code with "orm_cuts" instances.
 -- HB 2021-02-03: first design.
 
@@ -129,30 +130,23 @@ architecture rtl of comb_conditions is
     constant nr_objects_slice_3_int: natural := slice_3_high_obj1-slice_3_low_obj1+1;
     constant nr_objects_slice_4_int: natural := slice_4_high_obj1-slice_4_low_obj1+1;
 
--- fixed pipeline structure, 2 stages total
-    constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
-    constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
-
-    signal obj1_slice_1_vs_templ, obj1_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array(slice_1_low_obj1 to slice_1_high_obj1, 1 to 1);
-    signal obj1_slice_2_vs_templ, obj1_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(slice_2_low_obj1 to slice_2_high_obj1, 1 to 1);
-    signal obj1_slice_3_vs_templ, obj1_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(slice_3_low_obj1 to slice_3_high_obj1, 1 to 1);
-    signal obj1_slice_4_vs_templ, obj1_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(slice_4_low_obj1 to slice_4_high_obj1, 1 to 1);
+    signal obj1_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array(slice_1_low_obj1 to slice_1_high_obj1, 1 to 1);
+    signal obj1_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(slice_2_low_obj1 to slice_2_high_obj1, 1 to 1);
+    signal obj1_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(slice_3_low_obj1 to slice_3_high_obj1, 1 to 1);
+    signal obj1_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(slice_4_low_obj1 to slice_4_high_obj1, 1 to 1);
 
 --***************************************************************
 -- signals for charge correlation comparison:
 -- charge correlation inputs are compared with requested charge (given by TME)
-    signal charge_comp_double : muon_charcorr_double_array := (others => (others => '0'));
     signal charge_comp_double_pipe : muon_charcorr_double_array;
-    signal charge_comp_triple : muon_charcorr_triple_array := (others => (others => (others => '0')));
     signal charge_comp_triple_pipe : muon_charcorr_triple_array;
-    signal charge_comp_quad : muon_charcorr_quad_array := (others => (others => (others => (others => '0'))));
     signal charge_comp_quad_pipe : muon_charcorr_quad_array;
 --***************************************************************
 
-    signal deta_orm_comp, deta_orm_comp_pipe : std_logic_2dim_array(0 to MAX_CALO_OBJECTS-1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
-    signal dphi_orm_comp, dphi_orm_comp_pipe : std_logic_2dim_array(0 to MAX_CALO_OBJECTS-1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
-    signal dr_orm_comp, dr_orm_comp_pipe : std_logic_2dim_array(0 to MAX_CALO_OBJECTS-1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
-    signal obj2_vs_templ, obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
+    signal deta_orm_comp_pipe : std_logic_2dim_array(0 to MAX_CALO_OBJECTS-1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
+    signal dphi_orm_comp_pipe : std_logic_2dim_array(0 to MAX_CALO_OBJECTS-1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
+    signal dr_orm_comp_pipe : std_logic_2dim_array(0 to MAX_CALO_OBJECTS-1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
+    signal obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
 
     signal condition_and_or : std_logic;
 
@@ -186,7 +180,8 @@ begin
                 iso_luts_obj1
             )
             port map(
-                obj1_calo, obj1_slice_1_vs_templ, obj1_slice_2_vs_templ, obj1_slice_3_vs_templ, obj1_slice_4_vs_templ
+                lhc_clk,
+                obj1_calo, obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe
             );
 
         -- "Matrix" of permutations in an and-or-structure.
@@ -199,7 +194,8 @@ begin
                 slice_4_low_obj1, slice_4_high_obj1,
                 nr_templates
             )
-            port map(lhc_clk,
+            port map(
+                lhc_clk,
                 obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe,
                 twobody_pt_comp_pipe,
                 condition_o
@@ -211,7 +207,8 @@ begin
         -- Instantiation of object cuts for obj2 - overlap removal object.
         obj2_l: for i in slice_low_obj2 to slice_high_obj2 generate
             obj2_comp_i: entity work.calo_comparators
-                generic map(pt_ge_mode_obj2, type_obj2,
+                generic map(
+                    pt_ge_mode_obj2, type_obj2,
                     pt_threshold_obj2,
                     nr_eta_windows_obj2,
                     eta_w1_upper_limit_obj2, eta_w1_lower_limit_obj2,
@@ -227,7 +224,7 @@ begin
                     iso_lut_obj2
                 )
                 port map(
-                    obj2(i), obj2_vs_templ(i,1)
+                    lhc_clk, obj2(i), obj2_vs_templ_pipe(i,1)
                 );
         end generate obj2_l;
 
@@ -267,7 +264,8 @@ begin
                 nr_templates,
                 slice_low_obj2, slice_high_obj2
             )
-            port map(lhc_clk,
+            port map(
+                lhc_clk,
                 obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe,
                 obj2_vs_templ_pipe,
                 twobody_pt_comp_pipe,
@@ -300,13 +298,13 @@ begin
                 ip_luts_obj1
             )
             port map(
-                obj1_muon, obj1_slice_1_vs_templ, obj1_slice_2_vs_templ, obj1_slice_3_vs_templ, obj1_slice_4_vs_templ
+                lhc_clk,
+                obj1_muon, obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe
             );
 
         -- Instantiation of charge correlation matrix.
         charge_corr_matrix_i: entity work.muon_charge_corr_matrix
             generic map(
-                obj_vs_templ_pipeline_stage,
                 slice_1_low_obj1, slice_1_high_obj1,
                 slice_2_low_obj1, slice_2_high_obj1,
                 slice_3_low_obj1, slice_3_high_obj1,
@@ -314,7 +312,8 @@ begin
                 nr_templates,
                 requested_charge_correlation
             )
-            port map(lhc_clk,
+            port map(
+                lhc_clk,
                 ls_charcorr_double, os_charcorr_double,
                 ls_charcorr_triple, os_charcorr_triple,
                 ls_charcorr_quad, os_charcorr_quad,
@@ -331,7 +330,8 @@ begin
                 slice_4_low_obj1, slice_4_high_obj1,
                 nr_templates
             )
-            port map(lhc_clk,
+            port map(
+                lhc_clk,
                 obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe,
                 charge_comp_double_pipe, charge_comp_triple_pipe, charge_comp_quad_pipe, twobody_pt_comp_pipe, twobody_upt_comp_pipe,
                 condition_o
@@ -339,29 +339,13 @@ begin
     end generate muon_i;
 
 -- Pipeline stage for obj_vs_templ
-    obj_vs_templ_pipeline_p: process(lhc_clk, obj1_slice_1_vs_templ, obj1_slice_2_vs_templ, obj1_slice_3_vs_templ, obj1_slice_4_vs_templ, obj2_vs_templ, deta_orm_comp, dphi_orm_comp, dr_orm_comp)
+    obj_vs_templ_pipeline_p: process(lhc_clk, twobody_pt_comp, twobody_upt_comp)
     begin
-        if obj_vs_templ_pipeline_stage = false then
-            obj1_slice_1_vs_templ_pipe <= obj1_slice_1_vs_templ;
-            obj1_slice_2_vs_templ_pipe <= obj1_slice_2_vs_templ;
-            obj1_slice_3_vs_templ_pipe <= obj1_slice_3_vs_templ;
-            obj1_slice_4_vs_templ_pipe <= obj1_slice_4_vs_templ;
-            obj2_vs_templ_pipe <= obj2_vs_templ;
---             deta_orm_comp_pipe <= deta_orm_comp;
---             dphi_orm_comp_pipe <= dphi_orm_comp;
---             dr_orm_comp_pipe <= dr_orm_comp;
+        if INTERMEDIATE_PIPELINE = false then
             twobody_pt_comp_pipe <= twobody_pt_comp;
             twobody_upt_comp_pipe <= twobody_upt_comp;
         else
             if (lhc_clk'event and lhc_clk = '1') then
-                obj1_slice_1_vs_templ_pipe <= obj1_slice_1_vs_templ;
-                obj1_slice_2_vs_templ_pipe <= obj1_slice_2_vs_templ;
-                obj1_slice_3_vs_templ_pipe <= obj1_slice_3_vs_templ;
-                obj1_slice_4_vs_templ_pipe <= obj1_slice_4_vs_templ;
-                obj2_vs_templ_pipe <= obj2_vs_templ;
-    --             deta_orm_comp_pipe <= deta_orm_comp;
-    --             dphi_orm_comp_pipe <= dphi_orm_comp;
-    --             dr_orm_comp_pipe <= dr_orm_comp;
                 twobody_pt_comp_pipe <= twobody_pt_comp;
                 twobody_upt_comp_pipe <= twobody_upt_comp;
             end if;

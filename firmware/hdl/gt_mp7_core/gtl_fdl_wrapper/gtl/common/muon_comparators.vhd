@@ -3,6 +3,7 @@
 -- Comparators for transverse momentum, pseudorapidity, azimuth angle, quality and isolation of muon objects
 
 -- Version history:
+-- HB 2021-02-19: added output register (with selection).
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
 -- HB 2020-06-08: inserted comparators for "unconstraint pt" [upt] and "impact parameter" [ip] of new muon structure.
 -- HB 2019-06-14: updated for "five eta cuts". Used phi_windows_comp.
@@ -44,9 +45,10 @@ entity muon_comparators is
         upt_cut : boolean;
         upt_upper_limit : std_logic_vector;
         upt_lower_limit : std_logic_vector;
-        ip_lut : std_logic_vector        
+        ip_lut : std_logic_vector
     );
     port(
+        lhc_clk : in std_logic;
         data_i : in std_logic_vector;
         comp_o : out std_logic
     );
@@ -73,7 +75,9 @@ architecture rtl of muon_comparators is
     signal charge_comp : std_logic;
     signal upt_comp : std_logic;
     signal ip_comp : std_logic;
-    
+
+    signal comp_int : std_logic;
+
     signal no_muon : std_logic;
 
 begin
@@ -112,7 +116,7 @@ begin
     charge <= data_i(D_S_I_MUON.charge_high downto D_S_I_MUON.charge_low);
     upt <= data_i(D_S_I_MUON.upt_high downto D_S_I_MUON.upt_low);
     ip <= data_i(D_S_I_MUON.ip_high downto D_S_I_MUON.ip_low);
-    
+
 -- HB 2015-08-28: inserted check for "no muon" (all object parameters = 0)
     no_muon <= '1' when data_i = ZERO else '0';
 
@@ -160,7 +164,7 @@ begin
         );
 
 -- Comparator for requested charge
--- charge_high = charge valid, charge_low = charge sign (positive or negative), 
+-- charge_high = charge valid, charge_low = charge sign (positive or negative),
     charge_comp <= '1' when charge = "10" and requested_charge = "pos" else -- charge sign = '0' => positive
                    '1' when charge = "11" and requested_charge = "neg" else -- charge sign = '1' => negative
                    '1' when requested_charge = "ign" else '0';
@@ -174,10 +178,10 @@ begin
 -- Comparator for Pt unconstraint
     upt_cut_p: process(upt)
     begin
-        if not upt_cut then 
+        if not upt_cut then
             upt_comp <= '1';
         else
-            if (upt >= upt_lower_limit and upt <= upt_upper_limit) then 
+            if (upt >= upt_lower_limit and upt <= upt_upper_limit) then
                 upt_comp <= '1';
             else
                 upt_comp <= '0';
@@ -189,6 +193,17 @@ begin
     ip_comp <= ip_lut(CONV_INTEGER(ip)); -- 4 bit LUT for impact parameter, because of 2 bits impact parameter
 
 -- Comparators AND
-    comp_o <= pt_comp and eta_comp and phi_comp and qual_comp and iso_comp and charge_comp and upt_comp and ip_comp and not no_muon;
+    comp_int <= pt_comp and eta_comp and phi_comp and qual_comp and iso_comp and charge_comp and upt_comp and ip_comp and not no_muon;
+
+    pipeline_p: process(lhc_clk, comp_int)
+        begin
+        if INTERMEDIATE_PIPELINE = false then
+            comp_o <= comp_int;
+        else
+            if (lhc_clk'event and lhc_clk = '1') then
+                comp_o <= comp_int;
+            end if;
+        end if;
+    end process;
 
 end architecture rtl;

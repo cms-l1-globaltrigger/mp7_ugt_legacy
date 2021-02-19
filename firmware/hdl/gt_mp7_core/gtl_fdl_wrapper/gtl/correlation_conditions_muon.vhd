@@ -6,6 +6,7 @@
 -- 3. muon esums.
 
 -- Version history:
+-- HB 2021-02-19: updated instances of muon_comparators and condition output pipeline.
 -- HB 2020-02-11: replaced code with "sum_mass" and "correlation_cuts" instances.
 -- HB 2020-02-02: first design.
 
@@ -180,10 +181,6 @@ end correlation_conditions_muon;
 
 architecture rtl of correlation_conditions_muon is
 
--- fixed pipeline structure
-    constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
-    constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
-
 --***************************************************************
 -- signals for charge correlation comparison:
     signal charge_comp_double, charge_comp_double_pipe : muon_charcorr_double_array := (others => (others => '1'));
@@ -194,22 +191,16 @@ architecture rtl of correlation_conditions_muon is
     type sum_mass_array is array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) of std_logic_vector(mass_vector_width+1 downto 0);
     signal sum_mass, sum_mass_temp : sum_mass_array := (others => (others => (others => (others => '0'))));
 
-    signal obj1_vs_templ, obj1_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));
-    signal obj2_vs_templ, obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
-    signal obj3_vs_templ, obj3_vs_templ_pipe : std_logic_2dim_array(slice_low_obj3 to slice_high_obj3, 1 to 1) := (others => (others => '0'));
+    signal obj1_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));
+    signal obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
+    signal obj3_vs_templ_pipe : std_logic_2dim_array(slice_low_obj3 to slice_high_obj3, 1 to 1) := (others => (others => '0'));
 -- HB 2017-03-27: default values of cut comps -> '1' because of AND in formular of obj_vs_templ_vec
-    signal deta_comp, deta_comp_temp, deta_comp_pipe, dphi_comp, dphi_comp_temp, dphi_comp_pipe, dr_comp, dr_comp_temp, dr_comp_pipe, mass_comp, mass_comp_temp, mass_comp_pipe, twobody_pt_comp, twobody_pt_comp_temp, twobody_pt_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
+    signal deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
     signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) :=
     (others => (others => '1'));
     signal invariant_mass, invariant_mass_temp : mass_dim2_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => (others => '0')));
-    signal mass_3_obj_comp, mass_3_obj_comp_pipe :
-        std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
+    signal mass_3_obj_comp_pipe : std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
     signal condition_and_or : std_logic;
-
-    signal esums_comp, esums_comp_pipe : std_logic := '0';
-
---     signal cosh_deta_int : common_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
---     signal cos_dphi_int : common_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
 
 begin
 
@@ -242,27 +233,8 @@ begin
                 upt_lower_limit_obj1,
                 ip_lut_obj1
                 )
-            port map(obj1(i), obj1_vs_templ(i,1));
+            port map(lhc_clk, obj1(i), obj1_vs_templ_pipe(i,1));
     end generate obj1_l;
-
-    pipeline_p: process(lhc_clk, obj1_vs_templ, obj2_vs_templ, obj3_vs_templ, esums_comp, deta_comp, dphi_comp, dr_comp, mass_comp, mass_3_obj_comp, twobody_pt_comp, charge_comp_double, charge_comp_triple)
-        begin
-        if obj_vs_templ_pipeline_stage = false then
-            obj1_vs_templ_pipe <= obj1_vs_templ;
-            obj2_vs_templ_pipe <= obj2_vs_templ;
-            obj3_vs_templ_pipe <= obj3_vs_templ;
-            charge_comp_double_pipe <= charge_comp_double;
-            charge_comp_triple_pipe <= charge_comp_triple;
-        else
-            if (lhc_clk'event and lhc_clk = '1') then
-                obj1_vs_templ_pipe <= obj1_vs_templ;
-                obj2_vs_templ_pipe <= obj2_vs_templ;
-                obj3_vs_templ_pipe <= obj3_vs_templ;
-                charge_comp_double_pipe <= charge_comp_double;
-                charge_comp_triple_pipe <= charge_comp_triple;
-            end if;
-        end if;
-    end process;
 
     not_esums_sel: if not sel_esums generate
         obj2_l: for i in slice_low_obj2 to slice_high_obj2 generate
@@ -294,15 +266,8 @@ begin
                     upt_lower_limit_obj2,
                     ip_lut_obj2
                     )
-                port map(obj2(i), obj2_vs_templ(i,1));
+                port map(lhc_clk, obj2(i), obj2_vs_templ_pipe(i,1));
         end generate obj2_l;
-
---         type_conv_l_1: for i in 0 to NR_MU_OBJECTS-1 generate
---             type_conv_l_2: for j in 0 to nr_obj2-1 generate
---                 cosh_deta_int(i,j)(cosh_cos_width-1 downto 0) <= cosh_deta(i,j)(cosh_cos_width-1 downto 0);
---                 cos_dphi_int(i,j)(cosh_cos_width-1 downto 0) <= cos_dphi(i,j)(cosh_cos_width-1 downto 0);
---             end generate type_conv_l_2;
---         end generate type_conv_l_1;
 
         correlation_cuts_i: entity work.correlation_cuts
             generic map(
@@ -349,11 +314,11 @@ begin
                 cos_phi_2_integer => cos_phi_2_integer,
                 sin_phi_1_integer => sin_phi_1_integer,
                 sin_phi_2_integer => sin_phi_2_integer,
+                invariant_mass => invariant_mass,
                 deta_comp_pipe => deta_comp_pipe,
                 dphi_comp_pipe => dphi_comp_pipe,
                 dr_comp_pipe => dr_comp_pipe,
                 mass_comp_pipe => mass_comp_pipe,
-                invariant_mass => invariant_mass,
                 twobody_pt_comp_pipe => twobody_pt_comp_pipe
             );
 
@@ -409,6 +374,17 @@ begin
                     end generate charge_double_l_2;
                 end generate charge_double_l_1;
             end generate charge_double_i;
+
+            cc_double_p: process(lhc_clk, charge_comp_double)
+                begin
+                if INTERMEDIATE_PIPELINE = false then
+                    charge_comp_double_pipe <= charge_comp_double;
+                else
+                    if (lhc_clk'event and lhc_clk = '1') then
+                        charge_comp_double_pipe <= charge_comp_double;
+                    end if;
+                end if;
+            end process;
 
             matrix_and_or_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, mass_div_dr_comp_pipe, twobody_pt_comp_pipe, charge_comp_double_pipe)
                 variable index : integer := 0;
@@ -470,7 +446,7 @@ begin
                         upt_lower_limit_obj3,
                         ip_lut_obj3
                         )
-                    port map(obj3(i), obj3_vs_templ(i,1));
+                    port map(lhc_clk, obj3(i), obj3_vs_templ_pipe(i,1));
             end generate obj3_l;
 
             sum_mass_i: entity work.sum_mass
@@ -514,6 +490,17 @@ begin
                 end generate charge_triple_l_1;
             end generate charge_triple_i;
 
+            cc_triple_p: process(lhc_clk, charge_comp_triple)
+                begin
+                if INTERMEDIATE_PIPELINE = false then
+                    charge_comp_triple_pipe <= charge_comp_triple;
+                else
+                    if (lhc_clk'event and lhc_clk = '1') then
+                        charge_comp_triple_pipe <= charge_comp_triple;
+                    end if;
+                end if;
+            end process;
+
             -- "Matrix" of permutations in an and-or-structure.
             matrix_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, obj3_vs_templ_pipe, mass_3_obj_comp_pipe, charge_comp_triple_pipe)
                 variable index : integer := 0;
@@ -545,10 +532,6 @@ begin
     end generate not_esums_sel;
 
     esums_sel: if sel_esums generate
-
---         type_conv_l_1: for i in 0 to NR_MU_OBJECTS-1 generate
---             cos_dphi_int(i,0)(cosh_cos_width-1 downto 0) <= cos_dphi(i,0)(cosh_cos_width-1 downto 0);
---         end generate type_conv_l_1;
 
         esums_i: entity work.esums_4_corr_cond
             generic map(
@@ -599,7 +582,7 @@ begin
 -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(lhc_clk, condition_and_or)
         begin
-            if conditions_pipeline_stage = false then
+            if CONDITIONS_PIPELINE = false then
                 condition_o <= condition_and_or;
             else
                 if (lhc_clk'event and lhc_clk = '1') then

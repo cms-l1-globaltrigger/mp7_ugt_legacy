@@ -2,6 +2,7 @@
 -- Calo condition matrix
 
 -- Version history:
+-- HB 2021-02-19: updated condition output pipeline.
 -- HB 2019-04-30: first version (updated Dinyar/Hannes proposal).
 
 library IEEE;
@@ -19,9 +20,10 @@ entity calo_cond_matrix is
         calo_object_slice_3_high: natural;
         calo_object_slice_4_low: natural;
         calo_object_slice_4_high: natural;
-        nr_templates: positive        
+        nr_templates: positive
     );
-    Port ( clk : in std_logic;
+    port(
+        clk : in std_logic;
         obj_slice_1_vs_templ : in object_slice_1_vs_template_array(calo_object_slice_1_low to calo_object_slice_1_high, 1 to 1);
         obj_slice_2_vs_templ : in object_slice_2_vs_template_array(calo_object_slice_2_low to calo_object_slice_2_high, 1 to 1);
         obj_slice_3_vs_templ : in object_slice_3_vs_template_array(calo_object_slice_3_low to calo_object_slice_3_high, 1 to 1);
@@ -178,10 +180,14 @@ begin
 
 -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(clk, condition_and_or)
-    begin
-        if (clk'event and clk = '1') then
-            condition_o <= condition_and_or;
-        end if;
+        begin
+            if CONDITIONS_PIPELINE = false then
+                condition_o <= condition_and_or;
+            else
+                if (clk'event and clk = '1') then
+                    condition_o <= condition_and_or;
+                end if;
+            end if;
     end process;
 
 end Behavioral;

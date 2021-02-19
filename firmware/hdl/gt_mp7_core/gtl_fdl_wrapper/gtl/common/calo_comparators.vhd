@@ -3,6 +3,7 @@
 -- Comparators for energy, pseudorapidity, azimuth angle and isolation of calo objects
 
 -- Version history:
+-- HB 2021-02-19: added output register (with selection).
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
 -- HB 2019-06-14: updated for "five eta cuts".
 -- HB 2019-05-03: changed name from  calo_comparators_v2 to calo_comparators.
@@ -40,6 +41,7 @@ entity calo_comparators is
         iso_lut: std_logic_vector
     );
     port(
+        lhc_clk : in std_logic;
         data_i : in std_logic_vector;
         comp_o : out std_logic
     );
@@ -57,6 +59,7 @@ architecture rtl of calo_comparators is
     signal eta_comp : std_logic;
     signal phi_comp : std_logic;
     signal iso_comp : std_logic;
+    signal comp_int : std_logic;
 
     signal no_calo : std_logic;
 
@@ -69,7 +72,7 @@ begin
 
 -- HB 2015-08-28: inserted "no calo" (all object parameters = 0)
     no_calo <= '1' when data_i = ZERO else '0';
-    
+
 -- HB 2015-04-27: selection of calo object types
     eg_sel: if obj_type=0 generate
     et(D_S_I_EG_V2.et_high-D_S_I_EG_V2.et_low downto 0) <= data_i(D_S_I_EG_V2.et_high downto D_S_I_EG_V2.et_low);
@@ -198,21 +201,32 @@ begin
     end generate tau_sel;
 
     -- Comparator for energy (et)
-    et_comp <= '1' when et >= et_threshold and et_ge_mode else            
-               '1' when et = et_threshold and not et_ge_mode else '0'; 
-           
+    et_comp <= '1' when et >= et_threshold and et_ge_mode else
+               '1' when et = et_threshold and not et_ge_mode else '0';
+
 -- HB 2015-04-27: comparators out for eg and tau
-    comp_o_eg_tau_i: if obj_type=0 or obj_type=2 generate
+    comp_int_eg_tau_i: if obj_type=0 or obj_type=2 generate
 -- HB 2015-04-24: comparator for isolation bits with LUT
         iso_comp <= iso_lut(CONV_INTEGER(iso));
 -- HB 2015-08-28: inserted "no calo" (all object parameters = 0)
-        comp_o <= et_comp and eta_comp and phi_comp and iso_comp and not no_calo;
-    end generate comp_o_eg_tau_i;
-        
+        comp_int <= et_comp and eta_comp and phi_comp and iso_comp and not no_calo;
+    end generate comp_int_eg_tau_i;
+
 -- HB 2015-04-27: comparators out for jet
-    comp_o_jet_i: if obj_type=1 generate
+    comp_int_jet_i: if obj_type=1 generate
 -- HB 2015-08-28: inserted "no calo" (all object parameters = 0)
-        comp_o <= et_comp and eta_comp and phi_comp and not no_calo;
-    end generate comp_o_jet_i;
-        
+        comp_int <= et_comp and eta_comp and phi_comp and not no_calo;
+    end generate comp_int_jet_i;
+
+    pipeline_p: process(lhc_clk, comp_int)
+        begin
+        if INTERMEDIATE_PIPELINE = false then
+            comp_o <= comp_int;
+        else
+            if (lhc_clk'event and lhc_clk = '1') then
+                comp_o <= comp_int;
+            end if;
+        end if;
+    end process;
+
 end architecture rtl;

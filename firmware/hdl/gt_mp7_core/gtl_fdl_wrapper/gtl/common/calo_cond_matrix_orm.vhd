@@ -1,24 +1,27 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
+-- Company:
+-- Engineer:
+--
 -- Create Date: 03/07/2019 12:17:34 PM
--- Design Name: 
+-- Design Name:
 -- Module Name: calo_cond_matrix - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
+-- Project Name:
+-- Target Devices:
+-- Tool Versions:
+-- Description:
+--
+-- Dependencies:
+--
 -- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
--- 
+--
 ----------------------------------------------------------------------------------
+-- Description:
+-- Calo condition matrix overlap removal
 
 -- Version history:
+-- HB 2021-02-19: updated condition output pipeline.
 -- HB 2020-01-28: bug fix in "matrix_quad_p_1".
 -- HB 2019-10-17: bug fix at twobody_pt_comp port.
 -- HB 2019-04-30: first version (updated Dinyar/Hannes proposal).
@@ -38,11 +41,12 @@ entity calo_cond_matrix_orm is
         calo1_object_slice_3_high: natural;
         calo1_object_slice_4_low: natural;
         calo1_object_slice_4_high: natural;
-        nr_templates: positive;        
+        nr_templates: positive;
         calo2_object_low: natural;
         calo2_object_high: natural
     );
-    Port (clk : in std_logic;
+    port(
+        clk : in std_logic;
         calo1_obj_slice_1_vs_templ : in object_slice_1_vs_template_array(calo1_object_slice_1_low to calo1_object_slice_1_high, 1 to 1);
         calo1_obj_slice_2_vs_templ : in object_slice_2_vs_template_array(calo1_object_slice_2_low to calo1_object_slice_2_high, 1 to 1);
         calo1_obj_slice_3_vs_templ : in object_slice_3_vs_template_array(calo1_object_slice_3_low to calo1_object_slice_3_high, 1 to 1);
@@ -57,7 +61,7 @@ entity calo_cond_matrix_orm is
 end calo_cond_matrix_orm;
 
 architecture Behavioral of calo_cond_matrix_orm is
-    constant and_partition_len: integer := 5280; 
+    constant and_partition_len: integer := 5280;
 
     constant nr_objects_slice_1_int: natural := calo1_object_slice_1_high-calo1_object_slice_1_low+1;
     constant nr_objects_slice_2_int: natural := calo1_object_slice_2_high-calo1_object_slice_2_low+1;
@@ -121,10 +125,10 @@ begin
                             index := index + 1;
                             obj_vs_templ_vec(index) := calo1_obj_slice_1_vs_templ(i,1) and calo1_obj_slice_2_vs_templ(j,1) and calo2_obj_vs_templ(k,1) and twobody_pt_comp(i,j) and
                             not (
-                            (diff_eta_orm_comp(i,k) or diff_eta_orm_comp(j,k) or diff_phi_orm_comp(i,k) or 
-                            diff_phi_orm_comp(j,k) or dr_orm_comp(i,k) or dr_orm_comp(j,k)) 
+                            (diff_eta_orm_comp(i,k) or diff_eta_orm_comp(j,k) or diff_phi_orm_comp(i,k) or
+                            diff_phi_orm_comp(j,k) or dr_orm_comp(i,k) or dr_orm_comp(j,k))
                             and calo2_obj_vs_templ(k,1)
-                            ); 
+                            );
                         end if;
                     end loop;
                 end loop;
@@ -139,7 +143,7 @@ begin
 -- HB 2017-09-06: max. 12 calo1 obj. and 12 calo2 obj. => max. length of obj_vs_templ_vec = 12*11*10*12 = 15840/5280 =3 splitted vectors
 -- Condition type: "triple".
     matrix_triple_i: if nr_templates = 3 generate
-        matrix_triple_p: process(calo1_obj_slice_1_vs_templ, calo1_obj_slice_2_vs_templ, calo1_obj_slice_3_vs_templ, calo2_obj_vs_templ, 
+        matrix_triple_p: process(calo1_obj_slice_1_vs_templ, calo1_obj_slice_2_vs_templ, calo1_obj_slice_3_vs_templ, calo2_obj_vs_templ,
             diff_eta_orm_comp, diff_phi_orm_comp, dr_orm_comp)
             variable index : integer := 0;
             variable index2 : integer := 0;
@@ -168,24 +172,24 @@ begin
                                 if(test_index = 0) then
                                     obj_vs_templ_vec1(index2) := calo1_obj_slice_1_vs_templ(i,1) and calo1_obj_slice_2_vs_templ(j,1) and calo1_obj_slice_3_vs_templ(k,1) and calo2_obj_vs_templ(l,1) and
                                     not (
-                                    (diff_eta_orm_comp(i,l) or diff_eta_orm_comp(j,l) or diff_eta_orm_comp(k,l) or 
-                                    diff_phi_orm_comp(i,l) or diff_phi_orm_comp(j,l) or diff_phi_orm_comp(k,l) or 
+                                    (diff_eta_orm_comp(i,l) or diff_eta_orm_comp(j,l) or diff_eta_orm_comp(k,l) or
+                                    diff_phi_orm_comp(i,l) or diff_phi_orm_comp(j,l) or diff_phi_orm_comp(k,l) or
                                     dr_orm_comp(i,l) or dr_orm_comp(j,l) or dr_orm_comp(k,l))
                                     and calo2_obj_vs_templ(l,1)
                                     );
                                 elsif(test_index = 1) then
                                     obj_vs_templ_vec2(index2) := calo1_obj_slice_1_vs_templ(i,1) and calo1_obj_slice_2_vs_templ(j,1) and calo1_obj_slice_3_vs_templ(k,1) and calo2_obj_vs_templ(l,1) and
                                     not (
-                                    (diff_eta_orm_comp(i,l) or diff_eta_orm_comp(j,l) or diff_eta_orm_comp(k,l) or 
-                                    diff_phi_orm_comp(i,l) or diff_phi_orm_comp(j,l) or diff_phi_orm_comp(k,l) or 
+                                    (diff_eta_orm_comp(i,l) or diff_eta_orm_comp(j,l) or diff_eta_orm_comp(k,l) or
+                                    diff_phi_orm_comp(i,l) or diff_phi_orm_comp(j,l) or diff_phi_orm_comp(k,l) or
                                     dr_orm_comp(i,l) or dr_orm_comp(j,l) or dr_orm_comp(k,l))
                                     and calo2_obj_vs_templ(l,1)
                                     );
                                 elsif(test_index = 2) then
                                     obj_vs_templ_vec3(index2) := calo1_obj_slice_1_vs_templ(i,1) and calo1_obj_slice_2_vs_templ(j,1) and calo1_obj_slice_3_vs_templ(k,1) and calo2_obj_vs_templ(l,1) and
                                     not (
-                                    (diff_eta_orm_comp(i,l) or diff_eta_orm_comp(j,l) or diff_eta_orm_comp(k,l) or 
-                                    diff_phi_orm_comp(i,l) or diff_phi_orm_comp(j,l) or diff_phi_orm_comp(k,l) or 
+                                    (diff_eta_orm_comp(i,l) or diff_eta_orm_comp(j,l) or diff_eta_orm_comp(k,l) or
+                                    diff_phi_orm_comp(i,l) or diff_phi_orm_comp(j,l) or diff_phi_orm_comp(k,l) or
                                     dr_orm_comp(i,l) or dr_orm_comp(j,l) or dr_orm_comp(k,l))
                                     and calo2_obj_vs_templ(l,1)
                                     );
@@ -201,7 +205,7 @@ begin
             obj_vs_templ_vec_sig2 <= obj_vs_templ_vec2;
             obj_vs_templ_vec_sig3 <= obj_vs_templ_vec3;
         end process matrix_triple_p;
-        
+
         matrix_triple_p_2: process(obj_vs_templ_vec_sig1, obj_vs_templ_vec_sig2, obj_vs_templ_vec_sig3)
             variable condition_and_or_tmp1, condition_and_or_tmp2, condition_and_or_tmp3 : std_logic := '0';
         begin
@@ -223,7 +227,7 @@ begin
 -- -- HB 2019-10-17: max. 8 calo1 obj. and 12 calo2 obj. => max. length of obj_vs_templ_vec = 8*7*6*5*12 = 20160/5280=3.81
 -- Condition type: "quad".
     matrix_quad_i: if nr_templates = 4 generate
-        matrix_quad_p_1: process(calo1_obj_slice_1_vs_templ, calo1_obj_slice_2_vs_templ, calo1_obj_slice_3_vs_templ, calo1_obj_slice_4_vs_templ, 
+        matrix_quad_p_1: process(calo1_obj_slice_1_vs_templ, calo1_obj_slice_2_vs_templ, calo1_obj_slice_3_vs_templ, calo1_obj_slice_4_vs_templ,
             calo2_obj_vs_templ, diff_eta_orm_comp, diff_phi_orm_comp, dr_orm_comp)
             variable index : integer := 0;
             variable index2 : integer := 0;
@@ -259,7 +263,7 @@ begin
                                         diff_phi_orm_comp(i,m) or diff_phi_orm_comp(j,m) or diff_phi_orm_comp(k,m) or diff_phi_orm_comp(l,m) or
                                         dr_orm_comp(i,m) or dr_orm_comp(j,m) or dr_orm_comp(k,m) or dr_orm_comp(l,m))
                                         and calo2_obj_vs_templ(m,1)
-                                        ); 
+                                        );
                                     elsif(test_index = 1) then
                                         obj_vs_templ_vec2(index2) := calo1_obj_slice_1_vs_templ(i,1) and calo1_obj_slice_2_vs_templ(j,1) and calo1_obj_slice_3_vs_templ(k,1) and calo1_obj_slice_4_vs_templ(l,1) and calo2_obj_vs_templ(m,1) and
                                         not (
@@ -267,7 +271,7 @@ begin
                                         diff_phi_orm_comp(i,m) or diff_phi_orm_comp(j,m) or diff_phi_orm_comp(k,m) or diff_phi_orm_comp(l,m) or
                                         dr_orm_comp(i,m) or dr_orm_comp(j,m) or dr_orm_comp(k,m) or dr_orm_comp(l,m))
                                         and calo2_obj_vs_templ(m,1)
-                                        ); 
+                                        );
                                     elsif(test_index = 2) then
                                         obj_vs_templ_vec3(index2) := calo1_obj_slice_1_vs_templ(i,1) and calo1_obj_slice_2_vs_templ(j,1) and calo1_obj_slice_3_vs_templ(k,1) and calo1_obj_slice_4_vs_templ(l,1) and calo2_obj_vs_templ(m,1) and
                                         not (
@@ -275,7 +279,7 @@ begin
                                         diff_phi_orm_comp(i,m) or diff_phi_orm_comp(j,m) or diff_phi_orm_comp(k,m) or diff_phi_orm_comp(l,m) or
                                         dr_orm_comp(i,m) or dr_orm_comp(j,m) or dr_orm_comp(k,m) or dr_orm_comp(l,m))
                                         and calo2_obj_vs_templ(m,1)
-                                        ); 
+                                        );
                                     elsif(test_index = 3) then
                                         obj_vs_templ_vec4(index2) := calo1_obj_slice_1_vs_templ(i,1) and calo1_obj_slice_2_vs_templ(j,1) and calo1_obj_slice_3_vs_templ(k,1) and calo1_obj_slice_4_vs_templ(l,1) and calo2_obj_vs_templ(m,1) and
                                         not (
@@ -283,7 +287,7 @@ begin
                                         diff_phi_orm_comp(i,m) or diff_phi_orm_comp(j,m) or diff_phi_orm_comp(k,m) or diff_phi_orm_comp(l,m) or
                                         dr_orm_comp(i,m) or dr_orm_comp(j,m) or dr_orm_comp(k,m) or dr_orm_comp(l,m))
                                         and calo2_obj_vs_templ(m,1)
-                                        ); 
+                                        );
                                     end if;
                                     index := index + 1;
                                     index2 := index2 +1;
@@ -322,10 +326,14 @@ begin
 
 -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(clk, condition_and_or)
-    begin
-        if (clk'event and clk = '1') then
-            condition_o <= condition_and_or;
-        end if;
+        begin
+            if CONDITIONS_PIPELINE = false then
+                condition_o <= condition_and_or;
+            else
+                if (clk'event and clk = '1') then
+                    condition_o <= condition_and_or;
+                end if;
+            end if;
     end process;
 
 end Behavioral;

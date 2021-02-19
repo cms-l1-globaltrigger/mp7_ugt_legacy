@@ -103,6 +103,7 @@ constant MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"000000
 -- ==== FDL definitions - end ============================================================
 -- fixed pipeline structure
 constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
+constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
 
 -- Definition of object types
 

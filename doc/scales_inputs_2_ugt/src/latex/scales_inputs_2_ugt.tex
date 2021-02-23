@@ -16,13 +16,13 @@
 
 \begin{titlepage}
 
-\date{11 December 2020}
+\date{23 February 2021}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
 \begin{Authlist}
-{H.Bergauer, J.Er\"{o}, M.Jeitler, 
-%B.Rahbaran, 
+{H.Bergauer, J.Er\"{o}, M.Jeitler,
+%B.Rahbaran,
 J.Wittmann, C.-E.Wulz}
 \Instfoot{hephy}
 {Institute of High Energy Physics of the Austrian Academy of Sciences}
@@ -45,7 +45,7 @@ C.Battilana, D.Rabady, H.Sakulin
 
 J.Brooke
 \Instfoot{Bristol}
-{University of Bristol, UK} 
+{University of Bristol, UK}
 
 G.Iles, A.Tapper
 \Instfoot{Imperial}
@@ -75,7 +75,7 @@ With respect to the ``legacy" system, the upgraded GT (uGT or $\mu$GT) has highe
 
 We are using the new resources as described below (see also proposal~\cite{Darin}; the legacy system's connections are documented in~\cite{muon} for muons and in~\cite{calo} for calo objects) and have introduced the following new features:
 
-1) The hardware  allows for 64 bits per muon object and for 32 bits per any other object (jets, e/$\gamma$, tau, energy sums). 
+1) The hardware  allows for 64 bits per muon object and for 32 bits per any other object (jets, e/$\gamma$, tau, energy sums).
 
 2) All scales are linear (in the legacy system, the muon $p_t$ scale and the calorimeter $\eta$ scale were non-linear).
 
@@ -89,32 +89,33 @@ The bin width in $\eta$ over the whole $\eta$ range is 1/8 of 0.0870 for muons a
 
 $\eta$ values, which can be positive or negative, are expressed in Two's Complement notation:
 
-So, for muons, which use 9 bits for coding $\eta$, the central value of the bin 0 (-0.010875/2 to +0.010875/2) = 0.0, the left edge of the bins ranges from $-255 \times 0.010875 - 0.010875/2 = -2.7785625$ to $+255 \times 0.010875 - 0.010875/2 = 2.7676875$. The central value of the bins ranges between $\pm 2.773125$ .  The physical $\eta$ range of the muon detectors is about $\pm2.45$, so that not all possible $\eta$ bins are used. 
+So, for muons, which use 9 bits for coding $\eta$, the central value of the bin 0 (-0.010875/2 to +0.010875/2) = 0.0, the left edge of the bins ranges from $-255 \times 0.010875 - 0.010875/2 = -2.7785625$ to $+255 \times 0.010875 - 0.010875/2 = 2.7676875$. The central value of the bins ranges between $\pm 2.773125$ .  The physical $\eta$ range of the muon detectors is about $\pm2.45$, so that not all possible $\eta$ bins are used.
 
-For calo objects, which use 8 bits for coding $\eta$, the left edge of the bins range from $-128 \times 0.0435 = -5.568000$ to $127 \times 0.0435 = 5.524500$ (left edge of the bin 0 = 0.0). The central value of the bins ranges between $\pm 5.546260$. The physical $\eta$ range of the calorimeters is about $\pm5$, so that not all possible $\eta$ bins are used. 
+For calo objects, which use 8 bits for coding $\eta$, the left edge of the bins range from $-128 \times 0.0435 = -5.568000$ to $127 \times 0.0435 = 5.524500$ (left edge of the bin 0 = 0.0). The central value of the bins ranges between $\pm 5.546260$. The physical $\eta$ range of the calorimeters is about $\pm5$, so that not all possible $\eta$ bins are used.
 
 \textbf{Remark:} Muon $\eta$ and $\varphi$ raw bits currently not used in uGT. Muon $\varphi$ raw bits [$\varphi$ (out)] are part of the 64 bit muon structure on frames 2 to 6, $\eta$ raw bits are transmitted on frame 1 (see Table~\ref{table:sum_opt_links}).
 
-6) The $p_t$/$E_t$ scale is identical in step width (0.5 GeV for all systems), starts from 0 (zero) but reaches up to different maximum values for different objects. The highest bin (such as 0x1ff for 9 bits, or 0x7ff for 11 bits, etc.) marks an overflow.
+6) The $p_t$/$E_t$ scale for calo and energy sums objects is identical in step width (0.5 GeV for all systems), starts from 0 (zero) but reaches up to different maximum values for different objects. The highest bin (such as 0x1ff for 9 bits, or 0x7ff for 11 bits, etc.) marks an overflow.\\
+The $p_t$ scale for muon objects starts from 0 (zero), but HW index=0 indicates an invalid muon, HW index=1 represents 0 to 0.5 GeV, the step width is 0.5 GeV. The highest bin 0x1ff (for 9 bits) marks an overflow.
 
 The new muon structure contains:\\
-- "unconstrained $p_t$" scale (8 bits) in steps of 1.0 GeV starting from 0 (zero), the highest bin 0xff marks an overflow.\\ 
+- "unconstrained $p_t$" scale (8 bits) in steps of 1.0 GeV starting from 0 (zero), HW index=0 indicates an invalid muon, the highest bin 0xff marks an overflow.\\
 - "impact parameter" with 2 bits.
 
 7) This system allows us to keep a sufficient number of bits for each object free for future use (quality, isolation, possibly tag bits to match uGMT muons to isolation information from the Calorimeter Trigger, etc).
 
 8) For the initial phase, the following numbers of objects are have been implemented: 8 muons, 12 e/$\gamma$'s, 12 taus, 12 jets, and 1 each for the energy sums (ET, ETTEM [ECAL sum - part of the ET data structure], ET$_{miss}$, HT, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$).
-``Isolated e/$\gamma$'s" do not constitute a separate collection any more but are e/$\gamma$'s marked with two "isolation bit(s)". "Forward jets" also are not in a separate collection any more (their $\eta$ value shows which part of the calorimeter they come from). It is be up to the Calorimeter trigger to rank objects in such a way as to guarantee that not all isolated e/$\gamma$'s will be killed by non-isolated e/$\gamma$'s, or that all central jets will be killed by forward jets. 
+``Isolated e/$\gamma$'s" do not constitute a separate collection any more but are e/$\gamma$'s marked with two "isolation bit(s)". "Forward jets" also are not in a separate collection any more (their $\eta$ value shows which part of the calorimeter they come from). It is be up to the Calorimeter trigger to rank objects in such a way as to guarantee that not all isolated e/$\gamma$'s will be killed by non-isolated e/$\gamma$'s, or that all central jets will be killed by forward jets.
 
-9) There are ideas to derive electron/gamma signals at high $\eta$ (beyond the range of ECAL) by using the long and short fibers of HF. Therefore, the e/$\gamma$ $\eta$ range has been extended up to $\eta$=5, and the number of e/$\gamma$ objects up to 12. Just as in the case of jets, the Calorimeter trigger will take care that not all central e/$\gamma$'s are killed by such "forward electrons". 
+9) There are ideas to derive electron/gamma signals at high $\eta$ (beyond the range of ECAL) by using the long and short fibers of HF. Therefore, the e/$\gamma$ $\eta$ range has been extended up to $\eta$=5, and the number of e/$\gamma$ objects up to 12. Just as in the case of jets, the Calorimeter trigger will take care that not all central e/$\gamma$'s are killed by such "forward electrons".
 
 10) The minimum bias HF bits are part of the energy sums data structure. Each of the four quantities ET, ET$_{miss}$, HT, HT$_{miss}$ contains HF minimum bias bits on the corresponding MSBs (bits 31..28).
- 
+
 11) The "Towercount" bits (introduced for Heavy-Ion running) are part of the HT data structure (bits 24..12).
 
 12) The "Asymmetry" and "Centrality" bits (introduced for Heavy-Ion running) are part of the ET$_{miss}$, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$ data structure.
- 
-The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2} ) show the  bits/resolution per object instance for all objects, including the ones that will be implemented 
+
+The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2} ) show the  bits/resolution per object instance for all objects, including the ones that will be implemented
 %in theMBT1HFP upgrade system and deployed     ??????????????????????????
 in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.
 
@@ -241,26 +242,26 @@ The following pages contain tables for data structure of objects and the data fl
 % link & 0 & 1 & 2 & 3 & 4  & 5 & 6 & 7 & 8 & 9 & 10 \\\cline{1-1}
 frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \makebox[2.4cm][c]{10} \\\hline\hline
 % frame &  & & & & & & & & & & \\\hline\hline
-0 & free & free & free & free & EG0 & EG6  & JET0 & JET6 & TAU0 & TAU6 & ET, \\ 
- &  &  &  &  &  &  &  &  &  &  & ETTEM, \\ 
- &  &  &  &  &  &  &  &  &  &  & MBT0HFP \\ 
+0 & free & free & free & free & EG0 & EG6  & JET0 & JET6 & TAU0 & TAU6 & ET, \\
+ &  &  &  &  &  &  &  &  &  &  & ETTEM, \\
+ &  &  &  &  &  &  &  &  &  &  & MBT0HFP \\
 1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7 & HT, \\
  & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & & & TOWERCOUNT, \\
  & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & & & MBT0HFM \\
  & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & & & \\
- &  &  &  &  &  &  &  &  &  &  & \\ 
+ &  &  &  &  &  &  &  &  &  &  & \\
 2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8  & ET$_{miss}$, \\
- &  &  &  &  &  &  &  &  &  &  & ASYMET, \\ 
- &  &  &  &  &  &  &  &  &  &  & MBT1HFP \\ 
-3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9  & HT$_{miss}$, \\ 
- &  &  &  &  &  &  &  &  &  &  & ASYMHT, \\ 
- &  &  &  &  &  &  &  &  &  &  & MBT1HFM \\ 
+ &  &  &  &  &  &  &  &  &  &  & ASYMET, \\
+ &  &  &  &  &  &  &  &  &  &  & MBT1HFP \\
+3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9  & HT$_{miss}$, \\
+ &  &  &  &  &  &  &  &  &  &  & ASYMHT, \\
+ &  &  &  &  &  &  &  &  &  &  & MBT1HFM \\
 4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10 & ET$_{miss}^{HF}$ \\
- &  &  &  &  &  &  &  &  &  &  & ASYMETHF, \\ 
- &  &  &  &  &  &  &  &  &  &  & CENT[3:0] \\ 
+ &  &  &  &  &  &  &  &  &  &  & ASYMETHF, \\
+ &  &  &  &  &  &  &  &  &  &  & CENT[3:0] \\
 5 & MU1 [63:32] & MU3 [63:32] & MU5 [63:32] & MU7 [63:32] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11 & HT$_{miss}^{HF}$ \\
- &  &  &  &  &  &  &  &  &  &  & ASYMHTHF, \\ 
- &  &  &  &  &  &  &  &  &  &  & CENT[7:4] \\\hline  
+ &  &  &  &  &  &  &  &  &  &  & ASYMHTHF, \\
+ &  &  &  &  &  &  &  &  &  &  & CENT[7:4] \\\hline
 \end{tabular}
 }
 \label{table:sum_opt_links}
@@ -272,7 +273,7 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \makebox[2.4cm][c]{10} \\\hline\
 bins are "narrower" than other bins.
 \item The definition of the muon $\varphi$ scale shown in Table~\ref{table:muon_phi_scale}.
 \item The definition of the muon quality bits is shown in Table~\ref{table:muon_quality_bits}. It is preliminary, quality ``level x" should be replaced by reliable terms.
-\item The definition of the muon isolation bits is shown in Table~\ref{table:muon_iso_bits}. It is preliminary and should be updated when agreed upon. 
+\item The definition of the muon isolation bits is shown in Table~\ref{table:muon_iso_bits}. It is preliminary and should be updated when agreed upon.
 \item The data flow of muon objects on the optical links is shown in Table~\ref{table:opt_link_muon_obj_0_1}.
 \end{itemize}
 
@@ -407,7 +408,7 @@ frame & objects\\\hline\hline
 \item The data structure of a jet object is shown in Table~\ref{table:jet_object} (bits 31..27 are not defined yet, reserved for isolation, quality and reserved)
 \item The data structure of an e/$\gamma$ object is shown in Table~\ref{table:egamma_object} (bits 31..27 are not defined yet, reserved for quality and reserved)
 \item The data structure of a tau object is shown in Table~\ref{table:tau_object} (bits 31..27 are not defined yet, reserved for quality and reserved)
-\item The definition of isolation bits for e/$\gamma$ and tau is shown in Table~\ref{table:eg_tau_iso_bits}. It is preliminary and should be updated when agreed upon. 
+\item The definition of isolation bits for e/$\gamma$ and tau is shown in Table~\ref{table:eg_tau_iso_bits}. It is preliminary and should be updated when agreed upon.
 \item The definition of the calorimeter $\eta$ scale is shown in Table~\ref{table:calo_eta_scale}. The minimum value is -5.0, the maximum +5.0, so the the highest and lowest
 bins are "narrower" other bins.
 \item The definition of the calorimeter ET$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}$ $\varphi$ scale is shown in Table~\ref{table:calo_phi_scale}.
@@ -724,7 +725,7 @@ Centrality bits [7:4] & CENT[7:4] & 5 & HT$_{miss}^{HF}$ & 31..28 \\\hline
 \bibitem {muon}
 http://www.hephy.at/project/cms/trigger/globalMuonTrigger/notes/in04\_006.pdf
 
-\bibitem {calo} 
+\bibitem {calo}
 http://www.hephy.at/project/electronic1/GlobalTrigger/doc/InterfaceDesc/CMS\_NOTE\_2002\_069\_29\_Nov\_2010.htm
 
 

@@ -3,6 +3,7 @@
 -- Comparators for energy, pseudorapidity, azimuth angle and isolation of calo objects
 
 -- Version history:
+-- HB 2021-02-24: removed "no_calo".
 -- HB 2021-02-19: added output register (with selection).
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
 -- HB 2019-06-14: updated for "five eta cuts".
@@ -49,8 +50,6 @@ end calo_comparators;
 
 architecture rtl of calo_comparators is
 
-    constant ZERO : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
-
     signal et : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
     signal eta : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
     signal phi : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
@@ -61,20 +60,21 @@ architecture rtl of calo_comparators is
     signal iso_comp : std_logic;
     signal comp_int : std_logic;
 
-    signal no_calo : std_logic;
-
 begin
 
--- HB 2015-04-27: used integer for obj_type
--- eg_obj_type=0
--- jet_obj_type=1
--- tau_obj_type=2
-
--- HB 2015-08-28: inserted "no calo" (all object parameters = 0)
-    no_calo <= '1' when data_i = ZERO else '0';
+-- ************************************************
+-- DEFINITION of calo_comparators:
+-- Pt greater/equal pt_threshold
+-- AND
+-- Eta in range
+-- AND
+-- Phi in range
+-- AND
+-- ISO LUT (for eg and tau)
+-- ************************************************
 
 -- HB 2015-04-27: selection of calo object types
-    eg_sel: if obj_type=0 generate
+    eg_sel: if obj_type=EG_TYPE generate
     et(D_S_I_EG_V2.et_high-D_S_I_EG_V2.et_low downto 0) <= data_i(D_S_I_EG_V2.et_high downto D_S_I_EG_V2.et_low);
     eta(D_S_I_EG_V2.eta_high-D_S_I_EG_V2.eta_low downto 0) <= data_i(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low);
     phi(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0) <= data_i(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low);
@@ -117,7 +117,7 @@ begin
 
     end generate eg_sel;
 
-    jet_sel: if obj_type=1 generate
+    jet_sel: if obj_type=JET_TYPE generate
     et(D_S_I_JET_V2.et_high-D_S_I_JET_V2.et_low downto 0) <= data_i(D_S_I_JET_V2.et_high downto D_S_I_JET_V2.et_low);
     eta(D_S_I_JET_V2.eta_high-D_S_I_JET_V2.eta_low downto 0) <= data_i(D_S_I_JET_V2.eta_high downto D_S_I_JET_V2.eta_low);
     phi(D_S_I_JET_V2.phi_high-D_S_I_JET_V2.phi_low downto 0) <= data_i(D_S_I_JET_V2.phi_high downto D_S_I_JET_V2.phi_low);
@@ -158,7 +158,7 @@ begin
 
     end generate jet_sel;
 
-    tau_sel: if obj_type=2 generate
+    tau_sel: if obj_type=TAU_TYPE generate
     et(D_S_I_TAU_V2.et_high-D_S_I_TAU_V2.et_low downto 0) <= data_i(D_S_I_TAU_V2.et_high downto D_S_I_TAU_V2.et_low);
     eta(D_S_I_TAU_V2.eta_high-D_S_I_TAU_V2.eta_low downto 0) <= data_i(D_S_I_TAU_V2.eta_high downto D_S_I_TAU_V2.eta_low);
     phi(D_S_I_TAU_V2.phi_high-D_S_I_TAU_V2.phi_low downto 0) <= data_i(D_S_I_TAU_V2.phi_high downto D_S_I_TAU_V2.phi_low);
@@ -205,17 +205,15 @@ begin
                '1' when et = et_threshold and not et_ge_mode else '0';
 
 -- HB 2015-04-27: comparators out for eg and tau
-    comp_int_eg_tau_i: if obj_type=0 or obj_type=2 generate
+    comp_int_eg_tau_i: if obj_type=EG_TYPE or obj_type=TAU_TYPE generate
 -- HB 2015-04-24: comparator for isolation bits with LUT
         iso_comp <= iso_lut(CONV_INTEGER(iso));
--- HB 2015-08-28: inserted "no calo" (all object parameters = 0)
-        comp_int <= et_comp and eta_comp and phi_comp and iso_comp and not no_calo;
+        comp_int <= et_comp and eta_comp and phi_comp and iso_comp;
     end generate comp_int_eg_tau_i;
 
 -- HB 2015-04-27: comparators out for jet
-    comp_int_jet_i: if obj_type=1 generate
--- HB 2015-08-28: inserted "no calo" (all object parameters = 0)
-        comp_int <= et_comp and eta_comp and phi_comp and not no_calo;
+    comp_int_jet_i: if obj_type=JET_TYPE generate
+        comp_int <= et_comp and eta_comp and phi_comp;
     end generate comp_int_jet_i;
 
     pipeline_p: process(lhc_clk, comp_int)

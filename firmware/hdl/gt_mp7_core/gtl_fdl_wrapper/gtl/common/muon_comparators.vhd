@@ -3,6 +3,7 @@
 -- Comparators for transverse momentum, pseudorapidity, azimuth angle, quality and isolation of muon objects
 
 -- Version history:
+-- HB 2021-02-24: changed "no_muon" to "invalid_muon".
 -- HB 2021-02-19: added output register (with selection).
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
 -- HB 2020-06-08: inserted comparators for "unconstraint pt" [upt] and "impact parameter" [ip] of new muon structure.
@@ -78,7 +79,7 @@ architecture rtl of muon_comparators is
 
     signal comp_int : std_logic;
 
-    signal no_muon : std_logic;
+    signal invalid_muon : std_logic;
 
 begin
 
@@ -118,7 +119,7 @@ begin
     ip <= data_i(D_S_I_MUON.ip_high downto D_S_I_MUON.ip_low);
 
 -- HB 2015-08-28: inserted check for "no muon" (all object parameters = 0)
-    no_muon <= '1' when data_i = ZERO else '0';
+    invalid_muon <= '1' when data_i = ZERO else '0';
 
     pt_comp <= '1' when ((pt >= pt_threshold and pt_ge_mode=true) or (pt = pt_threshold and pt_ge_mode=false)) else '0';
 
@@ -193,7 +194,7 @@ begin
     ip_comp <= ip_lut(CONV_INTEGER(ip)); -- 4 bit LUT for impact parameter, because of 2 bits impact parameter
 
 -- Comparators AND
-    comp_int <= pt_comp and eta_comp and phi_comp and qual_comp and iso_comp and charge_comp and upt_comp and ip_comp and not no_muon;
+    comp_int <= pt_comp and eta_comp and phi_comp and qual_comp and iso_comp and charge_comp and upt_comp and ip_comp and not invalid_muon;
 
     pipeline_p: process(lhc_clk, comp_int)
         begin

@@ -65,7 +65,8 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/obj_parameter.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/differences.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/cosh_deta_cos_dphi.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_calculator.vhd
+#src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr_calculator.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/comb_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/min_bias_hf_conditions.vhd

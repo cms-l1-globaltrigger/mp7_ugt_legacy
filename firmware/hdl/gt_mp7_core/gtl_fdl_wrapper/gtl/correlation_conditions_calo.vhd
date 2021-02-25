@@ -188,8 +188,6 @@ end correlation_conditions_calo;
 architecture rtl of correlation_conditions_calo is
 
     constant mass_vector_width: positive := pt1_width+pt1_width+cosh_cos_width;
-    type sum_mass_array is array(0 to nr_obj1-1, 0 to nr_obj1-1, 0 to nr_obj1-1) of std_logic_vector(mass_vector_width+1 downto 0);
-    signal sum_mass, sum_mass_temp : sum_mass_array := (others => (others => (others => (others => '0'))));
 
     signal deta_orm_comp_12_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
     signal deta_orm_comp_13_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));

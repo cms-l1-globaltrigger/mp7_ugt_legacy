@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2021-02-25: removed unused types (calo_deta_bin_vector_array, muon_deta_bin_vector_array, calo_dphi_bin_vector_array, muon_dphi_bin_vector_array).
 -- HB 2021-02-18: additional constants and types (for cosh_deta_cos_dphi.vhd).
 -- HB 2021-02-16: additional constants for HTMHF.
 -- HB 2021-02-11: added constant for intermediate pipeline in conditions.
@@ -987,8 +988,8 @@ constant CALO_DPHI_BINS : positive := CALO_PHI_BINS; -- 144
 constant CALO_DETA_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DETA_BINS))+1
 constant CALO_DPHI_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DPHI_BINS))+1
 
-type calo_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DETA_BINS_WIDTH-1 downto 0);
-type calo_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DPHI_BINS_WIDTH-1 downto 0);
+-- type calo_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DETA_BINS_WIDTH-1 downto 0);
+-- type calo_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DPHI_BINS_WIDTH-1 downto 0);
 
 constant CALO_INV_DR_SQ_LUT_MAX_VAL : natural := 52847140;
 constant CALO_INV_DR_SQ_VECTOR_WIDTH : natural := 26; -- => log2(CALO_INV_DR_SQ_LUT_MAX_VAL)
@@ -1020,14 +1021,8 @@ constant MUON_DPHI_BINS : positive := MUON_PHI_BINS; -- 576
 constant MU_DETA_BINS_WIDTH : positive := 9; -- => int(log2(MUON_DETA_BINS))+1
 constant MU_DPHI_BINS_WIDTH : positive := 10; -- => int(log2(MUON_DPHI_BINS))+1
 
-type muon_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DETA_BINS_WIDTH-1 downto 0);
-type muon_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DPHI_BINS_WIDTH-1 downto 0);
-
-constant COMMON_DETA_BINS_WIDTH : positive := max(CALO_DETA_BINS_WIDTH, MU_DETA_BINS_WIDTH);
-constant COMMON_DPHI_BINS_WIDTH : positive := max(CALO_DPHI_BINS_WIDTH, MU_DPHI_BINS_WIDTH);
-
-type common_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(COMMON_DETA_BINS_WIDTH-1 downto 0);
-type common_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(COMMON_DPHI_BINS_WIDTH-1 downto 0);
+-- type muon_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DETA_BINS_WIDTH-1 downto 0);
+-- type muon_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DPHI_BINS_WIDTH-1 downto 0);
 
 -- full muon bins would exceed BRAM resources, therefore reduced bins for ROMs are used
 constant MUON_DETA_BINS_ROM : positive := 225; -- double resolution of calos (half of muon eta bins)
@@ -1035,6 +1030,12 @@ constant MUON_DPHI_BINS_ROM : positive := 144; -- same resolution as calos (quar
 
 constant MU_DETA_BINS_WIDTH_ROM : positive := 8; -- => int(log2(MUON_DETA_BINS_ROM))+1
 constant MU_DPHI_BINS_WIDTH_ROM : positive := 8; -- => int(log2(MUON_DPHI_BINS_ROM))+1
+
+constant COMMON_DETA_BINS_WIDTH : positive := max(CALO_DETA_BINS_WIDTH, MU_DETA_BINS_WIDTH);
+constant COMMON_DPHI_BINS_WIDTH : positive := max(CALO_DPHI_BINS_WIDTH, MU_DPHI_BINS_WIDTH);
+
+type common_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(COMMON_DETA_BINS_WIDTH-1 downto 0);
+type common_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(COMMON_DPHI_BINS_WIDTH-1 downto 0);
 
 constant MU_MU_INV_DR_SQ_LUT_MAX_VAL : natural := 211388559;
 constant MU_MU_INV_DR_SQ_VECTOR_WIDTH : natural := 28; -- => log2(MU_MU_INV_DR_SQ_LUT_MAX_VAL)

@@ -88,8 +88,8 @@ begin
                 rom_lut_i : rom_lut_calo_inv_dr_sq_all
                     port map (
                         clk => clk,
-                        deta => deta_bin(i,j),
-                        dphi => dphi_bin(i,j),
+                        deta => deta_bin(i,j)(deta_bins_width-1 downto 0),
+                        dphi => dphi_bin(i,j)(dphi_bins_width-1 downto 0),
                         dout => inv_dr_sq(i,j)
                     );
             end generate rom_lut_calo_sel;
@@ -98,14 +98,15 @@ begin
                 rom_lut_i : rom_lut_muon_inv_dr_sq_all
                     port map (
                         clk => clk,
-                        deta => deta_bin(i,j),
-                        dphi => dphi_bin(i,j),
+                        deta => deta_bin(i,j)(deta_bins_width-1 downto 0),
+                        dphi => dphi_bin(i,j)(dphi_bins_width-1 downto 0),
                         dout => inv_dr_sq(i,j)
                     );
             end generate rom_lut_muon_sel;
 
         -- calculation of invariant mass with formular M**2/2=pt1*pt2*(cosh(eta1-eta2)-cos(phi1-phi2))
-            invariant_mass_sq_div2(i,j) <= pt1(i) * pt2(j) * (cosh_deta(i,j) - cos_dphi(i,j));
+            invariant_mass_sq_div2(i,j)(mass_vector_width-1 downto 0) <=
+                pt1(i)(pt1_width-1 downto 0) * pt2(j)(pt2_width-1 downto 0) * (cosh_deta(i,j)(cosh_cos_width-1 downto 0) - cos_dphi(i,j)(cosh_cos_width-1 downto 0));
 
             mass_div_dr_p: process(invariant_mass_sq_div2, inv_dr_sq)
                 begin

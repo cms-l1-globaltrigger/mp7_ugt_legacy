@@ -48,7 +48,12 @@ begin
                 sum_mass_l: if j>i and k>i and k>j generate
                     sum_mass_calc_i: entity work.sum_mass_calc
                         generic map(mass_vector_width)
-                        port map(invariant_mass(i,j), invariant_mass(i,k), invariant_mass(j,k), sum_mass_temp(i,j,k));
+                        port map(
+                            invariant_mass(i,j)(mass_vector_width-1 DOWNTO 0),
+                            invariant_mass(i,k)(mass_vector_width-1 DOWNTO 0),
+                            invariant_mass(j,k)(mass_vector_width-1 DOWNTO 0),
+                            sum_mass_temp(i,j,k)
+                        );
                     sum_mass(i,j,k) <= sum_mass_temp(i,j,k);
                     sum_mass(i,k,j) <= sum_mass_temp(i,j,k);
                     sum_mass(j,i,k) <= sum_mass_temp(i,j,k);

@@ -55,17 +55,49 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/esums_4_corr
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/obj_parameter.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/differences.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/cosh_deta_cos_dphi.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/correlation_conditions_calo.vhd
 
+vcom -93 -work work $NGC_DIR/rom_lut_calo_inv_dr_sq_1/synth/rom_lut_calo_inv_dr_sq_1.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_calo_inv_dr_sq_2/synth/rom_lut_calo_inv_dr_sq_2.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_calo_inv_dr_sq_3/synth/rom_lut_calo_inv_dr_sq_3.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_calo_inv_dr_sq_4/synth/rom_lut_calo_inv_dr_sq_4.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_calo_inv_dr_sq_5/synth/rom_lut_calo_inv_dr_sq_5.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_calo_inv_dr_sq_6/synth/rom_lut_calo_inv_dr_sq_6.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_calo_inv_dr_sq_7/synth/rom_lut_calo_inv_dr_sq_7.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_calo_inv_dr_sq_8/synth/rom_lut_calo_inv_dr_sq_8.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_calo_inv_dr_sq_9/synth/rom_lut_calo_inv_dr_sq_9.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_1/synth/rom_lut_muon_inv_dr_sq_1.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_2/synth/rom_lut_muon_inv_dr_sq_2.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_3/synth/rom_lut_muon_inv_dr_sq_3.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_4/synth/rom_lut_muon_inv_dr_sq_4.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_5/synth/rom_lut_muon_inv_dr_sq_5.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_6/synth/rom_lut_muon_inv_dr_sq_6.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_7/synth/rom_lut_muon_inv_dr_sq_7.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_8/synth/rom_lut_muon_inv_dr_sq_8.vhd
+vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_9/synth/rom_lut_muon_inv_dr_sq_9.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_calo_inv_dr_sq_all.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_muon_inv_dr_sq_all.vhd
+
+vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_1.mif
+vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_2.mif
+vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_3.mif
+vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_4.mif
+vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_5.mif
+vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_6.mif
+vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_7.mif
+vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_8.mif
+vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_9.mif
+
 #Testbench
-vcom -93 -work work $TESTBENCH/mass_3_eg_tb.vhd
+vcom -93 -work work $TESTBENCH/mass_div_dr_jet_tb.vhd
 
 #Load Design
-vsim -t 1ps work.mass_3_eg_tb
+vsim -t 1ps work.mass_div_dr_jet_tb
 
 ##Load signals in wave window
 view wave
-do $TESTBENCH/../scripts/mass_3_test_wave.do
+do $TESTBENCH/../scripts/mass_div_dr_test_wave.do
 
 ##Run simulation
 run 500 ns

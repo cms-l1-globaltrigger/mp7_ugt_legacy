@@ -1,6 +1,6 @@
 
 -- Description:
--- Testbench for simulation of mass_div_dr_calculator.vhd
+-- Testbench for simulation of mass 3 objects
 
 -- Version history:
 -- HB 2020-08-25: first design
@@ -73,7 +73,7 @@ begin
 	wait for LHC_CLK_PERIOD;
         eg_bx_0 <= (others => X"00000000");
 	wait for LHC_CLK_PERIOD;
-        eg_bx_0 <= (X"0006D070", X"0000E080"), X"0000E080", others => X"00000000");
+        eg_bx_0 <= (X"0006D070", X"0000E080", X"0000E080", others => X"00000000");
 	wait for LHC_CLK_PERIOD;
         eg_bx_0 <= (others => X"00000000");
 	wait for LHC_CLK_PERIOD;
@@ -157,6 +157,8 @@ dut: entity work.correlation_conditions_calo
 -- correlation cuts
         pt1_width => EG_PT_VECTOR_WIDTH,
         pt2_width => EG_PT_VECTOR_WIDTH,
+        mass_cut => true,
+        mass_type => INVARIANT_MASS_TYPE,
         mass_upper_limit_vector => X"00041A6642C78140",
         mass_lower_limit_vector => X"000000000000C350",
         mass_cosh_cos_precision => EG_EG_COSH_COS_PRECISION,

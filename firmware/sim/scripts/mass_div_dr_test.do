@@ -79,16 +79,6 @@ vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_9/synth/rom_lut_muon_inv_dr_
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_calo_inv_dr_sq_all.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_muon_inv_dr_sq_all.vhd
 
-vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_1.mif
-vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_2.mif
-vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_3.mif
-vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_4.mif
-vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_5.mif
-vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_6.mif
-vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_7.mif
-vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_8.mif
-vcom -93 -work work ./../../rom_lut_calo_inv_dr_sq_9.mif
-
 #Testbench
 vcom -93 -work work $TESTBENCH/mass_div_dr_jet_tb.vhd
 

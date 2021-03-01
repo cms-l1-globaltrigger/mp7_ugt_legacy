@@ -3,6 +3,7 @@
 -- Collection of cuts for correlations
 
 -- Version history:
+-- HB 2021-03-01: bug fix => no mass_calculator instance with mass_type "INVARIANT_MASS_DIV_DR_TYPE".
 -- HB 2021-01-18: inserted new output port "invariant_mass" (for invariant mass of 3 objects).
 -- HB 2020-12-14: changed names.
 -- HB 2020-08-10: inserted cut for "twobody xunconstraint pt" of new muon structure.
@@ -41,10 +42,10 @@ entity cuts_instances is
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        pt1_width: positive := 12; 
-        pt2_width: positive := 12; 
-        upt1_width: positive := 12; 
-        upt2_width: positive := 12; 
+        pt1_width: positive := 12;
+        pt2_width: positive := 12;
+        upt1_width: positive := 12;
+        upt2_width: positive := 12;
         cosh_cos_precision : positive := EG_EG_COSH_COS_PRECISION;
         cosh_cos_width: positive := EG_EG_COSH_COS_VECTOR_WIDTH;
 
@@ -75,18 +76,18 @@ entity cuts_instances is
         twobody_pt_comp: out std_logic := '1';
         twobody_upt_comp: out std_logic := '1'
     );
-end cuts_instances; 
+end cuts_instances;
 
 architecture rtl of cuts_instances is
 
 begin
 
     deta_i: if deta_cut = true generate
-        deta_comp <= '1' when deta >= deta_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
+        deta_comp <= '1' when deta >= deta_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and
                          deta <= deta_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
     end generate deta_i;
     dphi_i: if dphi_cut = true generate
-        dphi_comp <= '1' when dphi >= dphi_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and 
+        dphi_comp <= '1' when dphi >= dphi_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and
                          dphi <= dphi_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
     end generate dphi_i;
     dr_i: if dr_cut = true generate
@@ -101,16 +102,16 @@ begin
                 dr_comp => dr_comp
             );
     end generate dr_i;
-    mass_i: if mass_cut = true generate
+    mass_i: if mass_cut = true and mass_type /= INVARIANT_MASS_DIV_DR_TYPE generate
         mass_calculator_i: entity work.mass_calculator
             generic map(
                 mass_type => mass_type,
                 mass_upper_limit_vector => mass_upper_limit_vector,
                 mass_lower_limit_vector => mass_lower_limit_vector,
-                pt1_width => pt1_width, 
-                pt2_width => pt2_width, 
-                upt1_width => upt1_width, 
-                upt2_width => upt2_width, 
+                pt1_width => pt1_width,
+                pt2_width => pt2_width,
+                upt1_width => upt1_width,
+                upt2_width => upt2_width,
                 cosh_cos_width => cosh_cos_width,
                 mass_cosh_cos_precision => cosh_cos_precision
             )
@@ -128,8 +129,8 @@ begin
     twobody_pt_i: if twobody_pt_cut = true generate
         twobody_pt_calculator_i: entity work.twobody_pt_calculator
             generic map(
-                pt1_width => pt1_width, 
-                pt2_width => pt2_width, 
+                pt1_width => pt1_width,
+                pt2_width => pt2_width,
                 pt_sq_threshold_vector => pt_sq_threshold_vector,
                 sin_cos_width => sin_cos_width,
                 pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
@@ -147,8 +148,8 @@ begin
     twobody_upt_i: if twobody_upt_cut = true generate
         twobody_upt_calculator_i: entity work.twobody_pt_calculator
             generic map(
-                pt1_width => upt1_width, 
-                pt2_width => upt2_width, 
+                pt1_width => upt1_width,
+                pt2_width => upt2_width,
                 pt_sq_threshold_vector => upt_sq_threshold_vector,
                 sin_cos_width => sin_cos_width,
                 pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
@@ -163,5 +164,5 @@ begin
                 pt_square_comp => twobody_upt_comp
         );
     end generate twobody_upt_i;
-    
+
 end architecture rtl;

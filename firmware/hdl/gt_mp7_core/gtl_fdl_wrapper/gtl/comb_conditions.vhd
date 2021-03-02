@@ -3,6 +3,7 @@
 -- Condition module for all combination conditions.
 
 -- Version history:
+-- HB 2021-03-02: bug fixed.
 -- HB 2021-02-19: updated condition output.
 -- HB 2020-02-11: replaced code with "orm_cuts" instances.
 -- HB 2021-02-03: first design.
@@ -158,7 +159,7 @@ architecture rtl of comb_conditions is
 
 begin
 
-    calo_i: if not (deta_orm_cut and dphi_orm_cut and dr_orm_cut) and type_obj1 /= MU_TYPE generate
+    calo_i: if not (deta_orm_cut and dphi_orm_cut and dr_orm_cut) and (type_obj1 /= MU_TYPE) generate
         -- Instantiation of object cuts for obj1.
         obj1_cuts_i: entity work.calo_obj_cuts
             generic map(
@@ -203,7 +204,7 @@ begin
     end generate calo_i;
 
     -- condition with overlap removal
-    calo_orm_i: if deta_orm_cut or dphi_orm_cut or dr_orm_cut generate
+    calo_orm_i: if (deta_orm_cut or dphi_orm_cut or dr_orm_cut)  and (type_obj1 /= MU_TYPE) generate
         -- Instantiation of object cuts for obj2 - overlap removal object.
         obj2_l: for i in slice_low_obj2 to slice_high_obj2 generate
             obj2_comp_i: entity work.calo_comparators
@@ -353,7 +354,7 @@ begin
     end process;
 
 -- Instantiation of two-body pt cut.
-    twobody_pt_cut_i: if twobody_pt_cut = true and nr_templates = 2 generate
+    twobody_pt_cut_i: if twobody_pt_cut and nr_templates = 2 generate
         twobody_pt_i: entity work.twobody_pt
             generic map(
                 slice_1_low_obj1, slice_1_high_obj1,
@@ -371,7 +372,7 @@ begin
     end generate twobody_pt_cut_i;
 
 -- Instantiation of two-body unconstraint pt cut.
-    twobody_upt_cut_i: if twobody_upt_cut = true and nr_templates = 2 generate
+    twobody_upt_cut_i: if twobody_upt_cut and nr_templates = 2 generate
         twobody_upt_i: entity work.twobody_pt
             generic map(
                 slice_1_low_obj1, slice_1_high_obj1,

@@ -7,6 +7,7 @@
 -- 4. calo esums.
 
 -- Version history:
+-- HB 2021-03-02: bug fixed.
 -- HB 2021-02-19: updated instances of comparator modules and condition output pipeline.
 -- HB 2020-02-11: replaced code with "orm_cuts", "sum_mass" and "correlation_cuts" instances.
 -- HB 2020-01-27: added calo esums correlation.
@@ -455,7 +456,7 @@ begin
     -- condition with overlap removal
         orm_i: if deta_orm_cut or dphi_orm_cut or dr_orm_cut generate
         -- two calos with one calo overlap removal(obj_2plus1 = true)
-            obj_2plus1_true_i: if obj_2plus1 = true generate
+            obj_2plus1_true_i: if obj_2plus1 generate
                 orm_cuts_13_i: entity work.orm_cuts
                     generic map(
                         slice_low_obj1,
@@ -551,7 +552,7 @@ begin
             end generate obj_2plus1_true_i;
 
         -- one calo with one calo overlap removal(obj_2plus1 = false)
-            obj_2plus1_false_i: if obj_2plus1 = false generate
+            obj_2plus1_false_i: if not obj_2plus1 generate
                 orm_cuts_12_i: entity work.orm_cuts
                     generic map(
                         slice_low_obj1,

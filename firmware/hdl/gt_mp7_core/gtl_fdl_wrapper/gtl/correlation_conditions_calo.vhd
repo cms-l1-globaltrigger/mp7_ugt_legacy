@@ -7,7 +7,7 @@
 -- 4. calo esums.
 
 -- Version history:
--- HB 2021-03-02: bug fixed.
+-- HB 2021-03-03: bug fixed.
 -- HB 2021-02-19: updated instances of comparator modules and condition output pipeline.
 -- HB 2020-02-11: replaced code with "orm_cuts", "sum_mass" and "correlation_cuts" instances.
 -- HB 2020-01-27: added calo esums correlation.
@@ -359,7 +359,7 @@ begin
             );
 
     -- condition without overlap removal
-        no_orm_i: if not(deta_orm_cut and dphi_orm_cut and dr_orm_cut) generate
+        no_orm_i: if not(deta_orm_cut or dphi_orm_cut or dr_orm_cut) generate
 
         -- HB 2020-08-27: comparison for invariant mass divided by delta R (one pipeline delay inside of the calculation of "mass_div_dr").
             mass_div_dr_sel: if mass_cut = true and mass_type = INVARIANT_MASS_DIV_DR_TYPE generate

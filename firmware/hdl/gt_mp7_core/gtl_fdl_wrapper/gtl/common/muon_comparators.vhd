@@ -1,8 +1,9 @@
 
--- Desription:
+-- Description:
 -- Comparators for transverse momentum, pseudorapidity, azimuth angle, quality and isolation of muon objects
 
 -- Version history:
+-- HB 2021-03-06: removed "invalid_muon".
 -- HB 2021-02-24: changed "no_muon" to "invalid_muon".
 -- HB 2021-02-19: added output register (with selection).
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
@@ -57,8 +58,6 @@ end muon_comparators;
 
 architecture rtl of muon_comparators is
 
-    constant ZERO : std_logic_vector(MAX_MUON_BITS-1 downto 0) := (others => '0');
-
     signal pt : std_logic_vector(D_S_I_MUON.pt_high downto D_S_I_MUON.pt_low);
     signal eta : std_logic_vector(D_S_I_MUON.eta_high downto D_S_I_MUON.eta_low);
     signal phi : std_logic_vector(D_S_I_MUON.phi_high downto D_S_I_MUON.phi_low);
@@ -68,14 +67,14 @@ architecture rtl of muon_comparators is
     signal upt : std_logic_vector(D_S_I_MUON.upt_high downto D_S_I_MUON.upt_low);
     signal ip : std_logic_vector(D_S_I_MUON.ip_high downto D_S_I_MUON.ip_low);
 
-    signal pt_comp : std_logic;
-    signal eta_comp : std_logic;
-    signal phi_comp : std_logic;
-    signal qual_comp : std_logic;
-    signal iso_comp : std_logic;
-    signal charge_comp : std_logic;
-    signal upt_comp : std_logic;
-    signal ip_comp : std_logic;
+    signal pt_comp : std_logic := '1';
+    signal eta_comp : std_logic := '1';
+    signal phi_comp : std_logic := '1';
+    signal qual_comp : std_logic := '1';
+    signal iso_comp : std_logic := '1';
+    signal ch_comp : std_logic := '1';
+    signal upt_comp : std_logic := '1';
+    signal ip_comp : std_logic := '1';
 
     signal comp_int : std_logic;
 
@@ -118,10 +117,16 @@ begin
     upt <= data_i(D_S_I_MUON.upt_high downto D_S_I_MUON.upt_low);
     ip <= data_i(D_S_I_MUON.ip_high downto D_S_I_MUON.ip_low);
 
--- HB 2015-08-28: inserted check for "no muon" (all object parameters = 0)
-    invalid_muon <= '1' when data_i = ZERO else '0';
-
-    pt_comp <= '1' when ((pt >= pt_threshold and pt_ge_mode=true) or (pt = pt_threshold and pt_ge_mode=false)) else '0';
+-- HB 2021-03-08: implemented pt_comp for better modularity
+    pt_comp_i: entity work.pt_comp
+        generic map(
+            pt_ge_mode,
+            pt_threshold
+        )
+        port map(
+            pt,
+            pt_comp
+        );
 
 -- Comparator for pseudorapidity (eta)
 -- Eta scale is defined with Two's Complement notation values for HW index.
@@ -165,36 +170,65 @@ begin
         );
 
 -- Comparator for requested charge
--- charge_high = charge valid, charge_low = charge sign (positive or negative),
-    charge_comp <= '1' when charge = "10" and requested_charge = "pos" else -- charge sign = '0' => positive
-                   '1' when charge = "11" and requested_charge = "neg" else -- charge sign = '1' => negative
-                   '1' when requested_charge = "ign" else '0';
+-- HB 2021-03-08: implemented lut_comp for better modularity
+    charge_comp_i: entity work.charge_comp
+        generic map(
+            requested_charge
+        )
+        port map(
+            charge,
+            ch_comp
+        );
 
 -- Comparator for quality bits with LUT
-    qual_comp <= qual_lut(CONV_INTEGER(qual)); -- 16 bit LUT for quality, because of 4 bit quality
+-- HB 2021-03-08: implemented lut_comp for better modularity
+    qual_comp_i: entity work.lut_comp
+        generic map(
+            qual_lut
+        )
+        port map(
+            qual,
+            qual_comp
+        );
 
 -- Comparator for ISO bits with LUT
-    iso_comp <= iso_lut(CONV_INTEGER(iso)); -- 4 bit LUT for isolation, because of 2 bits isolation
+-- HB 2021-03-08: implemented lut_comp for better modularity
+    iso_comp_i: entity work.lut_comp
+        generic map(
+            iso_lut
+        )
+        port map(
+            iso,
+            iso_comp
+        );
 
 -- Comparator for Pt unconstraint
-    upt_cut_p: process(upt)
-    begin
-        if not upt_cut then
-            upt_comp <= '1';
-        else
-            if (upt >= upt_lower_limit and upt <= upt_upper_limit) then
-                upt_comp <= '1';
-            else
-                upt_comp <= '0';
-            end if;
-        end if;
-    end process;
+-- HB 2021-03-08: implemented upt_comp for better modularity
+    sel_upt_comp_i: if upt_cut generate
+        upt_comp_i: entity work.upt_comp
+            generic map(
+                upt_upper_limit,
+                upt_lower_limit
+            )
+            port map(
+                upt,
+                upt_comp
+            );
+    end generate sel_upt_comp_i;
 
 -- Comparator for IP bits with LUT
-    ip_comp <= ip_lut(CONV_INTEGER(ip)); -- 4 bit LUT for impact parameter, because of 2 bits impact parameter
+-- HB 2021-03-08: implemented lut_comp for better modularity
+    ip_comp_i: entity work.lut_comp
+        generic map(
+            ip_lut
+        )
+        port map(
+            ip,
+            ip_comp
+        );
 
 -- Comparators AND
-    comp_int <= pt_comp and eta_comp and phi_comp and qual_comp and iso_comp and charge_comp and upt_comp and ip_comp and not invalid_muon;
+    comp_int <= pt_comp and eta_comp and phi_comp and qual_comp and iso_comp and ch_comp and upt_comp and ip_comp;
 
     pipeline_p: process(lhc_clk, comp_int)
         begin

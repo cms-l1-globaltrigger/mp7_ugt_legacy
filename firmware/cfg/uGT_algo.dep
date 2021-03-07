@@ -31,6 +31,10 @@ src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_slice.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/centrality_pipeline.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/ext_cond_pipeline.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/p_m_2_bx_pipeline.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/common/pt_comp.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/common/upt_comp.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/common/lut_comp.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/common/charge_comp.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/eta_comp_signed.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/eta_windows_comp.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/sub_signed_eta.vhd

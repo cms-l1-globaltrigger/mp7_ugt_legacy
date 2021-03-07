@@ -1,5 +1,5 @@
 
--- Desription:
+-- Description:
 -- Comparators for energy, pseudorapidity, azimuth angle and isolation of calo objects
 
 -- Version history:
@@ -54,10 +54,10 @@ architecture rtl of calo_comparators is
     signal eta : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
     signal phi : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
     signal iso : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
-    signal et_comp : std_logic;
-    signal eta_comp : std_logic;
-    signal phi_comp : std_logic;
-    signal iso_comp : std_logic;
+    signal et_comp : std_logic := '1';
+    signal eta_comp : std_logic := '1';
+    signal phi_comp : std_logic := '1';
+    signal iso_comp : std_logic := '1';
     signal comp_int : std_logic;
 
 begin
@@ -201,13 +201,28 @@ begin
     end generate tau_sel;
 
     -- Comparator for energy (et)
-    et_comp <= '1' when et >= et_threshold and et_ge_mode else
-               '1' when et = et_threshold and not et_ge_mode else '0';
+-- HB 2021-03-08: implemented pt_comp for better modularity
+    et_comp_i: entity work.pt_comp
+        generic map(
+            et_ge_mode,
+            et_threshold
+        )
+        port map(
+            et,
+            et_comp
+        );
 
 -- HB 2015-04-27: comparators out for eg and tau
     comp_int_eg_tau_i: if obj_type=EG_TYPE or obj_type=TAU_TYPE generate
--- HB 2015-04-24: comparator for isolation bits with LUT
-        iso_comp <= iso_lut(CONV_INTEGER(iso));
+-- HB 2021-03-08: implemented lut_comp for better modularity
+        iso_comp_i: entity work.lut_comp
+            generic map(
+                iso_lut
+            )
+            port map(
+                iso,
+                iso_comp
+            );
         comp_int <= et_comp and eta_comp and phi_comp and iso_comp;
     end generate comp_int_eg_tau_i;
 

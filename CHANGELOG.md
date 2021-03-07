@@ -4,20 +4,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.13.0] - 2021-02-18
+## [v1.13.0] - 2021-03-08
 ### Comment
 
 - mp7_ugt firmware release v1.13.0
 - changed directory structure in gtl (created sub dir "common")
 - added new modules for calculations
+- added new modules for object cuts comparators (for better modularity of resources)
 
 ### Added
 - source files:
   - ../gtl/conv_eta_phi.vhd
   - ../gtl/cosh_deta_cos_dphi.vhd
   - ../gtl/differences.vhd
+  - ../gtl/pt_comp.vhd
+  - ../gtl/upt_comp.vhd
+  - ../gtl/charge_comp.vhd
+  - ../gtl/lut_comp.vhd
 
 ### Changed
+### Changed
+- source files:
+  - ../gtl/common/calo_comparators.vhd
+  - ../gtl/common/muon_comparators.vhd
 - dep file:
   - ../cfg/uGT_algo.dep
 - simulation files:

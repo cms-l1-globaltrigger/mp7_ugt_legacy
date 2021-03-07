@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - mp7_ugt firmware release v1.13.0
 - changed directory structure in gtl (created sub dir "common")
+- added new modules for calculations
 
 ### Added
 - source files:

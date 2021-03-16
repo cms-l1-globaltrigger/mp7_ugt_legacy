@@ -104,18 +104,35 @@ begin
                     );
             end generate rom_lut_muon_sel;
 
-        -- calculation of invariant mass with formular M**2/2=pt1*pt2*(cosh(eta1-eta2)-cos(phi1-phi2))
-            invariant_mass_sq_div2(i,j)(mass_vector_width-1 downto 0) <=
-                pt1(i)(pt1_width-1 downto 0) * pt2(j)(pt2_width-1 downto 0) * (cosh_deta(i,j)(cosh_cos_width-1 downto 0) - cos_dphi(i,j)(cosh_cos_width-1 downto 0));
+--         -- calculation of invariant mass with formular M**2/2=pt1*pt2*(cosh(eta1-eta2)-cos(phi1-phi2))
+--             invariant_mass_sq_div2(i,j)(mass_vector_width-1 downto 0) <=
+--                 pt1(i)(pt1_width-1 downto 0) * pt2(j)(pt2_width-1 downto 0) * (cosh_deta(i,j)(cosh_cos_width-1 downto 0) - cos_dphi(i,j)(cosh_cos_width-1 downto 0));
+--
+--             mass_div_dr_p: process(invariant_mass_sq_div2, inv_dr_sq)
+--                 begin
+--                 if inv_dr_sq(i,j) > 0 then
+--                     mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0) <= invariant_mass_sq_div2(i,j)(mass_vector_width-1 downto 0) * inv_dr_sq(i,j);
+--                 else
+--                     mass_div_dr(i,j) <= max_mass_div_dr;
+--                 end if;
+--             end process;
 
-            mass_div_dr_p: process(invariant_mass_sq_div2, inv_dr_sq)
-                begin
-                if inv_dr_sq(i,j) > 0 then
-                    mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0) <= invariant_mass_sq_div2(i,j)(mass_vector_width-1 downto 0) * inv_dr_sq(i,j);
-                else
-                    mass_div_dr(i,j) <= max_mass_div_dr;
-                end if;
-            end process;
+            mass_div_dr_calc_i: entity work.mass_div_dr_calc
+                generic map(
+                    pt1_width,
+                    pt2_width,
+                    cosh_cos_width,
+                    inv_dr_sq_width
+                )
+                port map(
+                    pt1(i)(pt1_width-1 downto 0),
+                    pt2(j)(pt2_width-1 downto 0),
+                    cosh_deta(i,j)(cosh_cos_width-1 downto 0),
+                    cos_dphi(i,j)(cosh_cos_width-1 downto 0),
+                    inv_dr_sq(i,j)(inv_dr_sq_width-1 downto 0),
+                    mass_div_dr(i,j)
+                );
+
         end generate l2;
     end generate l1;
 

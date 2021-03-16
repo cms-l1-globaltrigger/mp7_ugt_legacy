@@ -4,25 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.13.0] - 2021-03-08
+## [v1.13.0] - 2021-03-16
 ### Comment
 
 - mp7_ugt firmware release v1.13.0
 - changed directory structure in gtl (created sub dir "common")
 - added new modules for calculations
 - added new modules for object cuts comparators (for better modularity of resources)
+- added new modules for and-or matrix in correlation conditions
 
 ### Added
 - source files:
   - ../gtl/conv_eta_phi.vhd
+  - ../gtl/obj_parameter.vhd
   - ../gtl/cosh_deta_cos_dphi.vhd
   - ../gtl/differences.vhd
-  - ../gtl/pt_comp.vhd
-  - ../gtl/upt_comp.vhd
-  - ../gtl/charge_comp.vhd
-  - ../gtl/lut_comp.vhd
+  - ../gtl/common/pt_comp.vhd
+  - ../gtl/common/upt_comp.vhd
+  - ../gtl/common/charge_comp.vhd
+  - ../gtl/common/lut_comp.vhd
+  - ../gtl/common/matrix_corr_cond.vhd
+  - ../gtl/common/mass_div_dr_calc.vhd
 
-### Changed
 ### Changed
 - source files:
   - ../gtl/common/calo_comparators.vhd
@@ -31,6 +34,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../cfg/uGT_algo.dep
 - simulation files:
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
+
+### Removed
+- source file:
+  - ../gtl/mass_div_dr_calculator.vhd
 
 ## [v1.12.0] - 2021-02-05
 ### Comment

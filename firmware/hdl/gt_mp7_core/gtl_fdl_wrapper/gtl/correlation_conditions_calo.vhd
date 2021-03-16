@@ -7,6 +7,7 @@
 -- 4. calo esums.
 
 -- Version history:
+-- HB 2021-03-16: implemented instance "matrix_corr_cond".
 -- HB 2021-03-04: bugs fixed.
 -- HB 2021-02-19: updated instances of comparator modules and condition output pipeline.
 -- HB 2020-02-11: replaced code with "orm_cuts", "sum_mass" and "correlation_cuts" instances.
@@ -393,33 +394,28 @@ begin
                 end generate mass_l_1;
             end generate mass_div_dr_sel;
 
-            matrix_and_or_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, mass_div_dr_comp_pipe, twobody_pt_comp_pipe)
-                variable index : integer := 0;
-                variable obj_vs_templ_vec : std_logic_vector(((slice_high_obj1-slice_low_obj1+1)*(slice_high_obj2-slice_low_obj2+1)) downto 1) := (others => '0');
-                variable condition_and_or_tmp : std_logic := '0';
-            begin
-                index := 0;
-                obj_vs_templ_vec := (others => '0');
-                condition_and_or_tmp := '0';
-                for i in slice_low_obj1 to slice_high_obj1 loop
-                    for j in slice_low_obj2 to slice_high_obj2 loop
-                        if type_obj1 = type_obj2 and same_bx then
-                            if j/=i then
-                            index := index + 1;
-                            obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and deta_comp_pipe(i,j) and dphi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
-                            end if;
-                        else
-                            index := index + 1;
-                            obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and deta_comp_pipe(i,j) and dphi_comp_pipe(i,j) and dr_comp_pipe(i,j) and mass_comp_pipe(i,j) and mass_div_dr_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
-                        end if;
-                    end loop;
-                end loop;
-                for i in 1 to index loop
-                    -- ORs for matrix
-                    condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
-                end loop;
-                condition_and_or <= condition_and_or_tmp;
-            end process;
+            matrix_corr_cond_i: entity work.matrix_corr_cond
+                generic map(
+                    slice_low_obj1,
+                    slice_high_obj1,
+                    slice_low_obj2,
+                    slice_high_obj2,
+                    type_obj1,
+                    type_obj2,
+                    same_bx
+                    )
+                port map(
+                    obj1_vs_templ_pipe,
+                    obj2_vs_templ_pipe,
+                    deta_comp_pipe,
+                    dphi_comp_pipe,
+                    dr_comp_pipe,
+                    mass_comp_pipe,
+                    mass_div_dr_comp_pipe,
+                    twobody_pt_comp_pipe,
+                    condition_and_or => condition_and_or
+                );
+
         end generate no_orm_i;
 
     -- comparator for obj3 (two calos with one calo overlap removal or mass 3 objects)
@@ -509,6 +505,7 @@ begin
                         dphi_orm_comp_23_pipe,
                         dr_orm_comp_23_pipe
                     );
+
                 matrix_and_or_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, obj3_vs_templ_pipe, deta_orm_comp_13_pipe, dphi_orm_comp_13_pipe, dr_orm_comp_13_pipe, deta_orm_comp_23_pipe, dphi_orm_comp_23_pipe, dr_orm_comp_23_pipe, deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
                     variable index : integer := 0;
                     variable obj_vs_templ_vec, orm_vec: std_logic_3dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) :=

@@ -48,6 +48,7 @@ begin
 -- calculation of invariant mass with formular M**2/2=pt1*pt2*(cosh(eta1-eta2)-cos(phi1-phi2))
     invariant_mass_sq_div2 <= pt1 * pt2 * (cosh_deta - cos_dphi);
 
+-- mass_div_dr <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_mass_div_dr;
     mass_div_dr_p: process(invariant_mass_sq_div2, inv_dr_sq)
         begin
         if inv_dr_sq > 0 then

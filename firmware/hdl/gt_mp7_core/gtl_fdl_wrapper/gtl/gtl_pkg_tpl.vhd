@@ -1115,7 +1115,7 @@ constant TAU_MU_ROM : natural range 0 to 2 := CALO_MU_ROM;
 -- conversion LUTs
 type calo_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;
 -- type eg_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;
--- type jet_eta_conv_2_muon_eta_lut_arrconstant EG_EG_ROM : natural range 0 to 2 := CALO_CALO_ROM;
+-- type jet_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;
 -- type tau_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;
 
 constant CALO_ETA_CONV_2_MUON_ETA_LUT : calo_eta_conv_2_muon_eta_lut_array := (

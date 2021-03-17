@@ -3,6 +3,7 @@
 -- Invariant mass divided by deltaR based on LUTs (ROMs).
 
 -- Version history:
+-- HB 2021-03-17: implemented instance "mass_div_dr_calc".
 -- HB 2021-02-24: added loops for all combinations of objects. Changed module name.
 -- HB 2020-05-29: moved comparison to mass_div_dr_comp.vhd.
 -- HB 2020-05-14: first design.
@@ -79,7 +80,7 @@ architecture rtl of mass_div_dr is
 begin
 
 -- LUT value for deta=0 and dphi=0 (dR=0, 1/dR=undefined) => 0, which means mass_div_dr is on it's maximum
---     mass_div_dr <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_mass_div_dr;
+-- mass_div_dr <= (invariant_mass_sq_div2 * inv_dr_sq) when (inv_dr_sq > 0) else max_mass_div_dr;
 
     l1: for i in 0 to nr_obj1-1 generate
         l2: for j in 0 to nr_obj2-1 generate
@@ -103,19 +104,6 @@ begin
                         dout => inv_dr_sq(i,j)
                     );
             end generate rom_lut_muon_sel;
-
---         -- calculation of invariant mass with formular M**2/2=pt1*pt2*(cosh(eta1-eta2)-cos(phi1-phi2))
---             invariant_mass_sq_div2(i,j)(mass_vector_width-1 downto 0) <=
---                 pt1(i)(pt1_width-1 downto 0) * pt2(j)(pt2_width-1 downto 0) * (cosh_deta(i,j)(cosh_cos_width-1 downto 0) - cos_dphi(i,j)(cosh_cos_width-1 downto 0));
---
---             mass_div_dr_p: process(invariant_mass_sq_div2, inv_dr_sq)
---                 begin
---                 if inv_dr_sq(i,j) > 0 then
---                     mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0) <= invariant_mass_sq_div2(i,j)(mass_vector_width-1 downto 0) * inv_dr_sq(i,j);
---                 else
---                     mass_div_dr(i,j) <= max_mass_div_dr;
---                 end if;
---             end process;
 
             mass_div_dr_calc_i: entity work.mass_div_dr_calc
                 generic map(

@@ -20,15 +20,8 @@ if [info exists env(MTI_LIBS)] {
 
 ## set your src files directory for your design
 
-set MP7_COMPONENTS {{MP7_TAG}}/components
-set VIEW_WAVE {{VIEW_WAVE}}
-
-set HDL_DIR {{SIM_DIR}}/../hdl
-set NGC_DIR {{SIM_DIR}}/../ngc
-set TB_DIR {{SIM_DIR}}/testbench
-set MENU_DIR {{MENU_DIR}}
-set MOD_TB_DIR {{MOD_TB_DIR}}
-set FILE_NAME {{MENU_DIR}}/../running.lock
+set HDL_DIR ./../hdl
+set TESTBENCH ./../sim/testbench
 
 ## Create and map work directory
 vlib work
@@ -36,11 +29,11 @@ vmap work work
 
 ##Design files
 vcom -93 -work work $TESTBENCH/txt_util_pkg.vhd
-vcom -93 -work work $MTI/lhc_data_pkg.vhd
+vcom -93 -work work $HDL_DIR/lhc_data_pkg.vhd
 vcom -93 -work work $TESTBENCH/lhc_data_debug_util_pkg.vhd
-vcom -93 -work work $MTI/math_pkg.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gt_mp7_core_pkg_sim.vhd
-vcom -93 -work work $MTI/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg_sim.vhd
+vcom -93 -work work $HDL_DIR/math_pkg.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gt_mp7_core_pkg_sim.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg_sim.vhd
 #
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/pt_comp.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/upt_comp.vhd
@@ -51,13 +44,6 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/eta_comp_sig
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/eta_windows_comp.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/sub_signed_eta.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/sub_unsigned_phi.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/twobody_pt_calculator.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/twobody_pt.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/calo_comparators.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/calo_cond_matrix.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/calo_cond_matrix_orm.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/calo_obj_cuts.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/esums_comparators.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/muon_comparators.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/muon_cond_matrix.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/common/muon_obj_cuts.vhd
@@ -83,19 +69,13 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/obj_parameter.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/differences.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/cosh_deta_cos_dphi.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/mass_div_dr.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/comb_conditions.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/min_bias_hf_conditions.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/towercount_condition.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/correlation_conditions_calo.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl_fdl_wrapper/gtl/correlation_conditions_muon.vhd
 
 #Testbench
 vcom -93 -work work $TESTBENCH/correlation_conditions_muon_tb.vhd
 
 #Load Design
-vsim -t 1ps work.correlation_conditions_muon
+vsim -t 1ps work.correlation_conditions_muon_TB
 
 ##Load signals in wave window
 view wave

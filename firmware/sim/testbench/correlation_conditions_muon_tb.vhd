@@ -20,6 +20,7 @@ architecture rtl of correlation_conditions_muon_TB is
 
     signal lhc_clk : std_logic;
 
+    signal mu_bx_0, mu_bx_0_int : muon_objects_array(0 to NR_MUON_OBJECTS-1);
     signal mu_bx_0_pt_vector: diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
     signal mu_bx_0_upt_vector: diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
     signal mu_bx_0_eta_integer: diff_integer_inputs_array(0 to NR_MU_OBJECTS-1) := (others => 0);
@@ -60,27 +61,29 @@ begin
         wait for 5 * LHC_CLK_PERIOD;
         wait for 7 ns;
 -- muon data from github/herbberg/l1menus/2021/L1Menu_new_features_test_v2-d1/testvectors/TestVector_L1Menu_new_features_test_v2.txt (bx=0003..0006)
-        muon <= (X"0fe5e00c0413fcbc", X"0fe70809fca3fce1", X"4fe95008d833fd2a", X"4885a80c105220b5");
+        mu_bx_0 <= (X"0fe5e00c0413fcbc", X"0fe70809fca3fce1", X"4fe95008d833fd2a", X"4885a80c105220b5", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000");
         wait for LHC_CLK_PERIOD;
-        muon <= (X"0fe73008f5a3fce6", X"8963b00df6b25c76", X"85cb600d4351756c", X"850200080cd94440");
+        mu_bx_0 <= (X"0fe73008f5a3fce6", X"8963b00df6b25c76", X"85cb600d4351756c", X"850200080cd94440", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000");
         wait for LHC_CLK_PERIOD;
-        muon <= (X"4fe77808e74bfcef", X"8fe1700d0453fc2e", X"4c63a008698b1c74", X"c747780d4ae1d0ef");
+        mu_bx_0 <= (X"4fe77808e74bfcef", X"8fe1700d0453fc2e", X"4c63a008698b1c74", X"c747780d4ae1d0ef", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000");
         wait for LHC_CLK_PERIOD;
-        muon <= (X"cff1c80d44abfe39", X"8deeb809366b79d7", X"05c250086131744a", X"03b1e80cfca0ee3d");
+        mu_bx_0 <= (X"cff1c80d44abfe39", X"8deeb809366b79d7", X"05c250086131744a", X"03b1e80cfca0ee3d", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000");
+        wait for LHC_CLK_PERIOD;
+        mu_bx_0 <= (X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000");
         wait for LHC_CLK_PERIOD;
         wait;
     end process;
 
  ------------------- Instantiate  modules  -----------------
-pipeline_p: process(lhc_clk, muon)
+pipeline_p: process(lhc_clk, mu_bx_0)
     begin
         if (lhc_clk'event and lhc_clk = '1') then
-           mu_bx_0 <= muon;
+           mu_bx_0_int <= mu_bx_0;
         end if;
 end process;
 
 muon_charge_correlations_bx_0_bx_0_i: entity work.muon_charge_correlations
-    port map(mu_bx_0, mu_bx_0,
+    port map(mu_bx_0_int, mu_bx_0_int,
         ls_charcorr_double_bx_0_bx_0, os_charcorr_double_bx_0_bx_0,
         ls_charcorr_triple_bx_0_bx_0, os_charcorr_triple_bx_0_bx_0,
         ls_charcorr_quad_bx_0_bx_0, os_charcorr_quad_bx_0_bx_0);
@@ -91,7 +94,7 @@ parameter_mu_bx_0_i: entity work.obj_parameter
         type_obj => MU_TYPE
     )
     port map(
-        muon => mu_bx_0,
+        muon => mu_bx_0_int,
         pt_vector => mu_bx_0_pt_vector,
         upt_vector => mu_bx_0_upt_vector,
         eta_integer => mu_bx_0_eta_integer,
@@ -156,6 +159,8 @@ invariant_mass_upt_i0_i: entity work.correlation_conditions_muon
 -- correlation cuts
         pt1_width => MU_PT_VECTOR_WIDTH,
         pt2_width => MU_PT_VECTOR_WIDTH,
+        upt1_width => MU_UPT_VECTOR_WIDTH,
+        upt2_width => MU_UPT_VECTOR_WIDTH,
         mass_cut => true,
         mass_type => INVARIANT_MASS_UPT_TYPE,
         mass_cosh_cos_precision => MU_MU_COSH_COS_PRECISION,
@@ -169,13 +174,15 @@ invariant_mass_upt_i0_i: entity work.correlation_conditions_muon
     )
     port map(
         lhc_clk,
-        obj1 => mu_bx_0,
-        obj2 => mu_bx_0,
+        obj1 => mu_bx_0_int,
+        obj2 => mu_bx_0_int,
         pt1 => mu_bx_0_pt_vector,
         pt2 => mu_bx_0_pt_vector,
+        upt1 => mu_bx_0_upt_vector,
+        upt2 => mu_bx_0_upt_vector,
         cosh_deta => mu_mu_bx_0_bx_0_cosh_deta_vector,
         cos_dphi => mu_mu_bx_0_bx_0_cos_dphi_vector,
-        condition_o => invariant_mass_upt_i0
+        condition_o => condition_o
     );
 
 end rtl;

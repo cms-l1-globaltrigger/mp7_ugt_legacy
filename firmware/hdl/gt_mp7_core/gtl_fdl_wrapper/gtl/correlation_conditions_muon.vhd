@@ -131,6 +131,8 @@ entity correlation_conditions_muon is
 
         pt1_width: positive := MU_PT_VECTOR_WIDTH;
         pt2_width: positive := MU_PT_VECTOR_WIDTH;
+        upt1_width: positive := MU_UPT_VECTOR_WIDTH;
+        upt2_width: positive := MU_UPT_VECTOR_WIDTH;
 
         mass_cut: boolean := false;
         mass_type : natural := INVARIANT_MASS_TYPE;
@@ -166,6 +168,8 @@ entity correlation_conditions_muon is
         dphi: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
         pt2 : in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
+        upt1 : in diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
+        upt2 : in diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
         cosh_deta : in common_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         cos_dphi : in common_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         cos_phi_1_integer : in sin_cos_integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
@@ -287,6 +291,8 @@ begin
                 mass_lower_limit_vector => mass_lower_limit_vector,
                 pt1_width => pt1_width,
                 pt2_width => pt2_width,
+                upt1_width => upt1_width,
+                upt2_width => upt2_width,
                 cosh_cos_precision => mass_cosh_cos_precision,
                 cosh_cos_width => cosh_cos_width,
                 pt_sq_threshold_vector => pt_sq_threshold_vector,
@@ -304,6 +310,8 @@ begin
                 dphi => dphi,
                 pt1 => pt1,
                 pt2 => pt2,
+                upt1 => upt1,
+                upt2 => upt2,
                 cosh_deta => cosh_deta,
                 cos_dphi => cos_dphi,
                 cos_phi_1_integer => cos_phi_1_integer,

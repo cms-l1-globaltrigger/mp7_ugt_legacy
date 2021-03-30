@@ -60,20 +60,28 @@ begin
     begin
         wait for 5 * LHC_CLK_PERIOD;
         wait for 7 ns;
--- muon data from github/herbberg/l1menus/2021/L1Menu_new_features_test_v2-d1/testvectors/TestVector_L1Menu_new_features_test_v2.txt (bx=0003..0006)
+-- muon data from github/herbberg/l1menus/2021/L1Menu_new_features_test_v3-d5/testvectors/TestVector_L1Menu_new_features_test_v3.txt
+--bx = 0003
         mu_bx_0 <= (X"0fe5e00c0413fcbc", X"0fe70809fca3fce1", X"4fe95008d833fd2a", X"4885a80c105220b5", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000");
         wait for LHC_CLK_PERIOD;
+--bx = 0004
         mu_bx_0 <= (X"0fe73008f5a3fce6", X"8963b00df6b25c76", X"85cb600d4351756c", X"850200080cd94440", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000");
         wait for LHC_CLK_PERIOD;
+--bx = 0005
         mu_bx_0 <= (X"4fe77808e74bfcef", X"8fe1700d0453fc2e", X"4c63a008698b1c74", X"c747780d4ae1d0ef", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000");
         wait for LHC_CLK_PERIOD;
+--bx = 0006
         mu_bx_0 <= (X"cff1c80d44abfe39", X"8deeb809366b79d7", X"05c250086131744a", X"03b1e80cfca0ee3d", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000");
+        wait for LHC_CLK_PERIOD;
+        mu_bx_0 <= (X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000");
+        wait for LHC_CLK_PERIOD;
+--bx = 0028
+        mu_bx_0 <= (X"cfeb6009093bfd6c", X"0e8dc009d75ba5b8", X"c465d00c2a7918ba", X"4091e00c5640223c", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000");
         wait for LHC_CLK_PERIOD;
         mu_bx_0 <= (X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000", X"0000000000000000");
         wait for LHC_CLK_PERIOD;
         wait;
     end process;
-
  ------------------- Instantiate  modules  -----------------
 pipeline_p: process(lhc_clk, mu_bx_0)
     begin

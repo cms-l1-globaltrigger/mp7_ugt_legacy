@@ -4,10 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
   
-## [v1.12.1] - 2021-03-18
+## [v1.12.1] - 2021-03-31
 ### Comment
 
 - mp7_ugt firmware release v1.12.1
+
+### Changed
+- source files:
+  - ../gt_mp7_core/gt_mp7_core_pkg.vhd
+  - ../gtl/correlation_conditions_muon.vhd
 
 ## [v1.12.0] - 2021-02-05
 ### Comment

@@ -49,11 +49,11 @@ entity mass_calculator is
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0) := (others => '0');
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
         mass_comp : out std_logic;
-        invariant_mass_o : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0); 
+        invariant_mass_o : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0);
 -- HB 2016-11-08: simulation outputs
-        sim_invariant_mass_sq_div2 : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0); 
+        sim_invariant_mass_sq_div2 : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0);
         sim_inv_mass_comp : out std_logic;
-        sim_transverse_mass_sq_div2 : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0); 
+        sim_transverse_mass_sq_div2 : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0);
         sim_transverse_mass_comp : out std_logic
     );
 end mass_calculator;
@@ -67,9 +67,9 @@ architecture rtl of mass_calculator is
     signal invariant_mass_sq_div2 : std_logic_vector(MASS_VECTOR_WIDTH-1 downto 0) := (others => '0');
     signal inv_mass_upt_sq_div2 : std_logic_vector(MASS_UPT_VECTOR_WIDTH-1 downto 0) := (others => '0');
     signal transverse_mass_sq_div2 : std_logic_vector(MASS_VECTOR_WIDTH-1 downto 0) := (others => '0');
-    
+
     signal inv_mass_comp, inv_mass_upt_comp, transverse_mass_comp : std_logic := '0';
-    
+
 -- HB 2017-09-21: used attribute "use_dsp" instead of "use_dsp48" for "mass" - see warning below
 -- MP7 builds, synth_1, runme.log => WARNING: [Synth 8-5974] attribute "use_dsp48" has been deprecated, please use "use_dsp" instead
     attribute use_dsp : string;
@@ -83,22 +83,22 @@ begin
     invariant_mass_sq_div2 <= pt1 * pt2 * (cosh_deta - cos_dphi);
     invariant_mass_o <= invariant_mass_sq_div2;
     sim_invariant_mass_sq_div2 <= invariant_mass_sq_div2;
-    
+
     inv_mass_comp <= '1' when invariant_mass_sq_div2 >= mass_lower_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) and invariant_mass_sq_div2 <= mass_upper_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) else '0';
     sim_inv_mass_comp <= inv_mass_comp;
-    
+
     inv_mass_upt_sq_div2 <= upt1 * upt2 * (cosh_deta - cos_dphi);
-    
+
     inv_mass_upt_comp <= '1' when inv_mass_upt_sq_div2 >= mass_lower_limit_vector(MASS_UPT_VECTOR_WIDTH-1 downto 0) and inv_mass_upt_sq_div2 <= mass_upper_limit_vector(MASS_UPT_VECTOR_WIDTH-1 downto 0) else '0';
-    
+
 -- HB 2016-12-12: calculation of transverse mass with formular M**2/2=pt1*pt2*(1-cos(phi1-phi2))
 --                "conv_std_logic_vector((10**mass_cosh_cos_precision), cosh_cos_width)" means 1 multiplied with 10**mass_cosh_cos_precision, converted to std_logic_vector with cosh_cos_width
     transverse_mass_sq_div2 <= pt1 * pt2 * ((conv_std_logic_vector((10**mass_cosh_cos_precision), cosh_cos_width)) - cos_dphi);
     sim_transverse_mass_sq_div2 <= transverse_mass_sq_div2;
-    
+
     transverse_mass_comp <= '1' when transverse_mass_sq_div2 >= mass_lower_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) and transverse_mass_sq_div2 <= mass_upper_limit_vector(MASS_VECTOR_WIDTH-1 downto 0) else '0';
     sim_transverse_mass_comp <= transverse_mass_comp;
-    
+
 -- HB 2016-12-13: selection of comparision for mass types
     invariant_mass_sel: if mass_type = INVARIANT_MASS_TYPE generate
         mass_comp <= '1' when inv_mass_comp = '1' else '0';
@@ -109,5 +109,5 @@ begin
     transverse_mass_sel: if mass_type = TRANSVERSE_MASS_TYPE generate
         mass_comp <= '1' when transverse_mass_comp = '1' else '0';
     end generate transverse_mass_sel;
-    
+
 end architecture rtl;

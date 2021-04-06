@@ -977,6 +977,7 @@ constant MAX_WIDTH_DR_LIMIT_VECTOR : positive := 64;
 constant MAX_WIDTH_MASS_LIMIT_VECTOR : positive := 64;
 constant MAX_WIDTH_TBPT_LIMIT_VECTOR : positive := 64;
 type mass_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
+type dr_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
 
 -- ********************************************************
 -- definitions for invariant mass divided by deltaR

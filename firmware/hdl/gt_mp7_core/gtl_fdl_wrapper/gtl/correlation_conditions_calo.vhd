@@ -7,6 +7,7 @@
 -- 4. calo esums.
 
 -- Version history:
+-- HB 2021-04-06: changed for mass and DR cuts calculation outside of conditions (similar to mass_div_dr).
 -- HB 2021-03-16: implemented instance "matrix_corr_cond".
 -- HB 2021-03-04: bugs fixed.
 -- HB 2021-02-19: updated instances of comparator modules and condition output pipeline.
@@ -174,14 +175,16 @@ entity correlation_conditions_calo is
         dphi: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
         pt2 : in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
---         cosh_deta : in calo_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
---         cos_dphi : in calo_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         cosh_deta : in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         cos_dphi : in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         cos_phi_1_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
         cos_phi_2_integer : in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
         sin_phi_1_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
         sin_phi_2_integer : in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
+        dr : in dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        mass_inv_pt : in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        mass_inv_upt : in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        mass_trans : in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_div_dr : in mass_div_dr_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         condition_o: out std_logic
     );
@@ -306,6 +309,30 @@ begin
             end generate obj2_l;
         end generate muon_obj2_i;
 
+        mass_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
+            mass_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
+                mass_comp_l1: if (type_obj1 = type_obj2) and (same_bx = true) and j>i generate
+                    mass_comp(i,j) <= '1' when mass_inv_pt(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and mass_inv_pt(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                    mass_comp(i,j) <= mass_comp(i,j);
+                    mass_comp(j,i) <= mass_comp(i,j);
+                end generate mass_comp_l1;
+                mass_comp_l2: if (type_obj1 /= type_obj2) or (same_bx = false) generate
+                    mass_comp(i,j) <= '1' when mass_inv_pt(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and mass_inv_pt(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                end generate mass_comp_l2;
+            end generate mass_l_2;
+        end generate mass_l_1;
+
+        pipeline_p: process(lhc_clk, deta_comp, dphi_comp, dr_comp, mass_comp, twobody_pt_comp)
+            begin
+            if INTERMEDIATE_PIPELINE = false then
+                mass_comp_pipe <= mass_comp;
+            else
+                if (lhc_clk'event and lhc_clk = '1') then
+                    mass_comp_pipe <= mass_comp;
+                end if;
+            end if;
+        end process;
+
         correlation_cuts_i: entity work.correlation_cuts
             generic map(
                 slice_low_obj1,
@@ -355,7 +382,7 @@ begin
                 deta_comp_pipe => deta_comp_pipe,
                 dphi_comp_pipe => dphi_comp_pipe,
                 dr_comp_pipe => dr_comp_pipe,
-                mass_comp_pipe => mass_comp_pipe,
+--                 mass_comp_pipe => mass_comp_pipe,
                 twobody_pt_comp_pipe => twobody_pt_comp_pipe
             );
 

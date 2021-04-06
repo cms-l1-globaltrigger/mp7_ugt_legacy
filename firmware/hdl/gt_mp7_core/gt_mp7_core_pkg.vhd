@@ -9,6 +9,7 @@
 
 -- gtl history:
 -- HB 2021-02-08: v1.13.0: Changed directory structure in gtl (created sub dir "common" for modules, wihich are not instantiated in gtl_module.vhd).
+-- HB 2021-03-18: v1.12.1: Bug fix in correlation_conditions_muon.vhd.
 -- HB 2021-02-05: v1.12.0: Implemented comb_conditions.vhd, correlation_conditions_calo.vhd and correlation_conditions_muon.vhd instead of calo_conditions.vhd, muon_conditions.vhd and calo_calo_correlation_condition.vhd, muon_muon_correlation_condition.vhd, etc.
 -- HB 2020-12-14: v1.11.0: Changes logic for phi cuts (similar to eta cuts). Same order in generics calo and muon conditions and for all correlation conditions (simplifies templates of VHDL Producer).
 -- HB 2020-10-09: v1.10.1: Added module pipelines (including modules for ext_cond_pipe and centrality_pipe processes). Changed files for correlation conditions of calos and muons.
@@ -45,7 +46,7 @@ package gt_mp7_core_pkg is
     constant BUILD_VERSION : std_logic_vector(31 downto 0) := TOP_BUILD_VERSION;
 
 -- ==================================================================================================
--- FRAME version (given by the editor of frame.vhd)
+-- FRAME version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 13;
     constant FRAME_REV_VERSION        : integer range 0 to 255 := 0;

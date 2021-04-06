@@ -3,7 +3,42 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
-  
+
+## [v1.13.0] - 2021-04-06
+### Comment
+
+- mp7_ugt firmware release v1.13.0
+- changed directory structure in gtl (created sub dir "common")
+- added new modules for calculations
+- added new modules for object cuts comparators (for better modularity of resources)
+- added new modules for and-or matrix in correlation conditions
+
+### Added
+- source files:
+  - ../gtl/conv_eta_phi.vhd
+  - ../gtl/obj_parameter.vhd
+  - ../gtl/cosh_deta_cos_dphi.vhd
+  - ../gtl/differences.vhd
+  - ../gtl/common/pt_comp.vhd
+  - ../gtl/common/upt_comp.vhd
+  - ../gtl/common/charge_comp.vhd
+  - ../gtl/common/lut_comp.vhd
+  - ../gtl/common/matrix_corr_cond.vhd
+  - ../gtl/common/mass_div_dr_calc.vhd
+
+### Changed
+- source files:
+  - ../gtl/common/calo_comparators.vhd
+  - ../gtl/common/muon_comparators.vhd
+- dep file:
+  - ../cfg/uGT_algo.dep
+- simulation files:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
+
+### Removed
+- source file:
+  - ../gtl/mass_div_dr_calculator.vhd
+
 ## [v1.12.1] - 2021-03-31
 ### Comment
 
@@ -46,11 +81,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../gtl/calo_muon_correlation_condition.vhd
   - ../gtl/muon_muon_correlation_condition.vhd
   - ../gtl/calo_obj_cuts.vhd
-  - ../gtl/cuts_instances.vhd 
-  - ../gtl/mass_calculator.vhd 
-  - ../gtl/muon_charge_corr_matrix.vhd 
-  - ../gtl/muon_obj_cuts.vhd 
-  - ../gtl/muon_obj_cuts.vhd 
+  - ../gtl/cuts_instances.vhd
+  - ../gtl/mass_calculator.vhd
+  - ../gtl/muon_charge_corr_matrix.vhd
+  - ../gtl/muon_obj_cuts.vhd
+  - ../gtl/muon_obj_cuts.vhd
 - dep file:
   - ../cfg/uGT_algo.dep
 - simulation files:
@@ -196,7 +231,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - source files:
   - ../gtl/calo_cond_matrix_orm.vhd
-  
+
 ## [v1.10.5] - 2020-01-20
 ### Comment
 
@@ -209,7 +244,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - script files:
   - ../scripts/run_simulation_questa.py
   - ../scripts/runIpbbSynth.py
-  
+
 ## [v1.10.4] - 2019-11-14
 ### Comment
 

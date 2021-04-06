@@ -2,6 +2,10 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2021-02-25: removed unused types (calo_deta_bin_vector_array, muon_deta_bin_vector_array, calo_dphi_bin_vector_array, muon_dphi_bin_vector_array).
+-- HB 2021-02-18: additional constants and types (for cosh_deta_cos_dphi.vhd).
+-- HB 2021-02-16: additional constants for HTMHF.
+-- HB 2021-02-11: added constant for intermediate pipeline in conditions.
 -- HB 2021-01-25: added constants for bit width and types of all object cuts (MAX_PT_BITS, etc., renamed MAX_MUON_PHI_BITS to MUON_PHI_BITS).
 -- HB 2021-01-22: added constant (MAX_OBJECT_BITS) and type (common_objects_array).
 -- HB 2020-06-26: added constants for rom width (for invariant mass divided by deltaR).
@@ -50,11 +54,11 @@ use work.gt_mp7_core_pkg.all;
 package gtl_pkg is
 
 -- HB 2019-05-02: inserted types for calo_cond_matrix.vhd.
-type object_slice_1_vs_template_array is array (natural range <>, natural range <>) of std_logic;     
-type object_slice_2_vs_template_array is array (natural range <>, natural range <>) of std_logic;     
-type object_slice_3_vs_template_array is array (natural range <>, natural range <>) of std_logic;     
-type object_slice_4_vs_template_array is array (natural range <>, natural range <>) of std_logic; 
-    
+type object_slice_1_vs_template_array is array (natural range <>, natural range <>) of std_logic;
+type object_slice_2_vs_template_array is array (natural range <>, natural range <>) of std_logic;
+type object_slice_3_vs_template_array is array (natural range <>, natural range <>) of std_logic;
+type object_slice_4_vs_template_array is array (natural range <>, natural range <>) of std_logic;
+
 type sin_cos_integer_array is array (natural range <>) of integer;
 
 {{ugt_constants}}
@@ -98,6 +102,9 @@ type rate_counter_array is array (NR_ALGOS-1 downto 0) of std_logic_vector(RATE_
 -- constant MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := ({AssignmentFinorVetoMasks} others => X"00000001"); --Finor and veto masks registers (bit 0 = finor, bit 1 = veto)
 constant MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"00000001"); --Finor and veto masks registers (bit 0 = finor, bit 1 = veto)
 -- ==== FDL definitions - end ============================================================
+-- fixed pipeline structure
+constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
+constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
 
 -- Definition of object types
 
@@ -182,11 +189,11 @@ constant MUON_IP_BITS : natural := MUON_IP_HIGH-MUON_IP_LOW+1;
 --     eta_raw_high, eta_raw_low, phi_raw_high, phi_raw_low, idx_bits_high, idx_bits_low, charge_high, charge_low, iso_high, iso_low,
 --     eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MAX_MUON_BITS-1 downto 0;
 -- end record d_s_i_muon_record;
--- 
+--
 -- constant d_s_i_muon : d_s_i_muon_record :=
 --     (MUON_ETA_RAW_HIGH,MUON_ETA_RAW_LOW,MUON_PHI_RAW_HIGH,MUON_PHI_RAW_LOW,MUON_IDX_BITS_HIGH,MUON_IDX_BITS_LOW,MUON_CHARGE_HIGH,MUON_CHARGE_LOW,MUON_ISO_HIGH,MUON_ISO_LOW,
 --     MUON_ETA_HIGH,MUON_ETA_LOW,MUON_QUAL_HIGH,MUON_QUAL_LOW,MUON_PT_HIGH,MUON_PT_LOW,MUON_PHI_HIGH,MUON_PHI_LOW);
--- 
+--
 type d_s_i_muon_record is record
     ip_high, ip_low, upt_high, upt_low, phi_raw_high, phi_raw_low, idx_bits_high, idx_bits_low, charge_high, charge_low, iso_high, iso_low, eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MAX_MUON_BITS-1 downto 0;
 end record d_s_i_muon_record;
@@ -657,10 +664,15 @@ constant EG_ETMHF_DPHI_PRECISION: positive := 3;
 constant JET_ETMHF_DPHI_PRECISION: positive := 3;
 constant TAU_ETMHF_DPHI_PRECISION: positive := 3;
 constant MUON_ETMHF_DPHI_PRECISION: positive := 3;
+constant EG_HTMHF_DPHI_PRECISION: positive := 3;
+constant JET_HTMHF_DPHI_PRECISION: positive := 3;
+constant TAU_HTMHF_DPHI_PRECISION: positive := 3;
+constant MUON_HTMHF_DPHI_PRECISION: positive := 3;
 -- HB 2017-06-21: for correlation conditions v2
 constant MU_ETM_DPHI_PRECISION: positive := 3;
 constant MU_HTM_DPHI_PRECISION: positive := 3;
 constant MU_ETMHF_DPHI_PRECISION: positive := 3;
+constant MU_HTMHF_DPHI_PRECISION: positive := 3;
 
 constant EG_EG_DETA_DPHI_PRECISION: positive := max(EG_EG_DETA_PRECISION, EG_EG_DPHI_PRECISION);
 constant EG_JET_DETA_DPHI_PRECISION: positive := max(EG_JET_DETA_PRECISION, EG_JET_DPHI_PRECISION);
@@ -748,6 +760,10 @@ constant EG_HTM_MASS_PRECISION : positive range 1 to 3 := 1;
 constant JET_HTM_MASS_PRECISION : positive range 1 to 3 := 1;
 constant TAU_HTM_MASS_PRECISION : positive range 1 to 3 := 1;
 constant MU_HTM_MASS_PRECISION : positive range 1 to 3 := 1;
+constant EG_HTMHF_MASS_PRECISION : positive range 1 to 3 := 1;
+constant JET_HTMHF_MASS_PRECISION : positive range 1 to 3 := 1;
+constant TAU_HTMHF_MASS_PRECISION : positive range 1 to 3 := 1;
+constant MU_HTMHF_MASS_PRECISION : positive range 1 to 3 := 1;
 
 -- calo-calo-correlation
 -- constant CALO_INV_MASS_PT_PRECISION : positive := 1;
@@ -757,12 +773,14 @@ constant TAU_PT_PRECISION : positive := 1;
 constant ETM_PT_PRECISION : positive := 1;
 constant ETMHF_PT_PRECISION : positive := 1;
 constant HTM_PT_PRECISION : positive := 1;
+constant HTMHF_PT_PRECISION : positive := 1;
 constant EG_PT_VECTOR_WIDTH: positive := log2c((2**(D_S_I_EG_V2.et_high-D_S_I_EG_V2.et_low+1)-1)*(10**EG_PT_PRECISION)); -- max. value 255.5 GeV => 2555 => 0x9FB
 constant JET_PT_VECTOR_WIDTH: positive := log2c((2**(D_S_I_JET_V2.et_high-D_S_I_JET_V2.et_low+1)-1)*(10**JET_PT_PRECISION));
 constant TAU_PT_VECTOR_WIDTH: positive := log2c((2**(D_S_I_TAU_V2.et_high-D_S_I_TAU_V2.et_low+1)-1)*(10**TAU_PT_PRECISION));
 constant ETM_PT_VECTOR_WIDTH: positive := log2c((2**(D_S_I_ETM_V2.et_high-D_S_I_ETM_V2.et_low+1)-1)*(10**ETM_PT_PRECISION));
 constant ETMHF_PT_VECTOR_WIDTH: positive := log2c((2**(D_S_I_ETMHF_V2.et_high-D_S_I_ETMHF_V2.et_low+1)-1)*(10**ETMHF_PT_PRECISION));
 constant HTM_PT_VECTOR_WIDTH: positive := log2c((2**(D_S_I_HTM_V2.et_high-D_S_I_HTM_V2.et_low+1)-1)*(10**HTM_PT_PRECISION));
+constant HTMHF_PT_VECTOR_WIDTH: positive := log2c((2**(D_S_I_HTMHF_V2.et_high-D_S_I_HTMHF_V2.et_low+1)-1)*(10**HTMHF_PT_PRECISION));
 -- constant EG_PT_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 (255.5 * 10**CALO_INV_MASS_PT_PRECISION) => 0x9FB
 -- constant JET_PT_VECTOR_WIDTH: positive := 14; -- max. value 1023.5 GeV => 10235 (1023.5 * 10**CALO_INV_MASS_PT_PRECISION) => 0x27FB
 -- constant TAU_PT_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 (255.5 * 10**CALO_INV_MASS_PT_PRECISION) => 0x9FB
@@ -786,6 +804,9 @@ constant TAU_ETMHF_COSH_COS_PRECISION : positive := 3;
 constant EG_HTM_COSH_COS_PRECISION : positive := 3;
 constant JET_HTM_COSH_COS_PRECISION : positive := 3;
 constant TAU_HTM_COSH_COS_PRECISION : positive := 3;
+constant EG_HTMHF_COSH_COS_PRECISION : positive := 3;
+constant JET_HTMHF_COSH_COS_PRECISION : positive := 3;
+constant TAU_HTMHF_COSH_COS_PRECISION : positive := 3;
 
 -- constant CALO_COSH_COS_VECTOR_WIDTH: positive := 24; -- max. value cosh_deta-cos_dphi => [10597282-(-1000)]=10598282 => 0xA1B78A
 constant EG_EG_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000)); -- [10597282-(-1000)]=10598282 => 0xA1B78A
@@ -800,12 +821,15 @@ constant TAU_TAU_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant EG_ETM_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant EG_ETMHF_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant EG_HTM_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
+constant EG_HTMHF_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant JET_ETM_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant JET_ETMHF_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant JET_HTM_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
+constant JET_HTMHF_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant TAU_ETM_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant TAU_ETMHF_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 constant TAU_HTM_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
+constant TAU_HTMHF_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 -- constant MAX_COSH_COS_TEMP_1: positive := max(EG_EG_COSH_COS_VECTOR_WIDTH, EG_JET_COSH_COS_VECTOR_WIDTH, EG_TAU_COSH_COS_VECTOR_WIDTH);
 -- constant MAX_COSH_COS_TEMP_2: positive := max(JET_JET_COSH_COS_VECTOR_WIDTH, JET_TAU_COSH_COS_VECTOR_WIDTH, TAU_TAU_COSH_COS_VECTOR_WIDTH);
 -- constant CALO_COSH_COS_VECTOR_WIDTH: positive := max(MAX_COSH_COS_TEMP_1, MAX_COSH_COS_TEMP_2);
@@ -823,6 +847,9 @@ constant TAU_ETMHF_PT_PRECISION : positive := 1;
 constant EG_HTM_PT_PRECISION : positive := 1;
 constant JET_HTM_PT_PRECISION : positive := 1;
 constant TAU_HTM_PT_PRECISION : positive := 1;
+constant EG_HTMHF_PT_PRECISION : positive := 1;
+constant JET_HTMHF_PT_PRECISION : positive := 1;
+constant TAU_HTMHF_PT_PRECISION : positive := 1;
 constant EG_EG_PT_PRECISION : positive := 1;
 constant EG_JET_PT_PRECISION : positive := 1;
 constant EG_TAU_PT_PRECISION : positive := 1;
@@ -842,6 +869,9 @@ constant TAU_ETMHF_SIN_COS_PRECISION : positive := 3;
 constant EG_HTM_SIN_COS_PRECISION : positive := 3;
 constant JET_HTM_SIN_COS_PRECISION : positive := 3;
 constant TAU_HTM_SIN_COS_PRECISION : positive := 3;
+constant EG_HTMHF_SIN_COS_PRECISION : positive := 3;
+constant JET_HTMHF_SIN_COS_PRECISION : positive := 3;
+constant TAU_HTMHF_SIN_COS_PRECISION : positive := 3;
 constant EG_EG_SIN_COS_PRECISION : positive := 3;
 constant EG_JET_SIN_COS_PRECISION : positive := 3;
 constant EG_TAU_SIN_COS_PRECISION : positive := 3;
@@ -861,17 +891,19 @@ constant MUON_MUON_COSH_COS_PRECISION : positive := 4; -- 4 digits after decimal
 constant MUON_ETM_COSH_COS_PRECISION : positive := 4; -- 4 digits after decimal point (after roundimg to the 5th digit)
 constant MUON_ETMHF_COSH_COS_PRECISION : positive := 4; -- 4 digits after decimal point (after roundimg to the 5th digit)
 constant MUON_HTM_COSH_COS_PRECISION : positive := 4; -- 4 digits after decimal point (after roundimg to the 5th digit)
+constant MUON_HTMHF_COSH_COS_PRECISION : positive := 4; -- 4 digits after decimal point (after roundimg to the 5th digit)
 constant MU_MU_COSH_COS_PRECISION : positive := MUON_MUON_COSH_COS_PRECISION; -- 4 digits after decimal point (after roundimg to the 5th digit)
 constant MU_ETM_COSH_COS_PRECISION : positive := MUON_ETM_COSH_COS_PRECISION;
 constant MU_ETMHF_COSH_COS_PRECISION : positive := MUON_ETMHF_COSH_COS_PRECISION;
 constant MU_HTM_COSH_COS_PRECISION : positive := MUON_HTM_COSH_COS_PRECISION;
+constant MU_HTMHF_COSH_COS_PRECISION : positive := MUON_HTMHF_COSH_COS_PRECISION;
 
 constant MUON_PT_VECTOR_WIDTH: positive := log2c((2**(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low+1)-1)*(10**MUON_PT_PRECISION)); -- max. value 255.5 GeV => 2555 => 0x9FB
 constant MU_PT_VECTOR_WIDTH: positive := MUON_PT_VECTOR_WIDTH; -- dummy for VHDL-Producer output (correlation conditions)
 -- constant MUON_PT_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 (255.5 * 10**MUON_INV_MASS_PT_PRECISION) => 0x9FB
 
 constant MUON_UPT_PRECISION : positive := 1; -- 1 digit after decimal point
-constant MU_UPT_VECTOR_WIDTH: positive := 12; -- max. value 255.0 GeV => 2550 (255.0 * 10**MUON_UPT_PRECISION) => 0x9F6 
+constant MU_UPT_VECTOR_WIDTH: positive := 12; -- max. value 255.0 GeV => 2550 (255.0 * 10**MUON_UPT_PRECISION) => 0x9F6
 
 constant MUON_MUON_COSH_COS_VECTOR_WIDTH: positive := log2c(677303); -- max. value cosh_deta-cos_dphi => [667303-(-10000)]=677303 => 0xA55B7 - highest value in LUT
 constant MU_MU_COSH_COS_VECTOR_WIDTH: positive := MUON_MUON_COSH_COS_VECTOR_WIDTH; -- max. value cosh_deta-cos_dphi => [667303-(-10000)]=677303 => 0xA55B7 - highest value in LUT
@@ -895,12 +927,14 @@ constant TAU_MUON_COSH_COS_VECTOR_WIDTH: positive := log2c(109487199-(-10000));
 constant MUON_ETM_COSH_COS_VECTOR_WIDTH: positive := log2c(109487199-(-10000));
 constant MUON_ETMHF_COSH_COS_VECTOR_WIDTH: positive := log2c(109487199-(-10000));
 constant MUON_HTM_COSH_COS_VECTOR_WIDTH: positive := log2c(109487199-(-10000));
+constant MUON_HTMHF_COSH_COS_VECTOR_WIDTH: positive := log2c(109487199-(-10000));
 constant EG_MU_COSH_COS_VECTOR_WIDTH: positive := EG_MUON_COSH_COS_VECTOR_WIDTH;
 constant JET_MU_COSH_COS_VECTOR_WIDTH: positive := JET_MUON_COSH_COS_VECTOR_WIDTH;
 constant TAU_MU_COSH_COS_VECTOR_WIDTH: positive := TAU_MUON_COSH_COS_VECTOR_WIDTH;
 constant MU_ETM_COSH_COS_VECTOR_WIDTH: positive := MUON_ETM_COSH_COS_VECTOR_WIDTH;
 constant MU_ETMHF_COSH_COS_VECTOR_WIDTH: positive := MUON_ETMHF_COSH_COS_VECTOR_WIDTH;
 constant MU_HTM_COSH_COS_VECTOR_WIDTH: positive := MUON_HTM_COSH_COS_VECTOR_WIDTH;
+constant MU_HTMHF_COSH_COS_VECTOR_WIDTH: positive := MUON_HTMHF_COSH_COS_VECTOR_WIDTH;
 -- constant CALO_MUON_COSH_COS_VECTOR_WIDTH: positive := max(EG_MUON_COSH_COS_VECTOR_WIDTH, JET_MUON_COSH_COS_VECTOR_WIDTH, TAU_MUON_COSH_COS_VECTOR_WIDTH);
 -- HB 2017-01-19: fix value for CALO_MUON_COSH_COS_VECTOR_WIDTH
 constant CALO_MUON_COSH_COS_VECTOR_WIDTH: positive := log2c(109487199-(-10000));
@@ -912,6 +946,7 @@ type common_cosh_cos_vector_array is array (natural range <>, natural range <>) 
 constant MU_ETM_PT_PRECISION : positive := 1;
 constant MU_ETMHF_PT_PRECISION : positive := 1;
 constant MU_HTM_PT_PRECISION : positive := 1;
+constant MU_HTMHF_PT_PRECISION : positive := 1;
 constant EG_MU_PT_PRECISION : positive := 1;
 constant JET_MU_PT_PRECISION : positive := 1;
 constant TAU_MU_PT_PRECISION : positive := 1;
@@ -920,6 +955,7 @@ constant MU_MU_PT_PRECISION : positive := 1;
 constant MU_ETM_SIN_COS_PRECISION : positive := 4;
 constant MU_ETMHF_SIN_COS_PRECISION : positive := 4;
 constant MU_HTM_SIN_COS_PRECISION : positive := 4;
+constant MU_HTMHF_SIN_COS_PRECISION : positive := 4;
 constant EG_MU_SIN_COS_PRECISION : positive := 4;
 constant JET_MU_SIN_COS_PRECISION : positive := 4;
 constant TAU_MU_SIN_COS_PRECISION : positive := 4;
@@ -949,11 +985,11 @@ type addr_rom_lut_calo_inv_dr_sq_array is array (natural range <>, natural range
 constant CALO_DETA_BINS : positive := 230;
 constant CALO_DPHI_BINS : positive := CALO_PHI_BINS; -- 144
 
-constant CALO_DETA_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DETA_BINS))+1 
+constant CALO_DETA_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DETA_BINS))+1
 constant CALO_DPHI_BINS_WIDTH : positive := 8; -- => int(log2(CALO_DPHI_BINS))+1
 
-type calo_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DETA_BINS_WIDTH-1 downto 0);
-type calo_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DPHI_BINS_WIDTH-1 downto 0);
+-- type calo_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DETA_BINS_WIDTH-1 downto 0);
+-- type calo_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_DPHI_BINS_WIDTH-1 downto 0);
 
 constant CALO_INV_DR_SQ_LUT_MAX_VAL : natural := 52847140;
 constant CALO_INV_DR_SQ_VECTOR_WIDTH : natural := 26; -- => log2(CALO_INV_DR_SQ_LUT_MAX_VAL)
@@ -982,18 +1018,24 @@ constant JET_TAU_MASS_DIV_DR_VECTOR_WIDTH : positive := JET_PT_VECTOR_WIDTH*TAU_
 constant MUON_DETA_BINS : positive := 451;
 constant MUON_DPHI_BINS : positive := MUON_PHI_BINS; -- 576
 
-constant MU_DETA_BINS_WIDTH : positive := 9; -- => int(log2(MUON_DETA_BINS))+1 
+constant MU_DETA_BINS_WIDTH : positive := 9; -- => int(log2(MUON_DETA_BINS))+1
 constant MU_DPHI_BINS_WIDTH : positive := 10; -- => int(log2(MUON_DPHI_BINS))+1
 
-type muon_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DETA_BINS_WIDTH-1 downto 0);
-type muon_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DPHI_BINS_WIDTH-1 downto 0);
+-- type muon_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DETA_BINS_WIDTH-1 downto 0);
+-- type muon_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_DPHI_BINS_WIDTH-1 downto 0);
 
 -- full muon bins would exceed BRAM resources, therefore reduced bins for ROMs are used
 constant MUON_DETA_BINS_ROM : positive := 225; -- double resolution of calos (half of muon eta bins)
 constant MUON_DPHI_BINS_ROM : positive := 144; -- same resolution as calos (quarter of muon phi bins)
 
-constant MU_DETA_BINS_WIDTH_ROM : positive := 8; -- => int(log2(MUON_DETA_BINS_ROM))+1 
+constant MU_DETA_BINS_WIDTH_ROM : positive := 8; -- => int(log2(MUON_DETA_BINS_ROM))+1
 constant MU_DPHI_BINS_WIDTH_ROM : positive := 8; -- => int(log2(MUON_DPHI_BINS_ROM))+1
+
+constant COMMON_DETA_BINS_WIDTH : positive := max(CALO_DETA_BINS_WIDTH, MU_DETA_BINS_WIDTH);
+constant COMMON_DPHI_BINS_WIDTH : positive := max(CALO_DPHI_BINS_WIDTH, MU_DPHI_BINS_WIDTH);
+
+type common_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(COMMON_DETA_BINS_WIDTH-1 downto 0);
+type common_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(COMMON_DPHI_BINS_WIDTH-1 downto 0);
 
 constant MU_MU_INV_DR_SQ_LUT_MAX_VAL : natural := 211388559;
 constant MU_MU_INV_DR_SQ_VECTOR_WIDTH : natural := 28; -- => log2(MU_MU_INV_DR_SQ_LUT_MAX_VAL)
@@ -1011,49 +1053,49 @@ constant MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR : positive := 84; -- 2*14+27+28=83, 
 type mass_div_dr_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0);
 type max_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
 
-constant EG_EG_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
-constant EG_JET_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
-constant EG_TAU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
-constant JET_JET_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
-constant JET_TAU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
-constant TAU_TAU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
-constant EG_MU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
-constant JET_MU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
-constant TAU_MU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH; 
-constant MU_MU_DETA_BINS_WIDTH : positive := MU_DETA_BINS_WIDTH; 
+constant EG_EG_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH;
+constant EG_JET_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH;
+constant EG_TAU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH;
+constant JET_JET_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH;
+constant JET_TAU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH;
+constant TAU_TAU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH;
+constant EG_MU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH;
+constant JET_MU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH;
+constant TAU_MU_DETA_BINS_WIDTH : positive := CALO_DETA_BINS_WIDTH;
+constant MU_MU_DETA_BINS_WIDTH : positive := MU_DETA_BINS_WIDTH;
 
-constant EG_EG_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
-constant EG_JET_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
-constant EG_TAU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
-constant JET_JET_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
-constant JET_TAU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
-constant TAU_TAU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
-constant EG_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
-constant JET_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
-constant TAU_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH; 
-constant MU_MU_DPHI_BINS_WIDTH : positive := MU_DPHI_BINS_WIDTH; 
+constant EG_EG_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH;
+constant EG_JET_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH;
+constant EG_TAU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH;
+constant JET_JET_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH;
+constant JET_TAU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH;
+constant TAU_TAU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH;
+constant EG_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH;
+constant JET_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH;
+constant TAU_MU_DPHI_BINS_WIDTH : positive := CALO_DPHI_BINS_WIDTH;
+constant MU_MU_DPHI_BINS_WIDTH : positive := MU_DPHI_BINS_WIDTH;
 
-constant EG_EG_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
-constant EG_JET_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
-constant EG_TAU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
-constant JET_JET_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
-constant JET_TAU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
-constant TAU_TAU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
-constant EG_MU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
-constant JET_MU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
-constant TAU_MU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH; 
-constant MU_MU_DETA_BINS_WIDTH_ROM : positive := MU_DETA_BINS_WIDTH_ROM; 
+constant EG_EG_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH;
+constant EG_JET_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH;
+constant EG_TAU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH;
+constant JET_JET_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH;
+constant JET_TAU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH;
+constant TAU_TAU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH;
+constant EG_MU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH;
+constant JET_MU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH;
+constant TAU_MU_DETA_BINS_WIDTH_ROM : positive := CALO_DETA_BINS_WIDTH;
+constant MU_MU_DETA_BINS_WIDTH_ROM : positive := MU_DETA_BINS_WIDTH_ROM;
 
-constant EG_EG_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
-constant EG_JET_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
-constant EG_TAU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
-constant JET_JET_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
-constant JET_TAU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
-constant TAU_TAU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
-constant EG_MU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
-constant JET_MU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
-constant TAU_MU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH; 
-constant MU_MU_DPHI_BINS_WIDTH_ROM : positive := MU_DPHI_BINS_WIDTH_ROM; 
+constant EG_EG_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH;
+constant EG_JET_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH;
+constant EG_TAU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH;
+constant JET_JET_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH;
+constant JET_TAU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH;
+constant TAU_TAU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH;
+constant EG_MU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH;
+constant JET_MU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH;
+constant TAU_MU_DPHI_BINS_WIDTH_ROM : positive := CALO_DPHI_BINS_WIDTH;
+constant MU_MU_DPHI_BINS_WIDTH_ROM : positive := MU_DPHI_BINS_WIDTH_ROM;
 
 -- ROM selection
 constant CALO_CALO_ROM : natural range 0 to 2 := 0;
@@ -1073,7 +1115,7 @@ constant TAU_MU_ROM : natural range 0 to 2 := CALO_MU_ROM;
 -- conversion LUTs
 type calo_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;
 -- type eg_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;
--- type jet_eta_conv_2_muon_eta_lut_arrconstant EG_EG_ROM : natural range 0 to 2 := CALO_CALO_ROM;
+-- type jet_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;
 -- type tau_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;
 
 constant CALO_ETA_CONV_2_MUON_ETA_LUT : calo_eta_conv_2_muon_eta_lut_array := (
@@ -1132,6 +1174,7 @@ constant JET_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := CAL
 constant HTM_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := CALO_PHI_CONV_2_MUON_PHI_LUT;
 constant ETM_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := CALO_PHI_CONV_2_MUON_PHI_LUT;
 constant ETMHF_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := CALO_PHI_CONV_2_MUON_PHI_LUT;
+constant HTMHF_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := CALO_PHI_CONV_2_MUON_PHI_LUT;
 
 -- ********************************************************
 -- delta LUTs
@@ -1225,12 +1268,15 @@ constant TAU_TAU_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_P
 constant EG_HTM_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 constant EG_ETM_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 constant EG_ETMHF_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
+constant EG_HTMHF_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 constant TAU_HTM_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 constant TAU_ETM_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 constant TAU_ETMHF_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
+constant TAU_HTMHF_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 constant JET_HTM_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 constant JET_ETM_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 constant JET_ETMHF_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
+constant JET_HTMHF_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 
 -- muon-muon differences LUTs
 type muon_muon_diff_eta_lut_array is array (0 to 2**(MUON_ETA_HIGH-MUON_ETA_LOW+1)-1) of natural range 0 to 4894;
@@ -1500,6 +1546,7 @@ constant JET_MU_DIFF_PHI_LUT : calo_muon_diff_phi_lut_array := CALO_MU_DIFF_PHI_
 constant MU_HTM_DIFF_PHI_LUT : calo_muon_diff_phi_lut_array := CALO_MU_DIFF_PHI_LUT;
 constant MU_ETM_DIFF_PHI_LUT : calo_muon_diff_phi_lut_array := CALO_MU_DIFF_PHI_LUT;
 constant MU_ETMHF_DIFF_PHI_LUT : calo_muon_diff_phi_lut_array := CALO_MU_DIFF_PHI_LUT;
+constant MU_HTMHF_DIFF_PHI_LUT : calo_muon_diff_phi_lut_array := CALO_MU_DIFF_PHI_LUT;
 
 -- ********************************************************
 -- mass LUTs
@@ -1952,6 +1999,7 @@ constant ETM_PT_LUT : etm_pt_lut_array := (
 );
 
 constant ETMHF_PT_LUT : etm_pt_lut_array := ETM_PT_LUT;
+constant HTMHF_PT_LUT : etm_pt_lut_array := ETM_PT_LUT;
 constant HTM_PT_LUT : etm_pt_lut_array := ETM_PT_LUT;
 
 -- muon pt LUTs
@@ -2105,6 +2153,9 @@ constant TAU_ETMHF_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_
 constant EG_HTM_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
 constant JET_HTM_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
 constant TAU_HTM_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
+constant EG_HTMHF_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
+constant JET_HTMHF_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
+constant TAU_HTMHF_COS_DPHI_LUT : calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPHI_LUT;
 
 -- muon-muon cosh deta LUTs
 type muon_muon_cosh_deta_lut_array is array (0 to 2**(MUON_ETA_HIGH-MUON_ETA_LOW+1)-1) of natural range 0 to 667303;
@@ -2376,6 +2427,7 @@ constant JET_MU_COS_DPHI_LUT : calo_muon_cos_dphi_lut_array := CALO_MUON_COS_DPH
 constant MU_ETM_COS_DPHI_LUT : calo_muon_cos_dphi_lut_array := CALO_MUON_COS_DPHI_LUT;
 constant MU_ETMHF_COS_DPHI_LUT : calo_muon_cos_dphi_lut_array := CALO_MUON_COS_DPHI_LUT;
 constant MU_HTM_COS_DPHI_LUT : calo_muon_cos_dphi_lut_array := CALO_MUON_COS_DPHI_LUT;
+constant MU_HTMHF_COS_DPHI_LUT : calo_muon_cos_dphi_lut_array := CALO_MUON_COS_DPHI_LUT;
 
 -- twobody-pt LUTs (for mass_cuts.vhd)
 
@@ -2408,6 +2460,7 @@ constant JET_COS_PHI_LUT : calo_sin_cos_phi_lut_array := CALO_COS_PHI_LUT;
 constant ETM_COS_PHI_LUT : calo_sin_cos_phi_lut_array := CALO_COS_PHI_LUT;
 constant ETMHF_COS_PHI_LUT : calo_sin_cos_phi_lut_array := CALO_COS_PHI_LUT;
 constant HTM_COS_PHI_LUT : calo_sin_cos_phi_lut_array := CALO_COS_PHI_LUT;
+constant HTMHF_COS_PHI_LUT : calo_sin_cos_phi_lut_array := CALO_COS_PHI_LUT;
 
 constant CALO_SIN_PHI_LUT : calo_sin_cos_phi_lut_array := (
 22, 65, 109, 152, 195, 238, 280, 321, 362, 403, 442, 481, 519, 556, 591, 626,
@@ -2434,6 +2487,7 @@ constant JET_SIN_PHI_LUT : calo_sin_cos_phi_lut_array := CALO_SIN_PHI_LUT;
 constant ETM_SIN_PHI_LUT : calo_sin_cos_phi_lut_array := CALO_SIN_PHI_LUT;
 constant ETMHF_SIN_PHI_LUT : calo_sin_cos_phi_lut_array := CALO_SIN_PHI_LUT;
 constant HTM_SIN_PHI_LUT : calo_sin_cos_phi_lut_array := CALO_SIN_PHI_LUT;
+constant HTMHF_SIN_PHI_LUT : calo_sin_cos_phi_lut_array := CALO_SIN_PHI_LUT;
 
 -- HB 2017-03-29: LUTs for cosine(phi) and sine(phi) for twobody-pt calculation of muon objects and converted phi values for correlations with muon.
 -- Center of phi bins for calculation of cosine and sine with 4 digits after decimal point

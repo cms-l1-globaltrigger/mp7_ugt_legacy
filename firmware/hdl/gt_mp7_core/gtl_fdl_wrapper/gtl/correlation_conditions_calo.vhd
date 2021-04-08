@@ -311,14 +311,17 @@ begin
         mass_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
             mass_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
                 mass_comp_l1: if (type_obj1 = type_obj2) and (same_bx = true) and j>i generate
---                     dr: if dr_cut generate
---                         dr_comp_temp <= '1' when dr_sq >= dr_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) and dr_sq <= dr_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0)) else '0';
---                     end generate dr;
+                    dr_sel: if dr_cut generate
+                        dr_comp_temp(i,j) <= '1' when dr(i,j) >= dr_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) and
+                        dr(i,j) <= dr_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) else '0';
+                    end generate dr_sel;
                     mass_type_inv_pt: if mass_cut and mass_type = INVARIANT_MASS_TYPE generate
-                        mass_comp_temp(i,j) <= '1' when mass_inv_pt(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and mass_inv_pt(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                        mass_comp_temp(i,j) <= '1' when mass_inv_pt(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+                        mass_inv_pt(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
                     end generate mass_type_inv_pt;
                     mass_type_trans: if mass_cut and mass_type = TRANSVERSE_MASS_TYPE generate
-                        mass_comp_temp(i,j) <= '1' when mass_trans(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and mass_trans(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                        mass_comp_temp(i,j) <= '1' when mass_trans(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+                        mass_trans(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
                     end generate mass_type_trans;
                     dr_comp(i,j) <= dr_comp_temp(i,j);
                     dr_comp(j,i) <= dr_comp_temp(i,j);
@@ -326,14 +329,17 @@ begin
                     mass_comp(j,i) <= mass_comp_temp(i,j);
                 end generate mass_comp_l1;
                 mass_comp_l2: if (type_obj1 /= type_obj2) or (same_bx = false) generate
---                     dr: if dr_cut generate
---                         dr_comp <= '1' when dr_sq >= dr_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) and dr_sq <= dr_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0)) else '0';
---                     end generate dr;
+                    dr_sel: if dr_cut generate
+                        dr_comp(i,j) <= '1' when dr(i,j) >= dr_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) and
+                        dr(i,j) <= dr_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) else '0';
+                    end generate dr_sel;
                     mass_type_inv_pt: if mass_cut and mass_type = INVARIANT_MASS_TYPE generate
-                        mass_comp(i,j) <= '1' when mass_inv_pt(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and mass_inv_pt(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                        mass_comp(i,j) <= '1' when mass_inv_pt(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+                        mass_inv_pt(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
                     end generate mass_type_inv_pt;
                     mass_type_trans: if mass_cut and mass_type = TRANSVERSE_MASS_TYPE generate
-                        mass_comp(i,j) <= '1' when mass_trans(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and mass_trans(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                        mass_comp(i,j) <= '1' when mass_trans(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+                        mass_trans(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
                     end generate mass_type_trans;
                 end generate mass_comp_l2;
             end generate mass_l_2;
@@ -342,11 +348,11 @@ begin
         pipeline_p: process(lhc_clk, dr_comp, mass_comp)
             begin
             if INTERMEDIATE_PIPELINE = false then
---                 dr_comp_pipe <= dr_comp;
+                dr_comp_pipe <= dr_comp;
                 mass_comp_pipe <= mass_comp;
             else
                 if (lhc_clk'event and lhc_clk = '1') then
---                     dr_comp_pipe <= dr_comp;
+                    dr_comp_pipe <= dr_comp;
                     mass_comp_pipe <= mass_comp;
                 end if;
             end if;
@@ -397,10 +403,10 @@ begin
                 cos_phi_2_integer => cos_phi_2_integer,
                 sin_phi_1_integer => sin_phi_1_integer,
                 sin_phi_2_integer => sin_phi_2_integer,
-                invariant_mass => invariant_mass,
+--                 invariant_mass => invariant_mass,
                 deta_comp_pipe => deta_comp_pipe,
                 dphi_comp_pipe => dphi_comp_pipe,
-                dr_comp_pipe => dr_comp_pipe,
+--                 dr_comp_pipe => dr_comp_pipe,
 --                 mass_comp_pipe => mass_comp_pipe,
                 twobody_pt_comp_pipe => twobody_pt_comp_pipe
             );
@@ -666,7 +672,8 @@ begin
                 )
                 port map(
                     lhc_clk,
-                    invariant_mass,
+--                     invariant_mass,
+                    mass_inv_pt,
                     mass_3_obj_comp_pipe
                 );
 

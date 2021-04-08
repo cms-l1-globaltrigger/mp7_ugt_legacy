@@ -199,7 +199,8 @@ architecture rtl of correlation_conditions_muon is
     signal obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
     signal obj3_vs_templ_pipe : std_logic_2dim_array(slice_low_obj3 to slice_high_obj3, 1 to 1) := (others => (others => '0'));
 -- HB 2017-03-27: default values of cut comps -> '1' because of AND in formular of obj_vs_templ_vec
-    signal deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
+    signal deta_comp_pipe, dphi_comp_pipe, dr_comp_temp, dr_comp, dr_comp_pipe, mass_comp_temp, mass_comp, mass_comp_pipe, twobody_pt_comp_pipe :
+    std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
     signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) :=
     (others => (others => '1'));
     signal invariant_mass, invariant_mass_temp : mass_dim2_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => (others => '0')));
@@ -273,6 +274,64 @@ begin
                 port map(lhc_clk, obj2(i), obj2_vs_templ_pipe(i,1));
         end generate obj2_l;
 
+        mass_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
+            mass_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
+                mass_comp_l1: if nr_obj2=NR_MU_OBJECTS and same_bx and j>i generate
+                    dr_sel: if dr_cut generate
+                        dr_comp_temp(i,j) <= '1' when dr(i,j) >= dr_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) and
+                        dr(i,j) <= dr_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) else '0';
+                    end generate dr_sel;
+                    mass_type_inv_pt: if mass_cut and mass_type = INVARIANT_MASS_TYPE generate
+                        mass_comp_temp(i,j) <= '1' when mass_inv_pt(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+                        mass_inv_pt(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                    end generate mass_type_inv_pt;
+                    mass_type_inv_upt: if mass_cut and mass_type = INVARIANT_MASS_UPT_TYPE generate
+                        mass_comp_temp(i,j) <= '1' when mass_inv_upt(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+                        mass_inv_upt(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                    end generate mass_type_inv_upt;
+                    mass_type_trans: if mass_cut and mass_type = TRANSVERSE_MASS_TYPE generate
+                        mass_comp_temp(i,j) <= '1' when mass_trans(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+                        mass_trans(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                    end generate mass_type_trans;
+                    dr_comp(i,j) <= dr_comp_temp(i,j);
+                    dr_comp(j,i) <= dr_comp_temp(i,j);
+                    mass_comp(i,j) <= mass_comp_temp(i,j);
+                    mass_comp(j,i) <= mass_comp_temp(i,j);
+                end generate mass_comp_l1;
+                mass_comp_l2: if nr_obj2/=NR_MU_OBJECTS or not same_bx generate
+                    dr_sel: if dr_cut generate
+                        dr_comp(i,j) <= '1' when dr(i,j) >= dr_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) and
+                        dr(i,j) <= dr_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) else '0';
+                    end generate dr_sel;
+                    mass_type_inv_pt: if mass_cut and mass_type = INVARIANT_MASS_TYPE generate
+                        mass_comp(i,j) <= '1' when mass_inv_pt(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+                        mass_inv_pt(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                    end generate mass_type_inv_pt;
+                    mass_type_inv_upt: if mass_cut and mass_type = INVARIANT_MASS_UPT_TYPE generate
+                        mass_comp_temp(i,j) <= '1' when mass_inv_upt(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+                        mass_inv_upt(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                    end generate mass_type_inv_upt;
+                    mass_type_trans: if mass_cut and mass_type = TRANSVERSE_MASS_TYPE generate
+                        mass_comp(i,j) <= '1' when mass_trans(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+                        mass_trans(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                    end generate mass_type_trans;
+                end generate mass_comp_l2;
+            end generate mass_l_2;
+        end generate mass_l_1;
+
+        pipeline_p: process(lhc_clk, dr_comp, mass_comp)
+            begin
+            if INTERMEDIATE_PIPELINE = false then
+                dr_comp_pipe <= dr_comp;
+                mass_comp_pipe <= mass_comp;
+            else
+                if (lhc_clk'event and lhc_clk = '1') then
+                    dr_comp_pipe <= dr_comp;
+                    mass_comp_pipe <= mass_comp;
+                end if;
+            end if;
+        end process;
+
         correlation_cuts_i: entity work.correlation_cuts
             generic map(
                 slice_low_obj1,
@@ -322,11 +381,11 @@ begin
                 cos_phi_2_integer => cos_phi_2_integer,
                 sin_phi_1_integer => sin_phi_1_integer,
                 sin_phi_2_integer => sin_phi_2_integer,
-                invariant_mass => invariant_mass,
+--                 invariant_mass => invariant_mass,
                 deta_comp_pipe => deta_comp_pipe,
                 dphi_comp_pipe => dphi_comp_pipe,
                 dr_comp_pipe => dr_comp_pipe,
-                mass_comp_pipe => mass_comp_pipe,
+--                 mass_comp_pipe => mass_comp_pipe,
                 twobody_pt_comp_pipe => twobody_pt_comp_pipe
             );
 
@@ -468,7 +527,8 @@ begin
                 )
                 port map(
                     lhc_clk,
-                    invariant_mass,
+--                     invariant_mass,
+                    mass_inv_pt,
                     mass_3_obj_comp_pipe
                 );
 

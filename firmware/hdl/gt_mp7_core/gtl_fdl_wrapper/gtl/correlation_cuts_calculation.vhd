@@ -16,7 +16,9 @@ entity correlation_cuts_calculation is
      generic(
         nr_obj1: natural;
         nr_obj2: natural;
-        mass_type: natural;
+        dr_cut: boolean := false;
+        mass_cut: boolean := false;
+        mass_type: natural := INVARIANT_MASS_TYPE;
         pt1_width: positive := 12;
         pt2_width: positive := 12;
         upt1_width: positive := 12;
@@ -25,12 +27,15 @@ entity correlation_cuts_calculation is
         cosh_cos_width: positive := EG_EG_COSH_COS_VECTOR_WIDTH
     );
     port(
+        deta: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        dphi: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         pt1: in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
         pt2: in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
         upt1: in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
         upt2: in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
         cosh_deta: in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         cos_dphi: in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        dr: out dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         inv_mass_pt: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         inv_mass_upt: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         trans_mass: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')))
@@ -43,27 +48,37 @@ begin
 
     cuts_l_1: for i in 0 to nr_obj1-1 generate
         cuts_l_2: for j in 0 to nr_obj2-1 generate
-            mass_calc_i: entity work.mass_instances_calc
-                generic map(
-                    mass_type => mass_type,
-                    pt1_width => pt1_width,
-                    pt2_width => pt2_width,
-                    upt1_width => upt1_width,
-                    upt2_width => upt2_width,
-                    cosh_cos_width => cosh_cos_width,
-                    mass_cosh_cos_precision => cosh_cos_precision
-                )
-                port map(
-                    pt1 => pt1(i)(pt1_width-1 downto 0),
-                    pt2 => pt2(j)(pt2_width-1 downto 0),
-                    upt1 => upt1(i)(upt1_width-1 downto 0),
-                    upt2 => upt2(j)(upt2_width-1 downto 0),
-                    cosh_deta => cosh_deta(i,j)(cosh_cos_width-1 downto 0),
-                    cos_dphi => cos_dphi(i,j)(cosh_cos_width-1 downto 0),
-                    inv_mass_pt => inv_mass_pt(i,j)(pt1_width+pt2_width+cosh_cos_width-1 downto 0),
-                    inv_mass_upt => inv_mass_upt(i,j)(upt1_width+upt2_width+cosh_cos_width-1 downto 0),
-                    trans_mass => trans_mass(i,j)(pt1_width+pt2_width+cosh_cos_width-1 downto 0)
-                );
+            dr_sel: if dr_cut generate
+                dr_calc_i: entity work.dr_calc
+                    port map(
+                        deta => deta(i,j),
+                        dphi => dphi(i,j),
+                        dr => dr(i,j)(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0)
+                    );
+            end generate dr_sel;
+            mass_sel: if mass_cut generate
+                mass_calc_i: entity work.mass_instances_calc
+                    generic map(
+                        mass_type => mass_type,
+                        pt1_width => pt1_width,
+                        pt2_width => pt2_width,
+                        upt1_width => upt1_width,
+                        upt2_width => upt2_width,
+                        cosh_cos_width => cosh_cos_width,
+                        mass_cosh_cos_precision => cosh_cos_precision
+                    )
+                    port map(
+                        pt1 => pt1(i)(pt1_width-1 downto 0),
+                        pt2 => pt2(j)(pt2_width-1 downto 0),
+                        upt1 => upt1(i)(upt1_width-1 downto 0),
+                        upt2 => upt2(j)(upt2_width-1 downto 0),
+                        cosh_deta => cosh_deta(i,j)(cosh_cos_width-1 downto 0),
+                        cos_dphi => cos_dphi(i,j)(cosh_cos_width-1 downto 0),
+                        inv_mass_pt => inv_mass_pt(i,j)(pt1_width+pt2_width+cosh_cos_width-1 downto 0),
+                        inv_mass_upt => inv_mass_upt(i,j)(upt1_width+upt2_width+cosh_cos_width-1 downto 0),
+                        trans_mass => trans_mass(i,j)(pt1_width+pt2_width+cosh_cos_width-1 downto 0)
+                    );
+            end generate mass_sel;
         end generate cuts_l_2;
     end generate cuts_l_1;
 

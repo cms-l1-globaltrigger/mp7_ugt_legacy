@@ -321,7 +321,7 @@ begin
                         mass_comp_temp(i,j) <= '1' when mass_trans(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and mass_trans(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
                     end generate mass_type_trans;
                     dr_comp(i,j) <= dr_comp_temp(i,j);
-                    dr_comp((j,i) <= dr_comp_temp(i,j);
+                    dr_comp(j,i) <= dr_comp_temp(i,j);
                     mass_comp(i,j) <= mass_comp_temp(i,j);
                     mass_comp(j,i) <= mass_comp_temp(i,j);
                 end generate mass_comp_l1;
@@ -329,7 +329,7 @@ begin
 --                     dr: if dr_cut generate
 --                         dr_comp <= '1' when dr_sq >= dr_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) and dr_sq <= dr_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0)) else '0';
 --                     end generate dr;
-                    mass_type_inv: if mass_cut and mass_type = INVARIANT_MASS_TYPE generate
+                    mass_type_inv_pt: if mass_cut and mass_type = INVARIANT_MASS_TYPE generate
                         mass_comp(i,j) <= '1' when mass_inv_pt(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and mass_inv_pt(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
                     end generate mass_type_inv_pt;
                     mass_type_trans: if mass_cut and mass_type = TRANSVERSE_MASS_TYPE generate

@@ -176,6 +176,10 @@ entity correlation_conditions_muon is
         cos_phi_2_integer : in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
         sin_phi_1_integer : in sin_cos_integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
         sin_phi_2_integer : in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
+        dr : in dr_dim2_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        mass_inv_pt : in mass_dim2_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        mass_inv_upt : in mass_dim2_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        mass_trans : in mass_dim2_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_div_dr : in mass_div_dr_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         condition_o: out std_logic
     );

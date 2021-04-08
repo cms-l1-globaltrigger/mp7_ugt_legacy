@@ -31,7 +31,7 @@ entity mass_instances_calc is
         cosh_deta : in std_logic_vector(cosh_cos_width-1 downto 0) := (others => '0');
         cos_dphi : in std_logic_vector(cosh_cos_width-1 downto 0);
         inv_mass_pt : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0) := (others => '0');
-        inv_mass_upt : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0) := (others => '0');
+        inv_mass_upt : out std_logic_vector(upt1_width+upt2_width+cosh_cos_width-1 downto 0) := (others => '0');
         trans_mass : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0) := (others => '0')
     );
 end mass_instances_calc;

@@ -1,9 +1,9 @@
 
 -- Description:
--- Instances for mass calculations
+-- Instances for correlation cuts calculations
 
 -- Version history:
--- HB 2021-04-06: first design.
+-- HB 2021-04-08: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -12,16 +12,16 @@ use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
 
-entity mass_instances is
+entity correlation_cuts_calculation is
      generic(
         nr_obj1: natural;
         nr_obj2: natural;
-        mass_type : natural;
+        mass_type: natural;
         pt1_width: positive := 12;
         pt2_width: positive := 12;
         upt1_width: positive := 12;
         upt2_width: positive := 12;
-        cosh_cos_precision : positive := EG_EG_COSH_COS_PRECISION;
+        cosh_cos_precision: positive := EG_EG_COSH_COS_PRECISION;
         cosh_cos_width: positive := EG_EG_COSH_COS_VECTOR_WIDTH
     );
     port(
@@ -35,9 +35,9 @@ entity mass_instances is
         inv_mass_upt: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         trans_mass: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')))
     );
-end mass_instances;
+end correlation_cuts_calculation;
 
-architecture rtl of mass_instances is
+architecture rtl of correlation_cuts_calculation is
 
 begin
 

@@ -133,7 +133,7 @@ entity correlation_conditions_calo is
         mass_cosh_cos_precision: positive := EG_EG_COSH_COS_PRECISION;
         cosh_cos_width: positive := EG_EG_COSH_COS_VECTOR_WIDTH;
 
-        twobody_pt_cut: boolean := false;
+        tbpt_cut: boolean := false;
         pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
         sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
         pt_sq_sin_cos_precision : positive := EG_EG_SIN_COS_PRECISION;
@@ -206,7 +206,7 @@ architecture rtl of correlation_conditions_calo is
     signal obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
     signal obj3_vs_templ_pipe : std_logic_2dim_array(slice_low_obj3 to slice_high_obj3, 1 to 1) := (others => (others => '0'));
 -- HB 2017-03-27: default values of cut comps -> '1' because of AND in formular of obj_vs_templ_vec
-    signal deta_comp_pipe, dphi_comp_pipe, dr_comp_temp, dr_comp, dr_comp_pipe, mass_comp_temp, mass_comp, mass_comp_pipe, twobody_pt_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
+    signal deta_comp_pipe, dphi_comp_pipe, dr_comp_temp, dr_comp, dr_comp_pipe, mass_comp_temp, mass_comp, mass_comp_pipe, tbpt_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
     signal mass_div_dr_comp_t, mass_div_dr_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) :=
     (others => (others => '1'));
 -- HB 2021-02-11: invariant_mass used for 3 object  (body) mass.
@@ -308,107 +308,46 @@ begin
             end generate obj2_l;
         end generate muon_obj2_i;
 
-        mass_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
-            mass_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
-                mass_comp_l1: if (type_obj1 = type_obj2) and (same_bx = true) and j>i generate
-                    dr_sel: if dr_cut generate
-                        dr_comp_temp(i,j) <= '1' when dr(i,j) >= dr_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) and
-                        dr(i,j) <= dr_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) else '0';
-                    end generate dr_sel;
-                    mass_type_inv_pt: if mass_cut and mass_type = INVARIANT_MASS_TYPE generate
-                        mass_comp_temp(i,j) <= '1' when mass_inv_pt(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
-                        mass_inv_pt(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
-                    end generate mass_type_inv_pt;
-                    mass_type_trans: if mass_cut and mass_type = TRANSVERSE_MASS_TYPE generate
-                        mass_comp_temp(i,j) <= '1' when mass_trans(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
-                        mass_trans(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
-                    end generate mass_type_trans;
-                    dr_comp(i,j) <= dr_comp_temp(i,j);
-                    dr_comp(j,i) <= dr_comp_temp(i,j);
-                    mass_comp(i,j) <= mass_comp_temp(i,j);
-                    mass_comp(j,i) <= mass_comp_temp(i,j);
-                end generate mass_comp_l1;
-                mass_comp_l2: if (type_obj1 /= type_obj2) or (same_bx = false) generate
-                    dr_sel: if dr_cut generate
-                        dr_comp(i,j) <= '1' when dr(i,j) >= dr_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) and
-                        dr(i,j) <= dr_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) else '0';
-                    end generate dr_sel;
-                    mass_type_inv_pt: if mass_cut and mass_type = INVARIANT_MASS_TYPE generate
-                        mass_comp(i,j) <= '1' when mass_inv_pt(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
-                        mass_inv_pt(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
-                    end generate mass_type_inv_pt;
-                    mass_type_trans: if mass_cut and mass_type = TRANSVERSE_MASS_TYPE generate
-                        mass_comp(i,j) <= '1' when mass_trans(i,j) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
-                        mass_trans(i,j) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
-                    end generate mass_type_trans;
-                end generate mass_comp_l2;
-            end generate mass_l_2;
-        end generate mass_l_1;
-
-        pipeline_p: process(lhc_clk, dr_comp, mass_comp)
-            begin
-            if INTERMEDIATE_PIPELINE = false then
-                dr_comp_pipe <= dr_comp;
-                mass_comp_pipe <= mass_comp;
-            else
-                if (lhc_clk'event and lhc_clk = '1') then
-                    dr_comp_pipe <= dr_comp;
-                    mass_comp_pipe <= mass_comp;
-                end if;
-            end if;
-        end process;
-
-        correlation_cuts_i: entity work.correlation_cuts
+        corr_cuts_comp_i: entity work.correlation_cuts_comp
             generic map(
-                slice_low_obj1,
-                slice_high_obj1,
-                slice_low_obj2,
-                slice_high_obj2,
-                deta_cut => deta_cut,
-                dphi_cut => dphi_cut,
-                dr_cut => dr_cut,
-                mass_cut => mass_cut,
-                mass_type => mass_type,
-                twobody_pt_cut => twobody_pt_cut,
-                deta_upper_limit_vector => deta_upper_limit_vector,
-                deta_lower_limit_vector => deta_lower_limit_vector,
-                dphi_upper_limit_vector => dphi_upper_limit_vector,
-                dphi_lower_limit_vector => dphi_lower_limit_vector,
-                dr_upper_limit_vector => dr_upper_limit_vector,
-                dr_lower_limit_vector => dr_lower_limit_vector,
-                mass_upper_limit_vector => mass_upper_limit_vector,
-                mass_lower_limit_vector => mass_lower_limit_vector,
-                pt1_width => pt1_width,
-                pt2_width => pt2_width,
-                cosh_cos_precision => mass_cosh_cos_precision,
-                cosh_cos_width => cosh_cos_width,
-                pt_sq_threshold_vector => pt_sq_threshold_vector,
-                sin_cos_width => sin_cos_width,
-                pt_sq_sin_cos_precision => pt_sq_sin_cos_precision,
                 nr_obj1 => nr_obj1,
                 type_obj1 => type_obj1,
                 nr_obj2 => nr_obj2,
                 type_obj2 => type_obj2,
+                slice_low_obj1 => slice_low_obj1,
+                slice_high_obj1 => slice_high_obj1,
+                slice_low_obj2 => slice_low_obj2,
+                slice_high_obj2 => slice_high_obj2,
+                deta_cut => deta_cut,
+                deta_upper_limit_vector => deta_upper_limit_vector,
+                deta_lower_limit_vector => deta_lower_limit_vector,
+                dphi_cut => dphi_cut,
+                dphi_upper_limit_vector => dphi_upper_limit_vector,
+                dphi_lower_limit_vector => dphi_lower_limit_vector,
+                dr_cut => dr_cut,
+                dr_upper_limit_vector => dr_upper_limit_vector,
+                dr_lower_limit_vector => dr_lower_limit_vector,
+                mass_cut => mass_cut,
+                mass_type => mass_type,
+                mass_vector_width => mass_vector_width,
+                mass_upper_limit_vector => mass_upper_limit_vector,
+                mass_lower_limit_vector => mass_lower_limit_vector,
+                tbpt_cut => tbpt_cut,
+                pt_sq_threshold_vector => pt_sq_threshold_vector,
                 same_bx => same_bx
             )
             port map(
                 lhc_clk,
                 deta => deta,
                 dphi => dphi,
-                pt1 => pt1,
-                pt2 => pt2,
-                cosh_deta => cosh_deta,
-                cos_dphi => cos_dphi,
-                cos_phi_1_integer => cos_phi_1_integer,
-                cos_phi_2_integer => cos_phi_2_integer,
-                sin_phi_1_integer => sin_phi_1_integer,
-                sin_phi_2_integer => sin_phi_2_integer,
---                 invariant_mass => invariant_mass,
-                deta_comp_pipe => deta_comp_pipe,
-                dphi_comp_pipe => dphi_comp_pipe,
---                 dr_comp_pipe => dr_comp_pipe,
---                 mass_comp_pipe => mass_comp_pipe,
-                twobody_pt_comp_pipe => twobody_pt_comp_pipe
+                dr => dr,
+                mass_inv_pt => mass_inv_pt,
+                mass_trans => mass_trans,
+                deta_comp_o => deta_comp_pipe,
+                dphi_comp_o => dphi_comp_pipe,
+                dr_comp_o => dr_comp_pipe,
+                mass_comp_o => mass_comp_pipe,
+                tbpt_comp_o => tbpt_comp_pipe
             );
 
     -- condition without overlap removal
@@ -464,7 +403,7 @@ begin
                     dr_comp_pipe,
                     mass_comp_pipe,
                     mass_div_dr_comp_pipe,
-                    twobody_pt_comp_pipe,
+                    tbpt_comp_pipe,
                     condition_and_or => condition_and_or
                 );
 
@@ -558,7 +497,7 @@ begin
                         dr_orm_comp_23_pipe
                     );
 
-                matrix_and_or_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, obj3_vs_templ_pipe, deta_orm_comp_13_pipe, dphi_orm_comp_13_pipe, dr_orm_comp_13_pipe, deta_orm_comp_23_pipe, dphi_orm_comp_23_pipe, dr_orm_comp_23_pipe, deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
+                matrix_and_or_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, obj3_vs_templ_pipe, deta_orm_comp_13_pipe, dphi_orm_comp_13_pipe, dr_orm_comp_13_pipe, deta_orm_comp_23_pipe, dphi_orm_comp_23_pipe, dr_orm_comp_23_pipe, deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, tbpt_comp_pipe)
                     variable index : integer := 0;
                     variable obj_vs_templ_vec, orm_vec: std_logic_3dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) :=
                         (others => (others => (others => '0')));
@@ -579,7 +518,7 @@ begin
                         for j in slice_low_obj2 to slice_high_obj2 loop
                             if j/=i then
                                 for k in slice_low_obj3 to slice_high_obj3 loop
-                                    obj_vs_templ_vec(i,j,k) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and obj3_vs_templ_pipe(k,1) and mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and dphi_comp_pipe(i,j) and deta_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j);
+                                    obj_vs_templ_vec(i,j,k) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and obj3_vs_templ_pipe(k,1) and mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and dphi_comp_pipe(i,j) and deta_comp_pipe(i,j) and tbpt_comp_pipe(i,j);
                                     orm_vec(i,j,k) := (dr_orm_comp_13_pipe(i,k) or dr_orm_comp_23_pipe(j,k) or dphi_orm_comp_13_pipe(i,k) or
                                                     dphi_orm_comp_23_pipe(j,k) or deta_orm_comp_13_pipe(i,k) or deta_orm_comp_23_pipe(j,k)) and
                                                     obj3_vs_templ_pipe(k,1);
@@ -628,7 +567,7 @@ begin
                         dphi_orm_comp_12_pipe,
                         dr_orm_comp_12_pipe
                     );
-                matrix_and_or_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, deta_orm_comp_12_pipe, dphi_orm_comp_12_pipe, dr_orm_comp_12_pipe, deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, twobody_pt_comp_pipe)
+                matrix_and_or_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, deta_orm_comp_12_pipe, dphi_orm_comp_12_pipe, dr_orm_comp_12_pipe, deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, tbpt_comp_pipe)
                     variable index : integer := 0;
                     variable obj_vs_templ_vec : std_logic_vector(((slice_high_obj1-slice_low_obj1+1)*(slice_high_obj2-slice_low_obj2+1)) downto 1) :=
                         (others => '0');
@@ -641,7 +580,7 @@ begin
                         for j in slice_low_obj2 to slice_high_obj2 loop
                             index := index + 1;
                             obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and
-                                                    mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and dphi_comp_pipe(i,j) and deta_comp_pipe(i,j) and twobody_pt_comp_pipe(i,j) and
+                                                    mass_comp_pipe(i,j) and dr_comp_pipe(i,j) and dphi_comp_pipe(i,j) and deta_comp_pipe(i,j) and tbpt_comp_pipe(i,j) and
                                                     not ((dr_orm_comp_12_pipe(i,j) or dphi_orm_comp_12_pipe(i,j) or deta_orm_comp_12_pipe(i,j)) and obj2_vs_templ_pipe(j,1));
                         end loop;
                     end loop;
@@ -724,7 +663,7 @@ begin
                 dphi_cut,
                 mass_cut,
                 mass_type,
-                twobody_pt_cut,
+                tbpt_cut,
                 dphi_upper_limit_vector,
                 dphi_lower_limit_vector,
                 mass_upper_limit_vector,
@@ -745,7 +684,6 @@ begin
                 dphi,
                 pt1,
                 pt2,
---                 cos_dphi_int,
                 cos_dphi,
                 cos_phi_1_integer,
                 cos_phi_2_integer,

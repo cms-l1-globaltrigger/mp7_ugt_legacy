@@ -149,6 +149,7 @@ entity correlation_conditions_muon is
         pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION;
 
         nr_obj2: natural := NR_MU_OBJECTS;
+        type_obj2: natural := MU_TYPE;
 
         mass_3_obj: boolean := false;
         same_bx: boolean := false
@@ -194,7 +195,6 @@ architecture rtl of correlation_conditions_muon is
 --***************************************************************
 
     constant mass_vector_width: positive := pt1_width+pt1_width+cosh_cos_width;
-    signal type_obj2: natural := MU_TYPE;
 
     signal obj1_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));
     signal obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
@@ -274,10 +274,6 @@ begin
                     )
                 port map(lhc_clk, obj2(i), obj2_vs_templ_pipe(i,1));
         end generate obj2_l;
-
-        sel_type_obj2: if mass_type = TRANSVERSE_MASS_TYPE generate
-            type_obj2 <= obj_type_esums; -- default => MU_TYPE
-        end generate sel_type_obj2;
 
         corr_cuts_comp_i: entity work.correlation_cuts_comp
             generic map(

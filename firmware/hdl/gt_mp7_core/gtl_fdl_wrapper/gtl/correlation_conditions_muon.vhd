@@ -275,7 +275,8 @@ begin
                 port map(lhc_clk, obj2(i), obj2_vs_templ_pipe(i,1));
         end generate obj2_l;
 
-        corr_cuts_comp_i: entity work.correlation_cuts_comp
+--         corr_cuts_comp_i: entity work.correlation_cuts_comp
+        corr_cuts_comp_i: entity work.correlation_cuts_wrapper
             generic map(
                 nr_obj1 => NR_MU_OBJECTS,
                 type_obj1 => MU_TYPE,

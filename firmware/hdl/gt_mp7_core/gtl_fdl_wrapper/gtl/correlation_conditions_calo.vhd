@@ -308,7 +308,8 @@ begin
             end generate obj2_l;
         end generate muon_obj2_i;
 
-        corr_cuts_comp_i: entity work.correlation_cuts_comp
+--         corr_cuts_comp_i: entity work.correlation_cuts_comp
+        corr_cuts_comp_i: entity work.correlation_cuts_wrapper
             generic map(
                 nr_obj1 => nr_obj1,
                 type_obj1 => type_obj1,

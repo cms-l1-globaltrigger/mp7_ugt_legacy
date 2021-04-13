@@ -22,7 +22,7 @@ begin
     loop_1: for i in 0 to NR_OBJ_1-1 generate
         loop_2: for j in 0 to NR_OBJ_2-1 generate
 -- only positive difference in eta
-	    eta_diff_o(i,j) <= abs(eta_in_1(i) - eta_in_2(j));
+            eta_diff_o(i,j) <= abs(eta_in_1(i) - eta_in_2(j));
         end generate loop_2;
     end generate loop_1;
 end architecture rtl;

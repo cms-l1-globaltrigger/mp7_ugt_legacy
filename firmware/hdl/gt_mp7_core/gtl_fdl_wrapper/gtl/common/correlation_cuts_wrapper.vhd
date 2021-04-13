@@ -45,7 +45,8 @@ entity correlation_cuts_wrapper is
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
         tbpt_cut: boolean := false;
-        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        tbpt_vector_width : natural := 2+EG_PT_VECTOR_WIDTH+EG_PT_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH;
+        tbpt_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
         same_bx: boolean := false
    );
@@ -57,6 +58,7 @@ entity correlation_cuts_wrapper is
         mass_inv_pt: in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_inv_upt : in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_trans: in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        tbpt: in tbpt_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         deta_comp_o: out std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
         dphi_comp_o: out std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
         dr_comp_o: out std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
@@ -109,6 +111,11 @@ begin
                             generic map(false, mass_upper_limit_vector(mass_vector_width-1 downto 0), mass_lower_limit_vector(mass_vector_width-1 downto 0))
                             port map(mass_trans(i,j), mass_comp_temp(i,j));
                     end generate mass_type_trans;
+                    tbpt_sel: if tbpt_cut generate
+                        tbpt_comp_i: entity work.correlation_cut_comp
+                            generic map(true, tbpt_threshold_vector(tbpt_vector_width-1 downto 0), tbpt_threshold_vector(tbpt_vector_width-1 downto 0))
+                            port map(tbpt(i,j), tbpt_comp_temp(i,j));
+                    end generate tbpt_sel;
                     deta_comp(i,j) <= deta_comp_temp(i,j);
                     deta_comp(j,i) <= deta_comp_temp(i,j);
                     dphi_comp(i,j) <= dphi_comp_temp(i,j);
@@ -117,6 +124,8 @@ begin
                     dr_comp(j,i) <= dr_comp_temp(i,j);
                     mass_comp(i,j) <= mass_comp_temp(i,j);
                     mass_comp(j,i) <= mass_comp_temp(i,j);
+                    tbpt_comp(i,j) <= tbpt_comp_temp(i,j);
+                    tbpt_comp(j,i) <= tbpt_comp_temp(i,j);
                 end generate same_type_bx_sel;
                 diff_type_bx_sel: if (type_obj1 /= type_obj2) or (same_bx = false) generate
                     deta_sel: if deta_cut generate
@@ -149,6 +158,11 @@ begin
                             generic map(false, mass_upper_limit_vector(mass_vector_width-1 downto 0), mass_lower_limit_vector(mass_vector_width-1 downto 0))
                             port map(mass_trans(i,j), mass_comp(i,j));
                     end generate mass_type_trans;
+                    tbpt_sel: if tbpt_cut generate
+                        tbpt_comp_i: entity work.correlation_cut_comp
+                            generic map(true, tbpt_threshold_vector(tbpt_vector_width-1 downto 0), tbpt_threshold_vector(tbpt_vector_width-1 downto 0))
+                            port map(tbpt(i,j), tbpt_comp(i,j));
+                    end generate tbpt_sel;
                 end generate diff_type_bx_sel;
             end generate comp_l_2;
         end generate comp_l_1;

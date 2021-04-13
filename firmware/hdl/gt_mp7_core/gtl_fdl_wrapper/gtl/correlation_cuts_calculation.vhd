@@ -24,7 +24,10 @@ entity correlation_cuts_calculation is
         upt1_width: positive := 12;
         upt2_width: positive := 12;
         cosh_cos_precision: positive := EG_EG_COSH_COS_PRECISION;
-        cosh_cos_width: positive := EG_EG_COSH_COS_VECTOR_WIDTH
+        cosh_cos_width: positive := EG_EG_COSH_COS_VECTOR_WIDTH;
+        tbpt_cut: boolean := false;
+        sin_cos_width: positive := 11;
+        pt_sq_sin_cos_precision: positive := 3
     );
     port(
         deta: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
@@ -35,10 +38,16 @@ entity correlation_cuts_calculation is
         upt2: in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
         cosh_deta: in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         cos_dphi: in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        cos_phi_integer1: in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
+        cos_phi_integer2: in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
+        sin_phi_integer1: in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
+        sin_phi_integer2: in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
         dr: out dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         inv_mass_pt: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         inv_mass_upt: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        trans_mass: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')))
+        trans_mass: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        tbpt: out tbpt_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        tbupt: out tbpt_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')))
     );
 end correlation_cuts_calculation;
 
@@ -79,6 +88,29 @@ begin
                         trans_mass => trans_mass(i,j)(pt1_width+pt2_width+cosh_cos_width-1 downto 0)
                     );
             end generate mass_sel;
+            tbpt_sel: if tbpt_cut generate
+                twobody_pt_calc_i: entity work.twobody_pt_calc
+                    generic map(
+                        pt1_width => pt1_width,
+                        pt2_width => pt2_width,
+                        upt1_width => upt1_width,
+                        upt2_width => upt2_width,
+                        sin_cos_width => sin_cos_width,
+                        pt_sq_sin_cos_precision => pt_sq_sin_cos_precision
+                    )
+                    port map(
+                        pt1 => pt1(i)(pt1_width-1 downto 0),
+                        pt2 => pt2(j)(pt2_width-1 downto 0),
+                        upt1 => upt1(i)(upt1_width-1 downto 0),
+                        upt2 => upt2(j)(upt2_width-1 downto 0),
+                        cos_phi_1_integer => cos_phi_integer1(i),
+                        cos_phi_2_integer => cos_phi_integer2(j),
+                        sin_phi_1_integer => sin_phi_integer1(i),
+                        sin_phi_2_integer => sin_phi_integer2(j),
+                        tbpt => tbpt(i,j),
+                        tbupt => tbupt(i,j)
+                );
+            end generate tbpt_sel;
         end generate cuts_l_2;
     end generate cuts_l_1;
 

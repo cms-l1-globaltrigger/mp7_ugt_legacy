@@ -120,6 +120,7 @@ entity comb_conditions is
         pt : in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
         cos_phi_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
         sin_phi_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
+        tbpt: in tbpt_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         condition_o: out std_logic
     );
 end comb_conditions;
@@ -136,7 +137,9 @@ architecture rtl of comb_conditions is
     signal obj1_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(slice_3_low_obj1 to slice_3_high_obj1, 1 to 1);
     signal obj1_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(slice_4_low_obj1 to slice_4_high_obj1, 1 to 1);
 
---***************************************************************
+    constant tbpt_vector_width: positive := 2+pt_width+pt_width+sin_cos_width+sin_cos_width;
+
+    --***************************************************************
 -- signals for charge correlation comparison:
 -- charge correlation inputs are compared with requested charge (given by TME)
     signal charge_comp_double_pipe : muon_charcorr_double_array;
@@ -339,54 +342,75 @@ begin
             );
     end generate muon_i;
 
--- Pipeline stage for obj_vs_templ
-    obj_vs_templ_pipeline_p: process(lhc_clk, twobody_pt_comp, twobody_upt_comp)
-    begin
-        if INTERMEDIATE_PIPELINE = false then
-            twobody_pt_comp_pipe <= twobody_pt_comp;
-            twobody_upt_comp_pipe <= twobody_upt_comp;
-        else
-            if (lhc_clk'event and lhc_clk = '1') then
-                twobody_pt_comp_pipe <= twobody_pt_comp;
-                twobody_upt_comp_pipe <= twobody_upt_comp;
-            end if;
-        end if;
-    end process;
-
--- Instantiation of two-body pt cut.
-    twobody_pt_cut_i: if twobody_pt_cut and nr_templates = 2 generate
-        twobody_pt_i: entity work.twobody_pt
+        corr_cuts_comp_i: entity work.correlation_cuts_wrapper
             generic map(
-                slice_1_low_obj1, slice_1_high_obj1,
-                slice_2_low_obj1, slice_2_high_obj1,
-                nr_templates,
-                twobody_pt_cut,
-                pt_width,
-                pt_sq_threshold_vector,
-                sin_cos_width,
-                pt_sq_sin_cos_precision
+                nr_obj1 => nr_obj1,
+                type_obj1 => type_obj1,
+                nr_obj2 => nr_obj2,
+                type_obj2 => type_obj2,
+                slice_low_obj1 => slice_1_low_obj1,
+                slice_high_obj1 => slice_1_high_obj1,
+                slice_low_obj2 => slice_2_low_obj1,
+                slice_high_obj2 => slice_2_high_obj1,
+                tbpt_cut => twobody_pt_cut,
+                tbpt_vector_width => tbpt_vector_width,
+                tbpt_threshold_vector => pt_sq_threshold_vector,
+                same_bx => true
             )
             port map(
-                pt, cos_phi_integer, sin_phi_integer, twobody_pt_comp
+                lhc_clk,
+                tbpt => tbpt,
+                tbpt_comp_o => twobody_pt_comp_pipe
             );
-    end generate twobody_pt_cut_i;
 
--- Instantiation of two-body unconstraint pt cut.
-    twobody_upt_cut_i: if twobody_upt_cut and nr_templates = 2 generate
-        twobody_upt_i: entity work.twobody_pt
-            generic map(
-                slice_1_low_obj1, slice_1_high_obj1,
-                slice_2_low_obj1, slice_2_high_obj1,
-                nr_templates,
-                twobody_upt_cut,
-                upt_width,
-                upt_sq_threshold_vector,
-                sin_cos_width,
-                pt_sq_sin_cos_precision
-            )
-            port map(
-                pt, cos_phi_integer, sin_phi_integer, twobody_upt_comp
-            );
-    end generate twobody_upt_cut_i;
+-- -- Pipeline stage for obj_vs_templ
+--     obj_vs_templ_pipeline_p: process(lhc_clk, twobody_pt_comp, twobody_upt_comp)
+--     begin
+--         if INTERMEDIATE_PIPELINE = false then
+--             twobody_pt_comp_pipe <= twobody_pt_comp;
+--             twobody_upt_comp_pipe <= twobody_upt_comp;
+--         else
+--             if (lhc_clk'event and lhc_clk = '1') then
+--                 twobody_pt_comp_pipe <= twobody_pt_comp;
+--                 twobody_upt_comp_pipe <= twobody_upt_comp;
+--             end if;
+--         end if;
+--     end process;
+--
+-- -- Instantiation of two-body pt cut.
+--     twobody_pt_cut_i: if twobody_pt_cut and nr_templates = 2 generate
+--         twobody_pt_i: entity work.twobody_pt
+--             generic map(
+--                 slice_1_low_obj1, slice_1_high_obj1,
+--                 slice_2_low_obj1, slice_2_high_obj1,
+--                 nr_templates,
+--                 twobody_pt_cut,
+--                 pt_width,
+--                 pt_sq_threshold_vector,
+--                 sin_cos_width,
+--                 pt_sq_sin_cos_precision
+--             )
+--             port map(
+--                 pt, cos_phi_integer, sin_phi_integer, twobody_pt_comp
+--             );
+--     end generate twobody_pt_cut_i;
+--
+-- -- Instantiation of two-body unconstraint pt cut.
+--     twobody_upt_cut_i: if twobody_upt_cut and nr_templates = 2 generate
+--         twobody_upt_i: entity work.twobody_pt
+--             generic map(
+--                 slice_1_low_obj1, slice_1_high_obj1,
+--                 slice_2_low_obj1, slice_2_high_obj1,
+--                 nr_templates,
+--                 twobody_upt_cut,
+--                 upt_width,
+--                 upt_sq_threshold_vector,
+--                 sin_cos_width,
+--                 pt_sq_sin_cos_precision
+--             )
+--             port map(
+--                 pt, cos_phi_integer, sin_phi_integer, twobody_upt_comp
+--             );
+--     end generate twobody_upt_cut_i;
 
 end architecture rtl;

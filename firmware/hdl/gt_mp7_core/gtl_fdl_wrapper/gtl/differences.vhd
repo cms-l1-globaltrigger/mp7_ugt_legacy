@@ -55,6 +55,13 @@ begin
         port map(phi_integer_obj1, phi_integer_obj2, dphi_integer_int);
     l1: for i in 0 to nr_obj1-1 generate
         l2: for j in 0 to nr_obj2-1 generate
+--             not_esums_i: if type_obj2 = EG_TYPE or type_obj2 = JET_TYPE or type_obj2 = TAU_TYPE or type_obj2 = MU_TYPE generate
+--                 deta_i: entity work.deta_calc
+--                     port map(eta_integer_obj1(i), eta_integer_obj2(j), deta_integer_int(i,j));
+--             end generate not_esums_i;
+--             dphi_i: entity work.dphi_calc
+--                 generic map(phi_half_range)
+--                 port map(phi_integer_obj1(i), phi_integer_obj2(j), dphi_integer_int(i,j));
             deta_dphi_vector_i: entity work.deta_dphi_vector
                 generic map(
                     calo_calo_deta_lut => calo_calo_deta_lut, calo_calo_dphi_lut => calo_calo_dphi_lut,
@@ -67,26 +74,6 @@ begin
                 port map(deta_integer => deta_integer_int(i,j), dphi_integer => dphi_integer_int(i,j),
                     deta_vector => deta_vector(i,j), dphi_vector => dphi_vector(i,j)
                 );
-
---             calo_calo_i: if type_obj1 /= MU_TYPE and (type_obj2 = EG_TYPE or type_obj2 = JET_TYPE or type_obj2 = TAU_TYPE) generate
---                 deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR(calo_calo_deta_lut(deta_integer_int(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
---                 dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR(calo_calo_dphi_lut(dphi_integer_int(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
---             end generate calo_calo_i;
---             calo_esums_i: if type_obj1 /= MU_TYPE and not (type_obj2 = EG_TYPE or type_obj2 = JET_TYPE or type_obj2 = TAU_TYPE or type_obj2 = MU_TYPE) generate
---                 dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR(calo_calo_dphi_lut(dphi_integer_int(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
---             end generate calo_esums_i;
---             calo_muon_i: if type_obj1 /= MU_TYPE and type_obj2 = MU_TYPE generate
---                 deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR(calo_muon_deta_lut(deta_integer_int(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
---                 dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR(calo_muon_dphi_lut(dphi_integer_int(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
---             end generate calo_muon_i;
---             muon_esums_i: if type_obj1 = MU_TYPE and not (type_obj2 = EG_TYPE or type_obj2 = JET_TYPE or type_obj2 = TAU_TYPE or type_obj2 = MU_TYPE) generate
---                 dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR(calo_muon_dphi_lut(dphi_integer_int(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
---             end generate muon_esums_i;
---             muon_muon_i: if type_obj1 = MU_TYPE and type_obj2 = MU_TYPE generate
---                 deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR(muon_muon_deta_lut(deta_integer_int(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
---                 dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR(muon_muon_dphi_lut(dphi_integer_int(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
---             end generate muon_muon_i;
-
         end generate l2;
     end generate l1;
 

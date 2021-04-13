@@ -182,6 +182,7 @@ entity correlation_conditions_muon is
         mass_inv_upt : in mass_dim2_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_trans : in mass_dim2_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_div_dr : in mass_div_dr_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        tbpt: in tbpt_dim2_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         condition_o: out std_logic
     );
 end correlation_conditions_muon;
@@ -195,6 +196,7 @@ architecture rtl of correlation_conditions_muon is
 --***************************************************************
 
     constant mass_vector_width: positive := pt1_width+pt1_width+cosh_cos_width;
+    constant tbpt_vector_width: positive := 2+pt1_width+pt2_width+sin_cos_width+sin_cos_width;
 
     signal obj1_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));
     signal obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
@@ -301,7 +303,8 @@ begin
                 mass_upper_limit_vector => mass_upper_limit_vector,
                 mass_lower_limit_vector => mass_lower_limit_vector,
                 tbpt_cut => tbpt_cut,
-                pt_sq_threshold_vector => pt_sq_threshold_vector,
+                tbpt_vector_width => tbpt_vector_width,
+                tbpt_threshold_vector => pt_sq_threshold_vector,
                 same_bx => same_bx
             )
             port map(
@@ -312,6 +315,7 @@ begin
                 mass_inv_pt => mass_inv_pt,
                 mass_inv_upt => mass_inv_upt,
                 mass_trans => mass_trans,
+                tbpt => tbpt,
                 deta_comp_o => deta_comp_pipe,
                 dphi_comp_o => dphi_comp_pipe,
                 dr_comp_o => dr_comp_pipe,

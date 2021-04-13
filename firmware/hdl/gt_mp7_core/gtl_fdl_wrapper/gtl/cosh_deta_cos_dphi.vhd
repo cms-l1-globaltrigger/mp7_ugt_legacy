@@ -56,26 +56,6 @@ begin
                 port map(deta_integer => deta_integer(i,j), dphi_integer => dphi_integer(i,j),
                     cosh_deta_vector => cosh_deta_vector(i,j), cos_dphi_vector => cos_dphi_vector(i,j)
                 );
-
---             calo_calo_i: if type_obj1 /= MU_TYPE and (type_obj2 = EG_TYPE or type_obj2 = JET_TYPE or type_obj2 = TAU_TYPE) generate
---                 cosh_deta_vector(i,j)(cosh_cos_vector_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(calo_calo_cosh_deta_lut(deta_integer(i,j)), cosh_cos_vector_width);
---                 cos_dphi_vector(i,j)(cosh_cos_vector_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(calo_calo_cos_dphi_lut(dphi_integer(i,j)), cosh_cos_vector_width);
---             end generate calo_calo_i;
---             calo_esums_i: if type_obj1 /= MU_TYPE and not (type_obj2 = EG_TYPE or type_obj2 = JET_TYPE or type_obj2 = TAU_TYPE or type_obj2 = MU_TYPE) generate
---                 cos_dphi_vector(i,j)(cosh_cos_vector_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(calo_calo_cos_dphi_lut(dphi_integer(i,j)), cosh_cos_vector_width);
---             end generate calo_esums_i;
---             calo_muon_i: if type_obj1 /= MU_TYPE and type_obj2 = MU_TYPE generate
---                 cosh_deta_vector(i,j)(cosh_cos_vector_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(calo_muon_cosh_deta_lut(deta_integer(i,j)), cosh_cos_vector_width);
---                 cos_dphi_vector(i,j)(cosh_cos_vector_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(calo_muon_cos_dphi_lut(dphi_integer(i,j)), cosh_cos_vector_width);
---             end generate calo_muon_i;
---             muon_esums_i: if type_obj1 = MU_TYPE and not (type_obj2 = EG_TYPE or type_obj2 = JET_TYPE or type_obj2 = TAU_TYPE or type_obj2 = MU_TYPE) generate
---                 cos_dphi_vector(i,j)(cosh_cos_vector_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(calo_muon_cos_dphi_lut(dphi_integer(i,j)), cosh_cos_vector_width);
---             end generate muon_esums_i;
---             muon_muon_i: if type_obj1 = MU_TYPE and type_obj2 = MU_TYPE generate
---                 cosh_deta_vector(i,j)(cosh_cos_vector_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(muon_muon_cosh_deta_lut(deta_integer(i,j)), cosh_cos_vector_width);
---                 cos_dphi_vector(i,j)(cosh_cos_vector_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(muon_muon_cos_dphi_lut(dphi_integer(i,j)), cosh_cos_vector_width);
---             end generate muon_muon_i;
-
             deta_bin_vector(i,j)(deta_bins_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(deta_integer(i,j), deta_bins_width);
             dphi_bin_vector(i,j)(dphi_bins_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(dphi_integer(i,j), dphi_bins_width);
         end generate cosh_cos_l2;

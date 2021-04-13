@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2021-04-13: added type "tbpt_dim2_array".
 -- HB 2021-02-25: removed unused types (calo_deta_bin_vector_array, muon_deta_bin_vector_array, calo_dphi_bin_vector_array, muon_dphi_bin_vector_array).
 -- HB 2021-02-18: additional constants and types (for cosh_deta_cos_dphi.vhd).
 -- HB 2021-02-16: additional constants for HTMHF.
@@ -978,6 +979,7 @@ constant MAX_WIDTH_MASS_LIMIT_VECTOR : positive := 64;
 constant MAX_WIDTH_TBPT_LIMIT_VECTOR : positive := 64;
 type mass_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
 type dr_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
+type tbpt_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
 
 -- ********************************************************
 -- definitions for invariant mass divided by deltaR

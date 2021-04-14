@@ -117,6 +117,7 @@ entity comb_conditions is
         os_charcorr_quad: in muon_charcorr_quad_array := (others => (others => (others => (others => '0'))));
         deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dphi_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        dr_orm: in dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         pt : in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
         cos_phi_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
         sin_phi_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
@@ -252,6 +253,7 @@ begin
                 lhc_clk,
                 deta_orm,
                 dphi_orm,
+                dr_orm,
                 deta_orm_comp_pipe,
                 dphi_orm_comp_pipe,
                 dr_orm_comp_pipe

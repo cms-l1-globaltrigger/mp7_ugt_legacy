@@ -13,7 +13,7 @@ use work.math_pkg.all;
 
 use work.gtl_pkg.all;
 
-entity mass_instances_calc is
+entity mass_calc is
     generic (
         mass_type : natural;
         pt1_width: positive := 12;
@@ -34,9 +34,9 @@ entity mass_instances_calc is
         inv_mass_upt : out std_logic_vector(upt1_width+upt2_width+cosh_cos_width-1 downto 0) := (others => '0');
         trans_mass : out std_logic_vector(pt1_width+pt2_width+cosh_cos_width-1 downto 0) := (others => '0')
     );
-end mass_instances_calc;
+end mass_calc;
 
-architecture rtl of mass_instances_calc is
+architecture rtl of mass_calc is
 
 -- HB 2015-10-21: length of std_logic_vector for invariant mass (invariant_mass_sq_div2) and limits.
     constant MASS_PT_VECTOR_WIDTH : positive := pt1_width+pt2_width+cosh_cos_width;

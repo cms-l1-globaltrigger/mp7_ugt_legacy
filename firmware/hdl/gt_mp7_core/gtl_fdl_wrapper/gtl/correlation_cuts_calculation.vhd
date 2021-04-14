@@ -66,7 +66,7 @@ begin
                     );
             end generate dr_sel;
             mass_sel: if mass_cut generate
-                mass_calc_i: entity work.mass_instances_calc
+                mass_calc_i: entity work.mass_calc
                     generic map(
                         mass_type => mass_type,
                         pt1_width => pt1_width,

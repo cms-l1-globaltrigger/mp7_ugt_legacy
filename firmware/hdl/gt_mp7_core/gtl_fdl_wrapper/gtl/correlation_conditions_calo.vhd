@@ -171,6 +171,7 @@ entity correlation_conditions_calo is
         esums: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
         deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
         dphi_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
+        dr_orm: in dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
         deta: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dphi: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         pt1 : in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
@@ -462,6 +463,7 @@ begin
                         lhc_clk,
                         deta_orm,
                         dphi_orm,
+                        dr_orm,
                         deta_orm_comp_13_pipe,
                         dphi_orm_comp_13_pipe,
                         dr_orm_comp_13_pipe
@@ -488,6 +490,7 @@ begin
                         lhc_clk,
                         deta_orm,
                         dphi_orm,
+                        dr_orm,
                         deta_orm_comp_23_pipe,
                         dphi_orm_comp_23_pipe,
                         dr_orm_comp_23_pipe
@@ -559,6 +562,7 @@ begin
                         lhc_clk,
                         deta_orm,
                         dphi_orm,
+                        dr_orm,
                         deta_orm_comp_12_pipe,
                         dphi_orm_comp_12_pipe,
                         dr_orm_comp_12_pipe

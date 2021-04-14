@@ -43,6 +43,8 @@ entity correlation_cuts_wrapper is
         mass_vector_width : natural := EG_PT_VECTOR_WIDTH+EG_PT_VECTOR_WIDTH+EG_EG_COSH_COS_VECTOR_WIDTH;
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        mass_div_dr_vector_width: positive := EG_EG_MASS_DIV_DR_VECTOR_WIDTH;
+        mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
         tbpt_cut: boolean := false;
         tbpt_vector_width : natural := 2+EG_PT_VECTOR_WIDTH+EG_PT_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH;
@@ -58,11 +60,13 @@ entity correlation_cuts_wrapper is
         mass_inv_pt: in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_inv_upt : in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_trans: in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        mass_div_dr: in mass_div_dr_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         tbpt: in tbpt_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         deta_comp_o: out std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
         dphi_comp_o: out std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
         dr_comp_o: out std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
         mass_comp_o: out std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
+        mass_div_dr_comp_o: out std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
         tbpt_comp_o: out std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'))
     );
 end correlation_cuts_wrapper;
@@ -70,9 +74,9 @@ end correlation_cuts_wrapper;
 architecture rtl of correlation_cuts_wrapper is
 
 -- HB 2017-03-27: default values of cut comps -> '1' because of AND in formular of AND-OR matrix
-    signal deta_comp_temp, dphi_comp_temp, dr_comp_temp, mass_comp_temp, tbpt_comp_temp :
+    signal deta_comp_temp, dphi_comp_temp, dr_comp_temp, mass_comp_temp, mass_div_dr_comp_temp, tbpt_comp_temp :
     std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
-    signal deta_comp, dphi_comp, dr_comp, mass_comp, tbpt_comp :
+    signal deta_comp, dphi_comp, dr_comp, mass_comp, mass_div_dr_comp, tbpt_comp :
     std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
 
 begin
@@ -111,6 +115,11 @@ begin
                             generic map(false, mass_upper_limit_vector(mass_vector_width-1 downto 0), mass_lower_limit_vector(mass_vector_width-1 downto 0))
                             port map(mass_trans(i,j), mass_comp_temp(i,j));
                     end generate mass_type_trans;
+                    mass_dr_sel: if mass_cut and mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
+                        mass_dr_comp_i: entity work.correlation_cut_comp
+                            generic map(true, mass_div_dr_threshold(mass_div_dr_vector_width-1 downto 0), mass_div_dr_threshold(mass_div_dr_vector_width-1 downto 0))
+                            port map(mass_div_dr(i,j), mass_div_dr_comp_temp(i,j));
+                    end generate mass_dr_sel;
                     tbpt_sel: if tbpt_cut generate
                         tbpt_comp_i: entity work.correlation_cut_comp
                             generic map(true, tbpt_threshold_vector(tbpt_vector_width-1 downto 0), tbpt_threshold_vector(tbpt_vector_width-1 downto 0))
@@ -124,6 +133,8 @@ begin
                     dr_comp(j,i) <= dr_comp_temp(i,j);
                     mass_comp(i,j) <= mass_comp_temp(i,j);
                     mass_comp(j,i) <= mass_comp_temp(i,j);
+                    mass_div_dr_comp(i,j) <= mass_div_dr_comp_temp(i,j);
+                    mass_div_dr_comp(j,i) <= mass_div_dr_comp_temp(i,j);
                     tbpt_comp(i,j) <= tbpt_comp_temp(i,j);
                     tbpt_comp(j,i) <= tbpt_comp_temp(i,j);
                 end generate same_type_bx_sel;
@@ -158,6 +169,11 @@ begin
                             generic map(false, mass_upper_limit_vector(mass_vector_width-1 downto 0), mass_lower_limit_vector(mass_vector_width-1 downto 0))
                             port map(mass_trans(i,j), mass_comp(i,j));
                     end generate mass_type_trans;
+                    mass_dr_sel: if mass_cut and mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
+                        mass_dr_comp_i: entity work.correlation_cut_comp
+                            generic map(true, mass_div_dr_threshold(mass_div_dr_vector_width-1 downto 0), mass_div_dr_threshold(mass_div_dr_vector_width-1 downto 0))
+                            port map(mass_div_dr(i,j), mass_div_dr_comp(i,j));
+                    end generate mass_dr_sel;
                     tbpt_sel: if tbpt_cut generate
                         tbpt_comp_i: entity work.correlation_cut_comp
                             generic map(true, tbpt_threshold_vector(tbpt_vector_width-1 downto 0), tbpt_threshold_vector(tbpt_vector_width-1 downto 0))
@@ -169,11 +185,12 @@ begin
 
         pipeline_p: process(lhc_clk, deta_comp, dphi_comp, dr_comp, mass_comp, tbpt_comp)
             begin
-            if INTERMEDIATE_PIPELINE = false then
+            if not INTERMEDIATE_PIPELINE then
                 deta_comp_o <= deta_comp;
                 dphi_comp_o <= dphi_comp;
                 dr_comp_o <= dr_comp;
                 mass_comp_o <= mass_comp;
+                mass_div_dr_comp_o <= mass_div_dr_comp;
                 tbpt_comp_o <= tbpt_comp;
             else
                 if (lhc_clk'event and lhc_clk = '1') then
@@ -181,6 +198,7 @@ begin
                     dphi_comp_o <= dphi_comp;
                     dr_comp_o <= dr_comp;
                     mass_comp_o <= mass_comp;
+                    mass_div_dr_comp_o <= mass_div_dr_comp;
                     tbpt_comp_o <= tbpt_comp;
                 end if;
             end if;

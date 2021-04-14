@@ -310,7 +310,6 @@ begin
             end generate obj2_l;
         end generate muon_obj2_i;
 
---         corr_cuts_comp_i: entity work.correlation_cuts_comp
         corr_cuts_comp_i: entity work.correlation_cuts_wrapper
             generic map(
                 nr_obj1 => nr_obj1,
@@ -358,40 +357,32 @@ begin
     -- condition without overlap removal
         no_orm_i: if not(deta_orm_cut or dphi_orm_cut or dr_orm_cut or mass_3_obj) generate
 
-        -- HB 2020-08-27: comparison for invariant mass divided by delta R (one pipeline delay inside of the calculation of "mass_div_dr").
-            mass_div_dr_sel: if mass_cut = true and mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
-                mass_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
-                    mass_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
-                        mass_comp_l1: if (type_obj1 = type_obj2) and (same_bx = true) and j>i generate
-                            comp_i: entity work.mass_div_dr_comp
-                                generic map(
-                                    mass_div_dr_vector_width,
-                                    mass_div_dr_threshold
-                                )
-                                port map(
-                                    mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0),
-                                    mass_div_dr_comp_t(i,j)
-                                );
-                            mass_div_dr_comp_pipe(i,j) <= mass_div_dr_comp_t(i,j);
-                            mass_div_dr_comp_pipe(j,i) <= mass_div_dr_comp_t(i,j);
-                        end generate mass_comp_l1;
-                        mass_comp_l2: if (type_obj1 /= type_obj2) or (same_bx = false) generate
-                            comp_i: entity work.mass_div_dr_comp
-                                generic map(
-                                    mass_div_dr_vector_width,
-                                    mass_div_dr_threshold
-                                )
-                                port map(
-                                    mass_div_dr(i,j)(mass_div_dr_vector_width-1 downto 0),
-                                    mass_div_dr_comp_pipe(i,j)
-                                );
-                        end generate mass_comp_l2;
-                    end generate mass_l_2;
-                end generate mass_l_1;
-            end generate mass_div_dr_sel;
+            corr_cuts_comp_i: entity work.correlation_cuts_wrapper
+                generic map(
+                    nr_obj1 => nr_obj1,
+                    type_obj1 => type_obj1,
+                    nr_obj2 => nr_obj2,
+                    type_obj2 => type_obj2,
+                    slice_low_obj1 => slice_low_obj1,
+                    slice_high_obj1 => slice_high_obj1,
+                    slice_low_obj2 => slice_low_obj2,
+                    slice_high_obj2 => slice_high_obj2,
+                    mass_cut => mass_cut,
+                    mass_type => mass_type,
+                    mass_vector_width => mass_vector_width,
+                    mass_div_dr_vector_width => mass_div_dr_vector_width,
+                    mass_div_dr_threshold => mass_div_dr_threshold,
+                    same_bx => same_bx
+                )
+                port map(
+                    lhc_clk,
+                    mass_div_dr => mass_div_dr,
+                    mass_div_dr_comp_o => mass_div_dr_comp_pipe
+                );
 
             matrix_corr_cond_i: entity work.matrix_corr_cond
                 generic map(
+                    true,
                     slice_low_obj1,
                     slice_high_obj1,
                     slice_low_obj2,
@@ -668,18 +659,15 @@ begin
                 dphi_cut,
                 mass_cut,
                 mass_type,
+                mass_vector_width,
                 tbpt_cut,
+                tbpt_vector_width,
                 dphi_upper_limit_vector,
                 dphi_lower_limit_vector,
                 mass_upper_limit_vector,
                 mass_lower_limit_vector,
-                pt1_width,
-                pt2_width,
-                mass_cosh_cos_precision,
-                cosh_cos_width,
                 pt_sq_threshold_vector,
-                sin_cos_width,
-                pt_sq_sin_cos_precision,
+                type_obj1,
                 nr_obj1
             )
             port map(
@@ -687,13 +675,8 @@ begin
                 esums,
                 obj1_vs_templ_pipe,
                 dphi,
-                pt1,
-                pt2,
-                cos_dphi,
-                cos_phi_1_integer,
-                cos_phi_2_integer,
-                sin_phi_1_integer,
-                sin_phi_2_integer,
+                mass_trans,
+                tbpt,
                 condition_and_or
             );
 

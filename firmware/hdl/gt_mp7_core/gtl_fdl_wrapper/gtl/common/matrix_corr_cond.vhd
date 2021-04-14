@@ -15,6 +15,7 @@ use work.gtl_pkg.all;
 
 entity matrix_corr_cond is
      generic(
+        no_orm: boolean := false;
         slice_low_obj1: natural := 0;
         slice_high_obj1: natural := NR_EG_OBJECTS-1;
         slice_low_obj2: natural := 0;
@@ -41,18 +42,28 @@ architecture rtl of matrix_corr_cond is
 
 begin
 
-    matrix_and_or_p: process(obj1_vs_templ, obj2_vs_templ, deta_comp, dphi_comp, dr_comp, mass_comp, mass_div_dr_comp, twobody_pt_comp, charge_comp_double)
-        variable index : integer := 0;
-        variable obj_vs_templ_vec : std_logic_vector(((slice_high_obj1-slice_low_obj1+1)*(slice_high_obj2-slice_low_obj2+1)) downto 1) := (others => '0');
-        variable condition_and_or_tmp : std_logic := '0';
-    begin
-        index := 0;
-        obj_vs_templ_vec := (others => '0');
-        condition_and_or_tmp := '0';
-        for i in slice_low_obj1 to slice_high_obj1 loop
-            for j in slice_low_obj2 to slice_high_obj2 loop
-                if type_obj1 = type_obj2 and same_bx then
-                    if j/=i then
+    no_orm_i: if no_orm generate
+
+        matrix_and_or_p: process(obj1_vs_templ, obj2_vs_templ, deta_comp, dphi_comp, dr_comp, mass_comp, mass_div_dr_comp, twobody_pt_comp, charge_comp_double)
+            variable index : integer := 0;
+            variable obj_vs_templ_vec : std_logic_vector(((slice_high_obj1-slice_low_obj1+1)*(slice_high_obj2-slice_low_obj2+1)) downto 1) := (others => '0');
+            variable condition_and_or_tmp : std_logic := '0';
+        begin
+            index := 0;
+            obj_vs_templ_vec := (others => '0');
+            condition_and_or_tmp := '0';
+            for i in slice_low_obj1 to slice_high_obj1 loop
+                for j in slice_low_obj2 to slice_high_obj2 loop
+                    if type_obj1 = type_obj2 and same_bx then
+                        if j/=i then
+                            index := index + 1;
+                            if (type_obj1 = MU_TYPE) and (type_obj2 = MU_TYPE) then
+                                obj_vs_templ_vec(index) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and deta_comp(i,j) and dphi_comp(i,j) and dr_comp(i,j) and mass_comp(i,j) and mass_div_dr_comp(i,j) and twobody_pt_comp(i,j) and charge_comp_double(i,j);
+                            else
+                                obj_vs_templ_vec(index) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and deta_comp(i,j) and dphi_comp(i,j) and dr_comp(i,j) and mass_comp(i,j) and mass_div_dr_comp(i,j) and twobody_pt_comp(i,j);
+                            end if;
+                        end if;
+                    else
                         index := index + 1;
                         if (type_obj1 = MU_TYPE) and (type_obj2 = MU_TYPE) then
                             obj_vs_templ_vec(index) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and deta_comp(i,j) and dphi_comp(i,j) and dr_comp(i,j) and mass_comp(i,j) and mass_div_dr_comp(i,j) and twobody_pt_comp(i,j) and charge_comp_double(i,j);
@@ -60,21 +71,15 @@ begin
                             obj_vs_templ_vec(index) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and deta_comp(i,j) and dphi_comp(i,j) and dr_comp(i,j) and mass_comp(i,j) and mass_div_dr_comp(i,j) and twobody_pt_comp(i,j);
                         end if;
                     end if;
-                else
-                    index := index + 1;
-                    if (type_obj1 = MU_TYPE) and (type_obj2 = MU_TYPE) then
-                        obj_vs_templ_vec(index) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and deta_comp(i,j) and dphi_comp(i,j) and dr_comp(i,j) and mass_comp(i,j) and mass_div_dr_comp(i,j) and twobody_pt_comp(i,j) and charge_comp_double(i,j);
-                    else
-                        obj_vs_templ_vec(index) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and deta_comp(i,j) and dphi_comp(i,j) and dr_comp(i,j) and mass_comp(i,j) and mass_div_dr_comp(i,j) and twobody_pt_comp(i,j);
-                    end if;
-                end if;
+                end loop;
             end loop;
-        end loop;
-        for i in 1 to index loop
-            -- ORs for matrix
-            condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
-        end loop;
-        condition_and_or <= condition_and_or_tmp;
-    end process;
+            for i in 1 to index loop
+                -- ORs for matrix
+                condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
+            end loop;
+            condition_and_or <= condition_and_or_tmp;
+        end process;
+
+    end generate;
 
 end architecture rtl;

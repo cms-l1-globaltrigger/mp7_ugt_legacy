@@ -1,6 +1,6 @@
 
 -- Description:
--- Calculation of differences for eta [deta] and phi [dphi]
+-- Calculation of differences in eta [deta] and phi [dphi]
 
 -- Version history:
 -- HB 2021-02-17: first design.
@@ -12,7 +12,7 @@ use ieee.std_logic_unsigned.all;
 
 use work.gtl_pkg.all;
 
-entity differences is
+entity deta_dphi_calculations is
      generic(
         calo_calo_deta_lut: calo_calo_diff_eta_lut_array := (others => 0);
         calo_calo_dphi_lut: calo_calo_diff_phi_lut_array := (others => 0);
@@ -36,9 +36,9 @@ entity differences is
         dphi_integer: out dim2_max_phi_range_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => 0));
         dphi_vector: out deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')))
     );
-end differences;
+end deta_dphi_calculations;
 
-architecture rtl of differences is
+architecture rtl of deta_dphi_calculations is
 
     signal deta_integer_int: dim2_max_eta_range_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => 0));
     signal dphi_integer_int: dim2_max_phi_range_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => 0));

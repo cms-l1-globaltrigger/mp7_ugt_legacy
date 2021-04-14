@@ -15,7 +15,7 @@ use work.gtl_pkg.all;
 
 entity correlation_cut_comp is
      generic(
-        tbpt_type: boolean := false;
+        threshold_type: boolean := false;
         upper_limit: std_logic_vector;
         lower_limit: std_logic_vector
    );
@@ -29,10 +29,10 @@ architecture rtl of correlation_cut_comp is
 
 begin
 
-    range_sel: if not tbpt_type generate
+    range_sel: if not threshold_type generate
         comp_o <= '1' when data_in >= lower_limit and data_in <= upper_limit else '0';
     end generate range_sel;
-    threshold_sel: if tbpt_type  generate
+    threshold_sel: if threshold_type  generate
         comp_o <= '1' when data_in >= lower_limit else '0';
     end generate threshold_sel;
 

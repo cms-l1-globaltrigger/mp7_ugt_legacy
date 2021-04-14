@@ -342,75 +342,25 @@ begin
             );
     end generate muon_i;
 
-        corr_cuts_comp_i: entity work.correlation_cuts_wrapper
-            generic map(
-                nr_obj1 => nr_obj1,
-                type_obj1 => type_obj1,
-                nr_obj2 => nr_obj2,
-                type_obj2 => type_obj2,
-                slice_low_obj1 => slice_1_low_obj1,
-                slice_high_obj1 => slice_1_high_obj1,
-                slice_low_obj2 => slice_2_low_obj1,
-                slice_high_obj2 => slice_2_high_obj1,
-                tbpt_cut => twobody_pt_cut,
-                tbpt_vector_width => tbpt_vector_width,
-                tbpt_threshold_vector => pt_sq_threshold_vector,
-                same_bx => true
-            )
-            port map(
-                lhc_clk,
-                tbpt => tbpt,
-                tbpt_comp_o => twobody_pt_comp_pipe
-            );
-
--- -- Pipeline stage for obj_vs_templ
---     obj_vs_templ_pipeline_p: process(lhc_clk, twobody_pt_comp, twobody_upt_comp)
---     begin
---         if INTERMEDIATE_PIPELINE = false then
---             twobody_pt_comp_pipe <= twobody_pt_comp;
---             twobody_upt_comp_pipe <= twobody_upt_comp;
---         else
---             if (lhc_clk'event and lhc_clk = '1') then
---                 twobody_pt_comp_pipe <= twobody_pt_comp;
---                 twobody_upt_comp_pipe <= twobody_upt_comp;
---             end if;
---         end if;
---     end process;
---
--- -- Instantiation of two-body pt cut.
---     twobody_pt_cut_i: if twobody_pt_cut and nr_templates = 2 generate
---         twobody_pt_i: entity work.twobody_pt
---             generic map(
---                 slice_1_low_obj1, slice_1_high_obj1,
---                 slice_2_low_obj1, slice_2_high_obj1,
---                 nr_templates,
---                 twobody_pt_cut,
---                 pt_width,
---                 pt_sq_threshold_vector,
---                 sin_cos_width,
---                 pt_sq_sin_cos_precision
---             )
---             port map(
---                 pt, cos_phi_integer, sin_phi_integer, twobody_pt_comp
---             );
---     end generate twobody_pt_cut_i;
---
--- -- Instantiation of two-body unconstraint pt cut.
---     twobody_upt_cut_i: if twobody_upt_cut and nr_templates = 2 generate
---         twobody_upt_i: entity work.twobody_pt
---             generic map(
---                 slice_1_low_obj1, slice_1_high_obj1,
---                 slice_2_low_obj1, slice_2_high_obj1,
---                 nr_templates,
---                 twobody_upt_cut,
---                 upt_width,
---                 upt_sq_threshold_vector,
---                 sin_cos_width,
---                 pt_sq_sin_cos_precision
---             )
---             port map(
---                 pt, cos_phi_integer, sin_phi_integer, twobody_upt_comp
---             );
---     end generate twobody_upt_cut_i;
+    corr_cuts_comp_i: entity work.correlation_cuts_wrapper
+        generic map(
+            nr_obj1 => nr_obj1,
+            type_obj1 => type_obj1,
+            nr_obj2 => nr_obj2,
+            type_obj2 => type_obj2,
+            slice_low_obj1 => slice_1_low_obj1,
+            slice_high_obj1 => slice_1_high_obj1,
+            slice_low_obj2 => slice_2_low_obj1,
+            slice_high_obj2 => slice_2_high_obj1,
+            tbpt_cut => twobody_pt_cut,
+            tbpt_vector_width => tbpt_vector_width,
+            tbpt_threshold_vector => pt_sq_threshold_vector,
+            same_bx => true
+        )
+        port map(
+            lhc_clk,
+            tbpt => tbpt,
+            tbpt_comp_o => twobody_pt_comp_pipe
+        );
 
 end architecture rtl;

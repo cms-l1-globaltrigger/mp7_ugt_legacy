@@ -76,14 +76,13 @@ entity comb_conditions is
         phi_w2_lower_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_obj2: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
 
-        twobody_pt_cut: boolean := false;
-        pt_width: positive := EG_PT_VECTOR_WIDTH;
-        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        twobody_upt_cut: boolean := false;
-        upt_width: positive := MU_UPT_VECTOR_WIDTH;
-        upt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION;
+        tbpt_cut: boolean := false;
+        tbpt_vector_width: positive := 2+EG_PT_VECTOR_WIDTH+EG_PT_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH;
+        tbpt_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
+
+        tbupt_cut: boolean := false;
+        tbupt_vector_width: positive := 2+MU_UPT_VECTOR_WIDTH+MU_UPT_VECTOR_WIDTH+MUON_SIN_COS_VECTOR_WIDTH+MUON_SIN_COS_VECTOR_WIDTH;
+        tbupt_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
         deta_orm_cut: boolean := false;
         deta_orm_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -118,9 +117,6 @@ entity comb_conditions is
         deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dphi_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dr_orm: in dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        pt : in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
-        cos_phi_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
-        sin_phi_integer : in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
         tbpt: in tbpt_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         condition_o: out std_logic
     );
@@ -137,8 +133,6 @@ architecture rtl of comb_conditions is
     signal obj1_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(slice_2_low_obj1 to slice_2_high_obj1, 1 to 1);
     signal obj1_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(slice_3_low_obj1 to slice_3_high_obj1, 1 to 1);
     signal obj1_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(slice_4_low_obj1 to slice_4_high_obj1, 1 to 1);
-
-    constant tbpt_vector_width: positive := 2+pt_width+pt_width+sin_cos_width+sin_cos_width;
 
     --***************************************************************
 -- signals for charge correlation comparison:
@@ -191,7 +185,7 @@ begin
 
         -- "Matrix" of permutations in an and-or-structure.
         -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates'.
-        cond_matrix_i: entity work.calo_cond_matrix
+        matrix_calo_cond_i: entity work.matrix_calo_cond
             generic map(
                 slice_1_low_obj1, slice_1_high_obj1,
                 slice_2_low_obj1, slice_2_high_obj1,
@@ -261,7 +255,7 @@ begin
 
         -- "Matrix" of permutations in an and-or-structure.
         -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates'.
-        cond_matrix_i: entity work.calo_cond_matrix_orm
+        matrix_calo_cond_orm_i: entity work.matrix_calo_cond_orm
             generic map(
                 slice_1_low_obj1, slice_1_high_obj1,
                 slice_2_low_obj1, slice_2_high_obj1,
@@ -309,7 +303,7 @@ begin
             );
 
         -- Instantiation of charge correlation matrix.
-        charge_corr_matrix_i: entity work.muon_charge_corr_matrix
+        matrix_muon_charge_corr_i: entity work.matrix_muon_charge_corr
             generic map(
                 slice_1_low_obj1, slice_1_high_obj1,
                 slice_2_low_obj1, slice_2_high_obj1,
@@ -328,7 +322,7 @@ begin
 
         -- "Matrix" of permutations in an and-or-structure.
         -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates'.
-        cond_matrix_i: entity work.muon_cond_matrix
+        matrix_muon_cond_i: entity work.matrix_muon_cond
             generic map(
                 slice_1_low_obj1, slice_1_high_obj1,
                 slice_2_low_obj1, slice_2_high_obj1,
@@ -354,9 +348,9 @@ begin
             slice_high_obj1 => slice_1_high_obj1,
             slice_low_obj2 => slice_2_low_obj1,
             slice_high_obj2 => slice_2_high_obj1,
-            tbpt_cut => twobody_pt_cut,
+            tbpt_cut => tbpt_cut,
             tbpt_vector_width => tbpt_vector_width,
-            tbpt_threshold_vector => pt_sq_threshold_vector,
+            tbpt_threshold_vector => tbpt_threshold_vector,
             same_bx => true
         )
         port map(

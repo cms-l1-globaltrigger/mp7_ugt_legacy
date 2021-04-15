@@ -129,24 +129,17 @@ entity correlation_conditions_muon is
         dr_upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
         dr_lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        pt1_width: positive := MU_PT_VECTOR_WIDTH;
-        pt2_width: positive := MU_PT_VECTOR_WIDTH;
-        upt1_width: positive := MU_UPT_VECTOR_WIDTH;
-        upt2_width: positive := MU_UPT_VECTOR_WIDTH;
-
         mass_cut: boolean := false;
         mass_type : natural := INVARIANT_MASS_TYPE;
         mass_div_dr_vector_width: positive := MU_MU_MASS_DIV_DR_VECTOR_WIDTH;
         mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
+        mass_vector_width: positive := MU_PT_VECTOR_WIDTH+MU_PT_VECTOR_WIDTH+MU_MU_COSH_COS_VECTOR_WIDTH;
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        mass_cosh_cos_precision: positive := MU_MU_COSH_COS_PRECISION;
-        cosh_cos_width: positive := MU_MU_COSH_COS_VECTOR_WIDTH;
 
         tbpt_cut: boolean := false;
-        pt_sq_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        sin_cos_width: positive := MUON_SIN_COS_VECTOR_WIDTH;
-        pt_sq_sin_cos_precision : positive := MU_MU_SIN_COS_PRECISION;
+        tbpt_vector_width : positive := 2+MU_PT_VECTOR_WIDTH+MU_PT_VECTOR_WIDTH+MUON_SIN_COS_VECTOR_WIDTH+MUON_SIN_COS_VECTOR_WIDTH;
+        tbpt_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
         nr_obj2: natural := NR_MU_OBJECTS;
         type_obj2: natural := MU_TYPE;
@@ -167,16 +160,6 @@ entity correlation_conditions_muon is
         os_charcorr_triple: in muon_charcorr_triple_array := (others => (others => (others => '0')));
         deta: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dphi: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        pt1 : in diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
-        pt2 : in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
-        upt1 : in diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
-        upt2 : in diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
-        cosh_deta : in common_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        cos_dphi : in common_cosh_cos_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        cos_phi_1_integer : in sin_cos_integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
-        cos_phi_2_integer : in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
-        sin_phi_1_integer : in sin_cos_integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
-        sin_phi_2_integer : in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
         dr : in dr_dim2_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_inv_pt : in mass_dim2_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_inv_upt : in mass_dim2_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
@@ -194,9 +177,6 @@ architecture rtl of correlation_conditions_muon is
     signal charge_comp_double, charge_comp_double_pipe : muon_charcorr_double_array := (others => (others => '1'));
     signal charge_comp_triple, charge_comp_triple_pipe : muon_charcorr_triple_array := (others => (others => (others => '1')));
 --***************************************************************
-
-    constant mass_vector_width: positive := pt1_width+pt1_width+cosh_cos_width;
-    constant tbpt_vector_width: positive := 2+pt1_width+pt2_width+sin_cos_width+sin_cos_width;
 
     signal obj1_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));
     signal obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
@@ -304,7 +284,7 @@ begin
                 mass_lower_limit_vector => mass_lower_limit_vector,
                 tbpt_cut => tbpt_cut,
                 tbpt_vector_width => tbpt_vector_width,
-                tbpt_threshold_vector => pt_sq_threshold_vector,
+                tbpt_threshold_vector => tbpt_threshold_vector,
                 same_bx => same_bx
             )
             port map(
@@ -369,7 +349,7 @@ begin
 
             cc_double_p: process(lhc_clk, charge_comp_double)
                 begin
-                if INTERMEDIATE_PIPELINE = false then
+                if not INTERMEDIATE_PIPELINE then
                     charge_comp_double_pipe <= charge_comp_double;
                 else
                     if (lhc_clk'event and lhc_clk = '1') then
@@ -390,16 +370,16 @@ begin
                     same_bx => same_bx
                     )
                 port map(
-                    obj1_vs_templ_pipe,
-                    obj2_vs_templ_pipe,
-                    deta_comp_pipe,
-                    dphi_comp_pipe,
-                    dr_comp_pipe,
-                    mass_comp_pipe,
-                    mass_div_dr_comp_pipe,
-                    tbpt_comp_pipe,
-                    charge_comp_double_pipe,
-                    condition_and_or
+                    obj1_vs_templ => obj1_vs_templ_pipe,
+                    obj2_vs_templ => obj2_vs_templ_pipe,
+                    deta_comp => deta_comp_pipe,
+                    dphi_comp => dphi_comp_pipe,
+                    dr_comp => dr_comp_pipe,
+                    mass_comp => mass_comp_pipe,
+                    mass_div_dr_comp => mass_div_dr_comp_pipe,
+                    tbpt_comp => tbpt_comp_pipe,
+                    charge_comp_double => charge_comp_double_pipe,
+                    condition_and_or => condition_and_or
                 );
 
         end generate matrix_2_obj_i;
@@ -482,7 +462,7 @@ begin
 
             cc_triple_p: process(lhc_clk, charge_comp_triple)
                 begin
-                if INTERMEDIATE_PIPELINE = false then
+                if not INTERMEDIATE_PIPELINE then
                     charge_comp_triple_pipe <= charge_comp_triple;
                 else
                     if (lhc_clk'event and lhc_clk = '1') then
@@ -491,32 +471,24 @@ begin
                 end if;
             end process;
 
-            -- "Matrix" of permutations in an and-or-structure.
-            matrix_p: process(obj1_vs_templ_pipe, obj2_vs_templ_pipe, obj3_vs_templ_pipe, mass_3_obj_comp_pipe, charge_comp_triple_pipe)
-                variable index : integer := 0;
-                variable obj_vs_templ_vec : std_logic_vector((slice_high_obj1-slice_low_obj1+1)*(slice_high_obj2-slice_low_obj2+1)*(slice_high_obj3-slice_low_obj3+1) downto 1) := (others => '0');
-                variable condition_and_or_tmp : std_logic := '0';
-            begin
-                index := 0;
-                obj_vs_templ_vec := (others => '0');
-                condition_and_or_tmp := '0';
-                for i in slice_low_obj1 to slice_high_obj1 loop
-                    for j in slice_low_obj2 to slice_high_obj2 loop
-                        for k in slice_low_obj3 to slice_high_obj3 loop
-                            if j/=i and i/=k and j/=k then
-                                index := index + 1;
-                                obj_vs_templ_vec(index) := obj1_vs_templ_pipe(i,1) and obj2_vs_templ_pipe(j,1) and obj3_vs_templ_pipe(k,1) and
-                                    mass_3_obj_comp_pipe(i,j,k) and charge_comp_triple_pipe(i,j,k);
-                            end if;
-                        end loop;
-                    end loop;
-                end loop;
-                for i in 1 to index loop
-                    -- ORs for matrix
-                    condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
-                end loop;
-                condition_and_or <= condition_and_or_tmp;
-            end process matrix_p;
+            matrix_corr_cond_i: entity work.matrix_corr_cond
+                generic map(
+                    mass_3_obj => true,
+                    slice_low_obj1 => slice_low_obj1,
+                    slice_high_obj1 => slice_high_obj1,
+                    slice_low_obj2 => slice_low_obj2,
+                    slice_high_obj2 => slice_high_obj2,
+                    slice_low_obj3 => slice_low_obj3,
+                    slice_high_obj3 => slice_high_obj3
+                    )
+                port map(
+                    obj1_vs_templ => obj1_vs_templ_pipe,
+                    obj2_vs_templ => obj2_vs_templ_pipe,
+                    obj3_vs_templ => obj3_vs_templ_pipe,
+                    mass_3_obj_comp => mass_3_obj_comp_pipe,
+                    charge_comp_triple => charge_comp_triple_pipe,
+                    condition_and_or => condition_and_or
+                );
 
         end generate mass_3_obj_i;
     end generate not_esums_sel;
@@ -545,7 +517,7 @@ begin
                 dphi_lower_limit_vector,
                 mass_upper_limit_vector,
                 mass_lower_limit_vector,
-                pt_sq_threshold_vector,
+                tbpt_threshold_vector,
                 MU_TYPE,
                 NR_MU_OBJECTS
             )
@@ -564,7 +536,7 @@ begin
 -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(lhc_clk, condition_and_or)
         begin
-            if CONDITIONS_PIPELINE = false then
+            if not CONDITIONS_PIPELINE then
                 condition_o <= condition_and_or;
             else
                 if (lhc_clk'event and lhc_clk = '1') then

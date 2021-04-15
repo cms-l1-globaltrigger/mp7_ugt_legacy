@@ -48,19 +48,20 @@ end orm_cuts;
 architecture rtl of orm_cuts is
 
     signal deta_orm_comp, dphi_orm_comp, dr_orm_comp : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
+    signal dr_orm_i : dr_dim2_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => (others => '0')));
 
 begin
 
     cuts_orm_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
         cuts_orm_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
-            deta_orm_cut_i: if deta_orm_cut = true generate
+            deta_orm_cut_i: if deta_orm_cut generate
                 deta_orm_comp(i,j) <= '1' when deta_orm(i,j) >= deta_orm_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and deta_orm(i,j) <= deta_orm_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
             end generate deta_orm_cut_i;
-            dphi_orm_cut_i: if dphi_orm_cut = true generate
+            dphi_orm_cut_i: if dphi_orm_cut generate
                 dphi_orm_comp(i,j) <= '1' when dphi_orm(i,j) >= dphi_orm_lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) and dphi_orm(i,j) <= dphi_orm_upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0) else '0';
             end generate dphi_orm_cut_i;
             dr_orm_cut_i: if dr_orm_cut = true generate
-                dr_calculator_i: entity work.dr_calculator
+                dr_calculator_i: entity work.dr_calc
                 generic map(
                     upper_limit_vector => dr_orm_upper_limit_vector,
                     lower_limit_vector => dr_orm_lower_limit_vector
@@ -76,7 +77,7 @@ begin
 
     pipeline_p: process(lhc_clk, deta_orm_comp, dphi_orm_comp, dr_orm_comp)
         begin
-        if INTERMEDIATE_PIPELINE = false then
+        if not INTERMEDIATE_PIPELINE then
             deta_orm_comp_pipe <= deta_orm_comp;
             dphi_orm_comp_pipe <= dphi_orm_comp;
             dr_orm_comp_pipe <= dr_orm_comp;

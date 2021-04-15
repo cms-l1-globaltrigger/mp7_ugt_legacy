@@ -2,6 +2,7 @@
 -- Matrix of charge correlation
 
 -- Version history:
+-- HB 2021-04-15: minor update. Changed name.
 -- HB 2021-02-19: updated intermediate pipelines.
 -- HB 2019-04-30: first version.
 
@@ -10,7 +11,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 use work.gtl_pkg.all;
 
-entity muon_charge_corr_matrix is
+entity matrix_muon_charge_corr is
      generic(
         muon_object_slice_1_low: natural;
         muon_object_slice_1_high: natural;
@@ -36,9 +37,9 @@ entity muon_charge_corr_matrix is
         charge_comp_quad_pipe: out muon_charcorr_quad_array
     );
 
-end muon_charge_corr_matrix;
+end matrix_muon_charge_corr;
 
-architecture Behavioral of muon_charge_corr_matrix is
+architecture Behavioral of matrix_muon_charge_corr is
 
     signal charge_comp_double : muon_charcorr_double_array := (others => (others => '0'));
     signal charge_comp_triple : muon_charcorr_triple_array := (others => (others => (others => '0')));
@@ -63,7 +64,7 @@ begin
     -- Pipeline stage for charge_comp_2
         charge_comp_2_pipeline_p: process(clk, charge_comp_double)
             begin
-                if INTERMEDIATE_PIPELINE = false then
+                if not INTERMEDIATE_PIPELINE then
                     charge_comp_double_pipe <= charge_comp_double;
                 else
                     if (clk'event and clk = '1') then
@@ -89,7 +90,7 @@ begin
     -- Pipeline stage for charge_comp_2
         charge_comp_3_pipeline_p: process(clk, charge_comp_triple)
             begin
-                if INTERMEDIATE_PIPELINE = false then
+                if not INTERMEDIATE_PIPELINE then
                     charge_comp_triple_pipe <= charge_comp_triple;
                 else
                     if (clk'event and clk = '1') then
@@ -117,7 +118,7 @@ begin
     -- Pipeline stage for charge_comp_2
         charge_comp_4_pipeline_p: process(clk, charge_comp_quad)
             begin
-                if INTERMEDIATE_PIPELINE = false then
+                if not INTERMEDIATE_PIPELINE then
                     charge_comp_quad_pipe <= charge_comp_quad;
                 else
                     if (clk'event and clk = '1') then

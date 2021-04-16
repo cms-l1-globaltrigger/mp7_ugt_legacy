@@ -1,13 +1,14 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.13.0
+-- mp7_ugt (=FRAME_VERSION): v1.14.0
 --
 -- frame: v1.2.3 (see frame.vhd)
--- gtl: v1.13.0 (see gtl_module_tpl.vhd)
+-- gtl: v1.14.0 (see gtl_module_tpl.vhd)
 -- fdl: v1.3.6 (see fdl_module.vhd)
 
 -- gtl history:
+-- HB 2021-04-16: v1.14.0: Added modules for correlation cuts calculations outside of conditions (correlation_cuts_calculation.vhd). Renamed files (differences.vhd => deta_dphi_calculations.vhd, ...). Added new modules for all and-or matrix instantiations (matrix_corr_cond.vhd, matrix_calo_cond.vhd, ...).
 -- HB 2021-02-08: v1.13.0: Changed directory structure in gtl (created sub dir "common" for modules, wihich are not instantiated in gtl_module.vhd).
 -- HB 2021-03-18: v1.12.1: Bug fix in correlation_conditions_muon.vhd.
 -- HB 2021-02-05: v1.12.0: Implemented comb_conditions.vhd, correlation_conditions_calo.vhd and correlation_conditions_muon.vhd instead of calo_conditions.vhd, muon_conditions.vhd and calo_calo_correlation_condition.vhd, muon_muon_correlation_condition.vhd, etc.
@@ -48,7 +49,7 @@ package gt_mp7_core_pkg is
 -- ==================================================================================================
 -- FRAME version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 13;
+    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 14;
     constant FRAME_REV_VERSION        : integer range 0 to 255 := 0;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
@@ -56,7 +57,7 @@ package gt_mp7_core_pkg is
            std_logic_vector(to_unsigned(FRAME_REV_VERSION, 8));
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 13;
+    constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 14;
     constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 0;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;

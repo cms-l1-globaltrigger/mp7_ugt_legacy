@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.14.0] - 2021-04-16
+### Comment
+
+- mp7_ugt firmware release v1.14.0
+- removed obsolete modules
+- added modules for correlation cuts calculations outside of conditions
+- added new modules for and-or matrix
+- cleaned up
+
 ## [v1.13.0] - 2021-04-06
 ### Comment
 

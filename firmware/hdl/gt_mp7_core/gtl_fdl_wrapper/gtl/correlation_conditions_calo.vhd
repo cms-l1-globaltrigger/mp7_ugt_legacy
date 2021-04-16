@@ -425,6 +425,7 @@ begin
         orm_i: if deta_orm_cut or dphi_orm_cut or dr_orm_cut generate
         -- two calos with one calo overlap removal(obj_2plus1 = true)
             obj_2plus1_true_i: if obj_2plus1 generate
+
                 orm_cuts_13_i: entity work.orm_cuts
                     generic map(
                         slice_low_obj1,
@@ -452,6 +453,7 @@ begin
                         dphi_orm_comp_13_pipe,
                         dr_orm_comp_13_pipe
                     );
+
                 orm_cuts_23_i: entity work.orm_cuts
                     generic map(
                         slice_low_obj2,
@@ -516,6 +518,7 @@ begin
 
         -- one calo with one calo overlap removal(obj_2plus1 = false)
             obj_2plus1_false_i: if not obj_2plus1 generate
+
                 orm_cuts_12_i: entity work.orm_cuts
                     generic map(
                         slice_low_obj1,

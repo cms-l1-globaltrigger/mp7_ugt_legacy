@@ -1,6 +1,6 @@
 
 -- Description:
--- Calculation of Delta-R and comparison with limits
+-- Calculation of Delta-R
 
 -- Version history:
 -- HB 2021-04-08: first design
@@ -20,7 +20,6 @@ entity dr_calc is
     port(
         deta : in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
         dphi : in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
-        dr_comp : out std_logic;
         dr : out std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0)
     );
 end dr_calc;
@@ -40,8 +39,6 @@ begin
     deta_squared <= deta*deta;
     dphi_squared <= dphi*dphi;
     dr_squared <= deta_squared+dphi_squared;
-
-    dr_comp <= '1' when (dr_squared >= lower_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0) and dr_squared <= upper_limit_vector(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0)) else '0';
 
     dr <= dr_squared;
 

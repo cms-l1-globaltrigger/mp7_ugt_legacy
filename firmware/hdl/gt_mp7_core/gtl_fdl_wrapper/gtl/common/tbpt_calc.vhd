@@ -13,7 +13,7 @@ use work.math_pkg.all;
 
 use work.gtl_pkg.all;
 
-entity twobody_pt_calc is
+entity tbpt_calc is
     generic (
         pt1_width: positive := 12;
         pt2_width: positive := 12;
@@ -34,9 +34,9 @@ entity twobody_pt_calc is
         tbpt : out std_logic_vector(2+pt1_width+pt2_width+sin_cos_width+sin_cos_width-1 downto 0);
         tbupt : out std_logic_vector(2+upt1_width+upt2_width+sin_cos_width+sin_cos_width-1 downto 0)
     );
-end twobody_pt_calc;
+end tbpt_calc;
 
-architecture rtl of twobody_pt_calc is
+architecture rtl of tbpt_calc is
 
 -- HB 2017-03-23: calculation of twobody_pt with formular => pt**2 = pt1**2+pt2**2+2*pt1*pt2*(cos(phi1)*cos(phi2)+sin(phi1)*sin(phi2))
 -- PT_SQ_VECTOR_WIDTH based on formular for pt**2 [2+... because of ...+2*pt1*pt2*(cos(phi1)*cos(phi2)+sin(phi1)*sin(phi2))]

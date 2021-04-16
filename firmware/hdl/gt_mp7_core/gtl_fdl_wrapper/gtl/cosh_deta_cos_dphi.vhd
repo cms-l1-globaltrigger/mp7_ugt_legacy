@@ -20,8 +20,6 @@ entity cosh_deta_cos_dphi is
         calo_muon_cos_dphi_lut: calo_muon_cos_dphi_lut_array := (others => 0);
         muon_muon_cosh_deta_lut: muon_muon_cosh_deta_lut_array := (others => 0);
         muon_muon_cos_dphi_lut: muon_muon_cos_dphi_lut_array := (others => 0);
-        deta_bins_width: natural := EG_EG_DETA_BINS_WIDTH;
-        dphi_bins_width: natural := EG_EG_DPHI_BINS_WIDTH;
         cosh_cos_vector_width: natural := EG_EG_COSH_COS_VECTOR_WIDTH;
         nr_obj1: natural := NR_EG_OBJECTS;
         type_obj1: natural := EG_TYPE;
@@ -31,8 +29,6 @@ entity cosh_deta_cos_dphi is
     port(
         dphi_integer: in dim2_max_phi_range_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => 0));
         deta_integer: in dim2_max_eta_range_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => 0));
-        deta_bin_vector: out common_deta_bin_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        dphi_bin_vector: out common_dphi_bin_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         cosh_deta_vector: out common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         cos_dphi_vector: out common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')))
     );
@@ -56,8 +52,6 @@ begin
                 port map(deta_integer => deta_integer(i,j), dphi_integer => dphi_integer(i,j),
                     cosh_deta_vector => cosh_deta_vector(i,j), cos_dphi_vector => cos_dphi_vector(i,j)
                 );
-            deta_bin_vector(i,j)(deta_bins_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(deta_integer(i,j), deta_bins_width);
-            dphi_bin_vector(i,j)(dphi_bins_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(dphi_integer(i,j), dphi_bins_width);
         end generate cosh_cos_l2;
     end generate cosh_cos_l1;
 

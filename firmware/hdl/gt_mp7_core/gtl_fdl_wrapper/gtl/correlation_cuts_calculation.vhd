@@ -89,7 +89,7 @@ begin
                     );
             end generate mass_sel;
             tbpt_sel: if tbpt_cut generate
-                twobody_pt_calc_i: entity work.twobody_pt_calc
+                twobody_pt_calc_i: entity work.tbpt_calc
                     generic map(
                         pt1_width => pt1_width,
                         pt2_width => pt2_width,

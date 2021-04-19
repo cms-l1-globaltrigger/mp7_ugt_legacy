@@ -51,48 +51,35 @@ begin
 
     l1: for i in 0 to nr_obj1-1 generate
         l2: for j in 0 to nr_obj2-1 generate
-            deta_dphi_i: entity work.deta_dphi_cosh_cos_luts
-                generic map(
-                    calo_calo_deta_lut => calo_calo_deta_lut, calo_calo_dphi_lut => calo_calo_dphi_lut,
-                    calo_muon_deta_lut => calo_muon_deta_lut, calo_muon_dphi_lut => calo_muon_dphi_lut,
-                    muon_muon_deta_lut => muon_muon_deta_lut, muon_muon_dphi_lut => muon_muon_dphi_lut,
-                    nr_obj1 => nr_obj1, type_obj1 => type_obj1,
-                    nr_obj2 => nr_obj2, type_obj2 => type_obj2,
-                    deta_dphi_sel => deta_dphi_sel
-                )
-                port map(deta_integer => deta_integer(i,j), dphi_integer => dphi_integer(i,j),
-                    deta_vector => deta_vector(i,j), dphi_vector => dphi_vector(i,j)
-                );
-            cosh_deta_cos_dphi_i: entity work.deta_dphi_cosh_cos_luts
-                generic map(
-                    calo_calo_cosh_deta_lut => calo_calo_cosh_deta_lut, calo_calo_cos_dphi_lut => calo_calo_cos_dphi_lut,
-                    calo_muon_cosh_deta_lut => calo_muon_cosh_deta_lut, calo_muon_cos_dphi_lut => calo_muon_cos_dphi_lut,
-                    muon_muon_cosh_deta_lut => muon_muon_cosh_deta_lut, muon_muon_cos_dphi_lut => muon_muon_cos_dphi_lut,
-                    nr_obj1 => nr_obj1, type_obj1 => type_obj1,
-                    nr_obj2 => nr_obj2, type_obj2 => type_obj2,
-                    cosh_cos_vector_width => cosh_cos_vector_width, cosh_deta_cos_dphi_sel => cosh_deta_cos_dphi_sel
-                )
-                port map(deta_integer => deta_integer(i,j), dphi_integer => dphi_integer(i,j),
-                    cosh_deta_vector => cosh_deta_vector(i,j), cos_dphi_vector => cos_dphi_vector(i,j)
-                );
+            deta_dphi_sel_i: if deta_dphi_sel generate
+                deta_dphi_i: entity work.deta_dphi_cosh_cos_luts
+                    generic map(
+                        calo_calo_deta_lut => calo_calo_deta_lut, calo_calo_dphi_lut => calo_calo_dphi_lut,
+                        calo_muon_deta_lut => calo_muon_deta_lut, calo_muon_dphi_lut => calo_muon_dphi_lut,
+                        muon_muon_deta_lut => muon_muon_deta_lut, muon_muon_dphi_lut => muon_muon_dphi_lut,
+                        nr_obj1 => nr_obj1, type_obj1 => type_obj1,
+                        nr_obj2 => nr_obj2, type_obj2 => type_obj2,
+                        deta_dphi_sel => deta_dphi_sel
+                    )
+                    port map(deta_integer => deta_integer(i,j), dphi_integer => dphi_integer(i,j),
+                        deta_vector => deta_vector(i,j), dphi_vector => dphi_vector(i,j)
+                    );
+            end generate deta_dphi_sel_i;
+            cosh_deta_cos_dphi_sel_i: if cosh_deta_cos_dphi_sel generate
+                cosh_deta_cos_dphi_i: entity work.deta_dphi_cosh_cos_luts
+                    generic map(
+                        calo_calo_cosh_deta_lut => calo_calo_cosh_deta_lut, calo_calo_cos_dphi_lut => calo_calo_cos_dphi_lut,
+                        calo_muon_cosh_deta_lut => calo_muon_cosh_deta_lut, calo_muon_cos_dphi_lut => calo_muon_cos_dphi_lut,
+                        muon_muon_cosh_deta_lut => muon_muon_cosh_deta_lut, muon_muon_cos_dphi_lut => muon_muon_cos_dphi_lut,
+                        nr_obj1 => nr_obj1, type_obj1 => type_obj1,
+                        nr_obj2 => nr_obj2, type_obj2 => type_obj2,
+                        cosh_cos_vector_width => cosh_cos_vector_width, cosh_deta_cos_dphi_sel => cosh_deta_cos_dphi_sel
+                    )
+                    port map(deta_integer => deta_integer(i,j), dphi_integer => dphi_integer(i,j),
+                        cosh_deta_vector => cosh_deta_vector(i,j), cos_dphi_vector => cos_dphi_vector(i,j)
+                    );
+            end generate cosh_deta_cos_dphi_sel_i;
         end generate l2;
     end generate l1;
-
---     cosh_cos_l1: for i in 0 to nr_obj1-1 generate
---         cosh_cos_l2: for j in 0 to nr_obj2-1 generate
---             deta_dphi_vector_i: entity work.deta_dphi_vector
---                 generic map(
---                     calo_calo_cosh_deta_lut => calo_calo_cosh_deta_lut, calo_calo_cos_dphi_lut => calo_calo_cos_dphi_lut,
---                     calo_muon_cosh_deta_lut => calo_muon_cosh_deta_lut, calo_muon_cos_dphi_lut => calo_muon_cos_dphi_lut,
---                     muon_muon_cosh_deta_lut => muon_muon_cosh_deta_lut, muon_muon_cos_dphi_lut => muon_muon_cos_dphi_lut,
---                     nr_obj1 => nr_obj1, type_obj1 => type_obj1,
---                     nr_obj2 => nr_obj2, type_obj2 => type_obj2,
---                     cosh_cos_vector_width => cosh_cos_vector_width, cosh_deta_cos_dphi_sel => true
---                 )
---                 port map(deta_integer => deta_integer(i,j), dphi_integer => dphi_integer(i,j),
---                     cosh_deta_vector => cosh_deta_vector(i,j), cos_dphi_vector => cos_dphi_vector(i,j)
---                 );
---         end generate cosh_cos_l2;
---     end generate cosh_cos_l1;
 
 end architecture rtl;

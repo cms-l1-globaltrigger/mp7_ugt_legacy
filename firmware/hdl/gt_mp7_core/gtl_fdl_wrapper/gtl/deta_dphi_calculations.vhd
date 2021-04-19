@@ -40,13 +40,10 @@ begin
     not_esums_i: if type_obj2 = EG_TYPE or type_obj2 = JET_TYPE or type_obj2 = TAU_TYPE or type_obj2 = MU_TYPE generate
         deta_i: entity work.deta_calc
             generic map(nr_obj1, nr_obj2)
-            port map(eta_integer_obj1, eta_integer_obj2, deta_integer_int);
+            port map(eta_integer_obj1, eta_integer_obj2, deta_integer);
     end generate not_esums_i;
     dphi_i: entity work.dphi_calc
         generic map(nr_obj1, nr_obj2, phi_half_range)
-        port map(phi_integer_obj1, phi_integer_obj2, dphi_integer_int);
-
-    deta_integer <= deta_integer_int;
-    dphi_integer <= dphi_integer_int;
+        port map(phi_integer_obj1, phi_integer_obj2, dphi_integer);
 
 end architecture rtl;

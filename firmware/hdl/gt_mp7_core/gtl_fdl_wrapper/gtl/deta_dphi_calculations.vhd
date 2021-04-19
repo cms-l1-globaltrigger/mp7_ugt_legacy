@@ -14,12 +14,6 @@ use work.gtl_pkg.all;
 
 entity deta_dphi_calculations is
      generic(
-        calo_calo_deta_lut: calo_calo_diff_eta_lut_array := (others => 0);
-        calo_calo_dphi_lut: calo_calo_diff_phi_lut_array := (others => 0);
-        calo_muon_deta_lut: calo_muon_diff_eta_lut_array := (others => 0);
-        calo_muon_dphi_lut: calo_muon_diff_phi_lut_array := (others => 0);
-        muon_muon_deta_lut: muon_muon_diff_eta_lut_array := (others => 0);
-        muon_muon_dphi_lut: muon_muon_diff_phi_lut_array := (others => 0);
         phi_half_range: natural := CALO_PHI_HALF_RANGE_BINS;
         nr_obj1: natural := NR_EG_OBJECTS;
         type_obj1 : natural := EG_TYPE;
@@ -32,9 +26,7 @@ entity deta_dphi_calculations is
         eta_integer_obj2: in diff_integer_inputs_array(0 to nr_obj2-1) := (others => 0);
         phi_integer_obj2: in diff_integer_inputs_array(0 to nr_obj2-1) := (others => 0);
         deta_integer: out dim2_max_eta_range_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => 0));
-        deta_vector: out deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        dphi_integer: out dim2_max_phi_range_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => 0));
-        dphi_vector: out deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')))
+        dphi_integer: out dim2_max_phi_range_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => 0))
     );
 end deta_dphi_calculations;
 
@@ -53,22 +45,6 @@ begin
     dphi_i: entity work.dphi_calc
         generic map(nr_obj1, nr_obj2, phi_half_range)
         port map(phi_integer_obj1, phi_integer_obj2, dphi_integer_int);
-    l1: for i in 0 to nr_obj1-1 generate
-        l2: for j in 0 to nr_obj2-1 generate
-            deta_dphi_vector_i: entity work.deta_dphi_vector
-                generic map(
-                    calo_calo_deta_lut => calo_calo_deta_lut, calo_calo_dphi_lut => calo_calo_dphi_lut,
-                    calo_muon_deta_lut => calo_muon_deta_lut, calo_muon_dphi_lut => calo_muon_dphi_lut,
-                    muon_muon_deta_lut => muon_muon_deta_lut, muon_muon_dphi_lut => muon_muon_dphi_lut,
-                    nr_obj1 => nr_obj1, type_obj1 => type_obj1,
-                    nr_obj2 => nr_obj2, type_obj2 => type_obj2,
-                    deta_dphi_sel => true
-                )
-                port map(deta_integer => deta_integer_int(i,j), dphi_integer => dphi_integer_int(i,j),
-                    deta_vector => deta_vector(i,j), dphi_vector => dphi_vector(i,j)
-                );
-        end generate l2;
-    end generate l1;
 
     deta_integer <= deta_integer_int;
     dphi_integer <= dphi_integer_int;

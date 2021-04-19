@@ -1,8 +1,9 @@
 
 -- Description:
--- Calculation of deta_vector and dphi_vector
+-- LUTs of deta, dphi, cosh_deta and cos_dphi.
 
 -- Version history:
+-- HB 2021-04-19: renamed.
 -- HB 2021-02-17: first design.
 
 library ieee;
@@ -12,7 +13,7 @@ use ieee.std_logic_unsigned.all;
 
 use work.gtl_pkg.all;
 
-entity deta_dphi_vector is
+entity deta_dphi_cosh_cos_luts is
      generic(
         calo_calo_deta_lut: calo_calo_diff_eta_lut_array := (others => 0);
         calo_calo_dphi_lut: calo_calo_diff_phi_lut_array := (others => 0);
@@ -42,9 +43,9 @@ entity deta_dphi_vector is
         cosh_deta_vector: out std_logic_vector(COMMON_COSH_COS_VECTOR_WIDTH-1 downto 0) := (others => '0');
         cos_dphi_vector: out std_logic_vector(COMMON_COSH_COS_VECTOR_WIDTH-1 downto 0) := (others => '0')
     );
-end deta_dphi_vector;
+end deta_dphi_cosh_cos_luts;
 
-architecture rtl of deta_dphi_vector is
+architecture rtl of deta_dphi_cosh_cos_luts is
 
 begin
 

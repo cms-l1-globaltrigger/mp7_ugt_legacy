@@ -3,6 +3,7 @@
 -- Calculation of Delta-R
 
 -- Version history:
+-- HB 2021-04-19: removed obsolete generic
 -- HB 2021-04-08: first design
 
 library ieee;
@@ -13,10 +14,6 @@ use ieee.std_logic_arith.all;
 use work.gtl_pkg.all;
 
 entity dr_calc is
-    generic (
-        upper_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        lower_limit_vector: std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0) := (others => '0')
-    );
     port(
         deta : in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
         dphi : in std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);

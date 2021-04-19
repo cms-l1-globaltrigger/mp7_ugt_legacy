@@ -54,9 +54,9 @@ begin
             deta_dphi_sel_i: if deta_dphi_sel generate
                 deta_dphi_i: entity work.deta_dphi_cosh_cos_luts
                     generic map(
-                        calo_calo_deta_lut => calo_calo_deta_lut, calo_calo_dphi_lut => calo_calo_dphi_lut,
-                        calo_muon_deta_lut => calo_muon_deta_lut, calo_muon_dphi_lut => calo_muon_dphi_lut,
-                        muon_muon_deta_lut => muon_muon_deta_lut, muon_muon_dphi_lut => muon_muon_dphi_lut,
+--                         calo_calo_deta_lut => calo_calo_deta_lut, calo_calo_dphi_lut => calo_calo_dphi_lut,
+--                         calo_muon_deta_lut => calo_muon_deta_lut, calo_muon_dphi_lut => calo_muon_dphi_lut,
+--                         muon_muon_deta_lut => muon_muon_deta_lut, muon_muon_dphi_lut => muon_muon_dphi_lut,
                         nr_obj1 => nr_obj1, type_obj1 => type_obj1,
                         nr_obj2 => nr_obj2, type_obj2 => type_obj2,
                         deta_dphi_sel => deta_dphi_sel
@@ -68,9 +68,9 @@ begin
             cosh_deta_cos_dphi_sel_i: if cosh_deta_cos_dphi_sel generate
                 cosh_deta_cos_dphi_i: entity work.deta_dphi_cosh_cos_luts
                     generic map(
-                        calo_calo_cosh_deta_lut => calo_calo_cosh_deta_lut, calo_calo_cos_dphi_lut => calo_calo_cos_dphi_lut,
-                        calo_muon_cosh_deta_lut => calo_muon_cosh_deta_lut, calo_muon_cos_dphi_lut => calo_muon_cos_dphi_lut,
-                        muon_muon_cosh_deta_lut => muon_muon_cosh_deta_lut, muon_muon_cos_dphi_lut => muon_muon_cos_dphi_lut,
+--                         calo_calo_cosh_deta_lut => calo_calo_cosh_deta_lut, calo_calo_cos_dphi_lut => calo_calo_cos_dphi_lut,
+--                         calo_muon_cosh_deta_lut => calo_muon_cosh_deta_lut, calo_muon_cos_dphi_lut => calo_muon_cos_dphi_lut,
+--                         muon_muon_cosh_deta_lut => muon_muon_cosh_deta_lut, muon_muon_cos_dphi_lut => muon_muon_cos_dphi_lut,
                         nr_obj1 => nr_obj1, type_obj1 => type_obj1,
                         nr_obj2 => nr_obj2, type_obj2 => type_obj2,
                         cosh_cos_vector_width => cosh_cos_vector_width, cosh_deta_cos_dphi_sel => cosh_deta_cos_dphi_sel

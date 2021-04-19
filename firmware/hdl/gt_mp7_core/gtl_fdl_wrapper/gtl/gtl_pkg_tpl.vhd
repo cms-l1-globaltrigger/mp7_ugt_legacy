@@ -1119,9 +1119,6 @@ constant TAU_MU_ROM : natural range 0 to 2 := CALO_MU_ROM;
 -- ********************************************************
 -- conversion LUTs
 type calo_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;
--- type eg_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;
--- type jet_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;
--- type tau_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of integer range -510 to 510;
 
 constant CALO_ETA_CONV_2_MUON_ETA_LUT : calo_eta_conv_2_muon_eta_lut_array := (
 2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62,
@@ -1147,12 +1144,6 @@ constant TAU_ETA_CONV_2_MUON_ETA_LUT : calo_eta_conv_2_muon_eta_lut_array := CAL
 constant JET_ETA_CONV_2_MUON_ETA_LUT : calo_eta_conv_2_muon_eta_lut_array := CALO_ETA_CONV_2_MUON_ETA_LUT;
 
 type calo_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range 0 to 574;
--- type eg_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range 0 to 574;
--- type jet_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range 0 to 574;
--- type tau_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range 0 to 574;
--- type etm_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range 0 to 574;
--- type etmhf_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range 0 to 574;
--- type htm_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range 0 to 574;
 
 constant CALO_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := (
 2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62,
@@ -1186,12 +1177,6 @@ constant HTMHF_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := C
 
 -- calo-calo differences LUTs
 type calo_calo_diff_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 9962;
--- type eg_eg_diff_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 9962;
--- type eg_jet_diff_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 9962;
--- type eg_tau_diff_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 9962;
--- type jet_jet_diff_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 9962;
--- type jet_tau_diff_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 9962;
--- type tau_tau_diff_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 9962;
 
 constant CALO_CALO_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := (
 0, 44, 87, 131, 174, 217, 261, 305, 348, 391, 435, 479, 522, 566, 609, 653,
@@ -1212,23 +1197,7 @@ constant CALO_CALO_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
--- constant EG_EG_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
--- constant EG_TAU_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
--- constant EG_JET_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
--- constant JET_EG_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
--- constant JET_JET_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
--- constant JET_TAU_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
--- constant TAU_EG_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
--- constant TAU_JET_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
--- constant TAU_TAU_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
-
 type calo_calo_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
--- type eg_eg_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
--- type eg_jet_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
--- type eg_tau_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
--- type jet_jet_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
--- type jet_tau_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
--- type tau_tau_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
 
 constant CALO_CALO_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := (
 0, 44, 87, 131, 175, 218, 262, 305, 349, 393, 436, 480, 524, 567, 611, 654,

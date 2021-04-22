@@ -32,7 +32,7 @@ entity deta_dphi_cosh_cos_luts is
         nr_obj2: natural := NR_EG_OBJECTS;
         type_obj2: natural := EG_TYPE;
         deta_dphi_sel: boolean := false;
-        cosh_cos_vector_width: natural := EG_EG_COSH_COS_VECTOR_WIDTH;
+        cosh_cos_vector_width: natural := CALO_CALO_COSH_COS_VECTOR_WIDTH;
         cosh_deta_cos_dphi_sel: boolean := false
     );
     port(

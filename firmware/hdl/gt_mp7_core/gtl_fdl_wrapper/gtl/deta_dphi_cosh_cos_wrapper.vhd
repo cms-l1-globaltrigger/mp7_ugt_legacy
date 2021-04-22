@@ -29,7 +29,7 @@ entity deta_dphi_cosh_cos_wrapper is
         calo_muon_cos_dphi_lut: calo_muon_cos_dphi_lut_array := (others => 0);
         muon_muon_cosh_deta_lut: muon_muon_cosh_deta_lut_array := (others => 0);
         muon_muon_cos_dphi_lut: muon_muon_cos_dphi_lut_array := (others => 0);
-        cosh_cos_vector_width: natural := EG_EG_COSH_COS_VECTOR_WIDTH;
+        cosh_cos_vector_width: natural := CALO_CALO_COSH_COS_VECTOR_WIDTH;
         nr_obj1: natural := NR_EG_OBJECTS;
         type_obj1: natural := EG_TYPE;
         nr_obj2: natural := NR_EG_OBJECTS;

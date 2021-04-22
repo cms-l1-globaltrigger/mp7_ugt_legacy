@@ -40,10 +40,10 @@ entity correlation_cuts_wrapper is
 
         mass_cut: boolean := false;
         mass_type : natural := INVARIANT_MASS_TYPE;
-        mass_vector_width : natural := EG_PT_VECTOR_WIDTH+EG_PT_VECTOR_WIDTH+EG_EG_COSH_COS_VECTOR_WIDTH;
+        mass_vector_width : natural := EG_PT_VECTOR_WIDTH+EG_PT_VECTOR_WIDTH+CALO_CALO_COSH_COS_VECTOR_WIDTH;
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
-        mass_div_dr_vector_width: positive := EG_EG_MASS_DIV_DR_VECTOR_WIDTH;
+        mass_div_dr_vector_width: positive := CALO_CALO_MASS_DIV_DR_VECTOR_WIDTH;
         mass_div_dr_threshold: std_logic_vector(MAX_WIDTH_MASS_DIV_DR_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
         tbpt_cut: boolean := false;

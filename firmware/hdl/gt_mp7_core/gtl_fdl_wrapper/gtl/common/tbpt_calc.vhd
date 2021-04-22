@@ -20,7 +20,7 @@ entity tbpt_calc is
         upt1_width: positive := 12;
         upt2_width: positive := 12;
         sin_cos_width: positive := 11;
-        tbpt_sin_cos_precision : positive := 3
+        sin_cos_precision : positive := 3
     );
     port(
         pt1 : in std_logic_vector(pt1_width-1 downto 0);
@@ -73,8 +73,8 @@ begin
 --               pt_square = pt1**2+pt2**2+2*pt1*pt2*cos_plus_sin_vec
 
 -- calculation tbpt
---     pt1_square <= pt1 * pt1 * conv_std_logic_vector(10**(tbpt_sin_cos_precision*2), PT_SQ_VECTOR_WIDTH-pt1_width*2);
---     pt2_square <= pt2 * pt2 * conv_std_logic_vector(10**(tbpt_sin_cos_precision*2), PT_SQ_VECTOR_WIDTH-pt2_width*2);
+--     pt1_square <= pt1 * pt1 * conv_std_logic_vector(10**(sin_cos_precision*2), PT_SQ_VECTOR_WIDTH-pt1_width*2);
+--     pt2_square <= pt2 * pt2 * conv_std_logic_vector(10**(sin_cos_precision*2), PT_SQ_VECTOR_WIDTH-pt2_width*2);
     pt1_square <= pt1 * pt1;
     pt2_square <= pt2 * pt2;
 
@@ -92,8 +92,8 @@ begin
     tbpt <= pt1_square + pt2_square + pt1_x_pt2_x_cos_plus_sin;
 
 -- calculation tbupt
---     upt1_square <= upt1 * upt1 * conv_std_logic_vector(10**(tbpt_sin_cos_precision*2), PT_SQ_VECTOR_WIDTH-upt1_width*2);
---     upt2_square <= upt2 * upt2 * conv_std_logic_vector(10**(tbpt_sin_cos_precision*2), PT_SQ_VECTOR_WIDTH-upt2_width*2);
+--     upt1_square <= upt1 * upt1 * conv_std_logic_vector(10**(sin_cos_precision*2), PT_SQ_VECTOR_WIDTH-upt1_width*2);
+--     upt2_square <= upt2 * upt2 * conv_std_logic_vector(10**(sin_cos_precision*2), PT_SQ_VECTOR_WIDTH-upt2_width*2);
     upt1_square <= upt1 * upt1;
     upt2_square <= upt2 * upt2;
 

@@ -20,20 +20,20 @@ entity correlation_cuts_calculation is
         dr_cut: boolean := false;
         mass_cut: boolean := false;
         mass_type: natural := INVARIANT_MASS_TYPE;
-        pt1_width: positive := 12;
-        pt2_width: positive := 12;
-        upt1_width: positive := 12;
-        upt2_width: positive := 12;
-        cosh_cos_precision: positive := EG_EG_COSH_COS_PRECISION;
-        cosh_cos_width: positive := EG_EG_COSH_COS_VECTOR_WIDTH;
+        pt1_width: positive := EG_PT_VECTOR_WIDTH;
+        pt2_width: positive := EG_PT_VECTOR_WIDTH;
+        upt1_width: positive := MU_UPT_VECTOR_WIDTH;
+        upt2_width: positive := MU_UPT_VECTOR_WIDTH;
+        cosh_cos_precision: positive := CALO_CALO_COSH_COS_PRECISION;
+        cosh_cos_width: positive := CALO_CALO_COSH_COS_VECTOR_WIDTH;
         tbpt_cut: boolean := false;
-        sin_cos_width: positive := 11;
-        tbpt_sin_cos_precision: positive := 3;
+        sin_cos_width: positive := CALO_SIN_COS_VECTOR_WIDTH;
+        sin_cos_precision: positive := CALO_SIN_COS_PRECISION;
         mass_over_dr_cut: boolean := false;
         rom_sel : natural := CALO_CALO_ROM;
-        deta_bins_width : natural := 8;
-        dphi_bins_width : natural := 8;
-        inverted_dr_sq_width: positive := 26
+        deta_bins_width : natural := CALO_DETA_BINS_WIDTH;
+        dphi_bins_width : natural := CALO_DPHI_BINS_WIDTH;
+        inverted_dr_sq_width: positive := CALO_CALO_INV_DR_SQ_VECTOR_WIDTH
     );
     port(
         lhc_clk: in std_logic := '0';
@@ -115,7 +115,7 @@ begin
                         upt1_width => upt1_width,
                         upt2_width => upt2_width,
                         cosh_cos_width => cosh_cos_width,
-                        mass_cosh_cos_precision => cosh_cos_precision
+                        cosh_cos_precision => cosh_cos_precision
                     )
                     port map(
                         pt1 => pt1(i)(pt1_width-1 downto 0),
@@ -178,7 +178,7 @@ begin
                         upt1_width => upt1_width,
                         upt2_width => upt2_width,
                         sin_cos_width => sin_cos_width,
-                        tbpt_sin_cos_precision => tbpt_sin_cos_precision
+                        sin_cos_precision => sin_cos_precision
                     )
                     port map(
                         pt1 => pt1(i)(pt1_width-1 downto 0),

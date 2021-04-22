@@ -21,7 +21,7 @@ entity mass_calc is
         upt1_width: positive := 12;
         upt2_width: positive := 12;
         cosh_cos_width: positive := 28;
-        mass_cosh_cos_precision : positive := 3
+        cosh_cos_precision : positive := 3
     );
     port(
         pt1 : in std_logic_vector(pt1_width-1 downto 0);
@@ -66,9 +66,9 @@ begin
     end generate invariant_mass_upt_sel;
     transverse_mass_sel: if mass_type = TRANSVERSE_MASS_TYPE generate
     -- HB 2016-12-12: calculation of transverse mass with formular M**2/2=pt1*pt2*(1-cos(phi1-phi2))
-    --                "conv_std_logic_vector((10**mass_cosh_cos_precision), cosh_cos_width)" means 1 multiplied with 10**mass_cosh_cos_precision,
+    --                "conv_std_logic_vector((10**cosh_cos_precision), cosh_cos_width)" means 1 multiplied with 10**cosh_cos_precision,
     --                converted to std_logic_vector with cosh_cos_width
-        trans_mass_sq_div2 <= pt1 * pt2 * ((conv_std_logic_vector((10**mass_cosh_cos_precision), cosh_cos_width)) - cos_dphi);
+        trans_mass_sq_div2 <= pt1 * pt2 * ((conv_std_logic_vector((10**cosh_cos_precision), cosh_cos_width)) - cos_dphi);
         trans_mass <= trans_mass_sq_div2;
     end generate transverse_mass_sel;
 

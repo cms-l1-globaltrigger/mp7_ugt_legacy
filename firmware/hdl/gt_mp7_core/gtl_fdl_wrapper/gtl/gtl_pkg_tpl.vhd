@@ -75,27 +75,18 @@ constant FDL_FW_VERSION : std_logic_vector(31 downto 0) := X"00" &
 
 -- ==== FDL definitions - begin ============================================================
 -- Definitions for prescalers (for FDL !)
--- constant PRESCALER_COUNTER_WIDTH : integer := 24;
--- -- HB 2019-06-03: inserted for fractional prescaler values
--- constant PRESCALER_FRACTION_WIDTH : integer := 8;
 
 -- HB HB 2016-03-02: type definition for "global" index use.
 type prescale_factor_global_array is array (MAX_NR_ALGOS-1 downto 0) of std_logic_vector(31 downto 0);
-
 type prescale_factor_array is array (NR_ALGOS-1 downto 0) of std_logic_vector(31 downto 0); -- same width as PCIe data
--- constant PRESCALE_FACTOR_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := ({AssignmentPrescaleFactors} others => X"00000001"); -- written by TME
--- constant PRESCALE_FACTOR_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"00000001"); -- written by TME
 
 -- Definitions for rate counters
 constant RATE_COUNTER_WIDTH : integer := 32;
-
 -- HB HB 2016-03-02: type definition for "global" index use.
 type rate_counter_global_array is array (MAX_NR_ALGOS-1 downto 0) of std_logic_vector(RATE_COUNTER_WIDTH-1 downto 0);
-
 type rate_counter_array is array (NR_ALGOS-1 downto 0) of std_logic_vector(RATE_COUNTER_WIDTH-1 downto 0);
 
 -- HB 2014-02-28: changed vector length of init values for finor- and veto-maks, because of min. 32 bits for register
--- constant MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := ({AssignmentFinorVetoMasks} others => X"00000001"); --Finor and veto masks registers (bit 0 = finor, bit 1 = veto)
 constant MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"00000001"); --Finor and veto masks registers (bit 0 = finor, bit 1 = veto)
 -- ==== FDL definitions - end ============================================================
 
@@ -104,7 +95,6 @@ constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
 constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
 
 -- Definition of general types
-
 type std_logic_array is array (natural range <>) of std_logic;
 type std_logic_2dim_array is array (natural range <>, natural range <>) of std_logic;
 type std_logic_3dim_array is array (natural range <>, natural range <>, natural range <>) of std_logic;
@@ -114,12 +104,10 @@ type integer_array is array (natural range <>) of integer;
 type integer_2dim_array is array (natural range <>, natural range <>) of integer;
 
 -- Definition of object types
-
 constant NR_CALO_TYPES : natural := 3;
 constant EG_TYPE : natural range 0 to NR_CALO_TYPES-1 := 0;
 constant JET_TYPE : natural range 0 to NR_CALO_TYPES-1 := 1;
 constant TAU_TYPE : natural range 0 to NR_CALO_TYPES-1 := 2;
-
 constant NR_ESUMS_TYPES : natural := 11;
 constant ETT_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+0;
 constant HTT_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+1;
@@ -132,7 +120,6 @@ constant ASYMET_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYP
 constant ASYMHT_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+8;
 constant ASYMETHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+9;
 constant ASYMHTHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+10;
-
 constant MU_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES+0;
 
 -- ==== MUONs - begin ============================================================
@@ -162,21 +149,12 @@ constant MUON_ISO_BITS : natural := MUON_ISO_HIGH-MUON_ISO_LOW+1;
 constant MUON_CHARGE_LOW : natural := 34;
 constant MUON_CHARGE_HIGH : natural := 35;
 constant MUON_CHARGE_BITS : natural := MUON_CHARGE_HIGH-MUON_CHARGE_LOW+1;
--- HB 2017-04-11: updated muon structure for "raw" and "extrapolated" phi and eta bits (phi_high, phi_low, eta_high and eta_low => for "extrapolated").
 constant MUON_IDX_BITS_LOW : natural := 36;
 constant MUON_IDX_BITS_HIGH : natural := 42;
 constant MUON_IDX_BITS : natural := MUON_IDX_BITS_HIGH-MUON_IDX_BITS_LOW+1;
 constant MUON_PHI_RAW_LOW : natural := 43;
 constant MUON_PHI_RAW_HIGH : natural := 52;
 constant MUON_PHI_RAW_BITS : natural := MUON_PHI_RAW_HIGH-MUON_PHI_RAW_LOW+1;
-
--- HB 2020-06-08: MUON_ETA_RAW not used anymore in GT.
--- constant MUON_ETA_RAW_LOW : natural := 53;
--- constant MUON_ETA_RAW_HIGH : natural := 61;
--- HB 2020-06-08: updated for new muon structure with "unconstraint pt" and "impact parameter".
--- 8 bit "unconstraint pt" [UPT] (requirements with lower and upper limit - window), bits 60..53
--- 2 bit "impact parameter" [IP] (requirements given by LUT), bits 63..62
--- bit 61 is reserved
 constant MUON_UPT_LOW : natural := 53;
 constant MUON_UPT_HIGH : natural := 60;
 constant MUON_UPT_BITS : natural := MUON_UPT_HIGH-MUON_UPT_LOW+1;
@@ -192,11 +170,10 @@ constant d_s_i_muon : d_s_i_muon_record :=
     (MUON_IP_HIGH,MUON_IP_LOW,MUON_UPT_HIGH,MUON_UPT_LOW,MUON_PHI_RAW_HIGH,MUON_PHI_RAW_LOW,MUON_IDX_BITS_HIGH,MUON_IDX_BITS_LOW,MUON_CHARGE_HIGH,MUON_CHARGE_LOW,MUON_ISO_HIGH,MUON_ISO_LOW,MUON_ETA_HIGH,MUON_ETA_LOW,MUON_QUAL_HIGH,MUON_QUAL_LOW,MUON_PT_HIGH,MUON_PT_LOW,MUON_PHI_HIGH,MUON_PHI_LOW);
 
 constant D_S_I_MUON_V2 : d_s_i_muon_record := d_s_i_muon;
-constant D_S_I_MU_V2 : d_s_i_muon_record := d_s_i_muon; -- dummy for VHDL-Producer output (correlation conditions)
+constant D_S_I_MU_V2 : d_s_i_muon_record := d_s_i_muon;
 
 type muon_objects_array is array (natural range <>) of std_logic_vector(MAX_MUON_BITS-1 downto 0);
 type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
-
 type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.qual_high-d_s_i_muon.qual_low+1))-1 downto 0);
 type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.iso_high-d_s_i_muon.iso_low+1))-1 downto 0);
 type muon_templates_ip_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.ip_high-d_s_i_muon.ip_low+1))-1 downto 0);
@@ -288,13 +265,13 @@ type calo_templates_iso_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vec
 constant MAX_ESUMS_BITS : positive := 20; -- see ETM, HTM, etc.
 constant MAX_ESUMS_TEMPLATES_BITS : positive range 1 to MAX_ESUMS_BITS := 16;
 
-constant NR_ETT_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
-constant NR_HTT_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
-constant NR_ETM_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
-constant NR_HTM_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
-constant NR_ETMHF_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
-constant NR_HTMHF_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
-constant NR_TOWERCOUNT_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
+constant NR_ETT_OBJECTS : positive := 1;
+constant NR_HTT_OBJECTS : positive := 1;
+constant NR_ETM_OBJECTS : positive := 1;
+constant NR_HTM_OBJECTS : positive := 1;
+constant NR_ETMHF_OBJECTS : positive := 1;
+constant NR_HTMHF_OBJECTS : positive := 1;
+constant NR_TOWERCOUNT_OBJECTS : positive := 1;
 
 type d_s_i_ett_record is record
     et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
@@ -336,13 +313,13 @@ constant ETT_ET_LOW : natural := 0;
 constant ETT_ET_HIGH : natural := 11;
 constant ETT_ET_BITS : natural := ETT_ET_HIGH-ETT_ET_LOW+1;
 constant D_S_I_ETT : d_s_i_ett_record := (ETT_ET_HIGH,ETT_ET_LOW);
-constant D_S_I_ETT_V2 : d_s_i_ett_record := D_S_I_ETT; -- dummy for VHDL-Producer output (correlation conditions)
+constant D_S_I_ETT_V2 : d_s_i_ett_record := D_S_I_ETT;
 
 constant HTT_ET_LOW : natural := 0;
 constant HTT_ET_HIGH : natural := 11;
 constant HTT_ET_BITS : natural := HTT_ET_HIGH-HTT_ET_LOW+1;
 constant D_S_I_HTT : d_s_i_htt_record := (HTT_ET_HIGH,HTT_ET_LOW);
-constant D_S_I_HTT_V2 : d_s_i_htt_record := D_S_I_HTT; -- dummy for VHDL-Producer output (correlation conditions)
+constant D_S_I_HTT_V2 : d_s_i_htt_record := D_S_I_HTT;
 
 constant ETM_ET_LOW : natural := 0;
 constant ETM_ET_HIGH : natural := 11;
@@ -351,7 +328,7 @@ constant ETM_PHI_LOW : natural := 12;
 constant ETM_PHI_HIGH : natural := 19;
 constant ETM_PHI_BITS : natural := ETM_PHI_HIGH-ETM_PHI_LOW+1;
 constant D_S_I_ETM : d_s_i_etm_record := (ETM_PHI_HIGH,ETM_PHI_LOW,ETM_ET_HIGH,ETM_ET_LOW);
-constant D_S_I_ETM_V2 : d_s_i_etm_record := D_S_I_ETM; -- dummy for VHDL-Producer output (correlation conditions)
+constant D_S_I_ETM_V2 : d_s_i_etm_record := D_S_I_ETM;
 
 constant HTM_ET_LOW : natural := 0;
 constant HTM_ET_HIGH : natural := 11;
@@ -360,17 +337,16 @@ constant HTM_PHI_LOW : natural := 12;
 constant HTM_PHI_HIGH : natural := 19;
 constant HTM_PHI_BITS : natural := HTM_PHI_HIGH-HTM_PHI_LOW+1;
 constant D_S_I_HTM : d_s_i_htm_record := (HTM_PHI_HIGH,HTM_PHI_LOW,HTM_ET_HIGH,HTM_ET_LOW);
-constant D_S_I_HTM_V2 : d_s_i_htm_record := D_S_I_HTM; -- dummy for VHDL-Producer output (correlation conditions)
+constant D_S_I_HTM_V2 : d_s_i_htm_record := D_S_I_HTM;
 
--- HB 2016-06-07: inserted ETTEM
 constant ETTEM_IN_ETT_LOW : natural := 12;
 constant ETTEM_IN_ETT_HIGH : natural := 23;
 constant ETTEM_ET_LOW : natural := 0;
 constant ETTEM_ET_HIGH : natural := 11;
 constant ETTEM_ET_BITS : natural := ETTEM_ET_HIGH-ETTEM_ET_LOW+1;
 constant D_S_I_ETTEM : d_s_i_ettem_record := (ETTEM_ET_HIGH,ETTEM_ET_LOW);
-constant D_S_I_ETTEM_V2 : d_s_i_ettem_record := D_S_I_ETTEM; -- dummy for VHDL-Producer output (correlation conditions)
--- HB 2016-06-07: inserted ETMHF
+constant D_S_I_ETTEM_V2 : d_s_i_ettem_record := D_S_I_ETTEM;
+
 constant ETMHF_ET_LOW : natural := 0;
 constant ETMHF_ET_HIGH : natural := 11;
 constant ETMHF_ET_BITS : natural := ETMHF_ET_HIGH-ETMHF_ET_LOW+1;
@@ -378,8 +354,8 @@ constant ETMHF_PHI_LOW : natural := 12;
 constant ETMHF_PHI_HIGH : natural := 19;
 constant ETMHF_PHI_BITS : natural := ETMHF_PHI_HIGH-ETMHF_PHI_LOW+1;
 constant D_S_I_ETMHF : d_s_i_etmhf_record := (ETMHF_PHI_HIGH,ETMHF_PHI_LOW,ETMHF_ET_HIGH,ETMHF_ET_LOW);
-constant D_S_I_ETMHF_V2 : d_s_i_etmhf_record := D_S_I_ETMHF; -- dummy for VHDL-Producer output (correlation conditions)
--- HB 2016-09-16: inserted HTMHF
+constant D_S_I_ETMHF_V2 : d_s_i_etmhf_record := D_S_I_ETMHF;
+
 constant HTMHF_ET_LOW : natural := 0;
 constant HTMHF_ET_HIGH : natural := 11;
 constant HTMHF_ET_BITS : natural := HTMHF_ET_HIGH-HTMHF_ET_LOW+1;
@@ -387,24 +363,13 @@ constant HTMHF_PHI_LOW : natural := 12;
 constant HTMHF_PHI_HIGH : natural := 19;
 constant HTMHF_PHI_BITS : natural := HTMHF_PHI_HIGH-HTMHF_PHI_LOW+1;
 constant D_S_I_HTMHF : d_s_i_htmhf_record := (HTMHF_PHI_HIGH,HTMHF_PHI_LOW,HTMHF_ET_HIGH,HTMHF_ET_LOW);
-constant D_S_I_HTMHF_V2 : d_s_i_htmhf_record := D_S_I_HTMHF; -- dummy for VHDL-Producer output (correlation conditions)
+constant D_S_I_HTMHF_V2 : d_s_i_htmhf_record := D_S_I_HTMHF;
 
 constant MAX_ESUMS_ET_BITS_1 : positive := max(ETT_ET_BITS, HTT_ET_BITS, ETM_ET_BITS);
 constant MAX_ESUMS_ET_BITS_2 : positive := max(MAX_ESUMS_ET_BITS_1, HTM_ET_BITS, ETTEM_ET_BITS);
 constant MAX_ESUMS_ET_BITS : positive := max(MAX_ESUMS_ET_BITS_2, ETMHF_ET_BITS, HTMHF_ET_BITS);
 constant MAX_ESUMS_PHI_BITS_1 : positive := max(ETM_PHI_BITS, HTM_PHI_BITS, ETMHF_PHI_BITS);
 constant MAX_ESUMS_PHI_BITS : positive := max(MAX_ESUMS_PHI_BITS_1, HTMHF_PHI_BITS);
-
--- HB 2018-08-06: inserted constants and types for "Asymmetry" and "Centrality" (included in esums data structure).
--- see: https://indico.cern.ch/event/746381/contributions/3085360/subcontributions/260912/attachments/1693846/2725976/DemuxOutput.pdf
-
--- Frame 2, ETM: bits 27..20 => ASYMET
--- Frame 3, HTM: bits 27..20 => ASYMHT
--- Frame 4, ETMHF: bits 27..20 => ASYMETHF
--- Frame 5, HTMHF: bits 27..20 => ASYMHTHF
-
--- Frame 4, ETMHF: bits 31..28 => CENT3..CENT0
--- Frame 5, HTMHF: bits 31..28 => CENT7..CENT4
 
 constant ASYMET_IN_ETM_HIGH : natural := 27;
 constant ASYMET_IN_ETM_LOW : natural := 20;
@@ -473,20 +438,11 @@ constant TOWERCOUNT_COUNT_LOW : natural := 0;
 constant TOWERCOUNT_COUNT_HIGH : natural := 12;
 constant MAX_TOWERCOUNT_BITS : natural := 16; -- 4 hex digits !
 constant D_S_I_TOWERCOUNT : d_s_i_towercnt_record := (TOWERCOUNT_COUNT_HIGH,TOWERCOUNT_COUNT_LOW);
-constant D_S_I_TOWERCOUNT_V2 : d_s_i_towercnt_record := D_S_I_TOWERCOUNT; -- dummy for VHDL-Producer output (correlation conditions)
+constant D_S_I_TOWERCOUNT_V2 : d_s_i_towercnt_record := D_S_I_TOWERCOUNT;
 
 -- *******************************************************************************************************
 -- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
 -- HB 2016-04-21: see email from Johannes (Andrew Rose), 2016-04-20 15:34
--- Frame 0: (HF+ thresh 0) ... ... (Scalar ET) - 4 MSBs
--- Frame 1: (HF- thresh 0) ... ... (Scalar HT) - 4 MSBs
--- Frame 2: (HF+ thresh 1) ... ... (Vector ET) - 4 MSBs
--- Frame 3: (HF- thresh 1) ... ... (Vector HT) - 4 MSBs
--- HB 2016-04-26: grammar notation
--- HF+ thresh 0 => MBT0HFP
--- HF- thresh 0 => MBT0HFM
--- HF+ thresh 1 => MBT1HFP
--- HF- thresh 1 => MBT1HFM
 
 constant MBT0HFP_IN_ETT_HIGH : natural := 31;
 constant MBT0HFP_IN_ETT_LOW : natural := 28;
@@ -561,50 +517,38 @@ type common_objects_array is array (natural range <>) of std_logic_vector(MAX_OB
 -- ==== CALOs - end ============================================================
 
 -- "External conditions" (former "Technical Triggers" and "External Algorithms") definitions
-constant NR_EXTERNAL_CONDITIONS : positive := EXTERNAL_CONDITIONS_DATA_WIDTH; -- number of "External conditions" inputs (proposed max. NR_EXTERNAL_CONDITIONS = 256), from lhc_data_pkg.vhd
+ -- number of "External conditions" inputs (proposed max. NR_EXTERNAL_CONDITIONS = 256), from lhc_data_pkg.vhd
+ constant NR_EXTERNAL_CONDITIONS : positive := EXTERNAL_CONDITIONS_DATA_WIDTH;
 
 -- ==== Correlations - begin ============================================================
--- Subtractors
-constant MAX_DIFF_BITS : positive := 16;
-type diff_inputs_array is array (natural range <>) of std_logic_vector(MAX_DIFF_BITS-1 downto 0);
-
 -- ********************************************************
 -- deta, dphi and dr parameters
 
 -- constant PI : real :=  3.14159;
-constant PI : real :=  3.15; -- TM used this value for PI
-
-constant CALO_ETA_STEP : real := 0.087/2.0; -- values from scales
+constant PI : real :=  3.15; -- Takashi M. used this value for PI
 constant MUON_ETA_STEP : real := 0.087/8.0; -- values from scales
-
 constant CALO_PHI_BINS : positive := 144; -- values from scales
 constant MUON_PHI_BINS : positive := 576; -- values from scales
-constant CALO_PHI_HALF_RANGE_BINS : positive := CALO_PHI_BINS/2; -- 144/2, because of phi bin width = 2*PI/144
-constant MUON_PHI_HALF_RANGE_BINS : positive := MUON_PHI_BINS/2; -- 576/2, because of phi bin width = 2*PI/576
+constant CALO_PHI_HALF_RANGE_BINS : positive := CALO_PHI_BINS/2;
+constant MUON_PHI_HALF_RANGE_BINS : positive := MUON_PHI_BINS/2;
 constant MU_PHI_HALF_RANGE_BINS : positive := MUON_PHI_HALF_RANGE_BINS;
-
 constant PHI_MIN : real := 0.0; -- phi min.: 0.0
 constant PHI_MAX : real := 2.0*PI; -- phi max.: 2*PI
-
 constant ETA_MIN : real := -5.0; -- eta min.: -5.0
 constant ETA_MAX : real := 5.0; -- eta max.: +5.0
 constant ETA_RANGE_REAL : real := 10.0; -- eta range max.: -5.0 to +5.0
-
 constant DETA_DPHI_PRECISION_ALL: positive := 3;
-constant DETA_DPHI_VECTOR_WIDTH_ALL: positive := log2c(max(integer(ETA_RANGE_REAL*(real(10**DETA_DPHI_PRECISION_ALL))),integer(PHI_MAX*(real(10**DETA_DPHI_PRECISION_ALL))))); -- length of DETA/DPHI vector for Delta-R calculation
-type deta_dphi_vector_array is array (natural range <>, natural range <>) of std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
-
+constant DETA_DPHI_VECTOR_WIDTH_ALL: positive := log2c(max(integer(ETA_RANGE_REAL*(real(10**DETA_DPHI_PRECISION_ALL))),integer(PHI_MAX*(real(10**DETA_DPHI_PRECISION_ALL)))));
+constant MAX_DIFF_BITS : positive := 16;
 constant MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR : positive := 32;
 constant MAX_WIDTH_DR_LIMIT_VECTOR : positive := 64;
+
+type diff_inputs_array is array (natural range <>) of std_logic_vector(MAX_DIFF_BITS-1 downto 0);
+type deta_dphi_vector_array is array (natural range <>, natural range <>) of std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
 type dr_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
 
 -- ********************************************************
 -- mass parameters
--- HB 2020-06-17: definition of mass_type:
--- 0 => invariant mass
--- 1 => transverse mass
--- 2 => invariant mass with unconstraint pt
--- 3 => invariant mass divided by deltaR
 
 constant MASS_TYPE_MAX_VALUE : natural := 3;
 constant INVARIANT_MASS_TYPE : natural range 0 to MASS_TYPE_MAX_VALUE := 0;
@@ -626,16 +570,12 @@ constant CALO_CALO_COSH_COS_PRECISION : positive := 3;
 constant CALO_CALO_COSH_COS_VECTOR_WIDTH: positive := log2c(10597282-(-1000));
 type calo_cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_CALO_COSH_COS_VECTOR_WIDTH-1 downto 0);
 
-constant CALO_SIN_COS_PRECISION : positive := 3;
-constant CALO_SIN_COS_VECTOR_WIDTH: positive := log2c(1000-(-1000));
-type calo_sin_cos_vector_array is array (natural range <>) of std_logic_vector(CALO_SIN_COS_VECTOR_WIDTH-1 downto 0);
-
 -- muon-muon-correlation
 constant MUON_PT_PRECISION : positive := 1; -- 1 digit after decimal point
 constant MUON_MUON_COSH_COS_PRECISION : positive := 4; -- 4 digits after decimal point (after roundimg to the 5th digit)
 
 constant MUON_PT_VECTOR_WIDTH: positive := log2c((2**(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low+1)-1)*(10**MUON_PT_PRECISION)); -- max. value 255.5 GeV => 2555 => 0x9FB
-constant MU_PT_VECTOR_WIDTH: positive := MUON_PT_VECTOR_WIDTH; -- dummy for VHDL-Producer output (correlation conditions)
+constant MU_PT_VECTOR_WIDTH: positive := MUON_PT_VECTOR_WIDTH;
 
 constant MUON_UPT_PRECISION : positive := 1; -- 1 digit after decimal point
 constant MU_UPT_VECTOR_WIDTH: positive := 12; -- max. value 255.0 GeV => 2550 (255.0 * 10**MUON_UPT_PRECISION) => 0x9F6
@@ -653,10 +593,6 @@ type calo_muon_cosh_cos_vector_array is array (natural range <>, natural range <
 constant COMMON_COSH_COS_VECTOR_WIDTH: positive := max(CALO_CALO_COSH_COS_VECTOR_WIDTH, MUON_MUON_COSH_COS_VECTOR_WIDTH, CALO_MUON_COSH_COS_VECTOR_WIDTH);
 type common_cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(COMMON_COSH_COS_VECTOR_WIDTH-1 downto 0);
 
-constant MUON_SIN_COS_PRECISION : positive := 4;
-constant MUON_SIN_COS_VECTOR_WIDTH: positive := log2c(10000-(-10000));
-type muon_sin_cos_vector_array is array (natural range <>) of std_logic_vector(MUON_SIN_COS_VECTOR_WIDTH-1 downto 0);
-
 subtype max_eta_range_integer is integer range 0 to integer(ETA_RANGE_REAL/MUON_ETA_STEP)-1; -- 10.0/0.010875 = 919.54 => rounded(919.54) = 920 - number of bins with muon bin width for full (calo) eta range
 type dim2_max_eta_range_array is array (natural range <>, natural range <>) of max_eta_range_integer;
 subtype max_phi_range_integer is integer range 0 to max(MUON_PHI_BINS, CALO_PHI_BINS)-1; -- number of bins with muon bin width (=576)
@@ -665,7 +601,6 @@ type dim2_max_phi_range_array is array (natural range <>, natural range <>) of m
 constant MAX_WIDTH_MASS_LIMIT_VECTOR : positive := 64;
 type mass_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
 
--- ********************************************************
 -- definitions for invariant mass divided by deltaR
 type addr_rom_lut_calo_inv_dr_sq_array is array (natural range <>, natural range <>) of std_logic_vector(15 downto 0);
 
@@ -725,6 +660,14 @@ constant CALO_MU_ROM : natural range 0 to 2 := 2;
 -- two-body pt parameters
 constant MAX_WIDTH_TBPT_LIMIT_VECTOR : positive := 64;
 type tbpt_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
+
+constant CALO_SIN_COS_PRECISION : positive := 3;
+constant CALO_SIN_COS_VECTOR_WIDTH: positive := log2c(1000-(-1000));
+type calo_sin_cos_vector_array is array (natural range <>) of std_logic_vector(CALO_SIN_COS_VECTOR_WIDTH-1 downto 0);
+
+constant MUON_SIN_COS_PRECISION : positive := 4;
+constant MUON_SIN_COS_VECTOR_WIDTH: positive := log2c(10000-(-10000));
+type muon_sin_cos_vector_array is array (natural range <>) of std_logic_vector(MUON_SIN_COS_VECTOR_WIDTH-1 downto 0);
 
 -- ********************************************************
 -- conversion LUTs

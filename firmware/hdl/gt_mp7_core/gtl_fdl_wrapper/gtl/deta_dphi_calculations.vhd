@@ -21,10 +21,10 @@ entity deta_dphi_calculations is
         type_obj2 : natural := EG_TYPE
     );
     port(
-        eta_integer_obj1: in diff_integer_inputs_array(0 to nr_obj1-1) := (others => 0);
-        phi_integer_obj1: in diff_integer_inputs_array(0 to nr_obj1-1) := (others => 0);
-        eta_integer_obj2: in diff_integer_inputs_array(0 to nr_obj2-1) := (others => 0);
-        phi_integer_obj2: in diff_integer_inputs_array(0 to nr_obj2-1) := (others => 0);
+        eta_integer_obj1: in integer_array(0 to nr_obj1-1) := (others => 0);
+        phi_integer_obj1: in integer_array(0 to nr_obj1-1) := (others => 0);
+        eta_integer_obj2: in integer_array(0 to nr_obj2-1) := (others => 0);
+        phi_integer_obj2: in integer_array(0 to nr_obj2-1) := (others => 0);
         deta_integer: out dim2_max_eta_range_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => 0));
         dphi_integer: out dim2_max_phi_range_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => 0))
     );

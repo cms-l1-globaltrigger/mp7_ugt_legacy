@@ -10,8 +10,8 @@ entity deta_calc is
         nr_obj2 : positive := 8
     );
     port(
-        eta_in_1 : in diff_integer_inputs_array(0 to nr_obj1-1);
-        eta_in_2 : in diff_integer_inputs_array(0 to nr_obj2-1);
+        eta_in_1 : in integer_array(0 to nr_obj1-1);
+        eta_in_2 : in integer_array(0 to nr_obj2-1);
         eta_diff_o : out dim2_max_eta_range_array(0 to nr_obj1-1, 0 to nr_obj2-1)
     );
 end deta_calc;

@@ -58,10 +58,10 @@ algonum = 512#numbers of bits
 IGNORED_ALGOS = [
   'L1_FirstBunchInTrain',
   'L1_SecondBunchInTrain',
-  #'L1_MASSUPT_0_0_10',
-  #'L1_MASSUPT_0_0_20',
-  #'L1_MASSUPT_0_0_10_open',
-  #'L1_MASSUPT_0_0_20_open',
+  'L1_MASSUPT_0_0_10',
+  'L1_MASSUPT_0_0_20',
+  'L1_MASSUPT_0_0_10_open',
+  'L1_MASSUPT_0_0_20_open',
   ]
 
 def run_command(*args):

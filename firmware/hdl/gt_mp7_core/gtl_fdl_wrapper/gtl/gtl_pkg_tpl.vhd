@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2021-04-23: cleaned up types, constants and comments.
 -- HB 2021-04-22: inserted constants for "CALO_CALO_COSH_COS_VECTOR_WIDTH", etc. instead of "EG_EG_COSH_COS_VECTOR_WIDTH", etc. Similarly done for COSH_COS_PRECISION, MASS_DIV_DR_VECTOR_WIDTH and SIN_COS_PRECISION. Cleaned up.
 -- HB 2021-04-19: removed obsolete constants for LUTs.
 -- HB 2021-04-13: added type "tbpt_dim2_array".
@@ -56,14 +57,6 @@ use work.gt_mp7_core_pkg.all;
 
 package gtl_pkg is
 
--- HB 2019-05-02: inserted types for calo_cond_matrix.vhd.
-type object_slice_1_vs_template_array is array (natural range <>, natural range <>) of std_logic;
-type object_slice_2_vs_template_array is array (natural range <>, natural range <>) of std_logic;
-type object_slice_3_vs_template_array is array (natural range <>, natural range <>) of std_logic;
-type object_slice_4_vs_template_array is array (natural range <>, natural range <>) of std_logic;
-
-type sin_cos_integer_array is array (natural range <>) of integer;
-
 {{ugt_constants}}
 
 -- HB 2014-09-09: GTL and FDL firmware major, minor and revision versions moved to gt_mp7_core_pkg.vhd (GTL_FW_MAJOR_VERSION, etc.)
@@ -105,15 +98,22 @@ type rate_counter_array is array (NR_ALGOS-1 downto 0) of std_logic_vector(RATE_
 -- constant MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := ({AssignmentFinorVetoMasks} others => X"00000001"); --Finor and veto masks registers (bit 0 = finor, bit 1 = veto)
 constant MASKS_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"00000001"); --Finor and veto masks registers (bit 0 = finor, bit 1 = veto)
 -- ==== FDL definitions - end ============================================================
--- fixed pipeline structure
+
+-- Fixed pipeline structure
 constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
 constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
 
--- Definition of object types
+-- Definition of general types
 
--- HB 2015-02-16: changed for different "calo_records", each for eg, jet and tau.
--- different records used for calo_conditions_v2.vhd
--- used natural instead of string for object types
+type std_logic_array is array (natural range <>) of std_logic;
+type std_logic_2dim_array is array (natural range <>, natural range <>) of std_logic;
+type std_logic_3dim_array is array (natural range <>, natural range <>, natural range <>) of std_logic;
+type std_logic_4dim_array is array (natural range <>, natural range <>, natural range <>, natural range <>) of std_logic;
+
+type integer_array is array (natural range <>) of integer;
+type integer_2dim_array is array (natural range <>, natural range <>) of integer;
+
+-- Definition of object types
 
 constant NR_CALO_TYPES : natural := 3;
 constant EG_TYPE : natural range 0 to NR_CALO_TYPES-1 := 0;
@@ -125,12 +125,9 @@ constant ETT_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-
 constant HTT_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+1;
 constant ETM_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+2;
 constant HTM_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+3;
--- HB 2016-06-07: inserted ETTEM and ETMHF
 constant ETTEM_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+4;
 constant ETMHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+5;
--- HB 2016-09-16: inserted HTMHF to esums
 constant HTMHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+6;
--- HB 2018-08-08: inserted "Asymmetry" to esums
 constant ASYMET_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+7;
 constant ASYMHT_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+8;
 constant ASYMETHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+9;
@@ -202,24 +199,10 @@ type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(
 
 type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.qual_high-d_s_i_muon.qual_low+1))-1 downto 0);
 type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.iso_high-d_s_i_muon.iso_low+1))-1 downto 0);
--- HB 2020-06-08: updated for new muon structure with "unconstraint pt" and "impact parameter".
 type muon_templates_ip_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.ip_high-d_s_i_muon.ip_low+1))-1 downto 0);
-
-type muon_templates_boolean_array is array (1 to NR_MUON_TEMPLATES) of boolean;
-type muon_templates_natural_array is array (1 to NR_MUON_TEMPLATES) of natural;
 type muon_templates_string_array is array (1 to NR_MUON_TEMPLATES) of string(1 to 3);
 
--- HB 2014-04-15: types for muon_charge_correlations.vhd
-type muon_charcorr_double_array is array (0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic;
-type muon_charcorr_triple_array is array (0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic;
-type muon_charcorr_quad_array is array (0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic;
 -- ==== MUONs - end ============================================================
-
--- HB 2017-03-15: type definition for "std_logic" arrays.
-type std_logic_array is array (natural range <>) of std_logic;
-type std_logic_2dim_array is array (natural range <>, natural range <>) of std_logic;
--- HB 2017-05-18:
-type std_logic_3dim_array is array (natural range <>, natural range <>, natural range <>) of std_logic;
 
 -- ==== CALOs - begin ============================================================
 -- CALOs
@@ -293,12 +276,9 @@ constant D_S_I_TAU_V2: d_s_i_tau_record := (TAU_ISO_HIGH,TAU_ISO_LOW,TAU_PHI_HIG
 type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO_BITS-1 downto 0);
 constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
 type calo_templates_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
-type calo_templates_boolean_array is array (1 to NR_CALO_TEMPLATES) of boolean;
-type calo_templates_natural_array is array (1 to NR_CALO_TEMPLATES) of natural;
 constant MAX_CALO_ET_BITS : positive := max(EG_ET_BITS, JET_ET_BITS, TAU_ET_BITS);
 constant MAX_CALO_ETA_BITS : positive := max(EG_ETA_BITS, JET_ETA_BITS, TAU_ETA_BITS);
 constant MAX_CALO_PHI_BITS : positive := max(EG_PHI_BITS, JET_PHI_BITS, TAU_PHI_BITS);
--- constant MAX_CALO_ISO_BITS : positive := max((D_S_I_EG_V2.iso_high-D_S_I_EG_V2.iso_low+1), (D_S_I_TAU_V2.iso_high-D_S_I_TAU_V2.iso_low+1));
 constant MAX_CALO_ISO_BITS : positive := max(EG_ISO_BITS, TAU_ISO_BITS);
 type calo_templates_iso_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
@@ -312,9 +292,7 @@ constant NR_ETT_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (corr
 constant NR_HTT_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
 constant NR_ETM_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
 constant NR_HTM_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
--- HB 2016-06-07: inserted ETMHF
 constant NR_ETMHF_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
--- HB 2016-09-16: inserted HTMHF and TOWERCOUNT (ECAL sum)
 constant NR_HTMHF_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
 constant NR_TOWERCOUNT_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
 
@@ -589,8 +567,6 @@ constant NR_EXTERNAL_CONDITIONS : positive := EXTERNAL_CONDITIONS_DATA_WIDTH; --
 -- Subtractors
 constant MAX_DIFF_BITS : positive := 16;
 type diff_inputs_array is array (natural range <>) of std_logic_vector(MAX_DIFF_BITS-1 downto 0);
-type diff_integer_inputs_array is array (natural range <>) of integer;
-type diff_2dim_integer_array is array (natural range <>, natural range <>) of integer;
 
 -- ********************************************************
 -- deta, dphi and dr parameters
@@ -618,10 +594,9 @@ constant DETA_DPHI_PRECISION_ALL: positive := 3;
 constant DETA_DPHI_VECTOR_WIDTH_ALL: positive := log2c(max(integer(ETA_RANGE_REAL*(real(10**DETA_DPHI_PRECISION_ALL))),integer(PHI_MAX*(real(10**DETA_DPHI_PRECISION_ALL))))); -- length of DETA/DPHI vector for Delta-R calculation
 type deta_dphi_vector_array is array (natural range <>, natural range <>) of std_logic_vector(DETA_DPHI_VECTOR_WIDTH_ALL-1 downto 0);
 
--- subtypes for ranges of limits
-subtype diff_eta_range_real is real range 0.0 to ETA_RANGE_REAL;
-subtype diff_phi_range_real is real range 0.0 to PHI_MAX/2.0;
-subtype dr_squared_range_real is real range 0.0 to ((ETA_RANGE_REAL*(real(10**DETA_DPHI_PRECISION_ALL)))**2+(PI*(real(10**DETA_DPHI_PRECISION_ALL))**2));
+constant MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR : positive := 32;
+constant MAX_WIDTH_DR_LIMIT_VECTOR : positive := 64;
+type dr_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
 
 -- ********************************************************
 -- mass parameters
@@ -654,7 +629,6 @@ type calo_cosh_cos_vector_array is array (natural range <>, natural range <>) of
 constant CALO_SIN_COS_PRECISION : positive := 3;
 constant CALO_SIN_COS_VECTOR_WIDTH: positive := log2c(1000-(-1000));
 type calo_sin_cos_vector_array is array (natural range <>) of std_logic_vector(CALO_SIN_COS_VECTOR_WIDTH-1 downto 0);
-type calo_sin_cos_integer_array is array (natural range <>) of integer;
 
 -- muon-muon-correlation
 constant MUON_PT_PRECISION : positive := 1; -- 1 digit after decimal point
@@ -682,21 +656,14 @@ type common_cosh_cos_vector_array is array (natural range <>, natural range <>) 
 constant MUON_SIN_COS_PRECISION : positive := 4;
 constant MUON_SIN_COS_VECTOR_WIDTH: positive := log2c(10000-(-10000));
 type muon_sin_cos_vector_array is array (natural range <>) of std_logic_vector(MUON_SIN_COS_VECTOR_WIDTH-1 downto 0);
-type muon_sin_cos_integer_array is array (natural range <>) of integer;
 
 subtype max_eta_range_integer is integer range 0 to integer(ETA_RANGE_REAL/MUON_ETA_STEP)-1; -- 10.0/0.010875 = 919.54 => rounded(919.54) = 920 - number of bins with muon bin width for full (calo) eta range
 type dim2_max_eta_range_array is array (natural range <>, natural range <>) of max_eta_range_integer;
 subtype max_phi_range_integer is integer range 0 to max(MUON_PHI_BINS, CALO_PHI_BINS)-1; -- number of bins with muon bin width (=576)
 type dim2_max_phi_range_array is array (natural range <>, natural range <>) of max_phi_range_integer;
 
--- HB 2017-10-02: Max. vector width for limits of correlation cuts
-constant MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR : positive := 32;
-constant MAX_WIDTH_DR_LIMIT_VECTOR : positive := 64;
 constant MAX_WIDTH_MASS_LIMIT_VECTOR : positive := 64;
-constant MAX_WIDTH_TBPT_LIMIT_VECTOR : positive := 64;
 type mass_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0);
-type dr_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_DR_LIMIT_VECTOR-1 downto 0);
-type tbpt_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
 
 -- ********************************************************
 -- definitions for invariant mass divided by deltaR
@@ -753,6 +720,11 @@ type max_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of
 constant CALO_CALO_ROM : natural range 0 to 2 := 0;
 constant MU_MU_ROM : natural range 0 to 2 := 1;
 constant CALO_MU_ROM : natural range 0 to 2 := 2;
+
+-- ********************************************************
+-- two-body pt parameters
+constant MAX_WIDTH_TBPT_LIMIT_VECTOR : positive := 64;
+type tbpt_dim2_array is array (natural range <>, natural range <>) of std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0);
 
 -- ********************************************************
 -- conversion LUTs

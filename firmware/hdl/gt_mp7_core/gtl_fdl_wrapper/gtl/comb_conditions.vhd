@@ -108,12 +108,12 @@ entity comb_conditions is
         obj1_calo: in calo_objects_array(0 to nr_obj1-1) := (others => (others => '0'));
         obj1_muon: in muon_objects_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
         obj2: in calo_objects_array(0 to nr_obj2-1) := (others => (others => '0'));
-        ls_charcorr_double: in muon_charcorr_double_array := (others => (others => '0'));
-        os_charcorr_double: in muon_charcorr_double_array := (others => (others => '0'));
-        ls_charcorr_triple: in muon_charcorr_triple_array := (others => (others => (others => '0')));
-        os_charcorr_triple: in muon_charcorr_triple_array := (others => (others => (others => '0')));
-        ls_charcorr_quad: in muon_charcorr_quad_array := (others => (others => (others => (others => '0'))));
-        os_charcorr_quad: in muon_charcorr_quad_array := (others => (others => (others => (others => '0'))));
+        ls_charcorr_double: in std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
+        os_charcorr_double: in std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
+        ls_charcorr_triple: in std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
+        os_charcorr_triple: in std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
+        ls_charcorr_quad: in std_logic_4dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => (others => '0'))));
+        os_charcorr_quad: in std_logic_4dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => (others => '0'))));
         deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dphi_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dr_orm: in dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
@@ -129,17 +129,17 @@ architecture rtl of comb_conditions is
     constant nr_objects_slice_3_int: natural := slice_3_high_obj1-slice_3_low_obj1+1;
     constant nr_objects_slice_4_int: natural := slice_4_high_obj1-slice_4_low_obj1+1;
 
-    signal obj1_slice_1_vs_templ_pipe  : object_slice_1_vs_template_array(slice_1_low_obj1 to slice_1_high_obj1, 1 to 1);
-    signal obj1_slice_2_vs_templ_pipe  : object_slice_2_vs_template_array(slice_2_low_obj1 to slice_2_high_obj1, 1 to 1);
-    signal obj1_slice_3_vs_templ_pipe  : object_slice_3_vs_template_array(slice_3_low_obj1 to slice_3_high_obj1, 1 to 1);
-    signal obj1_slice_4_vs_templ_pipe  : object_slice_4_vs_template_array(slice_4_low_obj1 to slice_4_high_obj1, 1 to 1);
+    signal obj1_slice_1_vs_templ_pipe  : std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, 1 to 1);
+    signal obj1_slice_2_vs_templ_pipe  : std_logic_2dim_array(slice_2_low_obj1 to slice_2_high_obj1, 1 to 1);
+    signal obj1_slice_3_vs_templ_pipe  : std_logic_2dim_array(slice_3_low_obj1 to slice_3_high_obj1, 1 to 1);
+    signal obj1_slice_4_vs_templ_pipe  : std_logic_2dim_array(slice_4_low_obj1 to slice_4_high_obj1, 1 to 1);
 
     --***************************************************************
 -- signals for charge correlation comparison:
 -- charge correlation inputs are compared with requested charge (given by TME)
-    signal charge_comp_double_pipe : muon_charcorr_double_array;
-    signal charge_comp_triple_pipe : muon_charcorr_triple_array;
-    signal charge_comp_quad_pipe : muon_charcorr_quad_array;
+    signal charge_comp_double_pipe : std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1);
+    signal charge_comp_triple_pipe : std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1);
+    signal charge_comp_quad_pipe : std_logic_4dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1);
 --***************************************************************
 
     signal deta_orm_comp_pipe : std_logic_2dim_array(0 to MAX_CALO_OBJECTS-1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));

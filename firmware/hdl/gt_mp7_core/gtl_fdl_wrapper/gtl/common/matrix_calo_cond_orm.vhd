@@ -48,10 +48,10 @@ entity matrix_calo_cond_orm is
     );
     port(
         clk : in std_logic;
-        calo1_obj_slice_1_vs_templ : in object_slice_1_vs_template_array(calo1_object_slice_1_low to calo1_object_slice_1_high, 1 to 1);
-        calo1_obj_slice_2_vs_templ : in object_slice_2_vs_template_array(calo1_object_slice_2_low to calo1_object_slice_2_high, 1 to 1);
-        calo1_obj_slice_3_vs_templ : in object_slice_3_vs_template_array(calo1_object_slice_3_low to calo1_object_slice_3_high, 1 to 1);
-        calo1_obj_slice_4_vs_templ : in object_slice_4_vs_template_array(calo1_object_slice_4_low to calo1_object_slice_4_high, 1 to 1);
+        calo1_obj_slice_1_vs_templ : in std_logic_2dim_array(calo1_object_slice_1_low to calo1_object_slice_1_high, 1 to 1);
+        calo1_obj_slice_2_vs_templ : in std_logic_2dim_array(calo1_object_slice_2_low to calo1_object_slice_2_high, 1 to 1);
+        calo1_obj_slice_3_vs_templ : in std_logic_2dim_array(calo1_object_slice_3_low to calo1_object_slice_3_high, 1 to 1);
+        calo1_obj_slice_4_vs_templ : in std_logic_2dim_array(calo1_object_slice_4_low to calo1_object_slice_4_high, 1 to 1);
         calo2_obj_vs_templ : in std_logic_2dim_array(calo2_object_low to calo2_object_high, 1 to 1);
         twobody_pt_comp : in std_logic_2dim_array(calo1_object_slice_1_low to calo1_object_slice_1_high, calo1_object_slice_2_low to calo1_object_slice_2_high);
         diff_eta_orm_comp : in std_logic_2dim_array(0 to MAX_CALO_OBJECTS-1, calo2_object_low to calo2_object_high);

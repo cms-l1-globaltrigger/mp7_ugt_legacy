@@ -154,10 +154,10 @@ entity correlation_conditions_muon is
         obj2: in muon_objects_array(0 to nr_obj2-1) := (others => (others => '0'));
         obj3: in muon_objects_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
         esums: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
-        ls_charcorr_double: in muon_charcorr_double_array := (others => (others => '0'));
-        os_charcorr_double: in muon_charcorr_double_array := (others => (others => '0'));
-        ls_charcorr_triple: in muon_charcorr_triple_array := (others => (others => (others => '0')));
-        os_charcorr_triple: in muon_charcorr_triple_array := (others => (others => (others => '0')));
+        ls_charcorr_double: in std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
+        os_charcorr_double: in std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
+        ls_charcorr_triple: in std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
+        os_charcorr_triple: in std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
         deta: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dphi: in deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dr : in dr_dim2_array(0 to NR_MU_OBJECTS-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
@@ -174,8 +174,8 @@ architecture rtl of correlation_conditions_muon is
 
 --***************************************************************
 -- signals for charge correlation comparison:
-    signal charge_comp_double, charge_comp_double_pipe : muon_charcorr_double_array := (others => (others => '1'));
-    signal charge_comp_triple, charge_comp_triple_pipe : muon_charcorr_triple_array := (others => (others => (others => '1')));
+    signal charge_comp_double, charge_comp_double_pipe : std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => '1'));
+    signal charge_comp_triple, charge_comp_triple_pipe : std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '1')));
 --***************************************************************
 
     signal obj1_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));

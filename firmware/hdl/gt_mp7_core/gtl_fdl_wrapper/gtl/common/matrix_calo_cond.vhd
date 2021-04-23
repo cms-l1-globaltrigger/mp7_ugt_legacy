@@ -25,10 +25,10 @@ entity matrix_calo_cond is
     );
     port(
         clk : in std_logic;
-        obj_slice_1_vs_templ : in object_slice_1_vs_template_array(calo_object_slice_1_low to calo_object_slice_1_high, 1 to 1);
-        obj_slice_2_vs_templ : in object_slice_2_vs_template_array(calo_object_slice_2_low to calo_object_slice_2_high, 1 to 1);
-        obj_slice_3_vs_templ : in object_slice_3_vs_template_array(calo_object_slice_3_low to calo_object_slice_3_high, 1 to 1);
-        obj_slice_4_vs_templ : in object_slice_4_vs_template_array(calo_object_slice_4_low to calo_object_slice_4_high, 1 to 1);
+        obj_slice_1_vs_templ : in std_logic_2dim_array(calo_object_slice_1_low to calo_object_slice_1_high, 1 to 1);
+        obj_slice_2_vs_templ : in std_logic_2dim_array(calo_object_slice_2_low to calo_object_slice_2_high, 1 to 1);
+        obj_slice_3_vs_templ : in std_logic_2dim_array(calo_object_slice_3_low to calo_object_slice_3_high, 1 to 1);
+        obj_slice_4_vs_templ : in std_logic_2dim_array(calo_object_slice_4_low to calo_object_slice_4_high, 1 to 1);
         twobody_pt_comp : in std_logic_2dim_array(calo_object_slice_1_low to calo_object_slice_1_high, calo_object_slice_2_low to calo_object_slice_2_high);
         condition_o : out std_logic
     );

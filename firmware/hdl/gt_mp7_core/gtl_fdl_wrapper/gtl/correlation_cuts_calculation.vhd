@@ -48,10 +48,10 @@ entity correlation_cuts_calculation is
         cosh_deta: in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         cos_dphi: in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         inv_mass_pt_in: in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        cos_phi_integer1: in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
-        cos_phi_integer2: in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
-        sin_phi_integer1: in sin_cos_integer_array(0 to nr_obj1-1) := (others => 0);
-        sin_phi_integer2: in sin_cos_integer_array(0 to nr_obj2-1) := (others => 0);
+        cos_phi_integer1: in integer_array(0 to nr_obj1-1) := (others => 0);
+        cos_phi_integer2: in integer_array(0 to nr_obj2-1) := (others => 0);
+        sin_phi_integer1: in integer_array(0 to nr_obj1-1) := (others => 0);
+        sin_phi_integer2: in integer_array(0 to nr_obj2-1) := (others => 0);
         dr: out dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         inv_mass_pt: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         inv_mass_upt: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));

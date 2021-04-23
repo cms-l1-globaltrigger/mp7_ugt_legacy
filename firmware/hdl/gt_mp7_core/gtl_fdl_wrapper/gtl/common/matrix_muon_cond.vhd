@@ -26,13 +26,13 @@ entity matrix_muon_cond is
     );
     port(
         clk : in std_logic;
-        obj_slice_1_vs_templ : in object_slice_1_vs_template_array(muon_object_slice_1_low to muon_object_slice_1_high, 1 to 1);
-        obj_slice_2_vs_templ : in object_slice_2_vs_template_array(muon_object_slice_2_low to muon_object_slice_2_high, 1 to 1);
-        obj_slice_3_vs_templ : in object_slice_3_vs_template_array(muon_object_slice_3_low to muon_object_slice_3_high, 1 to 1);
-        obj_slice_4_vs_templ : in object_slice_4_vs_template_array(muon_object_slice_4_low to muon_object_slice_4_high, 1 to 1);
-        charge_comp_double : in muon_charcorr_double_array;
-        charge_comp_triple : in muon_charcorr_triple_array;
-        charge_comp_quad : in muon_charcorr_quad_array;
+        obj_slice_1_vs_templ : in std_logic_2dim_array(muon_object_slice_1_low to muon_object_slice_1_high, 1 to 1);
+        obj_slice_2_vs_templ : in std_logic_2dim_array(muon_object_slice_2_low to muon_object_slice_2_high, 1 to 1);
+        obj_slice_3_vs_templ : in std_logic_2dim_array(muon_object_slice_3_low to muon_object_slice_3_high, 1 to 1);
+        obj_slice_4_vs_templ : in std_logic_2dim_array(muon_object_slice_4_low to muon_object_slice_4_high, 1 to 1);
+        charge_comp_double : in std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1);
+        charge_comp_triple : in std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1);
+        charge_comp_quad : in std_logic_4dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1);
         twobody_pt_comp : in std_logic_2dim_array(muon_object_slice_1_low to muon_object_slice_1_high, muon_object_slice_2_low to muon_object_slice_2_high);
         twobody_upt_comp : in std_logic_2dim_array(muon_object_slice_1_low to muon_object_slice_1_high, muon_object_slice_2_low to muon_object_slice_2_high);
         condition_o : out std_logic

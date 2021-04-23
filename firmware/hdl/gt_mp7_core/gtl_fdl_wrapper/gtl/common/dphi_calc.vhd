@@ -11,8 +11,8 @@ entity dphi_calc is
         phi_half_range: positive := 72 -- in bins
     );
     port(
-        phi_in_1 : in diff_integer_inputs_array(0 to nr_obj1-1);
-        phi_in_2 : in diff_integer_inputs_array(0 to nr_obj2-1);
+        phi_in_1 : in integer_array(0 to nr_obj1-1);
+        phi_in_2 : in integer_array(0 to nr_obj2-1);
         phi_diff_o : out dim2_max_phi_range_array(0 to nr_obj1-1, 0 to nr_obj2-1)
     );
 end dphi_calc;

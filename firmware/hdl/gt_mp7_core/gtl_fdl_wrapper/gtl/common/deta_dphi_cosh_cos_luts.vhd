@@ -15,18 +15,6 @@ use work.gtl_pkg.all;
 
 entity deta_dphi_cosh_cos_luts is
      generic(
---         calo_calo_deta_lut: calo_calo_diff_eta_lut_array := (others => 0);
---         calo_calo_dphi_lut: calo_calo_diff_phi_lut_array := (others => 0);
---         calo_muon_deta_lut: calo_muon_diff_eta_lut_array := (others => 0);
---         calo_muon_dphi_lut: calo_muon_diff_phi_lut_array := (others => 0);
---         muon_muon_deta_lut: muon_muon_diff_eta_lut_array := (others => 0);
---         muon_muon_dphi_lut: muon_muon_diff_phi_lut_array := (others => 0);
---         calo_calo_cosh_deta_lut: calo_calo_cosh_deta_lut_array := (others => 0);
---         calo_calo_cos_dphi_lut: calo_calo_cos_dphi_lut_array := (others => 0);
---         calo_muon_cosh_deta_lut: calo_muon_cosh_deta_lut_array := (others => 0);
---         calo_muon_cos_dphi_lut: calo_muon_cos_dphi_lut_array := (others => 0);
---         muon_muon_cosh_deta_lut: muon_muon_cosh_deta_lut_array := (others => 0);
---         muon_muon_cos_dphi_lut: muon_muon_cos_dphi_lut_array := (others => 0);
         nr_obj1: natural := NR_EG_OBJECTS;
         type_obj1: natural := EG_TYPE;
         nr_obj2: natural := NR_EG_OBJECTS;

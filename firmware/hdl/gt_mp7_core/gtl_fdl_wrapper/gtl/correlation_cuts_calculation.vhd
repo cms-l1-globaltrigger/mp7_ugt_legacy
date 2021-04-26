@@ -15,8 +15,12 @@ use work.gtl_pkg.all;
 
 entity correlation_cuts_calculation is
      generic(
-        nr_obj1: natural;
-        nr_obj2: natural;
+        nr_obj1: natural := NR_EG_OBJECTS;
+        type_obj1: natural := EG_TYPE;
+        nr_obj2: natural := NR_EG_OBJECTS;
+        type_obj2: natural := EG_TYPE;
+        deta_cut: boolean := false;
+        dphi_cut: boolean := false;
         dr_cut: boolean := false;
         mass_cut: boolean := false;
         mass_type: natural := INVARIANT_MASS_TYPE;
@@ -37,21 +41,19 @@ entity correlation_cuts_calculation is
     );
     port(
         lhc_clk: in std_logic := '0';
-        dphi_integer: in dim2_max_phi_range_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => 0));
         deta_integer: in dim2_max_eta_range_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => 0));
-        deta: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        dphi: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        dphi_integer: in dim2_max_phi_range_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => 0));
         pt1: in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
         pt2: in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
         upt1: in diff_inputs_array(0 to nr_obj1-1) := (others => (others => '0'));
         upt2: in diff_inputs_array(0 to nr_obj2-1) := (others => (others => '0'));
-        cosh_deta: in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        cos_dphi: in common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         inv_mass_pt_in: in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         cos_phi_integer1: in integer_array(0 to nr_obj1-1) := (others => 0);
         cos_phi_integer2: in integer_array(0 to nr_obj2-1) := (others => 0);
         sin_phi_integer1: in integer_array(0 to nr_obj1-1) := (others => 0);
         sin_phi_integer2: in integer_array(0 to nr_obj2-1) := (others => 0);
+        deta: out deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        dphi: out deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dr: out dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         inv_mass_pt: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         inv_mass_upt: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
@@ -85,6 +87,12 @@ architecture rtl of correlation_cuts_calculation is
     constant mass_vector_width : positive := pt1_width+pt2_width+cosh_cos_width;
     constant mass_upt_vector_width : positive := upt1_width+upt2_width+cosh_cos_width;
 
+    signal deta_i: deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+    signal dphi_i: deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+
+    signal cosh_deta: common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+    signal cos_dphi: common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+
     signal deta_bin : common_deta_bin_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
     signal dphi_bin : common_dphi_bin_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
 
@@ -97,14 +105,40 @@ begin
 
     cuts_l_1: for i in 0 to nr_obj1-1 generate
         cuts_l_2: for j in 0 to nr_obj2-1 generate
+            deta_dphi_sel: if deta_cut or deta_cut or dr_cut generate
+                deta_dphi_i: entity work.deta_dphi_cosh_cos_luts
+                    generic map(
+                        nr_obj1 => nr_obj1, type_obj1 => type_obj1,
+                        nr_obj2 => nr_obj2, type_obj2 => type_obj2,
+                        deta_dphi_sel => true
+                    )
+                    port map(deta_integer => deta_integer(i,j), dphi_integer => dphi_integer(i,j),
+                        deta_vector => deta_i(i,j), dphi_vector => dphi_i(i,j)
+                    );
+                deta(i,j) <= deta_i(i,j);
+                dphi(i,j) <= dphi_i(i,j);
+            end generate deta_dphi_sel;
+
             dr_sel: if dr_cut generate
                 dr_calc_i: entity work.dr_calc
                     port map(
-                        deta => deta(i,j),
-                        dphi => dphi(i,j),
+                        deta => deta_i(i,j),
+                        dphi => dphi_i(i,j),
                         dr => dr(i,j)(DETA_DPHI_VECTOR_WIDTH_ALL*2-1 downto 0)
                     );
             end generate dr_sel;
+
+            cosh_deta_cos_dphi_sel: if mass_cut generate
+                cosh_deta_cos_dphi_i: entity work.deta_dphi_cosh_cos_luts
+                    generic map(
+                        nr_obj1 => nr_obj1, type_obj1 => type_obj1,
+                        nr_obj2 => nr_obj2, type_obj2 => type_obj2,
+                        cosh_cos_vector_width => cosh_cos_width, cosh_deta_cos_dphi_sel => true
+                    )
+                    port map(deta_integer => deta_integer(i,j), dphi_integer => dphi_integer(i,j),
+                        cosh_deta_vector => cosh_deta(i,j), cos_dphi_vector => cos_dphi(i,j)
+                    );
+            end generate cosh_deta_cos_dphi_sel;
 
             mass_sel: if mass_cut generate
                 mass_calc_i: entity work.mass_calc

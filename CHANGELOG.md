@@ -4,14 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.14.0] - 2021-04-16
+## [v1.14.0] - 2021-04-27
 ### Comment
 
 - mp7_ugt firmware release v1.14.0
 - removed obsolete modules
 - added modules for correlation cuts calculations outside of conditions
+- renamed files (differences.vhd => deta_dphi_calculations.vhd, ...)
 - added new modules for and-or matrix
 - cleaned up
+
+### Added
+- source files:
+  - ../gtl/correlation_cuts_calculation.vhd
+  - ../gtl/common/matrix_calo_cond.vhd
+  - ../gtl/common/matrix_calo_cond_orm.vhd
+  - ../gtl/common/matrix_muon_cond.vhd
+  - ../gtl/common/matrix_muon_charge_corr.vhd
 
 ## [v1.13.0] - 2021-04-06
 ### Comment

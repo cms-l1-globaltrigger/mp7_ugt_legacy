@@ -2,6 +2,7 @@
 -- Calo condition matrix
 
 -- Version history:
+-- HB 2021-04-15: minor update. Changed name.
 -- HB 2021-02-19: updated condition output pipeline.
 -- HB 2019-04-30: first version (updated Dinyar/Hannes proposal).
 
@@ -10,7 +11,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 use work.gtl_pkg.all;
 
-entity calo_cond_matrix is
+entity matrix_calo_cond is
     generic(
         calo_object_slice_1_low: natural;
         calo_object_slice_1_high: natural;
@@ -24,16 +25,16 @@ entity calo_cond_matrix is
     );
     port(
         clk : in std_logic;
-        obj_slice_1_vs_templ : in object_slice_1_vs_template_array(calo_object_slice_1_low to calo_object_slice_1_high, 1 to 1);
-        obj_slice_2_vs_templ : in object_slice_2_vs_template_array(calo_object_slice_2_low to calo_object_slice_2_high, 1 to 1);
-        obj_slice_3_vs_templ : in object_slice_3_vs_template_array(calo_object_slice_3_low to calo_object_slice_3_high, 1 to 1);
-        obj_slice_4_vs_templ : in object_slice_4_vs_template_array(calo_object_slice_4_low to calo_object_slice_4_high, 1 to 1);
+        obj_slice_1_vs_templ : in std_logic_2dim_array(calo_object_slice_1_low to calo_object_slice_1_high, 1 to 1);
+        obj_slice_2_vs_templ : in std_logic_2dim_array(calo_object_slice_2_low to calo_object_slice_2_high, 1 to 1);
+        obj_slice_3_vs_templ : in std_logic_2dim_array(calo_object_slice_3_low to calo_object_slice_3_high, 1 to 1);
+        obj_slice_4_vs_templ : in std_logic_2dim_array(calo_object_slice_4_low to calo_object_slice_4_high, 1 to 1);
         twobody_pt_comp : in std_logic_2dim_array(calo_object_slice_1_low to calo_object_slice_1_high, calo_object_slice_2_low to calo_object_slice_2_high);
         condition_o : out std_logic
     );
-end calo_cond_matrix;
+end matrix_calo_cond;
 
-architecture Behavioral of calo_cond_matrix is
+architecture Behavioral of matrix_calo_cond is
     constant nr_objects_slice_1_int: natural := calo_object_slice_1_high-calo_object_slice_1_low+1;
     constant nr_objects_slice_2_int: natural := calo_object_slice_2_high-calo_object_slice_2_low+1;
     constant nr_objects_slice_3_int: natural := calo_object_slice_3_high-calo_object_slice_3_low+1;
@@ -181,7 +182,7 @@ begin
 -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(clk, condition_and_or)
         begin
-            if CONDITIONS_PIPELINE = false then
+            if not CONDITIONS_PIPELINE then
                 condition_o <= condition_and_or;
             else
                 if (clk'event and clk = '1') then

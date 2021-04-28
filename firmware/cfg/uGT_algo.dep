@@ -49,7 +49,6 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/common/muon_obj_cuts.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/esums_comparators.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/deta_calc.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/dphi_calc.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/gtl/common/deta_dphi_cosh_cos_luts.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/deta_cosh_deta_luts.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/dphi_cos_dphi_luts.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/dr_calc.vhd

@@ -21,7 +21,7 @@ entity muon_mass_3_obj_condition is
      generic(
 
         muon1_object_low: natural := 0;
-        muon1_object_high: natural := NR_MU_OBJECTS-1;
+        muon1_object_high: natural := NR_MUON_OBJECTS-1;
         pt_ge_mode_muon1: boolean := true;
         pt_threshold_muon1: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_muon1: natural := 0;
@@ -50,7 +50,7 @@ entity muon_mass_3_obj_condition is
         ip_lut_muon1: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0) := (others => '1');
 
         muon2_object_low: natural := 0;
-        muon2_object_high: natural := NR_MU_OBJECTS-1;
+        muon2_object_high: natural := NR_MUON_OBJECTS-1;
         pt_ge_mode_muon2: boolean := true;
         pt_threshold_muon2: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_muon2: natural := 0;
@@ -79,7 +79,7 @@ entity muon_mass_3_obj_condition is
         ip_lut_muon2: std_logic_vector(2**(D_S_I_MUON_V2.ip_high-D_S_I_MUON_V2.ip_low+1)-1 downto 0) := (others => '1');
 
         muon3_object_low: natural := 0;
-        muon3_object_high: natural := NR_MU_OBJECTS-1;
+        muon3_object_high: natural := NR_MUON_OBJECTS-1;
         pt_ge_mode_muon3: boolean := true;
         pt_threshold_muon3: std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_muon3: natural := 0;
@@ -112,8 +112,8 @@ entity muon_mass_3_obj_condition is
         mass_upper_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
-        pt_width: positive := MU_PT_VECTOR_WIDTH; 
-        upt_width: positive := MU_UPT_VECTOR_WIDTH; 
+        pt_width: positive := MU_PT_VECTOR_WIDTH;
+        upt_width: positive := MU_UPT_VECTOR_WIDTH;
         cosh_cos_precision : positive := MU_MU_COSH_COS_PRECISION;
         cosh_cos_width: positive := MU_MU_COSH_COS_VECTOR_WIDTH
 
@@ -128,15 +128,15 @@ entity muon_mass_3_obj_condition is
         os_charcorr_triple: in muon_charcorr_triple_array := (others => (others => (others => '0')));
         condition_o: out std_logic
     );
-end muon_mass_3_obj_condition; 
+end muon_mass_3_obj_condition;
 
 architecture rtl of muon_mass_3_obj_condition is
 
 -- fixed pipeline structure, 2 stages total
     constant obj_vs_templ_pipeline_stage: boolean := true; -- pipeline stage for obj_vs_templ (intermediate flip-flop)
-    constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output 
+    constant conditions_pipeline_stage: boolean := true; -- pipeline stage for condition output
 
-    constant mass_vector_width: positive := pt_width+pt_width+cosh_cos_width; 
+    constant mass_vector_width: positive := pt_width+pt_width+cosh_cos_width;
 
     type muon1_object_vs_template_array is array (muon1_object_low to muon1_object_high, 1 to 1) of std_logic;
     type muon2_object_vs_template_array is array (muon2_object_low to muon2_object_high, 1 to 1) of std_logic;
@@ -152,13 +152,13 @@ architecture rtl of muon_mass_3_obj_condition is
     signal muon2_obj_vs_templ, muon2_obj_vs_templ_pipe : muon2_object_vs_template_array;
     signal muon3_obj_vs_templ, muon3_obj_vs_templ_pipe : muon3_object_vs_template_array;
 -- HB 2017-03-28: changed default values to provide all combinations of cuts (eg.: MASS and DR).
-    signal mass_comp, mass_comp_pipe : 
+    signal mass_comp, mass_comp_pipe :
         std_logic_3dim_array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) := (others => (others => (others => '0')));
 
     type inv_mass_value_array is array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic_vector(mass_vector_width-1 downto 0);
-    signal inv_mass_value, inv_mass_value_temp : inv_mass_value_array := (others => (others => (others => '0')));   
+    signal inv_mass_value, inv_mass_value_temp : inv_mass_value_array := (others => (others => (others => '0')));
     type sum_mass_array is array(0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1, 0 to NR_MUON_OBJECTS-1) of std_logic_vector(mass_vector_width+1 downto 0);
-    signal sum_mass, sum_mass_temp : sum_mass_array := (others => (others => (others => (others => '0'))));   
+    signal sum_mass, sum_mass_temp : sum_mass_array := (others => (others => (others => (others => '0'))));
 
     signal condition_and_or : std_logic;
 
@@ -167,7 +167,7 @@ begin
     -- *** section: CUTs - begin ***************************************************************************************
 
     -- Comparison with limits.
-    mass_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate 
+    mass_l_1: for i in 0 to NR_MUON_OBJECTS-1 generate
         mass_l_2: for j in 0 to NR_MUON_OBJECTS-1 generate
             mass_calc_l: if j>i generate
                 mass_calculator_i: entity work.mass_calculator
@@ -175,8 +175,8 @@ begin
                         mass_type => 0,
                         mass_upper_limit_vector => mass_upper_limit_vector,
                         mass_lower_limit_vector => mass_lower_limit_vector,
-                        pt1_width => pt_width, 
-                        pt2_width => pt_width, 
+                        pt1_width => pt_width,
+                        pt2_width => pt_width,
                         cosh_cos_width => cosh_cos_width,
                         mass_cosh_cos_precision => cosh_cos_precision
                     )
@@ -198,7 +198,7 @@ begin
             l3_sum: for k in 0 to NR_MUON_OBJECTS-1 generate
                 sum_mass_l: if j>i and k>i and k>j generate
                     sum_mass_calc_i: entity work.sum_mass_calc
-                        generic map(mass_vector_width)  
+                        generic map(mass_vector_width)
                         port map(inv_mass_value(i,j), inv_mass_value(i,k), inv_mass_value(j,k), sum_mass_temp(i,j,k));
                     sum_mass(i,j,k) <= sum_mass_temp(i,j,k);
                     sum_mass(i,k,j) <= sum_mass_temp(i,j,k);
@@ -207,16 +207,16 @@ begin
                     sum_mass(k,i,j) <= sum_mass_temp(i,j,k);
                     sum_mass(k,j,i) <= sum_mass_temp(i,j,k);
                 end generate sum_mass_l;
-            end generate l3_sum;    
+            end generate l3_sum;
         end generate l2_sum;
     end generate l1_sum;
-    
+
     l1_comp: for i in muon1_object_low to muon1_object_high generate
         l2_comp: for j in muon2_object_low to muon2_object_high generate
             l3_comp: for k in muon3_object_low to muon3_object_high generate
-                mass_comp(i,j,k) <= '1' when sum_mass(i,j,k) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
-                    sum_mass(i,j,k) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
-            end generate l3_comp;    
+                mass_comp(i,j,k) <= '1' when sum_mass(i,j,k)(mass_vector_width-1 downto 0) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
+                    sum_mass(i,j,k)(mass_vector_width-1 downto 0) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+            end generate l3_comp;
         end generate l2_comp;
     end generate l1_comp;
 
@@ -335,7 +335,7 @@ begin
     -- Pipeline stage for obj_vs_templ and mass_comp
     pipeline_p: process(lhc_clk, muon1_obj_vs_templ, muon2_obj_vs_templ, muon3_obj_vs_templ, mass_comp, charge_comp_triple)
         begin
-        if obj_vs_templ_pipeline_stage = false then 
+        if obj_vs_templ_pipeline_stage = false then
             muon1_obj_vs_templ_pipe <= muon1_obj_vs_templ;
             muon2_obj_vs_templ_pipe <= muon2_obj_vs_templ;
             muon3_obj_vs_templ_pipe <= muon3_obj_vs_templ;
@@ -361,18 +361,18 @@ begin
         index := 0;
         obj_vs_templ_vec := (others => '0');
         condition_and_or_tmp := '0';
-        for i in muon1_object_low to muon1_object_high loop 
+        for i in muon1_object_low to muon1_object_high loop
             for j in muon2_object_low to muon2_object_high loop
                 for k in muon3_object_low to muon3_object_high loop
                     if j/=i and i/=k and j/=k then
                         index := index + 1;
-                        obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and muon3_obj_vs_templ_pipe(k,1) and 
+                        obj_vs_templ_vec(index) := muon1_obj_vs_templ_pipe(i,1) and muon2_obj_vs_templ_pipe(j,1) and muon3_obj_vs_templ_pipe(k,1) and
                             charge_comp_triple_pipe(i,j,k) and mass_comp_pipe(i,j,k);
                     end if;
                 end loop;
             end loop;
         end loop;
-        for i in 1 to index loop 
+        for i in 1 to index loop
             -- ORs for matrix
             condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
         end loop;
@@ -382,7 +382,7 @@ begin
     -- Pipeline stage for condition output.
     condition_o_pipeline_p: process(lhc_clk, condition_and_or)
         begin
-            if conditions_pipeline_stage = false then 
+            if conditions_pipeline_stage = false then
                 condition_o <= condition_and_or;
             else
                 if (lhc_clk'event and lhc_clk = '1') then
@@ -390,15 +390,15 @@ begin
                 end if;
             end if;
     end process;
-    
+
 end architecture rtl;
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+

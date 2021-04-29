@@ -3,6 +3,7 @@
 -- Condition for invariant mass with 3 muon objects.
 
 -- Version history:
+-- HB 2021-04-29: bug fixed at mass comparison (signal "mass_comp").
 -- HB 2020-11-30: added default parameters. Currently no mass with 3 muon objects for "unconstraint pt".
 -- HB 2020-04-27: reverted to former version.
 -- HB 2020-04-24: update instance of mass_calculator.

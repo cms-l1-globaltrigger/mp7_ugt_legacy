@@ -3,7 +3,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
-  
+
+## [v1.11.3] - 2021-04-29
+### Comment
+
+- mp7_ugt firmware release v1.11.3
+- bug fixed in calo_mass_3_obj_condition.vhd and muon_mass_3_obj_condition.vhd
+
+### Changed
+- source files:
+  - ../gtl/calo_mass_3_obj_condition.vhd
+  - ../gtl/muon_mass_3_obj_condition.vhd
+  - ../gtl/gtl_module_tpl.vhd
+  - ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
+
 ## [v1.11.2] - 2020-12-01
 ### Comment
 
@@ -144,7 +157,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - source files:
   - ../gtl/calo_cond_matrix_orm.vhd
-  
+
 ## [v1.10.5] - 2020-01-20
 ### Comment
 
@@ -157,7 +170,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - script files:
   - ../scripts/run_simulation_questa.py
   - ../scripts/runIpbbSynth.py
-  
+
 ## [v1.10.4] - 2019-11-14
 ### Comment
 

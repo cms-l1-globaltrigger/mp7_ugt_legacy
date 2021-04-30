@@ -215,8 +215,8 @@ begin
     l1_comp: for i in muon1_object_low to muon1_object_high generate
         l2_comp: for j in muon2_object_low to muon2_object_high generate
             l3_comp: for k in muon3_object_low to muon3_object_high generate
-                mass_comp(i,j,k) <= '1' when sum_mass(i,j,k)(mass_vector_width-1 downto 0) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
-                    sum_mass(i,j,k)(mass_vector_width-1 downto 0) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                mass_comp(i,j,k) <= '1' when sum_mass(i,j,k)(mass_vector_width downto 0) >= mass_lower_limit_vector(mass_vector_width downto 0) and
+                    sum_mass(i,j,k)(mass_vector_width downto 0) <= mass_upper_limit_vector(mass_vector_width downto 0) else '0';
             end generate l3_comp;
         end generate l2_comp;
     end generate l1_comp;

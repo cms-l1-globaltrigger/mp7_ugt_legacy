@@ -87,6 +87,8 @@ architecture rtl of correlation_cuts_calculation is
 
     constant mass_vector_width : positive := pt1_width+pt2_width+cosh_cos_width;
     constant mass_upt_vector_width : positive := upt1_width+upt2_width+cosh_cos_width;
+    constant tbpt_vector_width : positive := 2+pt1_width+pt2_width+sin_cos_width+sin_cos_width;
+    constant tbupt_vector_width : positive := 2+upt1_width+upt2_width+sin_cos_width+sin_cos_width;
 
     signal deta_i: deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
     signal dphi_i: deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
@@ -248,8 +250,8 @@ begin
                         cos_phi_2_integer => cos_phi_integer2(j),
                         sin_phi_1_integer => sin_phi_integer1(i),
                         sin_phi_2_integer => sin_phi_integer2(j),
-                        tbpt => tbpt(i,j),
-                        tbupt => tbupt(i,j)
+                        tbpt => tbpt(i,j)(tbpt_vector_width-1 downto 0),
+                        tbupt => tbupt(i,j)(tbupt_vector_width-1 downto 0)
                 );
             end generate tbpt_sel;
         end generate cuts_l_2;

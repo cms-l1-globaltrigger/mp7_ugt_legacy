@@ -23,16 +23,16 @@ entity tbpt_calc is
         sin_cos_precision : positive := 3
     );
     port(
-        pt1 : in std_logic_vector(pt1_width-1 downto 0);
-        pt2 : in std_logic_vector(pt2_width-1 downto 0);
-        upt1 : in std_logic_vector(upt1_width-1 downto 0);
-        upt2 : in std_logic_vector(upt2_width-1 downto 0);
+        pt1 : in std_logic_vector(pt1_width-1 downto 0) := (others => '0');
+        pt2 : in std_logic_vector(pt2_width-1 downto 0) := (others => '0');
+        upt1 : in std_logic_vector(upt1_width-1 downto 0) := (others => '0');
+        upt2 : in std_logic_vector(upt2_width-1 downto 0) := (others => '0');
         cos_phi_1_integer : in integer;
         cos_phi_2_integer : in integer;
         sin_phi_1_integer : in integer;
         sin_phi_2_integer : in integer;
-        tbpt : out std_logic_vector(2+pt1_width+pt2_width+sin_cos_width+sin_cos_width-1 downto 0);
-        tbupt : out std_logic_vector(2+upt1_width+upt2_width+sin_cos_width+sin_cos_width-1 downto 0)
+        tbpt : out std_logic_vector(2+pt1_width+pt2_width+sin_cos_width+sin_cos_width-1 downto 0) := (others => '0');
+        tbupt : out std_logic_vector(2+upt1_width+upt2_width+sin_cos_width+sin_cos_width-1 downto 0) := (others => '0')
     );
 end tbpt_calc;
 
@@ -41,8 +41,8 @@ architecture rtl of tbpt_calc is
 -- HB 2017-03-23: calculation of twobody_pt with formular => pt**2 = pt1**2+pt2**2+2*pt1*pt2*(cos(phi1)*cos(phi2)+sin(phi1)*sin(phi2))
 -- PT_SQ_VECTOR_WIDTH based on formular for pt**2 [2+... because of ...+2*pt1*pt2*(cos(phi1)*cos(phi2)+sin(phi1)*sin(phi2))]
     constant PT_SQ_VECTOR_WIDTH : positive := 2+pt1_width+pt2_width+sin_cos_width+sin_cos_width;
-    signal pt1_square : std_logic_vector(PT_SQ_VECTOR_WIDTH-1 downto 0);
-    signal pt2_square : std_logic_vector(PT_SQ_VECTOR_WIDTH-1 downto 0);
+    signal pt1_square : std_logic_vector(pt1_width+pt1_width-1 downto 0);
+    signal pt2_square : std_logic_vector(pt2_width+pt2_width-1 downto 0);
 
     signal cos_plus_sin_integer : integer;
     signal cos_plus_sin_vec_temp : std_logic_vector(sin_cos_width+sin_cos_width-1 downto 0);
@@ -51,8 +51,8 @@ architecture rtl of tbpt_calc is
     signal pt1_x_pt2_x_cos_plus_sin : std_logic_vector(PT_SQ_VECTOR_WIDTH-1 downto 0);
 
     constant UPT_SQ_VECTOR_WIDTH : positive := 2+upt1_width+upt2_width+sin_cos_width+sin_cos_width;
-    signal upt1_square : std_logic_vector(PT_SQ_VECTOR_WIDTH-1 downto 0);
-    signal upt2_square : std_logic_vector(PT_SQ_VECTOR_WIDTH-1 downto 0);
+    signal upt1_square : std_logic_vector(upt1_width+upt1_width-1 downto 0);
+    signal upt2_square : std_logic_vector(upt2_width+upt2_width-1 downto 0);
 
     signal upt1_x_upt2_x_cos_plus_sin_temp : std_logic_vector(UPT_SQ_VECTOR_WIDTH-1 downto 0);
     signal upt1_x_upt2_x_cos_plus_sin : std_logic_vector(UPT_SQ_VECTOR_WIDTH-1 downto 0);

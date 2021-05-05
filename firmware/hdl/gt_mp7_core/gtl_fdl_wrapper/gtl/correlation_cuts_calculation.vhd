@@ -3,6 +3,7 @@
 -- Instances for correlation cuts calculations
 
 -- Version history:
+-- HB 2021-04-27: used deta_cosh_deta_luts.vhd and dphi_cos_dphi_luts.vhd separately for resource values.
 -- HB 2021-04-20: added logic for mass over deltaR.
 -- HB 2021-04-08: first design.
 
@@ -86,6 +87,8 @@ architecture rtl of correlation_cuts_calculation is
 
     constant mass_vector_width : positive := pt1_width+pt2_width+cosh_cos_width;
     constant mass_upt_vector_width : positive := upt1_width+upt2_width+cosh_cos_width;
+    constant tbpt_vector_width : positive := 2+pt1_width+pt2_width+sin_cos_width+sin_cos_width;
+    constant tbupt_vector_width : positive := 2+upt1_width+upt2_width+sin_cos_width+sin_cos_width;
 
     signal deta_i: deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
     signal dphi_i: deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
@@ -105,19 +108,31 @@ begin
 
     cuts_l_1: for i in 0 to nr_obj1-1 generate
         cuts_l_2: for j in 0 to nr_obj2-1 generate
-            deta_dphi_sel: if deta_cut or deta_cut or dr_cut generate
-                deta_dphi_i: entity work.deta_dphi_cosh_cos_luts
+            deta_sel: if deta_cut or dr_cut generate
+                deta_inst: entity work.deta_cosh_deta_luts
                     generic map(
                         nr_obj1 => nr_obj1, type_obj1 => type_obj1,
                         nr_obj2 => nr_obj2, type_obj2 => type_obj2,
-                        deta_dphi_sel => true
+                        deta_sel => true
                     )
-                    port map(deta_integer => deta_integer(i,j), dphi_integer => dphi_integer(i,j),
-                        deta_vector => deta_i(i,j), dphi_vector => dphi_i(i,j)
+                    port map(
+                        deta_integer => deta_integer(i,j), deta_vector => deta_i(i,j)
                     );
                 deta(i,j) <= deta_i(i,j);
+            end generate deta_sel;
+
+            dphi_sel: if dphi_cut or dr_cut generate
+                dphi_inst: entity work.dphi_cos_dphi_luts
+                    generic map(
+                        nr_obj1 => nr_obj1, type_obj1 => type_obj1,
+                        nr_obj2 => nr_obj2, type_obj2 => type_obj2,
+                        dphi_sel => true
+                    )
+                    port map(
+                        dphi_integer => dphi_integer(i,j), dphi_vector => dphi_i(i,j)
+                    );
                 dphi(i,j) <= dphi_i(i,j);
-            end generate deta_dphi_sel;
+            end generate dphi_sel;
 
             dr_sel: if dr_cut generate
                 dr_calc_i: entity work.dr_calc
@@ -128,17 +143,29 @@ begin
                     );
             end generate dr_sel;
 
-            cosh_deta_cos_dphi_sel: if mass_cut generate
-                cosh_deta_cos_dphi_i: entity work.deta_dphi_cosh_cos_luts
+            cosh_deta_sel: if mass_cut and not (mass_type = TRANSVERSE_MASS_TYPE) generate
+                cosh_deta_i: entity work.deta_cosh_deta_luts
                     generic map(
                         nr_obj1 => nr_obj1, type_obj1 => type_obj1,
                         nr_obj2 => nr_obj2, type_obj2 => type_obj2,
-                        cosh_cos_vector_width => cosh_cos_width, cosh_deta_cos_dphi_sel => true
+                        cosh_cos_vector_width => cosh_cos_width, cosh_deta_sel => true
                     )
-                    port map(deta_integer => deta_integer(i,j), dphi_integer => dphi_integer(i,j),
-                        cosh_deta_vector => cosh_deta(i,j), cos_dphi_vector => cos_dphi(i,j)
+                    port map(
+                        deta_integer => deta_integer(i,j), cosh_deta_vector => cosh_deta(i,j)
                     );
-            end generate cosh_deta_cos_dphi_sel;
+            end generate cosh_deta_sel;
+
+            cos_dphi_sel: if mass_cut generate
+                cos_dphi_i: entity work.dphi_cos_dphi_luts
+                    generic map(
+                        nr_obj1 => nr_obj1, type_obj1 => type_obj1,
+                        nr_obj2 => nr_obj2, type_obj2 => type_obj2,
+                        cosh_cos_vector_width => cosh_cos_width, cos_dphi_sel => true
+                    )
+                    port map(
+                        dphi_integer => dphi_integer(i,j), cos_dphi_vector => cos_dphi(i,j)
+                    );
+            end generate cos_dphi_sel;
 
             mass_sel: if mass_cut generate
                 mass_calc_i: entity work.mass_calc
@@ -223,8 +250,8 @@ begin
                         cos_phi_2_integer => cos_phi_integer2(j),
                         sin_phi_1_integer => sin_phi_integer1(i),
                         sin_phi_2_integer => sin_phi_integer2(j),
-                        tbpt => tbpt(i,j),
-                        tbupt => tbupt(i,j)
+                        tbpt => tbpt(i,j)(tbpt_vector_width-1 downto 0),
+                        tbupt => tbupt(i,j)(tbupt_vector_width-1 downto 0)
                 );
             end generate tbpt_sel;
         end generate cuts_l_2;

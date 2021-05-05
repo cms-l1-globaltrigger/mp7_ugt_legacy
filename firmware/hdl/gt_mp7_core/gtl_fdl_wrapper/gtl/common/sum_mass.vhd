@@ -68,8 +68,7 @@ begin
     l1_comp: for i in slice_low_obj1 to slice_high_obj1 generate
         l2_comp: for j in slice_low_obj2 to slice_high_obj2 generate
             l3_comp: for k in slice_low_obj3 to slice_high_obj3 generate
-                mass_3_obj_comp(i,j,k) <= '1' when sum_mass(i,j,k) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and
-                    sum_mass(i,j,k) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
+                mass_3_obj_comp(i,j,k) <= '1' when sum_mass(i,j,k)(mass_vector_width-1 downto 0) >= mass_lower_limit_vector(mass_vector_width-1 downto 0) and sum_mass(i,j,k)(mass_vector_width-1 downto 0) <= mass_upper_limit_vector(mass_vector_width-1 downto 0) else '0';
             end generate l3_comp;
         end generate l2_comp;
     end generate l1_comp;

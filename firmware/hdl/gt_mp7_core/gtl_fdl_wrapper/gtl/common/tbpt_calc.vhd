@@ -3,6 +3,7 @@
 -- Calculation of "twobody_pt" (pt**2) based on LUTs.
 
 -- Version history:
+-- HB 2021-05-05: changed calculations for xxx_square.
 -- HB 2021-04-13: first design
 
 library ieee;

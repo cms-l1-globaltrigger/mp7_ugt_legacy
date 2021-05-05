@@ -1,20 +1,9 @@
 
 -- Description:
--- Correlation Condition module for:
--- 1. two calorimeter objects (eg, jet and tau).
--- 2. one or two calorimeter objects with calo overlap removal.
--- 3. mass for 3 objects (same type).
--- 4. calo esums.
+-- Correlation Condition module
 
 -- Version history:
--- HB 2021-04-06: changed for mass and DR cuts calculation outside of conditions (similar to mass_div_dr).
--- HB 2021-03-16: implemented instance "matrix_corr_cond".
--- HB 2021-03-04: bugs fixed.
--- HB 2021-02-19: updated instances of comparator modules and condition output pipeline.
--- HB 2020-02-11: replaced code with "orm_cuts", "sum_mass" and "correlation_cuts" instances.
--- HB 2020-01-27: added calo esums correlation.
--- HB 2020-01-15: added mass for 3 objects (same type).
--- HB 2020-01-15: new design correlation_conditions_calo with and without overlap removal in one module.
+-- HB 2020-05-05: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -48,6 +37,12 @@ entity correlation_conditions_calo is
         phi_w2_upper_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_obj1: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
+        requested_charge_obj1: string(1 to 3) := "ign";
+        qual_lut_obj1: std_logic_vector(2**(MUON_QUAL_HIGH-MUON_QUAL_LOW+1)-1 downto 0) := (others => '1');
+        upt_cut_obj1: boolean := false;
+        upt_upper_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        upt_lower_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        ip_lut_obj1: std_logic_vector(2**(MUON_IP_HIGH-MUON_IP_LOW+1)-1 downto 0) := (others => '1');
 
         slice_low_obj2: natural := 0;
         slice_high_obj2: natural := NR_EG_OBJECTS-1;
@@ -78,7 +73,7 @@ entity correlation_conditions_calo is
         ip_lut_obj2: std_logic_vector(2**(MUON_IP_HIGH-MUON_IP_LOW+1)-1 downto 0) := (others => '1');
 
         slice_low_obj3: natural := 0;
-        slice_high_obj3: natural := NR_JET_OBJECTS-1;
+        slice_high_obj3: natural := NR_EG_OBJECTS-1;
         pt_ge_mode_obj3: boolean := true;
         pt_threshold_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_eta_windows_obj3 : natural := 0;
@@ -98,6 +93,12 @@ entity correlation_conditions_calo is
         phi_w2_upper_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_obj3: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
+        requested_charge_obj3: string(1 to 3) := "ign";
+        qual_lut_obj3: std_logic_vector(2**(MUON_QUAL_HIGH-MUON_QUAL_LOW+1)-1 downto 0) := (others => '1');
+        upt_cut_obj3: boolean := false;
+        upt_upper_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        upt_lower_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        ip_lut_obj3: std_logic_vector(2**(MUON_IP_HIGH-MUON_IP_LOW+1)-1 downto 0) := (others => '1');
 
         sel_esums: boolean := false;
         obj_type_esums: natural := ETM_TYPE;
@@ -108,6 +109,8 @@ entity correlation_conditions_calo is
         phi_w1_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_upper_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_esums: std_logic_vector(MAX_ESUMS_TEMPLATES_BITS-1 downto 0) := (others => '0');
+
+        requested_charge_correlation: string(1 to 2) := "ig";
 
         deta_cut: boolean := false;
         deta_upper_limit_vector: std_logic_vector(MAX_WIDTH_DETA_DPHI_LIMIT_VECTOR-1 downto 0) := (others => '0');
@@ -159,10 +162,16 @@ entity correlation_conditions_calo is
     );
     port(
         lhc_clk: in std_logic;
-        obj1: in calo_objects_array(0 to nr_obj1-1) := (others => (others => '0'));
-        obj2: in calo_objects_array(0 to nr_obj2-1) := (others => (others => '0'));
-        obj3: in calo_objects_array(0 to nr_obj3-1) := (others => (others => '0'));
-        muon: in muon_objects_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
+        calo_obj1: in calo_objects_array(0 to nr_obj1-1) := (others => (others => '0'));
+        calo_obj2: in calo_objects_array(0 to nr_obj2-1) := (others => (others => '0'));
+        calo_obj3: in calo_objects_array(0 to nr_obj3-1) := (others => (others => '0'));
+        muon_obj1: in muon_objects_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
+        muon_obj2: in muon_objects_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
+        muon_obj3: in muon_objects_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
+        ls_charcorr_double: in std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
+        os_charcorr_double: in std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
+        ls_charcorr_triple: in std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
+        os_charcorr_triple: in std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
         esums: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
         deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
         dphi_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
@@ -180,10 +189,15 @@ end correlation_conditions_calo;
 
 architecture rtl of correlation_conditions_calo is
 
+--***************************************************************
+-- signals for charge correlation comparison:
+    signal charge_comp_double, charge_comp_double_pipe : std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => '1'));
+    signal charge_comp_triple, charge_comp_triple_pipe : std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '1')));
+--***************************************************************
     signal deta_orm_comp_12_pipe, dphi_orm_comp_12_pipe, dr_orm_comp_12_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
     signal deta_orm_comp_13_pipe, dphi_orm_comp_13_pipe, dr_orm_comp_13_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
     signal deta_orm_comp_23_pipe, dphi_orm_comp_23_pipe, dr_orm_comp_23_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
-    signal obj1_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));
+   signal obj1_vs_templ_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, 1 to 1) := (others => (others => '0'));
     signal obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
     signal obj3_vs_templ_pipe : std_logic_2dim_array(slice_low_obj3 to slice_high_obj3, 1 to 1) := (others => (others => '0'));
 -- HB 2017-03-27: default values of cut comps -> '1' because of AND in formular of obj_vs_templ_vec
@@ -193,32 +207,68 @@ architecture rtl of correlation_conditions_calo is
 
 begin
 
-    obj1_l: for i in slice_low_obj1 to slice_high_obj1 generate
-        obj1_comp_i: entity work.calo_comparators
-            generic map(
-                pt_ge_mode_obj1,
-                type_obj1,
-                pt_threshold_obj1,
-                nr_eta_windows_obj1,
-                eta_w1_upper_limit_obj1,
-                eta_w1_lower_limit_obj1,
-                eta_w2_upper_limit_obj1,
-                eta_w2_lower_limit_obj1,
-                eta_w3_upper_limit_obj1,
-                eta_w3_lower_limit_obj1,
-                eta_w4_upper_limit_obj1,
-                eta_w4_lower_limit_obj1,
-                eta_w5_upper_limit_obj1,
-                eta_w5_lower_limit_obj1,
-                nr_phi_windows_obj1,
-                phi_w1_upper_limit_obj1,
-                phi_w1_lower_limit_obj1,
-                phi_w2_upper_limit_obj1,
-                phi_w2_lower_limit_obj1,
-                iso_lut_obj1
-            )
-            port map(lhc_clk, obj1(i), obj1_vs_templ_pipe(i,1));
-    end generate obj1_l;
+    calo_obj1_sel: if type_obj1 /= MU_TYPE generate
+        obj1_l: for i in slice_low_obj1 to slice_high_obj1 generate
+            obj1_comp_i: entity work.calo_comparators
+                generic map(
+                    pt_ge_mode_obj1,
+                    type_obj1,
+                    pt_threshold_obj1,
+                    nr_eta_windows_obj1,
+                    eta_w1_upper_limit_obj1,
+                    eta_w1_lower_limit_obj1,
+                    eta_w2_upper_limit_obj1,
+                    eta_w2_lower_limit_obj1,
+                    eta_w3_upper_limit_obj1,
+                    eta_w3_lower_limit_obj1,
+                    eta_w4_upper_limit_obj1,
+                    eta_w4_lower_limit_obj1,
+                    eta_w5_upper_limit_obj1,
+                    eta_w5_lower_limit_obj1,
+                    nr_phi_windows_obj1,
+                    phi_w1_upper_limit_obj1,
+                    phi_w1_lower_limit_obj1,
+                    phi_w2_upper_limit_obj1,
+                    phi_w2_lower_limit_obj1,
+                    iso_lut_obj1
+                )
+                port map(lhc_clk, calo_obj1(i), obj1_vs_templ_pipe(i,1));
+        end generate obj1_l;
+    end generate calo_obj1_sel;
+
+    muon_obj1_sel: if type_obj1 = MU_TYPE generate
+        obj1_l: for i in slice_low_obj1 to slice_high_obj1 generate
+            comp_i: entity work.muon_comparators
+                generic map(
+                    pt_ge_mode_obj1,
+                    pt_threshold_obj1,
+                    nr_eta_windows_obj1,
+                    eta_w1_upper_limit_obj1,
+                    eta_w1_lower_limit_obj1,
+                    eta_w2_upper_limit_obj1,
+                    eta_w2_lower_limit_obj1,
+                    eta_w3_upper_limit_obj1,
+                    eta_w3_lower_limit_obj1,
+                    eta_w4_upper_limit_obj1,
+                    eta_w4_lower_limit_obj1,
+                    eta_w5_upper_limit_obj1,
+                    eta_w5_lower_limit_obj1,
+                    nr_phi_windows_obj1,
+                    phi_w1_upper_limit_obj1,
+                    phi_w1_lower_limit_obj1,
+                    phi_w2_upper_limit_obj1,
+                    phi_w2_lower_limit_obj1,
+                    requested_charge_obj1,
+                    qual_lut_obj1,
+                    iso_lut_obj1,
+                    upt_cut_obj1,
+                    upt_upper_limit_obj1,
+                    upt_lower_limit_obj1,
+                    ip_lut_obj1
+                    )
+                port map(lhc_clk, muon_obj1(i), obj1_vs_templ_pipe(i,1));
+        end generate obj1_l;
+    end generate muon_obj1_sel;
 
     not_esums_sel: if not sel_esums generate
         calo_obj2_i: if type_obj2 /= MU_TYPE generate
@@ -246,7 +296,7 @@ begin
                         phi_w2_lower_limit_obj2,
                         iso_lut_obj2
                     )
-                    port map(lhc_clk, obj2(i), obj2_vs_templ_pipe(i,1));
+                    port map(lhc_clk, calo_obj2(i), obj2_vs_templ_pipe(i,1));
             end generate obj2_l;
         end generate calo_obj2_i;
 
@@ -280,7 +330,7 @@ begin
                         upt_lower_limit_obj2,
                         ip_lut_obj2
                         )
-                    port map(lhc_clk, muon(i), obj2_vs_templ_pipe(i,1));
+                    port map(lhc_clk, muon_obj2(i), obj2_vs_templ_pipe(i,1));
             end generate obj2_l;
         end generate muon_obj2_i;
 
@@ -354,6 +404,39 @@ begin
                     mass_div_dr_comp_o => mass_div_dr_comp_pipe
                 );
 
+            cc_double_sel: if type_obj1 = MU_TYPE and type_obj2 = MU_TYPE generate
+                charge_double_i: if requested_charge_correlation /= "ig" generate
+                -- Charge correlation comparison
+                    charge_double_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
+                        charge_double_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
+                            obj_same_bx_l: if same_bx = true generate
+                                charge_double_if: if j/=i generate
+                                    charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
+                                        '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
+                                        '1' when requested_charge_correlation = "ig" else '0';
+                                end generate charge_double_if;
+                            end generate obj_same_bx_l;
+                            obj_different_bx_l: if same_bx = false generate
+                                charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
+                                    '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
+                                    '1' when requested_charge_correlation = "ig" else '0';
+                            end generate obj_different_bx_l;
+                        end generate charge_double_l_2;
+                    end generate charge_double_l_1;
+                end generate charge_double_i;
+
+                cc_double_p: process(lhc_clk, charge_comp_double)
+                    begin
+                    if not INTERMEDIATE_PIPELINE then
+                        charge_comp_double_pipe <= charge_comp_double;
+                    else
+                        if (lhc_clk'event and lhc_clk = '1') then
+                            charge_comp_double_pipe <= charge_comp_double;
+                        end if;
+                    end if;
+                end process;
+            end generate cc_double_sel;
+
             matrix_corr_cond_i: entity work.matrix_corr_cond
                 generic map(
                     no_orm => true,
@@ -374,6 +457,7 @@ begin
                     mass_comp => mass_comp_pipe,
                     mass_div_dr_comp => mass_div_dr_comp_pipe,
                     tbpt_comp => tbpt_comp_pipe,
+                    charge_comp_double => charge_comp_double_pipe,
                     condition_and_or => condition_and_or
                 );
 
@@ -382,32 +466,68 @@ begin
     -- comparator for obj3 (two calos with one calo overlap removal or mass 3 objects)
         comp_obj3_i: if ((deta_orm_cut or dphi_orm_cut or dr_orm_cut) and obj_2plus1) or mass_3_obj generate
 
-            obj3_l: for i in slice_low_obj3 to slice_high_obj3 generate
-                obj3_comp_i: entity work.calo_comparators
-                    generic map(
-                        pt_ge_mode_obj3,
-                        type_obj3,
-                        pt_threshold_obj3,
-                        nr_eta_windows_obj3,
-                        eta_w1_upper_limit_obj3,
-                        eta_w1_lower_limit_obj3,
-                        eta_w2_upper_limit_obj3,
-                        eta_w2_lower_limit_obj3,
-                        eta_w3_upper_limit_obj3,
-                        eta_w3_lower_limit_obj3,
-                        eta_w4_upper_limit_obj3,
-                        eta_w4_lower_limit_obj3,
-                        eta_w5_upper_limit_obj3,
-                        eta_w5_lower_limit_obj3,
-                        nr_phi_windows_obj3,
-                        phi_w1_upper_limit_obj3,
-                        phi_w1_lower_limit_obj3,
-                        phi_w2_upper_limit_obj3,
-                        phi_w2_lower_limit_obj3,
-                        iso_lut_obj3
-                    )
-                    port map(lhc_clk, obj3(i), obj3_vs_templ_pipe(i,1));
-            end generate obj3_l;
+            calo_obj3_sel: if type_obj3 /= MU_TYPE generate
+                obj3_l: for i in slice_low_obj3 to slice_high_obj3 generate
+                    obj3_comp_i: entity work.calo_comparators
+                        generic map(
+                            pt_ge_mode_obj3,
+                            type_obj3,
+                            pt_threshold_obj3,
+                            nr_eta_windows_obj3,
+                            eta_w1_upper_limit_obj3,
+                            eta_w1_lower_limit_obj3,
+                            eta_w2_upper_limit_obj3,
+                            eta_w2_lower_limit_obj3,
+                            eta_w3_upper_limit_obj3,
+                            eta_w3_lower_limit_obj3,
+                            eta_w4_upper_limit_obj3,
+                            eta_w4_lower_limit_obj3,
+                            eta_w5_upper_limit_obj3,
+                            eta_w5_lower_limit_obj3,
+                            nr_phi_windows_obj3,
+                            phi_w1_upper_limit_obj3,
+                            phi_w1_lower_limit_obj3,
+                            phi_w2_upper_limit_obj3,
+                            phi_w2_lower_limit_obj3,
+                            iso_lut_obj3
+                        )
+                        port map(lhc_clk, calo_obj3(i), obj3_vs_templ_pipe(i,1));
+                end generate obj3_l;
+            end generate calo_obj3_sel;
+
+            muon_obj3_sel: if type_obj3 = MU_TYPE generate
+                obj3_l: for i in slice_low_obj3 to slice_high_obj3 generate
+                    comp_i: entity work.muon_comparators
+                        generic map(
+                            pt_ge_mode_obj3,
+                            pt_threshold_obj3,
+                            nr_eta_windows_obj3,
+                            eta_w1_upper_limit_obj3,
+                            eta_w1_lower_limit_obj3,
+                            eta_w2_upper_limit_obj3,
+                            eta_w2_lower_limit_obj3,
+                            eta_w3_upper_limit_obj3,
+                            eta_w3_lower_limit_obj3,
+                            eta_w4_upper_limit_obj3,
+                            eta_w4_lower_limit_obj3,
+                            eta_w5_upper_limit_obj3,
+                            eta_w5_lower_limit_obj3,
+                            nr_phi_windows_obj3,
+                            phi_w1_upper_limit_obj3,
+                            phi_w1_lower_limit_obj3,
+                            phi_w2_upper_limit_obj3,
+                            phi_w2_lower_limit_obj3,
+                            requested_charge_obj3,
+                            qual_lut_obj3,
+                            iso_lut_obj3,
+                            upt_cut_obj3,
+                            upt_upper_limit_obj3,
+                            upt_lower_limit_obj3,
+                            ip_lut_obj3
+                            )
+                        port map(lhc_clk, muon_obj3(i), obj3_vs_templ_pipe(i,1));
+                end generate obj3_l;
+            end generate muon_obj3_sel;
         end generate comp_obj3_i;
 
     -- condition with overlap removal
@@ -587,6 +707,41 @@ begin
                     mass_3_obj_comp_pipe
                 );
 
+            cc_triple_sel: if type_obj1 = MU_TYPE and type_obj2 = MU_TYPE and type_obj3 = MU_TYPE generate
+                charge_triple_i: if requested_charge_correlation /= "ig" generate
+                -- Charge correlation comparison
+                    charge_triple_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
+                        charge_triple_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
+                            charge_triple_l_3: for k in slice_low_obj3 to slice_high_obj3 generate
+                                obj_same_bx_l: if same_bx = true generate
+                                    charge_triple_if: if (j/=i and k/=i and k/=j) generate
+                                        charge_comp_triple(i,j,k) <= '1' when ls_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "ls" else
+                                            '1' when os_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "os" else
+                                            '1' when requested_charge_correlation = "ig" else '0';
+                                    end generate charge_triple_if;
+                                end generate obj_same_bx_l;
+                                obj_different_bx_l: if same_bx = false generate
+                                    charge_comp_triple(i,j,k) <= '1' when ls_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "ls" else
+                                        '1' when os_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "os" else
+                                        '1' when requested_charge_correlation = "ig" else '0';
+                                end generate obj_different_bx_l;
+                            end generate charge_triple_l_3;
+                        end generate charge_triple_l_2;
+                    end generate charge_triple_l_1;
+                end generate charge_triple_i;
+
+                cc_triple_p: process(lhc_clk, charge_comp_triple)
+                    begin
+                    if not INTERMEDIATE_PIPELINE then
+                        charge_comp_triple_pipe <= charge_comp_triple;
+                    else
+                        if (lhc_clk'event and lhc_clk = '1') then
+                            charge_comp_triple_pipe <= charge_comp_triple;
+                        end if;
+                    end if;
+                end process;
+            end generate cc_triple_sel;
+
             matrix_corr_cond_i: entity work.matrix_corr_cond
                 generic map(
                     mass_3_obj => true,
@@ -602,6 +757,7 @@ begin
                     obj2_vs_templ => obj2_vs_templ_pipe,
                     obj3_vs_templ => obj3_vs_templ_pipe,
                     mass_3_obj_comp => mass_3_obj_comp_pipe,
+                    charge_comp_triple => charge_comp_triple_pipe,
                     condition_and_or => condition_and_or
                 );
 

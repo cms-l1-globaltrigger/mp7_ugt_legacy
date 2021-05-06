@@ -4,14 +4,13 @@
 
 #
 src lhc_data_pkg.vhd
+src math_pkg.vhd
 src gt_mp7_top_pkg.vhd
-src bgo_sync.vhd
-src gt_mp7_core/gt_mp7_core_pkg.vhd
 
 ## HB 2019-04-24: gtl_module.vhd, gtl_pkg.vhd and algo_mapping_rop.vhd added via tcl script for every module in top.dep
 
-src gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
 #
+## FDL modules
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_addr_decode.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_rate_counter.vhd
@@ -28,6 +27,8 @@ src gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/pulse_converter.vhd
 src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_slice.vhd
 #
+## GTL modules
+### common modules
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/centrality_pipeline.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/ext_cond_pipeline.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/p_m_2_bx_pipeline.vhd
@@ -64,6 +65,7 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/common/charge_correlation_comp.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/correlation_cut_comp.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/correlation_cuts_wrapper.vhd
 #
+### modules of instances in gtl_module.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/pipelines.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/conv_eta_phi.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/obj_parameter.vhd
@@ -76,6 +78,29 @@ src gt_mp7_core/gtl_fdl_wrapper/gtl/towercount_condition.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/correlation_cuts_calculation.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/correlation_conditions.vhd
 #
+### modules of BRAMs used for mass over DeltaR
+src ../ngc/rom_lut_calo_inv_dr_sq_1/rom_lut_calo_inv_dr_sq_1.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_2/rom_lut_calo_inv_dr_sq_2.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_3/rom_lut_calo_inv_dr_sq_3.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_4/rom_lut_calo_inv_dr_sq_4.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_5/rom_lut_calo_inv_dr_sq_5.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_6/rom_lut_calo_inv_dr_sq_6.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_7/rom_lut_calo_inv_dr_sq_7.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_8/rom_lut_calo_inv_dr_sq_8.xci
+src ../ngc/rom_lut_calo_inv_dr_sq_9/rom_lut_calo_inv_dr_sq_9.xci
+src gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_calo_inv_dr_sq_all.vhd
+src ../ngc/rom_lut_muon_inv_dr_sq_1/rom_lut_muon_inv_dr_sq_1.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_2/rom_lut_muon_inv_dr_sq_2.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_3/rom_lut_muon_inv_dr_sq_3.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_4/rom_lut_muon_inv_dr_sq_4.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_5/rom_lut_muon_inv_dr_sq_5.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_6/rom_lut_muon_inv_dr_sq_6.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_7/rom_lut_muon_inv_dr_sq_7.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_8/rom_lut_muon_inv_dr_sq_8.xci
+src ../ngc/rom_lut_muon_inv_dr_sq_9/rom_lut_muon_inv_dr_sq_9.xci
+src gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_muon_inv_dr_sq_all.vhd
+#
+## FRAME modules
 src gt_mp7_core/frame/demux_lane/demux_lane_data.vhd
 src gt_mp7_core/frame/frame.vhd
 src gt_mp7_core/frame/rb/rb_pkg.vhd
@@ -87,12 +112,10 @@ src gt_mp7_core/frame/frame_addr_decode.vhd
 src gt_mp7_core/frame/lmp/lmp.vhd
 src gt_mp7_core/frame/frame_module_info.vhd
 src gt_mp7_core/frame/dm/delay_element.vhd
-#
 src gt_mp7_core/frame/output_mux/mux.vhd
 src gt_mp7_core/frame/output_mux/output_mux.vhd
-src gt_mp7_core/gt_mp7_core_addr_decode.vhd
-src math_pkg.vhd
-src mp7_payload.vhd
+#
+## IPBus modules
 src ipbus/slaves/ipb_write_regs.vhd
 src ipbus/slaves/ipb_pulse_regs.vhd
 src ipbus/slaves/ipb_read_regs.vhd
@@ -100,32 +123,15 @@ src ipbus/slaves/ipb_dpmem_4096_32.vhd
 src ../ngc/dp_mem_4096x32/dp_mem_4096x32.ngc
 src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
 #
+## MP7 modules
 src -c components/mp7_ttc mp7_ttc_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd
 #
-src ../ngc/rom_lut_calo_inv_dr_sq_1/rom_lut_calo_inv_dr_sq_1.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_2/rom_lut_calo_inv_dr_sq_2.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_3/rom_lut_calo_inv_dr_sq_3.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_4/rom_lut_calo_inv_dr_sq_4.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_5/rom_lut_calo_inv_dr_sq_5.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_6/rom_lut_calo_inv_dr_sq_6.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_7/rom_lut_calo_inv_dr_sq_7.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_8/rom_lut_calo_inv_dr_sq_8.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_9/rom_lut_calo_inv_dr_sq_9.xci
-
-src gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_calo_inv_dr_sq_all.vhd
-
-src ../ngc/rom_lut_muon_inv_dr_sq_1/rom_lut_muon_inv_dr_sq_1.xci
-src ../ngc/rom_lut_muon_inv_dr_sq_2/rom_lut_muon_inv_dr_sq_2.xci
-src ../ngc/rom_lut_muon_inv_dr_sq_3/rom_lut_muon_inv_dr_sq_3.xci
-src ../ngc/rom_lut_muon_inv_dr_sq_4/rom_lut_muon_inv_dr_sq_4.xci
-src ../ngc/rom_lut_muon_inv_dr_sq_5/rom_lut_muon_inv_dr_sq_5.xci
-src ../ngc/rom_lut_muon_inv_dr_sq_6/rom_lut_muon_inv_dr_sq_6.xci
-src ../ngc/rom_lut_muon_inv_dr_sq_7/rom_lut_muon_inv_dr_sq_7.xci
-src ../ngc/rom_lut_muon_inv_dr_sq_8/rom_lut_muon_inv_dr_sq_8.xci
-src ../ngc/rom_lut_muon_inv_dr_sq_9/rom_lut_muon_inv_dr_sq_9.xci
-
-src gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_muon_inv_dr_sq_all.vhd
-
+## top modules
+src gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
+src gt_mp7_core/gt_mp7_core_pkg.vhd
+src gt_mp7_core/gt_mp7_core_addr_decode.vhd
+src bgo_sync.vhd
+src mp7_payload.vhd
 
 

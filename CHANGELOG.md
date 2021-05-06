@@ -4,11 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.15.0] - 2021-05-05
+## [v1.15.0] - 2021-05-06
 ### Comment
 
 - mp7_ugt firmware release v1.15.0
 - unified correlation condition modules
+
+### Added
+- source files:
+  - ../gtl/correlation_conditions.vhd
+  - ../gtl/common/charge_correlation_comp.vhd
+
+### Removed
+- source file:
+  - ../gtl/correlation_conditions_calo.vhd
+  - ../gtl/correlation_conditions_muon.vhd
 
 ## [v1.14.1] - 2021-05-05
 ### Comment

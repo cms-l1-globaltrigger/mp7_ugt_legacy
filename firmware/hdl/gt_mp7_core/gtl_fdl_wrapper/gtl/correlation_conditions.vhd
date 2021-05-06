@@ -13,7 +13,7 @@ use ieee.std_logic_arith.all;
 use work.math_pkg.all;
 use work.gtl_pkg.all;
 
-entity correlation_conditions_calo is
+entity correlation_conditions is
      generic(
 
         slice_low_obj1: natural := 0;
@@ -180,14 +180,15 @@ entity correlation_conditions_calo is
         dphi: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dr : in dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_inv_pt : in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        mass_inv_upt : in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_trans : in mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_div_dr : in mass_div_dr_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         tbpt: in tbpt_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         condition_o: out std_logic
     );
-end correlation_conditions_calo;
+end correlation_conditions;
 
-architecture rtl of correlation_conditions_calo is
+architecture rtl of correlation_conditions is
 
 --***************************************************************
 -- signals for charge correlation comparison:
@@ -358,6 +359,8 @@ begin
                 mass_vector_width => mass_vector_width,
                 mass_upper_limit_vector => mass_upper_limit_vector,
                 mass_lower_limit_vector => mass_lower_limit_vector,
+                mass_div_dr_vector_width => mass_div_dr_vector_width,
+                mass_div_dr_threshold => mass_div_dr_threshold,
                 tbpt_cut => tbpt_cut,
                 tbpt_vector_width => tbpt_vector_width,
                 tbpt_threshold_vector => tbpt_threshold_vector,
@@ -369,40 +372,20 @@ begin
                 dphi => dphi,
                 dr => dr,
                 mass_inv_pt => mass_inv_pt,
+                mass_inv_upt => mass_inv_upt,
                 mass_trans => mass_trans,
+                mass_div_dr => mass_div_dr,
                 tbpt => tbpt,
                 deta_comp_o => deta_comp_pipe,
                 dphi_comp_o => dphi_comp_pipe,
                 dr_comp_o => dr_comp_pipe,
                 mass_comp_o => mass_comp_pipe,
+                mass_div_dr_comp_o => mass_div_dr_comp_pipe,
                 tbpt_comp_o => tbpt_comp_pipe
             );
 
     -- condition without overlap removal
         no_orm_i: if not(deta_orm_cut or dphi_orm_cut or dr_orm_cut or mass_3_obj) generate
-
-            corr_cuts_comp_i: entity work.correlation_cuts_wrapper
-                generic map(
-                    nr_obj1 => nr_obj1,
-                    type_obj1 => type_obj1,
-                    nr_obj2 => nr_obj2,
-                    type_obj2 => type_obj2,
-                    slice_low_obj1 => slice_low_obj1,
-                    slice_high_obj1 => slice_high_obj1,
-                    slice_low_obj2 => slice_low_obj2,
-                    slice_high_obj2 => slice_high_obj2,
-                    mass_cut => mass_cut,
-                    mass_type => mass_type,
-                    mass_vector_width => mass_vector_width,
-                    mass_div_dr_vector_width => mass_div_dr_vector_width,
-                    mass_div_dr_threshold => mass_div_dr_threshold,
-                    same_bx => same_bx
-                )
-                port map(
-                    lhc_clk,
-                    mass_div_dr => mass_div_dr,
-                    mass_div_dr_comp_o => mass_div_dr_comp_pipe
-                );
 
             cc_double_sel: if type_obj1 = MU_TYPE and type_obj2 = MU_TYPE generate
                 charge_double_i: if requested_charge_correlation /= "ig" generate

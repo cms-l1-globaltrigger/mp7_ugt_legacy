@@ -53,10 +53,10 @@ entity muon_obj_cuts is
     port(
         lhc_clk: in std_logic;
         data_i : in muon_objects_array;
-        obj_slice_1_vs_templ: out object_slice_1_vs_template_array;
-        obj_slice_2_vs_templ: out object_slice_2_vs_template_array;
-        obj_slice_3_vs_templ: out object_slice_3_vs_template_array;
-        obj_slice_4_vs_templ: out object_slice_4_vs_template_array
+        obj_slice_1_vs_templ: out std_logic_2dim_array;
+        obj_slice_2_vs_templ: out std_logic_2dim_array;
+        obj_slice_3_vs_templ: out std_logic_2dim_array;
+        obj_slice_4_vs_templ: out std_logic_2dim_array
     );
 
 end muon_obj_cuts;

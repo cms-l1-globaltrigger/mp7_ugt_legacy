@@ -21,15 +21,15 @@ entity obj_parameter is
         calo: in calo_objects_array(0 to nr_obj-1) := (others => (others => '0'));
         esums: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
         muon: in muon_objects_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
-        phi_conv_2_muon_phi_integer: in diff_integer_inputs_array(0 to nr_obj-1) := (others => 0);
+        phi_conv_2_muon_phi_integer: in integer_array(0 to nr_obj-1) := (others => 0);
         pt_vector: out diff_inputs_array(0 to nr_obj-1) := (others => (others => '0'));
         upt_vector: out diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
-        eta_integer: out diff_integer_inputs_array(0 to nr_obj-1) := (others => 0);
-        phi_integer: out diff_integer_inputs_array(0 to nr_obj-1) := (others => 0);
-        cos_phi: out sin_cos_integer_array(0 to nr_obj-1) := (others => 0);
-        sin_phi: out sin_cos_integer_array(0 to nr_obj-1) := (others => 0);
-        conv_cos_phi: out sin_cos_integer_array(0 to nr_obj-1) := (others => 0);
-        conv_sin_phi: out sin_cos_integer_array(0 to nr_obj-1) := (others => 0)
+        eta_integer: out integer_array(0 to nr_obj-1) := (others => 0);
+        phi_integer: out integer_array(0 to nr_obj-1) := (others => 0);
+        cos_phi: out integer_array(0 to nr_obj-1) := (others => 0);
+        sin_phi: out integer_array(0 to nr_obj-1) := (others => 0);
+        conv_cos_phi: out integer_array(0 to nr_obj-1) := (others => 0);
+        conv_sin_phi: out integer_array(0 to nr_obj-1) := (others => 0)
     );
 end obj_parameter;
 

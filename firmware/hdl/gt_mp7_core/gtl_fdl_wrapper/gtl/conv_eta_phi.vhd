@@ -20,8 +20,8 @@ entity conv_eta_phi is
     port(
         calo: in calo_objects_array(0 to nr_obj-1) := (others => (others => '0'));
         esums: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
-        eta_conv: out diff_integer_inputs_array(0 to nr_obj-1) := (others => 0);
-        phi_conv: out diff_integer_inputs_array(0 to nr_obj-1) := (others => 0)
+        eta_conv: out integer_array(0 to nr_obj-1) := (others => 0);
+        phi_conv: out integer_array(0 to nr_obj-1) := (others => 0)
     );
 end conv_eta_phi;
 

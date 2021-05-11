@@ -117,7 +117,7 @@ entity comb_conditions is
         deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dphi_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dr_orm: in dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        tbpt: in tbpt_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        tbpt: in tbpt_dim2_array(0 to nr_obj1-1, 0 to nr_obj1-1) := (others => (others => (others => '0')));
         condition_o: out std_logic
     );
 end comb_conditions;
@@ -342,8 +342,8 @@ begin
         generic map(
             nr_obj1 => nr_obj1,
             type_obj1 => type_obj1,
-            nr_obj2 => nr_obj2,
-            type_obj2 => type_obj2,
+            nr_obj2 => nr_obj1,
+            type_obj2 => type_obj1,
             slice_low_obj1 => slice_1_low_obj1,
             slice_high_obj1 => slice_1_high_obj1,
             slice_low_obj2 => slice_2_low_obj1,

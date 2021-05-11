@@ -187,8 +187,13 @@ begin
                     for k in slice_low_obj3 to slice_high_obj3 loop
                         if j/=i and i/=k and j/=k then
                             index := index + 1;
-                            obj_vs_templ_vec(index) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and obj3_vs_templ(k,1) and
-                                mass_3_obj_comp(i,j,k) and charge_comp_triple(i,j,k);
+                            if type_obj1 = MU_TYPE then
+                                obj_vs_templ_vec(index) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and obj3_vs_templ(k,1) and
+                                    mass_3_obj_comp(i,j,k) and charge_comp_triple(i,j,k);
+                            else
+                                obj_vs_templ_vec(index) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and obj3_vs_templ(k,1) and
+                                    mass_3_obj_comp(i,j,k);
+                            end if;
                         end if;
                     end loop;
                 end loop;

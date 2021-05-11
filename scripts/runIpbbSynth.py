@@ -29,7 +29,8 @@ DefaultVivadoVersion = '2019.2'
 DefaultBoardType = 'mp7xe_690'
 """Default board type to be used."""
 
-DefaultFirmwareDir = os.path.expanduser("~/work_ipbb")
+DefaultFirmwareDir = os.path.expanduser("~/work_synth/production")
+#DefaultFirmwareDir = os.path.expanduser("~/work_synth/tests")
 """Default output directory for firmware builds."""
 
 DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware.git'
@@ -165,10 +166,13 @@ def main():
     #ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, args.menuname, args.build)
     # HB 2019-11-12: inserted mp7_ugt tag and vivado version in directory name and changed order
     vivado_version = "vivado_" + args.vivado
-    ipbb_dir = os.path.join(args.path, args.menuname, args.build, project_type, args.ugt, args.mp7tag, vivado_version)
+    ipbb_dir = os.path.join(args.path, args.build, args.menuname, project_type, args.ugt, args.mp7tag, vivado_version)
+    ipbb_dir_build = os.path.join(args.path, args.build)
 
-    if os.path.isdir(ipbb_dir):
-        raise RuntimeError("build area alredy exists: {}".format(ipbb_dir))
+    #if os.path.isdir(ipbb_dir):
+        #raise RuntimeError("build area alredy exists: {}".format(ipbb_dir))
+    if os.path.isdir(ipbb_dir_build):
+        raise RuntimeError("build area already exists: {}".format(ipbb_dir_build))
 
     # Runnig simulation with Questa simulator, if args.sim is set
     if args.sim:
@@ -302,7 +306,7 @@ def main():
     # Take args.menuname with distribution number
     config.set('menu', 'name', args.menuname)
     # Location of menu XML file
-    menu_xml_loc = "{}/xml/{}.xml".format(url_menu, args.menuname)    
+    menu_xml_loc = "{}/xml/{}.xml".format(url_menu, args.menuname)
     config.set('menu', 'location', menu_xml_loc)
     config.set('menu', 'modules', modules)
 

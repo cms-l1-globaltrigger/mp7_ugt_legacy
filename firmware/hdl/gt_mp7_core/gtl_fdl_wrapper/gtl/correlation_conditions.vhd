@@ -133,7 +133,7 @@ entity correlation_conditions is
         mass_lower_limit_vector: std_logic_vector(MAX_WIDTH_MASS_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
         tbpt_cut: boolean := false;
-        tbpt_vector_width : positive := 2+EG_PT_VECTOR_WIDTH+EG_PT_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH;
+        tbpt_vector_width : positive := 2+EG_PT_VECTOR_WIDTH+EG_PT_VECTOR_WIDTH+(2*CALO_SIN_COS_VECTOR_WIDTH);
         tbpt_threshold_vector: std_logic_vector(MAX_WIDTH_TBPT_LIMIT_VECTOR-1 downto 0) := (others => '0');
 
         deta_orm_cut: boolean := false;

@@ -149,11 +149,8 @@ architecture rtl of comb_conditions is
 
     signal condition_and_or : std_logic;
 
-    signal twobody_pt_comp, twobody_pt_comp_pipe :
-    std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_2_low_obj1 to slice_2_high_obj1) := (others => (others => '1'));
-
-    signal twobody_upt_comp, twobody_upt_comp_temp, twobody_upt_comp_pipe :
-        std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_2_low_obj1 to slice_2_high_obj1) := (others => (others => '1'));
+    signal twobody_pt_comp_pipe, twobody_upt_comp_pipe :
+    std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_1_low_obj1 to slice_1_high_obj1) := (others => (others => '1'));
 
 begin
 
@@ -346,8 +343,8 @@ begin
             type_obj2 => type_obj1,
             slice_low_obj1 => slice_1_low_obj1,
             slice_high_obj1 => slice_1_high_obj1,
-            slice_low_obj2 => slice_2_low_obj1,
-            slice_high_obj2 => slice_2_high_obj1,
+            slice_low_obj2 => slice_1_low_obj1,
+            slice_high_obj2 => slice_1_high_obj1,
             tbpt_cut => tbpt_cut,
             tbpt_vector_width => tbpt_vector_width,
             tbpt_threshold_vector => tbpt_threshold_vector,

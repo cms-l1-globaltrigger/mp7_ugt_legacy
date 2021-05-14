@@ -2,6 +2,8 @@
 -- Description:
 -- Multiplexer for read-out record data.
 
+-- Version-history:
+-- HB 2021-05-14: added fdl_pkg use clause.
 -- HB 2016-09-16: inserted for L1TM_UID_HASH and FW_UID_HASH
 -- HB 2016-09-16: changed port names for algos for new read-out record structure (see proposal "https://twiki.cern.ch/twiki/bin/view/CMS/UGT_readout_proposal")
 -- JW 2015-11-04: included local veto and finor, included prescale_factor_set_index in readout
@@ -18,7 +20,8 @@ use work.lhc_data_pkg.all;
 use work.gt_mp7_core_pkg.all;
 use work.mp7_ttc_decl.all;
 
-use work.gtl_pkg.ALL;
+use work.fdl_pkg.all;
+use work.gtl_pkg.all;
 
 entity output_mux is
     generic(

@@ -103,7 +103,7 @@ def replace_vhdl_templates(vhdl_snippets_dir, src_fw_dir, dest_fw_dir):
 
     #Patch VHDL files in IPBB area (
     tb.template_replace(os.path.join(fdl_dir, 'algo_mapping_rop_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'algo_mapping_rop.vhd'))
-    tb.template_replace(os.path.join(gtl_dir, 'gtl_pkg_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'gtl_pkg.vhd'))
+    tb.template_replace(os.path.join(fdl_dir, 'fdl_pkg_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'fdl_pkg.vhd'))
     tb.template_replace(os.path.join(gtl_dir, 'gtl_module_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'gtl_module.vhd'))
 
 def parse_args():

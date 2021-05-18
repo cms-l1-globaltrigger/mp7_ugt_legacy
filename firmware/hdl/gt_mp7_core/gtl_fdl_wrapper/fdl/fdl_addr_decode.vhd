@@ -4,9 +4,10 @@ use IEEE.STD_LOGIC_1164.all;
 use ieee.numeric_std.all;
 use work.ipbus.all;
 
-use work.math_pkg.ALL;
+use work.math_pkg.all;
 use work.gt_mp7_core_pkg.all;
-use work.gtl_pkg.ALL;
+-- use work.gtl_pkg.all;
+use work.fdl_pkg.all;
 
 package fdl_addr_decode is
 

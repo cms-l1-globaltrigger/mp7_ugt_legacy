@@ -11,8 +11,8 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
-use work.gtl_pkg.ALL;
 use work.gt_mp7_core_pkg.all;
+use work.fdl_pkg.all;
 
 entity algo_mapping_rop is
     port(

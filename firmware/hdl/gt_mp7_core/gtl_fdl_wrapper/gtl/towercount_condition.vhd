@@ -26,23 +26,23 @@ architecture rtl of towercount_condition is
 
     constant ZERO : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0) := (others => '0');
 -- fixed pipeline structure, 2 stages total
-    constant conditions_pipeline_stages: natural := 2; -- pipeline stages for output signal of esums_conditions.vhd (0 => no flip-flop) 
+    constant conditions_pipeline_stages: natural := 2; -- pipeline stages for output signal of esums_conditions.vhd (0 => no flip-flop)
 
     signal comp_o : std_logic;
 
 begin
 
-   comp_o <= '0' when data_i(D_S_I_TOWERCOUNT_V2.count_high-D_S_I_TOWERCOUNT_V2.count_low-1 downto 0) = ZERO(D_S_I_TOWERCOUNT_V2.count_high-D_S_I_TOWERCOUNT_V2.count_low-1 downto 0) else
-	     '1' when (data_i(D_S_I_TOWERCOUNT_V2.count_high-D_S_I_TOWERCOUNT_V2.count_low-1 downto 0) >= count_threshold(D_S_I_TOWERCOUNT_V2.count_high-D_S_I_TOWERCOUNT_V2.count_low-1 downto 0)) and et_ge_mode else            
-             '1' when (data_i(D_S_I_TOWERCOUNT_V2.count_high-D_S_I_TOWERCOUNT_V2.count_low-1 downto 0) = count_threshold(D_S_I_TOWERCOUNT_V2.count_high-D_S_I_TOWERCOUNT_V2.count_low-1 downto 0)) and not et_ge_mode else
-             '0';            
-    
+   comp_o <= '0' when data_i(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0) = ZERO(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0) else
+	     '1' when (data_i(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0) >= count_threshold(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0)) and et_ge_mode else
+             '1' when (data_i(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0) = count_threshold(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0)) and not et_ge_mode else
+             '0';
+
 -- Pipeline stages for condition output.
     condition_o_pipeline: process(clk, comp_o)
 	variable pipeline_temp : std_logic_vector(0 to conditions_pipeline_stages+1) := (others => '0');
     begin
         pipeline_temp(conditions_pipeline_stages+1) := comp_o;
-        if (conditions_pipeline_stages > 0) then 
+        if (conditions_pipeline_stages > 0) then
             if (clk'event and (clk = '1') ) then
                 pipeline_temp(0 to conditions_pipeline_stages) := pipeline_temp(1 to conditions_pipeline_stages+1);
             end if;

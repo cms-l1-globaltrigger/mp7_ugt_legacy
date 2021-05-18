@@ -4,10 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.15.0] - 2021-05-xx
+## [v1.15.0] - 2021-05-18
 ### Comment
 
 - mp7_ugt firmware release v1.15.0
+- created fdl_pkg_tpl.vhd for "ugt_constants" replacement
+- changed file name gtl_pkg_tpl.vhd to gtl_pkg.vhd (package without replacement)
+- changed python scripts for fdl_pkg_tpl.vhd
+- extracted luts from gtl_pkg.vhd to gtl_luts_pkg.vhd
+- removed D_S_I types
+
+### Added
+- source files:
+  - ../fdl/fdl_pkg_tpl.vhd
+  - ../gtl/gtl_pkg.vhd
+  - ../gtl/gtl_luts_pkg.vhd
+
+### Changed
+- source files for inserting "fdl_pkg use clause" and removing D_S_I types
+- script files:
+  - scripts/run_simulation_questa.py
+  - scripts/runIpbbSynth.py
+- dep file:
+  - ../cfg/uGT_algo.dep
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
 
 ## [v1.14.2] - 2021-05-11
 ### Comment

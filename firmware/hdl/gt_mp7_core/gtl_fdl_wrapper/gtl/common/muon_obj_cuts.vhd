@@ -90,8 +90,8 @@ begin
                 qual_luts(1),
                 iso_luts(1),
                 upt_cuts(1),
-                upt_upper_limits(1)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
-                upt_lower_limits(1)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
+                upt_upper_limits(1)(MUON_UPT_HIGH-MUON_UPT_LOW downto 0),
+                upt_lower_limits(1)(MUON_UPT_HIGH-MUON_UPT_LOW downto 0),
                 ip_luts(1)
             )
             port map(lhc_clk, data_i(i), obj_slice_1_vs_templ(i,1));
@@ -121,8 +121,8 @@ begin
                 qual_luts(2),
                 iso_luts(2),
                 upt_cuts(2),
-                upt_upper_limits(2)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
-                upt_lower_limits(2)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
+                upt_upper_limits(2)(MUON_UPT_HIGH-MUON_UPT_LOW downto 0),
+                upt_lower_limits(2)(MUON_UPT_HIGH-MUON_UPT_LOW downto 0),
                 ip_luts(2)
                 )
             port map(lhc_clk, data_i(i), obj_slice_2_vs_templ(i,1));
@@ -152,8 +152,8 @@ begin
                 qual_luts(3),
                 iso_luts(3),
                 upt_cuts(3),
-                upt_upper_limits(3)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
-                upt_lower_limits(3)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
+                upt_upper_limits(3)(MUON_UPT_HIGH-MUON_UPT_LOW downto 0),
+                upt_lower_limits(3)(MUON_UPT_HIGH-MUON_UPT_LOW downto 0),
                 ip_luts(3)
                 )
             port map(lhc_clk, data_i(i), obj_slice_3_vs_templ(i,1));
@@ -183,8 +183,8 @@ begin
                 qual_luts(4),
                 iso_luts(4),
                 upt_cuts(4),
-                upt_upper_limits(4)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
-                upt_lower_limits(4)(D_S_I_MUON.upt_high-D_S_I_MUON.upt_low downto 0),
+                upt_upper_limits(4)(MUON_UPT_HIGH-MUON_UPT_LOW downto 0),
+                upt_lower_limits(4)(MUON_UPT_HIGH-MUON_UPT_LOW downto 0),
                 ip_luts(4)
                 )
             port map(lhc_clk, data_i(i), obj_slice_4_vs_templ(i,1));

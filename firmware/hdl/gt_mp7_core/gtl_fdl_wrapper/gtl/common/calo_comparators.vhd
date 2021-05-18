@@ -3,6 +3,7 @@
 -- Comparators for energy, pseudorapidity, azimuth angle and isolation of calo objects
 
 -- Version history:
+-- HB 2021-05-18: changed slice parameter.
 -- HB 2021-02-24: removed "no_calo".
 -- HB 2021-02-19: added output register (with selection).
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
@@ -75,128 +76,128 @@ begin
 
 -- HB 2015-04-27: selection of calo object types
     eg_sel: if obj_type=EG_TYPE generate
-    et(D_S_I_EG_V2.et_high-D_S_I_EG_V2.et_low downto 0) <= data_i(D_S_I_EG_V2.et_high downto D_S_I_EG_V2.et_low);
-    eta(D_S_I_EG_V2.eta_high-D_S_I_EG_V2.eta_low downto 0) <= data_i(D_S_I_EG_V2.eta_high downto D_S_I_EG_V2.eta_low);
-    phi(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0) <= data_i(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low);
-    iso(D_S_I_EG_V2.iso_high-D_S_I_EG_V2.iso_low downto 0) <= data_i(D_S_I_EG_V2.iso_high downto D_S_I_EG_V2.iso_low);
+        et(EG_ET_HIGH-EG_ET_LOW downto 0) <= data_i(EG_ET_HIGH downto EG_ET_LOW);
+        eta(EG_ETA_HIGH-EG_ETA_LOW downto 0) <= data_i(EG_ETA_HIGH downto EG_ETA_LOW);
+        phi(EG_PHI_HIGH-EG_PHI_LOW downto 0) <= data_i(EG_PHI_HIGH downto EG_PHI_LOW);
+        iso(EG_ISO_HIGH-EG_ISO_LOW downto 0) <= data_i(EG_ISO_HIGH downto EG_ISO_LOW);
 
 -- HB 2015-04-23: implemented eta_windows_comp for better modularity
 -- HB 2019-06-14: updated for "five eta cuts".
-    eg_eta_windows_comp_i: entity work.eta_windows_comp
-        generic map(
-            nr_eta_windows,
-            eta_w1_upper_limit(D_S_I_EG_V2.eta_high-D_S_I_EG_V2.eta_low downto 0),
-            eta_w1_lower_limit(D_S_I_EG_V2.eta_high-D_S_I_EG_V2.eta_low downto 0),
-            eta_w2_upper_limit(D_S_I_EG_V2.eta_high-D_S_I_EG_V2.eta_low downto 0),
-            eta_w2_lower_limit(D_S_I_EG_V2.eta_high-D_S_I_EG_V2.eta_low downto 0),
-            eta_w3_upper_limit(D_S_I_EG_V2.eta_high-D_S_I_EG_V2.eta_low downto 0),
-            eta_w3_lower_limit(D_S_I_EG_V2.eta_high-D_S_I_EG_V2.eta_low downto 0),
-            eta_w4_upper_limit(D_S_I_EG_V2.eta_high-D_S_I_EG_V2.eta_low downto 0),
-            eta_w4_lower_limit(D_S_I_EG_V2.eta_high-D_S_I_EG_V2.eta_low downto 0),
-            eta_w5_upper_limit(D_S_I_EG_V2.eta_high-D_S_I_EG_V2.eta_low downto 0),
-            eta_w5_lower_limit(D_S_I_EG_V2.eta_high-D_S_I_EG_V2.eta_low downto 0)
-        )
-        port map(
-            eta => eta(D_S_I_EG_V2.eta_high-D_S_I_EG_V2.eta_low downto 0),
-            eta_comp_o => eta_comp
-        );
+        eg_eta_windows_comp_i: entity work.eta_windows_comp
+            generic map(
+                nr_eta_windows,
+                eta_w1_upper_limit(EG_ETA_HIGH-EG_ETA_LOW downto 0),
+                eta_w1_lower_limit(EG_ETA_HIGH-EG_ETA_LOW downto 0),
+                eta_w2_upper_limit(EG_ETA_HIGH-EG_ETA_LOW downto 0),
+                eta_w2_lower_limit(EG_ETA_HIGH-EG_ETA_LOW downto 0),
+                eta_w3_upper_limit(EG_ETA_HIGH-EG_ETA_LOW downto 0),
+                eta_w3_lower_limit(EG_ETA_HIGH-EG_ETA_LOW downto 0),
+                eta_w4_upper_limit(EG_ETA_HIGH-EG_ETA_LOW downto 0),
+                eta_w4_lower_limit(EG_ETA_HIGH-EG_ETA_LOW downto 0),
+                eta_w5_upper_limit(EG_ETA_HIGH-EG_ETA_LOW downto 0),
+                eta_w5_lower_limit(EG_ETA_HIGH-EG_ETA_LOW downto 0)
+            )
+            port map(
+                eta => eta(EG_ETA_HIGH-EG_ETA_LOW downto 0),
+                eta_comp_o => eta_comp
+            );
 
 -- HB 2015-04-23: implemented phi_windows_comp for better modularity
-    eg_phi_windows_comp_i: entity work.phi_windows_comp
-        generic map(
-            nr_phi_windows => nr_phi_windows,
-            phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
-            phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
-            phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
-            phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0)
-        )
-        port map(
-            phi => data_i(D_S_I_EG_V2.phi_high downto D_S_I_EG_V2.phi_low),
-            phi_comp_o => phi_comp
-        );
+        eg_phi_windows_comp_i: entity work.phi_windows_comp
+            generic map(
+                nr_phi_windows => nr_phi_windows,
+                phi_w1_upper_limit => phi_w1_upper_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
+                phi_w1_lower_limit => phi_w1_lower_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
+                phi_w2_upper_limit => phi_w2_upper_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
+                phi_w2_lower_limit => phi_w2_lower_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0)
+            )
+            port map(
+                phi => data_i(EG_PHI_HIGH downto EG_PHI_LOW),
+                phi_comp_o => phi_comp
+            );
 
     end generate eg_sel;
 
     jet_sel: if obj_type=JET_TYPE generate
-    et(D_S_I_JET_V2.et_high-D_S_I_JET_V2.et_low downto 0) <= data_i(D_S_I_JET_V2.et_high downto D_S_I_JET_V2.et_low);
-    eta(D_S_I_JET_V2.eta_high-D_S_I_JET_V2.eta_low downto 0) <= data_i(D_S_I_JET_V2.eta_high downto D_S_I_JET_V2.eta_low);
-    phi(D_S_I_JET_V2.phi_high-D_S_I_JET_V2.phi_low downto 0) <= data_i(D_S_I_JET_V2.phi_high downto D_S_I_JET_V2.phi_low);
+        et(JET_ET_HIGH-JET_ET_LOW downto 0) <= data_i(JET_ET_HIGH downto JET_ET_LOW);
+        eta(JET_ETA_HIGH-JET_ETA_LOW downto 0) <= data_i(JET_ETA_HIGH downto JET_ETA_LOW);
+        phi(JET_PHI_HIGH-JET_PHI_LOW downto 0) <= data_i(JET_PHI_HIGH downto JET_PHI_LOW);
 
     -- HB 2015-04-23: implemented eta_windows_comp for better modularity
-    jet_eta_windows_comp_i: entity work.eta_windows_comp
-        generic map(
-            nr_eta_windows,
-            eta_w1_upper_limit(D_S_I_JET_V2.eta_high-D_S_I_JET_V2.eta_low downto 0),
-            eta_w1_lower_limit(D_S_I_JET_V2.eta_high-D_S_I_JET_V2.eta_low downto 0),
-            eta_w2_upper_limit(D_S_I_JET_V2.eta_high-D_S_I_JET_V2.eta_low downto 0),
-            eta_w2_lower_limit(D_S_I_JET_V2.eta_high-D_S_I_JET_V2.eta_low downto 0),
-            eta_w3_upper_limit(D_S_I_JET_V2.eta_high-D_S_I_JET_V2.eta_low downto 0),
-            eta_w3_lower_limit(D_S_I_JET_V2.eta_high-D_S_I_JET_V2.eta_low downto 0),
-            eta_w4_upper_limit(D_S_I_JET_V2.eta_high-D_S_I_JET_V2.eta_low downto 0),
-            eta_w4_lower_limit(D_S_I_JET_V2.eta_high-D_S_I_JET_V2.eta_low downto 0),
-            eta_w5_upper_limit(D_S_I_JET_V2.eta_high-D_S_I_JET_V2.eta_low downto 0),
-            eta_w5_lower_limit(D_S_I_JET_V2.eta_high-D_S_I_JET_V2.eta_low downto 0)
-        )
-        port map(
-            eta => eta(D_S_I_JET_V2.eta_high-D_S_I_JET_V2.eta_low downto 0),
-            eta_comp_o => eta_comp
-        );
+        jet_eta_windows_comp_i: entity work.eta_windows_comp
+            generic map(
+                nr_eta_windows,
+                eta_w1_upper_limit(JET_ETA_HIGH-JET_ETA_LOW downto 0),
+                eta_w1_lower_limit(JET_ETA_HIGH-JET_ETA_LOW downto 0),
+                eta_w2_upper_limit(JET_ETA_HIGH-JET_ETA_LOW downto 0),
+                eta_w2_lower_limit(JET_ETA_HIGH-JET_ETA_LOW downto 0),
+                eta_w3_upper_limit(JET_ETA_HIGH-JET_ETA_LOW downto 0),
+                eta_w3_lower_limit(JET_ETA_HIGH-JET_ETA_LOW downto 0),
+                eta_w4_upper_limit(JET_ETA_HIGH-JET_ETA_LOW downto 0),
+                eta_w4_lower_limit(JET_ETA_HIGH-JET_ETA_LOW downto 0),
+                eta_w5_upper_limit(JET_ETA_HIGH-JET_ETA_LOW downto 0),
+                eta_w5_lower_limit(JET_ETA_HIGH-JET_ETA_LOW downto 0)
+            )
+            port map(
+                eta => eta(JET_ETA_HIGH-JET_ETA_LOW downto 0),
+                eta_comp_o => eta_comp
+            );
 
 -- HB 2015-04-23: implemented phi_windows_comp for better modularity
-    jet_phi_windows_comp_i: entity work.phi_windows_comp
-        generic map(
-            nr_phi_windows => nr_phi_windows,
-            phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
-            phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
-            phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
-            phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0)
-        )
-        port map(
-            phi => data_i(D_S_I_JET_V2.phi_high downto D_S_I_JET_V2.phi_low),
-            phi_comp_o => phi_comp
-        );
+        jet_phi_windows_comp_i: entity work.phi_windows_comp
+            generic map(
+                nr_phi_windows => nr_phi_windows,
+                phi_w1_upper_limit => phi_w1_upper_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
+                phi_w1_lower_limit => phi_w1_lower_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
+                phi_w2_upper_limit => phi_w2_upper_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
+                phi_w2_lower_limit => phi_w2_lower_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0)
+            )
+            port map(
+                phi => data_i(JET_PHI_HIGH downto JET_PHI_LOW),
+                phi_comp_o => phi_comp
+            );
 
     end generate jet_sel;
 
     tau_sel: if obj_type=TAU_TYPE generate
-    et(D_S_I_TAU_V2.et_high-D_S_I_TAU_V2.et_low downto 0) <= data_i(D_S_I_TAU_V2.et_high downto D_S_I_TAU_V2.et_low);
-    eta(D_S_I_TAU_V2.eta_high-D_S_I_TAU_V2.eta_low downto 0) <= data_i(D_S_I_TAU_V2.eta_high downto D_S_I_TAU_V2.eta_low);
-    phi(D_S_I_TAU_V2.phi_high-D_S_I_TAU_V2.phi_low downto 0) <= data_i(D_S_I_TAU_V2.phi_high downto D_S_I_TAU_V2.phi_low);
-    iso(D_S_I_TAU_V2.iso_high-D_S_I_TAU_V2.iso_low downto 0) <= data_i(D_S_I_TAU_V2.iso_high downto D_S_I_TAU_V2.iso_low);
+        et(TAU_ET_HIGH-TAU_ET_LOW downto 0) <= data_i(TAU_ET_HIGH downto TAU_ET_LOW);
+        eta(TAU_ETA_HIGH-TAU_ETA_LOW downto 0) <= data_i(TAU_ETA_HIGH downto TAU_ETA_LOW);
+        phi(TAU_PHI_HIGH-TAU_PHI_LOW downto 0) <= data_i(TAU_PHI_HIGH downto TAU_PHI_LOW);
+        iso(TAU_ISO_HIGH-TAU_ISO_LOW downto 0) <= data_i(TAU_ISO_HIGH downto TAU_ISO_LOW);
 
     -- HB 2015-04-23: implemented eta_windows_comp for better modularity
-    tau_eta_windows_comp_i: entity work.eta_windows_comp
-        generic map(
-            nr_eta_windows,
-            eta_w1_upper_limit(D_S_I_TAU_V2.eta_high-D_S_I_TAU_V2.eta_low downto 0),
-            eta_w1_lower_limit(D_S_I_TAU_V2.eta_high-D_S_I_TAU_V2.eta_low downto 0),
-            eta_w2_upper_limit(D_S_I_TAU_V2.eta_high-D_S_I_TAU_V2.eta_low downto 0),
-            eta_w2_lower_limit(D_S_I_TAU_V2.eta_high-D_S_I_TAU_V2.eta_low downto 0),
-            eta_w3_upper_limit(D_S_I_TAU_V2.eta_high-D_S_I_TAU_V2.eta_low downto 0),
-            eta_w3_lower_limit(D_S_I_TAU_V2.eta_high-D_S_I_TAU_V2.eta_low downto 0),
-            eta_w4_upper_limit(D_S_I_TAU_V2.eta_high-D_S_I_TAU_V2.eta_low downto 0),
-            eta_w4_lower_limit(D_S_I_TAU_V2.eta_high-D_S_I_TAU_V2.eta_low downto 0),
-            eta_w5_upper_limit(D_S_I_TAU_V2.eta_high-D_S_I_TAU_V2.eta_low downto 0),
-            eta_w5_lower_limit(D_S_I_TAU_V2.eta_high-D_S_I_TAU_V2.eta_low downto 0)
-        )
-        port map(
-            eta => eta(D_S_I_TAU_V2.eta_high-D_S_I_TAU_V2.eta_low downto 0),
-            eta_comp_o => eta_comp
-        );
+        tau_eta_windows_comp_i: entity work.eta_windows_comp
+            generic map(
+                nr_eta_windows,
+                eta_w1_upper_limit(TAU_ETA_HIGH-TAU_ETA_LOW downto 0),
+                eta_w1_lower_limit(TAU_ETA_HIGH-TAU_ETA_LOW downto 0),
+                eta_w2_upper_limit(TAU_ETA_HIGH-TAU_ETA_LOW downto 0),
+                eta_w2_lower_limit(TAU_ETA_HIGH-TAU_ETA_LOW downto 0),
+                eta_w3_upper_limit(TAU_ETA_HIGH-TAU_ETA_LOW downto 0),
+                eta_w3_lower_limit(TAU_ETA_HIGH-TAU_ETA_LOW downto 0),
+                eta_w4_upper_limit(TAU_ETA_HIGH-TAU_ETA_LOW downto 0),
+                eta_w4_lower_limit(TAU_ETA_HIGH-TAU_ETA_LOW downto 0),
+                eta_w5_upper_limit(TAU_ETA_HIGH-TAU_ETA_LOW downto 0),
+                eta_w5_lower_limit(TAU_ETA_HIGH-TAU_ETA_LOW downto 0)
+            )
+            port map(
+                eta => eta(TAU_ETA_HIGH-TAU_ETA_LOW downto 0),
+                eta_comp_o => eta_comp
+            );
 
 -- HB 2015-04-23: implemented phi_windows_comp for better modularity
-    tau_phi_windows_comp_i: entity work.phi_windows_comp
-        generic map(
-            nr_phi_windows => nr_phi_windows,
-            phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
-            phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
-            phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0),
-            phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_EG_V2.phi_high-D_S_I_EG_V2.phi_low downto 0)
-        )
-        port map(
-            phi => data_i(D_S_I_TAU_V2.phi_high downto D_S_I_TAU_V2.phi_low),
-            phi_comp_o => phi_comp
-        );
+        tau_phi_windows_comp_i: entity work.phi_windows_comp
+            generic map(
+                nr_phi_windows => nr_phi_windows,
+                phi_w1_upper_limit => phi_w1_upper_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
+                phi_w1_lower_limit => phi_w1_lower_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
+                phi_w2_upper_limit => phi_w2_upper_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
+                phi_w2_lower_limit => phi_w2_lower_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0)
+            )
+            port map(
+                phi => data_i(TAU_PHI_HIGH downto TAU_PHI_LOW),
+                phi_comp_o => phi_comp
+            );
 
     end generate tau_sel;
 

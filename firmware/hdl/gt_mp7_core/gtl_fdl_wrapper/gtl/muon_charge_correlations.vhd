@@ -27,7 +27,7 @@ entity muon_charge_correlations is
 end muon_charge_correlations;
 
 architecture rtl of muon_charge_correlations is
-    type charge_bits_array is array (0 to NR_MUON_OBJECTS-1) of std_logic_vector(d_s_i_muon.charge_high-d_s_i_muon.charge_low downto 0);
+    type charge_bits_array is array (0 to NR_MUON_OBJECTS-1) of std_logic_vector(MUON_CHARGE_HIGH-MUON_CHARGE_LOW downto 0);
     signal charge_bits1, charge_bits2 : charge_bits_array;
     signal ls_charcorr_double_int : std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
     signal os_charcorr_double_int : std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
@@ -42,8 +42,8 @@ begin
 -- assumptions:
 -- charge_sign = '0' => positive muon
 -- charge_sign = '1' => negative muon
--- d_s_i_muon.charge_high = charge_valid
--- d_s_i_muon.charge_low = charge_sign
+-- MUON_CHARGE_HIGH = charge_valid
+-- MUON_CHARGE_LOW = charge_sign
 -- *********************************************************
 
 -- HB 2014-04-14:
@@ -51,8 +51,8 @@ begin
 
 charge_bits_l: for i in 0 to NR_MUON_OBJECTS-1 generate
 -- HB 2015-11-20: charge correlation for different Bx needed for muon muon correlation conditions, therefore charge_bits1 and charge_bits2
-    charge_bits1(i) <= data1(i)(d_s_i_muon.charge_high downto d_s_i_muon.charge_low);
-    charge_bits2(i) <= data2(i)(d_s_i_muon.charge_high downto d_s_i_muon.charge_low);
+    charge_bits1(i) <= data1(i)(MUON_CHARGE_HIGH downto MUON_CHARGE_LOW);
+    charge_bits2(i) <= data2(i)(MUON_CHARGE_HIGH downto MUON_CHARGE_LOW);
 end generate charge_bits_l;
 
 -- HB 2014-04-14: charge correlation not useful for one object

@@ -27,52 +27,33 @@ end min_bias_hf_conditions;
 
 architecture rtl of min_bias_hf_conditions is
 
---     constant ZERO : std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
--- fixed pipeline structure, 2 stages total
---     constant conditions_pipeline_stages: natural := 2; -- pipeline stages for output signal of esums_conditions.vhd (0 => no flip-flop) 
-
-    signal temp1, temp2 : std_logic;
-    signal comp_o : std_logic;
+    signal temp1, comp_o : std_logic;
 
 begin
 
     mbt0hfp_sel: if obj_type=0 generate
-        comp_o <= '1' when (data_i(D_S_I_MBT0HFP_V2.count_high downto D_S_I_MBT0HFP_V2.count_low) >= count_threshold) and et_ge_mode else            
-                  '1' when (data_i(D_S_I_MBT0HFP_V2.count_high downto D_S_I_MBT0HFP_V2.count_low) = count_threshold) and not et_ge_mode else
-                  '0';            
+        comp_o <= '1' when (data_i(MBT0HFP_COUNT_HIGH downto MBT0HFP_COUNT_LOW) >= count_threshold) and et_ge_mode else
+                  '1' when (data_i(MBT0HFP_COUNT_HIGH downto MBT0HFP_COUNT_LOW) = count_threshold) and not et_ge_mode else
+                  '0';
     end generate mbt0hfp_sel;
-    
+
     mbt0hfm_sel: if obj_type=1 generate
-        comp_o <= '1' when (data_i(D_S_I_MBT0HFM_V2.count_high downto D_S_I_MBT0HFM_V2.count_low) >= count_threshold) and et_ge_mode else            
-                  '1' when (data_i(D_S_I_MBT0HFM_V2.count_high downto D_S_I_MBT0HFM_V2.count_low) = count_threshold) and not et_ge_mode else
-                  '0';            
+        comp_o <= '1' when (data_i(MBT0HFM_COUNT_HIGH downto MBT0HFM_COUNT_LOW) >= count_threshold) and et_ge_mode else
+                  '1' when (data_i(MBT0HFM_COUNT_HIGH downto MBT0HFM_COUNT_LOW) = count_threshold) and not et_ge_mode else
+                  '0';
     end generate mbt0hfm_sel;
-    
+
     mbt1hfp_sel: if obj_type=2 generate
-        comp_o <= '1' when (data_i(D_S_I_MBT1HFP_V2.count_high downto D_S_I_MBT1HFP_V2.count_low) >= count_threshold) and et_ge_mode else            
-                  '1' when (data_i(D_S_I_MBT1HFP_V2.count_high downto D_S_I_MBT1HFP_V2.count_low) = count_threshold) and not et_ge_mode else
-                  '0';            
+        comp_o <= '1' when (data_i(MBT1HFP_COUNT_HIGH downto MBT1HFP_COUNT_LOW) >= count_threshold) and et_ge_mode else
+                  '1' when (data_i(MBT1HFP_COUNT_HIGH downto MBT1HFP_COUNT_LOW) = count_threshold) and not et_ge_mode else
+                  '0';
     end generate mbt1hfp_sel;
-    
+
     mbt1hfm_sel: if obj_type=3 generate
-        comp_o <= '1' when (data_i(D_S_I_MBT1HFM_V2.count_high downto D_S_I_MBT1HFM_V2.count_low) >= count_threshold) and et_ge_mode else            
-                  '1' when (data_i(D_S_I_MBT1HFM_V2.count_high downto D_S_I_MBT1HFM_V2.count_low) = count_threshold) and not et_ge_mode else
-                  '0';            
+        comp_o <= '1' when (data_i(MBT1HFM_COUNT_HIGH downto MBT1HFM_COUNT_LOW) >= count_threshold) and et_ge_mode else
+                  '1' when (data_i(MBT1HFM_COUNT_HIGH downto MBT1HFM_COUNT_LOW) = count_threshold) and not et_ge_mode else
+                  '0';
     end generate mbt1hfm_sel;
-    
--- This code did not work correctly (no minbias conditions in implementation) with Vivado versions 2018.3 and higher !!!
--- -- Pipeline stages for condition output.
---     condition_o_pipeline: process(clk, comp_o)
---         variable pipeline_temp : std_logic_vector(0 to conditions_pipeline_stages+1) := (others => '0');
---     begin
---         pipeline_temp(conditions_pipeline_stages+1) := comp_o;
---         if (conditions_pipeline_stages > 0) then 
---             if (clk'event and (clk = '1') ) then
---                 pipeline_temp(0 to conditions_pipeline_stages) := pipeline_temp(1 to conditions_pipeline_stages+1);
---             end if;
---         end if;
---         condition_o <= pipeline_temp(1); -- used pipeline_temp(1) instead of pipeline_temp(0), to prevent warnings in compilation
---     end process;
 
 -- Pipeline stages for condition output - 2 stages.
     condition_o_pipeline: process(clk, comp_o)

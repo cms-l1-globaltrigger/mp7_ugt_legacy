@@ -3,6 +3,7 @@
 -- Comparators for transverse momentum, pseudorapidity, azimuth angle, quality and isolation of muon objects
 
 -- Version history:
+-- HB 2021-05-18: changed slice parameter.
 -- HB 2021-03-06: removed "invalid_muon".
 -- HB 2021-02-24: changed "no_muon" to "invalid_muon".
 -- HB 2021-02-19: added output register (with selection).
@@ -58,14 +59,14 @@ end muon_comparators;
 
 architecture rtl of muon_comparators is
 
-    signal pt : std_logic_vector(D_S_I_MUON.pt_high downto D_S_I_MUON.pt_low);
-    signal eta : std_logic_vector(D_S_I_MUON.eta_high downto D_S_I_MUON.eta_low);
-    signal phi : std_logic_vector(D_S_I_MUON.phi_high downto D_S_I_MUON.phi_low);
-    signal qual : std_logic_vector(D_S_I_MUON.qual_high downto D_S_I_MUON.qual_low);
-    signal iso : std_logic_vector(D_S_I_MUON.iso_high downto D_S_I_MUON.iso_low);
-    signal charge : std_logic_vector(D_S_I_MUON.charge_high downto D_S_I_MUON.charge_low);
-    signal upt : std_logic_vector(D_S_I_MUON.upt_high downto D_S_I_MUON.upt_low);
-    signal ip : std_logic_vector(D_S_I_MUON.ip_high downto D_S_I_MUON.ip_low);
+    signal pt : std_logic_vector(MUON_PT_HIGH downto MUON_PT_LOW);
+    signal eta : std_logic_vector(MUON_ETA_HIGH downto MUON_ETA_LOW);
+    signal phi : std_logic_vector(MUON_PHI_HIGH downto MUON_PHI_LOW);
+    signal qual : std_logic_vector(MUON_QUAL_HIGH downto MUON_QUAL_LOW);
+    signal iso : std_logic_vector(MUON_ISO_HIGH downto MUON_ISO_LOW);
+    signal charge : std_logic_vector(MUON_CHARGE_HIGH downto MUON_CHARGE_LOW);
+    signal upt : std_logic_vector(MUON_UPT_HIGH downto MUON_UPT_LOW);
+    signal ip : std_logic_vector(MUON_IP_HIGH downto MUON_IP_LOW);
 
     signal pt_comp : std_logic := '1';
     signal eta_comp : std_logic := '1';
@@ -108,14 +109,14 @@ begin
 -- AND
 -- IP (impact parameter) LUT
 
-    pt  <= data_i(D_S_I_MUON.pt_high downto D_S_I_MUON.pt_low);
-    eta <= data_i(D_S_I_MUON.eta_high downto D_S_I_MUON.eta_low);
-    phi <= data_i(D_S_I_MUON.phi_high downto D_S_I_MUON.phi_low);
-    qual <= data_i(D_S_I_MUON.qual_high downto D_S_I_MUON.qual_low);
-    iso <= data_i(D_S_I_MUON.iso_high downto D_S_I_MUON.iso_low);
-    charge <= data_i(D_S_I_MUON.charge_high downto D_S_I_MUON.charge_low);
-    upt <= data_i(D_S_I_MUON.upt_high downto D_S_I_MUON.upt_low);
-    ip <= data_i(D_S_I_MUON.ip_high downto D_S_I_MUON.ip_low);
+    pt  <= data_i(MUON_PT_HIGH downto MUON_PT_LOW);
+    eta <= data_i(MUON_ETA_HIGH downto MUON_ETA_LOW);
+    phi <= data_i(MUON_PHI_HIGH downto MUON_PHI_LOW);
+    qual <= data_i(MUON_QUAL_HIGH downto MUON_QUAL_LOW);
+    iso <= data_i(MUON_ISO_HIGH downto MUON_ISO_LOW);
+    charge <= data_i(MUON_CHARGE_HIGH downto MUON_CHARGE_LOW);
+    upt <= data_i(MUON_UPT_HIGH downto MUON_UPT_LOW);
+    ip <= data_i(MUON_IP_HIGH downto MUON_IP_LOW);
 
 -- HB 2021-03-08: implemented pt_comp for better modularity
     pt_comp_i: entity work.pt_comp
@@ -139,19 +140,19 @@ begin
     eta_windows_comp_i: entity work.eta_windows_comp
         generic map(
             nr_eta_windows,
-            eta_w1_upper_limit(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-            eta_w1_lower_limit(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-            eta_w2_upper_limit(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-            eta_w2_lower_limit(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-            eta_w3_upper_limit(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-            eta_w3_lower_limit(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-            eta_w4_upper_limit(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-            eta_w4_lower_limit(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-            eta_w5_upper_limit(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0),
-            eta_w5_lower_limit(D_S_I_MUON.eta_high-D_S_I_MUON.eta_low downto 0)
+            eta_w1_upper_limit(MUON_ETA_HIGH-MUON_ETA_LOW downto 0),
+            eta_w1_LOWer_limit(MUON_ETA_HIGH-MUON_ETA_LOW downto 0),
+            eta_w2_upper_limit(MUON_ETA_HIGH-MUON_ETA_LOW downto 0),
+            eta_w2_LOWer_limit(MUON_ETA_HIGH-MUON_ETA_LOW downto 0),
+            eta_w3_upper_limit(MUON_ETA_HIGH-MUON_ETA_LOW downto 0),
+            eta_w3_LOWer_limit(MUON_ETA_HIGH-MUON_ETA_LOW downto 0),
+            eta_w4_upper_limit(MUON_ETA_HIGH-MUON_ETA_LOW downto 0),
+            eta_w4_LOWer_limit(MUON_ETA_HIGH-MUON_ETA_LOW downto 0),
+            eta_w5_upper_limit(MUON_ETA_HIGH-MUON_ETA_LOW downto 0),
+            eta_w5_LOWer_limit(MUON_ETA_HIGH-MUON_ETA_LOW downto 0)
         )
         port map(
-            eta => eta(D_S_I_MUON.eta_high downto D_S_I_MUON.eta_low),
+            eta => eta(MUON_ETA_HIGH downto MUON_ETA_LOW),
             eta_comp_o => eta_comp
         );
 
@@ -159,13 +160,13 @@ begin
     phi_windows_comp_i: entity work.phi_windows_comp
         generic map(
             nr_phi_windows => nr_phi_windows,
-            phi_w1_upper_limit => phi_w1_upper_limit(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-            phi_w1_lower_limit => phi_w1_lower_limit(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-            phi_w2_upper_limit => phi_w2_upper_limit(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0),
-            phi_w2_lower_limit => phi_w2_lower_limit(D_S_I_MUON.phi_high-D_S_I_MUON.phi_low downto 0)
+            phi_w1_upper_limit => phi_w1_upper_limit(MUON_PHI_HIGH-MUON_PHI_LOW downto 0),
+            phi_w1_LOWer_limit => phi_w1_LOWer_limit(MUON_PHI_HIGH-MUON_PHI_LOW downto 0),
+            phi_w2_upper_limit => phi_w2_upper_limit(MUON_PHI_HIGH-MUON_PHI_LOW downto 0),
+            phi_w2_LOWer_limit => phi_w2_LOWer_limit(MUON_PHI_HIGH-MUON_PHI_LOW downto 0)
         )
         port map(
-            phi => data_i(D_S_I_MUON.phi_high downto D_S_I_MUON.phi_low),
+            phi => data_i(MUON_PHI_HIGH downto MUON_PHI_LOW),
             phi_comp_o => phi_comp
         );
 

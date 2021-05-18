@@ -30,6 +30,7 @@ src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_slice.vhd
 ## GTL modules
 ### common modules
 src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg.vhd
+src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_luts_pkg.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/centrality_pipeline.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/ext_cond_pipeline.vhd
 src gt_mp7_core/gtl_fdl_wrapper/gtl/common/p_m_2_bx_pipeline.vhd

@@ -402,39 +402,6 @@ begin
                     charge_comp_double_o => charge_comp_double_pipe
                 );
 
---             cc_double_sel: if type_obj1 = MU_TYPE and type_obj2 = MU_TYPE generate
---                 charge_double_i: if requested_charge_correlation /= "ig" generate
---                 -- Charge correlation comparison
---                     charge_double_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
---                         charge_double_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
---                             obj_same_bx_l: if same_bx = true generate
---                                 charge_double_if: if j/=i generate
---                                     charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
---                                         '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
---                                         '1' when requested_charge_correlation = "ig" else '0';
---                                 end generate charge_double_if;
---                             end generate obj_same_bx_l;
---                             obj_different_bx_l: if same_bx = false generate
---                                 charge_comp_double(i,j) <= '1' when ls_charcorr_double(i,j) = '1' and requested_charge_correlation = "ls" else
---                                     '1' when os_charcorr_double(i,j) = '1' and requested_charge_correlation = "os" else
---                                     '1' when requested_charge_correlation = "ig" else '0';
---                             end generate obj_different_bx_l;
---                         end generate charge_double_l_2;
---                     end generate charge_double_l_1;
---                 end generate charge_double_i;
---
---                 cc_double_p: process(lhc_clk, charge_comp_double)
---                     begin
---                     if not INTERMEDIATE_PIPELINE then
---                         charge_comp_double_pipe <= charge_comp_double;
---                     else
---                         if (lhc_clk'event and lhc_clk = '1') then
---                             charge_comp_double_pipe <= charge_comp_double;
---                         end if;
---                     end if;
---                 end process;
---             end generate cc_double_sel;
-
             matrix_corr_cond_i: entity work.matrix_corr_cond
                 generic map(
                     no_orm => true,
@@ -721,41 +688,6 @@ begin
                     charge_comp_triple_o => charge_comp_triple_pipe
                 );
 
---             cc_triple_sel: if type_obj1 = MU_TYPE and type_obj2 = MU_TYPE and type_obj3 = MU_TYPE generate
---                 charge_triple_i: if requested_charge_correlation /= "ig" generate
---                 -- Charge correlation comparison
---                     charge_triple_l_1: for i in slice_low_obj1 to slice_high_obj1 generate
---                         charge_triple_l_2: for j in slice_low_obj2 to slice_high_obj2 generate
---                             charge_triple_l_3: for k in slice_low_obj3 to slice_high_obj3 generate
---                                 obj_same_bx_l: if same_bx = true generate
---                                     charge_triple_if: if (j/=i and k/=i and k/=j) generate
---                                         charge_comp_triple(i,j,k) <= '1' when ls_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "ls" else
---                                             '1' when os_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "os" else
---                                             '1' when requested_charge_correlation = "ig" else '0';
---                                     end generate charge_triple_if;
---                                 end generate obj_same_bx_l;
---                                 obj_different_bx_l: if same_bx = false generate
---                                     charge_comp_triple(i,j,k) <= '1' when ls_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "ls" else
---                                         '1' when os_charcorr_triple(i,j,k) = '1' and requested_charge_correlation = "os" else
---                                         '1' when requested_charge_correlation = "ig" else '0';
---                                 end generate obj_different_bx_l;
---                             end generate charge_triple_l_3;
---                         end generate charge_triple_l_2;
---                     end generate charge_triple_l_1;
---                 end generate charge_triple_i;
---
---                 cc_triple_p: process(lhc_clk, charge_comp_triple)
---                     begin
---                     if not INTERMEDIATE_PIPELINE then
---                         charge_comp_triple_pipe <= charge_comp_triple;
---                     else
---                         if (lhc_clk'event and lhc_clk = '1') then
---                             charge_comp_triple_pipe <= charge_comp_triple;
---                         end if;
---                     end if;
---                 end process;
---             end generate cc_triple_sel;
---
             matrix_corr_cond_i: entity work.matrix_corr_cond
                 generic map(
                     mass_3_obj => true,

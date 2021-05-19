@@ -131,16 +131,6 @@ constant MUON_IP_LOW : natural := 62;
 constant MUON_IP_HIGH : natural := 63;
 constant MUON_IP_BITS : natural := MUON_IP_HIGH-MUON_IP_LOW+1;
 
--- type d_s_i_muon_record is record
---     ip_high, ip_low, upt_high, upt_low, phi_raw_high, phi_raw_low, idx_bits_high, idx_bits_low, charge_high, charge_low, iso_high, iso_low, eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MAX_MUON_BITS-1 downto 0;
--- end record d_s_i_muon_record;
---
--- constant d_s_i_muon : d_s_i_muon_record :=
---     (MUON_IP_HIGH,MUON_IP_LOW,MUON_UPT_HIGH,MUON_UPT_LOW,MUON_PHI_RAW_HIGH,MUON_PHI_RAW_LOW,MUON_IDX_BITS_HIGH,MUON_IDX_BITS_LOW,MUON_CHARGE_HIGH,MUON_CHARGE_LOW,MUON_ISO_HIGH,MUON_ISO_LOW,MUON_ETA_HIGH,MUON_ETA_LOW,MUON_QUAL_HIGH,MUON_QUAL_LOW,MUON_PT_HIGH,MUON_PT_LOW,MUON_PHI_HIGH,MUON_PHI_LOW);
---
--- constant D_S_I_MUON_V2 : d_s_i_muon_record := d_s_i_muon;
--- constant D_S_I_MU_V2 : d_s_i_muon_record := d_s_i_muon;
-
 type muon_objects_array is array (natural range <>) of std_logic_vector(MAX_MUON_BITS-1 downto 0);
 type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
 type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(MUON_QUAL_HIGH-MUON_QUAL_LOW+1))-1 downto 0);
@@ -159,27 +149,6 @@ constant NR_TAU_OBJECTS : positive := TAU_ARRAY_LENGTH; -- number tau objects, f
 constant MAX_CALO_OBJECTS : positive := max(EG_ARRAY_LENGTH, JET_ARRAY_LENGTH, TAU_ARRAY_LENGTH);
 constant MAX_CALO_BITS : positive := max(EG_DATA_WIDTH, JET_DATA_WIDTH, TAU_DATA_WIDTH);
 
--- -- d_s_i_calo_record used for calo_conditions.vhd
--- type d_s_i_calo_record is record
---     phi_high, phi_low, eta_high, eta_low, et_high, et_low : natural range MAX_CALO_BITS-1 downto 0;
--- end record d_s_i_calo_record;
---
--- constant d_s_i_eg : d_s_i_calo_record := (24,17,16,9,8,0);
--- constant d_s_i_jet : d_s_i_calo_record := (26,19,18,11,10,0);
--- constant d_s_i_tau : d_s_i_calo_record := (24,17,16,9,8,0);
---
--- type d_s_i_eg_record is record
---     iso_high, iso_low, phi_high, phi_low, eta_high, eta_low, et_high, et_low : natural range MAX_CALO_BITS-1 downto 0;
--- end record d_s_i_eg_record;
---
--- type d_s_i_jet_record is record
---     phi_high, phi_low, eta_high, eta_low, et_high, et_low : natural range MAX_CALO_BITS-1 downto 0;
--- end record d_s_i_jet_record;
---
--- type d_s_i_tau_record is record
---     iso_high, iso_low, phi_high, phi_low, eta_high, eta_low, et_high, et_low : natural range MAX_CALO_BITS-1 downto 0;
--- end record d_s_i_tau_record;
-
 constant EG_ET_LOW : natural := 0;
 constant EG_ET_HIGH : natural := 8;
 constant EG_ET_BITS : natural := EG_ET_HIGH-EG_ET_LOW+1;
@@ -192,7 +161,6 @@ constant EG_PHI_BITS : natural := EG_PHI_HIGH-EG_PHI_LOW+1;
 constant EG_ISO_LOW : natural := 25;
 constant EG_ISO_HIGH : natural := 26;
 constant EG_ISO_BITS : natural := EG_ISO_HIGH-EG_ISO_LOW+1;
--- constant D_S_I_EG_V2: d_s_i_eg_record := (EG_ISO_HIGH,EG_ISO_LOW,EG_PHI_HIGH,EG_PHI_LOW,EG_ETA_HIGH,EG_ETA_LOW,EG_ET_HIGH,EG_ET_LOW);
 
 constant JET_ET_LOW : natural := 0;
 constant JET_ET_HIGH : natural := 10;
@@ -203,7 +171,6 @@ constant JET_ETA_BITS : natural := JET_ETA_HIGH-JET_ETA_LOW+1;
 constant JET_PHI_LOW : natural := 19;
 constant JET_PHI_HIGH : natural := 26;
 constant JET_PHI_BITS : natural := JET_PHI_HIGH-JET_PHI_LOW+1;
--- constant D_S_I_JET_V2: d_s_i_jet_record := (JET_PHI_HIGH,JET_PHI_LOW,JET_ETA_HIGH,JET_ETA_LOW,JET_ET_HIGH,JET_ET_LOW);
 
 constant TAU_ET_LOW : natural := 0;
 constant TAU_ET_HIGH : natural := 8;
@@ -217,7 +184,6 @@ constant TAU_PHI_BITS : natural := TAU_PHI_HIGH-TAU_PHI_LOW+1;
 constant TAU_ISO_LOW : natural := 25;
 constant TAU_ISO_HIGH : natural := 26;
 constant TAU_ISO_BITS : natural := TAU_ISO_HIGH-TAU_ISO_LOW+1;
--- constant D_S_I_TAU_V2: d_s_i_tau_record := (TAU_ISO_HIGH,TAU_ISO_LOW,TAU_PHI_HIGH,TAU_PHI_LOW,TAU_ETA_HIGH,TAU_ETA_LOW,TAU_ET_HIGH,TAU_ET_LOW);
 
 type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO_BITS-1 downto 0);
 constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
@@ -242,53 +208,13 @@ constant NR_ETMHF_OBJECTS : positive := 1;
 constant NR_HTMHF_OBJECTS : positive := 1;
 constant NR_TOWERCOUNT_OBJECTS : positive := 1;
 
--- type d_s_i_ett_record is record
---     et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
--- end record d_s_i_ett_record;
---
--- type d_s_i_htt_record is record
---     et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
--- end record d_s_i_htt_record;
---
--- type d_s_i_etm_record is record
---     phi_high, phi_low, et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
--- end record d_s_i_etm_record;
---
--- type d_s_i_htm_record is record
---     phi_high, phi_low, et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
--- end record d_s_i_htm_record;
---
--- -- HB 2016-06-07: inserted ETTEM
--- type d_s_i_ettem_record is record
---     et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
--- end record d_s_i_ettem_record;
---
--- -- HB 2016-06-07: inserted ETMHF
--- type d_s_i_etmhf_record is record
---     phi_high, phi_low, et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
--- end record d_s_i_etmhf_record;
---
--- -- HB 2016-09-16: inserted HTMHF
--- type d_s_i_htmhf_record is record
---     phi_high, phi_low, et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
--- end record d_s_i_htmhf_record;
---
--- -- HB 2016-09-16: inserted TOWERCOUNT
--- type d_s_i_towercnt_record is record
---     count_high, count_low : natural range MAX_ESUMS_BITS-1 downto 0;
--- end record d_s_i_towercnt_record;
-
 constant ETT_ET_LOW : natural := 0;
 constant ETT_ET_HIGH : natural := 11;
 constant ETT_ET_BITS : natural := ETT_ET_HIGH-ETT_ET_LOW+1;
--- constant D_S_I_ETT : d_s_i_ett_record := (ETT_ET_HIGH,ETT_ET_LOW);
--- constant D_S_I_ETT_V2 : d_s_i_ett_record := D_S_I_ETT;
 
 constant HTT_ET_LOW : natural := 0;
 constant HTT_ET_HIGH : natural := 11;
 constant HTT_ET_BITS : natural := HTT_ET_HIGH-HTT_ET_LOW+1;
--- constant D_S_I_HTT : d_s_i_htt_record := (HTT_ET_HIGH,HTT_ET_LOW);
--- constant D_S_I_HTT_V2 : d_s_i_htt_record := D_S_I_HTT;
 
 constant ETM_ET_LOW : natural := 0;
 constant ETM_ET_HIGH : natural := 11;
@@ -296,8 +222,6 @@ constant ETM_ET_BITS : natural := ETM_ET_HIGH-ETM_ET_LOW+1;
 constant ETM_PHI_LOW : natural := 12;
 constant ETM_PHI_HIGH : natural := 19;
 constant ETM_PHI_BITS : natural := ETM_PHI_HIGH-ETM_PHI_LOW+1;
--- constant D_S_I_ETM : d_s_i_etm_record := (ETM_PHI_HIGH,ETM_PHI_LOW,ETM_ET_HIGH,ETM_ET_LOW);
--- constant D_S_I_ETM_V2 : d_s_i_etm_record := D_S_I_ETM;
 
 constant HTM_ET_LOW : natural := 0;
 constant HTM_ET_HIGH : natural := 11;
@@ -305,16 +229,12 @@ constant HTM_ET_BITS : natural := HTM_ET_HIGH-HTM_ET_LOW+1;
 constant HTM_PHI_LOW : natural := 12;
 constant HTM_PHI_HIGH : natural := 19;
 constant HTM_PHI_BITS : natural := HTM_PHI_HIGH-HTM_PHI_LOW+1;
--- constant D_S_I_HTM : d_s_i_htm_record := (HTM_PHI_HIGH,HTM_PHI_LOW,HTM_ET_HIGH,HTM_ET_LOW);
--- constant D_S_I_HTM_V2 : d_s_i_htm_record := D_S_I_HTM;
 
 constant ETTEM_IN_ETT_LOW : natural := 12;
 constant ETTEM_IN_ETT_HIGH : natural := 23;
 constant ETTEM_ET_LOW : natural := 0;
 constant ETTEM_ET_HIGH : natural := 11;
 constant ETTEM_ET_BITS : natural := ETTEM_ET_HIGH-ETTEM_ET_LOW+1;
--- constant D_S_I_ETTEM : d_s_i_ettem_record := (ETTEM_ET_HIGH,ETTEM_ET_LOW);
--- constant D_S_I_ETTEM_V2 : d_s_i_ettem_record := D_S_I_ETTEM;
 
 constant ETMHF_ET_LOW : natural := 0;
 constant ETMHF_ET_HIGH : natural := 11;
@@ -322,8 +242,6 @@ constant ETMHF_ET_BITS : natural := ETMHF_ET_HIGH-ETMHF_ET_LOW+1;
 constant ETMHF_PHI_LOW : natural := 12;
 constant ETMHF_PHI_HIGH : natural := 19;
 constant ETMHF_PHI_BITS : natural := ETMHF_PHI_HIGH-ETMHF_PHI_LOW+1;
--- constant D_S_I_ETMHF : d_s_i_etmhf_record := (ETMHF_PHI_HIGH,ETMHF_PHI_LOW,ETMHF_ET_HIGH,ETMHF_ET_LOW);
--- constant D_S_I_ETMHF_V2 : d_s_i_etmhf_record := D_S_I_ETMHF;
 
 constant HTMHF_ET_LOW : natural := 0;
 constant HTMHF_ET_HIGH : natural := 11;
@@ -331,8 +249,6 @@ constant HTMHF_ET_BITS : natural := HTMHF_ET_HIGH-HTMHF_ET_LOW+1;
 constant HTMHF_PHI_LOW : natural := 12;
 constant HTMHF_PHI_HIGH : natural := 19;
 constant HTMHF_PHI_BITS : natural := HTMHF_PHI_HIGH-HTMHF_PHI_LOW+1;
--- constant D_S_I_HTMHF : d_s_i_htmhf_record := (HTMHF_PHI_HIGH,HTMHF_PHI_LOW,HTMHF_ET_HIGH,HTMHF_ET_LOW);
--- constant D_S_I_HTMHF_V2 : d_s_i_htmhf_record := D_S_I_HTMHF;
 
 constant MAX_ESUMS_ET_BITS_1 : positive := max(ETT_ET_BITS, HTT_ET_BITS, ETM_ET_BITS);
 constant MAX_ESUMS_ET_BITS_2 : positive := max(MAX_ESUMS_ET_BITS_1, HTM_ET_BITS, ETTEM_ET_BITS);
@@ -352,38 +268,17 @@ constant ASYMHTHF_IN_HTMHF_LOW : natural := 20;
 constant MAX_ASYM_BITS : positive range 1 to 8 := 8;
 constant MAX_ASYM_TEMPLATES_BITS : positive range 1 to MAX_ASYM_BITS := 8;
 
--- Type definitions for "Asymmetry"
--- type d_s_i_asymet_record is record
---     high, low : natural range MAX_ASYM_BITS-1 downto 0;
--- end record d_s_i_asymet_record;
---
--- type d_s_i_asymht_record is record
---     high, low : natural range MAX_ASYM_BITS-1 downto 0;
--- end record d_s_i_asymht_record;
---
--- type d_s_i_asymethf_record is record
---     high, low : natural range MAX_ASYM_BITS-1 downto 0;
--- end record d_s_i_asymethf_record;
---
--- type d_s_i_asymhthf_record is record
---     high, low : natural range MAX_ASYM_BITS-1 downto 0;
--- end record d_s_i_asymhthf_record;
-
 constant ASYMET_LOW : natural := 0;
 constant ASYMET_HIGH : natural := 7;
--- constant D_S_I_ASYMET : d_s_i_asymet_record := (ASYMET_HIGH,ASYMET_LOW);
 
 constant ASYMHT_LOW : natural := 0;
 constant ASYMHT_HIGH : natural := 7;
--- constant D_S_I_ASYMHT : d_s_i_asymht_record := (ASYMHT_HIGH,ASYMHT_LOW);
 
 constant ASYMETHF_LOW : natural := 0;
 constant ASYMETHF_HIGH : natural := 7;
--- constant D_S_I_ASYMETHF : d_s_i_asymethf_record := (ASYMETHF_HIGH,ASYMETHF_LOW);
 
 constant ASYMHTHF_LOW : natural := 0;
 constant ASYMHTHF_HIGH : natural := 7;
--- constant D_S_I_ASYMHTHF : d_s_i_asymhthf_record := (ASYMHTHF_HIGH,ASYMHTHF_LOW);
 
 -- *******************************************************************************************************
 -- Type definitions for "Centrality"
@@ -406,8 +301,6 @@ constant TOWERCOUNT_IN_HTT_HIGH : natural := 24;
 constant TOWERCOUNT_COUNT_LOW : natural := 0;
 constant TOWERCOUNT_COUNT_HIGH : natural := 12;
 constant MAX_TOWERCOUNT_BITS : natural := 16; -- 4 hex digits !
--- constant D_S_I_TOWERCOUNT : d_s_i_towercnt_record := (TOWERCOUNT_COUNT_HIGH,TOWERCOUNT_COUNT_LOW);
--- constant D_S_I_TOWERCOUNT_V2 : d_s_i_towercnt_record := D_S_I_TOWERCOUNT;
 
 -- *******************************************************************************************************
 -- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
@@ -430,38 +323,17 @@ constant MBT1HFM_TYPE : natural range 0 to 3 := 3;
 constant MAX_MBHF_BITS : positive range 1 to 4 := 4;
 constant MAX_MBHF_TEMPLATES_BITS : positive range 1 to MAX_MBHF_BITS := 4;
 
--- -- Type definitions for "min bias trigger" objects
--- type d_s_i_mbt0hfp_record is record
---     count_high, count_low : natural range MAX_ESUMS_BITS-1 downto 0;
--- end record d_s_i_mbt0hfp_record;
---
--- type d_s_i_mbt0hfm_record is record
---     count_high, count_low : natural range MAX_ESUMS_BITS-1 downto 0;
--- end record d_s_i_mbt0hfm_record;
---
--- type d_s_i_mbt1hfp_record is record
---     count_high, count_low : natural range MAX_ESUMS_BITS-1 downto 0;
--- end record d_s_i_mbt1hfp_record;
---
--- type d_s_i_mbt1hfm_record is record
---     count_high, count_low : natural range MAX_ESUMS_BITS-1 downto 0;
--- end record d_s_i_mbt1hfm_record;
-
 constant MBT0HFP_COUNT_LOW : natural := 0;
 constant MBT0HFP_COUNT_HIGH : natural := 3;
--- constant D_S_I_MBT0HFP_V2 : d_s_i_mbt0hfp_record := (MBT0HFP_COUNT_HIGH,MBT0HFP_COUNT_LOW);
 
 constant MBT0HFM_COUNT_LOW : natural := 0;
 constant MBT0HFM_COUNT_HIGH : natural := 3;
--- constant D_S_I_MBT0HFM_V2 : d_s_i_mbt0hfm_record := (MBT0HFM_COUNT_HIGH,MBT0HFM_COUNT_LOW);
 
 constant MBT1HFP_COUNT_LOW : natural := 0;
 constant MBT1HFP_COUNT_HIGH : natural := 3;
--- constant D_S_I_MBT1HFP_V2 : d_s_i_mbt1hfp_record := (MBT1HFP_COUNT_HIGH,MBT1HFP_COUNT_LOW);
 
 constant MBT1HFM_COUNT_LOW : natural := 0;
 constant MBT1HFM_COUNT_HIGH : natural := 3;
--- constant D_S_I_MBT1HFM_V2 : d_s_i_mbt1hfm_record := (MBT1HFM_COUNT_HIGH,MBT1HFM_COUNT_LOW);
 
 -- *******************************************************************************************************
 -- max bits for comparators.vhd

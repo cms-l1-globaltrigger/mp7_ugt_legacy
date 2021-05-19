@@ -2,7 +2,7 @@
 -- Wrapper for GTL and FDL
 
 -- Version-history:
--- HB 2021-05-18: changed slice parameter.
+-- HB 2021-05-18: changed constant names for slice parameter.
 -- HB 2019-10-10: inserted use clause fdl_pkg.
 -- HB 2018-08-08: changed names for internal signals.
 -- HB 2018-08-06: inserted signals for "Asymmetry" and "Centrality" (included in esums data structure).

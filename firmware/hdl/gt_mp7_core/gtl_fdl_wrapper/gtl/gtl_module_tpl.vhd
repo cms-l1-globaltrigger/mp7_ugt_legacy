@@ -2,6 +2,7 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
+-- HB 2021-05-20: v1.10.3: added constants for combination in overlap removal conditions (e.g. JET_EG_DETA_BINS_WIDTH) in gtl_pkg_tpl.vhd.
 -- HB 2021-04-29: v1.10.2: bug fixed at mass comparison (signal "mass_comp") in calo_mass_3_obj_condition.vhd and muon_mass_3_obj_condition.vhd.
 -- HB 2020-10-09: v1.10.1: Added module pipelines (including modules for ext_cond_pipe and centrality_pipe processes).
 -- HB 2020-08-25: v1.10.0: Implemented new muon structure with "unconstraint pt" and "impact parameter". Added files for "invariant mass with 3 objects" and "invariant mass divided by delta R".

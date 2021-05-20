@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.11.4] - 2021-05-20
+### Comment
+
+- mp7_ugt firmware release v1.11.4
+- added additional constants to gtl_pkg_tpl.vhd
+
+### Changed
+- source files:
+  - ../gtl/gtl_pkg_tpl.vhd
+  - ../gtl/gtl_module_tpl.vhd
+  - ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
+
 ## [v1.11.3] - 2021-04-29
 ### Comment
 

@@ -60,6 +60,9 @@ use work.gt_mp7_core_pkg.all;
 package gtl_pkg is
 
 -- Fixed pipeline structure
+constant BX_PIPELINE_STAGES: natural := 5; -- +/- 2bx pipeline
+constant EXT_COND_STAGES: natural := 2; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
+constant CENTRALITY_STAGES: natural := 2; -- pipeline stages for "Centrality" to get same pipeline to algos as conditions
 constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
 constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
 
@@ -132,6 +135,7 @@ constant MUON_IP_HIGH : natural := 63;
 constant MUON_IP_BITS : natural := MUON_IP_HIGH-MUON_IP_LOW+1;
 
 type muon_objects_array is array (natural range <>) of std_logic_vector(MAX_MUON_BITS-1 downto 0);
+type bx_muon_objects_array is array (0 to BX_PIPELINE_STAGES-1) of muon_objects_array(0 to NR_MU_OBJECTS-1);
 type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
 type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(MUON_QUAL_HIGH-MUON_QUAL_LOW+1))-1 downto 0);
 type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(MUON_ISO_HIGH-MUON_ISO_LOW+1))-1 downto 0);
@@ -186,6 +190,9 @@ constant TAU_ISO_HIGH : natural := 26;
 constant TAU_ISO_BITS : natural := TAU_ISO_HIGH-TAU_ISO_LOW+1;
 
 type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO_BITS-1 downto 0);
+type bx_eg_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_EG_OBJECTS-1);
+type bx_jet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_JET_OBJECTS-1);
+type bx_tau_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_TAU_OBJECTS-1);
 constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
 type calo_templates_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 constant MAX_CALO_ET_BITS : positive := max(EG_ET_BITS, JET_ET_BITS, TAU_ET_BITS);
@@ -280,6 +287,7 @@ constant ASYMETHF_HIGH : natural := 7;
 constant ASYMHTHF_LOW : natural := 0;
 constant ASYMHTHF_HIGH : natural := 7;
 
+type bx_esums_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 -- *******************************************************************************************************
 -- Type definitions for "Centrality"
 constant CENT_IN_ETMHF_HIGH : natural := 31;
@@ -293,6 +301,7 @@ constant CENT_UBITS_LOW : natural := 4;
 constant CENT_UBITS_HIGH: natural := 7;
 
 constant NR_CENTRALITY_BITS : positive := CENT_UBITS_HIGH-CENT_LBITS_LOW+1;
+type bx_cent_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic;
 
 -- *******************************************************************************************************
 -- HB 2016-09-16: inserted TOWERCOUNT
@@ -301,6 +310,7 @@ constant TOWERCOUNT_IN_HTT_HIGH : natural := 24;
 constant TOWERCOUNT_COUNT_LOW : natural := 0;
 constant TOWERCOUNT_COUNT_HIGH : natural := 12;
 constant MAX_TOWERCOUNT_BITS : natural := 16; -- 4 hex digits !
+type bx_towercount_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
 
 -- *******************************************************************************************************
 -- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
@@ -358,8 +368,9 @@ type common_objects_array is array (natural range <>) of std_logic_vector(MAX_OB
 -- ==== CALOs - end ============================================================
 
 -- "External conditions" (former "Technical Triggers" and "External Algorithms") definitions
- -- number of "External conditions" inputs (proposed max. NR_EXTERNAL_CONDITIONS = 256), from lhc_data_pkg.vhd
- constant NR_EXTERNAL_CONDITIONS : positive := EXTERNAL_CONDITIONS_DATA_WIDTH;
+-- number of "External conditions" inputs (proposed max. NR_EXTERNAL_CONDITIONS = 256), from lhc_data_pkg.vhd
+constant NR_EXTERNAL_CONDITIONS : positive := EXTERNAL_CONDITIONS_DATA_WIDTH;
+type bx_ext_cond_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
 
 -- ==== Correlations - begin ============================================================
 -- ********************************************************

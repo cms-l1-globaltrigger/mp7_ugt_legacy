@@ -2,7 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
--- HB 2021-05-21: added constants for bx arrays.
+-- HB 2021-05-21: added constants and types for bx arrays.
 -- HB 2021-05-18: moved LUTs to gtl_luts_pkg.vhd. Removed D_S_I types.
 -- HB 2021-05-14: moved "ugt_constants" replacement to fdl_pkg_tpl.vhd. New file name.
 -- HB 2021-04-23: cleaned up types, constants and comments.
@@ -372,6 +372,58 @@ type common_objects_array is array (natural range <>) of std_logic_vector(MAX_OB
 -- number of "External conditions" inputs (proposed max. NR_EXTERNAL_CONDITIONS = 256), from lhc_data_pkg.vhd
 constant NR_EXTERNAL_CONDITIONS : positive := EXTERNAL_CONDITIONS_DATA_WIDTH;
 type bx_ext_cond_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
+
+-- data records
+type gtl_data_record is record
+    mu : muon_objects_array(0 to NR_MUON_OBJECTS-1);
+    eg : calo_objects_array(0 to NR_EG_OBJECTS-1);
+    jet : calo_objects_array(0 to NR_JET_OBJECTS-1);
+    tau : calo_objects_array(0 to NR_TAU_OBJECTS-1);
+    ett : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    htt : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    etm : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    htm : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    ettem : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    etmhf : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    htmhf : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    mbt1hfp, mbt1hfm, mbt0hfp, mbt0hfm : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    asymet, asymht, asymethf, asymhthf : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    towercount : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
+    centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
+    ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
+end record gtl_data_record;
+
+type bx_data_record is record
+    mu : bx_muon_objects_array;
+    eg : bx_eg_objects_array;
+    jet : bx_jet_objects_array;
+    tau : bx_tau_objects_array;
+    ett : bx_esums_array;
+    htt : bx_esums_array;
+    etm : bx_esums_array;
+    htm : bx_esums_array;
+    ettem : bx_esums_array;
+    etmhf : bx_esums_array;
+    htmhf : bx_esums_array;
+    mbt1hfp : bx_esums_array;
+    mbt1hfm : bx_esums_array;
+    mbt0hfp : bx_esums_array;
+    mbt0hfm : bx_esums_array;
+    asymet : bx_esums_array;
+    asymht : bx_esums_array;
+    asymethf : bx_esums_array;
+    asymhthf : bx_esums_array;
+    towercount : bx_towercount_array;
+    cent0 : bx_cent_array;
+    cent1 : bx_cent_array;
+    cent2 : bx_cent_array;
+    cent3 : bx_cent_array;
+    cent4 : bx_cent_array;
+    cent5 : bx_cent_array;
+    cent6 : bx_cent_array;
+    cent7 : bx_cent_array;
+    ext_cond : bx_ext_cond_array;
+end record bx_data_record;
 
 -- ==== Correlations - begin ============================================================
 -- ********************************************************

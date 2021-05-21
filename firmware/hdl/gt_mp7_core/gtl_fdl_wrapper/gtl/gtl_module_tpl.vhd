@@ -48,28 +48,7 @@ use work.gtl_pkg.all;
 entity gtl_module is
     port(
         lhc_clk : in std_logic;
-        eg_data : in calo_objects_array(0 to NR_EG_OBJECTS-1);
-        jet_data : in calo_objects_array(0 to NR_JET_OBJECTS-1);
-        tau_data : in calo_objects_array(0 to NR_TAU_OBJECTS-1);
-        ett_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        ht_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        etm_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        htm_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        mbt1hfp_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        mbt1hfm_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        mbt0hfp_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        mbt0hfm_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        ettem_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        etmhf_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        htmhf_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        towercount_data : in std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
-        asymet_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        asymht_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        asymethf_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        asymhthf_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        centrality_data : in std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
-        muon_data : in muon_objects_array(0 to NR_MUON_OBJECTS-1);
-        external_conditions : in std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
+        gtl_data : in gtl_data_record;
         algo_o : out std_logic_vector(NR_ALGOS-1 downto 0));
 end gtl_module;
 
@@ -82,35 +61,7 @@ architecture rtl of gtl_module is
     );
     END COMPONENT;
 
-    signal mu : bx_muon_objects_array;
-    signal eg : bx_eg_objects_array;
-    signal jet : bx_jet_objects_array;
-    signal tau : bx_tau_objects_array;
-    signal ett : bx_esums_array;
-    signal htt : bx_esums_array;
-    signal etm : bx_esums_array;
-    signal htm : bx_esums_array;
-    signal mbt1hfp : bx_esums_array;
-    signal mbt1hfm : bx_esums_array;
-    signal mbt0hfp : bx_esums_array;
-    signal mbt0hfm : bx_esums_array;
-    signal ettem : bx_esums_array;
-    signal etmhf : bx_esums_array;
-    signal htmhf : bx_esums_array;
-    signal towercount : bx_towercount_array;
-    signal asymet : bx_esums_array;
-    signal asymht : bx_esums_array;
-    signal asymethf : bx_esums_array;
-    signal asymhthf : bx_esums_array;
-    signal cent0 : bx_cent_array;
-    signal cent1 : bx_cent_array;
-    signal cent2 : bx_cent_array;
-    signal cent3 : bx_cent_array;
-    signal cent4 : bx_cent_array;
-    signal cent5 : bx_cent_array;
-    signal cent6 : bx_cent_array;
-    signal cent7 : bx_cent_array;
-    signal ext_cond : bx_ext_cond_array;
+    signal bx_data : bx_data_record;
 
     signal algo : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
 
@@ -121,20 +72,8 @@ begin
 bx_pipeline_i: entity work.bx_pipeline
     port map(
         lhc_clk,
-        muon_data, eg_data, jet_data, tau_data,
-        ett_data, ht_data, etm_data, htm_data,
-        ettem_data, etmhf_data, htmhf_data,
-        mbt1hfp_data, mbt1hfm_data, mbt0hfp_data, mbt0hfm_data,
-        asymet_data, asymht_data, asymethf_data, asymhthf_data,
-        towercount_data, centrality_data, external_conditions,
-        mu, eg, jet, tau,
-        ett, htt, etm, htm,
-        ettem, etmhf, htmhf,
-        mbt1hfp, mbt1hfm, mbt0hfp, mbt0hfm,
-        asymet, asymht, asymethf, asymhthf,
-        towercount,
-        cent0, cent1, cent2, cent3, cent4, cent5, cent6, cent7,
-        ext_cond
+        gtl_data,
+        bx_data
     );
 
 {{gtl_module_instances}}

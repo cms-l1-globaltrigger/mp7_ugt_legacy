@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.15.0] - 2021-05-18
+## [v1.15.0] - 2021-05-21
 ### Comment
 
 - mp7_ugt firmware release v1.15.0
@@ -13,12 +13,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - changed python scripts for fdl_pkg_tpl.vhd
 - extracted luts from gtl_pkg.vhd to gtl_luts_pkg.vhd
 - removed D_S_I types
+- added files for bx arrays
 
 ### Added
 - source files:
   - ../fdl/fdl_pkg_tpl.vhd
   - ../gtl/gtl_pkg.vhd
   - ../gtl/gtl_luts_pkg.vhd
+  - ../gtl/bx_pipeline.vhd
+  - ../gtl/common/delay_pipeline.vhd
 
 ### Changed
 - source files for inserting "fdl_pkg use clause" and removing D_S_I types

@@ -2,7 +2,7 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
--- HB 2021-05-18: v1.15.0: Added fdl_pkg use clause.
+-- HB 2021-05-21: v1.15.0: Added fdl_pkg use clause. Added bx_pipeline for simplifiing code.
 -- HB 2021-05-05: v1.14.1: Bug fixed in sum_mass.vhd (comparison for mass 3 body).
 -- HB 2021-04-16: v1.14.0: Added modules for correlation cuts calculations outside of conditions (correlation_cuts_calculation.vhd). Renamed files (differences.vhd => deta_dphi_calculations.vhd, ...). Added new modules for all and-or matrix instantiations (matrix_corr_cond.vhd, matrix_calo_cond.vhd, ...).
 -- HB 2021-02-18: v1.13.0: Changed directory structure in gtl (created sub dir "common" for modules, which are not instantiated in gtl_module.vhd). Added new modules: conv_eta_phi.vhd, obj_parameter.vhd, differences.vhd and cosh_deta_cos_dphi.vhd. Cleaned up comments.
@@ -117,38 +117,6 @@ architecture rtl of gtl_module is
 {{gtl_module_signals}}
 
 begin
-
--- pipelines_i: entity work.pipelines
---     port map(
---         lhc_clk,
---         muon_data, mu_bx_p2, mu_bx_p1, mu_bx_0, mu_bx_m1, mu_bx_m2,
---         eg_data, eg_bx_p2, eg_bx_p1, eg_bx_0, eg_bx_m1, eg_bx_m2,
---         jet_data, jet_bx_p2, jet_bx_p1, jet_bx_0, jet_bx_m1, jet_bx_m2,
---         tau_data, tau_bx_p2, tau_bx_p1, tau_bx_0, tau_bx_m1, tau_bx_m2,
---         ett_data, ett_bx_p2, ett_bx_p1, ett_bx_0, ett_bx_m1, ett_bx_m2,
---         ht_data, htt_bx_p2, htt_bx_p1, htt_bx_0, htt_bx_m1, htt_bx_m2,
---         etm_data, etm_bx_p2, etm_bx_p1, etm_bx_0, etm_bx_m1, etm_bx_m2,
---         htm_data, htm_bx_p2, htm_bx_p1, htm_bx_0, htm_bx_m1, htm_bx_m2,
---         mbt1hfp_data, mbt1hfp_bx_p2, mbt1hfp_bx_p1, mbt1hfp_bx_0, mbt1hfp_bx_m1, mbt1hfp_bx_m2,
---         mbt1hfm_data, mbt1hfm_bx_p2, mbt1hfm_bx_p1, mbt1hfm_bx_0, mbt1hfm_bx_m1, mbt1hfm_bx_m2,
---         mbt0hfp_data, mbt0hfp_bx_p2, mbt0hfp_bx_p1, mbt0hfp_bx_0, mbt0hfp_bx_m1, mbt0hfp_bx_m2,
---         mbt0hfm_data, mbt0hfm_bx_p2, mbt0hfm_bx_p1, mbt0hfm_bx_0, mbt0hfm_bx_m1, mbt0hfm_bx_m2,
---         ettem_data, ettem_bx_p2, ettem_bx_p1, ettem_bx_0, ettem_bx_m1, ettem_bx_m2,
---         etmhf_data, etmhf_bx_p2, etmhf_bx_p1, etmhf_bx_0, etmhf_bx_m1, etmhf_bx_m2,
---         htmhf_data, htmhf_bx_p2, htmhf_bx_p1, htmhf_bx_0, htmhf_bx_m1, htmhf_bx_m2,
---         towercount_data, towercount_bx_p2, towercount_bx_p1, towercount_bx_0, towercount_bx_m1, towercount_bx_m2,
---         asymet_data, asymet_bx_p2, asymet_bx_p1, asymet_bx_0, asymet_bx_m1, asymet_bx_m2,
---         asymht_data, asymht_bx_p2, asymht_bx_p1, asymht_bx_0, asymht_bx_m1, asymht_bx_m2,
---         asymethf_data, asymethf_bx_p2, asymethf_bx_p1, asymethf_bx_0, asymethf_bx_m1, asymethf_bx_m2,
---         asymhthf_data, asymhthf_bx_p2, asymhthf_bx_p1, asymhthf_bx_0, asymhthf_bx_m1, asymhthf_bx_m2,
---         centrality_data,
---         cent0_bx_p2, cent1_bx_p2, cent2_bx_p2, cent3_bx_p2, cent4_bx_p2, cent5_bx_p2, cent6_bx_p2, cent7_bx_p2,
---         cent0_bx_p1, cent1_bx_p1, cent2_bx_p1, cent3_bx_p1, cent4_bx_p1, cent5_bx_p1, cent6_bx_p1, cent7_bx_p1,
---         cent0_bx_0, cent1_bx_0, cent2_bx_0, cent3_bx_0, cent4_bx_0, cent5_bx_0, cent6_bx_0, cent7_bx_0,
---         cent0_bx_m1, cent1_bx_m1, cent2_bx_m1, cent3_bx_m1, cent4_bx_m1, cent5_bx_m1, cent6_bx_m1, cent7_bx_m1,
---         cent0_bx_m2, cent1_bx_m2, cent2_bx_m2, cent3_bx_m2, cent4_bx_m2, cent5_bx_m2, cent6_bx_m2, cent7_bx_m2,
---         external_conditions, ext_cond_bx_p2, ext_cond_bx_p1, ext_cond_bx_0, ext_cond_bx_m1, ext_cond_bx_m2
---     );
 
 bx_pipeline_i: entity work.bx_pipeline
     port map(

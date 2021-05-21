@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2021-05-21: added constants for bx arrays.
 -- HB 2021-05-18: moved LUTs to gtl_luts_pkg.vhd. Removed D_S_I types.
 -- HB 2021-05-14: moved "ugt_constants" replacement to fdl_pkg_tpl.vhd. New file name.
 -- HB 2021-04-23: cleaned up types, constants and comments.

@@ -71,6 +71,7 @@ src gt_mp7_core/gtl/common/correlation_cut_comp.vhd
 src gt_mp7_core/gtl/common/correlation_cuts_wrapper.vhd
 #
 ### modules of instances in gtl_module.vhd
+src gt_mp7_core/gtl/bx_pipeline.vhd
 src gt_mp7_core/gtl/pipelines.vhd
 src gt_mp7_core/gtl/conv_eta_phi.vhd
 src gt_mp7_core/gtl/obj_parameter.vhd

@@ -3,82 +3,85 @@
 ?toolset=="Vivado"? src ../ucf/mp7_payload.tcl
 
 #
-src lhc_data_pkg.vhd
-src math_pkg.vhd
-src gt_mp7_top_pkg.vhd
+## GT packages
+src packages/lhc_data_pkg.vhd
+src packages/math_pkg.vhd
+src packages/gt_mp7_top_pkg.vhd
+src packages/gt_mp7_core_pkg.vhd
+src packages/gt_mp7_core_addr_decode.vhd
 
 ## HB 2019-04-24: gtl_module.vhd, fdl_pkg.vhd and algo_mapping_rop.vhd added via tcl script for every module in top.dep
 
 #
 ## FDL modules
-src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_addr_decode.vhd
-src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_module.vhd
-src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_rate_counter.vhd
-src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_post_dead_time_counter.vhd
-src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_fabric.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_pkg_prescale_float.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/fdl/fdl_pkg_prescale_num_denom.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler_fractional_pkg.vhd
-src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler_fractional_float.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler_fractional_num_denom.vhd
-#src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_pre_scaler_fractional.vhd
-src gt_mp7_core/gtl_fdl_wrapper/fdl/update_process.vhd
-src gt_mp7_core/gtl_fdl_wrapper/fdl/pulse_converter.vhd
-src gt_mp7_core/gtl_fdl_wrapper/fdl/algo_slice.vhd
+src gt_mp7_core/fdl/fdl_addr_decode.vhd
+src gt_mp7_core/fdl/fdl_module.vhd
+src gt_mp7_core/fdl/algo_rate_counter.vhd
+src gt_mp7_core/fdl/algo_post_dead_time_counter.vhd
+src gt_mp7_core/fdl/fdl_fabric.vhd
+#src gt_mp7_core/fdl/algo_pre_scaler.vhd
+#src gt_mp7_core/fdl/fdl_pkg_prescale_float.vhd
+#src gt_mp7_core/fdl/fdl_pkg_prescale_num_denom.vhd
+#src gt_mp7_core/fdl/algo_pre_scaler_fractional_pkg.vhd
+src gt_mp7_core/fdl/algo_pre_scaler_fractional_float.vhd
+#src gt_mp7_core/fdl/algo_pre_scaler_fractional_num_denom.vhd
+#src gt_mp7_core/fdl/algo_pre_scaler_fractional.vhd
+src gt_mp7_core/fdl/update_process.vhd
+src gt_mp7_core/fdl/pulse_converter.vhd
+src gt_mp7_core/fdl/algo_slice.vhd
 #
 ## GTL modules
 ### common modules
-src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_luts_pkg.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/centrality_pipeline.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/ext_cond_pipeline.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/p_m_2_bx_pipeline.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/pt_comp.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/upt_comp.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/lut_comp.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/charge_comp.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/eta_comp_signed.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/eta_windows_comp.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/phi_windows_comp.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/calo_comparators.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/matrix_calo_cond.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/matrix_calo_cond_orm.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/calo_obj_cuts.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/matrix_muon_charge_corr.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/muon_comparators.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/matrix_muon_cond.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/muon_obj_cuts.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/esums_comparators.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/deta_calc.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/dphi_calc.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/deta_cosh_deta_luts.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/dphi_cos_dphi_luts.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/dr_calc.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/mass_calc.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/sum_mass_calc.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/sum_mass.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/mass_over_dr_calc.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/tbpt_calc.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/orm_cuts.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/esums_4_corr_cond.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/matrix_corr_cond.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/charge_correlation_comp.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/correlation_cut_comp.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/common/correlation_cuts_wrapper.vhd
+src gt_mp7_core/gtl/gtl_pkg.vhd
+src gt_mp7_core/gtl/gtl_luts_pkg.vhd
+src gt_mp7_core/gtl/common/centrality_pipeline.vhd
+src gt_mp7_core/gtl/common/ext_cond_pipeline.vhd
+src gt_mp7_core/gtl/common/p_m_2_bx_pipeline.vhd
+src gt_mp7_core/gtl/common/pt_comp.vhd
+src gt_mp7_core/gtl/common/upt_comp.vhd
+src gt_mp7_core/gtl/common/lut_comp.vhd
+src gt_mp7_core/gtl/common/charge_comp.vhd
+src gt_mp7_core/gtl/common/eta_comp_signed.vhd
+src gt_mp7_core/gtl/common/eta_windows_comp.vhd
+src gt_mp7_core/gtl/common/phi_windows_comp.vhd
+src gt_mp7_core/gtl/common/calo_comparators.vhd
+src gt_mp7_core/gtl/common/matrix_calo_cond.vhd
+src gt_mp7_core/gtl/common/matrix_calo_cond_orm.vhd
+src gt_mp7_core/gtl/common/calo_obj_cuts.vhd
+src gt_mp7_core/gtl/common/matrix_muon_charge_corr.vhd
+src gt_mp7_core/gtl/common/muon_comparators.vhd
+src gt_mp7_core/gtl/common/matrix_muon_cond.vhd
+src gt_mp7_core/gtl/common/muon_obj_cuts.vhd
+src gt_mp7_core/gtl/common/esums_comparators.vhd
+src gt_mp7_core/gtl/common/deta_calc.vhd
+src gt_mp7_core/gtl/common/dphi_calc.vhd
+src gt_mp7_core/gtl/common/deta_cosh_deta_luts.vhd
+src gt_mp7_core/gtl/common/dphi_cos_dphi_luts.vhd
+src gt_mp7_core/gtl/common/dr_calc.vhd
+src gt_mp7_core/gtl/common/mass_calc.vhd
+src gt_mp7_core/gtl/common/sum_mass_calc.vhd
+src gt_mp7_core/gtl/common/sum_mass.vhd
+src gt_mp7_core/gtl/common/mass_over_dr_calc.vhd
+src gt_mp7_core/gtl/common/tbpt_calc.vhd
+src gt_mp7_core/gtl/common/orm_cuts.vhd
+src gt_mp7_core/gtl/common/esums_4_corr_cond.vhd
+src gt_mp7_core/gtl/common/matrix_corr_cond.vhd
+src gt_mp7_core/gtl/common/charge_correlation_comp.vhd
+src gt_mp7_core/gtl/common/correlation_cut_comp.vhd
+src gt_mp7_core/gtl/common/correlation_cuts_wrapper.vhd
 #
 ### modules of instances in gtl_module.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/pipelines.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/conv_eta_phi.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/obj_parameter.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/deta_dphi_calculations.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/comb_conditions.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/min_bias_hf_conditions.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/towercount_condition.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/correlation_cuts_calculation.vhd
-src gt_mp7_core/gtl_fdl_wrapper/gtl/correlation_conditions.vhd
+src gt_mp7_core/gtl/pipelines.vhd
+src gt_mp7_core/gtl/conv_eta_phi.vhd
+src gt_mp7_core/gtl/obj_parameter.vhd
+src gt_mp7_core/gtl/muon_charge_correlations.vhd
+src gt_mp7_core/gtl/deta_dphi_calculations.vhd
+src gt_mp7_core/gtl/comb_conditions.vhd
+src gt_mp7_core/gtl/esums_conditions.vhd
+src gt_mp7_core/gtl/min_bias_hf_conditions.vhd
+src gt_mp7_core/gtl/towercount_condition.vhd
+src gt_mp7_core/gtl/correlation_cuts_calculation.vhd
+src gt_mp7_core/gtl/correlation_conditions.vhd
 #
 ### modules of BRAMs used for mass over DeltaR
 src ../ngc/rom_lut_calo_inv_dr_sq_1/rom_lut_calo_inv_dr_sq_1.xci
@@ -90,7 +93,7 @@ src ../ngc/rom_lut_calo_inv_dr_sq_6/rom_lut_calo_inv_dr_sq_6.xci
 src ../ngc/rom_lut_calo_inv_dr_sq_7/rom_lut_calo_inv_dr_sq_7.xci
 src ../ngc/rom_lut_calo_inv_dr_sq_8/rom_lut_calo_inv_dr_sq_8.xci
 src ../ngc/rom_lut_calo_inv_dr_sq_9/rom_lut_calo_inv_dr_sq_9.xci
-src gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_calo_inv_dr_sq_all.vhd
+src gt_mp7_core/gtl/rom_lut_calo_inv_dr_sq_all.vhd
 src ../ngc/rom_lut_muon_inv_dr_sq_1/rom_lut_muon_inv_dr_sq_1.xci
 src ../ngc/rom_lut_muon_inv_dr_sq_2/rom_lut_muon_inv_dr_sq_2.xci
 src ../ngc/rom_lut_muon_inv_dr_sq_3/rom_lut_muon_inv_dr_sq_3.xci
@@ -100,7 +103,7 @@ src ../ngc/rom_lut_muon_inv_dr_sq_6/rom_lut_muon_inv_dr_sq_6.xci
 src ../ngc/rom_lut_muon_inv_dr_sq_7/rom_lut_muon_inv_dr_sq_7.xci
 src ../ngc/rom_lut_muon_inv_dr_sq_8/rom_lut_muon_inv_dr_sq_8.xci
 src ../ngc/rom_lut_muon_inv_dr_sq_9/rom_lut_muon_inv_dr_sq_9.xci
-src gt_mp7_core/gtl_fdl_wrapper/gtl/rom_lut_muon_inv_dr_sq_all.vhd
+src gt_mp7_core/gtl/rom_lut_muon_inv_dr_sq_all.vhd
 #
 ## FRAME modules
 src gt_mp7_core/frame/demux_lane/demux_lane_data.vhd
@@ -130,9 +133,7 @@ src -c components/mp7_ttc mp7_ttc_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd
 #
 ## top modules
-src gt_mp7_core/gtl_fdl_wrapper/gtl_fdl_wrapper.vhd
-src gt_mp7_core/gt_mp7_core_pkg.vhd
-src gt_mp7_core/gt_mp7_core_addr_decode.vhd
+src gt_mp7_core/gtl_fdl_wrapper.vhd
 src bgo_sync.vhd
 src mp7_payload.vhd
 

@@ -52,9 +52,9 @@ vcom -93 -work work $HDL_DIR/packages/gt_mp7_core_pkg_sim.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/gtl_pkg.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/gtl_luts_pkg.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/delay_pipeline.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/centrality_pipeline.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/ext_cond_pipeline.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/p_m_2_bx_pipeline.vhd
+#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/centrality_pipeline.vhd
+#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/ext_cond_pipeline.vhd
+#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/p_m_2_bx_pipeline.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/pt_comp.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/upt_comp.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/lut_comp.vhd
@@ -90,7 +90,7 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/esums_4_corr_cond.vhd
 #
 ### modules of instances in gtl_module.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/bx_pipeline.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/pipelines.vhd
+#vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/pipelines.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/muon_charge_correlations.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/conv_eta_phi.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/obj_parameter.vhd
@@ -121,29 +121,23 @@ vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_6/synth/rom_lut_muon_inv_dr_
 vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_7/synth/rom_lut_muon_inv_dr_sq_7.vhd
 vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_8/synth/rom_lut_muon_inv_dr_sq_8.vhd
 vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_9/synth/rom_lut_muon_inv_dr_sq_9.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/rom_lut_calo_inv_dr_sq_all.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/rom_lut_muon_inv_dr_sq_all.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/rom_lut_calo_inv_dr_sq_all.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd
 #
 ## FRAME modules
 vcom -93 -work work $HDL_DIR/gt_mp7_core/frame/dm/delay_element.vhd
 #
 ## FDL modules
 vcom -93 -work work $MENU_DIR/fdl_pkg.vhd
+vcom -93 -work work $MENU_DIR/algo_mapping_rop.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/update_process.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/pulse_converter.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/fdl_addr_decode.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/fdl_fabric.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/algo_pre_scaler.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/fdl_pkg_prescale_float.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/fdl_pkg_prescale_num_denom.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/algo_pre_scaler_fractional_pkg.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/algo_pre_scaler_fractional.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/algo_pre_scaler_fractional_float.vhd
-#vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/algo_pre_scaler_fractional_num_denom.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/algo_rate_counter.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/algo_post_dead_time_counter.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/algo_slice.vhd
-vcom -93 -work work $MENU_DIR/algo_mapping_rop.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/fdl_module.vhd
 #
 ## IPBus modules

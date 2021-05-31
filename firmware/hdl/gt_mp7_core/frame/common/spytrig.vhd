@@ -4,7 +4,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 use work.gt_mp7_core_pkg.all;
-use work.rb_pkg.all;
+use work.frame_rb_pkg.all;
 
 use work.math_pkg.all;
 

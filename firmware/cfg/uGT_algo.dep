@@ -9,12 +9,16 @@ src packages/math_pkg.vhd
 src packages/gt_mp7_top_pkg.vhd
 src packages/gt_mp7_core_pkg.vhd
 src packages/gt_mp7_core_addr_decode.vhd
+src packages/frame_addr_decode.vhd
+src packages/frame_rb_pkg.vhd
+src packages/fdl_addr_decode.vhd
+src packages/gtl_pkg.vhd
+src packages/gtl_luts_pkg.vhd
 
 ## HB 2019-04-24: gtl_module.vhd, fdl_pkg.vhd and algo_mapping_rop.vhd added via tcl script for every module in top.dep
 
 #
 ## FDL modules
-src gt_mp7_core/fdl/fdl_addr_decode.vhd
 src gt_mp7_core/fdl/fdl_module.vhd
 src gt_mp7_core/fdl/common/algo_rate_counter.vhd
 src gt_mp7_core/fdl/common/algo_post_dead_time_counter.vhd
@@ -25,8 +29,6 @@ src gt_mp7_core/fdl/common/algo_slice.vhd
 #
 ## GTL modules
 ### common modules
-src gt_mp7_core/gtl/gtl_pkg.vhd
-src gt_mp7_core/gtl/gtl_luts_pkg.vhd
 src gt_mp7_core/gtl/common/delay_pipeline.vhd
 src gt_mp7_core/gtl/common/pt_comp.vhd
 src gt_mp7_core/gtl/common/upt_comp.vhd
@@ -97,19 +99,17 @@ src ../ngc/rom_lut_muon_inv_dr_sq_9/rom_lut_muon_inv_dr_sq_9.xci
 src gt_mp7_core/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd
 #
 ## FRAME modules
-src gt_mp7_core/frame/demux_lane/demux_lane_data.vhd
+src gt_mp7_core/frame/common/demux_lane_data.vhd
+src gt_mp7_core/frame/common/rb.vhd
+src gt_mp7_core/frame/common/tcm.vhd
+src gt_mp7_core/frame/common/spytrig.vhd
+src gt_mp7_core/frame/common/lmp.vhd
+src gt_mp7_core/frame/common/delay_element.vhd
+src gt_mp7_core/frame/common/mux.vhd
+src gt_mp7_core/frame/common/output_mux.vhd
+src gt_mp7_core/frame/common/frame_fabric.vhd
+src gt_mp7_core/frame/common/frame_module_info.vhd
 src gt_mp7_core/frame/frame.vhd
-src gt_mp7_core/frame/rb/rb_pkg.vhd
-src gt_mp7_core/frame/rb/rb.vhd
-src gt_mp7_core/frame/tcm/tcm.vhd
-src gt_mp7_core/frame/mem/spytrig.vhd
-src gt_mp7_core/frame/frame_fabric.vhd
-src gt_mp7_core/frame/frame_addr_decode.vhd
-src gt_mp7_core/frame/lmp/lmp.vhd
-src gt_mp7_core/frame/frame_module_info.vhd
-src gt_mp7_core/frame/dm/delay_element.vhd
-src gt_mp7_core/frame/output_mux/mux.vhd
-src gt_mp7_core/frame/output_mux/output_mux.vhd
 #
 ## IPBus modules
 src ipbus/slaves/ipb_write_regs.vhd

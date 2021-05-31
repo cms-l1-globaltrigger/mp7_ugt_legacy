@@ -39,7 +39,7 @@ use work.mp7_data_types.all;
 use work.lhc_data_pkg.all;
 use work.frame_addr_decode.all;
 use work.gt_mp7_core_pkg.all;
-use work.rb_pkg.all;
+use work.frame_rb_pkg.all;
 use work.mp7_ttc_decl.all;
 
 entity frame is

@@ -100,10 +100,11 @@ def replace_vhdl_templates(vhdl_snippets_dir, src_fw_dir, dest_fw_dir):
     gtl_fdl_wrapper_dir = os.path.join(src_fw_dir, 'hdl', 'gt_mp7_core')
     gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
     fdl_dir = os.path.join(gtl_fdl_wrapper_dir, 'fdl')
+    pkg_dir = os.path.join(src_fw_dir, 'hdl', 'packages')
 
     #Patch VHDL files in IPBB area (
-    tb.template_replace(os.path.join(fdl_dir, 'algo_mapping_rop_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'algo_mapping_rop.vhd'))
-    tb.template_replace(os.path.join(fdl_dir, 'fdl_pkg_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'fdl_pkg.vhd'))
+    tb.template_replace(os.path.join(fdl_dir, 'common', 'algo_mapping_rop_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'algo_mapping_rop.vhd'))
+    tb.template_replace(os.path.join(pkg_dir, 'fdl_pkg_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'fdl_pkg.vhd'))
     tb.template_replace(os.path.join(gtl_dir, 'gtl_module_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'gtl_module.vhd'))
 
 def parse_args():

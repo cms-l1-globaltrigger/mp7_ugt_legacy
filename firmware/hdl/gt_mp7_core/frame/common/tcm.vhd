@@ -15,7 +15,7 @@ use IEEE.numeric_std.all;
 
 library work;
 use work.gt_mp7_core_pkg.all;
-use work.rb_pkg.all;
+use work.frame_rb_pkg.all;
 use work.mp7_ttc_decl.all;
 
 entity tcm is

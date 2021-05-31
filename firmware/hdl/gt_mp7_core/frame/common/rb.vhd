@@ -11,7 +11,7 @@ use work.ipbus.all;
 use work.ipbus_reg_types.all;
 use work.gt_mp7_core_pkg.all;
 use work.math_pkg.all;
-use work.rb_pkg.all;
+use work.frame_rb_pkg.all;
 
 entity rb is
     port
@@ -38,7 +38,7 @@ architecture arch of rb is
     constant OFFSET_SPYTRIGGER_ORBIT_NR_L : std_logic_vector(rb_addr_width-1 downto 0) := "00000";
     constant OFFSET_SPYTRIGGER_ORBIT_NR_H : std_logic_vector(rb_addr_width-1 downto 0) := "00001";
     constant OFFSET_SPYTRIGGER_CONTROL : std_logic_vector(rb_addr_width-1 downto 0) := "00010";
-    
+
 --     constant OFFSET_SW_RESET_RESET_EVENT : std_logic_vector(rb_addr_width-1 downto 0) := "00011";
 
     constant OFFSET_TCM_CMDIGNBCRES : std_logic_vector(rb_addr_width-1 downto 0) := "00100";
@@ -62,7 +62,7 @@ architecture arch of rb is
     constant OFFSET_TCM_STATUS_ERR_DET : std_logic_vector(rb_addr_width-1 downto 0) := "01010";
     constant OFFSET_TCM_STATUS_BX_NR_D_FDL : std_logic_vector(rb_addr_width-1 downto 0) := "01011";
     constant OFFSET_TCM_LUMINOSITY_SEG_NR : std_logic_vector(rb_addr_width-1 downto 0) := "01100";
-    
+
     constant nr_stat_reg : natural := 13;
     constant nr_ctrl_reg : natural := 2 ** (rb_addr_width-1);
 

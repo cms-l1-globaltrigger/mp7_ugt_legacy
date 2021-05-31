@@ -8,7 +8,7 @@ library work;
 use work.ipbus.all;
 use work.gt_mp7_core_pkg.all;
 
-package rb_pkg is
+package frame_rb_pkg is
 
 type sw_reg_spytrigger_in_t is record
     orbit_nr                      : orbit_nr_t;

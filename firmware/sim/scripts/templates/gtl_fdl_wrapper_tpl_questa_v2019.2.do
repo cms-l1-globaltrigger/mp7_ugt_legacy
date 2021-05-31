@@ -46,11 +46,13 @@ vcom -93 -work work $HDL_DIR/packages/lhc_data_pkg.vhd
 vcom -93 -work work $HDL_DIR/packages/math_pkg.vhd
 ## HB 2016-12-05: used gt_mp7_core_pkg_sim.vhd for simulation without other MP7 packages
 vcom -93 -work work $HDL_DIR/packages/gt_mp7_core_pkg_sim.vhd
+vcom -93 -work work $MENU_DIR/fdl_pkg.vhd
+vcom -93 -work work $HDL_DIR/packages/fdl_addr_decode.vhd
+vcom -93 -work work $HDL_DIR/packages/gtl_pkg.vhd
+vcom -93 -work work $HDL_DIR/packages/gtl_luts_pkg.vhd
 #
 ## GTL modules
 ### common modules
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/gtl_pkg.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/gtl_luts_pkg.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/delay_pipeline.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/pt_comp.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/upt_comp.vhd
@@ -121,12 +123,10 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/rom_lut_calo_inv_dr_sq_all.v
 vcom -93 -work work $HDL_DIR/gt_mp7_core/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd
 #
 ## FRAME modules
-vcom -93 -work work $HDL_DIR/gt_mp7_core/frame/dm/delay_element.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/frame/common/delay_element.vhd
 #
 ## FDL modules
-vcom -93 -work work $MENU_DIR/fdl_pkg.vhd
 vcom -93 -work work $MENU_DIR/algo_mapping_rop.vhd
-vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/fdl_addr_decode.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/common/update_process.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/common/fdl_fabric.vhd
 vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/common/algo_pre_scaler_fractional_float.vhd

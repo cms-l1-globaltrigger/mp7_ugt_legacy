@@ -29,14 +29,12 @@ begin
 --===============================================================================================--
 -- Module Info
     module_info_i: entity work.ipb_read_regs
-    generic map
-    (
+    generic map(
         addr_width => C_MODINFO_REGS_ADDR_WIDTH,
         regs_beg_index => C_MODINFO_REGS_BEGIN_INDEX,
         regs_end_index => C_MODINFO_REGS_END_INDEX
     )
-    port map
-    (
+    port map(
         clk => ipb_clk,
         reset => ipb_rst,
         ipbus_in => ipb_in,

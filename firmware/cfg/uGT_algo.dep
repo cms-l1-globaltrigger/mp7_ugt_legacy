@@ -16,22 +16,18 @@ src packages/gt_mp7_core_addr_decode.vhd
 ## FDL modules
 src gt_mp7_core/fdl/fdl_addr_decode.vhd
 src gt_mp7_core/fdl/fdl_module.vhd
-src gt_mp7_core/fdl/algo_rate_counter.vhd
-src gt_mp7_core/fdl/algo_post_dead_time_counter.vhd
-src gt_mp7_core/fdl/fdl_fabric.vhd
-src gt_mp7_core/fdl/algo_pre_scaler_fractional_float.vhd
-src gt_mp7_core/fdl/update_process.vhd
-src gt_mp7_core/fdl/pulse_converter.vhd
-src gt_mp7_core/fdl/algo_slice.vhd
+src gt_mp7_core/fdl/common/algo_rate_counter.vhd
+src gt_mp7_core/fdl/common/algo_post_dead_time_counter.vhd
+src gt_mp7_core/fdl/common/fdl_fabric.vhd
+src gt_mp7_core/fdl/common/algo_pre_scaler_fractional_float.vhd
+src gt_mp7_core/fdl/common/update_process.vhd
+src gt_mp7_core/fdl/common/algo_slice.vhd
 #
 ## GTL modules
 ### common modules
 src gt_mp7_core/gtl/gtl_pkg.vhd
 src gt_mp7_core/gtl/gtl_luts_pkg.vhd
 src gt_mp7_core/gtl/common/delay_pipeline.vhd
-#src gt_mp7_core/gtl/common/centrality_pipeline.vhd
-#src gt_mp7_core/gtl/common/ext_cond_pipeline.vhd
-#src gt_mp7_core/gtl/common/p_m_2_bx_pipeline.vhd
 src gt_mp7_core/gtl/common/pt_comp.vhd
 src gt_mp7_core/gtl/common/upt_comp.vhd
 src gt_mp7_core/gtl/common/lut_comp.vhd
@@ -67,7 +63,6 @@ src gt_mp7_core/gtl/common/correlation_cuts_wrapper.vhd
 #
 ### modules of instances in gtl_module.vhd
 src gt_mp7_core/gtl/bx_pipeline.vhd
-#src gt_mp7_core/gtl/pipelines.vhd
 src gt_mp7_core/gtl/conv_eta_phi.vhd
 src gt_mp7_core/gtl/obj_parameter.vhd
 src gt_mp7_core/gtl/muon_charge_correlations.vhd

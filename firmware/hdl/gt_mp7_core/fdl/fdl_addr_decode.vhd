@@ -6,7 +6,6 @@ use work.ipbus.all;
 
 use work.math_pkg.all;
 use work.gt_mp7_core_pkg.all;
--- use work.gtl_pkg.all;
 use work.fdl_pkg.all;
 
 package fdl_addr_decode is

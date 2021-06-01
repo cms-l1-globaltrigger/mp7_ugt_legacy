@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.15.0] - 2021-05-21
+## [v1.15.0] - 2021-06-01
 ### Comment
 
 - mp7_ugt firmware release v1.15.0
@@ -35,22 +35,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../cfg/uGT_algo.dep
 - simulation file:
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
-
-## [v1.14.2] - 2021-05-11
-### Comment
-
-- mp7_ugt firmware release v1.14.2
-- unified correlation condition modules
-
-### Added
-- source files:
-  - ../gtl/correlation_conditions.vhd
-  - ../gtl/common/charge_correlation_comp.vhd
-
-### Removed
-- source file:
-  - ../gtl/correlation_conditions_calo.vhd
-  - ../gtl/correlation_conditions_muon.vhd
 
 ## [v1.14.1] - 2021-05-05
 ### Comment
@@ -166,6 +150,34 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../cfg/uGT_algo.dep
 - simulation files:
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
+
+## [v1.11.4] - 2021-05-20
+### Comment
+
+    mp7_ugt firmware release v1.11.4
+    added additional constants to gtl_pkg_tpl.vhd
+
+### Changed
+
+    source files:
+        ../gtl/gtl_pkg_tpl.vhd
+        ../gtl/gtl_module_tpl.vhd
+        ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
+
+
+## [v1.11.3] - 2021-04-29
+### Comment
+
+    mp7_ugt firmware release v1.11.3
+    bug fixed in calo_mass_3_obj_condition.vhd and muon_mass_3_obj_condition.vhd
+
+### Changed
+
+    source files:
+        ../gtl/calo_mass_3_obj_condition.vhd
+        ../gtl/muon_mass_3_obj_condition.vhd
+        ../gtl/gtl_module_tpl.vhd
+        ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
 
 ## [v1.11.2] - 2020-12-01
 ### Comment

@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - extracted luts from gtl_pkg.vhd to gtl_luts_pkg.vhd
 - removed D_S_I types
 - added files for bx arrays
+- changed structure of directories in "gt_mp7_core"
+- moved all package files to new directory "packages"
+- removed obsolete files
 
 ### Added
 - source files:

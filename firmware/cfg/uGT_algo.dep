@@ -112,10 +112,10 @@ src gt_mp7_core/frame/common/frame_module_info.vhd
 src gt_mp7_core/frame/frame.vhd
 #
 ## IPBus modules
-src ipbus/slaves/ipb_write_regs.vhd
-src ipbus/slaves/ipb_pulse_regs.vhd
-src ipbus/slaves/ipb_read_regs.vhd
-src ipbus/slaves/ipb_dpmem_4096_32.vhd
+src gt_mp7_core/ipbus/ipb_write_regs.vhd
+src gt_mp7_core/ipbus/ipb_pulse_regs.vhd
+src gt_mp7_core/ipbus/ipb_read_regs.vhd
+src gt_mp7_core/ipbus/ipb_dpmem_4096_32.vhd
 src ../ngc/dp_mem_4096x32/dp_mem_4096x32.ngc
 src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
 #

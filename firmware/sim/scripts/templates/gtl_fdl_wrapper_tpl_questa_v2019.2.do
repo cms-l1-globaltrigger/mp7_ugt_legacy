@@ -138,10 +138,10 @@ vcom -93 -work work $HDL_DIR/gt_mp7_core/fdl/fdl_module.vhd
 ## IPBus modules
 #vcom -93 -work work $NGC_DIR/dp_mem_4096x32/dp_mem_4096x32.vhd
 vcom -93 -work work $NGC_DIR/dp_mem_4096x32_blk_mem_gen_v8_4_2/synth/dp_mem_4096x32.vhd
-vcom -93 -work work $HDL_DIR/ipbus/slaves/ipb_dpmem_4096_32.vhd
-vcom -93 -work work $HDL_DIR/ipbus/slaves/ipb_read_regs.vhd
-vcom -93 -work work $HDL_DIR/ipbus/slaves/ipb_write_regs.vhd
-vcom -93 -work work $HDL_DIR/ipbus/slaves/ipb_pulse_regs.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/ipbus/ipb_dpmem_4096_32.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/ipbus/ipb_read_regs.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/ipbus/ipb_write_regs.vhd
+vcom -93 -work work $HDL_DIR/gt_mp7_core/ipbus/ipb_pulse_regs.vhd
 #
 ## top modules
 vcom -93 -work work $MENU_DIR/gtl_module.vhd

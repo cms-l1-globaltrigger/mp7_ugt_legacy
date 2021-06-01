@@ -124,7 +124,6 @@ src -c components/mp7_ttc mp7_ttc_decl.vhd
 src -c boards/mp7/base_fw/common mp7_top_decl.vhd
 #
 ## top modules
-src payload/gtl_fdl_wrapper.vhd
 src payload/bgo_sync.vhd
 src mp7_payload.vhd
 

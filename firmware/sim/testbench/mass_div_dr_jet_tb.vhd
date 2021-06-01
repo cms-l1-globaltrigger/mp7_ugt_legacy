@@ -30,24 +30,20 @@ architecture beh of mass_div_dr_jet_tb is
     signal jet_bx_0 : calo_objects_array(0 to NR_JET_OBJECTS-1) := (others => X"00000000");
 
     signal jet_bx_0_pt_vector: diff_inputs_array(0 to NR_JET_OBJECTS-1) := (others => (others => '0'));
-    signal jet_bx_0_eta_integer: diff_integer_inputs_array(0 to NR_JET_OBJECTS-1) := (others => 0);
-    signal jet_bx_0_phi_integer: diff_integer_inputs_array(0 to NR_JET_OBJECTS-1) := (others => 0);
-    signal jet_bx_0_cos_phi: sin_cos_integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
-    signal jet_bx_0_sin_phi: sin_cos_integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
-    signal jet_bx_0_conv_cos_phi: sin_cos_integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
-    signal jet_bx_0_conv_sin_phi: sin_cos_integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
-    signal jet_bx_0_eta_conv_2_muon_eta_integer: diff_integer_inputs_array(0 to NR_JET_OBJECTS-1) := (others => 0);
-    signal jet_bx_0_phi_conv_2_muon_phi_integer: diff_integer_inputs_array(0 to NR_JET_OBJECTS-1) := (others => 0);
+    signal jet_bx_0_eta_integer: integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
+    signal jet_bx_0_phi_integer: integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
+    signal jet_bx_0_cos_phi: integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
+    signal jet_bx_0_sin_phi: integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
+    signal jet_bx_0_conv_cos_phi: integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
+    signal jet_bx_0_conv_sin_phi: integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
+    signal jet_bx_0_eta_conv_2_muon_eta_integer: integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
+    signal jet_bx_0_phi_conv_2_muon_phi_integer: integer_array(0 to NR_JET_OBJECTS-1) := (others => 0);
 
     signal jet_jet_bx_0_bx_0_deta_integer: dim2_max_eta_range_array(0 to NR_JET_OBJECTS-1, 0 to NR_JET_OBJECTS-1) := (others => (others => 0));
     signal jet_jet_bx_0_bx_0_deta_vector: deta_dphi_vector_array(0 to NR_JET_OBJECTS-1, 0 to NR_JET_OBJECTS-1) := (others => (others => (others => '0')));
     signal jet_jet_bx_0_bx_0_dphi_integer: dim2_max_phi_range_array(0 to NR_JET_OBJECTS-1, 0 to NR_JET_OBJECTS-1) := (others => (others => 0));
     signal jet_jet_bx_0_bx_0_dphi_vector: deta_dphi_vector_array(0 to NR_JET_OBJECTS-1, 0 to NR_JET_OBJECTS-1) := (others => (others => (others => '0')));
-    signal jet_jet_bx_0_bx_0_cosh_deta_vector : common_cosh_cos_vector_array(0 to NR_JET_OBJECTS-1, 0 to NR_JET_OBJECTS-1) := (others => (others => (others => '0')));
-    signal jet_jet_bx_0_bx_0_cos_dphi_vector : common_cosh_cos_vector_array(0 to NR_JET_OBJECTS-1, 0 to NR_JET_OBJECTS-1) := (others => (others => (others => '0')));
-    signal jet_jet_bx_0_bx_0_deta_bin_vector : common_deta_bin_vector_array(0 to NR_JET_OBJECTS-1, 0 to NR_JET_OBJECTS-1) := (others => (others => (others => '0')));
-    signal jet_jet_bx_0_bx_0_dphi_bin_vector : common_dphi_bin_vector_array(0 to NR_JET_OBJECTS-1, 0 to NR_JET_OBJECTS-1) := (others => (others => (others => '0')));
-    signal jet_jet_bx_0_bx_0_mass_div_dr : mass_div_dr_vector_array(0 to NR_JET_OBJECTS-1, 0 to NR_JET_OBJECTS-1) := (others => (others => (others => '0')));
+    signal jet_jet_bx_0_bx_0_mass_over_dr : mass_div_dr_vector_array(0 to NR_JET_OBJECTS-1, 0 to NR_JET_OBJECTS-1) := (others => (others => (others => '0')));
 
 --*********************************Main Body of Code**********************************
 begin
@@ -90,7 +86,7 @@ begin
 
  ------------------- Instantiate  modules  -----------------
 
-jet_bx_0_parameter_i: entity work.obj_parameter
+obj_parameter_jet_bx_0_i: entity work.obj_parameter
     generic map(
         nr_obj => NR_JET_OBJECTS,
         type_obj => JET_TYPE
@@ -107,11 +103,8 @@ jet_bx_0_parameter_i: entity work.obj_parameter
         conv_sin_phi => jet_bx_0_conv_sin_phi
     );
 
-jet_jet_bx_0_bx_0_differences_i: entity work.differences
+deta_dphi_integer_jet_jet_bx_0_bx_0_i: entity work.deta_dphi_calculations
     generic map(
-        calo_calo_deta_lut => JET_JET_DIFF_ETA_LUT,
-        calo_calo_dphi_lut => JET_JET_DIFF_PHI_LUT,
-        phi_half_range => CALO_PHI_HALF_RANGE_BINS,
         nr_obj1 => NR_JET_OBJECTS,
         type_obj1 => JET_TYPE,
         nr_obj2 => NR_JET_OBJECTS,
@@ -123,67 +116,48 @@ jet_jet_bx_0_bx_0_differences_i: entity work.differences
         eta_integer_obj2 => jet_bx_0_eta_integer,
         phi_integer_obj2 => jet_bx_0_phi_integer,
         deta_integer => jet_jet_bx_0_bx_0_deta_integer,
-        deta_vector => jet_jet_bx_0_bx_0_deta_vector,
-        dphi_integer => jet_jet_bx_0_bx_0_dphi_integer,
-        dphi_vector => jet_jet_bx_0_bx_0_dphi_vector
+        dphi_integer => jet_jet_bx_0_bx_0_dphi_integer
     );
 
-jet_jet_bx_0_bx_0_cosh_deta_cos_dphi_i: entity work.cosh_deta_cos_dphi
+mass_over_dr_jet_jet_bx_0_bx_0_i: entity work.correlation_cuts_calculation
     generic map(
-        calo_calo_cosh_deta_lut => JET_JET_COSH_DETA_LUT,
-        calo_calo_cos_dphi_lut => JET_JET_COS_DPHI_LUT,
-        deta_bins_width => JET_JET_DETA_BINS_WIDTH,
-        dphi_bins_width => JET_JET_DPHI_BINS_WIDTH,
-        cosh_cos_vector_width => JET_JET_COSH_COS_VECTOR_WIDTH,
         nr_obj1 => NR_JET_OBJECTS,
         type_obj1 => JET_TYPE,
         nr_obj2 => NR_JET_OBJECTS,
-        type_obj2 => JET_TYPE
-    )
-    port map(
-        dphi_integer => jet_jet_bx_0_bx_0_dphi_integer,
-        deta_integer => jet_jet_bx_0_bx_0_deta_integer,
-        deta_bin_vector => jet_jet_bx_0_bx_0_deta_bin_vector,
-        dphi_bin_vector => jet_jet_bx_0_bx_0_dphi_bin_vector,
-        cosh_deta_vector => jet_jet_bx_0_bx_0_cosh_deta_vector,
-        cos_dphi_vector => jet_jet_bx_0_bx_0_cos_dphi_vector
-    );
-
-jet_jet_bx_0_bx_0_mass_div_dr_i: entity work.mass_div_dr
-    generic map(
-        NR_JET_OBJECTS,
-        NR_JET_OBJECTS,
-        JET_JET_ROM,
-        JET_JET_DETA_BINS_WIDTH_ROM,
-        JET_JET_DPHI_BINS_WIDTH_ROM,
-        JET_PT_VECTOR_WIDTH,
-        JET_PT_VECTOR_WIDTH,
-        JET_JET_COSH_COS_VECTOR_WIDTH,
-        JET_JET_INV_DR_SQ_VECTOR_WIDTH
+        type_obj2 => JET_TYPE,
+        pt1_width => JET_PT_VECTOR_WIDTH,
+        pt2_width => JET_PT_VECTOR_WIDTH,
+        cosh_cos_width => CALO_CALO_COSH_COS_VECTOR_WIDTH,
+        mass_over_dr_cut => true,
+        rom_sel => CALO_CALO_ROM,
+        deta_bins_width => CALO_DETA_BINS_WIDTH_ROM,
+        dphi_bins_width => CALO_DETA_BINS_WIDTH_ROM,
+        inverted_dr_sq_width => CALO_CALO_INV_DR_SQ_VECTOR_WIDTH
     )
     port map(
         lhc_clk,
-        jet_jet_bx_0_bx_0_deta_bin_vector,
-        jet_jet_bx_0_bx_0_dphi_bin_vector,
-        jet_bx_0_pt_vector,
-        jet_bx_0_pt_vector,
-        jet_jet_bx_0_bx_0_cosh_deta_vector,
-        jet_jet_bx_0_bx_0_cos_dphi_vector,
-        jet_jet_bx_0_bx_0_mass_div_dr
+        deta_integer => jet_jet_bx_0_bx_0_deta_integer,
+        dphi_integer => jet_jet_bx_0_bx_0_dphi_integer,
+        pt1 => jet_bx_0_pt_vector,
+        pt2 => jet_bx_0_pt_vector,
+        mass_over_dr => jet_jet_bx_0_bx_0_mass_over_dr
     );
 
-dut: entity work.correlation_conditions_calo
+dut: entity work.correlation_conditions
     generic map(
+-- slices for muon
+        slice_low_obj1 => 0,
+        slice_high_obj1 => 11,
+        slice_low_obj2 => 0,
+        slice_high_obj2 => 11,
 -- obj cuts
         pt_threshold_obj1 => X"0002",
         pt_threshold_obj2 => X"0002",
 -- correlation cuts
-        pt1_width => JET_PT_VECTOR_WIDTH,
-        pt2_width => JET_PT_VECTOR_WIDTH,
         mass_cut => true,
         mass_type => INVARIANT_MASS_DIV_DR_TYPE,
-        mass_div_dr_vector_width => JET_JET_MASS_DIV_DR_VECTOR_WIDTH,
-        mass_div_dr_threshold => X"00000000000000000C350",
+        mass_div_dr_vector_width => CALO_CALO_INV_DR_SQ_VECTOR_WIDTH,
+        mass_div_dr_threshold => X"00000000000002FAF0800",
 -- number of objects and type
         nr_obj1 => NR_JET_OBJECTS,
         type_obj1 => JET_TYPE,
@@ -194,9 +168,9 @@ dut: entity work.correlation_conditions_calo
     )
     port map(
         lhc_clk,
-        obj1 => jet_bx_0,
-        obj2 => jet_bx_0,
-        mass_div_dr => jet_jet_bx_0_bx_0_mass_div_dr,
+        calo_obj1 => jet_bx_0,
+        calo_obj2 => jet_bx_0,
+        mass_div_dr => jet_jet_bx_0_bx_0_mass_over_dr,
         condition_o => open
     );
 

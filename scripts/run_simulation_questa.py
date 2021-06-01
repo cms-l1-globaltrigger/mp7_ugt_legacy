@@ -219,14 +219,14 @@ class Module(object):#module class and nessesary information
             '{{gtl_module_instances}}': read_file(os.path.join(src_dir, 'gtl_module_instances.vhd')),
         }
 
-        gtl_fdl_wrapper_dir = os.path.join(uGTalgosPath, 'hdl', 'gt_mp7_core')
-        gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
+        gtl_fdl_wrapper_dir = os.path.join(uGTalgosPath, 'hdl', 'payload')
+        #gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
         fdl_dir = os.path.join(gtl_fdl_wrapper_dir, 'fdl')
         pkg_dir = os.path.join(uGTalgosPath, 'hdl', 'packages')
         # Patch VHDL files
-        render_template(os.path.join(fdl_dir, 'common', 'algo_mapping_rop_tpl.vhd'), '%s/vhdl/algo_mapping_rop.vhd' % self.path, replace_map)
+        render_template(os.path.join(fdl_dir, 'algo_mapping_rop_tpl.vhd'), '%s/vhdl/algo_mapping_rop.vhd' % self.path, replace_map)
         render_template(os.path.join(pkg_dir, 'fdl_pkg_tpl.vhd'), '%s/vhdl/fdl_pkg.vhd' % self.path, replace_map)
-        render_template(os.path.join(gtl_dir, 'gtl_module_tpl.vhd'), '%s/vhdl/gtl_module.vhd' % self.path, replace_map)
+        render_template(os.path.join(gtl_fdl_wrapper_dir, 'gtl_module_tpl.vhd'), '%s/vhdl/gtl_module.vhd' % self.path, replace_map)
 
 def download_file_from_url(url, filename):
     """Download files from URL."""

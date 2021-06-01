@@ -26,6 +26,7 @@ use work.lhc_data_debug_util_pkg.all;
 use work.gt_mp7_core_pkg.all;
 
 use work.gtl_pkg.all;
+use work.fdl_pkg.all;
 
 entity gtl_fdl_wrapper_TB is
 end gtl_fdl_wrapper_TB;
@@ -54,6 +55,8 @@ architecture rtl of gtl_fdl_wrapper_TB is
     signal lhc_clk : std_logic;
 
     signal lhc_data : lhc_data_t := LHC_DATA_NULL;
+    signal gtl_data : gtl_data_record;
+    signal algo : std_logic_vector(NR_ALGOS-1 downto 0);
     signal algo_after_prescaler_rop : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal local_finor_with_veto : std_logic;
 
@@ -267,33 +270,49 @@ begin
 
  ------------------- Instantiate  modules  -----------------
 
-dut : entity work.gtl_fdl_wrapper
-    generic map(
-        SIM_MODE => SIM_MODE
-    )
-    port map(
-        ipb_clk            => '0',
-        ipb_rst            => '0',
-        ipb_in             => IPB_WBUS_NULL,
-        ipb_out            => open,
-        lhc_clk            => lhc_clk,
-        lhc_rst            => '0',
-        lhc_data           => lhc_data,
-        bcres              => '0',
-        test_en            => '0',
-        l1a                => '0',
-        begin_lumi_section => '0',
-        prescale_factor_set_index_rop => open,
-        algo_after_gtLogic_rop => open,
-        algo_after_bxomask_rop => open,
-        algo_after_prescaler_rop  => algo_after_prescaler_rop,
-        local_finor_rop => open,
-        local_veto_rop  => open,
-        finor_2_mezz_lemo  => open,
-        finor_preview_2_mezz_lemo  => open,
-        veto_2_mezz_lemo  => open,
-        finor_w_veto_2_mezz_lemo  => open,
-        local_finor_with_veto_o  => local_finor_with_veto
-    );
+    gtl_data_mapping_i: entity work.gtl_data_mapping
+        port map(
+            lhc_data,
+            gtl_data
+        );
+
+    gtl_module_i: entity work.gtl_module
+        port map(
+            lhc_clk,
+            gtl_data,
+            algo
+        );
+
+    fdl_module_i: entity work.fdl_module
+        generic map(
+            SIM_MODE => SIM_MODE,
+            PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT,
+            MASKS_INIT => MASKS_INIT
+        )
+        port map(
+            ipb_clk => '0',
+            ipb_rst => '0',
+            ipb_in => IPB_WBUS_NULL,
+            ipb_out => open,
+            lhc_clk => lhc_clk,
+            lhc_rst => '0',
+            bcres => '0',
+            test_en => '0',
+            l1a => '0',
+            begin_lumi_section => '0',
+            algo_i => algo,
+            prescale_factor_set_index_rop => open,
+            algo_after_gtLogic_rop => open,
+            algo_after_bxomask_rop => open,
+            algo_after_prescaler_rop  => algo_after_prescaler_rop,
+            local_finor_rop => open,
+            local_veto_rop  => open,
+            finor_2_mezz_lemo  => open,
+            finor_preview_2_mezz_lemo  => open,
+            veto_2_mezz_lemo  => open,
+            finor_w_veto_2_mezz_lemo  => open,
+            local_finor_with_veto_o  => local_finor_with_veto,
+            algo_bx_mask_sim => (others => '1')
+        );
 
 end rtl;

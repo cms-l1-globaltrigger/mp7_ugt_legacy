@@ -32,6 +32,7 @@ use work.mp7_brd_decl.all;
 use work.mp7_ttc_decl.all;
 use work.top_decl.all;
 use work.gtl_pkg.all;
+use work.fdl_pkg.all;
 
 entity mp7_payload is
     port(
@@ -99,6 +100,7 @@ architecture rtl of mp7_payload is
     signal lane_data_out : ldata(4 * N_REGION - 1 downto 0);
 
     signal gtl_data : gtl_data_record;
+    signal algo : std_logic_vector(NR_ALGOS-1 downto 0);
 
 begin
 

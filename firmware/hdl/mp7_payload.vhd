@@ -204,10 +204,10 @@ begin
     -- ========================================================
             lhc_clk => lhc_clk,
             lhc_rst => lhc_rst,
-            bcres => bcres,
-            test_en => test_en,
+            bcres => bc0_in,
+            test_en => test_en_int,
             l1a => l1a,
-            begin_lumi_section => begin_lumi_section,
+            begin_lumi_section => start_lumisection,
             algo_i => algo,
             prescale_factor_set_index_rop => prescale_factor_set_index_rop,
             algo_after_gtLogic_rop => algo_after_gtLogic_rop,

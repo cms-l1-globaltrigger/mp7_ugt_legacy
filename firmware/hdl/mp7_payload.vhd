@@ -199,8 +199,8 @@ begin
         port map(
             ipb_clk => ipb_clk,
             ipb_rst => ipb_rst,
-            ipb_in => ipb_in,
-            ipb_out => ipb_out,
+            ipb_in => ipb_to_slaves(C_IPB_GT_MP7_GTLFDL)
+            ipb_out => ipb_from_slaves(C_IPB_GT_MP7_GTLFDL)
     -- ========================================================
             lhc_clk => lhc_clk,
             lhc_rst => lhc_rst,

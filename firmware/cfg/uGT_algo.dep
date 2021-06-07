@@ -125,6 +125,7 @@ src -c boards/mp7/base_fw/common mp7_top_decl.vhd
 #
 ## top modules
 src payload/bgo_sync.vhd
+src payload/gtl_data_mapping.vhd
 src mp7_payload.vhd
 
 

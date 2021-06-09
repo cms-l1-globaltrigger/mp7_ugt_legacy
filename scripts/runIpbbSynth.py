@@ -29,7 +29,8 @@ DefaultVivadoVersion = '2019.2'
 DefaultBoardType = 'mp7xe_690'
 """Default board type to be used."""
 
-DefaultFirmwareDir = os.path.expanduser("~/work_ipbb")
+DefaultFirmwareDir = os.path.expanduser("~/work_synth/production")
+#DefaultFirmwareDir = os.path.expanduser("~/work_synth/tests")
 """Default output directory for firmware builds."""
 
 DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware.git'
@@ -96,14 +97,15 @@ def replace_vhdl_templates(vhdl_snippets_dir, src_fw_dir, dest_fw_dir):
         '{{gtl_module_instances}}': tb.read_file(os.path.join(vhdl_snippets_dir, 'gtl_module_instances.vhd')),
     }
 
-    gtl_fdl_wrapper_dir = os.path.join(src_fw_dir, 'hdl', 'gt_mp7_core', 'gtl_fdl_wrapper')
-    gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
+    gtl_fdl_wrapper_dir = os.path.join(src_fw_dir, 'hdl', 'payload')
+    #gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
     fdl_dir = os.path.join(gtl_fdl_wrapper_dir, 'fdl')
+    pkg_dir = os.path.join(src_fw_dir, 'hdl', 'packages')
 
     #Patch VHDL files in IPBB area (
     tb.template_replace(os.path.join(fdl_dir, 'algo_mapping_rop_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'algo_mapping_rop.vhd'))
-    tb.template_replace(os.path.join(gtl_dir, 'gtl_pkg_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'gtl_pkg.vhd'))
-    tb.template_replace(os.path.join(gtl_dir, 'gtl_module_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'gtl_module.vhd'))
+    tb.template_replace(os.path.join(pkg_dir, 'fdl_pkg_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'fdl_pkg.vhd'))
+    tb.template_replace(os.path.join(gtl_fdl_wrapper_dir, 'gtl_module_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'gtl_module.vhd'))
 
 def parse_args():
     """Parse command line arguments."""
@@ -165,10 +167,13 @@ def main():
     #ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, args.menuname, args.build)
     # HB 2019-11-12: inserted mp7_ugt tag and vivado version in directory name and changed order
     vivado_version = "vivado_" + args.vivado
-    ipbb_dir = os.path.join(args.path, args.menuname, args.build, project_type, args.ugt, args.mp7tag, vivado_version)
+    ipbb_dir = os.path.join(args.path, args.build, args.menuname, project_type, args.ugt, args.mp7tag, vivado_version)
+    ipbb_dir_build = os.path.join(args.path, args.build)
 
-    if os.path.isdir(ipbb_dir):
-        raise RuntimeError("build area alredy exists: {}".format(ipbb_dir))
+    #if os.path.isdir(ipbb_dir):
+        #raise RuntimeError("build area alredy exists: {}".format(ipbb_dir))
+    if os.path.isdir(ipbb_dir_build):
+        raise RuntimeError("build area already exists: {}".format(ipbb_dir_build))
 
     # Runnig simulation with Questa simulator, if args.sim is set
     if args.sim:
@@ -246,8 +251,8 @@ def main():
         replace_vhdl_templates(vhdl_snippets_dir, ipbb_src_fw_dir, ipbb_dest_fw_dir)
 
         logging.info("patch the target package with current UNIX timestamp/username/hostname ...")
-        top_pkg_tpl = os.path.join(ipbb_src_fw_dir, 'hdl', 'gt_mp7_top_pkg_tpl.vhd')
-        top_pkg = os.path.join(ipbb_src_fw_dir, 'hdl', 'gt_mp7_top_pkg.vhd')
+        top_pkg_tpl = os.path.join(ipbb_src_fw_dir, 'hdl', 'packages', 'gt_mp7_top_pkg_tpl.vhd')
+        top_pkg = os.path.join(ipbb_src_fw_dir, 'hdl', 'packages', 'gt_mp7_top_pkg.vhd')
         subprocess.check_call(['python', os.path.join(ipbb_src_fw_dir, '..', 'scripts', 'pkgpatch.py'), '--build', args.build, top_pkg_tpl, top_pkg])
 
         #Vivado settings
@@ -302,7 +307,7 @@ def main():
     # Take args.menuname with distribution number
     config.set('menu', 'name', args.menuname)
     # Location of menu XML file
-    menu_xml_loc = "{}/xml/{}.xml".format(url_menu, args.menuname)    
+    menu_xml_loc = "{}/xml/{}.xml".format(url_menu, args.menuname)
     config.set('menu', 'location', menu_xml_loc)
     config.set('menu', 'modules', modules)
 

@@ -4,6 +4,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.15.0] - 2021-06-09
+### Comment
+
+- mp7_ugt firmware release v1.15.0
+- created fdl_pkg_tpl.vhd for "ugt_constants" replacement
+- changed file name gtl_pkg_tpl.vhd to gtl_pkg.vhd (package without replacement)
+- changed python scripts for fdl_pkg_tpl.vhd
+- extracted luts from gtl_pkg.vhd to gtl_luts_pkg.vhd
+- removed D_S_I types
+- added files for bx arrays
+- changed structure and renamed directories
+- moved all package files to new directory "packages"
+- removed obsolete files
+- moved code from gtl_fdl_wrapper.vhd to mp7_payload.vhd (deleted gtl_fdl_wrapper.vhd)
+
+### Added
+- source files:
+  - ../fdl/fdl_pkg_tpl.vhd
+  - ../gtl/gtl_pkg.vhd
+  - ../gtl/gtl_luts_pkg.vhd
+  - ../gtl/bx_pipeline.vhd
+  - ../gtl/common/delay_pipeline.vhd
+
+### Changed
+- mp7_payload.vhd
+- source files for inserting "fdl_pkg use clause" and removing D_S_I types
+- script files:
+  - scripts/run_simulation_questa.py
+  - scripts/runIpbbSynth.py
+- dep file:
+  - ../cfg/uGT_algo.dep
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
+
 ## [v1.14.1] - 2021-05-05
 ### Comment
 
@@ -118,6 +152,34 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../cfg/uGT_algo.dep
 - simulation files:
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa_v2019.2.do
+
+## [v1.11.4] - 2021-05-20
+### Comment
+
+    mp7_ugt firmware release v1.11.4
+    added additional constants to gtl_pkg_tpl.vhd
+
+### Changed
+
+    source files:
+        ../gtl/gtl_pkg_tpl.vhd
+        ../gtl/gtl_module_tpl.vhd
+        ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
+
+
+## [v1.11.3] - 2021-04-29
+### Comment
+
+    mp7_ugt firmware release v1.11.3
+    bug fixed in calo_mass_3_obj_condition.vhd and muon_mass_3_obj_condition.vhd
+
+### Changed
+
+    source files:
+        ../gtl/calo_mass_3_obj_condition.vhd
+        ../gtl/muon_mass_3_obj_condition.vhd
+        ../gtl/gtl_module_tpl.vhd
+        ../gt_mp7_core/gt_mp7_core_pkg.vhd.vhd
 
 ## [v1.11.2] - 2020-12-01
 ### Comment

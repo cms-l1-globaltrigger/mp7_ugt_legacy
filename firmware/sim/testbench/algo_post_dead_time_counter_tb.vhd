@@ -1,5 +1,5 @@
 
--- Desription:
+-- Description:
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -20,7 +20,7 @@ architecture rtl of algo_post_dead_time_counter_TB is
     constant LHC_CLK_PERIOD  : time :=  25.2 ns;
     constant IPBUS_CLK_PERIOD  : time :=  8 ns;
     constant MAX_DELAY : integer := 32;
-    
+
     signal lhc_clk : std_logic;
     signal ipb_clk : std_logic;
 
@@ -32,7 +32,7 @@ architecture rtl of algo_post_dead_time_counter_TB is
     signal algo, algo_s : std_logic := '0';
 
 begin
-    
+
     -- Clock
     lhc_clk_p: process
     begin
@@ -71,19 +71,19 @@ begin
     stimuli_p: process
     begin
         wait for 50 ns;
-        algo <= '1'; 
-        wait for LHC_CLK_PERIOD; 
-        algo <= '0'; 
+        algo <= '1';
+        wait for LHC_CLK_PERIOD;
+        algo <= '0';
         wait for 175 ns;
-        algo <= '1'; 
-        wait for LHC_CLK_PERIOD; 
-        algo <= '0'; 
+        algo <= '1';
+        wait for LHC_CLK_PERIOD;
+        algo <= '0';
         wait for 175 ns;
-        algo <= '1'; 
-        wait for LHC_CLK_PERIOD; 
-        algo <= '0'; 
-        wait for LHC_CLK_PERIOD; 
-        wait; 
+        algo <= '1';
+        wait for LHC_CLK_PERIOD;
+        algo <= '0';
+        wait for LHC_CLK_PERIOD;
+        wait;
     end process;
 
  ------------------- Instantiate  modules  -----------------
@@ -97,8 +97,17 @@ begin
       end if;
    end process synchr_p;
 
-dut: entity work.algo_post_dead_time_counter
-    generic map(32, MAX_DELAY)
-    port map(ipb_clk, lhc_clk, lhc_res, sres_counter, begin_lumi_section_s, l1a_s, delay, algo_s, open);
-
+    dut: entity work.algo_post_dead_time_counter
+        generic map(32, MAX_DELAY)
+        port map(
+            ipb_clk,
+            lhc_clk,
+            lhc_res,
+            sres_counter,
+            begin_lumi_section_s,
+            l1a_s,
+            delay,
+            algo_s,
+            open
+        );
 end rtl;

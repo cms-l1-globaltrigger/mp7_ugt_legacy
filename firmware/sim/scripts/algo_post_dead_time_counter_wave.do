@@ -1,6 +1,5 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
-add wave -noupdate /algo_post_dead_time_counter_tb/dut/sys_clk
 add wave -noupdate /algo_post_dead_time_counter_tb/lhc_clk
 add wave -noupdate -radix binary /algo_post_dead_time_counter_tb/dut/algo
 add wave -noupdate /algo_post_dead_time_counter_tb/algo_s

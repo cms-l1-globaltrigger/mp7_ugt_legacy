@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.15.0] - 2021-06-01
+## [v1.15.0] - 2021-06-09
 ### Comment
 
 - mp7_ugt firmware release v1.15.0
@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - changed structure and renamed directories
 - moved all package files to new directory "packages"
 - removed obsolete files
+- moved code from gtl_fdl_wrapper.vhd to mp7_payload.vhd (deleted gtl_fdl_wrapper.vhd)
 
 ### Added
 - source files:
@@ -27,6 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../gtl/common/delay_pipeline.vhd
 
 ### Changed
+- mp7_payload.vhd
 - source files for inserting "fdl_pkg use clause" and removing D_S_I types
 - script files:
   - scripts/run_simulation_questa.py

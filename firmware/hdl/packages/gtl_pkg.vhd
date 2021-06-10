@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2021-06-10: added hadronic shower trigger bits (muon).
 -- HB 2021-05-21: added constants and types for bx arrays.
 -- HB 2021-05-18: moved LUTs to gtl_luts_pkg.vhd. Removed D_S_I types.
 -- HB 2021-05-14: moved "ugt_constants" replacement to fdl_pkg_tpl.vhd. New file name.
@@ -64,6 +65,7 @@ package gtl_pkg is
 constant BX_PIPELINE_STAGES: natural := 5; -- +/- 2bx pipeline
 constant EXT_COND_STAGES: natural := 2; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
 constant CENTRALITY_STAGES: natural := 2; -- pipeline stages for "Centrality" to get same pipeline to algos as conditions
+constant MUS_STAGES: natural := 2; -- pipeline stages for "Hadronic shower triggers (muon)" to get same pipeline to algos as conditions
 constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
 constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
 
@@ -134,6 +136,19 @@ constant MUON_UPT_BITS : natural := MUON_UPT_HIGH-MUON_UPT_LOW+1;
 constant MUON_IP_LOW : natural := 62;
 constant MUON_IP_HIGH : natural := 63;
 constant MUON_IP_BITS : natural := MUON_IP_HIGH-MUON_IP_LOW+1;
+
+-- Hadronic shower trigger bits (muon shower [mus]) - preliminary definition
+-- MUS0 => muon obj 0, bit 61
+-- MUS1 => muon obj 2, bit 61
+-- MUSOOT0 => muon obj 4, bit 61
+-- MUSOOT1 => muon obj 6, bit 61
+constant MUS_BIT : natural := 61;
+constant NR_MUS_BITS: natural := 4;
+constant MUON_OBJ_MUS0 : natural := 0;
+constant MUON_OBJ_MUS1 : natural := 2;
+constant MUON_OBJ_MUSOOT0 : natural := 4;
+constant MUON_OBJ_MUSOOT1 : natural := 6;
+type mus_bit_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic;
 
 type muon_objects_array is array (natural range <>) of std_logic_vector(MAX_MUON_BITS-1 downto 0);
 type bx_muon_objects_array is array (0 to BX_PIPELINE_STAGES-1) of muon_objects_array(0 to NR_MU_OBJECTS-1);
@@ -423,6 +438,7 @@ type bx_data_record is record
     cent6 : bx_cent_array;
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
+    mus0, mus1, musoot0, musoot1 : mus_bit_array;
 end record bx_data_record;
 
 -- ==== Correlations - begin ============================================================

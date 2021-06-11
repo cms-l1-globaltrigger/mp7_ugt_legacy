@@ -29,8 +29,8 @@ vmap work work
 #Top Entity the design
 vcom -93 -work work $GT_SRC/packages/math_pkg.vhd
 vcom -93 -work work $GT_SRC/packages/gt_mp7_core_pkg_sim.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/frame/common/delay_element.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/fdl/common/algo_post_dead_time_counter.vhd
+vcom -93 -work work $GT_SRC/payload/frame/delay_element.vhd
+vcom -93 -work work $GT_SRC/payload/fdl/algo_post_dead_time_counter.vhd
 
 #Testbench
 vcom -93 -work work $TESTBENCH/algo_post_dead_time_counter_tb.vhd

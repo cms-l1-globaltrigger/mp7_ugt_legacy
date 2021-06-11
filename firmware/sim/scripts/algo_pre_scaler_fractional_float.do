@@ -28,8 +28,8 @@ vmap work work
 
 #Top Entity the design
 vcom -93 -work work $GT_SRC/packages/fdl_pkg_prescale_float_sim.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/fdl/common/update_process.vhd
-vcom -93 -work work $GT_SRC/gt_mp7_core/fdl/common/algo_pre_scaler_fractional_float.vhd
+vcom -93 -work work $GT_SRC/payload/fdl/update_process.vhd
+vcom -93 -work work $GT_SRC/payload/fdl/algo_pre_scaler_fractional_float.vhd
 
 #Testbench
 #vcom -93 -work work $TESTBENCH/algo_pre_scaler_fractional_tb_pkg.vhd

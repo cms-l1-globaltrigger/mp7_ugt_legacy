@@ -31,7 +31,7 @@ def detect_versions_vx_y_z(filename, needle):
             if prev.startswith(needle):
                 return line.strip(' -v').strip()
             prev = line.strip().lower()
-    
+
 def detect_gt_versions(filename):
     """Try to detect uGT, FDL and GTL versions from VHDL statements. Returns a
     dictionary containing version strings with keys used in VHDL constants.
@@ -85,7 +85,7 @@ def main():
     needle = "-- vhdl producer version"
     versions['tm-vhdlproducer'] = detect_versions_vx_y_z(ugt_constants_path, needle)
     versions['tm-reporter'] = detect_tm_reporter_version(os.path.join(buildarea_dir, 'src', l1menu_html))
-    versions.update(detect_gt_versions(os.path.join(buildarea_dir, 'src', 'mp7_ugt_legacy', 'firmware', 'hdl', 'gt_mp7_core', 'gt_mp7_core_pkg.vhd')))
+    versions.update(detect_gt_versions(os.path.join(buildarea_dir, 'src', 'mp7_ugt_legacy', 'firmware', 'hdl', 'packages', 'gt_mp7_core_pkg.vhd')))
     #versions['vivado'] = detect_vivado_version(os.path.join(buildarea_dir, 'module_0', 'vivado.log'))
     vivado_version = config.get('vivado', 'version')
 

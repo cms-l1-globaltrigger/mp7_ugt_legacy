@@ -291,7 +291,6 @@ begin
             mux_out =>  lane_out(24)
         );
 
-
     -- JW 2015-08-24: added local and mp7 bc_cntr to output
     -- bc cntr output
 
@@ -299,6 +298,7 @@ begin
     s_in1_mux9   <=   (X"00000" & ctrs(6).bctr, sValid, start, strobe);    -- frame 1   -> mp7 ttc bc cntr for Quad 6!
     s_in2_mux9   <=   (X"00000" & bx_nr_fdl, sValid, start, strobe);       -- frame 2   -> frame bx_nr_fdl
 
+    -- HB 2021-06-16: inserted orbit counter for scouting
     scouting_p: process (orbit_nr, sValid, start, strobe)
     begin
         if SCOUTING then
@@ -309,15 +309,6 @@ begin
             s_in4_mux9   <=   ((others => '0'), sValid, start, strobe);        -- frame 4   -> free
         end if;
     end process scouting_p;
-
---     no_scouting_i: if not SCOUTING generate
---         s_in3_mux9   <=   ((others => '0'), sValid, start, strobe);        -- frame 3   -> free
---         s_in4_mux9   <=   ((others => '0'), sValid, start, strobe);        -- frame 4   -> free
---     end generate no_scouting_i;
---     scouting_i: if SCOUTING generate
---         s_in3_mux9   <=   (X"0000" & orbit_nr(47 downto 32), sValid, start, strobe); -- frame 3   -> orbit counter 47..32
---         s_in4_mux9   <=   (orbit_nr(31 downto 0), sValid, start, strobe);            -- frame 4   -> orbit counter 31..0
---     end generate scouting_i;
 
     s_in5_mux9   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
 

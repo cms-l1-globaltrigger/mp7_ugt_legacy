@@ -1,5 +1,10 @@
+-- Description:
+-- Package for constant and type definitions for Global Trigger Upgrade system.
 
--- actual versions:
+-- Version history:
+-- HB 2021-06-16: constants for selection of scouting and input data spymem.
+
+-- Actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
 -- mp7_ugt (=FRAME_VERSION): v1.15.2
 --
@@ -72,6 +77,10 @@ package gt_mp7_core_pkg is
 
 -- HB, 24-10-2013: proposed MAX_NR_ALGOS instead of NR_ALGOS
     constant MAX_NR_ALGOS        : integer := 512;
+
+-- HB 2021-06-16: constants for selection of scouting and input data spymem.
+    constant SCOUTING: boolean := false; -- selector for scouting
+    constant SPYMEM: boolean := true; -- selector for input spymem
 
     type ipb_regs_array is array (natural range <>) of std_logic_vector(31 downto 0);
 

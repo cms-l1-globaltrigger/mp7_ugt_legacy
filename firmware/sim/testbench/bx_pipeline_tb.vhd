@@ -3,7 +3,7 @@
 -- Testbench for simulation of bx_pipeline
 
 -- Version history:
--- HB 2020-08-25: first design
+-- HB 2021-06-10: first design
 
 library ieee;
 use ieee.std_logic_1164.all;

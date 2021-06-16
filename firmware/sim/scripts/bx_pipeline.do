@@ -14,11 +14,11 @@ if [info exists env(MTI_LIBS)] {
     vlib SECUREIP
     vmap UNISIM $MTI_LIBS/unisim
     vmap SECUREIP $MTI_LIBS/secureip
-
 }
 
 ## set your src files directory for your design
-set GT_SRC ./../hdl
+set HDL_DIR ./../hdl
+set NGC_DIR ./../ngc
 
 set TESTBENCH ./../sim/testbench
 
@@ -26,26 +26,27 @@ set TESTBENCH ./../sim/testbench
 vlib work
 vmap work work
 
-#Top Entity the design
-vcom -93 -work work $GT_SRC/packages/math_pkg.vhd
-vcom -93 -work work $GT_SRC/packages/gt_mp7_core_pkg_sim.vhd
-vcom -93 -work work $GT_SRC/payload/frame/delay_element.vhd
-vcom -93 -work work $GT_SRC/payload/fdl/algo_post_dead_time_counter.vhd
+#vcom -93 -work work $TESTBENCH/txt_util_pkg.vhd
+vcom -93 -work work $HDL_DIR/packages/lhc_data_pkg.vhd
+#vcom -93 -work work $TESTBENCH/lhc_data_debug_util_pkg.vhd
+#vcom -93 -work work $HDL_DIR/packages/math_pkg.vhd
+#vcom -93 -work work $HDL_DIR/packages/gt_mp7_core_pkg_sim.vhd
+vcom -93 -work work $HDL_DIR/packages/gtl_pkg.vhd
+
+vcom -93 -work work $HDL_DIR/payload/gtl/common/delay_pipeline.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/bx_pipeline.vhd
 
 #Testbench
-vcom -93 -work work $TESTBENCH/algo_post_dead_time_counter_tb.vhd
+vcom -93 -work work $TESTBENCH/bx_pipeline_tb.vhd
 
 #Load Design
-vsim -t 1ps work.algo_post_dead_time_counter_TB
+vsim -t 1ps work.bx_pipeline_tb
 
 ##Load signals in wave window
 view wave
-do $TESTBENCH/../scripts/algo_post_dead_time_counter_wave.do
+do $TESTBENCH/../scripts/bx_pipeline_wave.do
 
 ##Run simulation
 run 1000 ns
 
 # eof
-
-
-

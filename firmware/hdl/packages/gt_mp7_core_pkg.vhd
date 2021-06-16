@@ -1,13 +1,14 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.15.0
+-- mp7_ugt (=FRAME_VERSION): v1.15.1
 --
 -- frame: v1.2.3 (see frame.vhd)
--- gtl: v1.15.0 (see gtl_module_tpl.vhd)
+-- gtl: v1.15.1 (see gtl_module_tpl.vhd)
 -- fdl: v1.3.6 (see fdl_module.vhd)
 
 -- gtl history:
+-- HB 2021-06-10: v1.15.1: Added hadronic shower triggers.
 -- HB 2021-05-21: v1.15.0: Added fdl_pkg use clause. Added bx_pipeline for simplifiing code.
 -- HB 2021-05-05: v1.14.1: Bug fixed in sum_mass.vhd (comparison for mass 3 body).
 -- HB 2021-04-16: v1.14.0: Added modules for correlation cuts calculations outside of conditions (correlation_cuts_calculation.vhd). Renamed files (differences.vhd => deta_dphi_calculations.vhd, ...). Added new modules for all and-or matrix instantiations (matrix_corr_cond.vhd, matrix_calo_cond.vhd, ...).
@@ -52,7 +53,7 @@ package gt_mp7_core_pkg is
 -- FRAME version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 15;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 0;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 1;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &
@@ -60,7 +61,7 @@ package gt_mp7_core_pkg is
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 15;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 0;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 1;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 3;

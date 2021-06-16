@@ -1,6 +1,7 @@
 -- Description:
 -- Contains the "framework" of GT-logic (all parts, except GTL and FDL).
 
+-- HB 2021-06-16: v1.2.4 - implemented selectors (set in gtl_pkg.vhd) for "scouting" and use of input data spymem.
 -- HB 2017-10-10: v1.2.3 - bug fix "simmem_in_use_i" input of spytrig.
 -- HB 2017-10-10: v1.2.2 - removed mux control register ("mux_ctrl_regs_1"), used fixed values for output mux inputs ("mux_ctrl").
 -- HB 2017-10-06: v1.2.1 - cleaned-up (unused instances and signals). Changed port name "dsmux_lhc_data_o" to "lhc_data_2_gtl_o". Removed "SIMULATE_DATAPATH" from generic.
@@ -300,30 +301,36 @@ architecture rtl of frame is
             simmem_in_use_i => '0'
         );
 
+-- use of spymem depends on selector SPYMEM (set in gtl_pkg.vhd)
+    sel_spymem_i: if SPYMEM generate
+
 --===============================================================================================--
 --                                SIMSPYMEM          lhc_data_slv_i_simulator
 --===============================================================================================--
 -- HB 2106-05-31: memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd)
 -- 72 memory blocks with LHC_DATA_WIDTH = 2304
 --     simspy_mem_l: for i in 0 to LHC_DATA_WIDTH/SW_DATA_WIDTH-1 generate
-    simspy_mem_l: for i in 0 to 71 generate
-      simspy_mem_i: entity work.ipb_dpmem_4096_32
-         port map(
-             ipbus_clk => ipb_clk,
-             reset     => ipb_rst,
-             ipbus_in  => ipb_to_slaves(C_IPB_SIMSPYMEM(i)),
-             ipbus_out => ipb_from_slaves(C_IPB_SIMSPYMEM(i)),
-             ------------------
-             clk_b     => lhc_clk,
-             enb       => '1',
-             web       => spy1, -- spy1 = 1 => spying, spy1 = 0 => simulation data out
-             addrb     => bx_nr, -- HB 2014-08-18: no write and no read latency
-             dinb      => lhc_data_slv_i( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ),
-             doutb     => lhc_data_slv_o( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH )
-         );
-    end generate simspy_mem_l;
 
-    lhc_data_slv_i <= lhc_data_t_to_std_logic_vector(lmp_lhc_data_o);
+        simspy_mem_l: for i in 0 to 71 generate
+            simspy_mem_i: entity work.ipb_dpmem_4096_32
+                port map(
+                    ipbus_clk => ipb_clk,
+                    reset     => ipb_rst,
+                    ipbus_in  => ipb_to_slaves(C_IPB_SIMSPYMEM(i)),
+                    ipbus_out => ipb_from_slaves(C_IPB_SIMSPYMEM(i)),
+                    ------------------
+                    clk_b     => lhc_clk,
+                    enb       => '1',
+                    web       => spy1, -- spy1 = 1 => spying, spy1 = 0 => simulation data out
+                    addrb     => bx_nr, -- HB 2014-08-18: no write and no read latency
+                    dinb      => lhc_data_slv_i( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH ),
+                    doutb     => lhc_data_slv_o( (i+1)*SW_DATA_WIDTH-1 downto i*SW_DATA_WIDTH )
+                );
+        end generate simspy_mem_l;
+
+        lhc_data_slv_i <= lhc_data_t_to_std_logic_vector(lmp_lhc_data_o);
+
+    end generate sel_spymem_i;
 
 -- HB 2017-10-06: no dm and dsmux used, simmem not used anymore for tests
     lhc_data_2_gtl_o <= lmp_lhc_data_o;  -- data to GTL (gtl_fdl_wrapper.vhd)
@@ -387,6 +394,7 @@ architecture rtl of frame is
             ctrs        => ctrs,
             bx_nr       => bx_nr,
             bx_nr_fdl   => bx_nr_d_FDL_int,
+            orbit_nr    => orbit_nr,
             algo_after_gtLogic   => algo_after_gtLogic_rop,
             algo_after_bxomask   => algo_after_bxomask_rop,
             algo_after_prescaler => algo_after_prescaler_rop,

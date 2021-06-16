@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2021-06-16: constants for selection of scouting and input data spymem.
 -- HB 2021-06-10: added hadronic shower trigger bits (muon).
 -- HB 2021-05-21: added constants and types for bx arrays.
 -- HB 2021-05-18: moved LUTs to gtl_luts_pkg.vhd. Removed D_S_I types.
@@ -68,6 +69,10 @@ constant CENTRALITY_STAGES: natural := 2; -- pipeline stages for "Centrality" to
 constant MUS_STAGES: natural := 2; -- pipeline stages for "Hadronic shower triggers (muon)" to get same pipeline to algos as conditions
 constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
 constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
+
+-- Selector for options
+constant SCOUTING: boolean := false; -- selector for scouting
+constant SPYMEM: boolean := true; -- selector for input spymem
 
 -- Definition of general types
 type std_logic_array is array (natural range <>) of std_logic;

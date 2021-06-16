@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.15.2] - 2021-06-16
+### Comment
+
+- mp7_ugt firmware release v1.15.2
+- selection for scouting
+- selection for logic without spymem (to get enough BRAM resources for 12 objects)
+
+### Changed
+- source files:
+  - ../payload/frame.vhd
+  - ../payload/frame/output_mux.vhd
+  - ../packages/gtl_pkg.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+
 ## [v1.15.1] - 2021-06-14
 ### Comment
 

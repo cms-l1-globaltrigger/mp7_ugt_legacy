@@ -4,10 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.15.2] - 2021-06-16
+## [v1.15.3] - 2021-06-21
 ### Comment
 
-- mp7_ugt firmware release v1.15.2
+- mp7_ugt firmware release v1.15.3
 - selection for scouting
 - selection for logic without spymem (to get enough BRAM resources for 12 objects)
 
@@ -18,6 +18,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/gtl_pkg.vhd
   - ../packages/gt_mp7_core_pkg.vhd
 
+## [v1.15.2] - 2021-06-18
+### Comment
+
+- mp7_ugt firmware release v1.15.2
+- added tcl script for "manualy" bit file generation (after timing errors)
+
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+
+### Added
+- script files:
+  - scripts/vivado_write_bitstream.tcl
+
+>>>>>>> master
 ## [v1.15.1] - 2021-06-14
 ### Comment
 

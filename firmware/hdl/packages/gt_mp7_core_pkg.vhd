@@ -1,13 +1,10 @@
--- Description:
--- Package for constant and type definitions for Global Trigger Upgrade system.
 
--- Version history:
--- HB 2021-06-17: constants for selection of scouting and input data spymem given by gt_mp7_top_pkg (arguments in synthesis script).
--- HB 2021-06-16: constants for selection of scouting and input data spymem.
-
--- Actual versions:
+-- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.15.2
+-- mp7_ugt (=FRAME_VERSION): v1.15.3
+
+-- v1.15.3: Changes in frame (v1.2.4) - selector for scouting and no spymem
+-- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
 -- frame: v1.2.4 (see frame.vhd)
 -- gtl: v1.15.1 (see gtl_module_tpl.vhd)
@@ -59,7 +56,7 @@ package gt_mp7_core_pkg is
 -- FRAME version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 15;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 2;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 3;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &
@@ -78,10 +75,6 @@ package gt_mp7_core_pkg is
 
 -- HB, 24-10-2013: proposed MAX_NR_ALGOS instead of NR_ALGOS
     constant MAX_NR_ALGOS        : integer := 512;
-
--- HB 2021-06-16: constants for selection of scouting and input data spymem.
-    constant SCOUTING: boolean := TOP_SCOUTING; -- selector for scouting
-    constant SPYMEM: boolean := TOP_SPYMEM; -- selector for input data spymem
 
     type ipb_regs_array is array (natural range <>) of std_logic_vector(31 downto 0);
 

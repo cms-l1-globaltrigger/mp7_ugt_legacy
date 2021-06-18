@@ -32,7 +32,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - script files:
   - scripts/vivado_write_bitstream.tcl
 
->>>>>>> master
 ## [v1.15.1] - 2021-06-14
 ### Comment
 

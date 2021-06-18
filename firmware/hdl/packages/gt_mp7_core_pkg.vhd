@@ -2,6 +2,7 @@
 -- Package for constant and type definitions for Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2021-06-17: constants for selection of scouting and input data spymem given by gt_mp7_top_pkg (arguments in synthesis script).
 -- HB 2021-06-16: constants for selection of scouting and input data spymem.
 
 -- Actual versions:
@@ -79,8 +80,8 @@ package gt_mp7_core_pkg is
     constant MAX_NR_ALGOS        : integer := 512;
 
 -- HB 2021-06-16: constants for selection of scouting and input data spymem.
-    constant SCOUTING: boolean := false; -- selector for scouting
-    constant SPYMEM: boolean := true; -- selector for input spymem
+    constant SCOUTING: boolean := TOP_SCOUTING; -- selector for scouting
+    constant SPYMEM: boolean := TOP_SPYMEM; -- selector for input data spymem
 
     type ipb_regs_array is array (natural range <>) of std_logic_vector(31 downto 0);
 

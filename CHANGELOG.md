@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.15.2] - 2021-06-18
+### Comment
+
+- mp7_ugt firmware release v1.15.2
+- added tcl script for "manualy" bit file generation (after timing errors)
+
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+
+### Added
+- script files:
+  - scripts/vivado_write_bitstream.tcl
+
 ## [v1.15.1] - 2021-06-14
 ### Comment
 

@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.15.3] - 2021-06-26
+### Comment
+
+- mp7_ugt firmware release v1.15.3
+- added and updated scripts
+
+### Changed
+- source files:
+  - scripts/run_simulation_questa.py
+
+### Added
+- script files:
+  - scripts/runSynthWorkFlow.py
+
 ## [v1.15.2] - 2021-06-18
 ### Comment
 

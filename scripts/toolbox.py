@@ -20,8 +20,14 @@ def build_t(value):
         raise TypeError("Invalid build version: `{0}'".format(value))
 
 def menuname_t(name):
-    """Validates Xilinx Vivado version number."""
+    """XML name file name with distribution."""
     if not re.match(r'^L1Menu_\w+\-{1}d[0-9]{1,2}$', name):
+        raise ValueError("not a valid menu name: '{name}'".format(**locals()))
+    return name
+
+def xmlname_t(name):
+    """L1menu XML name tag."""
+    if not re.match(r'^L1Menu_\w+', name):
         raise ValueError("not a valid menu name: '{name}'".format(**locals()))
     return name
 

@@ -27,6 +27,7 @@ with os.popen('stty size') as fp:
     ts = int(fp.read().split()[1])
 
 failed_red = ("\033[1;31m Failed! \033[0m")
+mismatches_exit_red = ("\033[1;31m Mismatches occured !!! Exit on errors \033[0m")
 success_green = ("\033[1;32m Success! \033[0m")
 ok_green = ("\033[1;32m OK     \033[0m")
 ignore_yellow = ("\033[1;33m IGNORE \033[0m")
@@ -58,10 +59,10 @@ algonum = 512#numbers of bits
 IGNORED_ALGOS = [
   'L1_FirstBunchInTrain',
   'L1_SecondBunchInTrain',
-  #'L1_MASSUPT_0_0_10',
-  #'L1_MASSUPT_0_0_20',
-  #'L1_MASSUPT_0_0_10_open',
-  #'L1_MASSUPT_0_0_20_open',
+  'L1_MASSUPT_0_0_10',
+  'L1_MASSUPT_0_0_20',
+  'L1_MASSUPT_0_0_10_open',
+  'L1_MASSUPT_0_0_20_open',
   ]
 
 def run_command(*args):
@@ -277,7 +278,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
     #print "questasimlib_path: ", questasimlib_path
 
     # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
-    command = 'bash -c "cp /opt/mentor/questasim/modelsim.ini {sim_dir}/modelsim.ini"'.format(**locals())
+    command = 'bash -c "cp /opt/mentor/questasim/modelsim.ini {sim_dir}/modelsim.ini; chmod ug+w {sim_dir}/modelsim.ini"'.format(**locals())
     print("command cp modelsim.ini: ", command)
     run_command(command)
 
@@ -312,6 +313,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
     download_file_from_url(url, menu_filepath)
     # Remove "distribution number" from a_menu for testvector file name
     tv_name = "TestVector_{}{}".format((re.split("-", a_menu)[0]), '.txt')
+    print("=== TV name: ", tv_name)
     testvector_filepath = os.path.join(temp_dir, tv_name)
     url = "{}/testvectors/{}".format(url_menu, tv_name)
     download_file_from_url(url, testvector_filepath)
@@ -503,6 +505,12 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
     logging.info("removed temporary directory ('temp_dir') ...")
     if os.path.exists(os.path.join(sim_dir, "temp_dir")):
         shutil.rmtree(os.path.join(sim_dir, "temp_dir"))
+
+    if not success:
+        logging.info("===========================================================================")
+        logging.error(mismatches_exit_red)
+        logging.info("===========================================================================")
+        exit(1)
 
 def parse():
     parser = argparse.ArgumentParser()

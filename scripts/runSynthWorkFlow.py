@@ -59,7 +59,6 @@ def main():
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
     local_menu_path = "{}/{}/{}/2021/{}".format(home_dir, args.temp_dir, args.menu_local, menuname_dist)
-    print(local_menu_path)
     if os.path.exists(local_menu_path):
         raise RuntimeError('%s exists - remove it and execute script once more' % local_menu_path)
 
@@ -73,7 +72,7 @@ def main():
     run_command(command)
 
     logging.info("===========================================================================")
-    logging.info("create new branch %s", menuname_disthttps://github.com/cms-l1-globaltrigger/cms-l1-menu)
+    logging.info("create new branch %s", menuname_dist)
     command = 'bash -c "cd {home_dir}/{args.temp_dir}/cms-l1-menu; git checkout L1Menu_Collisions2020_v0_1_5-d3; git checkout -b {menuname_dist}"'.format(**locals())
     run_command(command)
 
@@ -115,19 +114,21 @@ def main():
     logging.info("run synthesis (takes about 4 hours)")
     subprocess.check_call(['python3', os.path.join(home_dir, args.temp_dir, DefaultUgtLocalDir, 'scripts', 'runIpbbSynth.py'), menuname_dist, '--menuurl', os.path.join(menu_url, '2021'), '--ugturl', 'https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy', '--ugt', args.ugt, '--build', args.build, '-p', args.synth_dir])
 
-    write_bitstream_path = "{}/{}/scripts/vivado_write_bitstream.tcl".format(home_dir, args.menu_local)
-    build_path = "{}/{}/{}/{}/mp7_ugt_legacy/{}/mp7fw_v3_0_0/vivado_2019.2".format(home_dir, DefaultUgtLocalDir, home_dir, args.synth_dir, args.build, menuname_dist, args.ugt)
-    build_cfg = "{}/{}/{}/{}/mp7_ugt_legacy/{}/mp7fw_v3_0_0/vivado_2019.2/build_{}.cfg".format(home_dir, args.synth_dir, args.build, menuname_dist, args.ugt, args.build)
+    write_bitstream_path = "{}/{}/scripts/vivado_write_bitstream.tcl".format(home_dir, DefaultUgtLocalDir)
+    build_path = "{}/{}/{}/mp7_ugt_legacy/{}/mp7fw_v3_0_0/vivado_2019.2".format(args.synth_dir, args.build, menuname_dist, args.ugt)
+    build_cfg = "{}/build_{}.cfg".format(build_path, args.build)
+    check_path = "{}/{}/scripts/checkIpbbSynth.py".format(home_dir, DefaultUgtLocalDir)
+    packer_path = "{}/{}/scripts/fwpackerIpbb.py".format(home_dir, DefaultUgtLocalDir)
 
     print("===========================================================================")
     print("after all syntheses have finished, check results with:")
-    print("$ python3", args.synth_dir,"/scripts/checkIpbbSynth.py", build_cfg)
+    print("$ python3", check_path, build_cfg)
     print(" ")
     print("if timing errors (and bit files is not generated) occur, execute the following command for every module with errors:")
     print("$ vivado -mode batch -source", write_bitstream_path," -tclargs", build_path," <module number (e.g.: 0)>")
     print(" ")
     print("after successfully created bit files, execute the following command to create tar file for HW:")
-    print("$ python3", args.synth_dir,"/scripts/fwpackerIpbb.py", build_cfg)
+    print("$ python3", packer_path, build_cfg)
     print("===========================================================================")
 
     logging.info("done.")

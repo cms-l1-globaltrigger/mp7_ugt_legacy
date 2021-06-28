@@ -88,7 +88,7 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("install tm-vhdlproducer in %s", args.temp_dir)
-    command = 'bash -c "cd {home_dir}/{args.temp_dir}; pip install -U pip; pip install git+https://github.com/herbberg/tm-vhdlproducer.git@master"'
+    command = 'bash -c "cd {home_dir}/{args.temp_dir}; pip install -U pip; pip install git+https://github.com/herbberg/tm-vhdlproducer.git@master"'.format(**locals())
     run_command(command)
 
     logging.info("===========================================================================")

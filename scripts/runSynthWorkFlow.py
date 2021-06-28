@@ -62,6 +62,10 @@ def main():
     if os.path.exists(local_menu_path):
         raise RuntimeError('%s exists - remove it and execute script once more' % local_menu_path)
 
+    xml_file_path = "{}/{}.xml".format(args.xml_path, args.xml_path)
+    if not os.path.exists(xml_file_path):
+        raise RuntimeError('%s does not exists' % xml_file_path)
+
     synth_dir_build_path = "{}/{}".format(args.synth_dir, args.build)
     if os.path.exists(synth_dir_build_path):
         raise RuntimeError('%s exists - remove build %s and execute script once more' % synth_dir_build_path, synth_dir_build_path)
@@ -90,6 +94,9 @@ def main():
     logging.info("install tm-vhdlproducer in %s", args.temp_dir)
     command = 'bash -c "cd {home_dir}/{args.temp_dir}; pip install -U pip; pip install git+https://github.com/herbberg/tm-vhdlproducer.git@master"'.format(**locals())
     run_command(command)
+
+    if os.path.exists(synth_dir_build_path):
+        raise RuntimeError('%s exists - remove build %s and execute script once more' % synth_dir_build_path, synth_dir_build_path)
 
     logging.info("===========================================================================")
     logging.info("run VHDL Producer")

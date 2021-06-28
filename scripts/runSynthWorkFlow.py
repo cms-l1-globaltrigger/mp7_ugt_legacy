@@ -62,7 +62,7 @@ def main():
     if os.path.exists(local_menu_path):
         raise RuntimeError('%s exists - remove it and execute script once more' % local_menu_path)
 
-    xml_file_path = "{}/{}.xml".format(args.xml_path, args.xml_path)
+    xml_file_path = "{}/{}.xml".format(args.xml_path, args.menuname)
     if not os.path.exists(xml_file_path):
         raise RuntimeError('%s does not exists' % xml_file_path)
 

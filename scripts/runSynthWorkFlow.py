@@ -31,7 +31,8 @@ def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('menuname', type=tb.xmlname_t, help="L1Menu name (eg. 'L1Menu_Collisions2020_v0_1_6')")
-    parser.add_argument('--user', required=True, help="user name [required]")
+    parser.add_argument('--user', required=True, help="synthesis server user name [required]")
+    parser.add_argument('--github_user', required=True, help="git hub user name [required]")
     parser.add_argument('--temp_dir', metavar='<path>', required=True, help="temporarly workflow dir name [required]")
     parser.add_argument('--xml_path', metavar='<path>', required=True, help="absolute path to XML file [required]")
     parser.add_argument('--menu_repo', metavar='<path>', required=True, help="github repo relative path of branch for menu (eg. mjeitler/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021) [required]")
@@ -72,7 +73,7 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("clone menu repo '%s' to %s", menuname_dist, args.temp_dir)
-    command = 'bash -c "git clone https://github.com/herbberg/cms-l1-menu.git {home_dir}/{args.temp_dir}/cms-l1-menu; "'.format(**locals())
+    command = 'bash -c "git clone https://github.com/{args.github_user}/cms-l1-menu.git {home_dir}/{args.temp_dir}/cms-l1-menu; "'.format(**locals())
     run_command(command)
 
     logging.info("===========================================================================")

@@ -12,6 +12,7 @@ import urllib.parse
 import urllib.error
 
 import toolbox as tb
+from time import sleep
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
@@ -112,8 +113,10 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("commit generated VHDL code of menu %s", menuname_dist)
-    command = 'bash -c "cd {home_dir}/{args.temp_dir}/{args.menu_local}; git pull; git add {menuname_dist}; git commit -m {commit_message}; git push --set-upstream origin {menuname_dist}"'.format(**locals())
+    command = 'bash -c "cd {home_dir}/{args.temp_dir}/{args.menu_local}; git add {menuname_dist}; git pull; git commit -m {commit_message}; git push --set-upstream origin {menuname_dist}"'.format(**locals())
     run_command(command)
+
+    sleep(2.0)
 
     logging.info("===========================================================================")
     logging.info("run simulation")

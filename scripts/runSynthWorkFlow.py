@@ -60,6 +60,7 @@ def main():
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
     local_menu_path = "{}/{}/{}/{}".format(home_dir, args.temp_dir, args.menu_local, menuname_dist)
+    print(local_menu_path)
     if os.path.exists(local_menu_path):
         raise RuntimeError('%s exists - remove it and execute script once more' % local_menu_path)
 

@@ -51,7 +51,7 @@ def main():
 
     menuname_dist = "{}-d{}".format(args.menuname, args.dist)
     home_dir = "/home/{}".format(args.user)
-    menu_url = "https://raw.githubusercontent.com/{}/{}".format(args.menu_repo, menuname_dist)
+    menu_url = "https://raw.githubusercontent.com/{}".format(args.menu_repo)
 
     commit_message = "'added new menu {}'".format(menuname_dist)
 
@@ -68,7 +68,7 @@ def main():
 
     synth_dir_build_path = "{}/{}".format(args.synth_dir, args.build)
     if os.path.exists(synth_dir_build_path):
-        raise RuntimeError('%s exists - remove build %s and execute script once more' % synth_dir_build_path, synth_dir_build_path)
+        raise RuntimeError('%s exists - remove build and execute script once more' % synth_dir_build_path)
 
     logging.info("===========================================================================")
     logging.info("clone menu repo '%s' to %s", menuname_dist, args.temp_dir)

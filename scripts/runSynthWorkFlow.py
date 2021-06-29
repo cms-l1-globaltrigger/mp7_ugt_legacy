@@ -128,6 +128,9 @@ def main():
     packer_path = "{}/{}/scripts/fwpackerIpbb.py".format(home_dir, DefaultUgtLocalDir)
 
     print("===========================================================================")
+    print("check, whether syntheses stll running with:")
+    print("$ screen -r")
+    print(" ")
     print("after all syntheses have finished, check results with:")
     print("$ python3", check_path, build_cfg)
     print(" ")

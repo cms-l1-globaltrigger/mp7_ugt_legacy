@@ -4,12 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.15.3] - 2021-06-21
+<<<<<<< HEAD
+## [v1.15.3] - 2021-06-29
 ### Comment
 
 - mp7_ugt firmware release v1.15.3
 - selection for scouting
 - selection for logic without spymem (to get enough BRAM resources for 12 objects)
+- added script of syntheses workflow
 
 ### Changed
 - source files:
@@ -17,6 +19,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/frame/output_mux.vhd
   - ../packages/gtl_pkg.vhd
   - ../packages/gt_mp7_core_pkg.vhd
+- source files:
+  - scripts/run_simulation_questa.py
+
+### Added
+- script files:
+  - scripts/runSynthWorkFlow.py
 
 ## [v1.15.2] - 2021-06-18
 ### Comment

@@ -19,7 +19,7 @@ EXIT_FAILURE = 1
 DefaultMenuLocalDir = 'cms-l1-menu/2021'
 DefaultUgtLocalDir = 'mp7_ugt_legacy'
 DefaultSynthDir = 'work_synth/production'
-DefaultUgtTag = 'master'
+DefaultUgtTag = 'dev_1_15_3'
 
 
 def run_command(*args):

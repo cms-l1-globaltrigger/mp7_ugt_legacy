@@ -12,6 +12,7 @@ import urllib.parse
 import urllib.error
 
 import toolbox as tb
+from time import sleep
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
@@ -31,7 +32,8 @@ def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('menuname', type=tb.xmlname_t, help="L1Menu name (eg. 'L1Menu_Collisions2020_v0_1_6')")
-    parser.add_argument('--user', required=True, help="user name [required]")
+    parser.add_argument('--user', required=True, help="synthesis server user name [required]")
+    parser.add_argument('--github_user', required=True, help="git hub user name [required]")
     parser.add_argument('--temp_dir', metavar='<path>', required=True, help="temporarly workflow dir name [required]")
     parser.add_argument('--xml_path', metavar='<path>', required=True, help="absolute path to XML file [required]")
     parser.add_argument('--menu_repo', metavar='<path>', required=True, help="github repo relative path of branch for menu (eg. mjeitler/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021) [required]")
@@ -59,6 +61,7 @@ def main():
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
     local_menu_path = "{}/{}/{}/{}".format(home_dir, args.temp_dir, args.menu_local, menuname_dist)
+    print(local_menu_path)
     if os.path.exists(local_menu_path):
         raise RuntimeError('%s exists - remove it and execute script once more' % local_menu_path)
 
@@ -72,7 +75,7 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("clone menu repo '%s' to %s", menuname_dist, args.temp_dir)
-    command = 'bash -c "git clone https://github.com/herbberg/cms-l1-menu.git {home_dir}/{args.temp_dir}/cms-l1-menu; "'.format(**locals())
+    command = 'bash -c "git clone https://github.com/{args.github_user}/cms-l1-menu.git {home_dir}/{args.temp_dir}/cms-l1-menu; "'.format(**locals())
     run_command(command)
 
     logging.info("===========================================================================")
@@ -110,8 +113,10 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("commit generated VHDL code of menu %s", menuname_dist)
-    command = 'bash -c "cd {home_dir}/{args.temp_dir}/{args.menu_local}; git pull; git add {menuname_dist}; git commit -m {commit_message}; git push --set-upstream origin {menuname_dist}"'.format(**locals())
+    command = 'bash -c "cd {home_dir}/{args.temp_dir}/{args.menu_local}; git add {menuname_dist}; git pull; git commit -m {commit_message}; git push --set-upstream origin {menuname_dist}"'.format(**locals())
     run_command(command)
+
+    sleep(2.0)
 
     logging.info("===========================================================================")
     logging.info("run simulation")

@@ -82,6 +82,11 @@ def main():
         raise RuntimeError('%s exists - remove build and execute script once more' % synth_dir_build_path)
 
     logging.info("===========================================================================")
+    logging.info("check '%s' with TME", args.xml_path)
+    command = 'bash -c "cd; ./tm-editor {args.xml_path}"'.format(**locals())
+    run_command(command)
+
+    logging.info("===========================================================================")
     logging.info("clone menu repo '%s' to '%s'", menuname_dist, args.temp_dir)
     command = 'bash -c "git clone https://github.com/{args.github_user}/cms-l1-menu.git {home_dir}/{args.temp_dir}/cms-l1-menu; "'.format(**locals())
     run_command(command)
@@ -102,11 +107,6 @@ def main():
         logging.info("===========================================================================")
         logging.info("branch '%s' exists", menuname_dist)
 
-    #logging.info("===========================================================================")
-    #logging.info("create new branch %s", menuname_dist)
-    #command = 'bash -c "cd {home_dir}/{args.temp_dir}/cms-l1-menu; git checkout L1Menu_Collisions2020_v0_1_5-d3; git checkout -b {menuname_dist}"'.format(**locals())
-    #run_command(command)
-
     logging.info("===========================================================================")
     logging.info("clone repo 'mp7' to %s (for simulation)", args.temp_dir)
     command = 'bash -c "git clone https://gitlab.cern.ch/hbergaue/mp7.git {home_dir}/{args.temp_dir}/mp7"'.format(**locals())
@@ -117,17 +117,12 @@ def main():
     command = 'bash -c "cd {home_dir}/{args.temp_dir}/mp7; git checkout mp7fw_v2_4_1_mp7_ugt"'.format(**locals())
     run_command(command)
 
-    logging.info("===========================================================================")
-    logging.info("install tm-vhdlproducer in %s", args.temp_dir)
-    command = 'bash -c "cd {home_dir}/{args.temp_dir}; pip install -U pip; pip install git+https://github.com/herbberg/tm-vhdlproducer.git@master"'.format(**locals())
-    run_command(command)
-
     if os.path.exists(synth_dir_build_path):
         raise RuntimeError('%s exists - remove build %s and execute script once more' % synth_dir_build_path, synth_dir_build_path)
 
     logging.info("===========================================================================")
     logging.info("run VHDL Producer")
-    command = 'bash -c "tm-vhdlproducer {args.xml_path} --modules 6 --dist {args.dist} --sorting desc --output {home_dir}/{args.temp_dir}/{menu_local}"'.format(**locals())
+    command = 'bash -c "cd; ./tm-vhdlproducer {args.xml_path} --modules 6 --dist {args.dist} --sorting desc --output {home_dir}/{args.temp_dir}/{menu_local}"'.format(**locals())
     run_command(command)
 
     logging.info("===========================================================================")

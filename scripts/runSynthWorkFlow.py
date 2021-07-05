@@ -60,6 +60,7 @@ def main():
     menu_repo = "{}/{}/{}/{}".format(args.github_user, menu_dir, menuname_dist, year_dir)
     menu_url = "https://raw.githubusercontent.com/{}".format(menu_repo)
     ugt_local_dir = 'mp7_ugt_legacy'
+    tme_error_file = "{}/{}/tme_error.txt".format(home_dir, args.temp_dir)
 
     commit_message = "'added new menu {}'".format(menuname_dist)
 
@@ -81,10 +82,18 @@ def main():
     if os.path.exists(synth_dir_build_path):
         raise RuntimeError('%s exists - remove build and execute script once more' % synth_dir_build_path)
 
-    #logging.info("===========================================================================")
-    #logging.info("check '%s' with TME", args.xml_path)
-    #command = 'bash -c "cd; ./tm-editor {args.xml_path}"'.format(**locals())
-    #run_command(command)
+    if os.path.exists(tme_error_file):
+        command = "rm {tme_error_file}".format(**locals())
+        run_command(command)
+
+    logging.info("===========================================================================")
+    logging.info("check '%s' with TME", args.xml_path)
+    command = "{home_dir}/tm-editor {args.xml_path} 2>&1 | tee tme_error.txt".format(**locals())
+    run_command(command)
+
+    if not os.stat(tme_error_file).st_size == 0:
+        print("XML file error !!!")
+        exit(1)
 
     logging.info("===========================================================================")
     logging.info("clone menu repo '%s' to '%s'", menuname_dist, args.temp_dir)
@@ -118,17 +127,10 @@ def main():
     run_command(command)
 
     logging.info("===========================================================================")
-    logging.info("install tm-vhdlproducer in %s", args.temp_dir)
-    command = 'bash -c "cd {home_dir}/{args.temp_dir}; pip install -U pip; pip install git+https://github.com/herbberg/tm-vhdlproducer.git@master"'.format(**locals())
-    run_command(command)
-
-    if os.path.exists(synth_dir_build_path):
-        raise RuntimeError('%s exists - remove build %s and execute script once more' % synth_dir_build_path, synth_dir_build_path)
-
-    logging.info("===========================================================================")
     logging.info("run VHDL Producer")
-    command = 'bash -c "tm-vhdlproducer {args.xml_path} --modules 6 --dist {args.dist} --sorting desc --output {home_dir}/{args.temp_dir}/{menu_local}"'.format(**locals())
+    command = 'bash -c "{home_dir}/tm-vhdlproducer {args.xml_path} --modules 6 --dist {args.dist} --sorting desc --output {home_dir}/{args.temp_dir}/{menu_local}"'.format(**locals())
     run_command(command)
+    #subprocess.check_call([os.path.join(home_dir, 'tm-vhdlproducer'), args.xml_path, '--modules 6  --dist', args.dist, '--sorting desc --output', os.path.join(home_dir, args.temp_dir, menu_local)])
 
     logging.info("===========================================================================")
     logging.info("copy test vector file to created menu %s", local_menu_path)

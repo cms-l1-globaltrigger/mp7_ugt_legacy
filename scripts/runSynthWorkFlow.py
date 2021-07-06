@@ -60,6 +60,8 @@ def main():
     menu_repo = "{}/{}/{}/{}".format(args.github_user, menu_dir, menuname_dist, year_dir)
     menu_url = "https://raw.githubusercontent.com/{}".format(menu_repo)
     ugt_local_dir = 'mp7_ugt_legacy'
+    tme_error_file = "{}/{}/tme_error.txt".format(home_dir, args.temp_dir)
+    menu_branch_exists_file = "{}/{}/menu_branch_exists.txt".format(home_dir, args.temp_dir)
 
     commit_message = "'added new menu {}'".format(menuname_dist)
 
@@ -67,7 +69,6 @@ def main():
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
     local_menu_path = "{}/{}/{}/{}".format(home_dir, args.temp_dir, menu_local, menuname_dist)
-    print(local_menu_path)
     if os.path.exists(local_menu_path):
         raise RuntimeError('%s exists - remove it and execute script once more' % local_menu_path)
 
@@ -81,31 +82,40 @@ def main():
     if os.path.exists(synth_dir_build_path):
         raise RuntimeError('%s exists - remove build and execute script once more' % synth_dir_build_path)
 
-    logging.info("===========================================================================")
-    logging.info("check '%s' with TME", args.xml_path)
-    command = 'bash -c "cd; ./tm-editor {args.xml_path}"'.format(**locals())
-    run_command(command)
+    if os.path.exists(tme_error_file):
+        command = "rm {tme_error_file}".format(**locals())
+        run_command(command)
+
+    if os.path.exists(menu_branch_exists_file):
+        command = "rm {menu_branch_exists_file}".format(**locals())
+        run_command(command)
 
     logging.info("===========================================================================")
-    logging.info("clone menu repo '%s' to '%s'", menuname_dist, args.temp_dir)
+    logging.info("verifying menu '%s' with TME", args.xml_path)
+    command = "{home_dir}/tm-editor {args.xml_path} 2>&1 | tee tme_error.txt".format(**locals())
+    run_command(command)
+
+    if os.stat(tme_error_file).st_size > 0:
+        print("===================================")
+        print("verifying XML in TME shows errors !!!")
+        exit(1)
+
+    logging.info("===========================================================================")
+    logging.info("clone menu repo 'cms-l1-menu' to '%s'", args.temp_dir)
     command = 'bash -c "git clone https://github.com/{args.github_user}/cms-l1-menu.git {home_dir}/{args.temp_dir}/cms-l1-menu; "'.format(**locals())
     run_command(command)
 
-    logging.info("===========================================================================")
-    logging.info("check branch '%s' exists", menuname_dist)
-    command = 'bash -c "cd {home_dir}/{args.temp_dir}/cms-l1-menu; git checkout {menuname_dist} &> git_branch_exists.txt"'.format(**locals())
+    command = 'bash -c "cd {home_dir}/{args.temp_dir}/cms-l1-menu; git show-branch remotes/origin/{menuname_dist} &> {menu_branch_exists_file}"'.format(**locals())
     run_command(command)
 
-    file_name = "{}/{}/{}/git_branch_exists.txt".format(home_dir, args.temp_dir, menu_dir)
-    words = read_file(file_name).split(' ')
-    if words[0] == 'error:':
+    words = read_file(menu_branch_exists_file).split(' ')
+    if words[0] == 'fatal:':
         logging.info("===========================================================================")
         logging.info("create new branch '%s'", menuname_dist)
         command = 'bash -c "cd {home_dir}/{args.temp_dir}/cms-l1-menu; git checkout L1Menu_Collisions2020_v0_1_5-d3; git checkout -b {menuname_dist}"'.format(**locals())
         run_command(command)
     else:
-        logging.info("===========================================================================")
-        logging.info("branch '%s' exists", menuname_dist)
+        raise RuntimeError('branch %s exists - delete it from repo (or change menu name)' % menuname_dist)
 
     logging.info("===========================================================================")
     logging.info("clone repo 'mp7' to %s (for simulation)", args.temp_dir)
@@ -117,13 +127,9 @@ def main():
     command = 'bash -c "cd {home_dir}/{args.temp_dir}/mp7; git checkout mp7fw_v2_4_1_mp7_ugt"'.format(**locals())
     run_command(command)
 
-    if os.path.exists(synth_dir_build_path):
-        raise RuntimeError('%s exists - remove build %s and execute script once more' % synth_dir_build_path, synth_dir_build_path)
-
     logging.info("===========================================================================")
     logging.info("run VHDL Producer")
-    command = 'bash -c "cd; ./tm-vhdlproducer {args.xml_path} --modules 6 --dist {args.dist} --sorting desc --output {home_dir}/{args.temp_dir}/{menu_local}"'.format(**locals())
-    run_command(command)
+    subprocess.check_call([os.path.join(home_dir, 'tm-vhdlproducer'), args.xml_path, '--modules 6', '--dist', args.dist, '--sorting desc', '--output', os.path.join(home_dir, args.temp_dir, menu_local)])
 
     logging.info("===========================================================================")
     logging.info("copy test vector file to created menu %s", local_menu_path)
@@ -135,6 +141,7 @@ def main():
     command = 'bash -c "cd {home_dir}/{args.temp_dir}/{menu_local}; git add {menuname_dist}; git pull; git commit -m {commit_message}; git push --set-upstream origin {menuname_dist}"'.format(**locals())
     run_command(command)
 
+    # waiting for commit is finished
     sleep(2.0)
 
     logging.info("===========================================================================")
@@ -152,10 +159,10 @@ def main():
     packer_path = "{}/{}/scripts/fwpackerIpbb.py".format(home_dir, ugt_local_dir)
 
     print("===========================================================================")
-    print("check, whether syntheses stll running with:")
+    print("check, whether syntheses still running:")
     print("$ screen -r")
     print(" ")
-    print("after all syntheses have finished, check results with:")
+    print("after all syntheses have finished, check results:")
     print("$ python3", check_path, build_cfg)
     print(" ")
     print("if timing errors (and bit files is not generated) occur, execute the following command for every module with errors:")

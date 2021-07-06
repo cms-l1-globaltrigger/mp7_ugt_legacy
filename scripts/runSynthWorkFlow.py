@@ -150,10 +150,10 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("run synthesis (takes about 4 hours)")
-    subprocess.check_call(['python3', os.path.join(home_dir, args.temp_dir, ugt_local_dir, 'scripts', 'runIpbbSynth.py'), menuname_dist, '--menuurl', os.path.join(menu_url), '--ugturl', 'https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy', '--ugt', args.ugt, '--build', args.build, '-p', args.synth_dir])
+    subprocess.check_call(['python3', os.path.join(home_dir, args.temp_dir, ugt_local_dir, 'scripts', 'runIpbbSynth.py'), menuname_dist, '--menuurl', os.path.join(menu_url), '--ugturl', 'https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy', '--ugt', args.ugt, '--build', args.build, '-p', os.path.join(home_dir, args.temp_dir, args.synth_dir)])
 
     write_bitstream_path = "{}/{}/scripts/vivado_write_bitstream.tcl".format(home_dir, ugt_local_dir)
-    build_path = "{}/{}/{}/mp7_ugt_legacy/{}/mp7fw_v3_0_0/vivado_2019.2".format(args.synth_dir, args.build, menuname_dist, args.ugt)
+    build_path = "{}/{}/{}/{}/mp7_ugt_legacy/{}/mp7fw_v3_0_0/vivado_2019.2".format(home_dir, args.temp_dir, args.synth_dir, args.build, menuname_dist, args.ugt)
     build_cfg = "{}/build_{}.cfg".format(build_path, args.build)
     check_path = "{}/{}/scripts/checkIpbbSynth.py".format(home_dir, ugt_local_dir)
     packer_path = "{}/{}/scripts/fwpackerIpbb.py".format(home_dir, ugt_local_dir)

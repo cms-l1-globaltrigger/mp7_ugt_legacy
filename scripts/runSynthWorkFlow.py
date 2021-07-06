@@ -129,8 +129,6 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("run VHDL Producer")
-    #command = 'bash -c "{home_dir}/tm-vhdlproducer {args.xml_path} --modules 6 --dist {args.dist} --sorting desc --output {home_dir}/{args.temp_dir}/{menu_local}"'.format(**locals())
-    #run_command(command)
     subprocess.check_call([os.path.join(home_dir, 'tm-vhdlproducer'), args.xml_path, '--modules 6', '--dist', args.dist, '--sorting desc', '--output', os.path.join(home_dir, args.temp_dir, menu_local)])
 
     logging.info("===========================================================================")
@@ -143,6 +141,7 @@ def main():
     command = 'bash -c "cd {home_dir}/{args.temp_dir}/{menu_local}; git add {menuname_dist}; git pull; git commit -m {commit_message}; git push --set-upstream origin {menuname_dist}"'.format(**locals())
     run_command(command)
 
+    # waiting for commit is finished
     sleep(2.0)
 
     logging.info("===========================================================================")
@@ -160,10 +159,10 @@ def main():
     packer_path = "{}/{}/scripts/fwpackerIpbb.py".format(home_dir, ugt_local_dir)
 
     print("===========================================================================")
-    print("check, whether syntheses stll running with:")
+    print("check, whether syntheses still running:")
     print("$ screen -r")
     print(" ")
-    print("after all syntheses have finished, check results with:")
+    print("after all syntheses have finished, check results:")
     print("$ python3", check_path, build_cfg)
     print(" ")
     print("if timing errors (and bit files is not generated) occur, execute the following command for every module with errors:")

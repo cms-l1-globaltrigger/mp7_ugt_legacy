@@ -1,9 +1,10 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.15.3
+-- mp7_ugt (=FRAME_VERSION): v1.15.4
 
--- v1.15.3: Changes in frame (v1.2.4) - selector for scouting and no spymem
+-- v1.15.4: Changes in frame (v1.2.4) - selector for scouting and no spymem
+-- v1.15.3: Added python script runSynthWorkFlow.py
 -- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
 -- frame: v1.2.4 (see frame.vhd)
@@ -56,7 +57,7 @@ package gt_mp7_core_pkg is
 -- FRAME version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 15;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 3;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 4;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &

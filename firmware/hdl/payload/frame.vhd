@@ -1,7 +1,7 @@
 -- Description:
 -- Contains the "framework" of GT-logic (all parts, except GTL and FDL).
 
--- HB 2021-06-16: v1.2.4 - implemented selectors (set in gtl_pkg.vhd) for "scouting" and use of input data spymem.
+-- HB 2021-06-16: v1.2.4 - implemented selectors (set in gtl_pkg.vhd) for "scouting" (in output_mux.vhd) and use of input data spymem.
 -- HB 2017-10-10: v1.2.3 - bug fix "simmem_in_use_i" input of spytrig.
 -- HB 2017-10-10: v1.2.2 - removed mux control register ("mux_ctrl_regs_1"), used fixed values for output mux inputs ("mux_ctrl").
 -- HB 2017-10-06: v1.2.1 - cleaned-up (unused instances and signals). Changed port name "dsmux_lhc_data_o" to "lhc_data_2_gtl_o". Removed "SIMULATE_DATAPATH" from generic.
@@ -42,6 +42,7 @@ use work.frame_addr_decode.all;
 use work.gt_mp7_core_pkg.all;
 use work.frame_rb_pkg.all;
 use work.mp7_ttc_decl.all;
+use work.gtl_pkg.all;
 
 entity frame is
     generic(

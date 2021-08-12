@@ -1,109 +1,98 @@
 \select@language {english}
 \contentsline {section}{List of Figures}{9}{section*.1}
 \contentsline {section}{List of Tables}{10}{section*.2}
-\contentsline {section}{\numberline {1}Firmware overview}{12}{section.1}
-\contentsline {subsection}{\numberline {1.1}Package: lhc\_data\_pkg}{13}{subsection.1.1}
-\contentsline {section}{\numberline {2}Framework}{14}{section.2}
-\contentsline {subsection}{\numberline {2.1}Configuration of optical connections}{15}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}Demux Lane Data}{15}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}Lane Mapping Process}{15}{subsection.2.3}
-\contentsline {subsubsection}{\numberline {2.3.1}Implementation}{15}{subsubsection.2.3.1}
-\contentsline {subsection}{\numberline {2.4}Delay Manager}{15}{subsection.2.4}
-\contentsline {subsubsection}{\numberline {2.4.1}Implementation}{15}{subsubsection.2.4.1}
-\contentsline {subsection}{\numberline {2.5}SIM and SPY Memory}{19}{subsection.2.5}
-\contentsline {subsubsection}{\numberline {2.5.1}Implementation}{19}{subsubsection.2.5.1}
-\contentsline {paragraph}{\numberline {2.5.1.1}SPY Trigger}{20}{paragraph.2.5.1.1}
-\contentsline {paragraph}{\numberline {2.5.1.2}SIM/SPY memory}{20}{paragraph.2.5.1.2}
-\contentsline {paragraph}{\numberline {2.5.1.3}SPY memory II}{23}{paragraph.2.5.1.3}
-\contentsline {paragraph}{\numberline {2.5.1.4}SPY memory III}{23}{paragraph.2.5.1.4}
-\contentsline {subsubsection}{\numberline {2.5.2}Interface Specification}{24}{subsubsection.2.5.2}
-\contentsline {subsection}{\numberline {2.6}TCM}{24}{subsection.2.6}
-\contentsline {subsubsection}{\numberline {2.6.1}Counter Overview}{24}{subsubsection.2.6.1}
-\contentsline {subsubsection}{\numberline {2.6.2}Bunch Crossing Number and counters derived from it}{24}{subsubsection.2.6.2}
-\contentsline {subsubsection}{\numberline {2.6.3}Special counter: bx\_nr\_d\_fdl}{25}{subsubsection.2.6.3}
-\contentsline {subsubsection}{\numberline {2.6.4}Counters derived from l1a}{25}{subsubsection.2.6.4}
-\contentsline {subsubsection}{\numberline {2.6.5}Errors}{25}{subsubsection.2.6.5}
-\contentsline {subsubsection}{\numberline {2.6.6}SW-Registers}{26}{subsubsection.2.6.6}
-\contentsline {subsubsection}{\numberline {2.6.7}Hardware Test}{30}{subsubsection.2.6.7}
-\contentsline {subsection}{\numberline {2.7}Software Reset}{30}{subsection.2.7}
-\contentsline {section}{\numberline {3}Global Trigger Logic}{31}{section.3}
-\contentsline {subsection}{\numberline {3.1}\ensuremath {\mu \mathrm {GTL}}\xspace Interface}{31}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Definition of optical interfaces}{32}{subsection.3.2}
-\contentsline {subsubsection}{\numberline {3.2.1}Calo-Layer2 optical interfaces}{32}{subsubsection.3.2.1}
-\contentsline {subsubsection}{\numberline {3.2.2}Global~Muon~Trigger\xspace optical interfaces}{33}{subsubsection.3.2.2}
-\contentsline {subsection}{\numberline {3.3}Implementation in firmware}{35}{subsection.3.3}
-\contentsline {subsubsection}{\numberline {3.3.1}Top-of-hierarchy module}{35}{subsubsection.3.3.1}
-\contentsline {subsubsection}{\numberline {3.3.2}Package module}{36}{subsubsection.3.3.2}
-\contentsline {subsection}{\numberline {3.4}\ensuremath {\mu \mathrm {GTL}}\xspace structure}{38}{subsection.3.4}
-\contentsline {subsubsection}{\numberline {3.4.1}Data $\pm $2bx}{38}{subsubsection.3.4.1}
-\contentsline {subsubsection}{\numberline {3.4.2}Definitions of Calorimeter data}{39}{subsubsection.3.4.2}
-\contentsline {subsubsection}{\numberline {3.4.3}Definitions of Energy sum quantities data}{41}{subsubsection.3.4.3}
-\contentsline {subsubsection}{\numberline {3.4.4}Definitions of Muon data}{43}{subsubsection.3.4.4}
-\contentsline {subsubsection}{\numberline {3.4.5}Calculation of differences in $\eta $ and $\varphi $}{45}{subsubsection.3.4.5}
-\contentsline {subsubsection}{\numberline {3.4.6}Combination conditions}{46}{subsubsection.3.4.6}
-\contentsline {paragraph}{\numberline {3.4.6.1}Combination conditions definition}{46}{paragraph.3.4.6.1}
-\contentsline {subparagraph}{\numberline {3.4.6.1.1}Combination conditions module}{47}{subparagraph.3.4.6.1.1}
-\contentsline {subparagraph}{\numberline {3.4.6.1.2}Calorimeter Overlap Remover conditions module}{54}{subparagraph.3.4.6.1.2}
-\contentsline {subparagraph}{\numberline {3.4.6.1.3}Calorimeter comparators module}{55}{subparagraph.3.4.6.1.3}
-\contentsline {subparagraph}{\numberline {3.4.6.1.4}Muon comparators module}{57}{subparagraph.3.4.6.1.4}
-\contentsline {subsubsection}{\numberline {3.4.7}Energy sum quantities conditions}{60}{subsubsection.3.4.7}
-\contentsline {paragraph}{\numberline {3.4.7.1}Energy sum quantities conditions module (including Asymmetry conditions)}{60}{paragraph.3.4.7.1}
-\contentsline {paragraph}{\numberline {3.4.7.2}Energy sum quantities conditions module - template for VHDL-Producer}{61}{paragraph.3.4.7.2}
-\contentsline {subsubsection}{\numberline {3.4.8}Minimum bias trigger conditions}{61}{subsubsection.3.4.8}
-\contentsline {subsubsection}{\numberline {3.4.9}Towercount condition}{61}{subsubsection.3.4.9}
-\contentsline {subsubsection}{\numberline {3.4.10}Centrality condition}{61}{subsubsection.3.4.10}
-\contentsline {subsubsection}{\numberline {3.4.11}Muon charge correlation module}{62}{subsubsection.3.4.11}
-\contentsline {subsubsection}{\numberline {3.4.12}Correlation conditions}{64}{subsubsection.3.4.12}
-\contentsline {paragraph}{\numberline {3.4.12.1}Calculation of cuts}{64}{paragraph.3.4.12.1}
-\contentsline {subparagraph}{\numberline {3.4.12.1.1}$\Delta $R calculation}{64}{subparagraph.3.4.12.1.1}
-\contentsline {subparagraph}{\numberline {3.4.12.1.2}Invariant mass calculation}{65}{subparagraph.3.4.12.1.2}
-\contentsline {subparagraph}{\numberline {3.4.12.1.3}Transverse mass calculation}{65}{subparagraph.3.4.12.1.3}
-\contentsline {subparagraph}{\numberline {3.4.12.1.4}Two-body pt calculation}{66}{subparagraph.3.4.12.1.4}
-\contentsline {subparagraph}{\numberline {3.4.12.1.5}Invariant mass divided by $\Delta $R calculation}{66}{subparagraph.3.4.12.1.5}
-\contentsline {subparagraph}{\numberline {3.4.12.1.6}Invariant mass calculation for three objects}{66}{subparagraph.3.4.12.1.6}
-\contentsline {subparagraph}{\numberline {3.4.12.1.7}Overview of possible correlation cuts}{66}{subparagraph.3.4.12.1.7}
-\contentsline {paragraph}{\numberline {3.4.12.2}Correlation condition modules}{68}{paragraph.3.4.12.2}
-\contentsline {subparagraph}{\numberline {3.4.12.2.1}Calo Calo Correlation condition module}{69}{subparagraph.3.4.12.2.1}
-\contentsline {subparagraph}{\numberline {3.4.12.2.2}Calo Calo Overlap Remover Correlation condition module}{76}{subparagraph.3.4.12.2.2}
-\contentsline {subparagraph}{\numberline {3.4.12.2.3}Calo Calo Correlation condition module for Invariant Mass Divided by $\Delta $R}{76}{subparagraph.3.4.12.2.3}
-\contentsline {subparagraph}{\numberline {3.4.12.2.4}Calo Correlation condition module for Invariant Mass with Three Objects}{77}{subparagraph.3.4.12.2.4}
-\contentsline {subparagraph}{\numberline {3.4.12.2.5}Calo Esums Correlation condition module}{77}{subparagraph.3.4.12.2.5}
-\contentsline {subparagraph}{\numberline {3.4.12.2.6}Calo Muon Correlation condition module}{82}{subparagraph.3.4.12.2.6}
-\contentsline {subparagraph}{\numberline {3.4.12.2.7}Muon Muon Correlation condition module}{89}{subparagraph.3.4.12.2.7}
-\contentsline {subparagraph}{\numberline {3.4.12.2.8}Muon Muon Correlation condition module for Invariant Mass Divided by $\Delta $R}{97}{subparagraph.3.4.12.2.8}
-\contentsline {subparagraph}{\numberline {3.4.12.2.9}Muon Correlation condition module for Invariant Mass with Three Objects}{97}{subparagraph.3.4.12.2.9}
-\contentsline {subparagraph}{\numberline {3.4.12.2.10}Muon Esums Correlation condition module}{97}{subparagraph.3.4.12.2.10}
-\contentsline {subsubsection}{\numberline {3.4.13}External Conditions}{103}{subsubsection.3.4.13}
-\contentsline {subsubsection}{\numberline {3.4.14}Algorithms logic}{103}{subsubsection.3.4.14}
-\contentsline {subsection}{\numberline {3.5}VHDL-Templates for VHDL-Producer}{104}{subsection.3.5}
-\contentsline {subsubsection}{\numberline {3.5.1}Global Trigger Logic module - template for VHDL-Producer}{104}{subsubsection.3.5.1}
-\contentsline {paragraph}{\numberline {3.5.1.1}Instances}{104}{paragraph.3.5.1.1}
-\contentsline {paragraph}{\numberline {3.5.1.2}Signal declarations}{106}{paragraph.3.5.1.2}
-\contentsline {subsubsection}{\numberline {3.5.2}Global Trigger Logic package module - template for VHDL-Producer}{107}{subsubsection.3.5.2}
-\contentsline {subsubsection}{\numberline {3.5.3}Algorithms mapping module - template for VHDL-Producer}{107}{subsubsection.3.5.3}
-\contentsline {subsubsection}{\numberline {3.5.4}Calorimeter conditions - template for VHDL-Producer}{107}{subsubsection.3.5.4}
-\contentsline {subsubsection}{\numberline {3.5.5}Energy sum quantities conditions - template for VHDL-Producer}{110}{subsubsection.3.5.5}
-\contentsline {subsubsection}{\numberline {3.5.6}Muon conditions - template for VHDL-Producer}{111}{subsubsection.3.5.6}
-\contentsline {subsubsection}{\numberline {3.5.7}Calo Calo Correlation condition - template for VHDL-Producer}{114}{subsubsection.3.5.7}
-\contentsline {subsubsection}{\numberline {3.5.8}Calo Muon Correlation condition - template for VHDL-Producer}{117}{subsubsection.3.5.8}
-\contentsline {subsubsection}{\numberline {3.5.9}Muon Muon Correlation condition - template for VHDL-Producer}{120}{subsubsection.3.5.9}
-\contentsline {subsubsection}{\numberline {3.5.10}Calo Esums Correlation condition - template for VHDL-Producer}{122}{subsubsection.3.5.10}
-\contentsline {subsubsection}{\numberline {3.5.11}Muon Esums Correlation condition - template for VHDL-Producer}{122}{subsubsection.3.5.11}
-\contentsline {section}{\numberline {4}Final Desicion Logic}{123}{section.4}
-\contentsline {subsection}{\numberline {4.1}\ensuremath {\mu \mathrm {FDL}}\xspace Interface}{123}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}MP7 Final-OR\xspace hardware solution}{124}{subsection.4.2}
-\contentsline {subsection}{\numberline {4.3}Data flow}{124}{subsection.4.3}
-\contentsline {subsection}{\numberline {4.4}Main parts}{125}{subsection.4.4}
-\contentsline {subsubsection}{\numberline {4.4.1}Registers and memories}{126}{subsubsection.4.4.1}
-\contentsline {paragraph}{\numberline {4.4.1.1}Register map}{126}{paragraph.4.4.1.1}
-\contentsline {subsubsection}{\numberline {4.4.2}Algo-bx-masks}{135}{subsubsection.4.4.2}
-\contentsline {subsubsection}{\numberline {4.4.3}Rate-counters}{135}{subsubsection.4.4.3}
-\contentsline {subsubsection}{\numberline {4.4.4}Prescalers}{135}{subsubsection.4.4.4}
-\contentsline {subsubsection}{\numberline {4.4.5}Finor-masks}{135}{subsubsection.4.4.5}
-\contentsline {subsubsection}{\numberline {4.4.6}Veto-masks}{135}{subsubsection.4.4.6}
-\contentsline {subsubsection}{\numberline {4.4.7}Finor}{136}{subsubsection.4.4.7}
-\contentsline {subsection}{\numberline {4.5}Implementation in firmware}{136}{subsection.4.5}
-\contentsline {section}{\numberline {5}Readout-Process}{138}{section.5}
-\contentsline {section}{\numberline {6}Glossary}{139}{section.6}
-\contentsline {section}{Bibliography}{141}{section*.3}
-\contentsline {section}{Index}{141}{section*.4}
+\contentsline {section}{\numberline {1}Global Trigger System overview}{12}{section.1}
+\contentsline {section}{\numberline {2}Firmware overview}{12}{section.2}
+\contentsline {subsection}{\numberline {2.1}Firmware version}{13}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Directory structure of Global Trigger firmware}{13}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Package: lhc\_data\_pkg}{13}{subsubsection.2.2.1}
+\contentsline {section}{\numberline {3}Framework}{14}{section.3}
+\contentsline {subsection}{\numberline {3.1}Configuration of optical connections}{15}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Demux Lane Data}{15}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Lane Mapping Process}{15}{subsection.3.3}
+\contentsline {subsubsection}{\numberline {3.3.1}Implementation}{15}{subsubsection.3.3.1}
+\contentsline {subsection}{\numberline {3.4}Delay Manager}{15}{subsection.3.4}
+\contentsline {subsubsection}{\numberline {3.4.1}Implementation}{15}{subsubsection.3.4.1}
+\contentsline {subsection}{\numberline {3.5}SIM and SPY Memory}{19}{subsection.3.5}
+\contentsline {subsubsection}{\numberline {3.5.1}Implementation}{19}{subsubsection.3.5.1}
+\contentsline {paragraph}{\numberline {3.5.1.1}SPY Trigger}{20}{paragraph.3.5.1.1}
+\contentsline {paragraph}{\numberline {3.5.1.2}SIM/SPY memory}{20}{paragraph.3.5.1.2}
+\contentsline {paragraph}{\numberline {3.5.1.3}SPY memory II}{23}{paragraph.3.5.1.3}
+\contentsline {paragraph}{\numberline {3.5.1.4}SPY memory III}{23}{paragraph.3.5.1.4}
+\contentsline {subsubsection}{\numberline {3.5.2}Interface Specification}{24}{subsubsection.3.5.2}
+\contentsline {subsection}{\numberline {3.6}TCM}{24}{subsection.3.6}
+\contentsline {subsubsection}{\numberline {3.6.1}Counter Overview}{24}{subsubsection.3.6.1}
+\contentsline {subsubsection}{\numberline {3.6.2}Bunch Crossing Number and counters derived from it}{24}{subsubsection.3.6.2}
+\contentsline {subsubsection}{\numberline {3.6.3}Special counter: bx\_nr\_d\_fdl}{25}{subsubsection.3.6.3}
+\contentsline {subsubsection}{\numberline {3.6.4}Counters derived from l1a}{25}{subsubsection.3.6.4}
+\contentsline {subsubsection}{\numberline {3.6.5}Errors}{25}{subsubsection.3.6.5}
+\contentsline {subsubsection}{\numberline {3.6.6}SW-Registers}{26}{subsubsection.3.6.6}
+\contentsline {subsubsection}{\numberline {3.6.7}Hardware Test}{30}{subsubsection.3.6.7}
+\contentsline {subsection}{\numberline {3.7}Software Reset}{30}{subsection.3.7}
+\contentsline {section}{\numberline {4}Global Trigger Logic}{31}{section.4}
+\contentsline {subsection}{\numberline {4.1}\ensuremath {\mu \mathrm {GTL}}\xspace Interface}{31}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Definition of optical interfaces}{32}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}Calo-Layer2 optical interfaces}{32}{subsubsection.4.2.1}
+\contentsline {subsubsection}{\numberline {4.2.2}Global~Muon~Trigger\xspace optical interfaces}{34}{subsubsection.4.2.2}
+\contentsline {subsection}{\numberline {4.3}Implementation in firmware}{35}{subsection.4.3}
+\contentsline {subsubsection}{\numberline {4.3.1}Top-of-hierarchy module}{35}{subsubsection.4.3.1}
+\contentsline {subsubsection}{\numberline {4.3.2}Package module}{36}{subsubsection.4.3.2}
+\contentsline {subsection}{\numberline {4.4}\ensuremath {\mu \mathrm {GTL}}\xspace structure}{38}{subsection.4.4}
+\contentsline {subsubsection}{\numberline {4.4.1}Data $\pm $2bx}{38}{subsubsection.4.4.1}
+\contentsline {subsubsection}{\numberline {4.4.2}Definitions of Calorimeter data}{39}{subsubsection.4.4.2}
+\contentsline {subsubsection}{\numberline {4.4.3}Definitions of Energy sum quantities data}{41}{subsubsection.4.4.3}
+\contentsline {subsubsection}{\numberline {4.4.4}Definitions of Muon data}{43}{subsubsection.4.4.4}
+\contentsline {subsubsection}{\numberline {4.4.5}Calculation of differences in $\eta $ and $\varphi $}{45}{subsubsection.4.4.5}
+\contentsline {subsubsection}{\numberline {4.4.6}Combination conditions}{46}{subsubsection.4.4.6}
+\contentsline {paragraph}{\numberline {4.4.6.1}Combination conditions definition}{46}{paragraph.4.4.6.1}
+\contentsline {subparagraph}{\numberline {4.4.6.1.1}Combination conditions module}{47}{subparagraph.4.4.6.1.1}
+\contentsline {subparagraph}{\numberline {4.4.6.1.2}Calorimeter Overlap Remover conditions module}{54}{subparagraph.4.4.6.1.2}
+\contentsline {subparagraph}{\numberline {4.4.6.1.3}Calorimeter comparators module}{55}{subparagraph.4.4.6.1.3}
+\contentsline {subparagraph}{\numberline {4.4.6.1.4}Muon comparators module}{57}{subparagraph.4.4.6.1.4}
+\contentsline {subsubsection}{\numberline {4.4.7}Energy sum quantities conditions}{60}{subsubsection.4.4.7}
+\contentsline {paragraph}{\numberline {4.4.7.1}Energy sum quantities conditions module (including Asymmetry conditions)}{60}{paragraph.4.4.7.1}
+\contentsline {paragraph}{\numberline {4.4.7.2}Energy sum quantities conditions module - template for VHDL-Producer}{61}{paragraph.4.4.7.2}
+\contentsline {subsubsection}{\numberline {4.4.8}Minimum bias trigger conditions}{61}{subsubsection.4.4.8}
+\contentsline {subsubsection}{\numberline {4.4.9}Towercount condition}{61}{subsubsection.4.4.9}
+\contentsline {subsubsection}{\numberline {4.4.10}Centrality condition}{61}{subsubsection.4.4.10}
+\contentsline {subsubsection}{\numberline {4.4.11}Muon charge correlation module}{62}{subsubsection.4.4.11}
+\contentsline {subsubsection}{\numberline {4.4.12}Correlation conditions}{64}{subsubsection.4.4.12}
+\contentsline {paragraph}{\numberline {4.4.12.1}Calculation of cuts}{64}{paragraph.4.4.12.1}
+\contentsline {subparagraph}{\numberline {4.4.12.1.1}$\Delta $R calculation}{64}{subparagraph.4.4.12.1.1}
+\contentsline {subparagraph}{\numberline {4.4.12.1.2}Invariant mass calculation}{65}{subparagraph.4.4.12.1.2}
+\contentsline {subparagraph}{\numberline {4.4.12.1.3}Transverse mass calculation}{65}{subparagraph.4.4.12.1.3}
+\contentsline {subparagraph}{\numberline {4.4.12.1.4}Two-body pt calculation}{66}{subparagraph.4.4.12.1.4}
+\contentsline {subparagraph}{\numberline {4.4.12.1.5}Invariant mass divided by $\Delta $R calculation}{66}{subparagraph.4.4.12.1.5}
+\contentsline {subparagraph}{\numberline {4.4.12.1.6}Invariant mass calculation for three objects}{66}{subparagraph.4.4.12.1.6}
+\contentsline {subparagraph}{\numberline {4.4.12.1.7}Overview of possible correlation cuts}{66}{subparagraph.4.4.12.1.7}
+\contentsline {paragraph}{\numberline {4.4.12.2}Correlation condition modules}{68}{paragraph.4.4.12.2}
+\contentsline {subparagraph}{\numberline {4.4.12.2.1}Calo Calo Correlation condition module}{69}{subparagraph.4.4.12.2.1}
+\contentsline {subparagraph}{\numberline {4.4.12.2.2}Calo Calo Overlap Remover Correlation condition module}{76}{subparagraph.4.4.12.2.2}
+\contentsline {subparagraph}{\numberline {4.4.12.2.3}Calo Calo Correlation condition module for Invariant Mass Divided by $\Delta $R}{76}{subparagraph.4.4.12.2.3}
+\contentsline {subparagraph}{\numberline {4.4.12.2.4}Calo Correlation condition module for Invariant Mass with Three Objects}{77}{subparagraph.4.4.12.2.4}
+\contentsline {subparagraph}{\numberline {4.4.12.2.5}Calo Esums Correlation condition module}{77}{subparagraph.4.4.12.2.5}
+\contentsline {subparagraph}{\numberline {4.4.12.2.6}Calo Muon Correlation condition module}{82}{subparagraph.4.4.12.2.6}
+\contentsline {subparagraph}{\numberline {4.4.12.2.7}Muon Muon Correlation condition module}{89}{subparagraph.4.4.12.2.7}
+\contentsline {subparagraph}{\numberline {4.4.12.2.8}Muon Muon Correlation condition module for Invariant Mass Divided by $\Delta $R}{97}{subparagraph.4.4.12.2.8}
+\contentsline {subparagraph}{\numberline {4.4.12.2.9}Muon Correlation condition module for Invariant Mass with Three Objects}{97}{subparagraph.4.4.12.2.9}
+\contentsline {subparagraph}{\numberline {4.4.12.2.10}Muon Esums Correlation condition module}{97}{subparagraph.4.4.12.2.10}
+\contentsline {subsubsection}{\numberline {4.4.13}External Conditions}{103}{subsubsection.4.4.13}
+\contentsline {subsubsection}{\numberline {4.4.14}Algorithms logic}{103}{subsubsection.4.4.14}
+\contentsline {section}{\numberline {5}Final Desicion Logic}{103}{section.5}
+\contentsline {subsection}{\numberline {5.1}\ensuremath {\mu \mathrm {FDL}}\xspace Interface}{103}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}MP7 Final-OR\xspace hardware solution}{104}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Data flow}{105}{subsection.5.3}
+\contentsline {subsection}{\numberline {5.4}Main parts}{106}{subsection.5.4}
+\contentsline {subsubsection}{\numberline {5.4.1}Registers and memories}{106}{subsubsection.5.4.1}
+\contentsline {paragraph}{\numberline {5.4.1.1}Register map}{107}{paragraph.5.4.1.1}
+\contentsline {subsubsection}{\numberline {5.4.2}Algo-bx-masks}{115}{subsubsection.5.4.2}
+\contentsline {subsubsection}{\numberline {5.4.3}Rate-counters}{115}{subsubsection.5.4.3}
+\contentsline {subsubsection}{\numberline {5.4.4}Prescalers}{115}{subsubsection.5.4.4}
+\contentsline {subsubsection}{\numberline {5.4.5}Finor-masks}{115}{subsubsection.5.4.5}
+\contentsline {subsubsection}{\numberline {5.4.6}Veto-masks}{115}{subsubsection.5.4.6}
+\contentsline {subsubsection}{\numberline {5.4.7}Finor}{116}{subsubsection.5.4.7}
+\contentsline {subsection}{\numberline {5.5}Implementation in firmware}{116}{subsection.5.5}
+\contentsline {section}{\numberline {6}Readout-Process}{118}{section.6}
+\contentsline {section}{\numberline {7}Glossary}{119}{section.7}
+\contentsline {section}{Bibliography}{121}{section*.3}
+\contentsline {section}{Index}{121}{section*.4}

@@ -1,34 +1,26 @@
-%------------------------------------------------------------------------------
-%
-% Repository path   : $HeadURL: https://hbergauer@forge.hephy.oeaw.ac.at/scm/svn/project-cmstrigger/GlobalTriggerUpgrade/doc/latex/gt-mp7-firmware-specification/content/framework.tex $
-% Last committed    : $Revision: 4485 $
-% Last changed by   : $Author: hbergauer $
-% Last changed date : $Date: 2018-08-13 16:51:08 +0200 (Mon, 13 Aug 2018) $
-% Description       : framework
-% ------------------------------------------------------------------------------
 \section{Framework}\label{sec:framework}
 \textbf{Remark:}\\
 with frame v1.2.3 "Delay Manager" (dm.vhd) and "Data Source Multiplexer" (dsmux.vhd) are removed because these features were never used in production system, only for tests.
 Simmem data not useable anymore, because of removed dsmux.
 The reason of removing is to get more available resources.\\
 
-Figure \ref{fig_system_overview} shows the basic components the framework together with \rop. 
- 
+Figure \ref{fig_system_overview} shows the basic components the framework together with \rop.
+
 \begin{figure}[h]
 \includegraphics[width=1.0\textwidth]{./figures/system_overview}
 \caption{System architecture overview}
 \label{fig_system_overview}
 \end{figure}
 
-The central data type of the framework is shown in Listing \ref{lst_lhc_data_t} (see Section \ref{section_lhc_data_pkg} for details). In the current configuration it comprises 
-2304 bits (288 Bytes). Data from the GTH interfaces is demultiplexed (from 240 MHz clock domain to LHC clock domain, see Demux Lane Data \ref{sec:demux_lane_data}) and mapped to this data type in the LMP (Lane Mapping Process). It is also used as input and output type for the SIM/SPY I memory. 
-The DM (Delay Manager) takes the output of the LMP and applies software configurable delays to the the different object streams (e.g. muon data, jet, tau etc.) in the \texttt{lhc\_data\_t} 
-to produce a consistent output (also regarding to the bcres signal). The software configurable multiplexer DSMUX (Data Source Multiplexer) is used to select which data stream is used as 
+The central data type of the framework is shown in Listing \ref{lst_lhc_data_t} (see Section \ref{section_lhc_data_pkg} for details). In the current configuration it comprises
+2304 bits (288 Bytes). Data from the GTH interfaces is demultiplexed (from 240 MHz clock domain to LHC clock domain, see Demux Lane Data \ref{sec:demux_lane_data}) and mapped to this data type in the LMP (Lane Mapping Process). It is also used as input and output type for the SIM/SPY I memory.
+The DM (Delay Manager) takes the output of the LMP and applies software configurable delays to the the different object streams (e.g. muon data, jet, tau etc.) in the \texttt{lhc\_data\_t}
+to produce a consistent output (also regarding to the bcres signal). The software configurable multiplexer DSMUX (Data Source Multiplexer) is used to select which data stream is used as
 input for the processing elements (trigger logic). The output of the DSMUX is routed to the GTL (Global Trigger Logic) and ROP (Read Out Process) and can optionally be stored in the SPY I memory.
 
 \subsection{Configuration of optical connections} \label{sec:sec_configuration_optical_conn}
 The configuration of the optical connections to Calo-Layer2 is (currently) done as described in Table~\ref{tab:framework:tab_configuration_optical_conn}, where
-frame means the 32 bits data (240 MHz) within a LHC clock period. 
+frame means the 32 bits data (240 MHz) within a LHC clock period.
 
 % \begin{table}[htdp]
 % \vspace{5mm}
@@ -80,7 +72,7 @@ frame means the 32 bits data (240 MHz) within a LHC clock period.
 \multicolumn{1}{|c|}{7} & jet obj. 6 & jet obj. 7 & jet obj. 8 & jet obj. 9 & jet obj. 10 & jet obj. 11 \\\hline
 \multicolumn{1}{|c|}{8} & tau obj. 0 & tau obj. 1 & tau obj. 2 & tau obj. 3 & tau obj. 4 & tau obj. 5 \\\hline
 \multicolumn{1}{|c|}{9} & tau obj. 6 & tau obj. 7 & tau obj. 8 & tau obj. 9 & tau obj. 10 & tau obj. 11 \\\hline
-\multicolumn{1}{|c|}{\multirow{3}{*}{10}} & 
+\multicolumn{1}{|c|}{\multirow{3}{*}{10}} &
 \multicolumn{1}{l|}{\ett} & \htt & \etm & \htm & ET$_{miss}^{HF}$ & HT$_{miss}^{HF}$ \\
 \multicolumn{1}{|c|}{} &
 \multicolumn{1}{l|}{ETTEM} & TOWER-COUNT & ASYMET & ASYMHT & ASYM-ETHF & ASYM-HTHF \\
@@ -105,7 +97,7 @@ frame means the 32 bits data (240 MHz) within a LHC clock period.
 
 \subsection{Demux Lane Data} \label{sec:demux_lane_data}
 Data from GTH interfaces is in the 240 MHz clock domain. The demultiplexing to the LHC clock domain (about 40 MHz) is done in demux\_lane\_data.vhd, which is instantiated
-in frame.vhd as often as lanes are used (currently 16 lanes are used). 
+in frame.vhd as often as lanes are used (currently 16 lanes are used).
 
 %------------------------------------------------------------------------------
 %
@@ -157,14 +149,14 @@ Currently lane mapping is "fixed" in lmp.vhd module, see Table \ref{tab:framewor
 with frame v1.2.3 "Delay Manager" (dm.vhd) and "Data Source Multiplexer" (dsmux.vhd) is removed because these features were never used in production system, only for tests.
 The reason of removing is to get more available resources.\\
 
-The Delay Manager is responsible for creating a delayed version of the \texttt{lhc\_data} and the bcres signal on its input. 
+The Delay Manager is responsible for creating a delayed version of the \texttt{lhc\_data} and the bcres signal on its input.
 For this purpose it uses an internal memory to record the history of the input signals.
 
 \subsubsection{Implementation}\label{sec:dm-impl}
-The DM is basically a reimplementation of the concept of the last design. The reimplementation was necessary because the new framework version uses the register bank for 
+The DM is basically a reimplementation of the concept of the last design. The reimplementation was necessary because the new framework version uses the register bank for
 software registers and the old DM was not flexible enough to handle the \texttt{lhc\_data\_t} introduced in the new framework.
 
-The DM instantiates one \texttt{delay\_element} for every object type defined in the \texttt{lhc\_data\_t} (e.g. muon, eg, etc.). The \texttt{delay\_element} uses RAM blocks 
+The DM instantiates one \texttt{delay\_element} for every object type defined in the \texttt{lhc\_data\_t} (e.g. muon, eg, etc.). The \texttt{delay\_element} uses RAM blocks
 to implement the delay line. However, for the delays 0 and 1 this memory can not be used (write latency) and must be bypassed (Figure \ref{fig_dm_delay_element}).
 
 \begin{figure}[h]
@@ -175,18 +167,18 @@ to implement the delay line. However, for the delays 0 and 1 this memory can not
 \label{fig_dm_delay_element}
 \end{figure}
 
-The Implementation of the DM is very generic because it makes extensive use of the constants provided by the \texttt{lhc\_data\_pkg}. The $lhc\_data\_i$ input signal 
+The Implementation of the DM is very generic because it makes extensive use of the constants provided by the \texttt{lhc\_data\_pkg}. The $lhc\_data\_i$ input signal
 is converted into a \texttt{std\_logic\_vector}.
-The constants \texttt{LHC\_DATA\_SLV\_START\_INDICES} and \texttt{LHC\_DATA\_SLV\_OBJECT\_WIDTH} provide the start index of each object in this vector and their 
-width respectively. The number of objects is given by the \texttt{LHC\_DATA\_OBJECT\_COUNT} constant. This information is used by a for-generate statement to instantiate 
+The constants \texttt{LHC\_DATA\_SLV\_START\_INDICES} and \texttt{LHC\_DATA\_SLV\_OBJECT\_WIDTH} provide the start index of each object in this vector and their
+width respectively. The number of objects is given by the \texttt{LHC\_DATA\_OBJECT\_COUNT} constant. This information is used by a for-generate statement to instantiate
 the required \texttt{delay\_element} components.
 
-For the $bcres\_o$ and the $bcres\_FDL\_o$ signals two additional \texttt{delay\_element} components are instantiated. 
+For the $bcres\_o$ and the $bcres\_FDL\_o$ signals two additional \texttt{delay\_element} components are instantiated.
 
-If only the data width or the array size of an object in the \texttt{lhc\_data\_t} is changed the DM does not need any modification. If, however, a new object is added a 
-new delay register must be added, as described in the register bank section. 
+If only the data width or the array size of an object in the \texttt{lhc\_data\_t} is changed the DM does not need any modification. If, however, a new object is added a
+new delay register must be added, as described in the register bank section.
 
-The registers for all delays have the same layout (see Register \ref{dm_reg}). The names for the individual (per object) delay registers are given in Table \ref{tab_dm_regs}. 
+The registers for all delays have the same layout (see Register \ref{dm_reg}). The names for the individual (per object) delay registers are given in Table \ref{tab_dm_regs}.
 For the software addresses of these registers refer to the \texttt{xml/gt\_amc514\_dm.xml} file.
 
 \begin{register}{htbp}{Delay Manager Registers}{}% name=CONFIG
@@ -227,7 +219,7 @@ external conditions & ex\_con\_delay  \\ \hline
 % \begin{minipage}{\textwidth}
 % \lstinputlisting[language=VHDL,caption=DM interface specification]{interfaces/dm.vhd}
 % \end{minipage}
-% 
+%
 %------------------------------------------------------------------------------
 %
 %  SIM and SPY Memory
@@ -241,10 +233,10 @@ The reason of removing "Data Source Multiplexer" is to get more available resour
 
 \textbf{\textit{Under construction!!!}}
 
-Figure \ref{fig_simspy} shows the SIM/SPY memory subsystem of the framework. 
-It is used to calibrate the system, i.e. to set the correct delays in the \hyperref[sec_dm]{Delay Manager}, to record results of the GTL/FDL and 
+Figure \ref{fig_simspy} shows the SIM/SPY memory subsystem of the framework.
+It is used to calibrate the system, i.e. to set the correct delays in the \hyperref[sec_dm]{Delay Manager}, to record results of the GTL/FDL and
 output packages of the \hyperref[sec_rop]{ROP} and to provide simulation data for the system.
-All source files for the memory subsystem are located in \texttt{src/mem} directory. 
+All source files for the memory subsystem are located in \texttt{src/mem} directory.
 
 \subsubsection{Implementation}\label{sec:sim_spy_impl}
 The memory subsystem consists of four main parts, which will be discussed in more detail in the following sections
@@ -263,7 +255,7 @@ The memory subsystem consists of four main parts, which will be discussed in mor
 \end{figure}
 
 \paragraph{SPY Trigger}\label{sec:spy_trigger}
-The SPY trigger controls the SPY memories and decides when data is recorded. It can be configured and controlled using 
+The SPY trigger controls the SPY memories and decides when data is recorded. It can be configured and controlled using
 software registers \ref{spy_trig_obrit_nr_reg} and \ref{spy_trig_cfg_reg} provided by the \hyperref[sec_rb]{register bank}.
 
 \begin{register}{htbp}{SPY Trigger Orbit Number Registers}{}% name=CONFIG
@@ -302,54 +294,54 @@ software registers \ref{spy_trig_obrit_nr_reg} and \ref{spy_trig_cfg_reg} provid
 		\item [spy3] Triggers the recording of the next package that will be sent by the ROP to SPY memory III, when written with 1.
 		\item [clr\_spy12\_rdy] Clears the ready flag of the SPY trigger for SPY memories I and II, when written with 1.
 		\item [clr\_spy3\_rdy] Clears the ready flag of the SPY trigger for SPY memory III, when written with 1.
-		\item [clr\_spy12\_err] Clears the error flag, when written with 1. 
+		\item [clr\_spy12\_err] Clears the error flag, when written with 1.
 		\item [spy12\_bsy] Indicates that the SPY trigger for SPY memories I and II is busy.
 		\item [spy3\_bsy] Indicates that the SPY trigger for SPY memory III is busy.
-		\item [spy12\_rdy] Indicates that one orbit has been recorded in SPY memories I and II and that the SPY trigger is ready for new commands.  
-		\item [spy3\_rdy] Indicates that packet has been recorded in SPY memory III and that the SPY trigger is ready for new commands. 
+		\item [spy12\_rdy] Indicates that one orbit has been recorded in SPY memories I and II and that the SPY trigger is ready for new commands.
+		\item [spy3\_rdy] Indicates that packet has been recorded in SPY memory III and that the SPY trigger is ready for new commands.
 		\item [spy12\_err] Indicates an error condition (Set only when the selected orbit number for the spy once trigger lies in the past and can therefore not be recorded).
 	\end{reglist}
 	\end{regdesc}
 \end{register}
 
-When the SPY trigger receives a spy12 command (next or once) over the software register interface it asserts the $spy1$ and $spy2$ signals for the appropriate orbit. 
-This means that the $spy$ signals go high with the bunch crossing counter reaching the value zero and stay high until it reaches zero again (overflow). Note that when 
+When the SPY trigger receives a spy12 command (next or once) over the software register interface it asserts the $spy1$ and $spy2$ signals for the appropriate orbit.
+This means that the $spy$ signals go high with the bunch crossing counter reaching the value zero and stay high until it reaches zero again (overflow). Note that when
 the SIM memory is being used (indicated by the $simem\_in\_use\_i$ input provided by the DSMUX component) the $spy1$ output will not be asserted.
 
 When a spy3 command is received the SPY trigger asserts the $spy3$ signal and waits until the $spy3\_ack$ signal is asserted.
 
 \paragraph{SIM/SPY memory}
-This component combines the SIM memory and the SPY memory I. This optimization is possible because these two memories are never used at the same time. There are basically 
+This component combines the SIM memory and the SPY memory I. This optimization is possible because these two memories are never used at the same time. There are basically
 two use cases for this memory.
 \begin{itemize}
 \item SIM memory: Data is read form the memory and provided to GTL and ROP to test these components.
-\item SPY memory: External data is received by the GTX and stored in the memory to check the alignment of the data.  
+\item SPY memory: External data is received by the GTX and stored in the memory to check the alignment of the data.
 \end{itemize}
-It is very important to guarantee that the spy input signal is not asserted, as long as the memory is used as SIM memory. Note that this functionality is implemented in 
+It is very important to guarantee that the spy input signal is not asserted, as long as the memory is used as SIM memory. Note that this functionality is implemented in
 the SPY trigger component.
 
-The SIM/SPY memory converts the $lhc\_data\_i$ input signal to a \texttt{std\_logic\_vector} using the converter function provided by the \texttt{lhc\_data\_pkg}. This vector 
-is then divided into chunks of 32 bits (the PCIe data width). For each of these chunks a 32 bit true-dual-port memory (2 read ports, 2 write ports, 2 clock domains) is instanciated. 
+The SIM/SPY memory converts the $lhc\_data\_i$ input signal to a \texttt{std\_logic\_vector} using the converter function provided by the \texttt{lhc\_data\_pkg}. This vector
+is then divided into chunks of 32 bits (the PCIe data width). For each of these chunks a 32 bit true-dual-port memory (2 read ports, 2 write ports, 2 clock domains) is instanciated.
 Thus, every memory has a read/write port in both clock domain, the 125MHz PCIe clock domain and the 40MHz LHC clock domain, which can be used simultaneously.
-The PCIe data-in signal ($sw\_i.data$) is connected to PCIe-clock domain write port of the memories. A memory select signal is generated form the LSBs of the software address ($sw\_i.addr$). 
+The PCIe data-in signal ($sw\_i.data$) is connected to PCIe-clock domain write port of the memories. A memory select signal is generated form the LSBs of the software address ($sw\_i.addr$).
 The memory select signal also controls the multiplexer on the output of the memories to generate the $sw\_o.data$ signal.
 
 Depending on whether the SIM/SPY memory is used to provide simulation data or to store/spy data the address on the LHC-clock domain port of the internal memories is adjusted.
-If data is recorded (SPY) the bunch crossing counter is used as memory address directly. 
-When the memory is read the read latency (two clock cycles) must be taken into account. 
+If data is recorded (SPY) the bunch crossing counter is used as memory address directly.
+When the memory is read the read latency (two clock cycles) must be taken into account.
 This is achieved by subtracting 2 form the bunch crossing number before using it as address.
 To generate the $lhc\_data\_o$ signal the LHC-clock domain data out ports of the internal memories are concatenated and converted back to the \texttt{lhc\_data\_t}.
 
-If the \texttt{lhc\_data\_t} is changed (e.g. new objects added) no modifications in the SIM/SPY memory are required. The SIM/SPY memory only depends on the (auto-generated) 
+If the \texttt{lhc\_data\_t} is changed (e.g. new objects added) no modifications in the SIM/SPY memory are required. The SIM/SPY memory only depends on the (auto-generated)
 functions used to convert a \texttt{lhc\_data\_t} signal to \texttt{std\_logic\_vector} and vice versa (see Section \ref{section_lhc_data_pkg} for details).
 
-In the current implementation the size every object in the \texttt{lhc\_data\_t} is a multiple of 32 bit. This is also expected by the SIM/SPY memory. If objects with 16 bit sizes 
-are added the SIM/SPY memory must be modified to support this situation (e.g. zero pad the \texttt{lhc\_data\_t}). Furthermore take into account that the PCIe memory bus is 32 bits wide. 
+In the current implementation the size every object in the \texttt{lhc\_data\_t} is a multiple of 32 bit. This is also expected by the SIM/SPY memory. If objects with 16 bit sizes
+are added the SIM/SPY memory must be modified to support this situation (e.g. zero pad the \texttt{lhc\_data\_t}). Furthermore take into account that the PCIe memory bus is 32 bits wide.
 So 16 bit objects should be added to the end of the \texttt{lhc\_data\_t} (as last entry) to keep software memory access simple.
 
-% Table \ref{tab_simpspy} shows the memory layout used to access (read/write) the stored \texttt{lhc\_data\_t}(see Listing \ref{lst_lhc_data_t}). It can be seen that there are areas in 
-% the memory that must not be accessed because they do not contain any valid data. 
-%require One lhc\_data entry (data for one bunch crossing) needs a memory block 
+% Table \ref{tab_simpspy} shows the memory layout used to access (read/write) the stored \texttt{lhc\_data\_t}(see Listing \ref{lst_lhc_data_t}). It can be seen that there are areas in
+% the memory that must not be accessed because they do not contain any valid data.
+%require One lhc\_data entry (data for one bunch crossing) needs a memory block
 
 % \begin{table}[h]
 % \begin{center}
@@ -362,7 +354,7 @@ So 16 bit objects should be added to the end of the \texttt{lhc\_data\_t} (as la
 % 0x00002 & BX 0: Muon(1).LOW    \\ \hline
 % 0x00003 & BX 0: Muon(1).HIGH   \\ \hline
 % ...    & BX 0: [lhc\_data]    \\ \hline
-% 0x00036 & BX 0: External Conditions (7/8) \\ \hline 
+% 0x00036 & BX 0: External Conditions (7/8) \\ \hline
 % 0x00037 & BX 0: External Conditions (8/8) \\ \hline
 % 0x00038 & undefined (do not access) \\ \hline
 % ...    & undefined (do not access) \\ \hline
@@ -378,18 +370,18 @@ So 16 bit objects should be added to the end of the \texttt{lhc\_data\_t} (as la
 % \caption{SIM/SPY I memory layout}
 % \label{tab_simpspy}
 % \end{table}
-% 
-% It is important to note, that the start address of the SIM/SPY memory (configured in the address decoder) must be a multiple of the size of the memory (in the current 
+%
+% It is important to note, that the start address of the SIM/SPY memory (configured in the address decoder) must be a multiple of the size of the memory (in the current
 % configuration $2^{18}$ byte addresses).
-% To handle/simplify the memory access to this memory special python classes (\verb|GTMemory.py| and \verb|GTMemoryImage.py|) are provided. The XML specification in 
+% To handle/simplify the memory access to this memory special python classes (\verb|GTMemory.py| and \verb|GTMemoryImage.py|) are provided. The XML specification in
 % Listing \ref{lst_lhc_data_t_xml} is used to obtain the memory layout. See the source files for further details and examples of how to use them.
 
 \paragraph{SPY memory II}
-The SPY memory II is divided into two subcomponents, to store the $algos$ and $finor$ outputs of the FDL. 
+The SPY memory II is divided into two subcomponents, to store the $algos$ and $finor$ outputs of the FDL.
 Both memory can only be read over the SW interface. A write access has no effect.
-% Tables \ref{tab_spy2_algos} and \ref{tab_spy2_finor} show the memory layout as seen by the software. 
+% Tables \ref{tab_spy2_algos} and \ref{tab_spy2_finor} show the memory layout as seen by the software.
 The algos memory uses the same architecture as the SIM memory.
-The finor memory uses a true-dual-port memory with asymmetric ports. This memory can be written with a data width of one bit and read with a data width of 32 bit. 
+The finor memory uses a true-dual-port memory with asymmetric ports. This memory can be written with a data width of one bit and read with a data width of 32 bit.
 
 % \begin{table}[h]
 % \begin{center}
@@ -412,8 +404,8 @@ The finor memory uses a true-dual-port memory with asymmetric ports. This memory
 % \caption{SPY II algos memory layout}
 % \label{tab_spy2_algos}
 % \end{table}
-% 
-% 
+%
+%
 % \begin{table}[h]
 % \begin{center}
 % \begin{tabular}{|c|c|}
@@ -429,15 +421,15 @@ The finor memory uses a true-dual-port memory with asymmetric ports. This memory
 % \caption{SPY II finor memory layout}
 % \label{tab_spy2_finor}
 % \end{table}
-% 
-% Note that the start addresses of the algos and finor memories (configured in the address decoder) must be a multiples of their sizes (in the current configuration $2^{16}$ and $2^7$).  
-%  
+%
+% Note that the start addresses of the algos and finor memories (configured in the address decoder) must be a multiples of their sizes (in the current configuration $2^{16}$ and $2^7$).
+%
 \paragraph{SPY memory III}
 The SPY memory III stores the output of the ROP, which is sent to the DAQ. The input data width is configurable to bus widths of 16, 32 or 64 bits.
 Depending on the input data width the memory uses different architectures.
-\begin{itemize} 
+\begin{itemize}
 \item 16 Bit \\
-A true-dual-port memory with asymmetric ports (16 and 32 bits) is used. 
+A true-dual-port memory with asymmetric ports (16 and 32 bits) is used.
 \item 32 Bit \\
 A true-dual-port memory with 32 Bit data width is used.
 \item 64 Bit \\
@@ -445,9 +437,9 @@ Two true-dual-port memories with 32 Bit data width are used.
 \end{itemize}
 
 % \subsubsection{Software}
-% The \texttt{gtamc514-memdump} python script can be used to access/read all spy memories of the system.  The \texttt{gtamc514-simmem} script is used to write 
+% The \texttt{gtamc514-memdump} python script can be used to access/read all spy memories of the system.  The \texttt{gtamc514-simmem} script is used to write
 % data to the SIM memory. Refer to See \texttt{gtamc514-memdump -h} and \texttt{gtamc514-simmem -h} for further details.
-% 
+%
 \subsubsection{Interface Specification}
 
 \begin{minipage}{\textwidth}
@@ -457,28 +449,28 @@ Two true-dual-port memories with 32 Bit data width are used.
 % \begin{minipage}{\textwidth}
 % \lstinputlisting[language=VHDL,label=lst_simspymem,caption=SIM/SPY I memory interface specification]{interfaces/simspymem.vhd}
 % \end{minipage}
-% 
+%
 % \begin{minipage}{\textwidth}
 % \lstinputlisting[language=VHDL,caption=SPY memory II (algos) interface specification]{interfaces/spymem2_algos.vhd}
 % \end{minipage}
-% 
+%
 % \begin{minipage}{\textwidth}
 % \lstinputlisting[language=VHDL,caption=SPY memory II (finor) interface specification]{interfaces/spymem2_finor.vhd}
 % \end{minipage}
-% 
+%
 % \begin{minipage}{\textwidth}
 % \lstinputlisting[language=VHDL,caption=SPY memory III interface specification]{interfaces/spymem3.vhd}
 % \end{minipage}
-% 
+%
 %------------------------------------------------------------------------------
 %
 %  L1A Simulator
 %
 % ------------------------------------------------------------------------------
 % \subsection{L1A Simulator}
-% 
+%
 % The simulation component for the l1a signal has been reimplemented based on specification of the last semester.
-% 
+%
 % The L1A SIM/MUX module takes as input the synchronized real l1a signal (usually originating from the TCS) and outputs depending on its configuration the (undelayed) real l1a signal or a simulation of the signal. The following simulation modes which are configurable through software register access are available:
 % \begin{itemize}
 % \item fire once: the l1a signal is set to high for exactly one clock cycle as soon as the software
@@ -503,9 +495,9 @@ Two true-dual-port memories with 32 Bit data width are used.
 % pattern A is used and for the last mode (alternating patterns), pattern A (even orbits) and
 % pattern B (odd orbits) are used. In case both, the second and the third mode are activated
 % by software register access, the third mode overrides the second one.
-%  
+%
 % Registers \ref{l1asim_cfg_reg} \ref{l1asim_orbit_nr_reg} \ref{l1asim_pattern_reg} specify the software interface.
-% 
+%
 % \begin{register}{htbp}{L1A Simulator Configuration Register}{}% name=CONFIG
 % 	\label{l1asim_cfg_reg}%
 % 	\regfield{reserved}{28}{4}{0}%
@@ -513,16 +505,16 @@ Two true-dual-port memories with 32 Bit data width are used.
 % 	\regfield{fire\_once}{1}{1}{0}%
 % 	\regfield{enable\_sim}{1}{0}{0}%
 % 	\reglabel{Reset}\regnewline%
-% 
+%
 % 	\begin{regdesc}
 % 	\begin{reglist}[Request~Depth]
 % 			\item [enable\_sim] Enables the l1a simulation module. This bit must be 1 for all other configurations to have an effect. If this bit is zero the real l1a signal is presented at the output of the l1asim module.
 % 			\item [fire\_once] When written with 1, triggers one l1a event as soon as the hardware recognizes the register access (It is not possible to exactly time the event using this trigger)
-% 			\item [sim\_mode] Selects one of the two simulation modes (pattern at orbit, alternating patterns). If zero (00) no mode is selected. 
+% 			\item [sim\_mode] Selects one of the two simulation modes (pattern at orbit, alternating patterns). If zero (00) no mode is selected.
 % 	\end{reglist}
 % 	\end{regdesc}
 % \end{register}
-% 
+%
 % \begin{register}{htbp}{L1A Simulator Orbit Number Registers}{}% name=CONFIG
 % 	\label{l1asim_orbit_nr_reg}
 % 	\regfield{orbit\_nr\_low}{32}{0}{0}%
@@ -535,7 +527,7 @@ Two true-dual-port memories with 32 Bit data width are used.
 % 	\end{reglist}
 % 	\end{regdesc}
 % \end{register}
-% 
+%
 % \begin{register}{htbp}{L1A Simulator Pattern Registers}{}% name=CONFIG
 % 	\label{l1asim_pattern_reg}
 % 	\regfield{reserved}{20}{12}{0}%
@@ -546,13 +538,13 @@ Two true-dual-port memories with 32 Bit data width are used.
 % 	\end{reglist}
 % 	\end{regdesc}
 % \end{register}
-% 
+%
 % \subsubsection{Interface Specification}
-% 
+%
 % \begin{minipage}{\textwidth}
 % \lstinputlisting[language=VHDL,caption=L1A Simulation module interface specification]{interfaces/l1asim.vhd}
 % \end{minipage}
-% 
+%
 %------------------------------------------------------------------------------
 %
 %  TCM
@@ -774,8 +766,8 @@ script                         &purpose    \\ \hline
 \end{table}
 
 % \subsubsection{Interface}
-% 
-% \lstinputlisting[language=VHDL,caption=TCM interface specification]{interfaces/tcm.vhd} 
+%
+% \lstinputlisting[language=VHDL,caption=TCM interface specification]{interfaces/tcm.vhd}
 
 \subsection{Software Reset} \label{sec:software_reset}
 The software reset module (sw\_reset) provides the possiblity for a software reset via the software event register sw\_reset\_event.

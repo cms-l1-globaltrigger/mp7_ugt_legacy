@@ -5,10 +5,12 @@ import math
 
 idx=0
 undefined="undefined"
+deta_bins=230
+dphi_bins=144
 
 print(f"{'idx':>6}", f"{'dphi_idx':>9}", f"{'deta_idx':>9}", f"{'dphi_val':>22}", f"{'deta_val':>22}", f"{'inv_dr_sq':>25}", f"{'inv_dr_sq_rounded':>18}", f"{'inv_dr_sq_fw_lut':>17}")
-for deta_idx in range(0,231):
-    for dphi_idx in range(0,73):
+for deta_idx in range(0,deta_range+1):
+    for dphi_idx in range(0,dphi_bins/2+1):
         deta_val = deta_idx*0.0435
         dphi_val = dphi_idx*2*math.pi/144
         if deta_idx == 0 and dphi_idx == 0:

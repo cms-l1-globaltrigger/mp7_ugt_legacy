@@ -3,15 +3,17 @@
 import sys
 import math
 
+# double bin width
+eta_factor=2
+eta_bin_width=0.087/8*eta_factor
+eta_min_bin=-225
+eta_max_bin=225
+deta_bins=int((abs(eta_min_bin)+eta_max_bin)/eta_factor)+1
 # same bin width as for calos
-eta_bin_width=0.0435
-eta_min_bin=-56
-eta_max_bin=56
-deta_bins=abs(eta_min_bin)+eta_max_bin+1
-phi_min_bin=0
-phi_max_bin=143
-phi_bins=phi_min_bin+phi_max_bin+1
-dphi_bins=int(phi_bins/2)
+phi_factor=4
+phi_bins=576
+phi_bins_reduced=phi_bins/phi_factor
+dphi_bins=int(phi_bins_reduced/2)
 # same precision as for muon invariant mass (2*pt_precision+cosh_cos_precision) [=1+1+4]
 precision=6
 

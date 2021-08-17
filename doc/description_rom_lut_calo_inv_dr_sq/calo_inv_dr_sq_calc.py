@@ -3,13 +3,11 @@
 import sys
 import math
 
-eta_bin_width=0.0435
+eta_bin_width=0.087/2
 eta_min_bin=-115
 eta_max_bin=114
 deta_bins=abs(eta_min_bin)+eta_max_bin+1
-phi_min_bin=0
-phi_max_bin=143
-phi_bins=phi_min_bin+phi_max_bin+1
+phi_bins=144
 dphi_bins=int(phi_bins/2)
 # same precision as for calo invariant mass (2*pt_precision+cosh_cos_precision) [=1+1+3]
 precision=5

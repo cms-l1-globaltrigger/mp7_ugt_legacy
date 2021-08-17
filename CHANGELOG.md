@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.15.4] - 2021-08-17
+### Comment
+
+- mp7_ugt firmware release v1.15.4
+- renewed logic and LUTs for 1/DR^2 for muon
+
+### Changed
+
+### Added
+- script files:
+  - ../doc/../calo_inv_dr_sq_calc.py
+  - ../doc/../muon_inv_dr_sq_calc.py
+
 ## [v1.15.3] - 2021-06-26
 ### Comment
 
@@ -11,7 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - added and updated scripts
 
 ### Changed
-- source files:
+- script files:
   - scripts/run_simulation_questa.py
 
 ### Added

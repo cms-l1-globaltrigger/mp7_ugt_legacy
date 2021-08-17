@@ -208,8 +208,11 @@ begin
                     rom_lut_i : rom_lut_muon_inv_dr_sq_all
                         port map (
                             clk => lhc_clk,
-                            deta => deta_bin(i,j)(deta_bins_width-1 downto 0),
-                            dphi => dphi_bin(i,j)(dphi_bins_width-1 downto 0),
+--                             deta => deta_bin(i,j)(deta_bins_width-1 downto 0),
+--                             dphi => dphi_bin(i,j)(dphi_bins_width-1 downto 0),
+-- reduced bin width (8 bits) for muon deta (half of calo bin width) and muon dphi (same as calo bin width)
+                            deta => deta_bin(i,j)(deta_bins_width-1 downto 1),
+                            dphi => dphi_bin(i,j)(dphi_bins_width-1 downto 2),
                             dout => inverted_dr_sq(i,j)
                         );
                 end generate rom_lut_muon_sel;

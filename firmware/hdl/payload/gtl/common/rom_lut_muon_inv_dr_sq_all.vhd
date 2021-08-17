@@ -23,7 +23,7 @@ entity rom_lut_muon_inv_dr_sq_all is
 end rom_lut_muon_inv_dr_sq_all;
 
 architecture rtl of rom_lut_muon_inv_dr_sq_all is
-    
+
     constant addr_width : positive := 12;
     constant dout1_width : positive := 28;
     constant dout2_width : positive := 16;
@@ -53,7 +53,7 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
         douta : OUT STD_LOGIC_VECTOR(dout1_width-1 DOWNTO 0)
     );
     END COMPONENT;
-    
+
     COMPONENT rom_lut_muon_inv_dr_sq_2
     PORT (
         clka : IN STD_LOGIC;
@@ -61,7 +61,7 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
         douta : OUT STD_LOGIC_VECTOR(dout2_width-1 DOWNTO 0)
     );
     END COMPONENT;
-    
+
     COMPONENT rom_lut_muon_inv_dr_sq_3
     PORT (
         clka : IN STD_LOGIC;
@@ -69,7 +69,7 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
         douta : OUT STD_LOGIC_VECTOR(dout3_width-1 DOWNTO 0)
     );
     END COMPONENT;
-    
+
     COMPONENT rom_lut_muon_inv_dr_sq_4
     PORT (
         clka : IN STD_LOGIC;
@@ -77,7 +77,7 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
         douta : OUT STD_LOGIC_VECTOR(dout4_width-1 DOWNTO 0)
     );
     END COMPONENT;
-    
+
     COMPONENT rom_lut_muon_inv_dr_sq_5
     PORT (
         clka : IN STD_LOGIC;
@@ -85,7 +85,7 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
         douta : OUT STD_LOGIC_VECTOR(dout5_width-1 DOWNTO 0)
     );
     END COMPONENT;
-    
+
     COMPONENT rom_lut_muon_inv_dr_sq_6
     PORT (
         clka : IN STD_LOGIC;
@@ -93,7 +93,7 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
         douta : OUT STD_LOGIC_VECTOR(dout6_width-1 DOWNTO 0)
     );
     END COMPONENT;
-    
+
     COMPONENT rom_lut_muon_inv_dr_sq_7
     PORT (
         clka : IN STD_LOGIC;
@@ -101,7 +101,7 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
         douta : OUT STD_LOGIC_VECTOR(dout7_width-1 DOWNTO 0)
     );
     END COMPONENT;
-    
+
     COMPONENT rom_lut_muon_inv_dr_sq_8
     PORT (
         clka : IN STD_LOGIC;
@@ -109,7 +109,7 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
         douta : OUT STD_LOGIC_VECTOR(dout8_width-1 DOWNTO 0)
     );
     END COMPONENT;
-    
+
     COMPONENT rom_lut_muon_inv_dr_sq_9
     PORT (
         clka : IN STD_LOGIC;
@@ -117,11 +117,11 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
         douta : OUT STD_LOGIC_VECTOR(dout9_width-1 DOWNTO 0)
     );
     END COMPONENT;
-    
+
     signal addr_lsb : STD_LOGIC_VECTOR(addr_width-1 DOWNTO 0);
     signal addr_lsb_9 : STD_LOGIC_VECTOR(addr_width-1 DOWNTO 0);
-    signal addr_msb : STD_LOGIC_VECTOR(3 DOWNTO 0);
-    signal addr_msb_9 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+--     signal addr_msb : STD_LOGIC_VECTOR(3 DOWNTO 0);
+--     signal addr_msb_9 : STD_LOGIC_VECTOR(3 DOWNTO 0);
     signal dout1 : STD_LOGIC_VECTOR(dout1_width-1 DOWNTO 0);
     signal dout2 : STD_LOGIC_VECTOR(dout2_width-1 DOWNTO 0);
     signal dout3 : STD_LOGIC_VECTOR(dout3_width-1 DOWNTO 0);
@@ -131,13 +131,13 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
     signal dout7 : STD_LOGIC_VECTOR(dout7_width-1 DOWNTO 0);
     signal dout8 : STD_LOGIC_VECTOR(dout8_width-1 DOWNTO 0);
     signal dout9 : STD_LOGIC_VECTOR(dout9_width-1 DOWNTO 0);
-    
+
 begin
-   
+
     addr_lsb <= deta(5 downto 0) & dphi(5 downto 0);
     addr_lsb_9 <= deta(7 downto 0) & dphi(3 downto 0);
-    addr_msb <= deta(7 downto 6) & dphi(7 downto 6);
-    addr_msb_9 <= dphi(7 downto 4);
+--     addr_msb <= deta(7 downto 6) & dphi(7 downto 6);
+--     addr_msb_9 <= dphi(7 downto 4);
 
     lut1_i : rom_lut_muon_inv_dr_sq_1
         port map (
@@ -152,7 +152,7 @@ begin
             addra => addr_lsb,
             douta => dout2
         );
-        
+
     lut3_i : rom_lut_muon_inv_dr_sq_3
         port map (
             clka => clk,
@@ -202,19 +202,19 @@ begin
             douta => dout9
         );
 
-    dout <= 
-        dout1 when addr_msb = "0000" else 
-        (lead_zero_5&dout5) when addr_msb = "0001" else  
-        (lead_zero_9&dout9) when addr_msb = "0010" else 
-        (lead_zero_2&dout2) when addr_msb = "0100" else 
-        (lead_zero_6&dout6) when addr_msb = "0101" else 
-        (lead_zero_9&dout9) when addr_msb = "0110" else 
-        (lead_zero_3&dout3) when addr_msb = "1000" else 
-        (lead_zero_7&dout7) when addr_msb = "1001" else 
-        (lead_zero_9&dout9) when addr_msb = "1010" else 
-        (lead_zero_4&dout4) when addr_msb = "1100" else 
-        (lead_zero_8&dout8) when addr_msb = "1101" else 
-        (lead_zero_9&dout9) when addr_msb_9 = "1000" else 
+    dout <=
+        dout1 when deta(7 downto 6) = "00" and dphi(7 downto 6) = "00" else
+        (lead_zero_5&dout5) when deta(7 downto 6) = "00" and dphi(7 downto 6) = "01" else
+        (lead_zero_9&dout9) when deta(7 downto 6) = "00" and dphi(7 downto 6) = "10" else
+        (lead_zero_2&dout2) when deta(7 downto 6) = "01" and dphi(7 downto 6) = "00" else
+        (lead_zero_6&dout6) when deta(7 downto 6) = "01" and dphi(7 downto 6) = "01" else
+        (lead_zero_9&dout9) when deta(7 downto 6) = "01" and dphi(7 downto 6) = "10" else
+        (lead_zero_3&dout3) when deta(7 downto 6) = "10" and dphi(7 downto 6) = "00" else
+        (lead_zero_7&dout7) when deta(7 downto 6) = "10" and dphi(7 downto 6) = "01" else
+        (lead_zero_9&dout9) when deta(7 downto 6) = "10" and dphi(7 downto 6) = "10" else
+        (lead_zero_4&dout4) when deta(7 downto 6) = "11" and dphi(7 downto 6) = "00" else
+        (lead_zero_8&dout8) when deta(7 downto 6) = "11" and dphi(7 downto 6) = "01" else
+        (lead_zero_9&dout9) when dphi(7 downto 4) = "1000" else
         zero_vec;
 
 end rtl;

@@ -14,6 +14,7 @@ phi_factor=4
 phi_bins=576
 phi_bins_reduced=phi_bins/phi_factor
 dphi_bins=int(phi_bins_reduced/2)
+print(phi_bins_reduced, dphi_bins)
 # same precision as for muon invariant mass (2*pt_precision+cosh_cos_precision) [=1+1+4]
 precision=6
 
@@ -25,7 +26,7 @@ print(f"{'idx':>6}", f"{'dphi_idx':>9}", f"{'deta_idx':>9}", f"{'dphi_val':>22}"
 for deta_idx in range(0,deta_bins+1):
     for dphi_idx in range(0,dphi_bins+1):
         deta_val = deta_idx*eta_bin_width
-        dphi_val = dphi_idx*2*math.pi/phi_bins
+        dphi_val = dphi_idx*2*math.pi/phi_bins_reduced
         if deta_idx == 0 and dphi_idx == 0:
             print(f"{idx:>6}", f"{dphi_idx:>9}", f"{deta_idx:>9}", f"{dphi_val:>22}", f"{deta_val:>22}", f"{undef:>25s}", f"{undef:>18s}", f"{undef:>17s}")
         else:

@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2020 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2021 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -57,7 +57,7 @@
 rom_lut_muon_inv_dr_sq_1 your_instance_name (
   .clka(clka),    // input wire clka
   .addra(addra),  // input wire [11 : 0] addra
-  .douta(douta)  // output wire [27 : 0] douta
+  .douta(douta)  // output wire [30 : 0] douta
 );
 // INST_TAG_END ------ End INSTANTIATION Template ---------
 

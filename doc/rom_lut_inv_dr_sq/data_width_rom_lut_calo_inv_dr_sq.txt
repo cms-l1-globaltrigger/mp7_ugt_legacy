@@ -1,9 +1,6 @@
-data width of roms for calo 1/DR^2:
+data width of roms for calo 1/DR^2 [with full bins => max deta: 230 , max dphi: 72 ]
 rom_nr 1 : 26
 rom_nr 2 : 14
 rom_nr 3 : 12
 rom_nr 4 : 11
 rom_nr 5 : 14
-rom_nr 6 : 13
-rom_nr 7 : 12
-rom_nr 8 : 11

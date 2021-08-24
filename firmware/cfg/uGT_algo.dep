@@ -82,10 +82,10 @@ src ../ngc/rom_lut_calo_inv_dr_sq_2/rom_lut_calo_inv_dr_sq_2.xci
 src ../ngc/rom_lut_calo_inv_dr_sq_3/rom_lut_calo_inv_dr_sq_3.xci
 src ../ngc/rom_lut_calo_inv_dr_sq_4/rom_lut_calo_inv_dr_sq_4.xci
 src ../ngc/rom_lut_calo_inv_dr_sq_5/rom_lut_calo_inv_dr_sq_5.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_6/rom_lut_calo_inv_dr_sq_6.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_7/rom_lut_calo_inv_dr_sq_7.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_8/rom_lut_calo_inv_dr_sq_8.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_9/rom_lut_calo_inv_dr_sq_9.xci
+#src ../ngc/rom_lut_calo_inv_dr_sq_6/rom_lut_calo_inv_dr_sq_6.xci
+#src ../ngc/rom_lut_calo_inv_dr_sq_7/rom_lut_calo_inv_dr_sq_7.xci
+#src ../ngc/rom_lut_calo_inv_dr_sq_8/rom_lut_calo_inv_dr_sq_8.xci
+#src ../ngc/rom_lut_calo_inv_dr_sq_9/rom_lut_calo_inv_dr_sq_9.xci
 src payload/gtl/common/rom_lut_calo_inv_dr_sq_all.vhd
 src ../ngc/rom_lut_muon_inv_dr_sq_1/rom_lut_muon_inv_dr_sq_1.xci
 src ../ngc/rom_lut_muon_inv_dr_sq_2/rom_lut_muon_inv_dr_sq_2.xci

@@ -1,8 +1,8 @@
 // Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2019.2 (lin64) Build 2708876 Wed Nov  6 21:39:14 MST 2019
-// Date        : Tue May 19 09:30:52 2020
-// Host        : bergauer-X1 running 64-bit Linux Mint 19.2 Tina
+// Tool Version: Vivado v.2019.2 (lin64) Build 2700185 Thu Oct 24 18:45:48 MDT 2019
+// Date        : Tue Aug 24 08:17:27 2021
+// Host        : ugt-synth running 64-bit Ubuntu 16.04.7 LTS
 // Command     : write_verilog -force -mode synth_stub
 //               /home/bergauer/github/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/ngc/rom_lut_muon_inv_dr_sq_2/rom_lut_muon_inv_dr_sq_2_stub.v
 // Design      : rom_lut_muon_inv_dr_sq_2
@@ -15,8 +15,8 @@
 // Please paste the declaration into a Verilog source file or add the file as an additional source.
 (* x_core_info = "blk_mem_gen_v8_4_4,Vivado 2019.2" *)
 module rom_lut_muon_inv_dr_sq_2(clka, addra, douta)
-/* synthesis syn_black_box black_box_pad_pin="clka,addra[11:0],douta[15:0]" */;
+/* synthesis syn_black_box black_box_pad_pin="clka,addra[11:0],douta[18:0]" */;
   input clka;
   input [11:0]addra;
-  output [15:0]douta;
+  output [18:0]douta;
 endmodule

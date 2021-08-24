@@ -17,6 +17,7 @@ use unisim.VComponents.all;
 entity rom_lut_muon_inv_dr_sq_all is
     generic(
         dout_width : positive := 33
+    );
     port(
         clk : in std_logic;
         deta : in STD_LOGIC_VECTOR(7 DOWNTO 0);

@@ -1,6 +1,6 @@
 
 -- Description:
--- Wrapper for all 9 ROM segments for LUTs with muon inv_dr_sq values.
+-- Wrapper for all 9 ROM segments for LUTs with muon inv_dr_sq values with reduced bin width (8 bits) for muon deta [226] and muon dphi [144] (half resolution)
 
 -- Version history:
 -- HB 2021-08-24: updated for new data width of ROMs.
@@ -14,15 +14,18 @@ use ieee.std_logic_arith.all;
 library unisim;
 use unisim.VComponents.all;
 
+use work.gtl_pkg.all;
+
 entity rom_lut_muon_inv_dr_sq_all is
     generic(
-        dout_width : positive := 33
+        deta_width : positive := 8;
+        dphi_width : positive := 8
     );
     port(
         clk : in std_logic;
-        deta : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-        dphi : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-        dout : out STD_LOGIC_VECTOR(dout_width-1 DOWNTO 0) := (others => '0')
+        deta : in STD_LOGIC_VECTOR(deta_width-1 DOWNTO 0);
+        dphi : in STD_LOGIC_VECTOR(dphi_width-1 DOWNTO 0);
+        dout : out STD_LOGIC_VECTOR(MU_MU_INV_DR_SQ_VECTOR_WIDTH-1 DOWNTO 0) := (others => '0')
     );
 end rom_lut_muon_inv_dr_sq_all;
 
@@ -30,7 +33,7 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
 
     constant addr_width : positive := 12;
 
-    constant dout1_width : positive := 33;
+    constant dout1_width : positive := 33; -- MU_MU_INV_DR_SQ_VECTOR_WIDTH
     constant dout2_width : positive := 19;
     constant dout3_width : positive := 17;
     constant dout4_width : positive := 16;
@@ -40,7 +43,7 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
     constant dout8_width : positive := 16;
     constant dout9_width : positive := 19;
 
-    constant zero_vec : STD_LOGIC_VECTOR(dout_width-1 DOWNTO 0) := (others => '0');
+    constant zero_vec : STD_LOGIC_VECTOR(MU_MU_INV_DR_SQ_VECTOR_WIDTH-1 DOWNTO 0) := (others => '0');
 
     COMPONENT rom_lut_muon_inv_dr_sq_1
     PORT (
@@ -117,7 +120,7 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
     signal addr_lsb : STD_LOGIC_VECTOR(addr_width-1 DOWNTO 0);
     signal addr_lsb_9 : STD_LOGIC_VECTOR(addr_width-1 DOWNTO 0);
 
-    signal dout1, dout2, dout3, dout4, dout5, dout6, dout7, dout8, dout9 : STD_LOGIC_VECTOR(dout_width-1 DOWNTO 0) := (others => '0');
+    signal dout1, dout2, dout3, dout4, dout5, dout6, dout7, dout8, dout9 : STD_LOGIC_VECTOR(MU_MU_INV_DR_SQ_VECTOR_WIDTH-1 DOWNTO 0) := (others => '0');
 
 begin
 

@@ -559,11 +559,11 @@ constant COMMON_DPHI_BINS_WIDTH : positive := max(CALO_DPHI_BINS_WIDTH, MU_DPHI_
 type common_deta_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(COMMON_DETA_BINS_WIDTH-1 downto 0);
 type common_dphi_bin_vector_array is array (natural range <>, natural range <>) of std_logic_vector(COMMON_DPHI_BINS_WIDTH-1 downto 0);
 
-constant MU_MU_INV_DR_SQ_LUT_MAX_VAL : natural := 211388559;
-constant MU_MU_INV_DR_SQ_VECTOR_WIDTH : natural := 28; -- => log2(MU_MU_INV_DR_SQ_LUT_MAX_VAL)
+constant MU_MU_INV_DR_SQ_LUT_MAX_VAL : natural := 2113885586;
+constant MU_MU_INV_DR_SQ_VECTOR_WIDTH : natural := 33; -- => log2(MU_MU_INV_DR_SQ_LUT_MAX_VAL)
 type muon_inv_dr_sq_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_MU_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
 
-constant MAX_INV_DR_SQ_VECTOR_WIDTH : positive := MU_MU_INV_DR_SQ_VECTOR_WIDTH; -- 28, max(CALO_INV_DR_SQ_VECTOR_WIDTH, MU_INV_DR_SQ_VECTOR_WIDTH)
+constant MAX_INV_DR_SQ_VECTOR_WIDTH : positive := MU_MU_INV_DR_SQ_VECTOR_WIDTH; -- 33, max(CALO_INV_DR_SQ_VECTOR_WIDTH, MU_INV_DR_SQ_VECTOR_WIDTH)
 
 constant MU_MU_MASS_DIV_DR_VECTOR_WIDTH : positive := 2*MU_PT_VECTOR_WIDTH+MU_MU_COSH_COS_VECTOR_WIDTH+MU_MU_INV_DR_SQ_VECTOR_WIDTH;
 type mu_mu_mass_div_dr_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MU_MU_MASS_DIV_DR_VECTOR_WIDTH-1 downto 0);

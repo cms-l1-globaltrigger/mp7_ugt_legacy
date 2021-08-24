@@ -72,7 +72,7 @@ architecture rtl of correlation_cuts_calculation is
         clk : IN STD_LOGIC;
         deta : in STD_LOGIC_VECTOR(7 DOWNTO 0);
         dphi : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-        dout : out STD_LOGIC_VECTOR(25 DOWNTO 0)
+        dout : out STD_LOGIC_VECTOR(CALO_CALO_INV_DR_SQ_VECTOR_WIDTH-1 DOWNTO 0)
     );
     END COMPONENT;
 
@@ -81,7 +81,7 @@ architecture rtl of correlation_cuts_calculation is
         clk : IN STD_LOGIC;
         deta : in STD_LOGIC_VECTOR(7 DOWNTO 0);
         dphi : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-        dout : out STD_LOGIC_VECTOR(27 DOWNTO 0)
+        dout : out STD_LOGIC_VECTOR(MU_MU_INV_DR_SQ_VECTOR_WIDTH-1 DOWNTO 0)
     );
     END COMPONENT;
 
@@ -96,11 +96,13 @@ architecture rtl of correlation_cuts_calculation is
     signal cosh_deta: common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
     signal cos_dphi: common_cosh_cos_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
 
-    signal deta_bin : common_deta_bin_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-    signal dphi_bin : common_dphi_bin_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+    signal calo_deta_bin : common_deta_bin_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+    signal calo_dphi_bin : common_dphi_bin_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+    signal muon_deta_bin : common_deta_bin_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+    signal muon_dphi_bin : common_dphi_bin_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
 
-    type inverted_dr_sq_array is array(0 to nr_obj1-1, 0 to nr_obj2-1) of std_logic_vector(inverted_dr_sq_width-1 downto 0);
-    signal inverted_dr_sq : inverted_dr_sq_array;
+    type inverted_dr_sq_array is array(0 to nr_obj1-1, 0 to nr_obj2-1) of std_logic_vector(MAX_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
+    signal inverted_dr_sq : inverted_dr_sq_array := (others => (others => (others => '0')));
 
     signal inv_mass_pt_in_p: mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
 
@@ -192,28 +194,28 @@ begin
             end generate mass_sel;
 
             mass_over_dr_sel: if mass_over_dr_cut generate
-                deta_bin(i,j)(deta_bins_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(deta_integer(i,j), deta_bins_width);
-                dphi_bin(i,j)(dphi_bins_width-1 downto 0) <= CONV_STD_LOGIC_VECTOR(dphi_integer(i,j), dphi_bins_width);
                 -- one clk for ROM
                 rom_lut_calo_sel: if rom_sel = CALO_CALO_ROM generate
+                    calo_deta_bin(i,j)(CALO_DETA_BINS_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR(deta_integer(i,j), CALO_DETA_BINS_WIDTH);
+                    calo_dphi_bin(i,j)(CALO_DPHI_BINS_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR(dphi_integer(i,j), CALO_DPHI_BINS_WIDTH);
                     rom_lut_i : rom_lut_calo_inv_dr_sq_all
                         port map (
                             clk => lhc_clk,
-                            deta => deta_bin(i,j)(deta_bins_width-1 downto 0),
-                            dphi => dphi_bin(i,j)(dphi_bins_width-1 downto 0),
-                            dout => inverted_dr_sq(i,j)
+                            deta => calo_deta_bin(i,j)(CALO_DETA_BINS_WIDTH-1 downto 0),
+                            dphi => calo_dphi_bin(i,j)(CALO_DPHI_BINS_WIDTH-1 downto 0),
+                            dout => inverted_dr_sq(i,j)(CALO_CALO_INV_DR_SQ_VECTOR_WIDTH-1 downto 0)
                         );
                 end generate rom_lut_calo_sel;
                 rom_lut_muon_sel: if rom_sel = MU_MU_ROM generate
+                    muon_deta_bin(i,j)(MU_DETA_BINS_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR(deta_integer(i,j), MU_DETA_BINS_WIDTH);
+                    muon_dphi_bin(i,j)(MU_DPHI_BINS_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR(dphi_integer(i,j), MU_DPHI_BINS_WIDTH);
                     rom_lut_i : rom_lut_muon_inv_dr_sq_all
                         port map (
                             clk => lhc_clk,
---                             deta => deta_bin(i,j)(deta_bins_width-1 downto 0),
---                             dphi => dphi_bin(i,j)(dphi_bins_width-1 downto 0),
--- reduced bin width (8 bits) for muon deta (half of calo bin width) and muon dphi (same as calo bin width)
-                            deta => deta_bin(i,j)(deta_bins_width-1 downto 1),
-                            dphi => dphi_bin(i,j)(dphi_bins_width-1 downto 2),
-                            dout => inverted_dr_sq(i,j)
+-- reduced bin width (8 bits) for muon deta [226] and muon dphi [144] (half resolution)
+                            deta => muon_deta_bin(i,j)(MU_DETA_BINS_WIDTH-1 downto 1),
+                            dphi => muon_dphi_bin(i,j)(MU_DPHI_BINS_WIDTH-1-1 downto 1),
+                            dout => inverted_dr_sq(i,j)(MU_MU_INV_DR_SQ_VECTOR_WIDTH-1 downto 0)
                         );
                 end generate rom_lut_muon_sel;
                 pipeline_p: process(lhc_clk, inv_mass_pt_in)

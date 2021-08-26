@@ -84,7 +84,7 @@ architecture rtl of rom_lut_calo_inv_dr_sq_all is
 
     signal addr_lsb, addr_lsb_5 : STD_LOGIC_VECTOR(addr_width-1 DOWNTO 0);
 
-    signal dout1, dout2, dout3, dout4, dout5 : STD_LOGIC_VECTOR(CALO_CALO_INV_DR_SQ_VECTOR_WIDTH-1 DOWNTO 0);
+    signal dout1, dout2, dout3, dout4, dout5 : STD_LOGIC_VECTOR(CALO_CALO_INV_DR_SQ_VECTOR_WIDTH-1 DOWNTO 0) := (others => '0');
 
 begin
 
@@ -127,11 +127,11 @@ begin
         );
 
     dout <=
-        dout1 when deta(7 downto 6) = "00" and dphi(6) = '0' else
-        dout2 when deta(7 downto 6) = "01" and dphi(6) = '0' else
-        dout3 when deta(7 downto 6) = "10" and dphi(6) = '0' else
-        dout4 when deta(7 downto 6) = "11" and dphi(6) = '0' else
-        dout5 when dphi(6 downto 4) = "100" else
+        dout1 when deta(7 downto 6) = "00" and dphi(7 downto 6) = "00" else
+        dout2 when deta(7 downto 6) = "01" and dphi(7 downto 6) = "00" else
+        dout3 when deta(7 downto 6) = "10" and dphi(7 downto 6) = "00" else
+        dout4 when deta(7 downto 6) = "11" and dphi(7 downto 6) = "00" else
+        dout5 when dphi(7 downto 4) = "0100" else
         zero_vec;
 
 end rtl;

@@ -1,6 +1,6 @@
 
 -- Description:
--- Wrapper for all 9 ROM segments for LUTs with inv_dr_sq values.
+-- Wrapper for all 5 ROM segments for LUTs with inv_dr_sq values.
 
 -- Version history:
 -- HB 2021-08-24: updated for new ROMs structure.

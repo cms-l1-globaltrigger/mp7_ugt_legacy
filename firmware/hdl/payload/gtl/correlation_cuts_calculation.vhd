@@ -3,6 +3,7 @@
 -- Instances for correlation cuts calculations
 
 -- Version history:
+-- HB 2021-08-27: added output inverted_dr_sq_sim for test and simulation.
 -- HB 2021-04-27: used deta_cosh_deta_luts.vhd and dphi_cos_dphi_luts.vhd separately for resource values.
 -- HB 2021-04-20: added logic for mass over deltaR.
 -- HB 2021-04-08: first design.
@@ -61,7 +62,8 @@ entity correlation_cuts_calculation is
         trans_mass: out mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         mass_over_dr: out mass_div_dr_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         tbpt: out tbpt_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
-        tbupt: out tbpt_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')))
+        tbupt: out tbpt_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
+        inverted_dr_sq_sim: out max_inv_dr_sq_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')))
     );
 end correlation_cuts_calculation;
 
@@ -101,8 +103,8 @@ architecture rtl of correlation_cuts_calculation is
     signal muon_deta_bin : common_deta_bin_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
     signal muon_dphi_bin : common_dphi_bin_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
 
-    type inverted_dr_sq_array is array(0 to nr_obj1-1, 0 to nr_obj2-1) of std_logic_vector(MAX_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
-    signal inverted_dr_sq : inverted_dr_sq_array := (others => (others => (others => '0')));
+--     type inverted_dr_sq_array is array(0 to nr_obj1-1, 0 to nr_obj2-1) of std_logic_vector(MAX_INV_DR_SQ_VECTOR_WIDTH-1 downto 0);
+    signal inverted_dr_sq : max_inv_dr_sq_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
 
     signal inv_mass_pt_in_p: mass_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
 
@@ -234,6 +236,7 @@ begin
                         inverted_dr_sq(i,j)(inverted_dr_sq_width-1 downto 0),
                         mass_over_dr(i,j)
                     );
+                inverted_dr_sq_sim(i,j) <= inverted_dr_sq(i,j);
             end generate mass_over_dr_sel;
 
             tbpt_sel: if tbpt_cut generate

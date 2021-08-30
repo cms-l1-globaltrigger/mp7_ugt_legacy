@@ -43,7 +43,7 @@ begin
         if inverted_dr_sq > 0 then
             mass_over_dr(mass_over_dr_vector_width-1 downto 0) <= mass_inv_pt(mass_vector_width-1 downto 0) * inverted_dr_sq(inverted_dr_sq_width-1 downto 0);
         else
-            mass_over_dr <= max_mass_over_dr;
+            mass_over_dr(mass_over_dr_vector_width-1 downto 0) <= max_mass_over_dr(mass_over_dr_vector_width-1 downto 0);
         end if;
     end process;
 

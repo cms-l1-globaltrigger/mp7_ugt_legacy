@@ -64,11 +64,13 @@ begin
     begin
         bx_data.eg(2) <= (others => X"00000000");
         wait for LHC_CLK_PERIOD;
-        bx_data.eg(2)(0)(8 downto 0) <= '1' & X"FF";
+--         bx_data.eg(2)(0)(8 downto 0) <= '1' & X"FF";
+        bx_data.eg(2)(0)(8 downto 0) <= '0' & X"14";
         bx_data.eg(2)(0)(16 downto 9) <= eta_val_max;
         bx_data.eg(2)(0)(24 downto 17) <= phi_val_max;
-        bx_data.eg(2)(1)(8 downto 0) <= '1' & X"FF";
-        for i in 0 to 230 loop
+--         bx_data.eg(2)(1)(8 downto 0) <= '1' & X"FF";
+        bx_data.eg(2)(1)(8 downto 0) <= '0' & X"14";
+        for i in 0 to 230-1 loop
             bx_data.eg(2)(1)(16 downto 9) <= eta_val_max - i;
             for j in 0 to 72 loop
                 bx_data.eg(2)(1)(24 downto 17) <= phi_val_max - j;
@@ -89,7 +91,8 @@ cond_invariant_mass_delta_r_i0_i: entity work.correlation_conditions
         mass_cut => true,
         mass_type => INVARIANT_MASS_DIV_DR_TYPE,
         mass_div_dr_vector_width => CALO_CALO_MASS_DIV_DR_VECTOR_WIDTH,
-        mass_div_dr_threshold => X"0000000000000006DDD00",
+--         mass_div_dr_threshold => X"0000000000000006DDD00",
+        mass_div_dr_threshold => X"000000000007000000000",
 -- number of objects and type
         nr_obj1 => NR_EG_OBJECTS,
         type_obj1 => EG_TYPE,

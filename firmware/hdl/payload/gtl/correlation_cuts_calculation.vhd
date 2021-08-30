@@ -89,6 +89,7 @@ architecture rtl of correlation_cuts_calculation is
 
     constant mass_vector_width : positive := pt1_width+pt2_width+cosh_cos_width;
     constant mass_upt_vector_width : positive := upt1_width+upt2_width+cosh_cos_width;
+    constant mass_over_dr_vector_width : positive := mass_vector_width+inverted_dr_sq_width;
     constant tbpt_vector_width : positive := 2+pt1_width+pt2_width+sin_cos_width+sin_cos_width;
     constant tbupt_vector_width : positive := 2+upt1_width+upt2_width+sin_cos_width+sin_cos_width;
 
@@ -234,7 +235,7 @@ begin
                     port map(
                         inv_mass_pt_in_p(i,j)(mass_vector_width-1 downto 0),
                         inverted_dr_sq(i,j)(inverted_dr_sq_width-1 downto 0),
-                        mass_over_dr(i,j)
+                        mass_over_dr(i,j)(mass_over_dr_vector_width-1 downto 0)
                     );
                 inverted_dr_sq_sim(i,j) <= inverted_dr_sq(i,j);
             end generate mass_over_dr_sel;

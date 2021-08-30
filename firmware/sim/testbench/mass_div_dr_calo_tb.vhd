@@ -62,6 +62,7 @@ begin
         variable eta_val_max : std_logic_vector(7 downto 0) := X"72";
         variable phi_val_max : std_logic_vector(7 downto 0) := X"48";
     begin
+        wait for 5 ns;
         bx_data.eg(2) <= (others => X"00000000");
         wait for LHC_CLK_PERIOD;
 --         bx_data.eg(2)(0)(8 downto 0) <= '1' & X"FF";

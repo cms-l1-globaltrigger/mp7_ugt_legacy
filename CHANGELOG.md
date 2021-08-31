@@ -38,12 +38,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/frame.vhd
   - ../packages/gtl_pkg.vhd
   - ../packages/gt_mp7_core_pkg.vhd
+  - ../payload/frame/output_mux.vhd
 
-## [v1.15.3] - 2021-06-26
+## [v1.15.3] - 2021-06-29
 ### Comment
 
 - mp7_ugt firmware release v1.15.3
-- added and updated scripts
+- added script of syntheses workflow
 
 ### Changed
 - script files:

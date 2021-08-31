@@ -18,7 +18,7 @@ EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
 DefaultSynthDir = 'work_synth/production'
-DefaultUgtTag = 'master'
+DefaultUgtTag = 'dev_1_15_3'
 
 
 def read_file(filename):

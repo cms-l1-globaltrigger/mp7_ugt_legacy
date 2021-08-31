@@ -56,7 +56,7 @@ COMPONENT rom_lut_muon_inv_dr_sq_5
   PORT (
     clka : IN STD_LOGIC;
     addra : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
-    douta : OUT STD_LOGIC_VECTOR(20 DOWNTO 0)
+    douta : OUT STD_LOGIC_VECTOR(18 DOWNTO 0)
   );
 END COMPONENT;
 -- COMP_TAG_END ------ End COMPONENT Declaration ------------

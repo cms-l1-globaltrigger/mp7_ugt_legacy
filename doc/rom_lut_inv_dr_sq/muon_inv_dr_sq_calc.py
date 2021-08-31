@@ -40,7 +40,7 @@ for dphi_msb in range(0,4):
         rom_nr+=1
         if rom_nr == max_rom_nr:
             dphi_idx_range = 32
-            deta_idx_range = 256
+            deta_idx_range = 128
         elif rom_nr < max_rom_nr:
             dphi_idx_range = 64
             deta_idx_range = 64

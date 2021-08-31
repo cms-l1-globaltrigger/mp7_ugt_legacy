@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - mp7_ugt firmware release v1.15.5
-- renewed logic and LUTs of 1/DR^2 (for mass over dr)
+- renewed logic and LUTs (ROMs) of 1/DR^2 (for mass over dr)
 
 ### Changed
 - source files:
@@ -25,6 +25,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - script files:
   - ../doc/../calo_inv_dr_sq_calc.py
   - ../doc/../muon_inv_dr_sq_calc.py
+- simulation file:
+  - ../sim/scripts/mass_div_dr_calo.do
+  - ../sim/scripts/mass_div_dr_calo_wave.do
+  - ../sim/testbench/mass_div_dr_calo_tb.vhd
+
+### Removed
+- source files:
+  - obsolete coe files
+  - IPs for rom_lut_calo_inv_dr_sq_6 to rom_lut_calo_inv_dr_sq_9
+- simulation file:
+  - obsolete simulation files
 
 ## [v1.15.4] - 2021-07-06
 ### Comment

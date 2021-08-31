@@ -4,18 +4,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.15.4] - 2021-08-17
+## [v1.15.5] - 2021-08-31
 ### Comment
 
-- mp7_ugt firmware release v1.15.4
-- renewed logic and LUTs for 1/DR^2 for muon
+- mp7_ugt firmware release v1.15.5
+- renewed logic and LUTs of 1/DR^2 (for mass over dr)
 
 ### Changed
+- source files:
+  - coe files
+  - regenerated IPs for rom_lut_calo_inv_dr_sq_1, ...
+  - regenerated IPs for rom_lut_muon_inv_dr_sq_1, ...
+  - ../payload/gtl/correlation_cuts_calculation.vhd
+  - ../payload/gtl/common/mass_over_dr_calc.vhd
+  - ../payload/gtl/common/rom_lut_calo_inv_dr_sq_all.vhd
+  - ../payload/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
 
 ### Added
 - script files:
   - ../doc/../calo_inv_dr_sq_calc.py
   - ../doc/../muon_inv_dr_sq_calc.py
+
+## [v1.15.4] - 2021-07-06
+### Comment
+
+- mp7_ugt firmware release v1.15.4
+- selection for scouting
+- selection for logic without spymem (to get enough BRAM resources for 12 objects)
+
+### Changed
+- source files:
+  - ../payload/frame.vhd
+  - ../packages/gtl_pkg.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
 
 ## [v1.15.3] - 2021-06-26
 ### Comment

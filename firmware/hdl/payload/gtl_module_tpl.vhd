@@ -2,6 +2,7 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
+-- HB 2021-08-31: v1.15.2: Changed logic for ROMs (mass over DR) [regenerated IPs for ROMs].
 -- HB 2021-06-10: v1.15.1: Added hadronic shower triggers.
 -- HB 2021-05-21: v1.15.0: Added fdl_pkg use clause. Added bx_pipeline (to simplify code).
 -- HB 2021-05-05: v1.14.1: Bug fixed in sum_mass.vhd (comparison for mass 3 body).

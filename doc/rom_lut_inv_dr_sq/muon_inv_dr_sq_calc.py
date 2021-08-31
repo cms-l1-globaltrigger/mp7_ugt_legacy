@@ -16,7 +16,7 @@ deta_bins=int((abs(eta_min_bin)+eta_max_bin)/eta_factor)+1
 # same bin width as for calos
 phi_factor=2
 phi_bins=576
-phi_bins_reduced=phi_bins/phi_factor
+phi_bins_reduced=int(phi_bins/phi_factor)
 dphi_bins=int(phi_bins_reduced/2)
 print("created muon LUTs with reduced bins [max deta:",deta_bins,", max dphi:",dphi_bins,"]")
 # same precision as for muon invariant mass (2*pt_precision+cosh_cos_precision) [=1+1+4]
@@ -39,7 +39,7 @@ for dphi_msb in range(0,4):
     for deta_msb in range(0,4):
         rom_nr+=1
         if rom_nr == max_rom_nr:
-            dphi_idx_range = 16
+            dphi_idx_range = 32
             deta_idx_range = 256
         elif rom_nr < max_rom_nr:
             dphi_idx_range = 64
@@ -54,7 +54,7 @@ for dphi_msb in range(0,4):
                 deta_idx_gl = deta_idx+deta_msb*64
                 deta_val = deta_idx_gl*eta_bin_width
                 dphi_idx_gl = dphi_idx+dphi_msb*64
-                dphi_val = dphi_idx_gl*2*math.pi/phi_bins
+                dphi_val = dphi_idx_gl*2*math.pi/phi_bins_reduced
                 if deta_val == 0 and dphi_val == 0:
                     inv_dr_sq_fw_lut_arr[0] = 0
 

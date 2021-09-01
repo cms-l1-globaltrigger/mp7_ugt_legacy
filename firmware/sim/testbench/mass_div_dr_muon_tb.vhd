@@ -61,7 +61,7 @@ begin
 
     process
         variable eta_val_max : std_logic_vector(8 downto 0) := '0' & X"E1";
-        variable phi_val_max : std_logic_vector(9 downto 0) := "00" & X"90";
+        variable phi_val_max : std_logic_vector(9 downto 0) := "01" & X"20";
     begin
         wait for 5 ns;
         bx_data.mu(2) <= (others => X"0000000000000000");
@@ -70,11 +70,10 @@ begin
         bx_data.mu(2)(0)(31 downto 23) <= eta_val_max;
         bx_data.mu(2)(0)(9 downto 0) <= phi_val_max;
         bx_data.mu(2)(1)(18 downto 10) <= '0' & X"15";
--- voller Breich für deta und dphi fehlt noch !!??
-        for i in 0 to 226-1 loop
-            bx_data.mu(2)(1)(31 downto 23) <= (eta_val_max - i*2);
-            for j in 0 to 72 loop
-                bx_data.mu(2)(1)(9 downto 0) <= (phi_val_max - j*2);
+        for i in 0 to 226*2 loop
+            bx_data.mu(2)(1)(31 downto 23) <= eta_val_max - i;
+            for j in 0 to 144*2 loop
+                bx_data.mu(2)(1)(9 downto 0) <= phi_val_max - j;
                 wait for LHC_CLK_PERIOD;
             end loop;
         end loop;

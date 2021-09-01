@@ -96,6 +96,6 @@ view wave
 do $TESTBENCH/../scripts/mass_div_dr_muon_wave.do
 
 ##Run simulation
-run 420 us
+run 3000 us
 
 # eof

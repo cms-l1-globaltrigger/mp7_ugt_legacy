@@ -71,7 +71,7 @@ begin
         bx_data.eg(2)(0)(24 downto 17) <= phi_val_max;
 --         bx_data.eg(2)(1)(8 downto 0) <= '1' & X"FF";
         bx_data.eg(2)(1)(8 downto 0) <= '0' & X"14";
-        for i in 0 to 230-1 loop
+        for i in 0 to 230 loop
             bx_data.eg(2)(1)(16 downto 9) <= eta_val_max - i;
             for j in 0 to 72 loop
                 bx_data.eg(2)(1)(24 downto 17) <= phi_val_max - j;

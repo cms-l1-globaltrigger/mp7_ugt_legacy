@@ -28,6 +28,7 @@ inv_dr_sq_fw_lut_arr={}
 idx=0
 rom_nr=0
 max_rom_nr=9
+end_emu_file=False
 
 inv_dr_sq_fw_lut_list=[[0 for x in range(4096)] for x in range(max_rom_nr)]
 
@@ -38,10 +39,10 @@ print(f"{'dphi':>5}", f"{'deta':>5}", f"{'dphi_val':>22}", f"{'deta_val':>22}", 
 for dphi_msb in range(0,4):
     for deta_msb in range(0,4):
         rom_nr+=1
-        if rom_nr == max_rom_nr:
+        if rom_nr > 8 and rom_nr <= max_rom_nr:
             dphi_idx_range = 32
-            deta_idx_range = 128
-        elif rom_nr < max_rom_nr:
+            deta_idx_range = 256
+        elif rom_nr <= 8:
             dphi_idx_range = 64
             deta_idx_range = 64
         filename=os.path.join(coe_files_path, "lut_muon_inv_dr_sq_rom" + str(rom_nr) + ".coe")
@@ -65,8 +66,13 @@ for dphi_msb in range(0,4):
                     inv_dr_sq_fw_lut = int(round(inv_dr_sq_rounded*(10**precision),0))
                     inv_dr_sq_fw_lut_arr[idx] = inv_dr_sq_fw_lut
 
-                    if deta_idx_gl <= deta_bins and dphi_idx_gl <= dphi_bins:
-                        print(f"{dphi_idx_gl:>5}", f"{deta_idx_gl:>5}", f"{dphi_val:>22}", f"{deta_val:>22}", f"{inv_dr_sq:>25}", f"{inv_dr_sq_rounded:>18}", f"{inv_dr_sq_fw_lut:>17}",  file=f_emu)
+                    if deta_idx_gl == deta_bins and dphi_idx_gl == dphi_bins+1:
+                        end_emu_file=True
+                        #print("EOF:", end_emu_file, file=f_emu)
+
+                    if not end_emu_file:
+                        if deta_idx_gl <= deta_bins and dphi_idx_gl <= dphi_bins:
+                            print(f"{dphi_idx_gl:>5}", f"{deta_idx_gl:>5}", f"{dphi_val:>22}", f"{deta_val:>22}", f"{inv_dr_sq:>25}", f"{inv_dr_sq_rounded:>18}", f"{inv_dr_sq_fw_lut:>17}",  file=f_emu)
 
                 if rom_nr <= max_rom_nr:
                     idx_modulo=idx%16

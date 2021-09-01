@@ -33,6 +33,7 @@ end rom_lut_muon_inv_dr_sq_all;
 architecture rtl of rom_lut_muon_inv_dr_sq_all is
 
     constant addr_width : positive := 12;
+    constant addr9_width : positive := 13;
 
     constant dout1_width : positive := 31; -- MU_MU_INV_DR_SQ_VECTOR_WIDTH
     constant dout2_width : positive := 19;
@@ -113,13 +114,13 @@ architecture rtl of rom_lut_muon_inv_dr_sq_all is
     COMPONENT rom_lut_muon_inv_dr_sq_9
     PORT (
         clka : IN STD_LOGIC;
-        addra : IN STD_LOGIC_VECTOR(addr_width-1 DOWNTO 0);
+        addra : IN STD_LOGIC_VECTOR(addr9_width-1 DOWNTO 0);
         douta : OUT STD_LOGIC_VECTOR(dout9_width-1 DOWNTO 0)
     );
     END COMPONENT;
 
     signal addr_lsb : STD_LOGIC_VECTOR(addr_width-1 DOWNTO 0);
-    signal addr_lsb_9 : STD_LOGIC_VECTOR(addr_width-1 DOWNTO 0);
+    signal addr_lsb_9 : STD_LOGIC_VECTOR(addr9_width-1 DOWNTO 0);
 
     signal dout1, dout2, dout3, dout4, dout5, dout6, dout7, dout8, dout9 : STD_LOGIC_VECTOR(MU_MU_INV_DR_SQ_VECTOR_WIDTH-1 DOWNTO 0) := (others => '0');
 

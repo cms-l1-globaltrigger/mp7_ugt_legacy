@@ -169,11 +169,12 @@ begin
                             generic map(false, mass_upper_limit_vector(mass_vector_width-1 downto 0), mass_lower_limit_vector(mass_vector_width-1 downto 0))
                             port map(mass_trans(i,j), mass_comp(i,j));
                     end generate mass_type_trans;
-                    mass_dr_sel: if mass_cut and mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
-                        mass_dr_comp_i: entity work.correlation_cut_comp
-                            generic map(true, mass_div_dr_threshold(mass_div_dr_vector_width-1 downto 0), mass_div_dr_threshold(mass_div_dr_vector_width-1 downto 0))
-                            port map(mass_div_dr(i,j), mass_div_dr_comp(i,j));
-                    end generate mass_dr_sel;
+-- HB 2021-09-02: mass_div_dr not acailable for different object types and bx
+--                     mass_dr_sel: if mass_cut and mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
+--                         mass_dr_comp_i: entity work.correlation_cut_comp
+--                             generic map(true, mass_div_dr_threshold(mass_div_dr_vector_width-1 downto 0), mass_div_dr_threshold(mass_div_dr_vector_width-1 downto 0))
+--                             port map(mass_div_dr(i,j), mass_div_dr_comp(i,j));
+--                     end generate mass_dr_sel;
                     tbpt_sel: if tbpt_cut generate
                         tbpt_comp_i: entity work.correlation_cut_comp
                             generic map(true, tbpt_threshold_vector(tbpt_vector_width-1 downto 0), tbpt_threshold_vector(tbpt_vector_width-1 downto 0))

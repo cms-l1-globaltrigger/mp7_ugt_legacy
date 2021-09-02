@@ -1098,43 +1098,44 @@ $\Delta$$R=\sqrt{(\eta_1-\eta_2)^2+(\varphi_1-\varphi_2)^2}$.\\
 
 In the TME there is one threshold for M/$\Delta$R, given in GeV (floating point notation) with one position after decimal point.
 The calculation of \textit{invariant mass over $\Delta$R of two objects} is done in an own module outside of the condition with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL).\\
-A direct calculation of 1/$\Delta$$R^2$ is not possible in firmware (VHDL code), therefore the implementation of the calculation is done by LUTs. In the hardware the values of these LUTs are stored in "large" ROMs, which was realized using the Block RAMs (BRAMs) of the Virtex chip. Due the number of available BRAMs there are some restrictions for creating algorithms with \textit{invariant mass over $\Delta$R}:
+A direct calculation of 1/$\Delta$$R^2$ is not possible in firmware (VHDL code), therefore the implementation of the calculation is done by LUTs. In the hardware the values of these LUTs are stored in "large" ROMs, which was realized using the Block RAMs (BRAMs) of the Virtex chip.\\
+Due the number of available BRAMs there are some restrictions for creating algorithms with \textit{invariant mass over $\Delta$R}:
 \begin{itemize}
-\item 1. Objects must have the same type (e.g.: muon_muon, eg-eg, ...).
-\item 2. Objects must be of same bx.
+\item 1. Objects must have the same type (e.g.: muon\_muon, eg\_eg, ...)
+\item 2. Objects must be of same bx
 \item 3. Resolution of delta Eta and delta Phi:
   \begin{itemize}
-  \item Full resolution for calos (max. deta bins=230, max. dphi bins=72).
-  \item Half resolution only for muons (max. deta bins=226, max. dphi bins=144).
+  \item Full resolution for calos (max. deta bins=230, max. dphi bins=72)
+  \item Half resolution only for muons (max. deta bins=226, max. dphi bins=144)
   \end{itemize}
 \item 4. The precision of delta Eta and delta Phi:
   \begin{itemize}
-  \item calo_calo = 5
-  \item muon_muon = 6.
+  \item calo\_calo = 5
+  \item muon\_muon = 6
   \end{itemize}
-\item 5. If 1/$\Delta$$R^2$=0 (deta=0 and dphi=0) then correlation cut \textit{invariant mass over $\Delta$R} is true.
-\item 6. The values of LUTs are only valid for current definitions and restrictions. Every change might cause a recalculation of the values and a regeneration of IPs (representing LUTs in BRAMs) in Vivado (firmware generation tool).
+\item 5. If 1/$\Delta$$R^2$=0 (deta=0 and dphi=0) then correlation cut \textit{invariant mass over $\Delta$R} is true
+\item 6. The values of LUTs are only valid for current definitions and restrictions. Every change might cause a recalculation of the values and a regeneration of IPs (representing LUTs in BRAMs) in Vivado (firmware generation tool)
 \end{itemize}
 
-The LUTs values (of 1/$\Delta$$R^2$) are listed in https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_15_5/doc/rom_lut_inv_dr_sq/emulator_lut_calo_inv_dr_sq_calc.txt and https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_15_5/doc/rom_lut_inv_dr_sq/emulator_lut_muon_inv_dr_sq_calc.txt. These files have been created by scripts https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_15_5/doc/rom_lut_inv_dr_sq/calo_inv_dr_sq_calc.py and https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_15_5/doc/rom_lut_inv_dr_sq/muon_inv_dr_sq_calc.py.
+The LUTs values (of 1/$\Delta$$R^2$) are listed in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_15_5/doc/rom_lut_inv_dr_sq/emulator_lut_calo_inv_dr_sq_calc.txt}{\texttt{emulator\_lut\_calo\_inv\_dr\_sq\_calc.txt}} and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_15_5/doc/rom_lut_inv_dr_sq/emulator_lut_muon_inv_dr_sq_calc.txt}{\texttt{emulator\_lut\_muon\_inv\_dr\_sq\_calc.txt}}. These files have been created by scripts \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_15_5/doc/rom_lut_inv_dr_sq/calo_inv_dr_sq_calc.py}{\texttt{calo\_inv\_dr\_sq\_calc.py}} and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_15_5/doc/rom_lut_inv_dr_sq/muon_inv_dr_sq_calc.py}{\texttt{muon\_inv\_dr\_sq\_calc.py}}.\\
 In these files the following values are listed in columns (from left to right):
 \begin{itemize}
-\item 1. Difference of phi [bins].
-\item 2. Difference of eta [bins].
-\item 3. Value of difference in phi (with resolution shown in restrictions).
-\item 4. Value of difference in eta (with resolution shown in restrictions).
-\item 5. Value of 1/DR^2.
-\item 6. Value of 1/DR^2 rounded (with value of precisions).
-\item 7. Integer value of 1/DR^2 rounded, multiplied with 10^precision (content of LUTs in firmware).
+\item 1. Difference of phi [bins]
+\item 2. Difference of eta [bins]
+\item 3. Value of difference in phi (with resolution shown in restrictions)
+\item 4. Value of difference in eta (with resolution shown in restrictions)
+\item 5. Value of 1/$\Delta$$R^2$
+\item 6. Value of 1/$\Delta$$R^2$ rounded (with value of precisions)
+\item 7. Integer value of 1/$\Delta$$R^2$ rounded, multiplied with 10\textsuperscript{precision} (content of LUTs in firmware)
 \end{itemize}
 
-The values of LUTs in firmware are listed in coe files of ROMs (created by same scripts mentioned above), currently 5 ROMs for calo_calo and 9 ROMs for muon_muon (see https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_15_5/firmware/ngc/lut_calo_inv_dr_sq_rom1.coe, etc. and https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_15_5/firmware/ngc/lut_muon_inv_dr_sq_rom1.coe, etc.). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. All ROMs have 4096 addresses, exept ROM 9 for muon_muon with 8192 addresses. The data width of ROMs is different depending on the highest value in ROM. Because of these different data widths the partitioning of several ROMs was done to save BRAM resources. Only one calculation of \textit{invariant mass over $\Delta$R} is possible in one Virtex chip, but one can have some algorithms containing \textit{invariant mass over $\Delta$R} with different thresholds, but with same objects and same bx.
+The values of LUTs in firmware are listed in coe files of ROMs (created by same scripts mentioned above), currently 5 ROMs for calo\_calo and 9 ROMs for muon\_muon (see \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_15_5/firmware/ngc/lut_calo_inv_dr_sq_rom1.coe}{\texttt{lut\_calo\_inv\_dr\_sq\_rom1.coe}}, etc. and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_15_5/firmware/ngc/lut_muon_inv_dr_sq_rom1.coe}{\texttt{lut\_muon\_inv\_dr\_sq\_rom1.coe}}, etc.). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. All ROMs have 4096 addresses, exept ROM 9 for muon\_muon with 8192 addresses. The data width of ROMs is different depending on the highest value in ROM. Because of these different data widths the partitioning of several ROMs was done to save BRAM resources. Only one calculation of \textit{invariant mass over $\Delta$R} is possible in one Virtex chip, but one can have some algorithms containing \textit{invariant mass over $\Delta$R} with different thresholds, but with same objects and same bx.\\
 Following numbers of BRAMs (36kb) are needed:
 \begin{itemize}
-\item calo_calo: 660.
-\item muon_muon: 630.
+\item calo\_calo: 660
+\item muon\_muon: 630
 \end{itemize}
-[Available BRAM (36kb) resources per chip: 873.]
+[Available BRAM (36kb) resources per chip: 873]
 
 \subparagraph{Invariant mass calculation for three objects}
 \label{sec:gtl:inv_mass_3_obj_calculation}

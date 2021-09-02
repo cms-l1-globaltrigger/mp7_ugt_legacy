@@ -3,23 +3,24 @@
 
 \begin{longtable}{|c|p{.65\columnwidth}|c|}
 % \caption{Explanation of Listing~\ref{lst:muon_conditions_vhd}}\\
-\hline 
+\hline
 Doc Rev & Description of Change & Revision Date\\
 \hline
 \hline
 \endhead
-4.8 & Fixed typo in section "Invariant mass calculation for three objects" \ref{sec:gtl:inv_mass_3_obj_calculation}. & 2020/12/03\\ 
-4.7 & Inserted links to VHDL modules. & 2020/09/18\\ 
-4.6 & Updated text in section "Correlation conditions" \ref{sec:gtl:correlation_conditions}. Description is for v1.10.0 of Global Trigger Logic. & 2020/09/17\\ 
-4.5 & Inserted description of "Invariant mass divided by delta R calculation" (see \ref{sec:gtl:inv_mass_div_dr_calculation}). & 2020/09/10\\ 
-4.4 & Fixed typo (unconstrained pt). & 2020/09/09\\ 
-4.3 & Inserted text for new muon structure in sections \ref{sec:gtl:gmt_optical_interfaces} and \ref{sec:gtl:muon_data}. & 2020/08/04\\ 
-4.2 & Additional text in section \ref{sec:gtl:calo_calo_overlap_remover_condition_module}. & 2020/05/25\\ 
-4.1 & Updated glossary. & 2020/04/21\\ 
-4.0 & Removed listings (not usefull for emulator designers). & 2020/04/17\\ 
-3.9 & Inserted text in section \ref{sec:gtl:calo_conditions_orm_module} for Calorimeter Overlap Remover conditions and \ref{sec:gtl:calo_calo_overlap_remover_condition_module} for Calo Calo Overlap Remover Correlation conditions. & 2020/04/16\\ 
-3.8 & Updated text in sections \ref{sec:gtl:calorimeter_conditions}, \ref{sec:gtl:muon_conditions} and \ref{sec:gtl:correlation_conditions} for changes which have been done for GTL VHDL version 1.8.0 (module names without version number, "five eta cuts"). & 2019/08/13\\ 
-3.7 & Inserted "Asymmetry" and "Centrality" of "Energy sums" (GTL VHDL version 1.6.0). Therefore updated sections \ref{sec:gtl:ugtl_interface}, \ref{sec:gtl:gct_optical_interfaces}, 
+4.9 & Updated (and renamed) description of "Invariant mass over delta R calculation" (see \ref{sec:gtl:inv_mass_div_dr_calculation}). & 2021/09/02\\
+4.8 & Fixed typo in section "Invariant mass calculation for three objects" \ref{sec:gtl:inv_mass_3_obj_calculation}. & 2020/12/03\\
+4.7 & Inserted links to VHDL modules. & 2020/09/18\\
+4.6 & Updated text in section "Correlation conditions" \ref{sec:gtl:correlation_conditions}. Description is for v1.10.0 of Global Trigger Logic. & 2020/09/17\\
+4.5 & Inserted description of "Invariant mass divided by delta R calculation" (see \ref{sec:gtl:inv_mass_div_dr_calculation}). & 2020/09/10\\
+4.4 & Fixed typo (unconstrained pt). & 2020/09/09\\
+4.3 & Inserted text for new muon structure in sections \ref{sec:gtl:gmt_optical_interfaces} and \ref{sec:gtl:muon_data}. & 2020/08/04\\
+4.2 & Additional text in section \ref{sec:gtl:calo_calo_overlap_remover_condition_module}. & 2020/05/25\\
+4.1 & Updated glossary. & 2020/04/21\\
+4.0 & Removed listings (not usefull for emulator designers). & 2020/04/17\\
+3.9 & Inserted text in section \ref{sec:gtl:calo_conditions_orm_module} for Calorimeter Overlap Remover conditions and \ref{sec:gtl:calo_calo_overlap_remover_condition_module} for Calo Calo Overlap Remover Correlation conditions. & 2020/04/16\\
+3.8 & Updated text in sections \ref{sec:gtl:calorimeter_conditions}, \ref{sec:gtl:muon_conditions} and \ref{sec:gtl:correlation_conditions} for changes which have been done for GTL VHDL version 1.8.0 (module names without version number, "five eta cuts"). & 2019/08/13\\
+3.7 & Inserted "Asymmetry" and "Centrality" of "Energy sums" (GTL VHDL version 1.6.0). Therefore updated sections \ref{sec:gtl:ugtl_interface}, \ref{sec:gtl:gct_optical_interfaces},
 \ref{sec:gtl:esums_conditions} added section "Centrality condition" \ref{sec:gtl:centrality_cond} & 2018/08/13\\
 3.6 & Updated text in section "Global Trigger Logic" (\ref{sec:gtl:global_trigger_logic}) according to firmware version v1.5.0 of gtl\_module.vhd & 2018/02/21\\
 3.5 & Inserted text for "Minimum bias trigger conditions" (\ref{sec:gtl:min_bias_conditions}) and "Towercount condition" (\ref{sec:gtl:towercount_cond}).
@@ -35,17 +36,17 @@ Updated glossary. & 2016/11/28\\
 Created scheme for conversion of calorimeter $\eta$ and $\varphi$ to muon scale for calo-muon-correlation conditions (see Figure~\ref{fig:gtl:convert_scheme_calo_2_muon_eta_phi}). & 2015/11/17\\
 2.7 & Added text in sections (\ref{sec:gtl:calo_comp_module}) and (\ref{sec:gtl:muon_comp_module}). & 2015/10/08\\
 2.6 & Updated Tables \ref{tab:gtl:calo_lut_iso} and \ref{tab:gtl:muon_lut_iso}. Remaned section "Calorimeter conditions module - version 2" to "Calorimeter conditions module - version 3"
-(see \ref{sec:gtl:calo_cond_def}), section "Muon conditions module" to "Muon conditions module - version 2" and section "Muon comparators module" to "Muon comparators module - version 2" 
-(see \ref{sec:gtl:muon_cond_def}) & 2015/10/02\\ 
+(see \ref{sec:gtl:calo_cond_def}), section "Muon conditions module" to "Muon conditions module - version 2" and section "Muon comparators module" to "Muon comparators module - version 2"
+(see \ref{sec:gtl:muon_cond_def}) & 2015/10/02\\
 2.5 & Updated text and tables of $\eta$ ranges for Calorimeter objects (see \ref{sec:gtl:calorimeter_data}). & 2015/09/22\\
 2.4 & Corrected calculation of muon $\eta$ step width (see \ref{sec:gtl:muon_data}). & 2015/09/10\\
 2.3 & Edited text in Tables \ref{tab:gtl:calo_lut_iso}, \ref{tab:gtl:muon_lut_qual} and \ref{tab:gtl:muon_lut_iso}. & 2015/08/28\\
 2.2 & Updated definition of $\eta$ ranges for Calorimeter objects and Muon objects (\ref{sec:gtl:calorimeter_data} and \ref{sec:gtl:muon_data}). & 2015/08/20\\
 2.1 & Added section Calo Muon Correlation condition (\ref{sec:gtl:calo_muon_correlation_condition_module}) & 2015/08/19\\
 2.0 & Added section "Correlation conditions" (\ref{sec:gtl:correlation_conditions}). & 2015/06/19\\
-1.9 & Added tables for calorimeter isolation-bits and for muon quality- and isolation-bits definition (\ref{tab:gtl:eg_tau_iso_bits}, \ref{tab:gtl:muon_quality_bits} and \ref{tab:gtl:muon_iso_bits}). 
+1.9 & Added tables for calorimeter isolation-bits and for muon quality- and isolation-bits definition (\ref{tab:gtl:eg_tau_iso_bits}, \ref{tab:gtl:muon_quality_bits} and \ref{tab:gtl:muon_iso_bits}).
 Edited section glossary (\ref{sec:glossary}) and acronyms. & 2015/05/07\\
-1.8 & Added text for "Energy sum conditions" (\ref{sec:gtl:esums_conditions}) and updated chapters for "Calorimeter conditions" for version 2. Inserted isolation bits for \egamma and tau objects 
+1.8 & Added text for "Energy sum conditions" (\ref{sec:gtl:esums_conditions}) and updated chapters for "Calorimeter conditions" for version 2. Inserted isolation bits for \egamma and tau objects
 (\ref{sec:gtl:calorimeter_data}). & 2015/05/06\\
 1.7 & Minor changes in sections "Muon data" (\ref{sec:gtl:muon_data}) & 2014/11/06\\
 1.6 & Minor changes in sections "Calorimeter conditions definition" (\ref{sec:gtl:calo_cond_def}) and "Muon conditions definition" (\ref{sec:gtl:muon_cond_def}) & 2014/07/01\\

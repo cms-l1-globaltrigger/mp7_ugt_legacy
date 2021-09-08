@@ -27,24 +27,20 @@ inv_dr_sq_fw_lut_arr={}
 
 idx=0
 rom_nr=0
-max_rom_nr=9
+max_rom_nr=6
 end_emu_file=False
 
-inv_dr_sq_fw_lut_list=[[0 for x in range(4096)] for x in range(max_rom_nr)]
+inv_dr_sq_fw_lut_list=[[0 for x in range(8192)] for x in range(max_rom_nr)]
 
 filename=os.path.join(doc_files_path, "emulator_lut_muon_inv_dr_sq_calc.txt")
 f_emu = open(filename, "w")
-print(f"{'dphi':>5}", f"{'deta':>5}", f"{'dphi_val':>22}", f"{'deta_val':>22}", f"{'inv_dr_sq':>25}", f"{'inv_dr_sq_rounded':>18}", f"{'inv_dr_sq_fw_lut':>17}",  file=f_emu)
+print(f"{'dphi':>5}", f"{'deta':>5}", f"{'dphi_val':>22}", f"{'deta_val':>22}", f"{'inv_dr_sq':>25}", f"{'inv_dr_sq_rounded':>18}", f"{'inv_dr_sq_fw_lut':>17}", f"{'rom_nr':>8}", file=f_emu)
 
-for dphi_msb in range(0,4):
-    for deta_msb in range(0,4):
+for dphi_msb in range(0,3):
+    for deta_msb in range(0,2):
         rom_nr+=1
-        if rom_nr > 8 and rom_nr <= max_rom_nr:
-            dphi_idx_range = 32
-            deta_idx_range = 256
-        elif rom_nr <= 8:
-            dphi_idx_range = 64
-            deta_idx_range = 64
+        dphi_idx_range = 64
+        deta_idx_range = 128
         filename=os.path.join(coe_files_path, "lut_muon_inv_dr_sq_rom" + str(rom_nr) + ".coe")
         if rom_nr <= max_rom_nr:
             f = open(filename, "w")
@@ -52,14 +48,14 @@ for dphi_msb in range(0,4):
             print("memory_initialization_vector=", file=f)
         for deta_idx in range(0,deta_idx_range):
             for dphi_idx in range(0,dphi_idx_range):
-                deta_idx_gl = deta_idx+deta_msb*64
+                deta_idx_gl = deta_idx+deta_msb*deta_idx_range
                 deta_val = deta_idx_gl*eta_bin_width
-                dphi_idx_gl = dphi_idx+dphi_msb*64
+                dphi_idx_gl = dphi_idx+dphi_msb*dphi_idx_range
                 dphi_val = dphi_idx_gl*2*math.pi/phi_bins_reduced
                 if deta_val == 0 and dphi_val == 0:
                     inv_dr_sq_fw_lut_arr[0] = 0
 
-                    print(f"{dphi_idx:>5}", f"{deta_idx:>5}", f"{dphi_val:>22}", f"{deta_val:>22}", f"{undef:>25s}", f"{undef:>18s}", f"{undef:>17s}",  file=f_emu)
+                    print(f"{dphi_idx:>5}", f"{deta_idx:>5}", f"{dphi_val:>22}", f"{deta_val:>22}", f"{undef:>25s}", f"{undef:>18s}", f"{undef:>17s}", f"{rom_nr:>8}", file=f_emu)
                 else:
                     inv_dr_sq = 1/((deta_val**2)+(dphi_val**2))
                     inv_dr_sq_rounded = round(inv_dr_sq,precision)
@@ -72,7 +68,7 @@ for dphi_msb in range(0,4):
 
                     if not end_emu_file:
                         if deta_idx_gl <= deta_bins and dphi_idx_gl <= dphi_bins:
-                            print(f"{dphi_idx_gl:>5}", f"{deta_idx_gl:>5}", f"{dphi_val:>22}", f"{deta_val:>22}", f"{inv_dr_sq:>25}", f"{inv_dr_sq_rounded:>18}", f"{inv_dr_sq_fw_lut:>17}",  file=f_emu)
+                            print(f"{dphi_idx_gl:>5}", f"{deta_idx_gl:>5}", f"{dphi_val:>22}", f"{deta_val:>22}", f"{inv_dr_sq:>25}", f"{inv_dr_sq_rounded:>18}", f"{inv_dr_sq_fw_lut:>17}", f"{rom_nr:>8}", file=f_emu)
 
                 if rom_nr <= max_rom_nr:
                     idx_modulo=idx%16

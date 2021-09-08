@@ -29,6 +29,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../sim/scripts/mass_div_dr_calo.do
   - ../sim/scripts/mass_div_dr_calo_wave.do
   - ../sim/testbench/mass_div_dr_calo_tb.vhd
+  - ../sim/scripts/mass_div_dr_muon_result.do
+  - ../sim/scripts/mass_div_dr_muon_result_wave.do
+  - ../sim/scripts/rom_lut_calo_inv_dr_sq_all.do
+  - ../sim/scripts/rom_lut_calo_inv_dr_sq_all_wave.do
+  - ../sim/scripts/rom_lut_muon_inv_dr_sq_all.do
+  - ../sim/scripts/rom_lut_muon_inv_dr_sq_all_wave.do
+  - ../sim/testbench/mass_div_dr_muon_result_tb.vhd
+  - ../sim/testbench/rom_lut_calo_inv_dr_sq_all_tb.vhd
+  - ../sim/testbench/rom_lut_muon_inv_dr_sq_all_tb.vhd
 
 ### Removed
 - source files:

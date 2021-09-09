@@ -90,21 +90,22 @@ cd <local path>/mp7_ugt_legacy
 Run synthesis script (for all 6 modules).
 
 ```bash
-python scripts/runIpbbSynth.py <L1Menu name> --mp7url <URL MP7 git repo> --mp7tag <MP7 tag> -p <work dir> --build <build-version> --ugturl <URL ugt git repo> -u <ugt tag in repo>
+python3 scripts/runIpbbSynth.py <L1Menu name> --mp7url <URL MP7 git repo> --mp7tag <MP7 tag> -p <work dir> --build <build-version> --ugturl <URL ugt git repo> -u <ugt tag in repo>
 ```
 
 **Note:** inspect default values for arguments using
 ```bash
-python scripts/runIpbbSynth.py -h
+python3 scripts/runIpbbSynth.py -h
 ```
 
 Example
 ```bash
-python scripts/runIpbbSynth.py L1Menu_Collisions2018_v2_1_0-d4 \ 
-  --menuurl https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/master/2020 \
-  --build 0x1123 \
-  --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy \
-  --ugt v1.10.7
+python3 scripts/runIpbbSynth.py L1Menu_Collisions2020_v0_1_6-d1
+  --menuurl https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021
+  --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy
+  --ugt master
+  --build 0x1138
+  -p ~/work_synth/production/
 ```
 
 Run synthesis script (for all 6 modules) with simulation (Questasim)
@@ -117,11 +118,12 @@ python scripts/runIpbbSynth.py <L1Menu name> --mp7url <URL MP7 git repo> --mp7ta
 
 Example
 ```bash
-python scripts/runIpbbSynth.py L1Menu_Collisions2018_v2_1_0-d2 \
-  --build 0x1123 \
-  --menuurl https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/master/2020 \
-  --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy \
-  --ugt v1.10.7 \
+python3 scripts/runIpbbSynth.py L1Menu_Collisions2020_v0_1_6-d1
+  --menuurl https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021
+  --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy
+  --ugt master
+  --build 0x1138
+  -p ~/work_synth/production/
   --sim \
   --simmp7path ~/gitlab/hbergaue/mp7
 ```

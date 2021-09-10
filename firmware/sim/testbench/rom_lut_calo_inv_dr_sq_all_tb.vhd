@@ -29,6 +29,8 @@ architecture beh of rom_lut_calo_inv_dr_sq_all_tb is
 
     signal calo_deta_bin : STD_LOGIC_VECTOR(7 DOWNTO 0);
     signal calo_dphi_bin : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    signal calo_deta_bin_sync : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    signal calo_dphi_bin_sync : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
 
 --*********************************Main Body of Code**********************************
@@ -50,13 +52,13 @@ begin
         calo_dphi_bin <=  X"00";
         wait for LHC_CLK_PERIOD;
         calo_deta_bin <= X"C2";
-        calo_dphi_bin <= X"80";
+        calo_dphi_bin <= X"48";
         wait for LHC_CLK_PERIOD;
         calo_deta_bin <= X"00";
         calo_dphi_bin <= X"00";
         wait for LHC_CLK_PERIOD;
         calo_deta_bin <= X"7F";
-        calo_dphi_bin <= X"80";
+        calo_dphi_bin <= X"48";
         wait for LHC_CLK_PERIOD;
         calo_deta_bin <= X"00";
         calo_dphi_bin <= X"00";
@@ -98,7 +100,7 @@ begin
         calo_dphi_bin <= X"00";
         wait for LHC_CLK_PERIOD;
         calo_deta_bin <= X"56";
-        calo_dphi_bin <= X"80";
+        calo_dphi_bin <= X"48";
         wait for LHC_CLK_PERIOD;
         calo_deta_bin <= X"00";
         calo_dphi_bin <= X"00";
@@ -120,11 +122,19 @@ begin
  ------------------- Instantiate  modules  -----------------
 
 
+sync_p: process(lhc_clk, calo_deta_bin, calo_dphi_bin)
+    begin
+    if (lhc_clk'event and lhc_clk = '1') then
+        calo_deta_bin_sync <= calo_deta_bin;
+        calo_dphi_bin_sync <= calo_dphi_bin;
+    end if;
+end process;
+
 dut : entity work.rom_lut_calo_inv_dr_sq_all
     port map (
         clk => lhc_clk,
-        deta => calo_deta_bin,
-        dphi => calo_dphi_bin,
+        deta => calo_deta_bin_sync,
+        dphi => calo_dphi_bin_sync,
         dout => open
     );
 

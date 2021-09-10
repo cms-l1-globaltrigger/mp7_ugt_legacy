@@ -56,7 +56,7 @@
 //----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
 rom_lut_calo_inv_dr_sq_1 your_instance_name (
   .clka(clka),    // input wire clka
-  .addra(addra),  // input wire [11 : 0] addra
+  .addra(addra),  // input wire [12 : 0] addra
   .douta(douta)  // output wire [25 : 0] douta
 );
 // INST_TAG_END ------ End INSTANTIATION Template ---------

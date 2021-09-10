@@ -90,6 +90,6 @@ view wave
 do $TESTBENCH/../scripts/mass_div_dr_calo_wave.do
 
 ##Run simulation
-run 422 us
+run 800 us
 
 # eof

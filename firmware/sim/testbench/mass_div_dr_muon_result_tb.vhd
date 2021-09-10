@@ -71,7 +71,7 @@ begin
         variable phi_val_max : std_logic_vector(9 downto 0) := "01" & X"20";
         variable write_l : line;
         variable inverted_dr_sq_sim_int : integer;
-        file tv_file : text open read_mode is "/home/bergauer/github/cms-l1-globaltrigger/mp7_ugt_legacy/doc/rom_lut_inv_dr_sq/lut_muon_inv_dr_sq_sim.txt";
+--         file tv_file : text open read_mode is "/home/bergauer/github/cms-l1-globaltrigger/mp7_ugt_legacy/doc/rom_lut_inv_dr_sq/lut_muon_inv_dr_sq_sim.txt";
         file result_file : text open write_mode is "result_lut_muon_inv_dr_sq_sim.txt";
     begin
         wait for 5 ns;

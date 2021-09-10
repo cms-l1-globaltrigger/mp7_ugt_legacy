@@ -18,9 +18,9 @@ phi_factor=2
 phi_bins=576
 phi_bins_reduced=int(phi_bins/phi_factor)
 dphi_bins=int(phi_bins_reduced/2)
-print("created muon LUTs with reduced bins [max deta:",deta_bins,", max dphi:",dphi_bins,"]")
 # same precision as for muon invariant mass (2*pt_precision+cosh_cos_precision) [=1+1+4]
 precision=6
+print("created muon LUTs with reduced bins [max deta:",deta_bins,", max dphi:",dphi_bins,", precision:",precision,"]")
 
 undef="undefined"
 inv_dr_sq_fw_lut_arr={}
@@ -32,8 +32,9 @@ end_emu_file=False
 
 inv_dr_sq_fw_lut_list=[[0 for x in range(8192)] for x in range(max_rom_nr)]
 
-filename=os.path.join(doc_files_path, "emulator_lut_muon_inv_dr_sq_calc.txt")
-f_emu = open(filename, "w")
+filename_emu=("emulator_lut_muon_inv_dr_sq_calc_prec" + str(precision) + ".txt")
+filepath_emu=os.path.join(doc_files_path, filename_emu)
+f_emu = open(filepath_emu, "w")
 print(f"{'dphi':>5}", f"{'deta':>5}", f"{'dphi_val':>22}", f"{'deta_val':>22}", f"{'inv_dr_sq':>25}", f"{'inv_dr_sq_rounded':>18}", f"{'inv_dr_sq_fw_lut':>17}", f"{'rom_nr':>8}", file=f_emu)
 
 for dphi_msb in range(0,3):
@@ -41,9 +42,9 @@ for dphi_msb in range(0,3):
         rom_nr+=1
         dphi_idx_range = 64
         deta_idx_range = 128
-        filename=os.path.join(coe_files_path, "lut_muon_inv_dr_sq_rom" + str(rom_nr) + ".coe")
+        filepath=os.path.join(coe_files_path, "lut_muon_inv_dr_sq_rom" + str(rom_nr) + ".coe")
         if rom_nr <= max_rom_nr:
-            f = open(filename, "w")
+            f = open(filepath, "w")
             print("memory_initialization_radix=10;", file=f)
             print("memory_initialization_vector=", file=f)
         for deta_idx in range(0,deta_idx_range):
@@ -85,9 +86,10 @@ for dphi_msb in range(0,3):
         f.close()
 f_emu.close()
 
-filename=os.path.join(doc_files_path, "data_width_rom_lut_muon_inv_dr_sq.txt")
-f = open(filename, "w")
-print("data width of roms for muon 1/DR^2 with reduced bins [max deta:",deta_bins,", max dphi:", dphi_bins,"]", file=f)
+filename=("data_width_rom_lut_muon_inv_dr_sq_prec" + str(precision) + ".txt")
+filepath=os.path.join(doc_files_path, filename)
+f = open(filepath, "w")
+print("data width of roms for muon 1/DR^2 with reduced bins [max deta:",deta_bins,", max dphi:", dphi_bins,", precision:",precision,"]", file=f)
 for rom_nr in range(0, max_rom_nr):
     print("rom_nr", rom_nr+1, ":", max(inv_dr_sq_fw_lut_list[rom_nr]).bit_length(), file=f)
 f.close()

@@ -1,0 +1,7 @@
+data width of roms for muon 1/DR^2 with reduced bins [max deta: 226 , max dphi: 144 , precision: 6 ]
+rom_nr 1 : 31
+rom_nr 2 : 17
+rom_nr 3 : 19
+rom_nr 4 : 17
+rom_nr 5 : 17
+rom_nr 6 : 16

@@ -13,9 +13,9 @@ eta_max_bin=114
 deta_bins=abs(eta_min_bin)+eta_max_bin+1
 phi_bins=144
 dphi_bins=int(phi_bins/2)
-print("created calo LUTs [with full bins => max deta:",deta_bins,", max dphi:",dphi_bins,"]")
-# same precision as for calo invariant mass (2*pt_precision+cosh_cos_precision) [=1+1+3]
-precision=5
+# same precision as for muon invariant mass (2*pt_precision+cosh_cos_precision) [=1+1+4]
+precision=4
+print("created calo LUTs with reduced bins [max deta:",deta_bins,", max dphi:",dphi_bins,", precision:",precision,"]")
 
 undef="undefined"
 inv_dr_sq_fw_lut_arr={}
@@ -27,8 +27,9 @@ end_emu_file=False
 
 inv_dr_sq_fw_lut_list=[[0 for x in range(8192)] for x in range(max_rom_nr)]
 
-filename=os.path.join(doc_files_path, "emulator_lut_calo_inv_dr_sq_calc.txt")
-f_emu = open(filename, "w")
+filename_emu=("emulator_lut_calo_inv_dr_sq_calc_prec" + str(precision) + ".txt")
+filepath_emu=os.path.join(doc_files_path, filename_emu)
+f_emu = open(filepath_emu, "w")
 print(f"{'dphi':>5}", f"{'deta':>5}", f"{'dphi_val':>22}", f"{'deta_val':>22}", f"{'inv_dr_sq':>25}", f"{'inv_dr_sq_rounded':>18}", f"{'inv_dr_sq_fw_lut':>17}", f"{'rom_nr':>8}", file=f_emu)
 
 for dphi_msb in range(0,2):
@@ -81,9 +82,10 @@ for dphi_msb in range(0,2):
         f.close()
 f_emu.close()
 
-filename=os.path.join(doc_files_path, "data_width_rom_lut_calo_inv_dr_sq.txt")
-f = open(filename, "w")
-print("data width of roms for calo 1/DR^2 [with full bins => max deta:",deta_bins,", max dphi:",dphi_bins,"]", file=f)
+filename=("data_width_rom_lut_calo_inv_dr_sq_prec" + str(precision) + ".txt")
+filepath=os.path.join(doc_files_path, filename)
+f = open(filepath, "w")
+print("data width of roms for calo 1/DR^2 with reduced bins [max deta:",deta_bins,", max dphi:", dphi_bins,", precision:",precision,"]", file=f)
 for rom_nr in range(0, max_rom_nr):
     print("rom_nr", rom_nr+1, ":", max(inv_dr_sq_fw_lut_list[rom_nr]).bit_length(), file=f)
 f.close()

@@ -1,10 +1,10 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.2 (lin64) Build 2700185 Thu Oct 24 18:45:48 MDT 2019
--- Date        : Thu Sep  9 09:51:59 2021
+-- Date        : Thu Sep  9 09:51:58 2021
 -- Host        : ugt-synth running 64-bit Ubuntu 16.04.7 LTS
--- Command     : write_vhdl -force -mode synth_stub
---               /home/bergauer/github/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/ngc/rom_lut_calo_inv_dr_sq_1/rom_lut_calo_inv_dr_sq_1_stub.vhdl
+-- Command     : write_vhdl -force -mode synth_stub -rename_top rom_lut_calo_inv_dr_sq_1 -prefix
+--               rom_lut_calo_inv_dr_sq_1_ rom_lut_calo_inv_dr_sq_1_stub.vhdl
 -- Design      : rom_lut_calo_inv_dr_sq_1
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7vx690tffg1927-2

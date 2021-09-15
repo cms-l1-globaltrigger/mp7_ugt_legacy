@@ -13,8 +13,8 @@ eta_max_bin=114
 deta_bins=abs(eta_min_bin)+eta_max_bin+1
 phi_bins=144
 dphi_bins=int(phi_bins/2)
-# same precision as for muon invariant mass (2*pt_precision+cosh_cos_precision) [=1+1+4]
-precision=4
+
+precision=5
 print("created calo LUTs with reduced bins [max deta:",deta_bins,", max dphi:",dphi_bins,", precision:",precision,"]")
 
 undef="undefined"

@@ -18,8 +18,8 @@ phi_factor=2
 phi_bins=576
 phi_bins_reduced=int(phi_bins/phi_factor)
 dphi_bins=int(phi_bins_reduced/2)
-# same precision as for muon invariant mass (2*pt_precision+cosh_cos_precision) [=1+1+4]
-precision=6
+
+precision=5
 print("created muon LUTs with reduced bins [max deta:",deta_bins,", max dphi:",dphi_bins,", precision:",precision,"]")
 
 undef="undefined"

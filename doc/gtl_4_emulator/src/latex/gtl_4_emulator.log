@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2018.10.12)  2 SEP 2021 11:38
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2018.10.12)  14 SEP 2021 10:55
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1214,11 +1214,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 12--14
  []
 
 Package epstopdf Info: Source file: <figures/mGTL_firmware.eps>
-(epstopdf)                    date: 2021-09-02 11:38:32
+(epstopdf)                    date: 2021-09-14 10:55:09
 (epstopdf)                    size: 237733 bytes
 (epstopdf)             Output file: <figures/mGTL_firmware-eps-converted-to.pdf
 >
-(epstopdf)                    date: 2021-09-02 11:38:36
+(epstopdf)                    date: 2021-09-14 10:55:14
 (epstopdf)                    size: 97022 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/mGTL_firmware-eps-c
 onverted-to.pdf figures/mGTL_firmware.eps>
@@ -1531,11 +1531,11 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 238.
 
 Package epstopdf Info: Source file: <figures/gtl_pipeline.eps>
-(epstopdf)                    date: 2021-09-02 11:38:30
+(epstopdf)                    date: 2021-09-14 10:55:07
 (epstopdf)                    size: 247789 bytes
 (epstopdf)             Output file: <figures/gtl_pipeline-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2021-09-02 11:38:36
+(epstopdf)                    date: 2021-09-14 10:55:14
 (epstopdf)                    size: 95770 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/gtl_pipeline-eps-co
 nverted-to.pdf figures/gtl_pipeline.eps>
@@ -1682,11 +1682,11 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 [19]
 Package epstopdf Info: Source file: <figures/phi_windows_comparator.eps>
-(epstopdf)                    date: 2021-09-02 11:38:33
+(epstopdf)                    date: 2021-09-14 10:55:10
 (epstopdf)                    size: 86720 bytes
 (epstopdf)             Output file: <figures/phi_windows_comparator-eps-convert
 ed-to.pdf>
-(epstopdf)                    date: 2021-09-02 11:38:36
+(epstopdf)                    date: 2021-09-14 10:55:14
 (epstopdf)                    size: 34804 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/phi_windows_compara
 tor-eps-converted-to.pdf figures/phi_windows_comparator.eps>
@@ -1937,11 +1937,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 1015--1016
 
 Package epstopdf Info: Source file: <figures/scheme_vhdl_cuts_correllation_cond
 ition.eps>
-(epstopdf)                    date: 2021-09-02 11:38:34
+(epstopdf)                    date: 2021-09-14 10:55:12
 (epstopdf)                    size: 220382 bytes
 (epstopdf)             Output file: <figures/scheme_vhdl_cuts_correllation_cond
 ition-eps-converted-to.pdf>
-(epstopdf)                    date: 2021-09-02 11:38:37
+(epstopdf)                    date: 2021-09-14 10:55:15
 (epstopdf)                    size: 89792 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/scheme_vhdl_cuts_co
 rrellation_condition-eps-converted-to.pdf figures/scheme_vhdl_cuts_correllation
@@ -2051,7 +2051,12 @@ Overfull \hbox (3.63988pt too wide) in paragraph at lines 1120--1122
 alc.txt[][]\T1/lmr/m/n/10.95 . These files have been cre-ated by scripts
  []
 
-[35] [36]
+[35]
+Underfull \hbox (badness 10000) in paragraph at lines 1138--1139
+
+ []
+
+[36]
 Overfull \hbox (3.25952pt too wide) in paragraph at lines 1151--1153
 \T1/lmr/m/n/10.95 ([][]\T1/pcr/m/n/10.95 calo_-calo_-correlation_-condition.vhd
 [][]\T1/lmr/m/n/10.95 : electron/$\OML/lmm/m/it/10.95 ^^M$\T1/lmr/m/n/10.95 -el
@@ -2126,12 +2131,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 1344--1358
 [42]
 Package epstopdf Info: Source file: <figures/convert_scheme_calo_2_muon_eta_phi
 .eps>
-(epstopdf)                    date: 2021-09-02 11:38:29
+(epstopdf)                    date: 2021-09-14 10:55:06
 (epstopdf)                    size: 240902 bytes
 (epstopdf)             Output file: <figures/convert_scheme_calo_2_muon_eta_phi
 -eps-converted-to.pdf>
-(epstopdf)                    date: 2021-09-02 11:38:37
-(epstopdf)                    size: 94516 bytes
+(epstopdf)                    date: 2021-09-14 10:55:15
+(epstopdf)                    size: 94518 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/convert_scheme_calo
 _2_muon_eta_phi-eps-converted-to.pdf figures/convert_scheme_calo_2_muon_eta_phi
 .eps>
@@ -2143,7 +2148,7 @@ pdfTeX warning: pdflatex (file ./figures/convert_scheme_calo_2_muon_eta_phi-eps
 -converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version
  <1.5> allowed
 
-<figures/convert_scheme_calo_2_muon_eta_phi-eps-converted-to.pdf, id=763, 632.3
+<figures/convert_scheme_calo_2_muon_eta_phi-eps-converted-to.pdf, id=762, 632.3
 625pt x 437.635pt>
 File: figures/convert_scheme_calo_2_muon_eta_phi-eps-converted-to.pdf Graphic f
 ile (type pdf)
@@ -2236,7 +2241,7 @@ Here is how much of TeX's memory you used:
  17673 multiletter control sequences out of 15000+600000
  97317 words of font info for 79 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 49i,14n,45p,1144b,1920s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 49i,14n,45p,1139b,1920s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/en
 c/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/s
 hare/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/l
@@ -2256,10 +2261,10 @@ onts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr9.pfb>
 share/texlive/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/f
 onts/type1/urw/courier/ucrro8a.pfb>
-Output written on gtl_4_emulator.pdf (49 pages, 856452 bytes).
+Output written on gtl_4_emulator.pdf (49 pages, 856594 bytes).
 PDF statistics:
- 952 PDF objects out of 1000 (max. 8388607)
- 865 compressed objects within 9 object streams
+ 951 PDF objects out of 1000 (max. 8388607)
+ 864 compressed objects within 9 object streams
  197 named destinations out of 1000 (max. 500000)
  471 words of extra memory for PDF output out of 10000 (max. 10000000)
 

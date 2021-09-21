@@ -38,13 +38,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="152"/>
-    <Option Name="WTModelSimExportSim" Val="152"/>
-    <Option Name="WTQuestaExportSim" Val="152"/>
-    <Option Name="WTIesExportSim" Val="152"/>
-    <Option Name="WTVcsExportSim" Val="152"/>
-    <Option Name="WTRivieraExportSim" Val="152"/>
-    <Option Name="WTActivehdlExportSim" Val="152"/>
+    <Option Name="WTXSimExportSim" Val="157"/>
+    <Option Name="WTModelSimExportSim" Val="157"/>
+    <Option Name="WTQuestaExportSim" Val="157"/>
+    <Option Name="WTIesExportSim" Val="157"/>
+    <Option Name="WTVcsExportSim" Val="157"/>
+    <Option Name="WTRivieraExportSim" Val="157"/>
+    <Option Name="WTActivehdlExportSim" Val="157"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -79,6 +79,12 @@
         </FileInfo>
       </File>
       <File Path="$PPRDIR/../lut_calo_inv_dr_sq_rom4.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../lut_calo_inv_dr_sq_rom5.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -142,6 +148,13 @@
         </FileInfo>
       </File>
       <File Path="$PPRDIR/../rom_lut_calo_inv_dr_sq_4/rom_lut_calo_inv_dr_sq_4.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../rom_lut_calo_inv_dr_sq_5/rom_lut_calo_inv_dr_sq_5.xci">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>

@@ -29,6 +29,8 @@ idx=0
 rom_nr=0
 max_rom_nr=6
 rom_size=8192
+bram_size=18432
+muon_objects=8
 end_emu_file=False
 
 inv_dr_sq_fw_lut_list=[[0 for x in range(rom_size)] for x in range(max_rom_nr)]
@@ -87,11 +89,17 @@ for dphi_msb in range(0,3):
         f.close()
 f_emu.close()
 
+brams18_sum = 0
+
 filename=("data_width_rom_lut_muon_one_over_dr_sq.txt")
 filepath=os.path.join(doc_files_path, filename)
 f = open(filepath, "w")
-print("data width of roms for muon 1/DR^2 with reduced bins [max deta:",deta_bins,", max dphi:", dphi_bins,", precision:",precision,"]", file=f)
+print("Data width of roms and number of 18kb BRAMs for muon 1/DR^2 with reduced bins [max deta:",deta_bins,", max dphi:", dphi_bins,", precision:",precision,"]", file=f)
+print("'rom_nr' 'data width' 'BRAM 18kb'", file=f)
 for rom_nr in range(0, max_rom_nr):
-    print("rom_nr", rom_nr+1, ":", max(inv_dr_sq_fw_lut_list[rom_nr]).bit_length(), file=f)
+    brams18 = int(max(inv_dr_sq_fw_lut_list[rom_nr]).bit_length() * rom_size / bram_size) + 1
+    brams18_sum = brams18_sum + brams18
+    print("  ",rom_nr+1, "        ", max(inv_dr_sq_fw_lut_list[rom_nr]).bit_length(), "         ", brams18, file=f)
+brams36_total = (brams18_sum/2) * (muon_objects*(muon_objects-1)/2)
+print("Total number of BRAM 36kb for muon:", brams36_total, file=f)
 f.close()
-

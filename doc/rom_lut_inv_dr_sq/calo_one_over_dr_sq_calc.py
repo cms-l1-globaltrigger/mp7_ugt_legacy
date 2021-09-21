@@ -24,6 +24,8 @@ idx=0
 rom_nr=0
 max_rom_nr=5
 rom_size=4096
+bram_size=18432
+calo_objects=12
 end_emu_file=False
 
 inv_dr_sq_fw_lut_list=[[0 for x in range(rom_size)] for x in range(max_rom_nr)]
@@ -36,8 +38,12 @@ print(f"{'dphi':>5}", f"{'deta':>5}", f"{'dphi_val':>22}", f"{'deta_val':>22}", 
 for dphi_msb in range(0,2):
     for deta_msb in range(0,4):
         rom_nr+=1
-        dphi_idx_range = 64
-        deta_idx_range = 64
+        if rom_nr == max_rom_nr:
+            dphi_idx_range = 16
+            deta_idx_range = 256
+        elif rom_nr < max_rom_nr:
+            dphi_idx_range = 64
+            deta_idx_range = 64
         filename=os.path.join(coe_files_path, "lut_calo_inv_dr_sq_rom" + str(rom_nr) + ".coe")
         if rom_nr <= max_rom_nr:
             f = open(filename, "w")
@@ -45,9 +51,13 @@ for dphi_msb in range(0,2):
             print("memory_initialization_vector=", file=f)
         for deta_idx in range(0,deta_idx_range):
             for dphi_idx in range(0,dphi_idx_range):
-                deta_idx_gl = deta_idx+deta_msb*deta_idx_range
+                if rom_nr == max_rom_nr:
+                    deta_idx_gl = deta_idx+deta_msb*deta_idx_range
+                    dphi_idx_gl = dphi_idx+dphi_msb*dphi_idx_range+64-dphi_idx_range
+                elif rom_nr < max_rom_nr:
+                    deta_idx_gl = deta_idx+deta_msb*deta_idx_range
+                    dphi_idx_gl = dphi_idx+dphi_msb*dphi_idx_range
                 deta_val = deta_idx_gl*eta_bin_width
-                dphi_idx_gl = dphi_idx+dphi_msb*dphi_idx_range
                 dphi_val = dphi_idx_gl*2*math.pi/phi_bins
                 if deta_val == 0 and dphi_val == 0:
                     inv_dr_sq_fw_lut_arr[0] = 0
@@ -82,11 +92,17 @@ for dphi_msb in range(0,2):
         f.close()
 f_emu.close()
 
+brams18_sum = 0
+
 filename=("data_width_rom_lut_calo_one_over_dr_sq.txt")
 filepath=os.path.join(doc_files_path, filename)
 f = open(filepath, "w")
-print("data width of roms for calo 1/DR^2 with reduced bins [max deta:",deta_bins,", max dphi:", dphi_bins,", precision:",precision,"]", file=f)
+print("Data width of roms and number of 18kb BRAMs for calo 1/DR^2 [max deta:",deta_bins,", max dphi:", dphi_bins,", precision:",precision,"]", file=f)
+print("'rom_nr' 'data width' 'BRAM 18kb'", file=f)
 for rom_nr in range(0, max_rom_nr):
-    print("rom_nr", rom_nr+1, ":", max(inv_dr_sq_fw_lut_list[rom_nr]).bit_length(), file=f)
+    brams18 = int(max(inv_dr_sq_fw_lut_list[rom_nr]).bit_length() * rom_size / bram_size) + 1
+    brams18_sum = brams18_sum + brams18
+    print("  ",rom_nr+1, "        ", max(inv_dr_sq_fw_lut_list[rom_nr]).bit_length(), "         ", brams18, file=f)
+brams36_total = (brams18_sum/2) * (calo_objects*(calo_objects-1)/2)
+print("Total number of BRAM 36kb for calos:", brams36_total, file=f)
 f.close()
-

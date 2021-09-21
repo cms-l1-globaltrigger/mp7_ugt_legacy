@@ -27,7 +27,7 @@ end_emu_file=False
 
 inv_dr_sq_fw_lut_list=[[0 for x in range(8192)] for x in range(max_rom_nr)]
 
-filename_emu=("emulator_lut_calo_inv_dr_sq_calc_prec" + str(precision) + ".txt")
+filename_emu=("emulator_lut_calo_inv_dr_sq_calc.txt")
 filepath_emu=os.path.join(doc_files_path, filename_emu)
 f_emu = open(filepath_emu, "w")
 print(f"{'dphi':>5}", f"{'deta':>5}", f"{'dphi_val':>22}", f"{'deta_val':>22}", f"{'inv_dr_sq':>25}", f"{'inv_dr_sq_rounded':>18}", f"{'inv_dr_sq_fw_lut':>17}", f"{'rom_nr':>8}", file=f_emu)
@@ -82,7 +82,7 @@ for dphi_msb in range(0,2):
         f.close()
 f_emu.close()
 
-filename=("data_width_rom_lut_calo_inv_dr_sq_prec" + str(precision) + ".txt")
+filename=("data_width_rom_lut_calo_inv_dr_sq.txt")
 filepath=os.path.join(doc_files_path, filename)
 f = open(filepath, "w")
 print("data width of roms for calo 1/DR^2 with reduced bins [max deta:",deta_bins,", max dphi:", dphi_bins,", precision:",precision,"]", file=f)

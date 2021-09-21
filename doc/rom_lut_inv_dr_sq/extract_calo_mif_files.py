@@ -40,7 +40,7 @@ lut_calc = [0 for x in range(rom_len)]
 rom_idx = 0
 lut_idx = 0
 
-file_path_lut = os.path.join(dir_path, "calo_inv_dr_sq_lut.txt")
+file_path_lut = os.path.join(dir_path, "calo_one_over_dr_sq_lut.txt")
 f_lut = open(file_path_lut, 'w')
 #file_path_w = os.path.join(dir_path, "calo_roms_1_4.txt")
 #f_rom = open(file_path_w, 'w')

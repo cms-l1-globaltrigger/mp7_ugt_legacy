@@ -28,9 +28,10 @@ inv_dr_sq_fw_lut_arr={}
 idx=0
 rom_nr=0
 max_rom_nr=6
+rom_size=8192
 end_emu_file=False
 
-inv_dr_sq_fw_lut_list=[[0 for x in range(8192)] for x in range(max_rom_nr)]
+inv_dr_sq_fw_lut_list=[[0 for x in range(rom_size)] for x in range(max_rom_nr)]
 
 filename_emu=("emulator_lut_muon_one_over_dr_sq_calc.txt")
 filepath_emu=os.path.join(doc_files_path, filename_emu)

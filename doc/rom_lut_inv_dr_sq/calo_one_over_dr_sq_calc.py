@@ -22,10 +22,11 @@ inv_dr_sq_fw_lut_arr={}
 
 idx=0
 rom_nr=0
-max_rom_nr=4
+max_rom_nr=5
+rom_size=4096
 end_emu_file=False
 
-inv_dr_sq_fw_lut_list=[[0 for x in range(8192)] for x in range(max_rom_nr)]
+inv_dr_sq_fw_lut_list=[[0 for x in range(rom_size)] for x in range(max_rom_nr)]
 
 filename_emu=("emulator_lut_calo_one_over_dr_sq_calc.txt")
 filepath_emu=os.path.join(doc_files_path, filename_emu)
@@ -33,10 +34,10 @@ f_emu = open(filepath_emu, "w")
 print(f"{'dphi':>5}", f"{'deta':>5}", f"{'dphi_val':>22}", f"{'deta_val':>22}", f"{'inv_dr_sq':>25}", f"{'inv_dr_sq_rounded':>18}", f"{'inv_dr_sq_fw_lut':>17}", f"{'rom_nr':>8}", file=f_emu)
 
 for dphi_msb in range(0,2):
-    for deta_msb in range(0,2):
+    for deta_msb in range(0,4):
         rom_nr+=1
         dphi_idx_range = 64
-        deta_idx_range = 128
+        deta_idx_range = 64
         filename=os.path.join(coe_files_path, "lut_calo_inv_dr_sq_rom" + str(rom_nr) + ".coe")
         if rom_nr <= max_rom_nr:
             f = open(filename, "w")
@@ -57,7 +58,6 @@ for dphi_msb in range(0,2):
                     inv_dr_sq_rounded = round(inv_dr_sq,precision)
                     inv_dr_sq_fw_lut = int(round(inv_dr_sq_rounded*(10**precision),0))
                     inv_dr_sq_fw_lut_arr[idx] = inv_dr_sq_fw_lut
-
 
                     if deta_idx_gl == deta_bins and dphi_idx_gl == dphi_bins+1:
                         end_emu_file=True

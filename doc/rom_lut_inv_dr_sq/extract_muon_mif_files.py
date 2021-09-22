@@ -4,10 +4,10 @@ import os
 import math
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-print(dir_path)
+#print(dir_path)
 ngc_path_temp = dir_path.split('doc')
 ngc_path = os.path.join(ngc_path_temp[0], "firmware", "ngc")
-print(ngc_path)
+#print(ngc_path)
 
 # double bin width
 eta_factor=2
@@ -47,7 +47,7 @@ rom_idx = 0
 lut_idx = 0
 
 file_path_lut = os.path.join(dir_path, "muon_one_over_dr_sq_lut.txt")
-#file_path_lut = "lut.txt"
+print("Path muon lut file:", file_path_lut)
 f_lut = open(file_path_lut, 'w')
 #file_path_w = os.path.join(dir_path, "muon_roms_1_6.txt")
 #f_rom = open(file_path_w, 'w')

@@ -1,5 +1,9 @@
 ## Description of python scripts
 
+### constants.py
+
+File for common constants
+
 ### calo_one_over_dr_sq_calc.py
 
 ATTENTION: should be used if one wants to update coe files, only!

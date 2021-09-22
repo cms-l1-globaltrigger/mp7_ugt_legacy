@@ -33,14 +33,14 @@ end rom_lut_muon_inv_dr_sq_all;
 
 architecture rtl of rom_lut_muon_inv_dr_sq_all is
 
-    constant addr_width : positive := 13;
+    constant addr_width : positive := 13; -- ROM size: 8192
 
-    constant dout1_width : positive := 31; -- MU_MU_INV_DR_SQ_VECTOR_WIDTH
-    constant dout2_width : positive := 17;
-    constant dout3_width : positive := 19;
-    constant dout4_width : positive := 17;
-    constant dout5_width : positive := 17;
-    constant dout6_width : positive := 16;
+    constant dout1_width : positive := 28; -- MU_MU_INV_DR_SQ_VECTOR_WIDTH
+    constant dout2_width : positive := 14;
+    constant dout3_width : positive := 16;
+    constant dout4_width : positive := 14;
+    constant dout5_width : positive := 14;
+    constant dout6_width : positive := 13;
 
     constant zero_vec : STD_LOGIC_VECTOR(MU_MU_INV_DR_SQ_VECTOR_WIDTH-1 DOWNTO 0) := (others => '0');
 

@@ -52,6 +52,6 @@ view wave
 do $TESTBENCH/../scripts/rom_lut_calo_inv_dr_sq_all_wave.do
 
 ##Run simulation
-run 500 ns
+run 422 us
 
 # eof

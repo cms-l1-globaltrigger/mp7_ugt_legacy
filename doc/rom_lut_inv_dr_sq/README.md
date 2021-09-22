@@ -41,6 +41,8 @@ Reads contents of mif files (content of ROMs [after BRAMs generation in Vivado])
 the LUT values of 1/DR^2 for calo correlations:
 - ../doc/rom_lut_inv_dr_sq/calo_one_over_dr_sq_lut.txt
 
+REMARK: order of LUT values is done with increasing delta phi values in "inner loop" and increasing delta eta values in "outer loop"
+
 Additionally a comparison of calculated 1/DR^2 values with LUT values is done, see file below for details:
 - ../doc/rom_lut_inv_dr_sq/compare_calo_lut_rom.txt
 
@@ -49,6 +51,8 @@ Additionally a comparison of calculated 1/DR^2 values with LUT values is done, s
 Reads contents of mif files (content of ROMs [after BRAMs generation in Vivado]) and creates a file containing
 the LUT values of 1/DR^2 for muon correlations:
 - ../doc/rom_lut_inv_dr_sq/muon_one_over_dr_sq_lut.txt
+
+REMARK: order of LUT values is done with increasing delta phi values in "inner loop" and increasing delta eta values in "outer loop"
 
 Additionally a comparison of calculated 1/DR^2 values with LUT values is done, see file below for details:
 - ../doc/rom_lut_inv_dr_sq/compare_muon_lut_rom.txt

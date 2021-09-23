@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2018.10.12)  14 SEP 2021 10:54
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2018.10.12)  23 SEP 2021 15:02
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1335,10 +1335,10 @@ ri-ant Mass
 File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
 )
 Package epstopdf Info: Source file: <figures/mGT_payload.eps>
-(epstopdf)                    date: 2021-09-14 10:54:16
+(epstopdf)                    date: 2021-09-23 15:02:32
 (epstopdf)                    size: 230317 bytes
 (epstopdf)             Output file: <figures/mGT_payload-eps-converted-to.pdf>
-(epstopdf)                    date: 2021-09-14 10:54:27
+(epstopdf)                    date: 2021-09-23 15:02:43
 (epstopdf)                    size: 94594 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/mGT_payload-eps-con
 verted-to.pdf figures/mGT_payload.eps>
@@ -1379,11 +1379,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 2--6
  []
 
 Package epstopdf Info: Source file: <./figures/system_overview.eps>
-(epstopdf)                    date: 2021-09-14 10:54:24
+(epstopdf)                    date: 2021-09-23 15:02:40
 (epstopdf)                    size: 164151 bytes
 (epstopdf)             Output file: <./figures/system_overview-eps-converted-to
 .pdf>
-(epstopdf)                    date: 2021-09-14 10:54:27
+(epstopdf)                    date: 2021-09-23 15:02:44
 (epstopdf)                    size: 68657 bytes
 (epstopdf)             Command: <epstopdf --outfile=./figures/system_overview-e
 ps-converted-to.pdf ./figures/system_overview.eps>
@@ -1569,11 +1569,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 148--151
  []
 
 Package epstopdf Info: Source file: <./figures/dm_delay_element.eps>
-(epstopdf)                    date: 2021-09-14 10:54:06
+(epstopdf)                    date: 2021-09-23 15:02:23
 (epstopdf)                    size: 46559 bytes
 (epstopdf)             Output file: <./figures/dm_delay_element-eps-converted-t
 o.pdf>
-(epstopdf)                    date: 2021-09-14 10:54:27
+(epstopdf)                    date: 2021-09-23 15:02:44
 (epstopdf)                    size: 20105 bytes
 (epstopdf)             Command: <epstopdf --outfile=./figures/dm_delay_element-
 eps-converted-to.pdf ./figures/dm_delay_element.eps>
@@ -1621,10 +1621,10 @@ LaTeX Warning: Hyper reference `sec_rop' on page 19 undefined on input line 238
 .
 
 Package epstopdf Info: Source file: <./figures/simspy.eps>
-(epstopdf)                    date: 2021-09-14 10:54:23
+(epstopdf)                    date: 2021-09-23 15:02:39
 (epstopdf)                    size: 154478 bytes
 (epstopdf)             Output file: <./figures/simspy-eps-converted-to.pdf>
-(epstopdf)                    date: 2021-09-14 10:54:28
+(epstopdf)                    date: 2021-09-23 15:02:44
 (epstopdf)                    size: 67550 bytes
 (epstopdf)             Command: <epstopdf --outfile=./figures/simspy-eps-conver
 ted-to.pdf ./figures/simspy.eps>
@@ -1694,12 +1694,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--5
  []
 
 Package epstopdf Info: Source file: <figures/mGTL_firmware.eps>
-(epstopdf)                    date: 2021-09-14 10:54:15
-(epstopdf)                    size: 228675 bytes
+(epstopdf)                    date: 2021-09-23 15:02:31
+(epstopdf)                    size: 212972 bytes
 (epstopdf)             Output file: <figures/mGTL_firmware-eps-converted-to.pdf
 >
-(epstopdf)                    date: 2021-09-14 10:54:28
-(epstopdf)                    size: 93622 bytes
+(epstopdf)                    date: 2021-09-23 15:02:45
+(epstopdf)                    size: 84806 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/mGTL_firmware-eps-c
 onverted-to.pdf figures/mGTL_firmware.eps>
 (epstopdf)             \includegraphics on input line 10.
@@ -1708,13 +1708,13 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./figures/mGTL_firmware-eps-converted-to.pdf): P
 DF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<figures/mGTL_firmware-eps-converted-to.pdf, id=971, 684.5575pt x 437.635pt>
+<figures/mGTL_firmware-eps-converted-to.pdf, id=971, 684.5575pt x 277.035pt>
 File: figures/mGTL_firmware-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/mGTL_firmware-eps-converted-to.pdf>
 Package pdftex.def Info: figures/mGTL_firmware-eps-converted-to.pdf used on inp
 ut line 10.
-(pdftex.def)             Requested size: 426.79134pt x 272.85342pt.
+(pdftex.def)             Requested size: 426.79134pt x 172.72372pt.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <14.4> on input line 15.
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -1726,15 +1726,15 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\mu' on input line 15.
 
-[31
 
- <./figures/mGTL_firmware-eps-converted-to.pdf>]
 Overfull \hbox (2.59499pt too wide) in paragraph at lines 34--35
 []\T1/lmr/m/n/10.95 "Asymmetry" in-for-ma-tion (ASYMET, ASYMHT, ASYMETHF, ASYMH
 THF) 
  []
 
+[31
 
+ <./figures/mGTL_firmware-eps-converted-to.pdf>]
 Overfull \hbox (4.8916pt too wide) in paragraph at lines 51--53
 \T1/lmr/m/n/10.95 in-puts to $\OML/lmm/m/it/10.95 ^^V$\T1/lmr/m/n/10.95 GT" (se
 e ac-tual ver-sion in [][]$https : / / raw . githubusercontent . com / cms-[]l1
@@ -1804,39 +1804,39 @@ LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <10.95> not available
 \depth=\dimen155 (locally)
 \totalheight=\dimen156 (locally)
 \width=\dimen157 (locally)
+\height=\dimen154 (locally)
+\depth=\dimen155 (locally)
+\totalheight=\dimen156 (locally)
+\width=\dimen157 (locally)
+\height=\dimen154 (locally)
+\depth=\dimen155 (locally)
+\totalheight=\dimen156 (locally)
+\width=\dimen157 (locally)
+\height=\dimen154 (locally)
+\depth=\dimen155 (locally)
+\totalheight=\dimen156 (locally)
+\width=\dimen157 (locally)
+\height=\dimen154 (locally)
+\depth=\dimen155 (locally)
+\totalheight=\dimen156 (locally)
+\width=\dimen157 (locally)
+\height=\dimen154 (locally)
+\depth=\dimen155 (locally)
+\totalheight=\dimen156 (locally)
+\width=\dimen157 (locally)
+\height=\dimen154 (locally)
+\depth=\dimen155 (locally)
+\totalheight=\dimen156 (locally)
+\width=\dimen157 (locally)
+\height=\dimen154 (locally)
+\depth=\dimen155 (locally)
+\totalheight=\dimen156 (locally)
+\width=\dimen157 (locally)
+\height=\dimen154 (locally)
+\depth=\dimen155 (locally)
+\totalheight=\dimen156 (locally)
+\width=\dimen157 (locally)
 [32]
-\height=\dimen154 (locally)
-\depth=\dimen155 (locally)
-\totalheight=\dimen156 (locally)
-\width=\dimen157 (locally)
-\height=\dimen154 (locally)
-\depth=\dimen155 (locally)
-\totalheight=\dimen156 (locally)
-\width=\dimen157 (locally)
-\height=\dimen154 (locally)
-\depth=\dimen155 (locally)
-\totalheight=\dimen156 (locally)
-\width=\dimen157 (locally)
-\height=\dimen154 (locally)
-\depth=\dimen155 (locally)
-\totalheight=\dimen156 (locally)
-\width=\dimen157 (locally)
-\height=\dimen154 (locally)
-\depth=\dimen155 (locally)
-\totalheight=\dimen156 (locally)
-\width=\dimen157 (locally)
-\height=\dimen154 (locally)
-\depth=\dimen155 (locally)
-\totalheight=\dimen156 (locally)
-\width=\dimen157 (locally)
-\height=\dimen154 (locally)
-\depth=\dimen155 (locally)
-\totalheight=\dimen156 (locally)
-\width=\dimen157 (locally)
-\height=\dimen154 (locally)
-\depth=\dimen155 (locally)
-\totalheight=\dimen156 (locally)
-\width=\dimen157 (locally)
 \height=\dimen154 (locally)
 \depth=\dimen155 (locally)
 \totalheight=\dimen156 (locally)
@@ -1957,7 +1957,7 @@ Overfull \hbox (1.44019pt too wide) in paragraph at lines 153--153
 \depth=\dimen155 (locally)
 \totalheight=\dimen156 (locally)
 \width=\dimen157 (locally)
-[33] [34]
+[33]
 Overfull \hbox (25.51822pt too wide) in paragraph at lines 191--195
 \T1/lmr/m/n/10.95 VHDL snip-pets files (\T1/pcr/m/n/10.95 algo_-index.vhd\T1/lm
 r/m/n/10.95 , \T1/pcr/m/n/10.95 gtl_-module_-instances.vhd\T1/lmr/m/n/10.95 , \
@@ -1972,11 +1972,11 @@ lmr/m/n/10.95 ([][]\T1/pcr/m/n/10.95 gtl_-pkg_-tpl.vhd[][]\T1/lmr/m/n/10.95 )
  []
 
 Package epstopdf Info: Source file: <figures/tme_gtl.eps>
-(epstopdf)                    date: 2021-09-14 10:54:25
-(epstopdf)                    size: 573399 bytes
+(epstopdf)                    date: 2021-09-23 15:02:42
+(epstopdf)                    size: 930726 bytes
 (epstopdf)             Output file: <figures/tme_gtl-eps-converted-to.pdf>
-(epstopdf)                    date: 2021-09-14 10:54:29
-(epstopdf)                    size: 228170 bytes
+(epstopdf)                    date: 2021-09-23 15:02:46
+(epstopdf)                    size: 367720 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/tme_gtl-eps-convert
 ed-to.pdf figures/tme_gtl.eps>
 (epstopdf)             \includegraphics on input line 200.
@@ -1985,19 +1985,19 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./figures/tme_gtl-eps-converted-to.pdf): PDF inc
 lusion: found PDF version <1.7>, but at most version <1.5> allowed
-<figures/tme_gtl-eps-converted-to.pdf, id=1001, 408.52625pt x 437.635pt>
+<figures/tme_gtl-eps-converted-to.pdf, id=997, 383.4325pt x 437.635pt>
 File: figures/tme_gtl-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/tme_gtl-eps-converted-to.pdf>
 Package pdftex.def Info: figures/tme_gtl-eps-converted-to.pdf used on input lin
 e 200.
-(pdftex.def)             Requested size: 426.79134pt x 457.22647pt.
+(pdftex.def)             Requested size: 426.79134pt x 487.14954pt.
 
 Underfull \hbox (badness 10000) in paragraph at lines 205--207
 
  []
 
-(./interfaces/gtl_module_tpl.vhd [35
+(./interfaces/gtl_module_tpl.vhd [34
 
 ]
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <9> not available
@@ -2012,7 +2012,7 @@ Overfull \hbox (52.55109pt too wide) in paragraph at lines 29--30
 [][][][] 
  []
 
-) [36] [37 <./figures/tme_gtl-eps-converted-to.pdf>]
+) [35] [36 <./figures/tme_gtl-eps-converted-to.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\mu' on input line 232.
@@ -2030,11 +2030,11 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 235.
 
 Package epstopdf Info: Source file: <figures/gtl_pipeline.eps>
-(epstopdf)                    date: 2021-09-14 10:54:09
+(epstopdf)                    date: 2021-09-23 15:02:26
 (epstopdf)                    size: 255707 bytes
 (epstopdf)             Output file: <figures/gtl_pipeline-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2021-09-14 10:54:29
+(epstopdf)                    date: 2021-09-23 15:02:46
 (epstopdf)                    size: 98724 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/gtl_pipeline-eps-co
 nverted-to.pdf figures/gtl_pipeline.eps>
@@ -2044,7 +2044,7 @@ Package epstopdf Info: Output file is already uptodate.
 
 pdfTeX warning: pdflatex (file ./figures/gtl_pipeline-eps-converted-to.pdf): PD
 F inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<figures/gtl_pipeline-eps-converted-to.pdf, id=1054, 498.86375pt x 437.635pt>
+<figures/gtl_pipeline-eps-converted-to.pdf, id=1050, 498.86375pt x 437.635pt>
 File: figures/gtl_pipeline-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/gtl_pipeline-eps-converted-to.pdf>
@@ -2056,7 +2056,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 255--256
 
  []
 
-[38
+[37
 
  <./figures/gtl_pipeline-eps-converted-to.pdf>]
 (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
@@ -2098,7 +2098,7 @@ File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
 \depth=\dimen155 (locally)
 \totalheight=\dimen156 (locally)
 \width=\dimen157 (locally)
- [39]
+ [38]
 \height=\dimen154 (locally)
 \depth=\dimen155 (locally)
 \totalheight=\dimen156 (locally)
@@ -2134,7 +2134,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 356--357
 
  []
 
-[40] [41]
+[39] [40]
 \height=\dimen154 (locally)
 \depth=\dimen155 (locally)
 \totalheight=\dimen156 (locally)
@@ -2253,7 +2253,7 @@ Overfull \hbox (1.44019pt too wide) in paragraph at lines 461--461
 \depth=\dimen155 (locally)
 \totalheight=\dimen156 (locally)
 \width=\dimen157 (locally)
-[42]
+[41]
 \height=\dimen154 (locally)
 \depth=\dimen155 (locally)
 \totalheight=\dimen156 (locally)
@@ -2298,7 +2298,7 @@ Overfull \hbox (1.44019pt too wide) in paragraph at lines 461--461
 \depth=\dimen155 (locally)
 \totalheight=\dimen156 (locally)
 \width=\dimen157 (locally)
- [43]
+ [42]
 Underfull \hbox (badness 10000) in paragraph at lines 506--509
 
  []
@@ -2323,7 +2323,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 589--590
 
  []
 
-[44]
+[43]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 605.
@@ -2348,17 +2348,17 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 605.
 
-[45] [46]
+[44] [45]
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <9> on input line 663.
- [47] (./interfaces/comb_conditions.vhd
+ [46] (./interfaces/comb_conditions.vhd
 LaTeX Font Info:    Try loading font information for TS1+pcr on input line 13.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1pcr.fd
 File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
-) [48
+) [47
 
-] [49]) [50]
+] [48]) [49]
 Overfull \hbox (20.26833pt too wide) in alignment at lines 685--690
  [] [] 
  []
@@ -2378,7 +2378,7 @@ Overfull \hbox (20.26833pt too wide) in alignment at lines 731--751
  [] [] 
  []
 
-[51
+[50
 
 ]
 Overfull \hbox (20.26833pt too wide) in alignment at lines 751--771
@@ -2390,20 +2390,20 @@ Overfull \hbox (20.26833pt too wide) in alignment at lines 771--784
  [] [] 
  []
 
-[52] [53]
+[51] [52]
 
-LaTeX Warning: Reference `sec:gtl:calo_conditions_module' on page 54 undefined 
+LaTeX Warning: Reference `sec:gtl:calo_conditions_module' on page 53 undefined 
 on input line 790.
 
-[54
+[53
 
 ]
 Package epstopdf Info: Source file: <figures/phi_windows_comparator.eps>
-(epstopdf)                    date: 2021-09-14 10:54:20
+(epstopdf)                    date: 2021-09-23 15:02:36
 (epstopdf)                    size: 86720 bytes
 (epstopdf)             Output file: <figures/phi_windows_comparator-eps-convert
 ed-to.pdf>
-(epstopdf)                    date: 2021-09-14 10:54:30
+(epstopdf)                    date: 2021-09-23 15:02:47
 (epstopdf)                    size: 34804 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/phi_windows_compara
 tor-eps-converted-to.pdf figures/phi_windows_comparator.eps>
@@ -2415,7 +2415,7 @@ pdfTeX warning: pdflatex (file ./figures/phi_windows_comparator-eps-converted-t
 o.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allow
 ed
 
-<figures/phi_windows_comparator-eps-converted-to.pdf, id=1265, 684.5575pt x 274
+<figures/phi_windows_comparator-eps-converted-to.pdf, id=1260, 684.5575pt x 274
 .02374pt>
 File: figures/phi_windows_comparator-eps-converted-to.pdf Graphic file (type pd
 f)
@@ -2423,9 +2423,9 @@ f)
 Package pdftex.def Info: figures/phi_windows_comparator-eps-converted-to.pdf us
 ed on input line 815.
 (pdftex.def)             Requested size: 426.79134pt x 170.84628pt.
- [55
+ [54
 
- <./figures/phi_windows_comparator-eps-converted-to.pdf>] [56
+ <./figures/phi_windows_comparator-eps-converted-to.pdf>] [55
 
 ]
 Overfull \hbox (1.06204pt too wide) in paragraph at lines 857--858
@@ -2438,13 +2438,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 911--912
 
  []
 
-[57
+[56
 
-] [58] [59] (./interfaces/esums_conditions.vhd) [60
+] [57] [58] (./interfaces/esums_conditions.vhd) [59
 
 ]
 
-LaTeX Warning: Reference `lst:instance_esums_condition_vhd' on page 61 undefine
+LaTeX Warning: Reference `lst:instance_esums_condition_vhd' on page 60 undefine
 d on input line 965.
 
 
@@ -2457,14 +2457,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 995--1003
 
  []
 
-[61] [62] [63]
+[60] [61] [62]
 Package epstopdf Info: Source file: <figures/scheme_vhdl_cuts_correllation_cond
 ition.eps>
-(epstopdf)                    date: 2021-09-14 10:54:22
+(epstopdf)                    date: 2021-09-23 15:02:38
 (epstopdf)                    size: 240478 bytes
 (epstopdf)             Output file: <figures/scheme_vhdl_cuts_correllation_cond
 ition-eps-converted-to.pdf>
-(epstopdf)                    date: 2021-09-14 10:54:30
+(epstopdf)                    date: 2021-09-23 15:02:47
 (epstopdf)                    size: 97164 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/scheme_vhdl_cuts_co
 rrellation_condition-eps-converted-to.pdf figures/scheme_vhdl_cuts_correllation
@@ -2477,7 +2477,7 @@ pdfTeX warning: pdflatex (file ./figures/scheme_vhdl_cuts_correllation_conditio
 n-eps-converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most ve
 rsion <1.5> allowed
 
-<figures/scheme_vhdl_cuts_correllation_condition-eps-converted-to.pdf, id=1345,
+<figures/scheme_vhdl_cuts_correllation_condition-eps-converted-to.pdf, id=1341,
  653.44125pt x 437.635pt>
 File: figures/scheme_vhdl_cuts_correllation_condition-eps-converted-to.pdf Grap
 hic file (type pdf)
@@ -2514,7 +2514,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1141--1142
 
  []
 
-[64
+[63
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 1143--1144
@@ -2531,7 +2531,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1153--1154
 
  []
 
-[65 <./figures/scheme_vhdl_cuts_correllation_condition-eps-converted-to.pdf>]
+[64 <./figures/scheme_vhdl_cuts_correllation_condition-eps-converted-to.pdf>]
 Underfull \hbox (badness 10000) in paragraph at lines 1161--1162
 
  []
@@ -2568,7 +2568,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1175--1176
 
  []
 
-[66]
+[65]
 Overfull \hbox (3.63988pt too wide) in paragraph at lines 1198--1200
 \T1/lmr/m/n/10.95 and [][]\T1/pcr/m/n/10.95 emulator_-lut_-muon_-inv_-dr_-sq_-c
 alc.txt[][]\T1/lmr/m/n/10.95 . These files have been cre-ated by scripts
@@ -2579,7 +2579,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1216--1217
 
  []
 
-[67] [68] [69]
+[66] [67] [68]
 Overfull \hbox (3.25952pt too wide) in paragraph at lines 1328--1330
 \T1/lmr/m/n/10.95 ([][]\T1/pcr/m/n/10.95 calo_-calo_-correlation_-condition.vhd
 [][]\T1/lmr/m/n/10.95 : electron/$\OML/lmm/m/it/10.95 ^^M$\T1/lmr/m/n/10.95 -el
@@ -2606,14 +2606,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 1355--1360
 
  []
 
-[70]
+[69]
 Underfull \hbox (badness 10000) in paragraph at lines 1373--1374
 
  []
 
-[71] (./interfaces/calo_calo_correlation_condition.vhd [72
+[70] (./interfaces/calo_calo_correlation_condition.vhd [71
 
-] [73])
+] [72])
 Underfull \hbox (badness 6428) in paragraph at lines 1389--1390
 []|\T1/lmr/m/n/9 selection of mass type (IN-VARI-ANT_-MASS_-TYPE, IN-VARI-
  []
@@ -2623,7 +2623,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1389--1390
 \T1/lmr/m/n/9 ANT_-MASS_-PT_-TYPE, TRANS-VERSE_-MASS_-TYPE or
  []
 
-[74]
+[73]
 Underfull \hbox (badness 3746) in paragraph at lines 1458--1459
 []|\T1/lmr/m/n/9 differences in $\OML/lmm/m/it/9 ^^Q$\T1/lmr/m/n/9 , cal-cu-lat
 ed in an in-stance of mod-ule \T1/pcr/m/n/9 sub_-
@@ -2635,7 +2635,7 @@ Underfull \hbox (badness 3492) in paragraph at lines 1459--1460
  in an in-stance of mod-ule \T1/pcr/m/n/9 sub_-
  []
 
-[75] [76]
+[74] [75]
 Overfull \hbox (38.6895pt too wide) in paragraph at lines 1482--1483
 []\T1/lmr/m/n/10.95 Overlap Re-mover Cor-re-la-tion con-di-tions [][]\T1/pcr/m/
 n/10.95 calo_-calo_-calo_-correlation_-orm_-condition.vhd[][]
@@ -2653,7 +2653,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 1484.
 
-[77]
+[76]
 Overfull \hbox (13.96008pt too wide) in paragraph at lines 1504--1511
 \T1/lmr/m/n/10.95 The calo es-ums cor-re-la-tion con-di-tion mod-ule ([][]\T1/p
 cr/m/n/10.95 calo_-esums_-correlation_-condition.vhd[][]\T1/lmr/m/n/10.95 )
@@ -2664,20 +2664,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 1504--1511
 
  []
 
-[78]
+[77]
 Underfull \hbox (badness 10000) in paragraph at lines 1523--1525
 
  []
 
-(./interfaces/calo_esums_correlation_condition.vhd [79]) [80]
+(./interfaces/calo_esums_correlation_condition.vhd [78]) [79]
 Underfull \hbox (badness 3492) in paragraph at lines 1588--1589
 []|\T1/lmr/m/n/9 differences in $\OML/lmm/m/it/9 '$\T1/lmr/m/n/9 , cal-cu-lated
  in an in-stance of mod-ule \T1/pcr/m/n/9 sub_-
  []
 
-[81
+[80
 
-] [82]
+] [81]
 Overfull \hbox (5.13899pt too wide) in paragraph at lines 1604--1618
 \T1/lmr/m/n/10.95 The calo muon cor-re-la-tion con-di-tion mod-ule ([][]\T1/pcr
 /m/n/10.95 calo_-muon_-correlation_-condition.vhd[][]\T1/lmr/m/n/10.95 )
@@ -2695,11 +2695,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 1604--1618
 
 Package epstopdf Info: Source file: <figures/convert_scheme_calo_2_muon_eta_phi
 .eps>
-(epstopdf)                    date: 2021-09-14 10:54:05
+(epstopdf)                    date: 2021-09-23 15:02:22
 (epstopdf)                    size: 240902 bytes
 (epstopdf)             Output file: <figures/convert_scheme_calo_2_muon_eta_phi
 -eps-converted-to.pdf>
-(epstopdf)                    date: 2021-09-14 10:54:31
+(epstopdf)                    date: 2021-09-23 15:02:48
 (epstopdf)                    size: 94518 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/convert_scheme_calo
 _2_muon_eta_phi-eps-converted-to.pdf figures/convert_scheme_calo_2_muon_eta_phi
@@ -2712,7 +2712,7 @@ pdfTeX warning: pdflatex (file ./figures/convert_scheme_calo_2_muon_eta_phi-eps
 -converted-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version
  <1.5> allowed
 
-<figures/convert_scheme_calo_2_muon_eta_phi-eps-converted-to.pdf, id=1678, 632.
+<figures/convert_scheme_calo_2_muon_eta_phi-eps-converted-to.pdf, id=1674, 632.
 3625pt x 437.635pt>
 File: figures/convert_scheme_calo_2_muon_eta_phi-eps-converted-to.pdf Graphic f
 ile (type pdf)
@@ -2728,15 +2728,15 @@ Underfull \hbox (badness 1210) in paragraph at lines 1638--1638
 in file
  []
 
-[83]
+[82]
 Underfull \hbox (badness 10000) in paragraph at lines 1644--1645
 
  []
 
-[84 <./figures/convert_scheme_calo_2_muon_eta_phi-eps-converted-to.pdf>]
-(./interfaces/calo_muon_correlation_condition.vhd [85
+[83 <./figures/convert_scheme_calo_2_muon_eta_phi-eps-converted-to.pdf>]
+(./interfaces/calo_muon_correlation_condition.vhd [84
 
-] [86])
+] [85])
 Underfull \hbox (badness 6428) in paragraph at lines 1659--1660
 []|\T1/lmr/m/n/9 selection of mass type (IN-VARI-ANT_-MASS_-TYPE, IN-VARI-
  []
@@ -2746,31 +2746,31 @@ Underfull \hbox (badness 10000) in paragraph at lines 1659--1660
 \T1/lmr/m/n/9 ANT_-MASS_-PT_-TYPE, TRANS-VERSE_-MASS_-TYPE or
  []
 
-[87]
+[86]
 Underfull \hbox (badness 3746) in paragraph at lines 1734--1735
 []|\T1/lmr/m/n/9 differences in $\OML/lmm/m/it/9 ^^Q$\T1/lmr/m/n/9 , cal-cu-lat
 ed in an in-stance of mod-ule \T1/pcr/m/n/9 sub_-
  []
 
-[88]
+[87]
 Underfull \hbox (badness 3492) in paragraph at lines 1735--1736
 []|\T1/lmr/m/n/9 differences in $\OML/lmm/m/it/9 '$\T1/lmr/m/n/9 , cal-cu-lated
  in an in-stance of mod-ule \T1/pcr/m/n/9 sub_-
  []
 
-[89]
+[88]
 Underfull \hbox (badness 10000) in paragraph at lines 1756--1762
 
  []
 
-[90]
+[89]
 Underfull \hbox (badness 10000) in paragraph at lines 1778--1779
 
  []
 
-[91] (./interfaces/muon_muon_correlation_condition.vhd [92
+[90] (./interfaces/muon_muon_correlation_condition.vhd [91
 
-] [93])
+] [92])
 Overfull \hbox (20.26833pt too wide) in alignment at lines 1783--1788
  [] [] 
  []
@@ -2795,12 +2795,12 @@ Overfull \hbox (20.26833pt too wide) in alignment at lines 1809--1829
  [] [] 
  []
 
-[94]
+[93]
 Overfull \hbox (20.26833pt too wide) in alignment at lines 1829--1849
  [] [] 
  []
 
-[95]
+[94]
 Overfull \hbox (20.26833pt too wide) in alignment at lines 1849--1869
  [] [] 
  []
@@ -2822,7 +2822,7 @@ Overfull \hbox (20.26833pt too wide) in alignment at lines 1869--1888
  [] [] 
  []
 
-[96] [97]
+[95] [96]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 1894.
@@ -2851,7 +2851,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1914--1928
 
  []
 
-[98]
+[97]
 Underfull \hbox (badness 2617) in paragraph at lines 1942--1942
 [][][]\T1/lmr/m/n/9 Definition of "\T1/pcr/m/n/9 constant \T1/pcr/m/n/10 MU_-ET
 M_-COSH_-COS_-PRECISION \T1/lmr/m/n/9 ..." and "\T1/pcr/m/n/9 constant \T1/pcr/
@@ -2863,21 +2863,21 @@ Underfull \hbox (badness 10000) in paragraph at lines 1950--1952
 
  []
 
-(./interfaces/muon_esums_correlation_condition.vhd [99] [100]) [101]
+(./interfaces/muon_esums_correlation_condition.vhd [98] [99]) [100]
 Underfull \hbox (badness 3492) in paragraph at lines 2022--2023
 []|\T1/lmr/m/n/9 differences in $\OML/lmm/m/it/9 '$\T1/lmr/m/n/9 , cal-cu-lated
  in an in-stance of mod-ule \T1/pcr/m/n/9 sub_-
  []
 
-[102
+[101
 
-] [103]) (./content/fdl.tex
+] [102]) (./content/fdl.tex
 Package epstopdf Info: Source file: <figures/mFDL_firmware.eps>
-(epstopdf)                    date: 2021-09-14 10:54:11
+(epstopdf)                    date: 2021-09-23 15:02:28
 (epstopdf)                    size: 223249 bytes
 (epstopdf)             Output file: <figures/mFDL_firmware-eps-converted-to.pdf
 >
-(epstopdf)                    date: 2021-09-14 10:54:31
+(epstopdf)                    date: 2021-09-23 15:02:48
 (epstopdf)                    size: 96525 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/mFDL_firmware-eps-c
 onverted-to.pdf figures/mFDL_firmware.eps>
@@ -2888,7 +2888,7 @@ Package epstopdf Info: Output file is already uptodate.
 pdfTeX warning: pdflatex (file ./figures/mFDL_firmware-eps-converted-to.pdf): P
 DF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
 
-<figures/mFDL_firmware-eps-converted-to.pdf, id=2133, 684.5575pt x 326.21875pt>
+<figures/mFDL_firmware-eps-converted-to.pdf, id=2129, 684.5575pt x 326.21875pt>
 File: figures/mFDL_firmware-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/mFDL_firmware-eps-converted-to.pdf>
 Package pdftex.def Info: figures/mFDL_firmware-eps-converted-to.pdf used on inp
@@ -2899,13 +2899,13 @@ ut line 16.
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\mu' on input line 21.
 
-[104]
+[103]
 Package epstopdf Info: Source file: <figures/fdl_pipeline.eps>
-(epstopdf)                    date: 2021-09-14 10:54:07
+(epstopdf)                    date: 2021-09-23 15:02:24
 (epstopdf)                    size: 128249 bytes
 (epstopdf)             Output file: <figures/fdl_pipeline-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2021-09-14 10:54:31
+(epstopdf)                    date: 2021-09-23 15:02:49
 (epstopdf)                    size: 50988 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/fdl_pipeline-eps-co
 nverted-to.pdf figures/fdl_pipeline.eps>
@@ -2916,19 +2916,19 @@ Package epstopdf Info: Output file is already uptodate.
 pdfTeX warning: pdflatex (file ./figures/fdl_pipeline-eps-converted-to.pdf): PD
 F inclusion: found PDF version <1.7>, but at most version <1.5> allowed
 
-<figures/fdl_pipeline-eps-converted-to.pdf, id=2139, 684.5575pt x 380.42125pt>
+<figures/fdl_pipeline-eps-converted-to.pdf, id=2135, 684.5575pt x 380.42125pt>
 File: figures/fdl_pipeline-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/fdl_pipeline-eps-converted-to.pdf>
 Package pdftex.def Info: figures/fdl_pipeline-eps-converted-to.pdf used on inpu
 t line 64.
 (pdftex.def)             Requested size: 426.79134pt x 237.1822pt.
- [105 <./figures/mFDL_firmware-eps-converted-to.pdf>]
+ [104 <./figures/mFDL_firmware-eps-converted-to.pdf>]
 
-LaTeX Warning: Reference `sec:gtl:algo_mapping_tme' on page 106 undefined on in
+LaTeX Warning: Reference `sec:gtl:algo_mapping_tme' on page 105 undefined on in
 put line 79.
 
-[106 <./figures/fdl_pipeline-eps-converted-to.pdf>] [107]
+[105 <./figures/fdl_pipeline-eps-converted-to.pdf>] [106]
 Overfull \hbox (19.54956pt too wide) in alignment at lines 140--146
  [] [] [] [] 
  []
@@ -3053,7 +3053,7 @@ Overfull \hbox (19.54956pt too wide) in alignment at lines 168--178
  [] [] [] [] 
  []
 
-[108] [109] [110] [111] [112] [113] [114] [115] [116
+[107] [108] [109] [110] [111] [112] [113] [114] [115
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 522--523
@@ -3065,7 +3065,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 524--525
 
  []
 
-(./interfaces/fdl_module.vhd [117]) [118]) (./content/rop.tex [119
+(./interfaces/fdl_module.vhd [116]) [117]) (./content/rop.tex [118
 
 ])
 (./content/glossary.tex
@@ -3074,9 +3074,9 @@ Overfull \hbox (21.71692pt too wide) in paragraph at lines 20--21
 MBT1HFM) 
  []
 
-[120
+[119
 
-]) (./content/acronyms.tex) [121
+]) (./content/acronyms.tex) [120
 
 ] (./gt-mp7-firmware-specification.bbl
 (./gt-mp7-firmware-specification.brf)
@@ -3091,7 +3091,7 @@ LaTeX Warning: Empty `thebibliography' environment on input line 3.
 No file gt-mp7-firmware-specification.ind.
 
 AED: lastpage setting LastPage
-[122
+[121
 
 ]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 89.
@@ -3115,8 +3115,8 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 89.
  ) 
 Here is how much of TeX's memory you used:
- 16865 strings out of 495028
- 244862 string characters out of 6181496
+ 16864 strings out of 495028
+ 244854 string characters out of 6181496
  492196 words of memory out of 5000000
  18639 multiletter control sequences out of 15000+600000
  110552 words of font info for 85 fonts, out of 8000000 for 9000
@@ -3145,11 +3145,11 @@ blic/lm/lmss8.pfb></usr/share/texmf/fonts/type1/public/lm/lmss9.pfb></usr/share
 fonts/type1/public/lm/lmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/
 courier/ucrb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8
 a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb>
-Output written on gt-mp7-firmware-specification.pdf (123 pages, 1747373 bytes).
+Output written on gt-mp7-firmware-specification.pdf (122 pages, 1877658 bytes).
 
 PDF statistics:
- 2612 PDF objects out of 2984 (max. 8388607)
- 2417 compressed objects within 25 object streams
- 1044 named destinations out of 1200 (max. 500000)
+ 2608 PDF objects out of 2984 (max. 8388607)
+ 2414 compressed objects within 25 object streams
+ 1043 named destinations out of 1200 (max. 500000)
  862 words of extra memory for PDF output out of 10000 (max. 10000000)
 

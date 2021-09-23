@@ -1,8 +1,9 @@
 
 -- Description:
--- Wrapper for all 5 ROM segments for LUTs with inv_dr_sq values.
+-- Wrapper for ROMs (4x8192 addresses) with LUTs values of 1/DR^2 for calos.
 
 -- Version history:
+-- HB 2021-09-09: changed ROMs structure.
 -- HB 2021-08-30: added sync for deta and dphi msb.
 -- HB 2021-08-24: updated for new ROMs structure.
 -- HB 2020-05-15: bug fixed for rom_lut_calo_inv_dr_sq_9 address.
@@ -33,7 +34,7 @@ end rom_lut_calo_inv_dr_sq_all;
 
 architecture rtl of rom_lut_calo_inv_dr_sq_all is
 
-    constant addr_width : positive := 12;
+    constant addr_width : positive := 12; -- ROM size: 4096
 
     constant dout1_width : positive := 26; -- CALO_CALO_INV_DR_SQ_VECTOR_WIDTH
     constant dout2_width : positive := 14;
@@ -74,7 +75,7 @@ architecture rtl of rom_lut_calo_inv_dr_sq_all is
         douta : OUT STD_LOGIC_VECTOR(dout4_width-1 DOWNTO 0)
     );
     END COMPONENT;
-
+    
     COMPONENT rom_lut_calo_inv_dr_sq_5
     PORT (
         clka : IN STD_LOGIC;
@@ -86,6 +87,8 @@ architecture rtl of rom_lut_calo_inv_dr_sq_all is
     signal addr_lsb, addr_lsb_5 : STD_LOGIC_VECTOR(addr_width-1 DOWNTO 0);
 
     signal dout1, dout2, dout3, dout4, dout5 : STD_LOGIC_VECTOR(CALO_CALO_INV_DR_SQ_VECTOR_WIDTH-1 DOWNTO 0) := (others => '0');
+
+    signal addr_msb : STD_LOGIC_VECTOR(2 DOWNTO 0);
 
     signal deta_msb : STD_LOGIC_VECTOR(1 DOWNTO 0);
     signal dphi_msb : STD_LOGIC_VECTOR(3 DOWNTO 0);
@@ -137,21 +140,22 @@ begin
             dphi_msb <= dphi(7 downto 4);
         end if;
     end process;
-
-    dout <=
-        dout1 when deta_msb = "00" and dphi_msb(3 downto 2) = "00" else
-        dout2 when deta_msb = "01" and dphi_msb(3 downto 2) = "00" else
-        dout3 when deta_msb = "10" and dphi_msb(3 downto 2) = "00" else
-        dout4 when deta_msb = "11" and dphi_msb(3 downto 2) = "00" else
-        dout5 when dphi_msb = "0100" else
-        zero_vec;
-
---     dout <=
---         dout1 when deta(7 downto 6) = "00" and dphi(7 downto 6) = "00" else
---         dout2 when deta(7 downto 6) = "01" and dphi(7 downto 6) = "00" else
---         dout3 when deta(7 downto 6) = "10" and dphi(7 downto 6) = "00" else
---         dout4 when deta(7 downto 6) = "11" and dphi(7 downto 6) = "00" else
---         dout5 when dphi(7 downto 4) = "0100" else
---         zero_vec;
-
+    
+    mux_p: process(deta_msb, dphi_msb, dout1, dout2, dout3, dout4, dout5)
+        begin
+        if dphi_msb(3 downto 2) = "00" then
+            if deta_msb = "00" then
+                dout <= dout1;
+            elsif deta_msb = "01" then
+                dout <= dout2;
+            elsif deta_msb = "10" then
+                dout <= dout3;
+            elsif deta_msb = "11" then
+                dout <= dout4;
+            end if;
+        elsif dphi_msb(3 downto 0) = "0100" then
+            dout <= dout5;
+        end if;
+    end process;
+        
 end rtl;

@@ -4,10 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.16.0] - 2021-08-31
+## [v1.16.0] - 2021-09-23
 ### Comment
 
-- mp7_ugt firmware release v1.15.5
+- mp7_ugt firmware release v1.16.0
 - renewed logic and LUTs (ROMs) of 1/DR^2 (for mass over dr)
 
 ### Changed
@@ -20,21 +20,35 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/gtl/common/rom_lut_calo_inv_dr_sq_all.vhd
   - ../payload/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd
   - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/gtl_pkg.vhd
 
 ### Added
 - script files:
-  - ../doc/../calo_inv_dr_sq_calc.py
-  - ../doc/../muon_inv_dr_sq_calc.py
+  - ../doc/../calo_one_over_dr_sq_calc.py
+  - ../doc/../muon_one_over_dr_sq_calc.py
+  - ../doc/../calo_one_over_dr_sq_calc_4_sim.py
+  - ../doc/../muon_one_over_dr_sq_calc_4_sim.py
+  - ../doc/../extract_calo_mif_files.py
+  - ../doc/../extract_muon_mif_files.py
 - simulation file:
   - ../sim/scripts/mass_div_dr_calo.do
   - ../sim/scripts/mass_div_dr_calo_wave.do
-  - ../sim/testbench/mass_div_dr_calo_tb.vhd
   - ../sim/scripts/mass_div_dr_muon_result.do
   - ../sim/scripts/mass_div_dr_muon_result_wave.do
+  - ../sim/scripts/mass_div_dr_muon.do
+  - ../sim/scripts/mass_div_dr_muon_wave.do
+  - ../sim/scripts/one_over_dr_sq_calo.do
+  - ../sim/scripts/one_over_dr_sq_calo_wave.do
+  - ../sim/scripts/one_over_dr_sq_muon.do
+  - ../sim/scripts/one_over_dr_sq_muon_wave.do
   - ../sim/scripts/rom_lut_calo_inv_dr_sq_all.do
   - ../sim/scripts/rom_lut_calo_inv_dr_sq_all_wave.do
   - ../sim/scripts/rom_lut_muon_inv_dr_sq_all.do
   - ../sim/scripts/rom_lut_muon_inv_dr_sq_all_wave.do
+  - ../sim/testbench/mass_div_dr_calo_tb.vhd
+  - ../sim/testbench/one_over_dr_sq_calo_tb.vhd
+  - ../sim/testbench/one_over_dr_sq_muon_tb.vhd
+  - ../sim/testbench/mass_div_dr_muon_tb.vhd
   - ../sim/testbench/mass_div_dr_muon_result_tb.vhd
   - ../sim/testbench/rom_lut_calo_inv_dr_sq_all_tb.vhd
   - ../sim/testbench/rom_lut_muon_inv_dr_sq_all_tb.vhd

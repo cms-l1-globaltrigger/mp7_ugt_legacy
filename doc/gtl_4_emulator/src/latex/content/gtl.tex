@@ -1,18 +1,12 @@
-\section{Package: lhc\_data\_pkg} \label{section_lhc_data_pkg}
-The VHDL record \texttt{lhc\_data\_t} (shown in Listing \ref{lst_lhc_data_t}) is used as a container for all object streams processed by the system. It is declared in the VHDL package \texttt{lhc\_data\_pkg}.
-For debugging and simulation purposes a second package (\texttt{lhc\_data\_debug\_util\_pkg}) is created which contains functions to convert the \texttt{lhc\_data\_t} to a hexadecimal string representation and vice versa.
-The testbench of the design uses these functions to load the contents of the SIM memory from a file.
-
-\lstinputlisting[label=lst_lhc_data_t,language=VHDL,caption=lhc\_data\_t record specification]{interfaces/lhc_data_t.vhd}
-
-\clearpage
-
 \section{Global Trigger Logic}
 \label{sec:gtl:global_trigger_logic}
-\textbf{Remark:}\\
-This description is for version 1.10.0 of Global Trigger Logic.\\
 
-The Global Trigger Logic (\ugtl) firmware contains conditions and Algorithms for trigger decision.
+\textbf{SECTION STILL UNDER CONSTRUCTION}\\
+
+\textbf{Remark:}\\
+This description is for version 1.16.0 of Global Trigger Logic.\\
+
+The Global Trigger Logic (\ugtl) firmware contains conditions and algorithms for trigger decision.
 
 \begin{figure}[htb]
 \centering
@@ -31,15 +25,23 @@ The Global Trigger Logic (\ugtl) firmware contains conditions and Algorithms for
 \item Electron/$\gamma$ objects
 \item Jet objects
 \item Tau objects
-\item Energy summary information: Total Et (\ett), total Et from ECAL only (ETTEM), total calibrated Et in jets (\htt), missing Et (\etm), missing Et including HF (ET$_{miss}^{HF}$), missing Ht objects (\htm),
-missing Ht including HF (HT$_{miss}^{HF}$) and "Asymmetry" information (ASYMET, ASYMHT, ASYMETHF, ASYMHTHF)
+\item Energy summary information:
+\begin{itemize}
+\item Total Et (\ett)
+\item total Et from ECAL only (ETTEM)
+\item total calibrated Et in jets (\htt)
+\item missing Et (\etm)
+\item missing Et including HF (ET$_{miss}^{HF}$)
+\item missing Ht objects (\htm)
+\item missing Ht including HF (HT$_{miss}^{HF}$)
+\item "Asymmetry" information (ASYMET, ASYMHT, ASYMETHF, ASYMHTHF)
+\end{itemize}
 \item Minimum bias HF bits (included in energy summary information data structure)
 \item Towercount bits (number of firing HCAL towers, included in energy summary information data structure)
 \item "Centrality" bits
 \end{itemize}
 \item \gmt data
 \item External conditions
-\item LHC-clock
 \end{itemize}
 \textbf{Outputs:}
 \begin{itemize}
@@ -54,9 +56,6 @@ All definitions for scales in the following chapters are from a CMS Detector Not
 
 \subsubsection{Calo-Layer2 optical interfaces}
 \label{sec:gtl:gct_optical_interfaces}
-
-The configuration of optical connections from Calo-Layer2 to \ugt is shown in Table~\ref{tab:framework:tab_configuration_optical_conn}.\\
-% \textit{The location of the GTH channels for the connections is very preliminary, must be checked with connections on Calo-Layer2.}\\
 
 The data structure of an \egamma object (bits 27..31 are not defined yet, reserved for quality, ...):
 \begin{center}
@@ -193,20 +192,19 @@ The firmware of \ugtl consists of two main parts:
 \item A top-of-hierarchy file (\texttt{gtl\_module.vhd}), which contains the pipeline for $\pm$2bx data, the instantiations of calculators for differences in $\eta$ and $\varphi$, the instantiations of conditions, the instantiations of charge correlation logic of muons and the Algorithms logic for 512 Algorithms, as well as a package file (\texttt{gtl\_pkg.vhd}) for declarations.
 Actually 6 AMC board are used to contain 512 Algorithms. Therefore the 512 Algorithms are \textbf{partitioned by VHDL Producer}.
 % The VHDL Producer for every Trigger Menu (see Figure~\ref{fig:gtl:tme_gtl}) creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}), these snippets are inserted into templates for \texttt{gtl\_module.vhd} and \texttt{gtl\_pkg.vhd} during simulation and synthesis.
-The VHDL Producer for every Trigger Menu creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}), these snippets are inserted into templates for \texttt{gtl\_module.vhd}  (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_module_tpl.vhd}{\texttt{gtl\_module\_tpl.vhd}}) and \texttt{gtl\_pkg.vhd} (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/gtl_pkg_tpl.vhd}{\texttt{gtl\_pkg\_tpl.vhd}}) during simulation and synthesis.
+The VHDL Producer for every Trigger Menu creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}), these snippets are inserted into templates for \texttt{gtl\_module.vhd} (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/payload/gtl/gtl_module_tpl.vhd}{\texttt{gtl\_module\_tpl.vhd}}) and \texttt{gtl\_pkg.vhd} (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/packages/gtl_pkg_tpl.vhd}{\texttt{gtl\_pkg\_tpl.vhd}}) during simulation and synthesis.
 \item A set of VHDL-files exists for all the modules instantiated in top-of-hierarchy and the modules in the hierarchy. These files, called the "fixed part", are not influenced by VHDL Producer.
 \end{itemize}
 
-% \begin{figure}[htb]
-% \centering
-% \includegraphics[width=15cm]{figures/tme_gtl}
-% \caption{VHDL file generation by VHDL Producer}
-% \label{fig:gtl:tme_gtl}
-% \end{figure}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/tme_gtl}
+\caption{VHDL file generation by VHDL Producer}
+\label{fig:gtl:tme_gtl}
+\end{figure}
 
 The latency of \ugtl is fixed to 5 bunch-crossings,
-2 bunch-crossings for the pipeline of $\pm$2bx data (for data with +2bx and +1bx), 2 bunch-crossings for conditions (fixed), also for the conditions requested in the future,
-1 bunch-crossing for the logic of Algorithms (See Figure \ref{fig:gtl:gtl_pipeline}).\\
+2 bunch-crossings for the pipeline of $\pm$2bx data (for data with +2bx and +1bx), 2 bunch-crossings for conditions (fixed), also for the conditions requested in the future, 1 bunch-crossing for the logic of Algorithms (See Figure \ref{fig:gtl:gtl_pipeline}).\\
 
 \subsubsection{Top-of-hierarchy module}
 \label{sec:gtl:top_module}
@@ -224,9 +222,6 @@ Listing~\ref{lst:gtl_module_vhd} contains the entity-declaration of the top-of-h
 
 %% "automatic generation" of entity-list (see /scripts/extract_entities.sh)
 \lstinputlisting[label=lst:gtl_module_vhd,language=VHDL,caption=Entity declaration of \texttt{gtl\_module.vhd}]{interfaces/gtl_module_tpl.vhd}
-
-\subsubsection{Package module}
-\label{sec:gtl:package_module}
 
 All the declarations for arrays ('type'), parameters ('constant') and look-up-tables ('constant') used in modules are available in \texttt{gtl\_pkg.vhd} package-file.
 
@@ -251,26 +246,8 @@ on latency, because coming before data for a certain bunch-crossing.
 \label{fig:gtl:gtl_pipeline}
 \end{figure}
 
-\subsubsection{Calculation of differences in $\eta$ and $\varphi$}
-\label{sec:gtl:calculation_differences}
 
-Some condition types namely correlation conditions uses differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$) to make the decision.
-Therefore these differences are calculated out of these conditions, because the differences can be used several times in different condition types.
-The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs),
-which represents values of differences (multiples of units in $\eta$ and $\varphi$).
-Differences in $\varphi$ are provided by module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd}{\texttt{sub\_phi\_integer\_obj\_vs\_obj.vhd}}, which instantiates the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd}{\texttt{sub\_unsigned\_phi.vhd}} as many times as
-the numbers of both objects determine.\\
-In the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd}{\texttt{sub\_unsigned\_phi.vhd}} a calculation of a difference of two objects is done, both objects must have the same resolution, namely the higher one.
-The result is the absolute value of the difference.
-There are two differences in $\varphi$, one "clockwise" and one "anti-clockwise". For the final result the smaller difference is taken.\\
-Differences in $\eta$ are provided by module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd}{\texttt{sub\_eta\_integer\_obj\_vs\_obj.vhd}}, which instantiates the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_eta.vhd}{\texttt{sub\_unsigned\_eta.vhd}} as many times as the numbers of both objects determine.\\
-In the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_eta.vhd}{\texttt{sub\_unsigned\_eta.vhd}} a calculation of a difference of two objects is done with a signed subtraction, because of the Two's Complement notation of $\eta$ values.
-The result is the absolute value of the difference.
-
-\subsubsection{Calorimeter conditions}
-\label{sec:gtl:calorimeter_conditions}
-
-\paragraph{Calorimeter data}
+\subsubsection{Definitions of Calorimeter data}
 \label{sec:gtl:calorimeter_data}
 
 The calorimeter trigger processing identifies \textbf{\egamma, jet and tau} objects and \textbf{\esums}.\\
@@ -278,60 +255,60 @@ The calorimeter trigger processing identifies \textbf{\egamma, jet and tau} obje
 \textbf{\egamma}:\\ Twelve objects are passed to the \ugt for each event.\\
 For each selected object, the Calo-Layer2 sends parameters for \et and for position and quality information - encoded in 32 bits:
 \begin{itemize}
-\item 9 bits \et, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
-\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -3.0 to 3.0, step = 0.087/2, linear scale, 138 bins (HW index = 0xBC..0x44)
+\item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
+\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 138 bins (HW index = 0xBC..0x44)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
-\item 2 bits isolation (meaning not defined yet!)
-\item 5 bits quality and spare (not defined yet!)
+\item 2 bits isolation
+\item 5 bits spare
 \end{itemize}
 
 The data structure of an \egamma object (bits 27..31 are not defined yet, reserved for quality, ...):
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,8,9,16,17,24,25,26,27,31} \\
-        \bitbox {5}     {\texttt{qual/spare}} &
+        \bitbox {5}     {\texttt{spare}} &
         \bitbox {2}     {\texttt{iso}} &
         \bitbox {8}     {\texttt{$\varphi$}}  &
         \bitbox {8}     {\texttt{$\eta$}}  &
-        \bitbox {9}     {\texttt{\et}} \\
+        \bitbox {9}     {\texttt{\pt}} \\
 \end{bytefield}
 \end{center}
 
 \textbf{jet}:\\ Twelve objects are passed to the \ugt for each event.\\
 For each selected object, the Calo-Layer2 sends parameters: \et, for position and quality information - encoded in 32 bits:
 \begin{itemize}
-\item 11 bits \et, range = 0..1023 GeV (HW index = 0..0x7FF), step = 0.5, the highest bin will mark an overflow (HW index 0x7FF): meaning has to be defined
+\item 11 bits \pt, range = 0..1023 GeV (HW index = 0..0x7FF), step = 0.5, the highest bin will mark an overflow (HW index 0x7FF): meaning has to be defined
 \item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
-\item 5 bits quality and spare (not defined yet!)
+\item 5 bitsspare
 \end{itemize}
 
 The data structure of a jet object (bits 27..31 are not defined yet, reserved for quality, ...):
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,10,11,18,19,26,27,31} \\
-        \bitbox {5}     {\texttt{iso/qu/sp}} &
+        \bitbox {5}     {\texttt{spare}} &
         \bitbox {8}     {\texttt{$\varphi$}}  &
         \bitbox {8}     {\texttt{$\eta$}}  &
-        \bitbox {11}    {\texttt{\et}} \\
+        \bitbox {11}    {\texttt{\pt}} \\
 \end{bytefield}
 \end{center}
 
 \textbf{tau}:\\ Twelve objects are passed to the \ugt for each event.\\
 For each selected object, the Calo-Layer2 sends parameters for \et and for position and quality information - encoded in 32 bits:
 \begin{itemize}
-\item 9 bits \et, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
-\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -3.0 to 3.0, step = 0.087/2, linear scale, 138 bins (HW index = 0xBC..0x44)
+\item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
+\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 138 bins (HW index = 0xBC..0x44)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
-\item 2 bits isolation (meaning not defined yet!)
-\item 5 bits quality and spare (not defined yet!)
+\item 2 bits isolation
+\item 5 bits spare
 \end{itemize}
 
 The data structure of a tau object (bits 27..31 are not defined yet, reserved for quality, ...):
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,8,9,16,17,24,25,26,27,31} \\
-        \bitbox {5}     {\texttt{qual/spare}} &
+        \bitbox {5}     {\texttt{spare}} &
         \bitbox {2}     {\texttt{iso}} &
         \bitbox {8}     {\texttt{$\varphi$}}  &
         \bitbox {8}     {\texttt{$\eta$}}  &
@@ -339,28 +316,9 @@ The data structure of a tau object (bits 27..31 are not defined yet, reserved fo
 \end{bytefield}
 \end{center}
 
-The representation of the 8 bits (called "hardware index [HW index]") in $\eta$ is expected as Two's Complement notation as shown in Table~\ref{tab:gtl:calo_eta_scale}.\\
+The representation of the 8 bits (called "hardware index [HW index]") in $\eta$ is expected as Two's Complement notation as shown below.\\
 
 \begin{table}[htdp]
-\caption{$\eta$ scale of \egamma and tau}
-\begin{center}
-\begin{tabular}{|c|l|c|}\hline
-\textbf{HW index}& \textbf{$\eta$ range} & \textbf{$\eta$ bin}\\\hline\hline
-0x44 & 68$*$0.087/2 to 69$*$0.087/2 & 68\\\hline
-... & ... & ...\\\hline
-0x01 & 0.087/2 to 2$*$0.087/2 & 1\\\hline
-0x00 & 0 to 0.087/2 & 0\\\hline
-0xFF & 0 to -0.087/2 & -1\\\hline
-0xFE & -0.087/2 to -2$*$0.087/2 & -2\\\hline
-... & ... & ...\\\hline
-0xBC & -68$*$0.087/2 to -69$*$0.087/2 & -69\\\hline
-\end{tabular}
-\end{center}
-\label{tab:gtl:calo_eta_scale}
-\end{table}
-
-\begin{table}[htdp]
-\caption{$\eta$ scale of jet}
 \begin{center}
 \begin{tabular}{|c|l|c|}\hline
 \textbf{HW index}& \textbf{$\eta$ range} & \textbf{$\eta$ bin}\\\hline\hline
@@ -374,7 +332,7 @@ The representation of the 8 bits (called "hardware index [HW index]") in $\eta$ 
 0x8E & -114$*$0.087/2 to -115$*$0.087/2 & -115\\\hline
 \end{tabular}
 \end{center}
-\label{tab:gtl:calo_eta_scale}
+\label{tab:gtl:calo_eta_scale_new}
 \end{table}
 
 The representation of the 8 bits in $\varphi$ is expected as shown in Table~\ref{tab:gtl:calo_phi_scale}.\\
@@ -409,120 +367,7 @@ bits [26..25] & definition \\\hline\hline
 \label{tab:gtl:eg_tau_iso_bits}
 \end{table}
 
-\clearpage
-
-\paragraph{Calorimeter conditions definition}
-\label{sec:gtl:calo_cond_def}
-
-A condition consists of calorimeter objects as input data and a set of requirements, which contain the requirements to be complied.
-
-The requirement for calorimeter conditions contains:\\
-one threshold for \et, ranges for $\eta$, $\varphi$ LUTs for isolation and differences in $\eta$ and $\varphi$. In addition the selection of the "relative bx" of objects
-is done in the requirement.\\
-The condition is complied, if every comparison between object parameters and requirements is valid for the following equation:
-\begin{itemize}
-\item \et greater-equal (or equal) threshold
-\item $\eta$ in range
-\item $\varphi$ in range
-\item isolation as requested (for \egamma and tau)
-\end{itemize}
-\textit{Additional comparisons for "quality information" could be part of the equation - but not defined yet.}
-
-There are different types of calorimeter conditions implemented, depending of how many objects have to comply the requirements.
-\begin{itemize}
-\item "Quad objects requirements condition": this condition type consists of requirements for 4 different trigger objects of the same object type.
-For each object the requirements can be different. To fulfill this condition, there must exist at least one set of 4 different objects,
-each of which fulfills at least one of the requirements.
-\item "Triple objects requirements condition": this condition type consists of requirements for 3 different trigger objects of the same object type.
-For each object the requirements can be different. To fulfill this condition, there must exist at least one set of 3 different objects,
-each of which fulfills at least one of the requirements.
-\item "Double objects requirements condition": this condition type consists of requirements for 2 different trigger objects of the same object type.
-For each object the requirements can be different. To fulfill this condition, there must exist at least one set of 2 different objects,
-each of which fulfills at least one of the requirements.\footnote{"Double objects requirements condition with spatial correlation" not used anymore, replaced by Correlation conditions}
-\item "Single object requirement condition": this condition type consists of one requirement for one trigger object of a given object type.
-To fulfill this condition, there must exist at least one object which fulfills the requirement.
-
-\end{itemize}
-
-The selection of the mode of \et-comparator (greater/equal or equal), the \et-threshold-value, ranges for $\eta$ and $\varphi$ set with thresholds, LUTs for isolation and ranges for differences in $\eta$ and $\varphi$ set with thresholds are fixed values given by VHDL Producer for every Trigger Menu.
-The objects have to be of same type and same bunch-crossing.
-
-\subparagraph{Calorimeter conditions module}
-\label{sec:gtl:calo_conditions_module}
-
-The module for conditions with calorimeter objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions.vhd}{\texttt{calo\_conditions.vhd}}) instantiates the calorimeter comparators module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_comparators.vhd}{\texttt{calo\_comparators.vhd}}) as many times as the numbers of objects and requirements determine. Depending on the condition-type, different and-or-structures of object vs. requirement are selected.
-The selection of condition-type and the number of objects is done by parameters in the generic interface list of the module (see Listing~\ref{lst:calo_conditions_vhd},
-see also the explanations below).\\
-For comparison in $\eta$, $\varphi$ and the differences in $\eta$ and $\varphi$, "window"-comparators are used.\\
-In the calorimeter conditions module a cut for two-body pt calculation can be selected. Therefore a threshold value for two-body pt is required.
-
-\subparagraph{Calorimeter Overlap Remover conditions module}
-\label{sec:gtl:calo_conditions_orm_module}
-The Calorimeter Overlap Remover conditions consits of a Calorimeter condition (\ref{sec:gtl:calo_conditions_module}) and a single condition for a different calo object type. One or more correlation cut(s) ($\Delta\eta$, $\Delta\varphi$ and $\Delta$R - \ref{sec:gtl:correlation_conditions}) for overlap removal is required between different calo object types.
-Overlap Remover conditions \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_orm.vhd}{\texttt{calo\_conditions\_orm.vhd}} are implemented only for calo object types.
-
-\subparagraph{Calorimeter comparators module}
-\label{sec:gtl:calo_comp_module}
-A comparator between the energy (\et) and a threshold (et\_threshold) and a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators
-is done in this basic module. The values for \et threshold, the 'mode-selection' for the \et comparator and the "limits" of the "window"-comparators is given in the generic interface list of the module. Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
-The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
-The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. There are two flags, one for "full-range" and one for "ignore-second-window" for the selection of the ranges.\\
-There are two cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator} and Listing~\ref{lst:phi_window_comparator_vhd}):
-\begin{itemize}
-\item Upper limit is less than lower limit => $\varphi$ range between the limits, including the $\varphi$ bin with value = 0 (HW index).
-\item Upper limit is greater/equal than lower limit => $\varphi$ range between the limits, not including the $\varphi$ bin with value = 0 (HW index).
-\end{itemize}
-The comparison of isolation (for \egamma and tau) is done with LUTs.
-\begin{lstlisting}[label=lst:phi_window_comparator_vhd,float=here,caption=VHDL code of "window"-comparator in $\varphi$,captionpos=t]
-    phi_comp_w1 <= '1' when phi_w1_upper_limit < phi_w1_lower_limit and
-                    (phi <= phi_w1_upper_limit or phi >= phi_w1_lower_limit) else
-                   '1' when phi_w1_upper_limit >= phi_w1_lower_limit and
-                    (phi <= phi_w1_upper_limit and phi >= phi_w1_lower_limit)
-                    else '0';
-\end{lstlisting}
-
-The values of $\eta$ and $\varphi$ have to be inside of only one of the required ranges ("or").
-
-The comparison of isolation (for \egamma and tau) is done with LUTs (see Table~\ref{tab:gtl:calo_lut_iso}).
-Only the least significant 4 bits of LUT are used, because currently 2 isolation bits are defined.
-
-\begin{table}[htdp]
-\begin{center}
-\begin{tabular}{|c|c|p{.4\columnwidth}|}\hline
-LUT content (16 bits) & isolation bits [26..25] & trigger \\\hline\hline
-X"0" & xx & no trigger\\\hline
-X"1" & 00 & trigger on isolation bits = 00\\\hline
-X"2" & 01 & trigger on isolation bits = 01\\\hline
-X"3" & 00 or 01 & trigger on isolation bits = 00 or 01\\\hline
-X"4" & 10 & trigger on isolation bits = 10\\\hline
-X"5" & 00 or 10 & trigger on isolation bits = 00 or 10\\\hline
-X"6" & 01 or 10 & trigger on isolation bits = 01 or 10\\\hline
-X"7" & 00 or 01 or 10 & trigger on isolation bits = 00 or 01 or 10\\\hline
-X"8" & 11 & trigger on isolation bits = 11\\\hline
-X"9" & 00 or 11 & trigger on isolation bits = 00 or 11\\\hline
-X"A" & 01 or 11 & trigger on isolation bits = 01 or 11\\\hline
-X"B" & 00 or 01 or 11 & trigger on isolation bits = 00 or 01 or 11\\\hline
-X"C" & 10 or 11 & trigger on isolation bits = 10 or 11\\\hline
-X"D" & 00 or 10 or 11 & trigger on isolation bits = 00 or 10 or 11\\\hline
-X"E" & 01 or 10 or 11 & trigger on isolation bits = 01 or 10 or 11\\\hline
-X"F" & 00 or 01 or 10 or 11 & trigger on isolation bits = 00 or 01 or 10 or 11 (= "ignore" isolation)\\\hline
-\end{tabular}
-\end{center}
-\caption{LUT contents for isolation comparison of \egamma and tau objects}
-\label{tab:gtl:calo_lut_iso}
-\end{table}
-
-\begin{figure}[htb]
-\centering
-\includegraphics[width=15cm]{figures/phi_windows_comparator}
-\caption{Setting the limits for "window"-comparators for $\varphi$}
-\label{fig:gtl:phi_windows_comparator}
-\end{figure}
-
-\clearpage
-
-\subsubsection{Energy sum quantities conditions}
-\label{sec:gtl:esums_conditions}
+\subsubsection{Definitions of Energy sum quantities data}
 
 \textbf{\esums}:\\ Consists of following quantities (naming convention see \ref{sec:glossary}):
 \begin{itemize}
@@ -542,7 +387,6 @@ X"F" & 00 or 01 or 10 or 11 & trigger on isolation bits = 00 or 01 or 10 or 11 (
 \item \textbf{CENT7}
 \end{itemize}
 
-\paragraph{Energy sum quantities data}
 Calo-Layer2 sends 6 frames (each 32 bits) with Energy sum quantities containing the following information:
 \begin{itemize}
 \item \et, 12 bits, range = 0..2047 GeV (HW index = 0..0xFFF), step = 0.5, the highest bin will mark an overflow (HW index 0xFFF): meaning has to be defined
@@ -619,51 +463,9 @@ Frame5: The data structure of "missing Ht including HF" (HT$_{miss}^{HF}$) quant
 \end{bytefield}
 \end{center}
 
-\paragraph{Energy sum quantities conditions module (including Asymmetry conditions)}
-
-For the entity-declaration see \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd}{\texttt{esums\_conditions.vhd}}.\\
-A comparator between \et and a threshold (et\_threshold) and, depending on object type, a comparison in $\varphi$ with
-two "window"-comparators is done in this module.
-The value for \et threshold, the 'mode-selection' for the \et comparator and the limits for the "window"-comparators are given in the generic interface list of the module.
-The selection whether a comparison in $\varphi$ is part of the condition is done with the value of the generic parameter 'obj\_type'
-('ETM\_TYPE', 'ETMHF\_TYPE', 'HTM\_TYPE' and 'HTMHF\_TYPE' force a comparison).
-The comparison in $\varphi$ is done in the same way as for calorimeter conditions (see \ref{sec:gtl:calo_comp_module}).
-Additionally the data-structure of input data (data\_i in port interface list) is provided
-as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
-Data for Asymmetry trigger are received on 4 frames on bits 27..20 (8 bits). For every type a comparision with an 8-bit threshold (greater-equal [or equal]) is done.
-Asymmetry data are interpreted as counts.
-
-\subsubsection{Minimum bias trigger conditions}
-\label{sec:gtl:min_bias_conditions}
-
-Data for Minimum bias trigger are received on the 4 MSBs of 4 frames used for Energy sum quantities (see \ref{sec:gtl:esums_conditions}).
-
-\begin{itemize}
-\item MBT0HFP: "minimum bias HF+ threshold 0" bits
-\item MBT0HFM: "minimum bias HF- threshold 0" bits
-\item MBT1HFP: "minimum bias HF+ threshold 1" bits
-\item MBT1HFM: "minimum bias HF- threshold 1" bits
-\end{itemize}
-
-In minimum bias trigger conditions module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/min_bias_hf_conditions.vhd}{\texttt{min\_bias\_hf\_conditions.vhd}}) there is a comparision with a 4-bit threshold (greater-equal [or equal]).
-
-\subsubsection{Towercount condition}
-\label{sec:gtl:towercount_cond}
-
-Data for Towercount trigger (number of firing HCAL towers) are received on frame \htt (see \ref{sec:gtl:esums_conditions}) on bits 24..12 (13 bits) of \htt data structure.\\
-In towercount condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/towercount\_condition.vhd}{\texttt{towercount\_condition.vhd}}) there is a comparision with a 13-bit threshold (greater-equal [or equal]).
-
-\subsubsection{Centrality condition}
-\label{sec:gtl:centrality_cond}
-
-Centrality bits used as a signals for triggers (similar to external signals).
-
-\subsubsection{Muon conditions}
-\label{sec:gtl:muon_conditions}
-
-\paragraph{Muon data}
+\subsubsection{Definitions of Muon data}
 \label{sec:gtl:muon_data}
-Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data structure with parameters for \pt, for position, charge, quality and isolation information:
+Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data structure with parameters for \pt, for unconstrained \pt, for impact parameter, for position, charge, quality and isolation information:
 \begin{itemize}
 \item 10 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/576 (\^=0.625°), 576 bins (HW index = 0..0x23F), HW index starting at 0° (anti-clockwise)
 \item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
@@ -798,12 +600,387 @@ bits [63..62] & definition \\\hline\hline
 \label{tab:gtl:muon_iso_bits}
 \end{table}
 
+\subsubsection{Calculation of differences in $\eta$ and $\varphi$}
+\label{sec:gtl:calculation_differences}
+
+Some condition types namely correlation conditions uses differences in $\eta$ and $\varphi$ to make the decision.
+Therefore these differences are calculated out of these conditions, because the differences can be used several times in different condition types.
+The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs),
+which represents values of differences (multiples of units in $\eta$ and $\varphi$).
+% Differences in $\varphi$ are provided by module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd}{\texttt{sub\_phi\_integer\_obj\_vs\_obj.vhd}}, which instantiates the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd}{\texttt{sub\_unsigned\_phi.vhd}} as many times as
+% the numbers of both objects determine.\\
+% In the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd}{\texttt{sub\_unsigned\_phi.vhd}} a calculation of a difference of two objects is done, both objects must have the same resolution, namely the higher one.
+% The result is the absolute value of the difference.
+% There are two differences in $\varphi$, one "clockwise" and one "anti-clockwise". For the final result the smaller difference is taken.\\
+% Differences in $\eta$ are provided by module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd}{\texttt{sub\_eta\_integer\_obj\_vs\_obj.vhd}}, which instantiates the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_eta.vhd}{\texttt{sub\_unsigned\_eta.vhd}} as many times as the numbers of both objects determine.\\
+% In the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_eta.vhd}{\texttt{sub\_unsigned\_eta.vhd}} a calculation of a difference of two objects is done with a signed subtraction, because of the Two's Complement notation of $\eta$ values.
+% The result is the absolute value of the difference.
+
+\subsubsection{Combination conditions}
+\label{sec:gtl:combination_conditions}
+
+\paragraph{Combination conditions definition}
+\label{sec:gtl:comb_cond_def}
+
+A condition consists of input data and a set of requirements, which contain the requirements to be complied. The requirements are called "object cuts".
+
+The requirement list contains:\\
+thresholds for \pt, ranges for $\eta$ and $\varphi$, LUTs for isolation, LUTs for quality, requsted charges, thresholds for unconstrained \pt, a LUTs for impact parameter.
+The condition is complied, if every comparison between object parameters and requirements is valid for the following object cuts (only for requested cuts):
+
+For Calorimeter input data:
+\begin{itemize}
+\item \pt greater-equal (or equal) threshold
+\item $\eta$ in range
+\item $\varphi$ in range
+\item iso LUT
+\end{itemize}
+
+For Muon input data:
+\begin{itemize}
+\item \pt greater-equal (or equal) threshold
+\item $\eta$ in range
+\item $\varphi$ in range
+\item iso LUT
+\item requested charge
+\item quality LUT
+\item unconstrained \pt greater-equal (or equal) threshold
+\item impact parameter LUT
+\end{itemize}
+
+There are different types of conditions implemented, depending of how many objects have to comply the requirements.
+\begin{itemize}
+\item "Quad objects requirements condition": this condition type consists of requirements for 4 different trigger objects of the same object type.
+For each object the requirements can be different. To fulfill this condition, there must exist at least one set of 4 different objects,
+each of which fulfills at least one of the requirements.
+\item "Triple objects requirements condition": this condition type consists of requirements for 3 different trigger objects of the same object type.
+For each object the requirements can be different. To fulfill this condition, there must exist at least one set of 3 different objects,
+each of which fulfills at least one of the requirements.
+\item "Double objects requirements condition": this condition type consists of requirements for 2 different trigger objects of the same object type.
+For each object the requirements can be different. To fulfill this condition, there must exist at least one set of 2 different objects,
+each of which fulfills at least one of the requirements.\footnote{"Double objects requirements condition with spatial correlation" not used anymore, replaced by Correlation conditions}
+\item "Single object requirement condition": this condition type consists of one requirement for one trigger object of a given object type.
+To fulfill this condition, there must exist at least one object which fulfills the requirement.
+\end{itemize}
+
+The values of the requirements are given by VHDL Producer for every Trigger Menu.\\
+The input data objects have to be of same type and same bunch-crossing.
+
+With "Double objects requirements condition" a correlation cut of "two-body pt" can be required (calorimeter and muon objects).\\
+Additionally charge correlation cuts with "Double objects requirements condition", "Triple objects requirements condition" and "Quad objects requirements condition" of muon objects can be required.
+
+% \subparagraph{Combination conditions module}
+% \label{sec:gtl:comb_conditions_module}
+%
+% TBD
+%
+% \clearpage
+% %% "automatic generation" of listings (see /scripts/extract_entities.sh)
+% \lstinputlisting[label=lst:comb_conditions_vhd,language=VHDL,caption=Entity declaration of \texttt{comb\_conditions.vhd}]{interfaces/comb_conditions.vhd}
+%
+% \clearpage
+%
+% \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
+% \caption{Explanation of Listing~\ref{lst:comb_conditions_vhd}}\\
+% \hline
+% {Item} & {Explanation}\\
+% \hline
+% \endhead
+% \verb|slice_1_low_obj1| & low value of slice for first object.\\
+% \verb|slice_1_high_obj1| & high value of slice for first object.\\
+% \verb|slice_2_low_obj1| & low value of slice for second object.\\
+% \verb|slice_2_high_obj1| & high value of slice for second object.\\
+% \verb|slice_3_low_obj1| & low value of slice for third object.\\
+% \verb|slice_3_high_obj1| & high value of slice for third object.\\
+% \verb|slice_4_low_obj1| & low value of slice for fourth object.\\
+% \verb|slice_4_high_obj1| & high value of slice for fourth object.\\
+% \verb|pt_ge_mode_obj1| & 'mode-selection' for the \pt comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
+% \verb|pt_thresholds_obj1| & array of four threshold values for comparison in pt (four threshold, because of max. 4 requirements).\\
+% \verb|nr_eta_windows_obj1| & array of four integer values for number of $\eta$ cuts.\\
+% \verb|eta_w1_upper_limits_obj1| & array of four "upper limits" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w1_lower_limits_obj1| & array of four "lower limits" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w2_upper_limits_obj1| & array of four "upper limits" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w2_lower_limits_obj1| & array of four "lower limits" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w3_upper_limits_obj1| & array of four "upper limits" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w3_lower_limits_obj1| & array of four "lower limits" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w4_upper_limits_obj1| & array of four "upper limits" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w4_lower_limits_obj1| & array of four "lower limits" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w5_upper_limits_obj1| & array of four "upper limits" of "window"-comparator 5 for $\eta$.\\
+% \verb|eta_w5_lower_limits_obj1| & array of four "lower limits" of "window"-comparator 5 for $\eta$.\\
+% \verb|nr_phi_windows_obj1| & array of four integer values for number of $\varphi$ cuts.\\
+% \verb|phi_w1_upper_limits_obj1| & array of four "upper limits" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w1_lower_limits_obj1| & array of four "lower limits" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w2_upper_limits_obj1| & array of four "upper limits" of "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_lower_limits_obj1| & array of four "lower limits" of "window"-comparator 2 for $\varphi$.\\
+% \verb|iso_luts_obj1| & array of four LUTs (4 bits) for isolation.\\
+% \verb|requested_charges_obj1| & array of four strings for requested charge ("pos" means "positive charge", "neg" means "negative charge" and "ign" means "ignore charge").\\
+% \verb|qual_luts_obj1| & array of four LUTs (16 bits) for quality.\\
+% \verb|upt_cuts_obj1| & array of four boolean for using unconstrained \pt cuts.\\
+% \verb|upt_upper_limits_obj1| & array of four "upper limits" of unconstrained \pt.\\
+% \verb|upt_lower_limits_obj1| & array of four "lower limits" of unconstrained \pt.\\
+% \verb|ip_luts_obj1| & array of four LUTs (4 bits) for impact parameter.\\
+% \verb|requested_charge_correlation| & string (2 characters) for requested charge correlation ("ls" means "like sign", "os" means "opposite sign" or "ig" means "ignore").\\
+% \verb|pt_ge_mode_obj2| & 'mode-selection' for the \pt comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
+% \verb|pt_thresholds_obj2| & array of four threshold values for comparison in pt (four threshold, because of max. 4 requirements).\\
+% \verb|nr_eta_windows_obj2| & array of four integer values for number of $\eta$ cuts.\\
+% \verb|eta_w1_upper_limits_obj2| & array of four "upper limits" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w1_lower_limits_obj2| & array of four "lower limits" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w2_upper_limits_obj2| & array of four "upper limits" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w2_lower_limits_obj2| & array of four "lower limits" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w3_upper_limits_obj2| & array of four "upper limits" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w3_lower_limits_obj2| & array of four "lower limits" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w4_upper_limits_obj2| & array of four "upper limits" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w4_lower_limits_obj2| & array of four "lower limits" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w5_upper_limits_obj2| & array of four "upper limits" of "window"-comparator 5 for $\eta$.\\
+% \verb|eta_w5_lower_limits_obj2| & array of four "lower limits" of "window"-comparator 5 for $\eta$.\\
+% \verb|nr_phi_windows_obj2| & array of four integer values for number of $\varphi$ cuts.\\
+% \verb|phi_w1_upper_limits_obj2| & array of four "upper limits" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w1_lower_limits_obj2| & array of four "lower limits" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w2_upper_limits_obj2| & array of four "upper limits" of "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_lower_limits_obj2| & array of four "lower limits" of "window"-comparator 2 for $\varphi$.\\
+% \verb|iso_luts_obj2| & array of four LUTs (4 bits) for isolation.\\
+% \verb|twobody_pt_cut| & valid strings are 'true' and 'false' (type is boolean).\\
+% \verb|pt_width| & vector length of pt value for two-body pt.\\
+% \verb|pt_sq_threshold_vector| & hex value for threshold of two-body pt comparison (value for pt square).\\
+% \verb|twobody_upt_cut| & valid strings are 'true' and 'false' (type is boolean).\\
+% \verb|upt_width| & vector length of unconstrained pt value for two-body pt.\\
+% \verb|upt_sq_threshold_vector| & hex value for threshold of two-body unconstrained pt comparison (value for pt square).\\
+% \verb|sin_cos_width| & vector length of sine and cosine.\\
+% \verb|pt_sq_sin_cos_precision| & precision of sine and cosine calculation in LUTs.\\
+% \verb|deta_orm_cut| & selection of $\Delta\eta$ cut for overlap removal.\\
+% \verb|deta_orm_upper_limit_vector| & "upper limit" of "window"-comparator for comparison of $\Delta\eta$ for overlap removal (hex value).\\
+% \verb|deta_orm_lower_limit_vector| & "lower limit" of "window"-comparator for comparison of $\Delta\eta$ for overlap removal (hex value).\\
+% \verb|dphi_orm_cut| & selection of $\Delta\varphi$ cut for overlap removal.\\
+% \verb|dphi_orm_upper_limit_vector| & "upper limit" of "window"-comparator for comparison of $\Delta\varphi$ for overlap removal (hex value).\\
+% \verb|dphi_orm_lower_limit_vector| & "lower limit" of "window"-comparator for comparison of $\Delta\varphi$ for overlap removal (hex value).\\
+% \verb|dr_orm_cut| & selection of $\Delta$R cut for overlap removal.\\
+% \verb|dr_orm_upper_limit_vector| & "upper limit" of "window"-comparator for comparison of $\Delta$$R^2$ for overlap removal (hex value).\\
+% \verb|dr_orm_lower_limit_vector| & "lower limit" of "window"-comparator for comparison of $\Delta$$R^2$ for overlap removal (hex value).\\
+% \verb|nr_obj1| & number of objects of input obj1.\\
+% \verb|type_obj1| & type of input obj1.\\
+% \verb|nr_obj2| & number of objects of input obj2 (for overlap removal).\\
+% \verb|type_obj2| & type of input obj2 (for overlap removal).\\
+% \verb|nr_templates| & number of requirements, selector of condition-type. Valid values are 1, 2, 3 and 4.\\
+% \verb|lhc_clk| & clock input (LHC clock).\\
+% \verb|obj1_calo| & calo input data.\\
+% \verb|obj1_muon| & muon input data.\\
+% \verb|obj2| & calo input data for overlap removal.\\
+% \verb|ls_charcorr_double| & array of "like sign" charge correlation for double condition.\\
+% \verb|os_charcorr_double| & array of "opposite sign" charge correlation for double condition.\\
+% \verb|ls_charcorr_triple| & array of "like sign" charge correlation for triple condition.\\
+% \verb|os_charcorr_triple| & array of "opposite sign" charge correlation for triple condition.\\
+% \verb|ls_charcorr_quad| & array of "like sign" charge correlation for quad condition.\\
+% \verb|os_charcorr_quad| & array of "opposite sign" charge correlation for quad condition.\\
+% \verb|deta_orm| & array of $\Delta\eta$ for overlap removal.\\
+% \verb|dphi_orm| & array of $\Delta\varphi$ for overlap removal.\\
+% \verb|pt| & pt value for two-body pt.\\
+% \verb|cos_phi_integer| & interger value of cosine for two-body pt.\\
+% \verb|sin_phi_integer| & interger value of sine for two-body pt.\\
+% \verb|condition_o| & output of condition (routed to Algorithms logic, see \ref{sec:gtl:algorithms_logic}).\\
+% \hline
+% \label{tab:gtl:explanation_muon_conditions_vhd}
+% \end{longtable}
+%
+% \clearpage
+%
+% \subparagraph{Calorimeter Overlap Remover conditions module}
+% \label{sec:gtl:calo_conditions_orm_module}
+% The Calorimeter Overlap Remover conditions consits of a Calorimeter condition (\ref{sec:gtl:calo_conditions_module}) and a single condition for a different calo object type. One or more correlation cut(s) ($\Delta\eta$, $\Delta\varphi$ and $\Delta$R - \ref{sec:gtl:correlation_conditions}) for overlap removal is required between different calo object types.
+% Overlap Remover conditions \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_conditions_orm.vhd}{\texttt{calo\_conditions\_orm.vhd}} are implemented only for calo object types.
+%
+% \clearpage
+%
+\subparagraph{Object cuts}\label{sec:gtl:object_cuts}
+A comparator between the energy (\pt) and a threshold (pt\_threshold) and a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators is done in this basic module.
+The values for \pt threshold, the 'mode-selection' for the \pt comparator and the "limits" of the "window"- comparators is given in the generic interface list of the module. Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
+The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
+The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. Number of windows is given for $\varphi$.\\
+There are two cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator} and Listing~\ref{lst:phi_window_comparator_vhd}):
+\begin{itemize}
+\item Upper limit is less than lower limit => $\varphi$ range between the limits, including the $\varphi$ bin with value = 0 (HW index).
+\item Upper limit is greater/equal than lower limit => $\varphi$ range between the limits, not including the $\varphi$ bin with value = 0 (HW index).
+\end{itemize}
+\begin{lstlisting}[label=lst:phi_window_comparator_vhd,float=here,caption=VHDL code of "window"-comparator in $\varphi$,captionpos=t]
+    phi_comp_w1 <= '1' when phi_w1_upper_limit < phi_w1_lower_limit and
+                    (phi <= phi_w1_upper_limit or phi >= phi_w1_lower_limit) else
+                   '1' when phi_w1_upper_limit >= phi_w1_lower_limit and
+                    (phi <= phi_w1_upper_limit and phi >= phi_w1_lower_limit)
+                    else '0';
+\end{lstlisting}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/phi_windows_comparator}
+\caption{Setting the limits for "window"-comparators for $\varphi$}
+\label{fig:gtl:phi_windows_comparator}
+\end{figure}
+
+The values of $\eta$ and $\varphi$ have to be inside of only one of the required ranges ("or").
+
 \clearpage
 
-\paragraph{Muon charge correlation module}
+The comparison of isolation (for \egamma, tau and muon) is done with a LUT (Table~\ref{tab:gtl:lut_iso}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|p{.4\columnwidth}|}\hline
+LUT content (4 bits) & isolation (2 bits) & trigger \\\hline\hline
+X"0" & xx & no trigger\\\hline
+X"1" & 00 & trigger on isolation bits = 00\\\hline
+X"2" & 01 & trigger on isolation bits = 01\\\hline
+X"3" & 00 or 01 & trigger on isolation bits = 00 or 01\\\hline
+X"4" & 10 & trigger on isolation bits = 10\\\hline
+X"5" & 00 or 10 & trigger on isolation bits = 00 or 10\\\hline
+X"6" & 01 or 10 & trigger on isolation bits = 01 or 10\\\hline
+X"7" & 00 or 01 or 10 & trigger on isolation bits = 00 or 01 or 10\\\hline
+X"8" & 11 & trigger on isolation bits = 11\\\hline
+X"9" & 00 or 11 & trigger on isolation bits = 00 or 11\\\hline
+X"A" & 01 or 11 & trigger on isolation bits = 01 or 11\\\hline
+X"B" & 00 or 01 or 11 & trigger on isolation bits = 00 or 01 or 11\\\hline
+X"C" & 10 or 11 & trigger on isolation bits = 10 or 11\\\hline
+X"D" & 00 or 10 or 11 & trigger on isolation bits = 00 or 10 or 11\\\hline
+X"E" & 01 or 10 or 11 & trigger on isolation bits = 01 or 10 or 11\\\hline
+X"F" & 00 or 01 or 10 or 11 & trigger on isolation bits = 00 or 01 or 10 or 11 (= "ignore" isolation)\\\hline
+\end{tabular}
+\end{center}
+\caption{LUT contents for isolation comparison}
+\label{tab:gtl:lut_iso}
+\end{table}
+
+\clearpage
+
+The comparison of impact parameter is done with LUT (Table~\ref{tab:gtl:muon_lut_ip}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|p{.4\columnwidth}|}\hline
+LUT content (4 bits) & impact parameter  (2 bits) & trigger \\\hline\hline
+X"0" & xx & no trigger\\\hline
+X"1" & 00 & trigger on impact parameter bits = 00\\\hline
+X"2" & 01 & trigger on impact parameter bits = 01\\\hline
+X"3" & 00 or 01 & trigger on impact parameter bits = 00 or 01\\\hline
+X"4" & 10 & trigger on impact parameter bits = 10\\\hline
+X"5" & 00 or 10 & trigger on impact parameter bits = 00 or 10\\\hline
+X"6" & 01 or 10 & trigger on impact parameter bits = 01 or 10\\\hline
+X"7" & 00 or 01 or 10 & trigger on impact parameter bits = 00 or 01 or 10\\\hline
+X"8" & 11 & trigger on impact parameter bits = 11\\\hline
+X"9" & 00 or 11 & trigger on impact parameter bits = 00 or 11\\\hline
+X"A" & 01 or 11 & trigger on impact parameter bits = 01 or 11\\\hline
+X"B" & 00 or 01 or 11 & trigger on impact parameter bits = 00 or 01 or 11\\\hline
+X"C" & 10 or 11 & trigger on impact parameter bits = 10 or 11\\\hline
+X"D" & 00 or 10 or 11 & trigger on impact parameter bits = 00 or 10 or 11\\\hline
+X"E" & 01 or 10 or 11 & trigger on impact parameter bits = 01 or 10 or 11\\\hline
+X"F" & 00 or 01 or 10 or 11 & trigger on impact parameter bits = 00 or 01 or 10 or 11 (= "ignore" impact parameter)\\\hline
+\end{tabular}
+\end{center}
+\caption{LUT contents for impact parameter comparison}
+\label{tab:gtl:muon_lut_ip}
+\end{table}
+
+The comparison of quality is done with LUT (Table~\ref{tab:gtl:muon_lut_qual}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{|c|c|l|c|}\hline
+LUT content (16 bits) & quality bits  (4 bits) & trigger \\\hline\hline
+X"0000" & xxxx & no trigger\\\hline
+X"0001" & 0000 & trigger on quality "level 0"\\\hline
+X"0002" & 0001 & trigger on quality "level 1"\\\hline
+X"0003" & 0001 or 0000 & trigger on quality "level 1" or "level 0"\\\hline
+X"0004" & 0010 & trigger on quality "level 2"\\\hline
+... & ...& ...\\\hline
+X"8000" & 1111 & trigger on quality "level 15"\\\hline
+X"C000" & 1111 or 1110 & trigger on quality "level 15" or "level 14"\\\hline
+... & ...& ...\\\hline
+X"FFFF" & xx & trigger on all quality "levels" (= "ignore")\\\hline
+\end{tabular}
+\end{center}
+\caption{LUT contents for quality comparison of muon objects}
+\label{tab:gtl:muon_lut_qual}
+\end{table}
+
+Charge valid and charge sign bits must be equal to the requested charge.\\
+
+\clearpage
+
+\subsubsection{Energy sum quantities conditions}
+\label{sec:gtl:esums_conditions}
+
+\paragraph{Energy sum quantities conditions module (including Asymmetry conditions)}
+
+For the entity-declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd}{\texttt{esums\_conditions.vhd}}, see Listing~\ref{lst:esums_conditions_vhd}.
+
+% "automatic generation" of listings (see /scripts/extract_entities.sh)
+%% REMARK: HB 2015-04-29: esums_conditions.vhd is not in ../firmware/gt_mp7/trunk/src and (scripts/extract_entities.sh) now, so interfaces/esums_conditions.vhd was copied and edited by hand.
+\lstinputlisting[label=lst:esums_conditions_vhd,language=VHDL,caption=Entity declaration of \texttt{esums\_conditions.vhd}]{interfaces/esums_conditions.vhd}
+
+\medskip
+\begin{table}[htdp]
+\footnotesize
+\begin{center}
+\begin{tabular}{l p{.7\columnwidth}}
+\toprule
+{Item} & {Explanation}\\
+\midrule
+\verb|et_ge_mode| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
+\verb|obj_type| &  valid strings are 'ETT\_TYPE', 'HTT\_TYPE', 'ETM\_TYPE', 'HTM\_TYPE' and 'ETMHF\_TYPE'.\\
+\verb|et_threshold| & threshold value for comparison in \et. The size of the std\_logic\_vector depends on the number of \et bits.\\
+\verb|phi_full_range| & boolean to set full range of $\varphi$.\\
+\verb|phi_w1_upper_limits| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
+\verb|phi_w1_lower_limits| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
+\verb|phi_w2_ignore| & boolean to ignore "window"-comparator 2 for $\varphi$.\\
+\verb|phi_w2_upper_limits| & "upper limit" of "window"-comparator 2 for $\varphi$.\\
+\verb|phi_w2_lower_limits| & "lower limit" of "window"-comparator 2 for $\varphi$.\\
+\verb|clk| & clock input (LHC clock).\\
+\verb|data_i| & input data, structure defined in \texttt{obj\_type}.\\
+\verb|condition_o| & output of condition (routed to Algorithms logic, see \ref{sec:gtl:algorithms_logic}).\\
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{Explanation of Listing~\ref{lst:esums_conditions_vhd}}
+\label{tab:gtl:explanation_esums_conditions_vhd}
+\end{table}
+
+A comparator between \et and a threshold (et\_threshold) and, depending on object type, a comparison in $\varphi$ with
+two "window"-comparators is done in this module.
+The value for \et threshold, the 'mode-selection' for the \et comparator and the limits for the "window"-comparators are given in the generic interface list of the module.
+The selection whether a comparison in $\varphi$ is part of the condition is done with the value of the generic parameter 'obj\_type'
+('ETM\_TYPE', 'ETMHF\_TYPE', 'HTM\_TYPE' and 'HTMHF\_TYPE' force a comparison).
+The comparison in $\varphi$ is done in the same way as for calorimeter conditions.
+Additionally the data-structure of input data (data\_i in port interface list) is provided
+as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
+Data for Asymmetry trigger are received on 4 frames on bits 27..20 (8 bits). For every type a comparision with an 8-bit threshold (greater-equal [or equal]) is done.
+Asymmetry data are interpreted as counts.
+
+\subsubsection{Minimum bias trigger conditions}
+\label{sec:gtl:min_bias_conditions}
+
+Data for Minimum bias trigger are received on the 4 MSBs of 4 frames used for Energy sum quantities (see \ref{sec:gtl:esums_conditions}).
+
+\begin{itemize}
+\item MBT0HFP: "minimum bias HF+ threshold 0" bits
+\item MBT0HFM: "minimum bias HF- threshold 0" bits
+\item MBT1HFP: "minimum bias HF+ threshold 1" bits
+\item MBT1HFM: "minimum bias HF- threshold 1" bits
+\end{itemize}
+
+In minimum bias trigger conditions module there is a comparision with a 4-bit threshold (greater-equal [or equal]).
+
+\subsubsection{Towercount condition}
+\label{sec:gtl:towercount_cond}
+
+Data for Towercount trigger (number of firing HCAL towers) are received on frame \htt (see \ref{sec:gtl:esums_conditions}) on bits 24..12 (13 bits) of \htt data structure.\\
+In towercount condition module there is a comparision with a 13-bit threshold (greater-equal [or equal]).
+
+\subsubsection{Centrality condition}
+\label{sec:gtl:centrality_cond}
+
+Centrality bits used as a signals for triggers (similar to external signals).
+
+\subsubsection{Muon charge correlation module}
 \label{sec:gtl:muon_charge_correlation_module}
 
-For definition of muon charge, see \ref{sec:gtl:muon_conditions}.\\
+For definition of muon charge, see \ref{sec:gtl:muon_data}.\\
 In the muon charge correlation module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd}{\texttt{muon\_charge\_correlations.vhd}}), the charge correlations are made for different muon conditions-types. The module is instantiated in the top-of-hierarchy module (\texttt{gtl\_module.vhd})
 and not inside of a muon conditions module.
 The charges of objects (number of objects depends on muon condition type) are compared to get "like sign charge" ("LS") or "opposite sign charge" ("0S"), "LS" means that the charges (charge sign)
@@ -896,134 +1073,23 @@ In TME one can select "LS", "0S" or ignore for charge correlation in muon condit
 
 \clearpage
 
-\paragraph{Muon conditions definition}
-\label{sec:gtl:muon_cond_def}
-
-A condition consists of input-data and a set of requirements, which contain the requirements to be complied.
-
-The requirement for muon conditions contains:\\
-a threshold for \pt, a threshold for unconstrained \pt, ranges for $\eta$ and $\varphi$, a LUT for quality, a LUT for isolation,
-a requsted charge, a LUT for impact parameter.
-The condition is complied, if every comparison between object parameters and requirements is valid for the following object cuts (only for requested cuts):
-\begin{itemize}
-\item \pt greater-equal (or equal) threshold
-\item unconstrained \pt greater-equal (or equal) threshold
-\item $\eta$ in range
-\item $\varphi$ in range
-\item requested charge
-\item quality LUT
-\item iso LUT
-\item impact parameter LUT
-\end{itemize}
-
-There are different types of calorimeter conditions implemented, depending of how many objects have to comply the requirements.
-\begin{itemize}
-\item "Quad objects requirements condition": this condition type consists of requirements for 4 different trigger objects of the same object type.
-For each object the requirements can be different. To fulfill this condition, there must exist at least one set of 4 different objects,
-each of which fulfills at least one of the requirements.
-\item "Triple objects requirements condition": this condition type consists of requirements for 3 different trigger objects of the same object type.
-For each object the requirements can be different. To fulfill this condition, there must exist at least one set of 3 different objects,
-each of which fulfills at least one of the requirements.
-\item "Double objects requirements condition": this condition type consists of requirements for 2 different trigger objects of the same object type.
-For each object the requirements can be different. To fulfill this condition, there must exist at least one set of 2 different objects,
-each of which fulfills at least one of the requirements.\footnote{"Double objects requirements condition with spatial correlation" not used anymore, replaced by Correlation conditions}
-\item "Single object requirement condition": this condition type consists of one requirement for one trigger object of a given object type.
-To fulfill this condition, there must exist at least one object which fulfills the requirement.
-
-\end{itemize}
-
-In addition requested charge correlation must be matched (except for "Single object requirement condition", there is no charge correlation).
-The calculation of charge correlations is done in an own module in the top-of-hierarchy module (\texttt{gtl\_module.vhd}).\\
-
-\subparagraph{Muon conditions module}
-\label{sec:gtl:muon_condidions_module}
-
-A module for conditions with muon objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_conditions.vhd}{\texttt{muon\_conditions.vhd}}) instantiates the muon comparators module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_comparators.vhd}{\texttt{muon\_comparators.vhd}}) as many times as the numbers of objects and requirements determine. Depending on the condition-type different and-or-structures of object vs. requirement are selected.
-The selection of condition-type and the number of objects is done by parameters in the generic interface list of the module.
-
-\subparagraph{Muon comparators module}
-\label{sec:gtl:muon_comp_module}
-
-A comparator between \pt and a threshold (pt\_threshold), a comparator between unconstrained \pt and a threshold (upt\_threshold), a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators, a comparison of quality with LUT, a comparison of isolation with LUT and a comparison of the requested charge is done in this basic module. The values for \pt threshold, unconstrained \pt threshold, the 'mode-selection' for the \pt comparator, the "limits" of the "window"-comparators, the quality LUTs, the isolation LUTs and the requested charge is given in the generic interface list of the module.
-Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
-The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
-The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. There are two flags, one for "full-range" and one for "ignore-second-window" for the selection of the ranges.\\
-There are two cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator} and Listing~\ref{lst:phi_window_comparator_vhd}):
-\begin{itemize}
-\item Upper limit is less than lower limit => $\varphi$ range between the limits, including the $\varphi$ bin with value = 0 (HW index).
-\item Upper limit is greater/equal than lower limit => $\varphi$ range between the limits, not including the $\varphi$ bin with value = 0 (HW index).
-\end{itemize}
-
-The values of $\eta$ and $\varphi$ have to be inside of only one of the two required ranges ("or").
-
-Charge valid and charge sign bits must be equal to the requested charge.\\
-The comparison of quality is done with LUT. To ignore quality comparison, all bits in the LUT have to be '1'.\\
-
-\begin{table}[htdp]
-\begin{center}
-\begin{tabular}{|c|c|l|c|}\hline
-LUT content (16 bits) & quality bits [22..19] & trigger \\\hline\hline
-X"0000" & xxxx & no trigger\\\hline
-X"0001" & 0000 & trigger on quality "level 0"\\\hline
-X"0002" & 0001 & trigger on quality "level 1"\\\hline
-X"0003" & 0001 or 0000 & trigger on quality "level 1" or "level 0"\\\hline
-X"0004" & 0010 & trigger on quality "level 2"\\\hline
-... & ...& ...\\\hline
-X"8000" & 1111 & trigger on quality "level 15"\\\hline
-X"C000" & 1111 or 1110 & trigger on quality "level 15" or "level 14"\\\hline
-... & ...& ...\\\hline
-X"FFFF" & xx & trigger on all quality "levels" (= "ignore")\\\hline
-\end{tabular}
-\end{center}
-\caption{LUT contents for quality comparison of muon objects}
-\label{tab:gtl:muon_lut_qual}
-\end{table}
-
-The comparison of isolation is done with LUT. To ignore isolation comparison, all bits in the LUT have to be '1' (see Table~\ref{tab:gtl:muon_lut_iso}).\\
-
-\begin{table}[htdp]
-\begin{center}
-\begin{tabular}{|c|c|p{.4\columnwidth}|}\hline
-LUT content (4 bits) & isolation bits [33..32] & trigger \\\hline\hline
-X"0" & xx & no trigger\\\hline
-X"1" & 00 & trigger on isolation bits = 00\\\hline
-X"2" & 01 & trigger on isolation bits = 01\\\hline
-X"3" & 00 or 01 & trigger on isolation bits = 00 or 01\\\hline
-X"4" & 10 & trigger on isolation bits = 10\\\hline
-X"5" & 00 or 10 & trigger on isolation bits = 00 or 10\\\hline
-X"6" & 01 or 10 & trigger on isolation bits = 01 or 10\\\hline
-X"7" & 00 or 01 or 10 & trigger on isolation bits = 00 or 01 or 10\\\hline
-X"8" & 11 & trigger on isolation bits = 11\\\hline
-X"9" & 00 or 11 & trigger on isolation bits = 00 or 11\\\hline
-X"A" & 01 or 11 & trigger on isolation bits = 01 or 11\\\hline
-X"B" & 00 or 01 or 11 & trigger on isolation bits = 00 or 01 or 11\\\hline
-X"C" & 10 or 11 & trigger on isolation bits = 10 or 11\\\hline
-X"D" & 00 or 10 or 11 & trigger on isolation bits = 00 or 10 or 11\\\hline
-X"E" & 01 or 10 or 11 & trigger on isolation bits = 01 or 10 or 11\\\hline
-X"F" & 00 or 01 or 10 or 11 & trigger on isolation bits = 00 or 01 or 10 or 11 (= "ignore" isolation)\\\hline
-\end{tabular}
-\end{center}
-\caption{LUT contents for isolation comparison of muon objects}
-\label{tab:gtl:muon_lut_iso}
-\end{table}
-
-\clearpage
-
 \subsubsection{Correlation conditions}
 \label{sec:gtl:correlation_conditions}
 
-The correlation conditions contain a combination of two "Single object requirement conditions" of two object types or one "Double objects requirement condition" of objects of the same type. In addition with "object requirements" there are cuts for $\Delta\eta$, $\Delta\varphi$, $\Delta$R, mass and "two-body pt".\\
+The correlation conditions contain a combination of two "Single object requirement conditions" of two object types or one "Double objects requirement condition" of objects of the same type. In addition with object cuts there are correlation cuts for $\Delta\eta$, $\Delta\varphi$, $\Delta$R, mass, mass divided by $\Delta$R and "two-body pt".\\
+The correlation condition of "Invariant mass for three objects" contains one "Triple objects requirement condition" of objects of the same type with one object cut for mass.
 
 The following cuts can be used:
 \begin{itemize}
-\item Cut for $\Delta\eta$.
-\item Cut for $\Delta\varphi$.
-\item Cut for $\Delta$R.
+\item Cut for $\Delta\eta$ (DETA).
+\item Cut for $\Delta\varphi$ (DPHI).
+\item Cut for $\Delta$R (DR).
+\item Cuts for charge correlation (only for muon).
 \item Cuts for mass (MASS) of following mass types:
   \begin{itemize}
   \item Cut for Invariant mass.
   \item Cut for Invariant mass with unconstrained pt (only for muons).
-  \item Cut for Invariant mass divided by $\Delta$R.
+  \item Cut for Invariant mass over $\Delta$R.
   \item Cut for Transverse mass.
   \end{itemize}
 \item Cut for Two-body pt.
@@ -1117,25 +1183,25 @@ Due the number of available BRAMs there are some restrictions for creating algor
 \item 6. The values of LUTs are only valid for current definitions and restrictions. Every change might cause a recalculation of the values and a regeneration of IPs (representing LUTs in BRAMs) in Vivado (firmware generation tool)
 \end{itemize}
 
-The LUTs values (of 1/$\Delta$$R^2$) are listed in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/doc/rom_lut_inv_dr_sq/emulator_lut_calo_inv_dr_sq_calc.txt}{\texttt{emulator\_lut\_calo\_inv\_dr\_sq\_calc.txt}} and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/doc/rom_lut_inv_dr_sq/emulator_lut_muon_inv_dr_sq_calc.txt}{\texttt{emulator\_lut\_muon\_inv\_dr\_sq\_calc.txt}}. These files have been created by scripts \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/doc/rom_lut_inv_dr_sq/calo_inv_dr_sq_calc.py}{\texttt{calo\_inv\_dr\_sq\_calc.py}} and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/doc/rom_lut_inv_dr_sq/muon_inv_dr_sq_calc.py}{\texttt{muon\_inv\_dr\_sq\_calc.py}}.\\
-In these files the following values are listed in columns (from left to right):
-\begin{itemize}
-\item 1. Difference of phi [bins]
-\item 2. Difference of eta [bins]
-\item 3. Value of difference in phi (with resolution shown in restrictions)
-\item 4. Value of difference in eta (with resolution shown in restrictions)
-\item 5. Value of 1/$\Delta$$R^2$
-\item 6. Value of 1/$\Delta$$R^2$ rounded (with value of precisions)
-\item 7. Integer value of 1/$\Delta$$R^2$ rounded, multiplied with 10\textsuperscript{precision} (content of LUTs in firmware)
-\end{itemize}
-
-The values of LUTs in firmware are listed in coe files of ROMs (created by same scripts mentioned above), currently 4 ROMs for "calo calo" and 6 ROMs for "muon muon" (see \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/firmware/ngc/lut_calo_inv_dr_sq_rom1.coe}{\texttt{lut\_calo\_inv\_dr\_sq\_rom1.coe}}, etc. and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/firmware/ngc/lut_muon_inv_dr_sq_rom1.coe}{\texttt{lut\_muon\_inv\_dr\_sq\_rom1.coe}}, etc.). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. All ROMs have 8192 addresses. The data width of ROMs is different depending on the highest value in ROM. Because of these different data widths the partitioning of several ROMs was done to save BRAM resources. Currently 873 BRAMs (36kb) are available per Virtex chip.
+% The LUTs values (of 1/$\Delta$$R^2$) are listed in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/doc/rom_lut_inv_dr_sq/emulator_lut_calo_inv_dr_sq_calc.txt}{\texttt{emulator\_lut\_calo\_inv\_dr\_sq\_calc.txt}} and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/doc/rom_lut_inv_dr_sq/emulator_lut_muon_inv_dr_sq_calc.txt}{\texttt{emulator\_lut\_muon\_inv\_dr\_sq\_calc.txt}}. These files have been created by scripts \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/doc/rom_lut_inv_dr_sq/calo_inv_dr_sq_calc.py}{\texttt{calo\_inv\_dr\_sq\_calc.py}} and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/doc/rom_lut_inv_dr_sq/muon_inv_dr_sq_calc.py}{\texttt{muon\_inv\_dr\_sq\_calc.py}}.\\
+% In these files the following values are listed in columns (from left to right):
+% \begin{itemize}
+% \item 1. Difference of phi [bins]
+% \item 2. Difference of eta [bins]
+% \item 3. Value of difference in phi (with resolution shown in restrictions)
+% \item 4. Value of difference in eta (with resolution shown in restrictions)
+% \item 5. Value of 1/$\Delta$$R^2$
+% \item 6. Value of 1/$\Delta$$R^2$ rounded (with value of precisions)
+% \item 7. Integer value of 1/$\Delta$$R^2$ rounded, multiplied with 10\textsuperscript{precision} (content of LUTs in firmware)
+% \end{itemize}
+%
+The values of LUTs in firmware are listed in coe files of ROMs (created by same scripts mentioned above), currently 5 ROMs for "calo calo" and 6 ROMs for "muon muon" (see \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/firmware/ngc/lut_calo_inv_dr_sq_rom1.coe}{\texttt{lut\_calo\_inv\_dr\_sq\_rom1.coe}}, etc. and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/firmware/ngc/lut_muon_inv_dr_sq_rom1.coe}{\texttt{lut\_muon\_inv\_dr\_sq\_rom1.coe}}, etc.). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. All ROMs for calos have 4096 addresses, for muons 8192 addresses. The data width of ROMs is different depending on the highest LUT value in ROM. Because of these different data widths, the partitioning of several ROMs was done to save BRAM resources. Currently 873 BRAMs (36kb) are available per Virtex chip.
 Following numbers of BRAMs (36kb) are needed for:
 \begin{itemize}
-\item "calo calo": 396
+\item "calo calo": 660
 \item "muon muon": 672
 \end{itemize}
-Therefore two calculations of \textit{invariant mass over $\Delta$R} of ""calo calo"" or one calculation of "muon muon" are possible in one Virtex chip, but one can have some algorithms containing \textit{invariant mass over $\Delta$R} with different thresholds, but with same objects and same bx.\\
+Therefore one calculation of \textit{invariant mass over $\Delta$R} of "calo calo" or "muon muon" is possible in one Virtex chip, but one can have some algorithms containing \textit{invariant mass over $\Delta$R} with different thresholds, but with same objects and same bx.\\
 
 \subparagraph{Invariant mass calculation for three objects}
 \label{sec:gtl:inv_mass_3_obj_calculation}
@@ -1143,36 +1209,7 @@ Therefore two calculations of \textit{invariant mass over $\Delta$R} of ""calo c
 The calculation of \textit{invariant mass calculation for three objects} is done by calculating the invariant mass for all two-object combinations and take the sum of the three invariant masses of the two-object combinations.\\
 In the TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV (floating point notation) with one position after decimal point in even numbers.
 
-\paragraph{Correlation condition modules}
-\label{sec:gtl:correlation_condition_modules}
-
-As described in section Correlation conditions (\ref{sec:gtl:correlation_conditions}), correlations of two object types are available. Therefore several modules are provided with possible correlations (objects 1-objects 2):
-\begin{itemize}
-\item Correlation condition with calorimeter objects\\
-(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd}{\texttt{calo\_calo\_correlation\_condition.vhd}}: \egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau are possible.)
-\item Correlation condition for mass divided by $\Delta$R with calorimeter objects\\
-(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd}{\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}}: \egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau are possible.)
-\item Correlation condition with calorimeter objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\
-(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd}{\texttt{calo\_esums\_correlation\_condition.vhd}}: \egamma-etm, jet-etm, tau-etm, \egamma-htm, jet-htm, tau-htm, \egamma-etmhf, jet-etmhf and tau-etmhf are possible.)
-\item Correlation condition with calorimeter objects and muons objects\\
-(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd}{\texttt{calo\_muon\_correlation\_condition.vhd}}: \egamma-muon, jet-muon and tau-muon are possible.)
-\item Correlation condition with muon objects\\
-(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd}{\texttt{muon\_muon\_correlation\_condition.vhd}})
-\item Correlation condition for mass divided by $\Delta$R with muon objects\\
-(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_mass_div_dr_condition.vhd}{\texttt{muon\_muon\_mass\_div\_dr\_condition.vhd}})
-\item Correlation condition with muon objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\
-(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd}{\texttt{muon\_esums\_correlation\_condition.vhd}}: muon-etm, muon-etmhf and muon-htm are possible.)
-\end{itemize}
-
-There are two modules for mass with three objects:
-\begin{itemize}
-\item Correlation condition for mass with three objects with calorimeter objects (same type, same bunch-crossing)\\
-(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_3_obj_condition.vhd}{\texttt{calo\_mass\_3\_obj\_condition.vhd}}
-\item Correlation condition for mass with three objects with muon objects\\
-(\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_3_obj_condition.vhd}{\texttt{muon\_mass\_3\_obj\_condition.vhd}})
-\end{itemize}
-
-\subparagraph{Overview of possible correlation cuts in conditions}
+\subparagraph{Overview of possible correlation cuts}
 \label{sec:gtl:overview_correlation_cuts}
 
 The following list gives an overview of possible correlation cuts in conditions:
@@ -1271,195 +1308,715 @@ The following list gives an overview of possible correlation cuts in conditions:
 \end{itemize}
 \end{itemize}
 
-\subparagraph{Calo Calo Correlation condition module}
-\label{sec:gtl:calo_calo_correlation_condition_module}
+\paragraph{Correlation condition module}
+\label{sec:gtl:correlation_condition_modules}
 
-The calo calo correlation condition module contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd}{\texttt{calo\_calo\_correlation\_condition.vhd}} named "same\_bx").\\
-In addition there are "Cuts" for differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
-The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_EG\_DIFF\_ETA\_LUT, EG\_EG\_DIFF\_PHI\_LUT}\normalsize, ...), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
-These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
-So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
-
-\textbf{Remark:} Definitions of scales (see Tables \ref{tab:gtl:calo_eta_scale}, \ref{tab:gtl:calo_phi_scale}, \ref{tab:gtl:muon_eta_scale} and \ref{tab:gtl:muon_phi_scale}):
+As described in section Correlation conditions (\ref{sec:gtl:correlation_conditions}), correlations of two object types are available. Therefore several correlations (objects 1-objects 2) are possible:
 \begin{itemize}
-\item Calorimeter objects:
-\item $\eta$ bin width = $\frac{0.087}{2}$ (bin 0 from 0.0 to $\frac{0.087}{2}$)
-\item $\phi$ bin width = $\frac{2\pi}{144}$ (bin 0 from 0.0 to $\frac{2\pi}{144}$)
+\item Correlation condition with calorimeter objects\\
+\egamma-\egamma, \egamma-jet, \egamma-tau, jet-jet, jet-tau and tau-tau.
+\item Correlation condition with calorimeter objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\
+\egamma-etm, jet-etm, tau-etm, \egamma-htm, jet-htm, tau-htm, \egamma-etmhf, jet-etmhf and tau-etmhf.
+\item Correlation condition with calorimeter objects and muons objects\\
+\egamma-muon, jet-muon and tau-muon.
+\item Correlation condition with muon objects\\
+\item Correlation condition with muon objects and \esums (\etm, ET$_{miss}^{HF}$ and \htm only)\\
+muon-etm, muon-etmhf and muon-htm.
 \end{itemize}
 
-The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_EG\_COSH\_$\Delta\eta$\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_EG\_COS\_DPHI\_LUT}\normalsize, ...) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 3\textsuperscript{rd} position after decimal point, and multiplying by 1000 to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize ..."} in file \texttt{gtl\_pkg.vhd}. Value 1000 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
-The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT}\normalsize) for two-body pt (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
-The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" or the "Double objects requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\eta$ and $\Delta\varphi$ are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
-
-\subparagraph{Calo Calo Overlap Remover Correlation condition module}
-\label{sec:gtl:calo_calo_overlap_remover_condition_module}
-
-The Calo Calo Overlap Remover Correlation conditions consits of two modes. One with a Calo Calo Correlation condition with "Double objects requirement condition" for calo objects of same type and same bunch-crossing (\ref{sec:gtl:calo_calo_correlation_condition_module}) and a single condition for a different calo object type (can have different bunch-crossing too). There has to be at least one correlation cut for the objects of "Double objects requirement condition" and a correlation cut for overlap removal between objects (one or more cut(s) of $\Delta\eta$, $\Delta\varphi$ and $\Delta$R) of different object types ("2plus1"). A second mode ("1plus1") with a Calo Calo Correlation condition with a single condition and a different calo object type (can have different bunch-crossing too) also with a single condition. There has to be at least one correlation cut for the different objects (e.g. invariant mass) and a correlation cut for overlap removal between the objects (one or more cut(s) of $\Delta\eta$, $\Delta\varphi$ and $\Delta$R).
-
-Overlap Remover Correlation conditions \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_calo_correlation_orm_condition.vhd}{\texttt{calo\_calo\_calo\_correlation\_orm\_condition.vhd}} are implemented only for calo object types.
-
-\subparagraph{Calo Calo Correlation condition module for Invariant Mass Divided by $\Delta$R}
-\label{sec:gtl:calo_calo_correlation_condition_module_mass_div_dr}
-
-The calo calo correlation condition module for invariant mass divided by $\Delta$R contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd}{\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}} named "same\_bx").\\
-The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}), see \ref{sec:gtl:inv_mass_div_dr_calculation}. This module is instantiated once for every object type bunch-crossing combination.\\
-The comparison of calculated values and threshold is done inside the module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd}{\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}}).\\
-In the TME there is one threshold for M/$\Delta$R: "greater/equal threshold", given in GeV (floating point notation).\\
-The threshold for comparison with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL) is provided by VHDL-Producer.\\
-No other correlation cuts available in this condition type.
-
-\subparagraph{Calo Correlation condition module for Invariant Mass with Three Objects}
-\label{sec:gtl:calo_correlation_condition_module_mass_3_obj}
-
-The calo correlation condition module for invariant mass with three objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_3_obj_condition.vhd}{\texttt{calo\_mass\_3\_obj\_condition.vhd)}} contains a "Triple objects requirement condition" for calo objects of same type and same bunch-crossing.\\
-In addition a "Cut" for calculation of \textit{invariant mass with three objects} (see \ref{sec:gtl:inv_mass_3_obj_calculation}) is mandatory.\\
-No other correlation cuts available in this condition type.
-
-\subparagraph{Calo Esums Correlation condition module}
-\label{sec:gtl:calo_esums_correlation_condition_module}
-
-The calo esums correlation condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd}{\texttt{calo\_esums\_correlation\_condition.vhd}}) contains two "Single object requirement conditions", one of calo objects (\egamma, jet or tau) and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
-In addition there are "Cuts" for differences in $\varphi$ ($\Delta\varphi$) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
-The differences in $\varphi$ are calculated in bins.
-These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_ETM\_DIFF\_PHI\_LUT}\normalsize, ...),
-which represents values of differences (multiples of units in $\varphi$).
-These values given in the LUTs are calculated as floating-point values (based on the scales of $\varphi$), which are multiplied by a factor and truncated to an integer value.
-So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}.\\
-
-The contents of the LUTs $\cos(\Delta\varphi)$ (\small{EG\_ETM\_COS\_DPHI\_LUT}\normalsize, ...) for Transverse mass (formular see \ref{sec:gtl:transverse_mass_calculation})
-are created by calculating cosine, rounding-up at the 3\textsuperscript{rd}
-position after decimal point and multiplying by 1000 to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize ..."} in file \texttt{gtl\_pkg.vhd}.
-1000 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
-The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT}\normalsize) for two-body pt
-(formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
-The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition"
-and the results of selected "Cuts" are inside of a range (upper and lower limit).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\varphi$
-are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for MASS with 1\textsuperscript{st} position after decimal point.
-
-\subparagraph{Calo Muon Correlation condition module}
-\label{sec:gtl:calo_muon_correlation_condition_module}
-
-The calo muon correlation condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd}{\texttt{calo\_muon\_correlation\_condition.vhd}}) contains a "Single object requirement condition" for one type of calo objects (\egamma, jet or tau) and a "Single object requirement condition" for muon objects.
-In addition there are "Cuts" for differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
-The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_MU\_DIFF\_ETA\_LUT, EG\_MU\_DIFF\_PHI\_LUT}\normalsize, ...), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
-These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
-So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
-Because of the different scales of calorimeter and muon objects in $\eta$ and $\varphi$, there are LUTs for conversion the calorimeter bins to muon bins (in \texttt{gtl\_pkg.vhd}:
- e.g. \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize and \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize).\\\\
-\textbf{Remark:}\\
-The center value of bins are used as reference value for conversion.
-The content of \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize is calculated with formular:\\ "converted-calo-eta[bin] = calo-eta[bin] $\times$ 4 + 2",\\
-of \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize with formular:\\
-"converted-calo-phi[bin] = calo-phi[bin] $\times$ 4 + 2".\\
-The conversion calculations are preliminary, others may be proposed.\\\\
-Definitions of scales (see Tables \ref{tab:gtl:calo_eta_scale}, \ref{tab:gtl:calo_phi_scale}, \ref{tab:gtl:muon_eta_scale} and \ref{tab:gtl:muon_phi_scale}):
+There are two correlations for mass with three objects:
 \begin{itemize}
-\item Calorimeter objects:
-\begin{itemize}
-\item $\eta$ bin width = $\frac{0.087}{2}$ (bin 0 from 0.0 to $\frac{0.087}{2}$)
-\item $\phi$ bin width = $\frac{2\pi}{144}$ (bin 0 from 0.0 to $\frac{2\pi}{144}$)
-\end{itemize}
-\item Muon objects:
-\begin{itemize}
-\item $\eta$ bin width = $\frac{0.087}{8}$ (bin 0 from \small{0.5}$\times\frac{-0.087}{8}$ to \small{0.5}$\times\frac{+0.087}{8}$)
-\item $\phi$ bin width = $\frac{2\pi}{576}$ (bin 0 from 0.0 to $\frac{2\pi}{576}$)
-\end{itemize}
+\item Correlation condition for mass with three objects with calorimeter objects (same type, same bunch-crossing)\\
+\item Correlation condition for mass with three objects with muon objects\\
 \end{itemize}
 
-\begin{figure}[htb]
-\centering
-\includegraphics[width=15cm]{figures/convert_scheme_calo_2_muon_eta_phi}
-\caption{Conversion of calorimeter $\eta$ and $\varphi$ to muon scales}
-\label{fig:gtl:convert_scheme_calo_2_muon_eta_phi}
-\end{figure}
+% \subparagraph{Calo Calo Correlation condition module}
+% \label{sec:gtl:calo_calo_correlation_condition_module}
+%
+% The calo calo correlation condition module contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd}{\texttt{calo\_calo\_correlation\_condition.vhd}} named "same\_bx").\\
+% In addition there are "Cuts" for differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
+% The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_EG\_DIFF\_ETA\_LUT, EG\_EG\_DIFF\_PHI\_LUT}\normalsize, ...), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
+% These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
+% So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
+%
+% \textbf{Remark:} Definitions of scales (see Tables \ref{tab:gtl:calo_eta_scale_new}, \ref{tab:gtl:calo_phi_scale}, \ref{tab:gtl:muon_eta_scale} and \ref{tab:gtl:muon_phi_scale}):
+% \begin{itemize}
+% \item Calorimeter objects:
+% \item $\eta$ bin width = $\frac{0.087}{2}$ (bin 0 from 0.0 to $\frac{0.087}{2}$)
+% \item $\phi$ bin width = $\frac{2\pi}{144}$ (bin 0 from 0.0 to $\frac{2\pi}{144}$)
+% \end{itemize}
+%
+% The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_EG\_COSH\_DETA\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_EG\_COS\_DPHI\_LUT}\normalsize, ...) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 3\textsuperscript{rd} position after decimal point, and multiplying by 1000 to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize ..."} in file \texttt{gtl\_pkg.vhd}. Value 1000 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
+% The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT}\normalsize) for two-body pt (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
+% The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" or the "Double objects requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt).
+% This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\eta$ and $\Delta\varphi$ are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
+%
+% For the VHDL entity declaration of calo calo correlation condition module in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd}{\texttt{calo\_calo\_correlation\_condition.vhd}}, see Listing~\ref{lst:calo_calo_correlation_condition_vhd}.\\
+% \clearpage
+% %% "automatic generation" of listings (see /scripts/extract_entities.sh)
+% \lstinputlisting[label=lst:calo_calo_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_correlation_condition.vhd}{\texttt{calo\_calo\_correlation\_condition.vhd}}]{interfaces/calo_calo_correlation_condition.vhd}
+%
+% \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
+% \caption{Explanation of Listing~\ref{lst:calo_calo_correlation_condition_vhd}}\\
+% \hline
+% {Item} & {Explanation}\\
+% \hline
+% \endhead
+% \verb|same_bx| & boolean indicating whether data are from same Bx - 'true' for same Bx.\\
+% \verb|deta_cut| & boolean for using $\Delta\eta$ cut.\\
+% \verb|dphi_cut| & boolean for using $\Delta\varphi$ cut.\\
+% \verb|dr_cut| & boolean for using DR cut.\\
+% \verb|mass_cut| & boolean for using MASS cut.\\
+% \verb|mass_type| & selection of mass type (INVARIANT\_MASS\_TYPE, INVARIANT\_MASS\_PT\_TYPE, TRANSVERSE\_MASS\_TYPE or TRANSVERSE\_MASS\_PT\_TYPE are allowed).\\
+% \verb|calo1_object_low| & low index of object range (valid numbers: 0..11).\\
+% \verb|calo1_object_high| & high index of object range (valid numbers: 0..11, but greater or equal calo1\_object\_low).\\
+% \verb|et_ge_mode_calo1| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only).\\
+% \verb|obj_type_calo1| & selection of calo1 object type (EG\_TYPE, JET\_TYPE or TAU\_TYPE are allowed)\\
+% \verb|et_threshold_calo1| & threshold value for comparison in \et.\\
+% \verb|nr_eta_windows_calo1| & integer value for number of $\eta$ cuts.\\
+% \verb|eta_w1_upper_limit_calo1| & "upper limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w1_lower_limit_calo1| & "lower limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w2_upper_limit_calo1| & "upper limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w2_lower_limit_calo1| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w3_upper_limit_calo1| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w3_lower_limit_calo1| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w4_upper_limit_calo1| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w4_lower_limit_calo1| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w5_upper_limit_calo1| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|eta_w5_lower_limit_calo1| & "lower limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|phi_full_range_calo1| & boolean to set full range of $\varphi$.\\
+% \verb|phi_w1_upper_limit_calo1| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w1_lower_limit_calo1| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w2_ignore_calo1| & boolean to ignore "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_upper_limit_calo1| & "upper limit" of "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_lower_limit_calo1| & "lower limit" of "window"-comparator 2 for $\varphi$.\\
+% \verb|iso_lut_calo1| & content of LUT (4 bits) for isolation comparison.\\
+% \verb|calo2_object_low| & low index of object range (valid numbers: 0..11).\\
+% \verb|calo2_object_high| & high index of object range (valid numbers: 0..11, but greater or equal calo2\_object\_low).\\
+% \verb|et_ge_mode_calo2| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
+% \verb|obj_type_calo2| & selection of calo2 object type (EG\_TYPE, JET\_TYPE or TAU\_TYPE are allowed)\\
+% \verb|et_threshold_calo2| & threshold value for comparison in \et.\\
+% \verb|nr_eta_windows_calo2| & integer value for number of $\eta$ cuts.\\
+% \verb|eta_w1_upper_limit_calo2| & "upper limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w1_lower_limit_calo2| & "lower limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w2_upper_limit_calo2| & "upper limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w2_lower_limit_calo2| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w3_upper_limit_calo2| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w3_lower_limit_calo2| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w4_upper_limit_calo2| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w4_lower_limit_calo2| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w5_upper_limit_calo2| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|eta_w5_lower_limit_calo2| & "lower limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|phi_full_range_calo2| & boolean to set full range of $\varphi$.\\
+% \verb|phi_w1_upper_limit_calo2| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w1_lower_limit_calo2| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w2_ignore_calo2| & boolean to ignore "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_upper_limit_calo2| & "upper limit" of "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_lower_limit_calo2| & "lower limits" of "window"-comparator 2 for $\varphi$.\\
+% \verb|iso_lut_calo2| & content of LUT (4 bits) for isolation comparison.\\
+% \verb|diff_eta_upper_limit| & "upper limit" of "window"-comparator for comparison of differences in $\eta$ (hex value).\\
+% \verb|diff_eta_lower_limit| & "lower limit" of "window"-comparator for comparison of differences in $\eta$ (hex value).\\
+% \verb|diff_phi_upper_limit| & "upper limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
+% \verb|diff_phi_lower_limit| & "lower limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
+% \verb|dr_upper_limit| & "upper limit" of "window"-comparator for comparison of $\Delta$$R^2$ (hex value).\\
+% \verb|dr_lower_limit| & "lower limit" of "window"-comparator for comparison of $\Delta$$R^2$ (hex value).\\
+% \verb|DETA_DPHI_VECTOR_WIDTH| & vector width of $\Delta\eta$ and $\Delta\varphi$ for calculation of $\Delta$$R^2$.\\
+% \verb|DETA_DPHI_PRECISION| & position after decimal point for $\Delta\eta$ and $\Delta\varphi$.\\
+% \verb|mass_upper_limit| & "upper limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
+% \verb|mass_lower_limit| & "lower limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
+% \verb|MASS_PRECISION| & position after decimal point for $\frac{M^2}{2}$.\\
+% \verb|pt1_width| & number of bits of pt1.\\
+% \verb|pt2_width| & number of bits of pt2.\\
+% \verb|MASS_COSH_COS_PRECISION| & position after decimal point for $\cosh(\Delta\eta)$ and $\cos(\Delta\varphi)$.\\
+% \verb|cosh_cos_width| & number of bits for the maximum value in the LUT for $\cosh(\Delta\eta)$.\\
+% \verb|pt_sq_threshold| & threshold value for comparison in two-body pt (${pt^2}$).\\
+% \verb|sin_cos_width| & number of bits for the maximum value in the LUT for $\cos(\varphi)$ and $\sin(\varphi)$.\\
+% \verb|PT_PRECISION| & position after decimal point for ${pt^2}$.\\
+% \verb|PT_SQ_SIN_COS_PRECISION| & position after decimal point for $\cos(\varphi)$ and $\sin(\varphi)$.\\
+% \verb|lhc_clk| & clock input (LHC clock).\\
+% \verb|calo1_data_i| & calorimeter input data, structure defined with \texttt{obj\_type\_calo1}.\\
+% \verb|calo2_data_i| & calorimeter input data, structure defined with \texttt{obj\_type\_calo2}.\\
+% \verb|diff_eta| & differences in $\eta$, calculated in an instance of module \texttt{sub\_eta\_integer\_obj\_vs\_obj.vhd} in top-of-hierarchy module (\texttt{gtl\_module.vhd}), see \ref{sec:gtl:calculation_differences}.\\
+% \verb|diff_phi| & differences in $\varphi$, calculated in an instance of module \texttt{sub\_phi\_integer\_obj\_vs\_obj.vhd} in top-of-hierarchy module (\texttt{gtl\_module.vhd}).\\
+% \verb|pt1| & calo1 \et values [from LUT, in $GeV\times$10].\footnote{value 10 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_PT\_PRECISION}}}\\
+% \verb|pt2| & calo2 \et values [from LUT, in $GeV\times$10].\\
+% \verb|cosh_deta| & $\cosh(\Delta\eta)$ values [from LUT, $\cosh(\Delta\eta)\times$1000].\footnote{value 1000 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}}}\\
+% \verb|cos_dphi| & $\cos(\Delta\varphi)$ values [from LUT, $\cosh(\Delta\varphi)\times$1000].\\
+% \verb|cos_phi_1| & $\cos(\varphi)$ values from LUT for calo1.\\
+% \verb|cos_phi_2| & $\cos(\varphi)$ values from LUT for calo2.\\
+% \verb|sin_phi_1| & $\sin(\varphi)$ values from LUT for calo1.\\
+% \verb|sin_phi_2| & $\sin(\varphi)$ values from LUT for calo2.\\
+% \verb|condition_o| & output of condition (routed to Algorithms logic, see \ref{sec:gtl:algorithms_logic}).\\
+% \hline
+% \label{tab:gtl:explanation_calo_calo_correlation_condition_vhd}
+% \end{longtable}
+%
+% % \subparagraph{Calo Calo Correlation condition module - template for VHDL-Producer}
+% % See in Chapter \ref{sec:gtl:templates_tme} and in Listing~\ref{lst:instance_calo_calo_correlation_condition_vhd} for a VHDL-template for VHDL-Producer of
+% % instantiating a calorimeter-calorimeter-correlation condition (\texttt{calo\_calo\_correlation\_condition.vhd}).\\
+%
+% \subparagraph{Calo Calo Overlap Remover Correlation condition module}
+% \label{sec:gtl:calo_calo_overlap_remover_condition_module}
+%
+% The Calo Calo Overlap Remover Correlation conditions consits of two modes. One with a Calo Calo Correlation condition with "Double objects requirement condition" for calo objects of same type and same bunch-crossing (\ref{sec:gtl:calo_calo_correlation_condition_module}) and a single condition for a different calo object type (can have different bunch-crossing too). There has to be at least one correlation cut for the objects of "Double objects requirement condition" and a correlation cut for overlap removal between objects (one or more cut(s) of $\Delta\eta$, $\Delta\varphi$ and $\Delta$R) of different object types ("2plus1"). A second mode ("1plus1") with a Calo Calo Correlation condition with a single condition and a different calo object type (can have different bunch-crossing too) also with a single condition. There has to be at least one correlation cut for the different objects (e.g. invariant mass) and a correlation cut for overlap removal between the objects (one or more cut(s) of $\Delta\eta$, $\Delta\varphi$ and $\Delta$R).
+%
+% Overlap Remover Correlation conditions \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_calo_correlation_orm_condition.vhd}{\texttt{calo\_calo\_calo\_correlation\_orm\_condition.vhd}} are implemented only for calo object types.
+%
+% \subparagraph{Calo Calo Correlation condition module for Invariant Mass Divided by $\Delta$R}
+% \label{sec:gtl:calo_calo_correlation_condition_module_mass_div_dr}
+%
+% The calo calo correlation condition module for invariant mass divided by $\Delta$R contains two "Single object requirement conditions" for different types of calo objects (\egamma, jet or tau) or same type with data from different bunch-crossings as one possible mode and a "Double objects requirement condition" for calo objects of same type and same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd}{\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}} named "same\_bx").\\
+% The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}), see \ref{sec:gtl:inv_mass_div_dr_calculation}. This module is instantiated once for every object type bunch-crossing combination.\\
+% The comparison of calculated values and threshold is done inside the module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_calo_mass_div_dr_condition.vhd}{\texttt{calo\_calo\_mass\_div\_dr\_condition.vhd}}).\\
+% In the TME there is one threshold for M/$\Delta$R: "greater/equal threshold", given in GeV (floating point notation).\\
+% The threshold for comparison with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL) is provided by VHDL-Producer.\\
+% No other correlation cuts available in this condition type.
+%
+% \subparagraph{Calo Correlation condition module for Invariant Mass with Three Objects}
+% \label{sec:gtl:calo_correlation_condition_module_mass_3_obj}
+%
+% The calo correlation condition module for invariant mass with three objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_mass_3_obj_condition.vhd}{\texttt{calo\_mass\_3\_obj\_condition.vhd)}} contains a "Triple objects requirement condition" for calo objects of same type and same bunch-crossing.\\
+% In addition a "Cut" for calculation of \textit{invariant mass with three objects} (see \ref{sec:gtl:inv_mass_3_obj_calculation}) is mandatory.\\
+% No other correlation cuts available in this condition type.
+%
+% \subparagraph{Calo Esums Correlation condition module}
+% \label{sec:gtl:calo_esums_correlation_condition_module}
+%
+% The calo esums correlation condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd}{\texttt{calo\_esums\_correlation\_condition.vhd}}) contains two "Single object requirement conditions", one of calo objects (\egamma, jet or tau) and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
+% In addition there are "Cuts" for differences in $\varphi$ ($\Delta\varphi$) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
+% The differences in $\varphi$ are calculated in bins.
+% These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_ETM\_DIFF\_PHI\_LUT}\normalsize, ...),
+% which represents values of differences (multiples of units in $\varphi$).
+% These values given in the LUTs are calculated as floating-point values (based on the scales of $\varphi$), which are multiplied by a factor and truncated to an integer value.
+% So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}.\\
+%
+% The contents of the LUTs $\cos(\Delta\varphi)$ (\small{EG\_ETM\_COS\_DPHI\_LUT}\normalsize, ...) for Transverse mass (formular see \ref{sec:gtl:transverse_mass_calculation})
+% are created by calculating cosine, rounding-up at the 3\textsuperscript{rd}
+% position after decimal point and multiplying by 1000 to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize ..."} in file \texttt{gtl\_pkg.vhd}.
+% 1000 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
+% The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT}\normalsize) for two-body pt
+% (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
+% The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition"
+% and the results of selected "Cuts" are inside of a range (upper and lower limit).
+% This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\varphi$
+% are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for MASS with 1\textsuperscript{st} position after decimal point.
+%
+% For VHDL entity declaration for calo esums correlation condition module in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd}{\texttt{calo\_esums\_correlation\_condition.vhd}}, see Listing~\ref{lst:calo_esums_correlation_condition_vhd}.\\
+% %% "automatic generation" of listings (see /scripts/extract_entities.sh)
+% \lstinputlisting[label=lst:calo_esums_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_esums_correlation_condition.vhd}{\texttt{calo\_esums\_correlation\_condition.vhd}}]{interfaces/calo_esums_correlation_condition.vhd}
+%
+% \clearpage
+%
+% \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
+% \caption{Explanation of Listing~\ref{lst:calo_esums_correlation_condition_vhd}}\\
+% \hline
+% {Item} & {Explanation}\\
+% \hline
+% \endhead
+% \verb|dphi_cut| & boolean for using $\Delta\varphi$ cut.\\
+% \verb|mass_cut| & boolean for using MASS cut.\\
+% \verb|mass_type| & selection of mass type (TRANSVERSE\_MASS\_TYPE or TRANSVERSE\_MASS\_PT\_TYPE are allowed).\\
+% \verb|calo_object_low| & low index of object range (valid numbers: 0..11).\\
+% \verb|calo_object_high| & high index of object range (valid numbers: 0..11, but greater or equal calo\_object\_low).\\
+% \verb|et_ge_mode_calo| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only).\\
+% \verb|obj_type_calo| & selection of calo1 object type (EG\_TYPE, JET\_TYPE or TAU\_TYPE are allowed)\\
+% \verb|et_threshold_calo| & threshold value for comparison in \et.\\
+% \verb|nr_eta_windows_calo| & integer value for number of $\eta$ cuts.\\
+% \verb|eta_w1_upper_limit_calo| & "upper limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w1_lower_limit_calo| & "lower limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w2_upper_limit_calo| & "upper limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w2_lower_limit_calo| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w3_upper_limit_calo| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w3_lower_limit_calo| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w4_upper_limit_calo| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w4_lower_limit_calo| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w5_upper_limit_calo| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|eta_w5_lower_limit_calo| & "lower limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|phi_full_range_calo| & boolean to set full range of $\varphi$.\\
+% \verb|phi_w1_upper_limit_calo| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w1_lower_limit_calo| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w2_ignore_calo| & boolean to ignore "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_upper_limit_calo| & "upper limit" of "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_lower_limit_calo| & "lower limit" of "window"-comparator 2 for $\varphi$.\\
+% \verb|iso_lut_calo| & content of LUT (4 bits) for isolation comparison.\\
+% \verb|et_ge_mode_esums| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
+% \verb|obj_type_esums| & selection of esums type (ETM\_TYPE, ETMHF\_TYPE or HTM\_TYPE are allowed)\\
+% \verb|et_threshold_esums| & threshold value for comparison in \et.\\
+% \verb|phi_full_range_esums| & boolean to set full range of $\varphi$.\\
+% \verb|phi_w1_upper_limit_esums| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w1_lower_limit_esums| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w2_ignore_esums| & boolean to ignore "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_upper_limit_esums| & "upper limit" of "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_lower_limit_esums| & "lower limits" of "window"-comparator 2 for $\varphi$.\\
+% \verb|diff_phi_upper_limit| & "upper limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
+% \verb|diff_phi_lower_limit| & "lower limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
+% \verb|DETA_DPHI_VECTOR_WIDTH| & vector width of $\Delta\varphi$.\\
+% \verb|DETA_DPHI_PRECISION| & position after decimal point for $\Delta\varphi$.\\
+% \verb|mass_upper_limit| & "upper limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
+% \verb|mass_lower_limit| & "lower limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
+% \verb|MASS_PRECISION| & position after decimal point for $\frac{M^2}{2}$.\\
+% \verb|pt1_width| & number of bits of pt1.\\
+% \verb|pt2_width| & number of bits of pt2.\\
+% \verb|MASS_COSH_COS_PRECISION| & position after decimal point for $\cos(\Delta\varphi)$.\\
+% \verb|cosh_cos_width| & number of bits for the maximum value in the LUT for $\cos(\Delta\varphi)$.\\
+% \verb|pt_sq_threshold| & threshold value for comparison in two-body pt (${pt^2}$).\\
+% \verb|sin_cos_width| & number of bits for the maximum value in the LUT for $\cos(\varphi)$ and $\sin(\varphi)$.\\
+% \verb|PT_PRECISION| & position after decimal point for ${pt^2}$.\\
+% \verb|PT_SQ_SIN_COS_PRECISION| & position after decimal point for $\cos(\varphi)$ and $\sin(\varphi)$.\\
+% \verb|lhc_clk| & clock input (LHC clock).\\
+% \verb|calo_data_i| & calorimeter input data, structure defined with \texttt{obj\_type\_calo1}.\\
+% \verb|esums_data_i| & esums input data, structure defined with \texttt{obj\_type\_esums}.\\
+% \verb|diff_phi| & differences in $\varphi$, calculated in an instance of module \texttt{sub\_phi\_integer\_obj\_vs\_obj.vhd} in top-of-hierarchy module (\texttt{gtl\_module.vhd}).\\
+% \verb|pt1| & calo1 \et values [from LUT, in $GeV\times$10].\footnote{value 10 from 10\textsuperscript{\tiny{CALO\_INV\_MASS\_PT\_PRECISION}}}\\
+% \verb|pt2| & esums \et values [from LUT, in $GeV\times$10].\\
+% \verb|cos_dphi| & $\cos(\Delta\varphi)$ values from LUT.\\
+% \verb|cos_phi_1| & $\cos(\varphi)$ values from LUT for calo1.\\
+% \verb|cos_phi_2| & $\cos(\varphi)$ values from LUT for esums.\\
+% \verb|sin_phi_1| & $\sin(\varphi)$ values from LUT for calo1.\\
+% \verb|sin_phi_2| & $\sin(\varphi)$ values from LUT for esums.\\
+% \verb|condition_o| & output of condition (routed to Algorithms logic, see \ref{sec:gtl:algorithms_logic}).\\
+% \hline
+% \label{tab:gtl:explanation_calo_esums_correlation_condition_vhd}
+% \end{longtable}
+%
+% \subparagraph{Calo Muon Correlation condition module}
+% \label{sec:gtl:calo_muon_correlation_condition_module}
+%
+% The calo muon correlation condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd}{\texttt{calo\_muon\_correlation\_condition.vhd}}) contains a "Single object requirement condition" for one type of calo objects (\egamma, jet or tau) and a "Single object requirement condition" for muon objects.
+% In addition there are "Cuts" for differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$), a calculation of $\Delta$R (DR), a calculation of invariant mass (MASS) and a calculation of two-body pt, see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}.\\
+% The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{EG\_MU\_DIFF\_ETA\_LUT, EG\_MU\_DIFF\_PHI\_LUT}\normalsize, ...), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
+% These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
+% So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
+% Because of the different scales of calorimeter and muon objects in $\eta$ and $\varphi$, there are LUTs for conversion the calorimeter bins to muon bins (in \texttt{gtl\_pkg.vhd}:
+%  e.g. \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize and \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize).\\\\
+% \textbf{Remark:}\\
+% The center value of bins are used as reference value for conversion.
+% The content of \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize is calculated with formular:\\ "converted-calo-eta[bin] = calo-eta[bin] $\times$ 4 + 2",\\
+% of \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize with formular:\\
+% "converted-calo-phi[bin] = calo-phi[bin] $\times$ 4 + 2".\\
+% The conversion calculations are preliminary, others may be proposed.\\\\
+% Definitions of scales (see Tables \ref{tab:gtl:calo_eta_scale_new}, \ref{tab:gtl:calo_phi_scale}, \ref{tab:gtl:muon_eta_scale} and \ref{tab:gtl:muon_phi_scale}):
+% \begin{itemize}
+% \item Calorimeter objects:
+% \begin{itemize}
+% \item $\eta$ bin width = $\frac{0.087}{2}$ (bin 0 from 0.0 to $\frac{0.087}{2}$)
+% \item $\phi$ bin width = $\frac{2\pi}{144}$ (bin 0 from 0.0 to $\frac{2\pi}{144}$)
+% \end{itemize}
+% \item Muon objects:
+% \begin{itemize}
+% \item $\eta$ bin width = $\frac{0.087}{8}$ (bin 0 from \small{0.5}$\times\frac{-0.087}{8}$ to \small{0.5}$\times\frac{+0.087}{8}$)
+% \item $\phi$ bin width = $\frac{2\pi}{576}$ (bin 0 from 0.0 to $\frac{2\pi}{576}$)
+% \end{itemize}
+% \end{itemize}
+%
+% \begin{figure}[htb]
+% \centering
+% \includegraphics[width=15cm]{figures/convert_scheme_calo_2_muon_eta_phi}
+% \caption{Conversion of calorimeter $\eta$ and $\varphi$ to muon scales}
+% \label{fig:gtl:convert_scheme_calo_2_muon_eta_phi}
+% \end{figure}
+%
+% The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_MUON\_COSH\_DETA\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_MUON\_COS\_DPHI\_LUT}\normalsize, ...) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 4\textsuperscript{th} position after decimal point, and multiplying by 10000(10\textsuperscript{\tiny{CALO\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize) to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize} ...", "\texttt{constant \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize} ..." and "\texttt{constant \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize} ..." in file \texttt{gtl\_pkg.vhd}.}\\
+% The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT and MUON\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT and MUON\_SIN\_PHI\_LUT}\normalsize) for two-body pt (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point, and multiplying by 1000 to get integer values.\\
+% The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt).
+% This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\eta$ and $\Delta\varphi$
+% are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
+%
+% For the VHDL entity declaration of calo muon correlation condition module in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd}{\texttt{calo\_muon\_correlation\_condition.vhd}}, see Listing~\ref{lst:calo_muon_correlation_condition_vhd}.\\
+% \clearpage
+% %% "automatic generation" of listings (see /scripts/extract_entities.sh)
+% \lstinputlisting[label=lst:calo_muon_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/calo_muon_correlation_condition.vhd}{\texttt{calo\_muon\_correlation\_condition.vhd}}]{interfaces/calo_muon_correlation_condition.vhd}
+%
+% \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
+% \caption{Explanation of Listing~\ref{lst:calo_muon_correlation_condition_vhd}}\\
+% \hline
+% {Item} & {Explanation}\\
+% \hline
+% \endhead
+% \verb|deta_cut| & boolean for using $\Delta\eta$ cut.\\
+% \verb|dphi_cut| & boolean for using $\Delta\varphi$ cut.\\
+% \verb|dr_cut| & boolean for using DR cut.\\
+% \verb|mass_cut| & boolean for using MASS cut.\\
+% \verb|mass_type| & selection of mass type (INVARIANT\_MASS\_TYPE, INVARIANT\_MASS\_PT\_TYPE, TRANSVERSE\_MASS\_TYPE or TRANSVERSE\_MASS\_PT\_TYPE are allowed).\\
+% \verb|calo_object_low| & low index of object range (valid numbers: 0..11).\\
+% \verb|calo_object_high| & high index of object range (valid numbers: 0..11, but greater or equal calo\_object\_low).\\
+% \verb|calo_et_ge_mode_calo| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only).\\
+% \verb|obj_type_calo| & selection of calo object type (EG\_TYPE, JET\_TYPE or TAU\_TYPE are allowed)\\
+% \verb|et_threshold_calo| & threshold value for comparison in \et.\\
+% \verb|nr_eta_windows_calo| & integer value for number of $\eta$ cuts.\\
+% \verb|eta_w1_upper_limit_calo| & "upper limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w1_lower_limit_calo| & "lower limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w2_upper_limit_calo| & "upper limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w2_lower_limit_calo| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w3_upper_limit_calo| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w3_lower_limit_calo| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w4_upper_limit_calo| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w4_lower_limit_calo| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w5_upper_limit_calo| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|eta_w5_lower_limit_calo| & "lower limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|phi_full_range_calo| & boolean to set full range of $\varphi$.\\
+% \verb|phi_w1_upper_limit_calo| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w1_lower_limit_calo| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w2_ignore_calo| & boolean to ignore "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_upper_limit_calo| & "upper limit" of "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_lower_limit_calo| & "lower limit" of "window"-comparator 2 for $\varphi$.\\
+% \verb|iso_lut_calo| & content of LUT (4 bits) for isolation comparison.\\
+% \verb|muon_object_low| & low index of object range (valid numbers: 0..7).\\
+% \verb|muon_object_high| & high index of object range (valid numbers: 0..7, but greater or equal muon\_object\_low).\\
+% \verb|pt_ge_mode_muon| & 'mode-selection' for the \pt comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
+% \verb|pt_threshold_muon| & threshold value for comparison in \pt.\\
+% \verb|nr_eta_windows_muon| & integer value for number of $\eta$ cuts.\\
+% \verb|eta_w1_upper_limit_muon| & "upper limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w1_lower_limit_muon| & "lower limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w2_upper_limit_muon| & "upper limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w2_lower_limit_muon| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w3_upper_limit_muon| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w3_lower_limit_muon| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w4_upper_limit_muon| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w4_lower_limit_muon| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w5_upper_limit_muon| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|eta_w5_lower_limit_muon| & "lower limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|phi_full_range_muon| & boolean to set full range of $\varphi$.\\
+% \verb|phi_w1_upper_limit_muon| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w1_lower_limit_muon| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w2_ignore_muon| & boolean to ignore "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_upper_limit_muon| & "upper limit" of "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_lower_limit_muon| & "lower limits" of "window"-comparator 2 for $\varphi$.\\
+% \verb|requested_charge_muon| & string for requested charge ("pos" means "positive charge", "neg" means "negative charge" and "ign" means "ignore charge").\\
+% \verb|qual_lut_muon| & content of LUT (16 bits) for quality comparison.\\
+% \verb|iso_lut_muon| & content of LUT (4 bits) for isolation comparison.\\
+% \verb|upt_cut_muon| & boolean for using unconstrained \pt cuts.\\
+% \verb|upt_upper_limit_muon| & "upper limit" of unconstrained \pt.\\
+% \verb|upt_lower_limit_muon| & "lower limit" of unconstrained \pt.\\
+% \verb|ip_lut_muon| & content of LUTs (4 bits) for impact parameter.\\
+% \verb|diff_eta_upper_limit| & "upper limit" of "window"-comparator for comparison of differences in $\eta$ (hex value).\\
+% \verb|diff_eta_lower_limit| & "lower limit" of "window"-comparator for comparison of differences in $\eta$ (hex value).\\
+% \verb|diff_phi_upper_limit| & "upper limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
+% \verb|diff_phi_lower_limit| & "lower limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
+% \verb|dr_upper_limit| & "upper limit" of "window"-comparator for comparison of $\Delta$$R^2$ (hex value).\\
+% \verb|dr_lower_limit| & "lower limit" of "window"-comparator for comparison of $\Delta$$R^2$ (hex value).\\
+% \verb|DETA_DPHI_VECTOR_WIDTH| & vector width of $\Delta\eta$ and $\Delta\varphi$ for calculation of $\Delta$$R^2$.\\
+% \verb|DETA_DPHI_PRECISION| & position after decimal point for $\Delta\eta$ and $\Delta\varphi$.\\
+% \verb|mass_upper_limit| & "upper limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
+% \verb|mass_lower_limit| & "lower limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
+% \verb|MASS_PRECISION| & position after decimal point for $\frac{M^2}{2}$.\\
+% \verb|pt1_width| & number of bits of pt1.\\
+% \verb|pt2_width| & number of bits of pt2.\\
+% \verb|MASS_COSH_COS_PRECISION| & position after decimal point for $\cosh(\Delta\eta)$ and $\cos(\Delta\varphi)$.\\
+% \verb|cosh_cos_width| & number of bits for the maximum value in the LUT for $\cosh(\Delta\eta)$.\\
+% \verb|pt_sq_threshold| & threshold value for comparison in two-body pt (${pt^2}$).\\
+% \verb|sin_cos_width_1| & number of bits for the maximum value in the LUT for $\cos(\varphi)$ and $\sin(\varphi)$ of calos.\\
+% \verb|sin_cos_width_2| & number of bits for the maximum value in the LUT for $\cos(\varphi)$ and $\sin(\varphi)$ of muon.\\
+% \verb|PT_PRECISION| & position after decimal point for ${pt^2}$.\\
+% \verb|PT_SQ_SIN_COS_PRECISION| & position after decimal point for $\cos(\varphi)$ and $\sin(\varphi)$.\\
+% \verb|lhc_clk| & clock input (LHC clock).\\
+% \verb|calo_data_i| & calorimeter input data, structure defined with \texttt{obj\_type\_calo}.\\
+% \verb|muon_data_i| & muon input data.\\
+% \verb|diff_eta| & differences in $\eta$, calculated in an instance of module \texttt{sub\_eta\_integer\_obj\_vs\_obj.vhd} in top-of-hierarchy module (\texttt{gtl\_module.vhd}), see \ref{sec:gtl:calculation_differences}.\\
+% \verb|diff_phi| & differences in $\varphi$, calculated in an instance of module \texttt{sub\_phi\_integer\_obj\_vs\_obj.vhd} in top-of-hierarchy module (\texttt{gtl\_module.vhd}).\\
+% \verb|pt1| & calo \et values [from LUT, in $GeV\times$10].\footnote{value 10 from 10\textsuperscript{\tiny{CALO\_MUON\_INV\_MASS\_PT\_PRECISION}}}\\
+% \verb|pt2| & muon \pt values [from LUT, in $GeV \times$10].\\
+% \verb|cosh_deta| & $\cosh(\Delta\eta)$ values [from LUT, $\cosh(\Delta\eta)\times$10000].\footnote{value 10000 from 10\textsuperscript{\tiny{CALO\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}}}\\
+% \verb|cos_dphi| & $\cos(\Delta\varphi)$ values [from LUT, $\cosh(\Delta\varphi)\times$10000].\\
+% \verb|cos_phi_1| & $\cos(\varphi)$ values from LUT for calo.\\
+% \verb|cos_phi_2| & $\cos(\varphi)$ values from LUT for muon.\\
+% \verb|sin_phi_1| & $\sin(\varphi)$ values from LUT for calo.\\
+% \verb|sin_phi_2| & $\sin(\varphi)$ values from LUT for muon.\\
+% \verb|condition_o| & output of condition (routed to Algorithms logic, see \ref{sec:gtl:algorithms_logic}).\\
+% \hline
+% \label{tab:gtl:explanation_calo_muon_correlation_condition_vhd}
+% \end{longtable}
+%
+% % \subparagraph{Calo Muon Correlation condition module - template for VHDL-Producer}
+% % See in Chapter \ref{sec:gtl:templates_tme} and in Listing~\ref{lst:instance_calo_muon_correlation_condition_vhd} for a VHDL-template for VHDL-Producer of
+% % instantiating a calorimeter-muon-correlation condition (\texttt{calo\_muon\_correlation\_condition.vhd}).\\
+%
+% \subparagraph{Muon Muon Correlation condition module}
+% \label{sec:gtl:muon_muon_correlation_condition_module}
+%
+% The muon muon correlation condition module contains two "Single object requirement conditions" for data from different bunch-crossings as one possible mode
+% and a "Double objects requirement condition" for muon objects at same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd}{\texttt{muon\_muon\_correlation\_condition.vhd}} named "same\_bx"). In the case of a "Double objects requirement condition", requirements for "requested charge correlations" are used and a muon charge correlation module (see \ref{sec:gtl:muon_charge_correlation_module}) is required.\\
+% In addition there are "Cuts" for differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$), a calculation of $\Delta$R (DR), a calculation of invariant mass with pt or of invariant mass with unconstrained pt (MASS), a calculation of two-body pt.\\
+% The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{MUON\_MUON\_DIFF\_ETA\_LUT, MUON\_MUON\_DIFF\_PHI\_LUT}\normalsize), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
+% These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
+% So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
+%
+% \textbf{Remark:} Definitions of scales (see Tables \ref{tab:gtl:muon_eta_scale} and \ref{tab:gtl:muon_phi_scale}):
+% \begin{itemize}
+% \item Muon objects:
+% \item $\eta$ bin width = $\frac{0.087}{8}$ (bin 0 from \small{0.5}$\times\frac{-0.087}{8}$ to \small{0.5}$\times\frac{+0.087}{8}$)
+% \item $\phi$ bin width = $\frac{2\pi}{576}$ (bin 0 from 0.0 to $\frac{2\pi}{576}$)
+% \end{itemize}
+%
+% The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{MUON\_MUON\_COSH\_DETA\_LUT}\normalsize) and $\cos(\Delta\varphi)$ (\small{MUON\_MUON\_COS\_DPHI\_LUT}\normalsize) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 4\textsuperscript{th} position after decimal point, and multiplying by 10000 to get integer values.\footnote{Definition of "\texttt{constant \small{MUON\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize"} in file \texttt{gtl\_pkg.vhd}. Value 10000 from 10\textsuperscript{\tiny{MUON\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
+% The contents of the LUTs for $\cos(\varphi)$ (\small{MUON\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{MUON\_SIN\_PHI\_LUT}\normalsize) for two-body pt
+% (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point,
+% and multiplying by 1000 to get integer values.\\
+% The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" or the "Double objects requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt).
+% This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\eta$ and $\Delta\varphi$
+% are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR and MASS with 1\textsuperscript{st} position after decimal point.
+%
+% For the VHDL entity declaration of muon muon correlation condition module in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd}{\texttt{muon\_muon\_correlation\_condition.vhd}}, see Listing~\ref{lst:muon_muon_correlation_condition_vhd}.\\
+% \clearpage
+% %% "automatic generation" of listings (see /scripts/extract_entities.sh)
+% \lstinputlisting[label=lst:muon_muon_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd}{\texttt{muon\_muon\_correlation\_condition.vhd}}]{interfaces/muon_muon_correlation_condition.vhd}
+%
+% \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
+% \caption{Explanation of Listing~\ref{lst:muon_muon_correlation_condition_vhd}}\\
+% \hline
+% {Item} & {Explanation}\\
+% \hline
+% \endhead
+% \verb|same_bx| & boolean indicating whether data are from same Bx - 'true' for same Bx.\\
+% \verb|deta_cut| & boolean for using $\Delta\eta$ cut.\\
+% \verb|dphi_cut| & boolean for using $\Delta\varphi$ cut.\\
+% \verb|dr_cut| & boolean for using DR cut.\\
+% \verb|mass_cut| & boolean for using MASS cut.\\
+% \verb|mass_type| & selection of mass type (INVARIANT\_MASS\_TYPE, INVARIANT\_MASS\_PT\_TYPE, TRANSVERSE\_MASS\_TYPE or TRANSVERSE\_MASS\_PT\_TYPE are allowed).\\
+% \verb|muon_object_low| & low index of object range (valid numbers: 0..7).\\
+% \verb|muon_object_high| & high index of object range (valid numbers: 0..7, but greater or equal muon\_object\_low).\\
+% \verb|pt_ge_mode_muon1| & 'mode-selection' for the \pt comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
+% \verb|pt_threshold_muon1| & threshold value for comparison in \pt.\\
+% \verb|nr_eta_windows_muon1| & integer value for number of $\eta$ cuts.\\
+% \verb|eta_w1_upper_limit_muon1| & "upper limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w1_lower_limit_muon1| & "lower limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w2_upper_limit_muon1| & "upper limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w2_lower_limit_muon1| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w3_upper_limit_muon1| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w3_lower_limit_muon1| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w4_upper_limit_muon1| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w4_lower_limit_muon1| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w5_upper_limit_muon1| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|eta_w5_lower_limit_muon1| & "lower limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|phi_full_range_muon1| & boolean to set full range of $\varphi$.\\
+% \verb|phi_w1_upper_limit_muon1| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w1_lower_limit_muon1| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w2_ignore_muon1| & boolean to ignore "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_upper_limit_muon1| & "upper limit" of "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_lower_limit_muon1| & "lower limits" of "window"-comparator 2 for $\varphi$.\\
+% \verb|requested_charge_muon1| & string for requested charge ("pos" means "positive charge", "neg" means "negative charge" and "ign" means "ignore charge").\\
+% \verb|qual_lut_muon1| & content of LUT (16 bits) for quality comparison.\\
+% \verb|iso_lut_muon1| & content of LUT (4 bits) for isolation comparison.\\
+% \verb|upt_cut_muon1| & boolean for using unconstrained \pt cuts.\\
+% \verb|upt_upper_limit_muon1| & "upper limit" of unconstrained \pt.\\
+% \verb|upt_lower_limit_muon1| & "lower limit" of unconstrained \pt.\\
+% \verb|ip_lut_muon1| & content of LUTs (4 bits) for impact parameter.\\
+% \verb|pt_ge_mode_muon2| & 'mode-selection' for the \pt comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
+% \verb|pt_threshold_muon2| & threshold value for comparison in \pt.\\
+% \verb|nr_eta_windows_muon2| & integer value for number of $\eta$ cuts.\\
+% \verb|eta_w1_upper_limit_muon2| & "upper limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w1_lower_limit_muon2| & "lower limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w2_upper_limit_muon2| & "upper limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w2_lower_limit_muon2| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w3_upper_limit_muon2| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w3_lower_limit_muon2| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w4_upper_limit_muon2| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w4_lower_limit_muon2| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w5_upper_limit_muon2| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|eta_w5_lower_limit_muon2| & "lower limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|phi_full_range_muon2| & boolean to set full range of $\varphi$.\\
+% \verb|phi_w1_upper_limit_muon2| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w1_lower_limit_muon2| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w2_ignore_muon2| & boolean to ignore "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_upper_limit_muon2| & "upper limit" of "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_lower_limit_muon2| & "lower limits" of "window"-comparator 2 for $\varphi$.\\
+% \verb|requested_charge_muon2| & string for requested charge ("pos" means "positive charge", "neg" means "negative charge" and "ign" means "ignore charge").\\
+% \verb|qual_lut_muon2| & content of LUT (16 bits) for quality comparison.\\
+% \verb|iso_lut_muon2| & content of LUT (4 bits) for isolation comparison.\\
+% \verb|upt_cut_muon2| & boolean for using unconstrained \pt cuts.\\
+% \verb|upt_upper_limit_muon2| & "upper limit" of unconstrained \pt.\\
+% \verb|upt_lower_limit_muon2| & "lower limit" of unconstrained \pt.\\
+% \verb|ip_lut_muon2| & content of LUTs (4 bits) for impact parameter.\\
+% \verb|requested_charge_correlation| & string (2 characters) for requested charge correlation ("ls" means "like sign", "os" means "opposite sign" or "ig" means "ignore").\\
+% \verb|diff_eta_upper_limit| & "upper limit" of "window"-comparator for comparison of differences in $\eta$ (hex value).\\
+% \verb|diff_eta_lower_limit| & "lower limit" of "window"-comparator for comparison of differences in $\eta$ (hex value).\\
+% \verb|diff_phi_upper_limit| & "upper limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
+% \verb|diff_phi_lower_limit| & "lower limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
+% \verb|dr_upper_limit| & "upper limit" of "window"-comparator for comparison of $\Delta$$R^2$ (hex value).\\
+% \verb|dr_lower_limit| & "lower limit" of "window"-comparator for comparison of $\Delta$$R^2$ (hex value).\\
+% \verb|DETA_DPHI_VECTOR_WIDTH| & vector width of $\Delta\eta$ and $\Delta\varphi$ for calculation of $\Delta$$R^2$.\\
+% \verb|DETA_DPHI_PRECISION| & position after decimal point for $\Delta\eta$ and $\Delta\varphi$.\\
+% \verb|mass_upper_limit| & "upper limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
+% \verb|mass_lower_limit| & "lower limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
+% \verb|MASS_PRECISION| & position after decimal point for $\frac{M^2}{2}$.\\
+% \verb|pt_width| & number of bits of pt.\\
+% \verb|MASS_COSH_COS_PRECISION| & position after decimal point for $\cosh(\Delta\eta)$ and $\cos(\Delta\varphi)$.\\
+% \verb|cosh_cos_width| & number of bits for the maximum value in the LUT for $\cosh(\Delta\eta)$.\\
+% \verb|pt_sq_threshold| & threshold value for comparison in two-body pt (${pt^2}$).\\
+% \verb|sin_cos_width| & number of bits for the maximum value in the LUT for $\cos(\varphi)$ and $\sin(\varphi)$.\\
+% \verb|PT_PRECISION| & position after decimal point for ${pt^2}$.\\
+% \verb|PT_SQ_SIN_COS_PRECISION| & position after decimal point for $\cos(\varphi)$ and $\sin(\varphi)$.\\
+% \verb|lhc_clk| & clock input (LHC clock).\\
+% \verb|muon1_data_i| & muon1 input data.\\
+% \verb|muon2_data_i| & muon2 input data.\\
+% \verb|ls_charcorr_double| & array of "like sign" charge correlation for double condition.\\
+% \verb|os_charcorr_double| & array of "opposite sign" charge correlation for double condition.\\
+% \verb|diff_eta| & differences in $\eta$, calculated in an instance of module \texttt{sub\_eta\_integer\_obj\_vs\_obj.vhd} in top-of-hierarchy module (\texttt{gtl\_module.vhd}), see \ref{sec:gtl:calculation_differences}.\\
+% \verb|diff_phi| & differences in $\varphi$, calculated in an instance of module \texttt{sub\_phi\_integer\_obj\_vs\_obj.vhd} in top-of-hierarchy module (\texttt{gtl\_module.vhd}).\\
+% \verb|pt1| & muon1 \pt values [from LUT, in $GeV\times$10].\footnote{value 10 from 10\textsuperscript{\tiny{MUON\_MUON\_INV\_MASS\_PT\_PRECISION}}}\\
+% \verb|pt2| & muon2 \pt values [from LUT, in $GeV\times$10].\\
+% \verb|upt1| & muon1 unconstrained \pt values [from LUT, in $GeV\times$10].\footnote{value 10 from 10\textsuperscript{\tiny{MUON\_MUON\_INV\_MASS\_PT\_PRECISION}}}\\
+% \verb|upt2| & muon2 unconstrained \pt values [from LUT, in $GeV\times$10].\\
+% \verb|cosh_deta| & $\cosh(\Delta\eta)$ values [from LUT, $\cosh(\Delta\eta)\times$10000].\footnote{value 10000 from 10\textsuperscript{\tiny{MUON\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}}}\\
+% \verb|cos_dphi| & $\cos(\Delta\varphi)$ values [from LUT, $\cosh(\Delta\varphi)\times$10000].\\
+% \verb|cos_phi_1| & $\cos(\varphi)$ values from LUT for muon.\\
+% \verb|cos_phi_2| & $\cos(\varphi)$ values from LUT for muon (different to cos\_phi\_1, when data from different bunch-crossings).\\
+% \verb|sin_phi_1| & $\sin(\varphi)$ values from LUT for muon.\\
+% \verb|sin_phi_2| & $\sin(\varphi)$ values from LUT for muon (different to sin\_phi\_1, when data from different bunch-crossings).\\
+% \verb|condition_o| & output of condition (routed to Algorithms logic, see \ref{sec:gtl:algorithms_logic}).\\
+% \hline
+% \label{tab:gtl:explanation_muon_muon_correlation_condition_vhd}
+% \end{longtable}
+%
+% % \subparagraph{Muon Muon Correlation condition module - template for VHDL-Producer}
+% % See in Chapter \ref{sec:gtl:templates_tme} and in Listing~\ref{lst:instance_muon_muon_correlation_condition_vhd} for a VHDL-template for VHDL-Producer of
+% % instantiating a calorimeter-calorimeter-correlation condition (\texttt{muon\_muon\_correlation\_condition.vhd}).\\
+%
+% \subparagraph{Muon Muon Correlation condition module for Invariant Mass Divided by $\Delta$R}
+% \label{sec:gtl:muon_muon_correlation_condition_module_mass_div_dr}
+%
+% The muon muon correlation condition module for invariant mass divided by $\Delta$R contains two "Single object requirement conditions" from different bunch-crossings as one possible mode and a "Double objects requirement condition" for objects of same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \texttt{muon\_muon\_mass\_div\_dr\_condition.vhd} named "same\_bx").\\
+% The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}), see \ref{sec:gtl:inv_mass_div_dr_calculation}. This module is instantiated once for every object type bunch-crossing combination.\\
+% The comparison of calculated values and threshold is done inside the module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_mass_div_dr_condition.vhd}{texttt{muon\_muon\_mass\_div\_dr\_condition.vhd}}).\\
+% In the TME there is one threshold for M/$\Delta$R: "greater/equal threshold", given in GeV (floating point notation).\\
+% The threshold for comparison with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL) is provided by VHDL-Producer.\\
+% No other correlation cuts, except "charge correlation", available in this condition type.
+%
+% \subparagraph{Muon Correlation condition module for Invariant Mass with Three Objects}
+% \label{sec:gtl:muon_correlation_condition_module_mass_3_obj}
+%
+% The muon correlation condition module for invariant mass with three objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_3_obj_condition.vhd}{\texttt{muon\_mass\_3\_obj\_condition.vhd}}) contains a "Triple objects requirement condition" for objects of same type and same bunch-crossing.\\
+% In addition a "Cut" for calculation of \textit{invariant mass with three objects} (see \ref{sec:gtl:inv_mass_3_obj_calculation}) is mandatory.\\
+% No other correlation cuts, except "charge correlation", available in this condition type.
+%
+% \subparagraph{Muon Esums Correlation condition module}
+% \label{sec:gtl:muon_esums_correlation_condition_module}
+%
+% The muon esums correlation condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd}{\texttt{muon\_esums\_correlation\_condition.vhd}}) contains two "Single object requirement conditions", one of muon objects and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
+% In addition there are "Cuts" for differences in $\varphi$ ($\Delta\varphi$) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
+% The differences in $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{MUON\_ETM\_DIFF\_PHI\_LUT}\normalsize, ...),
+% which represents values of differences (multiples of units in $\varphi$).
+% These values given in the LUTs are calculated as floating-point values (based on the scales of $\varphi$), which are multiplied by a factor and truncated to an integer value.
+% So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}.\\
+% Because of the different scales of muon objects and esums in $\varphi$, there are LUTs for conversion the esums bins to muon bins (in \texttt{gtl\_pkg.vhd}:
+%  e.g. \small{ETM\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize).\\\\
+% \textbf{Remark:}\\
+% The center value of bins are used as reference value for conversion.
+% The content of LUT is calculated with formular:\\
+% "converted-esums-phi[bin] = esums-phi[bin] $\times$ 4 + 2"\\ (see Figure~\ref{fig:gtl:convert_scheme_calo_2_muon_eta_phi}).
+% The conversion calculations are preliminary, others may be proposed.\\\\
+% Definitions of scales:
+% \begin{itemize}
+% \item \etm, ET$_{miss}^{HF}$ or \htm:
+% \begin{itemize}
+% \item $\phi$ bin width = $\frac{2\pi}{144}$ (bin 0 from 0.0 to $\frac{2\pi}{144}$)
+% \end{itemize}
+% \item Muon objects:
+% \begin{itemize}
+% \item $\phi$ bin width = $\frac{2\pi}{576}$ (bin 0 from 0.0 to $\frac{2\pi}{576}$)
+% \end{itemize}
+% \end{itemize}
+%
+% The contents of the LUTs for $\cos(\Delta\varphi)$ (\small{MU\_ETM\_COS\_DPHI\_LUT}\normalsize, ...) for Transverse mass (formular see \ref{sec:gtl:transverse_mass_calculation})
+% are created by calculating cosine, rounding-up at the 4\textsuperscript{th}
+% position after decimal point and multiplying by 10000 (10\textsuperscript{\tiny{MU\_ETM\_COSH\_COS\_PRECISION}}\normalsize) to get integer values.\footnote{Definition of
+% "\texttt{constant \small{MU\_ETM\_COSH\_COS\_PRECISION}\normalsize} ..." and "\texttt{constant \small{CALO\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize} ..." in file \texttt{gtl\_pkg.vhd}.}\\
+% The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT and MUON\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT and MUON\_SIN\_PHI\_LUT}\normalsize) for two-body pt
+% (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
+% The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition"
+% and the results of selected "Cuts" are inside of a range (upper and lower limit).
+% This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\varphi$
+% are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for MASS with 1\textsuperscript{st} position after decimal point.
+%
+% For VHDL entity declaration for muon esums correlation condition module in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd}{\texttt{muon\_esums\_correlation\_condition.vhd}}, see Listing~\ref{lst:muon_esums_correlation_condition_vhd}.\\
+% %% "automatic generation" of listings (see /scripts/extract_entities.sh)
+% \lstinputlisting[label=lst:muon_esums_correlation_condition_vhd,language=VHDL,caption=Entity declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd}{\texttt{muon\_esums\_correlation\_condition.vhd}}]{interfaces/muon_esums_correlation_condition.vhd}
+%
+% \clearpage
+%
+% \begin{longtable}{>{\footnotesize}l >{\footnotesize}p{.65\columnwidth}}
+% \caption{Explanation of Listing~\ref{lst:muon_muon_correlation_condition_vhd}}\\
+% \hline
+% {Item} & {Explanation}\\
+% \hline
+% \endhead
+% \verb|dphi_cut| & boolean for using $\Delta\varphi$ cut.\\
+% \verb|mass_cut| & boolean for using MASS cut.\\
+% \verb|mass_type| & selection of mass type (TRANSVERSE\_MASS\_TYPE or TRANSVERSE\_MASS\_PT\_TYPE are allowed).\\
+% \verb|muon_object_low| & low index of object range (valid numbers: 0..7).\\
+% \verb|muon_object_high| & high index of object range (valid numbers: 0..7, but greater or equal muon\_object\_low).\\
+% \verb|pt_ge_mode_muon| & 'mode-selection' for the \pt comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
+% \verb|pt_threshold_muon| & threshold value for comparison in \pt.\\
+% \verb|nr_eta_windows_muon| & integer value for number of $\eta$ cuts.\\
+% \verb|eta_w1_upper_limit_muon| & "upper limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w1_lower_limit_muon| & "lower limit" of "window"-comparator 1 for $\eta$.\\
+% \verb|eta_w2_upper_limit_muon| & "upper limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w2_lower_limit_muon| & "lower limit" of "window"-comparator 2 for $\eta$.\\
+% \verb|eta_w3_upper_limit_muon| & "upper limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w3_lower_limit_muon| & "lower limit" of "window"-comparator 3 for $\eta$.\\
+% \verb|eta_w4_upper_limit_muon| & "upper limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w4_lower_limit_muon| & "lower limit" of "window"-comparator 4 for $\eta$.\\
+% \verb|eta_w5_upper_limit_muon| & "upper limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|eta_w5_lower_limit_muon| & "lower limit" of "window"-comparator 5 for $\eta$.\\
+% \verb|phi_full_range_muon| & boolean to set full range of $\varphi$.\\
+% \verb|phi_w1_upper_limit_muon| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w1_lower_limit_muon| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w2_ignore_muon| & boolean to ignore "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_upper_limit_muon| & "upper limit" of "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_lower_limit_muon| & "lower limits" of "window"-comparator 2 for $\varphi$.\\
+% \verb|requested_charge_muon| & string for requested charge ("pos" means "positive charge", "neg" means "negative charge" and "ign" means "ignore charge").\\
+% \verb|qual_lut_muon| & content of LUT (16 bits) for quality comparison.\\
+% \verb|iso_lut_muon| & content of LUT (4 bits) for isolation comparison.\\
+% \verb|upt_cut_muon| & boolean for using unconstrained \pt cuts.\\
+% \verb|upt_upper_limit_muon| & "upper limit" of unconstrained \pt.\\
+% \verb|upt_lower_limit_muon| & "lower limit" of unconstrained \pt.\\
+% \verb|ip_lut_muon| & content of LUTs (4 bits) for impact parameter.\\
+% \verb|et_ge_mode_esums| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
+% \verb|obj_type_esums| & selection of esums type (ETM\_TYPE or HTM\_TYPE are allowed)\\
+% \verb|et_threshold_esums| & threshold value for comparison in \et.\\
+% \verb|phi_full_range_esums| & boolean to set full range of $\varphi$.\\
+% \verb|phi_w1_upper_limit_esums| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w1_lower_limit_esums| & "lower limit" of "window"-comparator 1 for $\varphi$.\\
+% \verb|phi_w2_ignore_esums| & boolean to ignore "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_upper_limit_esums| & "upper limit" of "window"-comparator 2 for $\varphi$.\\
+% \verb|phi_w2_lower_limit_esums| & "lower limits" of "window"-comparator 2 for $\varphi$.\\
+% \verb|diff_phi_upper_limit| & "upper limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
+% \verb|diff_phi_lower_limit| & "lower limit" of "window"-comparator for comparison of differences in $\varphi$ (hex value).\\
+% \verb|DETA_DPHI_VECTOR_WIDTH| & vector width of $\Delta\varphi$.\\
+% \verb|DETA_DPHI_PRECISION| & position after decimal point for $\Delta\varphi$.\\
+% \verb|mass_upper_limit| & "upper limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
+% \verb|mass_lower_limit| & "lower limit" of "window"-comparator for comparison of $\frac{M^2}{2}$ (hex value).\\
+% \verb|MASS_PRECISION| & position after decimal point for $\frac{M^2}{2}$.\\
+% \verb|pt1_width| & number of bits of pt1.\\
+% \verb|pt2_width| & number of bits of pt2.\\
+% \verb|MASS_COSH_COS_PRECISION| & position after decimal point for $\cos(\Delta\varphi)$.\\
+% \verb|cosh_cos_width| & number of bits for the maximum value in the LUT for $\cos(\Delta\varphi)$.\\
+% \verb|pt_sq_threshold| & threshold value for comparison in two-body pt (${pt^2}$).\\
+% \verb|sin_cos_width_1| & number of bits for the maximum value in the LUT for $\cos(\varphi)$ and $\sin(\varphi)$ of muon.\\
+% \verb|sin_cos_width_2| & number of bits for the maximum value in the LUT for $\cos(\varphi)$ and $\sin(\varphi)$ of esums.\\
+% \verb|PT_PRECISION| & position after decimal point for ${pt^2}$.\\
+% \verb|PT_SQ_SIN_COS_PRECISION| & position after decimal point for $\cos(\varphi)$ and $\sin(\varphi)$.\\
+%
+% \verb|lhc_clk| & clock input (LHC clock).\\
+% \verb|muon_data_i| & muon input data.\\
+% \verb|esums_data_i| & esums input data, structure defined with \texttt{obj\_type\_esums}.\\
+% \verb|diff_phi| & differences in $\varphi$, calculated in an instance of module \texttt{sub\_phi\_integer\_obj\_vs\_obj.vhd} in top-of-hierarchy module (\texttt{gtl\_module.vhd}).\\
+% \verb|pt1| & muon \et values [from LUT, in $GeV\times$10].\\
+% \verb|pt2| & esums \et values [from LUT, in $GeV\times$10].\\
+% \verb|cos_dphi| & $\cos(\Delta\varphi)$ values from LUT.\\
+% \verb|cos_phi_1| & $\cos(\varphi)$ values from LUT for muon.\\
+% \verb|cos_phi_2| & $\cos(\varphi)$ values from LUT for esums.\\
+% \verb|sin_phi_1| & $\sin(\varphi)$ values from LUT for muon.\\
+% \verb|sin_phi_2| & $\sin(\varphi)$ values from LUT for esums.\\
+% \verb|condition_o| & output of condition (routed to Algorithms logic, see \ref{sec:gtl:algorithms_logic}).\\
+% \hline
+% \label{tab:gtl:explanation_muon_muon_correlation_condition_vhd}
+% \end{longtable}
 
-The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{EG\_MUON\_COSH\_DETA\_LUT}\normalsize, ...) and $\cos(\Delta\varphi)$ (\small{EG\_MUON\_COS\_DPHI\_LUT}\normalsize, ...) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 4\textsuperscript{th} position after decimal point, and multiplying by 10000(10\textsuperscript{\tiny{CALO\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize) to get integer values.\footnote{Definition of "\texttt{constant \small{CALO\_MUON\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize} ...", "\texttt{constant \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize} ..." and "\texttt{constant \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize} ..." in file \texttt{gtl\_pkg.vhd}.}\\
-The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT and MUON\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT and MUON\_SIN\_PHI\_LUT}\normalsize) for two-body pt (formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point, and multiplying by 1000 to get integer values.\\
-The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\eta$ and $\Delta\varphi$ are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR, MASS and two-body pt with 1\textsuperscript{st} position after decimal point.
-
-\subparagraph{Muon Muon Correlation condition module}
-\label{sec:gtl:muon_muon_correlation_condition_module}
-
-The muon muon correlation condition module contains two "Single object requirement conditions" for data from different bunch-crossings as one possible mode
-and a "Double objects requirement condition" for muon objects at same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_correlation_condition.vhd}{\texttt{muon\_muon\_correlation\_condition.vhd}} named "same\_bx"). In the case of a "Double objects requirement condition", requirements for "requested charge correlations" are used and a muon charge correlation module (see \ref{sec:gtl:muon_charge_correlation_module}) is required.\\
-In addition there are "Cuts" for differences in $\eta$ ($\Delta\eta$) and $\varphi$ ($\Delta\varphi$), a calculation of $\Delta$R (DR), a calculation of invariant mass with pt or of invariant mass with unconstrained pt (MASS), a calculation of two-body pt.\\
-The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{MUON\_MUON\_DIFF\_ETA\_LUT, MUON\_MUON\_DIFF\_PHI\_LUT}\normalsize), which represents values of differences (multiples of units in $\eta$ and $\varphi$).
-These values given in the LUTs are calculated as floating-point values (based on the scales of $\eta$ and $\varphi$), which are multiplied by a factor and truncated to an integer value.
-So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}. This "precision" is a parameter given for certain LUTs.\\
-
-\textbf{Remark:} Definitions of scales (see Tables \ref{tab:gtl:muon_eta_scale} and \ref{tab:gtl:muon_phi_scale}):
-\begin{itemize}
-\item Muon objects:
-\item $\eta$ bin width = $\frac{0.087}{8}$ (bin 0 from \small{0.5}$\times\frac{-0.087}{8}$ to \small{0.5}$\times\frac{+0.087}{8}$)
-\item $\phi$ bin width = $\frac{2\pi}{576}$ (bin 0 from 0.0 to $\frac{2\pi}{576}$)
-\end{itemize}
-
-The contents of the LUTs for $\cosh(\Delta\eta)$ (\small{MUON\_MUON\_COSH\_DETA\_LUT}\normalsize) and $\cos(\Delta\varphi)$ (\small{MUON\_MUON\_COS\_DPHI\_LUT}\normalsize) for invariant mass (formular see \ref{sec:gtl:inv_mass_calculation}) are created by calculating hyperbolic cosine and cosine, rounding-up at the 4\textsuperscript{th} position after decimal point, and multiplying by 10000 to get integer values.\footnote{Definition of "\texttt{constant \small{MUON\_INV\_MASS\_COSH\_COS\_PRECISION}\normalsize"} in file \texttt{gtl\_pkg.vhd}. Value 10000 from 10\textsuperscript{\tiny{MUON\_INV\_MASS\_COSH\_COS\_PRECISION}}\normalsize.}\\
-The contents of the LUTs for $\cos(\varphi)$ (\small{MUON\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{MUON\_SIN\_PHI\_LUT}\normalsize) for two-body pt
-(formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point,
-and multiplying by 1000 to get integer values.\\
-The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition" or the "Double objects requirement condition" and the results of selected "Cuts" are inside of a range (upper and lower limit) or greater/eual a threshold (e.g. for two-body pt).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\eta$ and $\Delta\varphi$
-are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for DR and MASS with 1\textsuperscript{st} position after decimal point.
-
-\subparagraph{Muon Muon Correlation condition module for Invariant Mass Divided by $\Delta$R}
-\label{sec:gtl:muon_muon_correlation_condition_module_mass_div_dr}
-
-The muon muon correlation condition module for invariant mass divided by $\Delta$R contains two "Single object requirement conditions" from different bunch-crossings as one possible mode and a "Double objects requirement condition" for objects of same bunch-crossing as a second mode (selection is done by a parameter in the generic list of \texttt{muon\_muon\_mass\_div\_dr\_condition.vhd} named "same\_bx").\\
-The calculation of \textit{invariant mass divided by $\Delta$R of two objects} is done in an own module outside of the condition (\texttt{mass\_div\_dr\_calculator.vhd}), see \ref{sec:gtl:inv_mass_div_dr_calculation}. This module is instantiated once for every object type bunch-crossing combination.\\
-The comparison of calculated values and threshold is done inside the module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_muon_mass_div_dr_condition.vhd}{texttt{muon\_muon\_mass\_div\_dr\_condition.vhd}}).\\
-In the TME there is one threshold for M/$\Delta$R: "greater/equal threshold", given in GeV (floating point notation).\\
-The threshold for comparison with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL) is provided by VHDL-Producer.\\
-No other correlation cuts, except "charge correlation", available in this condition type.
-
-\subparagraph{Muon Correlation condition module for Invariant Mass with Three Objects}
-\label{sec:gtl:muon_correlation_condition_module_mass_3_obj}
-
-The muon correlation condition module for invariant mass with three objects (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_mass_3_obj_condition.vhd}{\texttt{muon\_mass\_3\_obj\_condition.vhd}}) contains a "Triple objects requirement condition" for objects of same type and same bunch-crossing.\\
-In addition a "Cut" for calculation of \textit{invariant mass with three objects} (see \ref{sec:gtl:inv_mass_3_obj_calculation}) is mandatory.\\
-No other correlation cuts, except "charge correlation", available in this condition type.
-
-\subparagraph{Muon Esums Correlation condition module}
-\label{sec:gtl:muon_esums_correlation_condition_module}
-
-The muon esums correlation condition module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_esums_correlation_condition.vhd}{\texttt{muon\_esums\_correlation\_condition.vhd}}) contains two "Single object requirement conditions", one of muon objects and one of esums (\etm, ET$_{miss}^{HF}$ or \htm).\\
-In addition there are "Cuts" for differences in $\varphi$ ($\Delta\varphi$) or a calculation of mass (MASS) for Transverse mass or Transverse mass with two-body pt.\\
-The differences in $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs, e.g. \small{MUON\_ETM\_DIFF\_PHI\_LUT}\normalsize, ...),
-which represents values of differences (multiples of units in $\varphi$).
-These values given in the LUTs are calculated as floating-point values (based on the scales of $\varphi$), which are multiplied by a factor and truncated to an integer value.
-So, in the LUTs we have integer values, the factor is 10\textsuperscript{\tiny{precision}\normalsize}.\\
-Because of the different scales of muon objects and esums in $\varphi$, there are LUTs for conversion the esums bins to muon bins (in \texttt{gtl\_pkg.vhd}:
- e.g. \small{ETM\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize).\\\\
-\textbf{Remark:}\\
-The center value of bins are used as reference value for conversion.
-The content of LUT is calculated with formular:\\
-"converted-esums-phi[bin] = esums-phi[bin] $\times$ 4 + 2"\\ (see Figure~\ref{fig:gtl:convert_scheme_calo_2_muon_eta_phi}).
-The conversion calculations are preliminary, others may be proposed.\\\\
-Definitions of scales:
-\begin{itemize}
-\item \etm, ET$_{miss}^{HF}$ or \htm:
-\begin{itemize}
-\item $\phi$ bin width = $\frac{2\pi}{144}$ (bin 0 from 0.0 to $\frac{2\pi}{144}$)
-\end{itemize}
-\item Muon objects:
-\begin{itemize}
-\item $\phi$ bin width = $\frac{2\pi}{576}$ (bin 0 from 0.0 to $\frac{2\pi}{576}$)
-\end{itemize}
-\end{itemize}
-
-The contents of the LUTs for $\cos(\Delta\varphi)$ (\small{MU\_ETM\_COS\_DPHI\_LUT}\normalsize, ...) for Transverse mass (formular see \ref{sec:gtl:transverse_mass_calculation})
-are created by calculating cosine, rounding-up at the 4\textsuperscript{th}
-position after decimal point and multiplying by 10000 (10\textsuperscript{\tiny{MU\_ETM\_COSH\_COS\_PRECISION}}\normalsize) to get integer values.\footnote{Definition of
-"\texttt{constant \small{MU\_ETM\_COSH\_COS\_PRECISION}\normalsize} ..." and "\texttt{constant \small{CALO\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize} ..." in file \texttt{gtl\_pkg.vhd}.}\\
-The contents of the LUTs for $\cos(\varphi)$ (\small{CALO\_COS\_PHI\_LUT and MUON\_COS\_PHI\_LUT}\normalsize) and $\sin(\varphi)$ (\small{CALO\_SIN\_PHI\_LUT and MUON\_SIN\_PHI\_LUT}\normalsize) for two-body pt
-(formular see \ref{sec:gtl:twobody_pt_calculation}) are created by calculating cosine and sine, rounding-up at the 3\textsuperscript{rd} position after decimal point and multiplying by 1000 to get integer values.\\
-The condition is complied, if at least one comparison between object parameters and requirements is valid for the both "Single object requirement condition"
-and the results of selected "Cuts" are inside of a range (upper and lower limit).
-This limits are parts of the "generic" list of the entity declaration of the module and are expressed in hex notation. The limits for $\Delta\varphi$
-are expressed with a precision of 3\textsuperscript{rd} position after decimal point, for MASS with 1\textsuperscript{st} position after decimal point.
+% \subparagraph{Calo Muon Muon B-tagging condition module}
+% \label{sec:gtl:calo_muon_muon_b_tagging_condition_module}
+%
+% \textbf{Insert new text !!!}
 
 \subsubsection{External Conditions}
 \label{sec:gtl:external_conditions}
@@ -1469,7 +2026,5 @@ External Conditions will include the "Technical Trigger" of the legacy system.
 \subsubsection{Algorithms logic}
 \label{sec:gtl:algorithms_logic}
 
-The outputs of all the instantiated conditions are combined in the Algorithms logic with boolean algebra given by TME for every single Algorithm. These Algorithms are registered and provided
-as inputs for \fdl.
+The outputs of all the instantiated conditions are combined in the Algorithms logic with boolean algebra given by TME for every single Algorithm. These Algorithms are registered and provided as inputs for \fdl.
 
-\clearpage

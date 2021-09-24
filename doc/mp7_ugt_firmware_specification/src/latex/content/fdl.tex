@@ -1,11 +1,3 @@
-%------------------------------------------------------------------------------
-%
-% Repository path   : $HeadURL: https://hbergauer@forge.hephy.oeaw.ac.at/scm/svn/project-cmstrigger/GlobalTriggerUpgrade/doc/latex/gt-mp7-firmware-specification/content/fdl.tex $
-% Last committed    : $Revision: 4475 $
-% Last changed by   : $Author: hbergauer $
-% Last changed date : $Date: 2018-01-19 10:02:12 +0100 (Fri, 19 Jan 2018) $
-% Description       : Specification of Final Decision Logic
-% ------------------------------------------------------------------------------
 \section{Final Desicion Logic}\label{sec:fdl:ufdl}
 
 The Final Desicion Logic (\ufdl) firmware contains algo-bx-masks, suppression of algos caused by calibration trigger, prescalers, veto-masks and rate-counters
@@ -14,7 +6,7 @@ The Final Desicion Logic (\ufdl) firmware contains algo-bx-masks, suppression of
 \begin{figure}[htb]
 \centering
 \includegraphics[width=15cm]{figures/mFDL_firmware}
-\caption{\ufdl firmware v1.0.1} 
+\caption{\ufdl firmware v1.0.1}
 \label{fig:fdl:mFDL_firmware}
 \end{figure}
 
@@ -53,7 +45,7 @@ The Final Desicion Logic (\ufdl) firmware contains algo-bx-masks, suppression of
 \subsection{MP7 \finor hardware solution}
 
 %% Text, figures and tables moved to com-hardware.tex
-The firmware of \ufdl in this document is based on a hardware configuration with maximum 6 \ugt modules. 
+The firmware of \ufdl in this document is based on a hardware configuration with maximum 6 \ugt modules.
 % A proposed hardware solution for \finor is documented in \ref{sec:com-hard:hw_config_finor_mp7}.
 
 \subsection{Data flow}
@@ -62,23 +54,23 @@ The firmware of \ufdl in this document is based on a hardware configuration with
 \begin{figure}[htb]
 \centering
 \includegraphics[width=15cm]{figures/fdl_pipeline}
-\caption{\ufdl pipeline v1.0.1} 
+\caption{\ufdl pipeline v1.0.1}
 \label{fig:fdl:mFDL_pipeline}
 \end{figure}
 
 Every Algorithm, in total 512 coming from \ugtl, passes a algo-bx-mask, the logic for suppression of algos caused by calibration trigger and a prescaler, which reduces the trigger rate by a given factor. Prescaled Algorithms signals are combined to a local final-or-signal (\finor).
 For every Algorithm there is a rate-counter before prescaler and after prescaler, which are incremented by LHC-clock if the Algorithm is true. In addition there are post-dead-time counters, one for each Algorithm, which are incremented,
 if the Algorithm and the L1A-signal are true at the same bunch-crossing.
-% Algorithms signals after \finor-masks selected by veto-mask disable the total \finor-signal, if one of the selected Algorithm is true. The total \finor-signal is provided to TCDS. 
+% Algorithms signals after \finor-masks selected by veto-mask disable the total \finor-signal, if one of the selected Algorithm is true. The total \finor-signal is provided to TCDS.
 Algorithms after GTLogic, after algo-bx-masks, after prescalers, the local \finor- and local veto-signal are provided for read-out-record.\\
 If there are not enough firmware resources in one \ugt board, more boards could be used. Therefore the 512 Algorithms are partitioned by TME. TME will set the number of Algorithms as
 constant in the package module \texttt{gtl\_pkg.vhd}. This means \ugtl and \ufdl firmware considered as a unit for synthesis. In the case of more \ugt boards, the local \finor and local veto are routed via
 a mezzanine board on MP7 (located on "General Purpose I/O connector") to the FINOR-AMC502 module, where the total \finor is created and send to TCDS.\\
 A mapping for Algorithms is provided, to give flexibility for setting the index of Algorithms:
 \begin {itemize}
-\item creating a mapping instance (algo\_mapping\_rop.vhd) over TME (see \ref{sec:gtl:algo_mapping_tme}), this component will be instantiated in fix part of FDL, and new calculation will done each time over TME.
+\item creating a mapping instance (algo\_mapping\_rop.vhd) by VHDL Producer, this component will be instantiated in fix part of FDL, and new calculation will done each time over TME.
 \item TME delivers just the number of Algorithms, which will be built on each card.
-% \item TME additionally deliver the mapping process, in order FDL and IPBus, ROP know, which algorithm is at which address. 
+% \item TME additionally deliver the mapping process, in order FDL and IPBus, ROP know, which algorithm is at which address.
 \item from FDL point of view, FDL see incremented number of Algorithms indexes, \eg 0, 1, 2, which is \eg 69, 200, 300.
 \item TME should take care of assignment of each Algorithm to a number, that means if in card 1 algo\_59 is defined, nobody allows to produce the same number again.
 \end {itemize}
@@ -86,7 +78,7 @@ A mapping for Algorithms is provided, to give flexibility for setting the index 
 
 \subsection{Main parts}
 
-The top-of-hierarchy module (\texttt{fdl\_module.vhd}) contains 
+The top-of-hierarchy module (\texttt{fdl\_module.vhd}) contains
 \begin {itemize}
 \item version registers
 % \item a control register
@@ -105,9 +97,9 @@ The top-of-hierarchy module (\texttt{fdl\_module.vhd}) contains
 
 % \subsubsection{Reset structure}
 % \label{sec:fdl:reset_structure}
-% 
+%
 % \textit{under construction ...}
-% 
+%
 \subsubsection{Registers and memories}
 \label{sec:fdl:reg_mem}
 
@@ -139,7 +131,7 @@ The register map for \ufdl has a base address of \verb|0x90000000|.
 % % HB 2016-11-03: inserted "longtable"
 \begin{longtable}{c p{.4\columnwidth} c p{.33\columnwidth}}
 \caption{\ufdl register map}\\
-\hline 
+\hline
 Offset & {Register name} & {Access} & {Description}\\
 \hline
 \hline
@@ -184,7 +176,7 @@ Offset & {Register name} & {Access} & {Description}\\
 % \begin{tabular}{c p{.4\columnwidth} c p{.33\columnwidth}}
 % \toprule
 % Offset & {Register name} & {Access} & {Description}\\
-% \midrule      
+% \midrule
 % 0x90000000 & \verb|Algo BX masks(0)| & r/w & 4096 memory addresses of algo-bx-masks for Algorithms 0-31.\\
 % % 0x90001000 & \verb|Algo BX masks(1)| & r/w & 4096 memory addresses of algo-bx-masks for Algorithms 32-63.\\
 % ... & ... & ... & ...\\
@@ -483,7 +475,7 @@ which is reseted with a delay-able bcres signal, to get the correct relations be
 \subsubsection{Rate-counters}
 \label{sec:fdl:rate_counters}
 
-Every Algorithm has a rate-counters with 32 bits, because of the length of one luminosity segment period. There are counters before and after prescalers and post-dead-time counters. 
+Every Algorithm has a rate-counters with 32 bits, because of the length of one luminosity segment period. There are counters before and after prescalers and post-dead-time counters.
 The counters before and after prescalers are incremented, if the Algorithm signal is in high state and a positive edge of LHC-clock occur. The post-dead-time counters are incremented,
 if the Algorithm signal is in high state (delayed by L1A latency delay), a L1A signal and a positive edge of LHC-clock occur.
 The content of a counter is updated into a register (for reading the counter value) and is reseted at the begin of a luminosity segment period.
@@ -502,13 +494,13 @@ of a new luminosity segment period.
 \subsubsection{Finor-masks}
 \label{sec:fdl:finor_masks}
 
-Every Algorithm passes a \finor-mask, which enables the Algorithm for \finor. 
+Every Algorithm passes a \finor-mask, which enables the Algorithm for \finor.
 The \finor-masks are implemented as registers and loaded at the begin of a run.
 
 \subsubsection{Veto-masks}
 \label{sec:fdl:veto_masks}
 
-Every Algorithm passes a veto-mask, if at least one Algorithm, which is enabled by veto-mask, becomes high state, then \finor is disabled as long as the Algorithm is in high state. 
+Every Algorithm passes a veto-mask, if at least one Algorithm, which is enabled by veto-mask, becomes high state, then \finor is disabled as long as the Algorithm is in high state.
 The veto-masks are implemented as registers and loaded at the begin of a run.
 
 \subsubsection{Finor}

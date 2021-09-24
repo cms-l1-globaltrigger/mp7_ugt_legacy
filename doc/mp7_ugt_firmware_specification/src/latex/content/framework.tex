@@ -14,9 +14,9 @@ Figure \ref{fig_system_overview} shows the basic components the framework togeth
 
 The central data type of the framework is shown in Listing \ref{lst_lhc_data_t} (see Section \ref{section_lhc_data_pkg} for details). In the current configuration it comprises
 2304 bits (288 Bytes). Data from the GTH interfaces is demultiplexed (from 240 MHz clock domain to LHC clock domain, see Demux Lane Data \ref{sec:demux_lane_data}) and mapped to this data type in the LMP (Lane Mapping Process). It is also used as input and output type for the SIM/SPY I memory.
-The DM (Delay Manager) takes the output of the LMP and applies software configurable delays to the the different object streams (e.g. muon data, jet, tau etc.) in the \texttt{lhc\_data\_t}
-to produce a consistent output (also regarding to the bcres signal). The software configurable multiplexer DSMUX (Data Source Multiplexer) is used to select which data stream is used as
-input for the processing elements (trigger logic). The output of the DSMUX is routed to the GTL (Global Trigger Logic) and ROP (Read Out Process) and can optionally be stored in the SPY I memory.
+% The DM (Delay Manager) takes the output of the LMP and applies software configurable delays to the the different object streams (e.g. muon data, jet, tau etc.) in the \texttt{lhc\_data\_t}
+% to produce a consistent output (also regarding to the bcres signal). The software configurable multiplexer DSMUX (Data Source Multiplexer) is used to select which data stream is used as
+% input for the processing elements (trigger logic). The output of the DSMUX is routed to the GTL (Global Trigger Logic) and ROP (Read Out Process) and can optionally be stored in the SPY I memory.
 
 \subsection{Configuration of optical connections} \label{sec:sec_configuration_optical_conn}
 The configuration of the optical connections to Calo-Layer2 is (currently) done as described in Table~\ref{tab:framework:tab_configuration_optical_conn}, where
@@ -144,76 +144,76 @@ Currently lane mapping is "fixed" in lmp.vhd module, see Table \ref{tab:framewor
 %
 % ------------------------------------------------------------------------------
 
-\subsection{Delay Manager} \label{sec:dm}
-\textbf{Remark:}\\
-with frame v1.2.3 "Delay Manager" (dm.vhd) and "Data Source Multiplexer" (dsmux.vhd) is removed because these features were never used in production system, only for tests.
-The reason of removing is to get more available resources.\\
+% \subsection{Delay Manager} \label{sec:dm}
+% \textbf{Remark:}\\
+% with frame v1.2.3 "Delay Manager" (dm.vhd) and "Data Source Multiplexer" (dsmux.vhd) is removed because these features were never used in production system, only for tests.
+% The reason of removing is to get more available resources.\\
+%
+% The Delay Manager is responsible for creating a delayed version of the \texttt{lhc\_data} and the bcres signal on its input.
+% For this purpose it uses an internal memory to record the history of the input signals.
+%
+% \subsubsection{Implementation}\label{sec:dm-impl}
+% The DM is basically a reimplementation of the concept of the last design. The reimplementation was necessary because the new framework version uses the register bank for
+% software registers and the old DM was not flexible enough to handle the \texttt{lhc\_data\_t} introduced in the new framework.
 
-The Delay Manager is responsible for creating a delayed version of the \texttt{lhc\_data} and the bcres signal on its input.
-For this purpose it uses an internal memory to record the history of the input signals.
+% The DM instantiates one \texttt{delay\_element} for every object type defined in the \texttt{lhc\_data\_t} (e.g. muon, eg, etc.). The \texttt{delay\_element} uses RAM blocks
+% to implement the delay line. However, for the delays 0 and 1 this memory can not be used (write latency) and must be bypassed (Figure \ref{fig_dm_delay_element}).
+%
+% \begin{figure}[h]
+% \begin{center}
+% \includegraphics[width=0.5\textwidth]{./figures/dm_delay_element}
+% \end{center}
+% \caption{Delay Manager: delay\_element}
+% \label{fig_dm_delay_element}
+% \end{figure}
+%
+% The Implementation of the DM is very generic because it makes extensive use of the constants provided by the \texttt{lhc\_data\_pkg}. The $lhc\_data\_i$ input signal
+% is converted into a \texttt{std\_logic\_vector}.
+% The constants \texttt{LHC\_DATA\_SLV\_START\_INDICES} and \texttt{LHC\_DATA\_SLV\_OBJECT\_WIDTH} provide the start index of each object in this vector and their
+% width respectively. The number of objects is given by the \texttt{LHC\_DATA\_OBJECT\_COUNT} constant. This information is used by a for-generate statement to instantiate
+% the required \texttt{delay\_element} components.
 
-\subsubsection{Implementation}\label{sec:dm-impl}
-The DM is basically a reimplementation of the concept of the last design. The reimplementation was necessary because the new framework version uses the register bank for
-software registers and the old DM was not flexible enough to handle the \texttt{lhc\_data\_t} introduced in the new framework.
-
-The DM instantiates one \texttt{delay\_element} for every object type defined in the \texttt{lhc\_data\_t} (e.g. muon, eg, etc.). The \texttt{delay\_element} uses RAM blocks
-to implement the delay line. However, for the delays 0 and 1 this memory can not be used (write latency) and must be bypassed (Figure \ref{fig_dm_delay_element}).
-
-\begin{figure}[h]
-\begin{center}
-\includegraphics[width=0.5\textwidth]{./figures/dm_delay_element}
-\end{center}
-\caption{Delay Manager: delay\_element}
-\label{fig_dm_delay_element}
-\end{figure}
-
-The Implementation of the DM is very generic because it makes extensive use of the constants provided by the \texttt{lhc\_data\_pkg}. The $lhc\_data\_i$ input signal
-is converted into a \texttt{std\_logic\_vector}.
-The constants \texttt{LHC\_DATA\_SLV\_START\_INDICES} and \texttt{LHC\_DATA\_SLV\_OBJECT\_WIDTH} provide the start index of each object in this vector and their
-width respectively. The number of objects is given by the \texttt{LHC\_DATA\_OBJECT\_COUNT} constant. This information is used by a for-generate statement to instantiate
-the required \texttt{delay\_element} components.
-
-For the $bcres\_o$ and the $bcres\_FDL\_o$ signals two additional \texttt{delay\_element} components are instantiated.
-
-If only the data width or the array size of an object in the \texttt{lhc\_data\_t} is changed the DM does not need any modification. If, however, a new object is added a
-new delay register must be added, as described in the register bank section.
-
-The registers for all delays have the same layout (see Register \ref{dm_reg}). The names for the individual (per object) delay registers are given in Table \ref{tab_dm_regs}.
-For the software addresses of these registers refer to the \texttt{xml/gt\_amc514\_dm.xml} file.
-
-\begin{register}{htbp}{Delay Manager Registers}{}% name=CONFIG
-	\label{dm_reg}
-	\regfield{reserved}{20}{12}{0}%
-	\regfield{delay}{12}{0}{0}%
-	\begin{regdesc}
-	\begin{reglist}[Request~Depth]
-		\item [delay] The delay in lhc clock cycles (40 MHz) used for the specific object data.
-	\end{reglist}
-	\end{regdesc}
-\end{register}
-
-\begin{table}[h]
-\vspace{5mm}
-\begin{center}
-\begin{tabular}{|c|c|}
-\hline
-object description & register name \\ \hline  \hline
-bcres for TCM & bcres\_tcm\_delay \\ \hline
-bcres for FDL & bcres\_fdl\_delay  \\ \hline
-muon data & muons\_delay  \\ \hline
-e/g & eg\_delay  \\ \hline
-tau & tau\_delay \\ \hline
-jet & jet\_delay  \\ \hline
-ett & ett\_delay  \\ \hline
-ht & ht\_delay  \\ \hline
-etm & etm\_delay  \\ \hline
-htm & htm\_delay  \\ \hline
-external conditions & ex\_con\_delay  \\ \hline
-\end{tabular}
-\end{center}
-\caption{delay manager registers}
-\label{tab_dm_regs}
-\end{table}
+% For the $bcres\_o$ and the $bcres\_FDL\_o$ signals two additional \texttt{delay\_element} components are instantiated.
+%
+% If only the data width or the array size of an object in the \texttt{lhc\_data\_t} is changed the DM does not need any modification. If, however, a new object is added a
+% new delay register must be added, as described in the register bank section.
+%
+% The registers for all delays have the same layout (see Register \ref{dm_reg}). The names for the individual (per object) delay registers are given in Table \ref{tab_dm_regs}.
+% For the software addresses of these registers refer to the \texttt{xml/gt\_amc514\_dm.xml} file.
+%
+% \begin{register}{htbp}{Delay Manager Registers}{}% name=CONFIG
+% 	\label{dm_reg}
+% 	\regfield{reserved}{20}{12}{0}%
+% 	\regfield{delay}{12}{0}{0}%
+% 	\begin{regdesc}
+% 	\begin{reglist}[Request~Depth]
+% 		\item [delay] The delay in lhc clock cycles (40 MHz) used for the specific object data.
+% 	\end{reglist}
+% 	\end{regdesc}
+% \end{register}
+%
+% \begin{table}[h]
+% \vspace{5mm}
+% \begin{center}
+% \begin{tabular}{|c|c|}
+% \hline
+% object description & register name \\ \hline  \hline
+% bcres for TCM & bcres\_tcm\_delay \\ \hline
+% bcres for FDL & bcres\_fdl\_delay  \\ \hline
+% muon data & muons\_delay  \\ \hline
+% e/g & eg\_delay  \\ \hline
+% tau & tau\_delay \\ \hline
+% jet & jet\_delay  \\ \hline
+% ett & ett\_delay  \\ \hline
+% ht & ht\_delay  \\ \hline
+% etm & etm\_delay  \\ \hline
+% htm & htm\_delay  \\ \hline
+% external conditions & ex\_con\_delay  \\ \hline
+% \end{tabular}
+% \end{center}
+% \caption{delay manager registers}
+% \label{tab_dm_regs}
+% \end{table}
 
 % \subsubsection{Interface Specification}\label{sec:dm-inter}
 % \begin{minipage}{\textwidth}

@@ -1,0 +1,8 @@
+Data width of roms and number of 18kb BRAMs for calo 1/DR^2 [max deta: 230 , max dphi: 72 , precision: 5 ]
+'rom_nr' 'data width' 'BRAM 18kb'
+   1          26           6
+   2          14           4
+   3          12           3
+   4          11           3
+   5          14           4
+Total number of BRAM 36kb for calos: 660.0

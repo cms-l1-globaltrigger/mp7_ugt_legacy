@@ -1,0 +1,9 @@
+Data width of roms and number of 18kb BRAMs for muon 1/DR^2 with reduced bins [max deta: 226 , max dphi: 144 , precision: 5 ]
+'rom_nr' 'data width' 'BRAM 18kb'
+   1          28           13
+   2          14           7
+   3          16           8
+   4          14           7
+   5          14           7
+   6          13           6
+Total number of BRAM 36kb for muon: 672.0

@@ -1,4 +1,6 @@
-## Description of python scripts
+## Description of python scripts for 1/DR^2 LUTs, calculations and checks
+
+Files are located in ../scripts/rom_one_over_dr_sq
 
 ### constants.py
 

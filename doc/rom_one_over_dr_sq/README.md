@@ -1,10 +1,10 @@
-## Description of python scripts for 1/DR^2 LUTs, calculations and checks
+## Description of python scripts for 1/DR^2 calculations, LUTs and checks
 
 Files are located in ../scripts/rom_one_over_dr_sq
 
 ### constants.py
 
-File for common constants
+File containing constants used in one_over_dr_sq_calc.py and extract_mif_files.py
 
 ### one_over_dr_sq_calc.py
 

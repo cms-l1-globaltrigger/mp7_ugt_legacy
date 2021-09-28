@@ -5,8 +5,8 @@ import configparser
 import urllib.parse
 import math
 import os
-from constants import calo_eta_bin_width, calo_eta_min_bin, calo_eta_max_bin, calo_phi_bins, calo_rom_size, calo_nr_roms, calo_precision, bram_size, calo_objects
-from constants import muon_eta_bin_width, muon_eta_min_bin, muon_eta_max_bin, muon_eta_factor, muon_phi_bins_reduced, muon_rom_size, muon_nr_roms, muon_precision, bram_size, muon_objects
+from constants import calo_eta_bin_width, calo_eta_bins, calo_phi_bins, calo_rom_size, calo_nr_roms, calo_precision, bram_size, calo_objects
+from constants import muon_eta_bin_width, muon_eta_bins, muon_phi_bins_reduced, muon_rom_size, muon_nr_roms, muon_precision, bram_size, muon_objects
 
 def parse_args():
     """Parse command line arguments."""
@@ -35,7 +35,7 @@ one_over_dr_sq_fw_lut_arr={}
 ## CALOS
 
 eta_bin_width=calo_eta_bin_width
-deta_bins=abs(calo_eta_min_bin)+calo_eta_max_bin+1
+deta_bins=calo_eta_bins
 
 dphi_bins=int(calo_phi_bins/2)
 
@@ -150,7 +150,7 @@ f_sim.close()
 
 ## MUON
 
-deta_bins=int((abs(muon_eta_min_bin)+muon_eta_max_bin)/muon_eta_factor)+1
+deta_bins=muon_eta_bins
 dphi_bins=int(muon_phi_bins_reduced/2)
 
 #print("created muon LUTs with reduced bins [max deta:",deta_bins,", max dphi:",dphi_bins,", precision:",muon_precision,"]")

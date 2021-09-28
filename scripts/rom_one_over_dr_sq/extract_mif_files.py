@@ -6,8 +6,10 @@ from constants import calo_eta_bin_width, calo_eta_min_bin, calo_eta_max_bin, ca
 from constants import muon_eta_bin_width, muon_eta_min_bin, muon_eta_max_bin, muon_eta_factor, muon_phi_bins_reduced, muon_rom_size, muon_nr_roms, muon_deta_block_size, muon_dphi_block_size, muon_precision
 
 script_path = os.path.dirname(os.path.realpath(__file__))
-ngc_path_temp = script_path.split('doc')
-ngc_path = os.path.join(ngc_path_temp[0], "firmware", "ngc")
+ugt_path_temp = script_path.split('scripts')
+ugt_path = ugt_path_temp[0]
+ngc_path = os.path.join(ugt_path, "firmware/ngc")
+doc_files_path = os.path.join(ugt_path, "doc/rom_one_over_dr_sq")
 
 ## CALOS
 
@@ -30,8 +32,9 @@ lut_calc = [0 for x in range(rom_len)]
 rom_idx = 0
 lut_idx = 0
 
-file_path_lut = os.path.join(script_path, "calo_one_over_dr_sq_lut.txt")
-print("Path calo lut file:", file_path_lut)
+file_path_lut = os.path.join(doc_files_path, "calo_one_over_dr_sq_lut.txt")
+print("creates ../doc/rom_one_over_dr_sq/calo_one_over_dr_sq_lut.txt")
+#print("Path calo lut file:", file_path_lut)
 f_lut = open(file_path_lut, 'w')
 for i in range(0,calo_nr_roms):
     file_path_r = os.path.join(ngc_path, "rom_lut_calo_inv_dr_sq_"+str(i+1), "rom_lut_calo_inv_dr_sq_"+str(i+1)+".mif")
@@ -43,7 +46,7 @@ for i in range(0,calo_nr_roms):
 
 for i in range(0,deta_bins+1):
     for j in range(0,dphi_bins+1):
-        
+
         deta_val = i*eta_bin_width
         dphi_val = j*2*math.pi/calo_phi_bins
         if deta_val == 0 and dphi_val == 0:
@@ -78,13 +81,14 @@ for i in range(0,deta_bins+1):
             lut[lut_idx] = int(rom[4][line_nr],0)
             print(lut[lut_idx], file=f_lut)
             lut_idx+=1
-        
+
 f_lut.close()
 
 comp_status = "ok"
 error_total = False
 
-file_path_lut_rom = os.path.join(script_path, "compare_calo_lut_rom.txt")
+file_path_lut_rom = os.path.join(doc_files_path, "compare_calo_lut_rom.txt")
+print("creates ../doc/rom_one_over_dr_sq/compare_calo_lut_rom.txt")
 f_lut_rom = open(file_path_lut_rom, 'w')
 for i in range(0,lut_idx):
     if lut_calc[i] == lut[i]:
@@ -127,8 +131,9 @@ lut_calc = [0 for x in range(rom_len)]
 rom_idx = 0
 lut_idx = 0
 
-file_path_lut = os.path.join(script_path, "muon_one_over_dr_sq_lut.txt")
-print("Path muon lut file:", file_path_lut)
+file_path_lut = os.path.join(doc_files_path, "muon_one_over_dr_sq_lut.txt")
+print("creates ../doc/rom_one_over_dr_sq/muon_one_over_dr_sq_lut.txt")
+#print("Path muon lut file:", file_path_lut)
 f_lut = open(file_path_lut, 'w')
 for i in range(0,muon_nr_roms):
     file_path_r = os.path.join(ngc_path, "rom_lut_muon_inv_dr_sq_"+str(i+1), "rom_lut_muon_inv_dr_sq_"+str(i+1)+".mif")
@@ -186,7 +191,8 @@ f_lut.close()
 comp_status = "ok"
 error_total = False
 
-file_path_lut_rom = os.path.join(script_path, "compare_muon_lut_rom.txt")
+file_path_lut_rom = os.path.join(doc_files_path, "compare_muon_lut_rom.txt")
+print("creates ../doc/rom_one_over_dr_sq/compare_muon_lut_rom.txt")
 f_lut_rom = open(file_path_lut_rom, 'w')
 for i in range(0,lut_idx):
     if lut_calc[i] == lut[i]:

@@ -21,9 +21,9 @@ args = parse_args()
 
 if args.coe:
     print("creating coe files")
-    
+
 script_path = os.path.dirname(os.path.realpath(__file__))
-ugt_path_temp = script_path.split('doc')
+ugt_path_temp = script_path.split('scripts')
 ugt_path = ugt_path_temp[0]
 coe_files_path = os.path.join(ugt_path, "firmware/ngc")
 doc_files_path = os.path.join(ugt_path, "doc/rom_one_over_dr_sq")
@@ -50,6 +50,7 @@ one_over_dr_sq_fw_lut_list=[[0 for x in range(calo_rom_size)] for x in range(cal
 filename_emu=("emulator_lut_calo_one_over_dr_sq_calc.txt")
 filepath_emu=os.path.join(doc_files_path, filename_emu)
 f_emu = open(filepath_emu, "w")
+print("creates emulator_lut_calo_one_over_dr_sq_calc.txt")
 print(f"{'dphi':>5}", f"{'deta':>5}", f"{'dphi_val':>22}", f"{'deta_val':>22}", f"{'one_over_dr_sq':>25}", f"{'one_over_dr_sq_rounded':>18}", f"{'one_over_dr_sq_fw_lut':>17}", f"{'rom_nr':>8}", file=f_emu)
 
 for dphi_msb in range(0,2):
@@ -116,6 +117,7 @@ f_emu.close()
 brams18_sum = 0
 
 filename=("data_width_rom_lut_calo_one_over_dr_sq.txt")
+print("creates data_width_rom_lut_calo_one_over_dr_sq.txt")
 filepath=os.path.join(doc_files_path, filename)
 f = open(filepath, "w")
 print("Data width of roms and number of 18kb BRAMs for calo 1/DR^2 [max deta:",deta_bins,", max dphi:", dphi_bins,", precision:",calo_precision,"]", file=f)
@@ -129,7 +131,7 @@ print("Total number of BRAM 36kb for calos:", brams36_total, file=f)
 f.close()
 
 filename=os.path.join(sim_files_path, "calo_lut_one_over_dr_sq_4_sim.txt")
-print("created calo LUTs with full bins [ max deta:",deta_bins,", max dphi:",dphi_bins,", precision:",calo_precision,"] at", filename)
+print("creates calo LUTs with full bins [ max deta:",deta_bins,", max dphi:",dphi_bins,", precision:",calo_precision,"] at", filename)
 
 f_sim = open(filename, "w")
 
@@ -161,6 +163,7 @@ end_emu_file=False
 one_over_dr_sq_fw_lut_list=[[0 for x in range(muon_rom_size)] for x in range(muon_nr_roms)]
 
 filename_emu=("emulator_lut_muon_one_over_dr_sq_calc.txt")
+print("creates emulator_lut_muon_one_over_dr_sq_calc.txt")
 filepath_emu=os.path.join(doc_files_path, filename_emu)
 f_emu = open(filepath_emu, "w")
 print(f"{'dphi':>5}", f"{'deta':>5}", f"{'dphi_val':>22}", f"{'deta_val':>22}", f"{'one_over_dr_sq':>25}", f"{'one_over_dr_sq_rounded':>18}", f"{'one_over_dr_sq_fw_lut':>17}", f"{'rom_nr':>8}", file=f_emu)
@@ -221,6 +224,7 @@ f_emu.close()
 brams18_sum = 0
 
 filename=("data_width_rom_lut_muon_one_over_dr_sq.txt")
+print("creates data_width_rom_lut_muon_one_over_dr_sq.txt")
 filepath=os.path.join(doc_files_path, filename)
 f = open(filepath, "w")
 print("Data width of roms and number of 18kb BRAMs for muon 1/DR^2 with reduced bins [max deta:",deta_bins,", max dphi:", dphi_bins,", precision:",muon_precision,"]", file=f)

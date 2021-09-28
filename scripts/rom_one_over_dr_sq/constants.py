@@ -1,5 +1,6 @@
 """Constants for scripts of 1/DR^2.
 """
+
 # BRAM
 bram_size = 18432
 

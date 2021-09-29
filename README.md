@@ -36,16 +36,22 @@ pip install -r <mp7_ugt_legacy_path>/scripts/requirements.txt
 ```
 
 Run simulation using Questa.
+
+REMARK: 
+- MIF files (for mass over deltaR) are located in 'mp7_ugt_legacy/firmware/sim' for simulation. 
+- These files have to be in directory from where one runs script "run_simulation_questa.py".
+- Change to directory 'mp7_ugt_legacy/firmware/sim' is mandatory.
+
 ```bash
-cd mp7_ugt_legacy
-python scripts/run_simulation_questa.py <L1Menu name> --url <url l1menu> --mp7_tag <local mp7 path>
+cd mp7_ugt_legacy/firmware/sim
+python3 ../../scripts/run_simulation_questa.py <L1Menu name> --url <url l1menu> --mp7_tag <local mp7 path>
 ```
 
 Example
 ```bash
-cd mp7_ugt_legacy
-python scripts/run_simulation_questa.py L1Menu_Collisions2018_v2_1_0-d4 \
-  --url https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/master/2020 \
+cd mp7_ugt_legacy/firmware/sim
+python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_6-d1 \
+  --url https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/master/2021 \
   --mp7_tag ~/gitlab/hbergaue/mp7
 ```
 
@@ -113,7 +119,7 @@ Run synthesis script (for all 6 modules) with simulation (Questasim)
 git clone https://gitlab.cern.ch/hbergaue/mp7.git <local MP7 repo path>
 git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git <local path>/mp7_ugt_legacy
 cd <local path>/mp7_ugt_legacy
-python scripts/runIpbbSynth.py <L1Menu name> --mp7url <URL MP7 git repo> --mp7tag <MP7 tag> -p <work dir> --build <build version> --ugturl <URL ugt git repo> -u <ugt tag in repo> --sim --simmp7path <local MP7 repo path>
+python3 scripts/runIpbbSynth.py <L1Menu name> --mp7url <URL MP7 git repo> --mp7tag <MP7 tag> -p <work dir> --build <build version> --ugturl <URL ugt git repo> -u <ugt tag in repo> --sim --simmp7path <local MP7 repo path>
 ```
 
 Example

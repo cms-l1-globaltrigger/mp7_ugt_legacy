@@ -2,8 +2,8 @@
 
 import os
 import math
-from constants import calo_eta_bin_width, calo_eta_bins, calo_phi_bins, calo_rom_size, calo_nr_roms, calo_deta_block_size_rom1_4, calo_dphi_block_size_rom1_4, calo_dphi_block_size_rom5, calo_precision
-from constants import muon_eta_bin_width, muon_eta_bins, muon_phi_bins_reduced, muon_rom_size, muon_nr_roms, muon_deta_block_size, muon_dphi_block_size, muon_precision
+from constants import calo_eta_step, calo_eta_bins, calo_phi_bins, calo_rom_size, calo_nr_roms, calo_deta_block_size_rom1_4, calo_dphi_block_size_rom1_4, calo_dphi_block_size_rom5, calo_precision
+from constants import muon_eta_step, muon_eta_bins, muon_phi_bins_reduced, muon_rom_size, muon_nr_roms, muon_deta_block_size, muon_dphi_block_size, muon_precision
 
 script_path = os.path.dirname(os.path.realpath(__file__))
 ugt_path_temp = script_path.split('scripts')
@@ -13,7 +13,7 @@ doc_files_path = os.path.join(ugt_path, "doc/rom_one_over_dr_sq")
 
 ## CALOS
 
-eta_bin_width=calo_eta_bin_width
+eta_bin_width=calo_eta_step
 deta_bins=calo_eta_bins
 
 dphi_bins=int(calo_phi_bins/2)
@@ -112,6 +112,7 @@ else:
 
 ## MUON
 
+eta_bin_width=muon_eta_step
 deta_bins=muon_eta_bins
 
 dphi_bins=int(muon_phi_bins_reduced/2)
@@ -146,7 +147,7 @@ for i in range(0,muon_nr_roms):
 for i in range(0,deta_bins+1):
     for j in range(0,dphi_bins+1):
 
-        deta_val = i*muon_eta_bin_width
+        deta_val = i*eta_bin_width
         dphi_val = j*2*math.pi/muon_phi_bins_reduced
         if deta_val == 0 and dphi_val == 0:
             one_over_dr_sq = 0

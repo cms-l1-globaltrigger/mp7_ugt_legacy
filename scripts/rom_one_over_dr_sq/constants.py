@@ -8,10 +8,14 @@ bram_size = 18432 # BRAM size of Virtex chip
 calo_objects = 12 # see interface definition (scales_inputs_2_ugt.pdf)
 
 ## original bin width for eta
-calo_eta_bin_width = 0.087/2 # see interface definition (scales_inputs_2_ugt.pdf)
-calo_eta_min_bin = -115 # see interface definition (scales_inputs_2_ugt.pdf)
-calo_eta_max_bin = 114 # see interface definition (scales_inputs_2_ugt.pdf)
-calo_eta_bins = abs(calo_eta_min_bin)+(calo_eta_max_bin+1) # "+1" is for eta bin 0 (0..0.087/2)
+calo_eta_max_value = 5.0 # value from scales
+calo_eta_min_value = -5.0 # value from scales
+calo_eta_step = 0.0435 # value from scales
+calo_eta_bins = int((abs(calo_eta_min_value)+calo_eta_max_value)/calo_eta_step)+1
+#calo_eta_bin_width = 0.087/2 # see interface definition (scales_inputs_2_ugt.pdf)
+#calo_eta_min_bin = -115 # see interface definition (scales_inputs_2_ugt.pdf)
+#calo_eta_max_bin = 114 # see interface definition (scales_inputs_2_ugt.pdf)
+#calo_eta_bins = abs(calo_eta_min_bin)+(calo_eta_max_bin+1) # "+1" is for eta bin 0 (0..0.087/2)
 ## original bin width for phi
 calo_phi_bins = 144 # see interface definition (scales_inputs_2_ugt.pdf)
 
@@ -29,12 +33,18 @@ calo_dphi_block_size_rom5 = 16
 muon_objects = 8 # see interface definition (scales_inputs_2_ugt.pdf)
 
 ## double bin width for eta (depends on resources of BRAMs in Virtex chip)
-muon_eta_bin_width_def = 0.087/8 # see interface definition (scales_inputs_2_ugt.pdf)
+muon_eta_max_value = 2.45 # value from scales
+muon_eta_min_value = -2.45 # value from scales
+muon_eta_step_def = 0.010875 # value from scales
 muon_eta_factor = 2 # double bin width
-muon_eta_bin_width = muon_eta_bin_width_def*muon_eta_factor
-muon_eta_min_bin = -225 # see interface definition (scales_inputs_2_ugt.pdf)
-muon_eta_max_bin = 225 # see interface definition (scales_inputs_2_ugt.pdf)
-muon_eta_bins = int((abs(muon_eta_min_bin)+muon_eta_max_bin)/muon_eta_factor)+1
+muon_eta_step = muon_eta_step_def * muon_eta_factor
+muon_eta_bins = int(((abs(muon_eta_min_value)+muon_eta_max_value)/muon_eta_step_def)/muon_eta_factor)+1
+#muon_eta_bin_width_def = 0.087/8 # see interface definition (scales_inputs_2_ugt.pdf)
+#muon_eta_factor = 2 # double bin width
+#muon_eta_bin_width = muon_eta_bin_width_def*muon_eta_factor
+#muon_eta_min_bin = -225 # see interface definition (scales_inputs_2_ugt.pdf)
+#muon_eta_max_bin = 225 # see interface definition (scales_inputs_2_ugt.pdf)
+#muon_eta_bins = int((abs(muon_eta_min_bin)+muon_eta_max_bin)/muon_eta_factor)+1
 ## double bin width for phi (depends on resources of BRAMs in Virtex chip)
 muon_phi_bins = 576 # see interface definition (scales_inputs_2_ugt.pdf)
 muon_phi_factor = 2 # double bin width

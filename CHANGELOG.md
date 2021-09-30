@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.16.0] - 2021-09-23
+## [v1.16.0] - 2021-09-30
 ### Comment
 
 - mp7_ugt firmware release v1.16.0
@@ -24,12 +24,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - script files:
-  - ../doc/../calo_one_over_dr_sq_calc.py
-  - ../doc/../muon_one_over_dr_sq_calc.py
-  - ../doc/../calo_one_over_dr_sq_calc_4_sim.py
-  - ../doc/../muon_one_over_dr_sq_calc_4_sim.py
-  - ../doc/../extract_calo_mif_files.py
-  - ../doc/../extract_muon_mif_files.py
+  - ../doc/../one_over_dr_sq_calc.py
+  - ../doc/../extract_mif_files.py
+  - ../doc/../constants.py
 - simulation file:
   - ../sim/scripts/mass_div_dr_calo.do
   - ../sim/scripts/mass_div_dr_calo_wave.do

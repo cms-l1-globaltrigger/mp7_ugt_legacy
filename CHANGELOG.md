@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.17.0] - 2021-10-18
+## [v1.17.0] - 2021-10-19
 ### Comment
 
 - mp7_ugt firmware release v1.17.0
@@ -12,10 +12,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - source files:
+  - ../payload/gtl/common/calo_comparators.vhd
+  - ../payload/gtl/common/calo_obj_cuts.vhd
+  - ../payload/gtl/common/comb_conditions.vhd
+  - ../payload/gtl/common/correlation_conditions.vhd
+  - ../payload/gtl_module_tpl.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/gtl_pkg.vhd
 
-### Added
+## [v1.16.1] - 2021-10-18
+### Comment
 
-### Removed
+- mp7_ugt firmware release v1.16.1
+- bug fixed in calo_comparators.vhd
+
+### Changed
+- source files:
+  - ../payload/gtl/common/calo_comparators.vhd
+  - ../payload/gtl_module_tpl.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
 
 ## [v1.16.0] - 2021-09-30
 ### Comment

@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - source files:
   - ../payload/gtl/common/calo_comparators.vhd
+  - ../payload/gtl_module_tpl.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
 
 ## [v1.16.0] - 2021-09-30
 ### Comment

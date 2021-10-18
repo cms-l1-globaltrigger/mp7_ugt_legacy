@@ -2,6 +2,7 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
+-- HB 2021-10-18: v1.16.1: Bug fix in calo_comparators.vhd.
 -- HB 2021-08-31: v1.16.0: Changed logic for ROMs (mass over DR) [regenerated IPs for ROMs].
 -- HB 2021-06-10: v1.15.1: Added hadronic shower triggers.
 -- HB 2021-05-21: v1.15.0: Added fdl_pkg use clause. Added bx_pipeline (to simplify code).

@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.17.0] - 2021-10-18
+### Comment
+
+- mp7_ugt firmware release v1.17.0
+- implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data]
+
+### Changed
+- source files:
+
+### Added
+
+### Removed
+
 ## [v1.16.0] - 2021-09-30
 ### Comment
 

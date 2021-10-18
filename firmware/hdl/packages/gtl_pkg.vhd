@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2021-10-19: inserted jet DISP (displaced) bit 27 (and all dependencies on this bit).
 -- HB 2021-08-12: added selectors (constants) for SCOUTING and SPYMEM (usae of input spy memory).
 -- HB 2021-06-10: added hadronic shower trigger bits (muon).
 -- HB 2021-05-21: added constants and types for bx arrays.
@@ -60,6 +61,7 @@ use work.lhc_data_pkg.all;
 use work.math_pkg.all;
 use work.gt_mp7_core_pkg.all;
 
+type common_templates_ip_array is array (1 to COMMON_NR_TEMPLATES) of std_logic_vector(2**MUON_IP_BITS-1 downto 0);
 package gtl_pkg is
 
 -- Fixed pipeline structure
@@ -196,6 +198,7 @@ constant JET_ETA_BITS : natural := JET_ETA_HIGH-JET_ETA_LOW+1;
 constant JET_PHI_LOW : natural := 19;
 constant JET_PHI_HIGH : natural := 26;
 constant JET_PHI_BITS : natural := JET_PHI_HIGH-JET_PHI_LOW+1;
+constant JET_DISP_BIT : natural := 27;
 
 constant TAU_ET_LOW : natural := 0;
 constant TAU_ET_HIGH : natural := 8;

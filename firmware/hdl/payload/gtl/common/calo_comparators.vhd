@@ -3,6 +3,7 @@
 -- Comparators for energy, pseudorapidity, azimuth angle and isolation of calo objects
 
 -- Version history:
+-- HB 2021-10-19: added DISP cut for jets.
 -- HB 2021-10-18: bug fix (in jet_phi_windows_comp_i and tau_phi_windows_comp_i).
 -- HB 2021-05-18: changed slice parameter.
 -- HB 2021-02-24: removed "no_calo".
@@ -41,7 +42,8 @@ entity calo_comparators is
         phi_w1_lower_limit : std_logic_vector;
         phi_w2_upper_limit : std_logic_vector;
         phi_w2_lower_limit : std_logic_vector;
-        iso_lut: std_logic_vector
+        iso_lut: std_logic_vector;
+        disp_cut: boolean := false
     );
     port(
         lhc_clk : in std_logic;
@@ -56,6 +58,7 @@ architecture rtl of calo_comparators is
     signal eta : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
     signal phi : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
     signal iso : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
+    signal disp : std_logic := '0';
     signal et_comp : std_logic := '1';
     signal eta_comp : std_logic := '1';
     signal phi_comp : std_logic := '1';
@@ -123,6 +126,7 @@ begin
         et(JET_ET_HIGH-JET_ET_LOW downto 0) <= data_i(JET_ET_HIGH downto JET_ET_LOW);
         eta(JET_ETA_HIGH-JET_ETA_LOW downto 0) <= data_i(JET_ETA_HIGH downto JET_ETA_LOW);
         phi(JET_PHI_HIGH-JET_PHI_LOW downto 0) <= data_i(JET_PHI_HIGH downto JET_PHI_LOW);
+        disp <= data_i(JET_DISP_BIT);
 
     -- HB 2015-04-23: implemented eta_windows_comp for better modularity
         jet_eta_windows_comp_i: entity work.eta_windows_comp
@@ -202,21 +206,21 @@ begin
 
     end generate tau_sel;
 
-    -- Comparator for energy (et)
--- HB 2021-03-08: implemented pt_comp for better modularity
-    et_comp_i: entity work.pt_comp
-        generic map(
-            et_ge_mode,
-            et_threshold
-        )
-        port map(
-            et,
-            et_comp
-        );
-
 -- HB 2015-04-27: comparators out for eg and tau
     comp_int_eg_tau_i: if obj_type=EG_TYPE or obj_type=TAU_TYPE generate
--- HB 2021-03-08: implemented lut_comp for better modularity
+        -- Comparator for energy (et)
+    -- HB 2021-03-08: implemented pt_comp for better modularity
+        et_comp_i: entity work.pt_comp
+            generic map(
+                et_ge_mode,
+                et_threshold
+            )
+            port map(
+                et,
+                et_comp
+            );
+
+    -- HB 2021-03-08: implemented lut_comp for better modularity
         iso_comp_i: entity work.lut_comp
             generic map(
                 iso_lut
@@ -230,6 +234,18 @@ begin
 
 -- HB 2015-04-27: comparators out for jet
     comp_int_jet_i: if obj_type=JET_TYPE generate
+        -- Comparator for energy (et) and DISP
+        et_comp_i: entity work.pt_disp_comp
+            generic map(
+                et_ge_mode,
+                et_threshold,
+                disp_cut
+            )
+            port map(
+                et,
+                et_comp
+            );
+
         comp_int <= et_comp and eta_comp and phi_comp;
     end generate comp_int_jet_i;
 

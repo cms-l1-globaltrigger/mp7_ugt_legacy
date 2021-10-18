@@ -37,6 +37,7 @@ entity correlation_conditions is
         phi_w2_upper_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_obj1: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
+        disp_cut_obj1: std_logic := '0';
         requested_charge_obj1: string(1 to 3) := "ign";
         qual_lut_obj1: std_logic_vector(2**(MUON_QUAL_HIGH-MUON_QUAL_LOW+1)-1 downto 0) := (others => '1');
         upt_cut_obj1: boolean := false;
@@ -65,6 +66,7 @@ entity correlation_conditions is
         phi_w2_upper_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_obj2: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
+        disp_cut_obj2: std_logic := '0';
         requested_charge_obj2: string(1 to 3) := "ign";
         qual_lut_obj2: std_logic_vector(2**(MUON_QUAL_HIGH-MUON_QUAL_LOW+1)-1 downto 0) := (others => '1');
         upt_cut_obj2: boolean := false;
@@ -93,6 +95,7 @@ entity correlation_conditions is
         phi_w2_upper_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w2_lower_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_obj3: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
+        disp_cut_obj3: std_logic := '0';
         requested_charge_obj3: string(1 to 3) := "ign";
         qual_lut_obj3: std_logic_vector(2**(MUON_QUAL_HIGH-MUON_QUAL_LOW+1)-1 downto 0) := (others => '1');
         upt_cut_obj3: boolean := false;
@@ -231,7 +234,8 @@ begin
                     phi_w1_lower_limit_obj1,
                     phi_w2_upper_limit_obj1,
                     phi_w2_lower_limit_obj1,
-                    iso_lut_obj1
+                    iso_lut_obj1,
+                    disp_cut_obj1
                 )
                 port map(lhc_clk, calo_obj1(i), obj1_vs_templ_pipe(i,1));
         end generate obj1_l;
@@ -295,7 +299,8 @@ begin
                         phi_w1_lower_limit_obj2,
                         phi_w2_upper_limit_obj2,
                         phi_w2_lower_limit_obj2,
-                        iso_lut_obj2
+                        iso_lut_obj2,
+                        disp_cut_obj2
                     )
                     port map(lhc_clk, calo_obj2(i), obj2_vs_templ_pipe(i,1));
             end generate obj2_l;
@@ -454,7 +459,8 @@ begin
                             phi_w1_lower_limit_obj3,
                             phi_w2_upper_limit_obj3,
                             phi_w2_lower_limit_obj3,
-                            iso_lut_obj3
+                            iso_lut_obj3,
+                            disp_cut_obj3
                         )
                         port map(lhc_clk, calo_obj3(i), obj3_vs_templ_pipe(i,1));
                 end generate obj3_l;

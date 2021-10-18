@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/gt_mp7_core_pkg.vhd
   - ../packages/gtl_pkg.vhd
 
+### Added
+- source files:
+  - ../payload/gtl/common/pt_disp_comp.vhd
+
 ## [v1.16.1] - 2021-10-18
 ### Comment
 

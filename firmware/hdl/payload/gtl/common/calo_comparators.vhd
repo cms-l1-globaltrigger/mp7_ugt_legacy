@@ -3,6 +3,7 @@
 -- Comparators for energy, pseudorapidity, azimuth angle and isolation of calo objects
 
 -- Version history:
+-- HB 2021-10-18: bug fix (in jet_phi_windows_comp_i and tau_phi_windows_comp_i).
 -- HB 2021-05-18: changed slice parameter.
 -- HB 2021-02-24: removed "no_calo".
 -- HB 2021-02-19: added output register (with selection).
@@ -147,10 +148,10 @@ begin
         jet_phi_windows_comp_i: entity work.phi_windows_comp
             generic map(
                 nr_phi_windows => nr_phi_windows,
-                phi_w1_upper_limit => phi_w1_upper_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
-                phi_w1_lower_limit => phi_w1_lower_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
-                phi_w2_upper_limit => phi_w2_upper_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
-                phi_w2_lower_limit => phi_w2_lower_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0)
+                phi_w1_upper_limit => phi_w1_upper_limit(JET_PHI_HIGH-JET_PHI_LOW downto 0),
+                phi_w1_lower_limit => phi_w1_lower_limit(JET_PHI_HIGH-JET_PHI_LOW downto 0),
+                phi_w2_upper_limit => phi_w2_upper_limit(JET_PHI_HIGH-JET_PHI_LOW downto 0),
+                phi_w2_lower_limit => phi_w2_lower_limit(JET_PHI_HIGH-JET_PHI_LOW downto 0)
             )
             port map(
                 phi => data_i(JET_PHI_HIGH downto JET_PHI_LOW),
@@ -189,10 +190,10 @@ begin
         tau_phi_windows_comp_i: entity work.phi_windows_comp
             generic map(
                 nr_phi_windows => nr_phi_windows,
-                phi_w1_upper_limit => phi_w1_upper_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
-                phi_w1_lower_limit => phi_w1_lower_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
-                phi_w2_upper_limit => phi_w2_upper_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0),
-                phi_w2_lower_limit => phi_w2_lower_limit(EG_PHI_HIGH-EG_PHI_LOW downto 0)
+                phi_w1_upper_limit => phi_w1_upper_limit(TAU_PHI_HIGH-TAU_PHI_LOW downto 0),
+                phi_w1_lower_limit => phi_w1_lower_limit(TAU_PHI_HIGH-TAU_PHI_LOW downto 0),
+                phi_w2_upper_limit => phi_w2_upper_limit(TAU_PHI_HIGH-TAU_PHI_LOW downto 0),
+                phi_w2_lower_limit => phi_w2_lower_limit(TAU_PHI_HIGH-TAU_PHI_LOW downto 0)
             )
             port map(
                 phi => data_i(TAU_PHI_HIGH downto TAU_PHI_LOW),

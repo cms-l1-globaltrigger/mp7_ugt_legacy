@@ -3,6 +3,7 @@
 -- Condition module for all combination conditions.
 
 -- Version history:
+-- HB 2021-10-19: inserted cut for DISP of jets.
 -- HB 2021-03-03: bug fixed.
 -- HB 2021-02-19: updated condition output.
 -- HB 2020-02-11: replaced code with "orm_cuts" instances.

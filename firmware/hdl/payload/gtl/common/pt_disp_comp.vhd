@@ -7,16 +7,14 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all; -- for function "CONV_INTEGER"
 
-use work.gtl_pkg.all;
+-- use work.gtl_pkg.all;
 
 entity pt_disp_comp is
 	generic	(
         pt_ge_mode : boolean;
         pt_threshold: std_logic_vector;
-        disp_cut: boolean
+        disp_cut: boolean := false
     );
     port(
         pt : in std_logic_vector;
@@ -32,7 +30,7 @@ architecture rtl of pt_disp_comp is
 begin
 
     pt_comp_int <= '1' when pt >= pt_threshold and pt_ge_mode else
-               '1' when pt = pt_threshold and not pt_ge_mode else '0';
+                   '1' when pt = pt_threshold and not pt_ge_mode else '0';
 
     pt_comp_o <= '1' when pt_comp_int = '1' and not disp_cut else
                  '1' when pt_comp_int = '1' and disp_cut and disp = '1' else

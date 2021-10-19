@@ -2,6 +2,7 @@
 -- Calo objects cuts
 
 -- Version history:
+-- HB 2021-10-19: inserted cut for DISP of jets.
 -- HB 2021-02-19: updated for intermediate pipelines in calo_comparators.
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
 -- HB 2019-06-14: updated for "five eta cuts".
@@ -43,7 +44,7 @@ entity calo_obj_cuts is
         phi_w2_upper_limits: common_templates_array;
         phi_w2_lower_limits: common_templates_array;
         iso_luts: common_templates_iso_array;
-        disp_cuts: common_templates_boolean_array
+        disp_cuts: common_templates_boolean_array := (others => false)
 
     );
     port(

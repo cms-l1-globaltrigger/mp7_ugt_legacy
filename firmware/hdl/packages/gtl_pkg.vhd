@@ -61,7 +61,6 @@ use work.lhc_data_pkg.all;
 use work.math_pkg.all;
 use work.gt_mp7_core_pkg.all;
 
-type common_templates_ip_array is array (1 to COMMON_NR_TEMPLATES) of std_logic_vector(2**MUON_IP_BITS-1 downto 0);
 package gtl_pkg is
 
 -- Fixed pipeline structure

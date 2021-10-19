@@ -64,6 +64,7 @@ architecture rtl of calo_comparators is
     signal phi_comp : std_logic := '1';
     signal iso_comp : std_logic := '1';
     signal comp_int : std_logic;
+    signal et_disp_comp : std_logic;
 
 begin
 
@@ -206,20 +207,20 @@ begin
 
     end generate tau_sel;
 
+    -- Comparator for energy (et)
+    -- HB 2021-03-08: implemented pt_comp for better modularity
+    et_comp_i: entity work.pt_comp
+        generic map(
+            et_ge_mode,
+            et_threshold
+        )
+        port map(
+            et,
+            et_comp
+        );
+
 -- HB 2015-04-27: comparators out for eg and tau
     comp_int_eg_tau_i: if obj_type=EG_TYPE or obj_type=TAU_TYPE generate
-        -- Comparator for energy (et)
-    -- HB 2021-03-08: implemented pt_comp for better modularity
-        et_comp_i: entity work.pt_comp
-            generic map(
-                et_ge_mode,
-                et_threshold
-            )
-            port map(
-                et,
-                et_comp
-            );
-
     -- HB 2021-03-08: implemented lut_comp for better modularity
         iso_comp_i: entity work.lut_comp
             generic map(
@@ -235,18 +236,12 @@ begin
 -- HB 2015-04-27: comparators out for jet
     comp_int_jet_i: if obj_type=JET_TYPE generate
         -- Comparator for energy (et) and DISP
-        et_comp_i: entity work.pt_disp_comp
-            generic map(
-                et_ge_mode,
-                et_threshold,
-                disp_cut
-            )
-            port map(
-                et,
-                et_comp
-            );
-
-        comp_int <= et_comp and eta_comp and phi_comp;
+        et_disp_comp <= et_comp when not disp_cut
+                        else
+                        (et_comp and disp) when disp_cut
+                        else '0';
+                        
+        comp_int <= et_disp_comp and eta_comp and phi_comp;
     end generate comp_int_jet_i;
 
     pipeline_p: process(lhc_clk, comp_int)

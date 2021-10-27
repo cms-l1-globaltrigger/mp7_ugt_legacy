@@ -1,17 +1,18 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.16.1
+-- mp7_ugt (=FRAME_VERSION): v1.16.2
 
 -- v1.15.4: Changes in frame (v1.2.4) - selector for scouting and no spymem
 -- v1.15.3: Added python script runSynthWorkFlow.py
 -- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
 -- frame: v1.2.4 (see frame.vhd)
--- gtl: v1.16.1 (see gtl_module_tpl.vhd)
+-- gtl: v1.16.2 (see gtl_module_tpl.vhd)
 -- fdl: v1.3.6 (see fdl_module.vhd)
 
 -- gtl history:
+-- HB 2021-10-27: v1.16.2: Bug fix in matrix_corr_cond.vhd.
 -- HB 2021-10-18: v1.16.1: Bug fix in calo_comparators.vhd.
 -- HB 2021-08-31: v1.16.0: Changed logic for ROMs (mass over DR) [regenerated IPs for ROMs].
 -- HB 2021-06-10: v1.15.1: Added hadronic shower triggers.
@@ -59,7 +60,7 @@ package gt_mp7_core_pkg is
 -- FRAME version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 16;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 1;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 2;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &
@@ -67,7 +68,7 @@ package gt_mp7_core_pkg is
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 16;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 1;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 2;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 3;

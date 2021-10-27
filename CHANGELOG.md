@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.16.2] - 2021-10-27
+### Comment
+
+- mp7_ugt firmware release v1.16.2
+- bug fixed in matrix_corr_cond.vhd
+
+### Changed
+- source files:
+  - ../payload/gtl/common/matrix_corr_cond.vhd
+  - ../payload/gtl_module_tpl.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+
 ## [v1.16.1] - 2021-10-18
 ### Comment
 

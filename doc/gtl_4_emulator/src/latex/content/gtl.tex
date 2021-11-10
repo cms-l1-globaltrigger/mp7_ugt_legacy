@@ -711,8 +711,6 @@ Charge valid and charge sign bits must be equal to the requested charge.\\
 \subsubsection{Calculation of correlation cuts}
 \label{sec:gtl:calc_corr_cuts}
 
-The values of precision and step size are given by scale_set in XML file of a L1 menu.
-
 \paragraph{Calculation of $\Delta\eta$}
 \label{sec:gtl:calculation_delta_eta}
 
@@ -721,54 +719,8 @@ The calculation of \textit{$\Delta\eta$} of two objects is done with formula:\\
 $\Delta\eta$=abs(\eta_1-\eta_2)\\
 
 where \eta_1 and \eta_2 are represented in bins.
-LUTs are used to provide $\Delta\eta$ values for comparison in VHDL with requirements, given by TME and VHDL Producer as two thresholds: "greater/equal lower limit" and "less/equal upper limit".
-LUTs are provided for calo-calo, calo-muon and muon-muon correlations. They are defined as "constant" in a VHDL package file (gtl_luts_pkg.vhd) and named:
-CALO_CALO_DIFF_ETA_LUT
-CALO_MU_DIFF_ETA_LUT
-MU_MU_DIFF_ETA_LUT
 
-The address of the LUT is the value of $\Delta\eta$ in bins. The values in the LUT are calculated by multiplying $\Delta\eta$ in bins with $\eta$ step size, rounding at precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
-
-The precision values of $\Delta\eta$, $\Delta\phi$ and $\Delta$R are identical, there is only one definition for "Delta".
-The precision value in XML file is given by (an example for \eg \eg correlation):
-\textit{<scale>
-    <object>PRECISION</object>
-    <type>EG-EG-Delta</type>
-    ...
-    <n_bits>3</n_bits>
-</scale>}\\
-where <n_bits> is the precision value and <type> represents a precision name.\\
-All precision names for "Delta":
-EG-EG-Delta
-EG-JET-Delta
-EG-TAU-Delta
-JET-JET-Delta
-JET-TAU-Delta
-EG-ETM-Delta
-JET-ETM-Delta
-TAU-ETM-Delta
-EG-HTM-Delta
-JET-HTM-Delta
-TAU-HTM-Delta
-EG-ETMHF-Delta
-JET-ETMHF-Delta
-TAU-ETMHF-Delta
-EG-MU-Delta
-JET-MU-Delta
-TAU-MU-Delta
-MU-MU-Delta
-MU-ETM-Delta
-MU-HTM-Delta
-MU-ETMHF-Delta
-
-The $\eta$ (=$\Delta\eta$) step size in XML file is given by (an example for \eg):
-\textit{<scale>
-<object>EG</object>
-    <type>ETA</type>
-    ...
-    <step>+4.3499999999999997E-02</step>
-...
-</scale>}\\
+% LUTs are used to provide $\Delta\eta$ values for comparison in VHDL with requirements, given by TME and VHDL Producer as two thresholds: "greater/equal lower limit" and "less/equal upper limit".
 
 \paragraph{Calculation of $\Delta\phi$}
 \label{sec:gtl:calculation_delta_phi}
@@ -778,21 +730,6 @@ The calculation of \textit{$\Delta\phi$} of two objects is done with formula:\\
 $\Delta\phi$=abs(\phi_1-\phi_2) with ("\phi full bin range" - $\Delta\phi$) when ($\Delta\phi$ > "\phi half bin range").\\
 
 where \phi_1 and \phi_2 are represented in bins.
-LUTs for $\Delta\phi$ values are created and used similar to those for $\Delta\eta$ and named:
-CALO_CALO_DIFF_PHI_LUT
-CALO_MU_DIFF_PHI_LUT
-MU_MU_DIFF_PHI_LUT
-
-The precision values of $\Delta\phi$ are identical with $\Delta\eta$ (see \ref{sec:gtl:calculation_delta_eta}).
-
-The $\phi$ (=$\Delta\phi$) step size in XML file is given by (an example for \eg):
-\textit{<object>EG</object>
-    <type>PHI</type>
-    ...
-    <step>+4.3633231299858237E-02</step>
-...
-</scale>}\\
-
 
 \paragraph{$\Delta$R calculation}
 \label{sec:gtl:delta_r_calculation}
@@ -810,91 +747,7 @@ The calculation of \textit{invariant mass of two objects} is done with formula:\
 
 M=$\sqrt{2 pt_1  pt_2 (\cosh(\eta_1-\eta_2)-\cos(\varphi_1-\varphi_2))}$.\\
 
-The calculation of $\frac{M^2}{2}$ in VHDL is based on LUTs for \pt, $\cosh($$\Delta\eta$$)$ and $\cos($$\Delta\phi$$)$.
-Names for \pt LUTs:
-EG_PT_LUT (= TAU_PT_LUT)
-JET_PT_LUT
-ETM_PT_LUT (= HTM_PT_LUT, ETMHF_PT_LUT)
-MU_PT_LUT
-MU_UPT_LUT
-Names for $\cosh($$\Delta\eta$$)$ LUTs:
-CALO_CALO_COSH_DETA_LUT
-CALO_MUON_COSH_DETA_LUT
-MU_MU_COSH_DETA_LUT
-Names for $\cos($$\Delta\phi$$)$ LUTs:
-CALO_CALO_COS_DPHI_LUT
-CALO_MUON_COS_DPHI_LUT
-MU_MU_COS_DPHI_LUT
-
-The address of the LUT for \pt is the value of hard ware value of \pt.
-The values in the LUT are calculated with maximum value minus minimum value of a bin multipled with $10^precision$ to get integer values.\\
-
-The precision values in XML file are given by (an example for \eg \eg correlation):
-\textit{<scale>
-    <object>PRECISION</object>
-    <type>EG-EG-MassPt</type>
-    ...
-    <n_bits>1</n_bits>
-</scale>}\\
-
-All precision names for "MassPt":
-EG-EG-MassPt
-EG-JET-MassPt
-EG-TAU-MassPt
-JET-JET-MassPt
-JET-TAU-MassPt
-EG-ETM-MassPt
-JET-ETM-MassPt
-TAU-ETM-MassPt
-EG-HTM-MassPt
-JET-HTM-MassPt
-TAU-HTM-MassPt
-EG-ETMHF-MassPt
-JET-ETMHF-MassPt
-TAU-ETMHF-MassPt
-EG-MU-MassPt
-JET-MU-MassPt
-TAU-MU-MassPt
-MU-MU-MassPt
-MU-ETM-MassPt
-MU-HTM-MassPt
-MU-ETMHF-MassPt
-
-The address of the LUT for $\cosh($$\Delta\eta$$)$ is the value of $\Delta\eta$ in bins. The values in the LUT are calculated by multiplying $\Delta\eta$ in bins with $\eta$ step size, calculating cosine hyperbolic, rounding at "Math" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
-
-The address of the LUT for $\cos($$\Delta\phi$$)$ is the value of $\Delta\phi$ in bins. The values in the LUT are calculated by multiplying $\Delta\phi$ in bins with $\phi$ step size, calculating cosine, rounding at "Math" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
-
-The precision values in XML file are given by (an example for \eg \eg correlation):
-\textit{<scale>
-    <object>PRECISION</object>
-    <type>EG-EG-Math</type>
-    ...
-    <n_bits>3</n_bits>
-</scale>}\\
-for $\cosh($$\Delta\eta$$)$ and $\cos($$\Delta\phi$$)$.
-
-All precision names for "Math":
-EG-EG-Math
-EG-JET-Math
-EG-TAU-Math
-JET-JET-Math
-JET-TAU-Math
-EG-ETM-Math
-JET-ETM-Math
-TAU-ETM-Math
-EG-HTM-Math
-JET-HTM-Math
-TAU-HTM-Math
-EG-ETMHF-Math
-JET-ETMHF-Math
-TAU-ETMHF-Math
-EG-MU-Math
-JET-MU-Math
-TAU-MU-Math
-MU-MU-Math
-MU-ETM-Math
-MU-HTM-Math
-MU-ETMHF-Math
+The calculation of $\frac{M^2}{2}$ in VHDL (no square root in VHDL) is done by multiplying LUT values of \pt_1, \pt_2 and the difference of $\cosh($$\Delta\eta$$)$ and $\cos($$\Delta\phi$$)$.
 
 % In TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV with one position after decimal point in even numbers.\footnote{even numbers to get a precision of one position after decimal point after dividion by 2, because VHDL-Producer calculates thresholds for $\frac{M^2}{2}$, which includes a division by 2.}
 % The comparison in VHDL is done with $\frac{M^2}{2}$ (no square root in VHDL), thresholds for $\frac{M^2}{2}$ are provided by VHDL-Producer.\\
@@ -908,16 +761,6 @@ M=$\sqrt{2 pt_1 pt_2 (1-\cos(\varphi_1-\varphi_2))}$.\\
 
 Calculation similar to "Invariant mass calculation" (see \ref{sec:gtl:calculation_delta_eta}).
 
-\subparagraph{Two-body pt calculation}
-\label{sec:gtl:twobody_pt_calculation}
-
-The calculation of \textit{two-body pt} is done with formula:\\
-
-pt=$\sqrt{pt^2_1 + pt^2_2 + 2  pt_1 pt_2 (\cos(\varphi_1) \cos(\varphi_2) + \sin(\varphi_1) \sin(\varphi_2))}$\\
-
-In the TME there is one threshold for pt, given in GeV (floating point notation) with one position after decimal point.
-The comparison in VHDL is done with ${pt^2}$ (no square root in VHDL), threshold for ${pt^2}$ is provided by VHDL-Producer.
-
 \paragraph{Invariant mass over $\Delta$R calculation}
 \label{sec:gtl:inv_mass_div_dr_calculation}
 
@@ -927,8 +770,8 @@ M=$\sqrt{2 pt_1  pt_2 (\cosh(\eta_1-\eta_2)-\cos(\varphi_1-\varphi_2))}$.\\
 
 $\Delta$$R=\sqrt{(\eta_1-\eta_2)^2+(\varphi_1-\varphi_2)^2}$.\\
 
-In the TME there is one threshold for M/$\Delta$R, given in GeV (floating point notation) with one position after decimal point.
-The calculation of \textit{invariant mass over $\Delta$R of two objects} is done in an own module outside of the condition with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL).\\
+% In the TME there is one threshold for M/$\Delta$R, given in GeV (floating point notation) with one position after decimal point.
+The calculation of \textit{invariant mass over $\Delta$R of two objects} is done with $\frac{M^2}{2}\times$(1/$\Delta$$R^2$) (no square root in VHDL).\\
 A direct calculation of 1/$\Delta$$R^2$ is not possible in firmware (VHDL code), therefore the implementation of the calculation is done by LUTs. In the hardware the values of these LUTs are stored in "large" ROMs, which was realized using the Block RAMs (BRAMs) of the Virtex chip.\\
 Due the number of available BRAMs there are some restrictions for creating algorithms with \textit{invariant mass over $\Delta$R}:
 \begin{itemize}
@@ -948,31 +791,33 @@ Due the number of available BRAMs there are some restrictions for creating algor
 \item 6. The values of LUTs are only valid for current definitions and restrictions. Every change might cause a recalculation of the values and a regeneration of IPs (representing LUTs in BRAMs) in Vivado (firmware generation tool)
 \end{itemize}
 
-% The LUTs values (of 1/$\Delta$$R^2$) are listed in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/doc/rom_lut_inv_dr_sq/emulator_lut_calo_inv_dr_sq_calc.txt}{\texttt{emulator\_lut\_calo\_inv\_dr\_sq\_calc.txt}} and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/doc/rom_lut_inv_dr_sq/emulator_lut_muon_inv_dr_sq_calc.txt}{\texttt{emulator\_lut\_muon\_inv\_dr\_sq\_calc.txt}}. These files have been created by scripts \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/doc/rom_lut_inv_dr_sq/calo_inv_dr_sq_calc.py}{\texttt{calo\_inv\_dr\_sq\_calc.py}} and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/doc/rom_lut_inv_dr_sq/muon_inv_dr_sq_calc.py}{\texttt{muon\_inv\_dr\_sq\_calc.py}}.\\
-% In these files the following values are listed in columns (from left to right):
-% \begin{itemize}
-% \item 1. Difference of phi [bins]
-% \item 2. Difference of eta [bins]
-% \item 3. Value of difference in phi (with resolution shown in restrictions)
-% \item 4. Value of difference in eta (with resolution shown in restrictions)
-% \item 5. Value of 1/$\Delta$$R^2$
-% \item 6. Value of 1/$\Delta$$R^2$ rounded (with value of precisions)
-% \item 7. Integer value of 1/$\Delta$$R^2$ rounded, multiplied with 10\textsuperscript{precision} (content of LUTs in firmware)
-% \end{itemize}
-%
-The values of LUTs in firmware are listed in coe files of ROMs (created by same scripts mentioned above), currently 5 ROMs for "calo calo" and 6 ROMs for "muon muon" (see \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/firmware/ngc/lut_calo_inv_dr_sq_rom1.coe}{\texttt{lut\_calo\_inv\_dr\_sq\_rom1.coe}}, etc. and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/dev_1_16_x/firmware/ngc/lut_muon_inv_dr_sq_rom1.coe}{\texttt{lut\_muon\_inv\_dr\_sq\_rom1.coe}}, etc.). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. All ROMs for calos have 4096 addresses, for muons 8192 addresses. The data width of ROMs is different depending on the highest LUT value in ROM. Because of these different data widths, the partitioning of several ROMs was done to save BRAM resources. Currently 873 BRAMs (36kb) are available per Virtex chip.
+The values of LUTs in firmware are listed in coe files of ROMs (created by same scripts mentioned above), currently 5 ROMs for "calo calo" and 6 ROMs for "muon muon" (see \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/ngc/lut_calo_inv_dr_sq_rom1.coe}{\texttt{lut\_calo\_inv\_dr\_sq\_rom1.coe}}, etc. and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/ngc/lut_muon_inv_dr_sq_rom1.coe}{\texttt{lut\_muon\_inv\_dr\_sq\_rom1.coe}}, etc.). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. All ROMs for calos have 4096 addresses, for muons 8192 addresses. The data width of ROMs is different depending on the highest LUT value in ROM. Because of these different data widths, the partitioning of several ROMs was done to save BRAM resources. Currently 873 BRAMs (36kb) are available per Virtex chip.
 Following numbers of BRAMs (36kb) are needed for:
 \begin{itemize}
 \item "calo calo": 660
 \item "muon muon": 672
 \end{itemize}
-Therefore one calculation of \textit{invariant mass over $\Delta$R} of "calo calo" or "muon muon" is possible in one Virtex chip, but one can have some algorithms containing \textit{invariant mass over $\Delta$R} with different thresholds, but with same objects and same bx.\\
+Currently one calculation of \textit{invariant mass over $\Delta$R} of "calo calo" or "muon muon" is possible in one Virtex chip, but one can have some algorithms containing \textit{invariant mass over $\Delta$R} with different thresholds, but with same objects and same bx.\\
 
 \paragraph{Invariant mass calculation for three objects}
 \label{sec:gtl:inv_mass_3_obj_calculation}
 
 The calculation of \textit{invariant mass calculation for three objects} is done by calculating the invariant mass for all two-object combinations and take the sum of the three invariant masses of the two-object combinations.\\
-In the TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV (floating point notation) with one position after decimal point in even numbers.
+% In the TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV (floating point notation) with one position after decimal point in even numbers.
+
+\subparagraph{Two-body pt calculation}
+\label{sec:gtl:twobody_pt_calculation}
+
+The calculation of \textit{two-body pt} is done with formula:\\
+
+pt=$\sqrt{pt^2_1 + pt^2_2 + 2  pt_1 pt_2 (\cos(\varphi_1) \cos(\varphi_2) + \sin(\varphi_1) \sin(\varphi_2))}$\\
+
+The calculation of ${pt^2}$ in VHDL (no square root in VHDL) using LUTs for \pt, $\cos($$\varphi$$)$ and $\sin($$\varphi$$)$.
+
+% The calculation of ${pt^2}$ in VHDL (no square root in VHDL) is done by building sum of $\cos($$\varphi_1$$)$x$\cos($$\varphi_2$$)$ LUT value and $\sin($$\varphi_1$$)$x$\sin($$\varphi_2$$)$ LUT value, multiplying the sum with 2 and \pt_1 and \pt_1 LUT values and addiding the squares of \pt_1 and \pt_1 LUT values.
+
+% In the TME there is one threshold for pt, given in GeV (floating point notation) with one position after decimal point.
+% The comparison in VHDL is done with ${pt^2}$ (no square root in VHDL), threshold for ${pt^2}$ is provided by VHDL-Producer.
 
 \paragraph{Muon charge correlation}
 \label{sec:gtl:muon_charge_correlation_module}
@@ -1073,17 +918,235 @@ In TME one can select "LS", "0S" or ignore for charge correlation in muon condit
 \subsubsection{Calculation of look-up-tables (LUTs) for correlation cuts}
 \label{sec:gtl:calc_luts_corr_cuts}
 
-\paragraph{LUTs for \pt and unconstrained \pt}
-\label{sec:gtl:luts_pt_upt}
+They are defined as a "constant" in \texttt{gtl_luts_pkg.vhd} VHDL package file.
+The values of precision and step size are given by "scale_set" in XML file of a L1 menu.
 
-\paragraph{LUTs for $\Delta\eta$ and $\Delta\phi$}
-\label{sec:gtl:luts_deta_dphi}
+\textbf{LUTs for \pt and unconstrained \pt used in mass cuts}
 
-\paragraph{LUTs for $\cosh($$\Delta\eta$$)$}
-\label{sec:gtl:luts_cosh_deta}
+The values of \pt or unconstrained \pt LUT are calculated by building the difference of maximum and minimum value of a bin, rounding at precision position after decimal point and multiplying with $10^precision$ to get integer values.\\
+The address input of the LUT for \pt or unconstrained \pt is the value of hardware index of \pt or unconstrained \pt.
 
-\paragraph{LUTs for $\cos($$\Delta\varphi$$)$}
-\label{sec:gtl:luts_cos_dphi}
+The precision values in XML file are given by (an example for \eg \eg correlation):
+\textit{<scale>
+    <object>PRECISION</object>
+    <type>EG-EG-MassPt</type>
+    ...
+    <n_bits>1</n_bits>
+</scale>}\\
+
+All precision names for "MassPt":
+EG-EG-MassPt
+EG-JET-MassPt
+EG-TAU-MassPt
+JET-JET-MassPt
+JET-TAU-MassPt
+EG-ETM-MassPt
+JET-ETM-MassPt
+TAU-ETM-MassPt
+EG-HTM-MassPt
+JET-HTM-MassPt
+TAU-HTM-MassPt
+EG-ETMHF-MassPt
+JET-ETMHF-MassPt
+TAU-ETMHF-MassPt
+EG-MU-MassPt
+JET-MU-MassPt
+TAU-MU-MassPt
+MU-MU-MassPt
+MU-ETM-MassPt
+MU-HTM-MassPt
+MU-ETMHF-MassPt
+
+VHDL names of \pt and unconstrained \pt LUTs:
+EG_PT_LUT (used also for tau)
+JET_PT_LUT
+ETM_PT_LUT (used also for \htm and ET$_{miss}^{HF}$)
+MU_PT_LUT
+MU_UPT_LUT
+
+\textbf{LUTs for $\Delta\eta$}
+
+The values of the LUT are calculated by multiplying $\Delta\eta$ in bins with $\eta$ step size, rounding at precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
+The address of the LUT is the value of $\Delta\eta$ in bins.
+
+The precision values of $\Delta\eta$, $\Delta\phi$ and $\Delta$R are identical, there is only one definition for "Delta".
+The precision value in XML file is given by (an example for \eg \eg correlation):
+\textit{<scale>
+    <object>PRECISION</object>
+    <type>EG-EG-Delta</type>
+    ...
+    <n_bits>3</n_bits>
+</scale>}\\
+where <n_bits> is the precision value and <type> represents a precision name.\\
+All precision names for "Delta":
+EG-EG-Delta
+EG-JET-Delta
+EG-TAU-Delta
+JET-JET-Delta
+JET-TAU-Delta
+TAU-TAU-Delta
+EG-ETM-Delta
+JET-ETM-Delta
+TAU-ETM-Delta
+EG-HTM-Delta
+JET-HTM-Delta
+TAU-HTM-Delta
+EG-ETMHF-Delta
+JET-ETMHF-Delta
+TAU-ETMHF-Delta
+EG-MU-Delta
+JET-MU-Delta
+TAU-MU-Delta
+MU-MU-Delta
+MU-ETM-Delta
+MU-HTM-Delta
+MU-ETMHF-Delta
+
+The $\eta$ (=$\Delta\eta$) step size in XML file is given by (an example for \eg):
+\textit{<scale>
+<object>EG</object>
+    <type>ETA</type>
+    ...
+    <step>+4.3499999999999997E-02</step>
+...
+</scale>}\\
+
+VHDL names of $\Delta\eta$ LUTs:
+CALO_CALO_DIFF_ETA_LUT
+CALO_MU_DIFF_ETA_LUT
+MU_MU_DIFF_ETA_LUT
+
+\textbf{LUTs for $\Delta\phi$}
+
+The values of the LUT are calculated by multiplying $\Delta\phi$ in bins with $\varphi$ step size, rounding at precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
+The address of the LUT is the value of $\Delta\phi$ in bins.
+
+The precision values of $\Delta\phi$ are identical with $\Delta\eta$.
+
+The $\phi$ (=$\Delta\phi$) step size in XML file is given by (an example for \eg):
+\textit{<object>EG</object>
+    <type>PHI</type>
+    ...
+    <step>+4.3633231299858237E-02</step>
+...
+</scale>}\\
+
+VHDL names of $\Delta\phi$ LUTs:
+CALO_CALO_DIFF_PHI_LUT
+CALO_MU_DIFF_PHI_LUT
+MU_MU_DIFF_PHI_LUT
+
+\textbf{LUTs for $\cosh($$\Delta\eta$$)$ used in mass cuts}
+
+The values in the LUT are calculated by multiplying $\Delta\eta$ in bins with $\eta$ step size, calculating cosine hyperbolic, rounding at "Math" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
+The address of the LUT for $\cosh($$\Delta\eta$$)$ is the value of $\Delta\eta$ in bins.\\
+For calo muon correlations one has to use the muon step size.
+
+The precision values in XML file are given by (an example for \eg \eg correlation):
+\textit{<scale>
+    <object>PRECISION</object>
+    <type>EG-EG-Math</type>
+    ...
+    <n_bits>3</n_bits>
+</scale>}\\
+used for $\cosh($$\Delta\eta$$)$ and $\cos($$\Delta\phi$$)$.
+
+All precision names for "Math":
+EG-EG-Math
+EG-JET-Math
+EG-TAU-Math
+JET-JET-Math
+JET-TAU-Math
+TAU-TAU-Math
+EG-ETM-Math
+JET-ETM-Math
+TAU-ETM-Math
+EG-HTM-Math
+JET-HTM-Math
+TAU-HTM-Math
+EG-ETMHF-Math
+JET-ETMHF-Math
+TAU-ETMHF-Math
+EG-MU-Math
+JET-MU-Math
+TAU-MU-Math
+MU-MU-Math
+MU-ETM-Math
+MU-HTM-Math
+MU-ETMHF-Math
+
+VHDL names of $\cosh($$\Delta\eta$$)$ LUTs:
+CALO_CALO_COSH_DETA_LUT
+CALO_MUON_COSH_DETA_LUT
+MU_MU_COSH_DETA_LUT
+
+\textbf{LUTs for $\cos($$\Delta\phi$$)$ used in mass cuts}
+
+The values in the LUT are calculated by multiplying $\Delta\phi$ in bins with $\phi$ step size, calculating cosine, rounding at "Math" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
+The address of the LUT for $\cos($$\Delta\phi$$)$ is the value of $\Delta\phi$ in bins.
+For calo muon correlations one has to use the muon step size.
+
+VHDL names of $\cos($$\Delta\phi$$)$ LUTs:
+CALO_CALO_COS_DPHI_LUT
+CALO_MUON_COS_DPHI_LUT
+MU_MU_COS_DPHI_LUT
+
+\textbf{LUTs for 1/$\Delta$$R^2$ used in mass over deltaR cuts}
+
+The calculation of $\frac{1}{$$\Delta$$R^2$$}$ is done by adding the squares of $\Delta\eta$ and $\Delta\phi$ LUT values, rounding at "InverseDeltaRMath" precision position after decimal point and multipling the result with $10^precision$ to get integer values.
+The address of the two-dimensional LUT for $\frac{1}{$$\Delta$$R^2$$}$ are the values of $\Delta\eta$ and $\Delta\phi$ in bins.
+
+The precision values in XML file are given by (an example for \eg \eg correlation):
+\textit{<scale>
+    <object>PRECISION</object>
+    <type>EG-EG-InverseDeltaRMath</type>
+    ...
+    <n_bits>5</n_bits>
+</scale>}\\
+
+All precision names for "InverseDeltaRMath":
+EG-EG-InverseDeltaRMath
+JET-JET-InverseDeltaRMath
+TAU-TAU-InverseDeltaRMath
+MU-MU-InverseDeltaRMath
+
+\textbf{LUTs for \pt used two-body pt cuts}
+
+The values of \pt LUT are calculated by building the difference of maximum and minimum value of a bin, rounding at precision position after decimal point and multiplying with $10^precision$ to get integer values.\\
+The address input of the LUT for \pt is the value of hardware index of \pt.
+
+The precision values in XML file are given by (an example for \eg \eg correlation):
+\textit{<scale>
+    <object>PRECISION</object>
+    <type>EG-EG-TwoBodyPt</type>
+    ...
+    <n_bits>1</n_bits>
+</scale>}\\
+
+\textbf{LUTs for $\cos($$\varphi$$)$ used in two-body pt cuts}
+
+The values in the LUT are calculated by multiplying $\phi$ hardware index with $\phi$ step size, calculating cosine, rounding at "TwoBodyPtMath" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
+
+The precision values in XML file are given by (an example for \eg \eg correlation):
+\textit{<scale>
+    <object>PRECISION</object>
+    <type>EG-EG-TwoBodyPtMath</type>
+    ...
+    <n_bits>3</n_bits>
+</scale>}\\
+used for $\cos($$\varphi$$)$ and $\sin($$\varphi$$)$.
+
+VHDL names of $\cos($$\varphi$$)$ LUTs:
+CALO_COS_PHI_LUT
+MUON_COS_PHI_LUT
+
+\textbf{LUTs for $\sin($$\varphi$$)$ used in two-body pt cuts}
+
+The values in the LUT are calculated by multiplying $\phi$ hardware index with $\phi$ step size, calculating sine, rounding at "TwoBodyPtMath" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
+
+VHDL names of $\sin($$\varphi$$)$ LUTs:
+CALO_SIN_PHI_LUT
+MUON_SIN_PHI_LUT
 
 \clearpage
 

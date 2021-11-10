@@ -711,21 +711,88 @@ Charge valid and charge sign bits must be equal to the requested charge.\\
 \subsubsection{Calculation of correlation cuts}
 \label{sec:gtl:calc_corr_cuts}
 
-\paragraph{Calculation of differences in $\eta$ and $\varphi$}
-\label{sec:gtl:calculation_differences}
+The values of precision and step size are given by scale_set in XML file of a L1 menu.
 
-Some condition types namely correlation conditions uses differences in $\eta$ and $\varphi$ to make the decision.
-Therefore these differences are calculated out of these conditions, because the differences can be used several times in different condition types.
-The differences in $\eta$ and $\varphi$ are calculated in bins. These differences in bins are converted to numbers (by LUTs),
-which represents values of differences (multiples of units in $\eta$ and $\varphi$).
-% Differences in $\varphi$ are provided by module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_phi_integer_obj_vs_obj.vhd}{\texttt{sub\_phi\_integer\_obj\_vs\_obj.vhd}}, which instantiates the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd}{\texttt{sub\_unsigned\_phi.vhd}} as many times as
-% the numbers of both objects determine.\\
-% In the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_phi.vhd}{\texttt{sub\_unsigned\_phi.vhd}} a calculation of a difference of two objects is done, both objects must have the same resolution, namely the higher one.
-% The result is the absolute value of the difference.
-% There are two differences in $\varphi$, one "clockwise" and one "anti-clockwise". For the final result the smaller difference is taken.\\
-% Differences in $\eta$ are provided by module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_eta_integer_obj_vs_obj.vhd}{\texttt{sub\_eta\_integer\_obj\_vs\_obj.vhd}}, which instantiates the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_eta.vhd}{\texttt{sub\_unsigned\_eta.vhd}} as many times as the numbers of both objects determine.\\
-% In the module \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/sub_unsigned_eta.vhd}{\texttt{sub\_unsigned\_eta.vhd}} a calculation of a difference of two objects is done with a signed subtraction, because of the Two's Complement notation of $\eta$ values.
-% The result is the absolute value of the difference.
+\paragraph{Calculation of $\Delta\eta$}
+\label{sec:gtl:calculation_delta_eta}
+
+The calculation of \textit{$\Delta\eta$} of two objects is done with formula:\\
+
+$\Delta\eta$=abs(\eta_1-\eta_2)\\
+
+where \eta_1 and \eta_2 are represented in bins.
+LUTs are used to provide $\Delta\eta$ values for comparison in VHDL with requirements, given by TME and VHDL Producer as two thresholds: "greater/equal lower limit" and "less/equal upper limit".
+LUTs are provided for calo-calo, calo-muon and muon-muon correlations. They are defined as "constant" in a VHDL package file (gtl_luts_pkg.vhd) and named:
+CALO_CALO_DIFF_ETA_LUT
+CALO_MU_DIFF_ETA_LUT
+MU_MU_DIFF_ETA_LUT
+
+The address of the LUT is the value of $\Delta\eta$ in bins. The values in the LUT are calculated by multiplying $\Delta\eta$ in bins with $\eta$ step size, rounding at precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
+
+The precision values of $\Delta\eta$, $\Delta\phi$ and $\Delta$R are identical, there is only one definition for "Delta".
+The precision value in XML file is given by (an example for \eg \eg correlation):
+\textit{<scale>
+    <object>PRECISION</object>
+    <type>EG-EG-Delta</type>
+    ...
+    <n_bits>3</n_bits>
+</scale>}\\
+where <n_bits> is the precision value and <type> represents a precision name.\\
+All precision names for "Delta":
+EG-EG-Delta
+EG-JET-Delta
+EG-TAU-Delta
+JET-JET-Delta
+JET-TAU-Delta
+EG-ETM-Delta
+JET-ETM-Delta
+TAU-ETM-Delta
+EG-HTM-Delta
+JET-HTM-Delta
+TAU-HTM-Delta
+EG-ETMHF-Delta
+JET-ETMHF-Delta
+TAU-ETMHF-Delta
+EG-MU-Delta
+JET-MU-Delta
+TAU-MU-Delta
+MU-MU-Delta
+MU-ETM-Delta
+MU-HTM-Delta
+MU-ETMHF-Delta
+
+The $\eta$ (=$\Delta\eta$) step size in XML file is given by (an example for \eg):
+\textit{<scale>
+<object>EG</object>
+    <type>ETA</type>
+    ...
+    <step>+4.3499999999999997E-02</step>
+...
+</scale>}\\
+
+\paragraph{Calculation of $\Delta\phi$}
+\label{sec:gtl:calculation_delta_phi}
+
+The calculation of \textit{$\Delta\phi$} of two objects is done with formula:\\
+
+$\Delta\phi$=abs(\phi_1-\phi_2) with ("\phi full bin range" - $\Delta\phi$) when ($\Delta\phi$ > "\phi half bin range").\\
+
+where \phi_1 and \phi_2 are represented in bins.
+LUTs for $\Delta\phi$ values are created and used similar to those for $\Delta\eta$ and named:
+CALO_CALO_DIFF_PHI_LUT
+CALO_MU_DIFF_PHI_LUT
+MU_MU_DIFF_PHI_LUT
+
+The precision values of $\Delta\phi$ are identical with $\Delta\eta$ (see \ref{sec:gtl:calculation_delta_eta}).
+
+The $\phi$ (=$\Delta\phi$) step size in XML file is given by (an example for \eg):
+\textit{<object>EG</object>
+    <type>PHI</type>
+    ...
+    <step>+4.3633231299858237E-02</step>
+...
+</scale>}\\
+
 
 \paragraph{$\Delta$R calculation}
 \label{sec:gtl:delta_r_calculation}
@@ -734,9 +801,7 @@ The calculation of \textit{$\Delta$R} of two objects is done with formula:\\
 
 $\Delta$$R=\sqrt{(\eta_1-\eta_2)^2+(\varphi_1-\varphi_2)^2}$.\\
 
-In the TME there are two thresholds for $\Delta$R: "greater/equal lower limit" and "less/equal upper limit", given in floating point notation
-with one position after decimal point.
-The comparison in VHDL is done with $\Delta$$R^2$ (no square root in VHDL), thresholds for $\Delta$$R^2$ are provided by VHDL-Producer.
+The calculation of $\Delta$$R^2$ in VHDL (no square root in VHDL) is done by adding the square of $\Delta\eta$ and $\Delta\phi$ LUT values.
 
 \paragraph{Invariant mass calculation}
 \label{sec:gtl:inv_mass_calculation}
@@ -745,8 +810,94 @@ The calculation of \textit{invariant mass of two objects} is done with formula:\
 
 M=$\sqrt{2 pt_1  pt_2 (\cosh(\eta_1-\eta_2)-\cos(\varphi_1-\varphi_2))}$.\\
 
-In the TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV (floating point notation) with one position after decimal point in even numbers.\footnote{even numbers to get a precision of one position after decimal point after dividion by 2, because VHDL-Producer calculates thresholds for $\frac{M^2}{2}$, which includes a division by 2.}
-The comparison in VHDL is done with $\frac{M^2}{2}$ (no square root in VHDL), thresholds for $\frac{M^2}{2}$ are provided by VHDL-Producer.
+The calculation of $\frac{M^2}{2}$ in VHDL is based on LUTs for \pt, $\cosh($$\Delta\eta$$)$ and $\cos($$\Delta\phi$$)$.
+Names for \pt LUTs:
+EG_PT_LUT (= TAU_PT_LUT)
+JET_PT_LUT
+ETM_PT_LUT (= HTM_PT_LUT, ETMHF_PT_LUT)
+MU_PT_LUT
+MU_UPT_LUT
+Names for $\cosh($$\Delta\eta$$)$ LUTs:
+CALO_CALO_COSH_DETA_LUT
+CALO_MUON_COSH_DETA_LUT
+MU_MU_COSH_DETA_LUT
+Names for $\cos($$\Delta\phi$$)$ LUTs:
+CALO_CALO_COS_DPHI_LUT
+CALO_MUON_COS_DPHI_LUT
+MU_MU_COS_DPHI_LUT
+
+The address of the LUT for \pt is the value of hard ware value of \pt.
+The values in the LUT are calculated with maximum value minus minimum value of a bin multipled with $10^precision$ to get integer values.\\
+
+The precision values in XML file are given by (an example for \eg \eg correlation):
+\textit{<scale>
+    <object>PRECISION</object>
+    <type>EG-EG-MassPt</type>
+    ...
+    <n_bits>1</n_bits>
+</scale>}\\
+
+All precision names for "MassPt":
+EG-EG-MassPt
+EG-JET-MassPt
+EG-TAU-MassPt
+JET-JET-MassPt
+JET-TAU-MassPt
+EG-ETM-MassPt
+JET-ETM-MassPt
+TAU-ETM-MassPt
+EG-HTM-MassPt
+JET-HTM-MassPt
+TAU-HTM-MassPt
+EG-ETMHF-MassPt
+JET-ETMHF-MassPt
+TAU-ETMHF-MassPt
+EG-MU-MassPt
+JET-MU-MassPt
+TAU-MU-MassPt
+MU-MU-MassPt
+MU-ETM-MassPt
+MU-HTM-MassPt
+MU-ETMHF-MassPt
+
+The address of the LUT for $\cosh($$\Delta\eta$$)$ is the value of $\Delta\eta$ in bins. The values in the LUT are calculated by multiplying $\Delta\eta$ in bins with $\eta$ step size, calculating cosine hyperbolic, rounding at "Math" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
+
+The address of the LUT for $\cos($$\Delta\phi$$)$ is the value of $\Delta\phi$ in bins. The values in the LUT are calculated by multiplying $\Delta\phi$ in bins with $\phi$ step size, calculating cosine, rounding at "Math" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
+
+The precision values in XML file are given by (an example for \eg \eg correlation):
+\textit{<scale>
+    <object>PRECISION</object>
+    <type>EG-EG-Math</type>
+    ...
+    <n_bits>3</n_bits>
+</scale>}\\
+for $\cosh($$\Delta\eta$$)$ and $\cos($$\Delta\phi$$)$.
+
+All precision names for "Math":
+EG-EG-Math
+EG-JET-Math
+EG-TAU-Math
+JET-JET-Math
+JET-TAU-Math
+EG-ETM-Math
+JET-ETM-Math
+TAU-ETM-Math
+EG-HTM-Math
+JET-HTM-Math
+TAU-HTM-Math
+EG-ETMHF-Math
+JET-ETMHF-Math
+TAU-ETMHF-Math
+EG-MU-Math
+JET-MU-Math
+TAU-MU-Math
+MU-MU-Math
+MU-ETM-Math
+MU-HTM-Math
+MU-ETMHF-Math
+
+% In TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV with one position after decimal point in even numbers.\footnote{even numbers to get a precision of one position after decimal point after dividion by 2, because VHDL-Producer calculates thresholds for $\frac{M^2}{2}$, which includes a division by 2.}
+% The comparison in VHDL is done with $\frac{M^2}{2}$ (no square root in VHDL), thresholds for $\frac{M^2}{2}$ are provided by VHDL-Producer.\\
 
 \paragraph{Transverse mass calculation}
 \label{sec:gtl:transverse_mass_calculation}
@@ -755,8 +906,7 @@ The calculation of \textit{transverse mass of two objects} is done with formula:
 
 M=$\sqrt{2 pt_1 pt_2 (1-\cos(\varphi_1-\varphi_2))}$.\\
 
-In the TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV (floating point notation) with one position after decimal point in even numbers.\\
-The comparison in VHDL is done with $\frac{M^2}{2}$ (no square root in VHDL), thresholds for $\frac{M^2}{2}$ are provided by VHDL-Producer.
+Calculation similar to "Invariant mass calculation" (see \ref{sec:gtl:calculation_delta_eta}).
 
 \subparagraph{Two-body pt calculation}
 \label{sec:gtl:twobody_pt_calculation}
@@ -1007,20 +1157,20 @@ Additionally charge correlation cuts with "Double objects requirements condition
 %                     (phi <= phi_w1_upper_limit and phi >= phi_w1_lower_limit)
 %                     else '0';
 % \end{lstlisting}
-% 
+%
 % \begin{figure}[htb]
 % \centering
 % \includegraphics[width=15cm]{figures/phi_windows_comparator}
 % \caption{Setting the limits for "window"-comparators for $\varphi$}
 % \label{fig:gtl:phi_windows_comparator}
 % \end{figure}
-% 
+%
 % The values of $\eta$ and $\varphi$ have to be inside of only one of the required ranges ("or").
-% 
+%
 % \clearpage
-% 
+%
 % The comparison of isolation (for \egamma, tau and muon) is done with a LUT (Table~\ref{tab:gtl:lut_iso}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
-% 
+%
 % \begin{table}[htdp]
 % \begin{center}
 % \begin{tabular}{|c|c|p{.4\columnwidth}|}\hline
@@ -1046,11 +1196,11 @@ Additionally charge correlation cuts with "Double objects requirements condition
 % \caption{LUT contents for isolation comparison}
 % \label{tab:gtl:lut_iso}
 % \end{table}
-% 
+%
 % \clearpage
-% 
+%
 % The comparison of impact parameter is done with LUT (Table~\ref{tab:gtl:muon_lut_ip}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
-% 
+%
 % \begin{table}[htdp]
 % \begin{center}
 % \begin{tabular}{|c|c|p{.4\columnwidth}|}\hline
@@ -1076,9 +1226,9 @@ Additionally charge correlation cuts with "Double objects requirements condition
 % \caption{LUT contents for impact parameter comparison}
 % \label{tab:gtl:muon_lut_ip}
 % \end{table}
-% 
+%
 % The comparison of quality is done with LUT (Table~\ref{tab:gtl:muon_lut_qual}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
-% 
+%
 % \begin{table}[htdp]
 % \begin{center}
 % \begin{tabular}{|c|c|l|c|}\hline
@@ -1098,7 +1248,7 @@ Additionally charge correlation cuts with "Double objects requirements condition
 % \caption{LUT contents for quality comparison of muon objects}
 % \label{tab:gtl:muon_lut_qual}
 % \end{table}
-% 
+%
 % Charge valid and charge sign bits must be equal to the requested charge.\\
 
 \clearpage

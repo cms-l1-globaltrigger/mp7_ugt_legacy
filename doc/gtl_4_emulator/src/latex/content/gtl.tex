@@ -594,6 +594,18 @@ bits [63..62] & definition \\\hline\hline
 \subsubsection{Calculation of object cuts}
 \label{sec:gtl:calc_obj_cuts}
 
+List of object cuts:
+\begin{itemize}
+\item \pt
+\item $\eta$
+\item $\varphi$
+\item isolation
+\item requested charge
+\item quality
+\item unconstrained \pt
+\item impact parameter
+\end{itemize}
+
 \paragraph{Object cuts}
 \label{sec:gtl:object_cuts}
 A comparator between the energy (\pt) and a threshold (pt\_threshold) and a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators is done in this basic module.
@@ -711,6 +723,28 @@ Charge valid and charge sign bits must be equal to the requested charge.\\
 \subsubsection{Calculation of correlation cuts}
 \label{sec:gtl:calc_corr_cuts}
 
+The following cuts are for two object correlations:
+\begin{itemize}
+\item Cut for $\Delta\eta$ (DETA).
+\item Cut for $\Delta\varphi$ (DPHI).
+\item Cut for $\Delta$R (DR).
+\item Cuts for charge correlation (only for muon).
+\item Cuts for mass (MASS) of following mass types:
+  \begin{itemize}
+  \item Cut for Invariant mass.
+  \item Cut for Invariant mass with unconstrained pt (only for muons).
+  \item Cut for Invariant mass over $\Delta$R.
+  \item Cut for Transverse mass.
+  \end{itemize}
+\item Cut for Two-body pt.
+\end{itemize}
+There is one mass cut for correlations with three objects:
+\begin{itemize}
+\item Cut for invariant mass for three objects (MASS).
+\end{itemize}
+
+The generation of LUTs for calculations of correlation cuts is described in chapter "Calculation of look-up-tables (LUTs) for correlation cuts" (see \ref{sec:gtl:calc_luts_corr_cuts}).
+
 \textbf{Calculation of $\Delta\eta$}
 \label{sec:gtl:calculation_delta_eta}
 
@@ -718,7 +752,7 @@ The calculation of \textit{$\Delta\eta$} of two objects is done with formula:\\
 
 $\Delta\eta$=abs(\eta_1-\eta_2)\\
 
-where \eta_1 and \eta_2 are represented in bins.
+where \eta_1 and \eta_2 are represented in signed hardware indices.
 
 % LUTs are used to provide $\Delta\eta$ values for comparison in VHDL with requirements, given by TME and VHDL Producer as two thresholds: "greater/equal lower limit" and "less/equal upper limit".
 
@@ -727,9 +761,9 @@ where \eta_1 and \eta_2 are represented in bins.
 
 The calculation of \textit{$\Delta\phi$} of two objects is done with formula:\\
 
-$\Delta\phi$=abs(\phi_1-\phi_2) with ("\phi full bin range" - $\Delta\phi$) when ($\Delta\phi$ > "\phi half bin range").\\
+$\Delta\phi$=abs(\phi_1-\phi_2) with ("\phi full bin range"-$\Delta\phi$) when ($\Delta\phi$ > "\phi half bin range").\\
 
-where \phi_1 and \phi_2 are represented in bins.
+where \phi_1 and \phi_2 are represented in hardware indices.
 
 \textbf{$\Delta$R calculation}
 \label{sec:gtl:delta_r_calculation}
@@ -759,7 +793,7 @@ The calculation of \textit{transverse mass of two objects} is done with formula:
 
 M=$\sqrt{2 pt_1 pt_2 (1-\cos(\varphi_1-\varphi_2))}$.\\
 
-Calculation similar to "Invariant mass calculation" (see \ref{sec:gtl:calculation_delta_eta}).
+Calculation similar to "Invariant mass calculation" (see \ref{sec:gtl:inv_mass_calculation}).
 
 \textbf{Invariant mass over $\Delta$R calculation}
 \label{sec:gtl:inv_mass_div_dr_calculation}
@@ -799,13 +833,13 @@ Following numbers of BRAMs (36kb) are needed for:
 \end{itemize}
 Currently one calculation of \textit{invariant mass over $\Delta$R} of "calo calo" or "muon muon" is possible in one Virtex chip, but one can have some algorithms containing \textit{invariant mass over $\Delta$R} with different thresholds, but with same objects and same bx.\\
 
-\paragraph{Invariant mass calculation for three objects}
+\textbf{Invariant mass calculation for three objects}
 \label{sec:gtl:inv_mass_3_obj_calculation}
 
 The calculation of \textit{invariant mass calculation for three objects} is done by calculating the invariant mass for all two-object combinations and take the sum of the three invariant masses of the two-object combinations.\\
 % In the TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV (floating point notation) with one position after decimal point in even numbers.
 
-\subparagraph{Two-body pt calculation}
+\textbf{Two-body pt calculation}
 \label{sec:gtl:twobody_pt_calculation}
 
 The calculation of \textit{two-body pt} is done with formula:\\
@@ -819,7 +853,7 @@ The calculation of ${pt^2}$ in VHDL (no square root in VHDL) using LUTs for \pt,
 % In the TME there is one threshold for pt, given in GeV (floating point notation) with one position after decimal point.
 % The comparison in VHDL is done with ${pt^2}$ (no square root in VHDL), threshold for ${pt^2}$ is provided by VHDL-Producer.
 
-\paragraph{Muon charge correlation}
+\textbf{Muon charge correlation}
 \label{sec:gtl:muon_charge_correlation_module}
 
 For definition of muon charge, see \ref{sec:gtl:muon_data}.\\
@@ -921,16 +955,16 @@ In TME one can select "LS", "0S" or ignore for charge correlation in muon condit
 LUTs are defined as a VHDL "constant" in \texttt{gtl_luts_pkg.vhd} (VHDL package file).
 The values of precision and step size are given by "scale_set" in XML file of a L1 menu.
 
-Overview of precision for correlation cuts (an example for \eg \eg correlation):
-\textit{EG-EG-Delta} used for DeltaEta and DeltaPhi LUTs
-\textit{EG-EG-MassPt} used for pt and unconstrained pt LUTs (mass and two-body pt calculations)
-\textit{EG-EG-Math} used for cos(DeltaPhi) and cosh(DeltaEta) LUTs (mass calculations)
-\textit{EG-EG-InverseDeltaRMath} used for 1/DeltaR LUTs (mass over deltaR calculations)
-\textit{EG-EG-TwoBodyPtMath} used for cos(Phi) and sin(Phi) LUTs (two-body pt calculations)
+Overview of precision types for correlation cuts (an example for \eg \eg correlation):
+\textit{EG-EG-Delta} relevant for DeltaEta and DeltaPhi LUTs
+\textit{EG-EG-MassPt} relevant for pt and unconstrained pt LUTs (used in mass and two-body pt calculations)
+\textit{EG-EG-Math} relevant for cos(DeltaPhi) and cosh(DeltaEta) LUTs (used in mass calculations)
+\textit{EG-EG-InverseDeltaRMath} relevant for 1/DeltaR LUTs (used in mass over deltaR calculations)
+\textit{EG-EG-TwoBodyPtMath} relevant for cos(Phi) and sin(Phi) LUTs (used in two-body pt calculations)
 
-\textit{EG-EG-DeltaOverlapRemoval} is obsolete, used EG-EG-Delta
+\textit{EG-EG-DeltaOverlapRemoval} is obsolete, used EG-EG-Delta (same scales for $\eta$ and $\varphi$)
 \textit{EG-EG-Mass} currently not used
-\textit{EG-EG-TwoBodyPt} currently is obsolete, used EG-EG-MassPt
+\textit{EG-EG-TwoBodyPt} is obsolete, used EG-EG-MassPt
 
 Overview of precision names (example for "MassPt"):
 EG-EG-MassPt
@@ -956,6 +990,7 @@ MU-HTM-MassPt
 MU-ETMHF-MassPt
 
 \textbf{LUTs for \pt and unconstrained \pt used in mass and two-body pt calculations}
+\label{sec:gtl:calc_luts_pt}
 
 The values of \pt or unconstrained \pt LUT are calculated by building the half difference of maximum and minimum value of a bin, adding minimum value, rounding at precision position after decimal point and multiplying with $10^precision$ to get integer values.\\
 The address input of the LUT for \pt or unconstrained \pt is the value of hardware index of \pt or unconstrained \pt.
@@ -976,11 +1011,11 @@ MU_PT_LUT
 MU_UPT_LUT
 
 \textbf{LUTs for $\Delta\eta$}
+\label{sec:gtl:calc_luts_delta_eta}
 
-The values of the LUT are calculated by multiplying $\Delta\eta$ in bins with $\eta$ step size, rounding at precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
-The address of the LUT is the value of $\Delta\eta$ in bins.
+The values of the LUT are calculated by multiplying $\Delta\eta$ in hardware indices with $\eta$ step size, rounding at precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
+The address of the LUT is the value of $\Delta\eta$ in hardware indices.
 
-The precision values of $\Delta\eta$, $\Delta\phi$ and $\Delta$R are identical, there is only one definition for "Delta".
 The precision value in XML file is given by (an example for \eg \eg correlation):
 \textit{<scale>
     <object>PRECISION</object>
@@ -1005,9 +1040,10 @@ CALO_MU_DIFF_ETA_LUT
 MU_MU_DIFF_ETA_LUT
 
 \textbf{LUTs for $\Delta\phi$}
+\label{sec:gtl:calc_luts_delta_phi}
 
-The values of the LUT are calculated by multiplying $\Delta\phi$ in bins with $\varphi$ step size, rounding at precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
-The address of the LUT is the value of $\Delta\phi$ in bins.
+The values of the LUT are calculated by multiplying $\Delta\phi$ in hardware indices with $\varphi$ step size, rounding at precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
+The address of the LUT is the value of $\Delta\phi$ in hardware indices.
 
 The precision values of $\Delta\phi$ are identical with $\Delta\eta$.
 
@@ -1025,9 +1061,10 @@ CALO_MU_DIFF_PHI_LUT
 MU_MU_DIFF_PHI_LUT
 
 \textbf{LUTs for $\cosh($$\Delta\eta$$)$ used in mass calculations}
+\label{sec:gtl:calc_luts_cosh_delta_eta}
 
-The values in the LUT are calculated by multiplying $\Delta\eta$ in bins with $\eta$ step size, calculating cosine hyperbolic, rounding at "Math" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
-The address of the LUT for $\cosh($$\Delta\eta$$)$ is the value of $\Delta\eta$ in bins.\\
+The values in the LUT are calculated by multiplying $\Delta\eta$ in hardware indices with $\eta$ step size, calculating cosine hyperbolic, rounding at "Math" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
+The address of the LUT for $\cosh($$\Delta\eta$$)$ is the value of $\Delta\eta$ in hardware indices.\\
 For calo muon correlations one has to use the muon step size.
 
 The precision values in XML file are given by (an example for \eg \eg correlation):
@@ -1045,9 +1082,10 @@ CALO_MUON_COSH_DETA_LUT
 MU_MU_COSH_DETA_LUT
 
 \textbf{LUTs for $\cos($$\Delta\phi$$)$ used in mass calculations}
+\label{sec:gtl:calc_luts_cos_delta_phi}
 
-The values in the LUT are calculated by multiplying $\Delta\phi$ in bins with $\phi$ step size, calculating cosine, rounding at "Math" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
-The address of the LUT for $\cos($$\Delta\phi$$)$ is the value of $\Delta\phi$ in bins.
+The values in the LUT are calculated by multiplying $\Delta\phi$ in hardware indices with $\phi$ step size, calculating cosine, rounding at "Math" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
+The address of the LUT for $\cos($$\Delta\phi$$)$ is the value of $\Delta\phi$ in hardware indices.
 For calo muon correlations one has to use the muon step size.
 
 VHDL names of $\cos($$\Delta\phi$$)$ LUTs:
@@ -1056,9 +1094,10 @@ CALO_MUON_COS_DPHI_LUT
 MU_MU_COS_DPHI_LUT
 
 \textbf{LUTs for 1/$\Delta$$R^2$ used in mass over deltaR calculations}
+\label{sec:gtl:calc_luts_inverse_deltaR}
 
 The calculation of $\frac{1}{$$\Delta$$R^2$$}$ is done by adding the squares of $\Delta\eta$ and $\Delta\phi$ LUT values, rounding at "InverseDeltaRMath" precision position after decimal point and multipling the result with $10^precision$ to get integer values.
-The address of the two-dimensional LUT for $\frac{1}{$$\Delta$$R^2$$}$ are the values of $\Delta\eta$ and $\Delta\phi$ in bins.
+The address of the two-dimensional LUT for $\frac{1}{$$\Delta$$R^2$$}$ are the values of $\Delta\eta$ and $\Delta\phi$ in hardware indices.
 
 The precision values in XML file are given by (an example for \eg \eg correlation):
 \textit{<scale>
@@ -1088,6 +1127,7 @@ MU-MU-InverseDeltaRMath
 % </scale>}\\
 
 \textbf{LUTs for $\cos($$\varphi$$)$ used in two-body pt calculations}
+\label{sec:gtl:calc_luts_cos_phi}
 
 The values in the LUT are calculated by multiplying $\phi$ hardware index with $\phi$ step size, calculating cosine, rounding at "TwoBodyPtMath" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
 
@@ -1105,6 +1145,7 @@ CALO_COS_PHI_LUT
 MUON_COS_PHI_LUT
 
 \textbf{LUTs for $\sin($$\varphi$$)$ used in two-body pt cuts}
+\label{sec:gtl:calc_luts_sin_phi}
 
 The values in the LUT are calculated by multiplying $\phi$ hardware index with $\phi$ step size, calculating sine, rounding at "TwoBodyPtMath" precision position after decimal point and multipling the result with $10^precision$ to get integer values.\\
 
@@ -1123,7 +1164,7 @@ MUON_SIN_PHI_LUT
 A condition consists of input data and a set of requirements, which contain the requirements to be complied. The requirements are called "object cuts".
 
 The requirement list contains:\\
-thresholds for \pt, ranges for $\eta$ and $\varphi$, LUTs for isolation, LUTs for quality, requsted charges, thresholds for unconstrained \pt, a LUTs for impact parameter.
+thresholds for \pt, ranges for $\eta$ and $\varphi$, LUTs for isolation, LUTs for quality, requsted charges, thresholds for unconstrained \pt, a LUT for impact parameter.
 The condition is complied, if every comparison between object parameters and requirements is valid for the following object cuts (only for requested cuts):
 
 For Calorimeter input data:
@@ -1362,26 +1403,7 @@ Centrality bits used as a signals for triggers (similar to external signals).
 The correlation conditions contain a combination of two "Single object requirement conditions" of two object types or one "Double objects requirement condition" of objects of the same type. In addition with object cuts there are correlation cuts for $\Delta\eta$, $\Delta\varphi$, $\Delta$R, mass, mass divided by $\Delta$R and "two-body pt".\\
 The correlation condition of "Invariant mass for three objects" contains one "Triple objects requirement condition" of objects of the same type with one object cut for mass.
 
-The following cuts can be used:
-\begin{itemize}
-\item Cut for $\Delta\eta$ (DETA).
-\item Cut for $\Delta\varphi$ (DPHI).
-\item Cut for $\Delta$R (DR).
-\item Cuts for charge correlation (only for muon).
-\item Cuts for mass (MASS) of following mass types:
-  \begin{itemize}
-  \item Cut for Invariant mass.
-  \item Cut for Invariant mass with unconstrained pt (only for muons).
-  \item Cut for Invariant mass over $\Delta$R.
-  \item Cut for Transverse mass.
-  \end{itemize}
-\item Cut for Two-body pt.
-\end{itemize}
-
-There is one correlation condition type for a mass cut with three objects:
-\begin{itemize}
-\item Cut for invariant mass for three objects (MASS).
-\end{itemize}
+List of correlation cuts in \ref{sec:gtl:calc_corr_cuts}.
 
 \begin{figure}[htb]
 \centering
@@ -1390,7 +1412,7 @@ There is one correlation condition type for a mass cut with three objects:
 \label{fig:gtl:scheme_vhdl_cuts_correllation_condition}
 \end{figure}
 
-\subparagraph{Overview of possible correlation cuts}
+\textbf{Overview of correlation cuts in conditions}
 \label{sec:gtl:overview_correlation_cuts}
 
 The following list gives an overview of possible correlation cuts in conditions:
@@ -1412,15 +1434,6 @@ The following list gives an overview of possible correlation cuts in conditions:
 \item charge correlation
 \item two-body pt (for double condition)
 \end{itemize}
-% % HB 2020-09-11: MJ checks whether it makes sense!
-% Muon conditions overlap removal (muon\_conditions\_orm.vhd):
-% \begin{itemize}
-% \item charge correlation
-% \item $\Delta\eta$ overlap removal
-% \item $\Delta\varphi$ overlap removal
-% \item $\Delta$R overlap removal
-% \item two-body pt (for double condition)
-% \end{itemize}
 \item Calo calo correlation condition with calo overlap removal:
 \begin{itemize}
 \item $\Delta\eta$ overlap removal

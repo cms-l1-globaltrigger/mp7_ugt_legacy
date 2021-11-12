@@ -13,26 +13,32 @@
 \contentsline {subsubsection}{\numberline {1.4.2}Definitions of Calorimeter data}{13}{subsubsection.1.4.2}
 \contentsline {subsubsection}{\numberline {1.4.3}Definitions of Energy sum quantities data}{16}{subsubsection.1.4.3}
 \contentsline {subsubsection}{\numberline {1.4.4}Definitions of Muon data}{18}{subsubsection.1.4.4}
-\contentsline {subsubsection}{\numberline {1.4.5}Calculation of differences in $\eta $ and $\varphi $}{20}{subsubsection.1.4.5}
-\contentsline {subsubsection}{\numberline {1.4.6}Combination conditions}{21}{subsubsection.1.4.6}
-\contentsline {paragraph}{\numberline {1.4.6.1}Combination conditions definition}{21}{paragraph.1.4.6.1}
-\contentsline {subparagraph}{\numberline {1.4.6.1.1}Object cuts}{22}{subparagraph.1.4.6.1.1}
-\contentsline {subsubsection}{\numberline {1.4.7}Energy sum quantities conditions}{28}{subsubsection.1.4.7}
-\contentsline {paragraph}{\numberline {1.4.7.1}Energy sum quantities conditions module (including Asymmetry conditions)}{28}{paragraph.1.4.7.1}
-\contentsline {subsubsection}{\numberline {1.4.8}Minimum bias trigger conditions}{29}{subsubsection.1.4.8}
-\contentsline {subsubsection}{\numberline {1.4.9}Towercount condition}{29}{subsubsection.1.4.9}
-\contentsline {subsubsection}{\numberline {1.4.10}Centrality condition}{29}{subsubsection.1.4.10}
-\contentsline {subsubsection}{\numberline {1.4.11}Muon charge correlation module}{29}{subsubsection.1.4.11}
-\contentsline {subsubsection}{\numberline {1.4.12}Correlation conditions}{31}{subsubsection.1.4.12}
-\contentsline {paragraph}{\numberline {1.4.12.1}Calculation of cuts}{31}{paragraph.1.4.12.1}
-\contentsline {subparagraph}{\numberline {1.4.12.1.1}$\Delta $R calculation}{31}{subparagraph.1.4.12.1.1}
-\contentsline {subparagraph}{\numberline {1.4.12.1.2}Invariant mass calculation}{32}{subparagraph.1.4.12.1.2}
-\contentsline {subparagraph}{\numberline {1.4.12.1.3}Transverse mass calculation}{32}{subparagraph.1.4.12.1.3}
-\contentsline {subparagraph}{\numberline {1.4.12.1.4}Two-body pt calculation}{33}{subparagraph.1.4.12.1.4}
-\contentsline {subparagraph}{\numberline {1.4.12.1.5}Invariant mass over $\Delta $R calculation}{33}{subparagraph.1.4.12.1.5}
-\contentsline {subparagraph}{\numberline {1.4.12.1.6}Invariant mass calculation for three objects}{34}{subparagraph.1.4.12.1.6}
-\contentsline {subparagraph}{\numberline {1.4.12.1.7}Overview of possible correlation cuts}{34}{subparagraph.1.4.12.1.7}
-\contentsline {paragraph}{\numberline {1.4.12.2}Correlation condition module}{36}{paragraph.1.4.12.2}
-\contentsline {subsubsection}{\numberline {1.4.13}External Conditions}{37}{subsubsection.1.4.13}
-\contentsline {subsubsection}{\numberline {1.4.14}Algorithms logic}{37}{subsubsection.1.4.14}
-\contentsline {section}{\numberline {2}Glossary}{37}{section.2}
+\contentsline {subsubsection}{\numberline {1.4.5}Calculation of object cuts}{21}{subsubsection.1.4.5}
+\contentsline {paragraph}{\numberline {1.4.5.1}Object cuts}{21}{paragraph.1.4.5.1}
+\contentsline {subsubsection}{\numberline {1.4.6}Calculation of correlation cuts}{27}{subsubsection.1.4.6}
+\contentsline {paragraph}{\numberline {1.4.6.1}Calculation of differences in $\eta $ and $\varphi $}{27}{paragraph.1.4.6.1}
+\contentsline {paragraph}{\numberline {1.4.6.2}$\Delta $R calculation}{27}{paragraph.1.4.6.2}
+\contentsline {paragraph}{\numberline {1.4.6.3}Invariant mass calculation}{27}{paragraph.1.4.6.3}
+\contentsline {paragraph}{\numberline {1.4.6.4}Transverse mass calculation}{27}{paragraph.1.4.6.4}
+\contentsline {subparagraph}{\numberline {1.4.6.4.1}Two-body pt calculation}{28}{subparagraph.1.4.6.4.1}
+\contentsline {paragraph}{\numberline {1.4.6.5}Invariant mass over $\Delta $R calculation}{28}{paragraph.1.4.6.5}
+\contentsline {paragraph}{\numberline {1.4.6.6}Invariant mass calculation for three objects}{29}{paragraph.1.4.6.6}
+\contentsline {paragraph}{\numberline {1.4.6.7}Muon charge correlation}{29}{paragraph.1.4.6.7}
+\contentsline {subsubsection}{\numberline {1.4.7}Calculation of look-up-tables (LUTs) for correlation cuts}{31}{subsubsection.1.4.7}
+\contentsline {paragraph}{\numberline {1.4.7.1}LUTs for \ensuremath {p_{\mathrm {T}}}\xspace and unconstrained \ensuremath {p_{\mathrm {T}}}\xspace }{31}{paragraph.1.4.7.1}
+\contentsline {paragraph}{\numberline {1.4.7.2}LUTs for $\Delta \eta $ and $\Delta \phi $}{31}{paragraph.1.4.7.2}
+\contentsline {paragraph}{\numberline {1.4.7.3}LUTs for $\qopname \relax o{cosh}($$\Delta \eta $$)$}{31}{paragraph.1.4.7.3}
+\contentsline {paragraph}{\numberline {1.4.7.4}LUTs for $\qopname \relax o{cos}($$\Delta \varphi $$)$}{31}{paragraph.1.4.7.4}
+\contentsline {subsubsection}{\numberline {1.4.8}Combination conditions}{32}{subsubsection.1.4.8}
+\contentsline {paragraph}{\numberline {1.4.8.1}Combination conditions definition}{32}{paragraph.1.4.8.1}
+\contentsline {subsubsection}{\numberline {1.4.9}Energy sum quantities conditions}{34}{subsubsection.1.4.9}
+\contentsline {paragraph}{\numberline {1.4.9.1}Energy sum quantities conditions module (including Asymmetry conditions)}{34}{paragraph.1.4.9.1}
+\contentsline {subsubsection}{\numberline {1.4.10}Minimum bias trigger conditions}{35}{subsubsection.1.4.10}
+\contentsline {subsubsection}{\numberline {1.4.11}Towercount condition}{35}{subsubsection.1.4.11}
+\contentsline {subsubsection}{\numberline {1.4.12}Centrality condition}{35}{subsubsection.1.4.12}
+\contentsline {subsubsection}{\numberline {1.4.13}Correlation conditions}{36}{subsubsection.1.4.13}
+\contentsline {subparagraph}{\numberline {1.4.13.0.1}Overview of possible correlation cuts}{36}{subparagraph.1.4.13.0.1}
+\contentsline {paragraph}{\numberline {1.4.13.1}Correlation condition module}{39}{paragraph.1.4.13.1}
+\contentsline {subsubsection}{\numberline {1.4.14}External Conditions}{39}{subsubsection.1.4.14}
+\contentsline {subsubsection}{\numberline {1.4.15}Algorithms logic}{39}{subsubsection.1.4.15}
+\contentsline {section}{\numberline {2}Glossary}{40}{section.2}

@@ -3,6 +3,7 @@
 -- Matrix for correlation conditions
 
 -- Version history:
+-- HB 2021-10-27: bug fix for xxx_orm_comp default values. Changed uncorrect logic in "matrix_and_or_p" of "obj_2plus1"
 -- HB 2021-03-16: first design.
 
 library ieee;
@@ -41,15 +42,15 @@ entity matrix_corr_cond is
         tbpt_comp : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
         charge_comp_double : in std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => '1'));
         charge_comp_triple : in std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '1')));
-        deta_orm_comp_12 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
-        deta_orm_comp_13 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '1'));
-        deta_orm_comp_23 : in std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '1'));
-        dphi_orm_comp_12 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
-        dphi_orm_comp_13 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '1'));
-        dphi_orm_comp_23 : in std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '1'));
-        dr_orm_comp_12 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
-        dr_orm_comp_13 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '1'));
-        dr_orm_comp_23 : in std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '1'));
+        deta_orm_comp_12 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
+        deta_orm_comp_13 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
+        deta_orm_comp_23 : in std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
+        dphi_orm_comp_12 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
+        dphi_orm_comp_13 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
+        dphi_orm_comp_23 : in std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
+        dr_orm_comp_12 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
+        dr_orm_comp_13 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
+        dr_orm_comp_23 : in std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
         condition_and_or: out std_logic
     );
 end matrix_corr_cond;
@@ -122,15 +123,16 @@ begin
                     for j in slice_low_obj2 to slice_high_obj2 loop
                         if j/=i then
                             for k in slice_low_obj3 to slice_high_obj3 loop
-                                obj_vs_templ_vec(i,j,k) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and obj3_vs_templ(k,1) and mass_comp(i,j) and dr_comp(i,j) and dphi_comp(i,j) and deta_comp(i,j) and tbpt_comp(i,j);
-                                orm_vec(i,j,k) := (dr_orm_comp_13(i,k) or dr_orm_comp_23(j,k) or dphi_orm_comp_13(i,k) or
-                                    dphi_orm_comp_23(j,k) or deta_orm_comp_13(i,k) or deta_orm_comp_23(j,k)) and obj3_vs_templ(k,1);
-                                orm_vec_or_tmp(i,j) := orm_vec_or_tmp(i,j) or orm_vec(i,j,k);
+                                obj_vs_templ_vec(i,j,k) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and obj3_vs_templ(k,1) and
+                                    mass_comp(i,j) and dr_comp(i,j) and dphi_comp(i,j) and deta_comp(i,j) and tbpt_comp(i,j) and not
+                                    ((dr_orm_comp_13(i,k) or dr_orm_comp_23(j,k) or
+                                    dphi_orm_comp_13(i,k) or dphi_orm_comp_23(j,k) or
+                                    deta_orm_comp_13(i,k) or deta_orm_comp_23(j,k)) and
+                                    obj3_vs_templ(k,1));
                                 obj_vs_templ_or_tmp(i,j) := obj_vs_templ_or_tmp(i,j) or obj_vs_templ_vec(i,j,k);
                             end loop;
                             index := index + 1;
-                            obj_vs_templ_orm_vec(i,j) := obj_vs_templ_or_tmp(i,j) and not orm_vec_or_tmp(i,j);
-                            obj_vs_templ_orm_idx_vec(index) := obj_vs_templ_orm_vec(i,j);
+                            obj_vs_templ_orm_idx_vec(index) := obj_vs_templ_or_tmp(i,j);
                         end if;
                     end loop;
                 end loop;

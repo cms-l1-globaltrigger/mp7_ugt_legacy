@@ -3,6 +3,7 @@
 
 -- Version-history:
 -- HB 2021-10-19: v1.17.0: Implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data] in calo_comparators.vhd.
+-- HB 2021-10-27: v1.16.2: Bug fix in matrix_corr_cond.vhd.
 -- HB 2021-10-18: v1.16.1: Bug fix in calo_comparators.vhd.
 -- HB 2021-08-31: v1.16.0: Changed logic for ROMs (mass over DR) [regenerated IPs for ROMs].
 -- HB 2021-06-10: v1.15.1: Added hadronic shower triggers.

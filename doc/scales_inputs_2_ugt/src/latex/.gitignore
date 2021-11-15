@@ -1,0 +1,12 @@
+# ignore tex output
+*.aux
+*.bbl
+*.blg
+*.brf
+*.idx
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.pdf

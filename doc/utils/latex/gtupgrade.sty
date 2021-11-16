@@ -1,0 +1,197 @@
+%
+% Style definition for Global Trigger Upgrade.
+%
+% Repository path   : $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/utils/latex/gtupgrade.sty $
+% Last committed    : $Revision: 2344 $
+% Last changed by   : $Author: rahbaran $
+% Last changed date : $Date: 2013-10-11 16:20:19 +0200 (Fri, 11 Oct 2013) $
+% Description       : Style definition for usage in all GT Upgrade related docs.
+%
+
+% Default encoding.
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage[english]{babel}
+\usepackage{xspace}
+% Default fonts, first serif, second sans, thrid typewriter.
+\usepackage{lmodern}
+\renewcommand{\sfdefault}{lmss}
+\usepackage{courier}
+\renewcommand{\familydefault}{\rmdefault}
+
+% Default packages.
+\usepackage{a4wide}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{hyphenat}
+\usepackage{lastpage}
+\usepackage{listings}
+\usepackage{lscape}
+\usepackage{textcomp}
+\usepackage{titlesec}
+\usepackage{upquote}
+\usepackage{url}
+\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage{}
+\usepackage{register}
+\restylefloat{table}
+% Include GT Upgrade acronyms package (/utils/general/latex/acronyms.sty)
+\usepackage{acronyms} % This is HEPHY defined acronyms.sty, which can be found at ~/GlobalTriggerUpgrade/utils/latex
+\usepackage{bytefield}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{acronym}
+
+% Define header and footer.
+% Redefine header and foot, using {plain} because \maketitle resets to {plain}.
+\usepackage{fancyhdr}
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \lhead{\small{\nouppercase{\leftmark}}}
+  \renewcommand{\headrulewidth}{0.5pt}
+  \fancyfoot[R]{\small{Page {\thepage} of \pageref*{LastPage}}}
+  \renewcommand{\footrulewidth}{0.5pt}
+}
+\pagestyle{plain}
+
+% Include EPS -> PDF image converter.
+% Requires included graphicx package.
+\usepackage{epstopdf}
+
+% Generate word index.
+\usepackage{makeidx}
+\makeindex
+
+% Style of urls and hyperlinks.
+\urlstyle{rm}
+
+% Set section number (for report class, no chapters, begin with section).
+\def\thesection{\arabic{section}}
+
+% Define colors.
+\definecolor{text-color}           {rgb} {.1,.1,.1}
+\definecolor{section-color}        {rgb} {.20,.20,.20}
+\definecolor{url-color}            {rgb} {.1,0.1,.75}
+\definecolor{lst-background-color} {rgb} {.97,.97,.97}
+\definecolor{lst-comment-color}    {rgb} {.4,.4,.4}
+\definecolor{lst-keyword-color}    {rgb} {0,0,.5}
+\definecolor{lst-string-color}     {rgb} {.25,.1,.1}
+\definecolor{lst-rulecolor-color}  {rgb} {.9,.9,.9}
+
+% Section format.
+\titleformat{\part}{\Huge\bfseries\color{section-color}}{\thepart}{1em}{}
+\titleformat{\chapter}{\Huge\bfseries\color{section-color}}{\thechapter}{1em}{}
+\titleformat{\section}{\LARGE\bfseries\color{section-color}}{\thesection}{1em}{}
+\titleformat{\subsection}{\Large\bfseries\color{section-color}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\large\bfseries\color{section-color}}{\thesubsubsection}{1em}{}
+
+% Space between paragraphs, no indent.
+\setlength{\parskip}{\medskipamount}
+\setlength{\parindent}{0pt}
+
+% Set section and TOC numeration depth.
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+
+% Increase table cell height.
+\renewcommand\arraystretch{1.2}
+
+% Default listing appeareance.
+\lstset{
+  basicstyle        = \footnotesize\ttfamily,
+  commentstyle      = \itshape\color{lst-comment-color},
+  keywordstyle      = \bfseries\color{lst-keyword-color},
+  stringstyle       = \color{lst-string-color},
+  numberstyle       = \tiny\ttfamily,
+  breaklines        = true,
+  breakatwhitespace = false,
+  aboveskip         = \bigskipamount,
+  captionpos        = t,
+  mathescape        = false,
+  frame             = l,
+  framerule         = 3pt,
+  framesep          = 8pt,
+  numbersep         = 14pt,
+  rulecolor         = \color{lst-rulecolor-color},
+  upquote           = true,
+  showspaces        = false,
+  showstringspaces  = false,
+}
+
+% Default PDF setup using hyperref.
+\usepackage[
+    a4paper, pdfusetitle, unicode,
+    bookmarks          = true,
+    pdfnewwindow       = true,
+    colorlinks         = true,
+    linkcolor          = url-color,
+    citecolor          = url-color,
+    filecolor          = url-color,
+    urlcolor           = url-color,
+    bookmarksnumbered  = true,
+    bookmarksopen      = true,
+    bookmarksopenlevel = 1,
+    breaklinks         = false,
+    pdfborder          = {0 0 0},
+    backref            = section,
+] {hyperref}
+
+% Empty macro dfinitions, to be defined in user documents.
+\def\doctitle{Unnamed}
+\def\docauthor{Nobody}
+\def\docdate{\today}
+
+\newcommand{\doctitlepage}{
+ \begin{titlepage}
+  \begin{figure}[htpb]
+   \centering{}\includegraphics[width=0.2\textwidth]{figures/cmslogo}
+   \maketitle\clearpage{}
+  \end{figure}
+ \end{titlepage}
+}
+\newcommand{\doctoc}{
+ \tableofcontents{}
+ \clearpage{}
+}
+\newcommand{\docindex}{
+ \phantomsection\label{indexlist}
+ \addcontentsline{toc}{section}{Index}
+ \printindex{}
+}
+\newcommand{\doctables}{
+ \phantomsection\label{listoftab}
+ \addcontentsline{toc}{section}{List of Tables}
+ \listoftables{}
+ \clearpage{}
+}
+\newcommand{\docfigures}{
+ \phantomsection\label{listoffig}
+ \addcontentsline{toc}{section}{List of Figures}
+ \listoffigures{}
+ \clearpage{}
+}
+\newcommand{\docbib}[1]{
+ \clearpage{}
+ \phantomsection\label{bibligraphy}
+ \addcontentsline{toc}{section}{Bibliography}
+ \bibliographystyle{plain}
+ \bibliography{#1}
+}
+
+% Document title, formated.
+\title{\Huge\bfseries{}\doctitle}
+
+% Document author(s), formated.
+\author{
+ \docauthor\\
+ Institute of High Energy Physics (HEPHY)\\
+ \url{http://www.hephy.at}\\
+ \url{http://globaltrigger.hephy.at}
+}
+
+% Document creation date, formated.
+\date{\docdate}
+
+% eof

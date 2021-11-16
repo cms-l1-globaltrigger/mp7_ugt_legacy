@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.16.3] - 2021-11-16
+### Comment
+
+- mp7_ugt firmware release v1.16.3
+- added utils to doc directory (used for Latex)
+
+### Added
+- ../doc/utils
+
 ## [v1.16.2] - 2021-10-27
 ### Comment
 

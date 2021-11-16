@@ -318,7 +318,8 @@ The data structure of a tau object (bits 27..31 are not defined yet, reserved fo
 
 The representation of the 8 bits (called "hardware index [HW index]") in $\eta$ is expected as Two's Complement notation as shown below.\\
 
-\begin{table}[htdp]
+% \begin{table}[htdp]
+\begin{table}
 \begin{center}
 \begin{tabular}{|c|l|c|}\hline
 \textbf{HW index}& \textbf{$\eta$ range} & \textbf{$\eta$ bin}\\\hline\hline
@@ -337,7 +338,7 @@ The representation of the 8 bits (called "hardware index [HW index]") in $\eta$ 
 
 The representation of the 8 bits in $\varphi$ is expected as shown in Table~\ref{tab:gtl:calo_phi_scale}.\\
 
-\begin{table}[htdp]
+\begin{table}
 \begin{center}
 \begin{tabular}{|c|l|l|c|}\hline
 HW index & $\varphi$ range & $\varphi$ range [degrees] & $\varphi$ bin\\\hline\hline
@@ -505,7 +506,7 @@ The representation of the 9 bits (called "hardware index [HW index]") in $\eta$ 
 The central value of the bin 0 (-0.010875/2 to +0.010875/2) = 0.0, the left edge of the bins will range from $-255 \times 0.010875 - 0.010875/2 = -2.7785625$ to $+255 \times 0.010875 - 0.010875/2 = 2.7676875$.
 The central value of the bins will range between $\pm 2.773125$ . The physical $\eta$ range of the muon detectors is about $\pm2.45$, so that not all possible $\eta$ bins will be used.\\
 
-\begin{table}[htdp]
+\begin{table}
 \begin{center}
 \begin{tabular}{|c|l|c|}\hline
 HW index & $\eta$ range & $\eta$ bin\\\hline\hline
@@ -526,7 +527,7 @@ HW index & $\eta$ range & $\eta$ bin\\\hline\hline
 
 The representation of the 10 bits in $\varphi$ is expected as shown in Table~\ref{tab:gtl:muon_phi_scale}.\\
 
-\begin{table}[htdp]
+\begin{table}
 \begin{center}
 \begin{tabular}{|c|l|l|c|}\hline
 HW index & $\varphi$ range & $\varphi$ range [degrees] & $\varphi$ bin\\\hline\hline
@@ -612,12 +613,13 @@ A comparator between the energy (\pt) and a threshold (pt\_threshold) and a comp
 The values for \pt threshold, the 'mode-selection' for the \pt comparator and the "limits" of the "window"- comparators is given in the generic interface list of the module. Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
 The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
 The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. Number of windows is given for $\varphi$.\\
-There are two cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator} and Listing~\ref{lst:phi_window_comparator_vhd}):
+There are two cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator}):
 \begin{itemize}
 \item Upper limit is less than lower limit => $\varphi$ range between the limits, including the $\varphi$ bin with value = 0 (HW index).
 \item Upper limit is greater/equal than lower limit => $\varphi$ range between the limits, not including the $\varphi$ bin with value = 0 (HW index).
 \end{itemize}
-\begin{lstlisting}[label=lst:phi_window_comparator_vhd,float=here,caption=VHDL code of "window"-comparator in $\varphi$,captionpos=t]
+% \begin{lstlisting}[label=lst:phi_window_comparator_vhd,float=here,caption=VHDL code of "window"-comparator in $\varphi$,captionpos=t]
+\begin{lstlisting}
     phi_comp_w1 <= '1' when phi_w1_upper_limit < phi_w1_lower_limit and
                     (phi <= phi_w1_upper_limit or phi >= phi_w1_lower_limit) else
                    '1' when phi_w1_upper_limit >= phi_w1_lower_limit and
@@ -638,8 +640,10 @@ The values of $\eta$ and $\varphi$ have to be inside of only one of the required
 
 The comparison of isolation (for \egamma, tau and muon) is done with a LUT (Table~\ref{tab:gtl:lut_iso}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
 
-\begin{table}[htdp]
-\begin{center}
+\begin{table}[ht]
+\caption{LUT contents for isolation comparison}
+\vspace{5mm}
+\centering
 \begin{tabular}{|c|c|p{.4\columnwidth}|}\hline
 LUT content (4 bits) & isolation (2 bits) & trigger \\\hline\hline
 X"0" & xx & no trigger\\\hline
@@ -659,8 +663,6 @@ X"D" & 00 or 10 or 11 & trigger on isolation bits = 00 or 10 or 11\\\hline
 X"E" & 01 or 10 or 11 & trigger on isolation bits = 01 or 10 or 11\\\hline
 X"F" & 00 or 01 or 10 or 11 & trigger on isolation bits = 00 or 01 or 10 or 11 (= "ignore" isolation)\\\hline
 \end{tabular}
-\end{center}
-\caption{LUT contents for isolation comparison}
 \label{tab:gtl:lut_iso}
 \end{table}
 
@@ -668,8 +670,10 @@ X"F" & 00 or 01 or 10 or 11 & trigger on isolation bits = 00 or 01 or 10 or 11 (
 
 The comparison of impact parameter is done with LUT (Table~\ref{tab:gtl:muon_lut_ip}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
 
-\begin{table}[htdp]
-\begin{center}
+\begin{table}
+\caption{LUT contents for impact parameter comparison}
+\vspace{5mm}
+\centering
 \begin{tabular}{|c|c|p{.4\columnwidth}|}\hline
 LUT content (4 bits) & impact parameter  (2 bits) & trigger \\\hline\hline
 X"0" & xx & no trigger\\\hline
@@ -689,15 +693,15 @@ X"D" & 00 or 10 or 11 & trigger on impact parameter bits = 00 or 10 or 11\\\hlin
 X"E" & 01 or 10 or 11 & trigger on impact parameter bits = 01 or 10 or 11\\\hline
 X"F" & 00 or 01 or 10 or 11 & trigger on impact parameter bits = 00 or 01 or 10 or 11 (= "ignore" impact parameter)\\\hline
 \end{tabular}
-\end{center}
-\caption{LUT contents for impact parameter comparison}
 \label{tab:gtl:muon_lut_ip}
 \end{table}
 
 The comparison of quality is done with LUT (Table~\ref{tab:gtl:muon_lut_qual}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
 
-\begin{table}[htdp]
-\begin{center}
+\begin{table}
+\caption{LUT contents for quality comparison of muon objects}
+\vspace{5mm}
+\centering
 \begin{tabular}{|c|c|l|c|}\hline
 LUT content (16 bits) & quality bits  (4 bits) & trigger \\\hline\hline
 X"0000" & xxxx & no trigger\\\hline
@@ -711,8 +715,6 @@ X"C000" & 1111 or 1110 & trigger on quality "level 15" or "level 14"\\\hline
 ... & ...& ...\\\hline
 X"FFFF" & xx & trigger on all quality "levels" (= "ignore")\\\hline
 \end{tabular}
-\end{center}
-\caption{LUT contents for quality comparison of muon objects}
 \label{tab:gtl:muon_lut_qual}
 \end{table}
 
@@ -809,20 +811,15 @@ The calculation of \textit{invariant mass over $\Delta$R of two objects} is done
 A direct calculation of 1/$\Delta$$R^2$ is not possible in firmware (VHDL code), therefore the implementation of the calculation is done by LUTs. In the hardware the values of these LUTs are stored in "large" ROMs, which was realized using the Block RAMs (BRAMs) of the Virtex chip.\\
 Due the limited number of available BRAMs there are some restrictions for creating algorithms with \textit{invariant mass over $\Delta$R}:
 \begin{itemize}
-\item 1. Objects must have the same type (e.g.: "muon muon", "eg eg", ...)
-\item 2. Objects must be of same bx
-\item 3. Resolution of $\Delta\eta$ and $\Delta\varphi$:
+\item Objects must have the same type (e.g.: "muon muon", "eg eg", ...)
+\item Objects must be of same bx
+\item Resolution of $\Delta\eta$ and $\Delta\varphi$:
   \begin{itemize}
   \item Full resolution for calos (max. deta bins=230, max. dphi bins=72)
   \item Half resolution only for muons (max. deta bins=226, max. dphi bins=144)
   \end{itemize}
-\item 4. The precision of $\Delta\eta$ and $\Delta\varphi$:
-  \begin{itemize}
-  \item "calo calo" = 5
-  \item "muon muon" = 5
-  \end{itemize}
-\item 5. If 1/$\Delta$$R^2$=0 ($\Delta\eta$=0 and $\Delta\varphi$=0) then correlation cut \textit{invariant mass over $\Delta$R} is true
-\item 6. The values of LUTs are only valid for current definitions and restrictions. Every change might cause a recalculation of the values and a regeneration of IPs (representing LUTs in BRAMs) in Vivado (firmware generation tool)
+\item If 1/$\Delta$$R^2$=0 ($\Delta\eta$=0 and $\Delta\varphi$=0) then correlation cut \textit{invariant mass over $\Delta$R} is true
+\item The values of LUTs are only valid for current definitions and restrictions. Every change might cause a recalculation of the values and a regeneration of IPs (representing LUTs in BRAMs) in Vivado (firmware generation tool)
 \end{itemize}
 
 The values of LUTs in firmware are listed in coe files of ROMs (created by same scripts mentioned above), currently 5 ROMs for "calo calo" and 6 ROMs for "muon muon" (see \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/ngc/lut_calo_inv_dr_sq_rom1.coe}{\texttt{lut\_calo\_inv\_dr\_sq\_rom1.coe}}, etc. and \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/ngc/lut_muon_inv_dr_sq_rom1.coe}{\texttt{lut\_muon\_inv\_dr\_sq\_rom1.coe}}, etc.). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. All ROMs for calos have 4096 addresses, for muons 8192 addresses. The data width of ROMs is different depending on the highest LUT value in ROM. Because of these different data widths, the partitioning of several ROMs was done to save BRAM resources. Currently 873 BRAMs (36kb) are available per Virtex chip.
@@ -1140,7 +1137,7 @@ MU-MU-InverseDeltaRMath\\
 \textbf{LUTs for $\cos($$\varphi$$)$ used in two-body pt calculations}
 \label{sec:gtl:calc_luts_cos_phi}
 
-The values in the LUT are calculated by multiplying $\varphi$ hardware index with $\varphi$ step size, calculating cosine, rounding at "TwoBodyPtMath" precision position after decimal point and multipling the result with 10\textsuperscript{\tiny{precision}} to get integer values.\\
+The values in the LUT are calculated by building the half difference of maximum and minimum value of a $\varphi$ bin, adding minimum value, calculating cosine, rounding at "TwoBodyPtMath" precision position after decimal point and multipling the result with 10\textsuperscript{\tiny{precision}} to get integer values.\\
 
 The precision values in XML file are given by (an example for \eg \eg correlation):\\
 \textit{<scale>\\
@@ -1158,7 +1155,7 @@ MUON\_COS\_PHI\_LUT\\
 \textbf{LUTs for $\sin($$\varphi$$)$ used in two-body pt cuts}
 \label{sec:gtl:calc_luts_sin_phi}
 
-The values in the LUT are calculated by multiplying $\varphi$ hardware index with $\varphi$ step size, calculating sine, rounding at "TwoBodyPtMath" precision position after decimal point and multipling the result with 10\textsuperscript{\tiny{precision}} to get integer values.\\
+The values in the LUT are calculated by building the half difference of maximum and minimum value of a $\varphi$ bin, adding minimum value, calculating sine, rounding at "TwoBodyPtMath" precision position after decimal point and multipling the result with 10\textsuperscript{\tiny{precision}} to get integer values.\\
 
 VHDL names of $\sin($$\varphi$$)$ LUTs:\\
 CALO\_SIN\_PHI\_LUT\\
@@ -1250,7 +1247,7 @@ Additionally charge correlation cuts with "Double objects requirements condition
 %
 % The comparison of isolation (for \egamma, tau and muon) is done with a LUT (Table~\ref{tab:gtl:lut_iso}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
 %
-% \begin{table}[htdp]
+% \begin{table}
 % \begin{center}
 % \begin{tabular}{|c|c|p{.4\columnwidth}|}\hline
 % LUT content (4 bits) & isolation (2 bits) & trigger \\\hline\hline
@@ -1280,7 +1277,7 @@ Additionally charge correlation cuts with "Double objects requirements condition
 %
 % The comparison of impact parameter is done with LUT (Table~\ref{tab:gtl:muon_lut_ip}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
 %
-% \begin{table}[htdp]
+% \begin{table}
 % \begin{center}
 % \begin{tabular}{|c|c|p{.4\columnwidth}|}\hline
 % LUT content (4 bits) & impact parameter  (2 bits) & trigger \\\hline\hline
@@ -1308,7 +1305,7 @@ Additionally charge correlation cuts with "Double objects requirements condition
 %
 % The comparison of quality is done with LUT (Table~\ref{tab:gtl:muon_lut_qual}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
 %
-% \begin{table}[htdp]
+% \begin{table}
 % \begin{center}
 % \begin{tabular}{|c|c|l|c|}\hline
 % LUT content (16 bits) & quality bits  (4 bits) & trigger \\\hline\hline
@@ -1344,9 +1341,12 @@ For the entity-declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_
 \lstinputlisting[label=lst:esums_conditions_vhd,language=VHDL,caption=Entity declaration of \texttt{esums\_conditions.vhd}]{interfaces/esums_conditions.vhd}
 
 \medskip
-\begin{table}[htdp]
+\begin{table}
 \footnotesize
-\begin{center}
+\caption{Explanation of Listing~\ref{lst:esums_conditions_vhd}}
+\vspace{5mm}
+\centering
+% \begin{center}
 \begin{tabular}{l p{.7\columnwidth}}
 \toprule
 {Item} & {Explanation}\\
@@ -1365,8 +1365,8 @@ For the entity-declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_
 \verb|condition_o| & output of condition (routed to Algorithms logic, see \ref{sec:gtl:algorithms_logic}).\\
 \bottomrule
 \end{tabular}
-\end{center}
-\caption{Explanation of Listing~\ref{lst:esums_conditions_vhd}}
+% \end{center}
+% \caption{Explanation of Listing~\ref{lst:esums_conditions_vhd}}
 \label{tab:gtl:explanation_esums_conditions_vhd}
 \end{table}
 

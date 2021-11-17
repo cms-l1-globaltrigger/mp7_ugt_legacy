@@ -4,7 +4,7 @@
 \textbf{SECTION STILL UNDER CONSTRUCTION}\\
 
 \textbf{Remark:}\\
-This description is for version 1.16.0 of Global Trigger Logic.\\
+This description is for version 1.17.0 of Global Trigger Logic.\\
 
 The Global Trigger Logic (\ugtl) firmware contains conditions and algorithms for trigger decision.
 
@@ -69,16 +69,19 @@ The data structure of an \egamma object (bits 27..31 are not defined yet, reserv
 \end{bytefield}
 \end{center}
 
-The data structure of a jet object (bits 27..31 are not defined yet, reserved for quality, ...):
+The data structure of a jet object (bits 30..31 are spare bits):
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,10,11,18,19,26,27,31} \\
-        \bitbox {5}     {\texttt{iso/qu/sp}} &
+        \bitheader{0,10,11,18,19,26,27,27,28,29,30,31} \\
+        \bitbox {2}     {\texttt{sp}} &
+        \bitbox {2}     {\texttt{qu}} &
+        \bitbox {1}     {\texttt{D}} &
         \bitbox {8}     {\texttt{$\varphi$}}  &
         \bitbox {8}     {\texttt{$\eta$}}  &
         \bitbox {11}    {\texttt{\et}} \\
 \end{bytefield}
 \end{center}
+D = DISP bit, qu = quality flags, sp = spare bits.
 
 The data structure of a tau object (bits 27..31 are not defined yet, reserved for quality, ...):
 \begin{center}
@@ -166,8 +169,8 @@ The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = ch
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
         \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
-        \bitbox {2}     {\small  \texttt{imp para}}       &
-        \bitbox {1}     {\small  \texttt{r}}       &
+        \bitbox {2}     {\small  \texttt{imp}}       &
+        \bitbox {1}     {\small  \texttt{s}}       &
         \bitbox {8}     {\texttt{unconst.\pt}}       &
         \bitbox {10}    {\texttt{$\varphi$} (out)}
         \bitbox {7}     {\texttt{index bits}}
@@ -181,6 +184,7 @@ The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = ch
         \bitbox {10}    {\texttt{$\varphi$} (extrapol.)} \\
 \end{bytefield}
 \end{center}
+ch = charge bits, s = spare bit, imp = impact parameter.
 
 \clearpage
 
@@ -251,9 +255,10 @@ on latency, because coming before data for a certain bunch-crossing.
 \label{sec:gtl:calorimeter_data}
 
 The calorimeter trigger processing identifies \textbf{\egamma, jet and tau} objects and \textbf{\esums}.\\
+See also \ref{sec:gtl:optical_interfaces}.\\
 
 \textbf{\egamma}:\\ Twelve objects are passed to the \ugt for each event.\\
-For each selected object, the Calo-Layer2 sends parameters for \et and for position and quality information - encoded in 32 bits:
+For each selected object, the Calo-Layer2 sends parameters for \pt and for position and isolation - encoded in 32 bits:
 \begin{itemize}
 \item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
 \item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 138 bins (HW index = 0xBC..0x44)
@@ -262,40 +267,45 @@ For each selected object, the Calo-Layer2 sends parameters for \et and for posit
 \item 5 bits spare
 \end{itemize}
 
-The data structure of an \egamma object (bits 27..31 are not defined yet, reserved for quality, ...):
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,8,9,16,17,24,25,26,27,31} \\
-        \bitbox {5}     {\texttt{spare}} &
-        \bitbox {2}     {\texttt{iso}} &
-        \bitbox {8}     {\texttt{$\varphi$}}  &
-        \bitbox {8}     {\texttt{$\eta$}}  &
-        \bitbox {9}     {\texttt{\pt}} \\
-\end{bytefield}
-\end{center}
+% The data structure of an \egamma object (bits 27..31 are not defined yet, reserved for quality, ...):
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,8,9,16,17,24,25,26,27,31} \\
+%         \bitbox {5}     {\texttt{spare}} &
+%         \bitbox {2}     {\texttt{iso}} &
+%         \bitbox {8}     {\texttt{$\varphi$}}  &
+%         \bitbox {8}     {\texttt{$\eta$}}  &
+%         \bitbox {9}     {\texttt{\pt}} \\
+% \end{bytefield}
+% \end{center}
 
 \textbf{jet}:\\ Twelve objects are passed to the \ugt for each event.\\
-For each selected object, the Calo-Layer2 sends parameters: \et, for position and quality information - encoded in 32 bits:
+For each selected object, the Calo-Layer2 sends parameters: \pt, for position information, a DISP bit and quality information - encoded in 32 bits:
 \begin{itemize}
 \item 11 bits \pt, range = 0..1023 GeV (HW index = 0..0x7FF), step = 0.5, the highest bin will mark an overflow (HW index 0x7FF): meaning has to be defined
 \item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
-\item 5 bitsspare
+\item 1 DISP bit (will be used to flag a jet as delayed based on HCAL timing and depth profiles that are indicative of a LLP decay. If this bit is set to 1, then the jet has been tagged as an LLP jet.)
+\item 2 bits for "quality flags" - actually not used.
+\item 2 bits spare
 \end{itemize}
 
-The data structure of a jet object (bits 27..31 are not defined yet, reserved for quality, ...):
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,10,11,18,19,26,27,31} \\
-        \bitbox {5}     {\texttt{spare}} &
-        \bitbox {8}     {\texttt{$\varphi$}}  &
-        \bitbox {8}     {\texttt{$\eta$}}  &
-        \bitbox {11}    {\texttt{\pt}} \\
-\end{bytefield}
-\end{center}
+% The data structure of a jet object (bits 30..31 are spare bits):
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,10,11,18,19,26,27,27,28,29,30,31} \\
+%         \bitbox {2}     {\texttt{sp}} &
+%         \bitbox {2}     {\texttt{qu}} &
+%         \bitbox {1}     {\texttt{D}} &
+%         \bitbox {8}     {\texttt{$\varphi$}}  &
+%         \bitbox {8}     {\texttt{$\eta$}}  &
+%         \bitbox {11}    {\texttt{\et}} \\
+% \end{bytefield}
+% \end{center}
+% D = DISP bit, qu = quality flags, sp = spare bits.
 
 \textbf{tau}:\\ Twelve objects are passed to the \ugt for each event.\\
-For each selected object, the Calo-Layer2 sends parameters for \et and for position and quality information - encoded in 32 bits:
+For each selected object, the Calo-Layer2 sends parameters for \pt and for position information and isolation - encoded in 32 bits:
 \begin{itemize}
 \item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
 \item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 138 bins (HW index = 0xBC..0x44)
@@ -304,23 +314,24 @@ For each selected object, the Calo-Layer2 sends parameters for \et and for posit
 \item 5 bits spare
 \end{itemize}
 
-The data structure of a tau object (bits 27..31 are not defined yet, reserved for quality, ...):
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,8,9,16,17,24,25,26,27,31} \\
-        \bitbox {5}     {\texttt{spare}} &
-        \bitbox {2}     {\texttt{iso}} &
-        \bitbox {8}     {\texttt{$\varphi$}}  &
-        \bitbox {8}     {\texttt{$\eta$}}  &
-        \bitbox {9}     {\texttt{\et}} \\
-\end{bytefield}
-\end{center}
+% The data structure of a tau object (bits 27..31 are not defined yet, reserved for quality, ...):
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,8,9,16,17,24,25,26,27,31} \\
+%         \bitbox {5}     {\texttt{spare}} &
+%         \bitbox {2}     {\texttt{iso}} &
+%         \bitbox {8}     {\texttt{$\varphi$}}  &
+%         \bitbox {8}     {\texttt{$\eta$}}  &
+%         \bitbox {9}     {\texttt{\et}} \\
+% \end{bytefield}
+% \end{center}
 
 The representation of the 8 bits (called "hardware index [HW index]") in $\eta$ is expected as Two's Complement notation as shown below.\\
 
-% \begin{table}[htdp]
-\begin{table}
-\begin{center}
+\begin{table}[ht]
+\caption{$\eta$ scale of calorimeter objects}
+\vspace{5mm}
+\centering
 \begin{tabular}{|c|l|c|}\hline
 \textbf{HW index}& \textbf{$\eta$ range} & \textbf{$\eta$ bin}\\\hline\hline
 0x72 & 114$*$0.087/2 to 115$*$0.087/2 & 114\\\hline
@@ -332,14 +343,15 @@ The representation of the 8 bits (called "hardware index [HW index]") in $\eta$ 
 ... & ... & ...\\\hline
 0x8E & -114$*$0.087/2 to -115$*$0.087/2 & -115\\\hline
 \end{tabular}
-\end{center}
 \label{tab:gtl:calo_eta_scale_new}
 \end{table}
 
 The representation of the 8 bits in $\varphi$ is expected as shown in Table~\ref{tab:gtl:calo_phi_scale}.\\
 
-\begin{table}
-\begin{center}
+\begin{table}[ht]
+\caption{$\varphi$ scale of calorimeter objects}
+\vspace{5mm}
+\centering
 \begin{tabular}{|c|l|l|c|}\hline
 HW index & $\varphi$ range & $\varphi$ range [degrees] & $\varphi$ bin\\\hline\hline
 0x00 & 0 to 2$\pi$/144 & 0 to 2.5 & 0\\\hline
@@ -347,8 +359,6 @@ HW index & $\varphi$ range & $\varphi$ range [degrees] & $\varphi$ bin\\\hline\h
 ... & ... & ... & ...\\\hline
 0x8F & 143$*$2$\pi$/144 to 2$\pi$ & 357.5 to 360 & 143\\\hline
 \end{tabular}
-\end{center}
-\caption{$\varphi$ scale of calorimeter objects}
 \label{tab:gtl:calo_phi_scale}
 \end{table}
 
@@ -368,8 +378,11 @@ bits [26..25] & definition \\\hline\hline
 \label{tab:gtl:eg_tau_iso_bits}
 \end{table}
 
+\clearpage
+
 \subsubsection{Definitions of Energy sum quantities data}
 
+See also \ref{sec:gtl:optical_interfaces}.\\
 \textbf{\esums}:\\ Consists of following quantities (naming convention see \ref{sec:glossary}):
 \begin{itemize}
 \item \textbf{\ett}
@@ -398,75 +411,77 @@ Calo-Layer2 sends 6 frames (each 32 bits) with Energy sum quantities containing 
 \item "Centrality", 8 bits, used as signals
 \end{itemize}
 
-Frame0: The data structure of "total Et" (\ett) quantity [including "total Et from ECAL only" (ETTEM) and "minimum bias HF+ threshold 0" bits]:
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,11,12,23,24,27,28,31} \\
-        \bitbox {4}    {\texttt{MBT0HFP}} &
-        \bitbox {4}    {\texttt{spare}} &
-        \bitbox {12}    {\texttt{\et [ETTEM]}} &
-        \bitbox {12}    {\texttt{\et [\ett]}} \\
-\end{bytefield}
-\end{center}
+Frame0: The data structure of "total Et" (\ett) quantity [including "total Et from ECAL only" (ETTEM) and "minimum bias HF+ threshold 0" bits].
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,11,12,23,24,27,28,31} \\
+%         \bitbox {4}    {\texttt{MBT0HFP}} &
+%         \bitbox {4}    {\texttt{spare}} &
+%         \bitbox {12}    {\texttt{\et [ETTEM]}} &
+%         \bitbox {12}    {\texttt{\et [\ett]}} \\
+% \end{bytefield}
+% \end{center}
 
-Frame1: The data structure of "total calibrated Et in jets" (\htt) quantity [including "towercount" and "minimum bias HF- threshold 0" bits]:
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,11,12,24,25,27,28,31} \\
-        \bitbox {4}    {\texttt{MBT0HFM}} &
-        \bitbox {3}    {\texttt{spare}} &
-        \bitbox {13}    {\texttt{TOWERCOUNT}} &
-        \bitbox {12}    {\texttt{\et}} \\
-\end{bytefield}
-\end{center}
+Frame1: The data structure of "total calibrated Et in jets" (\htt) quantity [including "towercount" and "minimum bias HF- threshold 0" bits].
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,11,12,24,25,27,28,31} \\
+%         \bitbox {4}    {\texttt{MBT0HFM}} &
+%         \bitbox {3}    {\texttt{spare}} &
+%         \bitbox {13}    {\texttt{TOWERCOUNT}} &
+%         \bitbox {12}    {\texttt{\et}} \\
+% \end{bytefield}
+% \end{center}
 
-Frame2: The data structure of "missing Et" (\etm) quantity [including "Asymmetry" ASYMET and "minimum bias HF+ threshold 1" bits]:
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,11,12,19,20,27,28,31} \\
-        \bitbox {4}    {\texttt{MBT1HFP}} &
-        \bitbox {8}    {\texttt{ASYMET}} &
-        \bitbox {8}     {\texttt{$\varphi$}} &
-        \bitbox {12}    {\texttt{\et}} \\
-\end{bytefield}
-\end{center}
+Frame2: The data structure of "missing Et" (\etm) quantity [including "Asymmetry" ASYMET and "minimum bias HF+ threshold 1" bits].
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,11,12,19,20,27,28,31} \\
+%         \bitbox {4}    {\texttt{MBT1HFP}} &
+%         \bitbox {8}    {\texttt{ASYMET}} &
+%         \bitbox {8}     {\texttt{$\varphi$}} &
+%         \bitbox {12}    {\texttt{\et}} \\
+% \end{bytefield}
+% \end{center}
 
-Frame3: The data structure of "missing Ht" (\htm) quantity [including "Asymmetry" ASYMHT and "minimum bias HF- threshold 1" bits]:
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,11,12,19,20,27,28,31} \\
-        \bitbox {4}    {\texttt{MBT1HFM}} &
-        \bitbox {8}    {\texttt{ASYMHT}} &
-        \bitbox {8}     {\texttt{$\varphi$}} &
-        \bitbox {12}    {\texttt{\et}} \\
-\end{bytefield}
-\end{center}
+Frame3: The data structure of "missing Ht" (\htm) quantity [including "Asymmetry" ASYMHT and "minimum bias HF- threshold 1" bits].
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,11,12,19,20,27,28,31} \\
+%         \bitbox {4}    {\texttt{MBT1HFM}} &
+%         \bitbox {8}    {\texttt{ASYMHT}} &
+%         \bitbox {8}     {\texttt{$\varphi$}} &
+%         \bitbox {12}    {\texttt{\et}} \\
+% \end{bytefield}
+% \end{center}
 
-Frame4: The data structure of "missing Et including HF" (ET$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMETHF and "Centrality" bits (3:0)]:
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,11,12,19,20,27,28,31} \\
-        \bitbox {4}    {\small \texttt{CENT[3:0]}} &
-        \bitbox {8}    {\texttt{ASYMETHF}} &
-        \bitbox {8}     {\texttt{$\varphi$}} &
-        \bitbox {12}    {\texttt{\et}} \\
-\end{bytefield}
-\end{center}
+Frame4: The data structure of "missing Et including HF" (ET$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMETHF and "Centrality" bits (3:0)].
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,11,12,19,20,27,28,31} \\
+%         \bitbox {4}    {\small \texttt{CENT[3:0]}} &
+%         \bitbox {8}    {\texttt{ASYMETHF}} &
+%         \bitbox {8}     {\texttt{$\varphi$}} &
+%         \bitbox {12}    {\texttt{\et}} \\
+% \end{bytefield}
+% \end{center}
 
-Frame5: The data structure of "missing Ht including HF" (HT$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMHTHF and "Centrality" bits (7:4)]:
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,11,12,19,20,27,28,31} \\
-        \bitbox {4}    {\small \texttt{CENT[7:4]}} &
-        \bitbox {8}    {\texttt{ASYMHTHF}} &
-        \bitbox {8}     {\texttt{$\varphi$}} &
-        \bitbox {12}    {\texttt{\et}} \\
-\end{bytefield}
-\end{center}
+Frame5: The data structure of "missing Ht including HF" (HT$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMHTHF and "Centrality" bits (7:4)].
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,11,12,19,20,27,28,31} \\
+%         \bitbox {4}    {\small \texttt{CENT[7:4]}} &
+%         \bitbox {8}    {\texttt{ASYMHTHF}} &
+%         \bitbox {8}     {\texttt{$\varphi$}} &
+%         \bitbox {12}    {\texttt{\et}} \\
+% \end{bytefield}
+% \end{center}
+
+\clearpage
 
 \subsubsection{Definitions of Muon data}
 \label{sec:gtl:muon_data}
-Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data structure with parameters for \pt, for unconstrained \pt, for impact parameter, for position, charge, quality and isolation information:
+Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data structure with parameters for \pt, for unconstrained \pt, for impact parameter, for position, charge, quality and isolation information (see also \ref{sec:gtl:gmt_optical_interfaces}):\\
 \begin{itemize}
 \item 10 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/576 (\^=0.625°), 576 bins (HW index = 0..0x23F), HW index starting at 0° (anti-clockwise)
 \item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
@@ -482,32 +497,35 @@ Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data stru
 \item 2 bits impact parameter
 \end{itemize}
 
-The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = charge valid, bit 61 is a spare bit, bit 63..62 = impact parameter):
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
-        \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
-        \bitbox {2}     {\small  \texttt{imp para}}       &
-        \bitbox {1}     {\small  \texttt{r}}       &
-        \bitbox {8}     {\texttt{unconst.\pt}}       &
-        \bitbox {10}    {\texttt{$\varphi$} (out)}
-        \bitbox {7}     {\texttt{index bits}}
-        \bitbox {2}     {\small  \texttt{ch}}       &
-        \bitbox {2}     {\small \texttt{iso}} \\
-        [3ex]
-        \bitheader{0,9,10,18,19,22,23,31} \\
-        \bitbox {9}     {\texttt{$\eta$} (extrapol.)}       &
-        \bitbox {4}     {\texttt{qual}}       &
-        \bitbox {9}     {\texttt{\pt}}    &
-        \bitbox {10}    {\texttt{$\varphi$} (extrapol.)} \\
-\end{bytefield}
-\end{center}
+% The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = charge valid, bit 61 is a spare bit, bit 63..62 = impact parameter):
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
+%         \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
+%         \bitbox {2}     {\small  \texttt{imp}}       &
+%         \bitbox {1}     {\small  \texttt{s}}       &
+%         \bitbox {8}     {\texttt{unconst.\pt}}       &
+%         \bitbox {10}    {\texttt{$\varphi$} (out)}
+%         \bitbox {7}     {\texttt{index bits}}
+%         \bitbox {2}     {\small  \texttt{ch}}       &
+%         \bitbox {2}     {\small \texttt{iso}} \\
+%         [3ex]
+%         \bitheader{0,9,10,18,19,22,23,31} \\
+%         \bitbox {9}     {\texttt{$\eta$} (extrapol.)}       &
+%         \bitbox {4}     {\texttt{qual}}       &
+%         \bitbox {9}     {\texttt{\pt}}    &
+%         \bitbox {10}    {\texttt{$\varphi$} (extrapol.)} \\
+% \end{bytefield}
+% \end{center}
+% ch = charge bits, s = spare bit, imp = impact parameter.
 
 The representation of the 9 bits (called "hardware index [HW index]") in $\eta$ is expected as Two's Complement notation as shown in Table~\ref{tab:gtl:muon_eta_scale}.\\
 The central value of the bin 0 (-0.010875/2 to +0.010875/2) = 0.0, the left edge of the bins will range from $-255 \times 0.010875 - 0.010875/2 = -2.7785625$ to $+255 \times 0.010875 - 0.010875/2 = 2.7676875$.
 The central value of the bins will range between $\pm 2.773125$ . The physical $\eta$ range of the muon detectors is about $\pm2.45$, so that not all possible $\eta$ bins will be used.\\
 
 \begin{table}
-\begin{center}
+\caption{$\eta$ scale of muon objects}
+\vspace{5mm}
+\centering
 \begin{tabular}{|c|l|c|}\hline
 HW index & $\eta$ range & $\eta$ bin\\\hline\hline
 0x0E1 & 224.5$*$0.087/8 to 225.5$*$0.087/8 & 225\\\hline
@@ -520,15 +538,15 @@ HW index & $\eta$ range & $\eta$ bin\\\hline\hline
 ... & ... & ...\\\hline
 0x11F & -224.5$*$0.087/8 to -225.5$*$0.087/8 & -225\\\hline
 \end{tabular}
-\end{center}
-\caption{$\eta$ scale of muon objects}
 \label{tab:gtl:muon_eta_scale}
 \end{table}
 
 The representation of the 10 bits in $\varphi$ is expected as shown in Table~\ref{tab:gtl:muon_phi_scale}.\\
 
-\begin{table}
-\begin{center}
+\begin{table}[ht]
+\caption{$\varphi$ scale of muon objects}
+\vspace{5mm}
+\centering
 \begin{tabular}{|c|l|l|c|}\hline
 HW index & $\varphi$ range & $\varphi$ range [degrees] & $\varphi$ bin\\\hline\hline
 0x000 & 0 to 2$\pi$/576 & 0 to 0.625 & 0\\\hline
@@ -536,8 +554,6 @@ HW index & $\varphi$ range & $\varphi$ range [degrees] & $\varphi$ bin\\\hline\h
 ... & ... & ... & ...\\\hline
 0x23F & 575$*$2$\pi$/576 to 2$\pi$ & 359.375 to 360 & 575\\\hline
 \end{tabular}
-\end{center}
-\caption{$\varphi$ scale of muon objects}
 \label{tab:gtl:muon_phi_scale}
 \end{table}
 
@@ -601,7 +617,8 @@ List of object cuts:
 \item $\eta$
 \item $\varphi$
 \item isolation
-\item requested charge
+\item DISP
+\item charge
 \item quality
 \item unconstrained \pt
 \item impact parameter
@@ -609,8 +626,8 @@ List of object cuts:
 
 \paragraph{Object cuts}
 \label{sec:gtl:object_cuts}
-A comparator between the energy (\pt) and a threshold (pt\_threshold) and a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators is done in this basic module.
-The values for \pt threshold, the 'mode-selection' for the \pt comparator and the "limits" of the "window"- comparators is given in the generic interface list of the module. Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
+The comparisons for objects cuts are done by:\\
+A comparator between the energy (\pt) and a threshold (pt\_threshold) with 'mode-selection'. Similar for unconstrained \pt.\\
 The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
 The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. Number of windows is given for $\varphi$.\\
 There are two cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator}):
@@ -626,6 +643,13 @@ There are two cases how the limits of one "window"-comparator could be set (see 
                     (phi <= phi_w1_upper_limit and phi >= phi_w1_lower_limit)
                     else '0';
 \end{lstlisting}
+Only one of the required ranges ("windows") must be fulfilled by $\eta$ and $\varphi$ values ("or").\\
+
+\clearpage
+
+The comparisons for isolation, quality and impact parameter are done with LUTs.\\
+The comparison for charge is done with requested charge.\\
+If DISP bit is set to 1, then the jet has been tagged as an LLP jet. A one bit requirement is given for DISP for comparison.\\
 
 \begin{figure}[htb]
 \centering
@@ -633,10 +657,6 @@ There are two cases how the limits of one "window"-comparator could be set (see 
 \caption{Setting the limits for "window"-comparators for $\varphi$}
 \label{fig:gtl:phi_windows_comparator}
 \end{figure}
-
-The values of $\eta$ and $\varphi$ have to be inside of only one of the required ranges ("or").
-
-\clearpage
 
 The comparison of isolation (for \egamma, tau and muon) is done with a LUT (Table~\ref{tab:gtl:lut_iso}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
 
@@ -665,8 +685,6 @@ X"F" & 00 or 01 or 10 or 11 & trigger on isolation bits = 00 or 01 or 10 or 11 (
 \end{tabular}
 \label{tab:gtl:lut_iso}
 \end{table}
-
-\clearpage
 
 The comparison of impact parameter is done with LUT (Table~\ref{tab:gtl:muon_lut_ip}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
 
@@ -963,15 +981,6 @@ Overview of precision types for correlation cuts (an example for \eg \eg correla
 \item \textit{EG-EG-Mass} currently not used
 \item \textit{EG-EG-TwoBodyPt} is obsolete, used EG-EG-MassPt
 \end{itemize}
-% \textit{EG-EG-Delta} relevant for DeltaEta and DeltaPhi LUTs\\
-% \textit{EG-EG-MassPt} relevant for pt and unconstrained pt LUTs (used in mass and two-body pt calculations)\\
-% \textit{EG-EG-Math} relevant for cos(DeltaPhi) and cosh(DeltaEta) LUTs (used in mass calculations)\\
-% \textit{EG-EG-InverseDeltaRMath} relevant for 1/DeltaR LUTs (used in mass over deltaR calculations)\\
-% \textit{EG-EG-TwoBodyPtMath} relevant for cos(Phi) and sin(Phi) LUTs (used in two-body pt calculations)\\
-
-% \textit{EG-EG-DeltaOverlapRemoval} is obsolete, used EG-EG-Delta (same scales for $\eta$ and $\varphi$)\\
-% \textit{EG-EG-Mass} currently not used\\
-% \textit{EG-EG-TwoBodyPt} is obsolete, used EG-EG-MassPt\\
 
 Overview of precision names (example for "MassPt"):\\
 EG-EG-MassPt\\
@@ -1216,117 +1225,6 @@ The input data objects have to be of same type and same bunch-crossing.
 With "Double objects requirements condition" a correlation cut of "two-body pt" can be required (calorimeter and muon objects).\\
 Additionally charge correlation cuts with "Double objects requirements condition", "Triple objects requirements condition" and "Quad objects requirements condition" of muon objects can be required.
 
-% \subparagraph{Object cuts}\label{sec:gtl:object_cuts}
-% A comparator between the energy (\pt) and a threshold (pt\_threshold) and a comparison in $\eta$ with five "window"-comparators and $\varphi$ with two "window"-comparators is done in this basic module.
-% The values for \pt threshold, the 'mode-selection' for the \pt comparator and the "limits" of the "window"- comparators is given in the generic interface list of the module. Additionally the data-structure of input data (data\_i in port interface list) is provided as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
-% The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
-% The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. Number of windows is given for $\varphi$.\\
-% There are two cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator} and Listing~\ref{lst:phi_window_comparator_vhd}):
-% \begin{itemize}
-% \item Upper limit is less than lower limit => $\varphi$ range between the limits, including the $\varphi$ bin with value = 0 (HW index).
-% \item Upper limit is greater/equal than lower limit => $\varphi$ range between the limits, not including the $\varphi$ bin with value = 0 (HW index).
-% \end{itemize}
-% \begin{lstlisting}[label=lst:phi_window_comparator_vhd,float=here,caption=VHDL code of "window"-comparator in $\varphi$,captionpos=t]
-%     phi_comp_w1 <= '1' when phi_w1_upper_limit < phi_w1_lower_limit and
-%                     (phi <= phi_w1_upper_limit or phi >= phi_w1_lower_limit) else
-%                    '1' when phi_w1_upper_limit >= phi_w1_lower_limit and
-%                     (phi <= phi_w1_upper_limit and phi >= phi_w1_lower_limit)
-%                     else '0';
-% \end{lstlisting}
-%
-% \begin{figure}[htb]
-% \centering
-% \includegraphics[width=15cm]{figures/phi_windows_comparator}
-% \caption{Setting the limits for "window"-comparators for $\varphi$}
-% \label{fig:gtl:phi_windows_comparator}
-% \end{figure}
-%
-% The values of $\eta$ and $\varphi$ have to be inside of only one of the required ranges ("or").
-%
-% \clearpage
-%
-% The comparison of isolation (for \egamma, tau and muon) is done with a LUT (Table~\ref{tab:gtl:lut_iso}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
-%
-% \begin{table}
-% \begin{center}
-% \begin{tabular}{|c|c|p{.4\columnwidth}|}\hline
-% LUT content (4 bits) & isolation (2 bits) & trigger \\\hline\hline
-% X"0" & xx & no trigger\\\hline
-% X"1" & 00 & trigger on isolation bits = 00\\\hline
-% X"2" & 01 & trigger on isolation bits = 01\\\hline
-% X"3" & 00 or 01 & trigger on isolation bits = 00 or 01\\\hline
-% X"4" & 10 & trigger on isolation bits = 10\\\hline
-% X"5" & 00 or 10 & trigger on isolation bits = 00 or 10\\\hline
-% X"6" & 01 or 10 & trigger on isolation bits = 01 or 10\\\hline
-% X"7" & 00 or 01 or 10 & trigger on isolation bits = 00 or 01 or 10\\\hline
-% X"8" & 11 & trigger on isolation bits = 11\\\hline
-% X"9" & 00 or 11 & trigger on isolation bits = 00 or 11\\\hline
-% X"A" & 01 or 11 & trigger on isolation bits = 01 or 11\\\hline
-% X"B" & 00 or 01 or 11 & trigger on isolation bits = 00 or 01 or 11\\\hline
-% X"C" & 10 or 11 & trigger on isolation bits = 10 or 11\\\hline
-% X"D" & 00 or 10 or 11 & trigger on isolation bits = 00 or 10 or 11\\\hline
-% X"E" & 01 or 10 or 11 & trigger on isolation bits = 01 or 10 or 11\\\hline
-% X"F" & 00 or 01 or 10 or 11 & trigger on isolation bits = 00 or 01 or 10 or 11 (= "ignore" isolation)\\\hline
-% \end{tabular}
-% \end{center}
-% \caption{LUT contents for isolation comparison}
-% \label{tab:gtl:lut_iso}
-% \end{table}
-%
-% \clearpage
-%
-% The comparison of impact parameter is done with LUT (Table~\ref{tab:gtl:muon_lut_ip}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
-%
-% \begin{table}
-% \begin{center}
-% \begin{tabular}{|c|c|p{.4\columnwidth}|}\hline
-% LUT content (4 bits) & impact parameter  (2 bits) & trigger \\\hline\hline
-% X"0" & xx & no trigger\\\hline
-% X"1" & 00 & trigger on impact parameter bits = 00\\\hline
-% X"2" & 01 & trigger on impact parameter bits = 01\\\hline
-% X"3" & 00 or 01 & trigger on impact parameter bits = 00 or 01\\\hline
-% X"4" & 10 & trigger on impact parameter bits = 10\\\hline
-% X"5" & 00 or 10 & trigger on impact parameter bits = 00 or 10\\\hline
-% X"6" & 01 or 10 & trigger on impact parameter bits = 01 or 10\\\hline
-% X"7" & 00 or 01 or 10 & trigger on impact parameter bits = 00 or 01 or 10\\\hline
-% X"8" & 11 & trigger on impact parameter bits = 11\\\hline
-% X"9" & 00 or 11 & trigger on impact parameter bits = 00 or 11\\\hline
-% X"A" & 01 or 11 & trigger on impact parameter bits = 01 or 11\\\hline
-% X"B" & 00 or 01 or 11 & trigger on impact parameter bits = 00 or 01 or 11\\\hline
-% X"C" & 10 or 11 & trigger on impact parameter bits = 10 or 11\\\hline
-% X"D" & 00 or 10 or 11 & trigger on impact parameter bits = 00 or 10 or 11\\\hline
-% X"E" & 01 or 10 or 11 & trigger on impact parameter bits = 01 or 10 or 11\\\hline
-% X"F" & 00 or 01 or 10 or 11 & trigger on impact parameter bits = 00 or 01 or 10 or 11 (= "ignore" impact parameter)\\\hline
-% \end{tabular}
-% \end{center}
-% \caption{LUT contents for impact parameter comparison}
-% \label{tab:gtl:muon_lut_ip}
-% \end{table}
-%
-% The comparison of quality is done with LUT (Table~\ref{tab:gtl:muon_lut_qual}). [To ignore quality comparison, all bits in the LUT have to be '1'.]
-%
-% \begin{table}
-% \begin{center}
-% \begin{tabular}{|c|c|l|c|}\hline
-% LUT content (16 bits) & quality bits  (4 bits) & trigger \\\hline\hline
-% X"0000" & xxxx & no trigger\\\hline
-% X"0001" & 0000 & trigger on quality "level 0"\\\hline
-% X"0002" & 0001 & trigger on quality "level 1"\\\hline
-% X"0003" & 0001 or 0000 & trigger on quality "level 1" or "level 0"\\\hline
-% X"0004" & 0010 & trigger on quality "level 2"\\\hline
-% ... & ...& ...\\\hline
-% X"8000" & 1111 & trigger on quality "level 15"\\\hline
-% X"C000" & 1111 or 1110 & trigger on quality "level 15" or "level 14"\\\hline
-% ... & ...& ...\\\hline
-% X"FFFF" & xx & trigger on all quality "levels" (= "ignore")\\\hline
-% \end{tabular}
-% \end{center}
-% \caption{LUT contents for quality comparison of muon objects}
-% \label{tab:gtl:muon_lut_qual}
-% \end{table}
-%
-% Charge valid and charge sign bits must be equal to the requested charge.\\
-
 \clearpage
 
 \subsubsection{Energy sum quantities conditions}
@@ -1346,7 +1244,6 @@ For the entity-declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_
 \caption{Explanation of Listing~\ref{lst:esums_conditions_vhd}}
 \vspace{5mm}
 \centering
-% \begin{center}
 \begin{tabular}{l p{.7\columnwidth}}
 \toprule
 {Item} & {Explanation}\\
@@ -1365,8 +1262,6 @@ For the entity-declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_
 \verb|condition_o| & output of condition (routed to Algorithms logic, see \ref{sec:gtl:algorithms_logic}).\\
 \bottomrule
 \end{tabular}
-% \end{center}
-% \caption{Explanation of Listing~\ref{lst:esums_conditions_vhd}}
 \label{tab:gtl:explanation_esums_conditions_vhd}
 \end{table}
 
@@ -1380,6 +1275,8 @@ Additionally the data-structure of input data (data\_i in port interface list) i
 as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
 Data for Asymmetry trigger are received on 4 frames on bits 27..20 (8 bits). For every type a comparision with an 8-bit threshold (greater-equal [or equal]) is done.
 Asymmetry data are interpreted as counts.
+
+\clearpage
 
 \subsubsection{Minimum bias trigger conditions}
 \label{sec:gtl:min_bias_conditions}

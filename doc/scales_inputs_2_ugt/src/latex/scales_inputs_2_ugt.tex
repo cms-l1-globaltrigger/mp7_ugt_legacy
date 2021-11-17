@@ -16,7 +16,7 @@
 
 \begin{titlepage}
 
-\date{23 February 2021}
+\date{17 November 2021}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -115,9 +115,7 @@ The new muon structure contains:\\
 
 12) The "Asymmetry" and "Centrality" bits (introduced for Heavy-Ion running) are part of the ET$_{miss}$, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$ data structure.
 
-The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2} ) show the  bits/resolution per object instance for all objects, including the ones that will be implemented
-%in theMBT1HFP upgrade system and deployed     ??????????????????????????
-in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.
+The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2} ) show the  bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.
 
 \begin{table}[ht]
 \caption{\bf Scales (muon and calorimeter)}
@@ -137,7 +135,7 @@ muon	&	1 * 8	&	$\varphi$ (extrapolated)&	2$\pi$	&	2$\pi$/576$\sim$0.011	&	10 \\
 	&		&	index bits	&		&		&	7                    \\
 	&		&	$\varphi$ (out) &	2$\pi$	&	2$\pi$/576$\sim$0.011	&	10 \\
 	&		&	unconstrained $p_t$	&	0..256 GeV 	&	1.0	&	8                    \\
-	&		&	reserved	&		&		&	1                    \\
+	&		&	hadronic shower trigger	&		&		&	1                    \\
 	&		&	impact parameter	&		&		&	2                    \\
 	&		&	TOTAL	&		&		&	64                    \\
 % 	&		&		&		&		&	                    \\
@@ -145,7 +143,9 @@ muon	&	1 * 8	&	$\varphi$ (extrapolated)&	2$\pi$	&	2$\pi$/576$\sim$0.011	&	10 \\
 jet	&	1 * 12	&	$E_t$	&	0..1024 GeV	&	0.5	&	11                    \\
 	&		&	$\eta$	&	-5..5	&	0.0870/2=0.0435	&	7+1 = 8                    \\
 	&		&	$\varphi$	&	2$\pi$	&	2$\pi$/144$\sim$0.044	&	8                    \\
-	&		&	reserved	&		&		&	5                    \\
+	&		&	DISP	&		&		&	1                    \\
+	&		&	quality flags	&		&		&	2                    \\
+	&		&	spare	&		&		&	2                    \\
 	&		&	TOTAL	&		&		&	32                    \\
 % 	&		&		&		&		&	                    \\
 \hline
@@ -153,7 +153,7 @@ e/$\gamma$	&	1 * 12	&	$E_t$	&	0..256 GeV	&	0.5	&	9                    \\
 	&		&	$\eta$	&	-5..5	&	0.0870/2=0.0435	&	7+1 = 8                    \\
 	&		&	$\varphi$	&	2$\pi$	&	2$\pi$/144$\sim$0.044	&	8                    \\
 	&		&	iso	&		&		&	2                    \\
-	&		&	reserved	&		&		&	5                    \\
+	&		&	spare	&		&		&	5                    \\
 	&		&	TOTAL	&		&		&	32                    \\
 % 	&		&		&		&		&	                    \\
 \hline
@@ -161,7 +161,7 @@ tau	&	1 * 12	&	$E_t$	&	0..256 GeV	&	0.5	&	9                    \\
 	&		&	$\eta$	&	-5..5	&	0.0870/2=0.0435	&	7+1 = 8                    \\
 	&		&	$\varphi$	&	2$\pi$	&	2$\pi$/144$\sim$0.044	&	8                    \\
 	&		&	iso	&		&		&	2                    \\
-	&		&	reserved	&		&		&	5                    \\
+	&		&	spare	&		&		&	5                    \\
 	&		&	TOTAL	&		&		&	32                    \\
 % 	&		&		&		&		&	                    \\
 \hline
@@ -179,14 +179,14 @@ object	&	collections $\times$ instances	&	parameter	&	range	&	step	&	bits \\
 \hline\hline
 ET	&	1 * 1	&	$E_t$ [ET]	&	0..2048 GeV	&	0.5	&	12                    \\
 	&		&	$E_t$ [ETTEM]	&	0..2048 GeV	&	0.5	&	12                    \\
-	&		&	reserved	&		&		&	4                    \\
+	&		&	spare	&		&		&	4                    \\
 	&		&	minimum bias HF	&      0..15	&	n.a.	&	4                    \\
 	&		&	TOTAL	&		&		&	32                    \\
 % 	&		&		&		&		&	                    \\
 \hline
 HT	&	1 * 1	&	$E_t$	&	0..2048 GeV	&	0.5	&	12                    \\
 	&		&	TOWERCOUNT	&	0..8191	&	1	&	13                    \\
-	&		&	reserved	&		&		&	3                    \\
+	&		&	spare	&		&		&	3                    \\
 	&		&	minimum bias HF	&      0..15	&	n.a.	&	4                    \\
 	&		&	TOTAL	&		&		&	32                    \\
 % 	&		&		&		&		&	                    \\
@@ -268,7 +268,7 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \makebox[2.4cm][c]{10} \\\hline\
 \end{table}
 
 \begin{itemize}
-\item The data structure of a muon object is shown in Table~\ref{table:muon_object} (bits 63..36 are reserved bits).
+\item The data structure of a muon object is shown in Table~\ref{table:muon_object}.
 \item The definition of the muon $\eta$ scale shown in Table~\ref{table:muon_eta_scale}. The minimum value is -2.45, the maximum +2.45, so the the highest and lowest
 bins are "narrower" than other bins.
 \item The definition of the muon $\varphi$ scale shown in Table~\ref{table:muon_phi_scale}.
@@ -284,7 +284,7 @@ bins are "narrower" than other bins.
 \begin{tabular}{|c|c|}\hline
 bit(s) & parameter \\\hline\hline
 63..62 & impact parameter \\
-61 & reserved \\
+61 & hadronic shower (mus), on MU0, MU2, MU4 and MU6 \\
 60..53 & unconstrained $p_t$ \\
 52..43 & $\varphi$ (out) \\
 42..36 & index bits \\
@@ -299,9 +299,10 @@ bit(s) & parameter \\\hline\hline
 \label{table:muon_object}
 \end{table}
 
-\begin{table}[htdp]
+\begin{table}[ht]
 \caption{\bf $\eta$ scale of muon objects}
-\begin{center}
+\vspace{5mm}
+\centering
 \begin{tabular}{|c|l|l|c|}\hline
 HW index & $\eta$ range &  & $\eta$ bin\\\hline\hline
 0x0E1 & 2.4414375 to 2.45 & 224.5$*$0.087/8 to 225.5$*$0.087/8 & 225\\\hline
@@ -314,13 +315,13 @@ HW index & $\eta$ range &  & $\eta$ bin\\\hline\hline
 ... & ... & ... & ...\\\hline
 0x11F & -2.45 to -2.4414375 & -225.5$*$0.087/8 to -224.5$*$0.087/8 & -225\\\hline
 \end{tabular}
-\end{center}
 \label{table:muon_eta_scale}
 \end{table}
 
-\begin{table}[htdp]
+\begin{table}[ht]
 \caption{\bf $\varphi$ scale of muon objects}
-\begin{center}
+\vspace{5mm}
+\centering
 \begin{tabular}{|c|l|l|c|}\hline
 HW index & $\varphi$ range & $\varphi$ range [degrees] & $\varphi$ bin\\\hline\hline
 0x000 & 0 to 2$\pi$/576 & 0 to 0.625 & 0\\\hline
@@ -328,7 +329,6 @@ HW index & $\varphi$ range & $\varphi$ range [degrees] & $\varphi$ bin\\\hline\h
 ... & ... & ... & ...\\\hline
 0x23F & 575$*$2$\pi$/576 to 2$\pi$ & 359.375 to 360 & 575\\\hline
 \end{tabular}
-\end{center}
 \label{table:muon_phi_scale}
 \end{table}
 
@@ -386,7 +386,7 @@ bits [63..62] & definition \\\hline\hline
 \label{table:muon_iso_bits}
 \end{table}
 
-\begin{table}[htdp]
+\begin{table}[ht]
 \caption{\bf Data flow of muon objects 0 and 1 on the optical link \rm(equivalent for objects 2..7)}
 \vspace{5mm}
 \centering
@@ -405,10 +405,10 @@ frame & objects\\\hline\hline
 \clearpage
 
 \begin{itemize}
-\item The data structure of a jet object is shown in Table~\ref{table:jet_object} (bits 31..27 are not defined yet, reserved for isolation, quality and reserved)
-\item The data structure of an e/$\gamma$ object is shown in Table~\ref{table:egamma_object} (bits 31..27 are not defined yet, reserved for quality and reserved)
-\item The data structure of a tau object is shown in Table~\ref{table:tau_object} (bits 31..27 are not defined yet, reserved for quality and reserved)
-\item The definition of isolation bits for e/$\gamma$ and tau is shown in Table~\ref{table:eg_tau_iso_bits}. It is preliminary and should be updated when agreed upon.
+\item The data structure of a jet object is shown in Table~\ref{table:jet_object} (bits 31..30 spare bits)
+\item The data structure of an e/$\gamma$ object is shown in Table~\ref{table:egamma_object} (bits 31..27 are not defined yet)
+\item The data structure of a tau object is shown in Table~\ref{table:tau_object} (bits 31..27 are not defined yet)
+\item The definition of isolation bits for e/$\gamma$ and tau is shown in Table~\ref{table:eg_tau_iso_bits}.
 \item The definition of the calorimeter $\eta$ scale is shown in Table~\ref{table:calo_eta_scale}. The minimum value is -5.0, the maximum +5.0, so the the highest and lowest
 bins are "narrower" other bins.
 \item The definition of the calorimeter ET$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}$ $\varphi$ scale is shown in Table~\ref{table:calo_phi_scale}.
@@ -420,7 +420,9 @@ bins are "narrower" other bins.
 \centering
 \begin{tabular}{|c|c|}\hline
 bit(s) & parameter \\\hline\hline
-31..27 & reserved \\
+31..30 & spare \\
+29..28 & quality flags \\
+27..27 & DISP \\
 26..19 & $\varphi$ \\
 18..11 & $\eta$ \\
 10..0 & $E_t$ \\\hline
@@ -434,7 +436,7 @@ bit(s) & parameter \\\hline\hline
 \centering
 \begin{tabular}{|c|c|}\hline
 bit(s) & parameter \\\hline\hline
-31..27 & reserved \\
+31..27 & spare \\
 26..25 & iso \\
 24..17 & $\varphi$ \\
 16..9 & $\eta$ \\
@@ -449,7 +451,7 @@ bit(s) & parameter \\\hline\hline
 \centering
 \begin{tabular}{|c|c|}\hline
 bit(s) & parameter \\\hline\hline
-31..27 & reserved \\
+31..27 & spare \\
 26..25 & iso \\
 24..17 & $\varphi$ \\
 16..9 & $\eta$ \\
@@ -472,9 +474,10 @@ bits [26..25] & definition \\\hline\hline
 \label{table:eg_tau_iso_bits}
 \end{table}
 
-\begin{table}[htdp]
+\begin{table}[ht]
 \caption{\bf $\eta$ scale of calorimeter objects}
-\begin{center}
+\vspace{5mm}
+\centering
 \begin{tabular}{|c|l|l|c|}\hline
 HW index & $\eta$ range &  & $\eta$ bin \\\hline\hline
 0x72 & 4.959 to 5.0 & 114$*$0.087/2 to 115$*$0.087/2 & 114\\\hline
@@ -486,13 +489,13 @@ HW index & $\eta$ range &  & $\eta$ bin \\\hline\hline
 ... & ... & ... & ...\\\hline
 0x8E & -5.0 to -4.959 & -115$*$0.087/2 to -114$*$0.087/2 & -115\\\hline
 \end{tabular}
-\end{center}
 \label{table:calo_eta_scale}
 \end{table}
 
-\begin{table}[htdp]
+\begin{table}[ht]
 \caption{\bf $\varphi$ scale of calorimeter objects, ET$_{miss}$, ET$_{miss}^{HF}$, HT$_{miss}$ (and HT$_{miss}^{HF}$ [preliminary definition])}
-\begin{center}
+\vspace{5mm}
+\centering
 \begin{tabular}{|c|l|l|c|}\hline
 HW index & $\varphi$ range & $\varphi$ range [degrees] & $\varphi$ bin\\\hline\hline
 0x00 & 0 to 2$\pi$/144 & 0 to 2.5 & 0\\\hline
@@ -500,7 +503,6 @@ HW index & $\varphi$ range & $\varphi$ range [degrees] & $\varphi$ bin\\\hline\h
 ... & ... & ... & ...\\\hline
 0x8F & 143$*$2$\pi$/144 to 2$\pi$ & 357.5 to 360 & 143\\\hline
 \end{tabular}
-\end{center}
 \label{table:calo_phi_scale}
 \end{table}
 
@@ -511,7 +513,7 @@ HW index & $\varphi$ range & $\varphi$ range [degrees] & $\varphi$ bin\\\hline\h
 \item The data flow of e/$\gamma$, tau and jet objects 6..11 on an optical link is shown in Table~\ref{table:opt_link_egamma_obj_6_11}.
 \end{itemize}
 
-\begin{table}[htdp]
+\begin{table}[ht]
 \caption{\bf Data flow of e/$\gamma$, tau and jet objects 0..5 on optical link}
 \vspace{5mm}
 \centering
@@ -527,7 +529,7 @@ frame & objects\\\hline\hline
 \label{table:opt_link_egamma_obj_0_5}
 \end{table}
 
-\begin{table}[htdp]
+\begin{table}[ht]
 \caption{\bf Data flow of e/$\gamma$, tau and jet objects 6..11 on optical link}
 \vspace{5mm}
 \centering
@@ -554,7 +556,7 @@ is shown in Tables~\ref{table:ett_object}, ~\ref{table:ht_object}, ~\ref{table:e
 ~\ref{table:asymmetry_def} and ~\ref{table:centrality_def}.
 \end{itemize}
 
-\begin{table}[htdp]
+\begin{table}[ht]
 \caption{\bf Data flow of energy sums on optical link}
 \vspace{5mm}
 \centering
@@ -577,7 +579,7 @@ frame & objects \\\hline\hline
 \begin{tabular}{|c|c|}\hline
 bit(s) & parameter \\\hline\hline
 31..28 & minimum bias HF+ threshold 0 \\
-27..24 & reserved \\
+27..24 & spare \\
 23..12 & $E_t$ [ETTEM] \\
 11..0 & $E_t$ [ET] \\\hline
 \end{tabular}
@@ -591,7 +593,7 @@ bit(s) & parameter \\\hline\hline
 \begin{tabular}{|c|c|}\hline
 bit(s) & parameter \\\hline\hline
 31..28 & minimum bias HF- threshold 0 \\
-27..25 & reserved \\
+27..25 & spare \\
 24..12 & TOWERCOUNT \\
 11..0 & $E_t$ \\\hline
 \end{tabular}

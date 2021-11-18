@@ -240,7 +240,7 @@ All the declarations for arrays ('type'), parameters ('constant') and look-up-ta
 \label{sec:gtl:data_p_m_2bx}
 
 The \ugtl input data flow through a register pipeline of four stages. With those data it is possible to have conditions with objects from
-different bunch-crossings (within $\pm$2 bunch-crossings), \eg for Correlation conditions.\\
+different bunch-crossings (within $\pm$2 bunch-crossings), \egamma for Correlation conditions.\\
 See Figure \ref{fig:gtl:gtl_pipeline} for a scheme of \ugtl pipeline structure. The data "data\_p\_1bx" and "data\_p\_2bx" occur 1 respectively 2 bunch-crossings
 after data for a certain bunch-crossing, therefore we got 2 bunch-crossings of latency from those data. The data "data\_m\_1bx" and "data\_m\_2bx" have no influence
 on latency, because coming before data for a certain bunch-crossing.
@@ -972,7 +972,7 @@ In TME one can select "LS", "0S" or ignore for charge correlation in muon condit
 LUTs are defined as a VHDL "constant" in \texttt{gtl\_luts\_pkg.vhd} (VHDL package file).
 The values of precision and step size are given by "scale\_set" in XML file of a L1 menu.
 
-Overview of precision types for correlation cuts (an example for \eg \eg correlation):
+Overview of precision types for correlation cuts (an example for \egamma \egamma correlation):
 \begin{itemize}
 \item \textit{EG-EG-Delta} relevant for DeltaEta and DeltaPhi LUTs
 \item \textit{EG-EG-MassPt} relevant for pt and unconstrained pt LUTs (used in mass and two-body pt calculations)
@@ -1013,7 +1013,7 @@ MU-ETMHF-MassPt\\
 The values of \pt or unconstrained \pt LUT are calculated by building the half difference of maximum and minimum value of a bin, adding minimum value, rounding at precision position after decimal point and multiplying with 10\textsuperscript{\tiny{precision}} to get integer values.\\
 The address input of the LUT for \pt or unconstrained \pt is the value of hardware index of \pt or unconstrained \pt.
 
-The precision values in XML file are given by (an example for \eg \eg correlation):\\
+The precision values in XML file are given by (an example for \egamma \egamma correlation):\\
 \textit{<scale>\\
     <object>PRECISION</object>\\
     <type>EG-EG-MassPt</type>\\
@@ -1034,7 +1034,7 @@ MU\_UPT\_LUT\\
 The values of the LUT are calculated by multiplying $\Delta\eta$ in hardware indices with $\eta$ step size, rounding at precision position after decimal point and multipling the result with 10\textsuperscript{\tiny{precision}} to get integer values.\\
 The address of the LUT is the value of $\Delta\eta$ in hardware indices.\\
 
-The precision value in XML file is given by (an example for \eg \eg correlation):\\
+The precision value in XML file is given by (an example for \egamma \egamma correlation):\\
 \textit{<scale>\\
     <object>PRECISION</object>\\
     <type>EG-EG-Delta</type>\\
@@ -1043,7 +1043,7 @@ The precision value in XML file is given by (an example for \eg \eg correlation)
 </scale>}\\
 where <n\_bits> is the precision value and <type> represents a precision name.\\
 
-The $\eta$ (=$\Delta\eta$) step size in XML file is given by (an example for \eg):\\
+The $\eta$ (=$\Delta\eta$) step size in XML file is given by (an example for \egamma):\\
 \textit{<scale>\\
 <object>EG</object>\\
     <type>ETA</type>\\
@@ -1065,7 +1065,7 @@ The address of the LUT is the value of $\Delta\varphi$ in hardware indices.\\
 
 The precision values of $\Delta\varphi$ are identical with $\Delta\eta$.\\
 
-The $\varphi$ (=$\Delta\varphi$) step size in XML file is given by (an example for \eg):\\
+The $\varphi$ (=$\Delta\varphi$) step size in XML file is given by (an example for \egamma):\\
 \textit{<object>EG</object>\\
     <type>PHI</type>\\
     ...\\
@@ -1085,7 +1085,7 @@ The values in the LUT are calculated by multiplying $\Delta\eta$ in hardware ind
 The address of the LUT for $\cosh($$\Delta\eta$$)$ is the value of $\Delta\eta$ in hardware indices.\\
 For calo muon correlations one has to use the muon step size.\\
 
-The precision values in XML file are given by (an example for \eg \eg correlation):\\
+The precision values in XML file are given by (an example for \egamma \egamma correlation):\\
 \textit{<scale>\\
     <object>PRECISION</object>\\
     <type>EG-EG-Math</type>\\
@@ -1118,7 +1118,7 @@ The calculation of 1/$\Delta$$R^2$ is done by multiplying $\Delta\eta$ in hardwa
 adding the squares, inverting the sum, rounding at "InverseDeltaRMath" precision position after decimal point and multipling the result with 10\textsuperscript{\tiny{precision}} to get integer values.
 The address of the two-dimensional LUT for 1/$\Delta$$R^2$ consists of values of $\Delta\eta$ and $\Delta\varphi$ in hardware indices.\\
 
-The precision values in XML file are given by (an example for \eg \eg correlation):\\
+The precision values in XML file are given by (an example for \egamma \egamma correlation):\\
 \textit{<scale>\\
     <object>PRECISION</object>\\
     <type>EG-EG-InverseDeltaRMath</type>\\
@@ -1137,7 +1137,7 @@ MU-MU-InverseDeltaRMath\\
 % The values of \pt LUT are calculated by building the difference of maximum and minimum value of a bin, rounding at precision position after decimal point and multiplying with $10^precision$ to get integer values.\\
 % The address input of the LUT for \pt is the value of hardware index of \pt.
 %
-% The precision values in XML file are given by (an example for \eg \eg correlation):
+% The precision values in XML file are given by (an example for \egamma \egamma correlation):
 % \textit{<scale>
 %     <object>PRECISION</object>
 %     <type>EG-EG-TwoBodyPt</type>
@@ -1150,7 +1150,7 @@ MU-MU-InverseDeltaRMath\\
 
 The values in the LUT are calculated by building the half difference of maximum and minimum value of a $\varphi$ bin, adding minimum value, calculating cosine, rounding at "TwoBodyPtMath" precision position after decimal point and multipling the result with 10\textsuperscript{\tiny{precision}} to get integer values.\\
 
-The precision values in XML file are given by (an example for \eg \eg correlation):\\
+The precision values in XML file are given by (an example for \egamma \egamma correlation):\\
 \textit{<scale>\\
     <object>PRECISION</object>\\
     <type>EG-EG-TwoBodyPtMath</type>\\

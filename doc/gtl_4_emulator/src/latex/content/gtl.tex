@@ -52,7 +52,7 @@ The Global Trigger Logic (\ugtl) firmware contains conditions and algorithms for
 \label{sec:gtl:optical_interfaces}
 
 \textbf{Remark:}\\
-All definitions for scales in the following chapters are from a CMS Detector Note: "Scales for inputs to $\mu$GT" (see actual version in \url{https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf}).
+All definitions for scales in the following chapters are from a CMS Detector Note: "Scales for inputs to $\mu$GT" (see current version in \url{https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf}).
 
 \subsubsection{Calo-Layer2 optical interfaces}
 \label{sec:gtl:gct_optical_interfaces}
@@ -285,8 +285,8 @@ For each selected object, the Calo-Layer2 sends parameters: \pt, for position in
 \item 11 bits \pt, range = 0..1023 GeV (HW index = 0..0x7FF), step = 0.5, the highest bin will mark an overflow (HW index 0x7FF): meaning has to be defined
 \item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
-\item 1 DISP bit (will be used to flag a jet as delayed based on HCAL timing and depth profiles that are indicative of a LLP decay. If this bit is set to 1, then the jet has been tagged as an LLP jet.)
-\item 2 bits for "quality flags" - actually not used.
+\item 1 DISP bit (will be used to flag a jet as delayed / displaced based on HCAL timing and depth profiles that are indicative of a LLP decay. If this bit is set to 1, then the jet has been tagged as an LLP jet.)
+\item 2 bits for "quality flags" - currently not used.
 \item 2 bits spare
 \end{itemize}
 

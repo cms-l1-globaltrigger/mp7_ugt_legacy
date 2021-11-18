@@ -98,22 +98,26 @@ For calo objects, which use 8 bits for coding $\eta$, the left edge of the bins 
 6) The $p_t$/$E_t$ scale for calo and energy sums objects is identical in step width (0.5 GeV for all systems), starts from 0 (zero) but reaches up to different maximum values for different objects. The highest bin (such as 0x1ff for 9 bits, or 0x7ff for 11 bits, etc.) marks an overflow.\\
 The $p_t$ scale for muon objects starts from 0 (zero), but HW index=0 indicates an invalid muon, HW index=1 represents 0 to 0.5 GeV, the step width is 0.5 GeV. The highest bin 0x1ff (for 9 bits) marks an overflow.
 
-The new muon structure contains:\\
+7) The new muon structure contains:\\
 - "unconstrained $p_t$" scale (8 bits) in steps of 1.0 GeV starting from 0 (zero), HW index=0 indicates an invalid muon, the highest bin 0xff marks an overflow.\\
-- "impact parameter" with 2 bits.
+- "impact parameter" with 2 bits.\\
+- "hadronic shower trigger (mus)" bits on bit 31 of MU0, MU2, MU4 and MU6 objects.
 
-7) This system allows us to keep a sufficient number of bits for each object free for future use (quality, isolation, possibly tag bits to match uGMT muons to isolation information from the Calorimeter Trigger, etc).
+8) The new jet structure contains:\\
+- bit 27 will be used to flag a jet as delayed / displaced based on HCAL timing and depth profiles that are indicative of a LLP decay. This bit is referred to as “DISP”. If this bit is set to 1, then the jet has been tagged as an LLP jet.
 
-8) For the initial phase, the following numbers of objects are have been implemented: 8 muons, 12 e/$\gamma$'s, 12 taus, 12 jets, and 1 each for the energy sums (ET, ETTEM [ECAL sum - part of the ET data structure], ET$_{miss}$, HT, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$).
+9) This system allows us to keep a sufficient number of bits for each object free for future use (quality, isolation, possibly tag bits to match uGMT muons to isolation information from the Calorimeter Trigger, etc).
+
+10) For the initial phase, the following numbers of objects are have been implemented: 8 muons, 12 e/$\gamma$'s, 12 taus, 12 jets, and 1 each for the energy sums (ET, ETTEM [ECAL sum - part of the ET data structure], ET$_{miss}$, HT, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$).
 ``Isolated e/$\gamma$'s" do not constitute a separate collection any more but are e/$\gamma$'s marked with two "isolation bit(s)". "Forward jets" also are not in a separate collection any more (their $\eta$ value shows which part of the calorimeter they come from). It is be up to the Calorimeter trigger to rank objects in such a way as to guarantee that not all isolated e/$\gamma$'s will be killed by non-isolated e/$\gamma$'s, or that all central jets will be killed by forward jets.
 
-9) There are ideas to derive electron/gamma signals at high $\eta$ (beyond the range of ECAL) by using the long and short fibers of HF. Therefore, the e/$\gamma$ $\eta$ range has been extended up to $\eta$=5, and the number of e/$\gamma$ objects up to 12. Just as in the case of jets, the Calorimeter trigger will take care that not all central e/$\gamma$'s are killed by such "forward electrons".
+11) There are ideas to derive electron/gamma signals at high $\eta$ (beyond the range of ECAL) by using the long and short fibers of HF. Therefore, the e/$\gamma$ $\eta$ range has been extended up to $\eta$=5, and the number of e/$\gamma$ objects up to 12. Just as in the case of jets, the Calorimeter trigger will take care that not all central e/$\gamma$'s are killed by such "forward electrons".
 
-10) The minimum bias HF bits are part of the energy sums data structure. Each of the four quantities ET, ET$_{miss}$, HT, HT$_{miss}$ contains HF minimum bias bits on the corresponding MSBs (bits 31..28).
+12) The minimum bias HF bits are part of the energy sums data structure. Each of the four quantities ET, ET$_{miss}$, HT, HT$_{miss}$ contains HF minimum bias bits on the corresponding MSBs (bits 31..28).
 
-11) The "Towercount" bits (introduced for Heavy-Ion running) are part of the HT data structure (bits 24..12).
+13) The "Towercount" bits (introduced for Heavy-Ion running) are part of the HT data structure (bits 24..12).
 
-12) The "Asymmetry" and "Centrality" bits (introduced for Heavy-Ion running) are part of the ET$_{miss}$, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$ data structure.
+14) The "Asymmetry" and "Centrality" bits (introduced for Heavy-Ion running) are part of the ET$_{miss}$, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$ data structure.
 
 The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2} ) show the  bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.
 

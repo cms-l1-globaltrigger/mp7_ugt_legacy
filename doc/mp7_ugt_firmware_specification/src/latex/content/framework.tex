@@ -55,9 +55,10 @@ frame means the 32 bits data (240 MHz) within a LHC clock period.
 % \label{tab:framework:tab_configuration_optical_conn}
 % \end{table}
 
-\begin{table}[htdp]
+\begin{table}[ht]
+\caption{Configuration of optical connections}
 \vspace{5mm}
-\begin{center}
+\centering
 \begin{tabular}{c|m{.13\columnwidth}|m{.13\columnwidth}|m{.13\columnwidth}|m{.13\columnwidth}|m{.13\columnwidth}|m{.13\columnwidth}|}
 \cline{2-7}
  & \multicolumn{6}{c|}{\textbf{frame}} \\\hline
@@ -84,8 +85,6 @@ frame means the 32 bits data (240 MHz) within a LHC clock period.
 \multicolumn{1}{|c|}{14} & external-conditions [128..159] & external-conditions [160..191] & reserved & reserved & reserved & reserved \\\hline
 \multicolumn{1}{|c|}{15} & external-conditions [192..223] & external-conditions [224..255] & reserved & reserved & reserved & reserved \\\hline
 \end{tabular}
-\end{center}
-\caption{Configuration of optical connections}
 \label{tab:framework:tab_configuration_optical_conn}
 \end{table}
 
@@ -111,9 +110,10 @@ In the Lane Mapping Process module data from the lanes are mapped to objects str
 \subsubsection{Implementation}\label{sec:lmp_impl}
 Currently lane mapping is "fixed" in lmp.vhd module, see Table \ref{tab:framework:current_lane_mapping}
 
-\begin{table}[htdp]
+\begin{table}[ht]
+\caption{Current lane mapping}
 \vspace{5mm}
-\begin{center}
+\centering
 \begin{tabular}{|c|l|c|}\hline
 \textbf{lane} & \textbf{objects} \\\hline\hline
 0 & muon objects 0..1 \\\hline
@@ -133,8 +133,6 @@ Currently lane mapping is "fixed" in lmp.vhd module, see Table \ref{tab:framewor
 14 & external-conditions [128..191] \\\hline
 15 & external-conditions [192..255] \\\hline
 \end{tabular}
-\end{center}
-\caption{Current lane mapping}
 \label{tab:framework:current_lane_mapping}
 \end{table}
 

@@ -48,17 +48,17 @@
 % Title page.
 \doctitlepage{}
 
-% Document revision history.                  
+% Document revision history.
 \input{content/revision_history.tex}
 
 % Table of contents.
 \doctoc{}
 
-% List of figures.
-\docfigures{}
-
-% List of tables.
-\doctables{}
+% % List of figures.
+% \docfigures{}
+%
+% % List of tables.
+% \doctables{}
 
 % Document content, add chapter files here.
 %\input{content/com-hardware.tex}
@@ -66,14 +66,22 @@
 \input{content/firmware.tex}
 \input{content/framework.tex}
 % \input{content/ipbus.tex}
-\input{content/gtl.tex}
+% \input{content/gtl.tex}
+\input{../../../gtl_4_emulator/src/latex/content/gtl.tex}
 \input{content/fdl.tex}
 \input{content/rop.tex}
 % \input{content/sw_reset}
 % \input{content/configuration.tex}
 % \input{content/validation.tex}
-\input{content/glossary.tex}
-% 
+
+% List of tables.
+\doctables{}
+
+% List of figures.
+\docfigures{}
+
+\input{../../../gtl_4_emulator/src/latex/content/glossary.tex}
+%
 \section*{Acronyms}
 \begin{acronym}
 \input{content/acronyms.tex}

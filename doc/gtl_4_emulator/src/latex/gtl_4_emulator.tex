@@ -6,6 +6,8 @@
 
 % Include packages.
 \usepackage{gtupgrade}
+\usepackage{url}
+\usepackage{cite}
 % Document information.
 \def\doctitle{Global Trigger Logic -\\Description for emulator}
 \def\docauthor{Herbert Bergauer, Babak Rahbaran, Johannes Wittmann}
@@ -38,20 +40,27 @@
 % Title page.
 \doctitlepage{}
 
-% Document revision history.                  
+% Document revision history.
 \input{content/revision_history.tex}
 
 % Table of contents.
 \doctoc{}
 
-% List of figures.
-\docfigures{}
+% % List of figures.
+% \docfigures{}
+%
+% % List of tables.
+% \doctables{}
+%
+% Document content, add chapter files here.
+\input{content/gtl.tex}
 
 % List of tables.
 \doctables{}
 
-% Document content, add chapter files here.
-\input{content/gtl.tex}
+% List of figures.
+\docfigures{}
+
 \input{content/glossary.tex}
 
 \section*{Acronyms}
@@ -59,11 +68,11 @@
 \input{content/acronyms.tex}
 \end{acronym}
 
-% % Bibliography files.
-% \docbib{bib/sample}
-% 
-% % Index.
-% \docindex{}
+% \begin{thebibliography}{00}
+%
+% \bibitem {scales_inputs_2_ugt} https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf
+%
+% \end{thebibliography}
 
 % End of document structure.
 \end{document}

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - mp7_ugt firmware release v1.17.0
 - implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data]
 - added script compare_lut_values_emu_fw.py for comparison of emulator and firmware LUT values of 1/deltaR^2.
+- added sim files for "mass_over_dr_muon_tv".
 
 ### Changed
 - source files:
@@ -24,8 +25,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - source file:
   - ../payload/gtl/common/pt_disp_comp.vhd
-- source file:
+- script files:
   - scripts/rom_one_over_dr_sq/compare_lut_values_emu_fw.py
+- simulation files:
+  - ../sim/testbench/mass_over_dr_muon_tv_tb.vhd
+  - ../sim/scripts/mass_over_dr_muon_tv.do
+  - ../sim/scripts/mass_over_dr_muon_tv_wave.do
+
 
 ## [v1.16.3] - 2021-11-16
 ### Comment

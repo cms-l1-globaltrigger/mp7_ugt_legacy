@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.17.0] - 2021-11-16
+## [v1.17.0] - 2021-11-19
 ### Comment
 
 - mp7_ugt firmware release v1.17.0
 - implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data]
+- added script compare_lut_values_emu_fw.py for comparison of emulator and firmware LUT values of 1/deltaR^2.
 
 ### Changed
 - source files:
@@ -21,8 +22,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/gtl_pkg.vhd
 
 ### Added
-- source files:
+- source file:
   - ../payload/gtl/common/pt_disp_comp.vhd
+- source file:
+  - scripts/rom_one_over_dr_sq/compare_lut_values_emu_fw.py
 
 ## [v1.16.3] - 2021-11-16
 ### Comment

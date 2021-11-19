@@ -48,4 +48,15 @@ Additionally a comparison of calculated 1/DR^2 values with LUT values is done, s
 - ../doc/rom_lut_inv_dr_sq/compare_calo_lut_rom.txt
 - ../doc/rom_lut_inv_dr_sq/compare_muon_lut_rom.txt
 
+### compare_lut_values_emu_fw.py
+
+Compares emulator and firmware LUT values of 1/DR^2 from following files:
+- ../doc/rom_lut_inv_dr_sq/emulator/emulator_lut_calo_inv_dr_sq_calc_CODE.txt
+- ../doc/rom_lut_inv_dr_sq/emulator/emulator_lut_muon_inv_dr_sq_calc_CODE.txt
+- ../doc/rom_lut_inv_dr_sq/calo_one_over_dr_sq_lut.txt
+- ../doc/rom_lut_inv_dr_sq/muon_one_over_dr_sq_lut.txt
+The files of emulator LUTs should be provided by emulator people.
+The files of firmware LUTs should be created with script extract_mif_files.py (see above).
+
+
 

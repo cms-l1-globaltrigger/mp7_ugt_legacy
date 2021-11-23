@@ -66,7 +66,7 @@ architecture rtl of calo_comparators is
     signal phi_comp : std_logic := '1';
     signal iso_comp : std_logic := '1';
     signal comp_int : std_logic;
-    signal disp_comp : std_logic := '0';
+    signal disp_comp : std_logic;
 
 begin
 
@@ -237,18 +237,21 @@ begin
 
 -- HB 2015-04-27: comparators out for jet
     comp_int_jet_i: if obj_type=JET_TYPE generate
-        disp_i: if disp_cut generate
+        no_disp_cut_i: if not disp_cut generate
+            comp_int <= et_comp and eta_comp and phi_comp; -- equation, if DISP cut is not required
+        end generate no_disp_cut_i;
+        disp_cut_i: if disp_cut generate
         -- Comparator for DISP
-            disp_comp <= '1' when disp and disp_value
-                        else
-                        '1' when not disp and not disp_value
-                        else '0';
-
-            comp_int <= et_comp and disp_comp and eta_comp and phi_comp;
-        end generate disp_i;
-        no_disp_i: if not disp_cut generate
-            comp_int <= et_comp and eta_comp and phi_comp;
-        end generate no_disp_i;
+            disp_p: process(disp)
+            begin
+                if disp_requ = '1' then
+                    disp_comp <= disp; -- DISP bit requirement = 1, DISP bit = 1 (LLP jet) => disp_comp = '1'
+                elsif disp_requ = '0' then
+                    disp_comp <= not disp; -- DISP bit requirement = 0, DISP bit = 0 (no LLP jet) => disp_comp = '1'
+                end if;
+            end process;
+            comp_int <= et_comp and disp_comp and eta_comp and phi_comp; -- equation, if DISP cut is required
+        end generate disp_cut_i;
     end generate comp_int_jet_i;
 
     pipeline_p: process(lhc_clk, comp_int)

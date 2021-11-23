@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data]
 - added script compare_lut_values_emu_fw.py for comparison of emulator and firmware LUT values of 1/deltaR^2.
 - added sim files for "mass_over_dr_muon_tv".
+- added python script for selection of Latex documents (both documents gt-mp7-firmware-specification and gtl_4_emulator created in directory mp7_ugt_firmware_specification - directory gtl_4_emulator is obsolete).
 
 ### Changed
 - source files:
@@ -31,7 +32,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../sim/testbench/mass_over_dr_muon_tv_tb.vhd
   - ../sim/scripts/mass_over_dr_muon_tv.do
   - ../sim/scripts/mass_over_dr_muon_tv_wave.do
-
+- script files:
+  - ../doc/mp7_ugt_firmware_specification/src/latex/run_make.py
 
 ## [v1.16.3] - 2021-11-16
 ### Comment

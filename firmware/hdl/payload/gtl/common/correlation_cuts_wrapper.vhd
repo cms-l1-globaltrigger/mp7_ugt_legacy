@@ -3,6 +3,7 @@
 -- Wrapper for correlation cuts comparator
 
 -- Version history:
+-- HB 2021-11-23: bug fix for mass_div_dr_comp_o (removed from pipeline_p, because pipeline done in "correlation_cuts_calculation.vhd" - output register of BRAMs for "inverted_dr_sq").
 -- HB 2021-04-09: first design.
 
 library ieee;
@@ -133,8 +134,8 @@ begin
                     dr_comp(j,i) <= dr_comp_temp(i,j);
                     mass_comp(i,j) <= mass_comp_temp(i,j);
                     mass_comp(j,i) <= mass_comp_temp(i,j);
-                    mass_div_dr_comp(i,j) <= mass_div_dr_comp_temp(i,j);
-                    mass_div_dr_comp(j,i) <= mass_div_dr_comp_temp(i,j);
+                    mass_div_dr_comp_o(i,j) <= mass_div_dr_comp_temp(i,j);
+                    mass_div_dr_comp_o(j,i) <= mass_div_dr_comp_temp(i,j);
                     tbpt_comp(i,j) <= tbpt_comp_temp(i,j);
                     tbpt_comp(j,i) <= tbpt_comp_temp(i,j);
                 end generate same_type_bx_sel;
@@ -169,12 +170,7 @@ begin
                             generic map(false, mass_upper_limit_vector(mass_vector_width-1 downto 0), mass_lower_limit_vector(mass_vector_width-1 downto 0))
                             port map(mass_trans(i,j), mass_comp(i,j));
                     end generate mass_type_trans;
--- HB 2021-09-02: mass_div_dr not acailable for different object types and bx
---                     mass_dr_sel: if mass_cut and mass_type = INVARIANT_MASS_DIV_DR_TYPE generate
---                         mass_dr_comp_i: entity work.correlation_cut_comp
---                             generic map(true, mass_div_dr_threshold(mass_div_dr_vector_width-1 downto 0), mass_div_dr_threshold(mass_div_dr_vector_width-1 downto 0))
---                             port map(mass_div_dr(i,j), mass_div_dr_comp(i,j));
---                     end generate mass_dr_sel;
+-- HB 2021-09-02: mass_div_dr not available for different object types and bx
                     tbpt_sel: if tbpt_cut generate
                         tbpt_comp_i: entity work.correlation_cut_comp
                             generic map(true, tbpt_threshold_vector(tbpt_vector_width-1 downto 0), tbpt_threshold_vector(tbpt_vector_width-1 downto 0))
@@ -191,7 +187,6 @@ begin
                 dphi_comp_o <= dphi_comp;
                 dr_comp_o <= dr_comp;
                 mass_comp_o <= mass_comp;
-                mass_div_dr_comp_o <= mass_div_dr_comp;
                 tbpt_comp_o <= tbpt_comp;
             else
                 if (lhc_clk'event and lhc_clk = '1') then
@@ -199,7 +194,6 @@ begin
                     dphi_comp_o <= dphi_comp;
                     dr_comp_o <= dr_comp;
                     mass_comp_o <= mass_comp;
-                    mass_div_dr_comp_o <= mass_div_dr_comp;
                     tbpt_comp_o <= tbpt_comp;
                 end if;
             end if;

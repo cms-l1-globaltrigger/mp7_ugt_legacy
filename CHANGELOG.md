@@ -12,9 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - added script compare_lut_values_emu_fw.py for comparison of emulator and firmware LUT values of 1/deltaR^2.
 - added sim files for "mass_over_dr_muon_tv".
 - added python script for selection of Latex documents (both documents gt-mp7-firmware-specification and gtl_4_emulator created in directory mp7_ugt_firmware_specification - directory gtl_4_emulator is obsolete).
+- bug fixed in correlation_cuts_wrapper.vhd.
 
 ### Changed
 - source files:
+  - ../payload/gtl/common/correlation_cuts_wrapper.vhd
   - ../payload/gtl/common/calo_comparators.vhd
   - ../payload/gtl/common/calo_obj_cuts.vhd
   - ../payload/gtl/common/comb_conditions.vhd

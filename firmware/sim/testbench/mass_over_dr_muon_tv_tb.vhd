@@ -81,7 +81,7 @@ begin
             end loop;
             return res_v;
         end function;
-    begin--         temp_counter := 0;
+    begin
         while not endfile(testvector_file) loop
             readline(testvector_file, l);
             bx_data.mu(2)(0) <= str_to_slv(l(6 to 21));

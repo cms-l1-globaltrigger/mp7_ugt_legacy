@@ -3,6 +3,7 @@
 -- Comparators for energy, pseudorapidity, azimuth angle and isolation of calo objects
 
 -- Version history:
+-- HB 2021-11-23: updated DISP logic for jets.
 -- HB 2021-10-19: added DISP cut for jets.
 -- HB 2021-10-18: bug fix (in jet_phi_windows_comp_i and tau_phi_windows_comp_i).
 -- HB 2021-05-18: changed slice parameter.
@@ -42,8 +43,9 @@ entity calo_comparators is
         phi_w1_lower_limit : std_logic_vector;
         phi_w2_upper_limit : std_logic_vector;
         phi_w2_lower_limit : std_logic_vector;
-        iso_lut: std_logic_vector;
-        disp_cut: boolean := false
+        iso_lut : std_logic_vector;
+        disp_cut : boolean := false;
+        disp_requ : std_logic := '0'
     );
     port(
         lhc_clk : in std_logic;
@@ -64,7 +66,7 @@ architecture rtl of calo_comparators is
     signal phi_comp : std_logic := '1';
     signal iso_comp : std_logic := '1';
     signal comp_int : std_logic;
-    signal et_disp_comp : std_logic;
+    signal disp_comp : std_logic;
 
 begin
 
@@ -235,13 +237,21 @@ begin
 
 -- HB 2015-04-27: comparators out for jet
     comp_int_jet_i: if obj_type=JET_TYPE generate
-        -- Comparator for energy (et) and DISP
-        et_disp_comp <= et_comp when not disp_cut
-                        else
-                        (et_comp and disp) when disp_cut
-                        else '0';
-                        
-        comp_int <= et_disp_comp and eta_comp and phi_comp;
+        no_disp_cut_i: if not disp_cut generate
+            comp_int <= et_comp and eta_comp and phi_comp; -- equation, if DISP cut is not required
+        end generate no_disp_cut_i;
+        disp_cut_i: if disp_cut generate
+        -- Comparator for DISP
+            disp_p: process(disp)
+            begin
+                if disp_requ = '1' then
+                    disp_comp <= disp; -- DISP bit requirement = 1, DISP bit = 1 (LLP jet) => disp_comp = '1'
+                elsif disp_requ = '0' then
+                    disp_comp <= not disp; -- DISP bit requirement = 0, DISP bit = 0 (no LLP jet) => disp_comp = '1'
+                end if;
+            end process;
+            comp_int <= et_comp and disp_comp and eta_comp and phi_comp; -- equation, if DISP cut is required
+        end generate disp_cut_i;
     end generate comp_int_jet_i;
 
     pipeline_p: process(lhc_clk, comp_int)

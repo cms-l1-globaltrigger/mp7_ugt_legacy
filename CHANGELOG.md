@@ -4,12 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.17.0] - 2021-11-23
+## [v1.17.0] - 2021-11-26
 ### Comment
 
 - mp7_ugt firmware release v1.17.0
 - implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data]
 - bug fixed in correlation_cuts_wrapper.vhd.
+- updated code for MU-MU mass over dr - "half resolution" for eta and phi.
 - added sim files for "mass_over_dr_muon_tv".
 - added script compare_lut_values_emu_fw.py for comparison of emulator and firmware LUT values of 1/deltaR^2.
 - added python script for selection of Latex documents (both documents gt-mp7-firmware-specification and gtl_4_emulator created in directory mp7_ugt_firmware_specification - directory gtl_4_emulator will be obsolete).
@@ -24,6 +25,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/gtl_module_tpl.vhd
   - ../packages/gt_mp7_core_pkg.vhd
   - ../packages/gtl_pkg.vhd
+  - ../packages/correlation_cuts_calculation.vhd
+  - ../packages/deta_dphi_calculations.vhd
+  - ../packages/obj_parameter.vhd
 
 ### Added
 - source file:

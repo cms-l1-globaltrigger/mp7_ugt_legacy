@@ -3,7 +3,7 @@
 -- Testbench for simulation of mass div DR
 
 -- Version history:
--- HB 2020-11-19: first design
+-- HB 2020-11-24: first design
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -19,10 +19,10 @@ use std.textio.all;
 use work.math_pkg.all;
 use work.gtl_pkg.all;
 
-entity mass_div_dr_muon_tb is
-end mass_div_dr_muon_tb;
+entity mass_div_dr_muon_algo_12_tb is
+end mass_div_dr_muon_algo_12_tb;
 
-architecture beh of mass_div_dr_muon_tb is
+architecture beh of mass_div_dr_muon_algo_12_tb is
 
     signal lhc_clk : std_logic;
 
@@ -34,6 +34,8 @@ architecture beh of mass_div_dr_muon_tb is
     signal mu_bx_0_upt_vector: diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
     signal mu_bx_0_eta_integer: integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
     signal mu_bx_0_phi_integer: integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
+    signal mu_bx_0_eta_integer_half_res: integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
+    signal mu_bx_0_phi_integer_half_res: integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
     signal mu_bx_0_cos_phi: integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
     signal mu_bx_0_sin_phi: integer_array(0 to NR_MU_OBJECTS-1) := (others => 0);
 
@@ -42,8 +44,10 @@ architecture beh of mass_div_dr_muon_tb is
     signal ls_charcorr_quad_bx_0_bx_0, os_charcorr_quad_bx_0_bx_0 : std_logic_4dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1);
 
     signal mu_mu_bx_0_bx_0_deta_integer: dim2_max_eta_range_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => 0));
+    signal mu_mu_bx_0_bx_0_deta_integer_half_res: dim2_max_eta_range_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => 0));
     signal mu_mu_bx_0_bx_0_deta_vector: deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
     signal mu_mu_bx_0_bx_0_dphi_integer: dim2_max_phi_range_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => 0));
+    signal mu_mu_bx_0_bx_0_dphi_integer_half_res: dim2_max_phi_range_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => 0));
     signal mu_mu_bx_0_bx_0_dphi_vector: deta_dphi_vector_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
     signal mu_mu_bx_0_bx_0_mass_inv_pt : mass_dim2_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
     signal mu_mu_bx_0_bx_0_mass_over_dr : mass_div_dr_vector_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
@@ -62,7 +66,7 @@ begin
 
     process
         variable l : line;
-        file testvector_file : text open read_mode is "/home/bergauer/github/herbberg/l1menus/2021/L1Menu_test_MassOverdR-d1/testvectors/TestVector_L1Menu_test_MassOverdR.txt";
+        file testvector_file : text open read_mode is "/home/bergauer/github/herbberg/l1menus/2021/L1Menu_test_MassOverdR-d1/testvectors/TestVector_InvMassOverDR_R1.txt";
         function str_to_slv(str : string) return std_logic_vector is
             alias str_norm : string(1 to str'length) is str;
             variable char_v : character;
@@ -100,8 +104,8 @@ begin
  ------------------- Instantiate  modules  -----------------
 
 -- L1Menu_test_MassOverdR-d1
--- Algo 14: L1_DoubleMu_10_5_MassOverdR70
-cond_invariant_mass_delta_r_i14_i: entity work.correlation_conditions
+-- Algo 12: L1_DoubleMu_10_5_MassOverdR20
+cond_invariant_mass_delta_r_i12_i: entity work.correlation_conditions
     generic map(
 -- slices for muon
         slice_low_obj1 => 0,
@@ -115,7 +119,7 @@ cond_invariant_mass_delta_r_i14_i: entity work.correlation_conditions
         mass_cut => true,
         mass_type => INVARIANT_MASS_DIV_DR_TYPE,
         mass_div_dr_vector_width => MU_MU_MASS_DIV_DR_VECTOR_WIDTH,
-        mass_div_dr_threshold => X"000000000DED381F85000",
+        mass_div_dr_threshold => X"00000000012309CE54000",
 -- number of objects and type
         nr_obj1 => NR_MU_OBJECTS,
         type_obj1 => MU_TYPE,
@@ -143,6 +147,8 @@ calc_obj_parameter_mu_bx_0_i: entity work.obj_parameter
         upt_vector => mu_bx_0_upt_vector,
         eta_integer => mu_bx_0_eta_integer,
         phi_integer => mu_bx_0_phi_integer,
+        eta_integer_h_r => mu_bx_0_eta_integer_half_res,
+        phi_integer_h_r => mu_bx_0_phi_integer_half_res,
         cos_phi => mu_bx_0_cos_phi,
         sin_phi => mu_bx_0_sin_phi
     );
@@ -150,6 +156,7 @@ calc_obj_parameter_mu_bx_0_i: entity work.obj_parameter
 calc_deta_dphi_integer_mu_mu_bx_0_bx_0_i: entity work.deta_dphi_calculations
     generic map(
         phi_half_range => MUON_PHI_HALF_RANGE_BINS,
+        phi_h_r_half_range => MUON_PHI_HALF_RES_HALF_RANGE_BINS,
         nr_obj1 => NR_MU_OBJECTS,
         type_obj1 => MU_TYPE,
         nr_obj2 => NR_MU_OBJECTS,
@@ -160,6 +167,12 @@ calc_deta_dphi_integer_mu_mu_bx_0_bx_0_i: entity work.deta_dphi_calculations
         phi_integer_obj1 => mu_bx_0_phi_integer,
         eta_integer_obj2 => mu_bx_0_eta_integer,
         phi_integer_obj2 => mu_bx_0_phi_integer,
+        eta_integer_h_r_obj1 => mu_bx_0_eta_integer_half_res,
+        phi_integer_h_r_obj1 => mu_bx_0_phi_integer_half_res,
+        eta_integer_h_r_obj2 => mu_bx_0_eta_integer_half_res,
+        phi_integer_h_r_obj2 => mu_bx_0_phi_integer_half_res,
+        deta_integer_half_res => mu_mu_bx_0_bx_0_deta_integer_half_res,
+        dphi_integer_half_res => mu_mu_bx_0_bx_0_dphi_integer_half_res,
         deta_integer => mu_mu_bx_0_bx_0_deta_integer,
         dphi_integer => mu_mu_bx_0_bx_0_dphi_integer
     );
@@ -201,8 +214,8 @@ calc_cut_mass_over_dr_mu_mu_bx_0_bx_0_i: entity work.correlation_cuts_calculatio
     )
     port map(
         lhc_clk,
-        deta_integer => mu_mu_bx_0_bx_0_deta_integer,
-        dphi_integer => mu_mu_bx_0_bx_0_dphi_integer,
+        deta_integer => mu_mu_bx_0_bx_0_deta_integer_half_res,
+        dphi_integer => mu_mu_bx_0_bx_0_dphi_integer_half_res,
         inv_mass_pt_in => mu_mu_bx_0_bx_0_mass_inv_pt,
         mass_over_dr => mu_mu_bx_0_bx_0_mass_over_dr
     );

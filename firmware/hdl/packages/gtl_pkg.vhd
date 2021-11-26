@@ -460,6 +460,7 @@ constant MUON_PHI_BINS : positive := 576; -- values from scales
 constant CALO_PHI_HALF_RANGE_BINS : positive := CALO_PHI_BINS/2;
 constant MUON_PHI_HALF_RANGE_BINS : positive := MUON_PHI_BINS/2;
 constant MU_PHI_HALF_RANGE_BINS : positive := MUON_PHI_HALF_RANGE_BINS;
+constant MUON_PHI_HALF_RES_HALF_RANGE_BINS : positive := MUON_PHI_HALF_RANGE_BINS/2;
 constant PHI_MIN : real := 0.0; -- phi min.: 0.0
 constant PHI_MAX : real := 2.0*PI; -- phi max.: 2*PI
 constant ETA_MIN : real := -5.0; -- eta min.: -5.0

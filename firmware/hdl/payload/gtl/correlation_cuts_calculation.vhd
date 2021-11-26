@@ -3,6 +3,7 @@
 -- Instances for correlation cuts calculations
 
 -- Version history:
+-- HB 2021-11-26: change deta and dphi width in rom_lut_muon_inv_dr_sq_all instance ("half resolution" in eta and phi for MU-MU mass over dr).
 -- HB 2021-08-27: added output inverted_dr_sq_sim for test and simulation.
 -- HB 2021-04-27: used deta_cosh_deta_luts.vhd and dphi_cos_dphi_luts.vhd separately for resource values.
 -- HB 2021-04-20: added logic for mass over deltaR.
@@ -216,8 +217,8 @@ begin
                         port map (
                             clk => lhc_clk,
 -- reduced bin width (8 bits) for muon deta [226] and muon dphi [144] (half resolution)
-                            deta => muon_deta_bin(i,j)(MU_DETA_BINS_WIDTH-1 downto 1),
-                            dphi => muon_dphi_bin(i,j)(MU_DPHI_BINS_WIDTH-1-1 downto 1),
+                            deta => muon_deta_bin(i,j)(MU_DETA_BINS_WIDTH-1-1 downto 0),
+                            dphi => muon_dphi_bin(i,j)(MU_DPHI_BINS_WIDTH-1-2 downto 0),
                             dout => inverted_dr_sq(i,j)(MU_MU_INV_DR_SQ_VECTOR_WIDTH-1 downto 0)
                         );
                 end generate rom_lut_muon_sel;

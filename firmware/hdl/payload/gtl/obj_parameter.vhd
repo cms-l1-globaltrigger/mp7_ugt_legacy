@@ -3,6 +3,7 @@
 -- Extracting object parameter from calo, esums and muon data (for calculations of differences, mass, etc.).
 
 -- Version history:
+-- HB 2021-11-26: added ports eta_integer_h_r and phi_integer_h_r ("xxx_h_r" means "half resolution" - used for MU-MU mass over DR).
 -- HB 2021-05-18: added use clause gtl_luts_pkg.
 -- HB 2021-02-15: first design.
 
@@ -28,6 +29,8 @@ entity obj_parameter is
         upt_vector: out diff_inputs_array(0 to NR_MU_OBJECTS-1) := (others => (others => '0'));
         eta_integer: out integer_array(0 to nr_obj-1) := (others => 0);
         phi_integer: out integer_array(0 to nr_obj-1) := (others => 0);
+        eta_integer_h_r: out integer_array(0 to nr_obj-1) := (others => 0);
+        phi_integer_h_r: out integer_array(0 to nr_obj-1) := (others => 0);
         cos_phi: out integer_array(0 to nr_obj-1) := (others => 0);
         sin_phi: out integer_array(0 to nr_obj-1) := (others => 0);
         conv_cos_phi: out integer_array(0 to nr_obj-1) := (others => 0);
@@ -45,6 +48,8 @@ begin
             upt_vector(i)(MU_UPT_VECTOR_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR(MU_UPT_LUT(CONV_INTEGER(muon(i)(MUON_UPT_HIGH downto MUON_UPT_LOW))), MU_UPT_VECTOR_WIDTH);
             eta_integer(i) <= CONV_INTEGER(signed(muon(i)(MUON_ETA_HIGH downto MUON_ETA_LOW)));
             phi_integer(i) <= CONV_INTEGER(muon(i)(MUON_PHI_HIGH downto MUON_PHI_LOW));
+            eta_integer_h_r(i) <= CONV_INTEGER(signed(muon(i)(MUON_ETA_HIGH downto MUON_ETA_LOW+1)));
+            phi_integer_h_r(i) <= CONV_INTEGER(muon(i)(MUON_PHI_HIGH downto MUON_PHI_LOW+1));
             cos_phi(i) <= MUON_COS_PHI_LUT(CONV_INTEGER(muon(i)(MUON_PHI_HIGH downto MUON_PHI_LOW)));
             sin_phi(i) <= MUON_SIN_PHI_LUT(CONV_INTEGER(muon(i)(MUON_PHI_HIGH downto MUON_PHI_LOW)));
         end generate muon_i;

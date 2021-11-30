@@ -52,6 +52,7 @@ DO_FILE_TPL = 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do'
 
 QuestaSimPathVersion107c = '/opt/mentor/questasim'
 QuestaSimPathVersion106a = '/opt/mentor/questa_core_prime_10.6a/questasim'
+QuestaSimPathVersion2021_1_2 = '/opt/mentor/questa/2021.1_2/questasim/' # for server im CERN: 'srv-b1b07-10-01'
 DefaultQuestaSimLibsName = 'questalibs_vivado_v' # generated im /opt/mentor/
 
 mp7_tag = 'cactusupgrades'
@@ -280,6 +281,8 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
         questasim_path = QuestaSimPathVersion106a
     elif a_questasim == '10.7c':
         questasim_path = QuestaSimPathVersion107c
+    elif a_questasim == '2021':
+        questasim_path = QuestaSimPathVersion2021_1_2
     else:
         raise RuntimeError("Questa sim version '%s' does NOT exist" % a_questasim)
 
@@ -302,7 +305,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
     #print "questasimlib_path: ", questasimlib_path
 
     # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
-    command = 'bash -c "cp /opt/mentor/questasim/modelsim.ini {sim_dir}/modelsim.ini"'.format(**locals())
+    command = 'bash -c "cp {questasim_path}/modelsim.ini {sim_dir}/modelsim.ini"'.format(**locals())
     print("command cp modelsim.ini: ", command)
     run_command(command)
 

@@ -263,7 +263,7 @@ See also \ref{sec:gtl:optical_interfaces}.\\
 For each selected object, the Calo-Layer2 sends parameters for \pt and for position and isolation - encoded in 32 bits:
 \begin{itemize}
 \item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
-\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 138 bins (HW index = 0xBC..0x44)
+\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
 \item 2 bits isolation
 \item 5 bits spare
@@ -310,7 +310,7 @@ For each selected object, the Calo-Layer2 sends parameters: \pt, for position in
 For each selected object, the Calo-Layer2 sends parameters for \pt and for position information and isolation - encoded in 32 bits:
 \begin{itemize}
 \item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
-\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 138 bins (HW index = 0xBC..0x44)
+\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
 \item 2 bits isolation
 \item 5 bits spare
@@ -488,7 +488,7 @@ Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data stru
 \item 10 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/576 (\^=0.625°), 576 bins (HW index = 0..0x23F), HW index starting at 0° (anti-clockwise)
 \item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
 \item 4 bits quality, 16 types for quality (meaning not defined yet!)
-\item 9 (8+1 sign) bits pseudo-rapidity ($\eta$) position, range = -2.45 to 2.45, step = 0.087/8, linear scale, 452 bins (-225..225, HW index = 0x11F..0x0E1)
+\item 9 (8+1 sign) bits pseudo-rapidity ($\eta$) position, range = -2.45 to 2.45, step = 0.087/8, linear scale, 451 bins (-225..225, HW index = 0x11F..0x0E1)
 \item 2 bits isolation, 4 types for isolation (meaning not defined yet!)
 \item 1 bit charge sign, charge sign = '0' means "positive" charge, charge sign = '1' means "negative" charge
 \item 1 bit charge valid (='1' means "valid")

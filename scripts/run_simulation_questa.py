@@ -35,9 +35,21 @@ error_red = ("\033[1;31m ERROR  \033[0m")
 
 #reset = "\033[0m"
 
-DefaultVivadoVersion = '2019.2'
+host_name = os.uname()[1]
+print(host_name)
 
-DefaultQuestasimVersion = '10.7c'
+if host_name == 'srv-b1b07-10-01.cern.ch':
+    DefaultVivadoVersion = '2021.2'
+    DefaultQuestasimVersion = '2021.1'
+    QuestaSimPath = '/opt/mentor/questa/2021.1_2/questasim/' # for server im CERN: 'srv-b1b07-10-01'
+    ModelSimIniPath = '/home/ugt-build/bergauer/questasimlibs_vivado_2021.2'
+elif host_name == 'ugt-synth':
+    DefaultVivadoVersion = '2019.2'
+    DefaultQuestasimVersion = '10.7c'
+    QuestaSimPath = '/opt/mentor/questasim' # for server im HEPHY: 'ugt-synth'
+    ModelSimIniPath = '/opt/mentor/questasim'
+else:
+    raise RuntimeError("Host name '%s' does NOT exist" % host_name)
 
 vhdl_snippets_names = ['algo_index', 'gtl_module_instances', 'gtl_module_signals', 'ugt_constants']
 
@@ -50,9 +62,10 @@ TB_FILE = 'testbench/gtl_fdl_wrapper_tb.vhd'
 INI_FILE = 'modelsim.ini'
 DO_FILE_TPL = 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do'
 
-QuestaSimPathVersion107c = '/opt/mentor/questasim'
-QuestaSimPathVersion106a = '/opt/mentor/questa_core_prime_10.6a/questasim'
-DefaultQuestaSimLibsName = 'questalibs_vivado_v' # generated im /opt/mentor/
+#QuestaSimPathVersion107c = '/opt/mentor/questasim'
+#QuestaSimPathVersion106a = '/opt/mentor/questa_core_prime_10.6a/questasim'
+#QuestaSimPathVersion2021_1_2 = '/opt/mentor/questa/2021.1_2/questasim/' # for server im CERN: 'srv-b1b07-10-01'
+DefaultQuestaSimLibsName = 'questalibs_vivado_v'
 
 mp7_tag = 'cactusupgrades'
 algonum = 512#numbers of bits
@@ -194,7 +207,7 @@ class Module(object):#module class and nessesary information
             mask = mask | (1 << algo.index)
         return mask
 
-    def make_files(self, sim_dir, view_wave, mp7_tag, menu_path):#makes files for simulation
+    def make_files(self, sim_dir, view_wave, mp7_tag, menu_path, ipb_fw_dir):#makes files for simulation
         render_template(os.path.join(sim_dir, DO_FILE_TPL),
             os.path.join(self.path, DO_FILE), {
             '{{MP7_TAG}}' : mp7_tag,
@@ -202,6 +215,7 @@ class Module(object):#module class and nessesary information
             '{{MENU_DIR}}' : self.vhdl_path,
             '{{MOD_TB_DIR}}' : self.testbench_path,
             '{{SIM_DIR}}' : sim_dir,
+            '{{IPB_DIR}}' : ipb_fw_dir,
         })
         render_template(os.path.join(sim_dir, TB_FILE_TPL),
             os.path.join(self.path, TB_FILE), {
@@ -245,7 +259,7 @@ def download_file_from_url(url, filename):
         fp.write(d)
 
 #def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
-def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
+def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
     print("a_mp7_tag: ", a_mp7_tag)
     print("a_menu: ", a_menu)
     print("a_url_menu: ", a_url_menu)
@@ -253,17 +267,25 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
     print("a_questasim: ", a_questasim)
     print("a_questasimlibs: ", a_questasimlibs)
     # Check Questa sim version
-    if a_questasim == '10.6a':
-        questasim_path = QuestaSimPathVersion106a
-    elif a_questasim == '10.7c':
-        questasim_path = QuestaSimPathVersion107c
-    else:
-        raise RuntimeError("Questa sim version '%s' does NOT exist" % a_questasim)
+    #if a_questasim == '10.6a':
+        #questasim_path = QuestaSimPathVersion106a
+    #elif a_questasim == '10.7c':
+        #questasim_path = QuestaSimPathVersion107c
+    #elif a_questasim == '2021.1':
+        #questasim_path = QuestaSimPathVersion2021_1_2
+    #else:
+        #raise RuntimeError("Questa sim version '%s' does NOT exist" % a_questasim)
 
-    if not os.path.isdir(questasim_path):
-        raise RuntimeError("No installation of Questa sim in '%s'" % questasim_path)
+    if not os.path.isdir(QuestaSimPath):
+        raise RuntimeError("No installation of Questa sim in '%s'" % QuestaSimPath)
 
-    # Set sim_dir
+    questasim_path = QuestaSimPath
+
+    if not os.path.isdir(ModelSimIniPath):
+        raise RuntimeError("No installation of Questa sim in '%s'" % ModelSimIniPath)
+
+    modelsim_ini_path = ModelSimIniPath
+
     sim_dir = os.path.join(os.path.dirname(__file__), '../firmware/sim')
 
     # Copy dofile from gtl_fdl_wrapper_tpl_questa_v<vivado version>.do to gtl_fdl_wrapper_tpl_questa.do
@@ -278,7 +300,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
     #print "questasimlib_path: ", questasimlib_path
 
     # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
-    command = 'bash -c "cp /opt/mentor/questasim/modelsim.ini {sim_dir}/modelsim.ini; chmod ug+w {sim_dir}/modelsim.ini"'.format(**locals())
+    command = 'bash -c "cp {modelsim_ini_path}/modelsim.ini {sim_dir}/modelsim.ini; chmod ug+w {sim_dir}/modelsim.ini"'.format(**locals())
     print("command cp modelsim.ini: ", command)
     run_command(command)
 
@@ -375,11 +397,11 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_vivado, a_questasim, 
         logging.debug('Module_%d created at %s' % (module._id, base_dir))
 
         #module.make_files(sim_dir, a_view_wave, a_mp7_tag, a_menu)#sim_dir, view_wave, mp7_tag, menu_path
-        module.make_files(sim_dir, a_view_wave, a_mp7_tag, temp_dir)#sim_dir, view_wave, mp7_tag, temp_dir
+        module.make_files(sim_dir, a_view_wave, a_mp7_tag, temp_dir, a_ipb_fw_dir)#sim_dir, view_wave, mp7_tag, temp_dir
 
     logging.info('finished creating modules and masks')
     logging.info("===========================================================================")
-    logging.info('starting simulations with Questa Simulator version %s (from directory %s)'% (a_questasim, questasim_path))
+    logging.info('starting simulations with Questa Simulator version %s (from directory %s)'% (a_questasim,questasim_path))
 
     threads = []
     for module in modules:#makes for all simulations a thread
@@ -517,6 +539,7 @@ def parse():
     parser.add_argument('menu', type=tb.menuname_t, help = "menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')")
     parser.add_argument('--url', default=url_menu_default, help = "URL of menu")
     parser.add_argument('--mp7_tag', required=True, type=os.path.abspath, help = "local path to MP7 tag (checkout tag before running simulation)")
+    parser.add_argument('--ipb_fw_dir', required=True, type = os.path.abspath, help = "local path to IPBus firmware directory")
     parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version (default is {})".format(DefaultVivadoVersion))
     parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help = "Questasim version (default is  {})".format(DefaultQuestasimVersion))
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '~/{}')".format(DefaultQuestaSimLibsName))
@@ -532,7 +555,7 @@ def main():
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
-    run_simulation_questa(args.mp7_tag, args.menu, args.url, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
+    run_simulation_questa(args.mp7_tag, args.menu, args.url, args.ipb_fw_dir, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
 
 if __name__ == '__main__':
     main()

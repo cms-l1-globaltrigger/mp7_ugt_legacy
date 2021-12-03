@@ -1,4 +1,3 @@
-
 ##***************************** Beginning of Script ***************************
 
 ## If MTI_LIBS is defined, map unisim and simprim directories using MTI_LIBS
@@ -28,6 +27,7 @@ set NGC_DIR {{SIM_DIR}}/../ngc
 set TB_DIR {{SIM_DIR}}/testbench
 set MENU_DIR {{MENU_DIR}}
 set MOD_TB_DIR {{MOD_TB_DIR}}
+set IPB_DIR {{IPB_DIR}}
 set FILE_NAME {{MENU_DIR}}/../running.lock
 
 ## Create and map work directory
@@ -36,8 +36,8 @@ vmap work work
 
 ## MP7 files
 vcom -93 -work work $MP7_COMPONENTS/mp7_datapath/firmware/hdl/mp7_data_types.vhd
-vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/ipbus_package.vhd
-vcom -93 -work work $MP7_COMPONENTS/ipbus_core/firmware/hdl/ipbus_trans_decl.vhd
+vcom -93 -work work $IPB_DIR/components/ipbus_core/firmware/hdl/ipbus_package.vhd
+vcom -93 -work work $IPB_DIR/components/ipbus_core/firmware/hdl/ipbus_trans_decl.vhd
 vcom -93 -work work $HDL_DIR/packages/lhc_data_pkg.vhd
 vcom -93 -work work $TB_DIR/lhc_data_debug_util_pkg.vhd
 vcom -93 -work work $TB_DIR/txt_util_pkg.vhd

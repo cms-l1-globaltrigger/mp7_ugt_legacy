@@ -109,9 +109,9 @@ src payload/ipbus/ipb_write_regs.vhd
 src payload/ipbus/ipb_pulse_regs.vhd
 src payload/ipbus/ipb_read_regs.vhd
 src payload/ipbus/ipb_dpmem_4096_32.vhd
-src ../ngc/dp_mem_4096x32_blk_mem_gen_v8_4_2/dp_mem_4096x32.xci
-#src ../ngc/dp_mem_4096x32/dp_mem_4096x32.ngc
-#src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
+#src ../ngc/dp_mem_4096x32_blk_mem_gen_v8_4_2/dp_mem_4096x32.xci
+src ../ngc/dp_mem_4096x32/dp_mem_4096x32.ngc
+src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
 #
 ## MP7 modules
 src -c components/mp7_ttc mp7_ttc_decl.vhd

@@ -24,7 +24,11 @@ BoardAliases = {
     'mp7xe_690': 'xe',
 }
 
-DefaultVivadoVersion = '2019.2'
+DefaultVivadoVersion = os.getenv('UGT_VIVADO_VERSION')  # read from env or fallback to default
+DefaultQuestasimVersion = os.getenv('UGT_QUESTASIM_VERSION')
+DefaultQuestaSimLibsName = os.getenv('UGT_QUESTASIM_LIBS_NAME')
+QuestaSimPath = os.getenv('UGT_QUESTASIM_SIM_PATH')
+ModelSimIniPath = os.getenv('UGT_MODELSIM_INI_PATH')
 
 DefaultBoardType = 'mp7xe_690'
 """Default board type to be used."""
@@ -52,19 +56,7 @@ mp7fw_ugt_suffix = '_mp7_ugt'
 """Suffix for ugt MP7 FW tag (patched files in MP7 FW)."""
 """Example MP7 FW tag for ugt: mp7fw_v3_0_0_mp7_ugt."""
 
-#DefaultGitlabUrlUgt = 'https://:@gitlab.cern.ch:8443/hbergaue/ugt.git'
-"""Default URL of gitlab ugt repo."""
-
-#DefaultMenuUrl = 'https://raw.githubusercontent.com/herbberg/l1menus/master'
-
-DefaultQuestasimVersion = '10.7c'
-
 vhdl_snippets = ('algo_index.vhd','gtl_module_instances.vhd','gtl_module_signals.vhd','ugt_constants.vhd')
-
-# For Questa simulation
-QuestaSimPathVersion107c = '/opt/mentor/questasim'
-QuestaSimPathVersion106a = '/opt/mentor/questa_core_prime_10.6a/questasim'
-DefaultQuestaSimLibsName = 'questasimlibs' # generated im $HOME
 
 def run_command(*args):
     command = ' '.join(args)
@@ -98,7 +90,6 @@ def replace_vhdl_templates(vhdl_snippets_dir, src_fw_dir, dest_fw_dir):
     }
 
     gtl_fdl_wrapper_dir = os.path.join(src_fw_dir, 'hdl', 'payload')
-    #gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
     fdl_dir = os.path.join(gtl_fdl_wrapper_dir, 'fdl')
     pkg_dir = os.path.join(src_fw_dir, 'hdl', 'packages')
 
@@ -194,7 +185,7 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("creating IPBB area ...")
-    command = 'bash -c "cd; {cmd_ipbb_init}; cd {ipbb_dir}; {cmd_ipbb_add_ipb} && {cmd_ipbb_add_mp7} && {cmd_ipbb_add_ugt}"'.format(**locals())
+    command = 'bash -c "cd; {cmd_ipbb_init}; cd {ipbb_dir}; {cmd_ipbb_add_ipb} && {cmd_ipbb_add_mp7} && {cmd_ipbb_add_ugt}; cp {ipbb_dir}/src/mp7_ugt_legacy/firmware/cfg/uGT_algo_{args.vivado}.dep {ipbb_dir}/src/mp7_ugt_legacy/firmware/cfg/uGT_algo.dep"'.format(**locals())
     run_command(command)
 
     logging.info("===========================================================================")

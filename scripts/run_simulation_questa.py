@@ -35,21 +35,11 @@ error_red = ("\033[1;31m ERROR  \033[0m")
 
 #reset = "\033[0m"
 
-host_name = os.uname()[1]
-print(host_name)
-
-if host_name == 'srv-b1b07-10-01.cern.ch':
-    DefaultVivadoVersion = '2021.2'
-    DefaultQuestasimVersion = '2021.1'
-    QuestaSimPath = '/opt/mentor/questa/2021.1_2/questasim/' # for server im CERN: 'srv-b1b07-10-01'
-    ModelSimIniPath = '/home/ugt-build/bergauer/questasimlibs_vivado_2021.2'
-elif host_name == 'ugt-synth':
-    DefaultVivadoVersion = '2019.2'
-    DefaultQuestasimVersion = '10.7c'
-    QuestaSimPath = '/opt/mentor/questasim' # for server im HEPHY: 'ugt-synth'
-    ModelSimIniPath = '/opt/mentor/questasim'
-else:
-    raise RuntimeError("Host name '%s' does NOT exist" % host_name)
+DefaultVivadoVersion = os.getenv('UGT_VIVADO_VERSION')  # read from env or fallback to default
+DefaultQuestasimVersion = os.getenv('UGT_QUESTASIM_VERSION')
+DefaultQuestaSimLibsName = os.getenv('UGT_QUESTASIM_LIBS_NAME')
+QuestaSimPath = os.getenv('UGT_QUESTASIM_SIM_PATH')
+ModelSimIniPath = os.getenv('UGT_MODELSIM_INI_PATH')
 
 vhdl_snippets_names = ['algo_index', 'gtl_module_instances', 'gtl_module_signals', 'ugt_constants']
 
@@ -62,20 +52,38 @@ TB_FILE = 'testbench/gtl_fdl_wrapper_tb.vhd'
 INI_FILE = 'modelsim.ini'
 DO_FILE_TPL = 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do'
 
-#QuestaSimPathVersion107c = '/opt/mentor/questasim'
-#QuestaSimPathVersion106a = '/opt/mentor/questa_core_prime_10.6a/questasim'
-#QuestaSimPathVersion2021_1_2 = '/opt/mentor/questa/2021.1_2/questasim/' # for server im CERN: 'srv-b1b07-10-01'
-DefaultQuestaSimLibsName = 'questalibs_vivado_v'
 
 mp7_tag = 'cactusupgrades'
 algonum = 512#numbers of bits
 IGNORED_ALGOS = [
   'L1_FirstBunchInTrain',
   'L1_SecondBunchInTrain',
-  #'L1_MASSUPT_0_0_10',
-  #'L1_MASSUPT_0_0_20',
-  #'L1_MASSUPT_0_0_10_open',
-  #'L1_MASSUPT_0_0_20_open',
+  'L1_MASSUPT_0_0_10',
+  'L1_MASSUPT_0_0_20',
+  'L1_MASSUPT_0_0_10_open',
+  'L1_MASSUPT_0_0_20_open',
+  'L1_MASSUPT_0_0_10',
+  'L1_MASSUPT_0_0_20',
+  'L1_MASSUPT_5_5_10',
+  'L1_MASSUPT_5_5_20',
+  'L1_MASSUPT_0_0_10_open',
+  'L1_MASSUPT_0_0_20_open',
+  'L1_MASSUPT_5_5_10_open',
+  'L1_MASSUPT_5_5_20_open',
+  'L1_Mu0upt20ip0',
+  'L1_Mu0upt20ip1',
+  'L1_Mu0upt20ip2',
+  'L1_Mu0upt20ip3',
+  'L1_Mu0upt20ip03',
+  'L1_Mu0upt0',
+  'L1_Mu0upt5',
+  'L1_Mu0upt10',
+  'L1_Mu0upt20',
+  'L1_Mu0upt50',
+  'L1_Mu0upt100',
+  'L1_SingleMuOpenupt5',
+  'L1_SingleMuOpenupt20',
+  'L1_SingleMuOpenupt100',
   ]
 
 def run_command(*args):
@@ -266,15 +274,6 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_vivado,
     print("a_vivado: ", a_vivado)
     print("a_questasim: ", a_questasim)
     print("a_questasimlibs: ", a_questasimlibs)
-    # Check Questa sim version
-    #if a_questasim == '10.6a':
-        #questasim_path = QuestaSimPathVersion106a
-    #elif a_questasim == '10.7c':
-        #questasim_path = QuestaSimPathVersion107c
-    #elif a_questasim == '2021.1':
-        #questasim_path = QuestaSimPathVersion2021_1_2
-    #else:
-        #raise RuntimeError("Questa sim version '%s' does NOT exist" % a_questasim)
 
     if not os.path.isdir(QuestaSimPath):
         raise RuntimeError("No installation of Questa sim in '%s'" % QuestaSimPath)

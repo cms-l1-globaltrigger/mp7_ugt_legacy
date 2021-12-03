@@ -77,18 +77,18 @@ src payload/gtl/correlation_cuts_calculation.vhd
 src payload/gtl/correlation_conditions.vhd
 #
 ### modules of BRAMs used for mass over DeltaR
-src ../ngc/rom_lut_calo_inv_dr_sq_1/rom_lut_calo_inv_dr_sq_1.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_2/rom_lut_calo_inv_dr_sq_2.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_3/rom_lut_calo_inv_dr_sq_3.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_4/rom_lut_calo_inv_dr_sq_4.xci
-src ../ngc/rom_lut_calo_inv_dr_sq_5/rom_lut_calo_inv_dr_sq_5.xci
+src ../ngc/blk_mem_gen_v8_4_4/rom_lut_calo_inv_dr_sq_1/rom_lut_calo_inv_dr_sq_1.xci
+src ../ngc/blk_mem_gen_v8_4_4/rom_lut_calo_inv_dr_sq_2/rom_lut_calo_inv_dr_sq_2.xci
+src ../ngc/blk_mem_gen_v8_4_4/rom_lut_calo_inv_dr_sq_3/rom_lut_calo_inv_dr_sq_3.xci
+src ../ngc/blk_mem_gen_v8_4_4/rom_lut_calo_inv_dr_sq_4/rom_lut_calo_inv_dr_sq_4.xci
+src ../ngc/blk_mem_gen_v8_4_4/rom_lut_calo_inv_dr_sq_5/rom_lut_calo_inv_dr_sq_5.xci
 src payload/gtl/common/rom_lut_calo_inv_dr_sq_all.vhd
-src ../ngc/rom_lut_muon_inv_dr_sq_1/rom_lut_muon_inv_dr_sq_1.xci
-src ../ngc/rom_lut_muon_inv_dr_sq_2/rom_lut_muon_inv_dr_sq_2.xci
-src ../ngc/rom_lut_muon_inv_dr_sq_3/rom_lut_muon_inv_dr_sq_3.xci
-src ../ngc/rom_lut_muon_inv_dr_sq_4/rom_lut_muon_inv_dr_sq_4.xci
-src ../ngc/rom_lut_muon_inv_dr_sq_5/rom_lut_muon_inv_dr_sq_5.xci
-src ../ngc/rom_lut_muon_inv_dr_sq_6/rom_lut_muon_inv_dr_sq_6.xci
+src ../ngc/blk_mem_gen_v8_4_4/rom_lut_muon_inv_dr_sq_1/rom_lut_muon_inv_dr_sq_1.xci
+src ../ngc/blk_mem_gen_v8_4_4/rom_lut_muon_inv_dr_sq_2/rom_lut_muon_inv_dr_sq_2.xci
+src ../ngc/blk_mem_gen_v8_4_4/rom_lut_muon_inv_dr_sq_3/rom_lut_muon_inv_dr_sq_3.xci
+src ../ngc/blk_mem_gen_v8_4_4/rom_lut_muon_inv_dr_sq_4/rom_lut_muon_inv_dr_sq_4.xci
+src ../ngc/blk_mem_gen_v8_4_4/rom_lut_muon_inv_dr_sq_5/rom_lut_muon_inv_dr_sq_5.xci
+src ../ngc/blk_mem_gen_v8_4_4/rom_lut_muon_inv_dr_sq_6/rom_lut_muon_inv_dr_sq_6.xci
 src payload/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd
 #
 ## FRAME modules

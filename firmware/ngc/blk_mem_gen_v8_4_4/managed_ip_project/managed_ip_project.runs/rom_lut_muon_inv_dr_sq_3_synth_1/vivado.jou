@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2019.2 (64-bit)
+# SW Build 2700185 on Thu Oct 24 18:45:48 MDT 2019
+# IP Build 2699827 on Thu Oct 24 21:16:38 MDT 2019
+# Start of session at: Wed Sep 15 10:30:50 2021
+# Process ID: 25623
+# Current directory: /home/bergauer/github/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/ngc/managed_ip_project/managed_ip_project.runs/rom_lut_muon_inv_dr_sq_3_synth_1
+# Command line: vivado -log rom_lut_muon_inv_dr_sq_3.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source rom_lut_muon_inv_dr_sq_3.tcl
+# Log file: /home/bergauer/github/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/ngc/managed_ip_project/managed_ip_project.runs/rom_lut_muon_inv_dr_sq_3_synth_1/rom_lut_muon_inv_dr_sq_3.vds
+# Journal file: /home/bergauer/github/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/ngc/managed_ip_project/managed_ip_project.runs/rom_lut_muon_inv_dr_sq_3_synth_1/vivado.jou
+#-----------------------------------------------------------
+source rom_lut_muon_inv_dr_sq_3.tcl -notrace

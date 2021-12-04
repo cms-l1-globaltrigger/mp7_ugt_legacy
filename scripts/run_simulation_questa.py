@@ -288,9 +288,9 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_vivado,
     sim_dir = os.path.join(os.path.dirname(__file__), '../firmware/sim')
 
     # Copy dofile from gtl_fdl_wrapper_tpl_questa_v<vivado version>.do to gtl_fdl_wrapper_tpl_questa.do
-    src_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa_v{}.do'.format(a_vivado))
-    dest_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do')
-    shutil.copyfile(src_do, dest_do)
+#    src_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa_v{}.do'.format(a_vivado))
+#    dest_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do')
+#    shutil.copyfile(src_do, dest_do)
 
     ## Path to Questa sim libs for selected vivado version
     #questasimlibs_name = a_questasimlibs + a_vivado

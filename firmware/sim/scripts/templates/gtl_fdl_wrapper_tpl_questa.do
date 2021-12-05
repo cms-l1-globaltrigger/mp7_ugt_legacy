@@ -30,6 +30,8 @@ set MOD_TB_DIR {{MOD_TB_DIR}}
 set IPB_DIR {{IPB_DIR}}
 set FILE_NAME {{MENU_DIR}}/../running.lock
 
+set BLK_MEM_GEN_VERSION $env(UGT_BLK_MEM_GEN_VERSION)
+
 ## Create and map work directory
 vlib work
 vmap work work
@@ -101,17 +103,17 @@ vcom -93 -work work $HDL_DIR/payload/gtl/towercount_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
 #
 ### modules of BRAMs used for mass over DeltaR
-vcom -93 -work work $NGC_DIR/v2019_2_blk_mem_gen_v8_4_4/rom_lut_calo_inv_dr_sq_1/synth/rom_lut_calo_inv_dr_sq_1.vhd
-vcom -93 -work work $NGC_DIR/v2019_2_blk_mem_gen_v8_4_4/rom_lut_calo_inv_dr_sq_2/synth/rom_lut_calo_inv_dr_sq_2.vhd
-vcom -93 -work work $NGC_DIR/v2019_2_blk_mem_gen_v8_4_4/rom_lut_calo_inv_dr_sq_3/synth/rom_lut_calo_inv_dr_sq_3.vhd
-vcom -93 -work work $NGC_DIR/v2019_2_blk_mem_gen_v8_4_4/rom_lut_calo_inv_dr_sq_4/synth/rom_lut_calo_inv_dr_sq_4.vhd
-vcom -93 -work work $NGC_DIR/v2019_2_blk_mem_gen_v8_4_4/rom_lut_calo_inv_dr_sq_5/synth/rom_lut_calo_inv_dr_sq_5.vhd
-vcom -93 -work work $NGC_DIR/v2019_2_blk_mem_gen_v8_4_4/rom_lut_muon_inv_dr_sq_1/synth/rom_lut_muon_inv_dr_sq_1.vhd
-vcom -93 -work work $NGC_DIR/v2019_2_blk_mem_gen_v8_4_4/rom_lut_muon_inv_dr_sq_2/synth/rom_lut_muon_inv_dr_sq_2.vhd
-vcom -93 -work work $NGC_DIR/v2019_2_blk_mem_gen_v8_4_4/rom_lut_muon_inv_dr_sq_3/synth/rom_lut_muon_inv_dr_sq_3.vhd
-vcom -93 -work work $NGC_DIR/v2019_2_blk_mem_gen_v8_4_4/rom_lut_muon_inv_dr_sq_4/synth/rom_lut_muon_inv_dr_sq_4.vhd
-vcom -93 -work work $NGC_DIR/v2019_2_blk_mem_gen_v8_4_4/rom_lut_muon_inv_dr_sq_5/synth/rom_lut_muon_inv_dr_sq_5.vhd
-vcom -93 -work work $NGC_DIR/v2019_2_blk_mem_gen_v8_4_4/rom_lut_muon_inv_dr_sq_6/synth/rom_lut_muon_inv_dr_sq_6.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_calo_inv_dr_sq_1/synth/rom_lut_calo_inv_dr_sq_1.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_calo_inv_dr_sq_2/synth/rom_lut_calo_inv_dr_sq_2.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_calo_inv_dr_sq_3/synth/rom_lut_calo_inv_dr_sq_3.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_calo_inv_dr_sq_4/synth/rom_lut_calo_inv_dr_sq_4.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_calo_inv_dr_sq_5/synth/rom_lut_calo_inv_dr_sq_5.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_muon_inv_dr_sq_1/synth/rom_lut_muon_inv_dr_sq_1.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_muon_inv_dr_sq_2/synth/rom_lut_muon_inv_dr_sq_2.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_muon_inv_dr_sq_3/synth/rom_lut_muon_inv_dr_sq_3.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_muon_inv_dr_sq_4/synth/rom_lut_muon_inv_dr_sq_4.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_muon_inv_dr_sq_5/synth/rom_lut_muon_inv_dr_sq_5.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_muon_inv_dr_sq_6/synth/rom_lut_muon_inv_dr_sq_6.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/rom_lut_calo_inv_dr_sq_all.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd
 #

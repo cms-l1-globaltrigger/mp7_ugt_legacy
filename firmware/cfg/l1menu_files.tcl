@@ -11,3 +11,21 @@ set gtl_module "../../src/module_${mod_id}/gtl_module.vhd"
 # puts $gtl_module
 
 add_files -norecurse -fileset sources_1 $fdl_pkg $algo_mapping_rop $gtl_module
+
+## add blk_mem_gen files depending on environment variable
+
+set BLK_MEM_GEN_VERSION $env(UGT_BLK_MEM_GEN_VERSION)
+
+add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_1/rom_lut_calo_inv_dr_sq_1.xci"
+add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_2/rom_lut_calo_inv_dr_sq_2.xci"
+add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_3/rom_lut_calo_inv_dr_sq_3.xci"
+add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_4/rom_lut_calo_inv_dr_sq_4.xci"
+add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_5/rom_lut_calo_inv_dr_sq_5.xci"
+add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_1/rom_lut_muon_inv_dr_sq_1.xci"
+add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_2/rom_lut_muon_inv_dr_sq_2.xci"
+add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_3/rom_lut_muon_inv_dr_sq_3.xci"
+add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_4/rom_lut_muon_inv_dr_sq_4.xci"
+add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_5/rom_lut_muon_inv_dr_sq_5.xci"
+add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_6/rom_lut_muon_inv_dr_sq_6.xci"
+
+

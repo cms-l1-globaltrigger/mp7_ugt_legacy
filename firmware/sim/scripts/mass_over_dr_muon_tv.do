@@ -22,6 +22,8 @@ set NGC_DIR ./../ngc
 
 set TESTBENCH ./../sim/testbench
 
+set BLK_MEM_GEN_VERSION $env(UGT_BLK_MEM_GEN_VERSION)
+
 ## Create and map work directory
 vlib work
 vmap work work
@@ -74,12 +76,12 @@ vcom -93 -work work $HDL_DIR/payload/gtl/correlation_cuts_calculation.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/muon_charge_correlations.vhd
 
-vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_1/synth/rom_lut_muon_inv_dr_sq_1.vhd
-vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_2/synth/rom_lut_muon_inv_dr_sq_2.vhd
-vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_3/synth/rom_lut_muon_inv_dr_sq_3.vhd
-vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_4/synth/rom_lut_muon_inv_dr_sq_4.vhd
-vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_5/synth/rom_lut_muon_inv_dr_sq_5.vhd
-vcom -93 -work work $NGC_DIR/rom_lut_muon_inv_dr_sq_6/synth/rom_lut_muon_inv_dr_sq_6.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_muon_inv_dr_sq_1/synth/rom_lut_muon_inv_dr_sq_1.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_muon_inv_dr_sq_2/synth/rom_lut_muon_inv_dr_sq_2.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_muon_inv_dr_sq_3/synth/rom_lut_muon_inv_dr_sq_3.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_muon_inv_dr_sq_4/synth/rom_lut_muon_inv_dr_sq_4.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_muon_inv_dr_sq_5/synth/rom_lut_muon_inv_dr_sq_5.vhd
+vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_muon_inv_dr_sq_6/synth/rom_lut_muon_inv_dr_sq_6.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd
 
 #Testbench

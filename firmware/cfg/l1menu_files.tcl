@@ -16,16 +16,4 @@ add_files -norecurse -fileset sources_1 $fdl_pkg $algo_mapping_rop $gtl_module
 
 set BLK_MEM_GEN_VERSION $env(UGT_BLK_MEM_GEN_VERSION)
 
-add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_1/rom_lut_calo_inv_dr_sq_1.xci"
-add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_2/rom_lut_calo_inv_dr_sq_2.xci"
-add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_3/rom_lut_calo_inv_dr_sq_3.xci"
-add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_4/rom_lut_calo_inv_dr_sq_4.xci"
-add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_5/rom_lut_calo_inv_dr_sq_5.xci"
-add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_1/rom_lut_muon_inv_dr_sq_1.xci"
-add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_2/rom_lut_muon_inv_dr_sq_2.xci"
-add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_3/rom_lut_muon_inv_dr_sq_3.xci"
-add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_4/rom_lut_muon_inv_dr_sq_4.xci"
-add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_5/rom_lut_muon_inv_dr_sq_5.xci"
-add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_6/rom_lut_muon_inv_dr_sq_6.xci"
-
-
+add_files -norecurse -fileset sources_1 "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_1/rom_lut_calo_inv_dr_sq_1.xci" "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_2/rom_lut_calo_inv_dr_sq_2.xci" "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_3/rom_lut_calo_inv_dr_sq_3.xci" "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_4/rom_lut_calo_inv_dr_sq_4.xci" "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_calo_inv_dr_sq_5/rom_lut_calo_inv_dr_sq_5.xci" "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_1/rom_lut_muon_inv_dr_sq_1.xci" "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_2/rom_lut_muon_inv_dr_sq_2.xci" "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_3/rom_lut_muon_inv_dr_sq_3.xci" "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_4/rom_lut_muon_inv_dr_sq_4.xci" "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_5/rom_lut_muon_inv_dr_sq_5.xci" "../ngc/${BLK_MEM_GEN_VERSION}/rom_lut_muon_inv_dr_sq_6/rom_lut_muon_inv_dr_sq_6.xci"

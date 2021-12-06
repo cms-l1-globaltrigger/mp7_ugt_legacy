@@ -66,7 +66,7 @@ begin
 
     process
         variable l : line;
-        file testvector_file : text open read_mode is "/home/bergauer/github/herbberg/l1menus/2021/L1Menu_test_MassOverdR-d1/testvectors/TestVector_L1Menu_test_MassOverdR.txt";
+        file testvector_file : text open read_mode is "$UGT_HOME/github/herbberg/l1menus/2021/L1Menu_test_MassOverdR-d1/testvectors/TestVector_L1Menu_test_MassOverdR.txt";
         function str_to_slv(str : string) return std_logic_vector is
             alias str_norm : string(1 to str'length) is str;
             variable char_v : character;

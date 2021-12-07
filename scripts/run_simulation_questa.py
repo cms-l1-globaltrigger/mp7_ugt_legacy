@@ -36,18 +36,18 @@ error_red = ("\033[1;31m ERROR  \033[0m")
 #reset = "\033[0m"
 
 # definition of versions for check whether version set in environment variable is useful
-currentVivadoVersions = ["2019.2", "2020.2", "2021.1", "2021.2"]
+#currentVivadoVersions = ["2019.2", "2020.2", "2021.1", "2021.2"]
 currentQuestasimVersions = ["10.7c", "2021.1"]
 
-vv_ok = False
+#vv_ok = False
 qv_ok = False
 
-DefaultVivadoVersion = os.getenv('UGT_VIVADO_VERSION')  # read from env or fallback to default
-for VivadoVersion in currentVivadoVersions:
-    if DefaultVivadoVersion == VivadoVersion:
-        vv_ok = True
-if not vv_ok:
-    raise RuntimeError("UGT_VIVADO_VERSION is not set correctly ('%s')" % DefaultVivadoVersion)
+#DefaultVivadoVersion = os.getenv('UGT_VIVADO_VERSION')  # read from env or fallback to default
+#for VivadoVersion in currentVivadoVersions:
+#    if DefaultVivadoVersion == VivadoVersion:
+#        vv_ok = True
+#if not vv_ok:
+#    raise RuntimeError("UGT_VIVADO_VERSION is not set correctly ('%s')" % DefaultVivadoVersion)
 
 DefaultQuestasimVersion = os.getenv('UGT_QUESTASIM_VERSION')
 for QuestasimVersion in currentQuestasimVersions:
@@ -290,11 +290,11 @@ def download_file_from_url(url, filename):
         fp.write(d)
 
 #def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
-def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
+def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
     print("a_mp7_tag: ", a_mp7_tag)
     print("a_menu: ", a_menu)
     print("a_url_menu: ", a_url_menu)
-    print("a_vivado: ", a_vivado)
+#    print("a_vivado: ", a_vivado)
     print("a_questasim: ", a_questasim)
     print("a_questasimlibs: ", a_questasimlibs)
 
@@ -557,7 +557,7 @@ def parse():
     parser.add_argument('--url', default=url_menu_default, help = "URL of menu")
     parser.add_argument('--mp7_tag', required=True, type=os.path.abspath, help = "local path to MP7 tag (checkout tag before running simulation)")
     parser.add_argument('--ipb_fw_dir', required=True, type = os.path.abspath, help = "local path to IPBus firmware directory")
-    parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version (default is {})".format(DefaultVivadoVersion))
+#    parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version (default is {})".format(DefaultVivadoVersion))
     parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help = "Questasim version (default is  {})".format(DefaultQuestasimVersion))
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '~/{}')".format(DefaultQuestaSimLibsName))
     parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
@@ -572,7 +572,8 @@ def main():
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
-    run_simulation_questa(args.mp7_tag, args.menu, args.url, args.ipb_fw_dir, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
+#    run_simulation_questa(args.mp7_tag, args.menu, args.url, args.ipb_fw_dir, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
+    run_simulation_questa(args.mp7_tag, args.menu, args.url, args.ipb_fw_dir, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
 
 if __name__ == '__main__':
     main()

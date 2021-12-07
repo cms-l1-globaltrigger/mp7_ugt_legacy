@@ -37,7 +37,7 @@ error_red = ("\033[1;31m ERROR  \033[0m")
 
 # definition of versions for check whether version set in environment variable is useful
 #currentVivadoVersions = ["2019.2", "2020.2", "2021.1", "2021.2"]
-currentQuestasimVersions = ["10.7c", "2021.1"]
+currentQuestasimVersions = ["10.7c", "2021.1_2"]
 
 #vv_ok = False
 qv_ok = False
@@ -317,9 +317,9 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     #print "questasimlib_path: ", questasimlib_path
 
     # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
-    command = 'bash -c "cp {questasim_path}/modelsim.ini {sim_dir}/modelsim.ini; chmod ug+w {sim_dir}/modelsim.ini"'.format(**locals())
-    print("command cp modelsim.ini: ", command)
-    run_command(command)
+#    command = 'bash -c "cp {questasim_path}/modelsim.ini {sim_dir}/modelsim.ini; chmod ug+w {sim_dir}/modelsim.ini"'.format(**locals())
+#    print("command cp modelsim.ini: ", command)
+#    run_command(command)
 
     ## Run compile Vivado sim libs for Questa (if not exist)
     #run_compile_simlib(a_vivado, questasim_path, questasimlib_path)

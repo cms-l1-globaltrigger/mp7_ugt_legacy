@@ -30,8 +30,8 @@ set MOD_TB_DIR {{MOD_TB_DIR}}
 set IPB_DIR {{IPB_DIR}}
 set FILE_NAME {{MENU_DIR}}/../running.lock
 
-set BLK_MEM_GEN_VERSION $env(UGT_BLK_MEM_GEN_VERSION)
 set BLK_MEM_GEN_NAME $env(UGT_BLK_MEM_GEN_NAME)
+set DP_MEM_VERSION $env(UGT_DP_MEM_VERSION)
 
 ## Create and map work directory
 vlib work
@@ -131,8 +131,7 @@ vcom -93 -work work $HDL_DIR/payload/fdl/algo_post_dead_time_counter.vhd
 vcom -93 -work work $HDL_DIR/payload/fdl/algo_slice.vhd
 #
 ## IPBus modules
-#vcom -93 -work work $NGC_DIR/dp_mem_4096x32/dp_mem_4096x32.vhd
-vcom -93 -work work $NGC_DIR/dp_mem_4096x32_$BLK_MEM_GEN_VERSION/synth/dp_mem_4096x32.vhd
+vcom -93 -work work $NGC_DIR/dp_mem_4096x32_$DP_MEM_VERSION/synth/dp_mem_4096x32.vhd
 vcom -93 -work work $HDL_DIR/payload/ipbus/ipb_dpmem_4096_32.vhd
 vcom -93 -work work $HDL_DIR/payload/ipbus/ipb_read_regs.vhd
 vcom -93 -work work $HDL_DIR/payload/ipbus/ipb_write_regs.vhd

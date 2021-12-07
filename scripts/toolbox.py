@@ -51,7 +51,8 @@ def build_str_t(version):
 
 def questasim_t(version):
     """Validates Questasim version."""
-    if not re.match(r'^\d+\.\d{1}[a-z]{0,3}$', version):
+    #if not re.match(r'^\d+\.\d{1}[a-z]{0,1}$', version):
+    if not re.match(r'^\d+\.\d{1}[a-z0-9_]{0,3}$', version):
         raise ValueError("not a valid Questasim version: '{version}'".format(**locals()))
     return version
 

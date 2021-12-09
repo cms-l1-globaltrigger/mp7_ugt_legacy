@@ -48,7 +48,7 @@ entity comb_conditions is
         phi_w2_lower_limits_obj1: common_templates_array := (others => (others => '0'));
         iso_luts_obj1: common_templates_iso_array := (others => (others => '1'));
         disp_cuts_obj1: common_templates_boolean_array := (others => false);
-        disp_requs_obj1: common_templates_disp_array := (others => '0');
+        disp_requs_obj1: common_templates_boolean_array := (others => false);
         requested_charges_obj1: common_templates_string_array := (others => "ign");
         qual_luts_obj1: common_templates_quality_array := (others => (others => '1'));
         upt_cuts_obj1: common_templates_boolean_array := (others => false);
@@ -80,7 +80,7 @@ entity comb_conditions is
         phi_w2_lower_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         iso_lut_obj2: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
         disp_cut_obj2: boolean := false;
-        disp_requ_obj2: std_logic := '0';
+        disp_requ_obj2: boolean := false;
 
         tbpt_cut: boolean := false;
         tbpt_vector_width: positive := 2+EG_PT_VECTOR_WIDTH+EG_PT_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH;

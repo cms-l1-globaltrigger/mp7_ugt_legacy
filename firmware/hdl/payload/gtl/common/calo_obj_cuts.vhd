@@ -45,8 +45,8 @@ entity calo_obj_cuts is
         phi_w2_upper_limits: common_templates_array;
         phi_w2_lower_limits: common_templates_array;
         iso_luts: common_templates_iso_array;
-        disp_cuts: common_templates_boolean_array := (others => false);
-        disp_requs: common_templates_disp_array
+        disp_cuts: common_templates_boolean_array;
+        disp_requs: common_templates_boolean_array
 
     );
     port(

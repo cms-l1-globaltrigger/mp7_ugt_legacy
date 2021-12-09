@@ -45,7 +45,7 @@ entity calo_comparators is
         phi_w2_lower_limit : std_logic_vector;
         iso_lut : std_logic_vector;
         disp_cut : boolean := false;
-        disp_requ : std_logic
+        disp_requ : boolean := false
     );
     port(
         lhc_clk : in std_logic;
@@ -244,9 +244,9 @@ begin
         -- Comparator for DISP
             disp_p: process(disp)
             begin
-                if disp_requ = '1' then
+                if disp_requ then
                     disp_comp <= disp; -- DISP bit requirement = 1, DISP bit = 1 (LLP jet) => disp_comp = '1'
-                elsif disp_requ = '0' then
+                elsif not disp_requ then
                     disp_comp <= not disp; -- DISP bit requirement = 0, DISP bit = 0 (no LLP jet) => disp_comp = '1'
                 end if;
             end process;

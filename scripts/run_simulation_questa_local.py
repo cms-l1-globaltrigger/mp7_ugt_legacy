@@ -34,11 +34,25 @@ error_red = ("\033[1;31m ERROR  \033[0m")
 
 #reset = "\033[0m"
 
-DefaultVivadoVersion = os.getenv('UGT_VIVADO_VERSION')  # read from env or fallback to default
+# definition of versions for check
+currentQuestasimVersions = ["10.7c", "2021.1_2"]
+
+qv_ok = False
+
 DefaultQuestasimVersion = os.getenv('UGT_QUESTASIM_VERSION')
+for QuestasimVersion in currentQuestasimVersions:
+    if DefaultQuestasimVersion == QuestasimVersion:
+        qv_ok = True
+if not qv_ok:
+    raise RuntimeError("UGT_QUESTASIM_VERSION is not set correctly ('%s')" % DefaultQuestasimVersion)
+
 DefaultQuestaSimLibsName = os.getenv('UGT_QUESTASIM_LIBS_NAME')
+if DefaultQuestaSimLibsName == '':
+    raise RuntimeError("UGT_QUESTASIM_LIBS_NAME is not set")
+
 QuestaSimPath = os.getenv('UGT_QUESTASIM_SIM_PATH')
-ModelSimIniPath = os.getenv('UGT_MODELSIM_INI_PATH')
+if QuestaSimPath == '':
+    raise RuntimeError("UGT_QUESTASIM_SIM_PATH is not set")
 
 vhdl_snippets_names = ['algo_index', 'gtl_module_instances', 'gtl_module_signals', 'ugt_constants']
 
@@ -266,12 +280,12 @@ def download_file_from_url(url, filename):
         fp.write(d)
 
 #def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
-def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv):
+def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv):
     print("a_mp7_tag: ", a_mp7_tag)
     print("a_menu: ", a_menu)
     print("a_tv: ", a_tv)
     print("a_url_menu: ", a_url_menu)
-    print("a_vivado: ", a_vivado)
+    #print("a_vivado: ", a_vivado)
     print("a_questasim: ", a_questasim)
     print("a_questasimlibs: ", a_questasimlibs)
 
@@ -280,26 +294,21 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_vivado,
 
     questasim_path = QuestaSimPath
 
-    if not os.path.isdir(ModelSimIniPath):
-        raise RuntimeError("No installation of Questa sim in '%s'" % ModelSimIniPath)
-
-    modelsim_ini_path = ModelSimIniPath
-
-    sim_dir = '/home/bergauer/github/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/sim'
+    sim_dir = os.path.join(os.path.dirname(__file__), '../firmware/sim')
 
     # Copy dofile from gtl_fdl_wrapper_tpl_questa_v<vivado version>.do to gtl_fdl_wrapper_tpl_questa.do
-    src_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa_v{}.do'.format(a_vivado))
-    dest_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do')
-    shutil.copyfile(src_do, dest_do)
+    #src_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa_v{}.do'.format(a_vivado))
+    #dest_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do')
+    #shutil.copyfile(src_do, dest_do)
 
     ## Path to Questa sim libs for selected vivado version
     #questasimlibs_name = a_questasimlibs + a_vivado
     #questasimlib_path = os.path.join('/opt/mentor/', questasimlibs_name)
 
     # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
-    command = 'bash -c "cp {modelsim_ini_path}/modelsim.ini {sim_dir}/modelsim.ini; chmod ug+w {sim_dir}/modelsim.ini"'.format(**locals())
-    print("command cp modelsim.ini: ", command)
-    run_command(command)
+    #command = 'bash -c "cp {modelsim_ini_path}/modelsim.ini {sim_dir}/modelsim.ini; chmod ug+w {sim_dir}/modelsim.ini"'.format(**locals())
+    #print("command cp modelsim.ini: ", command)
+    #run_command(command)
 
     ## Run compile Vivado sim libs for Questa (if not exist)
     #run_compile_simlib(a_vivado, questasim_path, questasimlib_path)
@@ -397,7 +406,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_vivado,
         logging.debug('Module_%d created at %s' % (module._id, base_dir))
 
         #module.make_files(sim_dir, a_view_wave, a_mp7_tag, a_menu)#sim_dir, view_wave, mp7_tag, menu_path
-        module.make_files(sim_dir, a_view_wave, a_mp7_tag, temp_dir)#sim_dir, view_wave, mp7_tag, temp_dir
+        module.make_files(sim_dir, a_view_wave, a_mp7_tag, temp_dir, a_ipb_fw_dir)#sim_dir, view_wave, mp7_tag, temp_dir
 
     logging.info('finished creating modules and masks')
     logging.info("===========================================================================")
@@ -537,7 +546,7 @@ def parse():
     parser.add_argument('--url', default=local_menu_default, help = "URL of menu")
     parser.add_argument('--mp7_tag', required=True, type=os.path.abspath, help = "local path to MP7 tag (checkout tag before running simulation)")
     parser.add_argument('--ipb_fw_dir', required=True, type = os.path.abspath, help = "local path to IPBus firmware directory")
-    parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version (default is {})".format(DefaultVivadoVersion))
+    #parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version (default is {})".format(DefaultVivadoVersion))
     parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help = "Questasim version (default is  {})".format(DefaultQuestasimVersion))
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '~/{}')".format(DefaultQuestaSimLibsName))
     parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
@@ -552,7 +561,8 @@ def main():
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
-    run_simulation_questa(args.mp7_tag, args.menu, args.url, args.ipb_fw_dir, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, args.tv)
+    #run_simulation_questa(args.mp7_tag, args.menu, args.url, args.ipb_fw_dir, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, args.tv)
+    run_simulation_questa(args.mp7_tag, args.menu, args.url, args.ipb_fw_dir, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, args.tv)
 
 if __name__ == '__main__':
     main()

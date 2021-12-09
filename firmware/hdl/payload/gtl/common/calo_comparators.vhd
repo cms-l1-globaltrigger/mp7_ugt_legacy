@@ -3,7 +3,7 @@
 -- Comparators for energy, pseudorapidity, azimuth angle and isolation of calo objects
 
 -- Version history:
--- HB 2021-11-23: updated DISP logic for jets.
+-- HB 2021-12-09: updated DISP logic for jets.
 -- HB 2021-10-19: added DISP cut for jets.
 -- HB 2021-10-18: bug fix (in jet_phi_windows_comp_i and tau_phi_windows_comp_i).
 -- HB 2021-05-18: changed slice parameter.
@@ -45,7 +45,7 @@ entity calo_comparators is
         phi_w2_lower_limit : std_logic_vector;
         iso_lut : std_logic_vector;
         disp_cut : boolean := false;
-        disp_requ : std_logic := '0'
+        disp_requ : boolean := false
     );
     port(
         lhc_clk : in std_logic;
@@ -244,9 +244,9 @@ begin
         -- Comparator for DISP
             disp_p: process(disp)
             begin
-                if disp_requ = '1' then
+                if disp_requ then
                     disp_comp <= disp; -- DISP bit requirement = 1, DISP bit = 1 (LLP jet) => disp_comp = '1'
-                elsif disp_requ = '0' then
+                elsif not disp_requ then
                     disp_comp <= not disp; -- DISP bit requirement = 0, DISP bit = 0 (no LLP jet) => disp_comp = '1'
                 end if;
             end process;

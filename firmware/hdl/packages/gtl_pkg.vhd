@@ -380,7 +380,6 @@ constant COMMON_NR_TEMPLATES : positive range 1 to 4 := 4; -- number of max. tem
 constant MAX_TEMPLATES_BITS : positive := max(MAX_CALO_TEMPLATES_BITS, MAX_MUON_TEMPLATES_BITS);
 type common_templates_array is array (1 to COMMON_NR_TEMPLATES) of std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0);
 type common_templates_iso_array is array (1 to COMMON_NR_TEMPLATES) of std_logic_vector(2**MAX_ISO_BITS-1 downto 0);
-type common_templates_disp_array is array (1 to COMMON_NR_TEMPLATES) of std_logic;
 type common_templates_quality_array is array (1 to COMMON_NR_TEMPLATES) of std_logic_vector(2**MUON_QUAL_BITS-1 downto 0);
 type common_templates_ip_array is array (1 to COMMON_NR_TEMPLATES) of std_logic_vector(2**MUON_IP_BITS-1 downto 0);
 type common_templates_boolean_array is array (1 to COMMON_NR_TEMPLATES) of boolean;

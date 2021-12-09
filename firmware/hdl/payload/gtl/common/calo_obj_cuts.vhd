@@ -2,6 +2,7 @@
 -- Calo objects cuts
 
 -- Version history:
+-- HB 2021-12-09: updated for DISP of jets.
 -- HB 2021-10-19: inserted cut for DISP of jets.
 -- HB 2021-02-19: updated for intermediate pipelines in calo_comparators.
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
@@ -44,7 +45,8 @@ entity calo_obj_cuts is
         phi_w2_upper_limits: common_templates_array;
         phi_w2_lower_limits: common_templates_array;
         iso_luts: common_templates_iso_array;
-        disp_cuts: common_templates_boolean_array := (others => false)
+        disp_cuts: common_templates_boolean_array;
+        disp_requs: common_templates_boolean_array
 
     );
     port(
@@ -85,7 +87,8 @@ begin
                 phi_w2_upper_limits(1),
                 phi_w2_lower_limits(1),
                 iso_luts(1),
-                disp_cuts(1)
+                disp_cuts(1),
+                disp_requs(1)
             )
             port map(lhc_clk, data_i(i), obj_slice_1_vs_templ(i,1));
     end generate obj_slice_1_l;
@@ -112,7 +115,8 @@ begin
                 phi_w2_upper_limits(2),
                 phi_w2_lower_limits(2),
                 iso_luts(2),
-                disp_cuts(2)
+                disp_cuts(2),
+                disp_requs(2)
             )
             port map(lhc_clk, data_i(i), obj_slice_2_vs_templ(i,1));
     end generate obj_slice_2_l;
@@ -139,7 +143,8 @@ begin
                 phi_w2_upper_limits(3),
                 phi_w2_lower_limits(3),
                 iso_luts(3),
-                disp_cuts(3)
+                disp_cuts(3),
+                disp_requs(3)
             )
             port map(lhc_clk, data_i(i), obj_slice_3_vs_templ(i,1));
     end generate obj_slice_3_l;
@@ -166,7 +171,8 @@ begin
                 phi_w2_upper_limits(4),
                 phi_w2_lower_limits(4),
                 iso_luts(4),
-                disp_cuts(4)
+                disp_cuts(4),
+                disp_requs(4)
             )
             port map(lhc_clk, data_i(i), obj_slice_4_vs_templ(i,1));
     end generate obj_slice_4_l;

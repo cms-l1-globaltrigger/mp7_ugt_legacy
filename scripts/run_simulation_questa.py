@@ -75,7 +75,6 @@ TB_FILE = 'testbench/gtl_fdl_wrapper_tb.vhd'
 INI_FILE = 'modelsim.ini'
 DO_FILE_TPL = 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do'
 
-
 mp7_tag = 'cactusupgrades'
 algonum = 512#numbers of bits
 IGNORED_ALGOS = [
@@ -317,9 +316,9 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     #print "questasimlib_path: ", questasimlib_path
 
     # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
-#    command = 'bash -c "cp {questasim_path}/modelsim.ini {sim_dir}/modelsim.ini; chmod ug+w {sim_dir}/modelsim.ini"'.format(**locals())
-#    print("command cp modelsim.ini: ", command)
-#    run_command(command)
+    command = 'bash -c "cp {questasim_path}/modelsim.ini {sim_dir}/modelsim.ini; chmod ug+w {sim_dir}/modelsim.ini"'.format(**locals())
+    print("command cp modelsim.ini: ", command)
+    run_command(command)
 
     ## Run compile Vivado sim libs for Questa (if not exist)
     #run_compile_simlib(a_vivado, questasim_path, questasimlib_path)

@@ -38,13 +38,19 @@ DefaultQuestasimVersion = os.getenv('UGT_QUESTASIM_VERSION')
 if not DefaultQuestasimVersion:
     raise RuntimeError('UGT_QUESTASIM_VERSION is not defined.')
 
-DefaultQuestaSimLibsName = os.getenv('UGT_QUESTASIM_LIBS_NAME')
-if not DefaultQuestaSimLibsName:
-    raise RuntimeError('UGT_QUESTASIM_LIBS_NAME is not defined.')
-
 QuestaSimPath = os.getenv('UGT_QUESTASIM_SIM_PATH')
 if not QuestaSimPath:
     raise RuntimeError('UGT_QUESTASIM_SIM_PATH is not defined.')
+
+QuestaSimLibsName = os.getenv('UGT_QUESTASIM_LIBS_NAME')
+if not QuestaSimLibsName:
+    raise RuntimeError('UGT_QUESTASIM_LIBS_NAME is not defined.')
+
+QuestaSimlibsPath = os.getenv('UGT_QUESTASIM_SIM_LIBS_PATH')
+if not QuestaSimlibsPath:
+    raise RuntimeError('UGT_QUESTASIM_SIM_LIBS_PATH is not defined.')
+
+DefaultQuestaSimLibsName = QuestaSimlibsPath + QuestaSimLibsName
 
 vivadoQuestsimLibsVersion = os.getenv('UGT_VIVADO_QUESTASIMLIBS_VERSION')
 if not vivadoQuestsimLibsVersion:
@@ -285,29 +291,15 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     print("a_questasim: ", a_questasim)
     print("a_questasimlibs: ", a_questasimlibs)
 
-    if not os.path.isdir(QuestaSimPath):
-        raise RuntimeError("No installation of Questa sim in '%s'" % QuestaSimPath)
-
-    questasim_path = QuestaSimPath
-
     sim_dir = os.path.join(os.path.dirname(__file__), '../firmware/sim')
 
-    # Copy dofile from gtl_fdl_wrapper_tpl_questa_v<vivado version>.do to gtl_fdl_wrapper_tpl_questa.do
-    #src_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa_v{}.do'.format(a_vivado))
-    #dest_do = os.path.join(sim_dir, 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do')
-    #shutil.copyfile(src_do, dest_do)
-
     ## Path to Questa sim libs for selected vivado version
-    #questasimlibs_name = a_questasimlibs + a_vivado
-    #questasimlib_path = os.path.join('/opt/mentor/', questasimlibs_name)
+    questasimlib_path = os.path.join(a_questasimlibs, vivadoQuestsimLibsVersion)
 
     # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
-    command = 'bash -c "cp {questasim_path}/modelsim.ini {sim_dir}/modelsim.ini"'.format(**locals())
+    command = 'bash -c "cp {questasimlib_path}/modelsim.ini {sim_dir}/modelsim.ini; chmod ug+w {sim_dir}/modelsim.ini"'.format(**locals())
     print("command cp modelsim.ini: ", command)
     run_command(command)
-
-    ## Run compile Vivado sim libs for Questa (if not exist)
-    #run_compile_simlib(a_vivado, questasim_path, questasimlib_path)
 
     # using SIM_ROOT dir as default output path
     if not a_output:

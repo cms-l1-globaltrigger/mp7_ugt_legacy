@@ -208,7 +208,7 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("creating IPBB area ...")
-    command = 'bash -c "cd; {cmd_ipbb_init}; cd {ipbb_dir}; {cmd_ipbb_add_ipb} && {cmd_ipbb_add_mp7} && {cmd_ipbb_add_ugt}; cp {ipbb_dir}/src/mp7_ugt_legacy/firmware/cfg/uGT_algo_{args.vivado}.dep {ipbb_dir}/src/mp7_ugt_legacy/firmware/cfg/uGT_algo.dep"'.format(**locals())
+    command = 'bash -c "cd; {cmd_ipbb_init}; cd {ipbb_dir}; {cmd_ipbb_add_ipb} && {cmd_ipbb_add_mp7} && {cmd_ipbb_add_ugt}"'.format(**locals())
     run_command(command)
 
     logging.info("===========================================================================")

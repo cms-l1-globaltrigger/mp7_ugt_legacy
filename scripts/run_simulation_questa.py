@@ -51,10 +51,6 @@ vivadoQuestsimLibsVersion = os.getenv('UGT_VIVADO_QUESTASIMLIBS_VERSION')
 if not vivadoQuestsimLibsVersion:
     raise RuntimeError('UGT_VIVADO_QUESTASIMLIBS_VERSION is not defined.')
 
-questaPath = os.path.abspath(os.path.join(QuestaSimPath, DefaultQuestasimVersion))
-if not os.path.isdir(questaPath):
-    raise RuntimeError("No installation of Questa sim in '%s'" % questaPath)
-
 vhdl_snippets_names = ['algo_index', 'gtl_module_instances', 'gtl_module_signals', 'ugt_constants']
 
 url_menu_default = 'https://raw.githubusercontent.com/herbberg/l1menus/master'

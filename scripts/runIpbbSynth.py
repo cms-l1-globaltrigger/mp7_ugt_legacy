@@ -24,15 +24,9 @@ BoardAliases = {
     'mp7xe_690': 'xe',
 }
 
-# definition of versions Questasim and Vivado
-#currentQuestasimVersions = ["10.7c", "2021.1_2"]
-
 #DefaultQuestasimVersion = os.getenv('UGT_QUESTASIM_VERSION')
 #if not DefaultQuestasimVersion:
     #raise RuntimeError('UGT_QUESTASIM_VERSION is not defined.')
-
-#if DefaultQuestasimVersion not in currentQuestasimVersions:
-    #raise RuntimeError(f'Invalid UGT_QUESTASIM_VERSION version {questasim_version}')
 
 #DefaultQuestaSimLibsName = os.getenv('UGT_QUESTASIM_LIBS_NAME')
 #if not DefaultQuestaSimLibsName:
@@ -42,14 +36,21 @@ BoardAliases = {
 #if not QuestaSimPath:
     #raise RuntimeError('UGT_QUESTASIM_LIBS_NAME is not defined.')
 
-currentVivadoVersions = ["2019.2", "2021.2"]
+#questaPath = os.path.abspath(os.path.join(QuestaSimPath, DefaultQuestasimVersion))
+#if not os.path.isdir(questaPath):
+    #raise RuntimeError("No installation of Questa sim in '%s'" % questaPath)
 
 DefaultVivadoVersion = os.getenv('UGT_VIVADO_VERSION')
 if not DefaultVivadoVersion:
     raise RuntimeError('UGT_VIVADO_VERSION is not defined.')
 
-if DefaultVivadoVersion not in currentVivadoVersions:
-    raise RuntimeError(f'Invalid UGT_VIVADO_VERSION version {questasim_version}')
+VivadoBaseDir = os.getenv('VIVADO_BASE_DIR')
+if not VivadoBaseDir:
+    raise RuntimeError('VIVADO_BASE_DIR is not defined.')
+
+vivadoPath = os.path.abspath(os.path.join(VivadoBaseDir, DefaultVivadoVersion))
+if not os.path.isdir(vivadoPath):
+    raise RuntimeError("No installation of Vivado in '%s'" % vivadoPath)
 
 DefaultBoardType = 'mp7xe_690'
 """Default board type to be used."""

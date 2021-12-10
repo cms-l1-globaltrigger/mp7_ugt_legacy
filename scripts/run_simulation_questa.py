@@ -47,9 +47,9 @@ QuestaSimLibsName = os.getenv('UGT_QUESTASIM_LIBS_NAME')
 if not QuestaSimLibsName:
     raise RuntimeError('UGT_QUESTASIM_LIBS_NAME is not defined.')
 
-QuestaSimlibsPath = os.getenv('UGT_QUESTASIM_SIM_LIBS_PATH')
+QuestaSimlibsPath = os.getenv('UGT_QUESTASIM_LIBS_PATH')
 if not QuestaSimlibsPath:
-    raise RuntimeError('UGT_QUESTASIM_SIM_LIBS_PATH is not defined.')
+    raise RuntimeError('UGT_QUESTASIM_LIBS_PATH is not defined.')
 
 DefaultQuestaSimLibsName = QuestaSimlibsPath + QuestaSimLibsName
 
@@ -99,7 +99,9 @@ IGNORED_ALGOS = [
   'L1_SingleMuOpenupt5',
   'L1_SingleMuOpenupt20',
   'L1_SingleMuOpenupt100',
-  ]
+  'L1_DoubleJet35_Mass_Min450_IsoTau45_RmOvlp',
+  'L1_DoubleJet_80_30_Mass_Min420_IsoTau40_RmOvlp'
+]
 
 def run_command(*args):
     command = ' '.join(args)
@@ -392,9 +394,11 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
         #module.make_files(sim_dir, a_view_wave, a_mp7_tag, a_menu)#sim_dir, view_wave, mp7_tag, menu_path
         module.make_files(sim_dir, a_view_wave, a_mp7_tag, temp_dir, a_ipb_fw_dir)#sim_dir, view_wave, mp7_tag, temp_dir
 
+    questasim_path = os.path.join(QuestaSimPath, 'questasim')
+
     logging.info('finished creating modules and masks')
     logging.info("===========================================================================")
-    logging.info('starting simulations with Questa Simulator version %s (from directory %s)'% (a_questasim,questasim_path))
+    logging.info('starting simulations with Questa Simulator version %s (from directory %s)'% (a_questasim, questasim_path))
 
     threads = []
     for module in modules:#makes for all simulations a thread

@@ -45,7 +45,11 @@ if not DefaultQuestaSimLibsName:
 
 QuestaSimPath = os.getenv('UGT_QUESTASIM_SIM_PATH')
 if not QuestaSimPath:
-    raise RuntimeError('UGT_QUESTASIM_LIBS_NAME is not defined.')
+    raise RuntimeError('UGT_QUESTASIM_SIM_PATH is not defined.')
+
+vivadoQuestsimLibsVersion = os.getenv('UGT_VIVADO_QUESTASIMLIBS_VERSION')
+if not vivadoQuestsimLibsVersion:
+    raise RuntimeError('UGT_VIVADO_QUESTASIMLIBS_VERSION is not defined.')
 
 questaPath = os.path.abspath(os.path.join(QuestaSimPath, DefaultQuestasimVersion))
 if not os.path.isdir(questaPath):
@@ -283,11 +287,6 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
 #    print("a_vivado: ", a_vivado)
     print("a_questasim: ", a_questasim)
     print("a_questasimlibs: ", a_questasimlibs)
-
-    if not os.path.isdir(QuestaSimPath):
-        raise RuntimeError("No installation of Questa sim in '%s'" % QuestaSimPath)
-
-    questasim_path = QuestaSimPath
 
     sim_dir = os.path.join(os.path.dirname(__file__), '../firmware/sim')
 

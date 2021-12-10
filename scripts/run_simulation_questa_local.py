@@ -44,7 +44,11 @@ if not DefaultQuestaSimLibsName:
 
 QuestaSimPath = os.getenv('UGT_QUESTASIM_SIM_PATH')
 if not QuestaSimPath:
-    raise RuntimeError('UGT_QUESTASIM_LIBS_NAME is not defined.')
+    raise RuntimeError('UGT_QUESTASIM_SIM_PATH is not defined.')
+
+vivadoQuestsimLibsVersion = os.getenv('UGT_VIVADO_QUESTASIMLIBS_VERSION')
+if not vivadoQuestsimLibsVersion:
+    raise RuntimeError('UGT_VIVADO_QUESTASIMLIBS_VERSION is not defined.')
 
 questaPath = os.path.abspath(os.path.join(QuestaSimPath, DefaultQuestasimVersion))
 if not os.path.isdir(questaPath):

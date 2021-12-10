@@ -36,33 +36,22 @@ error_red = ("\033[1;31m ERROR  \033[0m")
 #reset = "\033[0m"
 
 # definition of versions for check whether version set in environment variable is useful
-#currentVivadoVersions = ["2019.2", "2020.2", "2021.1", "2021.2"]
 currentQuestasimVersions = ["10.7c", "2021.1_2"]
 
-#vv_ok = False
-qv_ok = False
-
-#DefaultVivadoVersion = os.getenv('UGT_VIVADO_VERSION')  # read from env or fallback to default
-#for VivadoVersion in currentVivadoVersions:
-#    if DefaultVivadoVersion == VivadoVersion:
-#        vv_ok = True
-#if not vv_ok:
-#    raise RuntimeError("UGT_VIVADO_VERSION is not set correctly ('%s')" % DefaultVivadoVersion)
-
 DefaultQuestasimVersion = os.getenv('UGT_QUESTASIM_VERSION')
-for QuestasimVersion in currentQuestasimVersions:
-    if DefaultQuestasimVersion == QuestasimVersion:
-        qv_ok = True
-if not qv_ok:
-    raise RuntimeError("UGT_QUESTASIM_VERSION is not set correctly ('%s')" % DefaultQuestasimVersion)
+if not DefaultQuestasimVersion:
+    raise RuntimeError('UGT_QUESTASIM_VERSION is not defined.')
+
+if DefaultQuestasimVersion not in currentQuestasimVersions:
+    raise RuntimeError(f'Invalid UGT_QUESTASIM_VERSION version {questasim_version}')
 
 DefaultQuestaSimLibsName = os.getenv('UGT_QUESTASIM_LIBS_NAME')
-if DefaultQuestaSimLibsName == '':
-    raise RuntimeError("UGT_QUESTASIM_LIBS_NAME is not set")
+if not DefaultQuestaSimLibsName:
+    raise RuntimeError('UGT_QUESTASIM_LIBS_NAME is not defined.')
 
 QuestaSimPath = os.getenv('UGT_QUESTASIM_SIM_PATH')
-if QuestaSimPath == '':
-    raise RuntimeError("UGT_QUESTASIM_SIM_PATH is not set")
+if not QuestaSimPath:
+    raise RuntimeError('UGT_QUESTASIM_LIBS_NAME is not defined.')
 
 vhdl_snippets_names = ['algo_index', 'gtl_module_instances', 'gtl_module_signals', 'ugt_constants']
 
@@ -556,7 +545,6 @@ def parse():
     parser.add_argument('--url', default=url_menu_default, help = "URL of menu")
     parser.add_argument('--mp7_tag', required=True, type=os.path.abspath, help = "local path to MP7 tag (checkout tag before running simulation)")
     parser.add_argument('--ipb_fw_dir', required=True, type = os.path.abspath, help = "local path to IPBus firmware directory")
-#    parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version (default is {})".format(DefaultVivadoVersion))
     parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help = "Questasim version (default is  {})".format(DefaultQuestasimVersion))
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '~/{}')".format(DefaultQuestaSimLibsName))
     parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)

@@ -24,11 +24,32 @@ BoardAliases = {
     'mp7xe_690': 'xe',
 }
 
-DefaultVivadoVersion = os.getenv('UGT_VIVADO_VERSION')  # read from env or fallback to default
-DefaultQuestasimVersion = os.getenv('UGT_QUESTASIM_VERSION')
-DefaultQuestaSimLibsName = os.getenv('UGT_QUESTASIM_LIBS_NAME')
-QuestaSimPath = os.getenv('UGT_QUESTASIM_SIM_PATH')
-ModelSimIniPath = os.getenv('UGT_MODELSIM_INI_PATH')
+# definition of versions Questasim and Vivado
+#currentQuestasimVersions = ["10.7c", "2021.1_2"]
+
+#DefaultQuestasimVersion = os.getenv('UGT_QUESTASIM_VERSION')
+#if not DefaultQuestasimVersion:
+    #raise RuntimeError('UGT_QUESTASIM_VERSION is not defined.')
+
+#if DefaultQuestasimVersion not in currentQuestasimVersions:
+    #raise RuntimeError(f'Invalid UGT_QUESTASIM_VERSION version {questasim_version}')
+
+#DefaultQuestaSimLibsName = os.getenv('UGT_QUESTASIM_LIBS_NAME')
+#if not DefaultQuestaSimLibsName:
+    #raise RuntimeError('UGT_QUESTASIM_LIBS_NAME is not defined.')
+
+#QuestaSimPath = os.getenv('UGT_QUESTASIM_SIM_PATH')
+#if not QuestaSimPath:
+    #raise RuntimeError('UGT_QUESTASIM_LIBS_NAME is not defined.')
+
+currentVivadoVersions = ["2019.2", "2021.2"]
+
+DefaultVivadoVersion = os.getenv('UGT_VIVADO_VERSION')
+if not DefaultVivadoVersion:
+    raise RuntimeError('UGT_VIVADO_VERSION is not defined.')
+
+if DefaultVivadoVersion not in currentVivadoVersions:
+    raise RuntimeError(f'Invalid UGT_VIVADO_VERSION version {questasim_version}')
 
 DefaultBoardType = 'mp7xe_690'
 """Default board type to be used."""
@@ -114,11 +135,11 @@ def parse_args():
     parser.add_argument('--build', type=tb.build_str_t, required=True, metavar='<version>', help='menu build version (eg. 0x1001) [required]')
     parser.add_argument('--board', metavar='<type>', default=DefaultBoardType, choices=list(BoardAliases.keys()), help="set board type (default is '{}')".format(DefaultBoardType))
     parser.add_argument('-p', '--path', metavar='<path>', default=DefaultFirmwareDir, type=os.path.abspath, help="fw build path (default is '{}')".format(DefaultFirmwareDir))
-    parser.add_argument('--sim', action='store_true', help='running simulation with Questa simulator (before synthesis)')
-    parser.add_argument('--simmp7path', metavar='<tag>', help="local MP7 firmware repo [required if sim is set]")
-    parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help = "Questasim version (default is  '{}')".format(DefaultQuestasimVersion))
-    parser.add_argument('--questasimlibs', metavar='<path>', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}') [useful if sim is set]".format(DefaultQuestaSimLibsName))
-    parser.add_argument('--output', metavar = '<path>', help = 'directory for sim results [useful if sim is set]', type = os.path.abspath)
+    #parser.add_argument('--sim', action='store_true', help='running simulation with Questa simulator (before synthesis)')
+    #parser.add_argument('--simmp7path', metavar='<tag>', help="local MP7 firmware repo [required if sim is set]")
+    #parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help = "Questasim version (default is  '{}')".format(DefaultQuestasimVersion))
+    #parser.add_argument('--questasimlibs', metavar='<path>', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}') [useful if sim is set]".format(DefaultQuestaSimLibsName))
+    #parser.add_argument('--output', metavar = '<path>', help = 'directory for sim results [useful if sim is set]', type = os.path.abspath)
     return parser.parse_args()
 
 def main():
@@ -166,14 +187,15 @@ def main():
     if os.path.isdir(ipbb_dir_build):
         raise RuntimeError("build area already exists: {}".format(ipbb_dir_build))
 
-    # Runnig simulation with Questa simulator, if args.sim is set
-    if args.sim:
-        logging.info("===========================================================================")
-        logging.info("running simulation with Questa ...")
-        run_simulation_questa(args.simmp7path, args.menuname, args.menuurl, args.vivado, args.questasim, args.questasimlibs, args.output, False, False, False)
-    else:
-        logging.info("===========================================================================")
-        logging.info("no simulation required ...")
+    ## Runnig simulation with Questa simulator, if args.sim is set
+    #if args.sim:
+        #logging.info("===========================================================================")
+        #logging.info("running simulation with Questa ...")
+        #run_simulation_questa(args.simmp7path, args.menuname, args.menuurl, args.vivado, args.questasim, args.questasimlibs, args.output, False, False, False)
+        #run_simulation_questa(args.simmp7path, args.menuname, args.menuurl, args.ipburl, args.questasim, args.questasimlibs, args.output, False, False, False)
+    #else:
+        #logging.info("===========================================================================")
+        #logging.info("no simulation required ...")
 
     ipbb_version = args.ipbb
 

@@ -3,9 +3,20 @@
 Simulation of gtl_fdl_wrapper with Questa simulator for 6 ugt modules
 
 * This is a description running script `run_simulation_questa.py` for simulation.
-* If Questa sim libraries for Vivado do not exist in `$HOME/questasimlibs_xxx`, they will be created for the selected Questa sim and Vivado versions.
+* If Questa sim libraries for Vivado do not exist, they will be created for the selected Questa sim and Vivado versions.
 
 ### Workflow
+
+Set the following environment variables (preferably in bashrc):
+```bash
+UGT_QUESTASIM_VERSION (e.g. '10.7c')
+UGT_QUESTASIM_SIM_PATH (e.g. '/opt/mentor')
+UGT_QUESTASIM_LIBS_NAME (e.g. 'questalibs_vivado_')
+UGT_VIVADO_QUESTASIMLIBS_VERSION (e.g. '2019.2')
+UGT_DP_MEM_VERSION (e.g. 'blk_mem_gen_v8_4_2')
+UGT_BLK_MEM_GEN_VERSION (e.g. 'blk_mem_gen_v8_4_4')
+UGT_BLK_MEM_GEN_NAME (e.g. 'v2019_2_blk_mem_gen_v8_4_4')
+```
 
 Clone git repositories for mp7 and ugt.
 ```bash
@@ -29,30 +40,31 @@ git checkout master
 
 If not already done create a Python virtual environment and install required dependencies including [IPBB](https://github.com/ipbus/ipbb) and lxml.
 ```bash
-python3 -m venv env
-. env/bin/activate
+python3 -m venv <name (e.g. env_questasim)>
+. env_questasim/bin/activate
 pip install -U pip
 pip install -r <mp7_ugt_legacy_path>/scripts/requirements.txt
 ```
 
 Run simulation using Questa.
 
-REMARK: 
-- MIF files (for mass over deltaR) are located in 'mp7_ugt_legacy/firmware/sim' for simulation. 
+REMARK:
+- MIF files (for mass over deltaR) are located in 'mp7_ugt_legacy/firmware/sim' for simulation.
 - These files have to be in directory from where one runs script "run_simulation_questa.py".
 - Change to directory 'mp7_ugt_legacy/firmware/sim' is mandatory.
 
 ```bash
 cd mp7_ugt_legacy/firmware/sim
-python3 ../../scripts/run_simulation_questa.py <L1Menu name> --url <url l1menu> --mp7_tag <local mp7 path>
+python3 ../../scripts/run_simulation_questa.py <L1Menu name> --url <url l1menu> --mp7_tag <local mp7 path> --ipb_fw_dir <local ipbus path>
 ```
 
 Example
 ```bash
 cd mp7_ugt_legacy/firmware/sim
-python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_6-d1 \
+python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8-d1 \
   --url https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/master/2021 \
   --mp7_tag ~/gitlab/hbergaue/mp7
+  --ipb_fw_dir ~/github/ipbus/ipbus-firmware
 ```
 
 ## Build
@@ -82,17 +94,30 @@ python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_6-d1 \
 
 ### Setup using script
 
+Set the following environment variables (preferably in bashrc):
+```bash
+VIVADO_BASE_DIR (e.g. '/opt/xilinx/Vivado')
+UGT_VIVADO_VERSION (e.g. '2019.2')
+UGT_DP_MEM_VERSION (e.g. 'blk_mem_gen_v8_4_2')
+UGT_BLK_MEM_GEN_NAME (e.g. 'v2019_2_blk_mem_gen_v8_4_4')
+```
 Run kerberos for outside of CERN network.
 ```bash
 kinit <username>@CERN.CH
 ```
-
 Make local clone of ugt repositiory.
 ```bash
 git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git <local path>/mp7_ugt_legacy
 cd <local path>/mp7_ugt_legacy
 ```
 
+If not already done create a Python virtual environment and install required dependencies including [IPBB](https://github.com/ipbus/ipbb) and lxml.
+```bash
+python3 -m venv <name (e.g. env_build_ugt_fw)>
+. env_build_ugt_fw/bin/activate
+pip install -U pip
+pip install -r <mp7_ugt_legacy_path>/scripts/requirements.txt
+```
 Run synthesis script (for all 6 modules).
 
 ```bash
@@ -106,8 +131,8 @@ python3 scripts/runIpbbSynth.py -h
 
 Example
 ```bash
-python3 scripts/runIpbbSynth.py L1Menu_Collisions2020_v0_1_6-d1
-  --menuurl https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021
+python3 scripts/runIpbbSynth.py L1Menu_Collisions2020_v0_1_8-d1
+  --menuurl https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2020_v0_1_8-d1/2021
   --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy
   --ugt master
   --build 0x1138
@@ -124,8 +149,8 @@ python3 scripts/runIpbbSynth.py <L1Menu name> --mp7url <URL MP7 git repo> --mp7t
 
 Example
 ```bash
-python3 scripts/runIpbbSynth.py L1Menu_Collisions2020_v0_1_6-d1
-  --menuurl https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021
+python3 scripts/runIpbbSynth.py L1Menu_Collisions2020_v0_1_8-d1
+  --menuurl https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2020_v0_1_8-d1/2021
   --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy
   --ugt master
   --build 0x1138

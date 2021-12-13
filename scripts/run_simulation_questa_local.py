@@ -59,14 +59,14 @@ if not vivadoQuestsimLibsVersion:
 vhdl_snippets_names = ['algo_index', 'gtl_module_instances', 'gtl_module_signals', 'ugt_constants']
 
 url_menu_default = 'https://raw.githubusercontent.com/herbberg/l1menus/master'
-local_menu_default = '/home/bergauer/github/herbberg/l1menus/2021'
+local_menu_default = '/home/bergauer/github/herbberg/l1menus/2021'  # TODO
 
 DO_FILE = 'gtl_fdl_wrapper.do'
-TB_FILE_TPL = 'testbench/templates/gtl_fdl_wrapper_tb_tpl.vhd'
-TB_FILE = 'testbench/gtl_fdl_wrapper_tb.vhd'
+TB_FILE_TPL = os.path.join('testbench', 'templates', 'gtl_fdl_wrapper_tb_tpl.vhd')
+TB_FILE = os.path.join('testbench', 'gtl_fdl_wrapper_tb.vhd')
 
 INI_FILE = 'modelsim.ini'
-DO_FILE_TPL = 'scripts/templates/gtl_fdl_wrapper_tpl_questa.do'
+DO_FILE_TPL = os.path.join('scripts', 'templates', 'gtl_fdl_wrapper_tpl_questa.do')
 
 mp7_tag = 'cactusupgrades'
 algonum = 512#numbers of bits
@@ -154,7 +154,7 @@ def bitfield(i, n=algonum):
     return [int(digit) for digit in '{0:0{1}b}'.format(i, n)][::-1]
 
 def run_vsim(vsim, module, msgmode, ini_file):#uses class module, arg msgmode and ini file path to start the simulation
-    vsim_bin = vsim + '/bin/vsim'
+    vsim_bin = os.path.join(vsim, 'bin', 'vsim')
     with open(module.results_log,'w') as logfile:
         cmd = [vsim_bin, '-c', '-msgmode', msgmode, '-modelsimini', ini_file, '-do', 'do {filename}; quit -f'.format(filename=os.path.join(module.path, DO_FILE))]
         logging.info("starting simulation for module_%d..." % module._id)
@@ -221,9 +221,9 @@ class Module(object):#module class and nessesary information
         self.base_path = base_path
         self.vhdl_path = os.path.join(base_path, 'module_%d' % self._id, 'vhdl')
         self.testbench_path = os.path.join(base_path, 'module_%d' % self._id, 'testbench')
-        self.results_json = '%s/results_module_%d.json' % (self.path, self._id)
-        self.results_log = '%s/results_module_%d.log' % (self.path, self._id)
-        self.results_txt = '%s/results_module_%d.txt' % (self.path, self._id)
+        self.results_json = os.path.join(self.path, f'results_module_{self._id:d}.json')
+        self.results_log = os.path.join(self.path, f'results_module_{self._id:d}.log')
+        self.results_txt = os.path.join(self.path, f'results_module_{self._id:d}.txt')
 
     def get_mask(self):#makes mask and saves it
         mask = 0
@@ -248,7 +248,7 @@ class Module(object):#module class and nessesary information
         })
 
         uGTalgosPath = os.path.abspath(os.path.join(sim_dir, '..'))
-        src_dir = os.path.join(menu_path, 'vhdl/module_%d/src' % self._id)
+        src_dir = os.path.join(menu_path, 'vhdl', f'module_{self._id:d}', 'src')
         #print "src_dir: ",src_dir
 
         replace_map = {
@@ -262,10 +262,22 @@ class Module(object):#module class and nessesary information
         #gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
         #fdl_dir = os.path.join(gtl_fdl_wrapper_dir, 'fdl')
         # Patch VHDL files
-        render_template(os.path.join(uGTalgosPath, 'hdl', 'payload',  'fdl', 'algo_mapping_rop_tpl.vhd'), '%s/vhdl/algo_mapping_rop.vhd' % self.path, replace_map)
+        render_template(
+            os.path.join(uGTalgosPath, 'hdl', 'payload',  'fdl', 'algo_mapping_rop_tpl.vhd'),
+            os.path.join(self.path, 'vhdl', 'algo_mapping_rop.vhd'),
+            replace_map
+        )
         #render_template(os.path.join(gtl_dir, 'gtl_pkg_tpl.vhd'), '%s/vhdl/gtl_pkg.vhd' % self.path, replace_map)
-        render_template(os.path.join(uGTalgosPath, 'hdl', 'packages', 'fdl_pkg_tpl.vhd'), '%s/vhdl/fdl_pkg.vhd' % self.path, replace_map)
-        render_template(os.path.join(uGTalgosPath, 'hdl', 'payload', 'gtl_module_tpl.vhd'), '%s/vhdl/gtl_module.vhd' % self.path, replace_map)
+        render_template(
+            os.path.join(uGTalgosPath, 'hdl', 'packages', 'fdl_pkg_tpl.vhd'),
+            os.path.join(self.path, 'vhdl', 'fdl_pkg.vhd'),
+            replace_map
+        )
+        render_template(
+            os.path.join(uGTalgosPath, 'hdl', 'payload', 'gtl_module_tpl.vhd'),
+            os.path.join(self.path, 'vhdl', 'gtl_module.vhd'),
+            replace_map
+        )
 
 def download_file_from_url(url, filename):
     """Download files from URL."""
@@ -292,13 +304,15 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     print("a_questasim: ", a_questasim)
     print("a_questasimlibs: ", a_questasimlibs)
 
-    sim_dir = os.path.join(os.path.dirname(__file__), '../firmware/sim')
+    sim_dir = os.path.join(os.path.dirname(__file__), '..' ,'firmware', 'sim')
 
     ## Path to Questa sim libs for selected vivado version
     questasimlib_path = os.path.join(a_questasimlibs, vivadoQuestsimLibsVersion)
 
     # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
-    command = 'bash -c "cp {questasimlib_path}/modelsim.ini {sim_dir}/modelsim.ini; chmod ug+w {sim_dir}/modelsim.ini"'.format(**locals())
+    source_filename = os.path.join(questasimlib_path, 'modelsim.ini')
+    dest_filename = os.path.join(sim_dir, 'modelsim.ini')
+    command = f'bash -c "cp {source_filename} {dest_filename}; chmod ug+w {dest_filename}"'
     print("command cp modelsim.ini: ", command)
     run_command(command)
 
@@ -339,9 +353,9 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     #run_command(command)
 
     timestamp = time.time()#creates timestamp
-    _time = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%dT%H-%M-%S')#changes time apperance
+    _time = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%dT%H-%M-%S')  # changes time apperance
 
-    base_dir = '%s/sim_results/%s_%s' % (a_output, _time, a_menu)#creates base directory for later use
+    base_dir = os.path.join(a_output, 'sim_results', f'{_time}_{a_menu}')  # creates base directory for later use
 
     modules = []
     menu = xmlmenu.XmlMenu(menu_filepath)
@@ -350,7 +364,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
 
     # Get VHDL snippets from menu URL
     for module in modules:
-        vhdl_src_path = "vhdl/module_{}/src".format(module._id)
+        vhdl_src_path = os.path.join('vhdl', f'module_{module._id:d}', 'src')
         temp_dir_module = os.path.join(temp_dir, vhdl_src_path)
         if not os.path.exists(temp_dir_module):
             os.makedirs(temp_dir_module)#makes folders
@@ -386,8 +400,8 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
         testvector_base_name = os.path.splitext(os.path.basename(testvector_filepath))[0]
         module.testvector_filepath = os.path.join(module.path, '%s_%s.txt' %(testvector_base_name, module_id))
 
-        os.makedirs('%s/testbench' % module.path)
-        os.makedirs('%s/vhdl' % module.path)
+        os.makedirs(os.path.join(module.path, 'testbench'))
+        os.makedirs(os.path.join(module.path, 'vhdl'))
         logging.debug('Module_%d: %0128x' % (module._id, module.get_mask()))
 
         make_testvector(module.get_mask(), testvector_filepath, module.testvector_filepath)#mask, testvectorfile, out_dir

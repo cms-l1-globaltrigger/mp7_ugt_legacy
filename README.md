@@ -10,12 +10,10 @@ Simulation of gtl_fdl_wrapper with Questa simulator for 6 ugt modules
 Set the following environment variables (preferably in bashrc):
 ```bash
 UGT_QUESTASIM_VERSION (e.g. '10.7c')
-UGT_QUESTASIM_SIM_PATH (e.g. '/opt/mentor')
-UGT_QUESTASIM_LIBS_NAME (e.g. 'questalibs_vivado_')
-UGT_VIVADO_QUESTASIMLIBS_VERSION (e.g. '2019.2')
-UGT_DP_MEM_VERSION (e.g. 'blk_mem_gen_v8_4_2')
-UGT_BLK_MEM_GEN_VERSION (e.g. 'blk_mem_gen_v8_4_4')
-UGT_BLK_MEM_GEN_NAME (e.g. 'v2019_2_blk_mem_gen_v8_4_4')
+UGT_QUESTASIM_SIM_PATH (e.g. '/opt/mentor') - installation directory of Questasim version
+UGT_QUESTASIM_LIBS_PATH (e.g. '/opt/mentor/questalibs_vivado_v2019.2') - path to questasim simulation libraries of a certain vivado version
+UGT_DP_MEM_VERSION (e.g. 'blk_mem_gen_v8_4_2') - version of blk_mem_gen for DP_MEM (spy memories) [for simulation]
+UGT_ROM_INV_DR_SQ_VERSION (e.g. 'blk_mem_gen_v8_4_4') - version of blk_mem_gen for ROMs of LUT values of 1/DR2 (spy memories) [for simulation]
 ```
 
 Clone git repositories for mp7 and ugt.
@@ -96,10 +94,10 @@ python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8-d1 \
 
 Set the following environment variables (preferably in bashrc):
 ```bash
-VIVADO_BASE_DIR (e.g. '/opt/xilinx/Vivado')
+VIVADO_BASE_DIR (e.g. '/opt/xilinx/Vivado') - installation directory of Vivado version
 UGT_VIVADO_VERSION (e.g. '2019.2')
-UGT_DP_MEM_VERSION (e.g. 'blk_mem_gen_v8_4_2')
-UGT_BLK_MEM_GEN_NAME (e.g. 'v2019_2_blk_mem_gen_v8_4_4')
+UGT_DP_MEM_VERSION (e.g. 'blk_mem_gen_v8_4_2') - version of blk_mem_gen for DP_MEM (spy memories) [for synthesis]
+UGT_ROM_INV_DR_SQ_VERSION (e.g. 'blk_mem_gen_v8_4_4') - version of blk_mem_gen for ROMs of LUT values of 1/DR2 (spy memories) [for synthesis]
 ```
 Run kerberos for outside of CERN network.
 ```bash

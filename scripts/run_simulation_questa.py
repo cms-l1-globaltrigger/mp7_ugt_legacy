@@ -43,19 +43,9 @@ QuestaSimPath = os.getenv('UGT_QUESTASIM_SIM_PATH')
 if not QuestaSimPath:
     raise RuntimeError('UGT_QUESTASIM_SIM_PATH is not defined.')
 
-QuestaSimLibsName = os.getenv('UGT_QUESTASIM_LIBS_NAME')
-if not QuestaSimLibsName:
-    raise RuntimeError('UGT_QUESTASIM_LIBS_NAME is not defined.')
-
-QuestaSimlibsPath = os.getenv('UGT_QUESTASIM_LIBS_PATH')
-if not QuestaSimlibsPath:
+DefaultQuestaSimLibsPath = os.getenv('UGT_QUESTASIM_LIBS_PATH')
+if not DefaultQuestaSimLibsPath:
     raise RuntimeError('UGT_QUESTASIM_LIBS_PATH is not defined.')
-
-DefaultQuestaSimLibsName = QuestaSimlibsPath + QuestaSimLibsName
-
-vivadoQuestsimLibsVersion = os.getenv('UGT_VIVADO_QUESTASIMLIBS_VERSION')
-if not vivadoQuestsimLibsVersion:
-    raise RuntimeError('UGT_VIVADO_QUESTASIMLIBS_VERSION is not defined.')
 
 vhdl_snippets_names = ['algo_index', 'gtl_module_instances', 'gtl_module_signals', 'ugt_constants']
 
@@ -294,11 +284,8 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
 
     sim_dir = os.path.join(os.path.dirname(__file__), '../firmware/sim')
 
-    ## Path to Questa sim libs for selected vivado version
-    questasimlib_path = os.path.join(a_questasimlibs, vivadoQuestsimLibsVersion)
-
     # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
-    command = 'bash -c "cp {questasimlib_path}/modelsim.ini {sim_dir}/modelsim.ini; chmod ug+w {sim_dir}/modelsim.ini"'.format(**locals())
+    command = 'bash -c "cp {a_questasimlibs}/modelsim.ini {sim_dir}/modelsim.ini; chmod ug+w {sim_dir}/modelsim.ini"'.format(**locals())
     print("command cp modelsim.ini: ", command)
     run_command(command)
 
@@ -538,7 +525,7 @@ def parse():
     parser.add_argument('--mp7_tag', required=True, type=os.path.abspath, help = "local path to MP7 tag (checkout tag before running simulation)")
     parser.add_argument('--ipb_fw_dir', required=True, type = os.path.abspath, help = "local path to IPBus firmware directory")
     parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help = "Questasim version (default is  {})".format(DefaultQuestasimVersion))
-    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name ".format(DefaultQuestaSimLibsName))
+    parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsPath, help = "Questasim Vivado libraries directory name ".format(DefaultQuestaSimLibsPath))
     parser.add_argument('--output', metavar = 'path', help = '', type = os.path.abspath)
     parser.add_argument('--view-wave', action = 'store_true', help = "shows the waveform")
     parser.add_argument('--wlf', action = 'store_true', help = "no console transcript info, warning and error messages (transcript output to vsim.wlf)")

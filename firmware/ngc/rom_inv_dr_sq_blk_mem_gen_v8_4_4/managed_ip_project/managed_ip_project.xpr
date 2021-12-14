@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="44" Path="/home/bergauer/github/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/ngc/managed_ip_project/managed_ip_project.xpr">
+<Project Version="7" Minor="44" Path="/home/bergauer/github/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/ngc/rom_inv_dr_sq_blk_mem_gen_v8_4_4/managed_ip_project/managed_ip_project.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="eb3814fac5d442c9a52f967ee9e099ef"/>
@@ -28,8 +28,8 @@
     <Option Name="IPCachePermission" Val="write"/>
     <Option Name="EnableCoreContainer" Val="FALSE"/>
     <Option Name="CreateRefXciForCoreContainers" Val="FALSE"/>
-    <Option Name="IPUserFilesDir" Val="$PPRDIR/../ip_user_files"/>
-    <Option Name="IPStaticSourceDir" Val="$PPRDIR/../ip_user_files/ipstatic"/>
+    <Option Name="IPUserFilesDir" Val="$PPRDIR/../../ip_user_files"/>
+    <Option Name="IPStaticSourceDir" Val="$PPRDIR/../../ip_user_files/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="WTXSimLaunchSim" Val="0"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
@@ -38,13 +38,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="157"/>
-    <Option Name="WTModelSimExportSim" Val="157"/>
-    <Option Name="WTQuestaExportSim" Val="157"/>
-    <Option Name="WTIesExportSim" Val="157"/>
-    <Option Name="WTVcsExportSim" Val="157"/>
-    <Option Name="WTRivieraExportSim" Val="157"/>
-    <Option Name="WTActivehdlExportSim" Val="157"/>
+    <Option Name="WTXSimExportSim" Val="159"/>
+    <Option Name="WTModelSimExportSim" Val="159"/>
+    <Option Name="WTQuestaExportSim" Val="159"/>
+    <Option Name="WTIesExportSim" Val="159"/>
+    <Option Name="WTVcsExportSim" Val="159"/>
+    <Option Name="WTRivieraExportSim" Val="159"/>
+    <Option Name="WTActivehdlExportSim" Val="159"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -155,6 +155,13 @@
         </FileInfo>
       </File>
       <File Path="$PPRDIR/../rom_lut_calo_inv_dr_sq_5/rom_lut_calo_inv_dr_sq_5.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../../dp_mem_4096x32_blk_mem_gen_v8_4_2/dp_mem_4096x32.xci">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>

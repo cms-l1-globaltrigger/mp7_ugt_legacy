@@ -1,10 +1,10 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.2 (lin64) Build 2700185 Thu Oct 24 18:45:48 MDT 2019
--- Date        : Wed Sep 15 10:32:52 2021
+-- Date        : Wed Sep 15 10:32:51 2021
 -- Host        : ugt-synth running 64-bit Ubuntu 16.04.7 LTS
--- Command     : write_vhdl -force -mode funcsim
---               /home/bergauer/github/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/ngc/rom_lut_muon_inv_dr_sq_3/rom_lut_muon_inv_dr_sq_3_sim_netlist.vhdl
+-- Command     : write_vhdl -force -mode funcsim -rename_top rom_lut_muon_inv_dr_sq_3 -prefix
+--               rom_lut_muon_inv_dr_sq_3_ rom_lut_muon_inv_dr_sq_3_sim_netlist.vhdl
 -- Design      : rom_lut_muon_inv_dr_sq_3
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -21,8 +21,6 @@ entity rom_lut_muon_inv_dr_sq_3_blk_mem_gen_mux is
     clka : in STD_LOGIC;
     douta_array : in STD_LOGIC_VECTOR ( 31 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_mux : entity is "blk_mem_gen_mux";
 end rom_lut_muon_inv_dr_sq_3_blk_mem_gen_mux;
 
 architecture STRUCTURE of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_mux is
@@ -228,8 +226,6 @@ entity rom_lut_muon_inv_dr_sq_3_blk_mem_gen_prim_wrapper_init is
     ena_array : in STD_LOGIC_VECTOR ( 0 to 0 );
     addra : in STD_LOGIC_VECTOR ( 11 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_prim_wrapper_init : entity is "blk_mem_gen_prim_wrapper_init";
 end rom_lut_muon_inv_dr_sq_3_blk_mem_gen_prim_wrapper_init;
 
 architecture STRUCTURE of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_prim_wrapper_init is
@@ -1226,8 +1222,6 @@ entity rom_lut_muon_inv_dr_sq_3_blk_mem_gen_prim_width is
     ena_array : in STD_LOGIC_VECTOR ( 0 to 0 );
     addra : in STD_LOGIC_VECTOR ( 11 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_prim_width : entity is "blk_mem_gen_prim_width";
 end rom_lut_muon_inv_dr_sq_3_blk_mem_gen_prim_width;
 
 architecture STRUCTURE of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_prim_width is
@@ -1321,8 +1315,6 @@ entity rom_lut_muon_inv_dr_sq_3_blk_mem_gen_generic_cstr is
     clka : in STD_LOGIC;
     addra : in STD_LOGIC_VECTOR ( 12 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_generic_cstr : entity is "blk_mem_gen_generic_cstr";
 end rom_lut_muon_inv_dr_sq_3_blk_mem_gen_generic_cstr;
 
 architecture STRUCTURE of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_generic_cstr is
@@ -1373,8 +1365,6 @@ entity rom_lut_muon_inv_dr_sq_3_blk_mem_gen_top is
     clka : in STD_LOGIC;
     addra : in STD_LOGIC_VECTOR ( 12 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_top : entity is "blk_mem_gen_top";
 end rom_lut_muon_inv_dr_sq_3_blk_mem_gen_top;
 
 architecture STRUCTURE of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_top is
@@ -1396,8 +1386,6 @@ entity rom_lut_muon_inv_dr_sq_3_blk_mem_gen_v8_4_4_synth is
     clka : in STD_LOGIC;
     addra : in STD_LOGIC_VECTOR ( 12 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_v8_4_4_synth : entity is "blk_mem_gen_v8_4_4_synth";
 end rom_lut_muon_inv_dr_sq_3_blk_mem_gen_v8_4_4_synth;
 
 architecture STRUCTURE of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_v8_4_4_synth is
@@ -1629,8 +1617,6 @@ entity rom_lut_muon_inv_dr_sq_3_blk_mem_gen_v8_4_4 is
   attribute C_WRITE_WIDTH_B of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_v8_4_4 : entity is 16;
   attribute C_XDEVICEFAMILY : string;
   attribute C_XDEVICEFAMILY of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_v8_4_4 : entity is "virtex7";
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_v8_4_4 : entity is "blk_mem_gen_v8_4_4";
   attribute downgradeipidentifiedwarnings : string;
   attribute downgradeipidentifiedwarnings of rom_lut_muon_inv_dr_sq_3_blk_mem_gen_v8_4_4 : entity is "yes";
 end rom_lut_muon_inv_dr_sq_3_blk_mem_gen_v8_4_4;

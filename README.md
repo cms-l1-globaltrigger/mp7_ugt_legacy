@@ -9,9 +9,10 @@ cd <mp7_ugt_legacy_path>
 python3 scripts/run_compile_simlib.py --vivado <Vivado version (e.g. 2019.2)> --questasim <Questasim version (e.g. 10.7c)> --output <output directory for generated libraries>
 ```
 
-                               | Questasim version |
-| Vivado version | blk_mem_gen | 10.7c | 2021.1_2 |
-|:--------------:|:-----------:|:-----:|:--------:|
+Following table shows which Questasim libraries for a certain Vivado version have been created and tested (version of IP 'blk_mem_gen' in libraries is relevant for Global Trigger logic):
+
+| Vivado | blk_mem_gen | 10.7c | 2021.1_2 |
+|:-:|:-:|:-:|:-:|
 | 2019.2 | v8.4.4 | ok | X |
 | 2020.2 | v8.4.4 | X | ok |
 | 2021.1 | v8.4.4 | X | ok |
@@ -21,11 +22,27 @@ python3 scripts/run_compile_simlib.py --vivado <Vivado version (e.g. 2019.2)> --
 
 Set the following environment variables (preferably in bashrc):
 ```bash
-UGT_QUESTASIM_VERSION (e.g. '2021.1_2') - Questasim version
-UGT_QUESTASIM_SIM_PATH (e.g. '/opt/mentor/questa/2021.1_2') - installation directory of Questasim version
-UGT_QUESTASIM_LIBS_PATH (e.g. '/opt/mentor/questasimlibs_vivado_v2021.2') - path to Questasim libraries of a certain vivado version
-UGT_DP_MEM_VERSION (e.g. 'blk_mem_gen_v8_4_5') - version of blk_mem_gen for DP_MEM (spy memories) in simulation environment
-UGT_ROM_INV_DR_SQ_VERSION (e.g. 'blk_mem_gen_v8_4_5') - version of blk_mem_gen for ROMs of LUT values of 1/DR2 (spy memories) in simulation environment
+UGT_QUESTASIM_VERSION - Questasim version (e.g. '2021.1_2')
+UGT_QUESTASIM_SIM_PATH - installation directory of Questasim version (e.g. '/opt/mentor/questa/2021.1_2')
+UGT_QUESTASIM_LIBS_PATH - path to Questasim libraries of a certain vivado version (e.g. '/opt/mentor/questasimlibs_vivado_v2021.2')
+UGT_DP_MEM_VERSION - version of blk_mem_gen for DP_MEM (spy memories), export it in simulation environment (e.g. 'blk_mem_gen_v8_4_5')
+UGT_ROM_INV_DR_SQ_VERSION - version of blk_mem_gen for ROMs of LUT values for 1/DR2 (spy memories), export it in simulation environment (e.g. 'blk_mem_gen_v8_4_5')
+```
+
+Example for creating a Questasim environment in bashrc:
+
+```bash
+alias @questasim='
+cd <home directory>;\
+python3 -m venv env_questasim;\
+. env_questasim/bin/activate;\
+pip install -U pip;\
+pip install -r <mp7_ugt_legacy directory>/scripts/requirements.txt;\
+cd <<mp7_ugt_legacy directory>>;\
+export UGT_DP_MEM_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_5)>;\
+export UGT_ROM_INV_DR_SQ_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_5)>;\
+. firmware/sim/setup.sh;\
+cd firmware/sim;\
 ```
 
 Clone git repositories for mp7 and ugt.
@@ -106,11 +123,26 @@ python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8-d1 \
 
 Set the following environment variables (preferably in bashrc):
 ```bash
-VIVADO_VERSION (e.g. '2019.2') - Vivado version
-VIVADO_BASE_DIR (e.g. '/opt/xilinx/Vivado') - installation directory of Vivado version
-UGT_DP_MEM_VERSION (e.g. 'blk_mem_gen_v8_4_4') - version of blk_mem_gen for DP_MEM (spy memories) in synthesis environment
-UGT_ROM_INV_DR_SQ_VERSION (e.g. 'blk_mem_gen_v8_4_4') - version of blk_mem_gen for ROMs of LUT values of 1/DR2 (spy memories) in synthesis environment
+VIVADO_VERSION - Vivado version (e.g. '2019.2')
+VIVADO_BASE_DIR - installation directory of Vivado version (e.g. '/opt/xilinx/Vivado')
+UGT_DP_MEM_VERSION - version of blk_mem_gen for DP_MEM (spy memories), export it in synthesis environment (e.g. 'blk_mem_gen_v8_4_4')
+UGT_ROM_INV_DR_SQ_VERSION - version of blk_mem_gen for ROMs of LUT values of 1/DR2 (spy memories), export it in synthesis environment (e.g. 'blk_mem_gen_v8_4_4')
 ```
+Example for creating a Questasim environment in bashrc:
+
+```bash
+alias @fw_ugt_build='
+cd <home directory>;\
+python3 -m venv env_build_ugt_fw;\
+. env_build_ugt_fw/bin/activate;\
+pip install -U pip;\
+pip install -r <mp7_ugt_legacy directory>/scripts/requirements.txt;\
+cd <mp7_ugt_legacy directory>;\
+source ${VIVADO_BASE_DIR}/${VIVADO_VERSION}/settings64.sh;\
+export UGT_DP_MEM_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_2);\
+export UGT_ROM_INV_DR_SQ_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_4);\
+```
+
 Run kerberos for outside of CERN network.
 ```bash
 kinit <username>@CERN.CH

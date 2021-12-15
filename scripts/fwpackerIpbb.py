@@ -1,19 +1,13 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-
 import argparse
 import configparser
 import logging
 import os
 import shutil
-import sys
 import tempfile
 import tarfile
 
 import toolbox as tb
 
-EXIT_SUCCESS = 0
-EXIT_FAILURE = 1
 
 def parse_args():
     """Parse command line arguments."""
@@ -22,6 +16,7 @@ def parse_args():
     parser.add_argument('--outdir', metavar="<path>", type=os.path.abspath, help="set location to write tarball")
     return parser.parse_args()
 
+
 def main():
     """Main routine."""
 
@@ -29,7 +24,7 @@ def main():
     args = parse_args()
 
     # Setup console logging
-    logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.DEBUG)
+    logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
     # with tarfile
 
@@ -43,7 +38,7 @@ def main():
 
     menu = config.get('menu', 'name')
     location = config.get('menu', 'location')
-    build = tb.build_t(config.get('menu', 'build')) # format 'ffff'
+    build = tb.build_t(config.get('menu', 'build'))  # format 'ffff'
     board = config.get('device', 'alias')
     buildarea = config.get('firmware', 'buildarea')
     menu_modules = int(config.get('menu', 'modules'))
@@ -66,28 +61,31 @@ def main():
 
     # Check modules
     for i in range(menu_modules):
-    #for i in range(len(glob.glob(os.path.join(buildarea, 'module_*')))):
         logging.info("collecting data from module %s", i)
         module_dir = 'module_{i}'.format(**locals())
 
-        #proj_dir = 'proj/{}_{}_0x{}_{}'.format(device_name, fw_type, build, i)
         proj_dir = 'proj/{}'.format(module_dir)
         build_dir = os.path.join(tmpdir, module_dir, 'build')
         log_dir = os.path.join(tmpdir, module_dir, 'log')
 
         # for IPBB v0.5.2 directory structure
         proj_runs = '{0}/{0}.runs'.format(module_dir)
-        #bit_file = '{}.bit'.format(module_dir)
         bit_file = 'top.bit'
 
         os.makedirs(build_dir)
         os.makedirs(log_dir)
-        shutil.copy(os.path.join(buildarea, proj_dir, proj_runs, 'impl_1', bit_file),
-            os.path.join(build_dir, 'gt_mp7_{board}_v{build}_module_{i}.bit'.format(**locals())))
-        shutil.copy(os.path.join(buildarea, proj_dir, proj_runs, 'synth_1', 'runme.log'),
-            os.path.join(log_dir, 'runme_synth_1.log'))
-        shutil.copy(os.path.join(buildarea, proj_dir, proj_runs, 'impl_1', 'runme.log'),
-            os.path.join(log_dir, 'runme_impl_1.log'))
+        shutil.copy(
+            os.path.join(buildarea, proj_dir, proj_runs, 'impl_1', bit_file),
+            os.path.join(build_dir, 'gt_mp7_{board}_v{build}_module_{i}.bit'.format(**locals()))
+        )
+        shutil.copy(
+            os.path.join(buildarea, proj_dir, proj_runs, 'synth_1', 'runme.log'),
+            os.path.join(log_dir, 'runme_synth_1.log')
+        )
+        shutil.copy(
+            os.path.join(buildarea, proj_dir, proj_runs, 'impl_1', 'runme.log'),
+            os.path.join(log_dir, 'runme_impl_1.log')
+        )
 
     logging.info("adding build configuration: %s", args.config)
     shutil.copy(args.config, tmpdir)
@@ -107,10 +105,6 @@ def main():
 
     logging.info("done.")
 
+
 if __name__ == '__main__':
-    try:
-        main()
-    except RuntimeError as message:
-        logging.error(message)
-        sys.exit(EXIT_FAILURE)
-    sys.exit(EXIT_SUCCESS)
+    main()

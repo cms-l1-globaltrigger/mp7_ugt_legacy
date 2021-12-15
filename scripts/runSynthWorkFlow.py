@@ -1,21 +1,11 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-
 import argparse
-import configparser
 import logging
 import os
 import subprocess
 import sys
-import urllib.request
-import urllib.parse
-import urllib.error
 
 import toolbox as tb
 from time import sleep
-
-EXIT_SUCCESS = 0
-EXIT_FAILURE = 1
 
 DefaultSynthDir = 'work_synth/production'
 DefaultUgtTag = 'master'
@@ -26,10 +16,12 @@ def read_file(filename):
     with open(filename, 'r') as fp:
         return fp.read()
 
+
 def run_command(*args):
     command = ' '.join(args)
     logging.info(">$ %s", command)
     os.system(command)
+
 
 def parse_args():
     """Parse command line arguments."""
@@ -45,6 +37,7 @@ def parse_args():
     parser.add_argument('--synth_dir', metavar='<path>', default=DefaultSynthDir, help="relative path to local dir for synthesis results (default is '{}')".format(DefaultSynthDir))
     parser.add_argument('--build', type=tb.build_str_t, required=True, metavar='<version>', help="menu build version (eg. 0x1001) [required]")
     return parser.parse_args()
+
 
 def main():
     """Main routine."""
@@ -98,7 +91,7 @@ def main():
     if os.stat(tme_error_file).st_size > 0:
         print("===================================")
         print("verifying XML in TME shows errors !!!")
-        exit(1)
+        sys.exit(1)
 
     logging.info("===========================================================================")
     logging.info("clone menu repo 'cms-l1-menu' to '%s'", args.temp_dir)
@@ -153,7 +146,9 @@ def main():
     subprocess.check_call(['python3', os.path.join(home_dir, args.temp_dir, ugt_local_dir, 'scripts', 'runIpbbSynth.py'), menuname_dist, '--menuurl', os.path.join(menu_url), '--ugturl', 'https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy', '--ugt', args.ugt, '--build', args.build, '-p', os.path.join(home_dir, args.temp_dir, args.synth_dir)])
 
     write_bitstream_path = "{}/{}/scripts/vivado_write_bitstream.tcl".format(home_dir, ugt_local_dir)
-    build_path = "{}/{}/{}/{}/mp7_ugt_legacy/{}/mp7fw_v3_0_0/vivado_2019.2".format(home_dir, args.temp_dir, args.synth_dir, args.build, menuname_dist, args.ugt)
+    # TODO (too-many-format-args)
+    # build_path = "{}/{}/{}/{}/mp7_ugt_legacy/{}/mp7fw_v3_0_0/vivado_2019.2".format(home_dir, args.temp_dir, args.synth_dir, args.build, menuname_dist, args.ugt)
+    build_path = "{}/{}/{}/{}/mp7_ugt_legacy/{}/mp7fw_v3_0_0/vivado_2019.2".format(home_dir, args.temp_dir, args.synth_dir, args.build, menuname_dist)
     build_cfg = "{}/build_{}.cfg".format(build_path, args.build)
     check_path = "{}/{}/scripts/checkIpbbSynth.py".format(home_dir, ugt_local_dir)
     packer_path = "{}/{}/scripts/fwpackerIpbb.py".format(home_dir, ugt_local_dir)
@@ -166,7 +161,7 @@ def main():
     print("$ python3", check_path, build_cfg)
     print(" ")
     print("if timing errors (and bit files is not generated) occur, execute the following command for every module with errors:")
-    print("$ vivado -mode batch -source", write_bitstream_path," -tclargs", build_path," <module number (e.g.: 0)>")
+    print("$ vivado -mode batch -source", write_bitstream_path, " -tclargs", build_path, " <module number (e.g.: 0)>")
     print(" ")
     print("after successfully created bit files, execute the following command to create tar file for HW:")
     print("$ python3", packer_path, build_cfg)
@@ -174,10 +169,6 @@ def main():
 
     logging.info("done.")
 
+
 if __name__ == '__main__':
-    try:
-        main()
-    except RuntimeError as message:
-        logging.error(message)
-        sys.exit(EXIT_FAILURE)
-    sys.exit(EXIT_SUCCESS)
+    main()

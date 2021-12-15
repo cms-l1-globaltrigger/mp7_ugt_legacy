@@ -24,25 +24,9 @@ BoardAliases = {
     'mp7xe_690': 'xe',
 }
 
-#DefaultQuestasimVersion = os.getenv('UGT_QUESTASIM_VERSION')
-#if not DefaultQuestasimVersion:
-    #raise RuntimeError('UGT_QUESTASIM_VERSION is not defined.')
-
-#DefaultQuestaSimLibsName = os.getenv('UGT_QUESTASIM_LIBS_NAME')
-#if not DefaultQuestaSimLibsName:
-    #raise RuntimeError('UGT_QUESTASIM_LIBS_NAME is not defined.')
-
-#QuestaSimPath = os.getenv('UGT_QUESTASIM_SIM_PATH')
-#if not QuestaSimPath:
-    #raise RuntimeError('UGT_QUESTASIM_LIBS_NAME is not defined.')
-
-#questaPath = os.path.abspath(os.path.join(QuestaSimPath, DefaultQuestasimVersion))
-#if not os.path.isdir(questaPath):
-    #raise RuntimeError("No installation of Questa sim in '%s'" % questaPath)
-
-DefaultVivadoVersion = os.getenv('UGT_VIVADO_VERSION')
+DefaultVivadoVersion = os.getenv('VIVADO_VERSION')
 if not DefaultVivadoVersion:
-    raise RuntimeError('UGT_VIVADO_VERSION is not defined.')
+    raise RuntimeError('VIVADO_VERSION is not defined.')
 
 VivadoBaseDir = os.getenv('VIVADO_BASE_DIR')
 if not VivadoBaseDir:
@@ -136,11 +120,6 @@ def parse_args():
     parser.add_argument('--build', type=tb.build_str_t, required=True, metavar='<version>', help='menu build version (eg. 0x1001) [required]')
     parser.add_argument('--board', metavar='<type>', default=DefaultBoardType, choices=list(BoardAliases.keys()), help="set board type (default is '{}')".format(DefaultBoardType))
     parser.add_argument('-p', '--path', metavar='<path>', default=DefaultFirmwareDir, type=os.path.abspath, help="fw build path (default is '{}')".format(DefaultFirmwareDir))
-    #parser.add_argument('--sim', action='store_true', help='running simulation with Questa simulator (before synthesis)')
-    #parser.add_argument('--simmp7path', metavar='<tag>', help="local MP7 firmware repo [required if sim is set]")
-    #parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help = "Questasim version (default is  '{}')".format(DefaultQuestasimVersion))
-    #parser.add_argument('--questasimlibs', metavar='<path>', default=DefaultQuestaSimLibsName, help = "Questasim Vivado libraries directory name (default: '{}') [useful if sim is set]".format(DefaultQuestaSimLibsName))
-    #parser.add_argument('--output', metavar = '<path>', help = 'directory for sim results [useful if sim is set]', type = os.path.abspath)
     return parser.parse_args()
 
 def main():
@@ -183,20 +162,8 @@ def main():
     ipbb_dir = os.path.join(args.path, args.build, args.menuname, project_type, args.ugt, args.mp7tag, vivado_version)
     ipbb_dir_build = os.path.join(args.path, args.build)
 
-    #if os.path.isdir(ipbb_dir):
-        #raise RuntimeError("build area alredy exists: {}".format(ipbb_dir))
     if os.path.isdir(ipbb_dir_build):
         raise RuntimeError("build area already exists: {}".format(ipbb_dir_build))
-
-    ## Runnig simulation with Questa simulator, if args.sim is set
-    #if args.sim:
-        #logging.info("===========================================================================")
-        #logging.info("running simulation with Questa ...")
-        #run_simulation_questa(args.simmp7path, args.menuname, args.menuurl, args.vivado, args.questasim, args.questasimlibs, args.output, False, False, False)
-        #run_simulation_questa(args.simmp7path, args.menuname, args.menuurl, args.ipburl, args.questasim, args.questasimlibs, args.output, False, False, False)
-    #else:
-        #logging.info("===========================================================================")
-        #logging.info("no simulation required ...")
 
     ipbb_version = args.ipbb
 
@@ -216,7 +183,6 @@ def main():
     xml_name = "{}{}".format(args.menuname, '.xml')
     html_name = "{}{}".format(args.menuname, '.html')
     url_menu = "{}/{}".format(args.menuurl, args.menuname)
-    #print "url_menu",url_menu
     # Download XML and HTML files (HTML for buildReporter.py)
     filename = os.path.join(ipbb_dir, 'src', xml_name)
     url = "{url_menu}/xml/{xml_name}".format(**locals())
@@ -281,7 +247,6 @@ def main():
         logging.info("creating IPBB project for module %s ...", module_id)
         cmd_ipbb_proj_create = "ipbb proj create vivado {module_name} {board_type}:../{project_type}".format(**locals())
 
-        #command = 'bash -c "cd; {cmd_activate_env}; cd {ipbb_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
         command = 'bash -c "cd; cd {ipbb_dir}; {cmd_ipbb_proj_create}"'.format(**locals())
         run_command(command)
 

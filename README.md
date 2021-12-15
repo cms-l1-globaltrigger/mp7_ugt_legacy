@@ -3,15 +3,27 @@
 Simulation of gtl_fdl_wrapper with Questa simulator for 6 ugt modules
 
 * This is a description running script `run_simulation_questa.py` for simulation.
-* If Questa sim libraries for Vivado do not exist, they will be created for the selected Questa sim and Vivado versions.
+* If Questasim libraries for a certain Vivado version do not exist, they have to be created for the selected Questasim version with script 'run_compile_simlib.py':
+```bash
+cd <mp7_ugt_legacy_path>
+python3 scripts/run_compile_simlib.py --vivado <Vivado version (e.g. 2019.2)> --questasim <Questasim version (e.g. 10.7c)> --output <output directory for generated libraries>
+```
+
+                               | Questasim version |
+| Vivado version | blk_mem_gen | 10.7c | 2021.1_2 |
+|:--------------:|:-----------:|:-----:|:--------:|
+| 2019.2 | v8.4.4 | ok | X |
+| 2020.2 | v8.4.4 | X | ok |
+| 2021.1 | v8.4.4 | X | ok |
+| 2021.2 | v8.4.5 | X | ok |
 
 ### Workflow
 
 Set the following environment variables (preferably in bashrc):
 ```bash
-UGT_QUESTASIM_VERSION (e.g. '2021.1_2')
+UGT_QUESTASIM_VERSION (e.g. '2021.1_2') - Questasim version
 UGT_QUESTASIM_SIM_PATH (e.g. '/opt/mentor/questa/2021.1_2') - installation directory of Questasim version
-UGT_QUESTASIM_LIBS_PATH (e.g. '/opt/mentor/questasimlibs_vivado_v2021.2') - path to questasim simulation libraries of a certain vivado version
+UGT_QUESTASIM_LIBS_PATH (e.g. '/opt/mentor/questasimlibs_vivado_v2021.2') - path to Questasim libraries of a certain vivado version
 UGT_DP_MEM_VERSION (e.g. 'blk_mem_gen_v8_4_5') - version of blk_mem_gen for DP_MEM (spy memories) in simulation environment
 UGT_ROM_INV_DR_SQ_VERSION (e.g. 'blk_mem_gen_v8_4_5') - version of blk_mem_gen for ROMs of LUT values of 1/DR2 (spy memories) in simulation environment
 ```
@@ -83,10 +95,10 @@ python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8-d1 \
 
 * The ugt repo [mp7 ugt_legacy](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy) is a fork of [svn2git ugt](https://gitlab.cern.ch/hbergaue/ugt/blob/master/mp7_ugt) repo.
   - added [ugt_strategy.tcl](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/ucf/ugt_strategy.tcl) for ugt specific strategy and inserted it into [top.dep](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/cfg/top.dep).
-  - added [l1menu_files.tcl](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/cfg/l1menu_files.tcl) for adding L1Menu VHDL files and inserted it into [top.dep](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/cfg/top.dep).
+  - added [add_l1menu_blkmem_files.tcl](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/cfg/add_l1menu_blkmem_files.tcl) for adding L1Menu VHDL files and inserted it into [top.dep](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/cfg/top.dep).
 
 * Following scripts are available for firmware sythesis, checking used fpga resources and packing firmware files:
-  - script [runIpbbSynth.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/runIpbbSynth.py) for IPBB synthesis (all 6 mp7_ugt modules) with the possibility of simulation.
+  - script [runIpbbSynth.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/runIpbbSynth.py) for IPBB synthesis (all 6 mp7_ugt modules).
   - script [checkIpbbSynth.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/checkIpbbSynth.py) for checking used fpga resources.
   - script [fwpackerIpbb.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/fwpackerIpbb.py) for packing firmware files in a tar file.
 
@@ -94,9 +106,9 @@ python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8-d1 \
 
 Set the following environment variables (preferably in bashrc):
 ```bash
+VIVADO_VERSION (e.g. '2019.2') - Vivado version
 VIVADO_BASE_DIR (e.g. '/opt/xilinx/Vivado') - installation directory of Vivado version
-UGT_VIVADO_VERSION (e.g. '2019.2')
-UGT_DP_MEM_VERSION (e.g. 'blk_mem_gen_v8_4_2') - version of blk_mem_gen for DP_MEM (spy memories) in synthesis environment
+UGT_DP_MEM_VERSION (e.g. 'blk_mem_gen_v8_4_4') - version of blk_mem_gen for DP_MEM (spy memories) in synthesis environment
 UGT_ROM_INV_DR_SQ_VERSION (e.g. 'blk_mem_gen_v8_4_4') - version of blk_mem_gen for ROMs of LUT values of 1/DR2 (spy memories) in synthesis environment
 ```
 Run kerberos for outside of CERN network.
@@ -135,14 +147,6 @@ python3 scripts/runIpbbSynth.py L1Menu_Collisions2020_v0_1_8-d1
   --ugt master
   --build 0x1138
   -p ~/work_synth/production/
-```
-
-Run synthesis script (for all 6 modules) with simulation (Questasim)
-```bash
-git clone https://gitlab.cern.ch/hbergaue/mp7.git <local MP7 repo path>
-git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git <local path>/mp7_ugt_legacy
-cd <local path>/mp7_ugt_legacy
-python3 scripts/runIpbbSynth.py <L1Menu name> --mp7url <URL MP7 git repo> --mp7tag <MP7 tag> -p <work dir> --build <build version> --ugturl <URL ugt git repo> -u <ugt tag in repo> --sim --simmp7path <local MP7 repo path>
 ```
 
 Example

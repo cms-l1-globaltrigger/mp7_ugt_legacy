@@ -33,26 +33,30 @@ Filter algorithms by attributes:
 
 """
 
-import sys, os
+import os
+import sys
 
 try:
     from lxml import etree
 except ImportError:
     raise RuntimeError("package `lxml` is missing, please install `python-lxml` using your favorite package manager.")
 
-__all__ = ['XmlMenu', '__doc__', '__version__']
+__all__ = ['XmlMenu', '__version__']
 __version__ = '1.0.0'
+
 
 def filter_first(function, sequence):
     """Retruns first match of filter() result or None if nothing was found."""
     return list(list(filter(function, sequence)) or [None])[0]
+
 
 def get_xpath(elem, path, fmt=str):
     """Easy access using etree elem xpath method."""
     try:
         return fmt(elem.xpath('{path}/text()'.format(path=path))[0])
     except IndexError:
-        return fmt() # retrun empty
+        return fmt()  # retrun empty
+
 
 def fast_iter(context, func, *args, **kwargs):
     """Fast XML iterator for huge XML files.
@@ -71,6 +75,7 @@ def fast_iter(context, func, *args, **kwargs):
             while ancestor.getprevious() is not None:
                 del ancestor.getparent()[0]
     del context
+
 
 class Algorithm(object):
     """Container holding a subset of algorithm information.
@@ -100,6 +105,7 @@ class Algorithm(object):
                "expression=\"{self.expression}\", " \
                "module(id={self.module_id}, index={self.module_index}))".format(**locals())
 
+
 class AlgorithmContainer(list):
     """Algorithm list container with extended lookup methods for content."""
     def byIndex(self, index):
@@ -121,6 +127,7 @@ class AlgorithmContainer(list):
     def asdict(self):
         """Retrun content as dictionary."""
         return [algorithm.asdict() for algorithm in self]
+
 
 class XmlMenu(object):
     """Container holding a subset of information of the XML menu.
@@ -150,11 +157,12 @@ class XmlMenu(object):
         self.n_modules = 0
         self.comment = ""
         self.algorithms = AlgorithmContainer()
-        if filename: self.read(filename)
+        if filename:
+            self.read(filename)
 
     def asdict(self):
         """Retrun content as dictionary."""
-        d = dict(self.__dict__) # copy
+        d = dict(self.__dict__)  # copy
         d['algorithms'] = self.algorithms.asdict()
         return d
 
@@ -174,7 +182,7 @@ class XmlMenu(object):
             self.n_modules = get_xpath(context, 'n_modules', int)
             self.comment = get_xpath(context, 'comment')
             # Access list of algorithms
-            fp.seek(0) # Seek begin of file
+            fp.seek(0)  # Seek begin of file
             context = etree.iterparse(fp, tag='algorithm')
             fast_iter(context, self._read_algorithm)
 
@@ -189,6 +197,7 @@ class XmlMenu(object):
         algorithm = Algorithm(index, name, expression, module_id, module_index, comment)
         self.algorithms.append(algorithm)
 
+
 def main():
     import json
     import argparse
@@ -202,6 +211,7 @@ def main():
     dump = json.dumps(menu.asdict(), indent=2)
     sys.stdout.write(dump)
     sys.stdout.flush()
+
 
 if __name__ == '__main__':
     main()

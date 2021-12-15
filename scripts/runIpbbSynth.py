@@ -1,12 +1,8 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-
 import argparse
 import configparser
 import logging
 import os
 import subprocess
-import sys
 import urllib.request
 import urllib.parse
 import urllib.error
@@ -14,13 +10,12 @@ import urllib.error
 import toolbox as tb
 
 from xmlmenu import XmlMenu
-from run_simulation_questa import run_simulation_questa
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
 BoardAliases = {
-    #'mp7_690es': 'r1',
+    # 'mp7_690es': 'r1',
     'mp7xe_690': 'xe',
 }
 
@@ -40,7 +35,7 @@ DefaultBoardType = 'mp7xe_690'
 """Default board type to be used."""
 
 DefaultFirmwareDir = os.path.expanduser("~/work_synth/production")
-#DefaultFirmwareDir = os.path.expanduser("~/work_synth/tests")
+# DefaultFirmwareDir = os.path.expanduser("~/work_synth/tests")
 """Default output directory for firmware builds."""
 
 DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware.git'
@@ -62,12 +57,19 @@ mp7fw_ugt_suffix = '_mp7_ugt'
 """Suffix for ugt MP7 FW tag (patched files in MP7 FW)."""
 """Example MP7 FW tag for ugt: mp7fw_v3_0_0_mp7_ugt."""
 
-vhdl_snippets = ('algo_index.vhd','gtl_module_instances.vhd','gtl_module_signals.vhd','ugt_constants.vhd')
+vhdl_snippets = (
+    'algo_index.vhd',
+    'gtl_module_instances.vhd',
+    'gtl_module_signals.vhd',
+    'ugt_constants.vhd'
+)
+
 
 def run_command(*args):
     command = ' '.join(args)
     logging.info(">$ %s", command)
     os.system(command)
+
 
 def download_file_from_url(url, filename):
     """Download files from URL."""
@@ -84,9 +86,10 @@ def download_file_from_url(url, filename):
     with open(filename, 'w') as fp:
         fp.write(d)
 
+
 def replace_vhdl_templates(vhdl_snippets_dir, src_fw_dir, dest_fw_dir):
     """Replace VHDL templates with snippets from VHDL Producer."""
-    #Read generated VHDL snippets
+    # Read generated VHDL snippets
     logging.info("replace VHDL templates with snippets from VHDL Producer ...")
     replace_map = {
         '{{algo_index}}': tb.read_file(os.path.join(vhdl_snippets_dir, 'algo_index.vhd')),
@@ -99,10 +102,11 @@ def replace_vhdl_templates(vhdl_snippets_dir, src_fw_dir, dest_fw_dir):
     fdl_dir = os.path.join(gtl_fdl_wrapper_dir, 'fdl')
     pkg_dir = os.path.join(src_fw_dir, 'hdl', 'packages')
 
-    #Patch VHDL files in IPBB area (
+    # Patch VHDL files in IPBB area (
     tb.template_replace(os.path.join(fdl_dir, 'algo_mapping_rop_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'algo_mapping_rop.vhd'))
     tb.template_replace(os.path.join(pkg_dir, 'fdl_pkg_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'fdl_pkg.vhd'))
     tb.template_replace(os.path.join(gtl_fdl_wrapper_dir, 'gtl_module_tpl.vhd'), replace_map, os.path.join(dest_fw_dir, 'gtl_module.vhd'))
+
 
 def parse_args():
     """Parse command line arguments."""
@@ -116,11 +120,12 @@ def parse_args():
     parser.add_argument('--mp7url', metavar='<path>', default=DefaultGitlabUrlMP7, help="URL of MP7 firmware repo (default is '{}')".format(DefaultGitlabUrlMP7))
     parser.add_argument('--mp7tag', metavar='<path>', default=DefaultMP7Tag, help="MP7 firmware repo: tag name (default is '{}')".format(DefaultMP7Tag))
     parser.add_argument('--ugturl', metavar='<path>', required=True, help="URL of ugt firmware repo [required]")
-    parser.add_argument('--ugt', metavar='<path>',required=True, help='ugt firmware repo: tag or branch name [required]')
+    parser.add_argument('--ugt', metavar='<path>', required=True, help='ugt firmware repo: tag or branch name [required]')
     parser.add_argument('--build', type=tb.build_str_t, required=True, metavar='<version>', help='menu build version (eg. 0x1001) [required]')
     parser.add_argument('--board', metavar='<type>', default=DefaultBoardType, choices=list(BoardAliases.keys()), help="set board type (default is '{}')".format(DefaultBoardType))
     parser.add_argument('-p', '--path', metavar='<path>', default=DefaultFirmwareDir, type=os.path.abspath, help="fw build path (default is '{}')".format(DefaultFirmwareDir))
     return parser.parse_args()
+
 
 def main():
     """Main routine."""
@@ -156,7 +161,7 @@ def main():
     # Create MP7 tag name for ugt
     mp7fw_ugt = args.mp7tag + mp7fw_ugt_suffix
 
-    #ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, args.menuname, args.build)
+    # ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, args.menuname, args.build)
     # HB 2019-11-12: inserted mp7_ugt tag and vivado version in directory name and changed order
     vivado_version = "vivado_" + args.vivado
     ipbb_dir = os.path.join(args.path, args.build, args.menuname, project_type, args.ugt, args.mp7tag, vivado_version)
@@ -214,7 +219,7 @@ def main():
         ipbb_dest_fw_dir = os.path.abspath(os.path.join(ipbb_dir, 'src', module_name))
         os.makedirs(ipbb_dest_fw_dir)
 
-        #Download generated VHDL snippets from repository and replace VHDL templates
+        # Download generated VHDL snippets from repository and replace VHDL templates
         logging.info("===========================================================================")
         logging.info(" *** module %s ***", module_id)
         logging.info("===========================================================================")
@@ -235,11 +240,11 @@ def main():
         top_pkg = os.path.join(ipbb_src_fw_dir, 'hdl', 'packages', 'gt_mp7_top_pkg.vhd')
         subprocess.check_call(['python', os.path.join(ipbb_src_fw_dir, '..', 'scripts', 'pkgpatch.py'), '--build', args.build, top_pkg_tpl, top_pkg])
 
-        #Vivado settings
+        # Vivado settings
         settings64 = os.path.join(vivado_base_dir, args.vivado, 'settings64.sh')
         if not os.path.isfile(settings64):
             raise RuntimeError(
-                "no such Xilinx Vivado settings file '{settings64}'\n" \
+                "no such Xilinx Vivado settings file '{settings64}'\n"
                 "  check if Xilinx Vivado {args.vivado} is installed on this machine.".format(**locals())
             )
 
@@ -253,13 +258,13 @@ def main():
         logging.info("===========================================================================")
         logging.info("running IPBB project, synthesis and implementation, creating bitfile for module %s ...", module_id)
 
-        #IPBB commands: running IPBB project, synthesis and implementation, creating bitfile
-        cmd_ipbb_project = "ipbb vivado make-project --single" # workaround to prevent "hang-up" in make-project with IPBB v0.5.2
+        # IPBB commands: running IPBB project, synthesis and implementation, creating bitfile
+        cmd_ipbb_project = "ipbb vivado make-project --single"  # workaround to prevent "hang-up" in make-project with IPBB v0.5.2
         cmd_ipbb_synth = "ipbb vivado synth"
         cmd_ipbb_impl = "ipbb vivado impl"
         cmd_ipbb_bitfile = "ipbb vivado package"
 
-        #Set variable "module_id" for tcl script (l1menu_files.tcl in uGT_algo.dep)
+        # Set variable "module_id" for tcl script (l1menu_files.tcl in uGT_algo.dep)
         command = 'bash -c "cd; source {settings64}; cd {ipbb_dir}/proj/{module_name}; module_id={module_id} {cmd_ipbb_project} && {cmd_ipbb_synth} && {cmd_ipbb_impl} && {cmd_ipbb_bitfile}"'.format(**locals())
 
         session = "build_{project_type}_{args.build}_{module_id}".format(**locals())
@@ -272,7 +277,7 @@ def main():
 
     os.chdir(ipbb_dir)
 
-    ## Creating configuration file.
+    # Creating configuration file.
     config = configparser.RawConfigParser()
     config.add_section('environment')
     config.set('environment', 'timestamp', tb.timestamp())
@@ -319,10 +324,6 @@ def main():
     logging.info("created configuration file: %s/build_%s.cfg.", ipbb_dir, args.build)
     logging.info("done.")
 
+
 if __name__ == '__main__':
-    try:
-        main()
-    except RuntimeError as message:
-        logging.error(message)
-        sys.exit(EXIT_FAILURE)
-    sys.exit(EXIT_SUCCESS)
+    main()

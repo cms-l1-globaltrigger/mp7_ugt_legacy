@@ -11,10 +11,12 @@ DefaultQuestaSimLibsPath = 'questasimlibs'
 pwd_script = os.path.dirname(__file__)
 pwd = os.getcwd()
 
+
 def run_command(*args):
     command = ' '.join(args)
     logging.info(">$ %s", command)
     os.system(command)
+
 
 def run_compile_simlib(vivado, questasim, questasimlib_path):
 
@@ -60,21 +62,24 @@ def run_compile_simlib(vivado, questasim, questasimlib_path):
     command = 'bash -c "cp {questasimlib_path}/modelsim.ini {sim_dir}/modelsim.ini"'.format(**locals())
     run_command(command)
 
-def parse():
+
+def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--vivado', help = "Vivado version", required = True)
-    parser.add_argument('--questasim', default=DefaultQuestaSimPath, help = "Questasim installation path")
-    parser.add_argument('--output', default=DefaultQuestaSimLibsPath, help = "Questasim Vivado libraries path")
+    parser.add_argument('--vivado', help="Vivado version", required=True)
+    parser.add_argument('--questasim', default=DefaultQuestaSimPath, help="Questasim installation path")
+    parser.add_argument('--output', default=DefaultQuestaSimLibsPath, help="Questasim Vivado libraries path")
     return parser.parse_args()
+
 
 def main():
 
-    args = parse()
+    args = parse_args()
 
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
     run_compile_simlib(args.vivado, args.questasim, args.output)
+
 
 if __name__ == '__main__':
     main()

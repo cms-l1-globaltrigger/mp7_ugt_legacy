@@ -108,7 +108,7 @@ class Analyzer:
                     errors += 1
                     # checks for args if -a or -e is an arg print error line
                     if self.show_all or self.show_errors:
-                        self.logger.hr("-" )
+                        self.logger.hr("-")
                         self.logger.info(line)
                         self.logger.hr("-")
                 # checks in current line if warning is at the beginning
@@ -137,7 +137,7 @@ class Analyzer:
                     errors += 1
                     # checks for args if -a or -e is an arg print error line
                     if self.show_all or self.show_errors:
-                        self.logger.hr("-" )
+                        self.logger.hr("-")
                         self.logger.info(line)
                         self.logger.hr("-")
                 # checks in current line if warning is at the beginning
@@ -228,7 +228,6 @@ class Analyzer:
                     self.utilization[module_id].append(parse_utilization(line))
                 if line.startswith("| DSPs"):
                     self.utilization[module_id].append(parse_utilization(line))
-
 
     def check_bitfile(self, impl_path, module_id):
         """Check for existing bitfile."""

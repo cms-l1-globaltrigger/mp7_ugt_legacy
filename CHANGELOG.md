@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.18.0] - 2021-12-16
+### Comment
+
+- mp7_ugt firmware release v1.18.0
+- updated scripts
+
+### Changed
+- script files:
+  - scripts/run_simulation_questa.py
+  - scripts/run_simulation_questa_local.py
+  - scripts/runIpbbSynth.py
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+- readme.md
+
 ## [v1.17.2] - 2021-12-16
 ### Comment
 

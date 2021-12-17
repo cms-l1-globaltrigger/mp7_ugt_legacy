@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - mp7_ugt firmware release v1.18.0
-- updated scripts
+- updated scripts for different version of Questsim and Vivado
 
 ### Changed
 - script files:

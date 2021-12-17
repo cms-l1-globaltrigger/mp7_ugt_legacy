@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.18.0] - 2021-12-16
+## [v1.18.0] - 2021-12-17
 ### Comment
 
 - mp7_ugt firmware release v1.18.0
@@ -18,6 +18,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
 - readme.md
+
+## [v1.17.3] - 2021-12-17
+### Comment
+
+- mp7_ugt firmware release v1.17.3
+- reorganized ../firmware/ngc
+
+### Changed
+- tcl file:
+  - ../cfg/add_l1menu_blkmem_files.tcl
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
 
 ## [v1.17.2] - 2021-12-16
 ### Comment

@@ -3,6 +3,7 @@
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
 -- mp7_ugt (=FRAME_VERSION): v1.18.0
 
+-- v1.17.3: Reorganized ../firmware/ngc, updated add_l1menu_blkmem_files.tcl and gtl_fdl_wrapper_tpl_questa.do
 -- v1.17.2: Changed python scripts run_simulation_questa.py, run_simulation_questa_local.py and runIpbbSynth.py
 -- v1.15.4: Changes in frame (v1.2.4) - selector for scouting and no spymem
 -- v1.15.3: Added python script runSynthWorkFlow.py

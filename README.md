@@ -45,18 +45,24 @@ export UGT_ROM_INV_DR_SQ_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_
 cd firmware/sim;\
 ```
 
-Clone git repositories for mp7 and ugt.
+Clone git repositories for ipbus-firmware, mp7 and ugt.
 ```bash
+git clone https://github.com/ipbus/ipbus-firmware.git
+cd <ipbus-firmware path>
+git checkout <branch|tag>
 git clone https://gitlab.cern.ch/hbergaue/mp7.git
-cd mp7
+cd <mp7 path>
 git checkout <tag>
 git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git
-cd mp7_ugt_legacy
+cd <mp7_ugt_legacy path>
 git checkout <branch|tag>
 ```
 
 Example
 ```bash
+git clone https://github.com/ipbus/ipbus-firmware.git
+cd ipbus-firmware
+git checkout master
 git clone https://gitlab.cern.ch/hbergaue/mp7.git
 cd mp7
 git checkout mp7fw_v3_0_0_mp7_ugt

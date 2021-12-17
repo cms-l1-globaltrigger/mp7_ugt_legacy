@@ -30,8 +30,6 @@ set MOD_TB_DIR {{MOD_TB_DIR}}
 set IPB_DIR {{IPB_DIR}}
 set FILE_NAME {{MENU_DIR}}/../running.lock
 
-#set ROM_INV_DR_SQ_VERSION $env(UGT_ROM_INV_DR_SQ_VERSION)
-#set DP_MEM_VERSION $env(UGT_DP_MEM_VERSION)
 set BLK_MEM_GEN_VERSION $env(UGT_BLK_MEM_GEN_VERSION)
 
 ## Create and map work directory

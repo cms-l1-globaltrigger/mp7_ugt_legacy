@@ -77,7 +77,7 @@ src payload/gtl/correlation_cuts_calculation.vhd
 src payload/gtl/correlation_conditions.vhd
 #
 ### modules of BRAMs used for mass over DeltaR
-## XCI files for blk_mem_ge moved to 'add_l1menu_blkmem_files.tcl'
+## XCI files of blk_mem_gen for rom_lut_calo_inv_dr_sq and rom_lut_muon_inv_dr_sq moved to 'add_l1menu_blkmem_files.tcl'
 src payload/gtl/common/rom_lut_calo_inv_dr_sq_all.vhd
 src payload/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd
 #
@@ -99,9 +99,7 @@ src payload/ipbus/ipb_write_regs.vhd
 src payload/ipbus/ipb_pulse_regs.vhd
 src payload/ipbus/ipb_read_regs.vhd
 src payload/ipbus/ipb_dpmem_4096_32.vhd
-## XCI files for blk_mem_ge moved to 'add_l1menu_blkmem_files.tcl'
-#src ../ngc/dp_mem_4096x32/dp_mem_4096x32.ngc
-#src ../ngc/dp_mem_4096x32/dp_mem_4096x32.vhd
+## XCI files of blk_mem_gen for dp_mem_4096x32 moved to 'add_l1menu_blkmem_files.tcl'
 #
 ## MP7 modules
 src -c components/mp7_ttc mp7_ttc_decl.vhd

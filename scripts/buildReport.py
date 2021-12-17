@@ -1,18 +1,26 @@
-#!/usr/bin/env python
-# Creates textile formatted snippets for build issues
-# and bitfile table in redmine.
-#
+"""Creates textile formatted snippets for build issues
+and bitfile table in redmine.
+"""
 
 import configparser
 import argparse
 import re
 import os
 
+
+def textile_strong(s):
+    return f"*{s}*"
+
+
+def textile_pre_inline(s):
+    return f"@{s}@"
+
+
 def detect_tm_reporter_version(filename):
     """Try to detect tm-reporter version from L1Menu-HTML file.
 
     Required format:
-  <meta name="generator" content="tm-reporter 2.7.2">
+    <meta name="generator" content="tm-reporter 2.7.2">
     """
     regex = re.compile(r'^.*tm-reporter\s+(\d+\.\d+\.\d+)')
     with open(filename) as fp:
@@ -20,6 +28,8 @@ def detect_tm_reporter_version(filename):
             m = regex.match(line)
             if m:
                 return m.group(1)
+    return None
+
 
 def detect_versions_vx_y_z(filename, needle):
     """Try to detect versions of VHDL producer, tmEventSetup, etc. from comments of generated output
@@ -31,6 +41,8 @@ def detect_versions_vx_y_z(filename, needle):
             if prev.startswith(needle):
                 return line.strip(' -v').strip()
             prev = line.strip().lower()
+    return None
+
 
 def detect_gt_versions(filename):
     """Try to detect uGT, FDL and GTL versions from VHDL statements. Returns a
@@ -52,10 +64,12 @@ def detect_gt_versions(filename):
         versions[k] = "{MAJOR}.{MINOR}.{REV}".format(**v)
     return versions
 
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('filename', help="build config file (*.cfg)")
     return parser.parse_args()
+
 
 def main():
     args = parse_args()
@@ -73,7 +87,6 @@ def main():
     username = config.get('environment', 'username')
     build_raw = config.get('menu', 'build')
     build_id = "0x{0}".format(build_raw)
-    #mp7fw_tag = config.get('firmware', 'tag')
     mp7fw_tag = config.get('firmware', 'mp7tag')
     ugt_tag = config.get('firmware', 'ugttag')
     l1menu_html = menu_name + ".html"
@@ -86,9 +99,7 @@ def main():
     versions['tm-vhdlproducer'] = detect_versions_vx_y_z(ugt_constants_path, needle)
     versions['tm-reporter'] = detect_tm_reporter_version(os.path.join(buildarea_dir, 'src', l1menu_html))
     versions.update(detect_gt_versions(os.path.join(buildarea_dir, 'src', 'mp7_ugt_legacy', 'firmware', 'hdl', 'packages', 'gt_mp7_core_pkg.vhd')))
-    #versions['vivado'] = detect_vivado_version(os.path.join(buildarea_dir, 'module_0', 'vivado.log'))
     vivado_version = config.get('vivado', 'version')
-
 
     table = [
         ("Menu", menu_name),
@@ -115,12 +126,6 @@ def main():
     for row in table:
         print(("|_<.{0} |{1} |".format(*row)))
 
-    def textile_strong(s):
-        return "*{0}*".format(s)
-
-    def textile_pre_inline(s):
-        return "@{0}@".format(s)
-
     row = [
         menu_name,
         textile_pre_inline(build_id),
@@ -138,6 +143,7 @@ def main():
     print("\nPrepend BITFILES table:\n")
     print("|_.Menu |_.Build |_.Creator |_.Vivado |_.MP7 tag |_.uGT tag |_.uGT |_.GTL |_.FDL |_.Modules |_.Issue |_.Notes |")
     print(("|{0} |".format(" |".join(row))))
+
 
 if __name__ == '__main__':
     main()

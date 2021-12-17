@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - mp7_ugt firmware release v1.17.3
 - reorganized ../firmware/ngc
 
+### Changed
+- tcl file:
+  - ../cfg/add_l1menu_blkmem_files.tcl
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+
 ## [v1.17.2] - 2021-12-16
 ### Comment
 

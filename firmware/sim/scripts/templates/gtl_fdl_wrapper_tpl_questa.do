@@ -104,17 +104,17 @@ vcom -93 -work work $HDL_DIR/payload/gtl/towercount_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
 #
 ### modules of BRAMs used for mass over DeltaR
-vcom -93 -work work $NGC_DIR/rom_inv_dr_sq_$ROM_INV_DR_SQ_VERSION/rom_lut_calo_inv_dr_sq_1/synth/rom_lut_calo_inv_dr_sq_1.vhd
-vcom -93 -work work $NGC_DIR/rom_inv_dr_sq_$ROM_INV_DR_SQ_VERSION/rom_lut_calo_inv_dr_sq_2/synth/rom_lut_calo_inv_dr_sq_2.vhd
-vcom -93 -work work $NGC_DIR/rom_inv_dr_sq_$ROM_INV_DR_SQ_VERSION/rom_lut_calo_inv_dr_sq_3/synth/rom_lut_calo_inv_dr_sq_3.vhd
-vcom -93 -work work $NGC_DIR/rom_inv_dr_sq_$ROM_INV_DR_SQ_VERSION/rom_lut_calo_inv_dr_sq_4/synth/rom_lut_calo_inv_dr_sq_4.vhd
-vcom -93 -work work $NGC_DIR/rom_inv_dr_sq_$ROM_INV_DR_SQ_VERSION/rom_lut_calo_inv_dr_sq_5/synth/rom_lut_calo_inv_dr_sq_5.vhd
-vcom -93 -work work $NGC_DIR/rom_inv_dr_sq_$ROM_INV_DR_SQ_VERSION/rom_lut_muon_inv_dr_sq_1/synth/rom_lut_muon_inv_dr_sq_1.vhd
-vcom -93 -work work $NGC_DIR/rom_inv_dr_sq_$ROM_INV_DR_SQ_VERSION/rom_lut_muon_inv_dr_sq_2/synth/rom_lut_muon_inv_dr_sq_2.vhd
-vcom -93 -work work $NGC_DIR/rom_inv_dr_sq_$ROM_INV_DR_SQ_VERSION/rom_lut_muon_inv_dr_sq_3/synth/rom_lut_muon_inv_dr_sq_3.vhd
-vcom -93 -work work $NGC_DIR/rom_inv_dr_sq_$ROM_INV_DR_SQ_VERSION/rom_lut_muon_inv_dr_sq_4/synth/rom_lut_muon_inv_dr_sq_4.vhd
-vcom -93 -work work $NGC_DIR/rom_inv_dr_sq_$ROM_INV_DR_SQ_VERSION/rom_lut_muon_inv_dr_sq_5/synth/rom_lut_muon_inv_dr_sq_5.vhd
-vcom -93 -work work $NGC_DIR/rom_inv_dr_sq_$ROM_INV_DR_SQ_VERSION/rom_lut_muon_inv_dr_sq_6/synth/rom_lut_muon_inv_dr_sq_6.vhd
+vcom -93 -work work $NGC_DIR/$ROM_INV_DR_SQ_VERSION/rom_lut_calo_inv_dr_sq_1/synth/rom_lut_calo_inv_dr_sq_1.vhd
+vcom -93 -work work $NGC_DIR/$ROM_INV_DR_SQ_VERSION/rom_lut_calo_inv_dr_sq_2/synth/rom_lut_calo_inv_dr_sq_2.vhd
+vcom -93 -work work $NGC_DIR/$ROM_INV_DR_SQ_VERSION/rom_lut_calo_inv_dr_sq_3/synth/rom_lut_calo_inv_dr_sq_3.vhd
+vcom -93 -work work $NGC_DIR/$ROM_INV_DR_SQ_VERSION/rom_lut_calo_inv_dr_sq_4/synth/rom_lut_calo_inv_dr_sq_4.vhd
+vcom -93 -work work $NGC_DIR/$ROM_INV_DR_SQ_VERSION/rom_lut_calo_inv_dr_sq_5/synth/rom_lut_calo_inv_dr_sq_5.vhd
+vcom -93 -work work $NGC_DIR/$ROM_INV_DR_SQ_VERSION/rom_lut_muon_inv_dr_sq_1/synth/rom_lut_muon_inv_dr_sq_1.vhd
+vcom -93 -work work $NGC_DIR/$ROM_INV_DR_SQ_VERSION/rom_lut_muon_inv_dr_sq_2/synth/rom_lut_muon_inv_dr_sq_2.vhd
+vcom -93 -work work $NGC_DIR/$ROM_INV_DR_SQ_VERSION/rom_lut_muon_inv_dr_sq_3/synth/rom_lut_muon_inv_dr_sq_3.vhd
+vcom -93 -work work $NGC_DIR/$ROM_INV_DR_SQ_VERSION/rom_lut_muon_inv_dr_sq_4/synth/rom_lut_muon_inv_dr_sq_4.vhd
+vcom -93 -work work $NGC_DIR/$ROM_INV_DR_SQ_VERSION/rom_lut_muon_inv_dr_sq_5/synth/rom_lut_muon_inv_dr_sq_5.vhd
+vcom -93 -work work $NGC_DIR/$ROM_INV_DR_SQ_VERSION/rom_lut_muon_inv_dr_sq_6/synth/rom_lut_muon_inv_dr_sq_6.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/rom_lut_calo_inv_dr_sq_all.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd
 #
@@ -131,7 +131,7 @@ vcom -93 -work work $HDL_DIR/payload/fdl/algo_post_dead_time_counter.vhd
 vcom -93 -work work $HDL_DIR/payload/fdl/algo_slice.vhd
 #
 ## IPBus modules
-vcom -93 -work work $NGC_DIR/dp_mem_4096x32_$DP_MEM_VERSION/synth/dp_mem_4096x32.vhd
+vcom -93 -work work $NGC_DIR/$DP_MEM_VERSION/dp_mem_4096x32/synth/dp_mem_4096x32.vhd
 vcom -93 -work work $HDL_DIR/payload/ipbus/ipb_dpmem_4096_32.vhd
 vcom -93 -work work $HDL_DIR/payload/ipbus/ipb_read_regs.vhd
 vcom -93 -work work $HDL_DIR/payload/ipbus/ipb_write_regs.vhd

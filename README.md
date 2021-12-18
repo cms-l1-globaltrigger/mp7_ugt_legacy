@@ -25,8 +25,7 @@ Set the following environment variables (preferably in bashrc):
 UGT_QUESTASIM_VERSION - Questasim version (e.g. '2021.1_2')
 UGT_QUESTASIM_SIM_PATH - installation directory of Questasim version (e.g. '/opt/mentor/questa/2021.1_2')
 UGT_QUESTASIM_LIBS_PATH - path to Questasim libraries of a certain vivado version (e.g. '/opt/mentor/questasimlibs_vivado_v2021.2')
-UGT_DP_MEM_VERSION - version of blk_mem_gen for DP_MEM (spy memories), export it in simulation environment (e.g. 'blk_mem_gen_v8_4_5')
-UGT_ROM_INV_DR_SQ_VERSION - version of blk_mem_gen for ROMs of LUT values for 1/DR2 (spy memories), export it in simulation environment (e.g. 'blk_mem_gen_v8_4_5')
+UGT_BLK_MEM_GEN_VERSION - version of blk_mem_gen IP for dual port memories (spy memories) and ROMs of LUT values for 1/DR2 (mass over deltaR), export it in simulation environment (e.g. 'blk_mem_gen_v8_4_5')
 ```
 
 Example for creating a Questasim environment in bashrc:
@@ -39,8 +38,7 @@ python3 -m venv env_questasim;\
 pip install -U pip;\
 pip install -r <mp7_ugt_legacy directory>/scripts/requirements.txt;\
 cd <<mp7_ugt_legacy directory>>;\
-export UGT_DP_MEM_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_5)>;\
-export UGT_ROM_INV_DR_SQ_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_5)>;\
+export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_5)>;\
 . firmware/sim/setup.sh;\
 cd firmware/sim;\
 ```
@@ -131,8 +129,7 @@ Set the following environment variables (preferably in bashrc):
 ```bash
 VIVADO_VERSION - Vivado version (e.g. '2019.2')
 VIVADO_BASE_DIR - installation directory of Vivado version (e.g. '/opt/xilinx/Vivado')
-UGT_DP_MEM_VERSION - version of blk_mem_gen for DP_MEM (spy memories), export it in synthesis environment (e.g. 'blk_mem_gen_v8_4_4')
-UGT_ROM_INV_DR_SQ_VERSION - version of blk_mem_gen for ROMs of LUT values of 1/DR2 (spy memories), export it in synthesis environment (e.g. 'blk_mem_gen_v8_4_4')
+UGT_BLK_MEM_GEN_VERSION - version of blk_mem_gen IP for dual port memories (spy memories) and ROMs of LUT values for 1/DR2 ("mass over deltaR"), export it in synthesis environment (e.g. 'blk_mem_gen_v8_4_4')
 ```
 Example for creating a Questasim environment in bashrc:
 
@@ -145,8 +142,7 @@ pip install -U pip;\
 pip install -r <mp7_ugt_legacy directory>/scripts/requirements.txt;\
 cd <mp7_ugt_legacy directory>;\
 source ${VIVADO_BASE_DIR}/${VIVADO_VERSION}/settings64.sh;\
-export UGT_DP_MEM_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_2);\
-export UGT_ROM_INV_DR_SQ_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_4);\
+export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_4);\
 ```
 
 Run kerberos for outside of CERN network.

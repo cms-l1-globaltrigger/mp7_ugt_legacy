@@ -385,6 +385,8 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
                     print("url:",url)
                     download_file_from_url(url, vhdl_file_local_path)
 
+    exit(0)
+
     if not os.path.exists(menu_filepath):
         raise RuntimeError('Missing %s File' % menu_filepath)
     if not os.path.exists(testvector_filepath):

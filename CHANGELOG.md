@@ -4,17 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.18.0] - 2021-12-18
+## [v1.18.0] - 2021-12-21
 ### Comment
 
 - mp7_ugt firmware release v1.18.0
-- updated scripts for different version of Questsim and Vivado
+- renamed scripts (no camel case) and updated for different version of Questsim and Vivado
 
 ### Changed
 - script files:
   - scripts/run_simulation_questa.py
-  - scripts/run_simulation_questa_local.py
-  - scripts/runIpbbSynth.py
+  - scripts/build_report.py
+  - scripts/check_synth_ipbb.py
+  - scripts/fwpacker_ipbb.py
+  - scripts/run_synth_ipbb.py
+  - scripts/run_synth_workflow.py
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
 - readme.md

@@ -302,8 +302,10 @@ def download_file_from_url(url, filename):
 
 def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv, a_local, a_ignored):
 
+    print("a_mp7_tag",a_mp7_tag)
+    print("a_ipb_fw_dir",a_ipb_fw_dir)
+
     sim_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'firmware', 'sim')
-    print("sim_dir:",sim_dir)
 
     # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
     source_filename = os.path.join(a_questasimlibs, 'modelsim.ini')
@@ -324,6 +326,11 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     temp_dir = os.path.join(sim_dir, "temp_dir")
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)  # makes folders
+
+    # clone repos of MP7 and IPB-firmware to temp_dir for "non local mode"
+    if not a_local:
+        command = f'bash -c "cd {temp_dir}; git clone {a_mp7_tag}.git mp7; git clone {a_ipb_fw_dir}.git ipbus-firmware"'
+        run_command(command)
 
     if a_local:
         logging.info("===========================================================================")
@@ -411,8 +418,14 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
 
         logging.debug('Module_%d created at %s' % (module._id, base_dir))
 
-        # module.make_files(sim_dir, a_view_wave, a_mp7_tag, a_menu)  # sim_dir, view_wave, mp7_tag, menu_path
-        module.make_files(sim_dir, a_view_wave, a_mp7_tag, temp_dir, a_ipb_fw_dir)  # sim_dir, view_wave, mp7_tag, temp_dir
+        if a_local:
+            mp7 = a_mp7_tag
+            ipb_fw = a_ipb_fw_dir
+        else:
+            mp7 = os.path.join(temp_dir, 'mp7')
+            ipb_fw = os.path.join(temp_dir, 'ipbus-firmware')
+
+        module.make_files(sim_dir, a_view_wave, mp7, temp_dir, ipb_fw)  # sim_dir, view_wave, mp7_tag, temp_dir
 
     questasim_path = os.path.join(QuestaSimPath, 'questasim')
 
@@ -546,18 +559,22 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     if os.path.exists(os.path.join(sim_dir, "temp_dir")):
         shutil.rmtree(os.path.join(sim_dir, "temp_dir"))
 
-    if not success:
-        logging.info("===========================================================================")
-        logging.error(mismatches_exit_red)
-        logging.info("===========================================================================")
-        exit(1)
+    #if not success:
+        #logging.info("===========================================================================")
+        #logging.error(mismatches_exit_red)
+        #logging.info("===========================================================================")
+        #exit(1)
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('menu', type=tb.menuname_t, help="menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')")
     parser.add_argument('--url', default=url_menu_default, help="URL of menu")
-    parser.add_argument('--mp7_tag', required=True, type=os.path.abspath, help="local path to MP7 tag (checkout tag before running simulation)")
-    parser.add_argument('--ipb_fw_dir', required=True, type=os.path.abspath, help="local path to IPBus firmware directory")
+    parser.add_argument('--mp7_local', type=os.path.abspath, help="local path to MP7 tag (checkout tag before running simulation)")
+    parser.add_argument('--ipb_fw_local', type=os.path.abspath, help="local path to IPBus firmware directory")
+    parser.add_argument('--mp7_url', help="MP7 repo")
+    parser.add_argument('--mp7_repo_tag', default='mp7fw_v3_0_0_mp7_ugt', help="MP7 repo tagmp7fw_v3_0_0_mp7_ugt")
+    parser.add_argument('--ipb_fw_url', help="IPBus firmware repo")
+    parser.add_argument('--ipb_fw_repo_tag', default='master', help="IPBus firmware repo tag (default: master)")
     parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help="Questasim version (default is {})".format(DefaultQuestasimVersion))
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsPath, help="Questasim Vivado libraries directory name (default is {})".format(DefaultQuestaSimLibsPath))
     parser.add_argument('--output', metavar='path', help='', type=os.path.abspath)
@@ -578,8 +595,13 @@ def main():
     tv =''
     if args.local:
         tv = args.tv
+        mp7 = args.mp7_local
+        ipb_fw = args.ipb_fw_local
+    else:
+        mp7 = args.mp7_url
+        ipb_fw = args.ipb_fw_url
 
-    run_simulation_questa(args.mp7_tag, args.menu, args.url, args.ipb_fw_dir, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, tv, args.local, args.ignored)
+    run_simulation_questa(mp7, args.menu, args.url, ipb_fw, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, tv, args.local, args.ignored)
 
 if __name__ == '__main__':
     main()

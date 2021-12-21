@@ -346,6 +346,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
         logging.info("download XML and testvector file from L1Menu repository ...")
         # Get l1menus_path for URL
         url_menu = "{}/{}".format(a_url_menu, a_menu)
+        print("url_menu:",url_menu)
         xml_name = "{}{}".format(a_menu, '.xml')
         menu_filepath = os.path.join(temp_dir, xml_name)
         url = "{}/xml/{}".format(url_menu, xml_name)
@@ -381,6 +382,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
                     run_command(command)
                 else:
                     url = "{}/{}".format(url_menu, vhdl_file_path)
+                    print("url:",url)
                     download_file_from_url(url, vhdl_file_local_path)
 
     if not os.path.exists(menu_filepath):

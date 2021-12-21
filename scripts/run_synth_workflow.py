@@ -117,7 +117,7 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("checkout branch mp7fw_v2_4_1_mp7_ugt of repo mp7 to %s (for simulation)", args.temp_dir)
-    command = 'bash -c "cd {home_dir}/{args.temp_dir}/mp7; git checkout mp7fw_v2_4_1_mp7_ugt"'.format(**locals())
+    command = 'bash -c "cd {home_dir}/{args.temp_dir}/mp7; git checkout mp7fw_v3_0_0_mp7_ugt"'.format(**locals())
     run_command(command)
 
     logging.info("===========================================================================")

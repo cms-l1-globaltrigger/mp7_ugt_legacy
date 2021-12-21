@@ -97,21 +97,20 @@ IGNORED_ALGOS = [
     'L1_SingleMuOpenupt20',
     'L1_SingleMuOpenupt100',
     'L1_DoubleJet35_Mass_Min450_IsoTau45_RmOvlp',
-    'L1_DoubleJet_80_30_Mass_Min420_IsoTau40_RmOvlp'
+    'L1_DoubleJet_80_30_Mass_Min420_IsoTau40_RmOvlp',
+    'L1_DoubleEG_15_10_MassOverdR10',
+    'L1_DoubleMu_10_5_MassOverdR4'
 ]
-
 
 def run_command(*args):
     command = ' '.join(args)
     logging.info(">$ %s", command)
     os.system(command)
 
-
 def read_file(filename):
     """Returns contents of a file."""
     with open(filename, 'r') as fp:
         return fp.read()
-
 
 def render_template(src, dst, args):
     """Replaces content of file *src* with values of dictionary *args* and writes to file *dst*.
@@ -126,7 +125,6 @@ def render_template(src, dst, args):
     with open(dst, 'w') as dst:
         dst.write(content)
 
-
 def make_testvector(mask, testvectorfile, new_testvector):
     """uses mask of the module, testvector file and the path of the new
     testvector file where the masked testvectors are stored"""
@@ -138,7 +136,6 @@ def make_testvector(mask, testvectorfile, new_testvector):
             colums[-1] = '1' if mask_trigger else '0'
             opf.write(' '.join(colums))
             opf.write('\n')
-
 
 def trigger_list(testvectorfile):
     """makes a list of all triggers in testvectorfile eg. [1,0,0,1,0,1,0,0,1,1,1]"""
@@ -157,7 +154,6 @@ def bitfield(i, n=algonum):
     [0, 1, 0, 1]
     """
     return [int(digit) for digit in '{0:0{1}b}'.format(i, n)][::-1]
-
 
 def run_vsim(vsim, module, msgmode, ini_file):
     """uses class module, arg msgmode and ini file path to start the simulation"""
@@ -199,7 +195,6 @@ def run_vsim(vsim, module, msgmode, ini_file):
 
         logging.info("finished simulating module_{}".format(module._id))
 
-
 def check_algocount(liste):
     """prosseses list so module id is in [0] and trgger count in [1] eg. [1, 255]"""
     aus_liste = []
@@ -220,7 +215,6 @@ def check_multiple(liste):  # checks if multiple triggers in list
 def logging_debug_write(textfile, string):  # output into textfile and if logging.debug true prints on screen
     textfile.write(string + '\n')
     logging.debug(string)
-
 
 class Module(object):
 
@@ -274,27 +268,22 @@ class Module(object):
             '{{gtl_module_instances}}': read_file(os.path.join(src_dir, 'gtl_module_instances.vhd')),
         }
 
-        gtl_fdl_wrapper_dir = os.path.join(uGTalgosPath, 'hdl', 'payload')
-        # gtl_dir = os.path.join(gtl_fdl_wrapper_dir, 'gtl')
-        fdl_dir = os.path.join(gtl_fdl_wrapper_dir, 'fdl')
-        pkg_dir = os.path.join(uGTalgosPath, 'hdl', 'packages')
         # Patch VHDL files
         render_template(
-            os.path.join(fdl_dir, 'algo_mapping_rop_tpl.vhd'),
+            os.path.join(uGTalgosPath, 'hdl', 'payload', 'fdl', 'algo_mapping_rop_tpl.vhd'),
             os.path.join(self.path, 'vhdl', 'algo_mapping_rop.vhd'),
             replace_map
         )
         render_template(
-            os.path.join(pkg_dir, 'fdl_pkg_tpl.vhd'),
+            os.path.join(uGTalgosPath, 'hdl', 'packages', 'fdl_pkg_tpl.vhd'),
             os.path.join(self.path, 'vhdl', 'fdl_pkg.vhd'),
             replace_map
         )
         render_template(
-            os.path.join(gtl_fdl_wrapper_dir, 'gtl_module_tpl.vhd'),
+            os.path.join(uGTalgosPath, 'hdl', 'payload', 'gtl_module_tpl.vhd'),
             os.path.join(self.path, 'vhdl', 'gtl_module.vhd'),
             replace_map
         )
-
 
 def download_file_from_url(url, filename):
     """Download files from URL."""
@@ -311,16 +300,7 @@ def download_file_from_url(url, filename):
     with open(filename, 'w') as fp:
         fp.write(d)
 
-
-# TODO
-# def run_simulation_questa(a_mp7_tag, a_menu, a_testvector, a_vivado, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
-def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose):
-    print("a_mp7_tag: ", a_mp7_tag)
-    print("a_menu: ", a_menu)
-    print("a_url_menu: ", a_url_menu)
-    # print("a_vivado: ", a_vivado)
-    print("a_questasim: ", a_questasim)
-    print("a_questasimlibs: ", a_questasimlibs)
+def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv, a_local, a_ignored):
 
     sim_dir = os.path.join(os.path.dirname(__file__), '..', 'firmware', 'sim')
 
@@ -344,29 +324,35 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)  # makes folders
 
-    logging.info("===========================================================================")
-    logging.info("download XML and testvector file from L1Menu repository ...")
-    # Get l1menus_path for URL
-    # url_menu = "{}/{}".format(url_menu_default, a_menu)
-    url_menu = "{}/{}".format(a_url_menu, a_menu)
-    print("=== url_menu: ", url_menu)
-    xml_name = "{}{}".format(a_menu, '.xml')
-    print("=== xml_name: ", xml_name)
-    menu_filepath = os.path.join(temp_dir, xml_name)
-    print("=== menu_filepath: ", menu_filepath)
-    url = "{}/xml/{}".format(url_menu, xml_name)
-    print("=== url: ", url)
-    download_file_from_url(url, menu_filepath)
-    # Remove "distribution number" from a_menu for testvector file name
-    tv_name = "TestVector_{}{}".format((re.split("-", a_menu)[0]), '.txt')
-    print("=== TV name: ", tv_name)
-    testvector_filepath = os.path.join(temp_dir, tv_name)
-    url = "{}/testvectors/{}".format(url_menu, tv_name)
-    download_file_from_url(url, testvector_filepath)
+    if a_local:
+        logging.info("===========================================================================")
+        logging.info("copy XML and testvector file from local L1Menu directory ...")
+        menu_dir = "{}/{}".format(a_url_menu, a_menu)
+        xml_name = "{}{}".format(a_menu, '.xml')
+        menu_filepath = os.path.join(temp_dir, xml_name)
+        menu_xml_file = "{}/xml/{}".format(menu_dir, xml_name)
+        if not a_tv.split(".")[1]:
+            tv_name = "{}{}".format(a_tv, '.txt')
+        else:
+            tv_name = a_tv
+        testvector_file = os.path.join(menu_dir, "testvectors", tv_name)
+        testvector_filepath = os.path.join(temp_dir, tv_name)
 
-    # Get VHDL snippets from menu URL
-    # print "menu_filepath: ", menu_filepath
-    # print "testvector_filepath: ", testvector_filepath
+        shutil.copyfile(menu_xml_file, menu_filepath)
+        shutil.copyfile(testvector_file, testvector_filepath)
+    else:
+        logging.info("===========================================================================")
+        logging.info("download XML and testvector file from L1Menu repository ...")
+        # Get l1menus_path for URL
+        url_menu = "{}/{}".format(a_url_menu, a_menu)
+        xml_name = "{}{}".format(a_menu, '.xml')
+        menu_filepath = os.path.join(temp_dir, xml_name)
+        url = "{}/xml/{}".format(url_menu, xml_name)
+        download_file_from_url(url, menu_filepath)
+        tv_name = "TestVector_{}{}".format((re.split("-", a_menu)[0]), '.txt')
+        testvector_filepath = os.path.join(temp_dir, tv_name)
+        url_tv = "{}/testvectors/{}".format(url_menu, tv_name)
+        download_file_from_url(url_tv, testvector_filepath)
 
     timestamp = time.time()  # creates timestamp
     _time = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%dT%H-%M-%S')  # changes time apperance
@@ -383,13 +369,18 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
         vhdl_src_path = os.path.join('vhdl', f'module_{module._id:d}', 'src')
         temp_dir_module = os.path.join(temp_dir, vhdl_src_path)
         if not os.path.exists(temp_dir_module):
-            os.makedirs(temp_dir_module)
-        for vhdl_name in vhdl_snippets_names:
-            vhdl_name_ext = vhdl_name + ".vhd"
-            vhdl_file_local_path = os.path.join(temp_dir_module, vhdl_name_ext)
-            vhdl_file_path = os.path.join(vhdl_src_path, vhdl_name_ext)
-            url = "{}/{}".format(url_menu, vhdl_file_path)
-            download_file_from_url(url, vhdl_file_local_path)
+            os.makedirs(temp_dir_module)  # makes folders
+            for vhdl_name in vhdl_snippets_names:
+                vhdl_name_ext = vhdl_name + ".vhd"
+                vhdl_file_local_path = os.path.join(temp_dir_module, vhdl_name_ext)
+                vhdl_file_path = os.path.join(vhdl_src_path, vhdl_name_ext)
+                if a_local:
+                    vhdl_file_source = "{}/{}".format(menu_dir, vhdl_file_path)
+                    command = 'bash -c "cd; cp {vhdl_file_source} {vhdl_file_local_path}"'.format(**locals())
+                    run_command(command)
+                else:
+                    url = "{}/{}".format(url_menu, vhdl_file_path)
+                    download_file_from_url(url, vhdl_file_local_path)
 
     if not os.path.exists(menu_filepath):
         raise RuntimeError('Missing %s File' % menu_filepath)
@@ -475,6 +466,8 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     handler.setLevel(logging.DEBUG)
     sum_log.addHandler(handler)
 
+    if a_local:
+        sum_log.info('Test vector file name: {}'.format(tv_name))
     sum_log.info("|-----|-----|------------------------------------------------------------------|--------|--------|--------|")
     sum_log.info("| Mod | Idx | Name of algorithm                                                | l1a.tv | l1a.hw | Result |")
     sum_log.info("|-----|-----|------------------------------------------------------------------|--------|--------|--------|")
@@ -484,7 +477,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     success = True
     for algo in algorithms:
         result = ok_green
-        if algo.name in IGNORED_ALGOS:
+        if algo.name in IGNORED_ALGOS and a_ignored:
             result = ignore_yellow
         # checks if algorithm trigger count is equal in both hardware and testvectors
         elif algos_tv[algo.index][0][1] != algos_sim[algo.index][0][1]:
@@ -556,7 +549,6 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
         logging.info("===========================================================================")
         exit(1)
 
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('menu', type=tb.menuname_t, help="menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')")
@@ -569,8 +561,10 @@ def parse_args():
     parser.add_argument('--view-wave', action='store_true', help="shows the waveform")
     parser.add_argument('--wlf', action='store_true', help="no console transcript info, warning and error messages (transcript output to vsim.wlf)")
     parser.add_argument('-v', '--verbose', action='store_const', const=logging.DEBUG, help="enables debug prints to console", default=logging.INFO)
+    parser.add_argument('--local', action='store_true', default=False, help='running simulation with Questa simulator in local mode')
+    parser.add_argument('--tv', help="Test vector name (only with 'local')")
+    parser.add_argument('--ignored', action='store_true', default=False, help='used IGNORED_ALGOS')
     return parser.parse_args()
-
 
 def main():
     args = parse_args()
@@ -578,10 +572,11 @@ def main():
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
-    # TODO
-    # run_simulation_questa(args.mp7_tag, args.menu, args.url, args.ipb_fw_dir, args.vivado, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
-    run_simulation_questa(args.mp7_tag, args.menu, args.url, args.ipb_fw_dir, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose)
+    tv =''
+    if args.local:
+        tv = args.tv
 
+    run_simulation_questa(args.mp7_tag, args.menu, args.url, args.ipb_fw_dir, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, tv, args.local, args.ignored)
 
 if __name__ == '__main__':
     main()

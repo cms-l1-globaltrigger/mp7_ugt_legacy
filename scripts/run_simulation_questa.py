@@ -302,7 +302,8 @@ def download_file_from_url(url, filename):
 
 def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv, a_local, a_ignored):
 
-    sim_dir = os.path.join(os.path.dirname(__file__), '..', 'firmware', 'sim')
+    sim_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'firmware', 'sim')
+    print("sim_dir:",sim_dir)
 
     # Copy modelsim.ini from questasimlib dir to sim dir (to get questasim libs corresponding to Vivado version)
     source_filename = os.path.join(a_questasimlibs, 'modelsim.ini')
@@ -393,7 +394,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
 
     ini_file = os.path.join(sim_dir, INI_FILE)
 
-    logging.info('Creating Modules and Masks...')
+    logging.info('creating Modules and Masks...')
 
     for module in modules:  # gives each module the information
         module_id = 'module_%d' % module._id
@@ -413,7 +414,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
 
     questasim_path = os.path.join(QuestaSimPath, 'questasim')
 
-    logging.info('finished creating modules and masks')
+    logging.info('finished creating Modules and Masks')
     logging.info("===========================================================================")
     logging.info('starting simulations with Questa Simulator version %s (from directory %s)', a_questasim, questasim_path)
 

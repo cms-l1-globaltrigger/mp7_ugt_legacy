@@ -2,7 +2,8 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
--- HB 2021-12-16: v1.18.0: Cleaned up ../firmware/ngc.
+-- HB 2021-12-17: v1.17.3: Reorganized ../firmware/ngc, updated add_l1menu_blkmem_files.tcl and gtl_fdl_wrapper_tpl_questa.do
+-- HB 2021-12-16: v1.17.2: Cleaned up ../firmware/ngc.
 -- HB 2021-10-23: v1.17.1: Updated logic for jet DISP cut.
 -- HB 2021-10-23: v1.17.0: Implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data] in calo_comparators.vhd. Bug fixed in correlation_cuts_wrapper.vhd.
 -- HB 2021-10-27: v1.16.2: Bug fix in matrix_corr_cond.vhd.

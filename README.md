@@ -28,6 +28,20 @@ UGT_QUESTASIM_LIBS_PATH - path to Questasim libraries of a certain vivado versio
 UGT_BLK_MEM_GEN_VERSION - version of blk_mem_gen IP for dual port memories (spy memories) and ROMs of LUT values for 1/DR2 (mass over deltaR), export it in simulation environment (e.g. 'blk_mem_gen_v8_4_5')
 ```
 
+Clone git ugt repository.
+```bash
+git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git
+cd <mp7_ugt_legacy path>
+git checkout <branch|tag>
+```
+
+Example
+```bash
+git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git
+cd mp7_ugt_legacy
+git checkout master
+```
+
 Example for creating a Questasim environment in bashrc:
 
 ```bash
@@ -43,38 +57,41 @@ export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_ge
 cd firmware/sim;\
 ```
 
-Clone git repositories for ipbus-firmware, mp7 and ugt.
-```bash
-git clone https://github.com/ipbus/ipbus-firmware.git
-cd <ipbus-firmware path>
-git checkout <branch|tag>
-git clone https://gitlab.cern.ch/hbergaue/mp7.git
-cd <mp7 path>
-git checkout <tag>
-git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git
-cd <mp7_ugt_legacy path>
-git checkout <branch|tag>
-```
-
-Example
-```bash
-git clone https://github.com/ipbus/ipbus-firmware.git
-cd ipbus-firmware
-git checkout master
-git clone https://gitlab.cern.ch/hbergaue/mp7.git
-cd mp7
-git checkout mp7fw_v3_0_0_mp7_ugt
-git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git
-cd mp7_ugt_legacy
-git checkout master
-```
-
 If not already done create a Python virtual environment and install required dependencies including [IPBB](https://github.com/ipbus/ipbb) and lxml.
 ```bash
 python3 -m venv <name (e.g. env_questasim)>
 . env_questasim/bin/activate
 pip install -U pip
 pip install -r <mp7_ugt_legacy_path>/scripts/requirements.txt
+```
+
+There are two "modes" in script "run_simulation_questa.py": 'local' and 'repo'.
+The local mode takes files from local directories, repo mode takes files from
+repositories of MP7 firmware, IPBus firmware and L1Menus.
+For local mode you have to clone git repositories for ipbus-firmware, mp7 and L1Menus.
+```bash
+git clone https://github.com/ipbus/ipbus-firmware.git <local path>/ipbus-firmware
+cd <local path>/ipbus-firmware
+git checkout <branch|tag>
+git clone https://gitlab.cern.ch/hbergaue/mp7.git <local path>/mp7
+cd <local path>/mp7
+git checkout <tag>
+git clone <URL L1Menus repo> <local path>/<L1Menus repo name>
+cd <local path>/<L1Menus repo name>
+git checkout <tag>
+```
+
+Example
+```bash
+git clone https://github.com/ipbus/ipbus-firmware.git ipbus-firmware
+cd ipbus-firmware
+git checkout master
+git clone https://gitlab.cern.ch/hbergaue/mp7.git mp7
+cd mp7
+git checkout mp7fw_v3_0_0_mp7_ugt
+git clone https://github.com/cms-l1-globaltrigger/cms-l1-menu.git cms-l1-menu
+cd cms-l1-menu
+git checkout master
 ```
 
 Run simulation using Questa.
@@ -84,18 +101,41 @@ REMARK:
 - These files have to be in directory from where one runs script "run_simulation_questa.py".
 - Change to directory 'mp7_ugt_legacy/firmware/sim' is mandatory.
 
+Running script in repo mode
 ```bash
 cd mp7_ugt_legacy/firmware/sim
-python3 ../../scripts/run_simulation_questa.py <L1Menu name> --url <url l1menu> --mp7_tag <local mp7 path> --ipb_fw_dir <local ipbus path>
+python3 ../../scripts/run_simulation_questa.py <L1Menu name> --url <URL L1Menu> --mp7_url <URL mp7 firmware> --ipb_fw_url <URL IPBus firmware>
+```
+
+**Note:** inspect for other arguments
+```bash
+python3 ../../scripts/run_simulation_questa.py -h
 ```
 
 Example
 ```bash
 cd mp7_ugt_legacy/firmware/sim
 python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8-d1 \
-  --url https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/master/2021 \
-  --mp7_tag ~/gitlab/hbergaue/mp7
-  --ipb_fw_dir ~/github/ipbus/ipbus-firmware
+--url https://raw.githubusercontent.com/herbberg/l1menus/master/2021 \
+--mp7_url https://gitlab.cern.ch/hbergaue/mp7 \
+--ipb_fw_url https://github.com/ipbus/ipbus-firmware
+```
+
+Running script in local mode
+```bash
+cd mp7_ugt_legacy/firmware/sim
+python3 ../../scripts/run_simulation_questa.py <L1Menu name> --local --url <L1Menu local path> --mp7_local <mp7 fw local path> --ipb_fw_local <IPBus firmware local path> --tv <test vector file name>
+```
+
+Example
+```bash
+cd mp7_ugt_legacy/firmware/sim
+python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8-d1 \
+--local \
+--url /home/bergauer/github/herbberg/l1menus/2021 \
+--mp7_local /home/bergauer/gitlab/hbergaue/mp7 \
+--ipb_fw_local /home/bergauer/github/ipbus/ipbus-firmware \
+--tv TestVector_000_VBF_WinterRun3.txt
 ```
 
 ## Build
@@ -163,36 +203,23 @@ pip install -U pip
 pip install -r <mp7_ugt_legacy_path>/scripts/requirements.txt
 ```
 Run synthesis script (for all 6 modules).
-
 ```bash
-python3 scripts/runIpbbSynth.py <L1Menu name> --mp7url <URL MP7 git repo> --mp7tag <MP7 tag> -p <work dir> --build <build-version> --ugturl <URL ugt git repo> -u <ugt tag in repo>
+python3 scripts/run_synth_ipbb.py <L1Menu name> --menuurl <URL MP7 L1menu repo> --ugturl <URL ugt git repo> --ugt <ugt tag in repo> --build <build-version> -p <work dir>
 ```
 
 **Note:** inspect default values for arguments using
 ```bash
-python3 scripts/runIpbbSynth.py -h
+python3 scripts/run_synth_ipbb.py -h
 ```
 
 Example
 ```bash
-python3 scripts/runIpbbSynth.py L1Menu_Collisions2020_v0_1_8-d1
+python3 scripts/run_synth_ipbb.py L1Menu_Collisions2020_v0_1_8-d1
   --menuurl https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2020_v0_1_8-d1/2021
   --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy
   --ugt master
   --build 0x1138
   -p ~/work_synth/production/
-```
-
-Example
-```bash
-python3 scripts/runIpbbSynth.py L1Menu_Collisions2020_v0_1_8-d1
-  --menuurl https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2020_v0_1_8-d1/2021
-  --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy
-  --ugt master
-  --build 0x1138
-  -p ~/work_synth/production/
-  --sim \
-  --simmp7path ~/gitlab/hbergaue/mp7
 ```
 
 ### Setup (commands for one module)

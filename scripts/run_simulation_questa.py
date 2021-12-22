@@ -20,7 +20,6 @@ from threading import Thread
 
 import toolbox as tb
 import xmlmenu
-# from run_compile_simlib import run_compile_simlib
 
 # terminal size
 with os.popen('stty size') as fp:
@@ -47,14 +46,24 @@ DefaultQuestaSimLibsPath = os.getenv('UGT_QUESTASIM_LIBS_PATH')
 if not DefaultQuestaSimLibsPath:
     raise RuntimeError('UGT_QUESTASIM_LIBS_PATH is not defined.')
 
+DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware'
+"""Default URL IPB FW repo."""
+
+DefaultIpbbTag = 'v1.4'
+"""Default tag IPB FW repo."""
+
+DefaultGitlabUrlMP7 = 'https://gitlab.cern.ch/hbergaue/mp7'
+"""Default URL MP7 FW repo."""
+
+DefaultMP7Tag = 'mp7fw_v3_0_0_mp7_ugt'
+"""Default tag MP7 FW repo."""
+
 vhdl_snippets_names = [
     'algo_index',
     'gtl_module_instances',
     'gtl_module_signals',
     'ugt_constants'
 ]
-
-url_menu_default = 'https://raw.githubusercontent.com/herbberg/l1menus/master'
 
 DO_FILE = 'gtl_fdl_wrapper.do'
 TB_FILE_TPL = os.path.join('testbench', 'templates', 'gtl_fdl_wrapper_tb_tpl.vhd')
@@ -559,31 +568,32 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     if os.path.exists(os.path.join(sim_dir, "temp_dir")):
         shutil.rmtree(os.path.join(sim_dir, "temp_dir"))
 
-    #if not success:
-        #logging.info("===========================================================================")
-        #logging.error(mismatches_exit_red)
-        #logging.info("===========================================================================")
-        #exit(1)
+    if not success:
+        logging.info("===========================================================================")
+        logging.error(mismatches_exit_red)
+        logging.info("===========================================================================")
+        exit(1)
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('menu', type=tb.menuname_t, help="menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')")
-    parser.add_argument('--url', default=url_menu_default, help="URL of menu")
+    parser.add_argument('menu', type=tb.menuname_t, help="menu name (eg. 'L1Menu_Collisions2020_v0_8_1-d1')")
+    parser.add_argument('--menu_url', help="URL of L1Menu")
+    parser.add_argument('--mp7_url', default=DefaultGitlabUrlMP7, help="MP7 repo (default is '{}')".format(DefaultGitlabUrlMP7))
+    parser.add_argument('--mp7_repo_tag', default=DefaultMP7Tag, help="MP7 repo tag (default is '{}')".format(DefaultMP7Tag))
+    parser.add_argument('--ipb_fw_url', default=DefaultGitlabUrlIPB, help="IPBus firmware repo (default is '{}')".format(DefaultGitlabUrlIPB))
+    parser.add_argument('--ipb_fw_repo_tag', default=DefaultIpbbTag, help="IPBus firmware repo tag (default is '{}')".format(DefaultIpbbTag))
+    parser.add_argument('--menu_local', type=os.path.abspath, help="local path to L1Menu")
     parser.add_argument('--mp7_local', type=os.path.abspath, help="local path to MP7 tag (checkout tag before running simulation)")
     parser.add_argument('--ipb_fw_local', type=os.path.abspath, help="local path to IPBus firmware directory")
-    parser.add_argument('--mp7_url', help="MP7 repo")
-    parser.add_argument('--mp7_repo_tag', default='mp7fw_v3_0_0_mp7_ugt', help="MP7 repo tagmp7fw_v3_0_0_mp7_ugt")
-    parser.add_argument('--ipb_fw_url', help="IPBus firmware repo")
-    parser.add_argument('--ipb_fw_repo_tag', default='master', help="IPBus firmware repo tag (default: master)")
+    parser.add_argument('--local', action='store_true', default=False, help='running simulation with Questa simulator in local mode')
+    parser.add_argument('--tv', help="Test vector name (only with 'local')")
+    parser.add_argument('--ignored', action='store_true', default=False, help='used IGNORED_ALGOS')
     parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help="Questasim version (default is {})".format(DefaultQuestasimVersion))
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsPath, help="Questasim Vivado libraries directory name (default is {})".format(DefaultQuestaSimLibsPath))
     parser.add_argument('--output', metavar='path', help='', type=os.path.abspath)
     parser.add_argument('--view-wave', action='store_true', help="shows the waveform")
     parser.add_argument('--wlf', action='store_true', help="no console transcript info, warning and error messages (transcript output to vsim.wlf)")
     parser.add_argument('-v', '--verbose', action='store_const', const=logging.DEBUG, help="enables debug prints to console", default=logging.INFO)
-    parser.add_argument('--local', action='store_true', default=False, help='running simulation with Questa simulator in local mode')
-    parser.add_argument('--tv', help="Test vector name (only with 'local')")
-    parser.add_argument('--ignored', action='store_true', default=False, help='used IGNORED_ALGOS')
     return parser.parse_args()
 
 def main():
@@ -594,14 +604,16 @@ def main():
 
     tv =''
     if args.local:
-        tv = args.tv
+        menu_p = args.menu_local
         mp7 = args.mp7_local
         ipb_fw = args.ipb_fw_local
+        tv = args.tv
     else:
+        menu_p = args.menu_url
         mp7 = args.mp7_url
         ipb_fw = args.ipb_fw_url
 
-    run_simulation_questa(mp7, args.menu, args.url, ipb_fw, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, tv, args.local, args.ignored)
+    run_simulation_questa(mp7, args.menu, menu_p, ipb_fw, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, tv, args.local, args.ignored)
 
 if __name__ == '__main__':
     main()

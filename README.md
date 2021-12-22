@@ -104,10 +104,10 @@ REMARK:
 Running script in repo mode
 ```bash
 cd mp7_ugt_legacy/firmware/sim
-python3 ../../scripts/run_simulation_questa.py <L1Menu name> --url <URL L1Menu> --mp7_url <URL mp7 firmware> --ipb_fw_url <URL IPBus firmware>
+python3 ../../scripts/run_simulation_questa.py <L1Menu name> --menu_url <URL L1Menu>
 ```
 
-**Note:** inspect for other arguments
+**Note:** inspect for default values and other arguments
 ```bash
 python3 ../../scripts/run_simulation_questa.py -h
 ```
@@ -115,24 +115,22 @@ python3 ../../scripts/run_simulation_questa.py -h
 Example
 ```bash
 cd mp7_ugt_legacy/firmware/sim
-python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8-d1 \
---url https://raw.githubusercontent.com/herbberg/l1menus/master/2021 \
---mp7_url https://gitlab.cern.ch/hbergaue/mp7 \
---ipb_fw_url https://github.com/ipbus/ipbus-firmware
+python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8_massdr-d1 \
+--menu_url https://raw.githubusercontent.com/herbberg/l1menus/master/2021
 ```
 
 Running script in local mode
 ```bash
 cd mp7_ugt_legacy/firmware/sim
-python3 ../../scripts/run_simulation_questa.py <L1Menu name> --local --url <L1Menu local path> --mp7_local <mp7 fw local path> --ipb_fw_local <IPBus firmware local path> --tv <test vector file name>
+python3 ../../scripts/run_simulation_questa.py <L1Menu name> --local --menu_local <L1Menu local path> --mp7_local <mp7 fw local path> --ipb_fw_local <IPBus firmware local path> --tv <test vector file name>
 ```
 
 Example
 ```bash
 cd mp7_ugt_legacy/firmware/sim
-python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8-d1 \
+python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8_massdr-d1 \
 --local \
---url /home/bergauer/github/herbberg/l1menus/2021 \
+--menu_local /home/bergauer/github/herbberg/l1menus/2021 \
 --mp7_local /home/bergauer/gitlab/hbergaue/mp7 \
 --ipb_fw_local /home/bergauer/github/ipbus/ipbus-firmware \
 --tv TestVector_000_VBF_WinterRun3.txt

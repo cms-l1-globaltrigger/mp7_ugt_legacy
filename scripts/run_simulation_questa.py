@@ -553,13 +553,13 @@ def parse_args():
     parser.add_argument('--ipb_fw_repo_tag', default=DefaultIpbbTag, help="IPBus firmware repo tag (default is '{}')".format(DefaultIpbbTag))
     parser.add_argument('--menu_local', type=os.path.abspath, help="local path to L1Menu")
     parser.add_argument('--mp7_local', type=os.path.abspath, help="local path to MP7 tag (checkout tag before running simulation)")
-    parser.add_argument('--ipb_fw_local', type=os.path.abspath, help="local path to IPBus firmware directory")
-    parser.add_argument('--local', action='store_true', default=False, help='running simulation with Questa simulator in local mode')
-    parser.add_argument('--tv', help="Test vector name (only with 'local')")
-    parser.add_argument('--ignored', action='store_true', default=False, help='used IGNORED_ALGOS')
+    parser.add_argument('--ipb_fw_local', type=os.path.abspath, help="local path to IPBus firmware directory (checkout tag before running simulation)")
+    parser.add_argument('--local', action='store_true', default=False, help="running simulation with Questa simulator in local mode")
+    parser.add_argument('--tv', help="Test vector name (needed only with 'local')")
+    parser.add_argument('--ignored', action='store_true', default=False, help="using IGNORED_ALGOS for error checks")
     parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help="Questasim version (default is {})".format(DefaultQuestasimVersion))
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsPath, help="Questasim Vivado libraries directory name (default is {})".format(DefaultQuestaSimLibsPath))
-    parser.add_argument('--output', metavar='path', help='', type=os.path.abspath)
+    parser.add_argument('--output', metavar='path', type=os.path.abspath, help='path to output directory')
     parser.add_argument('--view-wave', action='store_true', help="shows the waveform")
     parser.add_argument('--wlf', action='store_true', help="no console transcript info, warning and error messages (transcript output to vsim.wlf)")
     parser.add_argument('-v', '--verbose', action='store_const', const=logging.DEBUG, help="enables debug prints to console", default=logging.INFO)
@@ -571,16 +571,26 @@ def main():
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
-    tv =''
     if args.local:
         menu_p = args.menu_local
+        if not menu_p:
+            raise RuntimeError('argument --menu_local is not set.')
         mp7 = args.mp7_local
+        if not mp7:
+            raise RuntimeError('argument --mp7_local is not set.')
         ipb_fw = args.ipb_fw_local
+        if not ipb_fw:
+            raise RuntimeError('argument --ipb_fw_local is not set.')
         tv = args.tv
+        if not tv:
+            raise RuntimeError('argument --tv is not set.')
     else:
         menu_p = args.menu_url
+        if not menu_p:
+            raise RuntimeError('argument --menu_url is not set.')
         mp7 = args.mp7_url
         ipb_fw = args.ipb_fw_url
+        tv =''
 
     run_simulation_questa(mp7, args.menu, menu_p, ipb_fw, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, tv, args.local, args.ignored)
 

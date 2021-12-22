@@ -21,6 +21,8 @@ from threading import Thread
 import toolbox as tb
 import xmlmenu
 
+from ignored_algos import IGNORED_ALGOS
+
 # terminal size
 with os.popen('stty size') as fp:
     ts = int(fp.read().split()[1])
@@ -76,40 +78,7 @@ mp7_tag = 'cactusupgrades'
 
 algonum = 512  # numbers of bits
 
-IGNORED_ALGOS = [
-    'L1_FirstBunchInTrain',
-    'L1_SecondBunchInTrain',
-    'L1_MASSUPT_0_0_10',
-    'L1_MASSUPT_0_0_20',
-    'L1_MASSUPT_0_0_10_open',
-    'L1_MASSUPT_0_0_20_open',
-    'L1_MASSUPT_0_0_10',
-    'L1_MASSUPT_0_0_20',
-    'L1_MASSUPT_5_5_10',
-    'L1_MASSUPT_5_5_20',
-    'L1_MASSUPT_0_0_10_open',
-    'L1_MASSUPT_0_0_20_open',
-    'L1_MASSUPT_5_5_10_open',
-    'L1_MASSUPT_5_5_20_open',
-    'L1_Mu0upt20ip0',
-    'L1_Mu0upt20ip1',
-    'L1_Mu0upt20ip2',
-    'L1_Mu0upt20ip3',
-    'L1_Mu0upt20ip03',
-    'L1_Mu0upt0',
-    'L1_Mu0upt5',
-    'L1_Mu0upt10',
-    'L1_Mu0upt20',
-    'L1_Mu0upt50',
-    'L1_Mu0upt100',
-    'L1_SingleMuOpenupt5',
-    'L1_SingleMuOpenupt20',
-    'L1_SingleMuOpenupt100',
-    'L1_DoubleJet35_Mass_Min450_IsoTau45_RmOvlp',
-    'L1_DoubleJet_80_30_Mass_Min420_IsoTau40_RmOvlp',
-    'L1_DoubleEG_15_10_MassOverdR10',
-    'L1_DoubleMu_10_5_MassOverdR4'
-]
+# moved IGNORED_ALGOS to "ignored_algos.py" to have an own file for changes in IGNORED_ALGOS list
 
 def run_command(*args):
     command = ' '.join(args)

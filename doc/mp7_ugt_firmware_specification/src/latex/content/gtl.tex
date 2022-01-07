@@ -1434,6 +1434,36 @@ There are two correlations for mass with three objects:
 \item Correlation condition for mass with three objects with muon objects\\
 \end{itemize}
 
+In correlation condition with calorimeter and muons objects we have different scales of calorimeter and muon objects in $\eta$ and $\varphi$, therefore LUTs for conversion of the calorimeter bins to muon bins are used (in \texttt{gtl\_pkg.vhd}:
+ e.g. \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize  and \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize).\\\\
+\textbf{Remark:}\\
+The center value of bins are used as reference value for conversion.
+The content of \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize is calculated with formular:\\ "converted-calo-eta[bin] = calo-eta[bin] $\times$ 4 + 2",\\
+of \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize with formular:\\
+"converted-calo-phi[bin] = calo-phi[bin] $\times$ 4 + 2".\\
+Definitions of scales (see Tables \ref{tab:gtl:calo_eta_scale_new}, \ref{tab:gtl:calo_phi_scale}, \ref{tab:gtl:muon_eta_scale} and \ref{tab:gtl:muon_phi_scale}):
+\begin{itemize}
+\item Calorimeter objects:
+    \begin{itemize}
+    \item $\eta$ bin width = $\frac{0.087}{2}$ (bin 0 from 0.0 to $\frac{0.087}{2}$)
+    \item $\phi$ bin width = $\frac{2\pi}{144}$ (bin 0 from 0.0 to $\frac{2\pi}{144}$)
+    \end{itemize}
+\item Muon objects:
+    \begin{itemize}
+    \item $\eta$ bin width = $\frac{0.087}{8}$ (bin 0 from \small{0.5}$\times\frac{-0.087}{8}$ to \small{0.5}$\times\frac{+0.087}{8}$)
+    \item $\phi$ bin width = $\frac{2\pi}{576}$ (bin 0 from 0.0 to $\frac{2\pi}{576}$)
+    \end{itemize}
+\end{itemize}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/convert_scheme_calo_2_muon_eta_phi}
+\caption{Conversion of calorimeter $\eta$ and $\varphi$ to muon scales}
+\label{fig:gtl:convert_scheme_calo_2_muon_eta_phi}
+\end{figure}
+
+\clearpage
+
 \subsubsection{External Conditions}
 \label{sec:gtl:external_conditions}
 Maximal 256 External Conditions are possible in \gt. They are provided as inputs in the Algorithms logic of \ugtl.

@@ -21,8 +21,8 @@ Following table shows which Questasim libraries for a certain Vivado version hav
 ### Workflow
 
 Set the following environment variables (preferably in `.bashrc`):
-| Variable   | Description   |
-|:-----------|:--------------|
+| Variable | Description |
+|:---------|:------------|
 | `UGT_QUESTASIM_VERSION` | Questasim version |
 | `UGT_QUESTASIM_SIM_PATH` | Installation directory of Questasim version |
 | `UGT_QUESTASIM_LIBS_PATH` | Path to Questasim libraries of a certain vivado version |
@@ -54,16 +54,15 @@ git checkout master
 Example for creating a Questasim environment in bashrc:
 
 ```bash
-alias @questasim='
-cd <home directory>;\
-python3 -m venv env_questasim;\
-. env_questasim/bin/activate;\
-pip install -U pip;\
-pip install -r <mp7_ugt_legacy directory>/scripts/requirements.txt;\
-cd <<mp7_ugt_legacy directory>>;\
-export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_5)>;\
-. firmware/sim/setup.sh;\
-cd firmware/sim;\
+cd <home directory>
+python3 -m venv env_questasim
+. env_questasim/bin/activate
+pip install -U pip
+pip install -r <mp7_ugt_legacy_directory>/scripts/requirements.txt
+cd <mp7_ugt_legacy directory>
+export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_5)>
+. firmware/sim/setup.sh
+cd firmware/sim
 ```
 
 If not already done create a Python virtual environment and install required dependencies including [IPBB](https://github.com/ipbus/ipbb) and lxml.
@@ -191,15 +190,14 @@ export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_v8_4_4
 Example for creating a Questasim environment in bashrc:
 
 ```bash
-alias @fw_ugt_build='
-cd <home directory>;\
-python3 -m venv env_build_ugt_fw;\
-. env_build_ugt_fw/bin/activate;\
-pip install -U pip;\
-pip install -r <mp7_ugt_legacy directory>/scripts/requirements.txt;\
-cd <mp7_ugt_legacy directory>;\
-source ${VIVADO_BASE_DIR}/${VIVADO_VERSION}/settings64.sh;\
-export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_4);\
+cd <home directory>
+python3 -m venv env_build_ugt_fw
+. env_build_ugt_fw/bin/activate
+pip install -U pip
+pip install -r <mp7_ugt_legacy directory>/scripts/requirements.txt
+cd <mp7_ugt_legacy directory>
+source ${VIVADO_BASE_DIR}/${VIVADO_VERSION}/settings64.sh
+export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_4)
 ```
 
 Run kerberos for outside of CERN network.

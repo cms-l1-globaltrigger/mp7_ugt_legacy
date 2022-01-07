@@ -5,6 +5,7 @@ import re
 
 import toolbox as tb
 
+
 def replace_area_constraints(filename):
     content = tb.read_file(filename)
 
@@ -22,6 +23,7 @@ def replace_area_constraints(filename):
     with open(filename, "wb") as fp:
         fp.write(content)
         logging.info("Successfully patched area_constraints file '{}'".format(filename))
+
 
 def replace_brd_decl(filename):
     content = tb.read_file(filename)
@@ -41,6 +43,7 @@ def replace_brd_decl(filename):
         fp.write(content)
         logging.info("Successfully patched brd_decl file '{}'".format(filename))
 
+
 def insert_l1a_ttc(filename):
     content = tb.read_file(filename)
 
@@ -54,6 +57,7 @@ def insert_l1a_ttc(filename):
     with open(filename, "wb") as fp:
         fp.write(content)
         logging.info("Successfully patched l1a_ttc file '{}'".format(filename))
+
 
 def append_vivado_rules(filename):
     rules = [
@@ -73,6 +77,7 @@ def append_vivado_rules(filename):
             fp.write("\n")
         logging.info("Successfully patched VivadoScriptWriter file '{}'".format(filename))
 
+
 def patch_all(projectpath):
     """Batch patch all firmware files."""
     root_path = os.path.abspath(projectpath)
@@ -87,11 +92,13 @@ def patch_all(projectpath):
     insert_l1a_ttc(os.path.join(root_path, mp7xe_690_path))
     append_vivado_rules(os.path.join(root_path, script_writer_path))
 
+
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('path', type=os.path.abspath, help="path to the cactusupgrades dir of the fw tag which should be patched")
     return parser.parse_args()
+
 
 def main():
     args = parse_args()
@@ -107,6 +114,7 @@ def main():
         raise
 
     logging.info("done.")
+
 
 if __name__ == '__main__':
     main()

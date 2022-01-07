@@ -1,8 +1,9 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.17.3
+-- mp7_ugt (=FRAME_VERSION): v1.18.0
 
+-- HB 2021-12-16: v1.18.0 - Cleaned up ../firmware/ngc.
 -- v1.17.3: Reorganized ../firmware/ngc, updated add_l1menu_blkmem_files.tcl and gtl_fdl_wrapper_tpl_questa.do
 -- v1.17.2: Changed python scripts run_simulation_questa.py, run_simulation_questa_local.py and runIpbbSynth.py
 -- v1.15.4: Changes in frame (v1.2.4) - selector for scouting and no spymem
@@ -14,7 +15,7 @@
 -- fdl: v1.3.6 (see fdl_module.vhd)
 
 -- gtl history:
--- HB 2021-10-23: v1.17.1: Updated logic for jet DISP cut.
+-- HB 2021-12-09: v1.17.1: Updated logic for jet DISP cut.
 -- HB 2021-10-23: v1.17.0: Implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data] in calo_comparators.vhd. Bug fixed in correlation_cuts_wrapper.vhd.
 -- HB 2021-10-27: v1.16.2: Bug fix in matrix_corr_cond.vhd.
 -- HB 2021-10-18: v1.16.1: Bug fix in calo_comparators.vhd.
@@ -63,8 +64,8 @@ package gt_mp7_core_pkg is
 -- ==================================================================================================
 -- FRAME version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 17;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 3;
+    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 18;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 0;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &

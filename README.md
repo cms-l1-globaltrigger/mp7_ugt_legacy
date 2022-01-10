@@ -24,8 +24,8 @@ Set the following environment variables (preferably in `.bashrc`):
 | Variable | Description |
 |:---------|:------------|
 | `UGT_QUESTASIM_VERSION` | Questasim version |
-| `UGT_QUESTASIM_SIM_PATH` | Installation directory of Questasim version |
-| `UGT_QUESTASIM_LIBS_PATH` | Path to Questasim libraries of a certain vivado version |
+| `UGT_QUESTASIM_SIM_PATH` | Installation directory of Questasim |
+| `UGT_QUESTASIM_LIBS_PATH` | Path to Questasim libraries of a certain Vivado version |
 | `UGT_BLK_MEM_GEN_VERSION` | Version of blk_mem_gen IP for dual port memories (spy memories) and ROMs of LUT values for 1/DR2 (mass over deltaR) |
 
 Example

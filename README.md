@@ -20,12 +20,21 @@ Following table shows which Questasim libraries for a certain Vivado version hav
 
 ### Workflow
 
-Set the following environment variables (preferably in bashrc):
+Set the following environment variables (preferably in `.bashrc`):
+| Variable | Description |
+|:---------|:------------|
+| `UGT_QUESTASIM_VERSION` | Questasim version |
+| `UGT_QUESTASIM_SIM_PATH` | Installation directory of Questasim version |
+| `UGT_QUESTASIM_LIBS_PATH` | Path to Questasim libraries of a certain vivado version |
+| `UGT_BLK_MEM_GEN_VERSION` | Version of blk_mem_gen IP for dual port memories (spy memories) and ROMs of LUT values for 1/DR2 (mass over deltaR) |
+
+Example
+
 ```bash
-UGT_QUESTASIM_VERSION - Questasim version (e.g. '2021.1_2')
-UGT_QUESTASIM_SIM_PATH - installation directory of Questasim version (e.g. '/opt/mentor/questa/2021.1_2')
-UGT_QUESTASIM_LIBS_PATH - path to Questasim libraries of a certain vivado version (e.g. '/opt/mentor/questasimlibs_vivado_v2021.2')
-UGT_BLK_MEM_GEN_VERSION - version of blk_mem_gen IP for dual port memories (spy memories) and ROMs of LUT values for 1/DR2 (mass over deltaR), export it in simulation environment (e.g. 'blk_mem_gen_v8_4_5')
+export UGT_QUESTASIM_VERSION=2021.1_2
+export UGT_QUESTASIM_SIM_PATH=/opt/mentor/questa/2021.1_2
+export UGT_QUESTASIM_LIBS_PATH=/opt/mentor/questasimlibs_vivado_v2021.2
+export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_v8_4_5
 ```
 
 Clone git ugt repository.
@@ -45,16 +54,15 @@ git checkout master
 Example for creating a Questasim environment in bashrc:
 
 ```bash
-alias @questasim='
-cd <home directory>;\
-python3 -m venv env_questasim;\
-. env_questasim/bin/activate;\
-pip install -U pip;\
-pip install -r <mp7_ugt_legacy directory>/scripts/requirements.txt;\
-cd <<mp7_ugt_legacy directory>>;\
-export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_5)>;\
-. firmware/sim/setup.sh;\
-cd firmware/sim;\
+cd <home directory>
+python3 -m venv env_questasim
+. env_questasim/bin/activate
+pip install -U pip
+pip install -r <mp7_ugt_legacy_directory>/scripts/requirements.txt
+cd <mp7_ugt_legacy directory>
+export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_5)>
+. firmware/sim/setup.sh
+cd firmware/sim
 ```
 
 If not already done create a Python virtual environment and install required dependencies including [IPBB](https://github.com/ipbus/ipbb) and lxml.
@@ -163,24 +171,33 @@ python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8_mass
 
 ### Setup using script
 
-Set the following environment variables (preferably in bashrc):
+Set the following environment variables (preferably in `.bashrc`):
+
+| Variable | Description |
+|:---------|:------------|
+| `VIVADO_VERSION` | Vivado version |
+| `VIVADO_BASE_DIR` | Installation directory of Vivado version |
+| `UGT_BLK_MEM_GEN_VERSION` | Version of blk_mem_gen IP for dual port memories (spy memories) and ROMs of LUT values for 1/DR2 ("mass over deltaR") |
+
+Example
+
 ```bash
-VIVADO_VERSION - Vivado version (e.g. '2019.2')
-VIVADO_BASE_DIR - installation directory of Vivado version (e.g. '/opt/xilinx/Vivado')
-UGT_BLK_MEM_GEN_VERSION - version of blk_mem_gen IP for dual port memories (spy memories) and ROMs of LUT values for 1/DR2 ("mass over deltaR"), export it in synthesis environment (e.g. 'blk_mem_gen_v8_4_4')
+export VIVADO_VERSION=2019.2
+export VIVADO_BASE_DIR=/opt/xilinx/Vivado
+export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_v8_4_4
 ```
+
 Example for creating a Questasim environment in bashrc:
 
 ```bash
-alias @fw_ugt_build='
-cd <home directory>;\
-python3 -m venv env_build_ugt_fw;\
-. env_build_ugt_fw/bin/activate;\
-pip install -U pip;\
-pip install -r <mp7_ugt_legacy directory>/scripts/requirements.txt;\
-cd <mp7_ugt_legacy directory>;\
-source ${VIVADO_BASE_DIR}/${VIVADO_VERSION}/settings64.sh;\
-export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_4);\
+cd <home directory>
+python3 -m venv env_build_ugt_fw
+. env_build_ugt_fw/bin/activate
+pip install -U pip
+pip install -r <mp7_ugt_legacy directory>/scripts/requirements.txt
+cd <mp7_ugt_legacy directory>
+source ${VIVADO_BASE_DIR}/${VIVADO_VERSION}/settings64.sh
+export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_4)
 ```
 
 Run kerberos for outside of CERN network.

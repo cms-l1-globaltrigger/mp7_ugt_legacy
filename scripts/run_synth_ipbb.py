@@ -19,13 +19,13 @@ BoardAliases = {
     'mp7xe_690': 'xe',
 }
 
-DefaultVivadoVersion = os.getenv('VIVADO_VERSION')
+DefaultVivadoVersion = os.getenv('UGT_VIVADO_VERSION')
 if not DefaultVivadoVersion:
-    raise RuntimeError('VIVADO_VERSION is not defined.')
+    raise RuntimeError('UGT_VIVADO_VERSION is not defined.')
 
-VivadoBaseDir = os.getenv('VIVADO_BASE_DIR')
+VivadoBaseDir = os.getenv('UGT_VIVADO_BASE_DIR')
 if not VivadoBaseDir:
-    raise RuntimeError('VIVADO_BASE_DIR is not defined.')
+    raise RuntimeError('UGT_VIVADO_BASE_DIR is not defined.')
 
 vivadoPath = os.path.abspath(os.path.join(VivadoBaseDir, DefaultVivadoVersion))
 if not os.path.isdir(vivadoPath):
@@ -136,10 +136,10 @@ def main():
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
-    # Check for VIVADO_BASE_DIR
-    vivado_base_dir = os.getenv('VIVADO_BASE_DIR')
+    # Check for UGT_VIVADO_BASE_DIR
+    vivado_base_dir = os.getenv('UGT_VIVADO_BASE_DIR')
     if not vivado_base_dir:
-        raise RuntimeError("Environment variable 'VIVADO_BASE_DIR' not set. Set with: 'export VIVADO_BASE_DIR=...'")
+        raise RuntimeError("Environment variable 'UGT_VIVADO_BASE_DIR' not set. Set with: 'export UGT_VIVADO_BASE_DIR=...'")
 
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)

@@ -24,8 +24,8 @@ Set the following environment variables (preferably in `.bashrc`):
 | Variable | Description |
 |:---------|:------------|
 | `UGT_QUESTASIM_VERSION` | Questasim version |
-| `UGT_QUESTASIM_SIM_PATH` | Installation directory of Questasim |
-| `UGT_QUESTASIM_LIBS_PATH` | Path to Questasim libraries of a certain Vivado version |
+| `UGT_QUESTASIM_SIM_PATH` | Installation directory of Questasim version |
+| `UGT_QUESTASIM_LIBS_PATH` | Path to Questasim libraries of a certain vivado version |
 | `UGT_BLK_MEM_GEN_VERSION` | Version of blk_mem_gen IP for dual port memories (spy memories) and ROMs of LUT values for 1/DR2 (mass over deltaR) |
 
 Example
@@ -175,15 +175,15 @@ Set the following environment variables (preferably in `.bashrc`):
 
 | Variable | Description |
 |:---------|:------------|
-| `VIVADO_VERSION` | Vivado version |
-| `VIVADO_BASE_DIR` | Installation directory of Vivado version |
+| `UGT_VIVADO_VERSION` | Vivado version |
+| `UGT_VIVADO_BASE_DIR` | Installation directory of Vivado version |
 | `UGT_BLK_MEM_GEN_VERSION` | Version of blk_mem_gen IP for dual port memories (spy memories) and ROMs of LUT values for 1/DR2 ("mass over deltaR") |
 
 Example
 
 ```bash
-export VIVADO_VERSION=2019.2
-export VIVADO_BASE_DIR=/opt/xilinx/Vivado
+export UGT_VIVADO_VERSION=2019.2
+export UGT_VIVADO_BASE_DIR=/opt/xilinx/Vivado
 export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_v8_4_4
 ```
 
@@ -196,7 +196,7 @@ python3 -m venv env_build_ugt_fw
 pip install -U pip
 pip install -r <mp7_ugt_legacy directory>/scripts/requirements.txt
 cd <mp7_ugt_legacy directory>
-source ${VIVADO_BASE_DIR}/${VIVADO_VERSION}/settings64.sh
+source ${UGT_VIVADO_BASE_DIR}/${UGT_VIVADO_VERSION}/settings64.sh
 export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_4)
 ```
 

@@ -8,6 +8,7 @@ import toolbox as tb
 from time import sleep
 
 DefaultSynthDir = 'work_synth/production'
+DefaultUgtUrl = 'https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy'
 DefaultUgtTag = 'master'
 DefaultMenu4Checkout = 'L1Menu_Collisions2020_v0_1_5-d3'
 DefaultMenuRepo = 'l1menus'
@@ -36,6 +37,7 @@ def parse_args():
     parser.add_argument('--xml_path', metavar='<path>', required=True, help="absolute path to XML file [required]")
     parser.add_argument('--tv_path', metavar='<path>', required=True, help="absolute path to test vector file [required]")
     parser.add_argument('--dist', required=True, help="distribution number for VHDL Producer [required]")
+    parser.add_argument('--ugt_url', metavar='<path>', default=DefaultUgtUrl, help="ugt firmware repo url (default is '{}')".format(DefaultUgtUrl))
     parser.add_argument('--ugt', metavar='<path>', default=DefaultUgtTag, help="ugt firmware repo: tag or branch name (default is '{}')".format(DefaultUgtTag))
     parser.add_argument('--synth_dir', metavar='<path>', default=DefaultSynthDir, help="relative path to local dir for synthesis results (default is '{}')".format(DefaultSynthDir))
     parser.add_argument('--build', type=tb.build_str_t, required=True, metavar='<version>', help="menu build version (eg. 0x1001) [required]")
@@ -67,6 +69,11 @@ def main():
 
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
+
+    build_path = os.path.join(home_dir, args.synth_dir, args.build)
+    if os.path.exists(build_path):
+        command = "rm -rf {build_path}".format(**locals())
+        run_command(command)
 
     sim_temp_dir = os.path.join('/'.join(scripts_path.split('/')[:-1]), 'firmware', 'sim', 'temp_dir')
     if os.path.exists(sim_temp_dir):
@@ -102,15 +109,15 @@ def main():
         command = "rm {menu_branch_exists_file}".format(**locals())
         run_command(command)
 
-    #logging.info("===========================================================================")
-    #logging.info("verifying menu '%s' with TME", args.xml_path)
-    #command = 'bash -c "{home_dir}/tm-editor {args.xml_path} 2>&1 | tee {tme_error_file}"'.format(**locals())
-    #run_command(command)
+    logging.info("===========================================================================")
+    logging.info("verifying menu '%s' with TME", args.xml_path)
+    command = 'bash -c "{home_dir}/tm-editor {args.xml_path} 2>&1 | tee {tme_error_file}"'.format(**locals())
+    run_command(command)
 
-    #if os.stat(tme_error_file).st_size > 0:
-        #print("===================================")
-        #print("verifying XML in TME shows errors !!!")
-        #sys.exit(1)
+    if os.stat(tme_error_file).st_size > 0:
+        print("===================================")
+        print("verifying XML in TME shows errors !!!")
+        sys.exit(1)
 
     logging.info("===========================================================================")
     logging.info("clone menu repo 'args.menu_repo' to '%s'", args.temp_dir)
@@ -120,35 +127,33 @@ def main():
     command = 'bash -c "cd {home_dir}/{args.temp_dir}/{args.menu_repo}; git show-branch remotes/origin/{menuname_dist} &> {menu_branch_exists_file}"'.format(**locals())
     run_command(command)
 
-    #words = read_file(menu_branch_exists_file).split(' ')
-    #if words[0] == 'fatal:':
-        #logging.info("===========================================================================")
-        #logging.info("create new branch '%s'", menuname_dist)
-        #command = 'bash -c "cd {home_dir}/{args.temp_dir}/{args.menu_repo}; git checkout {args.checkout_menu}; git checkout -b {menuname_dist}"'.format(**locals())
-        #run_command(command)
-    #else:
-        #raise RuntimeError('branch %s exists - delete it from repo (or change menu name)' % menuname_dist)
+    words = read_file(menu_branch_exists_file).split(' ')
+    if words[0] == 'fatal:':
+        logging.info("===========================================================================")
+        logging.info("create new branch '%s'", menuname_dist)
+        command = 'bash -c "cd {home_dir}/{args.temp_dir}/{args.menu_repo}; git checkout {args.checkout_menu}; git checkout -b {menuname_dist}"'.format(**locals())
+        run_command(command)
+    else:
+        raise RuntimeError('branch %s exists - delete it from repo (or change menu name)' % menuname_dist)
 
-    #logging.info("===========================================================================")
-    #logging.info("run VHDL Producer")
-    #vhdl_prod_out = os.path.join(temp_dir_path, menu_local)
-    ##command = 'bash -c "{home_dir}/tm-vhdlproducer {args.xml_path} --modules 6 --dist {args.dist} --sorting desc --output {vhdl_prod_out} "'.format(**locals())
-    ##run_command(command)
+    logging.info("===========================================================================")
+    logging.info("run VHDL Producer")
+    vhdl_prod_out = os.path.join(temp_dir_path, menu_local)
 
-    #subprocess.check_call([os.path.join(home_dir, 'tm-vhdlproducer'), args.xml_path, '--modules 6', '--dist', args.dist, '--sorting desc', '--output', vhdl_prod_out])
+    subprocess.check_call([os.path.join(home_dir, 'tm-vhdlproducer'), args.xml_path, '--modules 6', '--dist', args.dist, '--sorting desc', '--output', vhdl_prod_out])
 
-    #logging.info("===========================================================================")
-    #logging.info("copy test vector file to created menu %s", local_menu_path)
-    #command = 'bash -c "scp {args.tv_path} {local_menu_path}/testvectors/TestVector_{args.menuname}.txt"'.format(**locals())
-    #run_command(command)
+    logging.info("===========================================================================")
+    logging.info("copy test vector file to created menu %s", local_menu_path)
+    command = 'bash -c "scp {args.tv_path} {local_menu_path}/testvectors/TestVector_{args.menuname}.txt"'.format(**locals())
+    run_command(command)
 
-    #logging.info("===========================================================================")
-    #logging.info("commit generated VHDL code of menu %s", menuname_dist)
-    #command = 'bash -c "cd {home_dir}/{args.temp_dir}/{menu_local}; git add {menuname_dist}; git pull; git commit -m {commit_message}; git push --set-upstream origin {menuname_dist}"'.format(**locals())
-    #run_command(command)
+    logging.info("===========================================================================")
+    logging.info("commit generated VHDL code of menu %s", menuname_dist)
+    command = 'bash -c "cd {home_dir}/{args.temp_dir}/{menu_local}; git add {menuname_dist}; git pull; git commit -m {commit_message}; git push --set-upstream origin {menuname_dist}"'.format(**locals())
+    run_command(command)
 
-    ## waiting for commit is finished
-    #sleep(2.0)
+    # waiting for commit is finished
+    sleep(2.0)
 
     logging.info("===========================================================================")
     logging.info("clone repo 'mp7' to %s (for simulation)", args.temp_dir)
@@ -167,22 +172,18 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("run simulation")
-    subprocess.check_call(['python3', os.path.join(scripts_path, 'run_simulation_questa.py'), os.path.join(menu_url, menuname_dist), '--tv', args.tv_path, ignored])
+    subprocess.check_call(['python3', os.path.join(scripts_path, 'run_simulation_questa.py'), os.path.join(menu_url,  menuname_dist), '--tv', args.tv_path, ignored])
 
     logging.info("===========================================================================")
     logging.info("run synthesis (takes about 4 hours)")
-    subprocess.check_call(['python3', os.path.join(scripts_path, 'run_synth_ipbb.py'), menuname_dist, '--menuurl', menu_url, '--ugturl', 'https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy', '--ugt', args.ugt, '--build', args.build, '-p', os.path.join(home_dir, args.synth_dir)])
+    subprocess.check_call(['python3', os.path.join(scripts_path, 'run_synth_ipbb.py'), menuname_dist, '--menuurl', menu_url, '--ugturl', args.ugt_url, '--ugt', args.ugt, '--build', args.build, '-p', os.path.join(home_dir, args.synth_dir)])
 
     write_bitstream_path = os.path.join(scripts_path, 'vivado_write_bitstream.tcl')
-    # TODO (too-many-format-args)
-    # build_path = "{}/{}/{}/{}/mp7_ugt_legacy/{}/mp7fw_v3_0_0/vivado_2019.2".format(home_dir, args.synth_dir, args.build, menuname_dist, args.ugt)
+
     build_path = os.path.join(home_dir, args.synth_dir, args.build, menuname_dist)
-    #build_path = "{}/{}/{}/{}/mp7_ugt_legacy/{}/mp7fw_v3_0_0/vivado_2019.2".format(home_dir, args.synth_dir, args.build, menuname_dist)
     build_cfg = "{}/build_{}.cfg".format(build_path, args.build)
     check_path = os.path.join(scripts_path, 'checkIpbbSynth.py')
     packer_path = os.path.join(scripts_path, 'fwpackerIpbb.py')
-    #check_path = "{}/{}/scripts/checkIpbbSynth.py".format(home_dir, ugt_local_dir)
-    #packer_path = "{}/{}/scripts/fwpackerIpbb.py".format(home_dir, ugt_local_dir)
 
     print("===========================================================================")
     print("check, whether syntheses still running:")

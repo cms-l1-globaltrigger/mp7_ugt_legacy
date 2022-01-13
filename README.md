@@ -75,35 +75,6 @@ pip install -U pip
 pip install -r <mp7_ugt_legacy_path>/scripts/requirements.txt
 ```
 
-There are two "modes" in script "run_simulation_questa.py": 'local' and 'repo'.
-The local mode takes files from local directories, repo mode takes files from
-repositories of MP7 firmware, IPBus firmware and L1Menus.
-For local mode you have to clone git repositories for ipbus-firmware, mp7 and L1Menus.
-```bash
-git clone https://github.com/ipbus/ipbus-firmware.git <local path>/ipbus-firmware
-cd <local path>/ipbus-firmware
-git checkout <branch|tag>
-git clone https://gitlab.cern.ch/hbergaue/mp7.git <local path>/mp7
-cd <local path>/mp7
-git checkout <tag>
-git clone <URL L1Menus repo> <local path>/<L1Menus repo name>
-cd <local path>/<L1Menus repo name>
-git checkout <tag>
-```
-
-Example
-```bash
-git clone https://github.com/ipbus/ipbus-firmware.git ipbus-firmware
-cd ipbus-firmware
-git checkout master
-git clone https://gitlab.cern.ch/hbergaue/mp7.git mp7
-cd mp7
-git checkout mp7fw_v3_0_0_mp7_ugt
-git clone https://github.com/cms-l1-globaltrigger/cms-l1-menu.git cms-l1-menu
-cd cms-l1-menu
-git checkout master
-```
-
 Run simulation using Questa.
 
 REMARK:
@@ -114,7 +85,7 @@ REMARK:
 Running script in repo mode
 ```bash
 cd mp7_ugt_legacy/firmware/sim
-python3 ../../scripts/run_simulation_questa.py <L1Menu name> --menu_url <URL L1Menu>
+python3 ../../scripts/run_simulation_questa.py <L1Menu name> --menu_url <URL L1Menu> --tv <testvector file path>
 ```
 
 **Note:** inspect for default values and other arguments
@@ -125,25 +96,7 @@ python3 ../../scripts/run_simulation_questa.py -h
 Example
 ```bash
 cd mp7_ugt_legacy/firmware/sim
-python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8_massdr-d1 \
---menu_url https://raw.githubusercontent.com/herbberg/l1menus/master/2021
-```
-
-Running script in local mode
-```bash
-cd mp7_ugt_legacy/firmware/sim
-python3 ../../scripts/run_simulation_questa.py <L1Menu name> --local --menu_local <L1Menu local path> --mp7_local <mp7 fw local path> --ipb_fw_local <IPBus firmware local path> --tv <test vector file name>
-```
-
-Example
-```bash
-cd mp7_ugt_legacy/firmware/sim
-python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8_massdr-d1 \
---local \
---menu_local /home/bergauer/github/herbberg/l1menus/2021 \
---mp7_local /home/bergauer/gitlab/hbergaue/mp7 \
---ipb_fw_local /home/bergauer/github/ipbus/ipbus-firmware \
---tv TestVector_000_VBF_WinterRun3.txt
+python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8_disp-d1 --menu_url https://raw.githubusercontent.com/herbberg/l1menus/master/2021 --tv /home/bergauer/github/herbberg/l1menus/2021/L1Menu_Collisions2020_v0_1_8_disp-d1/testvectors/TestVector_L1Menu_Collisions2020_v0_1_8_disp.txt --ignored
 ```
 
 ## Build
@@ -189,7 +142,7 @@ export UGT_VIVADO_BASE_DIR=/opt/xilinx/Vivado
 export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_v8_4_4
 ```
 
-Example for creating a Questasim environment in bashrc:
+Example for creating a Vivado environment in bashrc:
 
 ```bash
 cd <home directory>

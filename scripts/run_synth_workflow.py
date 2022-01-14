@@ -7,12 +7,21 @@ import sys
 import toolbox as tb
 from time import sleep
 
+import urllib.request
+
+failed_red = ("\033[1;31m Failed! \033[0m")
+mismatches_exit_red = ("\033[1;31m Mismatches occured !!! Exit on errors \033[0m")
+success_green = ("\033[1;32m Success! \033[0m")
+ok_green = ("\033[1;32m OK     \033[0m")
+ignore_yellow = ("\033[1;33m IGNORE \033[0m")
+error_red = ("\033[1;31m ERROR  \033[0m")
+
 DefaultSynthDir = 'work_synth/production'
 DefaultUgtUrl = 'https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy'
 DefaultUgtTag = 'master'
-DefaultMenu4Checkout = 'L1Menu_Collisions2020_v0_1_5-d3'
 DefaultMenuRepo = 'l1menus'
 DefaultMenuRepoYear = '2022'
+DefaultMenu4Checkout = '2021/L1Menu_Collisions2020_v0_1_5-d3'
 DefaultMP7Tag = 'mp7fw_v3_0_0_mp7_ugt'
 
 def read_file(filename):
@@ -20,12 +29,25 @@ def read_file(filename):
     with open(filename, 'r') as fp:
         return fp.read()
 
-
 def run_command(*args):
     command = ' '.join(args)
     logging.info(">$ %s", command)
     os.system(command)
 
+def download_file_from_url(url, filename):
+    """Download files from URL."""
+    # Remove existing file.
+    tb.remove(filename)
+    # Download file
+    logging.info("retrieving %s", url)
+    urllib.request.urlretrieve(url, filename)
+    tb.make_executable(filename)
+
+    with open(filename) as fp:
+        d = fp.read()
+    d = d.replace(', default=os.getlogin()', '')
+    with open(filename, 'w') as fp:
+        fp.write(d)
 
 def parse_args():
     """Parse command line arguments."""
@@ -34,7 +56,7 @@ def parse_args():
     parser.add_argument('--user', required=True, help="synthesis server user name [required]")
     parser.add_argument('--github_user', required=True, help="git hub user name [required]")
     parser.add_argument('--temp_dir', metavar='<path>', required=True, help="temporarly workflow dir name [required]")
-    parser.add_argument('--xml_path', metavar='<path>', required=True, help="absolute path to XML file [required]")
+    parser.add_argument('--xml_path', metavar='<path>', required=True, help="absolute path to XML file [required] (eg. 'https://raw.githubusercontent.com/....../L1Menu_Collisions2020_v0_1_6-d1.xml')")
     parser.add_argument('--tv_path', metavar='<path>', required=True, help="absolute path to test vector file [required]")
     parser.add_argument('--dist', required=True, help="distribution number for VHDL Producer [required]")
     parser.add_argument('--ugt_url', metavar='<path>', default=DefaultUgtUrl, help="ugt firmware repo url (default is '{}')".format(DefaultUgtUrl))
@@ -58,8 +80,9 @@ def main():
     menuname_dist = "{}-d{}".format(args.menuname, args.dist)
     home_dir = os.path.join('/home', args.user)
     menu_local = os.path.join(args.menu_repo, args.menu_repo_year)
-    menu_repo = os.path.join(args.github_user, args.menu_repo, menuname_dist, args.menu_repo_year)
-    menu_url = os.path.join('https://raw.githubusercontent.com', menu_repo)
+    #menu_repo = os.path.join(args.github_user, args.menu_repo, menuname_dist, args.menu_repo_year)
+    menu_repo = os.path.join(args.github_user, args.menu_repo, menuname_dist)
+    menu_url = os.path.join('https://raw.githubusercontent.com', menu_repo, args.menu_repo_year)
     temp_dir_path = os.path.join(home_dir, args.temp_dir)
     scripts_path = os.path.dirname(os.path.abspath(__file__))
     tme_error_file = os.path.join(temp_dir_path, 'tme_error.txt')
@@ -91,9 +114,6 @@ def main():
     if os.path.exists(local_menu_path):
         raise RuntimeError('%s exists - remove it and execute script once more' % local_menu_path)
 
-    if not os.path.exists(args.xml_path):
-        raise RuntimeError('%s does not exists' % args.xml_path)
-
     if not os.path.exists(args.tv_path):
         raise RuntimeError('%s does not exists' % args.tv_path)
 
@@ -111,18 +131,22 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("verifying menu '%s' with TME", args.xml_path)
-    command = 'bash -c "{home_dir}/tm-editor {args.xml_path} 2>&1 | tee {tme_error_file}"'.format(**locals())
-    run_command(command)
 
-    if os.stat(tme_error_file).st_size > 0:
-        print("===================================")
-        print("verifying XML in TME shows errors !!!")
-        sys.exit(1)
+    subprocess.check_call([os.path.join(home_dir, 'tm-editor'), args.xml_path])
 
-    logging.info("===========================================================================")
-    logging.info("clone menu repo 'args.menu_repo' to '%s'", args.temp_dir)
-    command = 'bash -c "git clone https://github.com/{args.github_user}/{args.menu_repo}.git {home_dir}/{args.temp_dir}/{args.menu_repo}; "'.format(**locals())
-    run_command(command)
+    #command = 'bash -c "{home_dir}/tm-editor {args.xml_path} 2>&1 | tee {tme_error_file}"'.format(**locals())
+    #run_command(command)
+
+    #if os.stat(tme_error_file).st_size > 0:
+        #print("===================================")
+        #print("verifying XML in TME shows errors !!!")
+        #sys.exit(1)
+
+    #logging.info("===========================================================================")
+    #logging.info("clone menu repo '%s'", args.menu_repo)
+    #logging.info("to '%s'", args.temp_dir)
+    #command = 'bash -c "git clone https://github.com/{args.github_user}/{args.menu_repo}.git {home_dir}/{args.temp_dir}/{args.menu_repo}; "'.format(**locals())
+    #run_command(command)
 
     command = 'bash -c "cd {home_dir}/{args.temp_dir}/{args.menu_repo}; git show-branch remotes/origin/{menuname_dist} &> {menu_branch_exists_file}"'.format(**locals())
     run_command(command)
@@ -136,11 +160,13 @@ def main():
     else:
         raise RuntimeError('branch %s exists - delete it from repo (or change menu name)' % menuname_dist)
 
-    logging.info("===========================================================================")
-    logging.info("run VHDL Producer")
-    vhdl_prod_out = os.path.join(temp_dir_path, menu_local)
+    local_xml_file_name = os.path.join(home_dir, args.temp_dir, args.xml_path.split("/")[-1])
+    download_file_from_url(args.xml_path, local_xml_file_name)
 
-    subprocess.check_call([os.path.join(home_dir, 'tm-vhdlproducer'), args.xml_path, '--modules 6', '--dist', args.dist, '--sorting desc', '--output', vhdl_prod_out])
+    logging.info("===========================================================================")
+    logging.info("run VHDL Producer with '%s' with", local_xml_file_name)
+
+    subprocess.check_call([os.path.join(home_dir, 'tm-vhdlproducer'), local_xml_file_name, '--modules 6', '--dist', args.dist, '--sorting desc', '--output', os.path.join(temp_dir_path, menu_local)])
 
     logging.info("===========================================================================")
     logging.info("copy test vector file to created menu %s", local_menu_path)
@@ -172,7 +198,7 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("run simulation")
-    subprocess.check_call(['python3', os.path.join(scripts_path, 'run_simulation_questa.py'), os.path.join(menu_url,  menuname_dist), '--tv', args.tv_path, ignored])
+    subprocess.check_call(['python3', os.path.join(scripts_path, 'run_simulation_questa.py'), args.xml_path, '--tv', args.tv_path, ignored])
 
     logging.info("===========================================================================")
     logging.info("run synthesis (takes about 4 hours)")
@@ -186,16 +212,16 @@ def main():
     packer_path = os.path.join(scripts_path, 'fwpackerIpbb.py')
 
     print("===========================================================================")
-    print("check, whether syntheses still running:")
+    print("\033[1;33m check, whether syntheses still running: \033[0m")
     print("$ screen -r")
     print(" ")
-    print("after all syntheses have finished, check results:")
+    print("\033[1;33m after all syntheses have finished, check results: \033[0m")
     print("$ python3", check_path, build_cfg)
     print(" ")
-    print("if timing errors (and bit files is not generated) occur, execute the following command for every module with errors:")
+    print("\033[1;33m if timing errors (and bit files is not generated) occur, execute the following command for every module with errors: \033[0m")
     print("$ vivado -mode batch -source", write_bitstream_path, " -tclargs", build_path, " <module number (e.g.: 0)>")
     print(" ")
-    print("after successfully created bit files, execute the following command to create tar file for HW:")
+    print("\033[1;33m after successfully created bit files, execute the following command to create tar file for HW: \033[0m")
     print("$ python3", packer_path, build_cfg)
     print("===========================================================================")
 

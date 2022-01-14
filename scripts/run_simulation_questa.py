@@ -280,8 +280,8 @@ def download_file_from_url(url, filename):
 
 def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv, a_ignored):
 
-    print("a_mp7_tag",a_mp7_tag)
-    print("a_ipb_fw_dir",a_ipb_fw_dir)
+    #print("a_mp7_tag",a_mp7_tag)
+    #print("a_ipb_fw_dir",a_ipb_fw_dir)
 
     sim_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'firmware', 'sim')
 
@@ -312,11 +312,9 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     logging.info("===========================================================================")
     logging.info("download XML and testvector file from L1Menu repository ...")
     # Get l1menus_path for URL
-    url_menu = "{}/{}".format(a_url_menu, a_menu)
-    print("url_menu:",url_menu)
     xml_name = "{}{}".format(a_menu, '.xml')
     menu_filepath = os.path.join(temp_dir, xml_name)
-    url = "{}/xml/{}".format(url_menu, xml_name)
+    url = os.path.join(a_url_menu, 'xml', xml_name)
     download_file_from_url(url, menu_filepath)
 
     tv_name = a_tv.split("/")[-1]
@@ -346,8 +344,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
                 vhdl_name_ext = vhdl_name + ".vhd"
                 vhdl_file_local_path = os.path.join(temp_dir_module, vhdl_name_ext)
                 vhdl_file_path = os.path.join(vhdl_src_path, vhdl_name_ext)
-                url = "{}/{}".format(url_menu, vhdl_file_path)
-                print("url:",url)
+                url = os.path.join(a_url_menu, vhdl_file_path)
                 download_file_from_url(url, vhdl_file_local_path)
 
     if not os.path.exists(menu_filepath):
@@ -520,7 +517,8 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('menu', help="menu url (eg. 'https://github.com/cms-l1-globaltrigger/cms-l1-menu/blob/master/2021/L1Menu_Collisions2020_v0_1_6-d1')")
+    #parser.add_argument('menu', help="menu url (eg. 'https://raw.githubusercontent.com/herbberg/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021/L1Menu_Collisions2020_v0_1_6-d1')")
+    parser.add_argument('menu_xml', help="menu url (eg. 'https://raw.githubusercontent.com/herbberg/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021/L1Menu_Collisions2020_v0_1_6-d1/xml/L1Menu_Collisions2020_v0_1_6-d1.xml')")
     #parser.add_argument('menu', type=tb.menuname_t, help="menu name (eg. 'L1Menu_Collisions2020_v0_8_1-d1')")
     #parser.add_argument('--menu_url', required=True, help="URL of L1Menu")
     parser.add_argument('--tv', required=True, help="Test vector path")
@@ -543,10 +541,11 @@ def main():
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
-    menu = args.menu.split("/")[-1]
+    xml_name = args.menu_xml.split("/")[-1]
+    menu = xml_name.split(".")[0]
     # check menu name
     tb.menuname_t(menu)
-    menu_url = '/'.join(args.menu.split('/')[:-1])
+    menu_url = '/'.join(args.menu_xml.split('/')[:-2])
 
     run_simulation_questa(args.mp7_url, menu, menu_url, args.ipb_fw_url, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, args.tv, args.ignored)
 

@@ -278,10 +278,10 @@ def download_file_from_url(url, filename):
     with open(filename, 'w') as fp:
         fp.write(d)
 
-def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv, a_local, a_ignored):
+def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv, a_ignored):
 
-    print("a_mp7_tag",a_mp7_tag)
-    print("a_ipb_fw_dir",a_ipb_fw_dir)
+    #print("a_mp7_tag",a_mp7_tag)
+    #print("a_ipb_fw_dir",a_ipb_fw_dir)
 
     sim_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'firmware', 'sim')
 
@@ -305,41 +305,24 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)  # makes folders
 
-    # clone repos of MP7 and IPB-firmware to temp_dir for "non local mode"
-    if not a_local:
-        command = f'bash -c "cd {temp_dir}; git clone {a_mp7_tag}.git mp7; git clone {a_ipb_fw_dir}.git ipbus-firmware"'
-        run_command(command)
+    # clone repos of MP7 and IPB-firmware to temp_dir
+    command = f'bash -c "cd {temp_dir}; git clone {a_mp7_tag}.git mp7; git clone {a_ipb_fw_dir}.git ipbus-firmware"'
+    run_command(command)
 
-    if a_local:
-        logging.info("===========================================================================")
-        logging.info("copy XML and testvector file from local L1Menu directory ...")
-        menu_dir = "{}/{}".format(a_url_menu, a_menu)
-        xml_name = "{}{}".format(a_menu, '.xml')
-        menu_filepath = os.path.join(temp_dir, xml_name)
-        menu_xml_file = "{}/xml/{}".format(menu_dir, xml_name)
-        if not a_tv.split(".")[1]:
-            tv_name = "{}{}".format(a_tv, '.txt')
-        else:
-            tv_name = a_tv
-        testvector_file = os.path.join(menu_dir, "testvectors", tv_name)
-        testvector_filepath = os.path.join(temp_dir, tv_name)
+    logging.info("===========================================================================")
+    logging.info("download XML and testvector file from L1Menu repository ...")
+    # Get l1menus_path for URL
+    xml_name = "{}{}".format(a_menu, '.xml')
+    menu_filepath = os.path.join(temp_dir, xml_name)
+    url = os.path.join(a_url_menu, 'xml', xml_name)
+    download_file_from_url(url, menu_filepath)
 
-        shutil.copyfile(menu_xml_file, menu_filepath)
-        shutil.copyfile(testvector_file, testvector_filepath)
-    else:
-        logging.info("===========================================================================")
-        logging.info("download XML and testvector file from L1Menu repository ...")
-        # Get l1menus_path for URL
-        url_menu = "{}/{}".format(a_url_menu, a_menu)
-        print("url_menu:",url_menu)
-        xml_name = "{}{}".format(a_menu, '.xml')
-        menu_filepath = os.path.join(temp_dir, xml_name)
-        url = "{}/xml/{}".format(url_menu, xml_name)
-        download_file_from_url(url, menu_filepath)
-        tv_name = "TestVector_{}{}".format((re.split("-", a_menu)[0]), '.txt')
-        testvector_filepath = os.path.join(temp_dir, tv_name)
-        url_tv = "{}/testvectors/{}".format(url_menu, tv_name)
-        download_file_from_url(url_tv, testvector_filepath)
+    tv_name = a_tv.split("/")[-1]
+    if not tv_name.split(".")[1]:
+        tv_name = "{}{}".format(tv_name, '.txt')
+
+    testvector_filepath = os.path.join(temp_dir, tv_name)
+    shutil.copyfile(a_tv, testvector_filepath)
 
     timestamp = time.time()  # creates timestamp
     _time = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%dT%H-%M-%S')  # changes time apperance
@@ -361,14 +344,8 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
                 vhdl_name_ext = vhdl_name + ".vhd"
                 vhdl_file_local_path = os.path.join(temp_dir_module, vhdl_name_ext)
                 vhdl_file_path = os.path.join(vhdl_src_path, vhdl_name_ext)
-                if a_local:
-                    vhdl_file_source = "{}/{}".format(menu_dir, vhdl_file_path)
-                    command = 'bash -c "cd; cp {vhdl_file_source} {vhdl_file_local_path}"'.format(**locals())
-                    run_command(command)
-                else:
-                    url = "{}/{}".format(url_menu, vhdl_file_path)
-                    print("url:",url)
-                    download_file_from_url(url, vhdl_file_local_path)
+                url = os.path.join(a_url_menu, vhdl_file_path)
+                download_file_from_url(url, vhdl_file_local_path)
 
     if not os.path.exists(menu_filepath):
         raise RuntimeError('Missing %s File' % menu_filepath)
@@ -396,12 +373,8 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
 
         logging.debug('Module_%d created at %s' % (module._id, base_dir))
 
-        if a_local:
-            mp7 = a_mp7_tag
-            ipb_fw = a_ipb_fw_dir
-        else:
-            mp7 = os.path.join(temp_dir, 'mp7')
-            ipb_fw = os.path.join(temp_dir, 'ipbus-firmware')
+        mp7 = os.path.join(temp_dir, 'mp7')
+        ipb_fw = os.path.join(temp_dir, 'ipbus-firmware')
 
         module.make_files(sim_dir, a_view_wave, mp7, temp_dir, ipb_fw)  # sim_dir, view_wave, mp7_tag, temp_dir
 
@@ -460,8 +433,7 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     handler.setLevel(logging.DEBUG)
     sum_log.addHandler(handler)
 
-    if a_local:
-        sum_log.info('Test vector file name: {}'.format(tv_name))
+    sum_log.info('Test vector file name: {}'.format(tv_name))
     sum_log.info("|-----|-----|------------------------------------------------------------------|--------|--------|--------|")
     sum_log.info("| Mod | Idx | Name of algorithm                                                | l1a.tv | l1a.hw | Result |")
     sum_log.info("|-----|-----|------------------------------------------------------------------|--------|--------|--------|")
@@ -545,22 +517,20 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('menu', type=tb.menuname_t, help="menu name (eg. 'L1Menu_Collisions2020_v0_8_1-d1')")
-    parser.add_argument('--menu_url', help="URL of L1Menu")
+    #parser.add_argument('menu', help="menu url (eg. 'https://raw.githubusercontent.com/herbberg/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021/L1Menu_Collisions2020_v0_1_6-d1')")
+    parser.add_argument('menu_xml', help="menu url (eg. 'https://raw.githubusercontent.com/herbberg/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021/L1Menu_Collisions2020_v0_1_6-d1/xml/L1Menu_Collisions2020_v0_1_6-d1.xml')")
+    #parser.add_argument('menu', type=tb.menuname_t, help="menu name (eg. 'L1Menu_Collisions2020_v0_8_1-d1')")
+    #parser.add_argument('--menu_url', required=True, help="URL of L1Menu")
+    parser.add_argument('--tv', required=True, help="Test vector path")
+    parser.add_argument('--ignored', action='store_true', default=False, help="using IGNORED_ALGOS for error checks")
     parser.add_argument('--mp7_url', default=DefaultGitlabUrlMP7, help="MP7 repo (default is '{}')".format(DefaultGitlabUrlMP7))
     parser.add_argument('--mp7_repo_tag', default=DefaultMP7Tag, help="MP7 repo tag (default is '{}')".format(DefaultMP7Tag))
     parser.add_argument('--ipb_fw_url', default=DefaultGitlabUrlIPB, help="IPBus firmware repo (default is '{}')".format(DefaultGitlabUrlIPB))
     parser.add_argument('--ipb_fw_repo_tag', default=DefaultIpbbTag, help="IPBus firmware repo tag (default is '{}')".format(DefaultIpbbTag))
-    parser.add_argument('--menu_local', type=os.path.abspath, help="local path to L1Menu")
-    parser.add_argument('--mp7_local', type=os.path.abspath, help="local path to MP7 tag (checkout tag before running simulation)")
-    parser.add_argument('--ipb_fw_local', type=os.path.abspath, help="local path to IPBus firmware directory (checkout tag before running simulation)")
-    parser.add_argument('--local', action='store_true', default=False, help="running simulation with Questa simulator in local mode")
-    parser.add_argument('--tv', help="Test vector name (needed only with 'local')")
-    parser.add_argument('--ignored', action='store_true', default=False, help="using IGNORED_ALGOS for error checks")
     parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help="Questasim version (default is {})".format(DefaultQuestasimVersion))
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsPath, help="Questasim Vivado libraries directory name (default is {})".format(DefaultQuestaSimLibsPath))
     parser.add_argument('--output', metavar='path', type=os.path.abspath, help='path to output directory')
-    parser.add_argument('--view-wave', action='store_true', help="shows the waveform")
+    parser.add_argument('--view_wave', action='store_true', help="shows the waveform")
     parser.add_argument('--wlf', action='store_true', help="no console transcript info, warning and error messages (transcript output to vsim.wlf)")
     parser.add_argument('-v', '--verbose', action='store_const', const=logging.DEBUG, help="enables debug prints to console", default=logging.INFO)
     return parser.parse_args()
@@ -571,28 +541,13 @@ def main():
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
-    if args.local:
-        menu_p = args.menu_local
-        if not menu_p:
-            raise RuntimeError('argument --menu_local is not set.')
-        mp7 = args.mp7_local
-        if not mp7:
-            raise RuntimeError('argument --mp7_local is not set.')
-        ipb_fw = args.ipb_fw_local
-        if not ipb_fw:
-            raise RuntimeError('argument --ipb_fw_local is not set.')
-        tv = args.tv
-        if not tv:
-            raise RuntimeError('argument --tv is not set.')
-    else:
-        menu_p = args.menu_url
-        if not menu_p:
-            raise RuntimeError('argument --menu_url is not set.')
-        mp7 = args.mp7_url
-        ipb_fw = args.ipb_fw_url
-        tv =''
+    xml_name = args.menu_xml.split("/")[-1]
+    menu = xml_name.split(".")[0]
+    # check menu name
+    tb.menuname_t(menu)
+    menu_url = '/'.join(args.menu_xml.split('/')[:-2])
 
-    run_simulation_questa(mp7, args.menu, menu_p, ipb_fw, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, tv, args.local, args.ignored)
+    run_simulation_questa(args.mp7_url, menu, menu_url, args.ipb_fw_url, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, args.tv, args.ignored)
 
 if __name__ == '__main__':
     main()

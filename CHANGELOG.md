@@ -15,6 +15,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/gtl_module_tpl.vhd
   - ../packages/gt_mp7_core_pkg.vhd
 
+## [v1.19.1] - 2022-01-13
+### Comment
+
+- mp7_ugt firmware release v1.19.1
+- cleaned up scripts
+
+### Changed
+- script files:
+  - scripts/run_simulation_questa.py
+  - scripts/run_synth_ipbb.py
+  - scripts/run_synth_workflow.py
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+- readme.md
+
 ## [v1.19.0] - 2022-01-10
 ### Comment
 

@@ -2,6 +2,7 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
+-- HB 2022-01-20: v3.0.0: Module for "anomaly detection trigger (ADT)" test.
 -- HB 2021-10-23: v1.17.1: Updated logic for jet DISP cut.
 -- HB 2021-10-23: v1.17.0: Implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data] in calo_comparators.vhd. Bug fixed in correlation_cuts_wrapper.vhd.
 -- HB 2021-10-27: v1.16.2: Bug fix in matrix_corr_cond.vhd.
@@ -59,19 +60,13 @@ entity gtl_module is
 end gtl_module;
 
 architecture rtl of gtl_module is
-    COMPONENT rom_lut_calo_inv_dr_sq
-    PORT(
-        clka : IN STD_LOGIC;
-        addra : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-        douta : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
-    );
-    END COMPONENT;
 
     signal bx_data : bx_data_record;
-
     signal algo : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
 
 {{gtl_module_signals}}
+
+-- Signals used in logic for ADT
 
 begin
 
@@ -83,6 +78,8 @@ bx_pipeline_i: entity work.bx_pipeline
     );
 
 {{gtl_module_instances}}
+
+-- Instances used in logic for ADT
 
 -- One pipeline stages for algorithms
 algo_pipeline_p: process(lhc_clk, algo)

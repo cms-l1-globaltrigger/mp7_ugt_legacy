@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v3.0.0] - 2022-01-20
+### Comment
+
+- mp7_ugt firmware release v3.0.0
+- test version for "anomaly detection trigger (ADT)"
+
+### Changed
+- source files:
+  - ../payload/gtl_module_tpl.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+
 ## [v1.19.0] - 2022-01-10
 ### Comment
 

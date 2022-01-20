@@ -66,8 +66,6 @@ architecture rtl of gtl_module is
 
 {{gtl_module_signals}}
 
--- Signals used in logic for ADT
-
 begin
 
 bx_pipeline_i: entity work.bx_pipeline
@@ -78,8 +76,6 @@ bx_pipeline_i: entity work.bx_pipeline
     );
 
 {{gtl_module_instances}}
-
--- Instances used in logic for ADT
 
 -- One pipeline stages for algorithms
 algo_pipeline_p: process(lhc_clk, algo)

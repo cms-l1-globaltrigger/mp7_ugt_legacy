@@ -17,7 +17,7 @@ entity adt_2_dummy is
     port(
         lhc_clk: in std_logic;
 --         clk240: in std_logic;
-        muon: in muon_objects_array;
+        mu: in muon_objects_array;
         eg: in calo_objects_array;
         jet: in calo_objects_array;
         tau: in calo_objects_array;
@@ -36,6 +36,6 @@ architecture rtl of adt_2_dummy is
 begin
 
 -- for tests used EG object 2 bit 0 as adt
-adt_out <= egamma(2)(0);
+adt_out <= eg(2)(0);
 
 end architecture rtl;

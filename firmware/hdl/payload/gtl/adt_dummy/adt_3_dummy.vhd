@@ -3,7 +3,8 @@
 -- Dummy module for "anomaly detection trigger (ADT)" test.
 
 -- Version history:
--- HB 2022-01-21: first design.
+-- HB 2022-01-24: all input data of bx 0.
+-- HB 2022-01-20: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -16,7 +17,16 @@ entity adt_3_dummy is
     port(
         lhc_clk: in std_logic;
 --         clk240: in std_logic;
-        adt_in: in bx_data_record;
+        muon: in muon_objects_array;
+        eg: in calo_objects_array;
+        jet: in calo_objects_array;
+        tau: in calo_objects_array;
+        ett: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        htt: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        etm: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        htm: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        ettem: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        etmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         adt_out: out std_logic
     );
 end adt_3_dummy;
@@ -25,7 +35,7 @@ architecture rtl of adt_3_dummy is
 
 begin
 
--- for tests used EG bx0 object 3 bit 0 as adt
-adt_out <= adt_in.eg(2)(3)(0);
+-- for tests used EG object 3 bit 0 as adt
+adt_out <= egamma(3)(0);
 
 end architecture rtl;

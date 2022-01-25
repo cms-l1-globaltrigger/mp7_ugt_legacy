@@ -3,7 +3,7 @@
 -- Dummy module for "anomaly detection trigger (ADT)" test.
 
 -- Version history:
--- HB 2022-01-24: all input data of bx 0.
+-- HB 2022-01-25: all input data with +/-2bx.
 -- HB 2022-01-20: first design.
 
 library ieee;
@@ -17,16 +17,16 @@ entity adt_5_dummy is
     port(
         lhc_clk: in std_logic;
 --         clk240: in std_logic;
-        mu: in muon_objects_array;
-        eg: in calo_objects_array;
-        jet: in calo_objects_array;
-        tau: in calo_objects_array;
-        ett: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        htt: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        etm: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        htm: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        ettem: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        etmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        mu: in bx_muon_objects_array;
+        eg: in bx_eg_objects_array;
+        jet: in bx_jet_objects_array;
+        tau: in bx_tau_objects_array;
+        ett: in bx_esums_array;
+        htt: in bx_esums_array;
+        etm: in bx_esums_array;
+        htm: in bx_esums_array;
+        ettem: in bx_esums_array;
+        etmhf: in bx_esums_array;
         adt_out: out std_logic
     );
 end adt_5_dummy;
@@ -35,7 +35,7 @@ architecture rtl of adt_5_dummy is
 
 begin
 
--- for tests used EG object 5 bit 0 as adt
-adt_out <= eg(5)(0);
+-- for tests used EG bx 0 object 5 bit 0 as adt
+adt_out <= eg(2)(5)(0);
 
 end architecture rtl;

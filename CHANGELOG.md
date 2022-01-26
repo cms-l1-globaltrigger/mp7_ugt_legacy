@@ -4,11 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.19.1] - 2022-01-13
+## [v1.19.1] - 2022-01-26
 ### Comment
 
 - mp7_ugt firmware release v1.19.1
-- cleaned up scripts
+- cleaned up and updated scripts
 
 ### Changed
 - script files:

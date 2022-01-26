@@ -139,7 +139,7 @@ def main():
     # Check for UGT_VIVADO_BASE_DIR
     vivado_base_dir = os.getenv('UGT_VIVADO_BASE_DIR')
     if not vivado_base_dir:
-        raise RuntimeError("Environment variable 'UGT_VIVADO_BASE_DIR' not set. Set with: 'export UGT_VIVADO_BASE_DIR=...'")
+        raise RuntimeError("\033[1;31m Environment variable 'UGT_VIVADO_BASE_DIR' not set. Set with: 'export UGT_VIVADO_BASE_DIR=...' \033[0m")
 
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
@@ -168,7 +168,8 @@ def main():
     ipbb_dir_build = os.path.join(args.path, args.build)
 
     if os.path.isdir(ipbb_dir_build):
-        raise RuntimeError("build area already exists: {}".format(ipbb_dir_build))
+        #raise RuntimeError("build area already exists: {}".format(ipbb_dir_build))
+        raise RuntimeError("\033[1;31m build area already exists: {} \033[0m".format(ipbb_dir_build))
 
     ipbb_version = args.ipbb
 
@@ -187,15 +188,18 @@ def main():
     logging.info("download XML file from L1Menu repository ...")
     xml_name = "{}{}".format(args.menuname, '.xml')
     html_name = "{}{}".format(args.menuname, '.html')
-    url_menu = "{}/{}".format(args.menuurl, args.menuname)
+    #url_menu = "{}/{}".format(args.menuurl, args.menuname)
+    url_menu = os.path.join(args.menuurl, args.menuname)
     # Download XML and HTML files (HTML for buildReporter.py)
     filename = os.path.join(ipbb_dir, 'src', xml_name)
-    url = "{url_menu}/xml/{xml_name}".format(**locals())
+    #url = "{url_menu}/xml/{xml_name}".format(**locals())
+    url = os.path.join(url_menu, 'xml', xml_name)
     download_file_from_url(url, filename)
     menu = XmlMenu(filename)
 
     filename = os.path.join(ipbb_dir, 'src', html_name)
-    url = "{url_menu}/doc/{html_name}".format(**locals())
+    #url = "{url_menu}/doc/{html_name}".format(**locals())
+    url = os.path.join(url_menu, 'doc', html_name)
     download_file_from_url(url, filename)
 
     # Fetch menu name from path.
@@ -230,7 +234,8 @@ def main():
         for i in range(len(vhdl_snippets)):
             vhdl_snippet = vhdl_snippets[i]
             filename = os.path.join(vhdl_snippets_dir, vhdl_snippet)
-            url = "{url_menu}/vhdl/{module_name}/src/{vhdl_snippet}".format(**locals())
+            #url = "{url_menu}/vhdl/{module_name}/src/{vhdl_snippet}".format(**locals())
+            url = os.path.join(url_menu, 'vhdl', module_name, 'src', vhdl_snippet)
             download_file_from_url(url, filename)
 
         replace_vhdl_templates(vhdl_snippets_dir, ipbb_src_fw_dir, ipbb_dest_fw_dir)

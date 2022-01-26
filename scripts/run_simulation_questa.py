@@ -305,9 +305,16 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)  # makes folders
 
+    logging.info("===========================================================================")
+    logging.info("clone repos of MP7 and IPB-firmware to temp_dir ...")
     # clone repos of MP7 and IPB-firmware to temp_dir
     command = f'bash -c "cd {temp_dir}; git clone {a_mp7_tag}.git mp7; git clone {a_ipb_fw_dir}.git ipbus-firmware"'
     run_command(command)
+
+    if not os.path.exists(os.path.join(temp_dir, "mp7")):
+        raise RuntimeError("\033[1;31m mp7 not in temp_dir. \033[0m")
+    if not os.path.exists(os.path.join(temp_dir, "ipbus-firmware")):
+        raise RuntimeError("\033[1;31m ipbus-firmware not in temp_dir. \033[0m")
 
     logging.info("===========================================================================")
     logging.info("download XML and testvector file from L1Menu repository ...")

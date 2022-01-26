@@ -139,7 +139,7 @@ def main():
     # Check for UGT_VIVADO_BASE_DIR
     vivado_base_dir = os.getenv('UGT_VIVADO_BASE_DIR')
     if not vivado_base_dir:
-        raise RuntimeError("Environment variable 'UGT_VIVADO_BASE_DIR' not set. Set with: 'export UGT_VIVADO_BASE_DIR=...'")
+        raise RuntimeError("\033[1;31m Environment variable 'UGT_VIVADO_BASE_DIR' not set. Set with: 'export UGT_VIVADO_BASE_DIR=...' \033[0m")
 
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
@@ -168,7 +168,8 @@ def main():
     ipbb_dir_build = os.path.join(args.path, args.build)
 
     if os.path.isdir(ipbb_dir_build):
-        raise RuntimeError("build area already exists: {}".format(ipbb_dir_build))
+        #raise RuntimeError("build area already exists: {}".format(ipbb_dir_build))
+        raise RuntimeError("\033[1;31m build area already exists: {} \033[0m".format(ipbb_dir_build))
 
     ipbb_version = args.ipbb
 

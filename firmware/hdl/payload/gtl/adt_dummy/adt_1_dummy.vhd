@@ -36,6 +36,6 @@ architecture rtl of adt_1_dummy is
 begin
 
 -- for tests used EG bx 0 object 1 bit 0 as adt
-adt_out <= eg(2)(1)(0);
+adt_out <= eg(2)(7)(0);
 
 end architecture rtl;

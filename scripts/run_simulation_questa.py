@@ -38,15 +38,15 @@ error_red = ("\033[1;31m ERROR  \033[0m")
 
 DefaultQuestasimVersion = os.getenv('UGT_QUESTASIM_VERSION')
 if not DefaultQuestasimVersion:
-    raise RuntimeError('UGT_QUESTASIM_VERSION is not defined.')
+    raise RuntimeError("\033[1;31m UGT_QUESTASIM_VERSION is not defined. \033[0m")
 
 QuestaSimPath = os.getenv('UGT_QUESTASIM_SIM_PATH')
 if not QuestaSimPath:
-    raise RuntimeError('UGT_QUESTASIM_SIM_PATH is not defined.')
+    raise RuntimeError("\033[1;31m UGT_QUESTASIM_SIM_PATH is not defined. \033[0m")
 
 DefaultQuestaSimLibsPath = os.getenv('UGT_QUESTASIM_LIBS_PATH')
 if not DefaultQuestaSimLibsPath:
-    raise RuntimeError('UGT_QUESTASIM_LIBS_PATH is not defined.')
+    raise RuntimeError("\033[1;31m UGT_QUESTASIM_LIBS_PATH is not defined. \033[0m")
 
 DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware'
 """Default URL IPB FW repo."""
@@ -278,10 +278,7 @@ def download_file_from_url(url, filename):
     with open(filename, 'w') as fp:
         fp.write(d)
 
-def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv, a_ignored):
-
-    #print("a_mp7_tag",a_mp7_tag)
-    #print("a_ipb_fw_dir",a_ipb_fw_dir)
+def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv, a_ignored):
 
     sim_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'firmware', 'sim')
 
@@ -307,8 +304,19 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
 
     logging.info("===========================================================================")
     logging.info("clone repos of MP7 and IPB-firmware to temp_dir ...")
+
+    gitlab_user = os.getenv('UGT_GITLAB_USER_NAME')
+    if not gitlab_user:
+        raise RuntimeError("\033[1;31m UGT_GITLAB_USER_NAME is not defined. \033[0m")
+
+    gitlab_pwd = os.getenv('UGT_GITLAB_PWD')
+    if not gitlab_pwd:
+        raise RuntimeError("\033[1;31m UGT_GITLAB_PWD is not defined. \033[0m")
+
+    gitlab_mp7_url = a_mp7_url.split("//")[1]
+
     # clone repos of MP7 and IPB-firmware to temp_dir
-    command = f'bash -c "cd {temp_dir}; git clone {a_mp7_tag}.git mp7; git clone {a_ipb_fw_dir}.git ipbus-firmware"'
+    command = f'bash -c "cd {temp_dir}; git clone https://{gitlab_user}:{gitlab_pwd}@{gitlab_mp7_url}.git mp7; cd {temp_dir}/mp7; git checkout {a_mp7_tag}; cd {temp_dir}; git clone {a_ipb_fw_dir}.git ipbus-firmware"'
     run_command(command)
 
     if not os.path.exists(os.path.join(temp_dir, "mp7")):
@@ -323,6 +331,9 @@ def run_simulation_questa(a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questas
     menu_filepath = os.path.join(temp_dir, xml_name)
     url = os.path.join(a_url_menu, 'xml', xml_name)
     download_file_from_url(url, menu_filepath)
+
+    if not os.path.exists(a_tv):
+        raise RuntimeError("\033[1;31m test vector file does not exist. \033[0m")
 
     tv_name = a_tv.split("/")[-1]
     if not tv_name.split(".")[1]:
@@ -554,7 +565,7 @@ def main():
     tb.menuname_t(menu)
     menu_url = '/'.join(args.menu_xml.split('/')[:-2])
 
-    run_simulation_questa(args.mp7_url, menu, menu_url, args.ipb_fw_url, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, args.tv, args.ignored)
+    run_simulation_questa(args.mp7_url, args.mp7_repo_tag, menu, menu_url, args.ipb_fw_url, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, args.tv, args.ignored)
 
 if __name__ == '__main__':
     main()

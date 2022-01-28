@@ -30,6 +30,12 @@ Set the following environment variables (preferably in `.bashrc`):
 | `UGT_QUESTASIM_LIBS_PATH` | Path to Questasim libraries of a certain vivado version |
 | `UGT_BLK_MEM_GEN_VERSION` | Version of blk_mem_gen IP for dual port memories (spy memories) and ROMs of LUT values for 1/DR2 (mass over deltaR) |
 
+In addition following environment variables (used in run_simulation_questa.py) must be set in the simulation environment for "automatic" git clone of MP7 firmware:
+| Variable | Description |
+|:---------|:------------|
+| `UGT_GITLAB_USER_NAME` | Gitlab user name |
+| `UGT_GITLAB_PWD` | Gitlab password |
+
 Example
 
 ```bash

@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.19.2] - 2022-02-02
+### Comment
+
+- mp7_ugt firmware release v1.19.2
+- added script file for creating documents with current version numbers in text
+
+### Added
+- script files:
+  - doc/../src/latex/replace_versions_and_make.py
+  - doc/../src/latex/content/fdl_tmpl.tex
+  - doc/../src/latex/content/gtl_tmpl.tex
+  - doc/../src/latex/content/firmware_tmpl.tex
+
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+
 ## [v1.19.1] - 2022-01-28
 ### Comment
 

@@ -1,15 +1,7 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
-<<<<<<< HEAD
-<<<<<<< HEAD
 -- mp7_ugt (=FRAME_VERSION): v3.0.0
-=======
--- mp7_ugt (=FRAME_VERSION): v1.19.1
->>>>>>> dev_1.19.1
-=======
--- mp7_ugt (=FRAME_VERSION): v1.19.2
->>>>>>> master
 
 -- HB 2021-02-02: v1.19.2 - Added script file for creating documents with current version numbers in text (doc/../src/latex/replace_versions_and_make.py)
 -- HB 2021-01-13: v1.19.1 - Cleaned up scripts

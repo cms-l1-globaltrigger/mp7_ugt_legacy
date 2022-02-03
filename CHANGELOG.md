@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.20.0] - 2022-02-03
+### Comment
+
+- mp7_ugt firmware release v1.20.0
+- inserted constants for frame version in gt_mp7_core_pkg.vhd
+
+### Added
+### Changed
+- script files:
+  - doc/../src/latex/replace_versions_and_make.py
+  - doc/../src/latex/content/firmware_tmpl.tex
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/gt_mp7_core_pkg_sim.vhd
+  - ../packages/frame_addr_decode.vhd
+  - ../payload/frame/frame_module_info.vhd
+
 ## [v1.19.2] - 2022-02-02
 ### Comment
 

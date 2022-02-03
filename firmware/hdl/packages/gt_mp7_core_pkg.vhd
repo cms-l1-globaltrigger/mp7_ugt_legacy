@@ -1,8 +1,12 @@
 
 -- actual versions:
--- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.19.2
+-- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
+-- gt: v1.20.0
+-- frame: v1.2.4 (see frame.vhd)
+-- gtl: v1.17.1 (see gtl_module_tpl.vhd)
+-- fdl: v1.3.6 (see fdl_module.vhd)
 
+-- HB 2021-02-03: v1.20.0 - Changed to "GT_VERSION" (used in frame_module_info.vhd) instead of "FRAME_VERSION". "FRAME_VERSION" is only for information, no register contains "FRAME_VERSION".
 -- HB 2021-02-02: v1.19.2 - Added script file for creating documents with current version numbers in text (doc/../src/latex/replace_versions_and_make.py)
 -- HB 2021-01-13: v1.19.1 - Cleaned up scripts
 -- HB 2021-12-22: v1.19.0 - Renamed scripts (no camel case) and updated for different version of Questsim and Vivado
@@ -66,14 +70,25 @@ package gt_mp7_core_pkg is
     constant BUILD_VERSION : std_logic_vector(31 downto 0) := TOP_BUILD_VERSION;
 
 -- ==================================================================================================
--- FRAME version
+-- GT firmware version
+    constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
+    constant GT_MINOR_VERSION      : integer range 0 to 255 := 20;
+    constant GT_REV_VERSION        : integer range 0 to 255 := 0;
+	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
+           std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
+           std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &
+           std_logic_vector(to_unsigned(GT_REV_VERSION, 8));
+-- FRAME firmware version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 19;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 2;
-	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
-           std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
-           std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &
-           std_logic_vector(to_unsigned(FRAME_REV_VERSION, 8));
+    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 2;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 4;
+--     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
+--     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 19;
+--     constant FRAME_REV_VERSION        : integer range 0 to 255 := 2;
+-- 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
+--            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
+--            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &
+--            std_logic_vector(to_unsigned(FRAME_REV_VERSION, 8));
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 17;

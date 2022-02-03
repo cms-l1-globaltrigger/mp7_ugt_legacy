@@ -9,12 +9,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - mp7_ugt firmware release v1.20.0
 - inserted constants for frame version in gt_mp7_core_pkg.vhd
+- added script file for creating documents with current version numbers in text
 
 ### Added
+- script files:
+  - doc/gtl_4_emulator/src/latex/replace_versions_and_make.py
+
 ### Changed
 - script files:
-  - doc/../src/latex/replace_versions_and_make.py
-  - doc/../src/latex/content/firmware_tmpl.tex
+  - doc/mp7_ugt_firmware_specification/src/latex/replace_versions_and_make.py
+- tex files:
+  - doc/mp7_ugt_firmware_specification/src/latex/content/firmware_tmpl.tex
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
   - ../packages/gt_mp7_core_pkg_sim.vhd
@@ -30,6 +35,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - script files:
   - doc/../src/latex/replace_versions_and_make.py
+- tex files:
   - doc/../src/latex/content/fdl_tmpl.tex
   - doc/../src/latex/content/gtl_tmpl.tex
   - doc/../src/latex/content/firmware_tmpl.tex

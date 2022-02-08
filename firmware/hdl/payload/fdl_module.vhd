@@ -2,7 +2,7 @@
 -- FDL structure
 
 -- Version-history:
--- HB 2022-02-08: v1.3.7 - based on v1.3.6, FRAME_VERSION (instead of SVN_REVISION_NUMBER) in regiater OFFSET_SVN_REVISION_NUMBER.
+-- HB 2022-02-08: v1.3.7 - based on v1.3.6, FRAME_VERSION (instead of SVN_REVISION_NUMBER) in register OFFSET_SVN_REVISION_NUMBER.
 -- HB 2019-10-02: v1.3.6 - based on v1.3.5, removed use clause.
 -- HB 2019-10-02: v1.3.5 - based on v1.3.4, changed logic for fractional prescaler - using 32 bits including 2 fractional digits for prescale factor.
 -- HB 2019-10-02: v1.3.4 - based on v1.3.3, changed logic for fractional prescaler (in algo_pre_scaler_fractional_bocci.vhd) - using numerator and denominator for prescale factor.

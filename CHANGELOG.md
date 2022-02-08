@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.20.0] - 2022-02-03
+## [v1.20.0] - 2022-02-08
 ### Comment
 
 - mp7_ugt firmware release v1.20.0
@@ -23,8 +23,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
   - ../packages/gt_mp7_core_pkg_sim.vhd
+  - ../packages/fdl_pkg_tpl.vhd
   - ../packages/frame_addr_decode.vhd
   - ../payload/frame/frame_module_info.vhd
+  - ../payload/fdl_module.vhd
+  - ../payload/frame.vhd
 
 ## [v1.19.2] - 2022-02-02
 ### Comment

@@ -2,6 +2,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2022-02-08: v1.3.7 - based on v1.3.6, FRAME_VERSION (instead of SVN_REVISION_NUMBER) in regiater OFFSET_SVN_REVISION_NUMBER.
 -- HB 2019-10-02: v1.3.6 - based on v1.3.5, removed use clause.
 -- HB 2019-10-02: v1.3.5 - based on v1.3.4, changed logic for fractional prescaler - using 32 bits including 2 fractional digits for prescale factor.
 -- HB 2019-10-02: v1.3.4 - based on v1.3.3, changed logic for fractional prescaler (in algo_pre_scaler_fractional_bocci.vhd) - using numerator and denominator for prescale factor.
@@ -283,7 +284,9 @@ begin
         versions_to_ipb(i+OFFSET_L1TM_FW_UID) <= L1TM_FW_UID(i*32+31 downto i*32);
     end generate l1tm_fw_uid_l;
 
-    versions_to_ipb(OFFSET_SVN_REVISION_NUMBER) <= SVN_REVISION_NUMBER;
+-- HB 2022-02-08: for tests - frame version in register "OFFSET_SVN_REVISION_NUMBER"
+--     versions_to_ipb(OFFSET_SVN_REVISION_NUMBER) <= SVN_REVISION_NUMBER;
+    versions_to_ipb(OFFSET_SVN_REVISION_NUMBER) <= FRAME_VERSION;
     versions_to_ipb(OFFSET_L1TM_UID_HASH) <= L1TM_UID_HASH;
     versions_to_ipb(OFFSET_FW_UID_HASH) <= FW_UID_HASH;
     versions_to_ipb(OFFSET_MODULE_ID) <= conv_std_logic_vector(MODULE_ID, 32);
@@ -351,7 +354,7 @@ begin
     end generate algo_bx_mem_l;
 
     bx_nr_out <= bx_nr_internal; -- to Algo-bx-memory
-    
+
 -- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
     algo_bx_mask_global <=  algo_bx_mask_mem_out when not SIM_MODE
                             else

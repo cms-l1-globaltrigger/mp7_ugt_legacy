@@ -1,7 +1,6 @@
 \section{Global Trigger System overview}\label{sec:gt_system}
 
-The Global Trigger System is based on uTCA technology and 10Gbps optical links. A set of 6 MP7 boards with FPGAs of the powerful Xilinx Virtex-7 family is available. The Global Trigger firmware is implemented on these FPGAs. Every FPGA contains a part of the VHDL representation of a L1 Menu, the partitioning is done by VHDL Producer tool. The trigger decision of every MP7 board is collected on an AMC502 board to generate the "final OR" signal
-which triggers the readout of the detector.
+The Global Trigger System is based on uTCA technology and 10Gbps optical links. A set of 6 MP7 boards (see~\cite{MP7}) with FPGAs of the powerful Xilinx Virtex-7 family is available. The Global Trigger firmware is implemented on these FPGAs. Every FPGA contains a part of the VHDL representation of a L1 Menu, the partitioning is done by VHDL Producer tool. The trigger decision of every MP7 board is collected on an AMC502 board to generate the "final OR" signal which triggers the readout of the detector.
 
 \section{Firmware overview}\label{sec:fw}
 The figure \ref{fig:mgt} shows the architecture of \ugt payload. It consists of framework and the algorithm logic which it consists of the following modules:
@@ -31,7 +30,8 @@ This firmware description is valid for version ++gtversion++ of Global Trigger f
 
 \subsection{Directory structure of Global Trigger firmware} \label{dir_struct_gt_fw}
 
-INSERT TEXT !!!
+In "../mp7\_ugt\_legacy/firmware" there are directories for synthesis configuration files ("cfg" and "ucf"), for VHDL source files ("hdl"), for memory files build from IPs ("ngc") and simulation files ("sim").\\
+All defintions for VHDL code are in "../hdl/packages", VHDL source files representing Global Trigger firmware are in "../hdl/payload" with subdirectories (for gtl, fdl, frame and ipbus).
 
 \subsubsection{Package: lhc\_data\_pkg} \label{section_lhc_data_pkg}
 

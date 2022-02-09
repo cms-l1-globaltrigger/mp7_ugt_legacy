@@ -1,7 +1,6 @@
 \section{Global Trigger Logic}
 \label{sec:gtl:global_trigger_logic}
 
-\textbf{Remark:}\\
 This description is for version ++gtlversion++ of Global Trigger Logic.\\
 
 The Global Trigger Logic (\ugtl) firmware contains conditions and algorithms for trigger decision.
@@ -266,18 +265,6 @@ For each selected object, the Calo-Layer2 sends parameters for \pt and for posit
 \item 5 bits spare
 \end{itemize}
 
-% The data structure of an \egamma object (bits 27..31 are not defined yet, reserved for quality, ...):
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,8,9,16,17,24,25,26,27,31} \\
-%         \bitbox {5}     {\texttt{spare}} &
-%         \bitbox {2}     {\texttt{iso}} &
-%         \bitbox {8}     {\texttt{$\varphi$}}  &
-%         \bitbox {8}     {\texttt{$\eta$}}  &
-%         \bitbox {9}     {\texttt{\pt}} \\
-% \end{bytefield}
-% \end{center}
-
 \textbf{jet}:\\ Twelve objects are passed to the \ugt for each event.\\
 For each selected object, the Calo-Layer2 sends parameters: \pt, for position information, a DISP bit and quality information - encoded in 32 bits:
 \begin{itemize}
@@ -289,20 +276,6 @@ For each selected object, the Calo-Layer2 sends parameters: \pt, for position in
 \item 2 bits spare
 \end{itemize}
 
-% The data structure of a jet object (bits 30..31 are spare bits):
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,10,11,18,19,26,27,27,28,29,30,31} \\
-%         \bitbox {2}     {\texttt{sp}} &
-%         \bitbox {2}     {\texttt{qu}} &
-%         \bitbox {1}     {\texttt{D}} &
-%         \bitbox {8}     {\texttt{$\varphi$}}  &
-%         \bitbox {8}     {\texttt{$\eta$}}  &
-%         \bitbox {11}    {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
-% D = DISP bit, qu = quality flags, sp = spare bits.
-
 \textbf{tau}:\\ Twelve objects are passed to the \ugt for each event.\\
 For each selected object, the Calo-Layer2 sends parameters for \pt and for position information and isolation - encoded in 32 bits:
 \begin{itemize}
@@ -312,18 +285,6 @@ For each selected object, the Calo-Layer2 sends parameters for \pt and for posit
 \item 2 bits isolation
 \item 5 bits spare
 \end{itemize}
-
-% The data structure of a tau object (bits 27..31 are not defined yet, reserved for quality, ...):
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,8,9,16,17,24,25,26,27,31} \\
-%         \bitbox {5}     {\texttt{spare}} &
-%         \bitbox {2}     {\texttt{iso}} &
-%         \bitbox {8}     {\texttt{$\varphi$}}  &
-%         \bitbox {8}     {\texttt{$\eta$}}  &
-%         \bitbox {9}     {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
 
 The representation of the 8 bits (called "hardware index [HW index]") in $\eta$ is expected as Two's Complement notation as shown below.\\
 
@@ -411,70 +372,16 @@ Calo-Layer2 sends 6 frames (each 32 bits) with Energy sum quantities containing 
 \end{itemize}
 
 Frame 0: The data structure of "total Et" (\ett) quantity [including "total Et from ECAL only" (ETTEM) and "minimum bias HF+ threshold 0" bits].
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,11,12,23,24,27,28,31} \\
-%         \bitbox {4}    {\texttt{MBT0HFP}} &
-%         \bitbox {4}    {\texttt{spare}} &
-%         \bitbox {12}    {\texttt{\et [ETTEM]}} &
-%         \bitbox {12}    {\texttt{\et [\ett]}} \\
-% \end{bytefield}
-% \end{center}
 
 Frame 1: The data structure of "total calibrated Et in jets" (\htt) quantity [including "towercount" and "minimum bias HF- threshold 0" bits].
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,11,12,24,25,27,28,31} \\
-%         \bitbox {4}    {\texttt{MBT0HFM}} &
-%         \bitbox {3}    {\texttt{spare}} &
-%         \bitbox {13}    {\texttt{TOWERCOUNT}} &
-%         \bitbox {12}    {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
 
 Frame 2: The data structure of "missing Et" (\etm) quantity [including "Asymmetry" ASYMET and "minimum bias HF+ threshold 1" bits].
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,11,12,19,20,27,28,31} \\
-%         \bitbox {4}    {\texttt{MBT1HFP}} &
-%         \bitbox {8}    {\texttt{ASYMET}} &
-%         \bitbox {8}     {\texttt{$\varphi$}} &
-%         \bitbox {12}    {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
 
 Frame 3: The data structure of "missing Ht" (\htm) quantity [including "Asymmetry" ASYMHT and "minimum bias HF- threshold 1" bits].
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,11,12,19,20,27,28,31} \\
-%         \bitbox {4}    {\texttt{MBT1HFM}} &
-%         \bitbox {8}    {\texttt{ASYMHT}} &
-%         \bitbox {8}     {\texttt{$\varphi$}} &
-%         \bitbox {12}    {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
 
 Frame 4: The data structure of "missing Et including HF" (ET$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMETHF and "Centrality" bits (3:0)].
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,11,12,19,20,27,28,31} \\
-%         \bitbox {4}    {\small \texttt{CENT[3:0]}} &
-%         \bitbox {8}    {\texttt{ASYMETHF}} &
-%         \bitbox {8}     {\texttt{$\varphi$}} &
-%         \bitbox {12}    {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
 
 Frame 5: The data structure of "missing Ht including HF" (HT$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMHTHF and "Centrality" bits (7:4)].
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,11,12,19,20,27,28,31} \\
-%         \bitbox {4}    {\small \texttt{CENT[7:4]}} &
-%         \bitbox {8}    {\texttt{ASYMHTHF}} &
-%         \bitbox {8}     {\texttt{$\varphi$}} &
-%         \bitbox {12}    {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
 
 \clearpage
 

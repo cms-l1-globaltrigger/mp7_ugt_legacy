@@ -1,6 +1,5 @@
 \section{Final Desicion Logic}\label{sec:fdl:ufdl}
 
-\textbf{Remark:}\\
 This description is for version v1.3.6 of Final Desicion Logic.\\
 
 The Final Desicion Logic (\ufdl) firmware contains algo-bx-masks, suppression of algos caused by calibration trigger, prescalers, veto-masks and rate-counters
@@ -64,7 +63,6 @@ The firmware of \ufdl in this document is based on a hardware configuration with
 Every Algorithm, in total 512 coming from \ugtl, passes a algo-bx-mask, the logic for suppression of algos caused by calibration trigger and a prescaler, which reduces the trigger rate by a given factor. Prescaled Algorithms signals are combined to a local final-or-signal (\finor).
 For every Algorithm there is a rate-counter before prescaler and after prescaler, which are incremented by LHC-clock if the Algorithm is true. In addition there are post-dead-time counters, one for each Algorithm, which are incremented,
 if the Algorithm and the L1A-signal are true at the same bunch-crossing.
-% Algorithms signals after \finor-masks selected by veto-mask disable the total \finor-signal, if one of the selected Algorithm is true. The total \finor-signal is provided to TCDS.
 Algorithms after GTLogic, after algo-bx-masks, after prescalers, the local \finor- and local veto-signal are provided for read-out-record.\\
 If there are not enough firmware resources in one \ugt board, more boards could be used. Therefore the 512 Algorithms are partitioned by TME. TME will set the number of Algorithms as
 constant in the package module \texttt{gtl\_pkg.vhd}. This means \ugtl and \ufdl firmware considered as a unit for synthesis. In the case of more \ugt boards, the local \finor and local veto are routed via
@@ -73,7 +71,6 @@ A mapping for Algorithms is provided, to give flexibility for setting the index 
 \begin {itemize}
 \item creating a mapping instance (algo\_mapping\_rop.vhd) by VHDL Producer, this component will be instantiated in fix part of FDL, and new calculation will done each time over TME.
 \item TME delivers just the number of Algorithms, which will be built on each card.
-% \item TME additionally deliver the mapping process, in order FDL and IPBus, ROP know, which algorithm is at which address.
 \item from FDL point of view, FDL see incremented number of Algorithms indexes, \eg 0, 1, 2, which is \eg 69, 200, 300.
 \item TME should take care of assignment of each Algorithm to a number, that means if in card 1 algo\_59 is defined, nobody allows to produce the same number again.
 \end {itemize}
@@ -84,9 +81,7 @@ A mapping for Algorithms is provided, to give flexibility for setting the index 
 The top-of-hierarchy module (\texttt{fdl\_module.vhd}) contains
 \begin {itemize}
 \item version registers
-% \item a control register
 \item a command pulse register
-% \item a status register
 \item prescalers for all Algorithms
 \item registers for prescale factors
 \item register for prescale factor set index
@@ -98,11 +93,6 @@ The top-of-hierarchy module (\texttt{fdl\_module.vhd}) contains
 \item the \finor-logic
 \end {itemize}
 
-% \subsubsection{Reset structure}
-% \label{sec:fdl:reset_structure}
-%
-% \textit{under construction ...}
-%
 \subsubsection{Registers and memories}
 \label{sec:fdl:reg_mem}
 
@@ -119,7 +109,6 @@ part of \record.
 \item One register for command pulses is implemented. One bit of this register (bit 0) is used for "setting the request signal for updating prescale factors high", which enables, that the prescale factors and the prescale factor set index
 are loaded at the begin of a luminosity segment period. (Other bits are not defined yet.)
 \item One control register is implemented (the content has to be defined).
-% \item One register for status information is implemented. The content has to be defined.
 \item 32 register for L1 Trigger Menu name for \ugtl is implemented.
 \item 4 register for L1 Trigger Menu UUID for \ugtl is implemented.
 \item One register for L1 Trigger Menu compiler version is implemented.
@@ -171,50 +160,6 @@ Offset & {Register name} & {Access} & {Description}\\
 \hline
 \label{tab:ufdl_register_map}
 \end{longtable}
-
-% \medskip
-% \begin{table}[htdp]
-% \footnotesize
-% \begin{center}
-% \begin{tabular}{c p{.4\columnwidth} c p{.33\columnwidth}}
-% \toprule
-% Offset & {Register name} & {Access} & {Description}\\
-% \midrule
-% 0x90000000 & \verb|Algo BX masks(0)| & r/w & 4096 memory addresses of algo-bx-masks for Algorithms 0-31.\\
-% % 0x90001000 & \verb|Algo BX masks(1)| & r/w & 4096 memory addresses of algo-bx-masks for Algorithms 32-63.\\
-% ... & ... & ... & ...\\
-% 0x9000F000 & \verb|Algo BX masks(15)| & r/w & 4096 memory addresses of algo-bx-masks for Algorithms 480-511.\\
-% 0x90010000 & \verb|Rate counter before prescaler| & r & 512 read-only registers for rate-counter values before prescalers.\\
-% 0x90010200 & \verb|Prescale factors| & r/w & 512 registers for prescale factors.\\
-% 0x90010400 & \verb|Rate counter after prescaler| & r & 512 read-only registers for rate-counter values after prescalers.\\
-% 0x90010600 & \verb|Rate counter post-dead-time| & r & 512 read-only registers for post-dead-time rate-counter values.\\
-% 0x90010800 & \verb|Masks| & r/w & 512 registers for finor-masks and veto-masks. Bit 0 = finor-mask, bit 1 = veto-mask.\\
-% 0x90091880 & \verb|Prescale factors set index| & r/w & Register for prescale factors set index.\\
-% % 0x90091888 & \verb|Control| & r/w & Register for control signals (content has to be defined !!!).\\
-% 0x900918C0 & \verb|L1tm name| & r & 32 registers for L1 Trigger Menu name for \ugtl.\\
-% 0x900918E0 & \verb|L1tm uuid| & r & 4 registers for L1 Trigger Menu UUID for \ugtl.\\
-% 0x900918E4 & \verb|L1tm compiler version| & r & Register for L1 Trigger Menu compiler version.\\
-% 0x900918E5 & \verb|GTL FW version| & r & Register for firmware version of \ugtl VHDL code.\\
-% 0x900918E6 & \verb|FDL FW version| & r & Register for firmware version of \ufdl VHDL code.\\
-% 0x900918E7 & \verb|L1tm FW uuid| & r & 4 registers for L1 Trigger Menu FW UUID for \ugtl.\\
-% 0x900918EB & \verb|SVN revision number| & r & Register for SVN revision number.\\
-% 0x900918EC & \verb|L1tm uuid hash| & r & Register for L1 Trigger Menu UUID hash for \ugtl.\\
-% 0x900918ED & \verb|L1tm FW uuid hash| & r & Register for L1 Trigger Menu FW UUID hash for \ugtl.\\
-% 0x900918EE & \verb|Module ID| & r & Register for Module ID of L1 Trigger Menu.\\
-% 0x90091900 & \verb|Command Pulses| & r/w & Register for command pulses.\\
-% 0x90091980 & \verb|Rate counter finor| & r & One read-only registers for finor rate-counter value.\\
-% 0x90092200 & \verb|L1A latency delay| & r/w & Register for L1A latency delay value (used for post-dead-time counter).\\
-% 0x90093000 & \verb|Rate counter L1A| & r & One read-only registers for L1A rate-counter value.\\
-% 0x90094000 & \verb|Rate counter veto| & r & One read-only registers for veto rate-counter value.\\
-% 0x90095000 & \verb|Prescale factors set index updated 0| & r & Read-only register for prescale factors set index, which was "updated" with begin of current lumi-section ("current\_prescale\_set\_index" in TDF).\\
-% 0x90095001 & \verb|Prescale factors set index updated 1| & r & Read-only register for prescale factors set index, which was "updated" with begin of previous lumi-section for monitoring ("previous\_prescale\_set\_index" in TDF).\\
-% 0x90096000 & \verb|Calibration trigger gap| & r/w & Register for begin and end (in Bx) of calibration trigger gap.\\
-% \bottomrule
-% \end{tabular}
-% \end{center}
-% \caption{\ufdl register map}
-% \label{tab:ufdl_register_map}
-% \end{table}
 
 \begin{register}{htbp}{Rate counter before prescaler}{}
 	\label{rate_counter_before_prescaler_regs}%
@@ -292,7 +237,6 @@ Offset & {Register name} & {Access} & {Description}\\
 	\reglabel{Reset}\regnewline%
 
 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
 	\begin{reglist}
 		\item [prescale\_factor\_set\_index] Index for a certain set of prescale factors.
 	\end{reglist}
@@ -308,7 +252,6 @@ Offset & {Register name} & {Access} & {Description}\\
 	\reglabel{Reset}\regnewline%
 
 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
 	\begin{reglist}
 		\item [major] Major version of L1tm compiler.
 		\item [minor] Minor version of L1tm compiler.

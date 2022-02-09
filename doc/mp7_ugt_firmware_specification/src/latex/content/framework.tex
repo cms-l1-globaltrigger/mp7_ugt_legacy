@@ -22,39 +22,6 @@ The central data type of the framework is shown in Listing \ref{lst_lhc_data_t} 
 The configuration of the optical connections to Calo-Layer2 is (currently) done as described in Table~\ref{tab:framework:tab_configuration_optical_conn}, where
 frame means the 32 bits data (240 MHz) within a LHC clock period.
 
-% \begin{table}[htdp]
-% \vspace{5mm}
-% \begin{center}
-% \begin{tabular}{|c|m{.13\columnwidth}|m{.13\columnwidth}|m{.13\columnwidth}|m{.13\columnwidth}|m{.13\columnwidth}|m{.13\columnwidth}|}
-% % \begin{tabular}{|p{.04\columnwidth}|p{.13\columnwidth}|p{.13\columnwidth}|p{.13\columnwidth}|p{.13\columnwidth}|p{.13\columnwidth}|p{.13\columnwidth}|}\hline
-% % \begin{tabular}{|c|c|c|c|c|c|c|}\hline
-% % \textbf{lane nr} & \textbf{1\textsuperscript{st}} & \textbf{2\textsuperscript{nd}} & \textbf{3\textsuperscript{rd}} & \textbf{4\textsuperscript{th}} & \textbf{5\textsuperscript{th}} & \textbf{6\textsuperscript{th}} \\\hline\hline
-% \cline{2-7}
-% & \multicolumn{6}{ c| }{\textbf{frame}} \\\hline
-% % \textbf{link} & \makebox [.13\columnwidth][c]{\textbf{frame}} & \makebox [.13\columnwidth][c]{\textbf{frame}} & \makebox [.13\columnwidth][c]{\textbf{frame}} & \makebox [.13\columnwidth][c]{\textbf{frame}} & \makebox [.13\columnwidth][c]{\textbf{frame}} & \makebox [.13\columnwidth][c]{\textbf{frame}} \\
-% \textbf{link} & \makebox [.13\columnwidth][c]{\textbf{0}} & \makebox [.13\columnwidth][c]{\textbf{1}} & \makebox [.13\columnwidth][c]{\textbf{2}} & \makebox [.13\columnwidth][c]{\textbf{3}} & \makebox [.13\columnwidth][c]{\textbf{4}} &\makebox [.13\columnwidth][c]{\textbf{5}} \\\hline\hline
-% 0 & reserved & reserved & muon obj. 0 [0..31] & muon obj. 0 [32..63] & muon obj. 1 [0..31] & muon obj. 1 [32..63]\\\hline
-% 1 & reserved & reserved & muon obj. 2 [0..31] & muon obj. 2 [32..63] & muon obj. 3 [0..31] & muon obj. 3 [32..63]\\\hline
-% 2 & reserved & reserved & muon obj. 4 [0..31] & muon obj. 4 [32..63] & muon obj. 5 [0..31] & muon obj. 5 [32..63]\\\hline
-% 3 & reserved & reserved & muon obj. 6 [0..31] & muon obj. 6 [32..63] & muon obj. 7 [0..31] & muon obj. 7 [32..63]\\\hline
-% 4 & \egamma obj. 0 & \egamma obj. 1 & \egamma obj. 2 & \egamma obj. 3 & \egamma obj. 4 & \egamma obj. 5 \\\hline
-% 5 & \egamma obj. 6 & \egamma obj. 7 & \egamma obj. 8 & \egamma obj. 9 & \egamma obj. 10 & \egamma obj. 11 \\\hline
-% 6 & jet obj. 0 & jet obj. 1 & jet obj. 2 & jet obj. 3 & jet obj. 4 & jet obj. 5 \\\hline
-% 7 & jet obj. 6 & jet obj. 7 & jet obj. 8 & jet obj. 9 & jet obj. 10 & jet obj. 11 \\\hline
-% 8 & tau obj. 0 & tau obj. 1 & tau obj. 2 & tau obj. 3 & tau obj. 4 & tau obj. 5 \\\hline
-% 9 & tau obj. 6 & tau obj. 7 & tau obj. 8 & tau obj. 9 & tau obj. 10 & tau obj. 11 \\\hline
-% 10 & \ett, ETTEM, MBT0HFP & \htt, TOWERCOUNT, MBT0HFM & \etm, MBT1HFP & \htm, MBT1HFM & \etm\_HF & \htm\_HF (preliminary definition) \\\hline
-% 11 & free & free & free & free & free & free \\\hline
-% 12 & external-conditions [0..31] & external-conditions [32..63] & reserved & reserved & reserved & reserved \\\hline
-% 13 & external-conditions [64..95] & external-conditions [96..127] & reserved & reserved & reserved & reserved \\\hline
-% 14 & external-conditions [128..159] & external-conditions [160..191] & reserved & reserved & reserved & reserved \\\hline
-% 15 & external-conditions [192..223] & external-conditions [224..255] & reserved & reserved & reserved & reserved \\\hline
-% \end{tabular}
-% \end{center}
-% \caption{Configuration of optical connections}
-% \label{tab:framework:tab_configuration_optical_conn}
-% \end{table}
-
 \begin{table}[ht]
 \caption{Configuration of optical connections}
 \vspace{5mm}
@@ -136,88 +103,6 @@ Currently lane mapping is "fixed" in lmp.vhd module, see Table \ref{tab:framewor
 \label{tab:framework:current_lane_mapping}
 \end{table}
 
-%------------------------------------------------------------------------------
-%
-%  Delay Manager
-%
-% ------------------------------------------------------------------------------
-
-% \subsection{Delay Manager} \label{sec:dm}
-% \textbf{Remark:}\\
-% with frame v1.2.3 "Delay Manager" (dm.vhd) and "Data Source Multiplexer" (dsmux.vhd) is removed because these features were never used in production system, only for tests.
-% The reason of removing is to get more available resources.\\
-%
-% The Delay Manager is responsible for creating a delayed version of the \texttt{lhc\_data} and the bcres signal on its input.
-% For this purpose it uses an internal memory to record the history of the input signals.
-%
-% \subsubsection{Implementation}\label{sec:dm-impl}
-% The DM is basically a reimplementation of the concept of the last design. The reimplementation was necessary because the new framework version uses the register bank for
-% software registers and the old DM was not flexible enough to handle the \texttt{lhc\_data\_t} introduced in the new framework.
-
-% The DM instantiates one \texttt{delay\_element} for every object type defined in the \texttt{lhc\_data\_t} (e.g. muon, eg, etc.). The \texttt{delay\_element} uses RAM blocks
-% to implement the delay line. However, for the delays 0 and 1 this memory can not be used (write latency) and must be bypassed (Figure \ref{fig_dm_delay_element}).
-%
-% \begin{figure}[h]
-% \begin{center}
-% \includegraphics[width=0.5\textwidth]{./figures/dm_delay_element}
-% \end{center}
-% \caption{Delay Manager: delay\_element}
-% \label{fig_dm_delay_element}
-% \end{figure}
-%
-% The Implementation of the DM is very generic because it makes extensive use of the constants provided by the \texttt{lhc\_data\_pkg}. The $lhc\_data\_i$ input signal
-% is converted into a \texttt{std\_logic\_vector}.
-% The constants \texttt{LHC\_DATA\_SLV\_START\_INDICES} and \texttt{LHC\_DATA\_SLV\_OBJECT\_WIDTH} provide the start index of each object in this vector and their
-% width respectively. The number of objects is given by the \texttt{LHC\_DATA\_OBJECT\_COUNT} constant. This information is used by a for-generate statement to instantiate
-% the required \texttt{delay\_element} components.
-
-% For the $bcres\_o$ and the $bcres\_FDL\_o$ signals two additional \texttt{delay\_element} components are instantiated.
-%
-% If only the data width or the array size of an object in the \texttt{lhc\_data\_t} is changed the DM does not need any modification. If, however, a new object is added a
-% new delay register must be added, as described in the register bank section.
-%
-% The registers for all delays have the same layout (see Register \ref{dm_reg}). The names for the individual (per object) delay registers are given in Table \ref{tab_dm_regs}.
-% For the software addresses of these registers refer to the \texttt{xml/gt\_amc514\_dm.xml} file.
-%
-% \begin{register}{htbp}{Delay Manager Registers}{}% name=CONFIG
-% 	\label{dm_reg}
-% 	\regfield{reserved}{20}{12}{0}%
-% 	\regfield{delay}{12}{0}{0}%
-% 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
-% 		\item [delay] The delay in lhc clock cycles (40 MHz) used for the specific object data.
-% 	\end{reglist}
-% 	\end{regdesc}
-% \end{register}
-%
-% \begin{table}[h]
-% \vspace{5mm}
-% \begin{center}
-% \begin{tabular}{|c|c|}
-% \hline
-% object description & register name \\ \hline  \hline
-% bcres for TCM & bcres\_tcm\_delay \\ \hline
-% bcres for FDL & bcres\_fdl\_delay  \\ \hline
-% muon data & muons\_delay  \\ \hline
-% e/g & eg\_delay  \\ \hline
-% tau & tau\_delay \\ \hline
-% jet & jet\_delay  \\ \hline
-% ett & ett\_delay  \\ \hline
-% ht & ht\_delay  \\ \hline
-% etm & etm\_delay  \\ \hline
-% htm & htm\_delay  \\ \hline
-% external conditions & ex\_con\_delay  \\ \hline
-% \end{tabular}
-% \end{center}
-% \caption{delay manager registers}
-% \label{tab_dm_regs}
-% \end{table}
-
-% \subsubsection{Interface Specification}\label{sec:dm-inter}
-% \begin{minipage}{\textwidth}
-% \lstinputlisting[language=VHDL,caption=DM interface specification]{interfaces/dm.vhd}
-% \end{minipage}
-%
 %------------------------------------------------------------------------------
 %
 %  SIM and SPY Memory
@@ -337,43 +222,6 @@ In the current implementation the size every object in the \texttt{lhc\_data\_t}
 are added the SIM/SPY memory must be modified to support this situation (e.g. zero pad the \texttt{lhc\_data\_t}). Furthermore take into account that the PCIe memory bus is 32 bits wide.
 So 16 bit objects should be added to the end of the \texttt{lhc\_data\_t} (as last entry) to keep software memory access simple.
 
-% Table \ref{tab_simpspy} shows the memory layout used to access (read/write) the stored \texttt{lhc\_data\_t}(see Listing \ref{lst_lhc_data_t}). It can be seen that there are areas in
-% the memory that must not be accessed because they do not contain any valid data.
-%require One lhc\_data entry (data for one bunch crossing) needs a memory block
-
-% \begin{table}[h]
-% \begin{center}
-% \begin{tabular}{|c|c|}
-% \hline
-% Address & Data (32 Bit) \\
-% (offset from base address) &  \\ \hline
-% 0x00000 & BX 0: Muon(0).LOW    \\ \hline
-% 0x00001 & BX 0: Muon(0).HIGH   \\ \hline
-% 0x00002 & BX 0: Muon(1).LOW    \\ \hline
-% 0x00003 & BX 0: Muon(1).HIGH   \\ \hline
-% ...    & BX 0: [lhc\_data]    \\ \hline
-% 0x00036 & BX 0: External Conditions (7/8) \\ \hline
-% 0x00037 & BX 0: External Conditions (8/8) \\ \hline
-% 0x00038 & undefined (do not access) \\ \hline
-% ...    & undefined (do not access) \\ \hline
-% 0x0003F & undefined (do not access) \\ \hline
-% 0x00040 & BX 1: Muon(0).LOW    \\ \hline
-% 0x00041 & BX 1: Muon(0).HIGH   \\ \hline
-% 0x00042 & BX 1: Muon(1).LOW    \\ \hline
-% 0x00043 & BX 1: Muon(1).HIGH   \\ \hline
-% ...     & ...       \\ \hline
-% 0x37AF7 & BX 3563: External Conditions (8/8)    \\ \hline
-% \end{tabular}
-% \end{center}
-% \caption{SIM/SPY I memory layout}
-% \label{tab_simpspy}
-% \end{table}
-%
-% It is important to note, that the start address of the SIM/SPY memory (configured in the address decoder) must be a multiple of the size of the memory (in the current
-% configuration $2^{18}$ byte addresses).
-% To handle/simplify the memory access to this memory special python classes (\verb|GTMemory.py| and \verb|GTMemoryImage.py|) are provided. The XML specification in
-% Listing \ref{lst_lhc_data_t_xml} is used to obtain the memory layout. See the source files for further details and examples of how to use them.
-
 \paragraph{SPY memory II}
 The SPY memory II is divided into two subcomponents, to store the $algos$ and $finor$ outputs of the FDL.
 Both memory can only be read over the SW interface. A write access has no effect.
@@ -381,45 +229,6 @@ Both memory can only be read over the SW interface. A write access has no effect
 The algos memory uses the same architecture as the SIM memory.
 The finor memory uses a true-dual-port memory with asymmetric ports. This memory can be written with a data width of one bit and read with a data width of 32 bit.
 
-% \begin{table}[h]
-% \begin{center}
-% \begin{tabular}{|c|c|}
-% \hline
-% Address & Data (32 Bit) \\
-% (offset from base address) &   \\ \hline
-% 0x00000 & BX 0: algos: 31-0 (1/16)     \\ \hline
-% 0x00001 & BX 0: algos: 64-32 (2/16)    \\ \hline
-% ...     & BX 0: ...            \\ \hline
-% 0x0000F & BX 0: algos: 511-480 (16/16)   \\ \hline
-% 0x00010 & BX 1: algos: 31-0 (1/16)    \\ \hline
-% 0x00011 & BX 1: algos: 63-32 (2/16)    \\ \hline
-% ...     & BX 1: ...            \\ \hline
-% 0x0001F & BX 1: algos: 511-480 (16/16)  \\ \hline
-% ...\\ \hline
-% 0x0DEBF & BX 3563: algos: 511-480 (16/16)\\ \hline
-% \end{tabular}
-% \end{center}
-% \caption{SPY II algos memory layout}
-% \label{tab_spy2_algos}
-% \end{table}
-%
-%
-% \begin{table}[h]
-% \begin{center}
-% \begin{tabular}{|c|c|}
-% \hline
-% Address & Data (32 Bit) \\
-% (offset from base address) &   \\ \hline
-% 0x00000 & finor for BX 31-0      \\ \hline
-% 0x00001 & finor for BX 64-32     \\ \hline
-% ...
-% 0x00070 & BX 3563: algos: 3552-3563 \\ \hline
-% \end{tabular}
-% \end{center}
-% \caption{SPY II finor memory layout}
-% \label{tab_spy2_finor}
-% \end{table}
-%
 % Note that the start addresses of the algos and finor memories (configured in the address decoder) must be a multiples of their sizes (in the current configuration $2^{16}$ and $2^7$).
 %
 \paragraph{SPY memory III}
@@ -434,115 +243,12 @@ A true-dual-port memory with 32 Bit data width is used.
 Two true-dual-port memories with 32 Bit data width are used.
 \end{itemize}
 
-% \subsubsection{Software}
-% The \texttt{gtamc514-memdump} python script can be used to access/read all spy memories of the system.  The \texttt{gtamc514-simmem} script is used to write
-% data to the SIM memory. Refer to See \texttt{gtamc514-memdump -h} and \texttt{gtamc514-simmem -h} for further details.
-%
 \subsubsection{Interface Specification}
 
 \begin{minipage}{\textwidth}
 \lstinputlisting[language=VHDL,caption=SPY trigger interface specification]{interfaces/spytrig.vhd}
 \end{minipage}
 
-% \begin{minipage}{\textwidth}
-% \lstinputlisting[language=VHDL,label=lst_simspymem,caption=SIM/SPY I memory interface specification]{interfaces/simspymem.vhd}
-% \end{minipage}
-%
-% \begin{minipage}{\textwidth}
-% \lstinputlisting[language=VHDL,caption=SPY memory II (algos) interface specification]{interfaces/spymem2_algos.vhd}
-% \end{minipage}
-%
-% \begin{minipage}{\textwidth}
-% \lstinputlisting[language=VHDL,caption=SPY memory II (finor) interface specification]{interfaces/spymem2_finor.vhd}
-% \end{minipage}
-%
-% \begin{minipage}{\textwidth}
-% \lstinputlisting[language=VHDL,caption=SPY memory III interface specification]{interfaces/spymem3.vhd}
-% \end{minipage}
-%
-%------------------------------------------------------------------------------
-%
-%  L1A Simulator
-%
-% ------------------------------------------------------------------------------
-% \subsection{L1A Simulator}
-%
-% The simulation component for the l1a signal has been reimplemented based on specification of the last semester.
-%
-% The L1A SIM/MUX module takes as input the synchronized real l1a signal (usually originating from the TCS) and outputs depending on its configuration the (undelayed) real l1a signal or a simulation of the signal. The following simulation modes which are configurable through software register access are available:
-% \begin{itemize}
-% \item fire once: the l1a signal is set to high for exactly one clock cycle as soon as the software
-% register access has been issued. Note that this mode overrides both, the real l1a and
-% any simulation mode. After the single l1a event completed, the L1A SIM/MUX module
-% continues operation according to the sim\_mode register.
-% \item pattern at orbit: replay a predefined l1a pattern at a specified orbit counter value.
-% \item alternating patterns: replay a predefined l1a pattern at an even orbit counter value,
-% followed by another predefined l1a pattern at an odd orbit counter value. This mode
-% is freerunning: the two orbit patterns are replayed in an alternating way as long as the
-% mode is active.
-% \end{itemize}
-% A l1a pattern consists of bunch crossing number (bx\_nr) compare values that indicate
-% when exactly the simulated l1a signal is supposed to be active (set to high). As the maximum
-% frequency of l1a signal occurrences is 100 kHz (10 l1a events per orbit), a l1a pattern
-% consists of 10 such bunch crossing counter compare values. Not all of the 10 places need to be
-% used: in case a bunch crossing counter compare value is higher than BUNCHES\_PER\_ORBIT-1
-% (e.g. 0xdec), but lower than 0x1000, it is ignored. Alternatively unused places can also be
-% set to values that are already specified.
-% Through software register access 2 l1a pattern can be specified: pattern A and pattern B. For
-% the first mode (fire once) no pattern is considered, for the second mode (pattern at orbit), only
-% pattern A is used and for the last mode (alternating patterns), pattern A (even orbits) and
-% pattern B (odd orbits) are used. In case both, the second and the third mode are activated
-% by software register access, the third mode overrides the second one.
-%
-% Registers \ref{l1asim_cfg_reg} \ref{l1asim_orbit_nr_reg} \ref{l1asim_pattern_reg} specify the software interface.
-%
-% \begin{register}{htbp}{L1A Simulator Configuration Register}{}% name=CONFIG
-% 	\label{l1asim_cfg_reg}%
-% 	\regfield{reserved}{28}{4}{0}%
-% 	\regfield{sim\_mode}{2}{2}{0}%
-% 	\regfield{fire\_once}{1}{1}{0}%
-% 	\regfield{enable\_sim}{1}{0}{0}%
-% 	\reglabel{Reset}\regnewline%
-%
-% 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
-% 			\item [enable\_sim] Enables the l1a simulation module. This bit must be 1 for all other configurations to have an effect. If this bit is zero the real l1a signal is presented at the output of the l1asim module.
-% 			\item [fire\_once] When written with 1, triggers one l1a event as soon as the hardware recognizes the register access (It is not possible to exactly time the event using this trigger)
-% 			\item [sim\_mode] Selects one of the two simulation modes (pattern at orbit, alternating patterns). If zero (00) no mode is selected.
-% 	\end{reglist}
-% 	\end{regdesc}
-% \end{register}
-%
-% \begin{register}{htbp}{L1A Simulator Orbit Number Registers}{}% name=CONFIG
-% 	\label{l1asim_orbit_nr_reg}
-% 	\regfield{orbit\_nr\_low}{32}{0}{0}%
-% 	\regfield{reserved}{16}{16}{0}%
-% 	\regfield{orbit\_nr\_high}{16}{0}{0}%
-% 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
-% 		\item [orbit\_nr\_low] The 32 low bits of the 48 bit orbit number, used for the pattern at orbit simulation mode.
-% 		\item [orbit\_nr\_high] The 16 high bits of the 48 bit orbit number, used for the pattern at orbit simulation mode.
-% 	\end{reglist}
-% 	\end{regdesc}
-% \end{register}
-%
-% \begin{register}{htbp}{L1A Simulator Pattern Registers}{}% name=CONFIG
-% 	\label{l1asim_pattern_reg}
-% 	\regfield{reserved}{20}{12}{0}%
-% 	\regfield{bx\_nr}{12}{0}{0}%
-% 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
-% 		\item [bx\_nr] The 12 bit bunch crossing number, used for the pattern at orbit and the alternating patterns simulation mode. Currently there are 10 pattern registers available (l1asim\_pattern\_a[0-4] and l1asim\_pattern\_b[0-4])
-% 	\end{reglist}
-% 	\end{regdesc}
-% \end{register}
-%
-% \subsubsection{Interface Specification}
-%
-% \begin{minipage}{\textwidth}
-% \lstinputlisting[language=VHDL,caption=L1A Simulation module interface specification]{interfaces/l1asim.vhd}
-% \end{minipage}
-%
 %------------------------------------------------------------------------------
 %
 %  TCM
@@ -762,10 +468,6 @@ script                         &purpose    \\ \hline
 \end{tabular}\caption{scripts for testing the tcm}\label{tab:tcm_hw_test}
 \end{scriptsize}
 \end{table}
-
-% \subsubsection{Interface}
-%
-% \lstinputlisting[language=VHDL,caption=TCM interface specification]{interfaces/tcm.vhd}
 
 \subsection{Software Reset} \label{sec:software_reset}
 The software reset module (sw\_reset) provides the possiblity for a software reset via the software event register sw\_reset\_event.

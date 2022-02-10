@@ -39,8 +39,8 @@ gtl_version = "v{}.{}.{}".format(versions["GTL_FW"]["MAJOR"],versions["GTL_FW"][
 fdl_version = "v{}.{}.{}".format(versions["FDL_FW"]["MAJOR"],versions["FDL_FW"]["MINOR"],versions["FDL_FW"]["REV"])
 frame_version = "v{}.{}.{}".format(versions["FRAME"]["MAJOR"],versions["FRAME"]["MINOR"],versions["FRAME"]["REV"])
 
-read_files = ['','','']
-write_files = ['src/latex/content/firmware.tex', 'src/latex/content/gtl.tex', 'src/latex/content/fdl.tex']
+read_files = ['','','','']
+write_files = ['src/latex/content/firmware.tex', 'src/latex/content/gtl.tex', 'src/latex/content/fdl.tex', 'src/latex/content/framework.tex']
 
 # remove existing write_files
 for idx, item in enumerate(write_files):

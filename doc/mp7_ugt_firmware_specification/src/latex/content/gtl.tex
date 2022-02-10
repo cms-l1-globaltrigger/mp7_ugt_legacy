@@ -1,12 +1,11 @@
 \section{Global Trigger Logic}
 \label{sec:gtl:global_trigger_logic}
 
-\textbf{Remark:}\\
 This description is for version v1.17.1 of Global Trigger Logic.\\
 
 The Global Trigger Logic (\ugtl) firmware contains conditions and algorithms for trigger decision.
 
-% Definitions are based on document ~\cite{scales_inputs_2_ugt}.
+Definitions are based on document~\cite{interface}.
 
 \begin{figure}[htb]
 \centering
@@ -52,7 +51,8 @@ The Global Trigger Logic (\ugtl) firmware contains conditions and algorithms for
 \label{sec:gtl:optical_interfaces}
 
 \textbf{Remark:}\\
-All definitions for scales in the following chapters are from a CMS Detector Note: "Scales for inputs to $\mu$GT" (see current version in \url{https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf}).
+% All definitions for scales in the following chapters are from a CMS Detector Note: "Scales for inputs to $\mu$GT" (see current version in \url{https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf}).
+All definitions for scales in the following chapters are from a CMS Detector Note: "Scales for inputs to $\mu$GT" (see~\cite{interface}).
 
 \subsubsection{Calo-Layer2 optical interfaces}
 \label{sec:gtl:gct_optical_interfaces}
@@ -223,10 +223,27 @@ The top-of-hierarchy module (\texttt{gtl\_module.vhd}) contains
 
 Listing~\ref{lst:gtl_module_vhd} contains the entity-declaration of the top-of-hierarchy file (\texttt{gtl\_module.vhd}).
 
-%% "automatic generation" of entity-list (see /scripts/extract_entities.sh)
 \lstinputlisting[label=lst:gtl_module_vhd,language=VHDL,caption=Entity declaration of \texttt{gtl\_module.vhd}]{interfaces/gtl_module_tpl.vhd}
 
 All the declarations for arrays ('type'), parameters ('constant') and look-up-tables ('constant') used in modules are available in \texttt{gtl\_pkg.vhd} package-file.
+
+\medskip
+\begin{table}
+\footnotesize
+\caption{Explanation of Listing~\ref{lst:fdl_module_vhd}}
+\vspace{5mm}
+\centering
+\begin{tabular}{l p{.7\columnwidth}}
+\toprule
+{Item} & {Explanation}\\
+\midrule
+\verb|lhc_clk| & clock input (LHC clock).\\
+\verb|gtl_data| & input data ($\pm$2bx data).\\
+\verb|algo_o| & algorithms output.\\
+\bottomrule
+\end{tabular}
+\label{tab:gtl:explanation_fdl_module_vhd}
+\end{table}
 
 \clearpage
 
@@ -266,18 +283,6 @@ For each selected object, the Calo-Layer2 sends parameters for \pt and for posit
 \item 5 bits spare
 \end{itemize}
 
-% The data structure of an \egamma object (bits 27..31 are not defined yet, reserved for quality, ...):
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,8,9,16,17,24,25,26,27,31} \\
-%         \bitbox {5}     {\texttt{spare}} &
-%         \bitbox {2}     {\texttt{iso}} &
-%         \bitbox {8}     {\texttt{$\varphi$}}  &
-%         \bitbox {8}     {\texttt{$\eta$}}  &
-%         \bitbox {9}     {\texttt{\pt}} \\
-% \end{bytefield}
-% \end{center}
-
 \textbf{jet}:\\ Twelve objects are passed to the \ugt for each event.\\
 For each selected object, the Calo-Layer2 sends parameters: \pt, for position information, a DISP bit and quality information - encoded in 32 bits:
 \begin{itemize}
@@ -289,20 +294,6 @@ For each selected object, the Calo-Layer2 sends parameters: \pt, for position in
 \item 2 bits spare
 \end{itemize}
 
-% The data structure of a jet object (bits 30..31 are spare bits):
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,10,11,18,19,26,27,27,28,29,30,31} \\
-%         \bitbox {2}     {\texttt{sp}} &
-%         \bitbox {2}     {\texttt{qu}} &
-%         \bitbox {1}     {\texttt{D}} &
-%         \bitbox {8}     {\texttt{$\varphi$}}  &
-%         \bitbox {8}     {\texttt{$\eta$}}  &
-%         \bitbox {11}    {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
-% D = DISP bit, qu = quality flags, sp = spare bits.
-
 \textbf{tau}:\\ Twelve objects are passed to the \ugt for each event.\\
 For each selected object, the Calo-Layer2 sends parameters for \pt and for position information and isolation - encoded in 32 bits:
 \begin{itemize}
@@ -312,18 +303,6 @@ For each selected object, the Calo-Layer2 sends parameters for \pt and for posit
 \item 2 bits isolation
 \item 5 bits spare
 \end{itemize}
-
-% The data structure of a tau object (bits 27..31 are not defined yet, reserved for quality, ...):
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,8,9,16,17,24,25,26,27,31} \\
-%         \bitbox {5}     {\texttt{spare}} &
-%         \bitbox {2}     {\texttt{iso}} &
-%         \bitbox {8}     {\texttt{$\varphi$}}  &
-%         \bitbox {8}     {\texttt{$\eta$}}  &
-%         \bitbox {9}     {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
 
 The representation of the 8 bits (called "hardware index [HW index]") in $\eta$ is expected as Two's Complement notation as shown below.\\
 
@@ -411,70 +390,16 @@ Calo-Layer2 sends 6 frames (each 32 bits) with Energy sum quantities containing 
 \end{itemize}
 
 Frame 0: The data structure of "total Et" (\ett) quantity [including "total Et from ECAL only" (ETTEM) and "minimum bias HF+ threshold 0" bits].
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,11,12,23,24,27,28,31} \\
-%         \bitbox {4}    {\texttt{MBT0HFP}} &
-%         \bitbox {4}    {\texttt{spare}} &
-%         \bitbox {12}    {\texttt{\et [ETTEM]}} &
-%         \bitbox {12}    {\texttt{\et [\ett]}} \\
-% \end{bytefield}
-% \end{center}
 
 Frame 1: The data structure of "total calibrated Et in jets" (\htt) quantity [including "towercount" and "minimum bias HF- threshold 0" bits].
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,11,12,24,25,27,28,31} \\
-%         \bitbox {4}    {\texttt{MBT0HFM}} &
-%         \bitbox {3}    {\texttt{spare}} &
-%         \bitbox {13}    {\texttt{TOWERCOUNT}} &
-%         \bitbox {12}    {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
 
 Frame 2: The data structure of "missing Et" (\etm) quantity [including "Asymmetry" ASYMET and "minimum bias HF+ threshold 1" bits].
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,11,12,19,20,27,28,31} \\
-%         \bitbox {4}    {\texttt{MBT1HFP}} &
-%         \bitbox {8}    {\texttt{ASYMET}} &
-%         \bitbox {8}     {\texttt{$\varphi$}} &
-%         \bitbox {12}    {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
 
 Frame 3: The data structure of "missing Ht" (\htm) quantity [including "Asymmetry" ASYMHT and "minimum bias HF- threshold 1" bits].
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,11,12,19,20,27,28,31} \\
-%         \bitbox {4}    {\texttt{MBT1HFM}} &
-%         \bitbox {8}    {\texttt{ASYMHT}} &
-%         \bitbox {8}     {\texttt{$\varphi$}} &
-%         \bitbox {12}    {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
 
 Frame 4: The data structure of "missing Et including HF" (ET$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMETHF and "Centrality" bits (3:0)].
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,11,12,19,20,27,28,31} \\
-%         \bitbox {4}    {\small \texttt{CENT[3:0]}} &
-%         \bitbox {8}    {\texttt{ASYMETHF}} &
-%         \bitbox {8}     {\texttt{$\varphi$}} &
-%         \bitbox {12}    {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
 
 Frame 5: The data structure of "missing Ht including HF" (HT$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMHTHF and "Centrality" bits (7:4)].
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,11,12,19,20,27,28,31} \\
-%         \bitbox {4}    {\small \texttt{CENT[7:4]}} &
-%         \bitbox {8}    {\texttt{ASYMHTHF}} &
-%         \bitbox {8}     {\texttt{$\varphi$}} &
-%         \bitbox {12}    {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
 
 \clearpage
 
@@ -495,27 +420,6 @@ Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data stru
 \item 1 spare bit
 \item 2 bits impact parameter
 \end{itemize}
-
-% The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = charge valid, bit 61 is a spare bit, bit 63..62 = impact parameter):
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
-%         \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
-%         \bitbox {2}     {\small  \texttt{imp}}       &
-%         \bitbox {1}     {\small  \texttt{s}}       &
-%         \bitbox {8}     {\texttt{unconst.\pt}}       &
-%         \bitbox {10}    {\texttt{$\varphi$} (out)}
-%         \bitbox {7}     {\texttt{index bits}}
-%         \bitbox {2}     {\small  \texttt{ch}}       &
-%         \bitbox {2}     {\small \texttt{iso}} \\
-%         [3ex]
-%         \bitheader{0,9,10,18,19,22,23,31} \\
-%         \bitbox {9}     {\texttt{$\eta$} (extrapol.)}       &
-%         \bitbox {4}     {\texttt{qual}}       &
-%         \bitbox {9}     {\texttt{\pt}}    &
-%         \bitbox {10}    {\texttt{$\varphi$} (extrapol.)} \\
-% \end{bytefield}
-% \end{center}
-% ch = charge bits, s = spare bit, imp = impact parameter.
 
 The representation of the 9 bits (called "hardware index [HW index]") in $\eta$ is expected as Two's Complement notation as shown in Table~\ref{tab:gtl:muon_eta_scale}.\\
 The central value of the bin 0 (-0.010875/2 to +0.010875/2) = 0.0, the left edge of the bins will range from $-255 \times 0.010875 - 0.010875/2 = -2.7785625$ to $+255 \times 0.010875 - 0.010875/2 = 2.7676875$.
@@ -802,9 +706,6 @@ M=$\sqrt{2 pt_1  pt_2 (\cosh(\eta1-\eta2)-\cos(\varphi1-\varphi2))}$.
 
 The calculation of $\frac{M^2}{2}$ in VHDL (no square root in VHDL) is done by multiplying LUT values of pt1, pt2 and the difference of $\cosh($$\Delta\eta$$)$ and $\cos($$\Delta\varphi$$)$.
 
-% In TME there are two thresholds for M: "greater/equal lower limit" and "less/equal upper limit", given in GeV with one position after decimal point in even numbers.\footnote{even numbers to get a precision of one position after decimal point after dividion by 2, because VHDL-Producer calculates thresholds for $\frac{M^2}{2}$, which includes a division by 2.}
-% The comparison in VHDL is done with $\frac{M^2}{2}$ (no square root in VHDL), thresholds for $\frac{M^2}{2}$ are provided by VHDL-Producer.\\
-
 \textbf{Transverse mass calculation}
 \label{sec:gtl:transverse_mass_calculation}
 
@@ -862,8 +763,6 @@ pt=$\sqrt{pt^2_1 + pt^2_2 + 2  pt_1 pt_2 (\cos(\varphi1) \cos(\varphi2) + \sin(\
 
 The calculation of ${pt^2}$ in VHDL (no square root in VHDL) using LUTs for pt1, pt2, $\cos($$\varphi$$)$ and $\sin($$\varphi$$)$.
 
-% The calculation of ${pt^2}$ in VHDL (no square root in VHDL) is done by building sum of $\cos($$$\varphi$\_1$$)$x$\cos($$$\varphi$\_2$$)$ LUT value and $\sin($$$\varphi$\_1$$)$x$\sin($$$\varphi$\_2$$)$ LUT value, multiplying the sum with 2 and \pt_1 and \pt_1 LUT values and addiding the squares of \pt_1 and \pt_1 LUT values.
-
 % In the TME there is one threshold for pt, given in GeV (floating point notation) with one position after decimal point.
 % The comparison in VHDL is done with ${pt^2}$ (no square root in VHDL), threshold for ${pt^2}$ is provided by VHDL-Producer.
 
@@ -878,39 +777,6 @@ of objects are the same, "0S" means that at least one object has different charg
 There is no charge correlation for single type conditions.\\
 In all cases the "charge valid" bit of the objects must be set.\\
 In TME one can select "LS", "0S" or ignore for charge correlation in muon conditions.\\
-
-% % Table proposed by Vasile Ghete!!!
-% Double Muon
-%
-% x x : I ignore (charge x = +, -, I)
-% + + : LS both positive muons
-% - - : LS both negative muons
-% I I : LS both muons with the same sign, positive or negative
-% + - : OS two muons of opposite sign
-% - + : OS idem
-% I I : OS idem
-%
-% TripleMuon:
-%
-% x x x : I  ignore (charge x = +, -, I)
-% + + + : LS three muons of positive charge
-% - - - : LS three muons of negative charge
-% I I I : LS three muons of the same sign (positive or negative)
-% + + - : OS a pair plus a positive muon
-% + - - : OS a pair plus a negative muon
-% + - I : OS a pair plus a negative or positive muon
-%
-% QuadMuon
-%
-% x x x x : I  ignore (charge x = +, -, I)
-% + + + + : LS four muons of positive charge
-% - - - - : LS four muons of negative charge
-% I I I I : LS four muons of the same sign (positive or negative)
-% + + + - : OS a pair plus two positive muons
-% + + - - : OS two pairs
-% + - - - : OS a pair plus two negative muons
-% + - I I : OS a pair plus two negative or positive muons
-%
 
 \begin{table}[ht]
 \caption{Muon charge correlation - Double Muon}
@@ -1129,19 +995,6 @@ JET-JET-InverseDeltaRMath\\
 TAU-TAU-InverseDeltaRMath\\
 MU-MU-InverseDeltaRMath\\
 
-% \textbf{LUTs for \pt used two-body pt cuts}
-%
-% The values of \pt LUT are calculated by building the difference of maximum and minimum value of a bin, rounding at precision position after decimal point and multiplying with $10^precision$ to get integer values.\\
-% The address input of the LUT for \pt is the value of hardware index of \pt.
-%
-% The precision values in XML file are given by (an example for \egamma \egamma correlation):
-% \textit{<scale>
-%     <object>PRECISION</object>
-%     <type>EG-EG-TwoBodyPt</type>
-%     ...
-%     <n\_bits>1</n\_bits>
-% </scale>}\\
-
 \textbf{LUTs for $\cos($$\varphi$$)$ used in two-body pt calculations}
 \label{sec:gtl:calc_luts_cos_phi}
 
@@ -1233,8 +1086,6 @@ Additionally charge correlation cuts with "Double objects requirements condition
 
 For the entity-declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd}{\texttt{esums\_conditions.vhd}}, see Listing~\ref{lst:esums_conditions_vhd}.
 
-% "automatic generation" of listings (see /scripts/extract_entities.sh)
-%% REMARK: HB 2015-04-29: esums_conditions.vhd is not in ../firmware/gt_mp7/trunk/src and (scripts/extract_entities.sh) now, so interfaces/esums_conditions.vhd was copied and edited by hand.
 \lstinputlisting[label=lst:esums_conditions_vhd,language=VHDL,caption=Entity declaration of \texttt{esums\_conditions.vhd}]{interfaces/esums_conditions.vhd}
 
 \medskip

@@ -13,6 +13,7 @@
 \documentclass[11pt,a4paper,english,titlepage]{article}
 
 % Include packages.
+\usepackage{cite}
 \usepackage{gtupgrade}
 
 % Document information.
@@ -81,8 +82,22 @@
 \input{content/acronyms.tex}
 \end{acronym}
 
-% % Bibliography files.
-\docbib{bib/gt-mp7}
+\clearpage
+
+\begin{thebibliography}{00}
+
+\bibitem {MP7}
+MP7 documentation:\\
+\url{http://www.hep.ph.ic.ac.uk/mp7}
+
+% \bibitem {muon}
+% \url{http://www.hephy.at/project/cms/trigger/globalMuonTrigger/notes/in04\_006.pdf}
+
+\bibitem {interface}
+Calo-layer2 and Global Muon Trigger interface documentation:\\
+\url{https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf}
+
+\end{thebibliography}
 
 % Index.
 \docindex{}

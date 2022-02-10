@@ -5,7 +5,7 @@ This description is for version v1.17.1 of Global Trigger Logic.\\
 
 The Global Trigger Logic (\ugtl) firmware contains conditions and algorithms for trigger decision.
 
-% Definitions are based on document ~\cite{scales_inputs_2_ugt}.
+Definitions are based on document~\cite{interface}.
 
 \begin{figure}[htb]
 \centering
@@ -16,8 +16,6 @@ The Global Trigger Logic (\ugtl) firmware contains conditions and algorithms for
 
 \subsection{\ugtl Interface}
 \label{sec:gtl:ugtl_interface}
-
-
 
 \textbf{Inputs:}
 \begin{itemize}
@@ -225,10 +223,27 @@ The top-of-hierarchy module (\texttt{gtl\_module.vhd}) contains
 
 Listing~\ref{lst:gtl_module_vhd} contains the entity-declaration of the top-of-hierarchy file (\texttt{gtl\_module.vhd}).
 
-%% "automatic generation" of entity-list (see /scripts/extract_entities.sh)
 \lstinputlisting[label=lst:gtl_module_vhd,language=VHDL,caption=Entity declaration of \texttt{gtl\_module.vhd}]{interfaces/gtl_module_tpl.vhd}
 
 All the declarations for arrays ('type'), parameters ('constant') and look-up-tables ('constant') used in modules are available in \texttt{gtl\_pkg.vhd} package-file.
+
+\medskip
+\begin{table}
+\footnotesize
+\caption{Explanation of Listing~\ref{lst:fdl_module_vhd}}
+\vspace{5mm}
+\centering
+\begin{tabular}{l p{.7\columnwidth}}
+\toprule
+{Item} & {Explanation}\\
+\midrule
+\verb|lhc_clk| & clock input (LHC clock).\\
+\verb|gtl_data| & input data ($\pm$2bx data).\\
+\verb|algo_o| & algorithms output.\\
+\bottomrule
+\end{tabular}
+\label{tab:gtl:explanation_fdl_module_vhd}
+\end{table}
 
 \clearpage
 
@@ -1071,8 +1086,6 @@ Additionally charge correlation cuts with "Double objects requirements condition
 
 For the entity-declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd}{\texttt{esums\_conditions.vhd}}, see Listing~\ref{lst:esums_conditions_vhd}.
 
-% "automatic generation" of listings (see /scripts/extract_entities.sh)
-%% REMARK: HB 2015-04-29: esums_conditions.vhd is not in ../firmware/gt_mp7/trunk/src and (scripts/extract_entities.sh) now, so interfaces/esums_conditions.vhd was copied and edited by hand.
 \lstinputlisting[label=lst:esums_conditions_vhd,language=VHDL,caption=Entity declaration of \texttt{esums\_conditions.vhd}]{interfaces/esums_conditions.vhd}
 
 \medskip

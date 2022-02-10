@@ -8,7 +8,7 @@ The Final Desicion Logic (\ufdl) firmware contains algo-bx-masks, suppression of
 \begin{figure}[htb]
 \centering
 \includegraphics[width=15cm]{figures/mFDL_firmware}
-\caption{\ufdl firmware v1.0.1}
+\caption{\ufdl firmware}
 \label{fig:fdl:mFDL_firmware}
 \end{figure}
 
@@ -56,7 +56,7 @@ The firmware of \ufdl in this document is based on a hardware configuration with
 \begin{figure}[htb]
 \centering
 \includegraphics[width=15cm]{figures/fdl_pipeline_v1_0_1}
-\caption{\ufdl pipeline v1.0.1}
+\caption{\ufdl pipeline}
 \label{fig:fdl:mFDL_pipeline}
 \end{figure}
 
@@ -75,6 +75,66 @@ A mapping for Algorithms is provided, to give flexibility for setting the index 
 \item TME should take care of assignment of each Algorithm to a number, that means if in card 1 algo\_59 is defined, nobody allows to produce the same number again.
 \end {itemize}
 % A software which manages these partitioned Algorithms for setting prescale factors, reading rate-counters and other accesses has to be developed.\\
+
+\clearpage
+
+\subsection{Implementation in firmware}
+\label{sec:fdl:implementation_firmware}
+
+The entity-declaration of \texttt{fdl\_module.vhd} is shown in \ref{sec:fdl:data_flow}.\\
+
+Listing~\ref{lst:fdl_module_vhd} contains the entity-declaration of the \texttt{fdl\_module.vhd}.\\
+
+\lstinputlisting[label=lst:fdl_module_vhd,language=VHDL,caption=Entity declaration of \texttt{fdl\_module.vhd}]{interfaces/fdl_module.vhd}
+
+\medskip
+\begin{table}
+\footnotesize
+\caption{Explanation of Listing~\ref{lst:fdl_module_vhd}}
+\vspace{5mm}
+\centering
+\begin{tabular}{l p{.7\columnwidth}}
+\toprule
+{Item} & {Explanation}\\
+\midrule
+\verb|SIM_MODE| & switch for simulation mode.\\
+\verb|PRESCALE_FACTOR_INIT| & init value for prescale factor.\\
+\verb|MASKS_INIT| & init value for BX mask.\\
+\verb|PRESCALE_FACTOR_SET_INDEX_WIDTH| & width of prescale factor set index.\\
+\verb|PRESCALE_FACTOR_SET_INDEX_REG_INIT| & init value prescale factor set index register.\\
+\verb|L1A_LATENCY_DELAY_INIT| & init value of L1A latency delay.\\
+\verb|CNTRL_REG_INIT| & init value control register.\\
+\verb|ALGO_INPUTS_FF| & switch for algos input flip-flops.\\
+\verb|ipb_clk| & IPBus clock input.\\
+\verb|ipb_rst| & IPBus reset input.\\
+\verb|ipb_in| & IPBus data input.\\
+\verb|ipb_out| & IPBus data output.\\
+\verb|lhc_clk| & clock input (LHC clock).\\
+\verb|lhc_rst| & reset input.\\
+\verb|bcres| & TTC BGo bunch counter reset input.\\
+\verb|test_en| & TTC BGo test enable input.\\
+\verb|l1a| & L1A input.\\
+\verb|begin_lumi_section| & begin of lumisection input.\\
+\verb|algo_i| & algos input.\\
+\verb|bx_nr_out| & bunch crossing number output.\\
+\verb|prescale_factor_set_index| & prescale factor set data output.\\
+\verb|algo_after_gtLogic_rop| & algos after GTL output.\\
+\verb|algo_after_bxomask_rop| & algos after BX mask output.\\
+\verb|algo_after_prescaler_rop| & algos after prescaler output.\\
+\verb|local_finor_rop| & local FINOR output.\\
+\verb|local_veto_rop| & local VETO output.\\
+\verb|finor_2_mezz_lemo| & FINOR to MP7 mezzanine board and via LEMO connection to FINOR board.\\
+\verb|finor_preview_2_mezz_lemo| & FINOR preview to MP7 mezzanine board and via LEMO connection to FINOR preview board.\\
+\verb|veto_2_mezz_lemo| & VETO to MP7 mezzanine board and via LEMO connection to FINOR board.\\
+\verb|finor_w_veto_2_mezz_lemo| & FINOR with VETO to MP7 mezzanine board and via LEMO connection to FINOR board.\\
+\verb|local_finor_with_veto_o| & local FINOR with VETO output.\\
+\verb|algo_bx_mask_sim| & algo BX mask input for simulation.\\
+\bottomrule
+\end{tabular}
+\label{tab:gtl:explanation_fdl_module_vhd}
+\end{table}
+
+\clearpage
 
 \subsection{Main parts}
 
@@ -454,15 +514,4 @@ The veto-masks are implemented as registers and loaded at the begin of a run.
 
 The \finor-signal is a disjunction of all Algorithms passed the \finor-bx-masks. An Algorithm enabled by veto-mask, disables the \finor. This is done on the FINOR-AMC502 module.
 
-\subsection{Implementation in firmware}
-\label{sec:fdl:implementation_firmware}
-
-The entity-declaration of \texttt{fdl\_module.vhd} is shown in \ref{sec:fdl:data_flow}.\\
-
-Listing~\ref{lst:fdl_module_vhd} contains the entity-declaration of the \texttt{fdl\_module.vhd}.\\
-
-%% "automatic generation" of entity-list (see /scripts/extract_entities.sh)
-\lstinputlisting[label=lst:fdl_module_vhd,language=VHDL,caption=Entity declaration of \texttt{fdl\_module.vhd}]{interfaces/fdl_module.vhd}
-
 \clearpage
-

@@ -15,7 +15,7 @@ Figure \ref{fig_system_overview} shows the basic components of Framework togethe
 \label{fig_system_overview}
 \end{figure}
 
-The central data type of Framework is shown in Listing \ref{lst_lhc_data_t} (see Section \ref{section_lhc_data_pkg} for details). In the current configuration it comprises
+The central data type of Framework is shown in Listing \ref{lst_lhc_data_t} (see Section \ref{sec:fw:section_lhc_data_pkg} for details). In the current configuration it comprises
 2304 bits (288 Bytes). Data from the GTH interfaces is demultiplexed (from 240 MHz clock domain to LHC clock domain, see Demux Lane Data \ref{sec:frame:demux_lane_data}) and mapped to this data type in the LMP (Lane Mapping Process). It is also used as input and output type for the SIM/SPY I memory.
 
 \subsection{Implementation in firmware}
@@ -265,7 +265,7 @@ This is achieved by subtracting 2 form the bunch crossing number before using it
 To generate the $lhc\_data\_o$ signal the LHC-clock domain data out ports of the internal memories are concatenated and converted back to the \texttt{lhc\_data\_t}.
 
 If the \texttt{lhc\_data\_t} is changed (e.g. new objects added) no modifications in the SIM/SPY memory are required. The SIM/SPY memory only depends on the (auto-generated)
-functions used to convert a \texttt{lhc\_data\_t} signal to \texttt{std\_logic\_vector} and vice versa (see Section \ref{section_lhc_data_pkg} for details).
+functions used to convert a \texttt{lhc\_data\_t} signal to \texttt{std\_logic\_vector} and vice versa (see Section \ref{sec:fw:section_lhc_data_pkg} for details).
 
 In the current implementation the size every object in the \texttt{lhc\_data\_t} is a multiple of 32 bit. This is also expected by the SIM/SPY memory. If objects with 16 bit sizes
 are added the SIM/SPY memory must be modified to support this situation (e.g. zero pad the \texttt{lhc\_data\_t}). Furthermore take into account that the PCIe memory bus is 32 bits wide.

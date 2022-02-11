@@ -269,7 +269,7 @@ deactivate
 ```
 ## Contact
 
-[Bernhard Arnold](bernhard.arnold@cern.ch)    
-[Herbert Bergauer](herbert.bergauer@oeaw.ac.at) - Developer
-[Manfred Jeitler](Manfred.Jeitler@cern.ch)    
+<[Bernhard Arnold](bernhard.arnold@cern.ch) >   
+<[Herbert Bergauer](herbert.bergauer@oeaw.ac.at)> - Developer
+<[Manfred Jeitler](Manfred.Jeitler@cern.ch)>    
 

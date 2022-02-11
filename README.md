@@ -4,7 +4,7 @@ Firmware for the CMS Global Trigger (uGT).
 
 This repository contains the algorithm part of the CMS uGT firmware. It has been written for the Imperial MP7, a Virtex-7 based AMC module.
 
-Documentaion of [uGT firmware](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/doc/mp7_ugt_firmware_specification/pdf/gt-mp7-firmware-specification.pdf)
+Documentaion of [uGT firmware](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/doc/mp7_ugt_firmware_specification/pdf/gt-mp7-firmware-specification.pdf).
 
 The uGT is versioned with the following scheme:
 
@@ -104,7 +104,7 @@ pip install -r <mp7_ugt_legacy_path>/scripts/requirements.txt
 
 Run simulation using Questa.
 
-**Remarks:**
+*Remarks:*
 - MIF files (for mass over deltaR) are located in 'mp7_ugt_legacy/firmware/sim' for simulation.
 - These files have to be in directory from where one runs script "run_simulation_questa.py".
 - Change to directory 'mp7_ugt_legacy/firmware/sim' is mandatory.
@@ -115,7 +115,7 @@ cd mp7_ugt_legacy/firmware/sim
 python3 ../../scripts/run_simulation_questa.py <L1Menu name> --menu_url <URL L1Menu> --tv <testvector file path>
 ```
 
-**Note:** inspect for default values and other arguments
+*Note:* inspect for default values and other arguments
 ```bash
 python3 ../../scripts/run_simulation_questa.py -h
 ```
@@ -128,7 +128,7 @@ python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8_disp
 
 ### Build
 
-**Remarks:**
+*Remarks:*
 - FW versions greater or equal 0x1130 are used for uGMT v6.1.0 and unpacker (with bug fix for shifted raw eta).
 - FW versions greater or equal 0x1120 and lower 0x1130 are used for uGMT v6.0.0_patch1 and unpacker (with bug: shifted raw eta).
 
@@ -206,7 +206,7 @@ Run synthesis script (for all 6 modules).
 python3 scripts/run_synth_ipbb.py <L1Menu name> --menuurl <URL MP7 L1menu repo> --ugturl <URL ugt git repo> --ugt <ugt tag in repo> --build <build-version> -p <work dir>
 ```
 
-**Note:** inspect default values for arguments using
+*Note:* inspect default values for arguments using
 ```bash
 python3 scripts/run_synth_ipbb.py -h
 ```
@@ -269,7 +269,7 @@ deactivate
 ```
 ## Contact
 
-<[Bernhard Arnold](bernhard.arnold@cern.ch) >   
-<[Herbert Bergauer](herbert.bergauer@oeaw.ac.at)> - Developer
-<[Manfred Jeitler](Manfred.Jeitler@cern.ch)>    
+Bernhard Arnold [<bernhard.arnold@cern.ch>]<br>
+Herbert Bergauer (Developer) [<herbert.bergauer@oeaw.ac.at>]<br>
+Manfred Jeitler [<Manfred.Jeitler@cern.ch>]
 

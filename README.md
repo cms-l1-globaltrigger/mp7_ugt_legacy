@@ -17,11 +17,11 @@ In addition there are versions (with similar schemes) for the following firmware
 * Global Trigger Logic (gtl_module.vhd)
 * Final Decision Logic (fdl_module.vhd)
 
-## Instructions for setting up the simulation and build environments.
+## Instructions for setting up simulation and build environments.
 
 ### Simulate
 
-Simulation of VHDL module "gtl_fdl_wrapper" with Questa simulator for 6 ugt modules
+Simulation of VHDL module "gtl_fdl_wrapper.vhd" with Questa simulator for 6 ugt modules.
 
 * This is a description running script `run_simulation_questa.py` for simulation.
 * If Questasim libraries for a certain Vivado version do not exist, they have to be created for the selected Questasim version with script 'run_compile_simlib.py':
@@ -132,9 +132,11 @@ python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8_disp
 - FW versions greater or equal 0x1130 are used for uGMT v6.1.0 and unpacker (with bug fix for shifted raw eta).
 - FW versions greater or equal 0x1120 and lower 0x1130 are used for uGMT v6.0.0_patch1 and unpacker (with bug: shifted raw eta).
 
-#### Build `mp7_ugt` firmware using IPBB
+#### Build `mp7_ugt` firmware using IPBus builder (IPBB)
 
-* This is a draft description with branches of MP7 and ugt repos.
+The firmware uses the ipbb build tool, and requires the ipbus system firmware. If you are going to build on a computer outside of the CERN network, then you will need to run kerberos (kinit username@CERN.CH). These instructions assume that you have your Xilinx Vivado licensing already setup for your enviroment.
+
+* This is a description with branches of MP7 and ugt repos.
 * A fork of [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware is available in [MP74UGT](https://gitlab.cern.ch/hbergaue/mp7) with branch:
   - "mp7fw_v3_0_0_mp7_ugt" created from tag mp7fw_v3_0_0.
 * This branch contains patched MP7 files for mp7_ugt_legacy (patched with [mp7patch.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/mp7patch.py)):

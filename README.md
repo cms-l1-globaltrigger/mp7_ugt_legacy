@@ -13,13 +13,13 @@ The uGT is versioned with the following scheme:
 * Rev version: Bug fixes, change/add scripts.
 
 In addition there are versions (with similar schemes) for the following firmware parts of uGT:
-frame.vhd
-gtl_module.vhd
-fdll_module.vhd
+* Framework (frame.vhd)
+* Global Trigger Logic (gtl_module.vhd)
+* Final Decision Logic (fdl_module.vhd)
 
-Instructions for setting up the simulation and build environments.
+## Instructions for setting up the simulation and build environments.
 
-## Simulate
+### Simulate
 
 Simulation of VHDL module "gtl_fdl_wrapper" with Questa simulator for 6 ugt modules
 
@@ -39,7 +39,7 @@ Following table shows which Questasim libraries for a certain Vivado version hav
 | 2021.1 | v8.4.4 | X | ok |
 | 2021.2 | v8.4.5 | X | ok |
 
-### Workflow
+#### Workflow
 
 Make sure that Questasim license file is set (MGLS_LICENSE_FILE).
 
@@ -104,7 +104,7 @@ pip install -r <mp7_ugt_legacy_path>/scripts/requirements.txt
 
 Run simulation using Questa.
 
-REMARK:
+**Remarks:**
 - MIF files (for mass over deltaR) are located in 'mp7_ugt_legacy/firmware/sim' for simulation.
 - These files have to be in directory from where one runs script "run_simulation_questa.py".
 - Change to directory 'mp7_ugt_legacy/firmware/sim' is mandatory.
@@ -126,13 +126,13 @@ cd mp7_ugt_legacy/firmware/sim
 python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8_disp-d1 --menu_url https://raw.githubusercontent.com/herbberg/l1menus/master/2021 --tv /home/bergauer/github/herbberg/l1menus/2021/L1Menu_Collisions2020_v0_1_8_disp-d1/testvectors/TestVector_L1Menu_Collisions2020_v0_1_8_disp.txt --ignored
 ```
 
-## Build
+### Build
 
-#### Remarks
+**Remarks:**
 - FW versions greater or equal 0x1130 are used for uGMT v6.1.0 and unpacker (with bug fix for shifted raw eta).
 - FW versions greater or equal 0x1120 and lower 0x1130 are used for uGMT v6.0.0_patch1 and unpacker (with bug: shifted raw eta).
 
-### Build `mp7_ugt` firmware using IPBB
+#### Build `mp7_ugt` firmware using IPBB
 
 * This is a draft description with branches of MP7 and ugt repos.
 * A fork of [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware is available in [MP74UGT](https://gitlab.cern.ch/hbergaue/mp7) with branch:
@@ -151,7 +151,7 @@ python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8_disp
   - script [checkIpbbSynth.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/checkIpbbSynth.py) for checking used fpga resources.
   - script [fwpackerIpbb.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/fwpackerIpbb.py) for packing firmware files in a tar file.
 
-### Setup using script
+#### Setup using script
 
 Set the following environment variables (preferably in `.bashrc`):
 
@@ -219,7 +219,7 @@ python3 scripts/run_synth_ipbb.py L1Menu_Collisions2020_v0_1_8-d1
   -p ~/work_synth/production/
 ```
 
-### Setup (commands for one module)
+#### Setup (commands for one module)
 
 Run kerberos for outside of CERN network
 ```bash

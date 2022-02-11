@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v3.0.0] - 2022-01-28
+## [v3.0.0] - 2022-02-11
 ### Comment
 
 - mp7_ugt firmware release v3.0.0
@@ -14,8 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../payload/gtl_module_tpl.vhd
 
-
-## [v1.19.2] - 2022-02-02
+## [v1.19.2] - 2022-02-10
 ### Comment
 
 - mp7_ugt firmware release v1.19.2
@@ -23,10 +22,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - script files:
-  - doc/../src/latex/replace_versions_and_make.py
+  - doc/mp7_ugt_firmware_specification/src/latex/replace_versions_and_make.py
+  - doc/gtl_4_emulator/src/latex/replace_versions_and_make.py
+- tex files:
   - doc/../src/latex/content/fdl_tmpl.tex
   - doc/../src/latex/content/gtl_tmpl.tex
   - doc/../src/latex/content/firmware_tmpl.tex
+  - doc/../src/latex/content/framework_tmpl.tex
 
 ### Changed
 - source files:

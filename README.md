@@ -1,6 +1,27 @@
+# uGT firmware
+
+Firmware for the CMS Global Trigger (uGT).
+
+This repository contains the algorithm part of the CMS uGT firmware. It has been written for the Imperial MP7, a Virtex-7 based AMC module.
+
+Documentaion of [uGT firmware](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/doc/mp7_ugt_firmware_specification/pdf/gt-mp7-firmware-specification.pdf)
+
+The uGT is versioned with the following scheme:
+
+* Major version: Changes in firmware structure, changes that require significant interventions at P5.
+* Minor version: New features for trigger decisions.
+* Rev version: Bug fixes, change/add scripts.
+
+In addition there are versions (with similar schemes) for the following firmware parts of uGT:
+frame.vhd
+gtl_module.vhd
+fdll_module.vhd
+
+Instructions for setting up the simulation and build environments.
+
 ## Simulate
 
-Simulation of gtl_fdl_wrapper with Questa simulator for 6 ugt modules
+Simulation of VHDL module "gtl_fdl_wrapper" with Questa simulator for 6 ugt modules
 
 * This is a description running script `run_simulation_questa.py` for simulation.
 * If Questasim libraries for a certain Vivado version do not exist, they have to be created for the selected Questasim version with script 'run_compile_simlib.py':
@@ -244,3 +265,9 @@ Generate a bitfile
 ipbb vivado package
 deactivate
 ```
+## Contact
+
+    Bernhard Arnold (bernhard.arnold@cern.ch)
+    Herbert Bergauer (herbert.bergauer@oeaw.ac.at) [Developer]
+    Manfred Jeitler (Manfred.Jeitler@cern.ch)
+

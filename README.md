@@ -1,6 +1,27 @@
-## Simulate
+# uGT firmware
 
-Simulation of gtl_fdl_wrapper with Questa simulator for 6 ugt modules
+Firmware for the CMS Global Trigger (uGT).
+
+This repository contains the algorithm part of the CMS uGT firmware. It has been written for the Imperial MP7, a Virtex-7 based AMC module.
+
+Documentaion of [uGT firmware](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/doc/mp7_ugt_firmware_specification/pdf/gt-mp7-firmware-specification.pdf).
+
+The uGT is versioned with the following scheme:
+
+* Major version: Changes in firmware structure, changes that require significant interventions at P5.
+* Minor version: New features for trigger decisions.
+* Rev version: Bug fixes, change/add scripts.
+
+In addition there are versions (with similar schemes) for the following firmware parts of uGT:
+* Framework ([frame.vhd](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame.vhd))
+* Global Trigger Logic ([gtl_module.vhd](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/gtl_module_tpl.vhd))
+* Final Decision Logic ([fdl_module.vhd](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/fdl_module.vhd))
+
+## Instructions for setting up simulation and build environments.
+
+### Simulate
+
+Simulation of VHDL module "gtl_fdl_wrapper.vhd" with Questa simulator for 6 ugt modules.
 
 * This is a description running script `run_simulation_questa.py` for simulation.
 * If Questasim libraries for a certain Vivado version do not exist, they have to be created for the selected Questasim version with script 'run_compile_simlib.py':
@@ -18,7 +39,7 @@ Following table shows which Questasim libraries for a certain Vivado version hav
 | 2021.1 | v8.4.4 | X | ok |
 | 2021.2 | v8.4.5 | X | ok |
 
-### Workflow
+#### Workflow
 
 Make sure that Questasim license file is set (MGLS_LICENSE_FILE).
 
@@ -83,7 +104,7 @@ pip install -r <mp7_ugt_legacy_path>/scripts/requirements.txt
 
 Run simulation using Questa.
 
-REMARK:
+*Remarks:*
 - MIF files (for mass over deltaR) are located in 'mp7_ugt_legacy/firmware/sim' for simulation.
 - These files have to be in directory from where one runs script "run_simulation_questa.py".
 - Change to directory 'mp7_ugt_legacy/firmware/sim' is mandatory.
@@ -94,7 +115,7 @@ cd mp7_ugt_legacy/firmware/sim
 python3 ../../scripts/run_simulation_questa.py <L1Menu name> --menu_url <URL L1Menu> --tv <testvector file path>
 ```
 
-**Note:** inspect for default values and other arguments
+*Note:* inspect for default values and other arguments
 ```bash
 python3 ../../scripts/run_simulation_questa.py -h
 ```
@@ -105,15 +126,17 @@ cd mp7_ugt_legacy/firmware/sim
 python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8_disp-d1 --menu_url https://raw.githubusercontent.com/herbberg/l1menus/master/2021 --tv /home/bergauer/github/herbberg/l1menus/2021/L1Menu_Collisions2020_v0_1_8_disp-d1/testvectors/TestVector_L1Menu_Collisions2020_v0_1_8_disp.txt --ignored
 ```
 
-## Build
+### Build
 
-#### Remarks
+*Remarks:*
 - FW versions greater or equal 0x1130 are used for uGMT v6.1.0 and unpacker (with bug fix for shifted raw eta).
 - FW versions greater or equal 0x1120 and lower 0x1130 are used for uGMT v6.0.0_patch1 and unpacker (with bug: shifted raw eta).
 
-### Build `mp7_ugt` firmware using IPBB
+#### Build `mp7_ugt` firmware using IPBus builder (IPBB)
 
-* This is a draft description with branches of MP7 and ugt repos.
+The firmware uses the ipbb build tool, and requires the ipbus system firmware. If you are going to build on a computer outside of the CERN network, then you will need to run kerberos (kinit username@CERN.CH). These instructions assume that you have your Xilinx Vivado licensing already setup for your enviroment.
+
+* This is a description with branches of MP7 and ugt repos.
 * A fork of [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware is available in [MP74UGT](https://gitlab.cern.ch/hbergaue/mp7) with branch:
   - "mp7fw_v3_0_0_mp7_ugt" created from tag mp7fw_v3_0_0.
 * This branch contains patched MP7 files for mp7_ugt_legacy (patched with [mp7patch.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/mp7patch.py)):
@@ -130,7 +153,7 @@ python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8_disp
   - script [checkIpbbSynth.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/checkIpbbSynth.py) for checking used fpga resources.
   - script [fwpackerIpbb.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/fwpackerIpbb.py) for packing firmware files in a tar file.
 
-### Setup using script
+#### Setup using script
 
 Set the following environment variables (preferably in `.bashrc`):
 
@@ -183,7 +206,7 @@ Run synthesis script (for all 6 modules).
 python3 scripts/run_synth_ipbb.py <L1Menu name> --menuurl <URL MP7 L1menu repo> --ugturl <URL ugt git repo> --ugt <ugt tag in repo> --build <build-version> -p <work dir>
 ```
 
-**Note:** inspect default values for arguments using
+*Note:* inspect default values for arguments using
 ```bash
 python3 scripts/run_synth_ipbb.py -h
 ```
@@ -198,7 +221,7 @@ python3 scripts/run_synth_ipbb.py L1Menu_Collisions2020_v0_1_8-d1
   -p ~/work_synth/production/
 ```
 
-### Setup (commands for one module)
+#### Setup (commands for one module)
 
 Run kerberos for outside of CERN network
 ```bash
@@ -244,3 +267,9 @@ Generate a bitfile
 ipbb vivado package
 deactivate
 ```
+## Contact
+
+Bernhard Arnold [<bernhard.arnold@cern.ch>]<br>
+Herbert Bergauer (Developer) [<herbert.bergauer@oeaw.ac.at>]<br>
+Manfred Jeitler [<Manfred.Jeitler@cern.ch>]
+

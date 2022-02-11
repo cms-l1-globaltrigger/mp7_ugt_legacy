@@ -13,9 +13,9 @@ The uGT is versioned with the following scheme:
 * Rev version: Bug fixes, change/add scripts.
 
 In addition there are versions (with similar schemes) for the following firmware parts of uGT:
-* Framework (frame.vhd)
-* Global Trigger Logic (gtl_module.vhd)
-* Final Decision Logic (fdl_module.vhd)
+* Framework ([frame.vhd](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame.vhd))
+* Global Trigger Logic ([gtl_module.vhd](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/gtl_module_tpl.vhd))
+* Final Decision Logic ([fdl_module.vhd](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/fdl_module.vhd))
 
 ## Instructions for setting up simulation and build environments.
 
@@ -269,7 +269,7 @@ deactivate
 ```
 ## Contact
 
-    [Bernhard Arnold](bernhard.arnold@cern.ch)    
-    [Herbert Bergauer](herbert.bergauer@oeaw.ac.at) - Developer
-    [Manfred Jeitler](Manfred.Jeitler@cern.ch)    
+[Bernhard Arnold](bernhard.arnold@cern.ch)    
+[Herbert Bergauer](herbert.bergauer@oeaw.ac.at) - Developer
+[Manfred Jeitler](Manfred.Jeitler@cern.ch)    
 

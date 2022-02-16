@@ -207,8 +207,34 @@ begin
     end generate calo_i;
 
     -- condition with overlap removal
-    calo_orm_i: if (deta_orm_cut or dphi_orm_cut or dr_orm_cut)  and (type_obj1 /= MU_TYPE) generate
+    calo_orm_i: if (deta_orm_cut or dphi_orm_cut or dr_orm_cut) and (type_obj1 /= MU_TYPE) generate
         -- Instantiation of object cuts for obj2 - overlap removal object.
+        obj1_cuts_i: entity work.calo_obj_cuts
+            generic map(
+                slice_1_low_obj1, slice_1_high_obj1,
+                slice_2_low_obj1, slice_2_high_obj1,
+                slice_3_low_obj1, slice_3_high_obj1,
+                slice_4_low_obj1, slice_4_high_obj1,
+                nr_templates, pt_ge_mode_obj1, type_obj1,
+                pt_thresholds_obj1,
+                nr_eta_windows_obj1,
+                eta_w1_upper_limits_obj1, eta_w1_lower_limits_obj1,
+                eta_w2_upper_limits_obj1, eta_w2_lower_limits_obj1,
+                eta_w3_upper_limits_obj1, eta_w3_lower_limits_obj1,
+                eta_w4_upper_limits_obj1, eta_w4_lower_limits_obj1,
+                eta_w5_upper_limits_obj1, eta_w5_lower_limits_obj1,
+                nr_phi_windows_obj1,
+                phi_w1_upper_limits_obj1, phi_w1_lower_limits_obj1,
+                phi_w2_upper_limits_obj1, phi_w2_lower_limits_obj1,
+                iso_luts_obj1,
+                disp_cuts_obj1,
+                disp_requs_obj1
+            )
+            port map(
+                lhc_clk,
+                obj1_calo, obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe
+            );
+
         obj2_l: for i in slice_low_obj2 to slice_high_obj2 generate
             obj2_comp_i: entity work.calo_comparators
                 generic map(

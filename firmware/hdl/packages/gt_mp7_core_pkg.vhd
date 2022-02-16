@@ -1,7 +1,7 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.19.2
+-- mp7_ugt (=FRAME_VERSION): v1.19.3
 
 -- HB 2021-02-02: v1.19.2 - Added script file for creating documents with current version numbers in text (doc/../src/latex/replace_versions_and_make.py)
 -- HB 2021-01-13: v1.19.1 - Cleaned up scripts
@@ -15,10 +15,11 @@
 -- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
 -- frame: v1.2.4 (see frame.vhd)
--- gtl: v1.17.1 (see gtl_module_tpl.vhd)
+-- gtl: v1.17.2 (see gtl_module_tpl.vhd)
 -- fdl: v1.3.6 (see fdl_module.vhd)
 
 -- gtl history:
+-- HB 2022-02-16: v1.17.2: Bug fixed in comb_conditions.vhd.
 -- HB 2021-12-09: v1.17.1: Updated logic for jet DISP cut.
 -- HB 2021-10-23: v1.17.0: Implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data] in calo_comparators.vhd. Bug fixed in correlation_cuts_wrapper.vhd.
 -- HB 2021-10-27: v1.16.2: Bug fix in matrix_corr_cond.vhd.
@@ -69,7 +70,7 @@ package gt_mp7_core_pkg is
 -- FRAME version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 19;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 2;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 3;
 	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &
@@ -77,7 +78,7 @@ package gt_mp7_core_pkg is
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 17;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 1;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 2;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 3;

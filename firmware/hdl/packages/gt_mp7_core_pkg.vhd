@@ -1,9 +1,10 @@
 
 -- actual versions:
+
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
 -- gt: v1.20.0
 -- frame: v1.2.5 (see frame.vhd)
--- gtl: v1.17.1 (see gtl_module_tpl.vhd)
+-- gtl: v1.17.2 (see gtl_module_tpl.vhd)
 -- fdl: v1.3.7 (see fdl_module.vhd)
 
 -- HB 2021-02-03: v1.20.0 - Changed to "GT_VERSION" (used in frame_module_info.vhd) instead of "FRAME_VERSION". "FRAME_VERSION" is only for information, no register contains "FRAME_VERSION".
@@ -19,6 +20,7 @@
 -- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
 -- gtl history:
+-- HB 2022-02-16: v1.17.2: Bug fixed in comb_conditions.vhd.
 -- HB 2021-12-09: v1.17.1: Updated logic for jet DISP cut.
 -- HB 2021-10-23: v1.17.0: Implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data] in calo_comparators.vhd. Bug fixed in correlation_cuts_wrapper.vhd.
 -- HB 2021-10-27: v1.16.2: Bug fix in matrix_corr_cond.vhd.
@@ -81,7 +83,7 @@ package gt_mp7_core_pkg is
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 17;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 1;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 2;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 3;

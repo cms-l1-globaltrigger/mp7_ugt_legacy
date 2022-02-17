@@ -83,14 +83,14 @@ A mapping for Algorithms is provided, to give flexibility for setting the index 
 
 The entity-declaration of \texttt{fdl\_module.vhd} is shown in \ref{sec:fdl:data_flow}.\\
 
-Listing~\ref{lst:fdl_module_vhd} contains the entity-declaration of the \texttt{fdl\_module.vhd}.\\
+Listing~\ref{lst:fdl:fdl_module_vhd} contains the entity-declaration of the \texttt{fdl\_module.vhd}.\\
 
-\lstinputlisting[label=lst:fdl_module_vhd,language=VHDL,caption=Entity declaration of \texttt{fdl\_module.vhd}]{interfaces/fdl_module.vhd}
+\lstinputlisting[label=lst:fdl:fdl_module_vhd,language=VHDL,caption=Entity declaration of \texttt{fdl\_module.vhd}]{interfaces/fdl_module.vhd}
 
 \medskip
 \begin{table}
 \footnotesize
-\caption{Explanation of Listing~\ref{lst:fdl_module_vhd}}
+\caption{Explanation of Listing~\ref{lst:fdl:fdl_module_vhd}}
 \vspace{5mm}
 \centering
 \begin{tabular}{l p{.7\columnwidth}}
@@ -131,7 +131,7 @@ Listing~\ref{lst:fdl_module_vhd} contains the entity-declaration of the \texttt{
 \verb|algo_bx_mask_sim| & algo BX mask input for simulation.\\
 \bottomrule
 \end{tabular}
-\label{tab:gtl:explanation_fdl_module_vhd}
+\label{tab:fdl:explanation_fdl_module_vhd}
 \end{table}
 
 \clearpage
@@ -156,7 +156,7 @@ The top-of-hierarchy module (\texttt{fdl\_module.vhd}) contains
 \subsubsection{Registers and memories}
 \label{sec:fdl:reg_mem}
 
-All registers and memories are 32 bits wide. (A first draft of the definition of the relative addresses is shown in Table~\ref{tab:ufdl_register_map}.)
+All registers and memories are 32 bits wide. (A first draft of the definition of the relative addresses is shown in Table~\ref{tab:fdl:ufdl_register_map}.)
 
 \begin {itemize}
 \item Dual-port memories for the algo-bx-masks are implemented. For each Algorithm there is a mask bit at every bunch crossing of one orbit. Therefore in total memories of 4096 x 512 bits
@@ -218,7 +218,7 @@ Offset & {Register name} & {Access} & {Description}\\
 0x90095001 & \verb|Previous prescale set index| & r & Read-only register for prescale factors set index, which was "updated" with begin of previous lumi-section for monitoring "prescale\_factors\_set\_index\_reg\_updated(1)" in VHDL).\\
 0x90096000 & \verb|Calibration trigger gap| & r/w & Register for begin and end (in Bx) of calibration trigger gap.\\
 \hline
-\label{tab:ufdl_register_map}
+\label{tab:fdl:ufdl_register_map}
 \end{longtable}
 
 \begin{register}{htbp}{Rate counter before prescaler}{}

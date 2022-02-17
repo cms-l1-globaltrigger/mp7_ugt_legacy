@@ -459,12 +459,14 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
 
     algorithms = sorted(menu.algorithms, key=lambda algorithm: algorithm.index)  # sorts all algorithms by index number
     success = True
+    err_cnt = 0
     for algo in algorithms:
         result = ok_green
         if algo.name in IGNORED_ALGOS and a_ignored:
             result = ignore_yellow
         # checks if algorithm trigger count is equal in both hardware and testvectors
         elif algos_tv[algo.index][0][1] != algos_sim[algo.index][0][1]:
+            err_cnt=err_cnt+1
             result = error_red
             success = False
 
@@ -530,6 +532,7 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
     if not success:
         logging.info("===========================================================================")
         logging.error(mismatches_exit_red)
+        print("\033[1;31m ===> {} error(s) occured! \033[0m".format(err_cnt))
         logging.info("===========================================================================")
         exit(1)
 

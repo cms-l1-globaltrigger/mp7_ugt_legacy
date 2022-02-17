@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v3.0.0] - 2022-02-11
+## [v3.0.0] - 2022-02-17
 ### Comment
 
 - mp7_ugt firmware release v3.0.0
@@ -13,6 +13,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - source files:
   - ../payload/gtl_module_tpl.vhd
+
+## [v1.19.3] - 2022-02-16
+### Comment
+
+- mp7_ugt firmware release v1.19.3
+- bug fixed in comb_conditions.vhd
+
+### Changed
+- source files:
+  - ../payload/hdl/gtl/comb_conditions.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+- script files:
+  - scripts/run_simulation_questa.py
 
 ## [v1.19.2] - 2022-02-10
 ### Comment

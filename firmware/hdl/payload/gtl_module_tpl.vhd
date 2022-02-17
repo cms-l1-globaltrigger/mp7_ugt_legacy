@@ -2,7 +2,8 @@
 -- Global Trigger Logic module.
 
 -- Version-history:
--- HB 2022-01-20: v3.0.0: Module for "anomaly detection trigger (ADT)" test.
+-- HB 2022-02-17: v3.0.0: Module for "anomaly detection trigger (ADT)" test.
+-- HB 2022-02-16: v1.17.2: Bug fixed in comb_conditions.vhd.
 -- HB 2021-10-23: v1.17.1: Updated logic for jet DISP cut.
 -- HB 2021-10-23: v1.17.0: Implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data] in calo_comparators.vhd. Bug fixed in correlation_cuts_wrapper.vhd.
 -- HB 2021-10-27: v1.16.2: Bug fix in matrix_corr_cond.vhd.

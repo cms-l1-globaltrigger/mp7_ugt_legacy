@@ -1,4 +1,4 @@
-\section{Framework}\label{sec:frame:framework}
+\section{Framework}\label{sec:framework:framework}
 
 This description is for version ++frameversion++ of Framework.\\
 
@@ -15,20 +15,19 @@ Figure \ref{fig_system_overview} shows the basic components of Framework togethe
 \label{fig_system_overview}
 \end{figure}
 
-The central data type of Framework is shown in Listing \ref{lst_lhc_data_t} (see Section \ref{section_lhc_data_pkg} for details). In the current configuration it comprises
-2304 bits (288 Bytes). Data from the GTH interfaces is demultiplexed (from 240 MHz clock domain to LHC clock domain, see Demux Lane Data \ref{sec:frame:demux_lane_data}) and mapped to this data type in the LMP (Lane Mapping Process). It is also used as input and output type for the SIM/SPY I memory.
+The central data type of Framework is shown in Listing \ref{lst:fw:lst_lhc_data_t} (see Section \ref{sec:fw:section_lhc_data_pkg} for details). In the current configuration it comprises 2304 bits (288 Bytes). Data from the GTH interfaces is demultiplexed (from 240 MHz clock domain to LHC clock domain, see Demux Lane Data \ref{sec:framework:demux_lane_data}) and mapped to this data type in the LMP (Lane Mapping Process). It is also used as input and output type for the SIM/SPY I memory.
 
 \subsection{Implementation in firmware}
-\label{sec:frame:implementation_firmware}
+\label{sec:framework:implementation_firmware}
 
-Listing~\ref{lst:frame_vhd} contains the entity-declaration of the \texttt{frame.vhd}.\\
+Listing~\ref{lst:framework:frame_vhd} contains the entity-declaration of the \texttt{frame.vhd}.\\
 
-\lstinputlisting[label=lst:frame_vhd,language=VHDL,caption=Entity declaration of \texttt{frame.vhd}]{interfaces/frame.vhd}
+\lstinputlisting[label=lst:framework:frame_vhd,language=VHDL,caption=Entity declaration of \texttt{frame.vhd}]{interfaces/frame.vhd}
 
 \medskip
 \begin{table}
 \footnotesize
-\caption{Explanation of Listing~\ref{lst:frame_vhd}}
+\caption{Explanation of Listing~\ref{lst:framework:frame_vhd}}
 \vspace{5mm}
 \centering
 \begin{tabular}{l p{.7\columnwidth}}
@@ -65,15 +64,15 @@ Listing~\ref{lst:frame_vhd} contains the entity-declaration of the \texttt{frame
 \verb|local_finor_with_veto_2_spy2| & local FINOR with VETO to spy mem input.\\
 \bottomrule
 \end{tabular}
-\label{tab:gtl:explanation_frame_vhd}
+\label{tab:framework:explanation_frame_vhd}
 \end{table}
 
 \clearpage
-\subsection{Configuration of optical connections} \label{sec:frame:sec_configuration_optical_conn}
+\subsection{Configuration of optical connections} \label{sec:framework:sec_configuration_optical_conn}
 The configuration of the optical connections to Calo-Layer2 is (currently) done as described in Table~\ref{tab:framework:tab_configuration_optical_conn}, where
 frame means the 32 bits data (240 MHz) within a LHC clock period.
 
-\begin{table}[ht]
+\begin{table}
 \caption{Configuration of optical connections}
 \vspace{5mm}
 \centering
@@ -112,7 +111,7 @@ frame means the 32 bits data (240 MHz) within a LHC clock period.
 %
 % ------------------------------------------------------------------------------
 
-\subsection{Demux Lane Data} \label{sec:frame:demux_lane_data}
+\subsection{Demux Lane Data} \label{sec:framework:demux_lane_data}
 Data from GTH interfaces is in the 240 MHz clock domain. The demultiplexing to the LHC clock domain (about 40 MHz) is done in demux\_lane\_data.vhd, which is instantiated
 in frame.vhd as often as lanes are used (currently 16 lanes are used).
 
@@ -122,10 +121,10 @@ in frame.vhd as often as lanes are used (currently 16 lanes are used).
 %
 % ------------------------------------------------------------------------------
 
-\subsection{Lane Mapping Process} \label{sec:frame:lmp}
+\subsection{Lane Mapping Process} \label{sec:framework:lmp}
 In the Lane Mapping Process module data from the lanes are mapped to objects structure defined in lhc\_data\_pkg.vhd.
 
-\subsubsection{Implementation}\label{sec:frame:lmp_impl}
+\subsubsection{Implementation}\label{sec:framework:lmp_impl}
 Currently lane mapping is "fixed" in lmp.vhd module, see Table \ref{tab:framework:current_lane_mapping}
 
 \begin{table}[ht]
@@ -160,7 +159,7 @@ Currently lane mapping is "fixed" in lmp.vhd module, see Table \ref{tab:framewor
 %
 % ------------------------------------------------------------------------------
 
-\subsection{SIM and SPY Memory}\label{sec:frame:sim-spy}
+\subsection{SIM and SPY Memory}\label{sec:framework:sim-spy}
 \textbf{Remark:}\\
 with frame v1.2.3 Simmem data not useable anymore, because of removed "Data Source Multiplexer".
 The reason of removing "Data Source Multiplexer" is to get more available resources.\\
@@ -170,7 +169,7 @@ It is used to calibrate the system, i.e. to set the correct delays in the \hyper
 output packages of the \hyperref[sec_rop]{ROP} and to provide simulation data for the system.
 All source files for the memory subsystem are located in \texttt{src/mem} directory.
 
-\subsubsection{Implementation}\label{sec:frame:sim_spy_impl}
+\subsubsection{Implementation}\label{sec:framework:sim_spy_impl}
 The memory subsystem consists of four main parts, which will be discussed in more detail in the following sections
 
 \begin{itemize}
@@ -186,7 +185,7 @@ The memory subsystem consists of four main parts, which will be discussed in mor
 \label{fig_simspy}
 \end{figure}
 
-\paragraph{SPY Trigger}\label{sec:frame:spy_trigger}
+\paragraph{SPY Trigger}\label{sec:framework:spy_trigger}
 The SPY trigger controls the SPY memories and decides when data is recorded. It can be configured and controlled using
 software registers \ref{spy_trig_obrit_nr_reg} and \ref{spy_trig_cfg_reg} provided by the \hyperref[sec_rb]{register bank}.
 
@@ -265,7 +264,7 @@ This is achieved by subtracting 2 form the bunch crossing number before using it
 To generate the $lhc\_data\_o$ signal the LHC-clock domain data out ports of the internal memories are concatenated and converted back to the \texttt{lhc\_data\_t}.
 
 If the \texttt{lhc\_data\_t} is changed (e.g. new objects added) no modifications in the SIM/SPY memory are required. The SIM/SPY memory only depends on the (auto-generated)
-functions used to convert a \texttt{lhc\_data\_t} signal to \texttt{std\_logic\_vector} and vice versa (see Section \ref{section_lhc_data_pkg} for details).
+functions used to convert a \texttt{lhc\_data\_t} signal to \texttt{std\_logic\_vector} and vice versa (see Section \ref{sec:fw:section_lhc_data_pkg} for details).
 
 In the current implementation the size every object in the \texttt{lhc\_data\_t} is a multiple of 32 bit. This is also expected by the SIM/SPY memory. If objects with 16 bit sizes
 are added the SIM/SPY memory must be modified to support this situation (e.g. zero pad the \texttt{lhc\_data\_t}). Furthermore take into account that the PCIe memory bus is 32 bits wide.
@@ -303,10 +302,9 @@ Two true-dual-port memories with 32 Bit data width are used.
 %  TCM
 %
 % ------------------------------------------------------------------------------
-\subsection{TCM}\label{sec:frame:tcm}
-\textbf{\textit{Under construction!!!}}
+\subsection{Timer Counter Manager}\label{sec:framework:tcm}
 
-The Timer Counter Manager (TCM) provides different counters, listed in table \ref{tab:tcm_counters}.
+The Timer Counter Manager (TCM) provides different counters, listed in table \ref{tab:framework:tcm_counters} and a set of resisters.
 
 \subsubsection{Counter Overview}
 \begin{table}[H]
@@ -322,12 +320,12 @@ orbit\_nr           &$0 to 2^{48}-1$    &overflow of bx\_nr               &BGOS:
 luminosity\_seg\_nr &$0 to 2^{32}-1$    &rising\_edge(orbit\_nr(18))      &BGOS: orbit counter reset &             \\ \hline
 start\_lumisection  &$0 to 1$           &luminosity\_seg\_nr increases    &after 25ns                &'1' for 25ns \\ \hline
 bx\_nr\_d\_fdl      &$0 to 3563$       &rising\_edge(lhc\_clk)            &overflow                  &             \\ \hline
-\end{tabular}\caption{counters of the timer counter manager}\label{tab:tcm_counters}
+\end{tabular}\caption{Counters of Timer Counter Manager}\label{tab:framework:tcm_counters}
 \end{scriptsize}
 \end{table}
 
 \subsubsection{Bunch Crossing Number and counters derived from it}
-All counters except for event\_nr and the trigger\_nr (which are trivial because they are increased with l1a) are dependent on the bunch crossing counter bx\_nr as stated in table \ref{tab:tcm_counters}. The bx\_nr is zero at startup, then waits for the the first bcres\_d (bunch crossing reset delayed) and starts counting as depicted in figure \ref{fig:bx_start}. It's maximal value is 3563 (0xdeb), then it automatically overflows and starts at zero again (see figure \ref{fig:bx_normal_operation}). Exactly when bx\_nr = 0, bcres\_d has to be asserted. Otherwise the counter is out of synchronization. If this happens, the software register err\_det is set and the counter waits for the next bcres\_d to synchronize again. Note that the value of the counter is invalid until it has synchronized again.
+All counters except for event\_nr and the trigger\_nr (which are trivial because they are increased with l1a) are dependent on the bunch crossing counter bx\_nr as stated in table \ref{tab:framework:tcm_counters}. The bx\_nr is zero at startup, then waits for the the first bcres\_d (bunch crossing reset delayed) and starts counting as depicted in figure \ref{fig:bx_start}. It's maximal value is 3563 (0xdeb), then it automatically overflows and starts at zero again (see figure \ref{fig:bx_normal_operation}). Exactly when bx\_nr = 0, bcres\_d has to be asserted. Otherwise the counter is out of synchronization. If this happens, the software register err\_det is set and the counter waits for the next bcres\_d to synchronize again. Note that the value of the counter is invalid until it has synchronized again.
 
 \begin{figure}[ht]
   \includegraphics[width=1.0\textwidth]{./figures/bx_start}
@@ -342,12 +340,12 @@ All counters except for event\_nr and the trigger\_nr (which are trivial because
 \end{figure}
 
 \subsubsection{Special counter: bx\_nr\_d\_fdl}
-The bx\_nr\_d\_fdl is derived from bcres\_d\_fdl in the same manner as bx\_nr is derived from bcres\_d. bx\_nr\_d\_fdl will automatically resync if the logic described in subsection \ref{subsec:frame:tcmerrors} detects a synchronization error for bx\_nr.
+The bx\_nr\_d\_fdl is derived from bcres\_d\_fdl in the same manner as bx\_nr is derived from bcres\_d. bx\_nr\_d\_fdl will automatically resync if the logic described in subsection \ref{subsec:framework:tcmerrors} detects a synchronization error for bx\_nr.
 
 \subsubsection{Counters derived from l1a}
-The counters event\_nr and trigger\_nr are increased with l1a, i.e. they are increased twice if l1a is high for 2 clock cycles, etc. They differ only in their value range and the condition that resets the counters, see table \ref{tab:tcm_counters}.
+The counters event\_nr and trigger\_nr are increased with l1a, i.e. they are increased twice if l1a is high for 2 clock cycles, etc. They differ only in their value range and the condition that resets the counters, see table \ref{tab:framework:tcm_counters}.
 
-\subsubsection{Errors}\label{subsec:frame:tcmerrors}
+\subsubsection{Errors}\label{subsec:framework:tcmerrors}
 As stated above, bcres\_d has to be asserted exactly when bx\_nr = 0, otherwise the counter is out of sync. Then the software register err\_det is set as depicted in figure \ref{fig:err_det}. err\_det can be reset via the software event register err\_det\_reset\_event as depicted in figure \ref{fig:err_det_reset}. Furthermore err\_det is set if bgos = Resync-0x1 and the counter value is not 3563.
 
 \begin{figure}[ht]
@@ -365,7 +363,7 @@ As stated above, bcres\_d has to be asserted exactly when bx\_nr = 0, otherwise 
 The TCM implements two additional counters (bx\_nr\_chk and bx\_nr\_max) for debugging purposes. These counters are not visible by any other module but readable via software. bx\_nr\_chk is a 32bit Counter that increases with every LHC clock cycle and resets with bcres\_d. bx\_r\_max holds the highest value bx\_nr\_chk ever reached (should be 3563 if the link is aligned).
 
 \subsubsection{SW-Registers}
-All counters except for the start\_lumisection described in table \ref{tab:tcm_counters} can be read by software via the following sw registers:
+All counters except for the start\_lumisection described in table \ref{tab:framework:tcm_counters} can be read by software via the following sw registers:
 
 \begin{register}{H}{TCM Bunch Crossing Number Register}{}%
 	\regfield{reserved}{20}{12}{0}%
@@ -501,24 +499,24 @@ Some additional control register can be used to check and reset err\_det, disabl
 	\end{regdesc}
 \end{register}
 
-\subsubsection{Hardware Test}
-There are various python scripts located in the software/GtControl/branches/fpga-design-2013/python/GtControl directory for testing the tcm module. Please refer to the output of the scripts for information how the tests are performed in detail. See table \ref{tab:tcm_hw_test}.
-\begin{table}[ht]
-\vspace{5mm}
-\begin{scriptsize}
-\begin{tabular}{|p{5cm}|p{10cm}|}
-\hline
-script                         &purpose    \\ \hline
-\verb|tcm_counter_values.py|   &outputs the values of all counters defined above    \\ \hline
-\verb|tcm_produce_err_det|     &produces an err\_det by manipulating bgos \\ \hline
-\verb|tcm_err_det_reset|       &resets the err\_det software register \\ \hline
-\verb|tcm_trigger_test|        &tests trigger\_nr and event\_nr by generating l1a signals using l1asim \\ \hline
-\verb|tcm_lum_seg_nr_test|    &checks the period of two successive increases of the luminositiy\_seg\_nr \\ \hline
-\end{tabular}\caption{scripts for testing the tcm}\label{tab:tcm_hw_test}
-\end{scriptsize}
-\end{table}
+% \subsubsection{Hardware Test}
+% There are various python scripts located in the software/GtControl/branches/fpga-design-2013/python/GtControl >>>>>????????? old??<<<<<<<<<  directory for testing the tcm module. Please refer to the output of the scripts for information how the tests are performed in detail. See table \ref{tab:tcm_hw_test}.
+% \begin{table}[ht]
+% \vspace{5mm}
+% \begin{scriptsize}
+% \begin{tabular}{|p{5cm}|p{10cm}|}
+% \hline
+% script                         &purpose    \\ \hline
+% \verb|tcm_counter_values.py|   &outputs the values of all counters defined above    \\ \hline
+% \verb|tcm_produce_err_det|     &produces an err\_det by manipulating bgos \\ \hline
+% \verb|tcm_err_det_reset|       &resets the err\_det software register \\ \hline
+% \verb|tcm_trigger_test|        &tests trigger\_nr and event\_nr by generating l1a signals using l1asim \\ \hline
+% \verb|tcm_lum_seg_nr_test|    &checks the period of two successive increases of the luminositiy\_seg\_nr \\ \hline
+% \end{tabular}\caption{scripts for testing the tcm}\label{tab:tcm_hw_test}
+% \end{scriptsize}
+% \end{table}
 
-\subsection{Software Reset} \label{sec:frame:software_reset}
+\subsection{Software Reset} \label{sec:framework:software_reset}
 The software reset module (sw\_reset) provides the possiblity for a software reset via the software event register sw\_reset\_event.
 
 \begin{register}{htbp}{Software Reset register}{}% name=CONFIG

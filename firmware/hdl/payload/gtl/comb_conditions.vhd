@@ -3,6 +3,7 @@
 -- Condition module for all combination conditions.
 
 -- Version history:
+-- HB 2022-02-17: bug fixed in orm and cleaned up.
 -- HB 2021-12-09: updated for DISP of jets.
 -- HB 2021-10-19: inserted cut for DISP of jets.
 -- HB 2021-03-03: bug fixed.
@@ -160,7 +161,7 @@ architecture rtl of comb_conditions is
 
 begin
 
-    calo_i: if not (deta_orm_cut or dphi_orm_cut or dr_orm_cut) and (type_obj1 /= MU_TYPE) generate
+    calo_i: if type_obj1 /= MU_TYPE generate
         -- Instantiation of object cuts for obj1.
         obj1_cuts_i: entity work.calo_obj_cuts
             generic map(
@@ -188,124 +189,100 @@ begin
                 obj1_calo, obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe
             );
 
-        -- "Matrix" of permutations in an and-or-structure.
-        -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates'.
-        matrix_calo_cond_i: entity work.matrix_calo_cond
-            generic map(
-                slice_1_low_obj1, slice_1_high_obj1,
-                slice_2_low_obj1, slice_2_high_obj1,
-                slice_3_low_obj1, slice_3_high_obj1,
-                slice_4_low_obj1, slice_4_high_obj1,
-                nr_templates
-            )
-            port map(
-                lhc_clk,
-                obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe,
-                twobody_pt_comp_pipe,
-                condition_o
-            );
-    end generate calo_i;
-
-    -- condition with overlap removal
-    calo_orm_i: if (deta_orm_cut or dphi_orm_cut or dr_orm_cut) and (type_obj1 /= MU_TYPE) generate
-        -- Instantiation of object cuts for obj2 - overlap removal object.
-        obj1_cuts_i: entity work.calo_obj_cuts
-            generic map(
-                slice_1_low_obj1, slice_1_high_obj1,
-                slice_2_low_obj1, slice_2_high_obj1,
-                slice_3_low_obj1, slice_3_high_obj1,
-                slice_4_low_obj1, slice_4_high_obj1,
-                nr_templates, pt_ge_mode_obj1, type_obj1,
-                pt_thresholds_obj1,
-                nr_eta_windows_obj1,
-                eta_w1_upper_limits_obj1, eta_w1_lower_limits_obj1,
-                eta_w2_upper_limits_obj1, eta_w2_lower_limits_obj1,
-                eta_w3_upper_limits_obj1, eta_w3_lower_limits_obj1,
-                eta_w4_upper_limits_obj1, eta_w4_lower_limits_obj1,
-                eta_w5_upper_limits_obj1, eta_w5_lower_limits_obj1,
-                nr_phi_windows_obj1,
-                phi_w1_upper_limits_obj1, phi_w1_lower_limits_obj1,
-                phi_w2_upper_limits_obj1, phi_w2_lower_limits_obj1,
-                iso_luts_obj1,
-                disp_cuts_obj1,
-                disp_requs_obj1
-            )
-            port map(
-                lhc_clk,
-                obj1_calo, obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe
-            );
-
-        obj2_l: for i in slice_low_obj2 to slice_high_obj2 generate
-            obj2_comp_i: entity work.calo_comparators
+        no_orm_i: if not (deta_orm_cut or dphi_orm_cut or dr_orm_cut) generate
+            -- "Matrix" of permutations in an and-or-structure.
+            -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates'.
+            matrix_calo_cond_i: entity work.matrix_calo_cond
                 generic map(
-                    pt_ge_mode_obj2, type_obj2,
-                    pt_threshold_obj2,
-                    nr_eta_windows_obj2,
-                    eta_w1_upper_limit_obj2, eta_w1_lower_limit_obj2,
-                    eta_w2_upper_limit_obj2, eta_w2_lower_limit_obj2,
-                    eta_w3_upper_limit_obj2, eta_w3_lower_limit_obj2,
-                    eta_w4_upper_limit_obj2, eta_w4_lower_limit_obj2,
-                    eta_w5_upper_limit_obj2, eta_w5_lower_limit_obj2,
-                    nr_phi_windows_obj2,
-                    phi_w1_upper_limit_obj2,
-                    phi_w1_lower_limit_obj2,
-                    phi_w2_upper_limit_obj2,
-                    phi_w2_lower_limit_obj2,
-                    iso_lut_obj2,
-                    disp_cut_obj2,
-                    disp_requ_obj2
+                    slice_1_low_obj1, slice_1_high_obj1,
+                    slice_2_low_obj1, slice_2_high_obj1,
+                    slice_3_low_obj1, slice_3_high_obj1,
+                    slice_4_low_obj1, slice_4_high_obj1,
+                    nr_templates
                 )
                 port map(
-                    lhc_clk, obj2(i), obj2_vs_templ_pipe(i,1)
+                    lhc_clk,
+                    obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe,
+                    twobody_pt_comp_pipe,
+                    condition_o
                 );
-        end generate obj2_l;
+        end generate no_orm_i;
 
-        orm_cuts_12_i: entity work.orm_cuts
-            generic map(
-                0,
-                MAX_CALO_OBJECTS-1,
-                slice_low_obj2,
-                slice_high_obj2,
-                deta_orm_cut,
-                deta_orm_upper_limit_vector,
-                deta_orm_lower_limit_vector,
-                dphi_orm_cut,
-                dphi_orm_upper_limit_vector,
-                dphi_orm_lower_limit_vector,
-                dr_orm_cut,
-                dr_orm_upper_limit_vector,
-                dr_orm_lower_limit_vector
-            )
-            port map(
-                lhc_clk,
-                deta_orm,
-                dphi_orm,
-                dr_orm,
-                deta_orm_comp_pipe,
-                dphi_orm_comp_pipe,
-                dr_orm_comp_pipe
-            );
+        -- condition with overlap removal
+        orm_i: if (deta_orm_cut or dphi_orm_cut or dr_orm_cut) generate
 
-        -- "Matrix" of permutations in an and-or-structure.
-        -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates'.
-        matrix_calo_cond_orm_i: entity work.matrix_calo_cond_orm
-            generic map(
-                slice_1_low_obj1, slice_1_high_obj1,
-                slice_2_low_obj1, slice_2_high_obj1,
-                slice_3_low_obj1, slice_3_high_obj1,
-                slice_4_low_obj1, slice_4_high_obj1,
-                nr_templates,
-                slice_low_obj2, slice_high_obj2
-            )
-            port map(
-                lhc_clk,
-                obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe,
-                obj2_vs_templ_pipe,
-                twobody_pt_comp_pipe,
-                deta_orm_comp_pipe, dphi_orm_comp_pipe, dr_orm_comp_pipe,
-                condition_o
-            );
-    end generate calo_orm_i;
+            obj2_l: for i in slice_low_obj2 to slice_high_obj2 generate
+                obj2_comp_i: entity work.calo_comparators
+                    generic map(
+                        pt_ge_mode_obj2, type_obj2,
+                        pt_threshold_obj2,
+                        nr_eta_windows_obj2,
+                        eta_w1_upper_limit_obj2, eta_w1_lower_limit_obj2,
+                        eta_w2_upper_limit_obj2, eta_w2_lower_limit_obj2,
+                        eta_w3_upper_limit_obj2, eta_w3_lower_limit_obj2,
+                        eta_w4_upper_limit_obj2, eta_w4_lower_limit_obj2,
+                        eta_w5_upper_limit_obj2, eta_w5_lower_limit_obj2,
+                        nr_phi_windows_obj2,
+                        phi_w1_upper_limit_obj2,
+                        phi_w1_lower_limit_obj2,
+                        phi_w2_upper_limit_obj2,
+                        phi_w2_lower_limit_obj2,
+                        iso_lut_obj2,
+                        disp_cut_obj2,
+                        disp_requ_obj2
+                    )
+                    port map(
+                        lhc_clk, obj2(i), obj2_vs_templ_pipe(i,1)
+                    );
+            end generate obj2_l;
+
+            orm_cuts_12_i: entity work.orm_cuts
+                generic map(
+                    0,
+                    MAX_CALO_OBJECTS-1,
+                    slice_low_obj2,
+                    slice_high_obj2,
+                    deta_orm_cut,
+                    deta_orm_upper_limit_vector,
+                    deta_orm_lower_limit_vector,
+                    dphi_orm_cut,
+                    dphi_orm_upper_limit_vector,
+                    dphi_orm_lower_limit_vector,
+                    dr_orm_cut,
+                    dr_orm_upper_limit_vector,
+                    dr_orm_lower_limit_vector
+                )
+                port map(
+                    lhc_clk,
+                    deta_orm,
+                    dphi_orm,
+                    dr_orm,
+                    deta_orm_comp_pipe,
+                    dphi_orm_comp_pipe,
+                    dr_orm_comp_pipe
+                );
+
+            -- "Matrix" of permutations in an and-or-structure.
+            -- Selection of calorimeter condition types ("single", "double", "triple" and "quad") by 'nr_templates'.
+            matrix_calo_cond_orm_i: entity work.matrix_calo_cond_orm
+                generic map(
+                    slice_1_low_obj1, slice_1_high_obj1,
+                    slice_2_low_obj1, slice_2_high_obj1,
+                    slice_3_low_obj1, slice_3_high_obj1,
+                    slice_4_low_obj1, slice_4_high_obj1,
+                    nr_templates,
+                    slice_low_obj2, slice_high_obj2
+                )
+                port map(
+                    lhc_clk,
+                    obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe,
+                    obj2_vs_templ_pipe,
+                    twobody_pt_comp_pipe,
+                    deta_orm_comp_pipe, dphi_orm_comp_pipe, dr_orm_comp_pipe,
+                    condition_o
+                );
+        end generate orm_i;
+    end generate calo_i;
 
     muon_i: if type_obj1 = MU_TYPE generate
         -- Instantiation of object cuts.

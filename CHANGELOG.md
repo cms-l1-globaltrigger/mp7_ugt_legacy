@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../payload/hdl/gtl/comb_conditions.vhd
   - ../packages/gt_mp7_core_pkg.vhd
+- script files:
+  - scripts/run_simulation_questa.py
 
 ## [v1.19.2] - 2022-02-10
 ### Comment

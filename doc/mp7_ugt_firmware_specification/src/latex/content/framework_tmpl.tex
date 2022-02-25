@@ -125,7 +125,7 @@ in frame.vhd as often as lanes are used (currently 16 lanes are used).
 In the Lane Mapping Process module data from the lanes are mapped to objects structure defined in lhc\_data\_pkg.vhd.
 
 \subsubsection{Implementation}\label{sec:framework:lmp_impl}
-Currently lane mapping is "fixed" in lmp.vhd module, see Table \ref{tab:framework:current_lane_mapping}
+Currently lane mapping is "fixed" in lmp.vhd module, see Table \ref{tab:framework:current_lane_mapping} (\esums\textsuperscript{1}: including minimum bias trigger bits, towercounts, asymmetry and centrality bits).
 
 \begin{table}[ht]
 \caption{Current lane mapping}
@@ -143,7 +143,7 @@ Currently lane mapping is "fixed" in lmp.vhd module, see Table \ref{tab:framewor
 7 & jet object 6..11 \\\hline
 8 & tau object 0..5 \\\hline
 9 & tau object 6..11 \\\hline
-10 & \esums (incl. minimum bias trigger bits and towercounts) \\\hline
+10 & \esums\footnotemark \\\hline
 11 & n/a (currently not used) \\\hline
 12 & external-conditions [0..63] \\\hline
 13 & external-conditions [64..127] \\\hline
@@ -165,9 +165,7 @@ with frame v1.2.3 Simmem data not useable anymore, because of removed "Data Sour
 The reason of removing "Data Source Multiplexer" is to get more available resources.\\
 
 Figure \ref{fig_simspy} shows the SIM/SPY memory subsystem of Framework.
-It is used to calibrate the system, i.e. to set the correct delays in the \hyperref[sec_dm]{Delay Manager}, to record results of the GTL/FDL and
-output packages of the \hyperref[sec_rop]{ROP} and to provide simulation data for the system.
-All source files for the memory subsystem are located in \texttt{src/mem} directory.
+It is used to calibrate the system, i.e. to record results of the GTL/FDL and output packages of the ROP.
 
 \subsubsection{Implementation}\label{sec:framework:sim_spy_impl}
 The memory subsystem consists of four main parts, which will be discussed in more detail in the following sections

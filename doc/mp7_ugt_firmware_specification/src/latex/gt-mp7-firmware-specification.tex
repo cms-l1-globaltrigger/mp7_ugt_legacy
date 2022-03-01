@@ -16,7 +16,7 @@
 \def\docdate{\today}
 
 % Custom commands.
-\newcommand{\req}[2]{{\bf R\_#1\_#2}}
+% \newcommand{\req}[2]{{\bf R\_#1\_#2}}
 %\newcommand{\cwarn}[1]{{\bf \color{red}#1}}
 
 % HB 2013-05-03: Inserted to get a CR after paragraph and subparagraph. Syntax from http://www.latex-community.org/viewtopic.php?f=5&t=1383
@@ -35,6 +35,9 @@
       {.5\baselineskip}%
       {\normalfont\normalsize\bfseries}}
 \makeatother
+
+% HB 2022-03-01: Get versions from file - edit file for new versions
+\input{content/versions.tex}
 
 % Begin document structure.
 \begin{document}
@@ -61,6 +64,9 @@
 % \input{content/sw_reset}
 % \input{content/configuration.tex}
 % \input{content/validation.tex}
+\input{content/glossary.tex}
+\input{content/acronyms.tex}
+\input{content/appendices.tex}
 
 % List of tables.
 \doctables{}
@@ -68,12 +74,10 @@
 % List of figures.
 \docfigures{}
 
-\input{content/glossary.tex}
-%
-\section*{Acronyms}
-\begin{acronym}
-\input{content/acronyms.tex}
-\end{acronym}
+% \section*{Acronyms}
+% \begin{acronym}
+% \input{content/acronyms.tex}
+% \end{acronym}
 
 \clearpage
 
@@ -87,6 +91,14 @@ MP7 documentation:\\
 MP7 firmware repository:\\
 \url{https://gitlab.cern.ch/cms-cactus/firmware/mp7}
 
+\bibitem {TME_repo}
+Trigger Menu Editor repository:\\
+\url{https://github.com/cms-l1-globaltrigger/tm-editor}
+
+\bibitem {VHDL_Producer}
+VHDL Producer repository:\\
+\url{https://github.com/cms-l1-globaltrigger/tm-vhdlproducer}
+
 % \bibitem {muon}
 % \url{http://www.hephy.at/project/cms/trigger/globalMuonTrigger/notes/in04\_006.pdf}
 
@@ -94,10 +106,14 @@ MP7 firmware repository:\\
 Calo-layer2 and Global Muon Trigger interface documentation:\\
 \url{https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf}
 
+\bibitem {GTHs}
+Xilinx Series 7 Transceivers (GTHs) documentation:\\
+\url{https://www.xilinx.com/support/documentation/user_guides/ug476_7Series_Transceivers.pdf}
+
 \end{thebibliography}
 
-% Index.
-\docindex{}
+% % Index.
+% \docindex{}
 
 % End of document structure.
 \end{document}

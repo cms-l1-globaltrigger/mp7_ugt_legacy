@@ -14,7 +14,7 @@
 \def\docdate{\today}
 
 % Custom commands.
-\newcommand{\req}[2]{{\bf R\_#1\_#2}}
+% \newcommand{\req}[2]{{\bf R\_#1\_#2}}
 %\newcommand{\cwarn}[1]{{\bf \color{red}#1}}
 
 % HB 2013-05-03: Inserted to get a CR after paragraph and subparagraph. Syntax from http://www.latex-community.org/viewtopic.php?f=5&t=1383
@@ -33,6 +33,9 @@
       {.5\baselineskip}%
       {\normalfont\normalsize\bfseries}}
 \makeatother
+
+% HB 2022-03-01: Get versions from file - edit file for new versions
+\input{../../../mp7_ugt_firmware_specification/src/latex/content/versions.tex}
 
 % Begin document structure.
 \begin{document}
@@ -56,20 +59,28 @@
 \docfigures{}
 
 \input{../../../mp7_ugt_firmware_specification/src/latex/content/glossary.tex}
-
-\section*{Acronyms}
-\begin{acronym}
 \input{../../../mp7_ugt_firmware_specification/src/latex/content/acronyms.tex}
-\end{acronym}
+
+% \section*{Acronyms}
+% \begin{acronym}
+% \input{../../../mp7_ugt_firmware_specification/src/latex/content/acronyms.tex}
+% \end{acronym}
 
 \begin{thebibliography}{00}
+
+\bibitem {TME_repo}
+Trigger Menu Editor repository:\\
+\url{https://github.com/cms-l1-globaltrigger/tm-editor}
+
+\bibitem {VHDL_Producer}
+VHDL Producer repository:\\
+\url{https://github.com/cms-l1-globaltrigger/tm-vhdlproducer}
 
 \bibitem {interface}
 Calo-layer2 and Global Muon Trigger interface documentation:\\
 \url{https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf}
 
 \end{thebibliography}
-
 
 % End of document structure.
 \end{document}

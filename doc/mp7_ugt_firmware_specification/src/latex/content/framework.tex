@@ -530,5 +530,45 @@ The software reset module (sw\_reset) provides the possiblity for a software res
 	\end{regdesc}
 \end{register}
 
+\subsection{Register map}
+\label{sec:framework:reg_map}
+The register map for Framework has a base address of \verb|0x80000000|.
+
+\begin{longtable}{c p{.25\columnwidth} c p{.45\columnwidth}}
+\caption{Framework register map}\\
+\hline
+Offset & {Register name} & {Access} & {Description}\\
+\hline
+\hline
+\endhead
+0x80000000 & \verb|Timestamp| & r & read-only register for timestamp begin of synthesis.\\
+0x80000001 & \verb|Hostname| & r & 4 read-only registers for hostname of synthesis platform.\\
+0x80000009 & \verb|Username| & r & 4 read-only registers for username of synthesis.\\
+0x80000012 & \verb|Frame version| & r & read-only register for Global Trigger firmware version.\\
+0x80000013 & \verb|Build version| & r & read-only register for build version of Global Trigger firmware.\\
+0x80000800 & \verb|Reset register| & r/w & register for reset pulse and counter reset of counters.\\
+0x80200000 & \verb|Spy mem finor| & r/w & 4096 memory addresses for finor and veto.\\
+0x80240000 & \verb|Spy mem algos (0)| & r/w & 4096 memory addresses for algos[31:0].\\
+0x80241000 & \verb|Spy mem algos (1)| & r/w & 4096 memory addresses for algos[63:32].\\
+... & ... & ... & ...\\
+0x8024F000 & \verb|Spy mem algos (15)| & r/w & 4096 memory addresses for algos[511:480].\\
+0x80300000 & \verb|Spy mem (0)| & r/w & 4096 memory addresses of input data.\\
+0x80301000 & \verb|Spy mem (1)| & r/w & 4096 memory addresses of input data.\\
+... & ... & ... & ...\\
+0x80347000 & \verb|Spy mem (71)| & r/w & 4096 memory addresses of input data.\\
+0x80700000 & \verb|Orbit nr low| & r/w & register for lower 32 bits of orbit number.\\
+0x80700001 & \verb|Orbit nr high| & r/w & register for higher 32 bits of orbit number.\\
+0x80700002 & \verb|Control| & r/w & control register for spy12.\\
+0x80700003 & \verb|Software reset| & r/w & software reset register.\\
+0x80700010 & \verb|Spytrigger status| & r & status register of spytrigger.\\
+0x80700012 & \verb|TCM status| & r & status register of TCM.\\
+0x80700016 & \verb|Orbit nr low status| & r & read-only register for lower 32 bits of orbit number.\\
+0x80700017 & \verb|Orbit nr high status| & r & read-only register for higher 32 bits of orbit number.\\
+0x80700019 & \verb|Bx nr max| & r & read-only register for maximum Bx number.\\
+0x8070001C & \verb|Luminosity seg nr| & r & read-only register for luminosity segment number.\\
+\hline
+\label{tab:framework:frame_register_map}
+\end{longtable}
+
 \clearpage
 

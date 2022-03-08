@@ -7,22 +7,12 @@ with frame v1.2.3 "Delay Manager" (\texttt{dm.vhd}) and "Data Source Multiplexer
 Simmem data not useable anymore, because of removed dsmux.
 The reason of removing is to get more available resources.\\
 
-% Figure \ref{fig_system_overview} shows the basic components of Framework together with \rop.
-%
-% \begin{figure}[h]
-% \includegraphics[width=1.0\textwidth]{./figures/system_overview}
-% \caption{System architecture overview}
-% \label{fig_system_overview}
-% \end{figure}
-
-% The central data type of Framework is shown in Listing \ref{lst:fw:lst_lhc_data_t} (see Section \ref{sec:fw:section_lhc_data_pkg} for details). In the current configuration it comprises 2304 bits (288 Bytes). Data from the GTH interfaces is demultiplexed (from 240 MHz clock domain to LHC clock domain, see Demux Lane Data \ref{sec:framework:demux_lane_data}) and mapped to this data type in the LMP (Lane Mapping Process). It is also used as input and output type for the SIM/SPY I memory.
-
 Data from the GTH interfaces is demultiplexed (from 240 MHz clock domain to LHC clock domain, see Demux Lane Data \ref{sec:framework:demux_lane_data}) and mapped to objects structure in Lane Mapping Process (LMP) for GTL input and SPY I memory.
 
 \subsection{Implementation in firmware}
 \label{sec:framework:implementation_firmware}
 
-Listing~\ref{lst:framework:frame_vhd} contains the entity-declaration of the \texttt{frame.vhd}.\\
+Listing~\ref{lst:framework:frame_vhd} contains the entity-declaration of the \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame.vhd}{\texttt{frame.vhd}}.\\
 
 \lstinputlisting[label=lst:framework:frame_vhd,language=VHDL,caption=Entity declaration of \texttt{frame.vhd}]{interfaces/frame.vhd}
 
@@ -75,7 +65,7 @@ Listing~\ref{lst:framework:frame_vhd} contains the entity-declaration of the \te
 
 \subsection{Main parts}
 
-The top-of-hierarchy module (\texttt{frame.vhd}) contains
+The top-of-hierarchy module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame.vhd}{\texttt{frame.vhd}}) contains
 \begin {itemize}
 \item demultiplexer of lane data
 \item lane mapping
@@ -129,7 +119,7 @@ The configuration of the optical connections from GMT, Calo-Layer2 and External 
 % ------------------------------------------------------------------------------
 
 \subsubsection{Demux Lane Data} \label{sec:framework:demux_lane_data}
-Data from GTH interfaces is in the 240 MHz clock domain. The demultiplexing to the LHC clock domain (about 40 MHz) is done in \texttt{demux\_lane\_data.vhd}, which is instantiated in \texttt{frame.vhd} for currently 16 input links.
+Data from GTH interfaces is in the 240 MHz clock domain. The demultiplexing to the LHC clock domain (about 40 MHz) is done in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame/demux_lane_data.vhd}{\texttt{demux\_lane\_data.vhd}}, which is instantiated in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame.vhd}{\texttt{frame.vhd}} for currently 16 input links.
 
 %------------------------------------------------------------------------------
 %
@@ -141,7 +131,7 @@ Data from GTH interfaces is in the 240 MHz clock domain. The demultiplexing to t
 In the Lane Mapping Process module data from the links are mapped to objects structure defined in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/packages/lhc_data_pkg.vhd}{\texttt{lhc\_data\_pkg.vhd}}.
 
 \paragraph{Implementation}\label{sec:framework:lmp_impl}
-Currently lane mapping is "fixed" in \texttt{lmp.vhd} module, see Table \ref{tab:framework:current_lane_mapping} (\esums\textsuperscript{1}: including minimum bias trigger bits, towercounts, asymmetry and centrality bits).
+Currently lane mapping is "fixed" in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame/lmp.vhd}{\texttt{lmp.vhd}} module, see Table \ref{tab:framework:current_lane_mapping} (\esums\textsuperscript{1}: including minimum bias trigger bits, towercounts, asymmetry and centrality bits).
 
 \begin{table}[ht]
 \caption{Current lane mapping}
@@ -180,10 +170,11 @@ Currently lane mapping is "fixed" in \texttt{lmp.vhd} module, see Table \ref{tab
 \subsubsection{SPY Memory}\label{sec:framework:spy}
 \textbf{Remark:}\\
 with frame v1.2.3 simulation memory (SIM Memory) data not useable anymore, because of removed "Data Source Multiplexer".
-The reason of removing "Data Source Multiplexer" is to get more available resources.\\
+The reason for removing "Data Source Multiplexer" is to get more available resources.\\
+SPY memory III for ROP data is not used anymore.\\
 
 Figure \ref{fig_simspy} shows the SPY memory subsystem of Framework.
-It is used to calibrate the system, i.e. to record results of the GTL/FDL and output packages of the ROP.
+It is used to calibrate the system, to record results of the GTL and FDL.
 
 \paragraph{Implementation}\label{sec:framework:spy_impl}
 The memory subsystem consists of four main parts, which will be discussed in more detail in the following sections:
@@ -201,10 +192,9 @@ The memory subsystem consists of four main parts, which will be discussed in mor
 \end{figure}
 
 \subparagraph{SPY Trigger}\label{sec:framework:spy_trigger}
-The SPY trigger controls the SPY memories and decides when data is recorded. It can be configured and controlled using
-software registers \ref{spy_trig_obrit_nr_reg} and \ref{spy_trig_cfg_reg} provided by the register bank (see .
+The SPY trigger controls the SPY memories and decides when data is recorded. It can be configured and controlled using software registers \ref{spy_trig_obrit_nr_reg} and \ref{spy_trig_cfg_reg}.
 
-Listing~\ref{lst:framework:spytrigger_vhd} contains the entity-declaration of the \texttt{spytrig.vhd}.\\
+Listing~\ref{lst:framework:spytrigger_vhd} contains the entity-declaration of the \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame/spytrig.vhd}{\texttt{spytrig.vhd}}.\\
 
 % \begin{minipage}{\textwidth}
 \lstinputlisting[label=lst:framework:spytrigger_vhd, language=VHDL,caption=SPY trigger interface specification]{interfaces/spytrig.vhd}
@@ -212,50 +202,12 @@ Listing~\ref{lst:framework:spytrigger_vhd} contains the entity-declaration of th
 
 When the SPY trigger receives a spy12 command (next or once) over the software register interface it asserts the $spy1$ and $spy2$ signals for the appropriate orbit.
 This means that the $spy$ signals go high with the bunch crossing counter reaching the value zero and stay high until it reaches zero again (overflow).
-When a spy3 command is received the SPY trigger asserts the $spy3$ signal and waits until the $spy3\_ack$ signal is asserted.
 
 \subparagraph{SPY memory I}
-SPY memory I receives data from LMP (coming from GTHs) to check the alignment of the data.
-
-The SPY memory converts the $lhc\_data\_i$ input signal to a \texttt{std\_logic\_vector} using the converter function provided by the \texttt{lhc\_data\_pkg}. This vector
-is then divided into chunks of 32 bits (the PCIe data width). For each of these chunks a 32 bit true-dual-port memory (2 read ports, 2 write ports, 2 clock domains) is instanciated.
-Thus, every memory has a read/write port in both clock domain, the 125MHz PCIe clock domain and the 40MHz LHC clock domain, which can be used simultaneously.
-The PCIe data-in signal ($sw\_i.data$) is connected to PCIe-clock domain write port of the memories. A memory select signal is generated form the LSBs of the software address ($sw\_i.addr$).
-The memory select signal also controls the multiplexer on the output of the memories to generate the $sw\_o.data$ signal.
-
-Depending on whether the SIM/SPY memory is used to provide simulation data or to store/spy data the address on the LHC-clock domain port of the internal memories is adjusted.
-If data is recorded (SPY) the bunch crossing counter is used as memory address directly.
-When the memory is read the read latency (two clock cycles) must be taken into account.
-This is achieved by subtracting 2 form the bunch crossing number before using it as address.
-To generate the $lhc\_data\_o$ signal the LHC-clock domain data out ports of the internal memories are concatenated and converted back to the \texttt{lhc\_data\_t}.
-
-If the \texttt{lhc\_data\_t} is changed (e.g. new objects added) no modifications in the SIM/SPY memory are required. The SIM/SPY memory only depends on the (auto-generated)
-functions used to convert a \texttt{lhc\_data\_t} signal to \texttt{std\_logic\_vector} and vice versa (see Section \ref{sec:fw:section_lhc_data_pkg} for details).
-
-In the current implementation the size every object in the \texttt{lhc\_data\_t} is a multiple of 32 bit. This is also expected by the SIM/SPY memory. If objects with 16 bit sizes
-are added the SIM/SPY memory must be modified to support this situation (e.g. zero pad the \texttt{lhc\_data\_t}). Furthermore take into account that the PCIe memory bus is 32 bits wide.
-So 16 bit objects should be added to the end of the \texttt{lhc\_data\_t} (as last entry) to keep software memory access simple.
+SPY memory I stores data from LMP (coming from GTHs) to check the alignment of the data, for simulation and test purposes. It is composed of 72 4096x32 bits memories (to cover 3564 bunch crossings with 32 bits datawidth) for all input data. The 4096x32 memory has an input port for 32 bits data at the 40MHz clock domain and an IPBus interface to read the content. Memory address is given by bunch crossing counter (40MHz clock domain).
 
 \subparagraph{SPY memory II}
-The SPY memory II is divided into two subcomponents, to store the $algos$ and $finor$ outputs of the FDL.
-Both memory can only be read over the SW interface. A write access has no effect.
-% Tables \ref{tab_spy2_algos} and \ref{tab_spy2_finor} show the memory layout as seen by the software.
-The algos memory uses the same architecture as the SIM memory.
-The finor memory uses a true-dual-port memory with asymmetric ports. This memory can be written with a data width of one bit and read with a data width of 32 bit.
-
-% Note that the start addresses of the algos and finor memories (configured in the address decoder) must be a multiples of their sizes (in the current configuration $2^{16}$ and $2^7$).
-%
-% \subparagraph{SPY memory III}
-% The SPY memory III stores the output of the ROP, which is sent to the DAQ. The input data width is configurable to bus widths of 16, 32 or 64 bits.
-% Depending on the input data width the memory uses different architectures.
-% \begin{itemize}
-% \item 16 Bit \\
-% A true-dual-port memory with asymmetric ports (16 and 32 bits) is used.
-% \item 32 Bit \\
-% A true-dual-port memory with 32 Bit data width is used.
-% \item 64 Bit \\
-% Two true-dual-port memories with 32 Bit data width are used.
-% \end{itemize}
+SPY memory II is divided into two subcomponents, to store the $algos$ and $finor$ outputs of the FDL, where memory for $algos$ has 16 4096x32 bits memories (16x32=512 algos) and $finor$ is made of only one (for finor with veto). Both have the same architecture as SPY memory I.
 
 %------------------------------------------------------------------------------
 %
@@ -264,7 +216,7 @@ The finor memory uses a true-dual-port memory with asymmetric ports. This memory
 % ------------------------------------------------------------------------------
 \subsubsection{Timer Counter Manager}\label{sec:framework:tcm}
 
-The Timer Counter Manager (TCM) provides different counters, listed in table \ref{tab:framework:tcm_counters} and a set of resisters.
+The Timer Counter Manager (TCM) provides different counters, listed in Table \ref{tab:framework:tcm_counters} and a set of resisters.
 
 \paragraph{Counter Overview}
 \begin{table}[H]
@@ -272,24 +224,24 @@ The Timer Counter Manager (TCM) provides different counters, listed in table \re
 \begin{scriptsize}
 \begin{tabular}{|l|l|l|l|l|}
 \hline
-Counter             &range              &increase condition               &reset condition           &Comments     \\ \hline
-bx\_nr              &$0 to 3563$        &rising\_edge(lhc\_clk)           &overflow                  &             \\ \hline
-event\_nr           &$0 to 2^{32}-1$    &l1a=1 and rising\_edge(lhc\_clk) &BGOS: event counter reset &             \\ \hline
-trigger\_nr         &$0 to 2^{48}-1$    &l1a=1 and rising\_edge(lhc\_clk) &BGOS: start run           &             \\ \hline
-orbit\_nr           &$0 to 2^{48}-1$    &overflow of bx\_nr               &BGOS: orbit counter reset &             \\ \hline
-luminosity\_seg\_nr &$0 to 2^{32}-1$    &rising\_edge(orbit\_nr(18))      &BGOS: orbit counter reset &             \\ \hline
-start\_lumisection  &$0 to 1$           &luminosity\_seg\_nr increases    &after 25ns                &'1' for 25ns \\ \hline
-bx\_nr\_d\_fdl      &$0 to 3563$       &rising\_edge(lhc\_clk)            &overflow                  &             \\ \hline
+\textbf{Counter}    &\textbf{range}     &\textbf{increase condition}      &\textbf{reset condition}  &\textbf{Comments} \\ \hline
+bx\_nr (\ref{tcm_bx_nr})             &$0..3563$        &rising\_edge(lhc\_clk)           &overflow                  &             \\ \hline
+event\_nr (\ref{tcm_ev_nr})           &$0..2^{32}-1$    &l1a=1 and rising\_edge(lhc\_clk) &BGo: event counter reset &             \\ \hline
+trigger\_nr (\ref{tcm_trigger_nr})         &$0..2^{48}-1$    &l1a=1 and rising\_edge(lhc\_clk) &BGo: start run           &             \\ \hline
+orbit\_nr (\ref{tcm_orbit_nr})           &$0..2^{48}-1$    &overflow of \textit{bx\_nr}               &BGo: orbit counter reset &             \\ \hline
+luminosity\_seg\_nr (\ref{lum_seg_nr}) &$0..2^{32}-1$    &rising\_edge(orbit\_nr(18))      &BGo: orbit counter reset &             \\ \hline
+start\_lumisection  &$0..1$           &luminosity\_seg\_nr increases    &after 25ns                &'1' for 25ns \\ \hline
+bx\_nr\_d\_fdl (\ref{tcm_bx_nr_fdl})      &$0..3563$       &rising\_edge(lhc\_clk)            &overflow                  &             \\ \hline
 \end{tabular}\caption{Counters of Timer Counter Manager}\label{tab:framework:tcm_counters}
 \end{scriptsize}
 \end{table}
 
 \paragraph{Bunch Crossing Number and counters derived from it}
-All counters except for event\_nr and the trigger\_nr (which are trivial because they are increased with l1a) are dependent on the bunch crossing counter bx\_nr as stated in table \ref{tab:framework:tcm_counters}. The bx\_nr is zero at startup, then waits for the the first bcres\_d (bunch crossing reset delayed) and starts counting as depicted in figure \ref{fig:bx_start}. It's maximal value is 3563 (0xdeb), then it automatically overflows and starts at zero again (see figure \ref{fig:bx_normal_operation}). Exactly when bx\_nr = 0, bcres\_d has to be asserted. Otherwise the counter is out of synchronization. If this happens, the software register err\_det is set and the counter waits for the next bcres\_d to synchronize again. Note that the value of the counter is invalid until it has synchronized again.
+All counters except for \textit{event\_nr} and \textit{trigger\_nr} (increased with l1a) depend on the bunch crossing counter \textit{bx\_nr} as stated in Table \ref{tab:framework:tcm_counters}. The \textit{bx\_nr} is zero at startup, then waits for the the first \textit{bcres\_d} (bunch crossing reset delayed) and starts counting as depicted in figure \ref{fig:bx_start}. It's maximal value is 3563 (0xdeb), then it automatically overflows and starts at zero again (see figure \ref{fig:bx_normal_operation}). Exactly when \textit{bx\_nr} = 0, \textit{bcres\_d} has to be asserted. Otherwise the counter is out of synchronization. If this happens, the software register \textit{err\_det} is set and the counter waits for the next \textit{bcres\_d} to synchronize again. Note that the value of the counter is invalid until it has synchronized again.
 
 \begin{figure}[ht]
   \includegraphics[width=1.0\textwidth]{./figures/bx_start}
-  \caption{start of the bunch crossing number with the first bcres\_d}
+  \caption{start of the bunch crossing number with the first \textit{bcres\_d}}
   \label{fig:bx_start}
 \end{figure}
 
@@ -300,197 +252,32 @@ All counters except for event\_nr and the trigger\_nr (which are trivial because
 \end{figure}
 
 \paragraph{Special counter: bx\_nr\_d\_fdl}
-The bx\_nr\_d\_fdl is derived from bcres\_d\_fdl in the same manner as bx\_nr is derived from bcres\_d. bx\_nr\_d\_fdl will automatically resync if the logic described in subsection \ref{subsec:framework:tcmerrors} detects a synchronization error for bx\_nr.
+The \textit{bx\_nr\_d\_fdl} is derived from \textit{bcres\_d\_fdl} in the same manner as \textit{bx\_nr} is derived from \textit{bcres\_d}. Counter \textit{bx\_nr\_d\_fdl} will automatically resyncronize if the logic described in subsection \ref{subsec:framework:tcmerrors} detects a synchronization error for \textit{bx\_nr}.
 
 \paragraph{Counters derived from l1a}
-The counters event\_nr and trigger\_nr are increased with l1a, i.e. they are increased twice if l1a is high for 2 clock cycles, etc. They differ only in their value range and the condition that resets the counters, see table \ref{tab:framework:tcm_counters}.
+The counters \textit{event\_nr} and \textit{trigger\_nr} are increased with l1a, i.e. they are increased twice if l1a is high for 2 clock cycles, etc. They differ only in their value range and the condition that resets the counters, see Table \ref{tab:framework:tcm_counters}.
 
 \paragraph{Errors}\label{subsec:framework:tcmerrors}
-As stated above, bcres\_d has to be asserted exactly when bx\_nr = 0, otherwise the counter is out of sync. Then the software register err\_det is set as depicted in figure \ref{fig:err_det}. err\_det can be reset via the software event register err\_det\_reset\_event as depicted in figure \ref{fig:err_det_reset}. Furthermore err\_det is set if bgos = Resync-0x1 and the counter value is not 3563.
+As stated above, \textit{bcres\_d} has to be asserted exactly when \textit{bx\_nr} = 0, otherwise the bunch crossing counter is out of sync. Then the software register \textit{err\_det} is set as depicted in figure \ref{fig:err_det}. Signal \textit{err\_det} can be reset via software event register \textit{err\_det\_reset\_event} as depicted in figure \ref{fig:err_det_reset}. Furthermore \textit{err\_det} is set if BGo Resync is applied and bunch crossing counter value is not 3563.
 
 \begin{figure}[ht]
   \includegraphics[width=1.0\textwidth]{./figures/err_det}
-  \caption{set of the software register err\_det when bc\_res\_d is not asserted correctly}
+  \caption{set of the software register \textit{err\_det} when \textit{bc\_res\_d} is not asserted correctly}
   \label{fig:err_det}
 \end{figure}
 
 \begin{figure}[ht]
   \includegraphics[width=1.0\textwidth]{./figures/err_det_reset}
-  \caption{reset of the software register err\_det when err\_det\_reset\_event toggles}
+  \caption{reset of the software register \textit{err\_det} when \textit{err\_det\_reset\_event} toggles}
   \label{fig:err_det_reset}
 \end{figure}
 
-The TCM implements two additional counters (bx\_nr\_chk and bx\_nr\_max) for debugging purposes. These counters are not visible by any other module but readable via software. bx\_nr\_chk is a 32bit Counter that increases with every LHC clock cycle and resets with bcres\_d. bx\_r\_max holds the highest value bx\_nr\_chk ever reached (should be 3563 if the link is aligned).
+The TCM implements two additional counters (\textit{bx\_nr\_chk} and \textit{bx\_nr\_max}) for debugging purposes. These counters are not visible by any other module but readable via software. Counter \textit{bx\_nr\_chk} has 32 bits that increases with every LHC clock cycle and resets with \textit{bcres\_d}. Value \textit{bx\_r\_max} holds the highest \textit{bx\_nr\_chk} ever reached (should be 3563 if the link is aligned).
 
-\paragraph{SW-Registers}
-All counters except for the start\_lumisection described in table \ref{tab:framework:tcm_counters} can be read by software via the following sw registers:
-
-% \begin{register}{H}{TCM Bunch Crossing Number Register}{}%
-% 	\regfield{reserved}{20}{12}{0}%
-% 	\regfield{bx\_nr}{12}{0}{0}%
-% 	\begin{regdesc}
-% 	\end{regdesc}
-% \end{register}
-% \begin{register}{H}{TCM Event Number Register}{}%
-% 	\regfield{event\_nr}{32}{0}{0}%
-% 	\begin{regdesc}
-% 	\end{regdesc}
-% \end{register}
-% \begin{register}{H}{TCM Trigger Number Registers}{}%
-% 	\regfield{trigger\_nr\_l}{32}{0}{0}%
-% 	\regfield{reserved}{16}{16}{0}%
-% 	\regfield{trigger\_nr\_h}{16}{0}{0}%
-% 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
-% 		\item [trigger\_nr\_l] The 32 low bits of the 48 bit trigger number.
-% 		\item [trigger\_nr\_h] The 16 high bits of the 48 bit trigger number.
-% 	\end{reglist}
-% 	\end{regdesc}
-% \end{register}
-% \begin{register}{H}{TCM Orbit Number Registers}{}%
-% 	\regfield{orbit\_nr\_l}{32}{0}{0}%
-% 	\regfield{reserved}{16}{16}{0}%
-% 	\regfield{orbit\_nr\_h}{16}{0}{0}%
-% 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
-% 		\item [orbit\_nr\_l] The 32 low bits of the 48 bit orbit number.
-% 		\item [orbit\_nr\_h] The 16 high bits of the 48 bit orbit number.
-% 	\end{reglist}
-% 	\end{regdesc}
-% \end{register}
-% \begin{register}{H}{TCM Luminosity Segment Number Register}{}%
-% 	\regfield{luminosity\_seg\_nr}{32}{0}{0}%
-% 	\begin{regdesc}
-% 	\end{regdesc}
-% \end{register}
-% \begin{register}{H}{TCM Bunch Crossing Number FDL Register}{}%
-% 	\regfield{reserved}{20}{12}{0}%
-% 	\regfield{bx\_nr\_d\_fdl}{12}{0}{0}%
-% 	\begin{regdesc}
-% 	\end{regdesc}
-% \end{register}
-% \begin{register}{H}{TCM Bunch Crossing Number Check Register}{}%
-% 	\regfield{bx\_nr\_chk}{32}{0}{0}%
-% 	\begin{regdesc}
-% 	\end{regdesc}
-% \end{register}
-% \begin{register}{H}{TCM Bunch Crossing Number Max Register}{}%
-% 	\regfield{bx\_nr\_max}{32}{0}{0}%
-% 	\begin{regdesc}
-% 	\end{regdesc}
-% \end{register}
-
-Some additional control register can be used to check and reset err\_det, disable the check of bcres\_d and bcres\_d\_fdl (bx\_nr and bx\_nr\_d\_fdl automatically reset when they overflow if cmd\_ign\_bcres is set, bcres\_d is ignored) and simulate the bgos signal. To do this, a value of the orbit signal has to be written to sw-register bgos. The value of the input signal bgos is replaced by the value of the sw-register for exactly one clock cycle, when "1" is written to the event register bgos\_event.
-
-% \begin{register}{H}{TCM cmd\_ign\_bcres}{}% name=CONFIG
-% 	\label{cmd_ign_bcres}%
-%  	\regfield{reserved}{31}{1}{0}%
-%  	\regfield{cmd\_ign\_bcres}{1}{0}{0}%
-% 	\reglabel{Reset}\regnewline%
-%
-% 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
-%  		\item [cmd\_ign\_bcres] bcres is ignored (not checked) when this is set.
-% 	\end{reglist}
-% 	\end{regdesc}
-% \end{register}
-%
-% \begin{register}{H}{TCM err\_det}{}% name=CONFIG
-% 	\label{err_det}%
-%  	\regfield{reserved}{31}{1}{0}%
-% 	\regfield{err\_det}{1}{0}{0}%
-% 	\reglabel{Reset}\regnewline%
-%
-% 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
-% 		\item [err\_det] Set when out of synchronization.
-% 	\end{reglist}
-% 	\end{regdesc}
-% \end{register}
-%
-% \begin{register}{H}{TCM err\_det\_reset\_event}{}% name=CONFIG
-% 	\label{err_det_reset_event}%
-%  	\regfield{reserved}{31}{1}{0}%
-%  	\regfield{err\_det\_reset\_event}{1}{0}{0}%
-% 	\reglabel{Reset}\regnewline%
-%
-% 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
-%  		\item [err\_det\_reset\_event] Event register: resets err\_det.
-% 	\end{reglist}
-% 	\end{regdesc}
-% \end{register}
-%
-% \begin{register}{H}{TCM bgos}{}% name=CONFIG
-% 	\label{bgos}%
-%  	\regfield{reserved}{31}{4}{0}%
-%  	\regfield{bgos}{4}{0}{0}%
-% 	\reglabel{Reset}\regnewline%
-%
-% 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
-%  		\item [bgos] For simulation of the bgos signal.
-% 	\end{reglist}
-% 	\end{regdesc}
-% \end{register}
-%
-% \begin{register}{H}{TCM bgos\_event}{}% name=CONFIG
-% 	\label{bgos_event}%
-%  	\regfield{reserved}{31}{1}{0}%
-%  	\regfield{bgos\_event}{1}{0}{0}%
-% 	\reglabel{Reset}\regnewline%
-%
-% 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
-%  		\item [bgos\_event] Event register: replaces the input signal bgos by the sw-register bgos for exactly one clock cycle.
-% 	\end{reglist}
-% 	\end{regdesc}
-% \end{register}
-%
-% \begin{register}{H}{TCM luminosity\_seg\_period\_msk}{}% name=CONFIG
-% 	\label{luminosity_seg_period_msk}%
-%  	\regfield{luminosity\_seg\_period\_msk}{32}{0}{0x40000}%
-% 	\reglabel{Reset} %\regnewline%
-%
-% 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
-%  		\item [luminosity\_seg\_period\_msk] luminosity\_seg\_nr is increased when the orbit\_nr mod lum\_seg\_period\_mask = 0.
-% 	\end{reglist}
-% 	\end{regdesc}
-% \end{register}
-
-% \subsubsection{Hardware Test}
-% There are various python scripts located in the software/GtControl/branches/fpga-design-2013/python/GtControl >>>>>????????? old??<<<<<<<<<  directory for testing the tcm module. Please refer to the output of the scripts for information how the tests are performed in detail. See table \ref{tab:tcm_hw_test}.
-% \begin{table}[ht]
-% \vspace{5mm}
-% \begin{scriptsize}
-% \begin{tabular}{|p{5cm}|p{10cm}|}
-% \hline
-% script                         &purpose    \\ \hline
-% \verb|tcm_counter_values.py|   &outputs the values of all counters defined above    \\ \hline
-% \verb|tcm_produce_err_det|     &produces an err\_det by manipulating bgos \\ \hline
-% \verb|tcm_err_det_reset|       &resets the err\_det software register \\ \hline
-% \verb|tcm_trigger_test|        &tests trigger\_nr and event\_nr by generating l1a signals using l1asim \\ \hline
-% \verb|tcm_lum_seg_nr_test|    &checks the period of two successive increases of the luminositiy\_seg\_nr \\ \hline
-% \end{tabular}\caption{scripts for testing the tcm}\label{tab:tcm_hw_test}
-% \end{scriptsize}
-% \end{table}
+Some additional control register can be used to check and reset \textit{err\_det}, disable the check of \textit{bcres\_d} and \textit{bcres\_d\_fdl} (\textit{bx\_nr} and \textit{bx\_nr\_d\_fdl} automatically reset when they overflow if cmd\_ign\_bcres is set, \textit{bcres\_d} is ignored) and simulate the bgos signal. To do this, a value of the orbit signal has to be written to sw-register bgos. The value of the input signal bgos is replaced by the value of the sw-register for exactly one clock cycle, when "1" is written to the event register \textit{bgos\_event}.
 
 \subsubsection{Software Reset} \label{sec:framework:software_reset}
 The software reset module (sw\_reset) provides the possiblity for a software reset via the software event register sw\_reset\_event.
-
-% \begin{register}{htbp}{Software Reset register}{}% name=CONFIG
-% 	\label{tcm_ctrl_reg}%
-% 	\regfield{reserved}{31}{1}{0}%
-% 	\regfield{sw\_reset\_event}{1}{0}{0}%
-% 	\reglabel{Reset}\regnewline%
-%
-% 	\begin{regdesc}
-% 	\begin{reglist}[Request~Depth]
-% 		\item [sw\_reset\_event] Event register: Generates a reset signal for exactly one clock cycle.
-% 	\end{reglist}
-% 	\end{regdesc}
-% \end{register}
 
 \subsubsection{Registers}
 \label{sec:framework:registers}
@@ -502,7 +289,7 @@ The register map for Framework has a base address of \verb|0x80000000|.
 \begin{longtable}{c p{.25\columnwidth} c p{.45\columnwidth}}
 \caption{Framework register map}\\
 \hline
-Offset & {Register name} & {Access} & {Description}\\
+Offset & Register name & Access & Description\\
 \hline
 \hline
 \endhead
@@ -517,20 +304,20 @@ Offset & {Register name} & {Access} & {Description}\\
 0x80241000 & \verb|Spy mem algos (1)| & r/w & 4096 memory addresses for algos[63:32].\\
 ... & ... & ... & ...\\
 0x8024F000 & \verb|Spy mem algos (15)| & r/w & 4096 memory addresses for algos[511:480].\\
-0x80300000 & \verb|Spy mem (0)| & r/w & 4096 memory addresses of input data.\\
-0x80301000 & \verb|Spy mem (1)| & r/w & 4096 memory addresses of input data.\\
+0x80300000 & \verb|Spy mem (0)| & r/w & 4096 memory addresses for input data.\\
+0x80301000 & \verb|Spy mem (1)| & r/w & 4096 memory addresses for input data.\\
 ... & ... & ... & ...\\
-0x80347000 & \verb|Spy mem (71)| & r/w & 4096 memory addresses of input data.\\
-0x80700000 & \verb|Orbit nr low| & r/w & register for lower 32 bits of orbit number.\\
-0x80700001 & \verb|Orbit nr high| & r/w & register for higher 32 bits of orbit number.\\
-0x80700002 & \verb|Control| & r/w & control register for spy12.\\
-0x80700003 & \verb|Software reset| & r/w & software reset register.\\
+0x80347000 & \verb|Spy mem (71)| & r/w & 4096 memory addresses for input data.\\
+0x80700000 & \vtop{\hbox{\strut \verb|Spytrigger:|}\hbox{\strut \verb|orbit nr low|}} & r/w & register for lower 32 bits of spy trigger orbit number.\\
+0x80700001 & \vtop{\hbox{\strut \verb|Spytrigger:|}\hbox{\strut \verb|orbit nr high|}} & r/w & register for higher 32 bits of spy trigger orbit number.\\
+0x80700002 & \vtop{\hbox{\strut \verb|Spytrigger:|}\hbox{\strut \verb|control|}} &r/w &  control register for spy12.\\
+0x80700003 & \verb|Software reset| & r/w &  software reset register.\\
 0x80700010 & \verb|Spytrigger status| & r & status register of spytrigger.\\
 0x80700012 & \verb|TCM status| & r & status register of TCM.\\
-0x80700016 & \verb|Orbit nr low status| & r & read-only register for lower 32 bits of orbit number.\\
-0x80700017 & \verb|Orbit nr high status| & r & read-only register for higher 32 bits of orbit number.\\
-0x80700019 & \verb|Bx nr max| & r & read-only register for maximum Bx number.\\
-0x8070001C & \verb|Luminosity seg nr| & r & read-only register for luminosity segment number.\\
+0x80700016 & \vtop{\hbox{\strut \verb|TCM status:|}\hbox{\strut \verb|orbit nr low|}} & r & read-only register for lower 32 bits of orbit number.\\
+0x80700017 & \vtop{\hbox{\strut \verb|TCM status:|}\hbox{\strut \verb|orbit nr high|}} & r & read-only register for higher 32 bits of orbit number.\\
+0x80700019 & \vtop{\hbox{\strut \verb|TCM status:|}\hbox{\strut \verb|bx nr max|}} & r & read-only register for maximum Bx number.\\
+0x8070001C & \vtop{\hbox{\strut \verb|TCM status:|}\hbox{\strut \verb|lum seg nr|}} & r & read-only register for luminosity segment number.\\
 \hline
 \label{tab:framework:frame_register_map}
 \end{longtable}
@@ -538,7 +325,7 @@ Offset & {Register name} & {Access} & {Description}\\
 \paragraph{Register details}
 \label{sec:framework:reg_details}
 
-\begin{register}{htbp}{SPY Trigger Orbit Number Registers}{}% name=CONFIG
+\begin{register}{htbp}{SPY Trigger Orbit Number Registers}{}
 	\label{spy_trig_obrit_nr_reg}
 	\regfield{orbit\_nr\_low}{32}{0}{0}%
 	\regfield{reserved}{16}{16}{0}%
@@ -585,17 +372,22 @@ Offset & {Register name} & {Access} & {Description}\\
 \end{register}
 
 \begin{register}{H}{TCM Bunch Crossing Number Register}{}%
+	\label{tcm_bx_nr}
 	\regfield{reserved}{20}{12}{0}%
 	\regfield{bx\_nr}{12}{0}{0}%
 	\begin{regdesc}
 	\end{regdesc}
 \end{register}
+
 \begin{register}{H}{TCM Event Number Register}{}%
+	\label{tcm_ev_nr}
 	\regfield{event\_nr}{32}{0}{0}%
 	\begin{regdesc}
 	\end{regdesc}
 \end{register}
+
 \begin{register}{H}{TCM Trigger Number Registers}{}%
+	\label{tcm_trigger_nr}
 	\regfield{trigger\_nr\_l}{32}{0}{0}%
 	\regfield{reserved}{16}{16}{0}%
 	\regfield{trigger\_nr\_h}{16}{0}{0}%
@@ -606,7 +398,9 @@ Offset & {Register name} & {Access} & {Description}\\
 	\end{reglist}
 	\end{regdesc}
 \end{register}
+
 \begin{register}{H}{TCM Orbit Number Registers}{}%
+	\label{tcm_orbit_nr}
 	\regfield{orbit\_nr\_l}{32}{0}{0}%
 	\regfield{reserved}{16}{16}{0}%
 	\regfield{orbit\_nr\_h}{16}{0}{0}%
@@ -617,23 +411,31 @@ Offset & {Register name} & {Access} & {Description}\\
 	\end{reglist}
 	\end{regdesc}
 \end{register}
+
 \begin{register}{H}{TCM Luminosity Segment Number Register}{}%
+	\label{lum_seg_nr}
 	\regfield{luminosity\_seg\_nr}{32}{0}{0}%
 	\begin{regdesc}
 	\end{regdesc}
 \end{register}
+
 \begin{register}{H}{TCM Bunch Crossing Number FDL Register}{}%
+	\label{tcm_bx_nr_fdl}
 	\regfield{reserved}{20}{12}{0}%
 	\regfield{bx\_nr\_d\_fdl}{12}{0}{0}%
 	\begin{regdesc}
 	\end{regdesc}
 \end{register}
+
 \begin{register}{H}{TCM Bunch Crossing Number Check Register}{}%
+	\label{tcm_bx_nr_chk}
 	\regfield{bx\_nr\_chk}{32}{0}{0}%
 	\begin{regdesc}
 	\end{regdesc}
 \end{register}
+
 \begin{register}{H}{TCM Bunch Crossing Number Max Register}{}%
+	\label{tcm_bx_nr_max}
 	\regfield{bx\_nr\_max}{32}{0}{0}%
 	\begin{regdesc}
 	\end{regdesc}
@@ -644,7 +446,6 @@ Offset & {Register name} & {Access} & {Description}\\
  	\regfield{reserved}{31}{1}{0}%
  	\regfield{cmd\_ign\_bcres}{1}{0}{0}%
 	\reglabel{Reset}\regnewline%
-
 	\begin{regdesc}
 	\begin{reglist}[Request~Depth]
  		\item [cmd\_ign\_bcres] bcres is ignored (not checked) when this is set.
@@ -657,7 +458,6 @@ Offset & {Register name} & {Access} & {Description}\\
  	\regfield{reserved}{31}{1}{0}%
 	\regfield{err\_det}{1}{0}{0}%
 	\reglabel{Reset}\regnewline%
-
 	\begin{regdesc}
 	\begin{reglist}[Request~Depth]
 		\item [err\_det] Set when out of synchronization.
@@ -670,7 +470,6 @@ Offset & {Register name} & {Access} & {Description}\\
  	\regfield{reserved}{31}{1}{0}%
  	\regfield{err\_det\_reset\_event}{1}{0}{0}%
 	\reglabel{Reset}\regnewline%
-
 	\begin{regdesc}
 	\begin{reglist}[Request~Depth]
  		\item [err\_det\_reset\_event] Event register: resets err\_det.
@@ -683,7 +482,6 @@ Offset & {Register name} & {Access} & {Description}\\
  	\regfield{reserved}{31}{4}{0}%
  	\regfield{bgos}{4}{0}{0}%
 	\reglabel{Reset}\regnewline%
-
 	\begin{regdesc}
 	\begin{reglist}[Request~Depth]
  		\item [bgos] For simulation of the bgos signal.
@@ -696,7 +494,6 @@ Offset & {Register name} & {Access} & {Description}\\
  	\regfield{reserved}{31}{1}{0}%
  	\regfield{bgos\_event}{1}{0}{0}%
 	\reglabel{Reset}\regnewline%
-
 	\begin{regdesc}
 	\begin{reglist}[Request~Depth]
  		\item [bgos\_event] Event register: replaces the input signal bgos by the sw-register bgos for exactly one clock cycle.
@@ -708,7 +505,6 @@ Offset & {Register name} & {Access} & {Description}\\
 	\label{luminosity_seg_period_msk}%
  	\regfield{luminosity\_seg\_period\_msk}{32}{0}{0x40000}%
 	\reglabel{Reset} %\regnewline%
-
 	\begin{regdesc}
 	\begin{reglist}[Request~Depth]
  		\item [luminosity\_seg\_period\_msk] luminosity\_seg\_nr is increased when the orbit\_nr mod lum\_seg\_period\_mask = 0.
@@ -721,7 +517,6 @@ Offset & {Register name} & {Access} & {Description}\\
 	\regfield{reserved}{31}{1}{0}%
 	\regfield{sw\_reset\_event}{1}{0}{0}%
 	\reglabel{Reset}\regnewline%
-
 	\begin{regdesc}
 	\begin{reglist}[Request~Depth]
 		\item [sw\_reset\_event] Event register: Generates a reset signal for exactly one clock cycle.

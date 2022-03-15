@@ -181,7 +181,7 @@ are loaded at the begin of a luminosity segment period. (Other bits are not defi
 The register map for \ufdl has a base address of \verb|0x90000000|.
 
 % % HB 2016-11-03: inserted "longtable"
-\begin{longtable}{c p{.4\columnwidth} c p{.33\columnwidth}}
+\begin{longtable}{c p{.27\columnwidth} c p{.43\columnwidth}}
 \caption{\ufdl register map}\\
 \hline
 Offset & {Register name} & {Access} & {Description}\\
@@ -192,31 +192,31 @@ Offset & {Register name} & {Access} & {Description}\\
 0x90001000 & \verb|Algo BX masks(1)| & r/w & 4096 memory addresses of algo-bx-masks for Algorithms 32-63.\\
 ... & ... & ... & ...\\
 0x9000F000 & \verb|Algo BX masks(15)| & r/w & 4096 memory addresses of algo-bx-masks for Algorithms 480-511.\\
-0x90010000 & \verb|Rate counter before prescaler| & r & 512 read-only registers for rate-counter values before prescalers.\\
-0x90010200 & \verb|Prescale factors| & r/w & 512 registers for prescale factors.\\
-0x90010400 & \verb|Rate counter after prescaler| & r & 512 read-only registers for rate-counter values after prescalers.\\
-0x90010600 & \verb|Rate counter post-dead-time| & r & 512 read-only registers for post-dead-time rate-counter values.\\
-0x90010800 & \verb|Masks| & r/w & 512 registers for finor-masks and veto-masks. Bit 0 = finor-mask, bit 1 = veto-mask.\\
-0x90091880 & \verb|Prescale factors set index| & r/w & Register for prescale factors set index.\\
+0x90010000 & \vtop{\hbox{\strut \verb|Rate counter|}\hbox{\strut \verb|before prescaler|}} (\ref{rate_counter_before_prescaler_regs}) & r & 512 read-only registers for rate-counter values before prescalers.\\
+0x90010200 & \verb|Prescale factors| (\ref{prescale_factor_regs}) & r/w & 512 registers for prescale factors.\\
+0x90010400 & \vtop{\hbox{\strut \verb|Rate counter|}\hbox{\strut \verb|after prescaler|}} (\ref{rate_counter_after_prescaler_regs}) & r & 512 read-only registers for rate-counter values after prescalers.\\
+0x90010600 & \vtop{\hbox{\strut \verb|Rate counter|}\hbox{\strut \verb|post-dead-time|}} (\ref{rate_counter_pdt_regs}) & r & 512 read-only registers for post-dead-time rate-counter values.\\
+0x90010800 & \verb|Masks| (\ref{masks_regs}) & r/w & 512 registers for finor-masks and veto-masks. Bit 0 = finor-mask, bit 1 = veto-mask.\\
+0x90091880 & \vtop{\hbox{\strut \verb|Prescale factors|}\hbox{\strut \verb|set index|}} (\ref{prescale_factor_set_index_reg}) & r/w & Register for prescale factors set index.\\
 % 0x90091888 & \verb|Control| & r/w & Register for control signals (content has to be defined !!!).\\
 0x900918C0 & \verb|L1tm name| & r & 32 registers for L1 Trigger Menu name for \ugtl.\\
 0x900918E0 & \verb|L1tm uuid| & r & 4 registers for L1 Trigger Menu UUID for \ugtl.\\
-0x900918E4 & \verb|L1tm compiler version| & r & Register for L1 Trigger Menu compiler version.\\
-0x900918E5 & \verb|GTL FW version| & r & Register for firmware version of \ugtl VHDL code.\\
-0x900918E6 & \verb|FDL FW version| & r & Register for firmware version of \ufdl VHDL code.\\
+0x900918E4 & \vtop{\hbox{\strut \verb|L1tm compiler|}\hbox{\strut \verb|version|}} (\ref{L1tm_compiler_version_reg}) & r & Register for L1 Trigger Menu compiler version.\\
+0x900918E5 & \verb|GTL FW version| (\ref{gtl_fw_version_reg}) & r & Register for firmware version of \ugtl VHDL code.\\
+0x900918E6 & \verb|FDL FW version| (\ref{fdl_fw_version_reg}) & r & Register for firmware version of \ufdl VHDL code.\\
 0x900918E7 & \verb|L1tm FW uuid| & r & 4 registers for L1 Trigger Menu FW UUID for \ugtl.\\
 0x900918EB & \verb|SVN revision number| & r & Register for SVN revision number.\\
 0x900918EC & \verb|L1tm uuid hash| & r & Register for L1 Trigger Menu UUID hash for \ugtl.\\
 0x900918ED & \verb|L1tm FW uuid hash| & r & Register for L1 Trigger Menu FW UUID hash for \ugtl.\\
 0x900918EE & \verb|Module ID| & r & Register for Module ID of L1 Trigger Menu.\\
-0x90091900 & \verb|Command Pulses| & r/w & Register for command pulses.\\
-0x90091980 & \verb|Rate counter finor| & r & One read-only registers for finor rate-counter value.\\
-0x90092200 & \verb|L1A latency delay| & r/w & Register for L1A latency delay value (used for post-dead-time counter).\\
-0x90093000 & \verb|Rate counter L1A| & r & One read-only registers for L1A rate-counter value.\\
-0x90094000 & \verb|Rate counter veto| & r & One read-only registers for veto rate-counter value.\\
-0x90095000 & \verb|Current prescale set index| & r & Read-only register for prescale factors set index, which was "updated" with begin of current lumi-section ("prescale\_factors\_set\_index\_reg\_updated(0)" in VHDL).\\
-0x90095001 & \verb|Previous prescale set index| & r & Read-only register for prescale factors set index, which was "updated" with begin of previous lumi-section for monitoring "prescale\_factors\_set\_index\_reg\_updated(1)" in VHDL).\\
-0x90096000 & \verb|Calibration trigger gap| & r/w & Register for begin and end (in Bx) of calibration trigger gap.\\
+0x90091900 & \verb|Command Pulses| (\ref{command_pulses_reg}) & r/w & \vtop{\hbox{\strut Register for command pulses}\hbox{\strut (request\_update\_factor\_pulse).}}\\
+0x90091980 & \verb|Rate counter finor| (\ref{rate_counter_finor_regs}) & r & One read-only registers for finor rate-counter value.\\
+0x90092200 & \verb|L1A latency delay| (\ref{l1a_latency_delay_reg}) & r/w & Register for L1A latency delay value (used for post-dead-time counter).\\
+0x90093000 & \verb|Rate counter L1A| (\ref{rate_counter_l1a_reg}) & r & One read-only registers for L1A rate-counter value.\\
+0x90094000 & \verb|Rate counter veto| (\ref{rate_counter_veto_reg}) & r & One read-only registers for veto rate-counter value.\\
+0x90095000 & \vtop{\hbox{\strut \verb|Current prescale|}\hbox{\strut \verb|set index|}} (\ref{current_prescale_factor_set_index_updated_reg}) & r & Read-only register for prescale factors set index, which was "updated" with begin of current lumi-section ("prescale\_factors\_set\_index\_reg\_updated(0)" in VHDL).\\
+0x90095001 & \vtop{\hbox{\strut \verb|Previous prescale|}\hbox{\strut \verb|set index|}} (\ref{previous_prescale_factor_set_index_updated_reg}) & r & Read-only register for prescale factors set index, which was "updated" with begin of previous lumi-section for monitoring "prescale\_factors\_set\_index\_reg\_updated(1)" in VHDL).\\
+0x90096000 & \vtop{\hbox{\strut \verb|Calibration trigger|}\hbox{\strut \verb|gap|}} (\ref{calibration_trigger_gap_reg}) & r/w & Register for begin and end (in Bx) of calibration trigger gap.\\
 \hline
 \label{tab:fdl:ufdl_register_map}
 \end{longtable}
@@ -249,7 +249,7 @@ Offset & {Register name} & {Access} & {Description}\\
 \end{register}
 
 \begin{register}{htbp}{Rate counter after prescaler}{}
-	\label{rate_counter_before_prescaler_regs}%
+	\label{rate_counter_after_prescaler_regs}%
 	\regfield{rate\_counter\_after\_prescaler}{32}{0}{0}%
 	\reglabel{Reset}\regnewline%
 
@@ -262,7 +262,7 @@ Offset & {Register name} & {Access} & {Description}\\
 \end{register}
 
 \begin{register}{htbp}{Rate counter post-dead-time}{}
-	\label{rate_counter_before_prescaler_regs}%
+	\label{rate_counter_pdt_regs}%
 	\regfield{rate\_counter\_postdeadtime}{32}{0}{0}%
 	\reglabel{Reset}\regnewline%
 
@@ -304,7 +304,7 @@ Offset & {Register name} & {Access} & {Description}\\
 \end{register}
 
 \begin{register}{htbp}{L1tm compiler version}{}
-	\label{gtl_fw_version_reg}%
+	\label{L1tm_compiler_version_reg}%
 	\regfield{reserved}{8}{24}{0}%
 	\regfield{major}{8}{16}{0}%
 	\regfield{minor}{8}{8}{0}%
@@ -424,7 +424,7 @@ Offset & {Register name} & {Access} & {Description}\\
 \end{register}
 
 \begin{register}{htbp}{Current prescale set index}{}
-	\label{prescale_factor_set_index_updated_reg}%
+	\label{current_prescale_factor_set_index_updated_reg}%
 	\regfield{reserved}{24}{8}{0}%
 	\regfield{prescale\_factor\_set\_index\_updated}{8}{0}{0}%
 	\reglabel{Reset}\regnewline%
@@ -438,7 +438,7 @@ Offset & {Register name} & {Access} & {Description}\\
 \end{register}
 
 \begin{register}{htbp}{Previous prescale set index}{}
-	\label{prescale_factor_set_index_updated_reg}%
+	\label{previous_prescale_factor_set_index_updated_reg}%
 	\regfield{reserved}{24}{8}{0}%
 	\regfield{prescale\_factor\_set\_index\_updated}{8}{0}{0}%
 	\reglabel{Reset}\regnewline%

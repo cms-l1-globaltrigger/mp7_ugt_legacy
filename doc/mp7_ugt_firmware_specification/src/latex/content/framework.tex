@@ -174,10 +174,10 @@ The reason for removing "Data Source Multiplexer" is to get more available resou
 SPY memory III for ROP data is not used anymore.\\
 
 Figure \ref{fig_simspy} shows the SPY memory subsystem of Framework.
-It is used to calibrate the system, to record results of the GTL and FDL.
+It is used to calibrate the system and to record results of the GTL and FDL.
 
 \paragraph{Implementation}\label{sec:framework:spy_impl}
-The memory subsystem consists of four main parts, which will be discussed in more detail in the following sections:
+The memory subsystem consists of four three parts, which will be discussed in more detail in the following sections:
 
 \begin{itemize}
 \item SPY Trigger
@@ -254,8 +254,8 @@ All counters except for \textit{event\_nr} and \textit{trigger\_nr} (increased w
 \paragraph{Special counter: bx\_nr\_d\_fdl}
 The \textit{bx\_nr\_d\_fdl} is derived from \textit{bcres\_d\_fdl} in the same manner as \textit{bx\_nr} is derived from \textit{bcres\_d}. Counter \textit{bx\_nr\_d\_fdl} will automatically resyncronize if the logic described in subsection \ref{subsec:framework:tcmerrors} detects a synchronization error for \textit{bx\_nr}.
 
-\paragraph{Counters derived from l1a}
-The counters \textit{event\_nr} and \textit{trigger\_nr} are increased with l1a, i.e. they are increased twice if l1a is high for 2 clock cycles, etc. They differ only in their value range and the condition that resets the counters, see Table \ref{tab:framework:tcm_counters}.
+\paragraph{Counters derived from L1A}
+The counters \textit{event\_nr} and \textit{trigger\_nr} are increased with L1A, i.e. they are increased twice if L1A is high for 2 clock cycles, etc. They differ only in their value range and the condition that resets the counters, see Table \ref{tab:framework:tcm_counters}.
 
 \paragraph{Errors}\label{subsec:framework:tcmerrors}
 As stated above, \textit{bcres\_d} has to be asserted exactly when \textit{bx\_nr} = 0, otherwise the bunch crossing counter is out of sync. Then the software register \textit{err\_det} is set as depicted in figure \ref{fig:err_det}. Signal \textit{err\_det} can be reset via software event register \textit{err\_det\_reset\_event} as depicted in figure \ref{fig:err_det_reset}. Furthermore \textit{err\_det} is set if BGo Resync is applied and bunch crossing counter value is not 3563.

@@ -21,7 +21,7 @@ The Final Desicion Logic (\ufdl) firmware contains algo-bx-masks, suppression of
 \begin{itemize}
 \item Algorithms from \ugtl
 \item IPBus interface (for registers, counters and memories)
-\item LHC-clock
+\item LHC clock
 \item Reset signal
 \item BC0, BGo test-enable, L1A
 % \item Indication of LHC gap
@@ -60,10 +60,10 @@ The firmware of \ufdl in this document is based on a hardware configuration with
 \label{fig:fdl:mFDL_pipeline}
 \end{figure}
 
-Every Algorithm, in total 512 coming from \ugtl, passes a algo-bx-mask, the logic for suppression of algos caused by calibration trigger and a prescaler, which reduces the trigger rate by a given factor. Prescaled Algorithms signals are combined to a local final-or-signal (\finor).
-For every Algorithm there is a rate-counter before prescaler and after prescaler, which are incremented by LHC-clock if the Algorithm is true. In addition there are post-dead-time counters, one for each Algorithm, which are incremented,
+Every Algorithm, in total 512 coming from \ugtl, passes a algo-bx-mask, the logic for suppression of algos caused by calibration trigger (\ref{calibration_trigger_gap_reg}) and a prescaler, which reduces the trigger rate by a given factor. The factor has a precision of two digits after comma ("fractional prescale factor"). Prescaled Algorithms signals are combined to a local final-or-signal (\finor).
+For every Algorithm there is a rate-counter before prescaler and after prescaler, which are incremented by LHC clock if the Algorithm is true. In addition there are post-dead-time counters, one for each Algorithm, which are incremented,
 if the Algorithm and the L1A-signal are true at the same bunch-crossing.
-Algorithms after GTLogic, after algo-bx-masks, after prescalers, the local \finor- and local veto-signal are provided for read-out-record.\\
+Algorithms after GTLogic, after algo-bx-masks, after prescalers, the local \finor- and local Veto-signal are provided for read-out-record.\\
 If there are not enough firmware resources in one \ugt board, more boards could be used. Therefore the 512 Algorithms are partitioned by TME. TME will set the number of Algorithms as
 constant in the package module \texttt{gtl\_pkg.vhd}. This means \ugtl and \ufdl firmware considered as a unit for synthesis. In the case of more \ugt boards, the local \finor and local veto are routed via
 a mezzanine board on MP7 (located on "General Purpose I/O connector") to the FINOR-AMC502 module, where the total \finor is created and send to TCDS.\\
@@ -81,7 +81,7 @@ A mapping for Algorithms is provided, to give flexibility for setting the index 
 \subsection{Implementation in firmware}
 \label{sec:fdl:implementation_firmware}
 
-The entity-declaration of \texttt{fdl\_module.vhd} is shown in \ref{sec:fdl:data_flow}.\\
+The entity-declaration of \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/fdl_module.vhd}{\texttt{fdl\_module.vhd}} is shown in \ref{sec:fdl:data_flow}.\\
 
 Listing~\ref{lst:fdl:fdl_module_vhd} contains the entity-declaration of the \texttt{fdl\_module.vhd}.\\
 
@@ -138,7 +138,7 @@ Listing~\ref{lst:fdl:fdl_module_vhd} contains the entity-declaration of the \tex
 
 \subsection{Main parts}
 
-The top-of-hierarchy module (\texttt{fdl\_module.vhd}) contains
+The top-of-hierarchy module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/fdl_module.vhd}{\texttt{fdl\_module.vhd}}) contains
 \begin {itemize}
 \item version registers
 \item a command pulse register
@@ -153,17 +153,60 @@ The top-of-hierarchy module (\texttt{fdl\_module.vhd}) contains
 \item the \finor-logic
 \end {itemize}
 
+\subsubsection{Algo-bx-masks}
+\label{sec:fdl:algo_bx_masks}
+
+Every Algorithm passes a logic where at every bunch-crossing of the orbit the Algorithm is enabled (or not). The algo-bx-masks are implemented as dual-port memories
+and loaded at the begin of run.
+The size of the algo-bx-masks memory is number of bunch-crossings per orbit for address length and number of Algorithms for data-depth (3564 [4096] x 512 bits).\\
+The address (bx-number) of the memory for masking the Algorithm is delivered by an address-counter for algo-bx-masks memory,
+which is reseted with a delay-able bcres signal, to get the correct relations between Algorithms and masks from memory.
+
+\subsubsection{Rate-counters}
+\label{sec:fdl:rate_counters}
+
+Every Algorithm has rate-counters with 32 bits, because of the length of one luminosity segment period. There are counters before and after prescalers and post-dead-time counters (\ref{rate_counter_before_prescaler_regs}, \ref{rate_counter_after_prescaler_regs} and \ref{rate_counter_pdt_regs}).
+The counters before and after prescalers are incremented, if the Algorithm signal is in high state and a positive edge of LHC clock occur. The post-dead-time counters are incremented, if the Algorithm signal, delayed by L1A latency delay (\ref{l1a_latency_delay_reg}), is in high state, a L1A signal and a positive edge of LHC clock occur.
+The content of a counter is updated into a register (for reading the counter value) and is set to 0 at the begin of a luminosity segment period.
+So there is one luminosity segment period time to read the registers with the counter values by software.
+In addition there are rate-counters for \finor-signal, Veto-signal and L1A-signal implemented (\ref{rate_counter_finor_regs}, \ref{rate_counter_veto_reg} and \ref{rate_counter_l1a_reg}). All counters count the occurancy of the signal in one luminosity segment.
+
+\subsubsection{Prescalers}
+\label{sec:fdl:pre_scalers}
+
+Every Algorithm has a prescaler with a prescale factor of 24 bits (\ref{prescale_factor_regs}). The prescaler reduces the trigger-rate per Algorithm with a factor, so \eg a factor of 2 passes through every second trigger. A prescale factor of 0 inhibits all triggers of the certain Algorithm. The factor is loaded into a register by software and updated at begin of a new luminosity segment period, if the update was enabled by software with setting 'request\_update\_factor\_pulse' to 1 and then to 0 in "command\_pulses" register (\ref{command_pulses_reg}). The prescaler works with the new factor.
+A register for "prescale factor set index" (\ref{prescale_factor_set_index_reg}) contains a value which represents a certain set of
+prescale factors. The content of this register is seen in the \record, too. The "prescale factor set index" is loaded into the register by software and updated at begin of a new luminosity segment period (\ref{current_prescale_factor_set_index_updated_reg} and \ref{previous_prescale_factor_set_index_updated_reg}).
+
+\subsubsection{Finor-masks}
+\label{sec:fdl:finor_masks}
+
+Every Algorithm passes a \finor-mask, which enables the Algorithm for \finor.
+The \finor-masks are implemented as registers (\ref{masks_regs}) and loaded at the begin of a run.
+
+\subsubsection{Veto-masks}
+\label{sec:fdl:veto_masks}
+
+Every Algorithm passes a veto-mask, if at least one Algorithm, which is enabled by veto-mask, becomes high state, then \finor is disabled as long as the Algorithm is in high state.
+The veto-masks are implemented as registers (\ref{masks_regs}) and loaded at the begin of a run.
+
+\subsubsection{Finor}
+\label{sec:fdl:finor}
+
+The \finor-signal is a disjunction of all Algorithms passed the \finor-bx-masks. An Algorithm enabled by veto-mask, disables the \finor. This is done on the FINOR-AMC502 module.
+
+\clearpage
 \subsubsection{Registers and memories}
 \label{sec:fdl:reg_mem}
 
-All registers and memories are 32 bits wide. (A first draft of the definition of the relative addresses is shown in Table~\ref{tab:fdl:ufdl_register_map}.)
+All registers and memories are 32 bits wide. (Definition of addresses is shown in Table~\ref{tab:fdl:ufdl_register_map}.)
 
 \begin {itemize}
 \item Dual-port memories for the algo-bx-masks are implemented. For each Algorithm there is a mask bit at every bunch crossing of one orbit. Therefore in total memories of 4096 x 512 bits
 are implemented. Because of the 32 bit data interface, 16 memories each with a size of 4096 x 32 bits are instantiated.
 \item Read-only registers for the value of rate-counters (before and after prescalers, post-dead-time counters) are implemented, 512 registers, one for every Algorithm. Rate-counter value has 32 bits.
 \item Registers for prescale factor of the prescalers are implemented, 512 registers, one for every Algorithm. A prescale factor value has 24 bits.
-\item Registers for masks (finor- and veto-masks) are implemented, 512 registers.
+\item Registers for masks (\finor- and veto-masks) are implemented, 512 registers.
 \item One register for prescale factors set index is implemented. This register contains a value, which is unique for a given set of prescale factors. The content of this register is
 part of \record.
 \item One register for command pulses is implemented. One bit of this register (bit 0) is used for "setting the request signal for updating prescale factors high", which enables, that the prescale factors and the prescale factor set index
@@ -196,7 +239,7 @@ Offset & {Register name} & {Access} & {Description}\\
 0x90010200 & \verb|Prescale factors| (\ref{prescale_factor_regs}) & r/w & 512 registers for prescale factors.\\
 0x90010400 & \vtop{\hbox{\strut \verb|Rate counter|}\hbox{\strut \verb|after prescaler|}} (\ref{rate_counter_after_prescaler_regs}) & r & 512 read-only registers for rate-counter values after prescalers.\\
 0x90010600 & \vtop{\hbox{\strut \verb|Rate counter|}\hbox{\strut \verb|post-dead-time|}} (\ref{rate_counter_pdt_regs}) & r & 512 read-only registers for post-dead-time rate-counter values.\\
-0x90010800 & \verb|Masks| (\ref{masks_regs}) & r/w & 512 registers for finor-masks and veto-masks. Bit 0 = finor-mask, bit 1 = veto-mask.\\
+0x90010800 & \verb|Masks| (\ref{masks_regs}) & r/w & 512 registers for \finor-masks and veto-masks. Bit 0 = \finor-mask, bit 1 = veto-mask.\\
 0x90091880 & \vtop{\hbox{\strut \verb|Prescale factors|}\hbox{\strut \verb|set index|}} (\ref{prescale_factor_set_index_reg}) & r/w & Register for prescale factors set index.\\
 % 0x90091888 & \verb|Control| & r/w & Register for control signals (content has to be defined !!!).\\
 0x900918C0 & \verb|L1tm name| & r & 32 registers for L1 Trigger Menu name for \ugtl.\\
@@ -243,7 +286,7 @@ Offset & {Register name} & {Access} & {Description}\\
 	\begin{regdesc}
 % 	\begin{reglist}[Request~Depth]
 	\begin{reglist}
-		\item [prescale\_factor] Prescale factor of an algo (given by register address). Prescale factor = 0 means disable algo.
+		\item [prescale\_factor] Prescale factor of an algo (given by register address). Prescale factor = 0 means "disable alg". The factor has a precision of two digits after comma, therefore values in register are equal to factor * 100 (e.g.: factor=1.00 => 100 [0x64]).
 	\end{reglist}
 	\end{regdesc}
 \end{register}
@@ -313,9 +356,9 @@ Offset & {Register name} & {Access} & {Description}\\
 
 	\begin{regdesc}
 	\begin{reglist}
-		\item [major] Major version of L1tm compiler.
-		\item [minor] Minor version of L1tm compiler.
-		\item [revision] Revision version of L1tm compiler.
+		\item [major] Major version of VHDL producer.
+		\item [minor] Minor version of VHDL producer.
+		\item [revision] Revision version of VHDL producer.
 	\end{reglist}
 	\end{regdesc}
 \end{register}
@@ -365,7 +408,7 @@ Offset & {Register name} & {Access} & {Description}\\
 	\begin{regdesc}
 % 	\begin{reglist}[Request~Depth]
 	\begin{reglist}
-		\item [request\_update\_factor\_pulse] Sets the request signal for updating prescale factors high. Updating is done at the next "begin of luminosity segment".
+		\item [request\_update\_factor\_pulse] A sequence of applying 1 followed by 0 generates the "request update factors pulse". (Updating is done at the next "begin of luminosity segment".)
 	\end{reglist}
 	\end{regdesc}
 \end{register}
@@ -469,49 +512,3 @@ Offset & {Register name} & {Access} & {Description}\\
 
 \clearpage
 
-\subsubsection{Algo-bx-masks}
-\label{sec:fdl:algo_bx_masks}
-
-Every Algorithm passes a logic where at every bunch-crossing of the orbit the Algorithm is enabled (or not). The algo-bx-masks are implemented as dual-port memories
-and loaded at the begin of run.
-The size of the algo-bx-masks memory is number of bunch-crossings per orbit for address length and number of Algorithms for data-depth (3564 [4096] x 512 bits).\\
-The address (bx-number) of the memory for masking the Algorithm is delivered by an address-counter for algo-bx-masks memory,
-which is reseted with a delay-able bcres signal, to get the correct relations between Algorithms and masks from memory.
-
-\subsubsection{Rate-counters}
-\label{sec:fdl:rate_counters}
-
-Every Algorithm has a rate-counters with 32 bits, because of the length of one luminosity segment period. There are counters before and after prescalers and post-dead-time counters.
-The counters before and after prescalers are incremented, if the Algorithm signal is in high state and a positive edge of LHC-clock occur. The post-dead-time counters are incremented,
-if the Algorithm signal is in high state (delayed by L1A latency delay), a L1A signal and a positive edge of LHC-clock occur.
-The content of a counter is updated into a register (for reading the counter value) and is reseted at the begin of a luminosity segment period.
-So there is one luminosity segment period time to read the registers with the counter values by software.
-
-\subsubsection{Prescalers}
-\label{sec:fdl:pre_scalers}
-
-Every Algorithm has a prescaler with a prescale factor of 24 bits. The prescaler reduces the trigger-rate per Algorithm with a factor, so \eg a factor of 2
-passes through every second trigger. A prescale factor of 0 inhibits all triggers of the certain Algorithm. The factor is loaded into a register by software and updated at begin
-of a new luminosity segment period, if the update was enabled by software ('request\_update\_factor\_pulse' was set in "command\_pulses" register). The prescaler works with the new factor.
-A register for "prescale factor set index" contains a value which represents a certain set of
-prescale factors. The content of this register is seen in the \record too. The "prescale factor set index" is loaded into the register by software and updated at begin
-of a new luminosity segment period.
-
-\subsubsection{Finor-masks}
-\label{sec:fdl:finor_masks}
-
-Every Algorithm passes a \finor-mask, which enables the Algorithm for \finor.
-The \finor-masks are implemented as registers and loaded at the begin of a run.
-
-\subsubsection{Veto-masks}
-\label{sec:fdl:veto_masks}
-
-Every Algorithm passes a veto-mask, if at least one Algorithm, which is enabled by veto-mask, becomes high state, then \finor is disabled as long as the Algorithm is in high state.
-The veto-masks are implemented as registers and loaded at the begin of a run.
-
-\subsubsection{Finor}
-\label{sec:fdl:finor}
-
-The \finor-signal is a disjunction of all Algorithms passed the \finor-bx-masks. An Algorithm enabled by veto-mask, disables the \finor. This is done on the FINOR-AMC502 module.
-
-\clearpage

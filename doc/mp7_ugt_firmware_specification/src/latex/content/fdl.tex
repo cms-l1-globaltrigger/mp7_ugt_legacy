@@ -223,6 +223,9 @@ are loaded at the begin of a luminosity segment period. (Other bits are not defi
 \label{sec:fdl:reg_map}
 The register map for \ufdl has a base address of \verb|0x90000000|.
 
+\textbf{Remark:}\\
+Register "SVN revision number" is used for firmware version of Framework VHDL code (SVN revision number is obsolete).
+
 % % HB 2016-11-03: inserted "longtable"
 \begin{longtable}{c p{.27\columnwidth} c p{.43\columnwidth}}
 \caption{\ufdl register map}\\
@@ -248,7 +251,7 @@ Offset & {Register name} & {Access} & {Description}\\
 0x900918E5 & \verb|GTL FW version| (\ref{gtl_fw_version_reg}) & r & Register for firmware version of \ugtl VHDL code.\\
 0x900918E6 & \verb|FDL FW version| (\ref{fdl_fw_version_reg}) & r & Register for firmware version of \ufdl VHDL code.\\
 0x900918E7 & \verb|L1tm FW uuid| & r & 4 registers for L1 Trigger Menu FW UUID for \ugtl.\\
-0x900918EB & \verb|SVN revision number| & r & Register for SVN revision number.\\
+0x900918EB & \verb|SVN revision number| & r & Register for firmware version of framework VHDL code.\\
 0x900918EC & \verb|L1tm uuid hash| & r & Register for L1 Trigger Menu UUID hash for \ugtl.\\
 0x900918ED & \verb|L1tm FW uuid hash| & r & Register for L1 Trigger Menu FW UUID hash for \ugtl.\\
 0x900918EE & \verb|Module ID| & r & Register for Module ID of L1 Trigger Menu.\\

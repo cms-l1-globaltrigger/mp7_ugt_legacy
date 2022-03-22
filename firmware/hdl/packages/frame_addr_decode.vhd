@@ -1,4 +1,5 @@
 
+-- HB 2021-02-03: changed "FRAME_VERSION" to "GT_VERSION" (new name in gt_mp7_core_pkg.vhd).
 -- HB 2106-05-31: memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd)
 -- HEPHY:21-05-2015 TOP_SERIAL_VENDOR is not more relevant, because in future we will read from hardware over ipmi just MAC address
 -- HEPHY:21-05-2015: test version with spy2_algos and spy2_finor instantiated with ipb_dpmem_4096_32 modules, too.
@@ -47,7 +48,7 @@ package frame_addr_decode is
     constant OFFSET_USERNAME: natural := OFFSET_HOSTNAME + HOSTNAME'length/32; -- 256 bits = 8 x 32 bits
     constant OFFSET_MODULE_TYPE: natural := OFFSET_USERNAME + USERNAME'length/32; -- 1 x 32 bits
     constant OFFSET_FRAME_VERSION: natural := OFFSET_MODULE_TYPE + MODULE_TYPE'length/32; -- 1 x 32 bits
-    constant OFFSET_BUILD_VERSION: natural := OFFSET_FRAME_VERSION + FRAME_VERSION'length/32; -- 1 x 32 bits
+    constant OFFSET_BUILD_VERSION: natural := OFFSET_FRAME_VERSION + GT_VERSION'length/32; -- 1 x 32 bits
 
     constant C_MODINFO_REGS_ADDR_WIDTH : integer := 5;
     constant C_MODINFO_REGS_BEGIN_INDEX : integer := OFFSET_TIMESTAMP;

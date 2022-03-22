@@ -2,6 +2,7 @@
 -- Contains the "framework" of GT-logic (all parts, except GTL and FDL).
 
 -- HB 2022-03-22: v1.3.0 - output ports bcres_d and bcres_d_FDL not used anymore (not used in mp7_payload.vhd). Signals bcres, bcres_outputmux, bcres_d_FDL_int and bx_nr_d_FDL_int not used anymore. Updated tcm.vhd (input port bcres_d_FDL not used anymore) and output_mux.vhd (input port bx_nr_fdl not used anymore). Removed signals for spy3.
+-- HB 2022-02-08: v1.2.5 - changed frame_module_info.vhd (GT_VERSION in OFFSET_FRAME_VERSION) and frame_addr_decode.vhd.
 -- HB 2021-06-16: v1.2.4 - implemented selectors (set in gtl_pkg.vhd) for "scouting" (in output_mux.vhd) and use of input data spymem.
 -- HB 2017-10-10: v1.2.3 - bug fix "simmem_in_use_i" input of spytrig.
 -- HB 2017-10-10: v1.2.2 - removed mux control register ("mux_ctrl_regs_1"), used fixed values for output mux inputs ("mux_ctrl").

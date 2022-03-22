@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/frame.vhd
   - ../payload/frame/tcm.vhd
   - ../payload/frame/output_mux.vhd
+  - ../payload/frame/spytrig.vhd
 
 ## [v1.19.3] - 2022-02-16
 ### Comment

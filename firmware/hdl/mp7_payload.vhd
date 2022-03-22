@@ -2,7 +2,7 @@
 -- Description:
 -- Global trigger top module (contains payload of MP7 for uGT)
 
--- HB 2022-03-22: signals bcres_d and bcres_d_FDL not used anymore. Updated frame.vhd and tcm.vhd.
+-- HB 2022-03-22: signals bcres_d and bcres_d_FDL not used anymore. Updated frame.vhd, tcm.vhd and output_mux.vhd.
 -- HB 2021-06-02: updated for new directory structure without gtl_fdl_wrapper.vhd (implemented gtl_module and fdl_module).
 -- HB 2017-10-06: renamed signal "dsmux_lhc_data" to "lhc_data_2_gtl" (similar to port name of frame).
 -- HB 2017-09-13: removed instance tp_mux_i.

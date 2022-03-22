@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/frame/tcm.vhd
   - ../payload/frame/output_mux.vhd
   - ../payload/frame/spytrig.vhd
+- tex files:
+  - doc/mp7_ugt_firmware_specification/src/latex/content/framework.tex
 
 ## [v1.20.0] - 2022-02-17
 ### Comment
@@ -25,10 +27,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - inserted constants for frame version in gt_mp7_core_pkg.vhd
 
 ### Changed
-- script files:
-  - doc/mp7_ugt_firmware_specification/src/latex/replace_versions_and_make.py
-- tex files:
-  - doc/mp7_ugt_firmware_specification/src/latex/content/firmware_tmpl.tex
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
   - ../packages/gt_mp7_core_pkg_sim.vhd

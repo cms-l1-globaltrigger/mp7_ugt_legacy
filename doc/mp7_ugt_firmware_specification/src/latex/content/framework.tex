@@ -12,7 +12,7 @@ Data from the GTH interfaces is demultiplexed (from 240 MHz clock domain to LHC 
 \subsection{Implementation in firmware}
 \label{sec:framework:implementation_firmware}
 
-Listing~\ref{lst:framework:frame_vhd} contains the entity-declaration of the \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame.vhd}{\texttt{frame.vhd}}.\\
+Listing~\ref{lst:framework:frame_vhd} contains the entity-declaration of the \href{\gitbranch/firmware/hdl/payload/frame.vhd}{\texttt{frame.vhd}}.\\
 
 \lstinputlisting[label=lst:framework:frame_vhd,language=VHDL,caption=Entity declaration of \texttt{frame.vhd}]{interfaces/frame.vhd}
 
@@ -65,7 +65,7 @@ Listing~\ref{lst:framework:frame_vhd} contains the entity-declaration of the \hr
 
 \subsection{Main parts}
 
-The top-of-hierarchy module (\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame.vhd}{\texttt{frame.vhd}}) contains
+The top-of-hierarchy module (\href{\gitbranch/firmware/hdl/payload/frame.vhd}{\texttt{frame.vhd}}) contains
 \begin {itemize}
 \item demultiplexer of lane data
 \item lane mapping
@@ -119,7 +119,7 @@ The configuration of the optical connections from GMT, Calo-Layer2 and External 
 % ------------------------------------------------------------------------------
 
 \subsubsection{Demux Lane Data} \label{sec:framework:demux_lane_data}
-Data from GTH interfaces is in the 240 MHz clock domain. The demultiplexing to the LHC clock domain (about 40 MHz) is done in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame/demux_lane_data.vhd}{\texttt{demux\_lane\_data.vhd}}, which is instantiated in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame.vhd}{\texttt{frame.vhd}} for currently 16 input links.
+Data from GTH interfaces is in the 240 MHz clock domain. The demultiplexing to the LHC clock domain (about 40 MHz) is done in \href{\gitbranch/firmware/hdl/payload/frame/demux_lane_data.vhd}{\texttt{demux\_lane\_data.vhd}}, which is instantiated in \href{\gitbranch/firmware/hdl/payload/frame.vhd}{\texttt{frame.vhd}} for currently 16 input links.
 
 %------------------------------------------------------------------------------
 %
@@ -128,10 +128,10 @@ Data from GTH interfaces is in the 240 MHz clock domain. The demultiplexing to t
 % ------------------------------------------------------------------------------
 
 \subsubsection{Lane Mapping Process} \label{sec:framework:lmp}
-In the Lane Mapping Process module data from the links are mapped to objects structure defined in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/packages/lhc_data_pkg.vhd}{\texttt{lhc\_data\_pkg.vhd}}.
+In the Lane Mapping Process module data from the links are mapped to objects structure defined in \href{\gitbranch/firmware/hdl/packages/lhc_data_pkg.vhd}{\texttt{lhc\_data\_pkg.vhd}}.
 
 \paragraph{Implementation}\label{sec:framework:lmp_impl}
-Currently lane mapping is "fixed" in \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame/lmp.vhd}{\texttt{lmp.vhd}} module, see Table \ref{tab:framework:current_lane_mapping} (\esums\textsuperscript{1}: including minimum bias trigger bits, towercounts, asymmetry and centrality bits).
+Currently lane mapping is "fixed" in \href{\gitbranch//firmware/hdl/payload/frame/lmp.vhd}{\texttt{lmp.vhd}} module, see Table \ref{tab:framework:current_lane_mapping} (\esums\textsuperscript{1}: including minimum bias trigger bits, towercounts, asymmetry and centrality bits).
 
 \begin{table}[ht]
 \caption{Current lane mapping}
@@ -194,7 +194,7 @@ The memory subsystem consists of four three parts, which will be discussed in mo
 \subparagraph{SPY Trigger}\label{sec:framework:spy_trigger}
 The SPY trigger controls the SPY memories and decides when data is recorded. It can be configured and controlled using software registers \ref{spy_trig_obrit_nr_reg} and \ref{spy_trig_cfg_reg}.
 
-Listing~\ref{lst:framework:spytrigger_vhd} contains the entity-declaration of the \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame/spytrig.vhd}{\texttt{spytrig.vhd}}.\\
+Listing~\ref{lst:framework:spytrigger_vhd} contains the entity-declaration of the \href{\gitbranch/firmware/hdl/payload/frame/spytrig.vhd}{\texttt{spytrig.vhd}}.\\
 
 % \begin{minipage}{\textwidth}
 \lstinputlisting[label=lst:framework:spytrigger_vhd, language=VHDL,caption=SPY trigger interface specification]{interfaces/spytrig.vhd}

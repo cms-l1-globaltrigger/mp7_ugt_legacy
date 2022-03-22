@@ -3,12 +3,8 @@
 This description is for version \versionframe of Framework.\\
 
 \textbf{Remark:}\\
-<<<<<<< HEAD
 with frame v1.2.3 "Delay Manager" (\texttt{dm.vhd}) and "Data Source Multiplexer" (\texttt{dsmux.vhd}) are removed because these features were never used in production system, only for tests.
-=======
-with Framework v1.2.3 "Delay Manager" (dm.vhd) and "Data Source Multiplexer" (dsmux.vhd) are removed because these features were never used in production system, only for tests.
->>>>>>> dev_1.20.x
-Simmem data not useable anymore, because of removed dsmux.
+Simmem data not used anymore, because of removed dsmux.
 The reason of removing is to get more available resources.\\
 
 Data from the GTH interfaces is demultiplexed (from 240 MHz clock domain to LHC clock domain, see Demux Lane Data \ref{sec:framework:demux_lane_data}) and mapped to objects structure in Lane Mapping Process (LMP) for GTL input and SPY I memory.

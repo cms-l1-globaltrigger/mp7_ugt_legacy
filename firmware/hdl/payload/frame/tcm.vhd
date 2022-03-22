@@ -1,4 +1,7 @@
+-- Description:
+-- Timer Counter Manager. Contains counters for bunch crossing number, event number, orbit number, trigger number and luminosity segment number.
 
+-- HB 2022-03-22: Port bcres_d_FDL not used anymore (bcres_d and bcres_d_FDL are the same signal: delayed bc0 [bc0_d_int in frame.vhd]).
 -- HB 2016-09-19: Removed "resync" and "stop" from port, not used anymore.
 -- HB 2016-07-04: Signal err_det not used anymore, but remained in the sw_reg_out (used by swatch ?). Removed err_det_reset_old from record, not used anymore.
 -- HB 2016-06-30: Inserted new logic for "start_lumisection" with "oc0" (to prevent 50ns pulse of "start_lumisection" after OC0).
@@ -29,7 +32,7 @@ entity tcm is
 	start		  : in std_logic;
 	l1a_sync          : in std_logic;
 	bcres_d           : in std_logic;
-	bcres_d_FDL       : in std_logic;
+-- 	bcres_d_FDL       : in std_logic;
 	sw_reg_in         : in sw_reg_tcm_in_t;
 	sw_reg_out        : out sw_reg_tcm_out_t;
 	bx_nr             : out bx_nr_t;
@@ -73,7 +76,8 @@ begin
     tcm_rst <= lhc_rst or cntr_rst;
 
     -- LHC clock domain
-    ctrl_lhc: process(tcm_rst, l, ec0, oc0, start, l1a_sync, bcres_d, sw_reg_in, bcres_d_FDL)
+--     ctrl_lhc: process(tcm_rst, l, ec0, oc0, start, l1a_sync, bcres_d, sw_reg_in, bcres_d_FDL)
+    ctrl_lhc: process(tcm_rst, l, ec0, oc0, start, l1a_sync, bcres_d, sw_reg_in)
 	variable v : lhc_reg_t;
     begin
 	v := l;
@@ -115,7 +119,8 @@ begin
 	    v.bx_nr_max := v.bx_nr_chk;
 	end if;
 	-- bx_nr_d_FDL
-	if (l.started_bx_FDL = '0' and bcres_d_FDL = '1') or sw_reg_in.cmd_ignbcres = '1' then
+-- 	if (l.started_bx_FDL = '0' and bcres_d_FDL = '1') or sw_reg_in.cmd_ignbcres = '1' then
+	if (l.started_bx_FDL = '0' and bcres_d = '1') or sw_reg_in.cmd_ignbcres = '1' then
 	    v.started_bx_FDL := '1';
 	--v.bx_nr_d_FDL := bx_nr_t(to_unsigned(1, BX_NR_WIDTH));
             v.bx_nr_d_FDL := bx_nr_t(to_unsigned(TTC_BC0_BX + 1, BX_NR_WIDTH)); -- JW 08.09.2015  Changed reset value of the bc cntr

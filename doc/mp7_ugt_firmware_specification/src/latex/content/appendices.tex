@@ -1,6 +1,7 @@
 \section{Appendices}\label{sec:app:app}
 
-\textbf{Appendix A:}
+\subsection{Configuration of GTHs}\label{sec:app:app_a}
+% \textbf{Appendix A:}
 
 The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
 In Figure~\ref{fig:app:gth_conf} configuration of GTHs~\cite{GTHs} for Global Trigger is shown.
@@ -14,7 +15,8 @@ In Figure~\ref{fig:app:gth_conf} configuration of GTHs~\cite{GTHs} for Global Tr
 
 \clearpage
 
-\textbf{Appendix B:}
+\subsection{Configuration of optical links}\label{sec:app:app_b}
+% \textbf{Appendix B:}
 
 Figure~\ref{fig:app:ugt_inputs} shows the configuration of optical links to Global Trigger.\\
 Links 0..3 contains muon data from GMT, links 4..11 data from GCT and links 12..15 external conditions
@@ -27,7 +29,8 @@ from AMC502 boards.
 \label{fig:app:ugt_inputs}
 \end{figure}
 
-\textbf{Appendix C:}
+\subsection{Configuration of links to AMC13 (readout)}\label{sec:app:app_c}
+% \textbf{Appendix C:}
 
 Figure~\ref{fig:app:ugt_outputs} shows the configuration of links from Global Trigger to AMC13 (readout).\\
 Links 16..24 contains algo data (after GTL, after BX mask and after prescalers), link 25 contains several counter values.
@@ -41,7 +44,8 @@ Links 16..24 contains algo data (after GTL, after BX mask and after prescalers),
 
 \clearpage
 
-\textbf{Appendix D:}
+\subsection{Optical patch panel}\label{sec:app:app_d}
+% \textbf{Appendix D:}
 
 Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panel for optical links.
 
@@ -51,5 +55,26 @@ Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panel 
 \caption{Global Trigger patch panel for optical link}
 \label{fig:app:ugt_pp}
 \end{figure}
+
+\subsection{Description of tests}\label{sec:app:app_e}
+% \textbf{Appendix E:}
+
+Workflow for simulation and synthesis of firmware is described in \href{\gitbranch/README.md}{\texttt{README}} file.\\\\
+List of useful TDF routines and commands for hardware tests:
+\begin{itemize}
+\item Load firmware to scansd card on all MP7 modules and load it into FPGAs\\
+\textit{\small{\$ tdf run uploadfw\_gt <tar file path> --rebootfpga}}
+\item Load firmware from scansd card into FPGA\\
+\textit{\small{\$ tdf run loadfw\_gt <fw build nr> <nr modules>}}
+\item Compare hardware results with test vector pattern\\
+\textit{\small{\$ tdf run multiboard\_function\_test -h}}
+\item Enable TTC signals on AMC13 for all MP7 modules\\
+\textit{\small{\$ tdf run ttc\_enable\_all}}
+\item Check lock of BC0 and LHC clock\\
+\textit{\small{\$ tdf unittest <module> default}}
+\item Check minipods\\
+\textit{\small{\$ tdf mp7butler minipods <module>}}
+\item ...\\
+\end{itemize}
 
 \clearpage

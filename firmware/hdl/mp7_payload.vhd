@@ -2,6 +2,7 @@
 -- Description:
 -- Global trigger top module (contains payload of MP7 for uGT)
 
+-- HB 2022-03-22: signals bcres_d and bcres_d_FDL not used anymore. Updated frame.vhd, tcm.vhd and output_mux.vhd.
 -- HB 2021-06-02: updated for new directory structure without gtl_fdl_wrapper.vhd (implemented gtl_module and fdl_module).
 -- HB 2017-10-06: renamed signal "dsmux_lhc_data" to "lhc_data_2_gtl" (similar to port name of frame).
 -- HB 2017-09-13: removed instance tp_mux_i.
@@ -77,8 +78,8 @@ architecture rtl of mp7_payload is
     signal veto_2_mezz_lemo : std_logic;
     signal finor_w_veto_2_mezz_lemo : std_logic;
 
-    signal bcres_d : std_logic;
-    signal bcres_d_FDL : std_logic;
+--     signal bcres_d : std_logic;
+--     signal bcres_d_FDL : std_logic;
     signal bx_nr_d_FDL : bx_nr_t;
     signal start_lumisection : std_logic;
 
@@ -144,7 +145,7 @@ begin
 
     frame_i: entity work.frame
         generic map(
-            NR_LANES            => (4 * N_REGION)
+            NR_LANES => (4 * N_REGION)
         )
         port map(
             ipb_clk => ipb_clk,
@@ -161,8 +162,8 @@ begin
             oc0 => oc0_sync_bc0_int,
             start => start_sync_bc0_int,
             l1a => l1a,
-            bcres_d => bcres_d,
-            bcres_d_FDL => bcres_d_FDL,
+--             bcres_d => bcres_d,
+--             bcres_d_FDL => bcres_d_FDL,
             start_lumisection => start_lumisection,
             lane_data_in => lane_data_in,
             lane_data_out => lane_data_out,

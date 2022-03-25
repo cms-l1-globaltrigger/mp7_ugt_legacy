@@ -2,7 +2,6 @@
 % Master LaTeX document.
 %
 % Define document type.
-% % \documentclass[11pt,a4paper,english,titlepage]{book}
 \documentclass[11pt,a4paper,english,titlepage]{article}
 
 % Include packages.
@@ -11,30 +10,10 @@
 
 % Document information.
 \def\doctitle{Global Trigger firmware Specification for MP7 platform for Upgrade Phase I}
-
 \def\docauthor{Herbert Bergauer, Babak Rahbaran, Johannes Wittmann}
 \def\docdate{\today}
 
-% Custom commands.
-% \newcommand{\req}[2]{{\bf R\_#1\_#2}}
-%\newcommand{\cwarn}[1]{{\bf \color{red}#1}}
-
-% HB 2013-05-03: Inserted to get a CR after paragraph and subparagraph. Syntax from http://www.latex-community.org/viewtopic.php?f=5&t=1383
-\makeatletter
-\renewcommand\paragraph{%
-   \@startsection{paragraph}{4}{0mm}%
-      {-\baselineskip}%
-      {.5\baselineskip}%
-      {\normalfont\normalsize\bfseries}}
-\makeatother
-
-\makeatletter
-\renewcommand\subparagraph{%
-   \@startsection{subparagraph}{4}{0mm}%
-      {-\baselineskip}%
-      {.5\baselineskip}%
-      {\normalfont\normalsize\bfseries}}
-\makeatother
+% Custom commands => see ../utils/latex/gtupgrade.sty.
 
 % HB 2022-03-01: Get versions from file - edit file for new versions
 \input{content/versions.tex}
@@ -42,78 +21,69 @@
 % Begin document structure.
 \begin{document}
 
-% Title page.
-\doctitlepage{}
+    % Title page.
+    \doctitlepage{}
 
-% Document revision history.
-\input{content/revision_history_fw.tex}
+    % Document revision history.
+    \input{content/revision_history_fw.tex}
 
-% Table of contents.
-\doctoc{}
+    % Table of contents.
+    \doctoc{}
 
-% Document content, add chapter files here.
-%\input{content/com-hardware.tex}
-% \input{content/requirements.tex}
-\input{content/firmware.tex}
-\input{content/framework.tex}
-% \input{content/ipbus.tex}
-% \input{content/gtl.tex}
-\input{content/gtl.tex}
-\input{content/fdl.tex}
-\input{content/rop.tex}
-% \input{content/sw_reset}
-% \input{content/configuration.tex}
-% \input{content/validation.tex}
-\input{content/glossary.tex}
-\input{content/acronyms.tex}
-\input{content/appendices.tex}
+    % Document content.
+    \input{content/firmware.tex}
+    \input{content/framework.tex}
+    \input{content/gtl.tex}
+    \input{content/fdl.tex}
+    \input{content/rop.tex}
+    \input{content/appendices.tex}
+    \input{content/glossary.tex}
+    \input{content/acronyms.tex}
 
-% List of tables.
-\doctables{}
+    % List of tables.
+    \doctables{}
 
-% List of figures.
-\docfigures{}
+    % List of figures.
+    \docfigures{}
 
-% \section*{Acronyms}
-% \begin{acronym}
-% \input{content/acronyms.tex}
-% \end{acronym}
+    % \section*{Acronyms}
+    % \begin{acronym}
+    % \input{content/acronyms.tex}
+    % \end{acronym}
 
-\clearpage
+    \clearpage
 
-\begin{thebibliography}{00}
+    \begin{thebibliography}{00}
 
-\bibitem {MP7}
-MP7 documentation:\\
-\url{http://www.hep.ph.ic.ac.uk/mp7}
+    \bibitem {MP7}
+    MP7 documentation:\\
+    \url{http://www.hep.ph.ic.ac.uk/mp7}
 
-\bibitem {MP7 firmware}
-MP7 firmware repository:\\
-\url{https://gitlab.cern.ch/cms-cactus/firmware/mp7}
+    \bibitem {MP7 firmware}
+    MP7 firmware repository:\\
+    \url{https://gitlab.cern.ch/cms-cactus/firmware/mp7}
 
-\bibitem {TME_repo}
-Trigger Menu Editor repository:\\
-\url{https://github.com/cms-l1-globaltrigger/tm-editor}
+    \bibitem {TME_repo}
+    Trigger Menu Editor repository:\\
+    \url{https://github.com/cms-l1-globaltrigger/tm-editor}
 
-\bibitem {VHDL_Producer}
-VHDL Producer repository:\\
-\url{https://github.com/cms-l1-globaltrigger/tm-vhdlproducer}
+    \bibitem {VHDL_Producer}
+    VHDL Producer repository:\\
+    \url{https://github.com/cms-l1-globaltrigger/tm-vhdlproducer}
 
-% \bibitem {muon}
-% \url{http://www.hephy.at/project/cms/trigger/globalMuonTrigger/notes/in04\_006.pdf}
+    \bibitem {interface}
+    Calo-layer2 and Global Muon Trigger interface documentation:\\
+    \url{https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf}
 
-\bibitem {interface}
-Calo-layer2 and Global Muon Trigger interface documentation:\\
-\url{https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/master/doc/scales_inputs_2_ugt/pdf/scales_inputs_2_ugt.pdf}
+    \bibitem {GTHs}
+    Xilinx Series 7 Transceivers (GTHs) documentation:\\
+    \url{https://www.xilinx.com/support/documentation/user_guides/ug476_7Series_Transceivers.pdf}
 
-\bibitem {GTHs}
-Xilinx Series 7 Transceivers (GTHs) documentation:\\
-\url{https://www.xilinx.com/support/documentation/user_guides/ug476_7Series_Transceivers.pdf}
+    %% Following link not available anymore
+    % \bibitem {muon}
+    % \url{http://www.hephy.at/project/cms/trigger/globalMuonTrigger/notes/in04\_006.pdf}
 
-\end{thebibliography}
-
-% % Index.
-% \docindex{}
+    \end{thebibliography}
 
 % End of document structure.
 \end{document}

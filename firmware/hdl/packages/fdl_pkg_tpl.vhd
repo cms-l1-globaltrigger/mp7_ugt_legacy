@@ -35,6 +35,12 @@ constant FDL_FW_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(FDL_FW_MINOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(FDL_FW_REV_VERSION, 8));
 
+-- HB 2022-02-08: for tests - frame version (readable from register "OFFSET_SVN_REVISION_NUMBER" in fdl_module.vhd)
+constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
+           std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
+           std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &
+           std_logic_vector(to_unsigned(FRAME_REV_VERSION, 8));
+
 -- ==== FDL definitions - begin ============================================================
 -- Definitions for prescalers (for FDL !)
 

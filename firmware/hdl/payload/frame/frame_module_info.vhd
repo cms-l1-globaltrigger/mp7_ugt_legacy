@@ -1,6 +1,8 @@
 
 -- Description: this module contains the "frame module info"
--- HEPHY:21-11-2014 TOP_SERIAL_VENDOR is not mor relevant, because in future we will read from hardware over ipmi just MAC address
+
+-- HB 2021-02-03: register "module_info_2_ipb(OFFSET_FRAME_VERSION)" contains "GT_VERSION" (instead of "FRAME_VERSION").
+-- HEPHY:21-11-2014 TOP_SERIAL_VENDOR is not mor relevant, because in future we will read from hardware over ipmi just MAC address.
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -63,7 +65,7 @@ begin
 --
     module_info_2_ipb(OFFSET_MODULE_TYPE) <= MODULE_TYPE;
 
-    module_info_2_ipb(OFFSET_FRAME_VERSION) <= FRAME_VERSION;
+    module_info_2_ipb(OFFSET_FRAME_VERSION) <= GT_VERSION;
 
     module_info_2_ipb(OFFSET_BUILD_VERSION) <= BUILD_VERSION;
 

@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.20.0] - 2022-03-25
+### Comment
+
+- mp7_ugt firmware release v1.20.0
+- updated and cleaned up framework
+- inserted constants for frame version in gt_mp7_core_pkg.vhd
+
+### Changed
+- source files:
+  - ../mp7_payload.vhd
+  - ../payload/frame.vhd
+  - ../payload/frame/tcm.vhd
+  - ../payload/frame/output_mux.vhd
+  - ../payload/frame/spytrig.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/gt_mp7_core_pkg_sim.vhd
+  - ../packages/fdl_pkg_tpl.vhd
+  - ../packages/frame_addr_decode.vhd
+  - ../payload/frame/frame_module_info.vhd
+  - ../payload/fdl_module.vhd
+
 ## [v1.19.3] - 2022-02-16
 ### Comment
 
@@ -12,7 +33,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - source files:
-  - ../payload/hdl/gtl/comb_conditions.vhd
+  - ../payload/gtl/comb_conditions.vhd
   - ../packages/gt_mp7_core_pkg.vhd
 - script files:
   - scripts/run_simulation_questa.py

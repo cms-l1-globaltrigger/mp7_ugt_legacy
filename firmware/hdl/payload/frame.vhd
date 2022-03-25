@@ -1,6 +1,8 @@
 -- Description:
 -- Contains the "framework" of GT-logic (all parts, except GTL and FDL).
 
+-- HB 2022-03-22: v1.3.0 - output ports bcres_d and bcres_d_FDL not used anymore (not used in mp7_payload.vhd). Signals bcres, bcres_outputmux, bcres_d_FDL_int and bx_nr_d_FDL_int not used anymore. Updated tcm.vhd (input port bcres_d_FDL not used anymore) and output_mux.vhd (input port bx_nr_fdl not used anymore). Removed signals for spy3.
+-- HB 2022-02-08: v1.2.5 - changed frame_module_info.vhd (GT_VERSION in OFFSET_FRAME_VERSION) and frame_addr_decode.vhd.
 -- HB 2021-06-16: v1.2.4 - implemented selectors (set in gtl_pkg.vhd) for "scouting" (in output_mux.vhd) and use of input data spymem.
 -- HB 2017-10-10: v1.2.3 - bug fix "simmem_in_use_i" input of spytrig.
 -- HB 2017-10-10: v1.2.2 - removed mux control register ("mux_ctrl_regs_1"), used fixed values for output mux inputs ("mux_ctrl").
@@ -62,8 +64,6 @@ entity frame is
         oc0 : in std_logic;
         start : in std_logic;
         l1a : in std_logic;
-        bcres_d : out std_logic;
-        bcres_d_FDL : out std_logic;
         start_lumisection : out std_logic;
         lane_data_in : in ldata(NR_LANES-1 downto 0);
         lane_data_out : out ldata(NR_LANES-1 downto 0);
@@ -105,21 +105,15 @@ architecture rtl of frame is
 
     signal lmp_lhc_data_o   : lhc_data_t; -- lhc_data output of lane mapping process
 
-    signal bcres : std_logic; -- NOT USED, "bc0" of mp7_ttc is used instead of "bcres"
-    signal bcres_d_int : std_logic; -- delayed version of bcres
-    signal bcres_d_FDL_int : std_logic; -- delayed version of bcres for FDL
-    signal bcres_outputmux : std_logic; -- non-delayed version of bcres for output mux
+    signal bc0_d_int : std_logic; -- delayed version of bcres
 
     --TCM signals
     signal bx_nr : bx_nr_t;
-    signal bx_nr_d_FDL_int : bx_nr_t;
     signal orbit_nr : orbit_nr_t;
 
     -- sim/spy mem
     signal spy1 : std_logic;
     signal spy2 : std_logic;
-    signal spy3 : std_logic;
-    signal spy3_ack : std_logic;
 
     signal lhc_data_slv_o : std_logic_vector(LHC_DATA_WIDTH-1 downto 0);
     signal lhc_data_slv_i : std_logic_vector(LHC_DATA_WIDTH-1 downto 0);
@@ -221,12 +215,10 @@ architecture rtl of frame is
             oc0               => oc0_d_int,
             start             => start_d_int,
             l1a_sync          => l1a,
-            bcres_d           => bcres_d_int,
-            bcres_d_FDL       => bcres_d_FDL_int,
+            bcres_d           => bc0_d_int,
             sw_reg_in         => rb2tcm,
             sw_reg_out        => tcm2rb,
             bx_nr             => bx_nr,
-            bx_nr_d_FDL       => bx_nr_d_FDL_int,
             event_nr          => open,
             trigger_nr        => open,
             orbit_nr          => orbit_nr,
@@ -262,24 +254,17 @@ architecture rtl of frame is
     sync_proc_i : process (lhc_clk, lhc_rst)
     begin
         if lhc_rst = RST_ACT then
-            bcres_d_int <= '0';
+            bc0_d_int <= '0';
             ec0_d_int <= '0';
             oc0_d_int <= '0';
             start_d_int <= '0';
-            bcres_d_FDL_int <= '0';
-            bcres_outputmux <= '0';
         elsif rising_edge(lhc_clk) then
-            bcres_d_int  <= bc0;
+            bc0_d_int  <= bc0;
             ec0_d_int <= ec0;
             oc0_d_int <= oc0;
             start_d_int <= start;
-            bcres_d_FDL_int <= bc0;
-            bcres_outputmux <= bc0;
         end if;
     end process;
-
-    bcres_d_FDL <= bcres_d_FDL_int;
-    bcres_d <= bcres_d_int;
 
 --===============================================================================================--
 --                           SIM/SPY MEMORY
@@ -293,13 +278,8 @@ architecture rtl of frame is
             bx_nr      => bx_nr,
             sw_reg_i   => rb2spytrig,
             sw_reg_o   => spytrig2rb,
-
             spy1_o     => spy1,
-            spy2_o     => spy2,
-            spy3_o     => spy3,
-            spy3_ack_i => spy3_ack,
-
-            simmem_in_use_i => '0'
+            spy2_o     => spy2
         );
 
 -- use of spymem depends on selector SPYMEM (set in gtl_pkg.vhd)
@@ -394,7 +374,7 @@ architecture rtl of frame is
             lhc_rst     => lhc_rst,
             ctrs        => ctrs,
             bx_nr       => bx_nr,
-            bx_nr_fdl   => bx_nr_d_FDL_int,
+--             bx_nr_fdl   => bx_nr_d_FDL_int,
             orbit_nr    => orbit_nr,
             algo_after_gtLogic   => algo_after_gtLogic_rop,
             algo_after_bxomask   => algo_after_bxomask_rop,

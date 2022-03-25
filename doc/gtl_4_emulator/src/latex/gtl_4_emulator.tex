@@ -6,33 +6,12 @@
 
 % Include packages.
 \usepackage{gtupgrade}
-\usepackage{url}
 \usepackage{cite}
+
 % Document information.
 \def\doctitle{Global Trigger Logic -\\Description for emulator}
 \def\docauthor{Herbert Bergauer, Babak Rahbaran, Johannes Wittmann}
 \def\docdate{\today}
-
-% Custom commands.
-% \newcommand{\req}[2]{{\bf R\_#1\_#2}}
-%\newcommand{\cwarn}[1]{{\bf \color{red}#1}}
-
-% HB 2013-05-03: Inserted to get a CR after paragraph and subparagraph. Syntax from http://www.latex-community.org/viewtopic.php?f=5&t=1383
-\makeatletter
-\renewcommand\paragraph{%
-   \@startsection{paragraph}{4}{0mm}%
-      {-\baselineskip}%
-      {.5\baselineskip}%
-      {\normalfont\normalsize\bfseries}}
-\makeatother
-
-\makeatletter
-\renewcommand\subparagraph{%
-   \@startsection{subparagraph}{4}{0mm}%
-      {-\baselineskip}%
-      {.5\baselineskip}%
-      {\normalfont\normalsize\bfseries}}
-\makeatother
 
 % HB 2022-03-01: Get versions from file - edit file for new versions
 \input{../../../mp7_ugt_firmware_specification/src/latex/content/versions.tex}
@@ -51,15 +30,14 @@
 
 % Document content, add chapter files here.
 \input{../../../mp7_ugt_firmware_specification/src/latex/content/gtl.tex}
+\input{../../../mp7_ugt_firmware_specification/src/latex/content/glossary.tex}
+\input{../../../mp7_ugt_firmware_specification/src/latex/content/acronyms.tex}
 
 % List of tables.
 \doctables{}
 
 % List of figures.
 \docfigures{}
-
-\input{../../../mp7_ugt_firmware_specification/src/latex/content/glossary.tex}
-\input{../../../mp7_ugt_firmware_specification/src/latex/content/acronyms.tex}
 
 % \section*{Acronyms}
 % \begin{acronym}

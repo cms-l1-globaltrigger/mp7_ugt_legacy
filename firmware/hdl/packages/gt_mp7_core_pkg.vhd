@@ -1,8 +1,15 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.19.3
+-- mp7_ugt (=FRAME_VERSION): v1.21.0
 
+-- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
+-- gt: v1.20.0
+-- frame: v1.3.0 (see frame.vhd)
+-- gtl: v1.17.2 (see gtl_module_tpl.vhd)
+-- fdl: v1.3.7 (see fdl_module.vhd)
+
+-- HB 2021-02-03: v1.20.0 - "GT_VERSION" is (used in frame_module_info.vhd) in register of "FRAME_VERSION". "FRAME_VERSION" is now in register of "SVN_REVISION_NUMBER".
 -- HB 2021-02-02: v1.19.2 - Added script file for creating documents with current version numbers in text (doc/../src/latex/replace_versions_and_make.py)
 -- HB 2021-01-13: v1.19.1 - Cleaned up scripts
 -- HB 2021-12-22: v1.19.0 - Renamed scripts (no camel case) and updated for different version of Questsim and Vivado
@@ -14,7 +21,8 @@
 -- v1.15.3: Added python script runSynthWorkFlow.py
 -- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
--- frame: v1.2.4 (see frame.vhd)
+
+-- frame: v1.3.0 (see frame.vhd)
 -- gtl: v1.17.2 (see gtl_module_tpl.vhd)
 -- fdl: v1.3.6 (see fdl_module.vhd)
 
@@ -67,14 +75,18 @@ package gt_mp7_core_pkg is
     constant BUILD_VERSION : std_logic_vector(31 downto 0) := TOP_BUILD_VERSION;
 
 -- ==================================================================================================
--- FRAME version
+-- GT firmware version
+    constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
+    constant GT_MINOR_VERSION      : integer range 0 to 255 := 20;
+    constant GT_REV_VERSION        : integer range 0 to 255 := 0;
+	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
+           std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
+           std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &
+           std_logic_vector(to_unsigned(GT_REV_VERSION, 8));
+-- FRAME firmware version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 19;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 3;
-	constant FRAME_VERSION : std_logic_vector(31 downto 0) := X"00" &
-           std_logic_vector(to_unsigned(FRAME_MAJOR_VERSION, 8)) &
-           std_logic_vector(to_unsigned(FRAME_MINOR_VERSION, 8)) &
-           std_logic_vector(to_unsigned(FRAME_REV_VERSION, 8));
+    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 3;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 0;
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 17;
@@ -82,7 +94,7 @@ package gt_mp7_core_pkg is
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 3;
-    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 6;
+    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 7;
 -- ==================================================================================================
 
     constant BUNCHES_PER_ORBIT : natural range 3564 to 3564 := LHC_BUNCH_COUNT;

@@ -69,7 +69,8 @@ package fdl_addr_decode is
     constant OFFSET_FDL_FW_VERSION: natural := OFFSET_GTL_FW_VERSION + GTL_FW_VERSION'length/32;
     constant OFFSET_L1TM_FW_UID: natural := OFFSET_FDL_FW_VERSION + FDL_FW_VERSION'length/32;
     constant OFFSET_SVN_REVISION_NUMBER: natural := OFFSET_L1TM_FW_UID + L1TM_FW_UID'length/32;
-    constant OFFSET_L1TM_UID_HASH: natural := OFFSET_SVN_REVISION_NUMBER + SVN_REVISION_NUMBER'length/32;
+--     constant OFFSET_L1TM_UID_HASH: natural := OFFSET_SVN_REVISION_NUMBER + SVN_REVISION_NUMBER'length/32;
+    constant OFFSET_L1TM_UID_HASH: natural := OFFSET_SVN_REVISION_NUMBER + FRAME_VERSION'length/32;
     constant OFFSET_FW_UID_HASH: natural := OFFSET_L1TM_UID_HASH + L1TM_UID_HASH'length/32;
     constant OFFSET_MODULE_ID: natural := OFFSET_FW_UID_HASH + FW_UID_HASH'length/32;
 

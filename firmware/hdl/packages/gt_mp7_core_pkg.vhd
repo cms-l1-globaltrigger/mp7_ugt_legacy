@@ -1,7 +1,7 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.21.0
+-- mp7_ugt (=FRAME_VERSION): v1.20.0
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
 -- gt: v1.20.0

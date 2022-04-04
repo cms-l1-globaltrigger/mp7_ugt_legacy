@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.20.1] - 2022-04-04
+### Comment
+
+- mp7_ugt firmware release v1.20.1
+- updated script run_synth_workflow.py
+
+### Changed
+- script files:
+  - scripts/run_synth_workflow.py
+
 ## [v1.20.0] - 2022-03-25
 ### Comment
 

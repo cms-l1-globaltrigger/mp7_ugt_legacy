@@ -85,6 +85,7 @@ def main():
     menu_url = os.path.join('https://raw.githubusercontent.com', menu_repo, args.menu_repo_year)
     temp_dir_path = os.path.join(home_dir, args.temp_dir)
     scripts_path = os.path.dirname(os.path.abspath(__file__))
+    mp7_ugt_path = os.path.join('/'.join(scripts_path.split('/')[:-1]))
     tme_error_file = os.path.join(temp_dir_path, 'tme_error.txt')
     menu_branch_exists_file = os.path.join(temp_dir_path, 'menu_branch_exists.txt')
 
@@ -133,20 +134,7 @@ def main():
     logging.info("verifying menu '%s' with TME", args.xml_path)
 
     subprocess.check_call([os.path.join(home_dir, 'tm-editor'), args.xml_path])
-
-    #command = 'bash -c "{home_dir}/tm-editor {args.xml_path} 2>&1 | tee {tme_error_file}"'.format(**locals())
-    #run_command(command)
-
-    #if os.stat(tme_error_file).st_size > 0:
-        #print("===================================")
-        #print("verifying XML in TME shows errors !!!")
-        #sys.exit(1)
-
-    #logging.info("===========================================================================")
-    #logging.info("clone menu repo '%s'", args.menu_repo)
-    #logging.info("to '%s'", args.temp_dir)
-    #command = 'bash -c "git clone https://github.com/{args.github_user}/{args.menu_repo}.git {home_dir}/{args.temp_dir}/{args.menu_repo}; "'.format(**locals())
-    #run_command(command)
+    #subprocess.check_call([os.path.join('tm-editor'), args.xml_path])
 
     command = 'bash -c "cd {home_dir}/{args.temp_dir}/{args.menu_repo}; git show-branch remotes/origin/{menuname_dist} &> {menu_branch_exists_file}"'.format(**locals())
     run_command(command)
@@ -166,7 +154,11 @@ def main():
     logging.info("===========================================================================")
     logging.info("run VHDL Producer with '%s' with", local_xml_file_name)
 
-    subprocess.check_call([os.path.join(home_dir, 'tm-vhdlproducer'), local_xml_file_name, '--modules 6', '--dist', args.dist, '--sorting desc', '--output', os.path.join(temp_dir_path, menu_local)])
+    #subprocess.check_call([os.path.join(home_dir, 'tm-vhdlproducer'), local_xml_file_name, '--modules 6', '--dist', args.dist, '--sorting desc', '--output', os.path.join(temp_dir_path, menu_local)])
+    menu_local_path = os.path.join(temp_dir_path, menu_local)
+    command = 'bash -c "cd {mp7_ugt_path}; tm-vhdlproducer {local_xml_file_name} --modules 6 --dist {args.dist} --sorting desc --output {menu_local_path}"'.format(**locals())
+    run_command(command)
+    #subprocess.check_call([os.path.join('tm-vhdlproducer'), local_xml_file_name, '--modules 6', '--dist', args.dist, '--sorting desc', '--output', os.path.join(temp_dir_path, menu_local)])
 
     logging.info("===========================================================================")
     logging.info("copy test vector file to created menu %s", local_menu_path)
@@ -175,7 +167,8 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("commit generated VHDL code of menu %s", menuname_dist)
-    command = 'bash -c "cd {home_dir}/{args.temp_dir}/{menu_local}; git add {menuname_dist}; git pull; git commit -m {commit_message}; git push --set-upstream origin {menuname_dist}"'.format(**locals())
+    #command = 'bash -c "cd {home_dir}/{args.temp_dir}/{menu_local}; git add {menuname_dist}; git pull; git commit -m {commit_message}; git push --set-upstream origin {menuname_dist}"'.format(**locals())
+    command = 'bash -c "cd {home_dir}/{args.temp_dir}/{menu_local}; git add {menuname_dist}; git pull"'.format(**locals())
     run_command(command)
 
     # waiting for commit is finished

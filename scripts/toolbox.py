@@ -54,6 +54,13 @@ def build_str_t(version):
     return version
 
 
+def year_str_t(year):
+    """Validates build number."""
+    if not re.match(r'^[0-9]{4}$', year):
+        raise ValueError("not a valid year: '{year}'".format(**locals()))
+    return year
+
+
 def questasim_t(version):
     """Validates Questasim version."""
     if not re.match(r'^\d+\.\d{1}[a-z0-9_]{0,3}$', version):

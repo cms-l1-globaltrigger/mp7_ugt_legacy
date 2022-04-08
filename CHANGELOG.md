@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - mp7_ugt firmware release v1.20.1
 - updated script run_synth_workflow.py
-- added funtion (year_str_t) in toolbox.py
+- added function (year_str_t) in toolbox.py
 
 ### Changed
 - script files:

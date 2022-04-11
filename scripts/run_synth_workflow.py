@@ -64,6 +64,18 @@ def main():
 
     cwd = os.getcwd()
 
+    # setup uGT FW requirements
+    command = f'bash -c "pip install -U pip; pip install -r scripts/requirements.txt"'
+    run_command(command)
+    # setup tm-editor
+    command = f'bash -c "git clone https://github.com/cms-l1-globaltrigger/tm-editor.git; cd tm-editor; git checkout main; pip install --upgrade pip; pip install -r requirements.txt; python setup.py develop; cd .."'
+    run_command(command)
+    # setup tm-vhdlproducer
+    command = f'bash -c "git clone https://github.com/herbberg/tm-vhdlproducer.git; cd tm-vhdlproducer; git checkout master; pip install --upgrade pip; pip install -r requirements.txt; python setup.py develop; cd .."'
+    run_command(command)
+
+    os.chdir(cwd)
+
     home_dir = os.path.join('/home', args.user)
     scripts_path = os.path.dirname(os.path.abspath(__file__))
     mp7_ugt_path = os.path.join('/'.join(scripts_path.split('/')[:-1]))

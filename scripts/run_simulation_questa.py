@@ -305,18 +305,18 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
     logging.info("===========================================================================")
     logging.info("clone repos of MP7 and IPB-firmware to temp_dir ...")
 
-    gitlab_user = os.getenv('UGT_GITLAB_USER_NAME')
-    if not gitlab_user:
-        raise RuntimeError("\033[1;31m UGT_GITLAB_USER_NAME is not defined. \033[0m")
+    #gitlab_user = os.getenv('UGT_GITLAB_USER_NAME')
+    #if not gitlab_user:
+        #raise RuntimeError("\033[1;31m UGT_GITLAB_USER_NAME is not defined. \033[0m")
 
-    gitlab_pwd = os.getenv('UGT_GITLAB_PWD')
-    if not gitlab_pwd:
-        raise RuntimeError("\033[1;31m UGT_GITLAB_PWD is not defined. \033[0m")
+    #gitlab_pwd = os.getenv('UGT_GITLAB_PWD')
+    #if not gitlab_pwd:
+        #raise RuntimeError("\033[1;31m UGT_GITLAB_PWD is not defined. \033[0m")
 
     gitlab_mp7_url = a_mp7_url.split("//")[1]
 
     # clone repos of MP7 and IPB-firmware to temp_dir
-    command = f'bash -c "cd {temp_dir}; git clone https://{gitlab_user}:{gitlab_pwd}@{gitlab_mp7_url}.git mp7; cd {temp_dir}/mp7; git checkout {a_mp7_tag}; cd {temp_dir}; git clone {a_ipb_fw_dir}.git ipbus-firmware"'
+    command = f'bash -c "cd {temp_dir}; git clone https://{gitlab_mp7_url}.git mp7; cd {temp_dir}/mp7; git checkout {a_mp7_tag}; cd {temp_dir}; git clone {a_ipb_fw_dir}.git ipbus-firmware"'
     run_command(command)
 
     if not os.path.exists(os.path.join(temp_dir, "mp7")):

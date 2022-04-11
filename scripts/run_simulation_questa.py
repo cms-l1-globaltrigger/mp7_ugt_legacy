@@ -538,10 +538,7 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    #parser.add_argument('menu', help="menu url (eg. 'https://raw.githubusercontent.com/herbberg/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021/L1Menu_Collisions2020_v0_1_6-d1')")
     parser.add_argument('menu_xml', help="menu url (eg. 'https://raw.githubusercontent.com/herbberg/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021/L1Menu_Collisions2020_v0_1_6-d1/xml/L1Menu_Collisions2020_v0_1_6-d1.xml')")
-    #parser.add_argument('menu', type=tb.menuname_t, help="menu name (eg. 'L1Menu_Collisions2020_v0_8_1-d1')")
-    #parser.add_argument('--menu_url', required=True, help="URL of L1Menu")
     parser.add_argument('--tv', required=True, help="Test vector path")
     parser.add_argument('--ignored', action='store_true', default=False, help="using IGNORED_ALGOS for error checks")
     parser.add_argument('--mp7_url', default=DefaultGitlabUrlMP7, help="MP7 repo (default is '{}')".format(DefaultGitlabUrlMP7))
@@ -566,6 +563,7 @@ def main():
     menu = xml_name.split(".")[0]
     # check menu name
     tb.menuname_t(menu)
+    #menu_url = f"https://{xml_name[2]}/{xml_name[3]}/{xml_name[4]}"
     menu_url = '/'.join(args.menu_xml.split('/')[:-2])
 
     run_simulation_questa(args.mp7_url, args.mp7_repo_tag, menu, menu_url, args.ipb_fw_url, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, args.tv, args.ignored)

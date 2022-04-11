@@ -42,11 +42,9 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('menu_xml_path', metavar='<path>', help="absolute path to XML file [required] (eg. 'https://raw.githubusercontent.com/cms-l1-dpg/L1MenuRun3/master/development/L1Menu_Collisions2022_v1_0_0/L1Menu_Collisions2022_v1_0_0.xml')")
     parser.add_argument('--repo_new_menu_path', metavar='<path>', help="path to repo of new menu [required] (eg. 'github/herbberg/l1menus/master/2022')")
-    #parser.add_argument('menuname', type=tb.xmlname_t, help="L1Menu name (eg. 'L1Menu_Collisions2020_v0_1_6')")
     parser.add_argument('--user', metavar='<path>', required=True, help="synthesis server user name [required]")
     parser.add_argument('--github_user', metavar='<path>', required=True, help="git hub user name [required]")
     parser.add_argument('--temp_dir', metavar='<path>', default=DefaultTempDir, help="local temporarly dir in /home/<user> for workflow (default is '{}')".format(DefaultTempDir))
-    #parser.add_argument('--menu_xml_path', metavar='<path>', required=True, help="absolute path to XML file [required] (eg. 'https://raw.githubusercontent.com/....../L1Menu_Collisions2022_v1_0_0-d1.xml')")
     parser.add_argument('--checkout_menu', metavar='<path>', required=True, help="checkout menu name for creating new menu branch (eg. L1Menu_Collisions2022_v1_0_0-d1)")
     parser.add_argument('--dist', type=int, required=True, help="distribution number for VHDL Producer [required]")
     parser.add_argument('--tv_path', metavar='<path>', required=True, help="absolute local path to test vector file [required]")
@@ -87,6 +85,7 @@ def main():
     menu_name_dist = "{}-d{}".format(menu_name_no_dist, args.dist)
     menu_url = f"https://{git_hub_com}/{menu_git}/{menu_repo_name}/{menu_branch}/{menu_year}"
     menu_url_synth = f"https://{git_hub_com}/{menu_git}/{menu_repo_name}/{menu_name_dist}/{menu_year}"
+    menu_repo_temp_dir_path = os.path.join(home_dir, args.temp_dir, menu_repo_name)
     mp7_temp_dir = os.path.join(home_dir, args.temp_dir, "mp7")
 
     commit_message = "'added new menu {}'".format(menu_name_dist)
@@ -137,21 +136,23 @@ def main():
         menu_git = 'cms-l1-globaltrigger'
         checkout_branch = args.checkout_menu
 
-    #menu_repo_git = "{}.git".format(os.path.join("https://github.com", menu_git, menu_repo_name))
-    #subprocess.run(["git", "clone", menu_repo_git, mp7_temp_dir], check=True)
-    #os.chdir(os.path.join(home_dir, args.temp_dir, menu_repo_name))
-    #remotes_origin = os.path.join("remotes", "origin", menu_name_dist)
-    #subprocess.run(["git", "show-branch", remotes_origin, "&>", menu_branch_exists_file], check=True)
-    #subprocess.run(["git", "checkout", "-b", menu_name_dist], check=True)
+    #menu_repo_git = f"https://github.com/{menu_git}/{menu_repo_name}.git"
+    #subprocess.run(["git", "clone", menu_repo_git, menu_repo_temp_dir_path], check=True)
+    #os.chdir(menu_repo_temp_dir_path)
+    #remotes_origin = f"remotes/origin/{menu_name_dist}"
+    #subprocess.run(["git", "show-branch", remotes_origin, "&>", "menu_branch_exists.txt"], capture_output=True)
     #os.chdir(cwd)
-    command = 'bash -c "cd; git clone https://github.com/{menu_git}/{menu_repo_name}.git {home_dir}/{args.temp_dir}/{menu_repo_name}; cd {home_dir}/{args.temp_dir}/{menu_repo_name}; git show-branch remotes/origin/{menu_name_dist} &> {menu_branch_exists_file} "'.format(**locals())
+
+    #exit(0)
+
+    command = f'bash -c "cd; git clone https://github.com/{menu_git}/{menu_repo_name}.git {home_dir}/{args.temp_dir}/{menu_repo_name}; cd {home_dir}/{args.temp_dir}/{menu_repo_name}; git show-branch remotes/origin/{menu_name_dist} &> {menu_branch_exists_file} "'
     run_command(command)
 
     words = read_file(menu_branch_exists_file).split(' ')
     if words[0] == 'fatal:':
         logging.info("===========================================================================")
         logging.info("create new branch '%s'", menu_name_dist)
-        os.chdir(os.path.join(home_dir, args.temp_dir, menu_repo_name))
+        os.chdir(menu_repo_temp_dir_path)
         subprocess.run(["git", "checkout", checkout_branch], check=True)
         subprocess.run(["git", "checkout", "-b", menu_name_dist], check=True)
         os.chdir(cwd)

@@ -30,7 +30,7 @@ set MOD_TB_DIR {{MOD_TB_DIR}}
 set IPB_DIR {{IPB_DIR}}
 set FILE_NAME {{MENU_DIR}}/../running.lock
 
-set BLK_MEM_GEN_VERSION $env(UGT_BLK_MEM_GEN_VERSION)
+set BLK_MEM_GEN_VERSION $env(UGT_BLK_MEM_GEN_VERSION_SIM)
 
 ## Create and map work directory
 vlib work

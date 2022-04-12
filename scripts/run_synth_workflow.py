@@ -44,6 +44,7 @@ def parse_args():
     parser.add_argument('--repo_new_menu_path', metavar='<path>', help="path to repo of new menu [required] (eg. 'github/herbberg/l1menus/master/2022')")
     parser.add_argument('--user', metavar='<path>', required=True, help="synthesis server user name [required]")
     parser.add_argument('--github_user', metavar='<path>', required=True, help="git hub user name [required]")
+    parser.add_argument('--home_dir', metavar='<path>', required=True, help="local home dir")
     parser.add_argument('--temp_dir', metavar='<path>', default=DefaultTempDir, help="local temporarly dir in /home/<user> for workflow (default is '{}')".format(DefaultTempDir))
     parser.add_argument('--checkout_menu', metavar='<path>', required=True, help="checkout menu name for creating new menu branch (eg. L1Menu_Collisions2022_v1_0_0-d1)")
     parser.add_argument('--dist', type=int, required=True, help="distribution number for VHDL Producer [required]")
@@ -71,7 +72,7 @@ def main():
 
     os.chdir(cwd)
 
-    home_dir = os.path.join('/home', args.user)
+    home_dir = args.home_dir
     scripts_path = os.path.dirname(os.path.abspath(__file__))
     mp7_ugt_path = os.path.join('/'.join(scripts_path.split('/')[:-1]))
     temp_dir_path = os.path.join(home_dir, args.temp_dir)
@@ -148,7 +149,7 @@ def main():
     logging.info("===========================================================================")
     logging.info("verifying menu '%s' with TME", args.menu_xml_path)
 
-    subprocess.run([os.path.join(home_dir, 'tm-editor'), args.menu_xml_path], check=True)
+    subprocess.run([os.path.join(mp7_ugt_path, 'tm-editor'), args.menu_xml_path], check=True)
 
     if menu_repo_name == 'l1menus':
         menu_git = 'herbberg'

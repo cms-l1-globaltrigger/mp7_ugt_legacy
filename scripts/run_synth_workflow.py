@@ -67,12 +67,7 @@ def main():
     # setup uGT FW requirements
     command = f'bash -c "pip install -U pip; pip install -r scripts/requirements.txt"'
     run_command(command)
-    # setup tm-editor
-    command = f'bash -c "git clone https://github.com/cms-l1-globaltrigger/tm-editor.git; cd tm-editor; git checkout main; pip install --upgrade pip; pip install -r requirements.txt; python setup.py develop; cd .."'
-    run_command(command)
     # setup tm-vhdlproducer
-    command = f'bash -c "git clone https://github.com/herbberg/tm-vhdlproducer.git; cd tm-vhdlproducer; git checkout master; pip install --upgrade pip; pip install -r requirements.txt; python setup.py develop; cd .."'
-    run_command(command)
 
     os.chdir(cwd)
 
@@ -84,6 +79,7 @@ def main():
     menu_branch_exists_file = os.path.join(temp_dir_path, 'menu_branch_exists.txt')
 
     menu_name = args.menu_xml_path.split('/')[-1]
+    raw_git_hub_com = args.menu_xml_path.split('/')[2]
     new_menu_path = args.repo_new_menu_path.split('/')
 
     git_hub_com = "{}.com".format(new_menu_path[0])
@@ -95,8 +91,7 @@ def main():
     menu_name_no_dist = menu_name.split('-')[0]
     menu_name_no_dist = menu_name.split('.')[0]
     menu_name_dist = "{}-d{}".format(menu_name_no_dist, args.dist)
-    menu_url = f"https://{git_hub_com}/{menu_git}/{menu_repo_name}/{menu_branch}/{menu_year}"
-    menu_url_synth = f"https://{git_hub_com}/{menu_git}/{menu_repo_name}/{menu_name_dist}/{menu_year}"
+    menu_url_synth = f"https://{raw_git_hub_com}/{menu_git}/{menu_repo_name}/{menu_name_dist}/{menu_year}/{menu_name_dist}/xml/{menu_name_dist}.xml"
     menu_repo_temp_dir_path = os.path.join(home_dir, args.temp_dir, menu_repo_name)
     mp7_temp_dir = os.path.join(home_dir, args.temp_dir, "mp7")
 
@@ -108,6 +103,14 @@ def main():
     build_path = os.path.join(home_dir, args.synth_dir, args.build)
     if os.path.exists(build_path):
         raise RuntimeError('%s exists - remove it and execute script once more' % build_path)
+
+    tme_path = os.path.join(mp7_ugt_path, "tm-editor")
+    if os.path.exists(tme_path):
+        subprocess.run(["rm", "-rf", tme_path], check=True)
+
+    vhdlprod_path = os.path.join(mp7_ugt_path, "tm-vhdlproducer")
+    if os.path.exists(vhdlprod_path):
+        subprocess.run(["rm", "-rf", vhdlprod_path], check=True)
 
     sim_temp_dir = os.path.join('/'.join(scripts_path.split('/')[:-1]), 'firmware', 'sim', 'temp_dir')
     if os.path.exists(sim_temp_dir):
@@ -135,6 +138,12 @@ def main():
 
     if os.path.exists(menu_branch_exists_file):
         subprocess.run(["rm", menu_branch_exists_file], check=True)
+
+    # setup tm-editor
+    command = f'bash -c "git clone https://github.com/cms-l1-globaltrigger/tm-editor.git; cd tm-editor; git checkout main; pip install --upgrade pip; pip install -r requirements.txt; python setup.py develop; cd .."'
+    run_command(command)
+
+    os.chdir(cwd)
 
     logging.info("===========================================================================")
     logging.info("verifying menu '%s' with TME", args.menu_xml_path)
@@ -174,6 +183,11 @@ def main():
     local_xml_file = os.path.join(home_dir, args.temp_dir, 'menu_xml_file')
     #local_xml_file = os.path.join(home_dir, args.temp_dir, menu_name)
     download_file_from_url(args.menu_xml_path, local_xml_file)
+
+    command = f'bash -c "git clone https://github.com/herbberg/tm-vhdlproducer.git; cd tm-vhdlproducer; git checkout master; pip install --upgrade pip; pip install -r requirements.txt; python setup.py develop; cd .."'
+    run_command(command)
+
+    os.chdir(cwd)
 
     logging.info("===========================================================================")
     logging.info("run VHDL Producer with '%s' with", local_xml_file)
@@ -226,7 +240,7 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("run synthesis (takes about 4 hours)")
-    subprocess.run(['python3', os.path.join(scripts_path, 'run_synth_ipbb.py'), menu_name_dist, '--menuurl', menu_url_synth, '--ugturl', args.ugt_url, '--ugt', args.ugt, '--build', args.build, '-p', os.path.join(home_dir, args.synth_dir)], check=True)
+    subprocess.run(['python3', os.path.join(scripts_path, 'run_synth_ipbb.py'), menu_url_synth, '--ugturl', args.ugt_url, '--ugt', args.ugt, '--build', args.build, '-p', os.path.join(home_dir, args.synth_dir)], check=True)
 
     write_bitstream_path = os.path.join(scripts_path, 'vivado_write_bitstream.tcl')
 

@@ -243,7 +243,8 @@ def main():
             vhdl_snippet = vhdl_snippets[i]
             filename = os.path.join(vhdl_snippets_dir, vhdl_snippet)
             #url = "{url_menu}/vhdl/{module_name}/src/{vhdl_snippet}".format(**locals())
-            url = os.path.join(url_menu, 'vhdl', module_name, 'src', vhdl_snippet)
+            url = os.path.join(url_base, 'vhdl', module_name, 'src', vhdl_snippet)
+            #url = os.path.join(url_menu, 'vhdl', module_name, 'src', vhdl_snippet)
             download_file_from_url(url, filename)
 
         replace_vhdl_templates(vhdl_snippets_dir, ipbb_src_fw_dir, ipbb_dest_fw_dir)
@@ -304,8 +305,8 @@ def main():
     # Take menuname with distribution number
     config.set('menu', 'name', menuname)
     # Location of menu XML file
-    menu_xml_loc = "{}/xml/{}.xml".format(url_menu, menuname)
-    config.set('menu', 'location', menu_xml_loc)
+    #menu_xml_loc = "{}/xml/{}.xml".format(url_menu, menuname)
+    config.set('menu', 'location', menu_url)
     config.set('menu', 'modules', modules)
 
     config.add_section('ipbb')

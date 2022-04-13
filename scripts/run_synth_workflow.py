@@ -65,13 +65,6 @@ def main():
 
     cwd = os.getcwd()
 
-    # setup uGT FW requirements
-    command = f'bash -c "pip install -U pip; pip install -r scripts/requirements.txt"'
-    run_command(command)
-    # setup tm-vhdlproducer
-
-    os.chdir(cwd)
-
     home_dir = args.home_dir
     scripts_path = os.path.dirname(os.path.abspath(__file__))
     mp7_ugt_path = os.path.join('/'.join(scripts_path.split('/')[:-1]))
@@ -106,12 +99,13 @@ def main():
         raise RuntimeError('%s exists - remove it and execute script once more' % build_path)
 
     tme_path = os.path.join(mp7_ugt_path, "tm-editor")
-    if os.path.exists(tme_path):
-        subprocess.run(["rm", "-rf", tme_path], check=True)
+    if not os.path.exists(tme_path):
+        raise RuntimeError('tm-editor does not exists - install it in this environment')
 
     vhdlprod_path = os.path.join(mp7_ugt_path, "tm-vhdlproducer")
-    if os.path.exists(vhdlprod_path):
+    if not os.path.exists(vhdlprod_path):
         subprocess.run(["rm", "-rf", vhdlprod_path], check=True)
+        raise RuntimeError('tm-vhdlproducer does not exists - install it in this environment')
 
     sim_temp_dir = os.path.join('/'.join(scripts_path.split('/')[:-1]), 'firmware', 'sim', 'temp_dir')
     if os.path.exists(sim_temp_dir):
@@ -140,16 +134,11 @@ def main():
     if os.path.exists(menu_branch_exists_file):
         subprocess.run(["rm", menu_branch_exists_file], check=True)
 
-    # setup tm-editor
-    command = f'bash -c "git clone https://github.com/cms-l1-globaltrigger/tm-editor.git; cd tm-editor; git checkout main; pip install --upgrade pip; pip install -r requirements.txt; python setup.py develop; cd .."'
-    run_command(command)
-
-    os.chdir(cwd)
-
     logging.info("===========================================================================")
     logging.info("verifying menu '%s' with TME", args.menu_xml_path)
 
-    subprocess.run([os.path.join(mp7_ugt_path, 'tm-editor'), args.menu_xml_path], check=True)
+    #subprocess.run([os.path.join(mp7_ugt_path, 'tm-editor'), args.menu_xml_path], check=True)
+    subprocess.run(["tm-editor", args.menu_xml_path], check=True)
 
     if menu_repo_name == 'l1menus':
         menu_git = 'herbberg'
@@ -164,8 +153,6 @@ def main():
     #remotes_origin = f"remotes/origin/{menu_name_dist}"
     #subprocess.run(["git", "show-branch", remotes_origin, "&>", "menu_branch_exists.txt"], capture_output=True)
     #os.chdir(cwd)
-
-    #exit(0)
 
     command = f'bash -c "cd; git clone https://github.com/{menu_git}/{menu_repo_name}.git {home_dir}/{args.temp_dir}/{menu_repo_name}; cd {home_dir}/{args.temp_dir}/{menu_repo_name}; git show-branch remotes/origin/{menu_name_dist} &> {menu_branch_exists_file} "'
     run_command(command)
@@ -182,13 +169,7 @@ def main():
         raise RuntimeError('branch %s exists - delete it from repo (or change menu name)' % menu_name_dist)
 
     local_xml_file = os.path.join(home_dir, args.temp_dir, 'menu_xml_file')
-    #local_xml_file = os.path.join(home_dir, args.temp_dir, menu_name)
     download_file_from_url(args.menu_xml_path, local_xml_file)
-
-    command = f'bash -c "git clone https://github.com/herbberg/tm-vhdlproducer.git; cd tm-vhdlproducer; git checkout master; pip install --upgrade pip; pip install -r requirements.txt; python setup.py develop; cd .."'
-    run_command(command)
-
-    os.chdir(cwd)
 
     logging.info("===========================================================================")
     logging.info("run VHDL Producer with '%s' with", local_xml_file)
@@ -212,7 +193,7 @@ def main():
     subprocess.run(["git", "add", menu_name_dist], check=True)
     subprocess.run(["git", "pull"])
     subprocess.run(["git", "commit", "-m", commit_message], check=True)
-    subprocess.run(["git", "push", "--set-upstream", "origin", menu_name_dist], check=True)
+    #subprocess.run(["git", "push", "--set-upstream", "origin", menu_name_dist], check=True)
     os.chdir(cwd)
 
     # waiting for commit is finished
@@ -235,13 +216,13 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("run simulation")
-    xml_file_4_sim = "{}.xml".format(os.path.join("https://raw.githubusercontent.com", menu_git, menu_repo_name, menu_name_dist, menu_year, menu_name_dist, 'xml', menu_name_dist))
+    xml_file_4_sim = "{}.xml".format(os.path.join(local_menu_path, 'xml', menu_name_dist))
     subprocess.run(['python3', os.path.join(scripts_path, 'run_simulation_questa.py'), xml_file_4_sim, '--tv', args.tv_path, ignored], check=True)
     os.chdir(cwd)
 
     logging.info("===========================================================================")
     logging.info("run synthesis (takes about 4 hours)")
-    subprocess.run(['python3', os.path.join(scripts_path, 'run_synth_ipbb.py'), menu_url_synth, '--ugturl', args.ugt_url, '--ugt', args.ugt, '--build', args.build, '-p', os.path.join(home_dir, args.synth_dir)], check=True)
+    #subprocess.run(['python3', os.path.join(scripts_path, 'run_synth_ipbb.py'), menu_url_synth, '--ugturl', args.ugt_url, '--ugt', args.ugt, '--build', args.build, '-p', os.path.join(home_dir, args.synth_dir)], check=True)
 
     write_bitstream_path = os.path.join(scripts_path, 'vivado_write_bitstream.tcl')
 
@@ -251,6 +232,10 @@ def main():
     packer_path = os.path.join(scripts_path, 'fwpackerIpbb.py')
 
     print("===========================================================================")
+    print("\033[1;33m push created menu branch: \033[0m")
+    print("$ cd", local_menu_path)
+    print("$ git push --set-upstream origin", menu_name_dist)
+    print(" ")
     print("\033[1;33m check, whether syntheses still running: \033[0m")
     print("$ screen -r")
     print(" ")

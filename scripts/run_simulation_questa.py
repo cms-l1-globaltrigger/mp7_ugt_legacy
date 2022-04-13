@@ -278,7 +278,7 @@ def download_file_from_url(url, filename):
     with open(filename, 'w') as fp:
         fp.write(d)
 
-def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv, a_ignored):
+def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv, a_ignored, local_xml):
 
     sim_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'firmware', 'sim')
 
@@ -330,7 +330,10 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
     xml_name = "{}{}".format(a_menu, '.xml')
     menu_filepath = os.path.join(temp_dir, xml_name)
     url = os.path.join(a_url_menu, 'xml', xml_name)
-    download_file_from_url(url, menu_filepath)
+    if not local_xml:
+        download_file_from_url(url, menu_filepath)
+    else:
+        shutil.copyfile(url, menu_filepath)
 
     if not os.path.exists(a_tv):
         raise RuntimeError("\033[1;31m test vector file does not exist. \033[0m")
@@ -363,7 +366,10 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
                 vhdl_file_local_path = os.path.join(temp_dir_module, vhdl_name_ext)
                 vhdl_file_path = os.path.join(vhdl_src_path, vhdl_name_ext)
                 url = os.path.join(a_url_menu, vhdl_file_path)
-                download_file_from_url(url, vhdl_file_local_path)
+                if not local_xml:
+                    download_file_from_url(url, vhdl_file_local_path)
+                else:
+                    shutil.copyfile(url, vhdl_file_local_path)
 
     if not os.path.exists(menu_filepath):
         raise RuntimeError('Missing %s File' % menu_filepath)
@@ -538,7 +544,7 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('menu_xml', help="menu url (eg. 'https://raw.githubusercontent.com/herbberg/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021/L1Menu_Collisions2020_v0_1_6-d1/xml/L1Menu_Collisions2020_v0_1_6-d1.xml')")
+    parser.add_argument('menu_xml', help="menu url (eg. 'https://raw.githubusercontent.com/.../2021/L1Menu_Collisions2020_v0_1_6-d1/xml/L1Menu_Collisions2020_v0_1_6-d1.xml') or local path (eg. <local path>/2021/L1Menu_Collisions2020_v0_1_6-d1/xml/L1Menu_Collisions2020_v0_1_6-d1.xml')")
     parser.add_argument('--tv', required=True, help="Test vector path")
     parser.add_argument('--ignored', action='store_true', default=False, help="using IGNORED_ALGOS for error checks")
     parser.add_argument('--mp7_url', default=DefaultGitlabUrlMP7, help="MP7 repo (default is '{}')".format(DefaultGitlabUrlMP7))
@@ -559,14 +565,25 @@ def main():
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
+    scripts_path = os.path.dirname(os.path.abspath(__file__))
+    mp7_ugt_path = os.path.join('/'.join(scripts_path.split('/')[:-1]))
+    temp_dir = os.path.join(mp7_ugt_path, 'firmware', 'sim', 'temp_dir')
+    if os.path.exists(temp_dir):
+        subprocess.run(["rm", "-rf", temp_dir], check=True)
+
     xml_name = args.menu_xml.split("/")[-1]
     menu = xml_name.split(".")[0]
     # check menu name
     tb.menuname_t(menu)
-    #menu_url = f"https://{xml_name[2]}/{xml_name[3]}/{xml_name[4]}"
-    menu_url = '/'.join(args.menu_xml.split('/')[:-2])
+    menu_url = "/".join(args.menu_xml.split("/")[:-2])
 
-    run_simulation_questa(args.mp7_url, args.mp7_repo_tag, menu, menu_url, args.ipb_fw_url, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, args.tv, args.ignored)
+    # works with url and local path for XML file location
+    if args.menu_xml.split("/")[0] == "https:":
+        local_xml = False
+    else:
+        local_xml = True
+
+    run_simulation_questa(args.mp7_url, args.mp7_repo_tag, menu, menu_url, args.ipb_fw_url, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, args.tv, args.ignored, local_xml)
 
 if __name__ == '__main__':
     main()

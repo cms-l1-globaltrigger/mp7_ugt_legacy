@@ -85,7 +85,9 @@ def main():
     menu_name_no_dist = menu_name.split('-')[0]
     menu_name_no_dist = menu_name.split('.')[0]
     menu_name_dist = "{}-d{}".format(menu_name_no_dist, args.dist)
-    menu_url_synth = f"https://{raw_git_hub_com}/{menu_git}/{menu_repo_name}/{menu_name_dist}/{menu_year}/{menu_name_dist}/xml/{menu_name_dist}.xml"
+
+    menu_url_synth = f"{temp_dir_path}/{menu_repo_name}/{menu_year}/{menu_name_dist}/xml/{menu_name_dist}.xml"
+
     menu_repo_temp_dir_path = os.path.join(home_dir, args.temp_dir, menu_repo_name)
     mp7_temp_dir = os.path.join(home_dir, args.temp_dir, "mp7")
 
@@ -137,7 +139,6 @@ def main():
     logging.info("===========================================================================")
     logging.info("verifying menu '%s' with TME", args.menu_xml_path)
 
-    #subprocess.run([os.path.join(mp7_ugt_path, 'tm-editor'), args.menu_xml_path], check=True)
     subprocess.run(["tm-editor", args.menu_xml_path], check=True)
 
     if menu_repo_name == 'l1menus':

@@ -2,6 +2,7 @@ import argparse
 import configparser
 import logging
 import os
+import shutil
 import subprocess
 import urllib.request
 import urllib.parse
@@ -138,16 +139,17 @@ def main():
     tb.menuname_t(menuname)
 
     menu_path = args.menu_xml.split('/')[:-2]
-    raw_git_hub_com = menu_path[2]
-    menu_git = menu_path[3]
-    menu_repo_name = menu_path[4]
-    menu_branch = menu_path[5]
-    menu_year = tb.year_str_t(menu_path[6])
-    url_base = f"https://{raw_git_hub_com}/{menu_git}/{menu_repo_name}/{menu_branch}/{menu_year}/{menuname}"
+    if args.menu_xml.split("/")[0] == "https:":
+        menu_year = tb.year_str_t(menu_path[6])
+        #base = f"https://{raw_git_hub_com}/{menu_git}/{menu_repo_name}/{menu_branch}/{menu_year}/{menuname}"
+        base = f"https://{menu_path[2]}/{menu_path[3]}/{menu_path[4]}/{menu_path[5]}/{menu_year}/{menuname}"
+    else:
+        base = "/".join(menu_path)
+
     xml_name = "{}.xml".format(menuname)
     html_name = "{}.html".format(menuname)
-    menu_url = f"{url_base}/xml/{xml_name}"
-    doc_url = f"{url_base}/doc/{html_name}"
+    menu_url = f"{base}/xml/{xml_name}"
+    doc_url = f"{base}/doc/{html_name}"
 
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
@@ -204,11 +206,17 @@ def main():
     logging.info("download XML file from L1Menu repository ...")
 
     filename = os.path.join(ipbb_dir, 'src', xml_name)
-    download_file_from_url(menu_url, filename)
+    if args.menu_xml.split("/")[0] == "https:":
+        download_file_from_url(menu_url, filename)
+    else:
+        shutil.copyfile(menu_url, filename)
     menu = XmlMenu(filename)
 
     filename = os.path.join(ipbb_dir, 'src', html_name)
-    download_file_from_url(doc_url, filename)
+    if args.menu_xml.split("/")[0] == "https:":
+        download_file_from_url(doc_url, filename)
+    else:
+        shutil.copyfile(doc_url, filename)
 
     # Fetch menu name from path.
     menu_name = menu.name
@@ -242,8 +250,11 @@ def main():
         for i in range(len(vhdl_snippets)):
             vhdl_snippet = vhdl_snippets[i]
             filename = os.path.join(vhdl_snippets_dir, vhdl_snippet)
-            url = "{url_menu}/vhdl/{module_name}/src/{vhdl_snippet}".format(**locals())
-            download_file_from_url(url, filename)
+            url = "{base}/vhdl/{module_name}/src/{vhdl_snippet}".format(**locals())
+            if args.menu_xml.split("/")[0] == "https:":
+                download_file_from_url(url, filename)
+            else:
+                shutil.copyfile(url, filename)
 
         replace_vhdl_templates(vhdl_snippets_dir, ipbb_src_fw_dir, ipbb_dest_fw_dir)
 

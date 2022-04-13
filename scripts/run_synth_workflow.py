@@ -222,7 +222,7 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("run synthesis (takes about 4 hours)")
-    #subprocess.run(['python3', os.path.join(scripts_path, 'run_synth_ipbb.py'), menu_url_synth, '--ugturl', args.ugt_url, '--ugt', args.ugt, '--build', args.build, '-p', os.path.join(home_dir, args.synth_dir)], check=True)
+    subprocess.run(['python3', os.path.join(scripts_path, 'run_synth_ipbb.py'), menu_url_synth, '--ugturl', args.ugt_url, '--ugt', args.ugt, '--build', args.build, '-p', os.path.join(home_dir, args.synth_dir)], check=True)
 
     write_bitstream_path = os.path.join(scripts_path, 'vivado_write_bitstream.tcl')
 

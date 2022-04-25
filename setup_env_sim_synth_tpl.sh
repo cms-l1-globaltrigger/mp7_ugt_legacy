@@ -1,21 +1,3 @@
-python3 -m venv env
-. env/bin/activate
-pip install -U pip
-pip install -r scripts/requirements.txt
-git clone <tm-editor repo>
-cd tm-editor
-git checkout <branch>
-pip install --upgrade pip
-pip install -r requirements.txt
-python setup.py develop
-cd ..
-git clone <tm-vhdlproducer repo>
-cd tm-vhdlproducer
-git checkout <branch>
-pip install --upgrade pip
-pip install -r requirements.txt
-python setup.py develop
-cd ..
 export UGT_VIVADO_BASE_DIR=<Vivado installation dir>
 export UGT_VIVADO_VERSION=<Vivado version>
 export MGLS_LICENSE_FILE=<license server>

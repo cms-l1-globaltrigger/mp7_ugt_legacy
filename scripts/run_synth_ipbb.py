@@ -112,7 +112,7 @@ def replace_vhdl_templates(vhdl_snippets_dir, src_fw_dir, dest_fw_dir):
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('menu_xml', help="menu url (eg. 'https://raw.githubusercontent.com/herbberg/cms-l1-menu/L1Menu_Collisions2020_v0_1_6-d1/2021/L1Menu_Collisions2020_v0_1_6-d1/xml/L1Menu_Collisions2020_v0_1_6-d1.xml')")
+    parser.add_argument('menu_xml', help="path to menu xml file (in repository or local")
     parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version to run (default is '{}')".format(DefaultVivadoVersion))
     parser.add_argument('--ipbb', metavar='<version>', default=DefaultIpbbVersion, type=tb.ipbb_version_t, help="IPBus builder version [tag] (default is '{}')".format(DefaultIpbbVersion))
     parser.add_argument('--ipburl', metavar='<path>', default=DefaultGitlabUrlIPB, help="URL of IPB firmware repo (default is '{}')".format(DefaultGitlabUrlIPB))
@@ -133,15 +133,15 @@ def main():
     # Parse command line arguments.
     args = parse_args()
 
+    menu_path = args.menu_xml.split('/')[:-2]
+    menu_split_0 = args.menu_xml.split("/")[0]
+    menu_year = tb.year_str_t(args.menu_xml.split('/')[-4])
     xml_name = args.menu_xml.split("/")[-1]
     menuname = xml_name.split(".")[0]
     # check menu name
     tb.menuname_t(menuname)
 
-    menu_path = args.menu_xml.split('/')[:-2]
-    if args.menu_xml.split("/")[0] == "https:":
-        menu_year = tb.year_str_t(menu_path[6])
-        #base = f"https://{raw_git_hub_com}/{menu_git}/{menu_repo_name}/{menu_branch}/{menu_year}/{menuname}"
+    if menu_split_0 == 'https:':
         base = f"https://{menu_path[2]}/{menu_path[3]}/{menu_path[4]}/{menu_path[5]}/{menu_year}/{menuname}"
     else:
         base = "/".join(menu_path)
@@ -206,14 +206,14 @@ def main():
     logging.info("download XML file from L1Menu repository ...")
 
     filename = os.path.join(ipbb_dir, 'src', xml_name)
-    if args.menu_xml.split("/")[0] == "https:":
+    if menu_split_0 == "https:":
         download_file_from_url(menu_url, filename)
     else:
         shutil.copyfile(menu_url, filename)
     menu = XmlMenu(filename)
 
     filename = os.path.join(ipbb_dir, 'src', html_name)
-    if args.menu_xml.split("/")[0] == "https:":
+    if menu_split_0 == "https:":
         download_file_from_url(doc_url, filename)
     else:
         shutil.copyfile(doc_url, filename)

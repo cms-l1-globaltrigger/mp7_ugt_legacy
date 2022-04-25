@@ -19,6 +19,35 @@ In addition there are versions (with similar schemes) for the following firmware
 
 ## Instructions for setting up simulation and build environments.
 
+### Setup environment
+
+If not already done create a Python virtual environment and install required dependencies including [IPBB](https://github.com/ipbus/ipbb) and lxml.
+```bash
+cd <mp7_ugt_legacy_path>
+python3 -m venv env>
+. env/bin/activate
+pip install -U pip
+pip install -r <mp7_ugt_legacy_path>/scripts/requirements.txt
+```
+
+A template file for setting up the envirionment variables is available (setup_env_sim_synth_tpl.sh). Copy this file to e.g. "setup_env_sim_synth.sh", edit the values for the variables and execute the script with ". setup_env_sim_synth.sh".
+
+Example for "setup_env_sim_synth.sh"
+
+```bash
+export UGT_VIVADO_BASE_DIR=/opt/xilinx/Vivado
+export UGT_VIVADO_VERSION=2019.2
+export MGLS_LICENSE_FILE=1717@heros.hephy.at
+export UGT_GITLAB_USER_NAME=hbergaue
+export UGT_QUESTASIM_VERSION=10.7c
+export UGT_QUESTASIM_SIM_PATH=/opt/mentor
+export UGT_VIVADO_QUESTASIMLIBS_VERSION=v2019.2
+export UGT_BLK_MEM_GEN_VERSION_SIM=blk_mem_gen_v8_4_4
+export UGT_BLK_MEM_GEN_VERSION_SYNTH=blk_mem_gen_v8_4_4
+export UGT_QUESTASIM_LIBS_PATH=${UGT_QUESTASIM_SIM_PATH}/questalibs_vivado_${UGT_VIVADO_QUESTASIMLIBS_VERSION}
+source ${UGT_VIVADO_BASE_DIR}/${UGT_VIVADO_VERSION}/settings64.sh
+```
+
 ### Simulate
 
 Simulation of VHDL module "gtl_fdl_wrapper.vhd" with Questa simulator for 6 ugt modules.
@@ -41,66 +70,7 @@ Following table shows which Questasim libraries for a certain Vivado version hav
 
 #### Workflow
 
-Make sure that Questasim license file is set (MGLS_LICENSE_FILE).
-
-Set the following environment variables (preferably in `.bashrc`):
-| Variable | Description |
-|:---------|:------------|
-| `UGT_QUESTASIM_VERSION` | Questasim version |
-| `UGT_QUESTASIM_SIM_PATH` | Installation directory of Questasim |
-| `UGT_QUESTASIM_LIBS_PATH` | Path to Questasim libraries of a certain vivado version |
-| `UGT_BLK_MEM_GEN_VERSION` | Version of blk_mem_gen IP for dual port memories (spy memories) and ROMs of LUT values for 1/DR2 (mass over deltaR) |
-
-In addition following environment variables (used in run_simulation_questa.py) must be set in the simulation environment for "automatic" git clone of MP7 firmware:
-| Variable | Description |
-|:---------|:------------|
-| `UGT_GITLAB_USER_NAME` | Gitlab user name |
-| `UGT_GITLAB_PWD` | Gitlab password |
-
-Example
-
-```bash
-export UGT_QUESTASIM_VERSION=2021.1_2
-export UGT_QUESTASIM_SIM_PATH=/opt/mentor/questa/2021.1_2
-export UGT_QUESTASIM_LIBS_PATH=/opt/mentor/questasimlibs_vivado_v2021.2
-export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_v8_4_5
-```
-
-Clone git ugt repository.
-```bash
-git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git
-cd <mp7_ugt_legacy path>
-git checkout <branch|tag>
-```
-
-Example
-```bash
-git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git
-cd mp7_ugt_legacy
-git checkout master
-```
-
-Example for creating a Questasim environment in bashrc:
-
-```bash
-cd <home directory>
-python3 -m venv env_questasim
-. env_questasim/bin/activate
-pip install -U pip
-pip install -r <mp7_ugt_legacy_directory>/scripts/requirements.txt
-cd <mp7_ugt_legacy directory>
-export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_5)>
-. firmware/sim/setup.sh
-cd firmware/sim
-```
-
-If not already done create a Python virtual environment and install required dependencies including [IPBB](https://github.com/ipbus/ipbb) and lxml.
-```bash
-python3 -m venv <name (e.g. env_questasim)>
-. env_questasim/bin/activate
-pip install -U pip
-pip install -r <mp7_ugt_legacy_path>/scripts/requirements.txt
-```
+Be sure that setup of environment is done (see chapter above).
 
 Run simulation using Questa.
 
@@ -109,21 +79,27 @@ Run simulation using Questa.
 - These files have to be in directory from where one runs script "run_simulation_questa.py".
 - Change to directory 'mp7_ugt_legacy/firmware/sim' is mandatory.
 
-Running script in repo mode
+Running script
 ```bash
-cd mp7_ugt_legacy/firmware/sim
-python3 ../../scripts/run_simulation_questa.py <L1Menu name> --menu_url <URL L1Menu> --tv <testvector file path>
+cd <mp7_ugt_legacy_path>
+python3 scripts/run_simulation_questa.py <path to menu xml file (in repo or local)> --tv <testvector file path> [--ignored]
 ```
 
 *Note:* inspect for default values and other arguments
 ```bash
-python3 ../../scripts/run_simulation_questa.py -h
+python3 scripts/run_simulation_questa.py -h
 ```
 
-Example
+Example 1
 ```bash
-cd mp7_ugt_legacy/firmware/sim
-python3 ../../scripts/run_simulation_questa.py L1Menu_Collisions2020_v0_1_8_disp-d1 --menu_url https://raw.githubusercontent.com/herbberg/l1menus/master/2021 --tv /home/bergauer/github/herbberg/l1menus/2021/L1Menu_Collisions2020_v0_1_8_disp-d1/testvectors/TestVector_L1Menu_Collisions2020_v0_1_8_disp.txt --ignored
+cd <mp7_ugt_legacy_path>
+python3 scripts/run_simulation_questa.py https://raw.githubusercontent.com/herbberg/l1menus/master/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --tv <path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/testvectors/TestVector_L1Menu_Collisions2022_v0_1_6.txt --ignored
+```
+
+Example 2
+```bash
+cd <mp7_ugt_legacy_path>
+python3 scripts/run_simulation_questa.py <path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --tv <path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/testvectors/TestVector_L1Menu_Collisions2022_v0_1_6.txt --ignored
 ```
 
 ### Build
@@ -153,57 +129,19 @@ The firmware uses the ipbb build tool, and requires the ipbus system firmware. I
   - script [checkIpbbSynth.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/checkIpbbSynth.py) for checking used fpga resources.
   - script [fwpackerIpbb.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/fwpackerIpbb.py) for packing firmware files in a tar file.
 
-#### Setup using script
+#### Workflow
 
-Set the following environment variables (preferably in `.bashrc`):
-
-| Variable | Description |
-|:---------|:------------|
-| `UGT_VIVADO_VERSION` | Vivado version |
-| `UGT_VIVADO_BASE_DIR` | Installation directory of Vivado version |
-| `UGT_BLK_MEM_GEN_VERSION` | Version of blk_mem_gen IP for dual port memories (spy memories) and ROMs of LUT values for 1/DR2 ("mass over deltaR") |
-
-Example
-
-```bash
-export UGT_VIVADO_VERSION=2019.2
-export UGT_VIVADO_BASE_DIR=/opt/xilinx/Vivado
-export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_v8_4_4
-```
-
-Example for creating a Vivado environment in bashrc:
-
-```bash
-cd <home directory>
-python3 -m venv env_build_ugt_fw
-. env_build_ugt_fw/bin/activate
-pip install -U pip
-pip install -r <mp7_ugt_legacy directory>/scripts/requirements.txt
-cd <mp7_ugt_legacy directory>
-source ${UGT_VIVADO_BASE_DIR}/${UGT_VIVADO_VERSION}/settings64.sh
-export UGT_BLK_MEM_GEN_VERSION=blk_mem_gen_<blk_mem_gen version (e.g. blk_mem_gen_v8_4_4)
-```
+Be sure that setup of environment is done (see chapter above).
 
 Run kerberos for outside of CERN network.
 ```bash
 kinit <username>@CERN.CH
 ```
-Make local clone of ugt repositiory.
-```bash
-git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git <local path>/mp7_ugt_legacy
-cd <local path>/mp7_ugt_legacy
-```
 
-If not already done create a Python virtual environment and install required dependencies including [IPBB](https://github.com/ipbus/ipbb) and lxml.
-```bash
-python3 -m venv <name (e.g. env_build_ugt_fw)>
-. env_build_ugt_fw/bin/activate
-pip install -U pip
-pip install -r <mp7_ugt_legacy_path>/scripts/requirements.txt
-```
 Run synthesis script (for all 6 modules).
 ```bash
-python3 scripts/run_synth_ipbb.py <L1Menu name> --menuurl <URL MP7 L1menu repo> --ugturl <URL ugt git repo> --ugt <ugt tag in repo> --build <build-version> -p <work dir>
+cd <mp7_ugt_legacy_path>
+python3 scripts/run_synth_ipbb.py <path to menu xml file (in repo or local)> --ugturl <URL ugt git repo> --ugt <ugt tag in repo> --build <build-version> -p <work dir>
 ```
 
 *Note:* inspect default values for arguments using
@@ -211,14 +149,16 @@ python3 scripts/run_synth_ipbb.py <L1Menu name> --menuurl <URL MP7 L1menu repo> 
 python3 scripts/run_synth_ipbb.py -h
 ```
 
-Example
+Example 1
 ```bash
-python3 scripts/run_synth_ipbb.py L1Menu_Collisions2020_v0_1_8-d1
-  --menuurl https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2020_v0_1_8-d1/2021
-  --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy
-  --ugt master
-  --build 0x1138
-  -p ~/work_synth/production/
+cd <mp7_ugt_legacy_path>
+python3 scripts/run_synth_ipbb.py https://raw.githubusercontent.com/herbberg/l1menus/master/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy --ugt master --build 0x113d -p /home/bergauer/work_synth/production
+```
+
+Example 2
+```bash
+cd <mp7_ugt_legacy_path>
+python3 scripts/run_synth_ipbb.py <path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy --ugt master --build 0x113d -p /home/bergauer/work_synth/production
 ```
 
 #### Setup (commands for one module)

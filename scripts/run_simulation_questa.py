@@ -345,7 +345,13 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
         tv_name = "{}{}".format(tv_name, '.txt')
 
     testvector_filepath = os.path.join(temp_dir, tv_name)
-    shutil.copyfile(a_tv, testvector_filepath)
+    #shutil.copyfile(a_tv, testvector_filepath)
+
+    tv_split_0 = a_tv.split("/")[0]
+    if tv_split_0 == 'https:':
+        download_file_from_url(a_tv, testvector_filepath) # retrieve xml file from repo
+    else:
+        shutil.copyfile(a_tv, testvector_filepath) # copy xml file from local path
 
     timestamp = time.time()  # creates timestamp
     _time = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%dT%H-%M-%S')  # changes time apperance

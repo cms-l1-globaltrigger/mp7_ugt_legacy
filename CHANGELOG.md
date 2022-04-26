@@ -8,11 +8,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - mp7_ugt firmware release v1.20.1
+- updated scripts run_simulation_questa.py and run_synth_ipbb.py
 - updated script run_synth_workflow.py
 - added function (year_str_t) in toolbox.py
+- added setup_env_sim_synth_tpl.sh
+
+### Added
+- shell script file:
+  - setup_env_sim_synth_tpl.sh
 
 ### Changed
 - script files:
+  - scripts/run_simulation_questa.py
+  - scripts/run_synth_ipbb.py
   - scripts/run_synth_workflow.py
   - scripts/toolbox.py
 

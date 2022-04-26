@@ -135,13 +135,13 @@ def main():
 
     menu_path = args.menu_xml.split('/')[:-2]
     menu_split_0 = args.menu_xml.split("/")[0]
-    menu_year = tb.year_str_t(args.menu_xml.split('/')[-4])
-    xml_name = args.menu_xml.split("/")[-1]
-    menuname = xml_name.split(".")[0]
+    menu_xml_name = args.menu_xml.split("/")[-1]
+    menuname = menu_xml_name.split(".")[0]
     # check menu name
     tb.menuname_t(menuname)
 
     if menu_split_0 == 'https:':
+        menu_year = tb.year_str_t(args.menu_xml.split('/')[-4])
         base = f"https://{menu_path[2]}/{menu_path[3]}/{menu_path[4]}/{menu_path[5]}/{menu_year}/{menuname}"
     else:
         base = "/".join(menu_path)

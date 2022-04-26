@@ -23,11 +23,13 @@ In addition there are versions (with similar schemes) for the following firmware
 
 If not already done create a Python virtual environment and install required dependencies including [IPBB](https://github.com/ipbus/ipbb) and lxml.
 ```bash
+git clone https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy.git <mp7_ugt_legacy_path>
 cd <mp7_ugt_legacy_path>
-python3 -m venv env>
+git checkout <branch>
+python3 -m venv env
 . env/bin/activate
 pip install -U pip
-pip install -r <mp7_ugt_legacy_path>/scripts/requirements.txt
+pip install -r scripts/requirements.txt
 ```
 
 A template file for setting up the envirionment variables is available (setup_env_sim_synth_tpl.sh). Copy this file to e.g. "setup_env_sim_synth.sh", edit the values for the variables and execute the script with ". setup_env_sim_synth.sh".

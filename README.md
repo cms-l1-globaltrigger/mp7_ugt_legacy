@@ -4,7 +4,7 @@ Firmware for the CMS Global Trigger (uGT).
 
 This repository contains the algorithm part of the CMS uGT firmware. It has been written for the Imperial MP7, a Virtex-7 based AMC module.
 
-Documentaion of [uGT firmware](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/doc/mp7_ugt_firmware_specification/pdf/gt-mp7-firmware-specification.pdf).
+Documentaion of [uGT firmware](doc/mp7_ugt_firmware_specification/pdf/gt-mp7-firmware-specification.pdf).
 
 The uGT is versioned with the following scheme:
 

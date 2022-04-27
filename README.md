@@ -30,7 +30,7 @@ pip install -U pip
 pip install -r scripts/requirements.txt
 ```
 
-A template file for setting up the envirionment variables is available (setup_env_sim_synth_tpl.sh). Copy this file to e.g. "setup_env_sim_synth.sh", edit the values for the variables and execute the script with ". setup_env_sim_synth.sh".
+A template file for setting up the envirionment variables is available [setup_env_sim_synth_tpl.sh](setup_env_sim_synth_tpl.sh). Copy this file to e.g. "setup_env_sim_synth.sh", edit the values for the variables and execute the script with ". setup_env_sim_synth.sh".
 
 Example for "setup_env_sim_synth.sh"
 
@@ -52,8 +52,8 @@ source ${UGT_VIVADO_BASE_DIR}/${UGT_VIVADO_VERSION}/settings64.sh
 
 Simulation of VHDL module "gtl_fdl_wrapper.vhd" with Questa simulator for 6 ugt modules.
 
-* This is a description running script `run_simulation_questa.py` for simulation.
-* If Questasim libraries for a certain Vivado version do not exist, they have to be created for the selected Questasim version with script 'run_compile_simlib.py':
+* This is a description running script [run_simulation_questa.py](scripts/run_simulation_questa.py) for simulation.
+* If Questasim libraries for a certain Vivado version do not exist, they have to be created for the selected Questasim version with script [run_compile_simlib.py](scripts/run_compile_simlib.py):
 ```bash
 cd <mp7_ugt_legacy_path>
 python3 scripts/run_compile_simlib.py --vivado <Vivado version (e.g. 2019.2)> --questasim <Questasim version (e.g. 10.7c)> --output <output directory for generated libraries>
@@ -76,8 +76,6 @@ Run simulation using Questa.
 
 *Remarks:*
 - MIF files (for mass over deltaR) are located in 'mp7_ugt_legacy/firmware/sim' for simulation.
-- These files have to be in directory from where one runs script "run_simulation_questa.py".
-- Change to directory 'mp7_ugt_legacy/firmware/sim' is mandatory.
 
 Running script
 ```bash
@@ -111,21 +109,21 @@ python3 scripts/run_simulation_questa.py <path>/github/herbberg/l1menus/2022/L1M
 The firmware uses the ipbb build tool, and requires the ipbus system firmware. If you are going to build on a computer outside of the CERN network, then you will need to run kerberos (kinit username@CERN.CH). These instructions assume that you have your Xilinx Vivado licensing already setup for your enviroment.
 
 * This is a description with branches of MP7 and ugt repos.
-* A fork of [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware is available in [MP74UGT](https://gitlab.cern.ch/hbergaue/mp7) with branch:
+* A fork of [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware is available for uGT in [MP7_for_uGT](https://gitlab.cern.ch/hbergaue/mp7) with branch:
   - "mp7fw_v3_0_0_mp7_ugt" created from tag mp7fw_v3_0_0.
-* This branch contains patched MP7 files for mp7_ugt_legacy (patched with [mp7patch.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/mp7patch.py)):
+* This branch contains patched MP7 files for mp7_ugt_legacy (patched with [mp7patch.py](scripts/mp7patch.py)):
   - area_constraints.tcl
   - mp7_brd_decl.vhd
   - mp7xe_690.vhd
 
 * The ugt repo [mp7 ugt_legacy](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy) is a fork of [svn2git ugt](https://gitlab.cern.ch/hbergaue/ugt/blob/master/mp7_ugt) repo.
-  - added [ugt_strategy.tcl](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/ucf/ugt_strategy.tcl) for ugt specific strategy and inserted it into [top.dep](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/cfg/top.dep).
-  - added [add_l1menu_blkmem_files.tcl](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/cfg/add_l1menu_blkmem_files.tcl) for adding L1Menu VHDL files and inserted it into [top.dep](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/firmware/cfg/top.dep).
+  - added [ugt_strategy.tcl](firmware/ucf/ugt_strategy.tcl) for ugt specific strategy and inserted it into [top.dep](firmware/cfg/top.dep).
+  - added [add_l1menu_blkmem_files.tcl](firmware/cfg/add_l1menu_blkmem_files.tcl) for adding L1Menu VHDL files and inserted it into [top.dep](firmware/cfg/top.dep).
 
 * Following scripts are available for firmware sythesis, checking used fpga resources and packing firmware files:
-  - script [runIpbbSynth.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/runIpbbSynth.py) for IPBB synthesis (all 6 mp7_ugt modules).
-  - script [checkIpbbSynth.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/checkIpbbSynth.py) for checking used fpga resources.
-  - script [fwpackerIpbb.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/fwpackerIpbb.py) for packing firmware files in a tar file.
+  - script [runIpbbSynth.py](scripts/runIpbbSynth.py) for IPBB synthesis (all 6 mp7_ugt modules).
+  - script [checkIpbbSynth.py](scripts/checkIpbbSynth.py) for checking used FPGA resources.
+  - script [fwpackerIpbb.py](scripts/fwpackerIpbb.py) for packing firmware files in a tar file.
 
 ### Workflow
 

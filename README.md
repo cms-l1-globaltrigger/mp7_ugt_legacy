@@ -13,13 +13,11 @@ The uGT is versioned with the following scheme:
 * Rev version: Bug fixes, change/add scripts.
 
 In addition there are versions (with similar schemes) for the following firmware parts of uGT:
-* Framework ([frame.vhd](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/frame.vhd))
-* Global Trigger Logic ([gtl_module.vhd](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/gtl_module_tpl.vhd))
-* Final Decision Logic ([fdl_module.vhd](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/firmware/hdl/payload/fdl_module.vhd))
+* Framework ([frame.vhd](firmware/hdl/payload/frame.vhd))
+* Global Trigger Logic ([gtl_module.vhd](firmware/hdl/payload/gtl_module_tpl.vhd))
+* Final Decision Logic ([fdl_module.vhd](firmware/hdl/payload/fdl_module.vhd))
 
-## Instructions for setting up simulation and build environments.
-
-### Setup environment
+## Setup environment for simulation and build
 
 If not already done create a Python virtual environment and install required dependencies including [IPBB](https://github.com/ipbus/ipbb) and lxml.
 ```bash
@@ -50,7 +48,7 @@ export UGT_QUESTASIM_LIBS_PATH=${UGT_QUESTASIM_SIM_PATH}/questalibs_vivado_${UGT
 source ${UGT_VIVADO_BASE_DIR}/${UGT_VIVADO_VERSION}/settings64.sh
 ```
 
-### Simulate
+## Simulate
 
 Simulation of VHDL module "gtl_fdl_wrapper.vhd" with Questa simulator for 6 ugt modules.
 
@@ -70,7 +68,7 @@ Following table shows which Questasim libraries for a certain Vivado version hav
 | 2021.1 | v8.4.4 | X | ok |
 | 2021.2 | v8.4.5 | X | ok |
 
-#### Workflow
+### Workflow
 
 Be sure that setup of environment is done (see chapter above).
 
@@ -104,13 +102,11 @@ cd <mp7_ugt_legacy_path>
 python3 scripts/run_simulation_questa.py <path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --tv <path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/testvectors/TestVector_L1Menu_Collisions2022_v0_1_6.txt --ignored
 ```
 
-### Build
+## Build `mp7_ugt` firmware using IPBus builder (IPBB) [for 6 modules]
 
 *Remarks:*
 - FW versions greater or equal 0x1130 are used for uGMT v6.1.0 and unpacker (with bug fix for shifted raw eta).
 - FW versions greater or equal 0x1120 and lower 0x1130 are used for uGMT v6.0.0_patch1 and unpacker (with bug: shifted raw eta).
-
-#### Build `mp7_ugt` firmware using IPBus builder (IPBB)
 
 The firmware uses the ipbb build tool, and requires the ipbus system firmware. If you are going to build on a computer outside of the CERN network, then you will need to run kerberos (kinit username@CERN.CH). These instructions assume that you have your Xilinx Vivado licensing already setup for your enviroment.
 
@@ -131,7 +127,7 @@ The firmware uses the ipbb build tool, and requires the ipbus system firmware. I
   - script [checkIpbbSynth.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/checkIpbbSynth.py) for checking used fpga resources.
   - script [fwpackerIpbb.py](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/scripts/fwpackerIpbb.py) for packing firmware files in a tar file.
 
-#### Workflow
+### Workflow
 
 Be sure that setup of environment is done (see chapter above).
 
@@ -163,7 +159,7 @@ cd <mp7_ugt_legacy_path>
 python3 scripts/run_synth_ipbb.py <path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy --ugt master --build 0x113d -p /home/bergauer/work_synth/production
 ```
 
-#### Setup (commands for one module)
+## Build for one module (with IPBB)
 
 Run kerberos for outside of CERN network
 ```bash

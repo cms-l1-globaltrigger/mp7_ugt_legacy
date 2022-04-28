@@ -286,7 +286,7 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
     source_filename = os.path.join(a_questasimlibs, 'modelsim.ini')
     dest_filename = os.path.join(sim_dir, 'modelsim.ini')
     command = f'bash -c "cp {source_filename} {dest_filename}; chmod ug+w {dest_filename}"'
-    print("command cp modelsim.ini: ", command)
+    #print("command cp modelsim.ini: ", command)
     run_command(command)
 
     # using SIM_ROOT dir as default output path
@@ -299,8 +299,11 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
     msgmode = 'wlf' if a_wlf else 'tran'
 
     temp_dir = os.path.join(sim_dir, "temp_dir")
-    if not os.path.exists(temp_dir):
-        os.makedirs(temp_dir)  # makes folders
+    # Remove existing "temp_dir"
+    if os.path.exists(temp_dir):
+        command = f'bash -c "rm -rf {temp_dir}"'
+        run_command(command)
+    os.makedirs(temp_dir)  # makes folders
 
     logging.info("===========================================================================")
     logging.info("clone repos of MP7 and IPB-firmware to temp_dir ...")
@@ -337,8 +340,8 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
     else:
         shutil.copyfile(url, menu_filepath) # copy xml file from local path
 
-    if not os.path.exists(a_tv):
-        raise RuntimeError("\033[1;31m test vector file does not exist. \033[0m")
+    #if not os.path.exists(a_tv):
+        #raise RuntimeError("\033[1;31m test vector file does not exist. \033[0m")
 
     tv_name = a_tv.split("/")[-1]
     if not tv_name.split(".")[1]:

@@ -2,6 +2,7 @@ import argparse
 import configparser
 import logging
 import os
+import shutil
 import subprocess
 import urllib.request
 import urllib.parse
@@ -111,8 +112,7 @@ def replace_vhdl_templates(vhdl_snippets_dir, src_fw_dir, dest_fw_dir):
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('menuname', type=tb.menuname_t, help="L1Menu name (eg. 'L1Menu_Collisions2018_v2_1_0-d1')")
-    parser.add_argument('--menuurl', metavar='<path>', required=True, help="L1Menu URL to retrieve files from repo [required]")
+    parser.add_argument('menu_xml', help="path to menu xml file (in repository or local")
     parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version to run (default is '{}')".format(DefaultVivadoVersion))
     parser.add_argument('--ipbb', metavar='<version>', default=DefaultIpbbVersion, type=tb.ipbb_version_t, help="IPBus builder version [tag] (default is '{}')".format(DefaultIpbbVersion))
     parser.add_argument('--ipburl', metavar='<path>', default=DefaultGitlabUrlIPB, help="URL of IPB firmware repo (default is '{}')".format(DefaultGitlabUrlIPB))
@@ -132,6 +132,24 @@ def main():
 
     # Parse command line arguments.
     args = parse_args()
+
+    menu_path = args.menu_xml.split('/')[:-2]
+    menu_split_0 = args.menu_xml.split("/")[0]
+    menu_xml_name = args.menu_xml.split("/")[-1]
+    menuname = menu_xml_name.split(".")[0]
+    # check menu name
+    tb.menuname_t(menuname)
+
+    if menu_split_0 == 'https:':
+        menu_year = tb.year_str_t(args.menu_xml.split('/')[-4])
+        base = f"https://{menu_path[2]}/{menu_path[3]}/{menu_path[4]}/{menu_path[5]}/{menu_year}/{menuname}"
+    else:
+        base = "/".join(menu_path)
+
+    xml_name = "{}.xml".format(menuname)
+    html_name = "{}.html".format(menuname)
+    menu_url = f"{base}/xml/{xml_name}"
+    doc_url = f"{base}/doc/{html_name}"
 
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
@@ -161,10 +179,10 @@ def main():
     # Create MP7 tag name for ugt
     mp7fw_ugt = args.mp7tag + mp7fw_ugt_suffix
 
-    # ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, args.menuname, args.build)
+    # ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, menuname, args.build)
     # HB 2019-11-12: inserted mp7_ugt tag and vivado version in directory name and changed order
     vivado_version = "vivado_" + args.vivado
-    ipbb_dir = os.path.join(args.path, args.build, args.menuname, project_type, args.ugt, args.mp7tag, vivado_version)
+    ipbb_dir = os.path.join(args.path, args.build, menuname, project_type, args.ugt, args.mp7tag, vivado_version)
     ipbb_dir_build = os.path.join(args.path, args.build)
 
     if os.path.isdir(ipbb_dir_build):
@@ -186,21 +204,19 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("download XML file from L1Menu repository ...")
-    xml_name = "{}{}".format(args.menuname, '.xml')
-    html_name = "{}{}".format(args.menuname, '.html')
-    #url_menu = "{}/{}".format(args.menuurl, args.menuname)
-    url_menu = os.path.join(args.menuurl, args.menuname)
-    # Download XML and HTML files (HTML for buildReporter.py)
+
     filename = os.path.join(ipbb_dir, 'src', xml_name)
-    #url = "{url_menu}/xml/{xml_name}".format(**locals())
-    url = os.path.join(url_menu, 'xml', xml_name)
-    download_file_from_url(url, filename)
+    if menu_split_0 == "https:":
+        download_file_from_url(menu_url, filename)
+    else:
+        shutil.copyfile(menu_url, filename)
     menu = XmlMenu(filename)
 
     filename = os.path.join(ipbb_dir, 'src', html_name)
-    #url = "{url_menu}/doc/{html_name}".format(**locals())
-    url = os.path.join(url_menu, 'doc', html_name)
-    download_file_from_url(url, filename)
+    if menu_split_0 == "https:":
+        download_file_from_url(doc_url, filename)
+    else:
+        shutil.copyfile(doc_url, filename)
 
     # Fetch menu name from path.
     menu_name = menu.name
@@ -234,9 +250,11 @@ def main():
         for i in range(len(vhdl_snippets)):
             vhdl_snippet = vhdl_snippets[i]
             filename = os.path.join(vhdl_snippets_dir, vhdl_snippet)
-            #url = "{url_menu}/vhdl/{module_name}/src/{vhdl_snippet}".format(**locals())
-            url = os.path.join(url_menu, 'vhdl', module_name, 'src', vhdl_snippet)
-            download_file_from_url(url, filename)
+            url = "{base}/vhdl/{module_name}/src/{vhdl_snippet}".format(**locals())
+            if args.menu_xml.split("/")[0] == "https:":
+                download_file_from_url(url, filename)
+            else:
+                shutil.copyfile(url, filename)
 
         replace_vhdl_templates(vhdl_snippets_dir, ipbb_src_fw_dir, ipbb_dest_fw_dir)
 
@@ -293,11 +311,10 @@ def main():
     # Remove "0x" from args.build
     build_raw = args.build.split("x", 1)
     config.set('menu', 'build', build_raw[1])
-    # Take args.menuname with distribution number
-    config.set('menu', 'name', args.menuname)
+    # Take menuname with distribution number
+    config.set('menu', 'name', menuname)
     # Location of menu XML file
-    menu_xml_loc = "{}/xml/{}.xml".format(url_menu, args.menuname)
-    config.set('menu', 'location', menu_xml_loc)
+    config.set('menu', 'location', menu_url)
     config.set('menu', 'modules', modules)
 
     config.add_section('ipbb')

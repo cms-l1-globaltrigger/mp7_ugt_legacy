@@ -6,7 +6,6 @@ export MTI_VCO_MODE=64
 export MGLS_LICENSE_FILE=<license server>
 export UGT_GITLAB_USER_NAME=<gitlab user name>
 export UGT_QUESTASIMLIBS_DIR=<Questasim libs dir>
-export UGT_QUESTASIM_VERSION=<Questasim version>
 export UGT_QUESTASIM_SIM_PATH=${MODELSIM_ROOT}
 export UGT_VIVADO_QUESTASIMLIBS_VERSION=<Questasim simlibs version>
 export UGT_QUESTASIM_LIBS_PATH=${UGT_QUESTASIMLIBS_DIR}/questasimlibs_vivado_${UGT_VIVADO_QUESTASIMLIBS_VERSION}

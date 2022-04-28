@@ -36,10 +36,6 @@ error_red = ("\033[1;31m ERROR  \033[0m")
 
 # reset = "\033[0m"
 
-DefaultQuestasimVersion = os.getenv('UGT_QUESTASIM_VERSION')
-if not DefaultQuestasimVersion:
-    raise RuntimeError("\033[1;31m UGT_QUESTASIM_VERSION is not defined. \033[0m")
-
 QuestaSimPath = os.getenv('UGT_QUESTASIM_SIM_PATH')
 if not QuestaSimPath:
     raise RuntimeError("\033[1;31m UGT_QUESTASIM_SIM_PATH is not defined. \033[0m")
@@ -278,7 +274,7 @@ def download_file_from_url(url, filename):
     with open(filename, 'w') as fp:
         fp.write(d)
 
-def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasim, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv, a_ignored):
+def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir, a_questasimlibs, a_output, a_view_wave, a_wlf, a_verbose, a_tv, a_ignored):
 
     sim_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'firmware', 'sim')
 
@@ -417,7 +413,7 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
 
     logging.info('finished creating Modules and Masks')
     logging.info("===========================================================================")
-    logging.info('starting simulations with Questa Simulator version %s (from directory %s)', a_questasim, questasim_path)
+    logging.info('starting simulations with Questa Simulator from directory %s', questasim_path)
 
     threads = []
     for module in modules:  # makes for all simulations a thread
@@ -562,7 +558,6 @@ def parse_args():
     parser.add_argument('--mp7_repo_tag', default=DefaultMP7Tag, help="MP7 repo tag (default is '{}')".format(DefaultMP7Tag))
     parser.add_argument('--ipb_fw_url', default=DefaultGitlabUrlIPB, help="IPBus firmware repo (default is '{}')".format(DefaultGitlabUrlIPB))
     parser.add_argument('--ipb_fw_repo_tag', default=DefaultIpbbTag, help="IPBus firmware repo tag (default is '{}')".format(DefaultIpbbTag))
-    parser.add_argument('--questasim', type=tb.questasim_t, default=DefaultQuestasimVersion, help="Questasim version (default is {})".format(DefaultQuestasimVersion))
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsPath, help="Questasim Vivado libraries directory name (default is {})".format(DefaultQuestaSimLibsPath))
     parser.add_argument('--output', metavar='path', type=os.path.abspath, help='path to output directory')
     parser.add_argument('--view_wave', action='store_true', help="shows the waveform")
@@ -582,7 +577,7 @@ def main():
     tb.menuname_t(menu)
     menu_url = '/'.join(args.menu_xml.split('/')[:-2])
 
-    run_simulation_questa(args.mp7_url, args.mp7_repo_tag, menu, menu_url, args.ipb_fw_url, args.questasim, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, args.tv, args.ignored)
+    run_simulation_questa(args.mp7_url, args.mp7_repo_tag, menu, menu_url, args.ipb_fw_url, args.questasimlibs, args.output, args.view_wave, args.wlf, args.verbose, args.tv, args.ignored)
 
 if __name__ == '__main__':
     main()

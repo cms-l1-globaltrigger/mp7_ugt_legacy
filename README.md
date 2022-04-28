@@ -35,17 +35,24 @@ A template file for setting up the envirionment variables is available [setup_en
 Example for "setup_env_sim_synth.sh"
 
 ```bash
-export UGT_VIVADO_BASE_DIR=/opt/xilinx/Vivado
-export UGT_VIVADO_VERSION=2019.2
+## Simulation (Questasim)
+export MODELSIM_ROOT=/opt/mentor
+export MODELSIM_PATH=${MODELSIM_ROOT}/questasim/bin
+export PATH=${MODELSIM_PATH}:${PATH}
+export MTI_VCO_MODE=64
 export MGLS_LICENSE_FILE=1717@heros.hephy.at
 export UGT_GITLAB_USER_NAME=hbergaue
-export UGT_QUESTASIM_VERSION=10.7c
-export UGT_QUESTASIM_SIM_PATH=/opt/mentor
-export UGT_VIVADO_QUESTASIMLIBS_VERSION=v2019.2
+export UGT_QUESTASIMLIBS_DIR=/opt/mentor
+export UGT_QUESTASIM_SIM_PATH=${MODELSIM_ROOT}
+export UGT_VIVADO_QUESTASIMLIBS_VERSION=2019.2
+export UGT_QUESTASIM_LIBS_PATH=${UGT_QUESTASIMLIBS_DIR}/questasimlibs_vivado_${UGT_VIVADO_QUESTASIMLIBS_VERSION}
 export UGT_BLK_MEM_GEN_VERSION_SIM=blk_mem_gen_v8_4_4
+## Synthesis (Vivado)
+export VIVADO_BASE_DIR=/opt/xilinx/Vivado
+export UGT_VIVADO_BASE_DIR=${VIVADO_BASE_DIR}
+export UGT_VIVADO_VERSION=2019.2
 export UGT_BLK_MEM_GEN_VERSION_SYNTH=blk_mem_gen_v8_4_4
-export UGT_QUESTASIM_LIBS_PATH=${UGT_QUESTASIM_SIM_PATH}/questalibs_vivado_${UGT_VIVADO_QUESTASIMLIBS_VERSION}
-source ${UGT_VIVADO_BASE_DIR}/${UGT_VIVADO_VERSION}/settings64.sh
+source ${VIVADO_BASE_DIR}/${UGT_VIVADO_VERSION}/settings64.sh
 ```
 
 ## Simulate
@@ -91,7 +98,7 @@ python3 scripts/run_simulation_questa.py -h
 Example 1
 ```bash
 cd <mp7_ugt_legacy_path>
-python3 scripts/run_simulation_questa.py https://raw.githubusercontent.com/herbberg/l1menus/master/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --tv <path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/testvectors/TestVector_L1Menu_Collisions2022_v0_1_6.txt --ignored
+python3 scripts/run_simulation_questa.py https://raw.githubusercontent.com/herbberg/l1menus/master/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --tv https://raw.githubusercontent.com/herbberg/l1menus/master/2022/L1Menu_Collisions2022_v0_1_6-d1/testvectors/TestVector_L1Menu_Collisions2022_v0_1_6.txt --ignored
 ```
 
 Example 2

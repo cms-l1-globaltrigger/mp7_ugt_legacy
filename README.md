@@ -164,6 +164,21 @@ cd <mp7_ugt_legacy_path>
 python3 scripts/run_synth_ipbb.py <path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy --ugt master --build 0x113d -p /home/bergauer/work_synth/production
 ```
 
+After all syntheses have finished, check results:
+```bash
+$ python3 scripts/check_synth_ipbb.py <path of build_xxxx.cfg>
+```
+
+If timing errors (and bit files is not generated) occur, execute the following command for every module with timing errors (checking timing errors in file <project path>/proj/module_<nr>/module_<nr>/module_<nr>.runs/impl_1/top_timing_summary_postroute_physopted.rpt):
+```bash
+$ vivado -mode batch -source <path to scripts/vivado_write_bitstream.tcl> -tclargs <project path> <module number (e.g.: 0)>
+```
+
+After successfully created bit files, execute the following command to create tar file for HW:
+```bash
+$ python3 scripts/fwpacker_ipbb.py <path of build_xxxx.cfg> 
+```
+
 ## Build for one module (with IPBB)
 
 Run kerberos for outside of CERN network

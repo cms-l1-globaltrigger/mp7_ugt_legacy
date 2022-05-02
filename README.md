@@ -104,7 +104,7 @@ python3 scripts/run_simulation_questa.py https://raw.githubusercontent.com/herbb
 Example 2
 ```bash
 cd <mp7_ugt_legacy_path>
-python3 scripts/run_simulation_questa.py <path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --tv <path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/testvectors/TestVector_L1Menu_Collisions2022_v0_1_6.txt --ignored
+python3 scripts/run_simulation_questa.py <local path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --tv <local path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/testvectors/TestVector_L1Menu_Collisions2022_v0_1_6.txt --ignored
 ```
 
 ## Build `mp7_ugt` firmware using IPBus builder (IPBB) [for 6 modules]
@@ -155,13 +155,13 @@ python3 scripts/run_synth_ipbb.py -h
 Example 1
 ```bash
 cd <mp7_ugt_legacy_path>
-python3 scripts/run_synth_ipbb.py https://raw.githubusercontent.com/herbberg/l1menus/master/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy --ugt master --build 0x113d -p /home/bergauer/work_synth/production
+python3 scripts/run_synth_ipbb.py https://raw.githubusercontent.com/herbberg/l1menus/master/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy --ugt master --build 0x113d -p <local path>/work_synth/production
 ```
 
 Example 2
 ```bash
 cd <mp7_ugt_legacy_path>
-python3 scripts/run_synth_ipbb.py <path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy --ugt master --build 0x113d -p /home/bergauer/work_synth/production
+python3 scripts/run_synth_ipbb.py <local path>/github/herbberg/l1menus/2022/L1Menu_Collisions2022_v0_1_6-d1/xml/L1Menu_Collisions2022_v0_1_6-d1.xml --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy --ugt master --build 0x113d -p <local path>/work_synth/production
 ```
 
 After all syntheses have finished, check results:
@@ -169,7 +169,11 @@ After all syntheses have finished, check results:
 $ python3 scripts/check_synth_ipbb.py <path of build_xxxx.cfg>
 ```
 
-If timing errors (and bit files is not generated) occur, execute the following command for every module with timing errors (checking timing errors in file <project path>/proj/module_<nr>/module_<nr>/module_<nr>.runs/impl_1/top_timing_summary_postroute_physopted.rpt):
+If timing errors occur (and bit files is not generated), check timing errors in file:
+```bash
+<project path>/proj/module_<nr>/module_<nr>/module_<nr>.runs/impl_1/top_timing_summary_postroute_physopted.rpt
+```
+Afterwards execute the following command for every module with timing errors to generate bit file:
 ```bash
 $ vivado -mode batch -source <path to scripts/vivado_write_bitstream.tcl> -tclargs <project path> <module number (e.g.: 0)>
 ```

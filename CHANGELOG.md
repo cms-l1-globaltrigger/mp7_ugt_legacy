@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.20.1] - 2022-04-28
+### Comment
+
+- mp7_ugt firmware release v1.20.1
+- updated scripts run_simulation_questa.py and run_synth_ipbb.py
+- removed script run_synth_workflow.py
+- added function (year_str_t) in toolbox.py
+- added setup_env_sim_synth_tpl.sh
+
+### Added
+- shell script file:
+  - setup_env_sim_synth_tpl.sh
+
+### Changed
+- script files:
+  - scripts/run_simulation_questa.py
+  - scripts/run_synth_ipbb.py
+  - scripts/toolbox.py
+
 ## [v1.20.0] - 2022-03-25
 ### Comment
 

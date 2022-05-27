@@ -188,10 +188,33 @@
  \docauthor\\
  Institute of High Energy Physics (HEPHY)\\
  \url{http://www.hephy.at}\\
- \url{http://globaltrigger.hephy.at}
+ \url{http://globaltrigger.hephy.at}\\
+ \url{https://twiki.cern.ch/twiki/bin/viewauth/CMS/GlobalTrigger}
 }
 
 % Document creation date, formated.
 \date{\docdate}
+
+% HB 2013-05-03: Inserted to get a CR after paragraph and subparagraph. Syntax from http://www.latex-community.org/viewtopic.php?f=5&t=1383
+\makeatletter
+\renewcommand\paragraph{%
+   \@startsection{paragraph}{4}{0mm}%
+      {-\baselineskip}%
+      {.5\baselineskip}%
+      {\normalfont\normalsize\bfseries}}
+\makeatother
+
+\makeatletter
+\renewcommand\subparagraph{%
+   \@startsection{subparagraph}{4}{0mm}%
+      {-\baselineskip}%
+      {.5\baselineskip}%
+      {\normalfont\normalsize\bfseries}}
+\makeatother
+
+% HB 2022-03-25: Definition of a grey box with white small charactors (for linux command lines)
+\definecolor{battleshipgrey}{rgb}{0.52, 0.52, 0.51}
+%\definecolor{arsenic}{rgb}{0.23, 0.27, 0.29}
+\newcommand\greybox[1]{\colorbox{battleshipgrey}{\textcolor{white}{\texttt{\small{#1}}}}}
 
 % eof

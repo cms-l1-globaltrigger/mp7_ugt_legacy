@@ -3,6 +3,7 @@
 -- Multiplexer for read-out record data.
 
 -- Version-history:
+-- HB 2022-03-22: Port bx_nr_fdl removed, contains same data as bx_nr (because bcres_d and bcres_d_FDL are the same signal: delayed bc0 [bc0_d_int in frame.vhd]).
 -- HB 2021-06-16: implemented selectors and orbit counter to quad 6 for "scouting".
 -- HB 2021-05-14: added fdl_pkg use clause.
 -- HB 2016-09-16: inserted for L1TM_UID_HASH and FW_UID_HASH
@@ -35,7 +36,6 @@ entity output_mux is
         clk240      : in std_logic;
         ctrs        : in ttc_stuff_array; --mp7 ttc ctrs
         bx_nr       : in std_logic_vector(11 downto 0);
-        bx_nr_fdl   : in std_logic_vector(11 downto 0);
         orbit_nr    : in orbit_nr_t;
         algo_after_gtLogic   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_bxomask   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
@@ -287,7 +287,6 @@ begin
             in3     =>  s_in3_mux8,    -- frame 3   -> algo_after_prescaler_mask 480-511
             in4     =>  s_in4_mux8,    -- frame 4   -> finor
             in5     =>  s_in5_mux8,    -- frame 5   -> free
-            -- sel     =>  frame_cntr,
             mux_out =>  lane_out(24)
         );
 
@@ -296,7 +295,7 @@ begin
 
     s_in0_mux9   <=   (X"00000" & bx_nr, sValid, start, strobe);           -- frame 0   -> frame bx_nr
     s_in1_mux9   <=   (X"00000" & ctrs(6).bctr, sValid, start, strobe);    -- frame 1   -> mp7 ttc bc cntr for Quad 6!
-    s_in2_mux9   <=   (X"00000" & bx_nr_fdl, sValid, start, strobe);       -- frame 2   -> frame bx_nr_fdl
+    s_in2_mux9   <=   (X"00000" & bx_nr, sValid, start, strobe);       -- frame 2   -> frame bx_nr (kept for same read-out structure)
 
     -- HB 2021-06-16: inserted orbit counter for scouting
     scouting_p: process (orbit_nr, sValid, start, strobe)
@@ -319,11 +318,10 @@ begin
             bcres   =>  ctrs(6).ttc_cmd(0), --bcres for quad 6
             in0     =>  s_in0_mux9,    -- frame 0   -> bx_nr
             in1     =>  s_in1_mux9,    -- frame 1   -> mp7 ttc bc cntr
-            in2     =>  s_in2_mux9,    -- frame 2   -> bx_nr_fdl
+            in2     =>  s_in2_mux9,    -- frame 2   -> bx_nr
             in3     =>  s_in3_mux9,    -- frame 3   -> free / orbit counter 47..32
             in4     =>  s_in4_mux9,    -- frame 4   -> free / orbit counter 31..0
             in5     =>  s_in5_mux9,    -- frame 5   -> free
-            -- sel     =>  frame_cntr,
             mux_out =>  lane_out(25)
         );
 

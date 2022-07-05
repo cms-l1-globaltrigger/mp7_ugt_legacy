@@ -174,9 +174,16 @@ In addition there are rate-counters for \finor-signal, Veto-signal and L1A-signa
 \subsubsection{Prescalers}
 \label{sec:fdl:pre_scalers}
 
-Every Algorithm has a prescaler with a prescale factor of 24 bits (\ref{prescale_factor_regs}). The prescaler reduces the trigger-rate per Algorithm with a factor, so \eg a factor of 2 passes through every second trigger. A prescale factor of 0 inhibits all triggers of the certain Algorithm. The factor is loaded into a register by software and updated at begin of a new luminosity segment period, if the update was enabled by software with setting 'request\_update\_factor\_pulse' to 1 and then to 0 in "command\_pulses" register (\ref{command_pulses_reg}). The prescaler works with the new factor.
+Every Algorithm has a prescaler with a prescale factor of 24 bits (\ref{prescale_factor_regs}). The prescaler reduces the trigger-rate per Algorithm with a factor, so \eg a factor of 2 passes through every second trigger. A prescale factor of 0 inhibits all triggers of the certain Algorithm.
+Currently the logic is working with fractional prescale factor values given in interger or float in prescal tables. The precision of fractional prescale factor values is 2 (2 digits after comma). Software multiplies the fractional prescale factor with 10\textsuperscript{\tiny{precision}} and load it into a register.
+At begin of a new luminosity segment period the factor is updated, if the update was enabled by software with setting 'request\_update\_factor\_pulse' to 1 and then to 0 in "command\_pulses" register (\ref{command_pulses_reg}). The prescaler works with the new factor.
 A register for "prescale factor set index" (\ref{prescale_factor_set_index_reg}) contains a value which represents a certain set of
-prescale factors. The content of this register is seen in the \record, too. The "prescale factor set index" is loaded into the register by software and updated at begin of a new luminosity segment period (\ref{current_prescale_factor_set_index_updated_reg} and \ref{previous_prescale_factor_set_index_updated_reg}).
+prescale factors. The content of this register is seen in the \record, too. The "prescale factor set index" is loaded into the register by software and updated at
+begin of a new luminosity segment period (\ref{current_prescale_factor_set_index_updated_reg} and \ref{previous_prescale_factor_set_index_updated_reg}).
+
+\paragraph{Prescaler logic}
+With every occurancy of the Algorithm a counter is incremented by 10\textsuperscript{\tiny{precision}} as long as the incremented counter is less than the factor.
+If the incremented counter is equal or greater than the factor, a prescaled Algorithm is created (for one clock cycle) and the incremented counter is subtracted with the factor at the next clock cycle.
 
 \subsubsection{Finor-masks}
 \label{sec:fdl:finor_masks}

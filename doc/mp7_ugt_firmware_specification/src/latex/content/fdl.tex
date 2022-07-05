@@ -185,6 +185,15 @@ begin of a new luminosity segment period (\ref{current_prescale_factor_set_index
 With every occurancy of the Algorithm a counter is incremented by 10\textsuperscript{\tiny{precision}} as long as the incremented counter is less than the factor.
 If the incremented counter is equal or greater than the factor, a prescaled Algorithm is created (for one clock cycle) and the incremented counter is subtracted with the factor at the next clock cycle.
 
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/Screenshot_fractional_prescalers}
+\caption{fractional prescaler}
+\label{fig:fdl:fractional_prescalers}
+\end{figure}
+
+In Figure (\ref{fig:fdl:fractional_prescalers}) one can see the simulation of a fractional prescaler. In this example the fractional prescale factor is 2.48, signal "prescale\_factor\_int" shows the multiplied value (248). The signal "algo" is always true, "prescaled\_algo\_o" shows the occurancy of reduced Algorithm by factor. Signals "algo\_cnt\_sim" and "prescaled\_algo\_cnt\_sim" show the number of occurancies, at cursor point a factor 47/19 (~ 2,4737) is reached. With higher numbers of "algo\_cnt\_sim" the factor is approching to 2.48.
+
 \subsubsection{Finor-masks}
 \label{sec:fdl:finor_masks}
 

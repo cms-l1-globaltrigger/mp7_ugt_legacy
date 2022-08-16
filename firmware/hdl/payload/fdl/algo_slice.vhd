@@ -4,7 +4,7 @@
 -- algo-bx-mask at algo input
 
 -- Version-history:
--- HB 2022-08-16: port signal start (start_sync_bc0_int) used for reset of prescale counter (instead of begin_lumi_section).
+-- HB 2022-08-16: port signal start (start_sync_bc0_int) used for reset of prescale counter (instead of begin_lumi_section). Removed sres signals for counters, not used anymore.
 -- HB 2019-09-26: new generic parameter PRESCALE_FACTOR_WIDTH (removed PRESCALER_COUNTER_WIDTH amd PRESCALER_FRACTION_WIDTH).
 -- HB 2019-06-03: updated for fractional pre-scaler values.
 -- HB 2017-01-10: fixed bug with 1 bx delay for "begin_lumi_per" for rate counter after pre-scaler.
@@ -90,7 +90,6 @@ begin
     port map( 
         sys_clk => sys_clk,
         lhc_clk => lhc_clk,
-        sres_counter => sres_algo_rate_counter,
         store_cnt_value => begin_lumi_per,
         algo_i => algo_after_algo_bx_mask_int,
         counter_o => rate_cnt_before_prescaler
@@ -103,7 +102,6 @@ begin
     )
     port map( 
         clk => lhc_clk,
-        sres_counter => sres_algo_pre_scaler,
         algo_i => algo_after_algo_bx_mask_int,
         start => start,
         request_update_factor_pulse => request_update_factor_pulse,
@@ -122,7 +120,6 @@ begin
     port map( 
         sys_clk => sys_clk,
         lhc_clk => lhc_clk,
-        sres_counter => sres_algo_rate_counter,
 --         store_cnt_value => begin_lumi_per,
         store_cnt_value => begin_lumi_per_del1,
         algo_i => algo_after_prescaler_int,
@@ -139,7 +136,6 @@ begin
     )
     port map( 
         clk => lhc_clk,
-        sres_counter => sres_algo_pre_scaler,
         algo_i => algo_after_algo_bx_mask_int,
         request_update_factor_pulse => request_update_factor_pulse,
         update_factor_pulse => begin_lumi_per,
@@ -154,8 +150,6 @@ begin
     port map( 
         sys_clk => sys_clk,
         lhc_clk => lhc_clk,
-        sres_counter => sres_algo_rate_counter,
---         store_cnt_value => begin_lumi_per,
         store_cnt_value => begin_lumi_per_del1,
         algo_i => algo_after_prescaler_preview_int,
         counter_o => rate_cnt_after_prescaler_preview
@@ -175,7 +169,6 @@ begin
         sys_clk => sys_clk,
         lhc_clk => lhc_clk,
         lhc_rst => lhc_rst,
-        sres_counter => sres_algo_post_dead_time_counter,
         store_cnt_value => begin_lumi_per,
         l1a => l1a,
         delay => l1a_latency_delay,

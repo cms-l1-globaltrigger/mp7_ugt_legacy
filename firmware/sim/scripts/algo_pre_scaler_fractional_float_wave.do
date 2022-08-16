@@ -2,6 +2,7 @@ onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /algo_pre_scaler_fractional_tb/lhc_clk
 add wave -noupdate /algo_pre_scaler_fractional_tb/sres_counter
+add wave -noupdate /algo_pre_scaler_fractional_tb/start
 add wave -noupdate /algo_pre_scaler_fractional_tb/request_update_factor_pulse
 add wave -noupdate /algo_pre_scaler_fractional_tb/update_factor_pulse
 add wave -noupdate -radix hexadecimal -radixshowbase 0 /algo_pre_scaler_fractional_tb/prescale_factor

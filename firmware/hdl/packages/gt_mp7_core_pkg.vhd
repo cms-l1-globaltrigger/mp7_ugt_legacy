@@ -9,7 +9,7 @@
 -- gtl: v1.17.2 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.0 (see fdl_module.vhd)
 
--- HB 2022-05-31: v1.21.0 - Signal start_sync_bc0_int used for reset of prescale counter (instead of begin_lumi_section).
+-- HB 2022-05-31: v1.21.0 - Signal start_sync_bc0_int used for reset of prescale counter (instead of begin_lumi_section). Removed sres signals for counters in FDL, not used anymore.
 -- HB 2021-05-31: v1.20.2 - Updated script run_simulation_questa.py (removed UGT_GITLAB_PWD)
 -- HB 2021-04-25: v1.20.1 - Updated and added scripts.
 -- HB 2021-02-03: v1.20.0 - "GT_VERSION" is (used in frame_module_info.vhd) in register of "FRAME_VERSION". "FRAME_VERSION" is now in register of "SVN_REVISION_NUMBER".

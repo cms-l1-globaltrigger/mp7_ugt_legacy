@@ -174,9 +174,38 @@ In addition there are rate-counters for \finor-signal, Veto-signal and L1A-signa
 \subsubsection{Prescalers}
 \label{sec:fdl:pre_scalers}
 
-Every Algorithm has a prescaler with a prescale factor of 24 bits (\ref{prescale_factor_regs}). The prescaler reduces the trigger-rate per Algorithm with a factor, so \eg a factor of 2 passes through every second trigger. A prescale factor of 0 inhibits all triggers of the certain Algorithm. The factor is loaded into a register by software and updated at begin of a new luminosity segment period, if the update was enabled by software with setting 'request\_update\_factor\_pulse' to 1 and then to 0 in "command\_pulses" register (\ref{command_pulses_reg}). The prescaler works with the new factor.
-A register for "prescale factor set index" (\ref{prescale_factor_set_index_reg}) contains a value which represents a certain set of
-prescale factors. The content of this register is seen in the \record, too. The "prescale factor set index" is loaded into the register by software and updated at begin of a new luminosity segment period (\ref{current_prescale_factor_set_index_updated_reg} and \ref{previous_prescale_factor_set_index_updated_reg}).
+Every Algorithm has a prescaler with a prescale factor of 24 bits (\ref{prescale_factor_regs}). The prescaler reduces the trigger-rate per Algorithm with a factor. So a factor of 2 lets every second trigger request of this Algorithm pass, a factor of 3 every third request and so on. 
+A prescale factor of 1 lets all triggers pass while a factor of 0 inhibits all trigger requests of the corresponding Algorithm.
+Since 2019 the logic allows also for fractional prescale factor values. Prescale factors are listed in integer or float
+format in prescale tables. 
+The precision of the fractional prescale factor values in the current implementation is 2 (2 digits after decimal point). 
+Software multiplies the fractional prescale factor with 10\textsuperscript{\tiny{precision}} (i.e., currently by 100) and loads it into a register.
+At the beginning of a new “luminosity section” (“lumi section”) the factor is updated if during the preceding lumi section the update was requested by software. 
+For this, in the “command pulses” register (\ref{command_pulses_reg}) the value of “request update factor pulse” is first set to 1 and then back to 0. 
+The prescaler then uses the updated factor. 
+A register for the “prescale factor set index” (\ref{prescale_factor_set_index_reg}) contains a value which represents a certain set
+of prescale factors (commonly referred to as “prescale column” in CMS). 
+The content of this register can be seen in the \record, too. 
+The “prescale factor set index” is loaded into the register by software and updated at the beginning of
+the next lumi section (\ref{current_prescale_factor_set_index_updated_reg} and \ref{previous_prescale_factor_set_index_updated_reg}).
+
+\paragraph{Prescaler logic}
+
+With each trigger request of the Algorithm, a counter is incremented by 10\textsuperscript{\tiny{precision}} as long as the
+incremented counter is less than the prescale factor. If the incremented counter is greater or equal than the prescale
+factor, the trigger request of the prescaled Algorithm is forwarded to the Final Decision Logic (for one clock cycle)
+and the prescale factor is subtracted from the incremented counter during the next clock cycle.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/Screenshot_fractional_prescalers}
+\caption{Fractional prescaler}
+\label{fig:fdl:fractional_prescalers}
+\end{figure}
+
+In Figure (\ref{fig:fdl:fractional_prescalers}) one can see the simulation of a fractional prescaler. In this example the fractional prescale factor is 2.48 and the signal 
+”prescale factor int” shows this value multiplied by 10\textsuperscript{\tiny{precision}}, i.e., currently by 100 (so, 248).
+The signal ”algo” is always true, in other words, without prescale this Algorithm would be firing (sending a trigger request) in every bunch crossing. Signal ”prescaled algo o” shows when the trigger request of the prescaled Algorithm is allowed to pass. Signals ”algo cnt sim” and ”prescaled algo cnt sim” show the number of this Algorithm’s trigger requests before and after the prescale logic. At the cursor point a factor 47/19 (\~{=} 2.4737) is reached. With ”algo cnt sim” reaching higher numbers, on average the effective prescale factor gets closer and closer to the requested value of 2.48.
 
 \subsubsection{Finor-masks}
 \label{sec:fdl:finor_masks}

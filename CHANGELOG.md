@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.21.0] - 2022-08-16
+### Comment
+
+- mp7_ugt firmware release v1.21.0
+- changed reset for prescale counter from "begin of lumi" to "start"
+
+### Changed
+- script files:
+  - ../mp7_payload.vhd
+  - ../payload/fdl_module.vhd
+  - ../payload/fdl/algo_slice.vhd
+  - ../payload/fdl/algo_pre_scaler_fractional_float.vhd
+
 ## [v1.20.2] - 2022-05-31
 ### Comment
 
@@ -11,7 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - updated script run_simulation_questa.py (removed UGT_GITLAB_PWD)
 
 ### Changed
-- script files:
+- source files:
   - scripts/run_simulation_questa.py
 
 ## [v1.20.1] - 2022-04-28

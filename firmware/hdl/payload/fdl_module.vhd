@@ -2,6 +2,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2022-08-16: v1.4.0 - based on v1.3.7, port signal start (start_sync_bc0_int) used for reset of prescale counter (instead of begin_lumi_section).
 -- HB 2022-02-08: v1.3.7 - based on v1.3.6, FRAME_VERSION (instead of SVN_REVISION_NUMBER) in register OFFSET_SVN_REVISION_NUMBER.
 -- HB 2019-10-02: v1.3.6 - based on v1.3.5, removed use clause.
 -- HB 2019-10-02: v1.3.5 - based on v1.3.4, changed logic for fractional prescaler - using 32 bits including 2 fractional digits for prescale factor.
@@ -98,6 +99,7 @@ entity fdl_module is
         lhc_rst             : in std_logic;
         bcres               : in std_logic;
         test_en             : in std_logic;
+        start               : in std_logic;
         l1a                 : in std_logic;
         begin_lumi_section  : in std_logic;
         algo_i              : in std_logic_vector(NR_ALGOS-1 downto 0);
@@ -893,6 +895,7 @@ begin
             sres_algo_pre_scaler => sres_algo_pre_scaler,
             sres_algo_post_dead_time_counter => sres_algo_post_dead_time_counter,
             suppress_cal_trigger => suppress_cal_trigger,
+            start => start,
             l1a => l1a,
             l1a_latency_delay => l1a_latency_delay_reg(0)(log2c(MAX_DELAY_L1A_LATENCY)-1 downto 0),
             request_update_factor_pulse => request_update_factor_pulse,

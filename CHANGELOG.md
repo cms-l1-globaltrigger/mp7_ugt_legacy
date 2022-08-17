@@ -11,11 +11,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - changed reset for prescale counter from "begin of lumi" to "start"
 
 ### Changed
-- script files:
+- source files:
   - ../mp7_payload.vhd
   - ../payload/fdl_module.vhd
   - ../payload/fdl/algo_slice.vhd
   - ../payload/fdl/algo_pre_scaler_fractional_float.vhd
+  - ../payload/fdl/algo_post_dead_time_counter.vhd
+  - ../payload/fdl/algo_rate_counter.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+- simulation files:
+  - ../sim/testbench/algo_pre_scaler_fractional_float_tb.vhd
+  - ../sim/scripts/algo_pre_scaler_fractional_float.do
+  - ../sim/scripts/algo_pre_scaler_fractional_float_wave.do
 
 ## [v1.20.2] - 2022-05-31
 ### Comment

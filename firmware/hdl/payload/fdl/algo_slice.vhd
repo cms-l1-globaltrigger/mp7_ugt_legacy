@@ -36,10 +36,6 @@ entity algo_slice is
         sys_clk : in std_logic;
         lhc_clk : in std_logic;
         lhc_rst : in std_logic;
--- HB 2015-09-17: added "sres_algo_rate_counter" and "sres_algo_pre_scaler"
-        sres_algo_rate_counter : in std_logic;
-        sres_algo_pre_scaler : in std_logic;
-        sres_algo_post_dead_time_counter : in std_logic;
 -- HB 2016-06-17: added suppress_cal_trigger, used to suppress counting algos caused by calibration trigger at bx=3490.
         suppress_cal_trigger : in std_logic; -- pos. active signal: '1' = suppression of algos caused by calibration trigger !!!
         start : in std_logic;
@@ -137,6 +133,7 @@ begin
     port map( 
         clk => lhc_clk,
         algo_i => algo_after_algo_bx_mask_int,
+        start => start,
         request_update_factor_pulse => request_update_factor_pulse,
         update_factor_pulse => begin_lumi_per,
         prescale_factor => prescale_factor_preview,

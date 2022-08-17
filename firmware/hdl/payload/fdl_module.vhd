@@ -294,7 +294,7 @@ begin
 --===============================================================================================--
 -- bx counter
     bc_cntr: process (lhc_clk, bcres)
-	begin
+    begin
         if (lhc_clk'event and lhc_clk = '1') then
            if (bcres = '1') then
               bx_nr_internal <= X"000";   -- sync BCReset
@@ -307,18 +307,18 @@ begin
 -- HB 2016-06-10: BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490)
 -- "test enable occurred" signal
     test_en_occurred_p: process (test_en, bcres)
-	begin
+    begin
         if (bcres = '1')  then
-	    test_en_occurred <= '0'; -- reset with bcres
+            test_en_occurred <= '0'; -- reset with bcres
         elsif (test_en'event and test_en = '1') then
-	    test_en_occurred <= '1'; -- test_en_occurred indicates that BGo test enable was send
+            test_en_occurred <= '1'; -- test_en_occurred indicates that BGo test enable was send
         end if;
     end process test_en_occurred_p;
 
 -- "suppress calibration trigger" (pos. active signal: '1' = suppression of calibration trigger !!!)
 -- gap for calibration trigger between 3480 and 3505 (proposed by MJ)
     suppress_cal_trigger_p: process (lhc_clk, test_en_occurred, bx_nr_internal)
-	begin
+    begin
         if (lhc_clk'event and lhc_clk = '1') then
            if (test_en_occurred = '1' and (bx_nr_internal >= (cal_trigger_gap_beg-1)) and (bx_nr_internal < cal_trigger_gap_end)) then -- minus 1 to get correct length of gap (see simulation with test_bgo_test_enable_logic_tb.vhd)
               suppress_cal_trigger <= '1'; -- pos. active signal: '1' = suppression of algos caused by calibration trigger during gap !!!
@@ -844,8 +844,8 @@ begin
     masks_reg_l: for i in 0 to MAX_NR_ALGOS-1 generate
         prescale_factor_global(i) <= prescale_factor_reg(i);
         prescale_factor_preview_global(i) <= prescale_factor_preview_reg(i);
--- 	finor_masks_global(i) <= masks_reg(i)(FINOR_BIT_IN_MASKS_REG);
-	veto_masks_global(i) <= masks_reg(i)(VETO_BIT_IN_MASKS_REG);
+--  finor_masks_global(i) <= masks_reg(i)(FINOR_BIT_IN_MASKS_REG);
+        veto_masks_global(i) <= masks_reg(i)(VETO_BIT_IN_MASKS_REG);
     end generate masks_reg_l;
 
 -- ******************************************************************************************************************
@@ -892,14 +892,14 @@ begin
             algo_after_bxomask => algo_after_bxomask(i),
             algo_after_prescaler => algo_after_prescaler(i),
             algo_after_prescaler_preview => algo_after_prescaler_preview(i),
-	    veto => veto(i)
-	);
+            veto => veto(i)
+    );
     end generate algo_slices_l;
 
 -- Finors
     local_finor_p: process(algo_after_prescaler)
        variable or_algo_var : std_logic := '0';
-	begin
+    begin
         or_algo_var := '0';
         for i in 0 to NR_ALGOS-1 loop
             or_algo_var := or_algo_var or algo_after_prescaler(i);
@@ -910,7 +910,7 @@ begin
 -- Finors for "prescaler preview" in monitoring
     local_finor_preview_p: process(algo_after_prescaler_preview)
        variable or_algo_var : std_logic := '0';
-	begin
+    begin
         or_algo_var := '0';
         for i in 0 to NR_ALGOS-1 loop
             or_algo_var := or_algo_var or algo_after_prescaler_preview(i);
@@ -921,12 +921,12 @@ begin
 -- Vetos
     local_veto_or_p: process(veto)
         variable or_veto_var : std_logic := '0';
-	begin
+    begin
         or_veto_var := '0';
         for i in 0 to NR_ALGOS-1 loop
             or_veto_var := or_veto_var or veto(i);
         end loop;
-	local_veto <= or_veto_var;
+        local_veto <= or_veto_var;
     end process local_veto_or_p;
 
 -- One pipeline stage for finor and veto to ROP
@@ -1022,16 +1022,16 @@ begin
 -- Rate counter L1A
 -- HB 2016-02-19: only for monitoring and verification of incoming L1As
     rate_cnt_l1a_i: entity work.algo_rate_counter
-	generic map(
-	    COUNTER_WIDTH => L1A_RATE_COUNTER_WIDTH
-	)
-	port map(
+        generic map(
+            COUNTER_WIDTH => L1A_RATE_COUNTER_WIDTH
+        )
+        port map(
             sys_clk => ipb_clk,
             lhc_clk => lhc_clk,
             store_cnt_value => begin_lumi_section,
             algo_i => l1a,
             counter_o => rate_cnt_l1a_reg(0)(L1A_RATE_COUNTER_WIDTH-1 downto 0)
-	);
+        );
 
 -- FDL data flow - end
 -- ********************************************

@@ -102,6 +102,7 @@ vcom -93 -work work $HDL_DIR/payload/gtl/min_bias_hf_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/towercount_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/anomaly_detection.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/adt_wrapper.vhd
 #
 ### modules of BRAMs used for mass over DeltaR
 vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_calo_inv_dr_sq_1/synth/rom_lut_calo_inv_dr_sq_1.vhd

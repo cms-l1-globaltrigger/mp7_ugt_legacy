@@ -30,19 +30,22 @@ end adt_wrapper;
 architecture rtl of adt_wrapper is
 
     signal ett_i, htt_i, etm_i, htm_i, etmhf_i, htmhf_i: std_logic_vector(31 downto 0) := X"00000000";
-
+    signal anomaly_score: std_logic_vector(15 downto 0);
+    signal ap_rst: std_logic := '0';
+    signal ap_start: std_logic := '1';
+    
 begin
 
-    ett_i <= X"000" & ett;
-    htt_i <= X"000" & htt;
-    etm_i <= X"000" & etm;
-    htm_i <= X"000" & htm;
-    etmhf_i <= X"000" & etmhf;
+    ett_i(MAX_ESUMS_BITS-1 downto 0) <= ett;
+    htt_i(MAX_ESUMS_BITS-1 downto 0) <= htt;
+    etm_i(MAX_ESUMS_BITS-1 downto 0) <= etm;
+    htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
+    etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
     
     anomaly_detection_i: entity work.anomaly_detection
         port map(
             open, open,
-            lhc_clk, '0', '1',
+            lhc_clk, ap_rst, ap_start,
             open, open, open,
             mu(0),mu(1),mu(2),mu(3),
             mu(4),mu(5),mu(6),mu(7),
@@ -56,9 +59,11 @@ begin
             tau(4),tau(5),tau(6),tau(7),
             tau(8),tau(9),tau(10),tau(11),
             ett_i,htt_i,etm_i,htm_i,etmhf_i,htmhf_i,
-            open,
-            adt_out
+            anomaly_score,
+            open
         );
+        
+    adt_out <= anomaly_score(0);
 
 --     adt_p: process(lhc_clk, adt_o)
 --         begin

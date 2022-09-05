@@ -1,6 +1,7 @@
 -- Description:
 -- Contains the "framework" of GT-logic (all parts, except GTL and FDL).
 
+-- HB 2022-09-02: v1.3.1 - cleaned up.
 -- HB 2022-03-22: v1.3.0 - output ports bcres_d and bcres_d_FDL not used anymore (not used in mp7_payload.vhd). Signals bcres, bcres_outputmux, bcres_d_FDL_int and bx_nr_d_FDL_int not used anymore. Updated tcm.vhd (input port bcres_d_FDL not used anymore) and output_mux.vhd (input port bx_nr_fdl not used anymore). Removed signals for spy3.
 -- HB 2022-02-08: v1.2.5 - changed frame_module_info.vhd (GT_VERSION in OFFSET_FRAME_VERSION) and frame_addr_decode.vhd.
 -- HB 2021-06-16: v1.2.4 - implemented selectors (set in gtl_pkg.vhd) for "scouting" (in output_mux.vhd) and use of input data spymem.
@@ -34,8 +35,6 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
-use ieee.numeric_std.all;
 
 use work.ipbus.all;
 use work.mp7_data_types.all;
@@ -69,12 +68,11 @@ entity frame is
         lane_data_out : out ldata(NR_LANES-1 downto 0);
         lhc_data_2_gtl_o : out lhc_data_t;
         prescale_factor_set_index_rop : in std_logic_vector(7 downto 0);
-        algo_after_gtLogic_rop : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        algo_after_gtlogic_rop : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_bxomask_rop : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         local_finor_rop : in std_logic;
         local_veto_rop : in std_logic;
-        finor_rop : in std_logic;
         local_finor_with_veto_2_spy2 : in std_logic
     );
 
@@ -374,9 +372,8 @@ architecture rtl of frame is
             lhc_rst     => lhc_rst,
             ctrs        => ctrs,
             bx_nr       => bx_nr,
---             bx_nr_fdl   => bx_nr_d_FDL_int,
             orbit_nr    => orbit_nr,
-            algo_after_gtLogic   => algo_after_gtLogic_rop,
+            algo_after_gtLogic   => algo_after_gtlogic_rop,
             algo_after_bxomask   => algo_after_bxomask_rop,
             algo_after_prescaler => algo_after_prescaler_rop,
             local_finor_in      => local_finor_rop,

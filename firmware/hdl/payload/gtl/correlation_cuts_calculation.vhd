@@ -3,6 +3,7 @@
 -- Instances for correlation cuts calculations
 
 -- Version history:
+-- HB 2022-09-05: cleaned up.
 -- HB 2021-11-26: change deta and dphi width in rom_lut_muon_inv_dr_sq_all instance ("half resolution" in eta and phi for MU-MU mass over dr).
 -- HB 2021-08-27: added output inverted_dr_sq_sim for test and simulation.
 -- HB 2021-04-27: used deta_cosh_deta_luts.vhd and dphi_cos_dphi_luts.vhd separately for resource values.
@@ -12,7 +13,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
-use ieee.std_logic_arith.all;
+use ieee.std_logic_arith.conv_std_logic_vector;
 
 use work.gtl_pkg.all;
 

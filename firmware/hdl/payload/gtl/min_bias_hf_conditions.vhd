@@ -1,14 +1,13 @@
 
 -- Description: minimum bias Hf conditions
 
+-- HB 2022-09-05: cleaned up.
 -- HB 2020-01-31: redesign output pipeline
 -- HB 2020-01-30: removed data_i compare with "ZERO".
 -- HB 2016-04-26: updated minimum bias Hf types to same notation as in grammar.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all; -- for function "CONV_INTEGER"
 
 use work.gtl_pkg.all;
 

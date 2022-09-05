@@ -1,13 +1,13 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.20.1
+-- mp7_ugt (=FRAME_VERSION): v1.20.3
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.20.2
--- frame: v1.3.0 (see frame.vhd)
--- gtl: v1.17.2 (see gtl_module_tpl.vhd)
--- fdl: v1.3.7 (see fdl_module.vhd)
+-- gt: v1.20.3
+-- frame: v1.3.1 (see frame.vhd)
+-- gtl: v1.17.3 (see gtl_module_tpl.vhd)
+-- fdl: v1.3.8 (see fdl_module.vhd)
 
 -- HB 2021-05-31: v1.20.2 - Updated script run_simulation_questa.py (removed UGT_GITLAB_PWD)
 -- HB 2021-04-25: v1.20.1 - Updated and added scripts.
@@ -24,11 +24,8 @@
 -- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
 
--- frame: v1.3.0 (see frame.vhd)
--- gtl: v1.17.2 (see gtl_module_tpl.vhd)
--- fdl: v1.3.6 (see fdl_module.vhd)
-
 -- gtl history:
+-- HB 2022-09-02: v1.17.3:  cleaned up.
 -- HB 2022-02-16: v1.17.2: Bug fixed in comb_conditions.vhd.
 -- HB 2021-12-09: v1.17.1: Updated logic for jet DISP cut.
 -- HB 2021-10-23: v1.17.0: Implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data] in calo_comparators.vhd. Bug fixed in correlation_cuts_wrapper.vhd.
@@ -80,7 +77,7 @@ package gt_mp7_core_pkg is
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GT_MINOR_VERSION      : integer range 0 to 255 := 20;
-    constant GT_REV_VERSION        : integer range 0 to 255 := 2;
+    constant GT_REV_VERSION        : integer range 0 to 255 := 3;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &
@@ -88,15 +85,15 @@ package gt_mp7_core_pkg is
 -- FRAME firmware version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 3;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 0;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 1;
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 17;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 2;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 3;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 3;
-    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 7;
+    constant FDL_FW_REV_VERSION        : integer range 0 to 255 := 8;
 -- ==================================================================================================
 
     constant BUNCHES_PER_ORBIT : natural range 3564 to 3564 := LHC_BUNCH_COUNT;

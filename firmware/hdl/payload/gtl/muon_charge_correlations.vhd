@@ -3,12 +3,12 @@
 -- Generates the charge correlations for muon conditions.
 
 -- Version history:
+-- HB 2022-09-05: cleaned up.
 -- HB 2015-11-20: inserted charge correlation (double) for different Bx (needed for muon muon correlation conditions)
 -- HB 2015-05-29: removed "use work.gtl_lib.all;" - using "entity work.xxx" for instances
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
 

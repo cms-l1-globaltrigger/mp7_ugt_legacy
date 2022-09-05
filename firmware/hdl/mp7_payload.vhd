@@ -165,7 +165,6 @@ begin
             algo_after_prescaler_rop => algo_after_prescaler_rop,
             local_finor_rop => local_finor_rop,
             local_veto_rop => local_veto_rop, -- HB 2014-10-22: added for ROP
-            finor_rop => '0', -- HB 2014-10-30: no total_finor to ROP
             local_finor_with_veto_2_spy2 => local_finor_with_veto_o -- HB 2014-10-30: to SPY2_FINOR
         );
 

@@ -3,6 +3,7 @@
 -- Condition module for esums object types (ett, etm, htt, htm, etmhf, htmhf) conditions.
 
 -- Version history:
+-- HB 2022-09-05: cleaned up.
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now. New order in generic.
 -- HB 2020-11-27: added default parameters. Changed order in generic.
 -- HB 2020-01-31: redesign output pipeline
@@ -10,8 +11,6 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all; -- for function "CONV_INTEGER"
 
 use work.gtl_pkg.all;
 

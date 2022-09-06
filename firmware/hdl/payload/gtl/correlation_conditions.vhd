@@ -10,9 +10,7 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
 
-use work.math_pkg.all;
 use work.gtl_pkg.all;
 
 entity correlation_conditions is

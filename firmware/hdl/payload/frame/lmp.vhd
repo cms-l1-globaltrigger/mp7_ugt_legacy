@@ -1,27 +1,27 @@
 
+-- Version-history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2106-05-31: lane mapping for all frames of calo links (for extended test-vector-file structure - see lhc_data_pkg.vhd)
 -- HEPHY 2014-05-20: changed lane mapping for muons from 0,1,2,3 to 2,3,4,5 of 240MHz objects -
 
 library ieee;
 use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
 
-library work;
 use work.gt_mp7_core_pkg.all;
 use work.lhc_data_pkg.all;
 
 entity lmp is
-	generic
-	(
-        	NR_LANES: positive
-	);
-	port
-	(
-		demux_data_i		: in demux_lanes_data_objects_array_t(NR_LANES-1 downto 0);
-		demux_data_valid_i	: in demux_lanes_data_objects_array_valid_t(NR_LANES-1 downto 0);
-		lhc_data_o		: out lhc_data_t;
-		lhc_data_valid_o	: out std_logic
-	);
+    generic
+    (
+        NR_LANES : positive
+    );
+    port
+    (
+        demux_data_i : in demux_lanes_data_objects_array_t(NR_LANES-1 downto 0);
+        demux_data_valid_i : in demux_lanes_data_objects_array_valid_t(NR_LANES-1 downto 0);
+        lhc_data_o : out lhc_data_t;
+        lhc_data_valid_o : out std_logic
+    );
 end;
 
 architecture arch of lmp is

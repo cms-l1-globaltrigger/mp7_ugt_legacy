@@ -3,14 +3,13 @@
 -- Correlation cut comparator
 
 -- Version history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2021-04-09: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
-use ieee.std_logic_arith.all;
 
-use work.math_pkg.all;
 use work.gtl_pkg.all;
 
 entity correlation_cut_comp is

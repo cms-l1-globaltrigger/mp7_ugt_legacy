@@ -4,21 +4,20 @@
 -- Output synchronized with sys_clk, to prevent wrong counter values when reading via PCIe.
 -- This design only works with LHC clock (40 MHz) and PCIe system clock (125 MHz)
 
+-- HB 2022-09-06: cleaned up.
 -- HB 2016-06-28: removed clock domain change for counter_o.
 -- HB 2015-09-17: inserted "clear counter value in the "output" register for reading by IPBus" with sres_counter = '1'.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
-use IEEE.numeric_std.all;
+use ieee.numeric_std.all;
 
 entity algo_rate_counter is
    generic(
       COUNTER_WIDTH : integer := 32
    );
    port(
-      sys_clk          : in     std_logic;
       lhc_clk          : in     std_logic;
       sres_counter     : in     std_logic;
       store_cnt_value  : in     std_logic;

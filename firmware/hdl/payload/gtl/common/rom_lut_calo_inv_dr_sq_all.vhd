@@ -3,6 +3,7 @@
 -- Wrapper for ROMs (4x8192 addresses) with LUTs values of 1/DR^2 for calos.
 
 -- Version history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2021-09-09: changed ROMs structure.
 -- HB 2021-08-30: added sync for deta and dphi msb.
 -- HB 2021-08-24: updated for new ROMs structure.
@@ -11,8 +12,6 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
-use ieee.std_logic_arith.all;
 
 library unisim;
 use unisim.VComponents.all;
@@ -87,8 +86,6 @@ architecture rtl of rom_lut_calo_inv_dr_sq_all is
     signal addr_lsb, addr_lsb_5 : STD_LOGIC_VECTOR(addr_width-1 DOWNTO 0);
 
     signal dout1, dout2, dout3, dout4, dout5 : STD_LOGIC_VECTOR(CALO_CALO_INV_DR_SQ_VECTOR_WIDTH-1 DOWNTO 0) := (others => '0');
-
-    signal addr_msb : STD_LOGIC_VECTOR(2 DOWNTO 0);
 
     signal deta_msb : STD_LOGIC_VECTOR(1 DOWNTO 0);
     signal dphi_msb : STD_LOGIC_VECTOR(3 DOWNTO 0);

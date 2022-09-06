@@ -3,12 +3,11 @@
 -- Correlation cuts module
 
 -- Version history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2021-02-12: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
-use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
 

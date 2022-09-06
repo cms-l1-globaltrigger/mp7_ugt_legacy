@@ -3,14 +3,12 @@
 -- Comparators fro charge correlation
 
 -- Version history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2020-05-06: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
-use ieee.std_logic_arith.all;
 
-use work.math_pkg.all;
 use work.gtl_pkg.all;
 
 entity charge_correlation_comp is

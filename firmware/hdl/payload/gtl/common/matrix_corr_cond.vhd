@@ -3,15 +3,13 @@
 -- Matrix for correlation conditions
 
 -- Version history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2021-10-27: bug fix for xxx_orm_comp default values. Changed uncorrect logic in "matrix_and_or_p" of "obj_2plus1"
 -- HB 2021-03-16: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
--- use ieee.std_logic_arith.all;
 
-use work.math_pkg.all;
 use work.gtl_pkg.all;
 
 entity matrix_corr_cond is
@@ -75,7 +73,7 @@ begin
                         if j/=i then
                             index := index + 1;
                             if (type_obj1 = MU_TYPE) and (type_obj2 = MU_TYPE) then
-                                obj_vs_templ_vec(index) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and deta_comp(i,j) and dphi_comp(i,j) and      dr_comp(i,j) and mass_comp(i,j) and mass_div_dr_comp(i,j) and tbpt_comp(i,j) and charge_comp_double(i,j);
+                                obj_vs_templ_vec(index) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and deta_comp(i,j) and dphi_comp(i,j) and dr_comp(i,j) and mass_comp(i,j) and mass_div_dr_comp(i,j) and tbpt_comp(i,j) and charge_comp_double(i,j);
                             else
                                 obj_vs_templ_vec(index) := obj1_vs_templ(i,1) and obj2_vs_templ(j,1) and deta_comp(i,j) and dphi_comp(i,j) and dr_comp(i,j) and mass_comp(i,j) and mass_div_dr_comp(i,j) and tbpt_comp(i,j);
                             end if;

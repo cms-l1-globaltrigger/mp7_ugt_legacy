@@ -75,7 +75,7 @@ use work.fdl_pkg.ALL;
 use work.gt_mp7_core_pkg.ALL;
 use work.fdl_addr_decode.all;
 
-use work.math_pkg.all;
+use work.math_pkg.log2c;
 
 entity fdl_module is
     generic(
@@ -104,7 +104,7 @@ entity fdl_module is
         algo_i              : in std_logic_vector(NR_ALGOS-1 downto 0);
         bx_nr_out : out std_logic_vector(11 downto 0);
         prescale_factor_set_index_rop : out std_logic_vector(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0);
-        algo_after_gtLogic_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        algo_after_gtlogic_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_bxomask_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         local_finor_rop : out std_logic;
@@ -234,8 +234,6 @@ begin
     fabric_i: entity work.fdl_fabric
         generic map(NSLV => NR_IPB_SLV_FDL)
         port map(
-            ipb_clk => ipb_clk,
-            ipb_rst => ipb_rst,
             ipb_in => ipb_in,
             ipb_out => ipb_out,
             ipb_to_slaves => ipb_to_slaves,
@@ -868,7 +866,6 @@ begin
             MAX_DELAY => MAX_DELAY_L1A_LATENCY
         )
         port map(
-            sys_clk => ipb_clk,
             lhc_clk => lhc_clk,
             lhc_rst => lhc_rst,
             sres_algo_rate_counter => sres_algo_rate_counter,
@@ -984,7 +981,6 @@ begin
             COUNTER_WIDTH => FINOR_RATE_COUNTER_WIDTH
         )
         port map(
-                sys_clk => ipb_clk,
                 lhc_clk => lhc_clk,
                 sres_counter => sres_finor_rate_counter,
                 store_cnt_value => begin_lumi_section,
@@ -998,7 +994,6 @@ begin
             COUNTER_WIDTH => FINOR_RATE_COUNTER_WIDTH
         )
         port map(
-                sys_clk => ipb_clk,
                 lhc_clk => lhc_clk,
                 sres_counter => sres_finor_rate_counter,
                 store_cnt_value => begin_lumi_section,
@@ -1013,7 +1008,6 @@ begin
             COUNTER_WIDTH => VETO_RATE_COUNTER_WIDTH
         )
         port map(
-                sys_clk => ipb_clk,
                 lhc_clk => lhc_clk,
                 sres_counter => sres_veto_rate_counter,
                 store_cnt_value => begin_lumi_section,
@@ -1024,17 +1018,16 @@ begin
 -- Rate counter L1A
 -- HB 2016-02-19: only for monitoring and verification of incoming L1As
     rate_cnt_l1a_i: entity work.algo_rate_counter
-	generic map(
-	    COUNTER_WIDTH => L1A_RATE_COUNTER_WIDTH
-	)
-	port map(
-            sys_clk => ipb_clk,
+        generic map(
+            COUNTER_WIDTH => L1A_RATE_COUNTER_WIDTH
+        )
+        port map(
             lhc_clk => lhc_clk,
             sres_counter => sres_l1a_rate_counter,
             store_cnt_value => begin_lumi_section,
             algo_i => l1a,
             counter_o => rate_cnt_l1a_reg(0)(L1A_RATE_COUNTER_WIDTH-1 downto 0)
-	);
+        );
 
 -- FDL data flow - end
 -- ********************************************
@@ -1062,7 +1055,7 @@ begin
             algo_after_gtLogic => algo_int,
             algo_after_bxomask => algo_after_bxomask,
             algo_after_prescaler => algo_after_prescaler,
-            algo_after_gtLogic_rop => algo_after_gtLogic_rop,
+            algo_after_gtlogic_rop => algo_after_gtlogic_rop,
             algo_after_bxomask_rop => algo_after_bxomask_rop,
             algo_after_prescaler_rop => algo_after_prescaler_rop
         );

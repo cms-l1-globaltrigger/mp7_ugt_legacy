@@ -3,6 +3,7 @@
 -- Comparators for transverse momentum, pseudorapidity, azimuth angle, quality and isolation of muon objects
 
 -- Version history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2021-05-18: changed slice parameter.
 -- HB 2021-03-06: removed "invalid_muon".
 -- HB 2021-02-24: changed "no_muon" to "invalid_muon".
@@ -17,8 +18,6 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all; -- for function "CONV_INTEGER"
 
 use work.gtl_pkg.all;
 
@@ -78,8 +77,6 @@ architecture rtl of muon_comparators is
     signal ip_comp : std_logic := '1';
 
     signal comp_int : std_logic;
-
-    signal invalid_muon : std_logic;
 
 begin
 
@@ -166,7 +163,7 @@ begin
             phi_w2_LOWer_limit => phi_w2_LOWer_limit(MUON_PHI_HIGH-MUON_PHI_LOW downto 0)
         )
         port map(
-            phi => data_i(MUON_PHI_HIGH downto MUON_PHI_LOW),
+            phi => phi(MUON_PHI_HIGH downto MUON_PHI_LOW),
             phi_comp_o => phi_comp
         );
 

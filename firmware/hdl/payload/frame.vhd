@@ -19,7 +19,7 @@
 -- JW 2016-04-19: v0.0.39 - connected the bcres_outputmux_o to the output mux, changed the mux code to sync the bcres signal and convert it to 240MHz domain
 -- HB 2016-04-11: v0.0.38 - implemented delays for EC0, OC0, RESYNC and START (same delay as BCRES) and inserted bcres_outputmux_o (delayed version of bcres for output mux) in dm.vhd.
 --                Inserted reset of lumi-section number with OC0 and used signals of synchronized (and delayed) BGos in tcm.vhd.
---                Used "algo_after_gtLogic" for read-out-record (changed "algo_before_prescaler" to "algo_after_bxomask") in output_mux.vhd (according to fdl_module v0.0.24).
+--                Used "algo_after_gtlogic" for read-out-record (changed "algo_before_prescaler" to "algo_after_bxomask") in output_mux.vhd (according to fdl_module v0.0.24).
 --                Changed tp_mux.vhd for synchronized BGos.
 -- HB 2016-03-23: v0.0.37 - removed l1asim module, inserted B-Go signals and l1a (ports) for tcm module.
 -- HB 2016-02-26: v0.0.36 - removed unused fdl_status, bx_nr_d_FDL and tp.
@@ -373,7 +373,7 @@ architecture rtl of frame is
             ctrs        => ctrs,
             bx_nr       => bx_nr,
             orbit_nr    => orbit_nr,
-            algo_after_gtLogic   => algo_after_gtlogic_rop,
+            algo_after_gtlogic   => algo_after_gtlogic_rop,
             algo_after_bxomask   => algo_after_bxomask_rop,
             algo_after_prescaler => algo_after_prescaler_rop,
             local_finor_in      => local_finor_rop,

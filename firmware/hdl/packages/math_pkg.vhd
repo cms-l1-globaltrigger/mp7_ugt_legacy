@@ -1,9 +1,8 @@
 
+-- HB 2022-09-02: cleaned up.
+
 library IEEE;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all;
-
 
 package math_pkg is
 	function log2c(constant value                : in integer) return integer;

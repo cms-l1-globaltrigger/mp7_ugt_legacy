@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2022-09-02: cleaned up.
 -- HB 2021-10-19: inserted jet DISP (displaced) bit 27 (and all dependencies on this bit).
 -- HB 2021-08-12: added selectors (constants) for SCOUTING and SPYMEM (usae of input spy memory).
 -- HB 2021-06-10: added hadronic shower trigger bits (muon).
@@ -53,9 +54,6 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all;
-use ieee.numeric_std.all;
 
 use work.lhc_data_pkg.all;
 use work.math_pkg.all;

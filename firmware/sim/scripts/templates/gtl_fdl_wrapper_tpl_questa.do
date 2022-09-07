@@ -19,7 +19,7 @@ if [info exists env(MTI_LIBS)] {
 
 ## set your src files directory for your design
 
-set MP7_COMPONENTS {{MP7_TAG}}/components
+set MP7 {{MP7_TAG}}
 set VIEW_WAVE {{VIEW_WAVE}}
 
 set HDL_DIR {{SIM_DIR}}/../hdl
@@ -37,17 +37,25 @@ vlib work
 vmap work work
 
 ## MP7 files
-vcom -93 -work work $MP7_COMPONENTS/mp7_datapath/firmware/hdl/mp7_data_types.vhd
+vcom -93 -work work $MP7/components/mp7_datapath/firmware/hdl/mp7_data_types.vhd
+vcom -93 -work work $MP7/boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7_brd_decl.vhd
+vcom -93 -work work $MP7/boards/mp7/base_fw/common/firmware/hdl/mp7_top_decl.vhd
+vcom -93 -work work $HDL_DIR/packages/gt_mp7_top_pkg_sim.vhd
+vcom -93 -work work $HDL_DIR/packages/top_decl.vhd
+vcom -93 -work work $MP7/components/mp7_ttc/firmware/hdl/mp7_ttc_decl.vhd
 vcom -93 -work work $IPB_DIR/components/ipbus_core/firmware/hdl/ipbus_package.vhd
 vcom -93 -work work $IPB_DIR/components/ipbus_core/firmware/hdl/ipbus_trans_decl.vhd
+vcom -93 -work work $IPB_DIR/components/ipbus_slaves/firmware/hdl/ipbus_reg_types.vhd
+vcom -93 -work work $IPB_DIR/components/ipbus_slaves/firmware/hdl/syncreg_w.vhd
+vcom -93 -work work $IPB_DIR/components/ipbus_slaves/firmware/hdl/syncreg_r.vhd
+vcom -93 -work work $IPB_DIR/components/ipbus_slaves/firmware/hdl/ipbus_syncreg_v.vhd
 vcom -93 -work work $HDL_DIR/packages/lhc_data_pkg.vhd
 vcom -93 -work work $TB_DIR/lhc_data_debug_util_pkg.vhd
 vcom -93 -work work $TB_DIR/txt_util_pkg.vhd
 
 ## GT packages
 vcom -93 -work work $HDL_DIR/packages/math_pkg.vhd
-## HB 2016-12-05: used gt_mp7_core_pkg_sim.vhd for simulation without other MP7 packages
-vcom -93 -work work $HDL_DIR/packages/gt_mp7_core_pkg_sim.vhd
+vcom -93 -work work $HDL_DIR/packages/gt_mp7_core_pkg.vhd
 vcom -93 -work work $MENU_DIR/fdl_pkg.vhd
 vcom -93 -work work $HDL_DIR/packages/fdl_addr_decode.vhd
 vcom -93 -work work $HDL_DIR/packages/gtl_pkg.vhd
@@ -140,6 +148,26 @@ vcom -93 -work work $HDL_DIR/payload/ipbus/ipb_pulse_regs.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl_data_mapping.vhd
 vcom -93 -work work $MENU_DIR/gtl_module.vhd
 vcom -93 -work work $HDL_DIR/payload/fdl_module.vhd
+
+## Modules - check only
+vcom -93 -work work $HDL_DIR/packages/frame_addr_decode.vhd
+vcom -93 -work work $HDL_DIR/packages/frame_rb_pkg.vhd
+vcom -93 -work work $HDL_DIR/payload/frame/demux_lane_data.vhd
+vcom -93 -work work $HDL_DIR/payload/frame/demux_lane_validation.vhd
+vcom -93 -work work $HDL_DIR/payload/frame/frame_module_info.vhd
+vcom -93 -work work $HDL_DIR/payload/frame/frame_fabric.vhd
+vcom -93 -work work $HDL_DIR/payload/frame/lmp.vhd
+vcom -93 -work work $HDL_DIR/payload/frame/mux.vhd
+vcom -93 -work work $HDL_DIR/payload/frame/output_mux.vhd
+vcom -93 -work work $HDL_DIR/payload/frame/rb.vhd
+vcom -93 -work work $HDL_DIR/payload/frame/spytrig.vhd
+vcom -93 -work work $HDL_DIR/payload/frame/tcm.vhd
+vcom -93 -work work $HDL_DIR/payload/frame.vhd
+vcom -93 -work work $HDL_DIR/payload/bgo_sync.vhd
+vcom -93 -work work $HDL_DIR/packages/gt_mp7_core_addr_decode.vhd
+vcom -93 -work work $IPB_DIR/components/ipbus_core/firmware/hdl/ipbus_fabric_sel.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl_data_mapping.vhd
+vcom -93 -work work $HDL_DIR/mp7_payload.vhd
 
 ##TB_DIR
 vcom -93 -work work $MOD_TB_DIR/gtl_fdl_wrapper_tb.vhd

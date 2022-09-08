@@ -10,7 +10,7 @@
 // https://github.com/cms-sw/cmssw/tree/master/DataFormats/L1TParticleFlow/interface
 
 typedef ap_fixed<9,2> cossin_t;
-typedef ap_fixed<12,3> sinh_t;
+typedef ap_fixed<9,3> sinh_t;
 
 static constexpr int N_TABLE = 2048;
 

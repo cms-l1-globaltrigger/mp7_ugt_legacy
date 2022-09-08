@@ -1,3 +1,4 @@
+-- HB 2022-09-08: cleaned up.
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
@@ -149,9 +150,9 @@ package body fdl_addr_decode is
         elsif std_match(addr, "1001000100001001010100000000000-") then sel := C_IPB_PRESCALE_FACTOR_PREVIEW_SET_INDEX_UPDATED; -- 0x91095000
 
         else sel := 99;
-		end if;
-		return sel;
+        end if;
+        return sel;
 
-	end fdl_addr_sel;
+    end fdl_addr_sel;
 
 end fdl_addr_decode;

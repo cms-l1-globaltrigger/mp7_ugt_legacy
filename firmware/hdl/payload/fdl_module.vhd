@@ -2,7 +2,7 @@
 -- FDL structure
 
 -- Version-history:
--- HB 2022-09-05: v1.3.8 - based on v1.3.7, cleaned up.
+-- HB 2022-09-08: v1.3.8 - based on v1.3.7, cleaned up. Removed unused output bx_nr_out.
 -- HB 2022-02-08: v1.3.7 - based on v1.3.6, FRAME_VERSION (instead of SVN_REVISION_NUMBER) in register OFFSET_SVN_REVISION_NUMBER.
 -- HB 2019-10-02: v1.3.6 - based on v1.3.5, removed use clause.
 -- HB 2019-10-02: v1.3.5 - based on v1.3.4, changed logic for fractional prescaler - using 32 bits including 2 fractional digits for prescale factor.
@@ -102,7 +102,6 @@ entity fdl_module is
         l1a                 : in std_logic;
         begin_lumi_section  : in std_logic;
         algo_i              : in std_logic_vector(NR_ALGOS-1 downto 0);
-        bx_nr_out : out std_logic_vector(11 downto 0);
         prescale_factor_set_index_rop : out std_logic_vector(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0);
         algo_after_gtlogic_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_bxomask_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
@@ -335,8 +334,6 @@ begin
             doutb     => algo_bx_mask_mem_out(32*i+31 downto 32*i)
         );
     end generate algo_bx_mem_l;
-
-    bx_nr_out <= bx_nr_internal; -- to Algo-bx-memory
 
 -- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
     algo_bx_mask_global <=  algo_bx_mask_mem_out when not SIM_MODE

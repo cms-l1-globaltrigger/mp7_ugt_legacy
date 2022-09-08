@@ -1,4 +1,5 @@
 
+-- HB 2022-09-08: cleaned up.
 -- HB 2016-09-16: updated for new esums and 12 tau objects
 -- HB 2016-05-31: inserted all frames of calo links for extended format structure of test-vector-file and sim-spy-memory
 
@@ -61,278 +62,278 @@ use ieee.std_logic_unsigned.all;
 package lhc_data_pkg is 
 
 -- HB 2016-06-01: constants for lane mapping (used in lmp.vhd)
-	constant OFFSET_MUON_LANES : natural := 0;
-	constant OFFSET_EG_LANES : natural := 4;
-	constant OFFSET_JET_LANES : natural := 6;
-	constant OFFSET_TAU_LANES : natural := 8;
-	constant OFFSET_ESUMS_LANES : natural := 10;
+    constant OFFSET_MUON_LANES : natural := 0;
+    constant OFFSET_EG_LANES : natural := 4;
+    constant OFFSET_JET_LANES : natural := 6;
+    constant OFFSET_TAU_LANES : natural := 8;
+    constant OFFSET_ESUMS_LANES : natural := 10;
 -- HB 2106-05-31: proposal for memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg_all_frames.vhd)
-	constant OFFSET_LINK_11_LANES : natural := 11;
-	constant OFFSET_EXT_COND_LANES : natural := 12;
+    constant OFFSET_LINK_11_LANES : natural := 11;
+    constant OFFSET_EXT_COND_LANES : natural := 12;
 
 --  for simspy memory (test with ipb_dpmem_4096_32)
-	constant SW_DATA_WIDTH : integer := 32;
+    constant SW_DATA_WIDTH : integer := 32;
 
-	constant MUON_ARRAY_LENGTH : integer := 8;
-	constant MUON_DATA_WIDTH : integer := SW_DATA_WIDTH*2;
-	constant EG_ARRAY_LENGTH : integer := 12;
-	constant EG_DATA_WIDTH : integer := SW_DATA_WIDTH;
-	constant TAU_ARRAY_LENGTH : integer := 12;
-	constant TAU_DATA_WIDTH : integer := SW_DATA_WIDTH;
-	constant JET_ARRAY_LENGTH : integer := 12;
-	constant JET_DATA_WIDTH : integer := SW_DATA_WIDTH;
-	constant ETT_DATA_WIDTH : integer := SW_DATA_WIDTH;
-	constant HT_DATA_WIDTH : integer := SW_DATA_WIDTH;
-	constant ETM_DATA_WIDTH : integer := SW_DATA_WIDTH;
-	constant HTM_DATA_WIDTH : integer := SW_DATA_WIDTH;
-	constant ETMHF_DATA_WIDTH : integer := SW_DATA_WIDTH;
-	constant HTMHF_DATA_WIDTH : integer := SW_DATA_WIDTH;
-	constant LINK_11_FR_0_WIDTH : integer := SW_DATA_WIDTH;
-	constant LINK_11_FR_1_WIDTH : integer := SW_DATA_WIDTH;
-	constant LINK_11_FR_2_WIDTH : integer := SW_DATA_WIDTH;
-	constant LINK_11_FR_3_WIDTH : integer := SW_DATA_WIDTH;
-	constant LINK_11_FR_4_WIDTH : integer := SW_DATA_WIDTH;
-	constant LINK_11_FR_5_WIDTH : integer := SW_DATA_WIDTH;
-	constant EXTERNAL_CONDITIONS_DATA_WIDTH : integer := SW_DATA_WIDTH*8;
+    constant MUON_ARRAY_LENGTH : integer := 8;
+    constant MUON_DATA_WIDTH : integer := SW_DATA_WIDTH*2;
+    constant EG_ARRAY_LENGTH : integer := 12;
+    constant EG_DATA_WIDTH : integer := SW_DATA_WIDTH;
+    constant TAU_ARRAY_LENGTH : integer := 12;
+    constant TAU_DATA_WIDTH : integer := SW_DATA_WIDTH;
+    constant JET_ARRAY_LENGTH : integer := 12;
+    constant JET_DATA_WIDTH : integer := SW_DATA_WIDTH;
+    constant ETT_DATA_WIDTH : integer := SW_DATA_WIDTH;
+    constant HT_DATA_WIDTH : integer := SW_DATA_WIDTH;
+    constant ETM_DATA_WIDTH : integer := SW_DATA_WIDTH;
+    constant HTM_DATA_WIDTH : integer := SW_DATA_WIDTH;
+    constant ETMHF_DATA_WIDTH : integer := SW_DATA_WIDTH;
+    constant HTMHF_DATA_WIDTH : integer := SW_DATA_WIDTH;
+    constant LINK_11_FR_0_WIDTH : integer := SW_DATA_WIDTH;
+    constant LINK_11_FR_1_WIDTH : integer := SW_DATA_WIDTH;
+    constant LINK_11_FR_2_WIDTH : integer := SW_DATA_WIDTH;
+    constant LINK_11_FR_3_WIDTH : integer := SW_DATA_WIDTH;
+    constant LINK_11_FR_4_WIDTH : integer := SW_DATA_WIDTH;
+    constant LINK_11_FR_5_WIDTH : integer := SW_DATA_WIDTH;
+    constant EXTERNAL_CONDITIONS_DATA_WIDTH : integer := SW_DATA_WIDTH*8;
+    
+    constant LHC_DATA_WIDTH : integer := 
+        (
+            (MUON_ARRAY_LENGTH*MUON_DATA_WIDTH) +
+            (EG_ARRAY_LENGTH*EG_DATA_WIDTH) +
+            (TAU_ARRAY_LENGTH*TAU_DATA_WIDTH) +
+            (JET_ARRAY_LENGTH*JET_DATA_WIDTH) +
+            ETT_DATA_WIDTH +
+            HT_DATA_WIDTH +
+            ETM_DATA_WIDTH +
+            HTM_DATA_WIDTH +
+            ETMHF_DATA_WIDTH + 
+            HTMHF_DATA_WIDTH +
+            LINK_11_FR_0_WIDTH + LINK_11_FR_1_WIDTH +
+            LINK_11_FR_2_WIDTH + LINK_11_FR_3_WIDTH +
+            LINK_11_FR_4_WIDTH + LINK_11_FR_5_WIDTH +
+            EXTERNAL_CONDITIONS_DATA_WIDTH
+        );
 
-	constant LHC_DATA_WIDTH : integer := 
-		(
-			(MUON_ARRAY_LENGTH*MUON_DATA_WIDTH) +
-			(EG_ARRAY_LENGTH*EG_DATA_WIDTH) +
-			(TAU_ARRAY_LENGTH*TAU_DATA_WIDTH) +
-			(JET_ARRAY_LENGTH*JET_DATA_WIDTH) +
-			ETT_DATA_WIDTH +
-			HT_DATA_WIDTH +
-			ETM_DATA_WIDTH +
-			HTM_DATA_WIDTH +
-			ETMHF_DATA_WIDTH + 
-			HTMHF_DATA_WIDTH +
-			LINK_11_FR_0_WIDTH + LINK_11_FR_1_WIDTH +
-			LINK_11_FR_2_WIDTH + LINK_11_FR_3_WIDTH +
-			LINK_11_FR_4_WIDTH + LINK_11_FR_5_WIDTH +
-			EXTERNAL_CONDITIONS_DATA_WIDTH
-		);
+    type muon_array_t is array(0 to MUON_ARRAY_LENGTH-1) of std_logic_vector(MUON_DATA_WIDTH-1 downto 0);
+    type eg_array_t is array(0 to EG_ARRAY_LENGTH-1) of std_logic_vector(EG_DATA_WIDTH-1 downto 0);
+    type tau_array_t is array(0 to TAU_ARRAY_LENGTH-1) of std_logic_vector(TAU_DATA_WIDTH-1 downto 0);
+    type jet_array_t is array(0 to JET_ARRAY_LENGTH-1) of std_logic_vector(JET_DATA_WIDTH-1 downto 0);
 
-	type muon_array_t is array(0 to MUON_ARRAY_LENGTH-1) of std_logic_vector(MUON_DATA_WIDTH-1 downto 0);
-	type eg_array_t is array(0 to EG_ARRAY_LENGTH-1) of std_logic_vector(EG_DATA_WIDTH-1 downto 0);
-	type tau_array_t is array(0 to TAU_ARRAY_LENGTH-1) of std_logic_vector(TAU_DATA_WIDTH-1 downto 0);
-	type jet_array_t is array(0 to JET_ARRAY_LENGTH-1) of std_logic_vector(JET_DATA_WIDTH-1 downto 0);
+    type lhc_data_t is record 
+        muon : muon_array_t;
+        eg : eg_array_t;
+        tau : tau_array_t;
+        jet : jet_array_t;
+        ett : std_logic_vector(ETT_DATA_WIDTH-1 downto 0);
+        ht : std_logic_vector(HT_DATA_WIDTH-1 downto 0);
+        etm : std_logic_vector(ETM_DATA_WIDTH-1 downto 0);
+        htm : std_logic_vector(HTM_DATA_WIDTH-1 downto 0);
+        etmhf : std_logic_vector(ETMHF_DATA_WIDTH-1 downto 0);
+        htmhf : std_logic_vector(HTMHF_DATA_WIDTH-1 downto 0);        
+        link_11_fr_0_data : std_logic_vector(LINK_11_FR_0_WIDTH-1 downto 0);
+        link_11_fr_1_data : std_logic_vector(LINK_11_FR_1_WIDTH-1 downto 0);
+        link_11_fr_2_data : std_logic_vector(LINK_11_FR_2_WIDTH-1 downto 0);
+        link_11_fr_3_data : std_logic_vector(LINK_11_FR_3_WIDTH-1 downto 0);
+        link_11_fr_4_data : std_logic_vector(LINK_11_FR_4_WIDTH-1 downto 0);
+        link_11_fr_5_data : std_logic_vector(LINK_11_FR_5_WIDTH-1 downto 0);        
+        external_conditions : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
+    end record; 
 
-	type lhc_data_t is record 
-		muon : muon_array_t;
-		eg : eg_array_t;
-		tau : tau_array_t;
-		jet : jet_array_t;
-		ett : std_logic_vector(ETT_DATA_WIDTH-1 downto 0);
-		ht : std_logic_vector(HT_DATA_WIDTH-1 downto 0);
-		etm : std_logic_vector(ETM_DATA_WIDTH-1 downto 0);
-		htm : std_logic_vector(HTM_DATA_WIDTH-1 downto 0);
-		etmhf : std_logic_vector(ETMHF_DATA_WIDTH-1 downto 0);
-		htmhf : std_logic_vector(HTMHF_DATA_WIDTH-1 downto 0);		
-		link_11_fr_0_data : std_logic_vector(LINK_11_FR_0_WIDTH-1 downto 0);
-		link_11_fr_1_data : std_logic_vector(LINK_11_FR_1_WIDTH-1 downto 0);
-		link_11_fr_2_data : std_logic_vector(LINK_11_FR_2_WIDTH-1 downto 0);
-		link_11_fr_3_data : std_logic_vector(LINK_11_FR_3_WIDTH-1 downto 0);
-		link_11_fr_4_data : std_logic_vector(LINK_11_FR_4_WIDTH-1 downto 0);
-		link_11_fr_5_data : std_logic_vector(LINK_11_FR_5_WIDTH-1 downto 0);		
-		external_conditions : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
-	end record; 
+    constant LHC_DATA_NULL : lhc_data_t := 
+        (
+            muon => (others=>(others=>'0')),
+            eg => (others=>(others=>'0')),
+            tau => (others=>(others=>'0')),
+            jet => (others=>(others=>'0')),
+            ett => (others=>'0'),
+            ht => (others=>'0'),
+            etm => (others=>'0'),
+            htm => (others=>'0'),
+            etmhf => (others=>'0'),
+            htmhf => (others=>'0'),
+            link_11_fr_0_data => (others=>'0'),
+            link_11_fr_1_data => (others=>'0'),
+            link_11_fr_2_data => (others=>'0'),
+            link_11_fr_3_data => (others=>'0'),
+            link_11_fr_4_data => (others=>'0'),
+            link_11_fr_5_data => (others=>'0'),
+            external_conditions => (others=>'0')
+        );
 
-	constant LHC_DATA_NULL : lhc_data_t := 
-		(
-			muon => (others=>(others=>'0')),
-			eg => (others=>(others=>'0')),
-			tau => (others=>(others=>'0')),
-			jet => (others=>(others=>'0')),
-			ett => (others=>'0'),
-			ht => (others=>'0'),
-			etm => (others=>'0'),
-			htm => (others=>'0'),
-			etmhf => (others=>'0'),
-			htmhf => (others=>'0'),
-			link_11_fr_0_data => (others=>'0'),
-			link_11_fr_1_data => (others=>'0'),
-			link_11_fr_2_data => (others=>'0'),
-			link_11_fr_3_data => (others=>'0'),
-			link_11_fr_4_data => (others=>'0'),
-			link_11_fr_5_data => (others=>'0'),
-			external_conditions => (others=>'0')
-		);
+    constant LHC_DATA_OBJECT_COUNT : integer :=17;
+    constant INDEX_MUON : integer := 0;
+    constant INDEX_EG : integer := 1;
+    constant INDEX_TAU : integer := 2;
+    constant INDEX_JET : integer := 3;
+    constant INDEX_ETT : integer := 4;
+    constant INDEX_HT : integer := 5;
+    constant INDEX_ETM : integer := 6;
+    constant INDEX_HTM : integer := 7;
+    constant INDEX_ETMHF : integer := 8;
+    constant INDEX_HTMHF : integer := 9;
+    constant INDEX_LINK_11_FR_0 : integer := 10;
+    constant INDEX_LINK_11_FR_1 : integer := 11;
+    constant INDEX_LINK_11_FR_2 : integer := 12;
+    constant INDEX_LINK_11_FR_3 : integer := 13;
+    constant INDEX_LINK_11_FR_4 : integer := 14;
+    constant INDEX_LINK_11_FR_5 : integer := 15;
+    constant INDEX_EXTERNAL_CONDITIONS : integer := 16;
+    type lhc_data_slv_property_t is array (0 to LHC_DATA_OBJECT_COUNT-1) of natural;
 
-	constant LHC_DATA_OBJECT_COUNT : integer :=17;
-	constant INDEX_MUON : integer := 0;
-	constant INDEX_EG : integer := 1;
-	constant INDEX_TAU : integer := 2;
-	constant INDEX_JET : integer := 3;
-	constant INDEX_ETT : integer := 4;
-	constant INDEX_HT : integer := 5;
-	constant INDEX_ETM : integer := 6;
-	constant INDEX_HTM : integer := 7;
-	constant INDEX_ETMHF : integer := 8;
-	constant INDEX_HTMHF : integer := 9;
-	constant INDEX_LINK_11_FR_0 : integer := 10;
-	constant INDEX_LINK_11_FR_1 : integer := 11;
-	constant INDEX_LINK_11_FR_2 : integer := 12;
-	constant INDEX_LINK_11_FR_3 : integer := 13;
-	constant INDEX_LINK_11_FR_4 : integer := 14;
-	constant INDEX_LINK_11_FR_5 : integer := 15;
-	constant INDEX_EXTERNAL_CONDITIONS : integer := 16;
-	type lhc_data_slv_property_t is array (0 to LHC_DATA_OBJECT_COUNT-1) of natural;
+    constant LHC_DATA_SLV_OBJECT_WIDTH : lhc_data_slv_property_t := 
+        (
+            MUON_ARRAY_LENGTH * MUON_DATA_WIDTH,
+            EG_ARRAY_LENGTH * EG_DATA_WIDTH,
+            TAU_ARRAY_LENGTH * TAU_DATA_WIDTH,
+            JET_ARRAY_LENGTH * JET_DATA_WIDTH,
+            ETT_DATA_WIDTH,
+            HT_DATA_WIDTH,
+            ETM_DATA_WIDTH,
+            HTM_DATA_WIDTH,
+            ETMHF_DATA_WIDTH, 
+            HTMHF_DATA_WIDTH,
+            LINK_11_FR_0_WIDTH, LINK_11_FR_1_WIDTH,
+            LINK_11_FR_2_WIDTH, LINK_11_FR_3_WIDTH,
+            LINK_11_FR_4_WIDTH, LINK_11_FR_5_WIDTH,
+            EXTERNAL_CONDITIONS_DATA_WIDTH
+        );
 
-	constant LHC_DATA_SLV_OBJECT_WIDTH : lhc_data_slv_property_t := 
-		(
-			MUON_ARRAY_LENGTH * MUON_DATA_WIDTH,
-			EG_ARRAY_LENGTH * EG_DATA_WIDTH,
-			TAU_ARRAY_LENGTH * TAU_DATA_WIDTH,
-			JET_ARRAY_LENGTH * JET_DATA_WIDTH,
-			ETT_DATA_WIDTH,
-			HT_DATA_WIDTH,
-			ETM_DATA_WIDTH,
-			HTM_DATA_WIDTH,
-			ETMHF_DATA_WIDTH, 
-			HTMHF_DATA_WIDTH,
-			LINK_11_FR_0_WIDTH, LINK_11_FR_1_WIDTH,
-			LINK_11_FR_2_WIDTH, LINK_11_FR_3_WIDTH,
-			LINK_11_FR_4_WIDTH, LINK_11_FR_5_WIDTH,
-			EXTERNAL_CONDITIONS_DATA_WIDTH
-		);
+    constant LHC_DATA_SLV_START_INDICES : lhc_data_slv_property_t; -- see body
 
-	constant LHC_DATA_SLV_START_INDICES : lhc_data_slv_property_t; -- see body
+    -- converter function prototypes
+    function lhc_data_t_to_std_logic_vector (data_in : lhc_data_t)
+    return std_logic_vector;
 
-	-- converter function prototypes
-	function lhc_data_t_to_std_logic_vector (data_in : lhc_data_t)
-	return std_logic_vector;
-
-	function std_logic_vector_to_lhc_data_t (data_in : std_logic_vector(LHC_DATA_WIDTH-1 downto 0))
-	return lhc_data_t;
+    function std_logic_vector_to_lhc_data_t (data_in : std_logic_vector(LHC_DATA_WIDTH-1 downto 0))
+    return lhc_data_t;
 
 end package;
 
 package body lhc_data_pkg is
 
-	function lhc_data_t_to_std_logic_vector (data_in : lhc_data_t )
-		return std_logic_vector
-	is
-		variable ret_value : std_logic_vector(LHC_DATA_WIDTH-1 downto 0);
-		variable index : natural := 0;
-	begin
-		for i in 0 to MUON_ARRAY_LENGTH-1 loop
-			ret_value(index+(i+1)*MUON_DATA_WIDTH-1 downto index+(i*MUON_DATA_WIDTH)) := data_in.muon(i);
-		end loop;
-		index := index + (MUON_ARRAY_LENGTH * MUON_DATA_WIDTH);
+    function lhc_data_t_to_std_logic_vector (data_in : lhc_data_t )
+        return std_logic_vector
+    is
+        variable ret_value : std_logic_vector(LHC_DATA_WIDTH-1 downto 0);
+        variable index : natural := 0;
+    begin
+        for i in 0 to MUON_ARRAY_LENGTH-1 loop
+            ret_value(index+(i+1)*MUON_DATA_WIDTH-1 downto index+(i*MUON_DATA_WIDTH)) := data_in.muon(i);
+        end loop;
+        index := index + (MUON_ARRAY_LENGTH * MUON_DATA_WIDTH);
 
-		for i in 0 to EG_ARRAY_LENGTH-1 loop
-			ret_value(index+(i+1)*EG_DATA_WIDTH-1 downto index+(i*EG_DATA_WIDTH)) := data_in.eg(i);
-		end loop;
-		index := index + (EG_ARRAY_LENGTH * EG_DATA_WIDTH);
+        for i in 0 to EG_ARRAY_LENGTH-1 loop
+            ret_value(index+(i+1)*EG_DATA_WIDTH-1 downto index+(i*EG_DATA_WIDTH)) := data_in.eg(i);
+        end loop;
+        index := index + (EG_ARRAY_LENGTH * EG_DATA_WIDTH);
 
-		for i in 0 to TAU_ARRAY_LENGTH-1 loop
-			ret_value(index+(i+1)*TAU_DATA_WIDTH-1 downto index+(i*TAU_DATA_WIDTH)) := data_in.tau(i);
-		end loop;
-		index := index + (TAU_ARRAY_LENGTH * TAU_DATA_WIDTH);
+        for i in 0 to TAU_ARRAY_LENGTH-1 loop
+            ret_value(index+(i+1)*TAU_DATA_WIDTH-1 downto index+(i*TAU_DATA_WIDTH)) := data_in.tau(i);
+        end loop;
+        index := index + (TAU_ARRAY_LENGTH * TAU_DATA_WIDTH);
 
-		for i in 0 to JET_ARRAY_LENGTH-1 loop
-			ret_value(index+(i+1)*JET_DATA_WIDTH-1 downto index+(i*JET_DATA_WIDTH)) := data_in.jet(i);
-		end loop;
-		index := index + (JET_ARRAY_LENGTH * JET_DATA_WIDTH);
+        for i in 0 to JET_ARRAY_LENGTH-1 loop
+            ret_value(index+(i+1)*JET_DATA_WIDTH-1 downto index+(i*JET_DATA_WIDTH)) := data_in.jet(i);
+        end loop;
+        index := index + (JET_ARRAY_LENGTH * JET_DATA_WIDTH);
 
-		ret_value(index + ETT_DATA_WIDTH-1 downto index) := data_in.ett;
-		index := index + ETT_DATA_WIDTH;
-		ret_value(index + HT_DATA_WIDTH-1 downto index) := data_in.ht;
-		index := index + HT_DATA_WIDTH;
-		ret_value(index + ETM_DATA_WIDTH-1 downto index) := data_in.etm;
-		index := index + ETM_DATA_WIDTH;
-		ret_value(index + HTM_DATA_WIDTH-1 downto index) := data_in.htm;
-		index := index + HTM_DATA_WIDTH;
-		ret_value(index + ETMHF_DATA_WIDTH-1 downto index) := data_in.etmhf;
-		index := index + ETMHF_DATA_WIDTH;
-		ret_value(index + HTMHF_DATA_WIDTH-1 downto index) := data_in.htmhf;
-		index := index + HTMHF_DATA_WIDTH;
-		
-		ret_value(index + LINK_11_FR_0_WIDTH-1 downto index) := data_in.link_11_fr_0_data;
-		index := index + LINK_11_FR_0_WIDTH;
-		ret_value(index + LINK_11_FR_1_WIDTH-1 downto index) := data_in.link_11_fr_1_data;
-		index := index + LINK_11_FR_1_WIDTH;
-		ret_value(index + LINK_11_FR_2_WIDTH-1 downto index) := data_in.link_11_fr_2_data;
-		index := index + LINK_11_FR_2_WIDTH;
-		ret_value(index + LINK_11_FR_3_WIDTH-1 downto index) := data_in.link_11_fr_3_data;
-		index := index + LINK_11_FR_3_WIDTH;
-		ret_value(index + LINK_11_FR_4_WIDTH-1 downto index) := data_in.link_11_fr_4_data;
-		index := index + LINK_11_FR_4_WIDTH;
-		ret_value(index + LINK_11_FR_5_WIDTH-1 downto index) := data_in.link_11_fr_5_data;
-		index := index + LINK_11_FR_5_WIDTH;
-		
-		ret_value(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index) := data_in.external_conditions;
-		index := index + EXTERNAL_CONDITIONS_DATA_WIDTH;
-		return ret_value;
-	end function;
+        ret_value(index + ETT_DATA_WIDTH-1 downto index) := data_in.ett;
+        index := index + ETT_DATA_WIDTH;
+        ret_value(index + HT_DATA_WIDTH-1 downto index) := data_in.ht;
+        index := index + HT_DATA_WIDTH;
+        ret_value(index + ETM_DATA_WIDTH-1 downto index) := data_in.etm;
+        index := index + ETM_DATA_WIDTH;
+        ret_value(index + HTM_DATA_WIDTH-1 downto index) := data_in.htm;
+        index := index + HTM_DATA_WIDTH;
+        ret_value(index + ETMHF_DATA_WIDTH-1 downto index) := data_in.etmhf;
+        index := index + ETMHF_DATA_WIDTH;
+        ret_value(index + HTMHF_DATA_WIDTH-1 downto index) := data_in.htmhf;
+        index := index + HTMHF_DATA_WIDTH;
+        
+        ret_value(index + LINK_11_FR_0_WIDTH-1 downto index) := data_in.link_11_fr_0_data;
+        index := index + LINK_11_FR_0_WIDTH;
+        ret_value(index + LINK_11_FR_1_WIDTH-1 downto index) := data_in.link_11_fr_1_data;
+        index := index + LINK_11_FR_1_WIDTH;
+        ret_value(index + LINK_11_FR_2_WIDTH-1 downto index) := data_in.link_11_fr_2_data;
+        index := index + LINK_11_FR_2_WIDTH;
+        ret_value(index + LINK_11_FR_3_WIDTH-1 downto index) := data_in.link_11_fr_3_data;
+        index := index + LINK_11_FR_3_WIDTH;
+        ret_value(index + LINK_11_FR_4_WIDTH-1 downto index) := data_in.link_11_fr_4_data;
+        index := index + LINK_11_FR_4_WIDTH;
+        ret_value(index + LINK_11_FR_5_WIDTH-1 downto index) := data_in.link_11_fr_5_data;
+        index := index + LINK_11_FR_5_WIDTH;
+        
+        ret_value(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index) := data_in.external_conditions;
+        index := index + EXTERNAL_CONDITIONS_DATA_WIDTH;
+        return ret_value;
+    end function;
 
-	function std_logic_vector_to_lhc_data_t (data_in : std_logic_vector(LHC_DATA_WIDTH-1 downto 0)) 
-		return lhc_data_t
-	is
-		variable ret_value : lhc_data_t;
-		variable index : natural := 0;
-	begin
-		for i in 0 to MUON_ARRAY_LENGTH-1 loop
-			ret_value.muon(i) := data_in( index+(i+1)*MUON_DATA_WIDTH-1 downto index+(i* MUON_DATA_WIDTH));
-		end loop;
-		index := index + (MUON_ARRAY_LENGTH * MUON_DATA_WIDTH);
+    function std_logic_vector_to_lhc_data_t (data_in : std_logic_vector(LHC_DATA_WIDTH-1 downto 0)) 
+        return lhc_data_t
+    is
+        variable ret_value : lhc_data_t;
+        variable index : natural := 0;
+    begin
+        for i in 0 to MUON_ARRAY_LENGTH-1 loop
+            ret_value.muon(i) := data_in( index+(i+1)*MUON_DATA_WIDTH-1 downto index+(i* MUON_DATA_WIDTH));
+        end loop;
+        index := index + (MUON_ARRAY_LENGTH * MUON_DATA_WIDTH);
 
-		for i in 0 to EG_ARRAY_LENGTH-1 loop
-			ret_value.eg(i) := data_in( index+(i+1)*EG_DATA_WIDTH-1 downto index+(i* EG_DATA_WIDTH));
-		end loop;
-		index := index + (EG_ARRAY_LENGTH * EG_DATA_WIDTH);
+        for i in 0 to EG_ARRAY_LENGTH-1 loop
+            ret_value.eg(i) := data_in( index+(i+1)*EG_DATA_WIDTH-1 downto index+(i* EG_DATA_WIDTH));
+        end loop;
+        index := index + (EG_ARRAY_LENGTH * EG_DATA_WIDTH);
 
-		for i in 0 to TAU_ARRAY_LENGTH-1 loop
-			ret_value.tau(i) := data_in( index+(i+1)*TAU_DATA_WIDTH-1 downto index+(i* TAU_DATA_WIDTH));
-		end loop;
-		index := index + (TAU_ARRAY_LENGTH * TAU_DATA_WIDTH);
-		
-		for i in 0 to JET_ARRAY_LENGTH-1 loop
-			ret_value.jet(i) := data_in( index+(i+1)*JET_DATA_WIDTH-1 downto index+(i* JET_DATA_WIDTH));
-		end loop;
-		index := index + (JET_ARRAY_LENGTH * JET_DATA_WIDTH);
+        for i in 0 to TAU_ARRAY_LENGTH-1 loop
+            ret_value.tau(i) := data_in( index+(i+1)*TAU_DATA_WIDTH-1 downto index+(i* TAU_DATA_WIDTH));
+        end loop;
+        index := index + (TAU_ARRAY_LENGTH * TAU_DATA_WIDTH);
+        
+        for i in 0 to JET_ARRAY_LENGTH-1 loop
+            ret_value.jet(i) := data_in( index+(i+1)*JET_DATA_WIDTH-1 downto index+(i* JET_DATA_WIDTH));
+        end loop;
+        index := index + (JET_ARRAY_LENGTH * JET_DATA_WIDTH);
 
-		ret_value.ett := data_in(index + ETT_DATA_WIDTH-1 downto index);
-		index := index + ETT_DATA_WIDTH;
-		ret_value.ht := data_in(index + HT_DATA_WIDTH-1 downto index);
-		index := index + HT_DATA_WIDTH;
-		ret_value.etm := data_in(index + ETM_DATA_WIDTH-1 downto index);
-		index := index + ETM_DATA_WIDTH;
-		ret_value.htm := data_in(index + HTM_DATA_WIDTH-1 downto index);
-		index := index + HTM_DATA_WIDTH;		
-		ret_value.etmhf := data_in(index + ETMHF_DATA_WIDTH-1 downto index);
-		index := index + ETMHF_DATA_WIDTH;
-		ret_value.htmhf := data_in(index + HTMHF_DATA_WIDTH-1 downto index);
-		index := index + HTMHF_DATA_WIDTH;
-		
-		ret_value.link_11_fr_0_data := data_in(index + LINK_11_FR_0_WIDTH-1 downto index);
-		index := index + LINK_11_FR_0_WIDTH;
-		ret_value.link_11_fr_1_data := data_in(index + LINK_11_FR_1_WIDTH-1 downto index);
-		index := index + LINK_11_FR_1_WIDTH;
-		ret_value.link_11_fr_2_data := data_in(index + LINK_11_FR_2_WIDTH-1 downto index);
-		index := index + LINK_11_FR_2_WIDTH;
-		ret_value.link_11_fr_3_data := data_in(index + LINK_11_FR_3_WIDTH-1 downto index);
-		index := index + LINK_11_FR_3_WIDTH;
-		ret_value.link_11_fr_4_data := data_in(index + LINK_11_FR_4_WIDTH-1 downto index);
-		index := index + LINK_11_FR_4_WIDTH;
-		ret_value.link_11_fr_5_data := data_in(index + LINK_11_FR_5_WIDTH-1 downto index);
-		index := index + LINK_11_FR_5_WIDTH;
-		
-		ret_value.external_conditions := data_in(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index);
-		index := index + EXTERNAL_CONDITIONS_DATA_WIDTH;
-		return ret_value;
-	end function;
+        ret_value.ett := data_in(index + ETT_DATA_WIDTH-1 downto index);
+        index := index + ETT_DATA_WIDTH;
+        ret_value.ht := data_in(index + HT_DATA_WIDTH-1 downto index);
+        index := index + HT_DATA_WIDTH;
+        ret_value.etm := data_in(index + ETM_DATA_WIDTH-1 downto index);
+        index := index + ETM_DATA_WIDTH;
+        ret_value.htm := data_in(index + HTM_DATA_WIDTH-1 downto index);
+        index := index + HTM_DATA_WIDTH;        
+        ret_value.etmhf := data_in(index + ETMHF_DATA_WIDTH-1 downto index);
+        index := index + ETMHF_DATA_WIDTH;
+        ret_value.htmhf := data_in(index + HTMHF_DATA_WIDTH-1 downto index);
+        index := index + HTMHF_DATA_WIDTH;
+        
+        ret_value.link_11_fr_0_data := data_in(index + LINK_11_FR_0_WIDTH-1 downto index);
+        index := index + LINK_11_FR_0_WIDTH;
+        ret_value.link_11_fr_1_data := data_in(index + LINK_11_FR_1_WIDTH-1 downto index);
+        index := index + LINK_11_FR_1_WIDTH;
+        ret_value.link_11_fr_2_data := data_in(index + LINK_11_FR_2_WIDTH-1 downto index);
+        index := index + LINK_11_FR_2_WIDTH;
+        ret_value.link_11_fr_3_data := data_in(index + LINK_11_FR_3_WIDTH-1 downto index);
+        index := index + LINK_11_FR_3_WIDTH;
+        ret_value.link_11_fr_4_data := data_in(index + LINK_11_FR_4_WIDTH-1 downto index);
+        index := index + LINK_11_FR_4_WIDTH;
+        ret_value.link_11_fr_5_data := data_in(index + LINK_11_FR_5_WIDTH-1 downto index);
+        index := index + LINK_11_FR_5_WIDTH;
+        
+        ret_value.external_conditions := data_in(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index);
+        index := index + EXTERNAL_CONDITIONS_DATA_WIDTH;
+        return ret_value;
+    end function;
 
-	function init_indices return lhc_data_slv_property_t is
-		variable ret_value : lhc_data_slv_property_t;
-	begin
-		ret_value(0) := 0;
-		for i in 1 to LHC_DATA_OBJECT_COUNT-1 loop
-			ret_value(i) := ret_value(i-1) + LHC_DATA_SLV_OBJECT_WIDTH(i-1);
-		end loop;
-		return ret_value;
-	end;
-	constant LHC_DATA_SLV_START_INDICES : lhc_data_slv_property_t := init_indices ;
+    function init_indices return lhc_data_slv_property_t is
+        variable ret_value : lhc_data_slv_property_t;
+    begin
+        ret_value(0) := 0;
+        for i in 1 to LHC_DATA_OBJECT_COUNT-1 loop
+            ret_value(i) := ret_value(i-1) + LHC_DATA_SLV_OBJECT_WIDTH(i-1);
+        end loop;
+        return ret_value;
+    end;
+    constant LHC_DATA_SLV_START_INDICES : lhc_data_slv_property_t := init_indices ;
 
 end;

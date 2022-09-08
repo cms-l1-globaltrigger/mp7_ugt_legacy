@@ -107,7 +107,6 @@ package gt_mp7_core_pkg is
 
 -- HB 2014-07-08: ipbus_rst is high active, RST_ACT changed to '1' (for lhc_rst [in gt_mp7_core_pkg.vhd]) to get proper reset-conditions,
 --                because in delay_line_sl.vhd and delay_line_slv.vhd both resets are used !!!
--- constant RST_ACT : std_logic := '0';
     constant RST_ACT : std_logic := '1';
     constant RST_ACT_ROP : std_logic := '0';
 

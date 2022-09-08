@@ -1,4 +1,5 @@
 
+-- HB 2022-09-08: cleaned up.
 -- HB 2017-09-08: reduced registers for frame v1.2.1 - no dm, no dsmux
 
 library ieee;
@@ -44,13 +45,6 @@ constant SW_REG_SPYTRIGGER_OUT_RESET : sw_reg_spytrigger_out_t :=
     trig_spy3_busy                => '0',
     trig_spy12_busy               => '0'
 );
--- type sw_reg_sw_reset_in_t is record
---     reset_event                   : std_logic;
--- end record;
--- constant SW_REG_SW_RESET_IN_RESET : sw_reg_sw_reset_in_t :=
--- (
---     reset_event                   => '0'
--- );
 type sw_reg_tcm_in_t is record
     cmd_ignbcres                  : std_logic;
     err_det_reset_event           : std_logic;

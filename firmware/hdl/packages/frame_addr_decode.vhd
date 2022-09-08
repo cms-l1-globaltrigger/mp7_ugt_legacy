@@ -1,4 +1,5 @@
 
+-- HB 2022-09-08: cleaned up.
 -- HB 2021-02-03: changed "FRAME_VERSION" to "GT_VERSION" (new name in gt_mp7_core_pkg.vhd).
 -- HB 2106-05-31: memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd)
 -- HEPHY:21-05-2015 TOP_SERIAL_VENDOR is not more relevant, because in future we will read from hardware over ipmi just MAC address
@@ -20,15 +21,15 @@ package frame_addr_decode is
     constant C_IPB_DEMUX_LANE_ADJ : natural := 2;
     constant C_IPB_RB : natural := 3;
 
---    constant C_IPB_SIMSPYMEM : natural := 4;
-
 -- HB 2106-05-31: memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd)
 -- 72 memory blocks with LHC_DATA_WIDTH = 2304
     type ipb_simspymem_index_array is array (0 to 71) of natural;
-    constant C_IPB_SIMSPYMEM : ipb_simspymem_index_array := (4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-                                                             20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
-                                                             40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
-							     60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75);
+    constant C_IPB_SIMSPYMEM : ipb_simspymem_index_array := (
+        4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+        20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+        40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
+        60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75
+    );
 
 --     constant C_IPB_SPYMEM2_ALGOS : natural := 64;
 -- HEPHY:21-05-2015: test version with spy2_algos and spy2_finor instantiated with ipb_dpmem_4096_32 modules.
@@ -58,13 +59,9 @@ package frame_addr_decode is
     constant C_TEST_REGS_BEGIN_INDEX : integer := 0;
     constant C_TEST_REGS_END_INDEX : integer := 14;
 
--- HEPHY:21-05-2015: C_RB_ADDR_WIDTH fixed to 12 in rb.vhd
---     constant C_RB_ADDR_WIDTH : integer := 20;
-
     function frame_addr_sel(signal addr : in std_logic_vector(31 downto 0)) return natural;
 
 end frame_addr_decode;
-
 
 package body frame_addr_decode is
 
@@ -80,7 +77,6 @@ package body frame_addr_decode is
         elsif std_match(addr, "10000000000000000000100000000000") then sel := C_IPB_PULSEREG;       -- 0x80000800
         elsif std_match(addr, "1000000000000000000010010000----") then sel := C_IPB_MUX_CONTROL;    -- 0x80000900 .. 0x8000090F
         elsif std_match(addr, "10000000011100000000------------") then sel := C_IPB_RB;             -- 0x80700000
---         elsif std_match(addr, "100000000011--------------------") then sel := C_IPB_SIMSPYMEM;   -- 0x80300000
         elsif std_match(addr, "10000000001100000000------------") then sel := C_IPB_SIMSPYMEM(0);   -- 0x80300000 .. 0x80300FFF
         elsif std_match(addr, "10000000001100000001------------") then sel := C_IPB_SIMSPYMEM(1);   -- 0x80301000 .. 0x80301FFF
         elsif std_match(addr, "10000000001100000010------------") then sel := C_IPB_SIMSPYMEM(2);
@@ -175,10 +171,10 @@ package body frame_addr_decode is
         elsif std_match(addr, "10000000001000000000------------") then sel := C_IPB_SPYMEM2_FINOR;  -- 0x80200000
         elsif std_match(addr, "1000000000101000----------------") then sel := C_IPB_SPYMEM3;        -- 0x80280000
         elsif std_match(addr, "1000000001000000----------------") then sel := C_IPB_SPYMEM3_P;      -- 0x80400000
-		else sel := 99;
-		end if;
-		return sel;
+        else sel := 99;
+        end if;
+        return sel;
 
-	end frame_addr_sel;
+    end frame_addr_sel;
 
 end frame_addr_decode;

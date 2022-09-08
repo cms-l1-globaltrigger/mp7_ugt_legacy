@@ -18,7 +18,7 @@ set f [open ../../cfg/anomaly_detection.dep "w"]
 
 foreach filepath [glob -dir prj_anomaly_detection/solution1/syn/vhdl/ *] {
   set filename [file tail $filepath];
-  file copy -force prj_anomaly_detection/solution1/syn/vhdl/$filename ../../hdl/payload/anomaly_detection/$filename;
+  file copy -force prj_anomaly_detection/solution1/syn/vhdl/$filename ../../hdl/payload/gtl/anomaly_detection/$filename;
   puts $f "src payload/anomaly_detection/$filename"
 }
 close $f

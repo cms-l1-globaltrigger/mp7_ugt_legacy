@@ -8,4 +8,5 @@ PxPyPz MuonToCartesian(Muon x);
 PxPyPz JetToCartesian(Jet x);
 PxPyPz CaloCommonToCartesian(CaloCommon x);
 PxPyPz EGammaToCartesian(EGamma x);
-PxPyPz TauToCartesian(Tau x);
+PxPyPz TauToCartesian(Tau x); 
+PxPyPz METToCartesian(ETMiss x); 

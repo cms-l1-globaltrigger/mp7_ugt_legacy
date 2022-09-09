@@ -9,6 +9,11 @@
 // Code mimics Phase 2 L1Trigger Particle Flow data types HLS:
 // https://github.com/cms-sw/cmssw/tree/master/DataFormats/L1TParticleFlow/interface
 
+typedef ap_fixed<9,2> cossin_t;
+typedef ap_fixed<9,3> sinh_t;
+
+static constexpr int N_TABLE = 2048;
+
 /* ---
  * Constants useful for converting physical units to hardware integers 
  * --- */
@@ -414,9 +419,9 @@ static const int NTAUS = 12;
  * --- */
 struct PxPyPz{
   // TODO these data types are not optimized
-  ap_fixed<12,10> px;
-  ap_fixed<12,10> py;
-  ap_fixed<12,10> pz;
+  ap_fixed<16,13> px;
+  ap_fixed<16,13> py;
+  ap_fixed<16,13> pz;
 
   static const int BITWIDTH = 36;
 

@@ -27,12 +27,12 @@ Definitions are based on document~\cite{interface}.
 \item Energy summary information:
 \begin{itemize}
 \item Total Et (\ett)
-\item total Et from ECAL only (ETTEM)
-\item total calibrated Et in jets (\htt)
-\item missing Et (\etm)
-\item missing Et including HF (ET$_{miss}^{HF}$)
-\item missing Ht objects (\htm)
-\item missing Ht including HF (HT$_{miss}^{HF}$)
+\item Total Et from ECAL only (ETTEM)
+\item Total calibrated Et in jets (\htt)
+\item Missing Et (\etm)
+\item Missing Et including HF (ET$_{miss}^{HF}$)
+\item Missing Ht objects (\htm)
+\item Missing Ht including HF (HT$_{miss}^{HF}$)
 \item "Asymmetry" information (ASYMET, ASYMHT, ASYMETHF, ASYMHTHF)
 \end{itemize}
 \item Minimum bias HF bits (included in energy summary information data structure)
@@ -94,7 +94,7 @@ The data structure of a tau object (bits 27..31 are not defined yet, reserved fo
 \end{bytefield}
 \end{center}
 
-The data structure of "total Et" (\ett) quantity [including "total Et from ECAL only" (ETTEM) and "minimum bias HF+ threshold 0" bits]:
+The data structure of "Total Et" (\ett) quantity [including "Total Et from ECAL only" (ETTEM) and "minimum bias HF+ threshold 0" bits]:
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,11,12,23,24,27,28,31} \\
@@ -105,7 +105,7 @@ The data structure of "total Et" (\ett) quantity [including "total Et from ECAL 
 \end{bytefield}
 \end{center}
 
-The data structure of "total calibrated Et in jets" (\htt) quantity [including "towercount" and "minimum bias HF- threshold 0" bits]:
+The data structure of "Total calibrated Et in jets" (\htt) quantity [including "towercount" and "minimum bias HF- threshold 0" bits]:
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,11,12,24,25,27,28,31} \\
@@ -116,7 +116,7 @@ The data structure of "total calibrated Et in jets" (\htt) quantity [including "
 \end{bytefield}
 \end{center}
 
-The data structure of "missing Et" (\etm) quantity [including "Asymmetry" ASYMET and "minimum bias HF+ threshold 1" bits]:
+The data structure of "Missing Et" (\etm) quantity [including "Asymmetry" ASYMET and "minimum bias HF+ threshold 1" bits]:
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,11,12,19,20,27,28,31} \\
@@ -127,7 +127,7 @@ The data structure of "missing Et" (\etm) quantity [including "Asymmetry" ASYMET
 \end{bytefield}
 \end{center}
 
-The data structure of "missing Ht" (\htm) quantity [including "Asymmetry" ASYMHT and "minimum bias HF- threshold 1" bits]:
+The data structure of "Missing Ht" (\htm) quantity [including "Asymmetry" ASYMHT and "minimum bias HF- threshold 1" bits]:
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,11,12,19,20,27,28,31} \\
@@ -138,7 +138,7 @@ The data structure of "missing Ht" (\htm) quantity [including "Asymmetry" ASYMHT
 \end{bytefield}
 \end{center}
 
-The data structure of "missing Et including HF" (ET$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMETHF and "Centrality" bits (3:0)]:
+The data structure of "Missing Et including HF" (ET$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMETHF and "Centrality" bits (3:0)]:
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,11,12,19,20,27,28,31} \\
@@ -149,7 +149,7 @@ The data structure of "missing Et including HF" (ET$_{miss}^{HF}$) quantity [inc
 \end{bytefield}
 \end{center}
 
-The data structure of "missing Ht including HF" (HT$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMHTHF and "Centrality" bits (7:4)]:
+The data structure of "Missing Ht including HF" (HT$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMHTHF and "Centrality" bits (7:4)]:
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,11,12,19,20,27,28,31} \\
@@ -192,9 +192,11 @@ ch = charge bits, s = spare bit, imp = impact parameter.
 
 The firmware of \ugtl consists of two main parts:
 \begin{itemize}
-\item A top-of-hierarchy file (\texttt{gtl\_module.vhd}), which contains the pipeline for $\pm$2bx data, the instantiations of calculators for differences in $\eta$ and $\varphi$, the instantiations of conditions, the instantiations of charge correlation logic of muons and the Algorithms logic for 512 Algorithms, as well as a package file (\texttt{gtl\_pkg.vhd}) for declarations.
-Currently 6 AMC (MP7) boards are used to contain Algorithms. A software tool called Trigger Menu Editor (TME)~\cite{TME_repo} is available to create a L1Menu with up to 512 Algorithms, which are partitioned by VHDL Producer~\cite{VHDL_Producer} to the 6 MP7 boards.
-The VHDL Producer for every Trigger Menu creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}), these snippets are inserted into templates for \texttt{gtl\_module.vhd} (\href{\gitbranch/firmware/hdl/payload/gtl/gtl_module_tpl.vhd}{\texttt{gtl\_module\_tpl.vhd}}) and \texttt{fdl\_pkg.vhd} (\href{\gitbranch/firmware/hdl/packages/fdl_pkg_tpl.vhd}{\texttt{fdl\_pkg\_tpl.vhd}}) during simulation and synthesis (see Figure \ref{fig:gtl:tme_gtl}).
+\item A top-of-hierarchy file (\texttt{gtl\_module.vhd}), which contains the pipeline for $\pm$2bx data, the instantiations of calculators for differences in $\eta$ and $\varphi$, the instantiations of conditions, the instantiations of charge correlation logic of muons and the Algorithms logic for 512 Algorithms, as well as a package file (\href{\gitbranch/tree/master/firmware/hdl/packages/gtl_pkg.vhd}{\texttt{gtl\_pkg.vhd}}) for declarations.
+Currently 6 AMC (MP7) boards are used to contain Algorithms.\\
+A software tool called Trigger Menu Editor (TME)~\cite{TME_repo} is available to create a L1Menu with up to 512 Algorithms, which are partitioned by VHDL Producer~\cite{VHDL_Producer} to the 6 MP7 boards.\\
+The VHDL Producer for every Trigger Menu creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}).\\
+These snippets are inserted into templates for \texttt{gtl\_module.vhd} (\href{\gitbranch/tree/master/firmware/hdl/payload/gtl/gtl_module_tpl.vhd}{\texttt{gtl\_module\_tpl.vhd}}), \texttt{algo\_mapping\_rop.vhd} (\href{\gitbranch/tree/master/firmware/hdl/payload/fdl/algo_mapping_rop_tpl.vhd}{\texttt{algo\_mapping\_rop\_tpl.vhd}}) and \texttt{fdl\_pkg.vhd} (\href{\gitbranch/tree/master/firmware/hdl/packages/fdl_pkg_tpl.vhd}{\texttt{fdl\_pkg\_tpl.vhd}}) during simulation and synthesis (see Figure \ref{fig:gtl:tme_gtl}).
 \item A set of VHDL-files exists for all the modules instantiated in top-of-hierarchy and the modules in the hierarchy. These files, called the "fixed part", are not influenced by VHDL Producer.
 \end{itemize}
 
@@ -222,7 +224,7 @@ The top-of-hierarchy module (\texttt{gtl\_module.vhd}) contains
 
 Listing~\ref{lst:gtl:gtl_module_vhd} contains the entity-declaration of the top-of-hierarchy file (\texttt{gtl\_module.vhd}).
 
-All the declarations for arrays ('type'), parameters ('constant') and look-up-tables ('constant') used in modules are available in \texttt{gtl\_pkg.vhd} package-file.
+All the declarations for arrays ('type'), parameters ('constant') and look-up-tables ('constant') used in modules are available in \href{\gitbranch/tree/master/firmware/hdl/packages/gtl_pkg.vhd}{\texttt{gtl\_pkg.vhd}} package-file.
 
 \clearpage
 
@@ -390,17 +392,17 @@ Calo-Layer2 sends 6 frames (each 32 bits) with Energy sum quantities containing 
 \item "Centrality", 8 bits, used as signals
 \end{itemize}
 
-Frame 0: The data structure of "total Et" (\ett) quantity [including "total Et from ECAL only" (ETTEM) and "minimum bias HF+ threshold 0" bits].
+Frame 0: The data structure of "Total Et" (\ett) quantity [including "Total Et from ECAL only" (ETTEM) and "minimum bias HF+ threshold 0" bits].
 
-Frame 1: The data structure of "total calibrated Et in jets" (\htt) quantity [including "towercount" and "minimum bias HF- threshold 0" bits].
+Frame 1: The data structure of "Total calibrated Et in jets" (\htt) quantity [including "towercount" and "minimum bias HF- threshold 0" bits].
 
-Frame 2: The data structure of "missing Et" (\etm) quantity [including "Asymmetry" ASYMET and "minimum bias HF+ threshold 1" bits].
+Frame 2: The data structure of "Missing Et" (\etm) quantity [including "Asymmetry" ASYMET and "minimum bias HF+ threshold 1" bits].
 
-Frame 3: The data structure of "missing Ht" (\htm) quantity [including "Asymmetry" ASYMHT and "minimum bias HF- threshold 1" bits].
+Frame 3: The data structure of "Missing Ht" (\htm) quantity [including "Asymmetry" ASYMHT and "minimum bias HF- threshold 1" bits].
 
-Frame 4: The data structure of "missing Et including HF" (ET$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMETHF and "Centrality" bits (3:0)].
+Frame 4: The data structure of "Missing Et including HF" (ET$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMETHF and "Centrality" bits (3:0)].
 
-Frame 5: The data structure of "missing Ht including HF" (HT$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMHTHF and "Centrality" bits (7:4)].
+Frame 5: The data structure of "Missing Ht including HF" (HT$_{miss}^{HF}$) quantity [including "Asymmetry" ASYMHTHF and "Centrality" bits (7:4)].
 
 \clearpage
 
@@ -741,7 +743,7 @@ Due the limited number of available BRAMs there are some restrictions for creati
 \item The values of LUTs are only valid for current definitions and restrictions. Every change might cause a recalculation of the values and a regeneration of IPs (representing LUTs in BRAMs) in Vivado (firmware generation tool)
 \end{itemize}
 
-The values of LUTs in firmware are listed in coe files of ROMs (created by same scripts mentioned above), currently 5 ROMs for "calo calo" and 6 ROMs for "muon muon" (see \href{\gitbranch/firmware/ngc/lut_calo_inv_dr_sq_rom1.coe}{\texttt{lut\_calo\_inv\_dr\_sq\_rom1.coe}}, etc. and \href{\gitbranch/firmware/ngc/lut_muon_inv_dr_sq_rom1.coe}{\texttt{lut\_muon\_inv\_dr\_sq\_rom1.coe}}, etc.). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. All ROMs for calos have 4096 addresses, for muons 8192 addresses. The data width of ROMs is different depending on the highest LUT value in ROM. Because of these different data widths, the partitioning of several ROMs was done to save BRAM resources. Currently 873 BRAMs (36kb) are available per Virtex chip.
+The values of LUTs in firmware are listed in coe files of ROMs (created by same scripts mentioned above), currently 5 ROMs for "calo calo" and 6 ROMs for "muon muon" (see \href{\gitbranch/tree/master/firmware/ngc/lut_calo_inv_dr_sq_rom1.coe}{\texttt{lut\_calo\_inv\_dr\_sq\_rom1.coe}}, etc. and \href{\gitbranch/tree/master/firmware/ngc/lut_muon_inv_dr_sq_rom1.coe}{\texttt{lut\_muon\_inv\_dr\_sq\_rom1.coe}}, etc.). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. All ROMs for calos have 4096 addresses, for muons 8192 addresses. The data width of ROMs is different depending on the highest LUT value in ROM. Because of these different data widths, the partitioning of several ROMs was done to save BRAM resources. Currently 873 BRAMs (36kb) are available per Virtex chip.
 Following numbers of BRAMs (36kb) are needed for:
 \begin{itemize}
 \item "calo calo": 660
@@ -771,7 +773,7 @@ The calculation of ${pt^2}$ in VHDL (no square root in VHDL) using LUTs for pt1,
 \label{sec:gtl:muon_charge_correlation_module}
 
 For definition of muon charge, see \ref{sec:gtl:muon_data}.\\
-In the muon charge correlation module (\href{\gitbranch/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd}{\texttt{muon\_charge\_correlations.vhd}}), the charge correlations are made for different muon conditions-types. The module is instantiated in the top-of-hierarchy module (\texttt{gtl\_module.vhd})
+In the muon charge correlation module (\href{\gitbranch/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd}{\texttt{muon\_charge\_correlations.vhd}}), the charge correlations are made for different muon conditions-types. The module is instantiated in the top-of-hierarchy module (\texttt{gtl\_module.vhd})
 and not inside of a muon conditions module.
 The charges of objects (number of objects depends on muon condition type) are compared to get "like sign charge" ("LS") or "opposite sign charge" ("0S"), "LS" means that the charges (charge sign)
 of objects are the same, "0S" means that at least one object has different charge than the others. This information is used in all instatiated muon conditions.
@@ -1085,7 +1087,7 @@ Additionally charge correlation cuts with "Double objects requirements condition
 
 \paragraph{Energy sum quantities conditions module (including Asymmetry conditions)}
 
-For the entity-declaration of \href{\gitbranch/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd}{\texttt{esums\_conditions.vhd}}, see Listing~\ref{lst:gtl:esums_conditions_vhd}.
+For the entity-declaration of \href{\gitbranch/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd}{\texttt{esums\_conditions.vhd}}, see Listing~\ref{lst:gtl:esums_conditions_vhd}.
 
 \lstinputlisting[label=lst:gtl:esums_conditions_vhd,language=VHDL,caption=Entity declaration of \texttt{esums\_conditions.vhd}]{interfaces/esums_conditions.vhd}
 

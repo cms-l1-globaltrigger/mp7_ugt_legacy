@@ -174,18 +174,18 @@ In addition there are rate-counters for \finor-signal, Veto-signal and L1A-signa
 \subsubsection{Prescalers}
 \label{sec:fdl:pre_scalers}
 
-Every Algorithm has a prescaler with a prescale factor of 24 bits (\ref{prescale_factor_regs}). The prescaler reduces the trigger-rate per Algorithm with a factor. So a factor of 2 lets every second trigger request of this Algorithm pass, a factor of 3 every third request and so on. 
+Every Algorithm has a prescaler with a prescale factor of 24 bits (\ref{prescale_factor_regs}). The prescaler reduces the trigger-rate per Algorithm with a factor. So a factor of 2 lets every second trigger request of this Algorithm pass, a factor of 3 every third request and so on.
 A prescale factor of 1 lets all triggers pass while a factor of 0 inhibits all trigger requests of the corresponding Algorithm.
 Since 2019 the logic allows also for fractional prescale factor values. Prescale factors are listed in integer or float
-format in prescale tables. 
-The precision of the fractional prescale factor values in the current implementation is 2 (2 digits after decimal point). 
+format in prescale tables.
+The precision of the fractional prescale factor values in the current implementation is 2 (2 digits after decimal point).
 Software multiplies the fractional prescale factor with 10\textsuperscript{\tiny{precision}} (i.e., currently by 100) and loads it into a register.
-At the beginning of a new “luminosity section” (“lumi section”) the factor is updated if during the preceding lumi section the update was requested by software. 
-For this, in the “command pulses” register (\ref{command_pulses_reg}) the value of “request update factor pulse” is first set to 1 and then back to 0. 
-The prescaler then uses the updated factor. 
+At the beginning of a new “luminosity section” (“lumi section”) the factor is updated if during the preceding lumi section the update was requested by software.
+For this, in the “command pulses” register (\ref{command_pulses_reg}) the value of “request update factor pulse” is first set to 1 and then back to 0.
+The prescaler then uses the updated factor.
 A register for the “prescale factor set index” (\ref{prescale_factor_set_index_reg}) contains a value which represents a certain set
-of prescale factors (commonly referred to as “prescale column” in CMS). 
-The content of this register can be seen in the \record, too. 
+of prescale factors (commonly referred to as “prescale column” in CMS).
+The content of this register can be seen in the \record, too.
 The “prescale factor set index” is loaded into the register by software and updated at the beginning of
 the next lumi section (\ref{current_prescale_factor_set_index_updated_reg} and \ref{previous_prescale_factor_set_index_updated_reg}).
 
@@ -203,7 +203,7 @@ and the prescale factor is subtracted from the incremented counter during the ne
 \label{fig:fdl:fractional_prescalers}
 \end{figure}
 
-In Figure (\ref{fig:fdl:fractional_prescalers}) one can see the simulation of a fractional prescaler. In this example the fractional prescale factor is 2.48 and the signal 
+In Figure (\ref{fig:fdl:fractional_prescalers}) one can see the simulation of a fractional prescaler. In this example the fractional prescale factor is 2.48 and the signal
 ”prescale factor int” shows this value multiplied by 10\textsuperscript{\tiny{precision}}, i.e., currently by 100 (so, 248).
 The signal ”algo” is always true, in other words, without prescale this Algorithm would be firing (sending a trigger request) in every bunch crossing. Signal ”prescaled algo o” shows when the trigger request of the prescaled Algorithm is allowed to pass. Signals ”algo cnt sim” and ”prescaled algo cnt sim” show the number of this Algorithm’s trigger requests before and after the prescale logic. At the cursor point a factor 47/19 (\~{=} 2.4737) is reached. With ”algo cnt sim” reaching higher numbers, on average the effective prescale factor gets closer and closer to the requested value of 2.48.
 
@@ -211,13 +211,15 @@ The signal ”algo” is always true, in other words, without prescale this Algo
 \label{sec:fdl:finor_masks}
 
 Every Algorithm passes a \finor-mask, which enables the Algorithm for \finor.
-The \finor-masks are implemented as registers (\ref{masks_regs}) and loaded at the begin of a run.
+The \finor-masks are implemented as registers (\ref{masks_regs}) and loaded at the begin of a run.\\
+Configuration of \finor-masks is done by a "run settings key" (e.g. UGT\_RS\_KEYS => ugt\_rs\_algo\_finor\_mask\_empty/v4)
 
 \subsubsection{Veto-masks}
 \label{sec:fdl:veto_masks}
 
 Every Algorithm passes a veto-mask, if at least one Algorithm, which is enabled by veto-mask, becomes high state, then \finor is disabled as long as the Algorithm is in high state.
-The veto-masks are implemented as registers (\ref{masks_regs}) and loaded at the begin of a run.
+The veto-masks are implemented as registers (\ref{masks_regs}) and loaded at the begin of a run.\\
+Configuration of veto-masks is done by a "run settings key" (e.g. UGT\_RS\_KEYS => ugt\_rs\_algo\_finor\_veto\_all\_zero/v2)
 
 \subsubsection{Finor}
 \label{sec:fdl:finor}

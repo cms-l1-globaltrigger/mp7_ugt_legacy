@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../sim/testbench/algo_pre_scaler_fractional_float_tb.vhd
   - ../sim/scripts/algo_pre_scaler_fractional_float.do
   - ../sim/scripts/algo_pre_scaler_fractional_float_wave.do
+- README.md
 
 ## [v1.20.2] - 2022-09-14
 ### Comment

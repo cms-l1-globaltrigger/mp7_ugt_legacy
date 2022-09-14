@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.21.0] - 2022-08-16
+## [v1.21.0] - 2022-09-14
 ### Comment
 
 - mp7_ugt firmware release v1.21.0
@@ -24,15 +24,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../sim/scripts/algo_pre_scaler_fractional_float.do
   - ../sim/scripts/algo_pre_scaler_fractional_float_wave.do
 
-## [v1.20.2] - 2022-05-31
+## [v1.20.2] - 2022-09-14
 ### Comment
 
 - mp7_ugt firmware release v1.20.2
-- updated script run_simulation_questa.py (removed UGT_GITLAB_PWD)
+- updated script run_simulation_questa.py (removed UGT_GITLAB_PWD) and documentation
 
 ### Changed
 - source files:
   - scripts/run_simulation_questa.py
+- latex files:
+  - doc/mp7_ugt_firmware_specification/src/latex/content/gtl.tex
+  - doc/mp7_ugt_firmware_specification/src/latex/content/fdl.tex
+  - doc/mp7_ugt_firmware_specification/src/latex/content/revision_history_fw.tex
+  - doc/mp7_ugt_firmware_specification/src/latex/content/glossary.tex
+  - doc/mp7_ugt_firmware_specification/src/latex/content/versions.tex
 
 ## [v1.20.1] - 2022-04-28
 ### Comment

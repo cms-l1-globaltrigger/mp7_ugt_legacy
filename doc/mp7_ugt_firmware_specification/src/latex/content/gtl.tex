@@ -183,7 +183,7 @@ The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = ch
         \bitbox {10}    {\texttt{$\varphi$} (extrapol.)} \\
 \end{bytefield}
 \end{center}
-ch = charge bits, s = spare bit, imp = impact parameter.
+ch = charge bits, s = muon shower bit (on MU0, MU2, MU4 and MU6), imp = impact parameter.
 
 \clearpage
 
@@ -998,6 +998,13 @@ JET-JET-InverseDeltaRMath\\
 TAU-TAU-InverseDeltaRMath\\
 MU-MU-InverseDeltaRMath\\
 
+The LUTs are located in BRAMs.\\
+For calo-calo mass over deltaR 5 ROMs are needed to represend the LUT. The content of the LUT one can see in \href{\gitbranch/tree/master/firmware/hdl/ngc/blk_mem_gen_v8_4_4/lut_calo_inv_dr_sq_rom1.coe}{\texttt{lut\_calo\_inv\_dr\_sq\_rom1.coe}} (and so on).\\
+For muon-muon mass over deltaR 6 ROMs are needed to represend the LUT. The content of the LUT one can see in \href{\gitbranch/tree/master/firmware/hdl/ngc/blk_mem_gen_v8_4_4/lut_muon_inv_dr_sq_rom1.coe}{\texttt{lut\_muon\_inv\_dr\_sq\_rom1.coe}} (and so on).\\
+The access to a certain ROM depends on the values of $\Delta\eta$ and $\Delta\varphi$ (see \href{\gitbranch/tree/master/test_rom_lut_calo_inv_dr_sq_all/doc/description_rom_lut_calo_inv_dr_sq.txt}{\texttt{description\_rom\_lut\_calo\_inv\_dr\_sq.txt}} and \href{\gitbranch/tree/master/firmware/hdl/payload/gtl/common/rom_lut_calo_inv_dr_sq_all.vhd}{\texttt{rom\_lut\_calo\_inv\_dr\_sq\_all.vhd}}, respectively\\ 
+\href{\gitbranch/tree/master/test_rom_lut_muon_inv_dr_sq_all/doc/description_rom_lut_muon_inv_dr_sq.txt}{\texttt{description\_rom\_lut\_muon\_inv\_dr\_sq.txt}} and\\
+\href{\gitbranch/tree/master/firmware/hdl/payload/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd}{\texttt{rom\_lut\_muon\_inv\_dr\_sq\_all.vhd}}).\\
+
 \textbf{LUTs for $\cos($$\varphi$$)$ used in two-body pt calculations}
 \label{sec:gtl:calc_luts_cos_phi}
 
@@ -1130,6 +1137,11 @@ Data for Asymmetry trigger are received on 4 frames on bits 27..20 (8 bits). For
 Asymmetry data are interpreted as counts.
 
 \clearpage
+
+\subsubsection{Muon shower bits}
+\label{sec:gtl:muon_shower_bits}
+
+Muon shower bits MUS0, MUS1, MUSOOT0 (muon shower out of time), MUSOOT1 (muon bit 61 on MU0, MU2, MU4 and MU6) can be selected by TME to an algo or combined with other conditions to an algo.
 
 \subsubsection{Minimum bias trigger conditions}
 \label{sec:gtl:min_bias_conditions}

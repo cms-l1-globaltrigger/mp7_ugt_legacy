@@ -48,13 +48,13 @@ DefaultIpbbTag = 'v1.4'
 DefaultIpbbVersion = '0.5.2'
 """Default version IPBB."""
 
-DefaultGitlabUrlMP7 = 'https://:@gitlab.cern.ch:8443/hbergaue/mp7.git'
+DefaultGitlabUrlMP7 = 'https://:@gitlab.cern.ch:8443/cms-cactus/mp7.git'
 """Default URL MP7 FW repo."""
 
 DefaultMP7Tag = 'mp7fw_v3_0_0'
 """Default tag MP7 FW repo."""
 
-mp7fw_ugt_suffix = '_mp7_ugt'
+#mp7fw_ugt_suffix = '_mp7_ugt'
 """Suffix for ugt MP7 FW tag (patched files in MP7 FW)."""
 """Example MP7 FW tag for ugt: mp7fw_v3_0_0_mp7_ugt."""
 
@@ -177,7 +177,7 @@ def main():
         project_type = project_type_repo_name
 
     # Create MP7 tag name for ugt
-    mp7fw_ugt = args.mp7tag + mp7fw_ugt_suffix
+    #mp7fw_ugt = args.mp7tag + mp7fw_ugt_suffix
 
     # ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, menuname, args.build)
     # HB 2019-11-12: inserted mp7_ugt tag and vivado version in directory name and changed order
@@ -194,12 +194,17 @@ def main():
     # IPBB commands: creating IPBB area
     cmd_ipbb_init = "ipbb init {ipbb_dir}".format(**locals())
     cmd_ipbb_add_ipb = "ipbb add git {args.ipburl} -b {args.ipb}".format(**locals())
-    cmd_ipbb_add_mp7 = "ipbb add git {args.mp7url} -b {mp7fw_ugt}".format(**locals())
+    cmd_ipbb_add_mp7 = "ipbb add git {args.mp7url} -b {args.mp7tag}".format(**locals())
     cmd_ipbb_add_ugt = "ipbb add git {args.ugturl} -b {args.ugt}".format(**locals())
 
     logging.info("===========================================================================")
     logging.info("creating IPBB area ...")
     command = 'bash -c "cd; {cmd_ipbb_init}; cd {ipbb_dir}; {cmd_ipbb_add_ipb} && {cmd_ipbb_add_mp7} && {cmd_ipbb_add_ugt}"'.format(**locals())
+    run_command(command)
+
+    logging.info("===========================================================================")
+    logging.info("patch MP7 firmware for ugt ...")
+    command = 'bash -c "cd; python3 {ipbb_dir}/src/mp7_ugt_legacy/scripts/mp7patch.py "'.format(**locals())
     run_command(command)
 
     logging.info("===========================================================================")

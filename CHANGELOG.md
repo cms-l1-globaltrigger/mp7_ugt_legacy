@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.20.3] - 2022-09-16
+### Comment
+
+- mp7_ugt firmware release v1.20.3
+- updated scripts for MP7 patch in run_synth_ipbb.py
+
+### Changed
+- script files:
+  - scripts/mp7patch.py
+  - scripts/run_synth_ipbb.py
+
 ## [v1.20.2] - 2022-05-31
 ### Comment
 

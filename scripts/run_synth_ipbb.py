@@ -333,7 +333,7 @@ def main():
     config.set('firmware', 'ipbtag', args.ipb)
     config.set('firmware', 'mp7url', args.mp7url)
     config.set('firmware', 'mp7tag', args.mp7tag)
-    config.set('firmware', 'mp7fw_ugt', mp7fw_ugt)
+    #config.set('firmware', 'mp7fw_ugt', mp7fw_ugt)
     config.set('firmware', 'ugturl', args.ugturl)
     config.set('firmware', 'ugttag', args.ugt)
     config.set('firmware', 'type', project_type)

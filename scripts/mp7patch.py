@@ -19,8 +19,6 @@ def replace_area_constraints(filename):
     if count != 1:
         raise RuntimeError("Could not replace add_cells_to_pblock line.")
 
-    print(content)
-
     with open(filename, "w") as fp:
         fp.write(content)
         logging.info("Successfully patched area_constraints file '{}'".format(filename))
@@ -47,7 +45,7 @@ def insert_l1a_ttc(filename):
     content = tb.read_file(filename)
 
     expr_payload = re.compile(r"(\s*ctrs\s*=>\s*ctrs\s*,)(\s*bc0\s*=>\s*payload_bc0\s*,)")
-    l1a_str = "\n                l1a => ttc_l1a,"
+    l1a_str = "\n           l1a => ttc_l1a,"
 
     content, count = expr_payload.subn(r"\g<1>{l1a_str}\g<2>".format(**locals()), content)
     if count != 1:

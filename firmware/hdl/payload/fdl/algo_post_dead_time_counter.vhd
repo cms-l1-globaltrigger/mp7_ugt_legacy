@@ -2,11 +2,8 @@
 -- Desription:
 -- Rate counter for algorithms in FDL
 
-<<<<<<< HEAD
 -- HB 2022-09-06: cleaned up.
-=======
 -- HB 2022-08-16: removed unused signal sres_counter.
->>>>>>> master
 -- HB 2016-06-28: removed clock domain change for counter_o.
 -- HB 2015-09-17: inserted "clear counter value in the "output" register for reading by IPBus" with sres_counter = '1'.
 

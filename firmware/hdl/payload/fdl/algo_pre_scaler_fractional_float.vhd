@@ -24,7 +24,6 @@ entity algo_pre_scaler is
    );
    port( 
       clk : in std_logic;
-      sres_counter : in std_logic;
       algo_i : in std_logic;
       start : in std_logic;
       request_update_factor_pulse : in std_logic;
@@ -50,17 +49,17 @@ architecture rtl of algo_pre_scaler is
 begin
 
     prescale_factor_update_i: entity work.update_process
-    generic map(
-        WIDTH => PRESCALE_FACTOR_WIDTH,
-        INIT_VALUE => PRESCALE_FACTOR_INIT
-    )
-    port map( 
-        clk => clk,
-        request_update_pulse => request_update_factor_pulse,
-        update_pulse => update_factor_pulse,
-        data_i => prescale_factor(PRESCALE_FACTOR_WIDTH-1 downto 0),
-        data_o => prescale_factor_int(PRESCALE_FACTOR_WIDTH-1 downto 0)
-    );
+        generic map(
+            WIDTH => PRESCALE_FACTOR_WIDTH,
+            INIT_VALUE => PRESCALE_FACTOR_INIT
+        )
+        port map( 
+            clk => clk,
+            request_update_pulse => request_update_factor_pulse,
+            update_pulse => update_factor_pulse,
+            data_i => prescale_factor(PRESCALE_FACTOR_WIDTH-1 downto 0),
+            data_o => prescale_factor_int(PRESCALE_FACTOR_WIDTH-1 downto 0)
+        );
     
     factor <= prescale_factor_int(PRESCALE_FACTOR_WIDTH-1 downto 0);
     

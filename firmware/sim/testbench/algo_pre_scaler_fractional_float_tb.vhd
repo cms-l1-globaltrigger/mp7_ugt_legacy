@@ -27,7 +27,7 @@ architecture beh of algo_pre_scaler_fractional_TB is
     constant LHC_CLK_PERIOD  : time :=  25 ns;
 
     signal lhc_clk : std_logic;
-    signal sres_counter, request_update_factor_pulse, update_factor_pulse : std_logic := '0';
+    signal request_update_factor_pulse, update_factor_pulse, start : std_logic := '0';
     signal algo : std_logic := '1';
     signal algo_o : std_logic;
     signal prescale_factor : std_logic_vector(PRESCALE_FACTOR_WIDTH-1 downto 0) := (others => '0');

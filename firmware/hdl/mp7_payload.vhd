@@ -2,6 +2,7 @@
 -- Description:
 -- Global trigger top module (contains payload of MP7 for uGT)
 
+-- HB 2022-08-16: signal start_sync_bc0_int used for reset for prescale counter (instead of "begin of lumi"). Removed sres signals for counters in FDL, not used anymore.
 -- HB 2022-03-22: signals bcres_d and bcres_d_FDL not used anymore. Updated frame.vhd, tcm.vhd and output_mux.vhd.
 -- HB 2021-06-02: updated for new directory structure without gtl_fdl_wrapper.vhd (implemented gtl_module and fdl_module).
 -- HB 2017-10-06: renamed signal "dsmux_lhc_data" to "lhc_data_2_gtl" (similar to port name of frame).
@@ -197,6 +198,7 @@ begin
             lhc_rst => lhc_rst,
             bcres => bc0_in,
             test_en => test_en_int,
+            start => start_sync_bc0_int,
             l1a => l1a,
             begin_lumi_section => start_lumisection,
             algo_i => algo,

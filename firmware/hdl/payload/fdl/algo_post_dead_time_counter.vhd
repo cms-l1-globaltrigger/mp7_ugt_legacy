@@ -2,7 +2,11 @@
 -- Desription:
 -- Rate counter for algorithms in FDL
 
+<<<<<<< HEAD
 -- HB 2022-09-06: cleaned up.
+=======
+-- HB 2022-08-16: removed unused signal sres_counter.
+>>>>>>> master
 -- HB 2016-06-28: removed clock domain change for counter_o.
 -- HB 2015-09-17: inserted "clear counter value in the "output" register for reading by IPBus" with sres_counter = '1'.
 
@@ -20,7 +24,6 @@ entity algo_post_dead_time_counter is
    port( 
       lhc_clk          : in     std_logic;
       lhc_rst          : in     std_logic;
-      sres_counter     : in     std_logic;
       store_cnt_value  : in     std_logic;
       l1a              : in     std_logic;
       delay            : in     std_logic_vector(log2c(MAX_DELAY)-1 downto 0);
@@ -58,10 +61,10 @@ begin
             delay       => delay
         );
 
-   counter_p: process (lhc_clk, sres_counter, store_cnt_value, algo_delayed(0))
+   counter_p: process (lhc_clk, store_cnt_value, algo_delayed(0))
    begin
       if lhc_clk'event and lhc_clk = '1' then
-        if sres_counter = '1' or store_cnt_value = '1' then
+        if store_cnt_value = '1' then
             counter <= (others => '0'); -- clear counter with synchr. reset and store_cnt_value (which is begin of lumi section)
          elsif limit = '1' then
             counter <= counter_end;

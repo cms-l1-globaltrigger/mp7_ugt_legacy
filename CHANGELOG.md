@@ -4,11 +4,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.20.3] - 2022-09-14
+## [v1.21.1] - 2022-09-19
 ### Comment
 
-- mp7_ugt firmware release v1.20.3
+- mp7_ugt firmware release v1.21.1
 - cleaned up VHDL code
+
+## [v1.21.0] - 2022-09-14
+### Comment
+
+- mp7_ugt firmware release v1.21.0
+- changed reset for prescale counter from "begin of lumi" to "start"
+
+### Changed
+- source files:
+  - ../mp7_payload.vhd
+  - ../payload/fdl_module.vhd
+  - ../payload/fdl/algo_slice.vhd
+  - ../payload/fdl/algo_pre_scaler_fractional_float.vhd
+  - ../payload/fdl/algo_post_dead_time_counter.vhd
+  - ../payload/fdl/algo_rate_counter.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+- simulation files:
+  - ../sim/testbench/algo_pre_scaler_fractional_float_tb.vhd
+  - ../sim/scripts/algo_pre_scaler_fractional_float.do
+  - ../sim/scripts/algo_pre_scaler_fractional_float_wave.do
+- README.md
 
 ## [v1.20.2] - 2022-09-14
 ### Comment
@@ -17,7 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - updated script run_simulation_questa.py (removed UGT_GITLAB_PWD) and documentation
 
 ### Changed
-- script files:
+- source files:
   - scripts/run_simulation_questa.py
 - latex files:
   - doc/mp7_ugt_firmware_specification/src/latex/content/gtl.tex

@@ -2,7 +2,8 @@
 -- FDL structure
 
 -- Version-history:
--- HB 2022-09-08: v1.3.8 - based on v1.3.7, cleaned up. Removed unused output bx_nr_out.
+-- HB 2022-09-08: v1.4.1 - based on v1.4.0, cleaned up. Removed unused output bx_nr_out.
+-- HB 2022-08-16: v1.4.0 - based on v1.3.7, port signal start (start_sync_bc0_int) used for reset of prescale counter (instead of begin_lumi_section). Removed sres signals for counters, not used anymore.
 -- HB 2022-02-08: v1.3.7 - based on v1.3.6, FRAME_VERSION (instead of SVN_REVISION_NUMBER) in register OFFSET_SVN_REVISION_NUMBER.
 -- HB 2019-10-02: v1.3.6 - based on v1.3.5, removed use clause.
 -- HB 2019-10-02: v1.3.5 - based on v1.3.4, changed logic for fractional prescaler - using 32 bits including 2 fractional digits for prescale factor.
@@ -99,6 +100,7 @@ entity fdl_module is
         lhc_rst             : in std_logic;
         bcres               : in std_logic;
         test_en             : in std_logic;
+        start               : in std_logic;
         l1a                 : in std_logic;
         begin_lumi_section  : in std_logic;
         algo_i              : in std_logic_vector(NR_ALGOS-1 downto 0);
@@ -134,7 +136,6 @@ architecture rtl of fdl_module is
     constant FINOR_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
     constant VETO_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
     constant L1A_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
---     constant MAX_DELAY_L1A_LATENCY : integer := 64;
     constant MAX_DELAY_L1A_LATENCY : integer := 63; -- values = 2**x causes "fatal error" at simulation in module "delay_element.vhd" !!!
 
     signal ipb_to_slaves: ipb_wbus_array(NR_IPB_SLV_FDL-1 downto 0);
@@ -157,21 +158,15 @@ architecture rtl of fdl_module is
 -- =================================================================================
 
     signal algo_int : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
-    signal sres_algo_pre_scaler : std_logic := '0';
-    signal sres_algo_rate_counter : std_logic := '0';
 
-    signal sres_finor_rate_counter : std_logic := '0';
     signal rate_cnt_finor_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
     signal rate_cnt_finor_preview_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
-    signal sres_veto_rate_counter : std_logic := '0';
     signal rate_cnt_veto_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
-    signal sres_l1a_rate_counter : std_logic := '0';
     signal rate_cnt_l1a_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
-    signal sres_algo_post_dead_time_counter : std_logic := '0';
     signal l1a_latency_delay_reg : ipb_regs_array(0 to 1) := (others => (others => '0'));
 
     signal algo_after_bxomask : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
@@ -830,16 +825,6 @@ begin
         veto_masks_global(i) <= masks_reg(i)(VETO_BIT_IN_MASKS_REG);
     end generate masks_reg_l;
 
---===============================================================================================--
-
--- HB 2016-02-23: sync reset for counters not used anymore - resync was a bug !!! Reset with begin of lumi-section is ok.
-    sres_algo_rate_counter <= '0';
-    sres_algo_pre_scaler <= '0';
-    sres_finor_rate_counter <= '0';
-    sres_veto_rate_counter <= '0';
-    sres_l1a_rate_counter <= '0';
-    sres_algo_post_dead_time_counter <= '0';
-
 -- ******************************************************************************************************************
 -- FDL data flow - begin
 
@@ -865,10 +850,8 @@ begin
         port map(
             lhc_clk => lhc_clk,
             lhc_rst => lhc_rst,
-            sres_algo_rate_counter => sres_algo_rate_counter,
-            sres_algo_pre_scaler => sres_algo_pre_scaler,
-            sres_algo_post_dead_time_counter => sres_algo_post_dead_time_counter,
             suppress_cal_trigger => suppress_cal_trigger,
+            start => start,
             l1a => l1a,
             l1a_latency_delay => l1a_latency_delay_reg(0)(log2c(MAX_DELAY_L1A_LATENCY)-1 downto 0),
             request_update_factor_pulse => request_update_factor_pulse,
@@ -885,8 +868,8 @@ begin
             algo_after_bxomask => algo_after_bxomask(i),
             algo_after_prescaler => algo_after_prescaler(i),
             algo_after_prescaler_preview => algo_after_prescaler_preview(i),
-	    veto => veto(i)
-	);
+            veto => veto(i)
+    );
     end generate algo_slices_l;
 
 -- Finors
@@ -979,7 +962,6 @@ begin
         )
         port map(
                 lhc_clk => lhc_clk,
-                sres_counter => sres_finor_rate_counter,
                 store_cnt_value => begin_lumi_section,
                 algo_i => local_finor,
                 counter_o => rate_cnt_finor_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
@@ -992,7 +974,6 @@ begin
         )
         port map(
                 lhc_clk => lhc_clk,
-                sres_counter => sres_finor_rate_counter,
                 store_cnt_value => begin_lumi_section,
                 algo_i => local_finor_preview,
                 counter_o => rate_cnt_finor_preview_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
@@ -1006,7 +987,6 @@ begin
         )
         port map(
                 lhc_clk => lhc_clk,
-                sres_counter => sres_veto_rate_counter,
                 store_cnt_value => begin_lumi_section,
                 algo_i => local_veto,
                 counter_o => rate_cnt_veto_reg(0)(VETO_RATE_COUNTER_WIDTH-1 downto 0)
@@ -1020,7 +1000,6 @@ begin
         )
         port map(
             lhc_clk => lhc_clk,
-            sres_counter => sres_l1a_rate_counter,
             store_cnt_value => begin_lumi_section,
             algo_i => l1a,
             counter_o => rate_cnt_l1a_reg(0)(L1A_RATE_COUNTER_WIDTH-1 downto 0)

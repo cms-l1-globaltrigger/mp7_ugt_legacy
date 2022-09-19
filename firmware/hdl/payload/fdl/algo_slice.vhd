@@ -5,6 +5,7 @@
 
 -- Version-history:
 -- HB 2022-09-06: cleaned up.
+-- HB 2022-08-16: port signal start (start_sync_bc0_int) used for reset of prescale counter (instead of begin_lumi_section). Removed sres signals for counters, not used anymore.
 -- HB 2019-09-26: new generic parameter PRESCALE_FACTOR_WIDTH (removed PRESCALER_COUNTER_WIDTH amd PRESCALER_FRACTION_WIDTH).
 -- HB 2019-06-03: updated for fractional pre-scaler values.
 -- HB 2017-01-10: fixed bug with 1 bx delay for "begin_lumi_per" for rate counter after pre-scaler.
@@ -33,12 +34,9 @@ entity algo_slice is
     port( 
         lhc_clk : in std_logic;
         lhc_rst : in std_logic;
--- HB 2015-09-17: added "sres_algo_rate_counter" and "sres_algo_pre_scaler"
-        sres_algo_rate_counter : in std_logic;
-        sres_algo_pre_scaler : in std_logic;
-        sres_algo_post_dead_time_counter : in std_logic;
 -- HB 2016-06-17: added suppress_cal_trigger, used to suppress counting algos caused by calibration trigger at bx=3490.
         suppress_cal_trigger : in std_logic; -- pos. active signal: '1' = suppression of algos caused by calibration trigger !!!
+        start : in std_logic;
 -- HB 2015-09-2: added "l1a" and "l1a_latency_delay" for post-dead-time counter
         l1a : in std_logic;
         l1a_latency_delay : in std_logic_vector(log2c(MAX_DELAY)-1 downto 0);
@@ -85,26 +83,25 @@ begin
         )
         port map( 
             lhc_clk => lhc_clk,
-            sres_counter => sres_algo_rate_counter,
             store_cnt_value => begin_lumi_per,
             algo_i => algo_after_algo_bx_mask_int,
             counter_o => rate_cnt_before_prescaler
         );
 
     prescaler_i: entity work.algo_pre_scaler
-        generic map( 
-            PRESCALE_FACTOR_WIDTH => PRESCALE_FACTOR_WIDTH,
-            PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT
+    generic map( 
+        PRESCALE_FACTOR_WIDTH => PRESCALE_FACTOR_WIDTH,
+        PRESCALE_FACTOR_INIT => PRESCALE_FACTOR_INIT
     )
-        port map( 
-            clk => lhc_clk,
-            sres_counter => sres_algo_pre_scaler,
-            algo_i => algo_after_algo_bx_mask_int,
-            request_update_factor_pulse => request_update_factor_pulse,
-            update_factor_pulse => begin_lumi_per,
-            prescale_factor => prescale_factor,
-            prescaled_algo_o => algo_after_prescaler_int
-        );
+    port map( 
+        clk => lhc_clk,
+        algo_i => algo_after_algo_bx_mask_int,
+        start => start,
+        request_update_factor_pulse => request_update_factor_pulse,
+        update_factor_pulse => begin_lumi_per,
+        prescale_factor => prescale_factor,
+        prescaled_algo_o => algo_after_prescaler_int
+    );
 
     veto <= algo_after_prescaler_int and veto_mask;
 
@@ -115,7 +112,6 @@ begin
         )
         port map( 
             lhc_clk => lhc_clk,
-            sres_counter => sres_algo_rate_counter,
             store_cnt_value => begin_lumi_per_del1,
             algo_i => algo_after_prescaler_int,
             counter_o => rate_cnt_after_prescaler
@@ -131,8 +127,8 @@ begin
         )
         port map( 
             clk => lhc_clk,
-            sres_counter => sres_algo_pre_scaler,
             algo_i => algo_after_algo_bx_mask_int,
+            start => start,
             request_update_factor_pulse => request_update_factor_pulse,
             update_factor_pulse => begin_lumi_per,
             prescale_factor => prescale_factor_preview,
@@ -145,7 +141,6 @@ begin
         )
         port map( 
             lhc_clk => lhc_clk,
-            sres_counter => sres_algo_rate_counter,
             store_cnt_value => begin_lumi_per_del1,
             algo_i => algo_after_prescaler_preview_int,
             counter_o => rate_cnt_after_prescaler_preview
@@ -164,7 +159,6 @@ begin
         port map( 
             lhc_clk => lhc_clk,
             lhc_rst => lhc_rst,
-            sres_counter => sres_algo_post_dead_time_counter,
             store_cnt_value => begin_lumi_per,
             l1a => l1a,
             delay => l1a_latency_delay,

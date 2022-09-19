@@ -45,18 +45,13 @@ DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware.git'
 DefaultIpbbTag = 'v1.4'
 """Default tag IPB FW repo."""
 
-DefaultIpbbVersion = '0.5.2'
-"""Default version IPBB."""
-
-DefaultGitlabUrlMP7 = 'https://:@gitlab.cern.ch:8443/cms-cactus/mp7.git'
+## HB 2022-09-16: using MP7 firmware from "original" repo, patching of MP7 firmware done in this script.
+DefaultGitlabUrlMP7 = 'https://:@gitlab.cern.ch:8443/cms-cactus/firmware/mp7.git'
 """Default URL MP7 FW repo."""
 
-DefaultMP7Tag = 'mp7fw_v3_0_0'
+## HB 2022-09-16: using tag of MP7 firmware "original" repo
+DefaultMP7Tag = 'v3.0.0'
 """Default tag MP7 FW repo."""
-
-#mp7fw_ugt_suffix = '_mp7_ugt'
-"""Suffix for ugt MP7 FW tag (patched files in MP7 FW)."""
-"""Example MP7 FW tag for ugt: mp7fw_v3_0_0_mp7_ugt."""
 
 vhdl_snippets = (
     'algo_index.vhd',
@@ -114,7 +109,6 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('menu_xml', help="path to menu xml file (in repository or local")
     parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version to run (default is '{}')".format(DefaultVivadoVersion))
-    parser.add_argument('--ipbb', metavar='<version>', default=DefaultIpbbVersion, type=tb.ipbb_version_t, help="IPBus builder version [tag] (default is '{}')".format(DefaultIpbbVersion))
     parser.add_argument('--ipburl', metavar='<path>', default=DefaultGitlabUrlIPB, help="URL of IPB firmware repo (default is '{}')".format(DefaultGitlabUrlIPB))
     parser.add_argument('-i', '--ipb', metavar='<tag>', default=DefaultIpbbTag, help="IPBus firmware repo: tag or branch name (default is '{}')".format(DefaultIpbbTag))
     parser.add_argument('--mp7url', metavar='<path>', default=DefaultGitlabUrlMP7, help="URL of MP7 firmware repo (default is '{}')".format(DefaultGitlabUrlMP7))
@@ -176,20 +170,13 @@ def main():
     else:
         project_type = project_type_repo_name
 
-    # Create MP7 tag name for ugt
-    #mp7fw_ugt = args.mp7tag + mp7fw_ugt_suffix
-
-    # ipbb_dir = os.path.join(args.path, project_type, args.mp7tag, menuname, args.build)
     # HB 2019-11-12: inserted mp7_ugt tag and vivado version in directory name and changed order
     vivado_version = "vivado_" + args.vivado
     ipbb_dir = os.path.join(args.path, args.build, menuname, project_type, args.ugt, args.mp7tag, vivado_version)
     ipbb_dir_build = os.path.join(args.path, args.build)
 
     if os.path.isdir(ipbb_dir_build):
-        #raise RuntimeError("build area already exists: {}".format(ipbb_dir_build))
         raise RuntimeError("\033[1;31m build area already exists: {} \033[0m".format(ipbb_dir_build))
-
-    ipbb_version = args.ipbb
 
     # IPBB commands: creating IPBB area
     cmd_ipbb_init = "ipbb init {ipbb_dir}".format(**locals())
@@ -199,12 +186,23 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("creating IPBB area ...")
-    command = 'bash -c "cd; {cmd_ipbb_init}; cd {ipbb_dir}; {cmd_ipbb_add_ipb} && {cmd_ipbb_add_mp7} && {cmd_ipbb_add_ugt}"'.format(**locals())
+    command = 'bash -c "cd; {cmd_ipbb_init}; cd {ipbb_dir}; ipbb --version > temp_ipbb_version.txt; {cmd_ipbb_add_ipb} && {cmd_ipbb_add_mp7} && {cmd_ipbb_add_ugt}"'.format(**locals())
     run_command(command)
 
+    ### get ipbb version
+    ipbb_version_file = os.path.join(ipbb_dir, 'temp_ipbb_version.txt')
+    with open(ipbb_version_file) as fp:
+        ipbb_version_str = fp.read()
+    ipbb_version = ipbb_version_str.split(' ')[2]
+    ipbb_version = ipbb_version.strip()
+    logging.info("ipbb_version: %s",ipbb_version)
+    command = 'bash -c "cd {ipbb_dir}; rm temp_ipbb_version.txt"'.format(**locals())
+    run_command(command)
+
+    ## HB 2022-09-16: patching of MP7 firmware (using MP7 firmware from original repo).
     logging.info("===========================================================================")
     logging.info("patch MP7 firmware for ugt ...")
-    command = 'bash -c "cd; python3 {ipbb_dir}/src/mp7_ugt_legacy/scripts/mp7patch.py "'.format(**locals())
+    command = 'bash -c "cd; python3 {ipbb_dir}/src/mp7_ugt_legacy/scripts/mp7patch.py {ipbb_dir}/src/mp7"'.format(**locals())
     run_command(command)
 
     logging.info("===========================================================================")
@@ -324,7 +322,7 @@ def main():
 
     config.add_section('ipbb')
     config.set('ipbb', 'version', ipbb_version)
-
+    
     config.add_section('vivado')
     config.set('vivado', 'version', args.vivado)
 
@@ -333,7 +331,6 @@ def main():
     config.set('firmware', 'ipbtag', args.ipb)
     config.set('firmware', 'mp7url', args.mp7url)
     config.set('firmware', 'mp7tag', args.mp7tag)
-    #config.set('firmware', 'mp7fw_ugt', mp7fw_ugt)
     config.set('firmware', 'ugturl', args.ugturl)
     config.set('firmware', 'ugttag', args.ugt)
     config.set('firmware', 'type', project_type)

@@ -17,6 +17,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/top_decl.vhd
   - ../packages/gt_mp7_core_pkg.vhd
 
+## [v1.21.1] - 2022-09-16
+### Comment
+
+- mp7_ugt firmware release v1.21.1
+- updated scripts for MP7 patch in run_synth_ipbb.py
+
+### Changed
+- script files:
+  - scripts/mp7patch.py
+  - scripts/run_synth_ipbb.py
+
 ## [v1.21.0] - 2022-09-14
 ### Comment
 

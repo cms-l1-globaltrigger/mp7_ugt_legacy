@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v1.21.1] - 2022-09-16
 ### Comment
 
-- mp7_ugt firmware release v1.20.3
+- mp7_ugt firmware release v1.21.1
 - updated scripts for MP7 patch in run_synth_ipbb.py
 
 ### Changed

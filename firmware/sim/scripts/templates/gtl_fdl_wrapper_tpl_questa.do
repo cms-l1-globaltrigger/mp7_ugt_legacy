@@ -39,7 +39,6 @@ vmap work work
 ## MP7 files
 vcom -93 -work work $MP7/components/mp7_datapath/firmware/hdl/mp7_data_types.vhd
 vcom -93 -work work $MP7/boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7_brd_decl.vhd
-vcom -93 -work work $MP7/components/mp7_ttc/firmware/hdl/mp7_ttc_decl.vhd
 vcom -93 -work work $MP7/boards/mp7/base_fw/common/firmware/hdl/mp7_top_decl.vhd
 vcom -93 -work work $IPB_DIR/components/ipbus_core/firmware/hdl/ipbus_package.vhd
 vcom -93 -work work $IPB_DIR/components/ipbus_core/firmware/hdl/ipbus_trans_decl.vhd
@@ -52,6 +51,7 @@ vcom -93 -work work $HDL_DIR/packages/math_pkg.vhd
 ## HB 2022-09-21: used gt_mp7_top_pkg_sim.vhd for simulation
 vcom -93 -work work $HDL_DIR/packages/gt_mp7_top_pkg_sim.vhd
 vcom -93 -work work $HDL_DIR/packages/top_decl.vhd
+vcom -93 -work work $MP7/components/mp7_ttc/firmware/hdl/mp7_ttc_decl.vhd
 vcom -93 -work work $HDL_DIR/packages/gt_mp7_core_pkg.vhd
 vcom -93 -work work $MENU_DIR/fdl_pkg.vhd
 vcom -93 -work work $HDL_DIR/packages/fdl_addr_decode.vhd

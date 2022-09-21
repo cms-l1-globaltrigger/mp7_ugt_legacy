@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.21.1] - 2022-09-16
+## [v1.21.1] - 2022-09-21
 ### Comment
 
 - mp7_ugt firmware release v1.21.1
@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - script files:
   - scripts/mp7patch.py
   - scripts/run_synth_ipbb.py
+  - scripts/run_simulation_questa.py
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+
+### Added
+- source files:
+  - ../packages/gt_mp7_top_pkg_sim.vhd
 
 ## [v1.21.0] - 2022-09-14
 ### Comment

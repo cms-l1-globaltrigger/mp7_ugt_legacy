@@ -3,6 +3,7 @@
 -- Multiplexer for read-out record data.
 
 -- Version-history:
+-- HB 2022-09-21: changed lanes, because ZDC optical links located on lanes 16..19, therefore output lanes moved.
 -- HB 2022-03-22: Port bx_nr_fdl removed, contains same data as bx_nr (because bcres_d and bcres_d_FDL are the same signal: delayed bc0 [bc0_d_int in frame.vhd]).
 -- HB 2021-06-16: implemented selectors and orbit counter to quad 6 for "scouting".
 -- HB 2021-05-14: added fdl_pkg use clause.
@@ -54,7 +55,7 @@ end output_mux;
 
 architecture arch of output_mux is
 
-    constant begin_output_links: positive := 20; 
+    constant first_output_lane: positive := 20; 
 
     signal sValid : std_logic := '0';
 
@@ -102,7 +103,7 @@ begin
             in3     =>  s_in3_mux0,   -- frame 3   -> algo_after_gtLogic 96-127
             in4     =>  s_in4_mux0,   -- frame 4   -> algo_after_gtLogic 128-159
             in5     =>  s_in5_mux0,   -- frame 5   -> algo_after_gtLogic 160-191
-            mux_out =>  lane_out(begin_output_links+1)
+            mux_out =>  lane_out(first_output_lane+0)
         );
 
 
@@ -125,7 +126,7 @@ begin
             in3     =>  s_in3_mux1,    -- frame 3   -> algo_after_gtLogic 288-319
             in4     =>  s_in4_mux1,    -- frame 4   -> algo_after_gtLogic 320-351
             in5     =>  s_in5_mux1,    -- frame 5   -> algo_after_gtLogic 352-383
-            mux_out =>  lane_out(begin_output_links+2)
+            mux_out =>  lane_out(first_output_lane+1)
         );
 
 
@@ -149,7 +150,7 @@ begin
             in4     =>  s_in4_mux2,    -- frame 4   -> free
             in5     =>  s_in5_mux2,    -- frame 5   -> free
             -- sel     =>  frame_cntr,
-            mux_out =>  lane_out(begin_output_links+3)
+            mux_out =>  lane_out(first_output_lane+2)
         );
 
 
@@ -172,7 +173,7 @@ begin
             in3     =>  s_in3_mux3,   -- frame 3   -> algo_after_bxomask 96-127
             in4     =>  s_in4_mux3,   -- frame 4   -> algo_after_bxomask 128-159
             in5     =>  s_in5_mux3,   -- frame 5   -> algo_after_bxomask 160-191
-            mux_out =>  lane_out(begin_output_links+4)
+            mux_out =>  lane_out(first_output_lane+3)
         );
 
 
@@ -195,7 +196,7 @@ begin
             in3     =>  s_in3_mux4,    -- frame 3   -> algo_after_bxomask 288-319
             in4     =>  s_in4_mux4,    -- frame 4   -> algo_after_bxomask 320-351
             in5     =>  s_in5_mux4,    -- frame 5   -> algo_after_bxomask 352-383
-            mux_out =>  lane_out(begin_output_links+5)
+            mux_out =>  lane_out(first_output_lane+4)
         );
 
 
@@ -219,7 +220,7 @@ begin
             in4     =>  s_in4_mux5,    -- frame 4   -> free
             in5     =>  s_in5_mux5,    -- frame 5   -> free
             -- sel     =>  frame_cntr,
-            mux_out =>  lane_out(begin_output_links+6)
+            mux_out =>  lane_out(first_output_lane+5)
         );
 
 
@@ -242,7 +243,7 @@ begin
             in3     =>  s_in3_mux6,   -- frame 3   -> algo_after_prescaler_mask 96-127
             in4     =>  s_in4_mux6,   -- frame 4   -> algo_after_prescaler_mask 128-159
             in5     =>  s_in5_mux6,   -- frame 5   -> algo_after_prescaler_mask 160-191
-            mux_out =>  lane_out(begin_output_links+7)
+            mux_out =>  lane_out(first_output_lane+6)
         );
 
 
@@ -265,7 +266,7 @@ begin
             in3     =>  s_in3_mux7,    -- frame 3   -> algo_after_prescaler_mask 288-319
             in4     =>  s_in4_mux7,    -- frame 4   -> algo_after_prescaler_mask 320-351
             in5     =>  s_in5_mux7,    -- frame 5   -> algo_after_prescaler_mask 352-383
-            mux_out =>  lane_out(begin_output_links+8)
+            mux_out =>  lane_out(first_output_lane+7)
         );
 
 
@@ -289,7 +290,7 @@ begin
             in3     =>  s_in3_mux8,    -- frame 3   -> algo_after_prescaler_mask 480-511
             in4     =>  s_in4_mux8,    -- frame 4   -> finor
             in5     =>  s_in5_mux8,    -- frame 5   -> free
-            mux_out =>  lane_out(begin_output_links+9)
+            mux_out =>  lane_out(first_output_lane+8)
         );
 
     -- JW 2015-08-24: added local and mp7 bc_cntr to output
@@ -324,7 +325,7 @@ begin
             in3     =>  s_in3_mux9,    -- frame 3   -> free / orbit counter 47..32
             in4     =>  s_in4_mux9,    -- frame 4   -> free / orbit counter 31..0
             in5     =>  s_in5_mux9,    -- frame 5   -> free
-            mux_out =>  lane_out(begin_output_links+10)
+            mux_out =>  lane_out(first_output_lane+9)
         );
 
 end architecture;

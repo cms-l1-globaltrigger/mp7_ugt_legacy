@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/frame/lmp.vhd
   - ../packages/top_decl.vhd
   - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/lhc_data_pkg.vhd
+- script files:
+  - scripts/mp7patch.py
 
 ## [v1.21.1] - 2022-09-21
 ### Comment

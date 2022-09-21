@@ -77,13 +77,8 @@ package gt_mp7_core_pkg is
 -- ==================================================================================================
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
-<<<<<<< HEAD
     constant GT_MINOR_VERSION      : integer range 0 to 255 := 22;
     constant GT_REV_VERSION        : integer range 0 to 255 := 0;
-=======
-    constant GT_MINOR_VERSION      : integer range 0 to 255 := 21;
-    constant GT_REV_VERSION        : integer range 0 to 255 := 1;
->>>>>>> patch_mp7fw
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &

@@ -1,4 +1,5 @@
 
+-- HB 2022-09-21: added ZDC
 -- HB 2106-05-31: lane mapping for all frames of calo links (for extended test-vector-file structure - see lhc_data_pkg.vhd)
 -- HEPHY 2014-05-20: changed lane mapping for muons from 0,1,2,3 to 2,3,4,5 of 240MHz objects -
 
@@ -11,21 +12,21 @@ use work.gt_mp7_core_pkg.all;
 use work.lhc_data_pkg.all;
 
 entity lmp is
-	generic
-	(
-        	NR_LANES: positive
-	);
-	port
-	(
-		demux_data_i		: in demux_lanes_data_objects_array_t(NR_LANES-1 downto 0);
-		demux_data_valid_i	: in demux_lanes_data_objects_array_valid_t(NR_LANES-1 downto 0);
-		lhc_data_o		: out lhc_data_t;
-		lhc_data_valid_o	: out std_logic
-	);
+    generic
+    (
+        NR_LANES: positive
+    );
+    port
+    (
+        demux_data_i : in demux_lanes_data_objects_array_t(NR_LANES-1 downto 0);
+        demux_data_valid_i : in demux_lanes_data_objects_array_valid_t(NR_LANES-1 downto 0);
+        lhc_data_o : out lhc_data_t;
+        lhc_data_valid_o : out std_logic
+    );
 end;
 
 architecture arch of lmp is
-
+    
 -- HB 2016-06-01: moved to lhc_data_pkg.vhd
 
 --     constant OFFSET_MUON_LANES : natural := 0;
@@ -37,6 +38,9 @@ architecture arch of lmp is
 --     constant OFFSET_LINK_11_LANES : natural := 11;
 -- -- BR 2015-05-01: added external-conditions.
 --     constant OFFSET_EXT_COND_LANES : natural := 12;
+-- -- HB 2022-09-21: added ZDC
+--     constant OFFSET_ZDC_LANES : natural := 16;
+
 begin
 
     lhc_data_valid_o <= '1';
@@ -131,6 +135,8 @@ begin
     lhc_data_o.external_conditions(191 downto 160) <= demux_data_i(OFFSET_EXT_COND_LANES+2)(1);
     lhc_data_o.external_conditions(223 downto 192) <= demux_data_i(OFFSET_EXT_COND_LANES+3)(0);
     lhc_data_o.external_conditions(255 downto 224) <= demux_data_i(OFFSET_EXT_COND_LANES+3)(1);
+
+    lhc_data_o.zdc <= demux_data_i(OFFSET_ZDC_LANES)(0);
 
 end architecture;
 

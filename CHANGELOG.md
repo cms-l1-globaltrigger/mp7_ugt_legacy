@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.22.0] - 2022-09-21
+## [v1.22.0] - 2022-09-22
 ### Comment
 
 - mp7_ugt firmware release v1.22.0
@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/lhc_data_pkg.vhd
 - script files:
   - scripts/mp7patch.py
+- tcl file:
+  - ../ucf/mp7_payload.tcl
 
 ## [v1.21.1] - 2022-09-21
 ### Comment

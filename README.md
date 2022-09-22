@@ -17,6 +17,12 @@ In addition there are versions (with similar schemes) for the following firmware
 * Global Trigger Logic ([gtl_module.vhd](firmware/hdl/payload/gtl_module_tpl.vhd))
 * Final Decision Logic ([fdl_module.vhd](firmware/hdl/payload/fdl_module.vhd))
 
+Following software tool versions used to create L1Menu and menu depended VHDL files:
+
+| utm | TME | VHDL Producer |
+|:-:|:-:|:-:|
+| 0.10.0 | 0.14.0 | 2.13.0 |
+
 ## Setup environment for simulation and build
 
 If not already done create a Python virtual environment and install required dependencies including [IPBB](https://github.com/ipbus/ipbb) and lxml.

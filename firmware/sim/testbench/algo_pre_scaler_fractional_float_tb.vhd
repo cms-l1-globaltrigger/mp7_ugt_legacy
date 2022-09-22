@@ -26,7 +26,7 @@ architecture beh of algo_pre_scaler_fractional_TB is
     constant LHC_CLK_PERIOD  : time :=  25 ns;
 
     signal lhc_clk : std_logic;
-    signal sres_counter, request_update_factor_pulse, update_factor_pulse : std_logic := '0';
+    signal request_update_factor_pulse, update_factor_pulse, start : std_logic := '0';
     signal algo : std_logic := '1';
     signal algo_o : std_logic;
     signal prescale_factor : std_logic_vector(PRESCALE_FACTOR_WIDTH-1 downto 0) := (others => '0');
@@ -57,16 +57,28 @@ begin
 
     process
     begin
-	wait for LHC_CLK_PERIOD; 
-    prescale_factor <= PRESCALE_FACTOR_VALUE_VEC;
-	wait for 5*LHC_CLK_PERIOD;
-	request_update_factor_pulse <= '1';
-	wait for LHC_CLK_PERIOD;
-	request_update_factor_pulse <= '0';
-	wait for 5*LHC_CLK_PERIOD;
-	update_factor_pulse <= '1';
-	wait for LHC_CLK_PERIOD;
-	update_factor_pulse <= '0';
+        wait for LHC_CLK_PERIOD; 
+        prescale_factor <= PRESCALE_FACTOR_VALUE_VEC;
+        wait for 10*LHC_CLK_PERIOD;
+        start <= '1'; -- TTC start signal resets prescaler
+        wait for LHC_CLK_PERIOD;
+        start <= '0';
+        wait for 5*LHC_CLK_PERIOD;
+        request_update_factor_pulse <= '1';
+        wait for LHC_CLK_PERIOD;
+        request_update_factor_pulse <= '0';
+        wait for 15*LHC_CLK_PERIOD;
+        update_factor_pulse <= '1'; -- set prescale factor at "begin of lumi" (if requested)
+        wait for LHC_CLK_PERIOD;
+        update_factor_pulse <= '0';
+        wait for 50*LHC_CLK_PERIOD;
+        update_factor_pulse <= '1'; -- check no "begin of lumi" reset
+        wait for LHC_CLK_PERIOD;
+        update_factor_pulse <= '0';
+        wait for 40*LHC_CLK_PERIOD;
+        start <= '1'; -- TTC start signal resets prescaler
+        wait for LHC_CLK_PERIOD;
+        start <= '0';
         wait;
     end process;
 
@@ -76,8 +88,8 @@ begin
         generic map(PRESCALE_FACTOR_WIDTH, PRESCALE_FACTOR_INIT_VALUE_VEC, SIM)
         port map(
         clk => lhc_clk,
-        sres_counter => sres_counter,
         algo_i => algo,
+        start => start,
         request_update_factor_pulse => request_update_factor_pulse,
         update_factor_pulse => update_factor_pulse,
         prescale_factor => prescale_factor,

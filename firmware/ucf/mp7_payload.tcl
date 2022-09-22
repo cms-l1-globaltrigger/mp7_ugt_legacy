@@ -12,11 +12,12 @@ resize_pblock [get_pblocks payload] -add {RAMB36_X0Y0:RAMB36_X1Y89}
 resize_pblock [get_pblocks payload] -add {DSP48_X0Y0:DSP48_X1Y179}
 
 # HB 2017-10-13: Extended payload region to former right bottom quad regions (quad_7 and quad_8)
-resize_pblock [get_pblocks payload] -add {SLICE_X192Y0:SLICE_X221Y99}
-resize_pblock [get_pblocks payload] -add {RAMB18_X13Y0:RAMB18_X14Y39}
-resize_pblock [get_pblocks payload] -add {RAMB36_X13Y0:RAMB36_X14Y19}
+# HB 2022-09-22: Reduced extended payload region to quad_8 only, because of moved GTHs for read-out-record (ZDC inserted in REGION 4)
+resize_pblock [get_pblocks payload] -add {SLICE_X192Y0:SLICE_X221Y49}
+resize_pblock [get_pblocks payload] -add {RAMB18_X13Y0:RAMB18_X14Y19}
+resize_pblock [get_pblocks payload] -add {RAMB36_X13Y0:RAMB36_X14Y9}
 # HB 2017-10-13: DSPs into payload region
-resize_pblock [get_pblocks payload] -add {DSP48_X17Y0:DSP48_X17Y39}
+resize_pblock [get_pblocks payload] -add {DSP48_X17Y0:DSP48_X17Y19}
 
 # HB 2017-10-13: Resize ctrl region
 resize_pblock [get_pblocks ctrl] -remove {CLOCKREGION_X0Y9:CLOCKREGION_X1Y9}

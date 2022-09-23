@@ -68,6 +68,7 @@ constant BX_PIPELINE_STAGES: natural := 5; -- +/- 2bx pipeline
 constant EXT_COND_STAGES: natural := 2; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
 constant CENTRALITY_STAGES: natural := 2; -- pipeline stages for "Centrality" to get same pipeline to algos as conditions
 constant MUS_STAGES: natural := 2; -- pipeline stages for "Hadronic shower triggers (muon)" to get same pipeline to algos as conditions
+constant ZDC_STAGES: natural := 2; -- pipeline stages for "ZDC condition" to get same pipeline to algos as conditions
 constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
 constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
 
@@ -236,7 +237,6 @@ constant NR_ETM_OBJECTS : positive := 1;
 constant NR_HTM_OBJECTS : positive := 1;
 constant NR_ETMHF_OBJECTS : positive := 1;
 constant NR_HTMHF_OBJECTS : positive := 1;
-constant NR_TOWERCOUNT_OBJECTS : positive := 1;
 
 constant ETT_ET_LOW : natural := 0;
 constant ETT_ET_HIGH : natural := 11;
@@ -328,6 +328,7 @@ type bx_cent_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic;
 
 -- *******************************************************************************************************
 -- HB 2016-09-16: inserted TOWERCOUNT
+constant NR_TOWERCOUNT_OBJECTS : positive := 1;
 constant TOWERCOUNT_IN_HTT_LOW : natural := 12;
 constant TOWERCOUNT_IN_HTT_HIGH : natural := 24;
 constant TOWERCOUNT_COUNT_LOW : natural := 0;
@@ -367,6 +368,14 @@ constant MBT1HFP_COUNT_HIGH : natural := 3;
 
 constant MBT1HFM_COUNT_LOW : natural := 0;
 constant MBT1HFM_COUNT_HIGH : natural := 3;
+
+-- *******************************************************************************************************
+-- HB 2016-09-16: inserted ZDC
+constant NR_ZDC_OBJECTS : positive := 1;
+constant ZDC_BIT_LOW : natural := 0;
+constant ZDC_BIT_HIGH : natural := 9;
+constant MAX_ZDC_BITS : natural := 16; -- 4 hex digits !
+type bx_zdc_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(MAX_ZDC_BITS-1 downto 0);
 
 -- *******************************************************************************************************
 -- max bits for comparators.vhd
@@ -413,6 +422,7 @@ type gtl_data_record is record
     towercount : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
     centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
+    zdc : std_logic_vector(MAX_ZDC_BITS-1 downto 0);
 end record gtl_data_record;
 
 type bx_data_record is record
@@ -446,6 +456,7 @@ type bx_data_record is record
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
     mus0, mus1, musoot0, musoot1 : mus_bit_array;
+    zdc : bx_zdc_array;
 end record bx_data_record;
 
 -- ==== Correlations - begin ============================================================

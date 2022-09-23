@@ -1,4 +1,7 @@
+-- Description:
+-- Package for register bank of frame.
 
+-- Version-history:
 -- HB 2022-09-08: cleaned up.
 -- HB 2017-09-08: reduced registers for frame v1.2.1 - no dm, no dsmux
 

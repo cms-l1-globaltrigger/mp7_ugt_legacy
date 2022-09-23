@@ -1,6 +1,6 @@
 
 -- Description:
--- Comparators fro charge correlation
+-- Comparators for charge correlation
 
 -- Version history:
 -- HB 2022-09-06: cleaned up.

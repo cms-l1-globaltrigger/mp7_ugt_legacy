@@ -1,5 +1,5 @@
 
--- Desription:
+-- Description:
 -- Comparators for pseudorapidity
 
 -- Version history:
@@ -37,7 +37,7 @@ architecture rtl of eta_windows_comp is
 begin
 
 -- HB 2017-12-19: nr_eta_windows has to be between 0 and 5 (0 means no eta window required, 1 to 5 are numbers of required windows)
-    assert (nr_eta_windows >= 0 and nr_eta_windows <= 5) report 
+    assert (nr_eta_windows >= 0 and nr_eta_windows <= 5) report
         "wrong number of eta windows (has to be between 0 and 5) - nr_eta_windows=" & integer'image(nr_eta_windows)
     severity failure;
 
@@ -50,8 +50,8 @@ begin
             generic map(
                 eta_upper_limit => eta_w1_upper_limit,
                 eta_lower_limit => eta_w1_lower_limit
-            )    
-            port map( 
+            )
+            port map(
                 eta => eta,
                 eta_comp => eta_comp_w1
             );
@@ -63,8 +63,8 @@ begin
             generic map(
                 eta_upper_limit => eta_w2_upper_limit,
                 eta_lower_limit => eta_w2_lower_limit
-            )    
-            port map( 
+            )
+            port map(
                 eta => eta,
                 eta_comp => eta_comp_w2
             );
@@ -75,8 +75,8 @@ begin
             generic map(
                 eta_upper_limit => eta_w3_upper_limit,
                 eta_lower_limit => eta_w3_lower_limit
-            )    
-            port map( 
+            )
+            port map(
                 eta => eta,
                 eta_comp => eta_comp_w3
             );
@@ -87,8 +87,8 @@ begin
             generic map(
                 eta_upper_limit => eta_w4_upper_limit,
                 eta_lower_limit => eta_w4_lower_limit
-            )    
-            port map( 
+            )
+            port map(
                 eta => eta,
                 eta_comp => eta_comp_w4
             );
@@ -99,8 +99,8 @@ begin
             generic map(
                 eta_upper_limit => eta_w5_upper_limit,
                 eta_lower_limit => eta_w5_lower_limit
-            )    
-            port map( 
+            )
+            port map(
                 eta => eta,
                 eta_comp => eta_comp_w5
             );

@@ -1,3 +1,5 @@
+-- Description:
+-- Package for address decoding of ugt core.
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;

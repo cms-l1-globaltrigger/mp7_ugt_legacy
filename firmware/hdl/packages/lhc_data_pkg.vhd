@@ -1,4 +1,7 @@
+-- Description:
+-- Package for definitions of lhc data.
 
+-- Version history:
 -- HB 2022-09-08: cleaned up.
 -- HB 2016-09-16: updated for new esums and 12 tau objects
 -- HB 2016-05-31: inserted all frames of calo links for extended format structure of test-vector-file and sim-spy-memory
@@ -59,7 +62,7 @@ library IEEE;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
-package lhc_data_pkg is 
+package lhc_data_pkg is
 
 -- HB 2016-06-01: constants for lane mapping (used in lmp.vhd)
     constant OFFSET_MUON_LANES : natural := 0;
@@ -95,8 +98,8 @@ package lhc_data_pkg is
     constant LINK_11_FR_4_WIDTH : integer := SW_DATA_WIDTH;
     constant LINK_11_FR_5_WIDTH : integer := SW_DATA_WIDTH;
     constant EXTERNAL_CONDITIONS_DATA_WIDTH : integer := SW_DATA_WIDTH*8;
-    
-    constant LHC_DATA_WIDTH : integer := 
+
+    constant LHC_DATA_WIDTH : integer :=
         (
             (MUON_ARRAY_LENGTH*MUON_DATA_WIDTH) +
             (EG_ARRAY_LENGTH*EG_DATA_WIDTH) +
@@ -106,7 +109,7 @@ package lhc_data_pkg is
             HT_DATA_WIDTH +
             ETM_DATA_WIDTH +
             HTM_DATA_WIDTH +
-            ETMHF_DATA_WIDTH + 
+            ETMHF_DATA_WIDTH +
             HTMHF_DATA_WIDTH +
             LINK_11_FR_0_WIDTH + LINK_11_FR_1_WIDTH +
             LINK_11_FR_2_WIDTH + LINK_11_FR_3_WIDTH +
@@ -119,7 +122,7 @@ package lhc_data_pkg is
     type tau_array_t is array(0 to TAU_ARRAY_LENGTH-1) of std_logic_vector(TAU_DATA_WIDTH-1 downto 0);
     type jet_array_t is array(0 to JET_ARRAY_LENGTH-1) of std_logic_vector(JET_DATA_WIDTH-1 downto 0);
 
-    type lhc_data_t is record 
+    type lhc_data_t is record
         muon : muon_array_t;
         eg : eg_array_t;
         tau : tau_array_t;
@@ -129,17 +132,17 @@ package lhc_data_pkg is
         etm : std_logic_vector(ETM_DATA_WIDTH-1 downto 0);
         htm : std_logic_vector(HTM_DATA_WIDTH-1 downto 0);
         etmhf : std_logic_vector(ETMHF_DATA_WIDTH-1 downto 0);
-        htmhf : std_logic_vector(HTMHF_DATA_WIDTH-1 downto 0);        
+        htmhf : std_logic_vector(HTMHF_DATA_WIDTH-1 downto 0);
         link_11_fr_0_data : std_logic_vector(LINK_11_FR_0_WIDTH-1 downto 0);
         link_11_fr_1_data : std_logic_vector(LINK_11_FR_1_WIDTH-1 downto 0);
         link_11_fr_2_data : std_logic_vector(LINK_11_FR_2_WIDTH-1 downto 0);
         link_11_fr_3_data : std_logic_vector(LINK_11_FR_3_WIDTH-1 downto 0);
         link_11_fr_4_data : std_logic_vector(LINK_11_FR_4_WIDTH-1 downto 0);
-        link_11_fr_5_data : std_logic_vector(LINK_11_FR_5_WIDTH-1 downto 0);        
+        link_11_fr_5_data : std_logic_vector(LINK_11_FR_5_WIDTH-1 downto 0);
         external_conditions : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
-    end record; 
+    end record;
 
-    constant LHC_DATA_NULL : lhc_data_t := 
+    constant LHC_DATA_NULL : lhc_data_t :=
         (
             muon => (others=>(others=>'0')),
             eg => (others=>(others=>'0')),
@@ -180,7 +183,7 @@ package lhc_data_pkg is
     constant INDEX_EXTERNAL_CONDITIONS : integer := 16;
     type lhc_data_slv_property_t is array (0 to LHC_DATA_OBJECT_COUNT-1) of natural;
 
-    constant LHC_DATA_SLV_OBJECT_WIDTH : lhc_data_slv_property_t := 
+    constant LHC_DATA_SLV_OBJECT_WIDTH : lhc_data_slv_property_t :=
         (
             MUON_ARRAY_LENGTH * MUON_DATA_WIDTH,
             EG_ARRAY_LENGTH * EG_DATA_WIDTH,
@@ -190,7 +193,7 @@ package lhc_data_pkg is
             HT_DATA_WIDTH,
             ETM_DATA_WIDTH,
             HTM_DATA_WIDTH,
-            ETMHF_DATA_WIDTH, 
+            ETMHF_DATA_WIDTH,
             HTMHF_DATA_WIDTH,
             LINK_11_FR_0_WIDTH, LINK_11_FR_1_WIDTH,
             LINK_11_FR_2_WIDTH, LINK_11_FR_3_WIDTH,
@@ -249,7 +252,7 @@ package body lhc_data_pkg is
         index := index + ETMHF_DATA_WIDTH;
         ret_value(index + HTMHF_DATA_WIDTH-1 downto index) := data_in.htmhf;
         index := index + HTMHF_DATA_WIDTH;
-        
+
         ret_value(index + LINK_11_FR_0_WIDTH-1 downto index) := data_in.link_11_fr_0_data;
         index := index + LINK_11_FR_0_WIDTH;
         ret_value(index + LINK_11_FR_1_WIDTH-1 downto index) := data_in.link_11_fr_1_data;
@@ -262,13 +265,13 @@ package body lhc_data_pkg is
         index := index + LINK_11_FR_4_WIDTH;
         ret_value(index + LINK_11_FR_5_WIDTH-1 downto index) := data_in.link_11_fr_5_data;
         index := index + LINK_11_FR_5_WIDTH;
-        
+
         ret_value(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index) := data_in.external_conditions;
         index := index + EXTERNAL_CONDITIONS_DATA_WIDTH;
         return ret_value;
     end function;
 
-    function std_logic_vector_to_lhc_data_t (data_in : std_logic_vector(LHC_DATA_WIDTH-1 downto 0)) 
+    function std_logic_vector_to_lhc_data_t (data_in : std_logic_vector(LHC_DATA_WIDTH-1 downto 0))
         return lhc_data_t
     is
         variable ret_value : lhc_data_t;
@@ -288,7 +291,7 @@ package body lhc_data_pkg is
             ret_value.tau(i) := data_in( index+(i+1)*TAU_DATA_WIDTH-1 downto index+(i* TAU_DATA_WIDTH));
         end loop;
         index := index + (TAU_ARRAY_LENGTH * TAU_DATA_WIDTH);
-        
+
         for i in 0 to JET_ARRAY_LENGTH-1 loop
             ret_value.jet(i) := data_in( index+(i+1)*JET_DATA_WIDTH-1 downto index+(i* JET_DATA_WIDTH));
         end loop;
@@ -301,12 +304,12 @@ package body lhc_data_pkg is
         ret_value.etm := data_in(index + ETM_DATA_WIDTH-1 downto index);
         index := index + ETM_DATA_WIDTH;
         ret_value.htm := data_in(index + HTM_DATA_WIDTH-1 downto index);
-        index := index + HTM_DATA_WIDTH;        
+        index := index + HTM_DATA_WIDTH;
         ret_value.etmhf := data_in(index + ETMHF_DATA_WIDTH-1 downto index);
         index := index + ETMHF_DATA_WIDTH;
         ret_value.htmhf := data_in(index + HTMHF_DATA_WIDTH-1 downto index);
         index := index + HTMHF_DATA_WIDTH;
-        
+
         ret_value.link_11_fr_0_data := data_in(index + LINK_11_FR_0_WIDTH-1 downto index);
         index := index + LINK_11_FR_0_WIDTH;
         ret_value.link_11_fr_1_data := data_in(index + LINK_11_FR_1_WIDTH-1 downto index);
@@ -319,7 +322,7 @@ package body lhc_data_pkg is
         index := index + LINK_11_FR_4_WIDTH;
         ret_value.link_11_fr_5_data := data_in(index + LINK_11_FR_5_WIDTH-1 downto index);
         index := index + LINK_11_FR_5_WIDTH;
-        
+
         ret_value.external_conditions := data_in(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index);
         index := index + EXTERNAL_CONDITIONS_DATA_WIDTH;
         return ret_value;

@@ -1,3 +1,5 @@
+-- Description:
+-- Package for definitions of ugt core.
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
@@ -6,7 +8,7 @@
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
 -- gt: v1.21.2
 -- frame: v1.3.1 (see frame.vhd)
--- gtl: v1.17.3 (see gtl_module_tpl.vhd)
+-- gtl: v1.17.4 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
 -- HB 2022-09-20: v1.21.1 - updated scripts for MP7 patch in run_synth_ipbb.py.
@@ -26,7 +28,8 @@
 -- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
 -- gtl history:
--- HB 2022-09-02: v1.17.3: cleaned up.
+-- HB 2022-09-23: v1.17.4: Used "delay_pipeline" for condition output in esums_conditions.vhd, min_bias_hf_conditions.vhd and towercount_condition.vhd.
+-- HB 2022-09-02: v1.17.3: Cleaned up.
 -- HB 2022-02-16: v1.17.2: Bug fixed in comb_conditions.vhd.
 -- HB 2021-12-09: v1.17.1: Updated logic for jet DISP cut.
 -- HB 2021-10-23: v1.17.0: Implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data] in calo_comparators.vhd. Bug fixed in correlation_cuts_wrapper.vhd.
@@ -90,7 +93,7 @@ package gt_mp7_core_pkg is
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 17;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 3;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 4;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 4;

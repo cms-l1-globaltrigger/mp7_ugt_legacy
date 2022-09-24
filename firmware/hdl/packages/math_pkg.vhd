@@ -1,4 +1,8 @@
 
+-- Description:
+-- Package for mathematics functions.
+
+-- Version history:
 -- HB 2022-09-02: cleaned up.
 
 library IEEE;
@@ -62,7 +66,7 @@ package body math_pkg is
     begin
         return max(max(value1, value2), value3);
     end function max;
-    
+
      function min(constant value1, value2 : in integer) return integer is
         variable ret_value : integer;
     begin

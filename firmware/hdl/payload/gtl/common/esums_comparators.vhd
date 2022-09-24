@@ -1,6 +1,6 @@
 
--- Desription:
--- Comparators fro esums
+-- Description:
+-- Comparators for esums
 
 -- Version history:
 -- HB 2022-09-06: cleaned up.

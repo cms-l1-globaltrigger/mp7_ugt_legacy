@@ -1,4 +1,7 @@
+-- Description:
+-- Package for address decoding of frame.
 
+-- Version-history:
 -- HB 2022-09-08: cleaned up.
 -- HB 2021-02-03: changed "FRAME_VERSION" to "GT_VERSION" (new name in gt_mp7_core_pkg.vhd).
 -- HB 2106-05-31: memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd)

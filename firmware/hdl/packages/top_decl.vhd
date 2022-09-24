@@ -1,3 +1,6 @@
+-- Description:
+-- Package for declarations of ugt top.
+
 -- top_decl
 --
 -- Defines constants for the whole device

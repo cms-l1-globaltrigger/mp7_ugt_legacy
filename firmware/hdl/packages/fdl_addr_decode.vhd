@@ -1,3 +1,7 @@
+-- Description:
+-- Package for address decoding of FDL.
+
+-- Version-history:
 -- HB 2022-09-08: cleaned up.
 
 library IEEE;

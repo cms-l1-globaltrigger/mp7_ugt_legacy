@@ -1,5 +1,5 @@
 
--- Desription:
+-- Description:
 -- Calculation of "twobody_pt" (pt**2) based on LUTs.
 
 -- Version history:

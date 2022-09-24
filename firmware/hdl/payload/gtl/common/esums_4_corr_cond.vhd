@@ -1,6 +1,6 @@
 
 -- Description:
--- Correlation cuts module
+-- Esums for correlation cuts.
 
 -- Version history:
 -- HB 2022-09-06: cleaned up.

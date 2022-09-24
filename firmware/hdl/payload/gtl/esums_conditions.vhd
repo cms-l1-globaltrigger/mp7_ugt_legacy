@@ -3,7 +3,7 @@
 -- Condition module for esums object types (ett, etm, htt, htm, etmhf, htmhf) conditions.
 
 -- Version history:
--- HB 2022-09-05: cleaned up.
+-- HB 2022-09-23: used "delay_pipeline" for condition output.
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now. New order in generic.
 -- HB 2020-11-27: added default parameters. Changed order in generic.
 -- HB 2020-01-31: redesign output pipeline
@@ -33,14 +33,12 @@ entity esums_conditions is
 end esums_conditions;
 
 architecture rtl of esums_conditions is
--- fixed pipeline structure, 2 stages total
---     constant conditions_pipeline_stages: natural := 2; -- pipeline stages for output signal of esums_conditions.vhd (0 => no flip-flop) 
 
-    signal temp1, temp2 : std_logic;
     signal comp_o : std_logic;
+    signal comp_v, comp_v_o : std_logic_vector(0 downto 0);
 
 begin
-    
+
     esums_comparators_i: entity work.esums_comparators
     generic map(
         et_ge_mode => et_ge_mode,
@@ -50,20 +48,25 @@ begin
         phi_w1_upper_limit => phi_w1_upper_limit,
         phi_w1_lower_limit => phi_w1_lower_limit,
         phi_w2_upper_limit => phi_w2_upper_limit,
-        phi_w2_lower_limit => phi_w2_lower_limit	
+        phi_w2_lower_limit => phi_w2_lower_limit
     )
     port map(
         data_i => data_i,
         comp_o => comp_o
     );
-    
--- Pipeline stages for condition output - 2 stages.
-    condition_o_pipeline: process(clk, comp_o)
-    begin
-        if (clk'event and clk = '1') then
-            temp1 <= comp_o;
-            condition_o <= temp1;
-        end if;
-    end process;
+
+-- Pipeline stages for condition output
+    comp_v(0) <= comp_o;
+
+    out_pipe_i: entity work.delay_pipeline
+        generic map(
+            DATA_WIDTH => 1,
+            STAGES => ESUMS_COND_STAGES
+        )
+        port map(
+            clk, comp_v, comp_v_o
+        );
+
+    condition_o <= comp_v_o(0);
 
 end architecture rtl;

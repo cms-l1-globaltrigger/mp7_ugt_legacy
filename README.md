@@ -121,14 +121,6 @@ python3 scripts/run_simulation_questa.py <local path>/github/herbberg/l1menus/20
 
 The firmware uses the ipbb build tool, and requires the ipbus system firmware. If you are going to build on a computer outside of the CERN network, then you will need to run kerberos (kinit username@CERN.CH). These instructions assume that you have your Xilinx Vivado licensing already setup for your enviroment.
 
-* This is a description with branches of MP7 and ugt repos.
-* A fork of [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware is available for uGT in [MP7_for_uGT](https://gitlab.cern.ch/hbergaue/mp7) with branch:
-  - "mp7fw_v3_0_0_mp7_ugt" created from tag mp7fw_v3_0_0.
-* This branch contains patched MP7 files for mp7_ugt_legacy (patched with [mp7patch.py](scripts/mp7patch.py)):
-  - area_constraints.tcl
-  - mp7_brd_decl.vhd
-  - mp7xe_690.vhd
-
 * The ugt repo [mp7 ugt_legacy](https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy) is a fork of [svn2git ugt](https://gitlab.cern.ch/hbergaue/ugt/blob/master/mp7_ugt) repo.
   - added [ugt_strategy.tcl](firmware/ucf/ugt_strategy.tcl) for ugt specific strategy and inserted it into [top.dep](firmware/cfg/top.dep).
   - added [add_l1menu_blkmem_files.tcl](firmware/cfg/add_l1menu_blkmem_files.tcl) for adding L1Menu VHDL files and inserted it into [top.dep](firmware/cfg/top.dep).
@@ -137,6 +129,14 @@ The firmware uses the ipbb build tool, and requires the ipbus system firmware. I
   - script [runIpbbSynth.py](scripts/runIpbbSynth.py) for IPBB synthesis (all 6 mp7_ugt modules).
   - script [checkIpbbSynth.py](scripts/checkIpbbSynth.py) for checking used FPGA resources.
   - script [fwpackerIpbb.py](scripts/fwpackerIpbb.py) for packing firmware files in a tar file.
+
+* The [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware needs to be adapted for Global Trigger firmware. 
+* A script [mp7patch.py](scripts/mp7patch.py) make this changes in the following MP7 files (tag v3.0.0):
+  - [area_constraints.tcl](https://gitlab.cern.ch/cms-cactus/firmware/mp7/-/blob/v3.0.0/boards/mp7/base_fw/common/firmware/ucf/area_constraints.tcl)
+  - [mp7_brd_decl.vhd](https://gitlab.cern.ch/cms-cactus/firmware/mp7/-/blob/v3.0.0/boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7_brd_decl.vhd)
+  - [mp7xe_690.vhd](https://gitlab.cern.ch/cms-cactus/firmware/mp7/-/blob/v3.0.0/boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7xe_690.vhd)
+* Additionally this script inserts L1A (port l1a) to [mp7_payload.vhd](firmware/hdl/mp7_payload.vhd)
+* In [run_simulation_questa.py](scripts/run_simulation_questa.py) and [runIpbbSynth.py](scripts/runIpbbSynth.py), [mp7patch.py](scripts/mp7patch.py) is implemented to patch files without using [MP7_for_uGT](https://gitlab.cern.ch/hbergaue/mp7) anymore.
 
 ### Workflow
 

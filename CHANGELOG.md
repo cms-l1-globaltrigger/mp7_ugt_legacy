@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.21.3] - 2022-09-26
+### Comment
+
+- mp7_ugt firmware release v1.21.3
+- added script run_latex_w_versions.py (extract versions from gt_mp7_core_pkg.vhd, creates versions.tex and run latex ['make'])
+
+### Added
+- script files:
+  - scripts/run_latex_w_versions.py
+
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+
 ## [v1.21.2] - 2022-09-21
 ### Comment
 
@@ -17,6 +31,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - scripts/run_simulation_questa.py
 - simulation file:
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
 
 ### Added
 - source files:
@@ -27,6 +43,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - mp7_ugt firmware release v1.21.1
 - cleaned up VHDL code
+
+### Changed
+- multiple files:
 
 ## [v1.21.0] - 2022-09-14
 ### Comment

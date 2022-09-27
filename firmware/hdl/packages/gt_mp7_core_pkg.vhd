@@ -11,6 +11,7 @@
 -- gtl: v1.17.4 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
+-- HB 2022-09-26: v1.21.2 - Added script run_latex_w_versions.py (extract versions from gt_mp7_core_pkg.vhd, creates versions.tex and run latex ['make']).
 -- HB 2022-05-31: v1.21.0 - Signal start_sync_bc0_int used for reset of prescale counter (instead of begin_lumi_section). Removed sres signals for counters in FDL, not used anymore.
 -- HB 2021-05-31: v1.20.2 - Updated script run_simulation_questa.py (removed UGT_GITLAB_PWD)
 -- HB 2021-04-25: v1.20.1 - Updated and added scripts.

@@ -42,7 +42,7 @@ DefaultFirmwareDir = os.path.expanduser("~/work_synth/production")
 DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware.git'
 """Default URL IPB FW repo."""
 
-DefaultIpbbTag = 'v1.4'
+DefaultIpbFwTag = 'v1.4'
 """Default tag IPB FW repo."""
 
 ## HB 2022-09-16: using MP7 firmware from "original" repo, patching of MP7 firmware done in this script.
@@ -110,7 +110,7 @@ def parse_args():
     parser.add_argument('menu_xml', help="path to menu xml file (in repository or local")
     parser.add_argument('--vivado', metavar='<version>', default=DefaultVivadoVersion, type=tb.vivado_t, help="Vivado version to run (default is '{}')".format(DefaultVivadoVersion))
     parser.add_argument('--ipburl', metavar='<path>', default=DefaultGitlabUrlIPB, help="URL of IPB firmware repo (default is '{}')".format(DefaultGitlabUrlIPB))
-    parser.add_argument('-i', '--ipb', metavar='<tag>', default=DefaultIpbbTag, help="IPBus firmware repo: tag or branch name (default is '{}')".format(DefaultIpbbTag))
+    parser.add_argument('-i', '--ipb', metavar='<tag>', default=DefaultIpbFwTag, help="IPBus firmware repo: tag or branch name (default is '{}')".format(DefaultIpbFwTag))
     parser.add_argument('--mp7url', metavar='<path>', default=DefaultGitlabUrlMP7, help="URL of MP7 firmware repo (default is '{}')".format(DefaultGitlabUrlMP7))
     parser.add_argument('--mp7tag', metavar='<path>', default=DefaultMP7Tag, help="MP7 firmware repo: tag name (default is '{}')".format(DefaultMP7Tag))
     parser.add_argument('--ugturl', metavar='<path>', required=True, help="URL of ugt firmware repo [required]")

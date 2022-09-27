@@ -132,10 +132,10 @@ The firmware uses the ipbb build tool, and requires the ipbus system firmware. I
 
 * The [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware needs to be adapted for Global Trigger firmware. 
 * A script [mp7patch.py](scripts/mp7patch.py) make this changes in the following MP7 files:
-  - area_constraints.tcl ('../boards/mp7/base_fw/common/firmware/ucf/area_constraints.tcl')
-  - mp7_brd_decl.vhd ('../boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7_brd_decl.vhd')
-  - mp7xe_690.vhd ('../boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7xe_690.vhd')
-* Additionally this script inserts L1A (port l1a) to 'mp7_payload.vhd' 
+  - [area_constraints.tcl](https://gitlab.cern.ch/cms-cactus/firmware/mp7/boards/mp7/base_fw/common/firmware/ucf/area_constraints.tcl)
+  - [mp7_brd_decl.vhd](https://gitlab.cern.ch/cms-cactus/firmware/mp7/boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7_brd_decl.vhd)
+  - [mp7xe_690.vhd](https://gitlab.cern.ch/cms-cactus/firmware/mp7/boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7xe_690.vhd)
+* Additionally this script inserts L1A (port l1a) to [mp7_payload.vhd](firmware/hdl/mp7_payload.vhd)
 * In [run_simulation_questa.py](scripts/run_simulation_questa.py) and [runIpbbSynth.py](scripts/runIpbbSynth.py), [mp7patch.py](scripts/mp7patch.py) is implemented to patch files without using [MP7_for_uGT](https://gitlab.cern.ch/hbergaue/mp7) anymore.
 
 ### Workflow

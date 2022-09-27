@@ -47,7 +47,7 @@ if not DefaultQuestaSimLibsPath:
 DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware'
 """Default URL IPB FW repo."""
 
-DefaultIpbbTag = 'v1.4'
+DefaultIpbFwTag = 'v1.4'
 """Default tag IPB FW repo."""
 
 DefaultGitlabUrlMP7 = 'https://gitlab.cern.ch/hbergaue/mp7'
@@ -553,7 +553,7 @@ def parse_args():
     parser.add_argument('--mp7_url', default=DefaultGitlabUrlMP7, help="MP7 repo (default is '{}')".format(DefaultGitlabUrlMP7))
     parser.add_argument('--mp7_repo_tag', default=DefaultMP7Tag, help="MP7 repo tag (default is '{}')".format(DefaultMP7Tag))
     parser.add_argument('--ipb_fw_url', default=DefaultGitlabUrlIPB, help="IPBus firmware repo (default is '{}')".format(DefaultGitlabUrlIPB))
-    parser.add_argument('--ipb_fw_repo_tag', default=DefaultIpbbTag, help="IPBus firmware repo tag (default is '{}')".format(DefaultIpbbTag))
+    parser.add_argument('--ipb_fw_repo_tag', default=DefaultIpbFwTag, help="IPBus firmware repo tag (default is '{}')".format(DefaultIpbFwTag))
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsPath, help="Questasim Vivado libraries directory name (default is {})".format(DefaultQuestaSimLibsPath))
     parser.add_argument('--output', metavar='path', type=os.path.abspath, help='path to output directory')
     parser.add_argument('--view_wave', action='store_true', help="shows the waveform")

@@ -23,6 +23,15 @@ Following software tool versions used to create L1Menu and menu depended VHDL fi
 |:-:|:-:|:-:|
 | 0.10.0 | 0.14.0 | 2.13.0 |
 
+Following dependencies exist for uGT firmware:
+
+| Repo | Tag |
+|:-:|:-:|
+| [MP7_for_uGT](https://gitlab.cern.ch/hbergaue/mp7) | mp7fw_v3_0_0_mp7_ugt
+| [IPBB](https://github.com/ipbus/ipbb) | v0.5.2
+| [IPB_FW](https://github.com/ipbus/ipbus-firmware) | v1.4
+
+
 ## Setup environment for simulation and build
 
 If not already done create a Python virtual environment and install required dependencies including [IPBB](https://github.com/ipbus/ipbb) and lxml.

@@ -4,24 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.21.3] - 2022-09-26
+## [v1.21.3] - 2022-09-21
 ### Comment
 
 - mp7_ugt firmware release v1.21.3
-- added script run_latex_w_versions.py (extract versions from gt_mp7_core_pkg.vhd, creates versions.tex and run latex ['make'])
-
-### Added
-- script files:
-  - scripts/run_latex_w_versions.py
-
-### Changed
-- source files:
-  - ../packages/gt_mp7_core_pkg.vhd
-
-## [v1.21.2] - 2022-09-21
-### Comment
-
-- mp7_ugt firmware release v1.21.2
 - updated scripts for MP7 patch in run_synth_ipbb.py and run_simulation_questa.py
 
 ### Changed
@@ -38,14 +24,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../packages/gt_mp7_top_pkg_sim.vhd
 
-## [v1.21.1] - 2022-09-19
+## [v1.21.2] - 2022-09-19
 ### Comment
 
-- mp7_ugt firmware release v1.21.1
+- mp7_ugt firmware release v1.21.2
 - cleaned up VHDL code
 
 ### Changed
 - multiple files:
+
+## [v1.21.1] - 2022-09-26
+### Comment
+
+- mp7_ugt firmware release v1.21.1
+- added script run_latex_w_versions.py (extract versions from gt_mp7_core_pkg.vhd, creates versions.tex and run latex ['make'])
+
+### Added
+- script files:
+  - scripts/run_latex_w_versions.py
+
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
 
 ## [v1.21.0] - 2022-09-14
 ### Comment

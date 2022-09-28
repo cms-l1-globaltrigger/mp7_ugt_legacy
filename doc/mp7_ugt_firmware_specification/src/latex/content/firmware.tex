@@ -19,14 +19,28 @@ The IPBus system allows the control of hardware via a ‘virtual bus’, using a
     \caption{\ugt payload}\label{fig:mgt}
  \end{figure}
 
-\subsection{Firmware version}\label{sec:fw:fw_version}
+\subsection{Firmware versions}\label{sec:fw:fw_version}
 
-This firmware description is valid for version \versiongt of Global Trigger firmware, containing the following module versions:
-\begin{itemize}
-\item Framework: \versionframe
-\item Global Trigger Logic: \versiongtl
-\item Final Decision Logic: \versionfdl
-\end{itemize}
+This firmware description is based on following versions:
+% \begin{itemize}
+% \item Framework: \versionframe
+% \item Global Trigger Logic: \versiongtl
+% \item Final Decision Logic: \versionfdl
+% \end{itemize}
+
+\begin{table}[ht]
+\caption{Firmware versions}
+\vspace{5mm}
+\centering
+\begin{tabular}{|l|l|}\hline
+\textbf{entity}& \textbf{version}\\\hline\hline
+Global Trigger firmware & \versiongt\\\hline
+Framework & \versionframe\\\hline
+Global Trigger Logic & \versiongtl\\\hline
+Final Decision Logic & \versionfdl\\\hline
+\end{tabular}
+\label{tab:fw:versions}
+\end{table}
 
 \subsection{Directory structure of Global Trigger firmware} \label{sec:fw:dir_struct_gt_fw}
 
@@ -94,7 +108,7 @@ In document \href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/ma
 \subsubsection{Testing firmware}
 \label{sec:fw:testing_firmware}
 
-Testing of firmware in hardware at CMS P5 is done with script "multiboard\_function\_test" ("tdf run\ multiboard\_function\_test -h"). Therefore a XML file of the L1Menu and a test vector file must be available at the crate. The firmware of the L1Menu which should be tested must be loaded into the 6 MP7 boards before testing ("tdf run uploadfw\_gt -h"). For checking crate status execute "tdf run crate\_status".\\
+Testing of firmware in hardware at CMS P5 (see \ref{sec:app:app_e}) is done with script "multiboard\_function\_test" ("tdf run\ multiboard\_function\_test -h"). Therefore a XML file of the L1Menu and a test vector file must be available at the crate. The firmware of the L1Menu which should be tested must be loaded into the 6 MP7 boards before testing ("tdf run uploadfw\_gt -h"). For checking crate status execute "tdf run crate\_status".\\
 This testing is restricted to persons with access to uGT crates at P5.
 
 \clearpage

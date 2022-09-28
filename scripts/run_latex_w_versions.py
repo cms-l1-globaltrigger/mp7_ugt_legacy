@@ -68,7 +68,7 @@ for version in versions_list:
     idx += 1
 #print(versions_values)
 
-verions_tex_file = os.path.join(dir_path, 'doc', 'mp7_ugt_firmware_specification', 'src', 'latex', 'content', 'versions.tex')
+versions_tex_file = os.path.join(dir_path, 'doc', 'mp7_ugt_firmware_specification', 'src', 'latex', 'content', 'versions.tex')
 nc = 'newcommand'
 vgt = 'versiongt'
 vframe = 'versionframe'
@@ -76,7 +76,7 @@ vgtl = 'versiongtl'
 vfdl = 'versionfdl'
 g_br = 'gitbranch'
 g_br_txt = 'https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/{}'.format(branch_name)
-with open(verions_tex_file, 'w') as fp:
+with open(versions_tex_file, 'w') as fp:
     fp.write('\%s{\%s}{v%s.%s.%s }\n' % (nc, vgt, versions_values[0], versions_values[1], versions_values[2]))
     fp.write('\%s{\%s}{v%s.%s.%s }\n' % (nc, vframe, versions_values[3], versions_values[4], versions_values[5]))
     fp.write('\%s{\%s}{v%s.%s.%s }\n' % (nc, vgtl, versions_values[6], versions_values[7], versions_values[8]))

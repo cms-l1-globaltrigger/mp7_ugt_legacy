@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - cleaned up VHDL code
 
 ### Changed
-- multiple files:
+- multiple VHDL files
 
 ## [v1.21.1] - 2022-09-26
 ### Comment

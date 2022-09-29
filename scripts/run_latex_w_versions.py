@@ -86,3 +86,10 @@ with open(versions_tex_file, 'w') as fp:
 command = f'bash -c "cd {dir_path}; cd doc/mp7_ugt_firmware_specification/src/latex; make"'
 run_command(command)
 
+print("=============================================================================\n")
+print("Remove *.eps files in ../doc/mp7_ugt_firmware_specification/src/latex/figures\n")
+print("=============================================================================\n")
+
+command = f'bash -c "cd {dir_path}; cd doc/mp7_ugt_firmware_specification/src/latex/figures; rm *.eps"'
+run_command(command)
+

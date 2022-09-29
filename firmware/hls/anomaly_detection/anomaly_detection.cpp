@@ -57,7 +57,7 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
     #pragma HLS unroll
     cartesians[iNNIn] = EGammaToCartesian(egammas[i]);
   }
-  for(int i = 0; i < AD_NMOUNS; i++, iNNIn++){
+  for(int i = 0; i < AD_NMUONS; i++, iNNIn++){
     #pragma HLS unroll
     cartesians[iNNIn] = MuonToCartesian(muons[i]);
   }

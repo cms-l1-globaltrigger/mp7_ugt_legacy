@@ -7,7 +7,7 @@
 
 // Only the top N of each object are taken
 // Assume that they arrive ordered
-static const int AD_NMOUNS = 4;
+static const int AD_NMUONS = 4;
 static const int AD_NJETS = 10;
 static const int AD_NEGAMMAS = 4;
 static const int AD_NTAUS = 4;

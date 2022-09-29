@@ -50,7 +50,7 @@ int main() {
     while (!feof(dump) && (++test <= NTEST)) {
       std::cout<< "Starting test = " << test << std::endl;
       
-      Muon muons[AD_NMOUNS];
+      Muon muons[AD_NMUONS];
       Jet jets[AD_NJETS];
       EGamma egammas[AD_NEGAMMAS];
       Tau taus[AD_NTAUS];
@@ -72,9 +72,9 @@ int main() {
       for(int i = 0; i < AD_NJETS; i++, iNNIn++){
         if (fscanf(dump, "   jet  pt %f eta %f phi %f", &pt_in, &eta_in, &phi_in) != 3) return 2;
         printf("   jet  pt %f eta %f phi %f \n", pt_in, eta_in, phi_in);
-        jets[i].et  = pt_in;
-        jets[i].eta = eta_in;
-        jets[i].phi = phi_in;
+        jets[i].et.V  = pt_in;
+        jets[i].eta.V = eta_in;
+        jets[i].phi.V = phi_in;
         cartesians[iNNIn] = JetToCartesian(jets[i]);
         cartesians_truth[iNNIn] = ObjToCartesian(pt_in, eta_in*Scales::CALO_ETA_LSB, phi_in*Scales::CALO_PHI_LSB);
         obj_name[iNNIn] = "jet" + std::to_string(i);
@@ -82,27 +82,27 @@ int main() {
       for(int i = 0; i < AD_NEGAMMAS; i++, iNNIn++){
         if (fscanf(dump, "   egamma  pt %f eta %f phi %f", &pt_in, &eta_in, &phi_in) != 3) return 2;
         printf("   egamma  pt %f eta %f phi %f \n", pt_in, eta_in, phi_in);
-        egammas[i].et  = pt_in;
-        egammas[i].eta = eta_in;
-        egammas[i].phi = phi_in;
+        egammas[i].et.V  = pt_in;
+        egammas[i].eta.V = eta_in;
+        egammas[i].phi.V = phi_in;
         cartesians[iNNIn] = EGammaToCartesian(egammas[i]);
         cartesians_truth[iNNIn] = ObjToCartesian(pt_in, eta_in*Scales::CALO_ETA_LSB, phi_in*Scales::CALO_PHI_LSB);
         obj_name[iNNIn] = "egamma" + std::to_string(i);
       }
-      for(int i = 0; i < AD_NMOUNS; i++, iNNIn++){
+      for(int i = 0; i < AD_NMUONS; i++, iNNIn++){
           if (fscanf(dump, "   muon  pt %f eta %f phi %f", &pt_in, &eta_in, &phi_in) != 3) return 2;
           printf("   muon  pt %f eta %f phi %f \n", pt_in, eta_in, phi_in);
-          muons[i].pt  = pt_in;
-          muons[i].eta_extrapolated = eta_in;
-          muons[i].phi_extrapolated = phi_in;
+          muons[i].pt.V  = pt_in;
+          muons[i].eta_extrapolated.V = eta_in;
+          muons[i].phi_extrapolated.V = phi_in;
           cartesians[iNNIn] = MuonToCartesian(muons[i]);
           cartesians_truth[iNNIn] = ObjToCartesian(pt_in, eta_in*Scales::MUON_ETA_LSB, phi_in*Scales::MUON_PHI_LSB);
           obj_name[iNNIn] = "muon" + std::to_string(i);
         }
       if (fscanf(dump, "   MET  pt %f eta %f phi %f\n", &pt_in, &eta_in, &phi_in) != 3) return 2;
       printf("   MET  pt %f eta %f phi %f \n", pt_in, eta_in, phi_in);
-      met.et = pt_in;
-      met.phi = phi_in;
+      met.et.V = pt_in;
+      met.phi.V = phi_in;
       cartesians[AD_NNNPARTICLES-1] = METToCartesian(met);
       cartesians_truth[AD_NNNPARTICLES-1] = ObjToCartesian(pt_in, 0., phi_in*Scales::CALO_PHI_LSB);
       obj_name[AD_NNNPARTICLES-1] = "MET";

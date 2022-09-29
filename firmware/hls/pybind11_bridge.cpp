@@ -64,7 +64,6 @@ std::vector<double> hwint_to_pxpypz(std::vector<int> in){
     etMiss.et.V = in[0];
     etMiss.phi.V = in[2];
     pxpypz[0] = METToCartesian(etMiss);
-    std::cout << etMiss.et << ", " << etMiss.et.V << ", " << etMiss.phi << ", " << etMiss.phi.V << std::endl;
 
     // convert EGamma
     for(int i = 0; i < AD_NEGAMMAS; i++){
@@ -103,9 +102,53 @@ std::vector<double> hwint_to_pxpypz(std::vector<int> in){
     return out;
 }
 
+// 'bridge' function for Python binding (not for firmware)
+double anomaly_score(std::vector<int> in){
+
+    assert((void("Wrong number of inputs"), in.size() == 3*(AD_NEGAMMAS+AD_NMUONS+AD_NJETS+1)));
+    // read (pT, eta, phi) for each of (in order): MET, electrons, muons, jets
+
+    // convert ETMiss
+    // note ETMiss eta expected at in[1], but not used
+    ETMiss etMiss;
+    etMiss.et.V = in[0];
+    etMiss.phi.V = in[2];
+
+    // convert EGamma
+    EGamma egamma[NEGAMMAS];
+    for(int i = 0; i < AD_NEGAMMAS; i++){
+        egamma[i].et.V = in[3*(1 + i) + 0];
+        egamma[i].eta.V = in[3*(1 + i) + 1];
+        egamma[i].phi.V = in[3*(1 + i) + 2];
+    }
+
+    // convert Muon
+    Muon muon[NMUONS];
+    for(int i = 0; i < AD_NMUONS; i++){
+        muon[i].pt.V = in[3*(1+AD_NEGAMMAS+i) + 0];
+        muon[i].eta_extrapolated.V = in[3*(1+AD_NEGAMMAS+i) + 1];
+        muon[i].phi_extrapolated.V = in[3*(1+AD_NEGAMMAS+i) + 2];
+    }
+
+    // convert Jet
+    Jet jet[NJETS];
+    for(int i = 0; i < AD_NJETS; i++){
+        jet[i].et.V = in[3*(1+AD_NEGAMMAS+AD_NMUONS+i) + 0];
+        jet[i].eta.V = in[3*(1+AD_NEGAMMAS+AD_NMUONS+i) + 1];
+        jet[i].phi.V = in[3*(1+AD_NEGAMMAS+AD_NMUONS+i) + 2];
+    }
+
+    // the unused inputs
+    Tau taus[NTAUS]; ET et; HT ht; HTMiss htmiss; ETHFMiss ethfmiss; HTHFMiss hthfmiss; 
+    AD_NN_OUT_T score;
+    anomaly_detection(muon, jet, egamma, taus, et, ht, etMiss, htmiss, ethfmiss, hthfmiss, score);
+    return score;
+}
+
 namespace py = pybind11;
 PYBIND11_MODULE(anomaly_detection_emulation, m){
   m.doc() = "Python bindings for Anomaly Detection at L1T HLS for emulation";
   m.def("physical_to_pxpypz", &physical_to_pxpypz, "GT inputs (in physical units) to (px, py, pz)");
   m.def("hwint_to_pxpypz", &hwint_to_pxpypz, "GT inputs (in integer hardware units) to (px, py, pz)");
+  m.def("anomaly_score", &anomaly_score, "GT inputs (in integer hardware units) to anomaly score");
 }

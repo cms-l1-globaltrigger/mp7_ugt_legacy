@@ -1,15 +1,16 @@
 #include "anomaly_detection.h"
+#include <stddef.h>
+#include "NN/myproject.h"
 
 void anomaly_detection_nn(AD_NN_IN_T nn_inputs[AD_NNNINPUTS], AD_NN_OUT_T &anomaly_score){
   // TODO - this function is a placeholder that does some operation on the inputs, 
   // so that the module can be synthesized without being optimized away
   // It should be replaced with the function call to the real Neural Network
-  AD_NN_OUT_T nn_out = 0;
-  for(int i = 0; i < AD_NNNINPUTS; i++){
-    #pragma HLS unroll
-    nn_out += nn_inputs[i];
-  }
-  anomaly_score = nn_out;
+  AD_NN_OUT_T score[1];
+  #pragma HLS array_partition variable=score complete
+  unsigned short size0, size1;
+  myproject(nn_inputs, score, size0, size1);
+  anomaly_score = score[0];
 }
 
 void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS], Tau taus[NTAUS],
@@ -25,15 +26,11 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
   #pragma HLS aggregate variable=etmiss compact=bit
   #pragma HLS aggregate variable=htmiss compact=bit
   #pragma HLS aggregate variable=ethfmiss compact=bit
-  #pragma HLS aggregate variable=hthfmiss compact=bit                    
+  #pragma HLS aggregate variable=hthfmiss compact=bit
   #pragma HLS array_partition variable=muons complete
   #pragma HLS array_partition variable=jets complete
   #pragma HLS array_partition variable=egammas complete
   #pragma HLS array_partition variable=taus complete 
-
-  // TODO this is only here while the computation is dummy
-  // to force the generated HDL to include a clock port
-  #pragma HLS latency min=2 max=2
 
   // pipeline everything
   #pragma HLS pipeline II=1
@@ -70,7 +67,7 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
 
   // 'unroll' particles (px, py, pz) to flat array of NN inputs
   AD_NN_IN_T nn_inputs[AD_NNNINPUTS];
-  #pragma HLS array_partition variable=nn_inputs complete
+  //#pragma HLS array_partition variable=nn_inputs complete
 
   for(int i = 0; i < AD_NNNPARTICLES; i++){
     #pragma HLS unroll
@@ -78,7 +75,6 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
     nn_inputs[3*i + 1] = cartesians[i].py;
     nn_inputs[3*i + 2] = cartesians[i].pz;
   }
- 
 
   anomaly_detection_nn(nn_inputs, anomaly_score);
 

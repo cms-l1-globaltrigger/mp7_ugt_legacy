@@ -416,12 +416,13 @@ static const int NTAUS = 12;
 /* ---
  * Definitions of common objects used for ML triggers
  * TODO: this is a first implementation, to be improved & expanded
+ * TODO: these data types for px, py, pz are not optimized
  * --- */
+typedef ap_fixed<16,13> pxpypz_t;
 struct PxPyPz{
-  // TODO these data types are not optimized
-  ap_fixed<16,13> px;
-  ap_fixed<16,13> py;
-  ap_fixed<16,13> pz;
+  pxpypz_t px;
+  pxpypz_t py;
+  pxpypz_t pz;
 
   static const int BITWIDTH = 36;
 

@@ -76,7 +76,7 @@ int main() {
         jets[i].eta.V = eta_in;
         jets[i].phi.V = phi_in;
         cartesians[iNNIn] = JetToCartesian(jets[i]);
-        cartesians_truth[iNNIn] = ObjToCartesian(pt_in, eta_in*Scales::CALO_ETA_LSB, phi_in*Scales::CALO_PHI_LSB);
+        cartesians_truth[iNNIn] = ObjToCartesian(jets[i].et, eta_in*Scales::CALO_ETA_LSB, phi_in*Scales::CALO_PHI_LSB);
         obj_name[iNNIn] = "jet" + std::to_string(i);
       }
       for(int i = 0; i < AD_NEGAMMAS; i++, iNNIn++){
@@ -86,7 +86,7 @@ int main() {
         egammas[i].eta.V = eta_in;
         egammas[i].phi.V = phi_in;
         cartesians[iNNIn] = EGammaToCartesian(egammas[i]);
-        cartesians_truth[iNNIn] = ObjToCartesian(pt_in, eta_in*Scales::CALO_ETA_LSB, phi_in*Scales::CALO_PHI_LSB);
+        cartesians_truth[iNNIn] = ObjToCartesian(egammas[i].et, eta_in*Scales::CALO_ETA_LSB, phi_in*Scales::CALO_PHI_LSB);
         obj_name[iNNIn] = "egamma" + std::to_string(i);
       }
       for(int i = 0; i < AD_NMUONS; i++, iNNIn++){
@@ -96,7 +96,7 @@ int main() {
           muons[i].eta_extrapolated.V = eta_in;
           muons[i].phi_extrapolated.V = phi_in;
           cartesians[iNNIn] = MuonToCartesian(muons[i]);
-          cartesians_truth[iNNIn] = ObjToCartesian(pt_in, eta_in*Scales::MUON_ETA_LSB, phi_in*Scales::MUON_PHI_LSB);
+          cartesians_truth[iNNIn] = ObjToCartesian(muons[i].pt, eta_in*Scales::MUON_ETA_LSB, phi_in*Scales::MUON_PHI_LSB);
           obj_name[iNNIn] = "muon" + std::to_string(i);
         }
       if (fscanf(dump, "   MET  pt %f eta %f phi %f\n", &pt_in, &eta_in, &phi_in) != 3) return 2;
@@ -104,7 +104,7 @@ int main() {
       met.et.V = pt_in;
       met.phi.V = phi_in;
       cartesians[AD_NNNPARTICLES-1] = METToCartesian(met);
-      cartesians_truth[AD_NNNPARTICLES-1] = ObjToCartesian(pt_in, 0., phi_in*Scales::CALO_PHI_LSB);
+      cartesians_truth[AD_NNNPARTICLES-1] = ObjToCartesian(met.et, 0., phi_in*Scales::CALO_PHI_LSB);
       obj_name[AD_NNNPARTICLES-1] = "MET";
       
       std::cout << "TEST : " << test << std::endl;

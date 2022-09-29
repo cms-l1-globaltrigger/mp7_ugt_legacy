@@ -125,7 +125,7 @@ table_t sine_with_conversion_MET(ap_uint<8> phi){
 
 
 PxPyPz MuonToCartesian(Muon x){
-  #pragma HLS inline off
+  //#pragma HLS inline off
   PxPyPz y;
   y.clear();
   
@@ -156,15 +156,20 @@ PxPyPz MuonToCartesian(Muon x){
   // cosphi = sin_table[phi+90*2];                             //cos(x)=sin(x+90). Do nothing with sign, cos(-θ) = cos θ,
   sinheta = (sign_eta > 0) ? (sinh_t) (-sign_eta*sinheta) : sinheta; // Change sign bit if eta is negative, sinh(-x)=-sin(x)
 
-  y.py = x.pt * sinphi;
-  y.px = x.pt * cosphi;
-  y.pz = x.pt * sinheta;
+  pxpypz_t px, py, pz;
+  #pragma hls bind_op variable=px op=mul impl=fabric
+  #pragma hls bind_op variable=py op=mul impl=fabric
+  #pragma hls bind_op variable=pz op=mul impl=fabric
+  py = x.pt * sinphi;
+  px = x.pt * cosphi;
+  pz = x.pt * sinheta;
+  y.px = px; y.py = py; y.pz = pz;
   
   return y;
 }
 
 PxPyPz JetToCartesian(Jet x){
-  #pragma HLS inline off
+  //#pragma HLS inline off
   PxPyPz y;
   y.clear();
   
@@ -195,15 +200,20 @@ PxPyPz JetToCartesian(Jet x){
   // cosphi = sin_table[phi+90*2];                             //cos(x)=sin(x+90). Do nothing with sign, cos(-θ) = cos θ,
   sinheta = (sign_eta > 0) ? (sinh_t) (-sign_eta*sinheta) : sinheta; // Change sign bit if eta is negative, sinh(-x)=-sin(x)
 
-  y.py = x.et * sinphi;
-  y.px = x.et * cosphi;
-  y.pz = x.et * sinheta;
+  pxpypz_t px, py, pz;
+  #pragma hls bind_op variable=px op=mul impl=fabric
+  #pragma hls bind_op variable=py op=mul impl=fabric
+  #pragma hls bind_op variable=pz op=mul impl=fabric
+  py = x.et * sinphi;
+  px = x.et * cosphi;
+  pz = x.et * sinheta;
+  y.px = px; y.py = py; y.pz = pz;
   
   return y;
 }
 
 PxPyPz CaloCommonToCartesian(CaloCommon x){
-  #pragma HLS inline off
+  //#pragma HLS inline off
   PxPyPz y;
   y.clear();
   
@@ -233,9 +243,14 @@ PxPyPz CaloCommonToCartesian(CaloCommon x){
   // cosphi = sin_table[phi+90*2];                             //cos(x)=sin(x+90). Do nothing with sign, cos(-θ) = cos θ,
   sinheta = (sign_eta > 0) ? (sinh_t) (-sign_eta*sinheta) : sinheta; // Change sign bit if eta is negative, sinh(-x)=-sin(x)
 
-  y.py = x.et * sinphi;
-  y.px = x.et * cosphi;
-  y.pz = x.et * sinheta;
+  pxpypz_t px, py, pz;
+  #pragma hls bind_op variable=px op=mul impl=fabric
+  #pragma hls bind_op variable=py op=mul impl=fabric
+  #pragma hls bind_op variable=pz op=mul impl=fabric
+  py = x.et * sinphi;
+  px = x.et * cosphi;
+  pz = x.et * sinheta;
+  y.px = px; y.py = py; y.pz = pz;
   
   return y;
 }
@@ -249,7 +264,7 @@ PxPyPz TauToCartesian(Tau x){
 }
 
 PxPyPz METToCartesian(ETMiss x){
-  #pragma HLS inline off
+  //#pragma HLS inline off
   PxPyPz y;
   y.clear();
   
@@ -269,9 +284,12 @@ PxPyPz METToCartesian(ETMiss x){
   sinphi = (sign_phi > 0) ? (cossin_t) (-sign_phi*sinphi) : sinphi; // Change sign bit if phi is negative, sin(-x)=-sin(x)
   // cosphi = sin_table[phi+90*2];                             //cos(x)=sin(x+90). Do nothing with sign, cos(-θ) = cos θ,
 
-  y.py = x.et * sinphi;
-  y.px = x.et * cosphi;
-  y.pz = 0.;
+  pxpypz_t px, py;
+  #pragma hls bind_op variable=px op=mul impl=fabric
+  #pragma hls bind_op variable=py op=mul impl=fabric
+  py = x.et * sinphi;
+  px = x.et * cosphi;
+  y.px = px; y.py = py; y.pz = 0.;
   
   return y;
 }

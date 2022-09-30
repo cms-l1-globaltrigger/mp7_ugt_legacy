@@ -2,17 +2,6 @@
 #include <stddef.h>
 #include "NN/myproject.h"
 
-void anomaly_detection_nn(AD_NN_IN_T nn_inputs[AD_NNNINPUTS], AD_NN_OUT_T &anomaly_score){
-  // TODO - this function is a placeholder that does some operation on the inputs, 
-  // so that the module can be synthesized without being optimized away
-  // It should be replaced with the function call to the real Neural Network
-  AD_NN_OUT_T score[1];
-  #pragma HLS array_partition variable=score complete
-  unsigned short size0, size1;
-  myproject(nn_inputs, score, size0, size1);
-  anomaly_score = score[0];
-}
-
 void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS], Tau taus[NTAUS],
                        ET et, HT ht, ETMiss etmiss, HTMiss htmiss, ETHFMiss ethfmiss, HTHFMiss hthfmiss,
                        AD_NN_OUT_T &anomaly_score){
@@ -67,6 +56,7 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
 
   // 'unroll' particles (px, py, pz) to flat array of NN inputs
   AD_NN_IN_T nn_inputs[AD_NNNINPUTS];
+  // TODO Vitis HLS complains if the array_partition pragma is left in. Why?
   //#pragma HLS array_partition variable=nn_inputs complete
 
   for(int i = 0; i < AD_NNNPARTICLES; i++){
@@ -76,6 +66,8 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
     nn_inputs[3*i + 2] = cartesians[i].pz;
   }
 
-  anomaly_detection_nn(nn_inputs, anomaly_score);
-
+  AD_NN_OUT_T score[1];
+  #pragma HLS array_partition variable=score complete
+  myproject(nn_inputs, score);
+  anomaly_score = score[0];
 }

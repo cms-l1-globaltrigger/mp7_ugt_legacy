@@ -29,9 +29,7 @@
 // Prototype of top level function for C-synthesis
 void myproject(
     input_t input_7[N_INPUT_1_1],
-    result_t layer12_out[KL_LOSS_12],
-    unsigned short &const_size_in_1,
-    unsigned short &const_size_out_1
+    result_t layer12_out[KL_LOSS_12]
 );
 
 #endif

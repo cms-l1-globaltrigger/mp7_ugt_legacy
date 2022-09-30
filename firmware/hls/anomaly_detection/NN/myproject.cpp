@@ -23,19 +23,14 @@
 
 void myproject(
     input_t input_7[N_INPUT_1_1],
-    result_t layer12_out[KL_LOSS_12],
-    unsigned short &const_size_in_1,
-    unsigned short &const_size_out_1
+    result_t layer12_out[KL_LOSS_12]
 ) {
 
     //hls-fpga-machine-learning insert IO
     #pragma HLS ARRAY_RESHAPE variable=input_7 type=complete dim=0
     #pragma HLS ARRAY_PARTITION variable=layer12_out type=complete dim=0
-    #pragma HLS INTERFACE ap_vld port=input_7,layer12_out 
-    #pragma HLS PIPELINE 
-
-    const_size_in_1 = N_INPUT_1_1;
-    const_size_out_1 = KL_LOSS_12;
+    #pragma HLS PIPELINE STYLE=FRP
+    #pragma HLS INLINE RECURSIVE
 
 #ifndef __SYNTHESIS__
     static bool loaded_weights = false;

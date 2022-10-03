@@ -298,6 +298,7 @@ begin
             lhc_rst => '0',
             bcres => '0',
             test_en => '0',
+            start => '0',
             l1a => '0',
             begin_lumi_section => '0',
             algo_i => algo,

@@ -2,6 +2,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2022-08-16: v1.4.0 - based on v1.3.7, port signal start (start_sync_bc0_int) used for reset of prescale counter (instead of begin_lumi_section). Removed sres signals for counters, not used anymore.
 -- HB 2022-02-08: v1.3.7 - based on v1.3.6, FRAME_VERSION (instead of SVN_REVISION_NUMBER) in register OFFSET_SVN_REVISION_NUMBER.
 -- HB 2019-10-02: v1.3.6 - based on v1.3.5, removed use clause.
 -- HB 2019-10-02: v1.3.5 - based on v1.3.4, changed logic for fractional prescaler - using 32 bits including 2 fractional digits for prescale factor.
@@ -98,6 +99,7 @@ entity fdl_module is
         lhc_rst             : in std_logic;
         bcres               : in std_logic;
         test_en             : in std_logic;
+        start               : in std_logic;
         l1a                 : in std_logic;
         begin_lumi_section  : in std_logic;
         algo_i              : in std_logic_vector(NR_ALGOS-1 downto 0);
@@ -158,22 +160,16 @@ architecture rtl of fdl_module is
 -- =================================================================================
 
     signal algo_int : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
-    signal sres_algo_pre_scaler : std_logic := '0';
     signal prescale_factor_int : prescale_factor_array;
-    signal sres_algo_rate_counter : std_logic := '0';
 
-    signal sres_finor_rate_counter : std_logic := '0';
     signal rate_cnt_finor_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
     signal rate_cnt_finor_preview_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
-    signal sres_veto_rate_counter : std_logic := '0';
     signal rate_cnt_veto_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
-    signal sres_l1a_rate_counter : std_logic := '0';
     signal rate_cnt_l1a_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
-    signal sres_algo_post_dead_time_counter : std_logic := '0';
     signal l1a_latency_delay_reg : ipb_regs_array(0 to 1) := (others => (others => '0'));
     signal rate_cnt_post_dead_time : rate_counter_array;
 
@@ -298,7 +294,7 @@ begin
 --===============================================================================================--
 -- bx counter
     bc_cntr: process (lhc_clk, bcres)
-	begin
+    begin
         if (lhc_clk'event and lhc_clk = '1') then
            if (bcres = '1') then
               bx_nr_internal <= X"000";   -- sync BCReset
@@ -311,18 +307,18 @@ begin
 -- HB 2016-06-10: BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490)
 -- "test enable occurred" signal
     test_en_occurred_p: process (test_en, bcres)
-	begin
+    begin
         if (bcres = '1')  then
-	    test_en_occurred <= '0'; -- reset with bcres
+            test_en_occurred <= '0'; -- reset with bcres
         elsif (test_en'event and test_en = '1') then
-	    test_en_occurred <= '1'; -- test_en_occurred indicates that BGo test enable was send
+            test_en_occurred <= '1'; -- test_en_occurred indicates that BGo test enable was send
         end if;
     end process test_en_occurred_p;
 
 -- "suppress calibration trigger" (pos. active signal: '1' = suppression of calibration trigger !!!)
 -- gap for calibration trigger between 3480 and 3505 (proposed by MJ)
     suppress_cal_trigger_p: process (lhc_clk, test_en_occurred, bx_nr_internal)
-	begin
+    begin
         if (lhc_clk'event and lhc_clk = '1') then
            if (test_en_occurred = '1' and (bx_nr_internal >= (cal_trigger_gap_beg-1)) and (bx_nr_internal < cal_trigger_gap_end)) then -- minus 1 to get correct length of gap (see simulation with test_bgo_test_enable_logic_tb.vhd)
               suppress_cal_trigger <= '1'; -- pos. active signal: '1' = suppression of algos caused by calibration trigger during gap !!!
@@ -848,19 +844,9 @@ begin
     masks_reg_l: for i in 0 to MAX_NR_ALGOS-1 generate
         prescale_factor_global(i) <= prescale_factor_reg(i);
         prescale_factor_preview_global(i) <= prescale_factor_preview_reg(i);
--- 	finor_masks_global(i) <= masks_reg(i)(FINOR_BIT_IN_MASKS_REG);
-	veto_masks_global(i) <= masks_reg(i)(VETO_BIT_IN_MASKS_REG);
+--  finor_masks_global(i) <= masks_reg(i)(FINOR_BIT_IN_MASKS_REG);
+        veto_masks_global(i) <= masks_reg(i)(VETO_BIT_IN_MASKS_REG);
     end generate masks_reg_l;
-
---===============================================================================================--
-
--- HB 2016-02-23: sync reset for counters not used anymore - resync was a bug !!! Reset with begin of lumi-section is ok.
-    sres_algo_rate_counter <= '0';
-    sres_algo_pre_scaler <= '0';
-    sres_finor_rate_counter <= '0';
-    sres_veto_rate_counter <= '0';
-    sres_l1a_rate_counter <= '0';
-    sres_algo_post_dead_time_counter <= '0';
 
 -- ******************************************************************************************************************
 -- FDL data flow - begin
@@ -888,11 +874,8 @@ begin
             sys_clk => ipb_clk,
             lhc_clk => lhc_clk,
             lhc_rst => lhc_rst,
--- HB 2015-09-17: added "sres_algo_rate_counter" and "sres_algo_pre_scaler"
-            sres_algo_rate_counter => sres_algo_rate_counter,
-            sres_algo_pre_scaler => sres_algo_pre_scaler,
-            sres_algo_post_dead_time_counter => sres_algo_post_dead_time_counter,
             suppress_cal_trigger => suppress_cal_trigger,
+            start => start,
             l1a => l1a,
             l1a_latency_delay => l1a_latency_delay_reg(0)(log2c(MAX_DELAY_L1A_LATENCY)-1 downto 0),
             request_update_factor_pulse => request_update_factor_pulse,
@@ -909,14 +892,14 @@ begin
             algo_after_bxomask => algo_after_bxomask(i),
             algo_after_prescaler => algo_after_prescaler(i),
             algo_after_prescaler_preview => algo_after_prescaler_preview(i),
-	    veto => veto(i)
-	);
+            veto => veto(i)
+    );
     end generate algo_slices_l;
 
 -- Finors
     local_finor_p: process(algo_after_prescaler)
        variable or_algo_var : std_logic := '0';
-	begin
+    begin
         or_algo_var := '0';
         for i in 0 to NR_ALGOS-1 loop
             or_algo_var := or_algo_var or algo_after_prescaler(i);
@@ -927,7 +910,7 @@ begin
 -- Finors for "prescaler preview" in monitoring
     local_finor_preview_p: process(algo_after_prescaler_preview)
        variable or_algo_var : std_logic := '0';
-	begin
+    begin
         or_algo_var := '0';
         for i in 0 to NR_ALGOS-1 loop
             or_algo_var := or_algo_var or algo_after_prescaler_preview(i);
@@ -938,12 +921,12 @@ begin
 -- Vetos
     local_veto_or_p: process(veto)
         variable or_veto_var : std_logic := '0';
-	begin
+    begin
         or_veto_var := '0';
         for i in 0 to NR_ALGOS-1 loop
             or_veto_var := or_veto_var or veto(i);
         end loop;
-	local_veto <= or_veto_var;
+        local_veto <= or_veto_var;
     end process local_veto_or_p;
 
 -- One pipeline stage for finor and veto to ROP
@@ -1004,7 +987,6 @@ begin
         port map(
                 sys_clk => ipb_clk,
                 lhc_clk => lhc_clk,
-                sres_counter => sres_finor_rate_counter,
                 store_cnt_value => begin_lumi_section,
                 algo_i => local_finor,
                 counter_o => rate_cnt_finor_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
@@ -1018,7 +1000,6 @@ begin
         port map(
                 sys_clk => ipb_clk,
                 lhc_clk => lhc_clk,
-                sres_counter => sres_finor_rate_counter,
                 store_cnt_value => begin_lumi_section,
                 algo_i => local_finor_preview,
                 counter_o => rate_cnt_finor_preview_reg(0)(FINOR_RATE_COUNTER_WIDTH-1 downto 0)
@@ -1033,7 +1014,6 @@ begin
         port map(
                 sys_clk => ipb_clk,
                 lhc_clk => lhc_clk,
-                sres_counter => sres_veto_rate_counter,
                 store_cnt_value => begin_lumi_section,
                 algo_i => local_veto,
                 counter_o => rate_cnt_veto_reg(0)(VETO_RATE_COUNTER_WIDTH-1 downto 0)
@@ -1042,17 +1022,16 @@ begin
 -- Rate counter L1A
 -- HB 2016-02-19: only for monitoring and verification of incoming L1As
     rate_cnt_l1a_i: entity work.algo_rate_counter
-	generic map(
-	    COUNTER_WIDTH => L1A_RATE_COUNTER_WIDTH
-	)
-	port map(
+        generic map(
+            COUNTER_WIDTH => L1A_RATE_COUNTER_WIDTH
+        )
+        port map(
             sys_clk => ipb_clk,
             lhc_clk => lhc_clk,
-            sres_counter => sres_l1a_rate_counter,
             store_cnt_value => begin_lumi_section,
             algo_i => l1a,
             counter_o => rate_cnt_l1a_reg(0)(L1A_RATE_COUNTER_WIDTH-1 downto 0)
-	);
+        );
 
 -- FDL data flow - end
 -- ********************************************

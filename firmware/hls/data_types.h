@@ -419,9 +419,9 @@ static const int NTAUS = 12;
  * --- */
 struct PxPyPz{
   // TODO these data types are not optimized
-  ap_fixed<16,13> px;
-  ap_fixed<16,13> py;
-  ap_fixed<16,13> pz;
+  ap_fixed<11,10> px;
+  ap_fixed<11,10> py;
+  ap_fixed<11,10> pz;
 
   static const int BITWIDTH = 36;
 

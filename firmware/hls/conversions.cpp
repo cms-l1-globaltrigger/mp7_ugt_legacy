@@ -128,32 +128,16 @@ PxPyPz MuonToCartesian(Muon x){
   #pragma HLS inline off
   PxPyPz y;
   y.clear();
-  
-  // //Initialize table once
-  // cossin_t sin_table[N_TABLE];
-  // init_sinphi_muon_table< ap_uint<10> , cossin_t, N_TABLE>(sin_table);
-  //
-  // sinh_t sinh_table[N_TABLE];
-  // init_sinh_muon_table< ap_int<9> , sinh_t, N_TABLE>(sinh_table);
-  //
-  // cossin_t sinphi;
-  // sinh_t sinheta;
-  // cossin_t cosphi;
-  
-  bool sign_phi = x.phi_extrapolated.sign();
+
   bool sign_eta = x.eta_extrapolated.sign();
   
-  ap_uint<10> phi =  hls::abs(x.phi_extrapolated); //Only store values for positive phi, pick up sign later
+  ap_uint<10> phi =  x.phi_extrapolated; //Only store values for positive phi, pick up sign later
   ap_int<9> eta   =  hls::abs(x.eta_extrapolated); //Only store values for positive eta, pick up sign later
-  
-  // sinphi  = sin_table[phi];
-  // sinheta = sinh_table[eta];
+
   cossin_t sinphi = sine_with_conversion_muon<ap_uint<10>, cossin_t, N_TABLE>(phi);
   cossin_t cosphi = sine_with_conversion_muon<ap_uint<10>, cossin_t, N_TABLE>(phi+90*2);
   sinh_t  sinheta = sinh_with_conversion_muon<ap_int<9>  , sinh_t  , N_TABLE>(eta);
-  
-  sinphi = (sign_phi > 0) ? (cossin_t) (-sign_phi*sinphi) : sinphi; // Change sign bit if phi is negative, sin(-x)=-sin(x)
-  // cosphi = sin_table[phi+90*2];                             //cos(x)=sin(x+90). Do nothing with sign, cos(-θ) = cos θ,
+
   sinheta = (sign_eta > 0) ? (sinh_t) (-sign_eta*sinheta) : sinheta; // Change sign bit if eta is negative, sinh(-x)=-sin(x)
 
   y.py = x.pt * sinphi;
@@ -167,32 +151,16 @@ PxPyPz JetToCartesian(Jet x){
   #pragma HLS inline off
   PxPyPz y;
   y.clear();
-  
-  // //Initialize table once
-  // cossin_t sin_table[N_TABLE];
-  // init_sinphi_jet_table< ap_uint<8> , cossin_t, N_TABLE>(sin_table);
-  //
-  // sinh_t sinh_table[N_TABLE];
-  // init_sinh_jet_table< ap_int<8> , sinh_t, N_TABLE>(sinh_table);
-  //
-  // cossin_t sinphi;
-  // sinh_t sinheta;
-  // cossin_t cosphi;
-  
-  bool sign_phi = x.phi.sign();
+
   bool sign_eta = x.eta.sign();
   
-  ap_uint<8> phi =  hls::abs(x.phi); //Only store values for positive phi, pick up sign later
+  ap_uint<8> phi =  x.phi;
   ap_int<8> eta   =  hls::abs(x.eta); //Only store values for positive eta, pick up sign later
-  
-  // sinphi = sin_table[phi];
-  // sinheta = sinh_table[eta];
+
   cossin_t sinphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi);
   cossin_t cosphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi+90*2);
-  sinh_t  sinheta = sinh_with_conversion_jet<ap_int<8>  , sinh_t  , N_TABLE>(eta);
-  
-  sinphi = (sign_phi > 0) ? (cossin_t) (-sign_phi*sinphi) : sinphi; // Change sign bit if phi is negative, sin(-x)=-sin(x)
-  // cosphi = sin_table[phi+90*2];                             //cos(x)=sin(x+90). Do nothing with sign, cos(-θ) = cos θ,
+  sinh_t  sinheta = sinh_with_conversion_jet<ap_int<8>, sinh_t  , N_TABLE>(eta);
+
   sinheta = (sign_eta > 0) ? (sinh_t) (-sign_eta*sinheta) : sinheta; // Change sign bit if eta is negative, sinh(-x)=-sin(x)
 
   y.py = x.et * sinphi;
@@ -206,31 +174,16 @@ PxPyPz CaloCommonToCartesian(CaloCommon x){
   #pragma HLS inline off
   PxPyPz y;
   y.clear();
-  
-  // //Initialize table once
-  // cossin_t sin_table[N_TABLE];
-  // init_sinphi_egamma_table< ap_uint<8> , cossin_t, N_TABLE>(sin_table);
-  //
-  // sinh_t sinh_table[N_TABLE];
-  // init_sinh_egamma_table< ap_int<8> , sinh_t, N_TABLE>(sinh_table);
-  //
-  // cossin_t sinphi;
-  // sinh_t sinheta;
-  // cossin_t cosphi;
 
   bool sign_phi = x.phi.sign();
   bool sign_eta = x.eta.sign();
   
-  ap_uint<8> phi =  hls::abs(x.phi); //Only store values for positive phi, pick up sign later
+  ap_uint<8> phi =  x.phi; //Only store values for positive phi, pick up sign later
   ap_int<8> eta   =  hls::abs(x.eta); //Only store values for positive eta, pick up sign later
   cossin_t sinphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi);
   cossin_t cosphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi+90*2);
   sinh_t  sinheta = sinh_with_conversion_jet<ap_int<8>  , sinh_t  , N_TABLE>(eta);
-  // sinphi = sin_table[phi];
-  // sinheta = sinh_table[eta];
-  
-  sinphi = (sign_phi > 0) ? (cossin_t) (-sign_phi*sinphi) : sinphi; // Change sign bit if phi is negative, sin(-x)=-sin(x)
-  // cosphi = sin_table[phi+90*2];                             //cos(x)=sin(x+90). Do nothing with sign, cos(-θ) = cos θ,
+
   sinheta = (sign_eta > 0) ? (sinh_t) (-sign_eta*sinheta) : sinheta; // Change sign bit if eta is negative, sinh(-x)=-sin(x)
 
   y.py = x.et * sinphi;
@@ -253,22 +206,10 @@ PxPyPz METToCartesian(ETMiss x){
   PxPyPz y;
   y.clear();
   
-  // //Initialize table once
-  // cossin_t sin_table[N_TABLE];
-  // init_sinphi_MET_table< ap_uint<8> , cossin_t, N_TABLE>(sin_table);
-  //
-  // cossin_t sinphi;
-  // cossin_t cosphi;
-  
-  bool sign_phi = x.phi.sign();
-  ap_uint<8> phi =  hls::abs(x.phi); //Only store values for positive phi, pick up sign later
+  ap_uint<8> phi =  x.phi; //Only store values for positive phi, pick up sign later
   cossin_t sinphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi);
   cossin_t cosphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi+90*2);
-  // sinphi = sin_table[phi];
-
-  sinphi = (sign_phi > 0) ? (cossin_t) (-sign_phi*sinphi) : sinphi; // Change sign bit if phi is negative, sin(-x)=-sin(x)
-  // cosphi = sin_table[phi+90*2];                             //cos(x)=sin(x+90). Do nothing with sign, cos(-θ) = cos θ,
-
+  
   y.py = x.et * sinphi;
   y.px = x.et * cosphi;
   y.pz = 0.;

@@ -39,7 +39,7 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
   #pragma HLS pipeline II=1
 
   // inline everything so there are no function call overheads
-  #pragma HLS inline off
+  #pragma HLS inline recursive
 
   PxPyPz cartesians[AD_NNNPARTICLES];
   #pragma HLS array_partition variable=cartesians complete
@@ -53,33 +53,33 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
     #pragma HLS unroll
     cartesians[iNNIn] = JetToCartesian(jets[i]);
   }
-  for(int i = 0; i < AD_NEGAMMAS; i++, iNNIn++){
-    #pragma HLS unroll
-    cartesians[iNNIn] = EGammaToCartesian(egammas[i]);
-  }
-  for(int i = 0; i < AD_NMOUNS; i++, iNNIn++){
-    #pragma HLS unroll
-    cartesians[iNNIn] = MuonToCartesian(muons[i]);
-  }
-  // TODO include taus in training
-  // for(int i = 0; i < AD_NTAUS; i++, iNNIn++){
-  //   #pragma HLS unroll
-  //   cartesians[iNNIn] = TauToCartesian(taus[i]);
-  // }
-   cartesians[AD_NNNPARTICLES-1] = METToCartesian(etmiss);
-
-  // 'unroll' particles (px, py, pz) to flat array of NN inputs
-  AD_NN_IN_T nn_inputs[AD_NNNINPUTS];
-  #pragma HLS array_partition variable=nn_inputs complete
-
-  for(int i = 0; i < AD_NNNPARTICLES; i++){
-    #pragma HLS unroll
-    nn_inputs[3*i + 0] = cartesians[i].px;
-    nn_inputs[3*i + 1] = cartesians[i].py;
-    nn_inputs[3*i + 2] = cartesians[i].pz;
-  }
- 
-
-  anomaly_detection_nn(nn_inputs, anomaly_score);
+  // // for(int i = 0; i < AD_NEGAMMAS; i++, iNNIn++){
+  // //   #pragma HLS unroll
+  // //   cartesians[iNNIn] = EGammaToCartesian(egammas[i]);
+  // // }
+  // // for(int i = 0; i < AD_NMOUNS; i++, iNNIn++){
+  // //   #pragma HLS unroll
+  // //   cartesians[iNNIn] = MuonToCartesian(muons[i]);
+  // // }
+  // // // TODO include taus in training
+  // // // for(int i = 0; i < AD_NTAUS; i++, iNNIn++){
+  // // //   #pragma HLS unroll
+  // // //   cartesians[iNNIn] = TauToCartesian(taus[i]);
+  // // // }
+  // //  cartesians[AD_NNNPARTICLES-1] = METToCartesian(etmiss);
+  // //
+  // // // 'unroll' particles (px, py, pz) to flat array of NN inputs
+  // // AD_NN_IN_T nn_inputs[AD_NNNINPUTS];
+  // // #pragma HLS array_partition variable=nn_inputs complete
+  // //
+  // // for(int i = 0; i < AD_NNNPARTICLES; i++){
+  // //   #pragma HLS unroll
+  // //   nn_inputs[3*i + 0] = cartesians[i].px;
+  // //   nn_inputs[3*i + 1] = cartesians[i].py;
+  // //   nn_inputs[3*i + 2] = cartesians[i].pz;
+  // // }
+  // //
+  //
+  // anomaly_detection_nn(nn_inputs, anomaly_score);
 
 }

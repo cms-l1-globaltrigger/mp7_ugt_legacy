@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../packages/top_decl.vhd
   - ../packages/gt_mp7_core_pkg.vhd
+- script files:
+  - scripts/run_synth_ipbb.py
+  - scripts/run_simulation_questa.py
 
 ## [v1.21.3] - 2022-09-29
 ### Comment

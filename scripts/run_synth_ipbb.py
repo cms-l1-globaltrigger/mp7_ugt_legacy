@@ -49,8 +49,8 @@ DefaultIpbFwTag = 'v1.4'
 DefaultGitlabUrlMP7 = 'https://:@gitlab.cern.ch:8443/cms-cactus/firmware/mp7.git'
 """Default URL MP7 FW repo."""
 
-## HB 2022-09-16: using tag of MP7 firmware "original" repo
-DefaultMP7Tag = 'v3.0.0'
+## HB 2022-10-04: using tag of MP7 firmware "original" repo
+DefaultMP7Tag = 'v3.2.2'
 """Default tag MP7 FW repo."""
 
 vhdl_snippets = (

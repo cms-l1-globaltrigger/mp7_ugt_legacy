@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.21.4] - 2022-10-04
+### Comment
+
+- mp7_ugt firmware release v1.21.4
+- updated top_decl.vhd: used "demux" in formatter for algo outputs to enable "orbit header" for scouting (therefore MP7 FW v3.2.2. or newer needed)
+
+### Changed
+- source files:
+  - ../packages/top_decl.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+
 ## [v1.21.3] - 2022-09-29
 ### Comment
 

@@ -25,7 +25,7 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
   #pragma HLS pipeline II=1
 
   // inline everything so there are no function call overheads
-  #pragma HLS inline off
+  #pragma HLS inline recursive
 
   PxPyPz cartesians[AD_NNNPARTICLES];
   #pragma HLS array_partition variable=cartesians complete

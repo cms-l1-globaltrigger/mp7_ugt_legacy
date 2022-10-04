@@ -10,7 +10,8 @@ open_solution -reset "solution1"
 set_part {xc7vx690t-ffg1927-2}
 
 # 40 MHZ LHC clock
-create_clock -period 25 
+create_clock -period 25
+set_clock_uncertainty 0
 
 csynth_design
 

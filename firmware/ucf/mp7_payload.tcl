@@ -3,20 +3,17 @@
 ## HB 2016-08-31: ../ucf/algo_constraints.xdc not used anymore (see uGT_algo.dep)
 ## JW 2017-10-06: Added payload area constraints
 
-# HB 2017-10-13: Extended payload region to former left quad regions(quad_9 to quad_17)
+# HB 2022-10-08: quad_9 used for 5G ZDC ipputs
+# HB 2022-10-0: Extended payload region to former left quad regions(quad_10 to quad_17)
 # JW 2017-10-06: Extended payload region to use space of unused GTHs (Greg's suggestion)
-resize_pblock [get_pblocks payload] -add {SLICE_X0Y0:SLICE_X29Y449}
-resize_pblock [get_pblocks payload] -add {RAMB18_X0Y0:RAMB18_X1Y179}
-resize_pblock [get_pblocks payload] -add {RAMB36_X0Y0:RAMB36_X1Y89}
+resize_pblock [get_pblocks payload] -add {SLICE_X0Y49:SLICE_X29Y449}
+resize_pblock [get_pblocks payload] -add {RAMB18_X0Y19:RAMB18_X1Y179}
+resize_pblock [get_pblocks payload] -add {RAMB36_X0Y9:RAMB36_X1Y89}
 # HB 2017-10-13: DSPs into payload region
-resize_pblock [get_pblocks payload] -add {DSP48_X0Y0:DSP48_X1Y179}
+resize_pblock [get_pblocks payload] -add {DSP48_X0Y19:DSP48_X1Y179}
 
-# HB 2017-10-13: Extended payload region to former right bottom quad regions (quad_7 and quad_8)
-resize_pblock [get_pblocks payload] -add {SLICE_X192Y0:SLICE_X221Y99}
-resize_pblock [get_pblocks payload] -add {RAMB18_X13Y0:RAMB18_X14Y39}
-resize_pblock [get_pblocks payload] -add {RAMB36_X13Y0:RAMB36_X14Y19}
-# HB 2017-10-13: DSPs into payload region
-resize_pblock [get_pblocks payload] -add {DSP48_X17Y0:DSP48_X17Y39}
+# HB 2022-10-08: quad_7 and quad_8 used for 6x 10G ZDC outputs
+# removed "extended payload region to former right bottom quad regions (quad_7 and quad_8)"
 
 # HB 2017-10-13: Resize ctrl region
 resize_pblock [get_pblocks ctrl] -remove {CLOCKREGION_X0Y9:CLOCKREGION_X1Y9}

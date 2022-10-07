@@ -128,6 +128,8 @@ architecture rtl of frame is
     signal oc0_d_int : std_logic;
     signal start_d_int : std_logic;
 
+    signal zdc5g : zdc5g_array_t;
+
     begin
 
 --===============================================================================================--
@@ -245,7 +247,8 @@ architecture rtl of frame is
             demux_data_i => demux_data_o(NR_LANES-1 downto 0),
             demux_data_valid_i => demux_data_valid_o(NR_LANES-1 downto 0),
             lhc_data_o => lmp_lhc_data_o,
-            lhc_data_valid_o => open
+            lhc_data_valid_o => open,
+            zdc5g => zdc5g
         );
 
 -- HB 2017-09-08: no dm used, only sync process from dm for BGos

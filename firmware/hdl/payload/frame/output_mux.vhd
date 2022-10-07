@@ -45,6 +45,7 @@ entity output_mux is
         valid_hi    : in std_logic_vector(15 downto 0);
         start       : in std_logic;
         strobe      : in std_logic;
+        zdc5g       : in zdc5g_array_t;
         lane_out    : out ldata(NR_LANES-1 downto 0)
     );
 end output_mux;
@@ -320,5 +321,46 @@ begin
             in5     =>  s_in5_mux9,    -- frame 5   -> free
             mux_out =>  lane_out(25)
         );
+
+    -- ZDC 5g input to ZDC 10G output (6x for patch panel)
+    s_in0_zdc   <=  (zdc5g(0), sValid, start, strobe);
+    s_in1_zdc   <=  (zdc5g(1), sValid, start, strobe);
+    s_in2_zdc   <=  (zdc5g(2), sValid, start, strobe);
+    s_in3_zdc   <=  (zdc5g(3), sValid, start, strobe);
+    s_in4_zdc   <=  (zdc5g(4), sValid, start, strobe);
+    s_in5_zdc   <=  (zdc5g(5), sValid, start, strobe);
+
+    mux_zdc_l: for i in 0 to 5 generate
+        quad_7: if i < 4 generate
+            mux_zdc_i: entity work.mux
+                port map(
+                    clk     =>  clk240,
+                    res     =>  lhc_rst,
+                    bcres   =>  ctrs(7).ttc_cmd(0),
+                    in0     =>  s_in0_zdc,
+                    in1     =>  s_in1_zdc,
+                    in2     =>  s_in2_zdc,
+                    in3     =>  s_in3_zdc,
+                    in4     =>  s_in4_zdc,
+                    in5     =>  s_in5_zdc,
+                    mux_out =>  lane_out(i+28)
+                );
+        end generate quad_7;
+        quad_8: if i >= 4 and i < 6 generate
+            mux_zdc_i: entity work.mux
+                port map(
+                    clk     =>  clk240,
+                    res     =>  lhc_rst,
+                    bcres   =>  ctrs(8).ttc_cmd(0),
+                    in0     =>  s_in0_zdc,
+                    in1     =>  s_in1_zdc,
+                    in2     =>  s_in2_zdc,
+                    in3     =>  s_in3_zdc,
+                    in4     =>  s_in4_zdc,
+                    in5     =>  s_in5_zdc,
+                    mux_out =>  lane_out(i+28)
+                );
+        end generate quad_8;
+    end generate mux_zdc_l;
 
 end architecture;

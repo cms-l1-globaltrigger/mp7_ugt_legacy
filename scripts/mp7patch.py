@@ -48,7 +48,7 @@ def insert_l1a_ttc(filename):
         logging.info("Successfully patched l1a_ttc file '{}'".format(filename))
 
 
-ef patch_all(projectpath):
+def patch_all(projectpath):
     """Batch patch all firmware files."""
     root_path = os.path.abspath(projectpath)
 

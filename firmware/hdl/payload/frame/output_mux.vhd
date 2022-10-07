@@ -58,12 +58,12 @@ architecture arch of output_mux is
     signal sValid : std_logic := '0';
 
     signal readout_finor : std_logic_vector(31 downto 0);
-    signal s_in0_mux0,s_in0_mux1,s_in0_mux2,s_in0_mux3,s_in0_mux4,s_in0_mux5,s_in0_mux6,s_in0_mux7,s_in0_mux8,s_in0_mux9 : lword;
-    signal s_in1_mux0,s_in1_mux1,s_in1_mux2,s_in1_mux3,s_in1_mux4,s_in1_mux5,s_in1_mux6,s_in1_mux7,s_in1_mux8,s_in1_mux9 : lword;
-    signal s_in2_mux0,s_in2_mux1,s_in2_mux2,s_in2_mux3,s_in2_mux4,s_in2_mux5,s_in2_mux6,s_in2_mux7,s_in2_mux8,s_in2_mux9 : lword;
-    signal s_in3_mux0,s_in3_mux1,s_in3_mux2,s_in3_mux3,s_in3_mux4,s_in3_mux5,s_in3_mux6,s_in3_mux7,s_in3_mux8,s_in3_mux9 : lword;
-    signal s_in4_mux0,s_in4_mux1,s_in4_mux2,s_in4_mux3,s_in4_mux4,s_in4_mux5,s_in4_mux6,s_in4_mux7,s_in4_mux8,s_in4_mux9 : lword;
-    signal s_in5_mux0,s_in5_mux1,s_in5_mux2,s_in5_mux3,s_in5_mux4,s_in5_mux5,s_in5_mux6,s_in5_mux7,s_in5_mux8,s_in5_mux9 : lword;
+    signal s_in0_mux0,s_in0_mux1,s_in0_mux2,s_in0_mux3,s_in0_mux4,s_in0_mux5,s_in0_mux6,s_in0_mux7,s_in0_mux8,s_in0_mux9,s_in0_zdc : lword;
+    signal s_in1_mux0,s_in1_mux1,s_in1_mux2,s_in1_mux3,s_in1_mux4,s_in1_mux5,s_in1_mux6,s_in1_mux7,s_in1_mux8,s_in1_mux9,s_in1_zdc : lword;
+    signal s_in2_mux0,s_in2_mux1,s_in2_mux2,s_in2_mux3,s_in2_mux4,s_in2_mux5,s_in2_mux6,s_in2_mux7,s_in2_mux8,s_in2_mux9,s_in2_zdc : lword;
+    signal s_in3_mux0,s_in3_mux1,s_in3_mux2,s_in3_mux3,s_in3_mux4,s_in3_mux5,s_in3_mux6,s_in3_mux7,s_in3_mux8,s_in3_mux9,s_in3_zdc : lword;
+    signal s_in4_mux0,s_in4_mux1,s_in4_mux2,s_in4_mux3,s_in4_mux4,s_in4_mux5,s_in4_mux6,s_in4_mux7,s_in4_mux8,s_in4_mux9,s_in4_zdc : lword;
+    signal s_in5_mux0,s_in5_mux1,s_in5_mux2,s_in5_mux3,s_in5_mux4,s_in5_mux5,s_in5_mux6,s_in5_mux7,s_in5_mux8,s_in5_mux9,s_in5_zdc : lword;
 
 begin
 

@@ -66,6 +66,9 @@ use ieee.std_logic_unsigned.all;
 
 package lhc_data_pkg is
 
+--  for simspy memory (test with ipb_dpmem_4096_32)
+    constant SW_DATA_WIDTH : integer := 32;
+
     type zdc5g_array_t is array(0 to 5) of std_logic_vector(SW_DATA_WIDTH-1 downto 0);
 
 -- HB 2016-06-01: constants for lane mapping (used in lmp.vhd)
@@ -76,9 +79,6 @@ package lhc_data_pkg is
     constant OFFSET_ESUMS_LANES : natural := 10;
     constant OFFSET_ZDC_LANES : natural := 11;
     constant OFFSET_EXT_COND_LANES : natural := 12;
-
---  for simspy memory (test with ipb_dpmem_4096_32)
-    constant SW_DATA_WIDTH : integer := 32;
 
     constant MUON_ARRAY_LENGTH : integer := 8;
     constant MUON_DATA_WIDTH : integer := SW_DATA_WIDTH*2;
@@ -129,7 +129,7 @@ package lhc_data_pkg is
         htm : std_logic_vector(HTM_DATA_WIDTH-1 downto 0);
         etmhf : std_logic_vector(ETMHF_DATA_WIDTH-1 downto 0);
         htmhf : std_logic_vector(HTMHF_DATA_WIDTH-1 downto 0);
-        zdc_data : std_logic_vector(ZDC_DATA_WIDTH-1 downto 0);
+        zdc : std_logic_vector(ZDC_DATA_WIDTH-1 downto 0);
         external_conditions : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
     end record;
 
@@ -145,7 +145,7 @@ package lhc_data_pkg is
             htm => (others=>'0'),
             etmhf => (others=>'0'),
             htmhf => (others=>'0'),
-            zdc_data => (others=>'0'),
+            zdc => (others=>'0'),
             external_conditions => (others=>'0')
         );
 
@@ -232,7 +232,7 @@ package body lhc_data_pkg is
         ret_value(index + HTMHF_DATA_WIDTH-1 downto index) := data_in.htmhf;
         index := index + HTMHF_DATA_WIDTH;
 
-        ret_value(index + ZDC_DATA_WIDTH-1 downto index) := data_in.zdc_data;
+        ret_value(index + ZDC_DATA_WIDTH-1 downto index) := data_in.zdc;
         index := index + ZDC_DATA_WIDTH;
 
         ret_value(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index) := data_in.external_conditions;
@@ -279,7 +279,7 @@ package body lhc_data_pkg is
         ret_value.htmhf := data_in(index + HTMHF_DATA_WIDTH-1 downto index);
         index := index + HTMHF_DATA_WIDTH;
 
-        ret_value.zdc_data := data_in(index + ZDC_DATA_WIDTH-1 downto index);
+        ret_value.zdc := data_in(index + ZDC_DATA_WIDTH-1 downto index);
         index := index + ZDC_DATA_WIDTH;
 
         ret_value.external_conditions := data_in(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index);

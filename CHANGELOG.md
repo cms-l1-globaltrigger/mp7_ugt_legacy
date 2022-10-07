@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.22.0] - 2022-10-06
+### Comment
+
+- mp7_ugt firmware release v1.22.0
+- changes for ZDC 5G optical conversion and 10G ZDC on link 11
+
+### Changed
+- source files:
+  - ../payload/frame/output_mux.vhd
+  - ../payload/frame/lmp.vhd
+  - ../packages/top_decl.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/lhc_data_pkg.vhd
+- script files:
+  - scripts/mp7patch.py
+- tcl file:
+  - ../ucf/mp7_payload.tcl
+
 ## [v1.21.3] - 2022-09-29
 ### Comment
 

@@ -7,6 +7,8 @@
 --
 -- Dave Newbold, June 2014
 
+-- HB 2022-09-21: inserted gth_5g_std_lat on REGION 4, updated to N_REGION = 8
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 

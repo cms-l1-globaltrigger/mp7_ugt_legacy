@@ -7,10 +7,11 @@
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
 -- gt: v1.22.0
--- frame: v1.3.1 (see frame.vhd)
--- gtl: v1.1884 (see gtl_module_tpl.vhd)
+-- frame: v1.4.0 (see frame.vhd)
+-- gtl: v1.18.0 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
+-- HB 2022-09-20: v1.22.0 - Changed top_decl.vhd to 10 REGIONs. Changed output_mux.vhd and lmp.vhd (frame: v1.4.0).
 -- HB 2022-09-26: v1.21.3 - Added script run_latex_w_versions.py (extract versions from gt_mp7_core_pkg.vhd, creates versions.tex and run latex ['make']).
 -- HB 2022-09-20: v1.21.1 - Updated scripts for MP7 patch in run_synth_ipbb.py.
 -- HB 2022-08-16: v1.21.0 - Signal start_sync_bc0_int used for reset of prescale counter (instead of begin_lumi_section). Removed sres signals for counters in FDL, not used anymore.
@@ -83,15 +84,15 @@ package gt_mp7_core_pkg is
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GT_MINOR_VERSION      : integer range 0 to 255 := 22;
-    constant GT_REV_VERSION        : integer range 0 to 255 := 8;
+    constant GT_REV_VERSION        : integer range 0 to 255 := 0;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(GT_REV_VERSION, 8));
 -- FRAME firmware version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 3;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 1;
+    constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 4;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 0;
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 18;

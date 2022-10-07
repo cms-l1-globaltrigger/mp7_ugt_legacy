@@ -1,6 +1,7 @@
 -- Description:
 -- Contains the "framework" of GT-logic (all parts, except GTL and FDL).
 
+-- HB 2022-10-08: v1.4.0 - quad 7 and 8 for ZDC 10G outputs, quad 9 for ZDC 5G inputs.
 -- HB 2022-09-02: v1.3.1 - cleaned up.
 -- HB 2022-03-22: v1.3.0 - output ports bcres_d and bcres_d_FDL not used anymore (not used in mp7_payload.vhd). Signals bcres, bcres_outputmux, bcres_d_FDL_int and bx_nr_d_FDL_int not used anymore. Updated tcm.vhd (input port bcres_d_FDL not used anymore) and output_mux.vhd (input port bx_nr_fdl not used anymore). Removed signals for spy3.
 -- HB 2022-02-08: v1.2.5 - changed frame_module_info.vhd (GT_VERSION in OFFSET_FRAME_VERSION) and frame_addr_decode.vhd.
@@ -387,7 +388,8 @@ architecture rtl of frame is
             valid_hi    => mux_ctrl(1)(15 downto 0),
             start       => mux_ctrl(2)(0),
             strobe      => mux_ctrl(3)(0),
-            lane_out     => lane_data_out
+            zdc5g       => zdc5g,
+            lane_out    => lane_data_out
         );
 
 -- END OF DATA-PATH

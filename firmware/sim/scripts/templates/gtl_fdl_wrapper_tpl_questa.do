@@ -56,6 +56,9 @@ vcom -93 -work work $TB_DIR/txt_util_pkg.vhd
 ## GT packages
 vcom -93 -work work $HDL_DIR/packages/math_pkg.vhd
 ## HB 2022-09-21: used gt_mp7_top_pkg_sim.vhd for simulation
+vcom -93 -work work $HDL_DIR/packages/gt_mp7_top_pkg_sim.vhd
+vcom -93 -work work $HDL_DIR/packages/top_decl.vhd
+vcom -93 -work work $MP7/components/mp7_ttc/firmware/hdl/mp7_ttc_decl.vhd
 vcom -93 -work work $HDL_DIR/packages/gt_mp7_core_pkg.vhd
 vcom -93 -work work $MENU_DIR/fdl_pkg.vhd
 vcom -93 -work work $HDL_DIR/packages/fdl_addr_decode.vhd
@@ -110,6 +113,7 @@ vcom -93 -work work $HDL_DIR/payload/gtl/esums_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/min_bias_hf_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/towercount_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/zdc_condition.vhd
 #
 ### modules of BRAMs used for mass over DeltaR
 vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_calo_inv_dr_sq_1/synth/rom_lut_calo_inv_dr_sq_1.vhd

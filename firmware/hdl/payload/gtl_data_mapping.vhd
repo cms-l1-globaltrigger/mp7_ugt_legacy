@@ -2,6 +2,7 @@
 -- Data mapping for GTL
 
 -- Version-history:
+-- HB 2022-10-10: inserted ZDC.
 -- HB 2022-09-05: cleaned up.
 -- HB 2021-06-01: first design.
 
@@ -89,4 +90,13 @@ begin
 
     gtl_data.ext_cond <= lhc_data.external_conditions(NR_EXTERNAL_CONDITIONS-1 downto 0);
 
+-- ****************************************************************************************
+
+    gtl_data.zdc(0) <= lhc_data.zdc10g_0(ZDC10G_0_WIDTH-1 downto 0);
+    gtl_data.zdc(1) <= lhc_data.zdc10g_1(ZDC10G_1_WIDTH-1 downto 0);
+    gtl_data.zdc(2) <= lhc_data.zdc10g_2(ZDC10G_2_WIDTH-1 downto 0);
+    gtl_data.zdc(3) <= lhc_data.zdc10g_3(ZDC10G_3_WIDTH-1 downto 0);
+    gtl_data.zdc(4) <= lhc_data.zdc10g_4(ZDC10G_4_WIDTH-1 downto 0);
+    gtl_data.zdc(5) <= lhc_data.zdc10g_5(ZDC10G_5_WIDTH-1 downto 0);
+    
 end architecture rtl;

@@ -2,6 +2,7 @@
 -- Pipeline for +/-2 bx data.
 
 -- Version-history:
+-- HB 2022-10-10: updated for ZDC (on link 11).
 -- HB 2021-06-10: updated for hadronic shower trigger (mus).
 -- HB 2021-05-21: first design.
 
@@ -66,6 +67,7 @@ begin
         bx_data.asymht(i) <= data_tmp(i).asymht;
         bx_data.asymethf(i) <= data_tmp(i).asymethf;
         bx_data.asymhthf(i) <= data_tmp(i).asymhthf;
+        bx_data.zdc(i) <= data_tmp(i).zdc;
 
 -- Additional delay for centrality and ext_cond (no comparators and conditions)
 

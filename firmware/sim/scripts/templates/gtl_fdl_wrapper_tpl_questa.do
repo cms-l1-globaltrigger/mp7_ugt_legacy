@@ -171,7 +171,6 @@ vcom -93 -work work $HDL_DIR/payload/frame.vhd
 vcom -93 -work work $HDL_DIR/payload/bgo_sync.vhd
 vcom -93 -work work $HDL_DIR/packages/gt_mp7_core_addr_decode.vhd
 vcom -93 -work work $IPB_DIR/components/ipbus_core/firmware/hdl/ipbus_fabric_sel.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl_data_mapping.vhd
 vcom -93 -work work $HDL_DIR/mp7_payload.vhd
 
 ##TB_DIR

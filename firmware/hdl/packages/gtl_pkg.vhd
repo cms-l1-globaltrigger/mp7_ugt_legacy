@@ -426,7 +426,7 @@ type gtl_data_record is record
     towercount : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
     centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
-    zdc : std_logic_vector(MAX_ZDC_BITS-1 downto 0);
+    zdc : zdc_array;
 end record gtl_data_record;
 
 type bx_data_record is record

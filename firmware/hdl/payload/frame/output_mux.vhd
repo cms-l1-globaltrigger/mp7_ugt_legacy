@@ -3,7 +3,7 @@
 -- Multiplexer for read-out record data.
 
 -- Version-history:
--- HB 2022-10-08: ZDC 10G outputs on quad 7 and 8.
+-- HB 2022-10-10: ZDC 10G outputs on quad 7 and 8. Removed orbit counter to quad 6 for "scouting".
 -- HB 2022-09-06: cleaned up.
 -- HB 2022-03-22: Port bx_nr_fdl removed, contains same data as bx_nr (because bcres_d and bcres_d_FDL are the same signal: delayed bc0 [bc0_d_int in frame.vhd]).
 -- HB 2021-06-16: implemented selectors and orbit counter to quad 6 for "scouting".
@@ -297,19 +297,8 @@ begin
     s_in0_mux9   <=   (X"00000" & bx_nr, sValid, start, strobe);           -- frame 0   -> frame bx_nr
     s_in1_mux9   <=   (X"00000" & ctrs(6).bctr, sValid, start, strobe);    -- frame 1   -> mp7 ttc bc cntr for Quad 6!
     s_in2_mux9   <=   (X"00000" & bx_nr, sValid, start, strobe);       -- frame 2   -> frame bx_nr (kept for same read-out structure)
-
-    -- HB 2021-06-16: inserted orbit counter for scouting
-    scouting_p: process (orbit_nr, sValid, start, strobe)
-    begin
-        if SCOUTING then
-            s_in3_mux9   <=   (X"0000" & orbit_nr(47 downto 32), sValid, start, strobe); -- frame 3   -> orbit counter 47..32
-            s_in4_mux9   <=   (orbit_nr(31 downto 0), sValid, start, strobe);            -- frame 4   -> orbit counter 31..0
-        else
-            s_in3_mux9   <=   ((others => '0'), sValid, start, strobe);        -- frame 3   -> free
-            s_in4_mux9   <=   ((others => '0'), sValid, start, strobe);        -- frame 4   -> free
-        end if;
-    end process scouting_p;
-
+    s_in3_mux9   <=   ((others => '0'), sValid, start, strobe);        -- frame 3   -> free
+    s_in4_mux9   <=   ((others => '0'), sValid, start, strobe);        -- frame 4   -> free
     s_in5_mux9   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
 
     mux9_i: entity work.mux

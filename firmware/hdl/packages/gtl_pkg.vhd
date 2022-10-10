@@ -2,7 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
--- HB 2022-10-10: added ZDC definitions.
+-- HB 2022-10-10: added ZDC definitions. Removed constant SCOUTING.
 -- HB 2022-09-23: added constants ESUMS_COND_STAGES, MB_COND_STAGES and TC_COND_STAGES.
 -- HB 2022-09-02: cleaned up.
 -- HB 2021-10-19: inserted jet DISP (displaced) bit 27 (and all dependencies on this bit).
@@ -76,7 +76,6 @@ constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
 constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
 
 -- Selector for options
-constant SCOUTING: boolean := false; -- selector for scouting
 constant SPYMEM: boolean := true; -- selector for input spymem
 
 -- Definition of general types

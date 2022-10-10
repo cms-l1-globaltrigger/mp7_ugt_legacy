@@ -2,7 +2,7 @@ import h5py
 import numpy as np
 
 infile = "/eos/cms/store/cmst3/group/l1tr/jngadiub/L1TNtupleRun3-h5-extended-v2-120X_hw/BSM_preprocessed.h5"
-nevents = 100
+nevents = 10
 sample = "haa4b_ma15_powheg"
 
 

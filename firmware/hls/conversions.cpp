@@ -165,7 +165,6 @@ PxPyPz JetToCartesian(Jet x){
   cossin_t sinphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi);
   cossin_t cosphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi+90*2);
   sinh_t  sinheta = sinh_with_conversion_jet<ap_int<8>, sinh_t  , N_TABLE>(eta);
-
   sinheta = (sign_eta > 0) ? (sinh_t) (-sign_eta*sinheta) : sinheta; // Change sign bit if eta is negative, sinh(-x)=-sin(x)
 
   pxpypz_t px, py, pz;

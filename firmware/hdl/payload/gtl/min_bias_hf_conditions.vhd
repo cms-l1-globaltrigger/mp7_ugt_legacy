@@ -1,6 +1,9 @@
 
--- Description: minimum bias Hf conditions
+-- Description:
+-- Minimum bias Hf conditions
 
+-- Version history:
+-- HB 2022-09-23: used "delay_pipeline" for condition output.
 -- HB 2020-01-31: redesign output pipeline
 -- HB 2020-01-30: removed data_i compare with "ZERO".
 -- HB 2016-04-26: updated minimum bias Hf types to same notation as in grammar.
@@ -27,7 +30,8 @@ end min_bias_hf_conditions;
 
 architecture rtl of min_bias_hf_conditions is
 
-    signal temp1, comp_o : std_logic;
+    signal comp_o : std_logic;
+    signal comp_v, comp_v_o : std_logic_vector(0 downto 0);
 
 begin
 
@@ -55,13 +59,18 @@ begin
                   '0';
     end generate mbt1hfm_sel;
 
--- Pipeline stages for condition output - 2 stages.
-    condition_o_pipeline: process(clk, comp_o)
-    begin
-        if (clk'event and clk = '1') then
-            temp1 <= comp_o;
-            condition_o <= temp1;
-        end if;
-    end process;
+-- Pipeline stages for condition output
+    comp_v(0) <= comp_o;
+
+    out_pipe_i: entity work.delay_pipeline
+        generic map(
+            DATA_WIDTH => 1,
+            STAGES => MB_COND_STAGES
+        )
+        port map(
+            clk, comp_v, comp_v_o
+        );
+
+    condition_o <= comp_v_o(0);
 
 end architecture rtl;

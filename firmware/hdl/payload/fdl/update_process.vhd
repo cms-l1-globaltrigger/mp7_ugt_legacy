@@ -2,10 +2,10 @@
 -- Desription:
 -- Update process for prescalers for algorithms in FDL
 
+-- HB 2022-09-06: cleaned up.
+
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all;
 
 entity update_process is
    generic( 

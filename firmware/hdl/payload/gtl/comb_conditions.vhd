@@ -3,6 +3,7 @@
 -- Condition module for all combination conditions.
 
 -- Version history:
+-- HB 2022-09-02: cleaned up.
 -- HB 2022-02-17: bug fixed in orm and cleaned up.
 -- HB 2021-12-09: updated for DISP of jets.
 -- HB 2021-10-19: inserted cut for DISP of jets.
@@ -13,8 +14,6 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all; -- for function "CONV_INTEGER"
 
 use work.gtl_pkg.all;
 
@@ -154,7 +153,7 @@ architecture rtl of comb_conditions is
     signal dr_orm_comp_pipe : std_logic_2dim_array(0 to MAX_CALO_OBJECTS-1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
     signal obj2_vs_templ_pipe : std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, 1 to 1) := (others => (others => '0'));
 
-    signal condition_and_or : std_logic;
+--     signal condition_and_or : std_logic;
 
     signal twobody_pt_comp_pipe, twobody_upt_comp_pipe :
     std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_1_low_obj1 to slice_1_high_obj1) := (others => (others => '1'));

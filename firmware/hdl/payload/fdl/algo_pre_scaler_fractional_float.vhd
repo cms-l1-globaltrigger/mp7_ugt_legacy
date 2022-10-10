@@ -3,6 +3,7 @@
 -- Prescalers for algorithms in FDL with fractional prescale values in float notation
 
 -- Version-history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2022-08-16: port signal start (start_sync_bc0_int) used for reset of prescale counter (instead of begin_lumi_section). Removed unused signal sres_counter.
 -- HB 2019-10-04: new file name for fractional prescale values in float notation.
 -- HB 2019-10-03: removed generic parameter PRESCALER_INCR [used as globaly, directly taken from fdl_pkg.vhd].
@@ -11,30 +12,28 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
 use work.fdl_pkg.ALL;
 
 entity algo_pre_scaler is
-    generic( 
-        PRESCALE_FACTOR_WIDTH : integer;
-        PRESCALE_FACTOR_INIT : std_logic_vector(31 DOWNTO 0);
-        SIM : boolean := false
-    );
-    port( 
-        clk : in std_logic;
-        algo_i : in std_logic;
-        start : in std_logic;
-        request_update_factor_pulse : in std_logic;
-        update_factor_pulse : in std_logic;
-        prescale_factor : in std_logic_vector (PRESCALE_FACTOR_WIDTH-1 DOWNTO 0); -- why counter_width ???
-        prescaled_algo_o : out std_logic;
-        -- output for simulation
-        index_sim : out integer := 0;
-        prescaled_algo_cnt_sim : out natural := 0;
-        algo_cnt_sim : out natural := 0  
-        );
+   generic( 
+      PRESCALE_FACTOR_WIDTH : integer;
+      PRESCALE_FACTOR_INIT : std_logic_vector(31 DOWNTO 0);
+      SIM : boolean := false
+   );
+   port( 
+      clk : in std_logic;
+      algo_i : in std_logic;
+      start : in std_logic;
+      request_update_factor_pulse : in std_logic;
+      update_factor_pulse : in std_logic;
+      prescale_factor : in std_logic_vector (PRESCALE_FACTOR_WIDTH-1 DOWNTO 0);
+      prescaled_algo_o : out std_logic;
+      -- output for simulation
+      prescaled_algo_cnt_sim : out natural := 0;
+      algo_cnt_sim : out natural := 0  
+   );
 end algo_pre_scaler;
 
 architecture rtl of algo_pre_scaler is
@@ -50,17 +49,17 @@ architecture rtl of algo_pre_scaler is
 begin
 
     prescale_factor_update_i: entity work.update_process
-    generic map(
-        WIDTH => PRESCALE_FACTOR_WIDTH,
-        INIT_VALUE => PRESCALE_FACTOR_INIT
-    )
-    port map( 
-        clk => clk,
-        request_update_pulse => request_update_factor_pulse,
-        update_pulse => update_factor_pulse,
-        data_i => prescale_factor(PRESCALE_FACTOR_WIDTH-1 downto 0),
-        data_o => prescale_factor_int(PRESCALE_FACTOR_WIDTH-1 downto 0)
-    );
+        generic map(
+            WIDTH => PRESCALE_FACTOR_WIDTH,
+            INIT_VALUE => PRESCALE_FACTOR_INIT
+        )
+        port map( 
+            clk => clk,
+            request_update_pulse => request_update_factor_pulse,
+            update_pulse => update_factor_pulse,
+            data_i => prescale_factor(PRESCALE_FACTOR_WIDTH-1 downto 0),
+            data_o => prescale_factor_int(PRESCALE_FACTOR_WIDTH-1 downto 0)
+        );
     
     factor <= prescale_factor_int(PRESCALE_FACTOR_WIDTH-1 downto 0);
     
@@ -90,7 +89,6 @@ begin
     
 -- Generating prescaled algos (prescale factor value = 0 => no prescaled algos)
     prescaled_algo_p: process (clk, algo_i, limit, factor)
-        variable algo_cnt : natural := 0;
     begin
         if clk'event and clk = '0' then 
             if factor = ZERO then

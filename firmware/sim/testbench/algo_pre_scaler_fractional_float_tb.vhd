@@ -3,6 +3,7 @@
 -- Testbench for prescalers (FDL) with fractional prescale values given in float
 
 -- Version history:
+-- HB 2022-09-08: cleaned up
 -- HB 2019-10-03: cleaned up code
 -- HB 2019-05-31: first design
 
@@ -30,7 +31,6 @@ architecture beh of algo_pre_scaler_fractional_TB is
     signal algo : std_logic := '1';
     signal algo_o : std_logic;
     signal prescale_factor : std_logic_vector(PRESCALE_FACTOR_WIDTH-1 downto 0) := (others => '0');
-    signal index_sim : integer;
     signal algo_cnt_sim : natural;
     signal prescaled_algo_cnt_sim : natural;
     
@@ -46,39 +46,18 @@ begin
         wait for LHC_CLK_PERIOD/2;
     end process;
 
---     -- Algo
---     process
---     begin
---         algo  <=  '1';
---         wait for LHC_CLK_PERIOD;
---         algo  <=  '0';
---         wait for 10*LHC_CLK_PERIOD;
---     end process;
-
     process
     begin
         wait for LHC_CLK_PERIOD; 
-        prescale_factor <= PRESCALE_FACTOR_VALUE_VEC;
-        wait for 10*LHC_CLK_PERIOD;
-        start <= '1'; -- TTC start signal resets prescaler
-        wait for LHC_CLK_PERIOD;
-        start <= '0';
+            prescale_factor <= PRESCALE_FACTOR_VALUE_VEC;
         wait for 5*LHC_CLK_PERIOD;
-        request_update_factor_pulse <= '1';
+            request_update_factor_pulse <= '1';
         wait for LHC_CLK_PERIOD;
-        request_update_factor_pulse <= '0';
-        wait for 15*LHC_CLK_PERIOD;
-        update_factor_pulse <= '1'; -- set prescale factor at "begin of lumi" (if requested)
+            request_update_factor_pulse <= '0';
+        wait for 5*LHC_CLK_PERIOD;
+            update_factor_pulse <= '1';
         wait for LHC_CLK_PERIOD;
-        update_factor_pulse <= '0';
-        wait for 50*LHC_CLK_PERIOD;
-        update_factor_pulse <= '1'; -- check no "begin of lumi" reset
-        wait for LHC_CLK_PERIOD;
-        update_factor_pulse <= '0';
-        wait for 40*LHC_CLK_PERIOD;
-        start <= '1'; -- TTC start signal resets prescaler
-        wait for LHC_CLK_PERIOD;
-        start <= '0';
+            update_factor_pulse <= '0';
         wait;
     end process;
 
@@ -87,16 +66,15 @@ begin
     dut: entity work.algo_pre_scaler
         generic map(PRESCALE_FACTOR_WIDTH, PRESCALE_FACTOR_INIT_VALUE_VEC, SIM)
         port map(
-        clk => lhc_clk,
-        algo_i => algo,
-        start => start,
-        request_update_factor_pulse => request_update_factor_pulse,
-        update_factor_pulse => update_factor_pulse,
-        prescale_factor => prescale_factor,
-        prescaled_algo_o => open,
-        index_sim => open,
-        prescaled_algo_cnt_sim => prescaled_algo_cnt_sim,
-        algo_cnt_sim => algo_cnt_sim
+            clk => lhc_clk,
+            sres_counter => sres_counter,
+            algo_i => algo,
+            request_update_factor_pulse => request_update_factor_pulse,
+            update_factor_pulse => update_factor_pulse,
+            prescale_factor => prescale_factor,
+            prescaled_algo_o => open,
+            prescaled_algo_cnt_sim => prescaled_algo_cnt_sim,
+            algo_cnt_sim => algo_cnt_sim
         );
 
 end beh;

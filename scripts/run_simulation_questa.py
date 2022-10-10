@@ -47,13 +47,15 @@ if not DefaultQuestaSimLibsPath:
 DefaultGitlabUrlIPB = 'https://github.com/ipbus/ipbus-firmware'
 """Default URL IPB FW repo."""
 
-DefaultIpbbTag = 'v1.4'
+DefaultIpbFwTag = 'v1.4'
 """Default tag IPB FW repo."""
 
-DefaultGitlabUrlMP7 = 'https://gitlab.cern.ch/hbergaue/mp7'
+## HB 2022-09-16: using MP7 firmware from "original" repo, patching of MP7 firmware done in this script.
+DefaultGitlabUrlMP7 = 'https://gitlab.cern.ch/cms-cactus/firmware/mp7'
 """Default URL MP7 FW repo."""
 
-DefaultMP7Tag = 'mp7fw_v3_0_0_mp7_ugt'
+## HB 2022-09-21: using tag of MP7 firmware "original" repo
+DefaultMP7Tag = 'v3.0.0'
 """Default tag MP7 FW repo."""
 
 vhdl_snippets_names = [
@@ -318,7 +320,13 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
         raise RuntimeError("\033[1;31m mp7 not in temp_dir. \033[0m")
     if not os.path.exists(os.path.join(temp_dir, "ipbus-firmware")):
         raise RuntimeError("\033[1;31m ipbus-firmware not in temp_dir. \033[0m")
-
+    
+    ## HB 2022-09-16: patching of MP7 firmware (using MP7 firmware from original repo).
+    logging.info("===========================================================================")
+    logging.info("patch MP7 firmware for ugt ...")
+    command = f'bash -c "cd; python3 {os.path.dirname(os.path.abspath(__file__))}/mp7patch.py {temp_dir}/mp7"'
+    run_command(command)
+    
     logging.info("===========================================================================")
     logging.info("download XML and testvector file from L1Menu repository ...")
     # Get l1menus_path for URL
@@ -553,7 +561,7 @@ def parse_args():
     parser.add_argument('--mp7_url', default=DefaultGitlabUrlMP7, help="MP7 repo (default is '{}')".format(DefaultGitlabUrlMP7))
     parser.add_argument('--mp7_repo_tag', default=DefaultMP7Tag, help="MP7 repo tag (default is '{}')".format(DefaultMP7Tag))
     parser.add_argument('--ipb_fw_url', default=DefaultGitlabUrlIPB, help="IPBus firmware repo (default is '{}')".format(DefaultGitlabUrlIPB))
-    parser.add_argument('--ipb_fw_repo_tag', default=DefaultIpbbTag, help="IPBus firmware repo tag (default is '{}')".format(DefaultIpbbTag))
+    parser.add_argument('--ipb_fw_repo_tag', default=DefaultIpbFwTag, help="IPBus firmware repo tag (default is '{}')".format(DefaultIpbFwTag))
     parser.add_argument('--questasimlibs', default=DefaultQuestaSimLibsPath, help="Questasim Vivado libraries directory name (default is {})".format(DefaultQuestaSimLibsPath))
     parser.add_argument('--output', metavar='path', type=os.path.abspath, help='path to output directory')
     parser.add_argument('--view_wave', action='store_true', help="shows the waveform")

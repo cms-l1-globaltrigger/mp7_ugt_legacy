@@ -1,7 +1,8 @@
 -- Description:
--- Package for constant and type definitions of FDL firmware in Global Trigger Upgrade system.
+-- Package for constant and type definitions for algo_pre_scaler_fractional_TB.
 
 -- Version-history:
+-- HB 2022-09-08: cleaned up.
 -- HB 2019-10-10: removed unused code.
 -- HB 2019-10-04: new file name for fractional prescale values in float notation.
 -- HB 2019-10-03: Cleaned up code.
@@ -29,7 +30,6 @@ package fdl_pkg is
 
     constant PRESCALE_FACTOR_INIT_VALUE_INTEGER : integer := integer(PRESCALE_FACTOR_INIT_VALUE * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
     constant PRESCALE_FACTOR_INIT_VALUE_VEC : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_INIT_VALUE_INTEGER, 32);   
---     constant PRESCALE_FACTOR_INIT : ipb_regs_array(0 to 511) := (others => PRESCALE_FACTOR_INIT_VALUE_VEC);
     constant PRESCALER_INCR : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR((10**PRESCALE_FACTOR_FRACTION_DIGITS), 32);
     
 -- *******************************************************************************************************

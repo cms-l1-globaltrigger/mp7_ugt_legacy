@@ -1,6 +1,6 @@
 
 -- Description:
--- Comparator formuon charge
+-- Comparator for muon charge
 
 -- Version history:
 -- HB 2021-03-08: first design.

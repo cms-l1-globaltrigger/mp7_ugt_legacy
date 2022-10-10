@@ -1,5 +1,5 @@
 
--- Desription:
+-- Description:
 -- Comparator for pseudorapidity (eta)
 -- Eta scale is defined with Two's Complement notation values for HW index.
 -- Therefore a comparison with "signed" is implemented, which needs ieee.std_logic_signed.all library.

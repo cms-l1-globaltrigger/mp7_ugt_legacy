@@ -3,12 +3,12 @@
 -- Eta and phi conversion to muon scale (for calo-muon and muon-esums correlation conditions)
 
 -- Version history:
+-- HB 2022-09-05: cleaned up.
 -- HB 2021-05-18: added use clause gtl_luts_pkg. Changed slice parameter.
 -- HB 2021-02-17: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
 use work.gtl_pkg.all;

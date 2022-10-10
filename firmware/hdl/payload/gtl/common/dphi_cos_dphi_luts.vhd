@@ -3,13 +3,13 @@
 -- LUTs of dphi and cos_dphi.
 
 -- Version history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2021-05-18: added use clause gtl_luts_pkg. Changed slice parameter.
 -- HB 2021-02-27: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all;
+use ieee.std_logic_arith.CONV_STD_LOGIC_VECTOR;
 
 use work.gtl_pkg.all;
 use work.gtl_luts_pkg.all;

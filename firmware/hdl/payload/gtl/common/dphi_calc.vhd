@@ -1,3 +1,5 @@
+-- Description:
+-- Calculation of difference in phi.
 
 library ieee;
 use ieee.std_logic_1164.all;

@@ -2,6 +2,8 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2022-09-23: added constants ESUMS_COND_STAGES, MB_COND_STAGES and TC_COND_STAGES.
+-- HB 2022-09-02: cleaned up.
 -- HB 2021-10-19: inserted jet DISP (displaced) bit 27 (and all dependencies on this bit).
 -- HB 2021-08-12: added selectors (constants) for SCOUTING and SPYMEM (usae of input spy memory).
 -- HB 2021-06-10: added hadronic shower trigger bits (muon).
@@ -53,9 +55,6 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all;
-use ieee.numeric_std.all;
 
 use work.lhc_data_pkg.all;
 use work.math_pkg.all;
@@ -65,6 +64,9 @@ package gtl_pkg is
 
 -- Fixed pipeline structure
 constant BX_PIPELINE_STAGES: natural := 5; -- +/- 2bx pipeline
+constant ESUMS_COND_STAGES: natural := 2; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
+constant MB_COND_STAGES: natural := 2; -- pipeline stages for "Minimum Bias conditions" to get same pipeline to algos as conditions
+constant TC_COND_STAGES: natural := 2; -- pipeline stages for "Towercount condition" to get same pipeline to algos as conditions
 constant EXT_COND_STAGES: natural := 2; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
 constant CENTRALITY_STAGES: natural := 2; -- pipeline stages for "Centrality" to get same pipeline to algos as conditions
 constant MUS_STAGES: natural := 2; -- pipeline stages for "Hadronic shower triggers (muon)" to get same pipeline to algos as conditions

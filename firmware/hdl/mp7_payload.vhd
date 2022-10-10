@@ -23,7 +23,6 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
 
 use work.ipbus.all;
 use work.mp7_data_types.all;
@@ -64,11 +63,8 @@ architecture rtl of mp7_payload is
 
     signal lhc_data_2_gtl : lhc_data_t;
 
-    signal tp_frame : std_logic_vector(3 downto 0);
-
-    signal fdl_status : std_logic_vector(3 downto 0);
     signal prescale_factor_set_index_rop : std_logic_vector(7 downto 0);
-    signal algo_after_gtLogic_rop : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+    signal algo_after_gtlogic_rop : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal algo_after_bxomask_rop : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal algo_after_prescaler_rop : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal local_finor_rop : std_logic;
@@ -79,9 +75,6 @@ architecture rtl of mp7_payload is
     signal veto_2_mezz_lemo : std_logic;
     signal finor_w_veto_2_mezz_lemo : std_logic;
 
---     signal bcres_d : std_logic;
---     signal bcres_d_FDL : std_logic;
-    signal bx_nr_d_FDL : bx_nr_t;
     signal start_lumisection : std_logic;
 
     signal lhc_rst : std_logic;
@@ -163,19 +156,16 @@ begin
             oc0 => oc0_sync_bc0_int,
             start => start_sync_bc0_int,
             l1a => l1a,
---             bcres_d => bcres_d,
---             bcres_d_FDL => bcres_d_FDL,
             start_lumisection => start_lumisection,
             lane_data_in => lane_data_in,
             lane_data_out => lane_data_out,
             lhc_data_2_gtl_o => lhc_data_2_gtl,
-            prescale_factor_set_index_rop   => prescale_factor_set_index_rop,
-            algo_after_gtLogic_rop => algo_after_gtLogic_rop,
+            prescale_factor_set_index_rop => prescale_factor_set_index_rop,
+            algo_after_gtlogic_rop => algo_after_gtlogic_rop,
             algo_after_bxomask_rop => algo_after_bxomask_rop,
             algo_after_prescaler_rop => algo_after_prescaler_rop,
             local_finor_rop => local_finor_rop,
             local_veto_rop => local_veto_rop, -- HB 2014-10-22: added for ROP
-            finor_rop => '0', -- HB 2014-10-30: no total_finor to ROP
             local_finor_with_veto_2_spy2 => local_finor_with_veto_o -- HB 2014-10-30: to SPY2_FINOR
         );
 
@@ -213,7 +203,7 @@ begin
             begin_lumi_section => start_lumisection,
             algo_i => algo,
             prescale_factor_set_index_rop => prescale_factor_set_index_rop,
-            algo_after_gtLogic_rop => algo_after_gtLogic_rop,
+            algo_after_gtlogic_rop => algo_after_gtlogic_rop,
             algo_after_bxomask_rop => algo_after_bxomask_rop,
             algo_after_prescaler_rop  => algo_after_prescaler_rop,
             local_finor_rop => local_finor_rop,

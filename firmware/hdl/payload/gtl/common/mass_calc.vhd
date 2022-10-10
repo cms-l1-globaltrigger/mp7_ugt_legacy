@@ -3,13 +3,13 @@
 -- Calculation of invariant mass or transverse mass based on LUTs.
 
 -- Version history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2021-04-06: first design
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
-use ieee.std_logic_arith.all;
-use work.math_pkg.all;
+use ieee.std_logic_arith.conv_std_logic_vector;
 
 use work.gtl_pkg.all;
 

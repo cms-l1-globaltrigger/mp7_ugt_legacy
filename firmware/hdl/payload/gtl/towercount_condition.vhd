@@ -1,6 +1,9 @@
 
--- Desription: TOWERCOUNT (ECAL sum) conditions
+-- Desription:
+-- TOWERCOUNT (ECAL sum) conditions
 
+-- Version history:
+-- HB 2022-09-23: used "delay_pipeline" for condition output.
 -- HB 2016-10-11: first design.
 
 library ieee;
@@ -29,25 +32,27 @@ architecture rtl of towercount_condition is
     constant conditions_pipeline_stages: natural := 2; -- pipeline stages for output signal of esums_conditions.vhd (0 => no flip-flop)
 
     signal comp_o : std_logic;
+    signal comp_v, comp_v_o : std_logic_vector(0 downto 0);
 
 begin
 
    comp_o <= '0' when data_i(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0) = ZERO(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0) else
-	     '1' when (data_i(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0) >= count_threshold(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0)) and et_ge_mode else
+             '1' when (data_i(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0) >= count_threshold(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0)) and et_ge_mode else
              '1' when (data_i(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0) = count_threshold(TOWERCOUNT_COUNT_HIGH-TOWERCOUNT_COUNT_LOW-1 downto 0)) and not et_ge_mode else
              '0';
 
--- Pipeline stages for condition output.
-    condition_o_pipeline: process(clk, comp_o)
-	variable pipeline_temp : std_logic_vector(0 to conditions_pipeline_stages+1) := (others => '0');
-    begin
-        pipeline_temp(conditions_pipeline_stages+1) := comp_o;
-        if (conditions_pipeline_stages > 0) then
-            if (clk'event and (clk = '1') ) then
-                pipeline_temp(0 to conditions_pipeline_stages) := pipeline_temp(1 to conditions_pipeline_stages+1);
-            end if;
-        end if;
-        condition_o <= pipeline_temp(1); -- used pipeline_temp(1) instead of pipeline_temp(0), to prevent warnings in compilation
-    end process;
+-- Pipeline stages for condition output
+    comp_v(0) <= comp_o;
+
+    out_pipe_i: entity work.delay_pipeline
+        generic map(
+            DATA_WIDTH => 1,
+            STAGES => TC_COND_STAGES
+        )
+        port map(
+            clk, comp_v, comp_v_o
+        );
+
+    condition_o <= comp_v_o(0);
 
 end architecture rtl;

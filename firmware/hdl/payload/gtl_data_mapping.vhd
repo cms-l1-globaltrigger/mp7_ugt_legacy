@@ -2,11 +2,11 @@
 -- Data mapping for GTL
 
 -- Version-history:
+-- HB 2022-09-05: cleaned up.
 -- HB 2021-06-01: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
 
 use work.lhc_data_pkg.all;
 use work.gtl_pkg.all;

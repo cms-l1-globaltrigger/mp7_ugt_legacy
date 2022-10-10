@@ -3,14 +3,14 @@
 -- Comparators for azimuth angle of calo objects
 
 -- Version history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2020-12-21: bug fixed.
 -- HB 2020-12-14: changed "phi cuts", used "nr_phi_windows" now.
 -- HB 2015-05-29: removed "use work.gtl_lib.all;" - using "entity work.xxx" for instances
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all; -- for et and phi comparators
+use ieee.std_logic_unsigned.all;
 
 entity phi_windows_comp is
     generic	(

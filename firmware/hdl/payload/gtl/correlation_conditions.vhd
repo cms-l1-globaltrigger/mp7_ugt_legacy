@@ -3,16 +3,14 @@
 -- Correlation Condition module (for all possible correlation conditions)
 
 -- Version history:
+-- HB 2022-09-05: cleaned up.
 -- HB 2021-12-09: updated for DISP of jets.
 -- HB 2021-10-19: inserted cut for DISP of jets.
 -- HB 2020-05-05: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
-use ieee.std_logic_arith.all;
 
-use work.math_pkg.all;
 use work.gtl_pkg.all;
 
 entity correlation_conditions is
@@ -200,8 +198,8 @@ architecture rtl of correlation_conditions is
 
 --***************************************************************
 -- signals for charge correlation comparison:
-    signal charge_comp_double, charge_comp_double_pipe : std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => '1'));
-    signal charge_comp_triple, charge_comp_triple_pipe : std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '1')));
+    signal charge_comp_double_pipe : std_logic_2dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => '1'));
+    signal charge_comp_triple_pipe : std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '1')));
 --***************************************************************
     signal deta_orm_comp_12_pipe, dphi_orm_comp_12_pipe, dr_orm_comp_12_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
     signal deta_orm_comp_13_pipe, dphi_orm_comp_13_pipe, dr_orm_comp_13_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));

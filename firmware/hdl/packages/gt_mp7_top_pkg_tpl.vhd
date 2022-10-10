@@ -1,3 +1,10 @@
+-- Description:
+-- Package for definitions of ugt top.
+
+-- Version-history:
+-- HB 2016-06-30: removed unused constants and comments
+
+--------------------------------------------------------------------------------
 --
 -- Notes on using `gtu-pkgpatch-ipbus' for this package:
 --  * {{IPBUS_TIMESTAMP}}    32 bit UNIX timestamp placeholder (X"00000000")
@@ -6,8 +13,6 @@
 --  * {{IPBUS_BUILD_VERSION}}     build firmware version (X"...")
 --
 --------------------------------------------------------------------------------
-
--- HB 2016-06-30: removed unused constants and comments
 
 library IEEE;
 use ieee.std_logic_1164.all;

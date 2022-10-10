@@ -129,7 +129,7 @@ architecture rtl of frame is
     signal oc0_d_int : std_logic;
     signal start_d_int : std_logic;
 
-    signal zdc5g : zdc5g_array_t;
+    signal zdc5g : zdc_array;
 
     begin
 

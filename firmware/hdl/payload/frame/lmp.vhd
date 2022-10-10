@@ -2,7 +2,7 @@
 -- Lane mapping process.
 
 -- Version-history:
--- HB 2022-10-08: inserted zdc.
+-- HB 2022-10-08: zdc10g on link 11.
 -- HB 2022-09-06: cleaned up.
 -- HB 2106-05-31: lane mapping for all frames of calo links (for extended test-vector-file structure - see lhc_data_pkg.vhd)
 -- HEPHY 2014-05-20: changed lane mapping for muons from 0,1,2,3 to 2,3,4,5 of 240MHz objects -
@@ -12,6 +12,7 @@ use IEEE.std_logic_1164.all;
 
 use work.gt_mp7_core_pkg.all;
 use work.lhc_data_pkg.all;
+use work.gtl_pkg.all;
 
 entity lmp is
     generic
@@ -24,14 +25,23 @@ entity lmp is
         demux_data_valid_i : in demux_lanes_data_objects_array_valid_t(NR_LANES-1 downto 0);
         lhc_data_o : out lhc_data_t;
         lhc_data_valid_o : out std_logic;
-        zdc5g : out zdc5g_array_t
+        zdc5g : out zdc_array
     );
 end;
 
 architecture arch of lmp is
 
--- HB 2022-10-08: "constant OFFSET_xxx_LANES" moved to lhc_data_pkg.vhd
-    constant ZDC_5G_LANE : natural := 36;
+-- HB 2016-06-01: moved to lhc_data_pkg.vhd
+
+--     constant OFFSET_MUON_LANES : natural := 0;
+--     constant OFFSET_EG_LANES : natural := 4;
+--     constant OFFSET_JET_LANES : natural := 6;
+--     constant OFFSET_TAU_LANES : natural := 8;
+--     constant OFFSET_ESUMS_LANES : natural := 10;
+-- -- HB 2106-05-31: proposal for memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd)
+--     constant OFFSET_ZDC10G_LANES : natural := 11;
+-- -- BR 2015-05-01: added external-conditions.
+--     constant OFFSET_EXT_COND_LANES : natural := 12;
 
 begin
 
@@ -92,6 +102,7 @@ begin
     lhc_data_o.tau(5)  <= demux_data_i(OFFSET_TAU_LANES+0)(5);
     lhc_data_o.tau(6)  <= demux_data_i(OFFSET_TAU_LANES+1)(0);
     lhc_data_o.tau(7)  <= demux_data_i(OFFSET_TAU_LANES+1)(1);
+-- HB 2016-10-17: or memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd)
     lhc_data_o.tau(8)  <= demux_data_i(OFFSET_TAU_LANES+1)(2);
     lhc_data_o.tau(9)  <= demux_data_i(OFFSET_TAU_LANES+1)(3);
     lhc_data_o.tau(10)  <= demux_data_i(OFFSET_TAU_LANES+1)(4);
@@ -106,16 +117,18 @@ begin
 -- HTm data
     lhc_data_o.htm <= demux_data_i(OFFSET_ESUMS_LANES)(3);
 
+-- HB 2016-10-17: or memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd)
     lhc_data_o.etmhf <= demux_data_i(OFFSET_ESUMS_LANES)(4);
     lhc_data_o.htmhf <= demux_data_i(OFFSET_ESUMS_LANES)(5);
 
-    lhc_data_o.zdc(0) <= demux_data_i(OFFSET_ZDC_LANES)(0)(0);
-    lhc_data_o.zdc(1) <= demux_data_i(OFFSET_ZDC_LANES)(0)(1);
-    lhc_data_o.zdc(2) <= demux_data_i(OFFSET_ZDC_LANES)(0)(2);
-    lhc_data_o.zdc(3) <= demux_data_i(OFFSET_ZDC_LANES)(0)(3);
-    lhc_data_o.zdc(4) <= demux_data_i(OFFSET_ZDC_LANES)(0)(4);
-    lhc_data_o.zdc(5) <= demux_data_i(OFFSET_ZDC_LANES)(0)(5);
+    lhc_data_o.zdc10g_0 <= demux_data_i(OFFSET_ZDC10G_LANES)(0);
+    lhc_data_o.zdc10g_1 <= demux_data_i(OFFSET_ZDC10G_LANES)(1);
+    lhc_data_o.zdc10g_2 <= demux_data_i(OFFSET_ZDC10G_LANES)(2);
+    lhc_data_o.zdc10g_3 <= demux_data_i(OFFSET_ZDC10G_LANES)(3);
+    lhc_data_o.zdc10g_4 <= demux_data_i(OFFSET_ZDC10G_LANES)(4);
+    lhc_data_o.zdc10g_5 <= demux_data_i(OFFSET_ZDC10G_LANES)(5);
 
+-- HEPHY 2015-05-01: added external-conditions.
     lhc_data_o.external_conditions(31 downto 0) <= demux_data_i(OFFSET_EXT_COND_LANES+0)(0);
     lhc_data_o.external_conditions(63 downto 32) <= demux_data_i(OFFSET_EXT_COND_LANES+0)(1);
     lhc_data_o.external_conditions(95 downto 64) <= demux_data_i(OFFSET_EXT_COND_LANES+1)(0);
@@ -125,12 +138,12 @@ begin
     lhc_data_o.external_conditions(223 downto 192) <= demux_data_i(OFFSET_EXT_COND_LANES+3)(0);
     lhc_data_o.external_conditions(255 downto 224) <= demux_data_i(OFFSET_EXT_COND_LANES+3)(1);
 
-    zdc5g(0) <= demux_data_i(ZDC_5G_LANE)(0);
-    zdc5g(1) <= demux_data_i(ZDC_5G_LANE)(1);
-    zdc5g(2) <= demux_data_i(ZDC_5G_LANE)(2);
-    zdc5g(3) <= demux_data_i(ZDC_5G_LANE)(3);
-    zdc5g(4) <= demux_data_i(ZDC_5G_LANE)(4);
-    zdc5g(5) <= demux_data_i(ZDC_5G_LANE)(5);
+    zdc5g(0) <= demux_data_i(ZDC5G_LANE_NR)(0);
+    zdc5g(1) <= demux_data_i(ZDC5G_LANE_NR)(1);
+    zdc5g(2) <= demux_data_i(ZDC5G_LANE_NR)(2);
+    zdc5g(3) <= demux_data_i(ZDC5G_LANE_NR)(3);
+    zdc5g(4) <= demux_data_i(ZDC5G_LANE_NR)(4);
+    zdc5g(5) <= demux_data_i(ZDC5G_LANE_NR)(5);
 
 end architecture;
 

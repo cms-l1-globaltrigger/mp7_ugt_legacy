@@ -1,4 +1,4 @@
-
+-- HB 2022-10-08: zdc10g on link 11.
 -- HB 2016-05-31: inserted all frames of calo links for extended format structure of test-vector-file
 
 library IEEE;
@@ -7,7 +7,7 @@ use ieee.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
 use work.lhc_data_pkg.all;
 
-package lhc_data_debug_util_pkg is
+package lhc_data_debug_util_pkg is 
 
 	function lhc_data_t_to_string (data_in : lhc_data_t; spacer_char : character )
 		return string;
@@ -37,8 +37,8 @@ package body lhc_data_debug_util_pkg is
 		end loop;
 		return ret_value;
 	end function;
-
-
+	
+	
 	function max(a,b : integer) return integer is
 	begin
 		if a > b then
@@ -47,8 +47,8 @@ package body lhc_data_debug_util_pkg is
 			return b;
 		end if;
 	end function;
-
-
+	
+	
 	function hex_to_slv(hex : string; min_width : integer) return std_logic_vector is
 		variable ret_value : std_logic_vector(max(hex'length*4-1,min_width-1) downto 0) := (others=>'0');
 		variable temp : std_logic_vector(3 downto 0);
@@ -58,7 +58,7 @@ package body lhc_data_debug_util_pkg is
 		for i in 0 to hex'length-1 loop
 			case hex(hex'length-i) is
 				when '0' => temp := x"0";
-				when '1' => temp := x"1";
+				when '1' => temp := x"1";	
 				when '2' => temp := x"2";
 				when '3' => temp := x"3";
 				when '4' => temp := x"4";
@@ -79,13 +79,13 @@ package body lhc_data_debug_util_pkg is
 		end loop;
 		return ret_value;
 	end function;
-
-
+	
+	
 	function is_hex_digit(c : character) return boolean is
 	begin
 		if c = '0' or c = '1' or c = '2' or c = '3' or
-		   c = '4' or c = '5' or c = '6' or c = '7' or
-		   c = '8' or c = '9' or c = 'a' or c = 'b' or
+		   c = '4' or c = '5' or c = '6' or c = '7' or 
+		   c = '8' or c = '9' or c = 'a' or c = 'b' or 
 		   c = 'c' or c = 'd' or c = 'e' or c = 'f' or
 		   c = 'A' or c = 'B' or c = 'C' or c = 'D' or
 		   c = 'E' or c = 'F' then
@@ -94,8 +94,8 @@ package body lhc_data_debug_util_pkg is
 			return false;
 		end if;
 	end function;
-
-	procedure next_range (start_index : inout integer; end_index : inout integer; str : string)
+	
+	procedure next_range (start_index : inout integer; end_index : inout integer; str : string) 
 	is
 	begin
 		start_index := end_index+1;
@@ -162,7 +162,12 @@ package body lhc_data_debug_util_pkg is
 			slv_to_hex(data_in.htm) & spacer_char &
 			slv_to_hex(data_in.etmhf) & spacer_char &
 			slv_to_hex(data_in.htmhf) & spacer_char &
-			slv_to_hex(data_in.zdc) & spacer_char &
+			slv_to_hex(data_in.zdc10g_0) & spacer_char &
+			slv_to_hex(data_in.zdc10g_1) & spacer_char &			
+			slv_to_hex(data_in.zdc10g_2) & spacer_char &
+			slv_to_hex(data_in.zdc10g_3) & spacer_char &
+			slv_to_hex(data_in.zdc10g_4) & spacer_char &
+			slv_to_hex(data_in.zdc10g_5) & spacer_char &						
 			slv_to_hex(data_in.external_conditions) & spacer_char ;
 	end function;
 
@@ -205,12 +210,20 @@ package body lhc_data_debug_util_pkg is
 		next_range(start_index, end_index, hexstring);
 		ret_value.htmhf := hex_to_slv("" & hexstring(start_index to end_index), HTMHF_DATA_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.zdc := hex_to_slv("" & hexstring(start_index to end_index), ZDC_DATA_WIDTH);
+		ret_value.zdc10g_0 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_0_WIDTH);
 		next_range(start_index, end_index, hexstring);
+		ret_value.zdc10g_1 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_1_WIDTH);
+		next_range(start_index, end_index, hexstring);
+		ret_value.zdc10g_2 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_2_WIDTH);
+		next_range(start_index, end_index, hexstring);
+		ret_value.zdc10g_3 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_3_WIDTH);
+		next_range(start_index, end_index, hexstring);
+		ret_value.zdc10g_4 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_4_WIDTH);
+		next_range(start_index, end_index, hexstring);
+		ret_value.zdc10g_5 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_5_WIDTH);
 
 		next_range(start_index, end_index, hexstring);
 		ret_value.external_conditions := hex_to_slv("" & hexstring(start_index to end_index), EXTERNAL_CONDITIONS_DATA_WIDTH );
 		return ret_value;
 	end function;
-
 end;

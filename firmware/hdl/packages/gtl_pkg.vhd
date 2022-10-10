@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2022-10-10: added ZDC definitions.
 -- HB 2022-09-23: added constants ESUMS_COND_STAGES, MB_COND_STAGES and TC_COND_STAGES.
 -- HB 2022-09-02: cleaned up.
 -- HB 2021-10-19: inserted jet DISP (displaced) bit 27 (and all dependencies on this bit).
@@ -373,11 +374,12 @@ constant MBT1HFM_COUNT_HIGH : natural := 3;
 
 -- *******************************************************************************************************
 -- HB 2016-09-16: inserted ZDC
-constant NR_ZDC_OBJECTS : positive := 1;
+constant NR_ZDC_OBJECTS : positive := 6;
 constant ZDC_BIT_LOW : natural := 0;
 constant ZDC_BIT_HIGH : natural := 9;
-constant MAX_ZDC_BITS : natural := 16; -- 4 hex digits !
-type bx_zdc_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(MAX_ZDC_BITS-1 downto 0);
+constant MAX_ZDC_BITS : natural := 32;
+type zdc_array is array (0 to NR_ZDC_OBJECTS-1) of std_logic_vector(MAX_ZDC_BITS-1 downto 0);
+type bx_zdc_array is array (0 to BX_PIPELINE_STAGES-1) of zdc_array;
 
 -- *******************************************************************************************************
 -- max bits for comparators.vhd

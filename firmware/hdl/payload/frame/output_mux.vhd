@@ -46,24 +46,25 @@ entity output_mux is
         valid_hi    : in std_logic_vector(15 downto 0);
         start       : in std_logic;
         strobe      : in std_logic;
-        zdc5g       : in zdc5g_array_t;
+        zdc5g       : in zdc_array;
         lane_out    : out ldata(NR_LANES-1 downto 0)
     );
 end output_mux;
 
 architecture arch of output_mux is
 
-    constant first_output_lane: positive := 20;
+    constant first_roc_lane: positive := 16;
+    constant first_zdc10g_lane: positive := 28;
 
     signal sValid : std_logic := '0';
 
     signal readout_finor : std_logic_vector(31 downto 0);
-    signal s_in0_mux0,s_in0_mux1,s_in0_mux2,s_in0_mux3,s_in0_mux4,s_in0_mux5,s_in0_mux6,s_in0_mux7,s_in0_mux8,s_in0_mux9,s_in0_zdc : lword;
-    signal s_in1_mux0,s_in1_mux1,s_in1_mux2,s_in1_mux3,s_in1_mux4,s_in1_mux5,s_in1_mux6,s_in1_mux7,s_in1_mux8,s_in1_mux9,s_in1_zdc : lword;
-    signal s_in2_mux0,s_in2_mux1,s_in2_mux2,s_in2_mux3,s_in2_mux4,s_in2_mux5,s_in2_mux6,s_in2_mux7,s_in2_mux8,s_in2_mux9,s_in2_zdc : lword;
-    signal s_in3_mux0,s_in3_mux1,s_in3_mux2,s_in3_mux3,s_in3_mux4,s_in3_mux5,s_in3_mux6,s_in3_mux7,s_in3_mux8,s_in3_mux9,s_in3_zdc : lword;
-    signal s_in4_mux0,s_in4_mux1,s_in4_mux2,s_in4_mux3,s_in4_mux4,s_in4_mux5,s_in4_mux6,s_in4_mux7,s_in4_mux8,s_in4_mux9,s_in4_zdc : lword;
-    signal s_in5_mux0,s_in5_mux1,s_in5_mux2,s_in5_mux3,s_in5_mux4,s_in5_mux5,s_in5_mux6,s_in5_mux7,s_in5_mux8,s_in5_mux9,s_in5_zdc : lword;
+    signal s_in0_mux0,s_in0_mux1,s_in0_mux2,s_in0_mux3,s_in0_mux4,s_in0_mux5,s_in0_mux6,s_in0_mux7,s_in0_mux8,s_in0_mux9,s_in0_zdc10g : lword;
+    signal s_in1_mux0,s_in1_mux1,s_in1_mux2,s_in1_mux3,s_in1_mux4,s_in1_mux5,s_in1_mux6,s_in1_mux7,s_in1_mux8,s_in1_mux9,s_in1_zdc10g : lword;
+    signal s_in2_mux0,s_in2_mux1,s_in2_mux2,s_in2_mux3,s_in2_mux4,s_in2_mux5,s_in2_mux6,s_in2_mux7,s_in2_mux8,s_in2_mux9,s_in2_zdc10g : lword;
+    signal s_in3_mux0,s_in3_mux1,s_in3_mux2,s_in3_mux3,s_in3_mux4,s_in3_mux5,s_in3_mux6,s_in3_mux7,s_in3_mux8,s_in3_mux9,s_in3_zdc10g : lword;
+    signal s_in4_mux0,s_in4_mux1,s_in4_mux2,s_in4_mux3,s_in4_mux4,s_in4_mux5,s_in4_mux6,s_in4_mux7,s_in4_mux8,s_in4_mux9,s_in4_zdc10g : lword;
+    signal s_in5_mux0,s_in5_mux1,s_in5_mux2,s_in5_mux3,s_in5_mux4,s_in5_mux5,s_in5_mux6,s_in5_mux7,s_in5_mux8,s_in5_mux9,s_in5_zdc10g : lword;
 
 begin
 
@@ -100,7 +101,7 @@ begin
             in3     =>  s_in3_mux0,   -- frame 3   -> algo_after_gtlogic 96-127
             in4     =>  s_in4_mux0,   -- frame 4   -> algo_after_gtlogic 128-159
             in5     =>  s_in5_mux0,   -- frame 5   -> algo_after_gtlogic 160-191
-            mux_out =>  lane_out(16)
+            mux_out =>  lane_out(first_roc_lane+0)
         );
 
 
@@ -123,7 +124,7 @@ begin
             in3     =>  s_in3_mux1,    -- frame 3   -> algo_after_gtlogic 288-319
             in4     =>  s_in4_mux1,    -- frame 4   -> algo_after_gtlogic 320-351
             in5     =>  s_in5_mux1,    -- frame 5   -> algo_after_gtlogic 352-383
-            mux_out =>  lane_out(17)
+            mux_out =>  lane_out(first_roc_lane+1)
         );
 
 
@@ -147,7 +148,7 @@ begin
             in4     =>  s_in4_mux2,    -- frame 4   -> free
             in5     =>  s_in5_mux2,    -- frame 5   -> free
             -- sel     =>  frame_cntr,
-            mux_out =>  lane_out(first_output_lane+2)
+            mux_out =>  lane_out(first_roc_lane+2)
         );
 
 
@@ -170,7 +171,7 @@ begin
             in3     =>  s_in3_mux3,   -- frame 3   -> algo_after_bxomask 96-127
             in4     =>  s_in4_mux3,   -- frame 4   -> algo_after_bxomask 128-159
             in5     =>  s_in5_mux3,   -- frame 5   -> algo_after_bxomask 160-191
-            mux_out =>  lane_out(first_output_lane+3)
+            mux_out =>  lane_out(first_roc_lane+3)
         );
 
 
@@ -193,7 +194,7 @@ begin
             in3     =>  s_in3_mux4,    -- frame 3   -> algo_after_bxomask 288-319
             in4     =>  s_in4_mux4,    -- frame 4   -> algo_after_bxomask 320-351
             in5     =>  s_in5_mux4,    -- frame 5   -> algo_after_bxomask 352-383
-            mux_out =>  lane_out(first_output_lane+4)
+            mux_out =>  lane_out(first_roc_lane+4)
         );
 
 
@@ -217,7 +218,7 @@ begin
             in4     =>  s_in4_mux5,    -- frame 4   -> free
             in5     =>  s_in5_mux5,    -- frame 5   -> free
             -- sel     =>  frame_cntr,
-            mux_out =>  lane_out(first_output_lane+5)
+            mux_out =>  lane_out(first_roc_lane+5)
         );
 
 
@@ -240,7 +241,7 @@ begin
             in3     =>  s_in3_mux6,   -- frame 3   -> algo_after_prescaler_mask 96-127
             in4     =>  s_in4_mux6,   -- frame 4   -> algo_after_prescaler_mask 128-159
             in5     =>  s_in5_mux6,   -- frame 5   -> algo_after_prescaler_mask 160-191
-            mux_out =>  lane_out(first_output_lane+6)
+            mux_out =>  lane_out(first_roc_lane+6)
         );
 
 
@@ -263,7 +264,7 @@ begin
             in3     =>  s_in3_mux7,    -- frame 3   -> algo_after_prescaler_mask 288-319
             in4     =>  s_in4_mux7,    -- frame 4   -> algo_after_prescaler_mask 320-351
             in5     =>  s_in5_mux7,    -- frame 5   -> algo_after_prescaler_mask 352-383
-            mux_out =>  lane_out(first_output_lane+7)
+            mux_out =>  lane_out(first_roc_lane+7)
         );
 
 
@@ -287,7 +288,7 @@ begin
             in3     =>  s_in3_mux8,    -- frame 3   -> algo_after_prescaler_mask 480-511
             in4     =>  s_in4_mux8,    -- frame 4   -> finor
             in5     =>  s_in5_mux8,    -- frame 5   -> free
-            mux_out =>  lane_out(first_output_lane+8)
+            mux_out =>  lane_out(first_roc_lane+8)
         );
 
     -- JW 2015-08-24: added local and mp7 bc_cntr to output
@@ -322,16 +323,16 @@ begin
             in3     =>  s_in3_mux9,    -- frame 3   -> free / orbit counter 47..32
             in4     =>  s_in4_mux9,    -- frame 4   -> free / orbit counter 31..0
             in5     =>  s_in5_mux9,    -- frame 5   -> free
-            mux_out =>  lane_out(first_output_lane+9)
+            mux_out =>  lane_out(first_roc_lane+9)
         );
 
     -- ZDC 5g input to ZDC 10G output (6x for patch panel)
-    s_in0_zdc   <=  (zdc5g(0), sValid, start, strobe);
-    s_in1_zdc   <=  (zdc5g(1), sValid, start, strobe);
-    s_in2_zdc   <=  (zdc5g(2), sValid, start, strobe);
-    s_in3_zdc   <=  (zdc5g(3), sValid, start, strobe);
-    s_in4_zdc   <=  (zdc5g(4), sValid, start, strobe);
-    s_in5_zdc   <=  (zdc5g(5), sValid, start, strobe);
+    s_in0_zdc10g   <=  (zdc5g(0), sValid, start, strobe);
+    s_in1_zdc10g   <=  (zdc5g(1), sValid, start, strobe);
+    s_in2_zdc10g   <=  (zdc5g(2), sValid, start, strobe);
+    s_in3_zdc10g   <=  (zdc5g(3), sValid, start, strobe);
+    s_in4_zdc10g   <=  (zdc5g(4), sValid, start, strobe);
+    s_in5_zdc10g   <=  (zdc5g(5), sValid, start, strobe);
 
     mux_zdc_l: for i in 0 to 5 generate
         quad_7: if i < 4 generate
@@ -340,13 +341,13 @@ begin
                     clk     =>  clk240,
                     res     =>  lhc_rst,
                     bcres   =>  ctrs(7).ttc_cmd(0),
-                    in0     =>  s_in0_zdc,
-                    in1     =>  s_in1_zdc,
-                    in2     =>  s_in2_zdc,
-                    in3     =>  s_in3_zdc,
-                    in4     =>  s_in4_zdc,
-                    in5     =>  s_in5_zdc,
-                    mux_out =>  lane_out(i+28)
+                    in0     =>  s_in0_zdc10g,
+                    in1     =>  s_in1_zdc10g,
+                    in2     =>  s_in2_zdc10g,
+                    in3     =>  s_in3_zdc10g,
+                    in4     =>  s_in4_zdc10g,
+                    in5     =>  s_in5_zdc10g,
+                    mux_out =>  lane_out(i+first_zdc10g_lane)
                 );
         end generate quad_7;
         quad_8: if i >= 4 and i < 6 generate
@@ -355,13 +356,13 @@ begin
                     clk     =>  clk240,
                     res     =>  lhc_rst,
                     bcres   =>  ctrs(8).ttc_cmd(0),
-                    in0     =>  s_in0_zdc,
-                    in1     =>  s_in1_zdc,
-                    in2     =>  s_in2_zdc,
-                    in3     =>  s_in3_zdc,
-                    in4     =>  s_in4_zdc,
-                    in5     =>  s_in5_zdc,
-                    mux_out =>  lane_out(i+28)
+                    in0     =>  s_in0_zdc10g,
+                    in1     =>  s_in1_zdc10g,
+                    in2     =>  s_in2_zdc10g,
+                    in3     =>  s_in3_zdc10g,
+                    in4     =>  s_in4_zdc10g,
+                    in5     =>  s_in5_zdc10g,
+                    mux_out =>  lane_out(i+first_zdc10g_lane)
                 );
         end generate quad_8;
     end generate mux_zdc_l;

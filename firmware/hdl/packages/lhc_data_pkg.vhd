@@ -76,7 +76,7 @@ package lhc_data_pkg is
     constant OFFSET_EXT_COND_LANES : natural := 12;
 
 -- HB 2022-10-10: lane number of ZDC 5G optical input
-    constant ZDC5G_LANE_NR : natural := 36;
+    constant ZDC5G_LANE_NR : natural := 71;
 
 --  for simspy memory (test with ipb_dpmem_4096_32)
     constant SW_DATA_WIDTH : integer := 32;

@@ -54,7 +54,7 @@ end output_mux;
 architecture arch of output_mux is
 
     constant first_roc_lane: positive := 16;
-    constant first_zdc10g_lane: positive := 28;
+    constant first_zdc10g_lane: positive := 67;
 
     signal sValid : std_logic := '0';
 
@@ -336,7 +336,7 @@ begin
                     in3     =>  s_in3_zdc10g,
                     in4     =>  s_in4_zdc10g,
                     in5     =>  s_in5_zdc10g,
-                    mux_out =>  lane_out(i+first_zdc10g_lane)
+                    mux_out =>  lane_out(first_zdc10g_lane-i)
                 );
         end generate quad_7;
         quad_8: if i >= 4 and i < 6 generate
@@ -351,7 +351,7 @@ begin
                     in3     =>  s_in3_zdc10g,
                     in4     =>  s_in4_zdc10g,
                     in5     =>  s_in5_zdc10g,
-                    mux_out =>  lane_out(i+first_zdc10g_lane)
+                    mux_out =>  lane_out(first_zdc10g_lane-i)
                 );
         end generate quad_8;
     end generate mux_zdc_l;

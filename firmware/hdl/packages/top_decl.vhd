@@ -36,7 +36,7 @@ package top_decl is
     constant ZS_ENABLED: boolean := FALSE;
     constant CLOCK_AUX_RATIO: clock_ratio_array_t := (1, 1, 1);
 
--- HB 2022-10-08: N_REGION = 10 (region 7 and 8 for ZDC 10G outputs, region 9 for ZDC 5G inputs)
+-- HB 2022-10-12: using all REGIONs (region 7 and 8 for ZDC 10G outputs, region 17 for ZDC 5G inputs)
     constant REGION_CONF: region_conf_array_t := (
         0 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 3, 10), -- 0 / 118 --> inputs from uGMT (muons)
         1 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 3, 10), -- 1 / 117*--> inputs from Calo-Layer-2 (eg, jets)
@@ -47,7 +47,15 @@ package top_decl is
         6 => (gth_10g_std_lat, u_crc32, buf, demux, buf, u_crc32, gth_10g_std_lat, 5, 12), -- 6 / 112 --> read-out record outputs
         7 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 5, 12), -- 7 / 111* --> 4x ZDC 10G outputs to patch panel
         8 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 5, 12), -- 8 / 110 --> 2x ZDC 10G outputs to patch panel
-        9 => (gth_5g, u_crc32, buf, no_fmt, buf, u_crc32, gth_5g, 0, 7) -- 9 / 210 --> inputs from ZDC 5G optical
+        9 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 0, 7), -- 9 / 210
+        10 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 0, 7), -- 10 / 211*
+        11 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 0, 7), -- 11 / 212
+        12 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 1, 8), -- 12 / 213
+        13 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 1, 8), -- 13 / 214*
+        14 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 1, 8), -- 14 / 215
+        15 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 2, 9), -- 15 / 216
+        16 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 2, 9), -- 16 / 217*
+        17 => (gth_5g, u_crc32, buf, no_fmt, buf, u_crc32, gth_5g, 0, 7) -- 17 / 218 --> inputs from ZDC 5G optical
     );
 
 end top_decl;

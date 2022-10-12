@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - mp7_ugt firmware release v1.22.0
-- changes for ZDC 5G optical conversion and 10G ZDC on link 11
+- changes for ZDC 5G optical conversion and 10G ZDC on link 11 and using all 18 quads
 
 ### Changed
 - source files:

@@ -8,7 +8,7 @@ import toolbox as tb
 def replace_area_constraints(filename):
     content = tb.read_file(filename)
 
-    #expr_forloop = re.compile(r"(for\s+{\s*set\s*i\s*0\sD*}\s+{\s*\$i\s*<\s*)(\d+)(\s*}\s+{\s*incr\s+i\s*})")
+    #expr_forloop = re.compile(r"(for\s+{\s*set\s*i\s*0\s*}\s+{\s*\$i\s*<\s*)(\d+)(\s*}\s+{\s*incr\s+i\s*})")
     expr_cells = re.compile(r"(add_cells_to_pblock\s+\[\s*get_pblocks\s+payload_)(\d+)(\s*]\s*\[get_cells\s+(?:-\w+\s+)?datapath/rgen\[)(\d+)(]\.region/pgen\.\*])")
 
     #content, count = expr_forloop.subn(r"\g<1>7\g<3>", content)
@@ -19,10 +19,9 @@ def replace_area_constraints(filename):
     if count != 1:
         raise RuntimeError("Could not replace add_cells_to_pblock line.")
 
-    with open(filename, "wb") as fp:
+    with open(filename, "w") as fp:
         fp.write(content)
         logging.info("Successfully patched area_constraints file '{}'".format(filename))
-
 
 #def replace_brd_decl(filename):
     #content = tb.read_file(filename)
@@ -30,9 +29,13 @@ def replace_area_constraints(filename):
     #expr_nregion = re.compile(r"(constant\s+N_REGION\s*:\s*integer\s*:=\s*)(\d+)(\s*;)")
     #expr_crossregion = re.compile(r"(constant\s+CROSS_REGION\s*:\s*integer\s*:=\s*)(\d+)(\s*;)")
 
-    #content, count = expr_nregion.subn(r"\g<1>6\g<3>", content)
+    #content, count = expr_nregion.subn(r"\g<1>7\g<3>", content)
     #if count != 1:
         #raise RuntimeError("Could not replace the N_REGION value.")
+
+    #content, count = expr_crossregion.subn(r"\g<1>6\g<3>", content)
+    #if count != 1:
+        #raise RuntimeError("Could not replace the CROSS_REGION value.")
 
     #with open(filename, "w") as fp:
         #fp.write(content)
@@ -52,7 +55,6 @@ def insert_l1a_ttc(filename):
         fp.write(content)
         logging.info("Successfully patched l1a_ttc file '{}'".format(filename))
 
-
 def patch_all(projectpath):
     """Batch patch all firmware files."""
     root_path = os.path.abspath(projectpath)
@@ -68,7 +70,7 @@ def patch_all(projectpath):
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('path', type=os.path.abspath, help="path to the MP7 dir of the fw tag which should be patched")
+    parser.add_argument('path', type=os.path.abspath, help="path to the cactusupgrades dir of the fw tag which should be patched")
     return parser.parse_args()
 
 def main():

@@ -15,7 +15,8 @@ def replace_area_constraints(filename):
     #if count != 1:
         #raise RuntimeError("Could not replace the for-loop value.")
 
-    content, count = expr_cells.subn(r"\g<1>6\g<3>6\g<5>", content)
+    #content, count = expr_cells.subn(r"\g<1>6\g<3>6\g<5>", content)
+    content, count = expr_cells.subn(r"\g<1>8\g<3>8\g<5>", content)
     if count != 1:
         raise RuntimeError("Could not replace add_cells_to_pblock line.")
 

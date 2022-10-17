@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2022-10-17: added constant NR_INPUT_LANES (for reduced NR_LANES in frame.vhd).
 -- HB 2022-10-10: added ZDC definitions. Removed constant SCOUTING.
 -- HB 2022-09-23: added constants ESUMS_COND_STAGES, MB_COND_STAGES and TC_COND_STAGES.
 -- HB 2022-09-02: cleaned up.
@@ -62,6 +63,10 @@ use work.math_pkg.all;
 use work.gt_mp7_core_pkg.all;
 
 package gtl_pkg is
+
+-- Definition of input lanes
+-- NR_LANES = NR_REGIONS * 4 => 72
+constant NR_INPUT_LANES : natural := 24; -- max. input links from optical patch panel
 
 -- Fixed pipeline structure
 constant BX_PIPELINE_STAGES: natural := 5; -- +/- 2bx pipeline

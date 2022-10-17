@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - source files:
+  - ../payload/frame.vhd
   - ../payload/frame/output_mux.vhd
   - ../payload/frame/lmp.vhd
   - ../packages/top_decl.vhd

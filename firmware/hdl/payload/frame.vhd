@@ -1,7 +1,7 @@
 -- Description:
 -- Contains the "framework" of GT-logic (all parts, except GTL and FDL).
 
--- HB 2022-10-08: v1.4.0 - quad 7 and 8 for ZDC 10G outputs, quad 9 for ZDC 5G inputs.
+-- HB 2022-10-08: v1.4.0 - quad 16 and 15 for ZDC 10G outputs, quad 17 for ZDC 5G inputs. Used NR_INPUT_LANES for demux_lane_data.vhd and lmp.vhd.
 -- HB 2022-09-02: v1.3.1 - cleaned up.
 -- HB 2022-03-22: v1.3.0 - output ports bcres_d and bcres_d_FDL not used anymore (not used in mp7_payload.vhd). Signals bcres, bcres_outputmux, bcres_d_FDL_int and bx_nr_d_FDL_int not used anymore. Updated tcm.vhd (input port bcres_d_FDL not used anymore) and output_mux.vhd (input port bx_nr_fdl not used anymore). Removed signals for spy3.
 -- HB 2022-02-08: v1.2.5 - changed frame_module_info.vhd (GT_VERSION in OFFSET_FRAME_VERSION) and frame_addr_decode.vhd.
@@ -99,8 +99,8 @@ architecture rtl of frame is
     signal rb2tcm : sw_reg_tcm_in_t;
     signal tcm2rb : sw_reg_tcm_out_t;
 
-    signal demux_data_o : demux_lanes_data_objects_array_t(NR_LANES-1 downto 0);
-    signal demux_data_valid_o : demux_lanes_data_objects_array_valid_t(NR_LANES-1 downto 0);
+    signal demux_data_o : demux_lanes_data_objects_array_t(NR_INPUT_LANES-1 downto 0);
+    signal demux_data_valid_o : demux_lanes_data_objects_array_valid_t(NR_INPUT_LANES-1 downto 0);
 
     signal lmp_lhc_data_o   : lhc_data_t; -- lhc_data output of lane mapping process
 
@@ -232,7 +232,7 @@ architecture rtl of frame is
 --================================================================================================
 
 -- DEMUX LANES
-    demux_lane_data_l: for i in 0 to NR_LANES-1 generate
+    demux_lane_data_l: for i in 0 to NR_INPUT_LANES-1 generate
         demux_lane_data_i: entity work.demux_lane_data
             port map(clk240 => clk240, lhc_clk => lhc_clk,
                 lane_data_in => lane_data_in(i),
@@ -243,10 +243,10 @@ architecture rtl of frame is
 
 -- LMP (lane mapping process)
     lmp_i: entity work.lmp
-        generic map(NR_LANES => NR_LANES)
+        generic map(NR_LANES => NR_INPUT_LANES)
         port map(
-            demux_data_i => demux_data_o(NR_LANES-1 downto 0),
-            demux_data_valid_i => demux_data_valid_o(NR_LANES-1 downto 0),
+            demux_data_i => demux_data_o(NR_INPUT_LANES-1 downto 0),
+            demux_data_valid_i => demux_data_valid_o(NR_INPUT_LANES-1 downto 0),
             lhc_data_o => lmp_lhc_data_o,
             lhc_data_valid_o => open,
             zdc5g => zdc5g

@@ -99,8 +99,8 @@ architecture rtl of frame is
     signal rb2tcm : sw_reg_tcm_in_t;
     signal tcm2rb : sw_reg_tcm_out_t;
 
-    signal demux_data_o : demux_lanes_data_objects_array_t(NR_INPUT_LANES-1 downto 0);
-    signal demux_data_valid_o : demux_lanes_data_objects_array_valid_t(NR_INPUT_LANES-1 downto 0);
+    signal demux_data_o : demux_lanes_data_objects_array_t(NR_LANES-1 downto 0);
+    signal demux_data_valid_o : demux_lanes_data_objects_array_valid_t(NR_LANES-1 downto 0);
 
     signal lmp_lhc_data_o   : lhc_data_t; -- lhc_data output of lane mapping process
 
@@ -241,6 +241,13 @@ architecture rtl of frame is
         );
     end generate;
 
+    zdc5g_demux_lane_data_i: entity work.demux_lane_data
+        port map(clk240 => clk240, lhc_clk => lhc_clk,
+            lane_data_in => lane_data_in(ZDC5G_LANE_NR),
+            demux_data_o => demux_data_o(ZDC5G_LANE_NR),
+            demux_data_valid_o => demux_data_valid_o(ZDC5G_LANE_NR)
+    );
+
 -- LMP (lane mapping process)
     lmp_i: entity work.lmp
         generic map(NR_LANES => NR_INPUT_LANES)
@@ -248,9 +255,15 @@ architecture rtl of frame is
             demux_data_i => demux_data_o(NR_INPUT_LANES-1 downto 0),
             demux_data_valid_i => demux_data_valid_o(NR_INPUT_LANES-1 downto 0),
             lhc_data_o => lmp_lhc_data_o,
-            lhc_data_valid_o => open,
-            zdc5g => zdc5g
+            lhc_data_valid_o => open
         );
+
+    zdc5g(0) <= demux_data_i(ZDC5G_LANE_NR)(0);
+    zdc5g(1) <= demux_data_i(ZDC5G_LANE_NR)(1);
+    zdc5g(2) <= demux_data_i(ZDC5G_LANE_NR)(2);
+    zdc5g(3) <= demux_data_i(ZDC5G_LANE_NR)(3);
+    zdc5g(4) <= demux_data_i(ZDC5G_LANE_NR)(4);
+    zdc5g(5) <= demux_data_i(ZDC5G_LANE_NR)(5);
 
 -- HB 2017-09-08: no dm used, only sync process from dm for BGos
     sync_proc_i : process (lhc_clk, lhc_rst)

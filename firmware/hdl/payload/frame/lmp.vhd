@@ -24,8 +24,8 @@ entity lmp is
         demux_data_i : in demux_lanes_data_objects_array_t(NR_LANES-1 downto 0);
         demux_data_valid_i : in demux_lanes_data_objects_array_valid_t(NR_LANES-1 downto 0);
         lhc_data_o : out lhc_data_t;
-        lhc_data_valid_o : out std_logic;
-        zdc5g : out zdc_array
+        lhc_data_valid_o : out std_logic
+--         zdc5g : out zdc_array
     );
 end;
 
@@ -138,12 +138,12 @@ begin
     lhc_data_o.external_conditions(223 downto 192) <= demux_data_i(OFFSET_EXT_COND_LANES+3)(0);
     lhc_data_o.external_conditions(255 downto 224) <= demux_data_i(OFFSET_EXT_COND_LANES+3)(1);
 
-    zdc5g(0) <= demux_data_i(ZDC5G_LANE_NR)(0);
-    zdc5g(1) <= demux_data_i(ZDC5G_LANE_NR)(1);
-    zdc5g(2) <= demux_data_i(ZDC5G_LANE_NR)(2);
-    zdc5g(3) <= demux_data_i(ZDC5G_LANE_NR)(3);
-    zdc5g(4) <= demux_data_i(ZDC5G_LANE_NR)(4);
-    zdc5g(5) <= demux_data_i(ZDC5G_LANE_NR)(5);
+--     zdc5g(0) <= demux_data_i(ZDC5G_LANE_NR)(0);
+--     zdc5g(1) <= demux_data_i(ZDC5G_LANE_NR)(1);
+--     zdc5g(2) <= demux_data_i(ZDC5G_LANE_NR)(2);
+--     zdc5g(3) <= demux_data_i(ZDC5G_LANE_NR)(3);
+--     zdc5g(4) <= demux_data_i(ZDC5G_LANE_NR)(4);
+--     zdc5g(5) <= demux_data_i(ZDC5G_LANE_NR)(5);
 
 end architecture;
 

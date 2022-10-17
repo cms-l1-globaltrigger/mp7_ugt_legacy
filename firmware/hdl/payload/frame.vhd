@@ -1,7 +1,7 @@
 -- Description:
 -- Contains the "framework" of GT-logic (all parts, except GTL and FDL).
 
--- HB 2022-10-08: v1.4.0 - quad 16 and 15 for ZDC 10G outputs, quad 17 for ZDC 5G inputs. Used NR_INPUT_LANES for demux_lane_data.vhd and lmp.vhd.
+-- HB 2022-10-08: v1.4.0 - quad 16 and 15 for ZDC 10G outputs, quad 17 for ZDC 5G inputs. Used NR_INPUT_LANES and ZDC5G_LANE_NR for demux_lane_data.vhd and lmp.vhd.
 -- HB 2022-09-02: v1.3.1 - cleaned up.
 -- HB 2022-03-22: v1.3.0 - output ports bcres_d and bcres_d_FDL not used anymore (not used in mp7_payload.vhd). Signals bcres, bcres_outputmux, bcres_d_FDL_int and bx_nr_d_FDL_int not used anymore. Updated tcm.vhd (input port bcres_d_FDL not used anymore) and output_mux.vhd (input port bx_nr_fdl not used anymore). Removed signals for spy3.
 -- HB 2022-02-08: v1.2.5 - changed frame_module_info.vhd (GT_VERSION in OFFSET_FRAME_VERSION) and frame_addr_decode.vhd.
@@ -258,12 +258,12 @@ architecture rtl of frame is
             lhc_data_valid_o => open
         );
 
-    zdc5g(0) <= demux_data_i(ZDC5G_LANE_NR)(0);
-    zdc5g(1) <= demux_data_i(ZDC5G_LANE_NR)(1);
-    zdc5g(2) <= demux_data_i(ZDC5G_LANE_NR)(2);
-    zdc5g(3) <= demux_data_i(ZDC5G_LANE_NR)(3);
-    zdc5g(4) <= demux_data_i(ZDC5G_LANE_NR)(4);
-    zdc5g(5) <= demux_data_i(ZDC5G_LANE_NR)(5);
+    zdc5g(0) <= demux_data_o(ZDC5G_LANE_NR)(0);
+    zdc5g(1) <= demux_data_o(ZDC5G_LANE_NR)(1);
+    zdc5g(2) <= demux_data_o(ZDC5G_LANE_NR)(2);
+    zdc5g(3) <= demux_data_o(ZDC5G_LANE_NR)(3);
+    zdc5g(4) <= demux_data_o(ZDC5G_LANE_NR)(4);
+    zdc5g(5) <= demux_data_o(ZDC5G_LANE_NR)(5);
 
 -- HB 2017-09-08: no dm used, only sync process from dm for BGos
     sync_proc_i : process (lhc_clk, lhc_rst)

@@ -29,6 +29,110 @@ List of useful TDF routines and commands for hardware tests:
 \end{itemize}
 
 \clearpage
+\clearpage
+\subsection{Configuration of GTHs}\label{sec:app:app_a}
+
+The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
+In Table~\ref{tab:app:conf_gths} configuration of GTHs~\cite{GTHs} for Global Trigger is shown\footnote{"ch." means "channel", "RX" means "receiver", "TX" means "transmitter"}.
+% In Figure~\ref{fig:app:gth_conf} configuration of GTHs~\cite{GTHs} for Global Trigger is shown.
+
+% \begin{figure}[htb]
+% \centering
+% \includegraphics[width=15cm]{figures/gth_xc7v690t_ffg1927}
+% \caption{Configuration of GTHs}
+% \label{fig:app:gth_conf}
+% \end{figure}
+
+\begin{longtable}{|l|c|c|c|c|c|}
+\hline
+\textbf{Objects}& \textbf{Link}& \textbf{MGT\_BANK}& \textbf{GTH ch.}& \textbf{RX}& \textbf{TX}\\
+\hline
+\hline
+\endhead
+MU0..MU1           & 0  & 118 & X1Y35 & x &   \\\hline
+MU2..MU3           & 1  & 118 & X1Y34 & x &   \\\hline
+MU4..MU5           & 2  & 118 & X1Y33 & x &   \\\hline
+MU6..MU7           & 3  & 118 & X1Y32 & x &   \\\hline
+EG0..EG5           & 4  & 117 & X1Y31 & x &   \\\hline
+EG6..EG11          & 5  & 117 & X1Y30 & x &   \\\hline
+JET0..JET5         & 6  & 117 & X1Y29 & x &   \\\hline
+JET6..JET11        & 7  & 117 & X1Y28 & x &   \\\hline
+TAU0..TAU5         & 8  & 116 & X1Y27 & x &   \\\hline
+TAU6..TAU11        & 9  & 116 & X1Y26 & x &   \\\hline
+ESUMS              & 10 & 116 & X1Y25 & x &   \\\hline
+ZDC                & 11 & 116 & X1Y24 & x &   \\\hline
+EXT\_COND[0:63]    & 12 & 115 & X1Y23 & x &   \\\hline
+EXT\_COND[64:127]  & 13 & 115 & X1Y22 & x &   \\\hline
+EXT\_COND[128:191] & 14 & 115 & X1Y21 & x &   \\\hline
+EXT\_COND[192:255] & 15 & 115 & X1Y20 & x &   \\\hline
+\hline
+ALGO\_AFTER\_GTLOGIC[0:191]     & 16 & 114 & X1Y19 &   & x \\\hline
+ALGO\_AFTER\_GTLOGIC[192:393]   & 17 & 114 & X1Y18 &   & x \\\hline
+ALGO\_AFTER\_GTLOGIC[384:511]   & 18 & 114 & X1Y17 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[0:191]      & 19 & 114 & X1Y16 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[192:393]    & 20 & 113 & X1Y15 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[384:511]    & 21 & 113 & X1Y14 &   & x \\\hline
+ALGO\_AFTER\_PRESCALER[0:191]   & 22 & 113 & X1Y13 &   & x \\\hline
+ALGO\_AFTER\_PRESCALER[192:393] & 23 & 113 & X1Y12 &   & x \\\hline
+ALGO\_AFTER\_PRESCALER[384:511] & 24 & 112 & X1Y11 &   & x \\\hline
+Bunchcounter, ...               & 25 & 112 & X1Y10 &   & x \\\hline
+\caption{Configuration of GTHs}
+\label{tab:app:conf_gths}
+\end{longtable}
+
+\clearpage
+
+\subsection{Configuration of optical input links}\label{sec:app:app_b}
+
+Figure~\ref{fig:app:ugt_inputs} shows the configuration of optical links to Global Trigger.\\
+Links 0..3 contains muon data from GMT, links 4..11 data from GCT and links 12..15 external conditions
+from AMC502 boards.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/ugt_inputs}
+\caption{Optical link inputs to Global Trigger}
+\label{fig:app:ugt_inputs}
+\end{figure}
+
+\subsection{Configuration of links to AMC13 (readout)}\label{sec:app:app_c}
+
+Figure~\ref{fig:app:ugt_outputs} shows the configuration of links from Global Trigger to AMC13 (readout).\\
+Links 16..24 contains algo data (after GTL, after BX mask and after prescalers), link 25 contains several counter values.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/ugt_outputs}
+\caption{Outputs from Global Trigger to AMC13}
+\label{fig:app:ugt_outputs}
+\end{figure}
+
+\clearpage
+
+\subsection{Optical patch panel}\label{sec:app:app_d}
+
+Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panel for optical links.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/ugt_patchpanel}
+\caption{Global Trigger patch panel for optical links}
+\label{fig:app:ugt_pp}
+\end{figure}
+
+\clearpage
+\subsection{ZDC 5G to 10G conversion scheme}\label{sec:app:zdc_5g_10g_conv}
+
+Figure~\ref{fig:app:zdc_5G_10G_conv_scheme} shows ZDC 5G link to 10G link conversion scheme on a MP7 module in one slot of \gt system.\\
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/zdc_5G_10G_conv_scheme}
+\caption{ZDC 5G link to 10G link conversion scheme}
+\label{fig:app:zdc_5G_10G_conv_scheme}
+\end{figure}
+
+\clearpage
 \subsection{GTH I/Os}\label{sec:app:gth_io}
 
 \textbf{Remark}:
@@ -201,86 +305,5 @@ TX2/9  & tx0/8  &     & X0Y33 &  5G & 0x8b & nc & 69 & -\\\hline
 TX2/11 & tx0/10 &     & X0Y34 &  5G & 0x8d & nc & 70 & -\\\hline
 TX2/12 & tx0/11 & 218 & X0Y35 &  5G & 0x8f & nc & 71 & -\\\hline
 \end{longtable}
-
-\clearpage
-\subsection{Configuration of GTHs}\label{sec:app:app_a}
-
-The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
-In Figure~\ref{fig:app:gth_conf} configuration of GTHs~\cite{GTHs} for Global Trigger is shown.
-
-\begin{figure}[htb]
-\centering
-\includegraphics[width=15cm]{figures/gth_xc7v690t_ffg1927}
-\caption{Configuration of GTHs}
-\label{fig:app:gth_conf}
-\end{figure}
-
 \clearpage
 
-\subsection{Configuration of optical input links}\label{sec:app:app_b}
-
-Figure~\ref{fig:app:ugt_inputs} shows the configuration of optical links to Global Trigger.\\
-Links 0..3 contains muon data from GMT, links 4..11 data from GCT and links 12..15 external conditions
-from AMC502 boards.
-
-\begin{figure}[htb]
-\centering
-\includegraphics[width=15cm]{figures/ugt_inputs}
-\caption{Optical link inputs to Global Trigger}
-\label{fig:app:ugt_inputs}
-\end{figure}
-
-\subsection{Configuration of links to AMC13 (readout)}\label{sec:app:app_c}
-
-Figure~\ref{fig:app:ugt_outputs} shows the configuration of links from Global Trigger to AMC13 (readout).\\
-Links 16..24 contains algo data (after GTL, after BX mask and after prescalers), link 25 contains several counter values.
-
-\begin{figure}[htb]
-\centering
-\includegraphics[width=15cm]{figures/ugt_outputs}
-\caption{Outputs from Global Trigger to AMC13}
-\label{fig:app:ugt_outputs}
-\end{figure}
-
-\clearpage
-
-\subsection{Optical patch panel}\label{sec:app:app_d}
-
-Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panel for optical links.
-
-\begin{figure}[htb]
-\centering
-\includegraphics[width=15cm]{figures/ugt_patchpanel}
-\caption{Global Trigger patch panel for optical link}
-\label{fig:app:ugt_pp}
-\end{figure}
-
-\subsection{Description of simulation, synthesis and hardware tests}\label{sec:app:app_e}
-
-Workflow for simulation and synthesis of firmware is described in \href{\gitbranch/README.md}{\texttt{README}} file.\\\\
-List of useful TDF routines and commands for hardware tests:
-\begin{itemize}
-\item Check crate status\\
-\greybox{\$ tdf run crate\_status}
-\item Enable TTC signals on AMC13 for all MP7 modules\\
-\greybox{\$ tdf run ttc\_enable}
-\item Check lock of BC0 and LHC clock\\
-\greybox{\$ tdf unittest <module> default}
-\item Reset module\\
-\greybox{\$ tdf mp7butler reset <module> --clksrc external --clkcfg default-ext}
-\item Load firmware to scansd card on all MP7 modules [and load it into FPGAs]\\
-\greybox{\$ tdf run uploadfw\_gt <tar file path> [--rebootfpga]}
-\item Load firmware from scansd card into FPGAs\\
-\greybox{\$ tdf run loadfw\_gt <fw build nr> <nr modules>}
-\item Compare hardware results with test vector pattern (for a certain firmware build)\\
-\greybox{\$ tdf run multiboard\_function\_test -h}
-\item Setup links (GTHs)\\
-\greybox{\$ tdf mp7butler rxmgts <module> -e <links>}
-\item Align links (GTHs)\\
-\greybox{\$ tdf mp7butler rxalign <module> -e <links> [--to-bx <alignment point>]}
-\item Check minipods\\
-\greybox{\$ tdf mp7butler minipods <module>}
-\item ... (other routines are available in /nfshome0/ugtdev/software/tdf/etc/routines)
-\end{itemize}
-
-\clearpage

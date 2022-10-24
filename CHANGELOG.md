@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - mp7_ugt firmware release v1.21.4
-- updated top_decl.vhd: used "demux" in formatter for algo outputs to enable "orbit header" for scouting (therefore MP7 FW v3.2.2. or newer needed)
+- updated top_decl.vhd: used "demux" in formatter for algo outputs to enable "orbit header" for scouting (therefore MP7 FW v3.2.2 or newer needed)
 
 ### Changed
 - source files:

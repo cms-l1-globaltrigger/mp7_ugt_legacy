@@ -2,6 +2,7 @@
 -- FDL structure
 
 -- Version-history:
+-- HB 2022-09-08: v1.4.1 - based on v1.4.0, cleaned up. Removed unused output bx_nr_out.
 -- HB 2022-08-16: v1.4.0 - based on v1.3.7, port signal start (start_sync_bc0_int) used for reset of prescale counter (instead of begin_lumi_section). Removed sres signals for counters, not used anymore.
 -- HB 2022-02-08: v1.3.7 - based on v1.3.6, FRAME_VERSION (instead of SVN_REVISION_NUMBER) in register OFFSET_SVN_REVISION_NUMBER.
 -- HB 2019-10-02: v1.3.6 - based on v1.3.5, removed use clause.
@@ -64,8 +65,8 @@
 
 library ieee;
 use ieee.std_logic_1164.ALL;
-use ieee.std_logic_arith.ALL;
-use ieee.std_logic_unsigned.ALL; -- for function "CONV_INTEGER"
+use ieee.std_logic_unsigned.all;
+use ieee.std_logic_arith.conv_std_logic_vector;
 
 use work.ipbus.all;
 
@@ -75,7 +76,7 @@ use work.fdl_pkg.ALL;
 use work.gt_mp7_core_pkg.ALL;
 use work.fdl_addr_decode.all;
 
-use work.math_pkg.all;
+use work.math_pkg.log2c;
 
 entity fdl_module is
     generic(
@@ -103,20 +104,19 @@ entity fdl_module is
         l1a                 : in std_logic;
         begin_lumi_section  : in std_logic;
         algo_i              : in std_logic_vector(NR_ALGOS-1 downto 0);
-        bx_nr_out : out std_logic_vector(11 downto 0);
         prescale_factor_set_index_rop : out std_logic_vector(PRESCALE_FACTOR_SET_INDEX_WIDTH-1 downto 0);
-        algo_after_gtLogic_rop  : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-        algo_after_bxomask_rop     : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-        algo_after_prescaler_rop      : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-        local_finor_rop     : out std_logic;
-        local_veto_rop      : out std_logic;
-        finor_2_mezz_lemo      : out std_logic; -- to LEMO
-        finor_preview_2_mezz_lemo      : out std_logic; -- to LEMO
-        veto_2_mezz_lemo      : out std_logic; -- to LEMO
-        finor_w_veto_2_mezz_lemo      : out std_logic; -- to tp_mux.vhd
-        local_finor_with_veto_o       : out std_logic; -- to SPY2_FINOR
+        algo_after_gtlogic_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        algo_after_bxomask_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        algo_after_prescaler_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        local_finor_rop : out std_logic;
+        local_veto_rop : out std_logic;
+        finor_2_mezz_lemo : out std_logic; -- to LEMO
+        finor_preview_2_mezz_lemo : out std_logic; -- to LEMO
+        veto_2_mezz_lemo : out std_logic; -- to LEMO
+        finor_w_veto_2_mezz_lemo : out std_logic; -- to tp_mux.vhd
+        local_finor_with_veto_o : out std_logic; -- to SPY2_FINOR
 -- HB 2016-03-02: v0.0.21 - algo_bx_mask_sim input for simulation use with MAX_NR_ALGOS (because of global index).
-        algo_bx_mask_sim    : in std_logic_vector(MAX_NR_ALGOS-1 downto 0)
+        algo_bx_mask_sim : in std_logic_vector(MAX_NR_ALGOS-1 downto 0)
     );
 end fdl_module;
 
@@ -136,7 +136,6 @@ architecture rtl of fdl_module is
     constant FINOR_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
     constant VETO_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
     constant L1A_RATE_COUNTER_WIDTH : integer := RATE_COUNTER_WIDTH;
---     constant MAX_DELAY_L1A_LATENCY : integer := 64;
     constant MAX_DELAY_L1A_LATENCY : integer := 63; -- values = 2**x causes "fatal error" at simulation in module "delay_element.vhd" !!!
 
     signal ipb_to_slaves: ipb_wbus_array(NR_IPB_SLV_FDL-1 downto 0);
@@ -148,7 +147,6 @@ architecture rtl of fdl_module is
     signal prescale_factor_reg: ipb_regs_array(0 to OFFSET_END_PRESCALE_FACTOR-OFFSET_BEG_PRESCALE_FACTOR);
     signal masks_reg: ipb_regs_array(0 to OFFSET_END_MASKS-OFFSET_BEG_MASKS);
     signal versions_to_ipb: ipb_regs_array(0 to OFFSET_END_READ_VERSIONS-OFFSET_BEG_READ_VERSIONS) := (others => (others => '0'));
-    signal control_reg: ipb_regs_array(0 to 1);
     signal prescale_factor_set_index_reg: ipb_regs_array(0 to 1);
     signal command_pulses: std_logic_vector(31 downto 0); -- see ipb_pulse_regs.vhd.
 
@@ -160,7 +158,6 @@ architecture rtl of fdl_module is
 -- =================================================================================
 
     signal algo_int : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
-    signal prescale_factor_int : prescale_factor_array;
 
     signal rate_cnt_finor_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
@@ -171,7 +168,6 @@ architecture rtl of fdl_module is
     signal rate_cnt_l1a_reg : ipb_regs_array(0 to 0) := (others => (others => '0'));
 
     signal l1a_latency_delay_reg : ipb_regs_array(0 to 1) := (others => (others => '0'));
-    signal rate_cnt_post_dead_time : rate_counter_array;
 
     signal algo_after_bxomask : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
     signal algo_after_prescaler : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
@@ -181,9 +177,6 @@ architecture rtl of fdl_module is
     signal local_finor_pipe : std_logic;
     signal local_veto_pipe : std_logic;
     signal algo_bx_mask_mem_out : std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '1');
-
-    signal lhc_clk_algo_bx_mem : std_logic := '0';
-    signal sync_en_algo_bx_mem : std_logic := '0';
 
     signal request_update_factor_pulse : std_logic;
     signal prescale_factor_set_index_reg_updated : ipb_regs_array(0 to 1) := (others => (others => '0'));
@@ -203,8 +196,6 @@ architecture rtl of fdl_module is
     signal rate_cnt_after_prescaler_global : rate_counter_global_array;
     signal rate_cnt_post_dead_time_local : rate_counter_array;
     signal rate_cnt_post_dead_time_global : rate_counter_global_array;
---     signal finor_masks_global : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
---     signal finor_masks_local : std_logic_vector(NR_ALGOS-1 downto 0);
     signal veto_masks_global : std_logic_vector(MAX_NR_ALGOS-1 downto 0);
     signal veto_masks_local : std_logic_vector(NR_ALGOS-1 downto 0);
 
@@ -223,10 +214,8 @@ architecture rtl of fdl_module is
     signal prescale_factor_preview_reg: ipb_regs_array(0 to OFFSET_END_PRESCALE_FACTOR_PREVIEW-OFFSET_BEG_PRESCALE_FACTOR_PREVIEW);
     signal prescale_factor_preview_set_index_reg: ipb_regs_array(0 to 1);
     signal prescale_factor_preview_set_index_reg_updated : ipb_regs_array(0 to 1) := (others => (others => '0'));
-    signal prescale_factor_preview_int : prescale_factor_array;
     signal algo_after_prescaler_preview : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
     signal local_finor_preview : std_logic := '0';
-    signal prescale_facto_previewr_set_index_reg_updated : ipb_regs_array(0 to 1) := (others => (others => '0'));
     signal prescale_factor_preview_global : prescale_factor_global_array;
     signal prescale_factor_preview_local : prescale_factor_array;
     signal rate_cnt_after_prescaler_preview_local : rate_counter_array;
@@ -239,8 +228,6 @@ begin
     fabric_i: entity work.fdl_fabric
         generic map(NSLV => NR_IPB_SLV_FDL)
         port map(
-            ipb_clk => ipb_clk,
-            ipb_rst => ipb_rst,
             ipb_in => ipb_in,
             ipb_out => ipb_out,
             ipb_to_slaves => ipb_to_slaves,
@@ -281,15 +268,10 @@ begin
     end generate l1tm_fw_uid_l;
 
 -- HB 2022-02-08: for tests - frame version in register "OFFSET_SVN_REVISION_NUMBER"
---     versions_to_ipb(OFFSET_SVN_REVISION_NUMBER) <= SVN_REVISION_NUMBER;
     versions_to_ipb(OFFSET_SVN_REVISION_NUMBER) <= FRAME_VERSION;
     versions_to_ipb(OFFSET_L1TM_UID_HASH) <= L1TM_UID_HASH;
     versions_to_ipb(OFFSET_FW_UID_HASH) <= FW_UID_HASH;
     versions_to_ipb(OFFSET_MODULE_ID) <= conv_std_logic_vector(MODULE_ID, 32);
-
---===============================================================================================--
--- Control register
--- HB 2015-08-31: control_reg not used currently
 
 --===============================================================================================--
 -- bx counter
@@ -342,14 +324,11 @@ begin
             enb       => '1',
             web       => '0', -- read
 -- HB 2016-01-18: using internal bx number for algo_bx_mem
---             addrb     => bx_nr(11 downto 0),
             addrb     => bx_nr_internal(11 downto 0),
             dinb      => X"FFFFFFFF", -- dummy
             doutb     => algo_bx_mask_mem_out(32*i+31 downto 32*i)
         );
     end generate algo_bx_mem_l;
-
-    bx_nr_out <= bx_nr_internal; -- to Algo-bx-memory
 
 -- HB 2015-08-14: v0.0.13 - algo_bx_mask_sim input for simulation use.
     algo_bx_mask_global <=  algo_bx_mask_mem_out when not SIM_MODE
@@ -829,7 +808,6 @@ begin
             regs_i => prescale_preview_otf_reg_updated
         );
 
-
 -- ****************************************************************************************************
 
 -- HB 2016-04-25: bug fixed at "rate_cnt_reg_l" (using MAX_NR_ALGOS instead of NR_ALGOS).
@@ -844,7 +822,6 @@ begin
     masks_reg_l: for i in 0 to MAX_NR_ALGOS-1 generate
         prescale_factor_global(i) <= prescale_factor_reg(i);
         prescale_factor_preview_global(i) <= prescale_factor_preview_reg(i);
---  finor_masks_global(i) <= masks_reg(i)(FINOR_BIT_IN_MASKS_REG);
         veto_masks_global(i) <= masks_reg(i)(VETO_BIT_IN_MASKS_REG);
     end generate masks_reg_l;
 
@@ -853,7 +830,7 @@ begin
 
 -- Input register for algorithms inputs (used for timing analysis of fdl_module).
     algo_in_ff_p: process(lhc_clk, algo_i)
-        begin
+    begin
         if (ALGO_INPUTS_FF = false) then
             algo_int <= algo_i;
         elsif (lhc_clk'event and (lhc_clk = '1') and (ALGO_INPUTS_FF = true)) then
@@ -871,7 +848,6 @@ begin
             MAX_DELAY => MAX_DELAY_L1A_LATENCY
         )
         port map(
-            sys_clk => ipb_clk,
             lhc_clk => lhc_clk,
             lhc_rst => lhc_rst,
             suppress_cal_trigger => suppress_cal_trigger,
@@ -931,7 +907,7 @@ begin
 
 -- One pipeline stage for finor and veto to ROP
     local_finor_veto_pipeline_p: process(lhc_clk, local_finor, local_veto)
-        begin
+    begin
         if (lhc_clk'event and (lhc_clk = '1')) then
             local_finor_pipe <= local_finor;
             local_veto_pipe <= local_veto;
@@ -950,7 +926,7 @@ begin
     finor_preview_2_mezz_lemo_tmp <= local_finor_preview;
     veto_2_mezz_lemo_tmp <= local_veto;
     finor_veto_2_mezz_p: process(lhc_clk, finor_2_mezz_lemo_tmp, veto_2_mezz_lemo_tmp, finor_preview_2_mezz_lemo_tmp)
-        begin
+    begin
         if (lhc_clk'event and (lhc_clk = '1')) then
             finor_2_mezz_lemo <= finor_2_mezz_lemo_tmp;
             finor_preview_2_mezz_lemo <= finor_preview_2_mezz_lemo_tmp;
@@ -962,7 +938,7 @@ begin
 -- Pipeline stages for "simulating" the stages of FINOR-AMC502, to get the same latency for both possibilities of connecting to TCDS.
 -- HB 2015-08-21: currently assumed 1.5 bx latency over FINOR-AMC502
     stage1_finor_amc502_sim_p: process(lhc_clk, local_finor, local_veto)
-        begin
+    begin
         if (lhc_clk'event and (lhc_clk = '1')) then
             finor_with_veto_temp1 <= local_finor and not local_veto;
             finor_with_veto_temp2 <= finor_with_veto_temp1;
@@ -971,7 +947,7 @@ begin
 
 -- HB 2016-02-26: finor_w_veto_2_mezz_lemo to tp_mux for LEMO connectors
     mezz_finor_veto_pipeline_p: process(lhc_clk, finor_with_veto_temp2)
-        begin
+    begin
         if (lhc_clk'event and (lhc_clk = '0')) then
             finor_w_veto_2_mezz_lemo <= finor_with_veto_temp2;
         end if;
@@ -985,7 +961,6 @@ begin
             COUNTER_WIDTH => FINOR_RATE_COUNTER_WIDTH
         )
         port map(
-                sys_clk => ipb_clk,
                 lhc_clk => lhc_clk,
                 store_cnt_value => begin_lumi_section,
                 algo_i => local_finor,
@@ -998,7 +973,6 @@ begin
             COUNTER_WIDTH => FINOR_RATE_COUNTER_WIDTH
         )
         port map(
-                sys_clk => ipb_clk,
                 lhc_clk => lhc_clk,
                 store_cnt_value => begin_lumi_section,
                 algo_i => local_finor_preview,
@@ -1012,7 +986,6 @@ begin
             COUNTER_WIDTH => VETO_RATE_COUNTER_WIDTH
         )
         port map(
-                sys_clk => ipb_clk,
                 lhc_clk => lhc_clk,
                 store_cnt_value => begin_lumi_section,
                 algo_i => local_veto,
@@ -1026,7 +999,6 @@ begin
             COUNTER_WIDTH => L1A_RATE_COUNTER_WIDTH
         )
         port map(
-            sys_clk => ipb_clk,
             lhc_clk => lhc_clk,
             store_cnt_value => begin_lumi_section,
             algo_i => l1a,
@@ -1054,14 +1026,12 @@ begin
             rate_cnt_after_prescaler_preview_global => rate_cnt_after_prescaler_preview_global,
             rate_cnt_post_dead_time_local => rate_cnt_post_dead_time_local,
             rate_cnt_post_dead_time_global => rate_cnt_post_dead_time_global,
---             finor_masks_global => finor_masks_global,
---             finor_masks_local => finor_masks_local,
             veto_masks_global => veto_masks_global,
             veto_masks_local => veto_masks_local,
             algo_after_gtLogic => algo_int,
             algo_after_bxomask => algo_after_bxomask,
             algo_after_prescaler => algo_after_prescaler,
-            algo_after_gtLogic_rop => algo_after_gtLogic_rop,
+            algo_after_gtlogic_rop => algo_after_gtlogic_rop,
             algo_after_bxomask_rop => algo_after_bxomask_rop,
             algo_after_prescaler_rop => algo_after_prescaler_rop
         );

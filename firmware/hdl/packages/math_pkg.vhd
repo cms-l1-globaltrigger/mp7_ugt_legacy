@@ -1,9 +1,12 @@
 
+-- Description:
+-- Package for mathematics functions.
+
+-- Version history:
+-- HB 2022-09-02: cleaned up.
+
 library IEEE;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all;
-
 
 package math_pkg is
 	function log2c(constant value                : in integer) return integer;
@@ -63,7 +66,7 @@ package body math_pkg is
     begin
         return max(max(value1, value2), value3);
     end function max;
-    
+
      function min(constant value1, value2 : in integer) return integer is
         variable ret_value : integer;
     begin

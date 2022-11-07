@@ -3,13 +3,13 @@
 -- Calculation of Delta-R
 
 -- Version history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2021-04-19: removed obsolete generic
 -- HB 2021-04-08: first design
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
-use ieee.std_logic_arith.all;
 
 use work.gtl_pkg.all;
 

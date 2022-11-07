@@ -3,6 +3,7 @@
 -- Multiplexer for read-out record data.
 
 -- Version-history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2022-03-22: Port bx_nr_fdl removed, contains same data as bx_nr (because bcres_d and bcres_d_FDL are the same signal: delayed bc0 [bc0_d_int in frame.vhd]).
 -- HB 2021-06-16: implemented selectors and orbit counter to quad 6 for "scouting".
 -- HB 2021-05-14: added fdl_pkg use clause.
@@ -12,11 +13,7 @@
 
 library ieee;
 use IEEE.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
-use ieee.std_logic_arith.all;
 
-library work;
-use work.ipbus.all;
 use work.mp7_data_types.all;
 use work.lhc_data_pkg.all;
 use work.gt_mp7_core_pkg.all;
@@ -37,7 +34,7 @@ entity output_mux is
         ctrs        : in ttc_stuff_array; --mp7 ttc ctrs
         bx_nr       : in std_logic_vector(11 downto 0);
         orbit_nr    : in orbit_nr_t;
-        algo_after_gtLogic   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+        algo_after_gtlogic   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_bxomask   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_prescaler   : in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         local_finor_in      : in std_logic;
@@ -64,7 +61,6 @@ architecture arch of output_mux is
     signal s_in4_mux0,s_in4_mux1,s_in4_mux2,s_in4_mux3,s_in4_mux4,s_in4_mux5,s_in4_mux6,s_in4_mux7,s_in4_mux8,s_in4_mux9 : lword;
     signal s_in5_mux0,s_in5_mux1,s_in5_mux2,s_in5_mux3,s_in5_mux4,s_in5_mux5,s_in5_mux6,s_in5_mux7,s_in5_mux8,s_in5_mux9 : lword;
 
-
 begin
 
     -- set sValid process
@@ -81,57 +77,57 @@ begin
     end process p_sValid;
 
 
-    -- algo_after_gtLogic 0-191 mux
-    s_in0_mux0   <=     (algo_after_gtLogic(31 downto 0), sValid, start, strobe);
-    s_in1_mux0   <=     (algo_after_gtLogic(63 downto 32), sValid, start, strobe);
-    s_in2_mux0   <=     (algo_after_gtLogic(95 downto 64), sValid, start, strobe);
-    s_in3_mux0   <=     (algo_after_gtLogic(127 downto 96), sValid, start, strobe);
-    s_in4_mux0   <=     (algo_after_gtLogic(159 downto 128), sValid, start, strobe);
-    s_in5_mux0   <=     (algo_after_gtLogic(191 downto 160), sValid, start, strobe);
+    -- algo_after_gtlogic 0-191 mux
+    s_in0_mux0   <=     (algo_after_gtlogic(31 downto 0), sValid, start, strobe);
+    s_in1_mux0   <=     (algo_after_gtlogic(63 downto 32), sValid, start, strobe);
+    s_in2_mux0   <=     (algo_after_gtlogic(95 downto 64), sValid, start, strobe);
+    s_in3_mux0   <=     (algo_after_gtlogic(127 downto 96), sValid, start, strobe);
+    s_in4_mux0   <=     (algo_after_gtlogic(159 downto 128), sValid, start, strobe);
+    s_in5_mux0   <=     (algo_after_gtlogic(191 downto 160), sValid, start, strobe);
 
     mux0_i: entity work.mux
         port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
-            in0     =>  s_in0_mux0,   -- frame 0   -> algo_after_gtLogic 0-31
-            in1     =>  s_in1_mux0,   -- frame 1   -> algo_after_gtLogic 32-63
-            in2     =>  s_in2_mux0,   -- frame 2   -> algo_after_gtLogic 64-95
-            in3     =>  s_in3_mux0,   -- frame 3   -> algo_after_gtLogic 96-127
-            in4     =>  s_in4_mux0,   -- frame 4   -> algo_after_gtLogic 128-159
-            in5     =>  s_in5_mux0,   -- frame 5   -> algo_after_gtLogic 160-191
+            in0     =>  s_in0_mux0,   -- frame 0   -> algo_after_gtlogic 0-31
+            in1     =>  s_in1_mux0,   -- frame 1   -> algo_after_gtlogic 32-63
+            in2     =>  s_in2_mux0,   -- frame 2   -> algo_after_gtlogic 64-95
+            in3     =>  s_in3_mux0,   -- frame 3   -> algo_after_gtlogic 96-127
+            in4     =>  s_in4_mux0,   -- frame 4   -> algo_after_gtlogic 128-159
+            in5     =>  s_in5_mux0,   -- frame 5   -> algo_after_gtlogic 160-191
             mux_out =>  lane_out(16)
         );
 
 
-    -- algo_after_gtLogic 192-383 mux
-    s_in0_mux1   <=    (algo_after_gtLogic(223 downto 192), sValid, start, strobe);    -- frame 0   -> algo_after_gtLogic 192-223
-    s_in1_mux1   <=    (algo_after_gtLogic(255 downto 224), sValid, start, strobe);    -- frame 1   -> algo_after_gtLogic 224-255
-    s_in2_mux1   <=    (algo_after_gtLogic(287 downto 256), sValid, start, strobe);    -- frame 2   -> algo_after_gtLogic 256-287
-    s_in3_mux1   <=    (algo_after_gtLogic(319 downto 288), sValid, start, strobe);    -- frame 3   -> algo_after_gtLogic 288-319
-    s_in4_mux1   <=    (algo_after_gtLogic(351 downto 320), sValid, start, strobe);    -- frame 4   -> algo_after_gtLogic 320-351
-    s_in5_mux1   <=    (algo_after_gtLogic(383 downto 352), sValid, start, strobe);    -- frame 5   -> algo_after_gtLogic 352-383
+    -- algo_after_gtlogic 192-383 mux
+    s_in0_mux1   <=    (algo_after_gtlogic(223 downto 192), sValid, start, strobe);    -- frame 0   -> algo_after_gtlogic 192-223
+    s_in1_mux1   <=    (algo_after_gtlogic(255 downto 224), sValid, start, strobe);    -- frame 1   -> algo_after_gtlogic 224-255
+    s_in2_mux1   <=    (algo_after_gtlogic(287 downto 256), sValid, start, strobe);    -- frame 2   -> algo_after_gtlogic 256-287
+    s_in3_mux1   <=    (algo_after_gtlogic(319 downto 288), sValid, start, strobe);    -- frame 3   -> algo_after_gtlogic 288-319
+    s_in4_mux1   <=    (algo_after_gtlogic(351 downto 320), sValid, start, strobe);    -- frame 4   -> algo_after_gtlogic 320-351
+    s_in5_mux1   <=    (algo_after_gtlogic(383 downto 352), sValid, start, strobe);    -- frame 5   -> algo_after_gtlogic 352-383
 
     mux1_i: entity work.mux
         port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
-            in0     =>  s_in0_mux1,    -- frame 0   -> algo_after_gtLogic 192-223
-            in1     =>  s_in1_mux1,    -- frame 1   -> algo_after_gtLogic 224-255
-            in2     =>  s_in2_mux1,    -- frame 2   -> algo_after_gtLogic 256-287
-            in3     =>  s_in3_mux1,    -- frame 3   -> algo_after_gtLogic 288-319
-            in4     =>  s_in4_mux1,    -- frame 4   -> algo_after_gtLogic 320-351
-            in5     =>  s_in5_mux1,    -- frame 5   -> algo_after_gtLogic 352-383
+            in0     =>  s_in0_mux1,    -- frame 0   -> algo_after_gtlogic 192-223
+            in1     =>  s_in1_mux1,    -- frame 1   -> algo_after_gtlogic 224-255
+            in2     =>  s_in2_mux1,    -- frame 2   -> algo_after_gtlogic 256-287
+            in3     =>  s_in3_mux1,    -- frame 3   -> algo_after_gtlogic 288-319
+            in4     =>  s_in4_mux1,    -- frame 4   -> algo_after_gtlogic 320-351
+            in5     =>  s_in5_mux1,    -- frame 5   -> algo_after_gtlogic 352-383
             mux_out =>  lane_out(17)
         );
 
 
-    -- algo_after_gtLogic 384-511 + finor mux
-    s_in0_mux2   <=   (algo_after_gtLogic(415 downto 384), sValid, start, strobe);    -- frame 0   -> algo_after_gtLogic 384-415
-    s_in1_mux2   <=   (algo_after_gtLogic(447 downto 416), sValid, start, strobe);    -- frame 1   -> algo_after_gtLogic 416-447
-    s_in2_mux2   <=   (algo_after_gtLogic(479 downto 448), sValid, start, strobe);    -- frame 2   -> algo_after_gtLogic 448-479
-    s_in3_mux2   <=   (algo_after_gtLogic(511 downto 480), sValid, start, strobe);    -- frame 3   -> algo_after_gtLogic 480-511
+    -- algo_after_gtlogic 384-511 + finor mux
+    s_in0_mux2   <=   (algo_after_gtlogic(415 downto 384), sValid, start, strobe);    -- frame 0   -> algo_after_gtlogic 384-415
+    s_in1_mux2   <=   (algo_after_gtlogic(447 downto 416), sValid, start, strobe);    -- frame 1   -> algo_after_gtlogic 416-447
+    s_in2_mux2   <=   (algo_after_gtlogic(479 downto 448), sValid, start, strobe);    -- frame 2   -> algo_after_gtlogic 448-479
+    s_in3_mux2   <=   (algo_after_gtlogic(511 downto 480), sValid, start, strobe);    -- frame 3   -> algo_after_gtlogic 480-511
     s_in4_mux2   <=   (L1TM_UID_HASH, sValid, start, strobe);            -- frame 4   -> free
     s_in5_mux2   <=   (FW_UID_HASH, sValid, start, strobe);            -- frame 5   -> free
 
@@ -140,10 +136,10 @@ begin
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(4).ttc_cmd(0), --bcres for quad 4
-            in0     =>  s_in0_mux2,    -- frame 0   -> algo_after_gtLogic 384-415
-            in1     =>  s_in1_mux2,    -- frame 1   -> algo_after_gtLogic 416-447
-            in2     =>  s_in2_mux2,    -- frame 2   -> algo_after_gtLogic 448-479
-            in3     =>  s_in3_mux2,    -- frame 3   -> algo_after_gtLogic 480-511
+            in0     =>  s_in0_mux2,    -- frame 0   -> algo_after_gtlogic 384-415
+            in1     =>  s_in1_mux2,    -- frame 1   -> algo_after_gtlogic 416-447
+            in2     =>  s_in2_mux2,    -- frame 2   -> algo_after_gtlogic 448-479
+            in3     =>  s_in3_mux2,    -- frame 3   -> algo_after_gtlogic 480-511
             in4     =>  s_in4_mux2,    -- frame 4   -> free
             in5     =>  s_in5_mux2,    -- frame 5   -> free
             -- sel     =>  frame_cntr,

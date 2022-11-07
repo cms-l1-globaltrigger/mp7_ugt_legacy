@@ -2,6 +2,7 @@
 -- Spy trigger module.
 
 -- Version-history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2022-03-22: removed spy3 ports and simmem_in_use (simmem not used anymore).
 
 library ieee;
@@ -16,14 +17,14 @@ use work.math_pkg.all;
 entity spytrig is
     port
     (
-        lhc_clk    : in  std_logic;
-        lhc_rst    : in  std_logic;
-        orbit_nr   : in  orbit_nr_t;
-        bx_nr      : in bx_nr_t;
-        sw_reg_i   : in  sw_reg_spytrigger_in_t;
-        sw_reg_o   : out sw_reg_spytrigger_out_t;
-        spy1_o     : out std_logic;
-        spy2_o     : out std_logic
+        lhc_clk : in  std_logic;
+        lhc_rst : in  std_logic;
+        orbit_nr : in  orbit_nr_t;
+        bx_nr : in bx_nr_t;
+        sw_reg_i : in  sw_reg_spytrigger_in_t;
+        sw_reg_o : out sw_reg_spytrigger_out_t;
+        spy1_o : out std_logic;
+        spy2_o : out std_logic
     );
 end;
 
@@ -87,9 +88,9 @@ begin
         elsif rising_edge(lhc_clk) then
             rst_timeout_cnt <= rst_timeout_cnt_nxt;
             --record event flags to detect toggled bits
-            last_flags.spy12_once        <= sw_reg_i.spy12_once_event;
-            last_flags.spy12_next        <= sw_reg_i.spy12_next_event;
-            last_flags.spy3              <= '0';
+            last_flags.spy12_once <= sw_reg_i.spy12_once_event;
+            last_flags.spy12_next <= sw_reg_i.spy12_next_event;
+            last_flags.spy3 <= '0';
             last_flags.clear_spy12_ready <= sw_reg_i.clear_spy12_ready_event;
             last_flags.clear_spy3_ready  <= '0';
             last_flags.clear_spy12_error <= sw_reg_i.clear_spy12_error_event;
@@ -97,9 +98,9 @@ begin
             spy3_fsm_state <= IDLE;
             spy12_fsm_state <= spy12_fsm_state_nxt;
             -- ready flags
-            spy12_ready_flag  <= spy12_ready_flag_nxt;
-            spy3_ready_flag   <= '0';
-            spy12_error_flag  <= spy12_error_flag_nxt;
+            spy12_ready_flag <= spy12_ready_flag_nxt;
+            spy3_ready_flag <= '0';
+            spy12_error_flag <= spy12_error_flag_nxt;
             spy_once_orbit_nr <= spy_once_orbit_nr_nxt;
         end if;
     end process;

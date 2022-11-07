@@ -3,14 +3,11 @@
 -- Comparator for unconstrained pt
 
 -- Version history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2021-03-08: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all; -- for function "CONV_INTEGER"
-
-use work.gtl_pkg.all;
 
 entity upt_comp is
     generic	(

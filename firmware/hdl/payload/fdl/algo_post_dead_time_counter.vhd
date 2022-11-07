@@ -1,19 +1,17 @@
 
 -- Desription:
 -- Rate counter for algorithms in FDL
--- Output synchronized with sys_clk, to prevent wrong counter values when reading via PCIe.
--- This design only works with LHC clock (40 MHz) and PCIe system clock (125 MHz)
 
+-- HB 2022-09-06: cleaned up.
 -- HB 2022-08-16: removed unused signal sres_counter.
 -- HB 2016-06-28: removed clock domain change for counter_o.
 -- HB 2015-09-17: inserted "clear counter value in the "output" register for reading by IPBus" with sres_counter = '1'.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
-use work.math_pkg.all;
+use work.math_pkg.log2c;
 
 entity algo_post_dead_time_counter is
    generic( 
@@ -21,7 +19,6 @@ entity algo_post_dead_time_counter is
       MAX_DELAY : integer := 128
    );
    port( 
-      sys_clk          : in     std_logic;
       lhc_clk          : in     std_logic;
       lhc_rst          : in     std_logic;
       store_cnt_value  : in     std_logic;
@@ -37,8 +34,6 @@ architecture rtl of algo_post_dead_time_counter is
     signal counter : std_logic_vector (COUNTER_WIDTH-1 DOWNTO 0) := (others => '0');
     signal counter_int : std_logic_vector (COUNTER_WIDTH-1 DOWNTO 0);
     signal limit : std_logic := '0';
-    signal store_cnt_value_lhc : std_logic := '0';
-    signal store_cnt_value_sys : std_logic := '0';
     
     signal algo : std_logic_vector(0 downto 0);
     signal algo_delayed : std_logic_vector(0 downto 0);

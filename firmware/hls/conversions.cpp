@@ -135,7 +135,7 @@ PxPyPz MuonToCartesian(Muon x){
   ap_int<9> eta   =  hls::abs(x.eta_extrapolated); //Only store values for positive eta, pick up sign later
 
   cossin_t sinphi = sine_with_conversion_muon<ap_uint<10>, cossin_t, N_TABLE>(phi);
-  cossin_t cosphi = sine_with_conversion_muon<ap_uint<10>, cossin_t, N_TABLE>(phi+90*2);
+  cossin_t cosphi = sine_with_conversion_muon<ap_uint<10>, cossin_t, N_TABLE>(phi+M_PI/2/Scales::MUON_PHI_LSB);
   sinh_t  sinheta = sinh_with_conversion_muon<ap_int<9>  , sinh_t  , N_TABLE>(eta);
 
   sinheta = (sign_eta > 0) ? (sinh_t) (-sign_eta*sinheta) : sinheta; // Change sign bit if eta is negative, sinh(-x)=-sin(x)
@@ -163,7 +163,7 @@ PxPyPz JetToCartesian(Jet x){
   ap_int<8> eta   =  hls::abs(x.eta); //Only store values for positive eta, pick up sign later
 
   cossin_t sinphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi);
-  cossin_t cosphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi+90*2);
+  cossin_t cosphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi+M_PI/2/Scales::CALO_PHI_LSB);
   sinh_t  sinheta = sinh_with_conversion_jet<ap_int<8>, sinh_t  , N_TABLE>(eta);
   sinheta = (sign_eta > 0) ? (sinh_t) (-sign_eta*sinheta) : sinheta; // Change sign bit if eta is negative, sinh(-x)=-sin(x)
 
@@ -190,7 +190,7 @@ PxPyPz CaloCommonToCartesian(CaloCommon x){
   ap_uint<8> phi =  x.phi; //Only store values for positive phi, pick up sign later
   ap_int<8> eta   =  hls::abs(x.eta); //Only store values for positive eta, pick up sign later
   cossin_t sinphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi);
-  cossin_t cosphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi+90*2);
+  cossin_t cosphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi+M_PI/2/Scales::CALO_PHI_LSB);
   sinh_t  sinheta = sinh_with_conversion_jet<ap_int<8>  , sinh_t  , N_TABLE>(eta);
 
   sinheta = (sign_eta > 0) ? (sinh_t) (-sign_eta*sinheta) : sinheta; // Change sign bit if eta is negative, sinh(-x)=-sin(x)
@@ -223,7 +223,7 @@ PxPyPz METToCartesian(ETMiss x){
   bool sign_phi = x.phi.sign();
   ap_uint<8> phi =  x.phi; //Only store values for positive phi, pick up sign later
   cossin_t sinphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi);
-  cossin_t cosphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi+90*2);
+  cossin_t cosphi = sine_with_conversion_jet<ap_uint<8>, cossin_t, N_TABLE>(phi+M_PI/2/Scales::CALO_PHI_LSB);
   // sinphi = sin_table[phi];
 
   sinphi = (sign_phi > 0) ? (cossin_t) (-sign_phi*sinphi) : sinphi; // Change sign bit if phi is negative, sin(-x)=-sin(x)

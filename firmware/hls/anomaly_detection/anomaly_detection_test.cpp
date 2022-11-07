@@ -26,10 +26,9 @@ PxPyPz_float ObjToCartesian(float pt_in,float eta_in,float phi_in)
     vec.pt  = pt_in;
     vec.eta = eta_in;
     vec.phi = phi_in;
-    vec.px = pt_in * cos(phi_in); //phi in radians
-    vec.py = pt_in * sin(phi_in); //phi in radians
-    vec.pz = pt_in * sinh(eta_in); //eta in radians
-
+    vec.px = pt_in * std::cos(phi_in); //phi in radians
+    vec.py = pt_in * std::sin(phi_in); //phi in radians
+    vec.pz = pt_in * std::sinh(eta_in); //eta in radians
     return vec;
     
 }

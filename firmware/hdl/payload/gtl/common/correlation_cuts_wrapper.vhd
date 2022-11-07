@@ -3,15 +3,13 @@
 -- Wrapper for correlation cuts comparator
 
 -- Version history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2021-11-23: bug fix for mass_div_dr_comp_o (removed from pipeline_p, because pipeline done in "correlation_cuts_calculation.vhd" - output register of BRAMs for "inverted_dr_sq").
 -- HB 2021-04-09: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
-use ieee.std_logic_arith.all;
 
-use work.math_pkg.all;
 use work.gtl_pkg.all;
 
 entity correlation_cuts_wrapper is
@@ -77,7 +75,7 @@ architecture rtl of correlation_cuts_wrapper is
 -- HB 2017-03-27: default values of cut comps -> '1' because of AND in formular of AND-OR matrix
     signal deta_comp_temp, dphi_comp_temp, dr_comp_temp, mass_comp_temp, mass_div_dr_comp_temp, tbpt_comp_temp :
     std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
-    signal deta_comp, dphi_comp, dr_comp, mass_comp, mass_div_dr_comp, tbpt_comp :
+    signal deta_comp, dphi_comp, dr_comp, mass_comp, tbpt_comp :
     std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
 
 begin

@@ -26,6 +26,8 @@ namespace Scales{
 
   static const double MUON_PT_LSB = 0.5;
   static const double CALO_PT_LSB = 0.5;
+  
+  const int INTPHI_PI = 720;
 }; // namespace Scales
 
 /* ---

@@ -27,12 +27,11 @@ vlib work
 vmap work work
 
 #Top Entity the design
-vcom -93 -work work $GT_SRC/packages/fdl_pkg_prescale_float_sim.vhd
+vcom -93 -work work $TESTBENCH/fdl_pkg_prescale_float_sim.vhd
 vcom -93 -work work $GT_SRC/payload/fdl/update_process.vhd
 vcom -93 -work work $GT_SRC/payload/fdl/algo_pre_scaler_fractional_float.vhd
 
 #Testbench
-#vcom -93 -work work $TESTBENCH/algo_pre_scaler_fractional_tb_pkg.vhd
 vcom -93 -work work $TESTBENCH/algo_pre_scaler_fractional_float_tb.vhd
 
 #Load Design

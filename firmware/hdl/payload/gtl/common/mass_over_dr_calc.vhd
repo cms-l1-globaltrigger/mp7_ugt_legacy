@@ -3,6 +3,7 @@
 -- Calculation of invariant mass divided by deltaR.
 
 -- Version history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2021-04-20: changed name.
 -- HB 2021-04-16: new input mass_inv_pt.
 -- HB 2021-03-16: first design.
@@ -10,8 +11,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
-use ieee.std_logic_arith.all;
-use work.math_pkg.all;
 
 use work.gtl_pkg.all;
 

@@ -1,13 +1,13 @@
 
 -- Description: this module contains the "frame module info"
 
+-- Version-history:
+-- HB 2022-09-06: cleaned up.
 -- HB 2021-02-03: register "module_info_2_ipb(OFFSET_FRAME_VERSION)" contains "GT_VERSION" (instead of "FRAME_VERSION").
 -- HEPHY:21-11-2014 TOP_SERIAL_VENDOR is not mor relevant, because in future we will read from hardware over ipmi just MAC address.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
-use ieee.numeric_std.all;
 
 use work.ipbus.all;
 use work.frame_addr_decode.all;
@@ -48,21 +48,13 @@ begin
     module_info_2_ipb(OFFSET_TIMESTAMP) <= TIMESTAMP;
 
     hostname_l: for i in 0 to HOSTNAME'length/32-1 generate
-		module_info_2_ipb(i+OFFSET_HOSTNAME) <= HOSTNAME(i*32+31 downto i*32);
+        module_info_2_ipb(i+OFFSET_HOSTNAME) <= HOSTNAME(i*32+31 downto i*32);
     end generate hostname_l;
 
---     hostname_l: for i in OFFSET_HOSTNAME to OFFSET_HOSTNAME+HOSTNAME'length/32-1 generate
--- 		module_info_2_ipb(i-OFFSET_HOSTNAME) <= HOSTNAME((i-OFFSET_HOSTNAME)*32+31 downto (i-OFFSET_HOSTNAME)*32);
---     end generate hostname_l;
---
     username_l: for i in 0 to USERNAME'length/32-1 generate
-		module_info_2_ipb(i+OFFSET_USERNAME) <= USERNAME(i*32+31 downto i*32);
+        module_info_2_ipb(i+OFFSET_USERNAME) <= USERNAME(i*32+31 downto i*32);
     end generate username_l;
 
---     username_l: for i in OFFSET_USERNAME to OFFSET_USERNAME+USERNAME'length/32-1 generate
--- 		module_info_2_ipb(i-OFFSET_USERNAME) <= USERNAME((i-OFFSET_USERNAME)*32+31 downto (i-OFFSET_USERNAME)*32);
---     end generate username_l;
---
     module_info_2_ipb(OFFSET_MODULE_TYPE) <= MODULE_TYPE;
 
     module_info_2_ipb(OFFSET_FRAME_VERSION) <= GT_VERSION;

@@ -3,13 +3,12 @@
 -- Calculation of differences in eta [deta] and phi [dphi]
 
 -- Version history:
+-- HB 2022-09-05: cleaned up.
 -- HB 2021-11-26: added logic for "half resolution" (used for MU-MU mass over DR).
 -- HB 2021-02-17: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all;
 
 use work.gtl_pkg.all;
 

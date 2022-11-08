@@ -52,9 +52,6 @@ entity anomaly_detection_sinh_table_3_ROM_AUTO_1R is
           address12      : in std_logic_vector(AddressWidth-1 downto 0); 
           ce12       : in std_logic; 
           q12         : out std_logic_vector(DataWidth-1 downto 0);
-          address13      : in std_logic_vector(AddressWidth-1 downto 0); 
-          ce13       : in std_logic; 
-          q13         : out std_logic_vector(DataWidth-1 downto 0);
           reset     : in std_logic;
           clk       : in std_logic
     ); 
@@ -76,7 +73,6 @@ signal address9_tmp : std_logic_vector(AddressWidth-1 downto 0);
 signal address10_tmp : std_logic_vector(AddressWidth-1 downto 0); 
 signal address11_tmp : std_logic_vector(AddressWidth-1 downto 0); 
 signal address12_tmp : std_logic_vector(AddressWidth-1 downto 0); 
-signal address13_tmp : std_logic_vector(AddressWidth-1 downto 0); 
 type mem_array is array (0 to AddressRange-1) of std_logic_vector (DataWidth-1 downto 0); 
 signal mem0 : mem_array := (
     0 => "000000000", 1 => "000000010", 2 => "000000101", 3 => "000001000", 
@@ -981,18 +977,6 @@ begin
 --synthesis translate_on
 end process;
 
-memory_access_guard_13: process (address13) 
-begin
-      address13_tmp <= address13;
---synthesis translate_off
-      if (CONV_INTEGER(address13) > AddressRange-1) then
-           address13_tmp <= (others => '0');
-      else 
-           address13_tmp <= address13;
-      end if;
---synthesis translate_on
-end process;
-
 p_rom_access: process (clk)  
 begin 
     if (clk'event and clk = '1') then
@@ -1034,9 +1018,6 @@ begin
         end if;
         if (ce12 = '1') then 
             q12 <= mem6(CONV_INTEGER(address12_tmp)); 
-        end if;
-        if (ce13 = '1') then 
-            q13 <= mem6(CONV_INTEGER(address13_tmp)); 
         end if;
     end if;
 end process;

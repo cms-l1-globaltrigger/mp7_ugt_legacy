@@ -3,13 +3,22 @@
 #include "NN/VAE_HLS.h"
 
 AD_NN_OUT_T computeLoss(AD_NN_OUT_T score[AD_NNNOUTPUTS]){
-  
+  AD_NN_OUT_SQ_T squares[AD_NNNOUTPUTS];
+  AD_NN_OUT_SQ_T tmp = 0;
   AD_NN_OUT_T loss = 0;
 
-  for (int i = 1; i <= AD_NNNOUTPUTS; i++){
-      #pragma HLS unroll
-      loss += (score[i] * score[i]);  
-    }
+  for (int i = 0; i < AD_NNNOUTPUTS; i++){
+    #pragma HLS unroll
+    AD_NN_OUT_SQ_T sq = score[i] * score[i];  
+    #pragma hls bind_op variable=sq op=mul impl=fabric
+    squares[i] = sq;
+  }
+
+  for (int i = 0; i < AD_NNNOUTPUTS; i++){
+    #pragma HLS unroll
+    tmp += squares[i];  
+  }
+  loss = tmp; // cast
   return loss;
 }
 
@@ -78,7 +87,7 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
   }
 
   AD_NN_OUT_T nnout[AD_NNNOUTPUTS];
-  #pragma HLS array_partition variable=score complete
+  #pragma HLS array_partition variable=nnout complete
   VAE_HLS(nn_inputs, nnout);
   anomaly_score = computeLoss(nnout);
 }

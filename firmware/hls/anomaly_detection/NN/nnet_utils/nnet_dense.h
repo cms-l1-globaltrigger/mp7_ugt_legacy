@@ -30,8 +30,8 @@ struct dense_config
     static const unsigned n_zeros = 0;
     // partitioning arrays cyclically to go with roll factors?
     // Product function to use
-    template<class x_T, class y_T, class res_T>
-    using product = nnet::product::mult<x_T, y_T, res_T>;
+    template<class x_T, class y_T>
+    using product = nnet::product::mult<x_T, y_T>;
 };
 
 template<class data_T, class res_T, typename CONFIG_T>
@@ -42,7 +42,11 @@ void dense(
     typename CONFIG_T::bias_t    biases[CONFIG_T::n_out])
 {
     #pragma HLS inline
-    dense_latency<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+    if (CONFIG_T::strategy == nnet::latency) {
+        dense_latency<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+    } else {
+        dense_resource<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+    }
 }
 
 }

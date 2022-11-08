@@ -1,6 +1,17 @@
 #include "anomaly_detection.h"
 #include <stddef.h>
-#include "NN/myproject.h"
+#include "NN/VAE_HLS.h"
+
+AD_NN_OUT_T computeLoss(AD_NN_OUT_T score[AD_NNNOUTPUTS]){
+  
+  AD_NN_OUT_T loss = 0;
+
+  for (int i = 1; i <= AD_NNNOUTPUTS; i++){
+      #pragma HLS unroll
+      loss += (score[i] * score[i]);  
+    }
+  return loss;
+}
 
 void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS], Tau taus[NTAUS],
                        ET et, HT ht, ETMiss etmiss, HTMiss htmiss, ETHFMiss ethfmiss, HTHFMiss hthfmiss,
@@ -66,8 +77,8 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
     nn_inputs[3*i + 2] = cartesians[i].pz;
   }
 
-  AD_NN_OUT_T score[1];
+  AD_NN_OUT_T nnout[AD_NNNOUTPUTS];
   #pragma HLS array_partition variable=score complete
-  myproject(nn_inputs, score);
-  anomaly_score = score[0];
+  VAE_HLS(nn_inputs, nnout);
+  anomaly_score = computeLoss(nnout);
 }

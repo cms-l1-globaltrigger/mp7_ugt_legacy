@@ -2,7 +2,7 @@ open_project -reset prj_anomaly_detection_sim
 set_top anomaly_detection
 add_files  -tb anomaly_detection.cpp -cflags "-std=c++11 -I../"
 add_files  -tb ../conversions.cpp -cflags "-std=c++11 -I../"
-add_files NN/myproject.cpp -cflags "-std=c++0x -INN/"
+add_files NN/VAE_HLS.cpp -cflags "-std=c++0x -INN/"
 add_files -tb anomaly_detection_test.cpp -cflags "-std=c++11 -I../"
 add_files -tb test_input.txt
 

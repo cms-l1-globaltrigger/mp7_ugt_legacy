@@ -78,7 +78,7 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
   }
 
   AD_NN_OUT_T nnout[AD_NNNOUTPUTS];
-  #pragma HLS array_partition variable=score complete
+  #pragma HLS array_partition variable=nnout complete
   VAE_HLS(nn_inputs, nnout);
   anomaly_score = computeLoss(nnout);
 }

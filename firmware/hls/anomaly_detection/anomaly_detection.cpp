@@ -6,7 +6,7 @@ AD_NN_OUT_T computeLoss(AD_NN_OUT_T score[AD_NNNOUTPUTS]){
   
   AD_NN_OUT_T loss = 0;
 
-  for (int i = 1; i <= AD_NNNOUTPUTS; i++){
+  for (int i = 0; i < AD_NNNOUTPUTS; i++){
       #pragma HLS unroll
       loss += (score[i] * score[i]);  
     }

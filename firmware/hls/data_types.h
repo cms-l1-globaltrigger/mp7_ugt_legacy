@@ -28,6 +28,9 @@ namespace Scales{
   static const double CALO_PT_LSB = 0.5;
   
   const int INTPHI_PI = 720;
+
+  static const int MUON_HALF_PI = 144;
+  static const int CALO_HALF_PI = 36;
 }; // namespace Scales
 
 /* ---

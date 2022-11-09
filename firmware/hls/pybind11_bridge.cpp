@@ -192,9 +192,9 @@ double anomaly_score(std::vector<int> in){
 
     // the unused inputs
     Tau taus[NTAUS]; ET et; HT ht; HTMiss htmiss; ETHFMiss ethfmiss; HTHFMiss hthfmiss; 
-    AD_NN_OUT_T score;
+    AD_NN_OUT_SQ_T score;
     anomaly_detection(muon, jet, egamma, taus, et, ht, etMiss, htmiss, ethfmiss, hthfmiss, score);
-    return score;
+    return (double) score;
 }
 
 std::vector<double> nn(std::vector<double> in){
@@ -218,7 +218,7 @@ double nn_loss(std::vector<double> in){
     for(int i = 0; i < AD_NNNOUTPUTS; i++){
         nn_outputs[i] = in[i];
     }
-    AD_NN_OUT_T loss = computeLoss(nn_outputs);
+    AD_NN_OUT_SQ_T loss = computeLoss(nn_outputs);
     return (double) loss;
 }
 

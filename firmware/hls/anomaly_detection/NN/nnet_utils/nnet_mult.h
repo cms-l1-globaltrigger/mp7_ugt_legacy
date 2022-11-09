@@ -75,7 +75,9 @@ class mult : public Product{
     {
         // 'Normal' product
         #pragma HLS INLINE
-        return a * w;
+        decltype(a*w) res = a * w;
+        #pragma hls bind_op variable=res op=mul impl=fabric
+        return res;
     }
     static void limit(unsigned multiplier_limit){
         #pragma HLS INLINE

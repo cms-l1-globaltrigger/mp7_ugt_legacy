@@ -1,6 +1,6 @@
-open_project -reset prj_ad_nn
-set_top myproject
-add_files NN/myproject.cpp -cflags "-std=c++0x -INN/"
+open_project -reset prj_anomaly_detection_nn
+set_top VAE_HLS
+add_files NN/VAE_HLS.cpp -cflags "-std=c++0x -INN/"
 
 open_solution -reset "solution1"
 

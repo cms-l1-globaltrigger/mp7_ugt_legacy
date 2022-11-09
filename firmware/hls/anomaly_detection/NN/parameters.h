@@ -22,6 +22,15 @@
 #include "weights/b7.h"
 
 //hls-fpga-machine-learning insert layer-config
+// q_activation
+struct linear_config2 : nnet::activ_config {
+    static const unsigned n_in = 57;
+    static const unsigned table_size = 1024;
+    static const unsigned io_type = nnet::io_parallel;
+    static const unsigned reuse_factor = 1;
+    typedef q_activation_table_t table_t;
+};
+
 // q_dense
 struct config3 : nnet::dense_config {
     static const unsigned n_in = 57;
@@ -32,7 +41,7 @@ struct config3 : nnet::dense_config {
     static const unsigned n_zeros = 1095;
     static const unsigned n_nonzeros = 729;
     static const bool store_weights_in_bram = false;
-    typedef model_default_t accum_t;
+    typedef q_dense_accum_t accum_t;
     typedef bias3_t bias_t;
     typedef weight3_t weight_t;
     typedef layer3_index index_t;
@@ -59,7 +68,7 @@ struct config5 : nnet::dense_config {
     static const unsigned n_zeros = 145;
     static const unsigned n_nonzeros = 367;
     static const bool store_weights_in_bram = false;
-    typedef model_default_t accum_t;
+    typedef q_dense_1_accum_t accum_t;
     typedef bias5_t bias_t;
     typedef weight5_t weight_t;
     typedef layer5_index index_t;
@@ -86,12 +95,21 @@ struct config7 : nnet::dense_config {
     static const unsigned n_zeros = 51;
     static const unsigned n_nonzeros = 157;
     static const bool store_weights_in_bram = false;
-    typedef model_default_t accum_t;
+    typedef mu_accum_t accum_t;
     typedef bias7_t bias_t;
     typedef weight7_t weight_t;
     typedef layer7_index index_t;
     template<class x_T, class y_T>
     using product = nnet::product::mult<x_T, y_T>;
+};
+
+// mu_quantized_bits
+struct linear_config8 : nnet::activ_config {
+    static const unsigned n_in = 13;
+    static const unsigned table_size = 1024;
+    static const unsigned io_type = nnet::io_parallel;
+    static const unsigned reuse_factor = 1;
+    typedef mu_quantized_bits_table_t table_t;
 };
 
 

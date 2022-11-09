@@ -1,11 +1,12 @@
 #include "anomaly_detection.h"
 #include <stddef.h>
 #include "NN/VAE_HLS.h"
+#include "NN/nnet_utils/nnet_common.h"
 
-AD_NN_OUT_T computeLoss(AD_NN_OUT_T score[AD_NNNOUTPUTS]){
+AD_NN_OUT_SQ_T computeLoss(AD_NN_OUT_T score[AD_NNNOUTPUTS]){
   AD_NN_OUT_SQ_T squares[AD_NNNOUTPUTS];
-  AD_NN_OUT_SQ_T tmp = 0;
-  AD_NN_OUT_T loss = 0;
+  AD_NN_OUT_SQ_T square_sum;
+
 
   for (int i = 0; i < AD_NNNOUTPUTS; i++){
     #pragma HLS unroll
@@ -14,17 +15,14 @@ AD_NN_OUT_T computeLoss(AD_NN_OUT_T score[AD_NNNOUTPUTS]){
     squares[i] = sq;
   }
 
-  for (int i = 0; i < AD_NNNOUTPUTS; i++){
-    #pragma HLS unroll
-    tmp += squares[i];  
-  }
-  loss = tmp; // cast
-  return loss;
+  nnet::Op_max<AD_NN_OUT_SQ_T> op;
+  square_sum = nnet::reduce<AD_NN_OUT_SQ_T, AD_NNNOUTPUTS, nnet::Op_max<AD_NN_OUT_SQ_T>>(squares, op);
+  return square_sum;
 }
 
 void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS], Tau taus[NTAUS],
                        ET et, HT ht, ETMiss etmiss, HTMiss htmiss, ETHFMiss ethfmiss, HTHFMiss hthfmiss,
-                       AD_NN_OUT_T &anomaly_score){
+                       AD_NN_OUT_SQ_T &anomaly_score){
   // define the interface                                                            
   #pragma HLS aggregate variable=muons compact=bit
   #pragma HLS aggregate variable=jets compact=bit

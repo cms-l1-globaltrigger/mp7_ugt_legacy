@@ -8,7 +8,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 
-entity anomaly_detection_mul_13s_5ns_16_1_1 is
+entity anomaly_detection_mul_13ns_3ns_15_1_1 is
 generic (
     ID : INTEGER := 1;
     NUM_STAGE : INTEGER := 0;
@@ -19,13 +19,17 @@ port (
     din0: in std_logic_vector(din0_WIDTH - 1 downto 0);
     din1: in std_logic_vector(din1_WIDTH - 1 downto 0);
     dout: out std_logic_vector(dout_WIDTH - 1 downto 0));
+
+    attribute use_dsp : string;
+    attribute use_dsp of anomaly_detection_mul_13ns_3ns_15_1_1 : entity is "no";
+
 end entity;
 
-architecture behav of anomaly_detection_mul_13s_5ns_16_1_1 is
+architecture behav of anomaly_detection_mul_13ns_3ns_15_1_1 is
     signal a_i : std_logic_vector(din0_WIDTH - 1 downto 0);
     signal b_i : std_logic_vector(din1_WIDTH - 1 downto 0);
 begin
     a_i <= din0;
     b_i <= din1;
-    dout <= std_logic_vector(resize(unsigned(std_logic_vector(signed(a_i) * signed('0' & b_i))), dout_WIDTH));
+    dout <= std_logic_vector(resize(unsigned(a_i) * unsigned(b_i), dout_WIDTH));
 end architecture;

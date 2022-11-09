@@ -27,7 +27,7 @@ Following dependencies exist for uGT firmware:
 
 | Repo | Tag |
 |:-:|:-:|
-| [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) | v3.0.0
+| [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) | v3.2.2
 | [IPBB](https://github.com/ipbus/ipbb) | v0.5.2
 | [IPB_FW](https://github.com/ipbus/ipbus-firmware) | v1.4
 

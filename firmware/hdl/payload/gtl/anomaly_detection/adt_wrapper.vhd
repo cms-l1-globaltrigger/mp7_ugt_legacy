@@ -37,6 +37,7 @@ architecture rtl of adt_wrapper is
     signal anomaly_score: std_logic_vector(15 downto 0);
     signal ap_rst: std_logic := '0';
     signal ap_start: std_logic := '1';
+    signal adt, adt_sim: std_logic_vector(0 downto 0);
     
 begin
 
@@ -72,14 +73,16 @@ begin
     end generate synth_mode_i;
 
     sim_mode_i: if sim_mode generate
+        adt(0) <= anomaly_score(0);
         sim_delay_i: entity work.delay_pipeline
             generic map(
                 DATA_WIDTH => 1,
                 STAGES => ADT_SIM_DEL
             )
             port map(
-                lhc_clk, anomaly_score(0), adt_out
+                lhc_clk, adt, adt_sim
             );
+        adt_out <= adt_sim(0);        
     end generate sim_mode_i;
 
 end architecture rtl;

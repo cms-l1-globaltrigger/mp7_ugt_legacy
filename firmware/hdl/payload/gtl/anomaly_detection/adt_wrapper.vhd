@@ -3,6 +3,7 @@
 -- Wrapper for "anomaly detection".
 
 -- Version history:
+-- HB 2022-11-10: added delay for simulation.
 -- HB 2022-08-29: first design.
 
 library ieee;
@@ -11,6 +12,9 @@ use ieee.std_logic_1164.all;
 use work.gtl_pkg.all;
 
 entity adt_wrapper is
+    generic	(
+        sim_mode: boolean := true
+    );
     port(
         lhc_clk: in std_logic;
         mu: in muon_objects_array;
@@ -63,13 +67,19 @@ begin
             open
         );
         
-    adt_out <= anomaly_score(0);
+    synth_mode_i: if not sim_mode generate
+        adt_out <= anomaly_score(0);
+    end generate synth_mode_i;
 
---     adt_p: process(lhc_clk, adt_o)
---         begin
---         if (lhc_clk'event and lhc_clk = '1') then
---             adt_out <= adt_o;
---         end if;
---     end process;
+    sim_mode_i: if sim_mode generate
+        sim_delay_i: entity work.delay_pipeline
+            generic map(
+                DATA_WIDTH => 1,
+                STAGES => ADT_SIM_DEL
+            )
+            port map(
+                lhc_clk, anomaly_score(0), adt_out
+            );
+    end generate sim_mode_i;
 
 end architecture rtl;

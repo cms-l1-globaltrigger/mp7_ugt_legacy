@@ -13,6 +13,8 @@ set_part {xc7vx690t-ffg1927-2}
 create_clock -period 25
 set_clock_uncertainty 0
 
+config_array_partition -complete_threshold 2
+
 csynth_design
 
 # make ipbb structure and .dep file

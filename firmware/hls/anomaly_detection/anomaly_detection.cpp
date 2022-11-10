@@ -31,9 +31,10 @@ void scaleNNInputs(pxpypz_t unscaled[AD_NNNINPUTS], AD_NN_IN_T scaled[AD_NNNINPU
   //#pragma HLS inline off
   for(int i = 0; i < AD_NNNINPUTS; i++){
     #pragma HLS unroll
-    AD_NN_IN_T tmp = unscaled[i] * ad_scales[i] + ad_offsets[i];
-    #pragma hls bind_op variable=tmp op=mul impl=fabric
-    scaled[i] = tmp;
+    AD_NN_IN_T tmp0 = unscaled[i] * ad_scales[i];
+    #pragma hls bind_op variable=tmp0 op=mul impl=fabric
+    AD_NN_IN_T tmp1 = tmp0 + ad_offsets[i];
+    scaled[i] = tmp1;
   }
 }
 

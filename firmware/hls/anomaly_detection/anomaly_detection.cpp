@@ -2,9 +2,13 @@
 #include <stddef.h>
 #include "NN/VAE_HLS.h"
 #include "NN/nnet_utils/nnet_common.h"
+#include "scales.h"
 
 AD_NN_OUT_SQ_T computeLoss(AD_NN_OUT_T score[AD_NNNOUTPUTS]){
+  #pragma HLS pipeline
+  //#pragma HLS inline off
   AD_NN_OUT_SQ_T squares[AD_NNNOUTPUTS];
+  #pragma HLS array_partition variable=squares complete
   AD_NN_OUT_SQ_T square_sum;
 
 
@@ -18,6 +22,19 @@ AD_NN_OUT_SQ_T computeLoss(AD_NN_OUT_T score[AD_NNNOUTPUTS]){
   nnet::Op_max<AD_NN_OUT_SQ_T> op;
   square_sum = nnet::reduce<AD_NN_OUT_SQ_T, AD_NNNOUTPUTS, nnet::Op_max<AD_NN_OUT_SQ_T>>(squares, op);
   return square_sum;
+}
+
+void scaleNNInputs(pxpypz_t unscaled[AD_NNNINPUTS], AD_NN_IN_T scaled[AD_NNNINPUTS]){
+  #pragma HLS pipeline
+  //#pragma HLS array_partition variable=unscaled complete
+  //#pragma HLS array_partition variable=scaled complete
+  //#pragma HLS inline off
+  for(int i = 0; i < AD_NNNINPUTS; i++){
+    #pragma HLS unroll
+    AD_NN_IN_T tmp = unscaled[i] * ad_scales[i] + ad_offsets[i];
+    #pragma hls bind_op variable=tmp op=mul impl=fabric
+    scaled[i] = tmp;
+  }
 }
 
 void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS], Tau taus[NTAUS],
@@ -73,16 +90,20 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
    cartesians[AD_NNNPARTICLES-1] = METToCartesian(etmiss);
 
   // 'unroll' particles (px, py, pz) to flat array of NN inputs
+  pxpypz_t nn_inputs_unscaled[AD_NNNINPUTS];
   AD_NN_IN_T nn_inputs[AD_NNNINPUTS];
   // TODO Vitis HLS complains if the array_partition pragma is left in. Why?
+  //#pragma HLS array_partition variable=nn_inputs_unscaled complete
   //#pragma HLS array_partition variable=nn_inputs complete
 
   for(int i = 0; i < AD_NNNPARTICLES; i++){
     #pragma HLS unroll
-    nn_inputs[3*i + 0] = cartesians[i].px;
-    nn_inputs[3*i + 1] = cartesians[i].py;
-    nn_inputs[3*i + 2] = cartesians[i].pz;
+    nn_inputs_unscaled[3*i + 0] = cartesians[i].px;
+    nn_inputs_unscaled[3*i + 1] = cartesians[i].py;
+    nn_inputs_unscaled[3*i + 2] = cartesians[i].pz;
   }
+
+  scaleNNInputs(nn_inputs_unscaled, nn_inputs);
 
   AD_NN_OUT_T nnout[AD_NNNOUTPUTS];
   #pragma HLS array_partition variable=nnout complete

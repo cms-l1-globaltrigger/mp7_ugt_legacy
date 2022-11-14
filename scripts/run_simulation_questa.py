@@ -65,6 +65,7 @@ vhdl_snippets_names = [
     'ugt_constants'
 ]
 
+DO_FILE_TMP = 'gtl_fdl_wrapper_tmp.do'
 DO_FILE = 'gtl_fdl_wrapper.do'
 TB_FILE_TPL = os.path.join('testbench', 'templates', 'gtl_fdl_wrapper_tb_tpl.vhd')
 TB_FILE = os.path.join('testbench', 'gtl_fdl_wrapper_tb.vhd')
@@ -216,7 +217,7 @@ class Module(object):
     def make_files(self, sim_dir, view_wave, mp7_tag, menu_path, ipb_fw_dir):  # makes files for simulation
         render_template(
             os.path.join(sim_dir, DO_FILE_TPL),
-            os.path.join(self.path, DO_FILE),
+            os.path.join(self.path, DO_FILE_TMP),
             {
                 '{{MP7_TAG}}': mp7_tag,
                 '{{VIEW_WAVE}}': format(view_wave),
@@ -259,6 +260,23 @@ class Module(object):
             os.path.join(uGTalgosPath, 'hdl', 'payload', 'gtl_module_tpl.vhd'),
             os.path.join(self.path, 'vhdl', 'gtl_module.vhd'),
             replace_map
+        )
+
+        adt_dep_file = os.path.join(uGTalgosPath, 'cfg', 'anomaly_detection.dep')
+        adt_repl = os.path.join(uGTalgosPath, 'cfg', 'anomaly_detection.txt')
+        
+        with open(adt_dep_file) as fp:
+            adt_vhd = fp.read()
+        adt_vhd = adt_vhd.replace('src ', 'vcom -93 -work work $HDL_DIR/')
+        with open(adt_repl, 'w') as fp:
+            fp.write(adt_vhd)
+                        
+        render_template(
+            os.path.join(self.path, DO_FILE_TMP),
+            os.path.join(self.path, DO_FILE),
+            {
+                '{{adt_vhd}}': read_file(os.path.join(uGTalgosPath, 'cfg', 'anomaly_detection.txt')),
+            }
         )
 
 def download_file_from_url(url, filename):

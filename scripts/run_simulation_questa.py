@@ -262,6 +262,7 @@ class Module(object):
             replace_map
         )
 
+        # Create 'anomaly_detection.txt' from 'anomaly_detection.dep'
         adt_dep_file = os.path.join(uGTalgosPath, 'cfg', 'anomaly_detection.dep')
         adt_repl = os.path.join(uGTalgosPath, 'cfg', 'anomaly_detection.txt')
         
@@ -271,6 +272,7 @@ class Module(object):
         with open(adt_repl, 'w') as fp:
             fp.write(adt_vhd)
                         
+        # Insert content of 'anomaly_detection.txt' into DO_FILE
         render_template(
             os.path.join(self.path, DO_FILE_TMP),
             os.path.join(self.path, DO_FILE),
@@ -564,6 +566,12 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
     if os.path.exists(os.path.join(sim_dir, "temp_dir")):
         shutil.rmtree(os.path.join(sim_dir, "temp_dir"))
 
+    # remove 'anomaly_detection.txt'
+    cfg_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'firmware', 'cfg')
+    adt_txt = os.path.join(cfg_dir, 'anomaly_detection.txt')
+    command = f'bash -c "rm {adt_txt}"'
+    run_command(command)
+        
     if not success:
         logging.info("===========================================================================")
         logging.error(mismatches_exit_red)

@@ -39,6 +39,8 @@ vcom -93 -work work $HDL_DIR/packages/gt_mp7_core_pkg.vhd
 vcom -93 -work work $HDL_DIR/packages/gtl_pkg.vhd
 vcom -93 -work work $HDL_DIR/packages/gtl_luts_pkg.vhd
 
+## GTL modules
+### common modules
 vcom -93 -work work $HDL_DIR/payload/gtl/common/delay_pipeline.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/pt_comp.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/upt_comp.vhd
@@ -72,19 +74,30 @@ vcom -93 -work work $HDL_DIR/payload/gtl/common/correlation_cut_comp.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/correlation_cuts_wrapper.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/orm_cuts.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/esums_4_corr_cond.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/charge_correlation_comp.vhd
+#
+### modules of instances in gtl_module.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/bx_pipeline.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/muon_charge_correlations.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/conv_eta_phi.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/obj_parameter.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/deta_dphi_calculations.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/correlation_cuts_calculation.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/comb_conditions.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/esums_conditions.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/min_bias_hf_conditions.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/towercount_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
+#
 
 #Testbench
-vcom -93 -work work $TESTBENCH/muon_charge_corr_test_tb.vhd
+vcom -93 -work work $TESTBENCH/muon_charge_corr_test_v2_tb.vhd
 
 #Load Design
-vsim -t 1ps work.muon_charge_corr_test_tb
+vsim -t 1ps work.muon_charge_corr_test_v2_tb
 
 ##Load signals in wave window
 view wave
-do $TESTBENCH/../scripts/muon_charge_corr_test_wave.do
+do $TESTBENCH/../scripts/muon_charge_corr_test_v2_wave.do
 
 ##Run simulation
 run 200 ns

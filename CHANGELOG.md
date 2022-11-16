@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.21.5] - 2022-11-16
+### Comment
+
+- mp7_ugt firmware release v1.21.5
+- bug fix in correlation_conditions.vhd
+
+### Changed
+- source files:
+  - ../payload/gtl/correlation_conditions.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+
 ## [v1.21.4] - 2022-10-04
 ### Comment
 

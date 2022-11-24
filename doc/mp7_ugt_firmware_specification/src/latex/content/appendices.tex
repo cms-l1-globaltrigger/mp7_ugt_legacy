@@ -200,17 +200,67 @@ TX2/36 & tx2/12 & X0Y00 & 0x8f & nc & -\\\hline
 \end{longtable}
 
 \clearpage
-\subsection{Configuration of GTHs}\label{sec:app:app_a}
+% \subsection{Configuration of GTHs}\label{sec:app:app_a}
+% 
+% The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
+% In Figure~\ref{fig:app:gth_conf} configuration of GTHs~\cite{GTHs} for Global Trigger is shown.
+% 
+% \begin{figure}[htb]
+% \centering
+% \includegraphics[width=15cm]{figures/gth_xc7v690t_ffg1927}
+% \caption{Configuration of GTHs}
+% \label{fig:app:gth_conf}
+% \end{figure}
+% 
+% \clearpage
+\subsection{Configuration of GTHs}\label{sec:app:gth_conf_table}
 
 The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
-In Figure~\ref{fig:app:gth_conf} configuration of GTHs~\cite{GTHs} for Global Trigger is shown.
+In Table~\ref{tab:app:gth_conf} configuration of GTHs~\cite{GTHs} for Global Trigger is shown\footnote{"MGT" means "MGT\_BANK", "GTHE2" means "GTHE2\_CHANNEL", "RX" means "GTH receiver", "TX" means "GTH transmitter"}.
 
-\begin{figure}[htb]
-\centering
-\includegraphics[width=15cm]{figures/gth_xc7v690t_ffg1927}
+\begin{longtable}{|l|c|c|c|c|c|}
 \caption{Configuration of GTHs}
-\label{fig:app:gth_conf}
-\end{figure}
+    \label{tab:app:gth_conf}\\
+\hline
+\textbf{Objects}& \textbf{Link}& \textbf{MGT}& \textbf{GTHE2}& \textbf{RX}& \textbf{TX}\\
+\hline
+\hline
+\endhead
+MU0..MU1  & 0  & 118 & X1Y35 & x &   \\\hline
+MU2..MU3  & 1  & 118 & X1Y34 & x &   \\\hline
+MU4..MU5  & 2  & 118 & X1Y33 & x &   \\\hline
+MU6..MU7  & 3  & 118 & X1Y32 & x &   \\\hline
+EG0..EG5  & 4  & 117 & X1Y31 & x &   \\\hline
+EG6..EG11 & 5  & 117 & X1Y30 & x &   \\\hline
+JET0..JET5  & 6  & 117 & X1Y29 & x &   \\\hline
+JET6..JET11 & 7  & 117 & X1Y28 & x &   \\\hline
+TAU0..TAU5  & 8  & 116 & X1Y27 & x &   \\\hline
+TAU6..TAU11 & 9  & 116 & X1Y26 & x &   \\\hline
+ESUMS  & 10  & 116 & X1Y25 & x &   \\\hline
+free & 11  & 116 & X1Y24 & x &   \\\hline
+EXT\_COND[0:63] & 12  & 115 & X1Y23 & x &   \\\hline
+EXT\_COND[64:127] & 13  & 115 & X1Y22 & x &   \\\hline
+EXT\_COND[128:191] & 14  & 115 & X1Y21 & x &   \\\hline
+EXT\_COND[192:255] & 15  & 115 & X1Y20 & x &   \\\hline
+free & 16  & 114 & X1Y19 & x &   \\\hline
+free & 17  & 114 & X1Y18 & x &   \\\hline
+free & 18  & 114 & X1Y17 & x &   \\\hline
+free & 19  & 114 & X1Y16 & x &   \\\hline
+free & 20  & 113 & X1Y15 & x &   \\\hline
+free & 21  & 113 & X1Y14 & x &   \\\hline
+free & 22  & 113 & X1Y13 & x &   \\\hline
+free & 23  & 113 & X1Y12 & x &   \\\hline\hline
+ALGO\_AFTER\_GTLOGIC[0:191] & 16  & 114 & X1Y19 &   & x \\\hline
+ALGO\_AFTER\_GTLOGIC[192:383] & 17  & 114 & X1Y18 &   & x \\\hline
+ALGO\_AFTER\_GTLOGIC[383:511] & 18  & 114 & X1Y17 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[0:191] & 19  & 114 & X1Y16 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[192:383] & 20  & 113 & X1Y15 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[383:511] & 21  & 113 & X1Y14 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[0:191] & 22  & 113 & X1Y13 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[192:383] & 23  & 113 & X1Y12 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[383:511] & 24  & 112 & X1Y11 &   & x \\\hline
+Bunchcounters, ... & 25  & 112 & X1Y10 &   & x \\\hline
+\end{longtable}
 
 \clearpage
 

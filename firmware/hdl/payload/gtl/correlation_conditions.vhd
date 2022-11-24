@@ -3,6 +3,7 @@
 -- Correlation Condition module (for all possible correlation conditions)
 
 -- Version history:
+-- HB 2022-11-16: bug fix in "mass_3_obj_i/matrix_corr_cond_i": added missing generic parameter.
 -- HB 2022-09-05: cleaned up.
 -- HB 2021-12-09: updated for DISP of jets.
 -- HB 2021-10-19: inserted cut for DISP of jets.
@@ -708,8 +709,11 @@ begin
                     slice_low_obj2 => slice_low_obj2,
                     slice_high_obj2 => slice_high_obj2,
                     slice_low_obj3 => slice_low_obj3,
-                    slice_high_obj3 => slice_high_obj3
-                    )
+                    slice_high_obj3 => slice_high_obj3,
+                    type_obj1 => type_obj1,
+                    type_obj2 => type_obj2,
+                    same_bx => same_bx
+                )
                 port map(
                     obj1_vs_templ => obj1_vs_templ_pipe,
                     obj2_vs_templ => obj2_vs_templ_pipe,

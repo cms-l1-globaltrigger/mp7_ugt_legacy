@@ -4,15 +4,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.21.5] - 2022-11-09
+## [v1.21.7] - 2022-11-24
 ### Comment
 
-- mp7_ugt firmware release v1.21.5
+- mp7_ugt firmware release v1.21.7
 - test version for "anomaly detection trigger (ADT)"
 
 ### Changed
 - source files:
   - ../payload/gtl_module_tpl.vhd
+
+## [v1.21.6] - 2022-11-23
+### Comment
+
+- mp7_ugt firmware release v1.21.6
+- updated doc/scales_inputs_2_ugt (added definition of muon shower bits)
+
+### Changed
+- tex file:
+  - doc/scales_inputs_2_ugt/src/latex/scales_inputs_2_ugt.tex
+
+## [v1.21.5] - 2022-11-16
+### Comment
+
+- mp7_ugt firmware release v1.21.5
+- bug fix in correlation_conditions.vhd
+
+### Changed
+- source files:
+  - ../payload/gtl/correlation_conditions.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
 
 ## [v1.21.4] - 2022-10-04
 ### Comment

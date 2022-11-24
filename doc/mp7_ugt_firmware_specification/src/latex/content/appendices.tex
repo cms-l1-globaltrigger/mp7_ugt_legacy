@@ -243,6 +243,178 @@ Links 16..24 contains algo data (after GTL, after BX mask and after prescalers),
 
 \subsection{Optical patch panel}\label{sec:app:app_d}
 
+The following Table~\ref{tab:app:ugt_opt_pp_1} contains the optical patch panel ("uGT Patchpanel \#1") connections for production crate\footnote{"source" means "source of MTP48 cable to uGT", "uGMT" means "Global Muon Trigger module", "demux" means "Calo-Layer2 demux module", "ext\_cond" means "External condition AMC502 module", "fibre" means "fibre number of a MTP48 cable", "LC" means "LC number of optical patch panel", "slot" means "MP7 slot number of MTCA crate".\label{note_ugt_opt_pp_1}}:
+
+\begin{longtable}{|l|c|l|c|l|}
+\caption{uGT Patchpanel \#1}
+    \label{tab:app:ugt_opt_pp_1}\\
+\hline
+\textbf{source}& \textbf{fibre}& \textbf{data}& \textbf{LC}& \textbf{slot}\\
+\hline
+\hline
+\endhead
+uGMT  & 1   & MU[0..1]   & 1/a  & 1..2 \\\hline
+uGMT  & 2   & MU[2..3]   & 1/b  & 1..2 \\\hline
+uGMT  & 3   & MU[4..5]   & 1/c  & 1..2 \\\hline
+uGMT  & 4   & MU[6..7]   & 1/d  & 1..2 \\\hline
+demux & 4b  & EG[0..5]   & 2/a  & 1..2 \\\hline
+demux & 4a  & EG[6..11]  & 2/b  & 1..2 \\\hline
+demux & 3b  & JET[0..5]  & 2/c  & 1..2 \\\hline
+demux & 3a  & JET[6..11] & 2/d  & 1..2 \\\hline
+demux & 2b  & TAU[0..5]  & 3/a  & 1..2 \\\hline
+demux & 2a  & TAU[6..11] & 3/b  & 1..2 \\\hline
+demux & 1b  & Esums      & 3/c  & 1..2 \\\hline
+demux & 1a  & Spare      & 3/d  & 1..2 \\\hline
+ext\_cond & ?   & ExtCond[0..63]    & 4/a  & 1..2 \\\hline
+ext\_cond & ?   & ExtCond[64..127]  & 4/b  & 1..2 \\\hline
+ext\_cond & ?   & ExtCond[128..191] & 4/c  & 1..2 \\\hline
+ext\_cond & ?   & ExtCond[192..255] & 4/d  & 1..2 \\\hline
+- & - & free & 5/a  & 1..2 \\\hline
+- & - & free & 5/b  & 1..2 \\\hline
+- & - & free & 5/c  & 1..2 \\\hline
+- & - & free & 5/d  & 1..2 \\\hline
+- & - & free & 6/a  & 1..2 \\\hline
+- & - & free & 6/b  & 1..2 \\\hline
+- & - & free & 6/c  & 1..2 \\\hline
+- & - & free & 6/d  & 1..2 \\\hline
+\hline
+uGMT  & 5   & MU[0..1]   & 7/a  & 3..4 \\\hline
+uGMT  & 6   & MU[2..3]   & 7/b  & 3..4 \\\hline
+uGMT  & 7   & MU[4..5]   & 7/c  & 3..4 \\\hline
+uGMT  & 8   & MU[6..7]   & 7/d  & 3..4 \\\hline
+demux & 12b & EG[0..5]   & 8/a  & 3..4 \\\hline
+demux & 12a & EG[6..11]  & 8/b  & 3..4 \\\hline
+demux & 11b & JET[0..5]  & 8/c  & 3..4 \\\hline
+demux & 11a & JET[6..11] & 8/d  & 3..4 \\\hline
+demux & 10b & TAU[0..5]  & 9/a  & 3..4 \\\hline
+demux & 10a & TAU[6..11] & 9/b  & 3..4 \\\hline
+demux & 9b  & Esums      & 9/c  & 3..4 \\\hline
+demux & 9a  & Spare      & 9/d  & 3..4 \\\hline
+ext\_cond & ?   & ExtCond[0..63]    & 10/a & 3..4 \\\hline
+ext\_cond & ?   & ExtCond[64..127]  & 10/b & 3..4 \\\hline
+ext\_cond & ?   & ExtCond[128..191] & 10/c & 3..4 \\\hline
+ext\_cond & ?   & ExtCond[192..255] & 10/d & 3..4 \\\hline
+- & - & free & 11/a & 3..4 \\\hline
+- & - & free & 11/b & 3..4 \\\hline
+- & - & free & 11/c & 3..4 \\\hline
+- & - & free & 11/d & 3..4 \\\hline
+- & - & free & 12/a & 3..4 \\\hline
+- & - & free & 12/b & 3..4 \\\hline
+- & - & free & 12/c & 3..4 \\\hline
+- & - & free & 12/d & 3..4 \\\hline
+\hline
+uGMT  & 9   & MU[0..1]   & 13/a & 5..6 \\\hline
+uGMT  & 10  & MU[2..3]   & 13/b & 5..6 \\\hline
+uGMT  & 11  & MU[4..5]   & 13/c & 5..6 \\\hline
+uGMT  & 12  & MU[6..7]   & 13/d & 5..6 \\\hline
+demux & 8b  & EG[0..5]   & 14/a & 5..6 \\\hline
+demux & 8a  & EG[6..11]  & 14/b & 5..6 \\\hline
+demux & 7b  & JET[0..5]  & 14/c & 5..6 \\\hline
+demux & 7a  & JET[6..11] & 14/d & 5..6 \\\hline
+demux & 18b & TAU[0..5]  & 15/a & 5..6 \\\hline
+demux & 18a & TAU[6..11] & 15/b & 5..6 \\\hline
+demux & 17b & Esums      & 15/c & 5..6 \\\hline
+demux & 17a & Spare      & 15/d & 5..6 \\\hline
+ext\_cond & ?   & ExtCond[0..63]    & 16/a & 5..6 \\\hline
+ext\_cond & ?   & ExtCond[64..127]  & 16/b & 5..6 \\\hline
+ext\_cond & ?   & ExtCond[128..191] & 16/c & 5..6 \\\hline
+ext\_cond & ?   & ExtCond[192..255] & 16/d & 5..6 \\\hline
+- & - & free & 17/a & 5..6 \\\hline
+- & - & free & 17/b & 5..6 \\\hline
+- & - & free & 17/c & 5..6 \\\hline
+- & - & free & 17/d & 5..6 \\\hline
+- & - & free & 18/a & 5..6 \\\hline
+- & - & free & 18/b & 5..6 \\\hline
+- & - & free & 18/c & 5..6 \\\hline
+- & - & free & 18/d & 5..6 \\\hline
+\end{longtable}
+
+The following Table~\ref{tab:app:ugt_opt_pp_2} contains the optical patch panel ("uGT Patchpanel \#3") connections for test crate\footref{note_ugt_opt_pp_1}:
+
+\begin{longtable}{|l|c|l|c|l|}
+\caption{uGT Patchpanel \#3}
+    \label{tab:app:ugt_opt_pp_2}\\
+\hline
+\textbf{source}& \textbf{fibre}& \textbf{data}& \textbf{LC}& \textbf{slot}\\
+\hline
+\hline
+\endhead
+uGMT  & 13  & MU[0..1]   & 1/a  & 5..6 \\\hline
+uGMT  & 14  & MU[2..3]   & 1/b  & 5..6 \\\hline
+uGMT  & 15  & MU[4..5]   & 1/c  & 5..6 \\\hline
+uGMT  & 16  & MU[6..7]   & 1/d  & 5..6 \\\hline
+demux & 16b & EG[0..5]   & 2/a  & 5..6 \\\hline
+demux & 16a & EG[6..11]  & 2/b  & 5..6 \\\hline
+demux & 15b & JET[0..5]  & 2/c  & 5..6 \\\hline
+demux & 15a & JET[6..11] & 2/d  & 5..6 \\\hline
+demux & 14b & TAU[0..5]  & 3/a  & 5..6 \\\hline
+demux & 14a & TAU[6..11] & 3/b  & 5..6 \\\hline
+demux & 13b & Esums      & 3/c  & 5..6 \\\hline
+demux & 13a & Spare      & 3/d  & 5..6 \\\hline
+ext\_cond & ?   & ExtCond[0..63]    & 4/a  & 5..6 \\\hline
+ext\_cond & ?   & ExtCond[64..127]  & 4/b  & 5..6 \\\hline
+ext\_cond & ?   & ExtCond[128..191] & 4/c  & 5..6 \\\hline
+ext\_cond & ?   & ExtCond[192..255] & 4/d  & 5..6 \\\hline
+- & - & free & 5/a  & 5..6 \\\hline
+- & - & free & 5/b  & 5..6 \\\hline
+- & - & free & 5/c  & 5..6 \\\hline
+- & - & free & 5/d  & 5..6 \\\hline
+- & - & free & 6/a  & 5..6 \\\hline
+- & - & free & 6/b  & 5..6 \\\hline
+- & - & free & 6/c  & 5..6 \\\hline
+- & - & free & 6/d  & 5..6 \\\hline
+\hline
+uGMT  & 17  & MU[0..1]   & 7/a  & 1..2 \\\hline
+uGMT  & 18  & MU[2..3]   & 7/b  & 1..2 \\\hline
+uGMT  & 19  & MU[4..5]   & 7/c  & 1..2 \\\hline
+uGMT  & 20  & MU[6..7]   & 7/d  & 1..2 \\\hline
+demux & 26  & EG[0..5]   & 8/a  & 1..2 \\\hline
+demux & 25  & EG[6..11]  & 8/b  & 1..2 \\\hline
+demux & 28  & JET[0..5]  & 8/c  & 1..2 \\\hline
+demux & 27  & JET[6..11] & 8/d  & 1..2 \\\hline
+demux & 30  & TAU[0..5]  & 9/a  & 1..2 \\\hline
+demux & 29  & TAU[6..11] & 9/b  & 1..2 \\\hline
+demux & 32  & Esums      & 9/c  & 1..2 \\\hline
+demux & 31  & Spare      & 9/d  & 1..2 \\\hline
+ext\_cond & ?   & ExtCond[0..63]    & 10/a & 1..2 \\\hline
+ext\_cond & ?   & ExtCond[64..127]  & 10/b & 1..2 \\\hline
+ext\_cond & ?   & ExtCond[128..191] & 10/c & 1..2 \\\hline
+ext\_cond & ?   & ExtCond[192..255] & 10/d & 1..2 \\\hline
+- & - & free & 11/a & 1..2 \\\hline
+- & - & free & 11/b & 1..2 \\\hline
+- & - & free & 11/c & 1..2 \\\hline
+- & - & free & 11/d & 1..2 \\\hline
+- & - & free & 12/a & 1..2 \\\hline
+- & - & free & 12/b & 1..2 \\\hline
+- & - & free & 12/c & 1..2 \\\hline
+- & - & free & 12/d & 1..2 \\\hline
+\hline
+uGMT  & 21  & MU[0..1]   & 13/a & 3..4 \\\hline
+uGMT  & 22  & MU[2..3]   & 13/b & 3..4 \\\hline
+uGMT  & 23  & MU[4..5]   & 13/c & 3..4 \\\hline
+uGMT  & 24  & MU[6..7]   & 13/d & 3..4 \\\hline
+demux & 34  & EG[0..5]   & 14/a & 3..4 \\\hline
+demux & 33  & EG[6..11]  & 14/b & 3..4 \\\hline
+demux & 35  & JET[0..5]  & 14/c & 3..4 \\\hline
+demux & 36  & JET[6..11] & 14/d & 3..4 \\\hline
+demux & 14  & TAU[0..5]  & 15/a & 3..4 \\\hline
+demux & 13  & TAU[6..11] & 15/b & 3..4 \\\hline
+demux & 16  & Esums      & 15/c & 3..4 \\\hline
+demux & 15  & Spare      & 15/d & 3..4 \\\hline
+ext\_cond & ?   & ExtCond[0..63]    & 16/a & 3..4 \\\hline
+ext\_cond & ?   & ExtCond[64..127]  & 16/b & 3..4 \\\hline
+ext\_cond & ?   & ExtCond[128..191] & 16/c & 3..4 \\\hline
+ext\_cond & ?   & ExtCond[192..255] & 16/d & 3..4 \\\hline
+- & - & free & 17/a & 3..4 \\\hline
+- & - & free & 17/b & 3..4 \\\hline
+- & - & free & 17/c & 3..4 \\\hline
+- & - & free & 17/d & 3..4 \\\hline
+- & - & free & 18/a & 3..4 \\\hline
+- & - & free & 18/b & 3..4 \\\hline
+- & - & free & 18/c & 3..4 \\\hline
+- & - & free & 18/d & 3..4 \\\hline
+\end{longtable}
+
 Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panel for optical links.
 
 \begin{figure}[htb]
@@ -251,33 +423,5 @@ Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panel 
 \caption{Global Trigger patch panel for optical link}
 \label{fig:app:ugt_pp}
 \end{figure}
-
-\subsection{Description of simulation, synthesis and hardware tests}\label{sec:app:app_e}
-
-Workflow for simulation and synthesis of firmware is described in \href{\gitbranch/README.md}{\texttt{README}} file.\\\\
-List of useful TDF routines and commands for hardware tests:
-\begin{itemize}
-\item Check crate status\\
-\greybox{\$ tdf run crate\_status}
-\item Enable TTC signals on AMC13 for all MP7 modules\\
-\greybox{\$ tdf run ttc\_enable}
-\item Check lock of BC0 and LHC clock\\
-\greybox{\$ tdf unittest <module> default}
-\item Reset module\\
-\greybox{\$ tdf mp7butler reset <module> --clksrc external --clkcfg default-ext}
-\item Load firmware to scansd card on all MP7 modules [and load it into FPGAs]\\
-\greybox{\$ tdf run uploadfw\_gt <tar file path> [--rebootfpga]}
-\item Load firmware from scansd card into FPGAs\\
-\greybox{\$ tdf run loadfw\_gt <fw build nr> <nr modules>}
-\item Compare hardware results with test vector pattern (for a certain firmware build)\\
-\greybox{\$ tdf run multiboard\_function\_test -h}
-\item Setup links (GTHs)\\
-\greybox{\$ tdf mp7butler rxmgts <module> -e <links>}
-\item Align links (GTHs)\\
-\greybox{\$ tdf mp7butler rxalign <module> -e <links> [--to-bx <alignment point>]}
-\item Check minipods\\
-\greybox{\$ tdf mp7butler minipods <module>}
-\item ... (other routines are available in /nfshome0/ugtdev/software/tdf/etc/routines)
-\end{itemize}
 
 \clearpage

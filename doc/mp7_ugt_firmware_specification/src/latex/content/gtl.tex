@@ -773,13 +773,29 @@ The calculation of ${pt^2}$ in VHDL (no square root in VHDL) using LUTs for pt1,
 \label{sec:gtl:muon_charge_correlation_module}
 
 For definition of muon charge, see \ref{sec:gtl:muon_data}.\\
-In the muon charge correlation module (\href{\gitbranch/firmware/hdl/payload/gtl/muon_charge_correlations.vhd}{\texttt{muon\_charge\_correlations.vhd}}), the charge correlations are made for different muon conditions-types. The module is instantiated in the top-of-hierarchy module (\texttt{gtl\_module.vhd})
+In the muon charge correlation module (\href{\gitbranch/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd}{\texttt{muon\_charge\_correlations.vhd}}), the charge correlations are made for different muon conditions types. The module is instantiated in the top-of-hierarchy module (\texttt{gtl\_module.vhd})
 and not inside of a muon conditions module.
 The charges of objects (number of objects depends on muon condition type) are compared to get "like sign charge" ("LS") or "opposite sign charge" ("0S"), "LS" means that the charges (charge sign)
 of objects are the same, "0S" means that at least one object has different charge than the others. This information is used in all instatiated muon conditions.
 There is no charge correlation for single type conditions.\\
 In all cases the "charge valid" bit of the objects must be set.\\
 In TME one can select "LS", "0S" or ignore for charge correlation in muon conditions.\\
+
+% \begin{table}[ht]
+% \caption{Muon charge correlation - Double Muon}
+% \vspace{5mm}
+% \centering
+% \begin{tabular}{|c|l|}\hline
+% \verb|x x| & I ignore (charge x = +, -, I) \\
+% \verb|+ +| & LS both positive muons \\
+% \verb|- -| & LS both negative muons \\
+% \verb|I I| & LS both muons with the same sign, positive or negative \\
+% \verb|+ -| & OS two muons of opposite sign \\
+% \verb|- +| & OS idem \\
+% \verb|I I| & OS idem \\\hline
+% \end{tabular}
+% \label{tab:gtl:muon_charge_corr_double}
+% \end{table}
 
 \begin{table}[ht]
 \caption{Muon charge correlation - Double Muon}
@@ -789,13 +805,27 @@ In TME one can select "LS", "0S" or ignore for charge correlation in muon condit
 \verb|x x| & I ignore (charge x = +, -, I) \\
 \verb|+ +| & LS both positive muons \\
 \verb|- -| & LS both negative muons \\
-\verb|I I| & LS both muons with the same sign, positive or negative \\
-\verb|+ -| & OS two muons of opposite sign \\
-\verb|- +| & OS idem \\
-\verb|I I| & OS idem \\\hline
+\verb|+ -| & OS two muons of opposite sign (a pair) \\
+\verb|- +| & OS two muons of opposite sign (a pair) \\\hline
 \end{tabular}
 \label{tab:gtl:muon_charge_corr_double}
 \end{table}
+
+% \begin{table}[ht]
+% \caption{Muon charge correlation - Triple Muon}
+% \vspace{5mm}
+% \centering
+% \begin{tabular}{|c|l|}\hline
+% \verb|x x x| & I  ignore (charge x = +, -, I) \\
+% \verb|+ + +| & LS three muons of positive charge \\
+% \verb|- - -| & LS three muons of negative charge \\
+% \verb|I I I| & LS three muons of the same sign (positive or negative) \\
+% \verb|+ + -| & OS a pair plus a positive muon \\
+% \verb|+ - -| & OS a pair plus a negative muon \\
+% \verb|+ - I| & OS a pair plus a negative or positive muon \\\hline
+% \end{tabular}
+% \label{tab:gtl:muon_charge_corr_triple}
+% \end{table}
 
 \begin{table}[ht]
 \caption{Muon charge correlation - Triple Muon}
@@ -805,13 +835,32 @@ In TME one can select "LS", "0S" or ignore for charge correlation in muon condit
 \verb|x x x| & I  ignore (charge x = +, -, I) \\
 \verb|+ + +| & LS three muons of positive charge \\
 \verb|- - -| & LS three muons of negative charge \\
-\verb|I I I| & LS three muons of the same sign (positive or negative) \\
+\verb|- + +| & OS a pair plus a positive muon \\
+\verb|+ - +| & OS a pair plus a positive muon \\
 \verb|+ + -| & OS a pair plus a positive muon \\
 \verb|+ - -| & OS a pair plus a negative muon \\
-\verb|+ - I| & OS a pair plus a negative or positive muon \\\hline
+\verb|- + -| & OS a pair plus a negative muon \\
+\verb|- - +| & OS a pair plus a negative muon \\\hline
 \end{tabular}
 \label{tab:gtl:muon_charge_corr_triple}
 \end{table}
+
+% \begin{table}[ht]
+% \caption{Muon charge correlation - Quad Muon}
+% \vspace{5mm}
+% \centering
+% \begin{tabular}{|c|l|}\hline
+% \verb|x x x x| & I  ignore (charge x = +, -, I) \\
+% \verb|+ + + +| & LS four muons of positive charge \\
+% \verb|- - - -| & LS four muons of negative charge \\
+% \verb|I I I I| & LS four muons of the same sign (positive or negative) \\
+% \verb|+ + + -| & OS a pair plus two positive muons \\
+% \verb|+ + - -| & OS two pairs \\
+% \verb|+ - - -| & OS a pair plus two negative muons \\
+% \verb|+ - I I| & OS a pair plus two negative or positive muons \\\hline
+% \end{tabular}
+% \label{tab:gtl:muon_charge_corr_quad}
+% \end{table}
 
 \begin{table}[ht]
 \caption{Muon charge correlation - Quad Muon}
@@ -821,11 +870,20 @@ In TME one can select "LS", "0S" or ignore for charge correlation in muon condit
 \verb|x x x x| & I  ignore (charge x = +, -, I) \\
 \verb|+ + + +| & LS four muons of positive charge \\
 \verb|- - - -| & LS four muons of negative charge \\
-\verb|I I I I| & LS four muons of the same sign (positive or negative) \\
+\verb|- + + +| & OS a pair plus two positive muons \\
+\verb|+ - + +| & OS a pair plus two positive muons \\
+\verb|+ + - +| & OS a pair plus two positive muons \\
 \verb|+ + + -| & OS a pair plus two positive muons \\
 \verb|+ + - -| & OS two pairs \\
+\verb|+ - + -| & OS two pairs \\
+\verb|+ - - +| & OS two pairs \\
+\verb|- - + +| & OS two pairs \\
+\verb|- + - +| & OS two pairs \\
+\verb|- + + -| & OS two pairs \\
 \verb|+ - - -| & OS a pair plus two negative muons \\
-\verb|+ - I I| & OS a pair plus two negative or positive muons \\\hline
+\verb|- + - -| & OS a pair plus two negative muons \\
+\verb|- - + -| & OS a pair plus two negative muons \\
+\verb|- - - +| & OS a pair plus two negative muons \\\hline
 \end{tabular}
 \label{tab:gtl:muon_charge_corr_quad}
 \end{table}

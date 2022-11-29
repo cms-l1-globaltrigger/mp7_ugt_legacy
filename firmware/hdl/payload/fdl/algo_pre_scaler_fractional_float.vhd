@@ -77,7 +77,7 @@ begin
     counter_p: process (clk, start, algo_i, limit)
     begin
         if clk'event and clk = '1' then
-            if start = '1' then
+            if start = '1' or factor = ZERO then
                 counter <= (others => '0');
             elsif limit = '1' and algo_i = '1' then
                 counter <= counter+INCR-factor;
@@ -108,7 +108,7 @@ begin
             variable prescaled_algo_cnt : natural := 0;
         begin
             if clk'event and clk = '0' then
-                if start = '1' then
+                if start = '1' or factor = ZERO then
                     prescaled_algo_cnt := 0;
                     algo_cnt := 0;
                 elsif limit = '0' and algo_i = '1' then

@@ -4,15 +4,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.21.7] - 2022-11-24
+## [v1.21.8] - 2022-11-29
 ### Comment
 
-- mp7_ugt firmware release v1.21.7
+- mp7_ugt firmware release v1.21.8
 - test version for "anomaly detection trigger (ADT)"
 
 ### Changed
 - source files:
   - ../payload/gtl_module_tpl.vhd
+
+## [v1.21.7] - 2022-11-29
+### Comment
+
+- mp7_ugt firmware release v1.21.7
+- bug fix in algo_pre_scaler_fractional_float.vhd (reset counter with factor=0)
+
+### Changed
+- source files:
+  - ../payload/fdl/algo_pre_scaler_fractional_float.vhd
+- simulation file:
+  - ../sim/scripts/algo_pre_scaler_fractional_float.do
+  - ../sim/scripts/algo_pre_scaler_fractional_float_wave.do
+  - ../sim/testbench/algo_pre_scaler_fractional_float_tb.vhd
 
 ## [v1.21.6] - 2022-11-23
 ### Comment

@@ -3,6 +3,7 @@
 -- Prescalers for algorithms in FDL with fractional prescale values in float notation
 
 -- Version-history:
+-- HB 2022-11-30: bug fixed (reset counter with factor=0).
 -- HB 2022-09-06: cleaned up.
 -- HB 2022-08-16: port signal start (start_sync_bc0_int) used for reset of prescale counter (instead of begin_lumi_section). Removed unused signal sres_counter.
 -- HB 2019-10-04: new file name for fractional prescale values in float notation.

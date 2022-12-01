@@ -28,7 +28,19 @@ List of useful TDF routines and commands for hardware tests:
 \item ... (other routines are available in /nfshome0/ugtdev/software/tdf/etc/routines)
 \end{itemize}
 
-\clearpage
+\subsubsection{Handling of timing errors in synthesis}\label{sec:app:synth_timing_errors}
+
+Sometimes synthesis finish with timing errors on modules and no bit files are generated for those modules.
+Most of the time the errors are low or not relevant and can be ignored. In this case generation
+of a bit file could be done on the platform of synthesis with the following command in an environment where
+vivado is running (see \href{\gitbranch/README.md}{\texttt{README}}):\\
+\begin{itemize}
+\item Generate bit file\\
+\greybox{\$ vivado -mode batch -source <local path to mp7\_ugt\_legacy>/}\\
+\greybox{scripts/vivado\_write\_bitstream.tcl -tclargs}\\
+\greybox{<path to synth dir> <module number>}
+\end{itemize}
+
 \subsection{GTH I/Os}\label{sec:app:gth_io}
 
 \subsubsection{GTH input connections}\label{sec:app:gth_i_conn}
@@ -117,6 +129,8 @@ RX2/35 & rx2/11 & X0Y01 & 0x8C & nc & -\\\hline
 RX2/36 & rx2/12 & X0Y00 & 0x8E & nc & -\\\hline
 \end{longtable}
 
+\clearpage
+
 \subsubsection{GTH output connections}\label{sec:app:gth_o_conn}
 
 Table~\ref{tab:app:gth_o_conn} contains the GTH output connections to MP7 MTP front connectors:
@@ -204,19 +218,7 @@ TX2/36 & tx2/12 & X0Y00 & 0x8f & nc & -\\\hline
 \end{longtable}
 
 \clearpage
-% \subsection{Configuration of GTHs}\label{sec:app:app_a}
-%
-% The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
-% In Figure~\ref{fig:app:gth_conf} configuration of GTHs~\cite{GTHs} for Global Trigger is shown.
-%
-% \begin{figure}[htb]
-% \centering
-% \includegraphics[width=15cm]{figures/gth_xc7v690t_ffg1927}
-% \caption{Configuration of GTHs}
-% \label{fig:app:gth_conf}
-% \end{figure}
-%
-% \clearpage
+
 \subsection{Configuration of GTHs}\label{sec:app:gth_conf_table}
 
 The FPGA on MP7 board receives and transmits data via GTH transceivers.\\

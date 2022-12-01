@@ -192,11 +192,11 @@ ch = charge bits, s = muon shower bit (on MU0, MU2, MU4 and MU6), imp = impact p
 
 The firmware of \ugtl consists of two main parts:
 \begin{itemize}
-\item A top-of-hierarchy file (\texttt{gtl\_module.vhd}), which contains the pipeline for $\pm$2bx data, the instantiations of calculators for differences in $\eta$ and $\varphi$, the instantiations of conditions, the instantiations of charge correlation logic of muons and the Algorithms logic for 512 Algorithms, as well as a package file (\href{\gitbranch/firmware/hdl/packages/gtl_pkg.vhd}{\texttt{gtl\_pkg.vhd}}) for declarations.
+\item A top-of-hierarchy file \href{\gitbranch/firmware/hdl/payload/gtl\_module\_tpl.vhd}{\texttt{\textquotesingle gtl\_module.vhd\textquotesingle }}, which contains the pipeline for $\pm$2bx data, the instantiations of calculators for differences in $\eta$ and $\varphi$, the instantiations of conditions, the instantiations of charge correlation logic of muons and the Algorithms logic for 512 Algorithms, as well as a package file (\href{\gitbranch/firmware/hdl/packages/gtl\_pkg.vhd}{\texttt{\textquotesingle gtl\_pkg.vhd\textquotesingle }}) for declarations.
 Currently 6 AMC (MP7) boards are used to contain Algorithms.\\
 A software tool called Trigger Menu Editor (TME)~\cite{TME_repo} is available to create a L1Menu with up to 512 Algorithms, which are partitioned by VHDL Producer~\cite{VHDL_Producer} to the 6 MP7 boards.\\
-The VHDL Producer for every Trigger Menu creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}).\\
-These snippets are inserted into templates for \texttt{gtl\_module.vhd} (\href{\gitbranch/firmware/hdl/payload/gtl/gtl_module_tpl.vhd}{\texttt{gtl\_module\_tpl.vhd}}), \texttt{algo\_mapping\_rop.vhd} (\href{\gitbranch/firmware/hdl/payload/fdl/algo_mapping_rop_tpl.vhd}{\texttt{algo\_mapping\_rop\_tpl.vhd}}) and \texttt{fdl\_pkg.vhd} (\href{\gitbranch/firmware/hdl/packages/fdl_pkg_tpl.vhd}{\texttt{fdl\_pkg\_tpl.vhd}}) during simulation and synthesis (see Figure \ref{fig:gtl:tme_gtl}).
+The VHDL Producer creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}) for a certain Trigger Menu.\\
+These snippets are inserted into templates for \href{\gitbranch/firmware/hdl/payload/gtl\_module\_tpl.vhd}{\texttt{\textquotesingle gtl\_module\_tpl.vhd\textquotesingle }}, \href{\gitbranch/firmware/hdl/payload/fdl/algo_mapping_rop_tpl.vhd}{\texttt{\textquotesingle algo\_mapping\_rop\_tpl.vhd\textquotesingle }} and \href{\gitbranch/firmware/hdl/packages/fdl_pkg_tpl.vhd}{\texttt{\textquotesingle fdl\_pkg\_tpl.vhd\textquotesingle }} during simulation and synthesis (see Figure \ref{fig:gtl:tme_gtl}).
 \item A set of VHDL-files exists for all the modules instantiated in top-of-hierarchy and the modules in the hierarchy. These files, called the "fixed part", are not influenced by VHDL Producer.
 \end{itemize}
 
@@ -224,7 +224,7 @@ The top-of-hierarchy module (\texttt{gtl\_module.vhd}) contains
 
 Listing~\ref{lst:gtl:gtl_module_vhd} contains the entity-declaration of the top-of-hierarchy file (\texttt{gtl\_module.vhd}).
 
-All the declarations for arrays ('type'), parameters ('constant') and look-up-tables ('constant') used in modules are available in \href{\gitbranch/firmware/hdl/packages/gtl_pkg.vhd}{\texttt{gtl\_pkg.vhd}} package-file.
+All the declarations for arrays (\textquotesingle type\textquotesingle ), parameters (\textquotesingle constant\textquotesingle ) and look-up-tables (\textquotesingle constant\textquotesingle ) used in modules are available in \href{\gitbranch/firmware/hdl/packages/gtl_pkg.vhd}{\texttt{\textquotesingle gtl\_pkg.vhd\textquotesingle }} package-file.
 
 \clearpage
 
@@ -743,7 +743,7 @@ Due the limited number of available BRAMs there are some restrictions for creati
 \item The values of LUTs are only valid for current definitions and restrictions. Every change might cause a recalculation of the values and a regeneration of IPs (representing LUTs in BRAMs) in Vivado (firmware generation tool)
 \end{itemize}
 
-The values of LUTs in firmware are listed in coe files of ROMs (created by same scripts mentioned above), currently 5 ROMs for "calo calo" and 6 ROMs for "muon muon" (see \href{\gitbranch/firmware/ngc/lut_calo_inv_dr_sq_rom1.coe}{\texttt{lut\_calo\_inv\_dr\_sq\_rom1.coe}}, etc. and \href{\gitbranch/firmware/ngc/lut_muon_inv_dr_sq_rom1.coe}{\texttt{lut\_muon\_inv\_dr\_sq\_rom1.coe}}, etc.). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. All ROMs for calos have 4096 addresses, for muons 8192 addresses. The data width of ROMs is different depending on the highest LUT value in ROM. Because of these different data widths, the partitioning of several ROMs was done to save BRAM resources. Currently 873 BRAMs (36kb) are available per Virtex chip.
+The values of LUTs in firmware are listed in coe files of ROMs (created by same scripts mentioned above), currently 5 ROMs for "calo calo" and 6 ROMs for "muon muon" (see \href{\gitbranch/firmware/ngc/lut_calo_inv_dr_sq_rom1.coe}{\texttt{\textquotesingle lut\_calo\_inv\_dr\_sq\_rom1.coe\textquotesingle }}, etc. and \href{\gitbranch/firmware/ngc/lut_muon_inv_dr_sq_rom1.coe}{\texttt{\textquotesingle lut\_muon\_inv\_dr\_sq\_rom1.coe\textquotesingle }}, etc.). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. All ROMs for calos have 4096 addresses, for muons 8192 addresses. The data width of ROMs is different depending on the highest LUT value in ROM. Because of these different data widths, the partitioning of several ROMs was done to save BRAM resources. Currently 873 BRAMs (36kb) are available per Virtex chip.
 Following numbers of BRAMs (36kb) are needed for:
 \begin{itemize}
 \item "calo calo": 660
@@ -773,7 +773,7 @@ The calculation of ${pt^2}$ in VHDL (no square root in VHDL) using LUTs for pt1,
 \label{sec:gtl:muon_charge_correlation_module}
 
 For definition of muon charge, see \ref{sec:gtl:muon_data}.\\
-In the muon charge correlation module (\href{\gitbranch/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd}{\texttt{muon\_charge\_correlations.vhd}}), the charge correlations are made for different muon conditions types. The module is instantiated in the top-of-hierarchy module (\texttt{gtl\_module.vhd})
+In the muon charge correlation module (\href{\gitbranch/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd}{\texttt{\textquotesingle muon\_charge\_correlations.vhd\textquotesingle }}), the charge correlations are made for different muon conditions types. The module is instantiated in the top-of-hierarchy module (\href{\gitbranch/firmware/hdl/payload/gtl\_module\_tpl.vhd}{\texttt{\textquotesingle gtl\_module.vhd\textquotesingle }})
 and not inside of a muon conditions module.
 The charges of objects (number of objects depends on muon condition type) are compared to get "like sign charge" ("LS") or "opposite sign charge" ("0S"), "LS" means that the charges (charge sign)
 of objects are the same, "0S" means that at least one object has different charge than the others. This information is used in all instatiated muon conditions.
@@ -1057,11 +1057,11 @@ TAU-TAU-InverseDeltaRMath\\
 MU-MU-InverseDeltaRMath\\
 
 The LUTs are located in BRAMs.\\
-For calo-calo mass over deltaR 5 ROMs are needed to represend the LUT. The content of the LUT one can see in \href{\gitbranch/firmware/ngc/blk_mem_gen_v8_4_4/lut_calo_inv_dr_sq_rom1.coe}{\texttt{lut\_calo\_inv\_dr\_sq\_rom1.coe}} (and so on).\\
-For muon-muon mass over deltaR 6 ROMs are needed to represend the LUT. The content of the LUT one can see in \href{\gitbranch/firmware/ngc/blk_mem_gen_v8_4_4/lut_muon_inv_dr_sq_rom1.coe}{\texttt{lut\_muon\_inv\_dr\_sq\_rom1.coe}} (and so on).\\
-The access to a certain ROM depends on the values of $\Delta\eta$ and $\Delta\varphi$ (see \href{\gitbranch/tree/master/test_rom_lut_calo_inv_dr_sq_all/doc/description_rom_lut_calo_inv_dr_sq.txt}{\texttt{description\_rom\_lut\_calo\_inv\_dr\_sq.txt}} and \href{\gitbranch/firmware/hdl/payload/gtl/common/rom_lut_calo_inv_dr_sq_all.vhd}{\texttt{rom\_lut\_calo\_inv\_dr\_sq\_all.vhd}}, respectively\\ 
-\href{\gitbranch/tree/master/test_rom_lut_muon_inv_dr_sq_all/doc/description_rom_lut_muon_inv_dr_sq.txt}{\texttt{description\_rom\_lut\_muon\_inv\_dr\_sq.txt}} and\\
-\href{\gitbranch/firmware/hdl/payload/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd}{\texttt{rom\_lut\_muon\_inv\_dr\_sq\_all.vhd}}).\\
+For calo-calo mass over deltaR 5 ROMs are needed to represend the LUT. The content of the LUT one can see in \href{\gitbranch/firmware/hdl/ngc/blk_mem_gen_v8_4_4/lut_calo_inv_dr_sq_rom1.coe}{\texttt{\textquotesingle lut\_calo\_inv\_dr\_sq\_rom1.coe\textquotesingle }} (and so on).\\
+For muon-muon mass over deltaR 6 ROMs are needed to represend the LUT. The content of the LUT one can see in \href{\gitbranch/firmware/hdl/ngc/blk_mem_gen_v8_4_4/lut_muon_inv_dr_sq_rom1.coe}{\texttt{\textquotesingle lut\_muon\_inv\_dr\_sq\_rom1.coe\textquotesingle }} (and so on).\\
+The access to a certain ROM depends on the values of $\Delta\eta$ and $\Delta\varphi$ (see \href{\gitbranch/test_rom_lut_calo_inv_dr_sq_all/doc/description_rom_lut_calo_inv_dr_sq.txt}{\texttt{\textquotesingle description\_rom\_lut\_calo\_inv\_dr\_sq.txt\textquotesingle }} and \href{\gitbranch/firmware/hdl/payload/gtl/common/rom_lut_calo_inv_dr_sq_all.vhd}{\texttt{\textquotesingle rom\_lut\_calo\_inv\_dr\_sq\_all.vhd\textquotesingle }}, respectively\\ 
+\href{\gitbranch/test_rom_lut_muon_inv_dr_sq_all/doc/description_rom_lut_muon_inv_dr_sq.txt}{\texttt{\textquotesingle description\_rom\_lut\_muon\_inv\_dr\_sq.txt\textquotesingle }} and\\
+\href{\gitbranch/firmware/hdl/payload/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd}{\texttt{\textquotesingle rom\_lut\_muon\_inv\_dr\_sq\_all.vhd\textquotesingle }}).\\
 
 \textbf{LUTs for $\cos($$\varphi$$)$ used in two-body pt calculations}
 \label{sec:gtl:calc_luts_cos_phi}
@@ -1152,7 +1152,7 @@ Additionally charge correlation cuts with "Double objects requirements condition
 
 \paragraph{Energy sum quantities conditions module (including Asymmetry conditions)}
 
-For the entity-declaration of \href{\gitbranch/firmware/hdl/payload/gtl/esums_conditions.vhd}{\texttt{esums\_conditions.vhd}}, see Listing~\ref{lst:gtl:esums_conditions_vhd}.
+For the entity-declaration of \href{\gitbranch/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd}{\texttt{\textquotesingle esums\_conditions.vhd\textquotesingle }}, see Listing~\ref{lst:gtl:esums_conditions_vhd}.
 
 \lstinputlisting[label=lst:gtl:esums_conditions_vhd,language=VHDL,caption=Entity declaration of \texttt{esums\_conditions.vhd}]{interfaces/esums_conditions.vhd}
 
@@ -1166,8 +1166,8 @@ For the entity-declaration of \href{\gitbranch/firmware/hdl/payload/gtl/esums_co
 \toprule
 {Item} & {Explanation}\\
 \midrule
-\verb|et_ge_mode| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
-\verb|obj_type| &  valid strings are 'ETT\_TYPE', 'HTT\_TYPE', 'ETM\_TYPE', 'HTM\_TYPE' and 'ETMHF\_TYPE'.\\
+\verb|et_ge_mode| & "mode-selection" for the \et comparator. Valid strings are "true" and "false" (type is boolean), "true" means comparator works on greater/equal, "false" means equal (for tests only)\\
+\verb|obj_type| &  valid strings are "ETT\_TYPE", "HTT\_TYPE", "ETM\_TYPE", "HTM\_TYPE" and "ETMHF\_TYPE".\\
 \verb|et_threshold| & threshold value for comparison in \et. The size of the std\_logic\_vector depends on the number of \et bits.\\
 \verb|phi_full_range| & boolean to set full range of $\varphi$.\\
 \verb|phi_w1_upper_limits| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
@@ -1185,9 +1185,9 @@ For the entity-declaration of \href{\gitbranch/firmware/hdl/payload/gtl/esums_co
 
 A comparator between \et and a threshold (et\_threshold) and, depending on object type, a comparison in $\varphi$ with
 two "window"-comparators is done in this module.
-The value for \et threshold, the 'mode-selection' for the \et comparator and the limits for the "window"-comparators are given in the generic interface list of the module.
-The selection whether a comparison in $\varphi$ is part of the condition is done with the value of the generic parameter 'obj\_type'
-('ETM\_TYPE', 'ETMHF\_TYPE', 'HTM\_TYPE' and 'HTMHF\_TYPE' force a comparison).
+The value for \et threshold, the \textquotesingle mode-selection\textquotesingle\  for the \et comparator and the limits for the "window"-comparators are given in the generic interface list of the module.
+The selection whether a comparison in $\varphi$ is part of the condition is done with the value of the generic parameter \textquotesingle obj\_type\textquotesingle\  
+(\textquotesingle ETM\_TYPE\textquotesingle\ , \textquotesingle ETMHF\_TYPE\textquotesingle\ , \textquotesingle HTM\_TYPE\textquotesingle\ and \textquotesingle HTMHF\_TYPE\textquotesingle\ force a comparison).
 The comparison in $\varphi$ is done in the same way as for calorimeter conditions.
 Additionally the data-structure of input data (data\_i in port interface list) is provided
 as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
@@ -1355,7 +1355,7 @@ There are two correlations for mass with three objects:
 \item Correlation condition for mass with three objects with muon objects\\
 \end{itemize}
 
-In correlation condition with calorimeter and muons objects we have different scales of calorimeter and muon objects in $\eta$ and $\varphi$, therefore LUTs for conversion of the calorimeter bins to muon bins are used (in \texttt{gtl\_pkg.vhd}:
+In correlation condition with calorimeter and muons objects we have different scales of calorimeter and muon objects in $\eta$ and $\varphi$, therefore LUTs for conversion of the calorimeter bins to muon bins are used (in \href{\gitbranch/firmware/hdl/packages/gtl_pkg.vhd}{\texttt{\textquotesingle gtl\_pkg.vhd\textquotesingle }}:
  e.g. \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize  and \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize).\\\\
 \textbf{Remark:}\\
 The center value of bins are used as reference value for conversion.

@@ -7,7 +7,7 @@ with frame v1.2.3 "Delay Manager" (\texttt{\textquotesingle dm.vhd\textquotesing
 Simmem data not used anymore, because of removed dsmux.
 The reason of removing is to get more available resources.\\
 
-Data from the GTH interfaces is demultiplexed (from 240 MHz clock domain to LHC clock domain, see Demux Lane Data \ref{sec:framework:demux_lane_data}) and mapped to objects structure in Lane Mapping Process (LMP) for \ugtl input and SPY I memory.
+Data from the GTH interfaces are demultiplexed (from 240 MHz clock domain to LHC clock domain, see Demux Lane Data \ref{sec:framework:demux_lane_data}) and mapped to objects structure in Lane Mapping Process (LMP) for \ugtl input and SPY I memory.
 
 \subsection{Implementation in firmware}
 \label{sec:framework:implementation_firmware}
@@ -29,33 +29,33 @@ Listing~\ref{lst:framework:frame_vhd} contains the entity-declaration of \href{\
 {Item} & {Explanation}\\
 \midrule
 \verb|NR_LANES| & number of used optical links.\\
-\verb|ipb_clk| & IPBus clock input.\\
-\verb|ipb_rst| & IPBus reset input.\\
-\verb|ipb_in| & IPBus data input.\\
-\verb|ipb_out| & IPBus data output.\\
-\verb|ctrs| & TTC control signals input.\\
-\verb|clk240| & clock input 240 MHz.\\
-\verb|lhc_clk| & clock input (LHC clock).\\
-\verb|lhc_rst_o| & reset output.\\
-\verb|bc0| & TTC BGo bunch counter reset input.\\
-\verb|ec0| & TTC BGo event counter reset input.\\
-\verb|oc0| & TTC BGo orbit counter reset input.\\
-\verb|start| & TTC BGo start input.\\
-\verb|l1a| & L1 access signal input.\\
-\verb|bcres_d| & delayed bunch counter reset output.\\
-\verb|bcres_d_FDL| & delayed bunch counter reset output fot \ufdl.\\
-\verb|start_lumisection| & begin of lumisection output.\\
-\verb|lane_data_in| & data from GTHs (optical links) input (240MHz domain).\\
-\verb|lane_data_out| & data to GTHs (optical links) output (240MHz domain).\\
-\verb|lhc_data_2_gtl_o| & data to \ugtl output (40MHz domain).\\
-\verb|prescale_factor_set_in| & prescale factor set data input.\\
-\verb|algo_after_gtLogic_rop| & algos after \ugtl input.\\
-\verb|algo_after_bxomask_rop| & algos after BX mask input.\\
-\verb|algo_after_prescaler_rop| & algos after prescaler input.\\
-\verb|local_finor_rop| & local FINOR input.\\
-\verb|local_veto_rop| & local VETO input.\\
-\verb|finor_rop| & FINOR input.\\
-\verb|local_finor_with_veto_2_spy2| & local FINOR with VETO to spy mem input.\\
+\verb|ipb_clk| & IPBus clock (input).\\
+\verb|ipb_rst| & IPBus reset (input).\\
+\verb|ipb_in| & IPBus data (input).\\
+\verb|ipb_out| & IPBus data (output).\\
+\verb|ctrs| & TTC control signals (input).\\
+\verb|clk240| & clock (input) 240 MHz.\\
+\verb|lhc_clk| & clock (input) (LHC clock).\\
+\verb|lhc_rst_o| & reset (output).\\
+\verb|bc0| & TTC BGo bunch counter reset (input).\\
+\verb|ec0| & TTC BGo event counter reset (input).\\
+\verb|oc0| & TTC BGo orbit counter reset (input).\\
+\verb|start| & TTC BGo start (input).\\
+\verb|l1a| & L1 access signal (input).\\
+\verb|bcres_d| & delayed bunch counter reset (output).\\
+\verb|bcres_d_FDL| & delayed bunch counter reset (output) fot \ufdl.\\
+\verb|start_lumisection| & begin of lumisection (output).\\
+\verb|lane_data_in| & data from GTHs (optical links) (input) (240MHz domain).\\
+\verb|lane_data_out| & data to GTHs (optical links) (output) (240MHz domain).\\
+\verb|lhc_data_2_gtl_o| & data to \ugtl (output) (40MHz domain).\\
+\verb|prescale_factor_set_in| & prescale factor set data (input).\\
+\verb|algo_after_gtLogic_rop| & algos after \ugtl (input).\\
+\verb|algo_after_bxomask_rop| & algos after BX mask (input).\\
+\verb|algo_after_prescaler_rop| & algos after prescaler (input).\\
+\verb|local_finor_rop| & local FINOR (input).\\
+\verb|local_veto_rop| & local VETO (input).\\
+\verb|finor_rop| & FINOR (input).\\
+\verb|local_finor_with_veto_2_spy2| & local FINOR with VETO to spy mem (input).\\
 \bottomrule
 \end{tabular}
 \label{tab:framework:explanation_frame_vhd}
@@ -119,7 +119,7 @@ The configuration of the optical connections from GMT, Calo-Layer2 and External 
 % ------------------------------------------------------------------------------
 
 \subsubsection{Demux Lane Data} \label{sec:framework:demux_lane_data}
-Data from GTH interfaces is in the 240 MHz clock domain. The demultiplexing to the LHC clock domain (about 40 MHz) is done in \href{\gitbranch/firmware/hdl/payload/frame/demux_lane_data.vhd}{\texttt{\textquotesingle demux\_lane\_data.vhd\textquotesingle }}, which is instantiated in \href{\gitbranch/firmware/hdl/payload/frame.vhd}{\texttt{\textquotesingle frame.vhd\textquotesingle }} for currently 16 input links.
+Data from GTH interfaces are in the 240 MHz clock domain. The demultiplexing to the LHC clock domain (about 40 MHz) is done in \href{\gitbranch/firmware/hdl/payload/frame/demux_lane_data.vhd}{\texttt{\textquotesingle demux\_lane\_data.vhd\textquotesingle }}, which is instantiated in \href{\gitbranch/firmware/hdl/payload/frame.vhd}{\texttt{\textquotesingle frame.vhd\textquotesingle }} for currently 16 input links.
 
 %------------------------------------------------------------------------------
 %

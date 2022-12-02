@@ -10,7 +10,7 @@
 // https://github.com/cms-sw/cmssw/tree/master/DataFormats/L1TParticleFlow/interface
 
 typedef ap_fixed<9,2> cossin_t;
-typedef ap_fixed<9,3> sinh_t;
+typedef ap_fixed<13,7> sinh_t;
 
 static constexpr int N_TABLE = 2048;
 
@@ -423,7 +423,7 @@ static const int NTAUS = 12;
  * TODO: this is a first implementation, to be improved & expanded
  * TODO: these data types for px, py, pz are not optimized
  * --- */
-typedef ap_fixed<16,13> pxpypz_t;
+typedef ap_fixed<17,14> pxpypz_t;
 struct PxPyPz{
 
   pxpypz_t px;

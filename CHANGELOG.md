@@ -13,7 +13,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - source files:
   - ../packages/gtl_pkg.vhd
+  - ../packages/gt_core_pkg.vhd
   - ../payload/gtl/bx_pipeline.vhd
+  - ../payload/gtl_module_tpl.vhd
 
 ## [v1.21.7] - 2022-11-29
 ### Comment

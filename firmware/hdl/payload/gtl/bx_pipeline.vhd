@@ -30,7 +30,7 @@ architecture rtl of bx_pipeline is
     type mus_tmp_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(NR_MUS_BITS-1 downto 0);
     signal mus_tmp, mus_tmp_del : mus_tmp_array;
 
-    signal mus0, mus1, musoot0, musoot1 : mus_bit_array;
+--     signal mus0, mus1, musoot0, musoot1, mus2 : mus_bit_array;
 
 begin
 
@@ -100,6 +100,7 @@ begin
         mus_tmp(i)(1) <= data_tmp(i).mu(MUON_OBJ_MUS1)(MUS_BIT);
         mus_tmp(i)(2) <= data_tmp(i).mu(MUON_OBJ_MUSOOT0)(MUS_BIT);
         mus_tmp(i)(3) <= data_tmp(i).mu(MUON_OBJ_MUSOOT1)(MUS_BIT);
+        mus_tmp(i)(4) <= data_tmp(i).mu(MUON_OBJ_MUS2)(MUS_BIT);
 
         mus_pipe_i: entity work.delay_pipeline
             generic map(
@@ -114,6 +115,7 @@ begin
         bx_data.mus1(i) <= mus_tmp_del(i)(1);
         bx_data.musoot0(i) <= mus_tmp_del(i)(2);
         bx_data.musoot1(i) <= mus_tmp_del(i)(3);
+        bx_data.mus2(i) <= mus_tmp_del(i)(4);
 
     end generate bx_l;
 

@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.22.0] - 2022-12-05
+### Comment
+
+- mp7_ugt firmware release v1.22.0
+- development for "MUS2" (email: "New 2Loose HMT configuration", 3.12.2022)
+
+### Changed
+- source files:
+  - ../packages/gtl_pkg.vhd
+  - ../payload/gtl/bx_pipeline.vhd
+
 ## [v1.21.7] - 2022-11-29
 ### Comment
 

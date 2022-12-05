@@ -151,11 +151,14 @@ constant MUON_IP_BITS : natural := MUON_IP_HIGH-MUON_IP_LOW+1;
 -- MUSOOT0 => muon obj 4, bit 61
 -- MUSOOT1 => muon obj 6, bit 61
 constant MUS_BIT : natural := 61;
-constant NR_MUS_BITS: natural := 4;
+constant NR_MUS_BITS: natural := 5;
 constant MUON_OBJ_MUS0 : natural := 0;
 constant MUON_OBJ_MUS1 : natural := 2;
 constant MUON_OBJ_MUSOOT0 : natural := 4;
 constant MUON_OBJ_MUSOOT1 : natural := 6;
+-- new MUS2 bit
+-- MUS0 => muon obj 7, bit 61
+constant MUON_OBJ_MUS2 : natural := 7; -- ANNAHME, NOCH NICHT FIXIERT, DEFINIEREN MIT GMT
 type mus_bit_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic;
 
 type muon_objects_array is array (natural range <>) of std_logic_vector(MAX_MUON_BITS-1 downto 0);

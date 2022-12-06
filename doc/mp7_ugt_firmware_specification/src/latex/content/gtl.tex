@@ -42,6 +42,7 @@ Definitions are based on document~\cite{interface}.
 \item \gmt data
 \begin{itemize}
 \item Muon objects
+\item Muon shower bits
 \end{itemize}
 \item External conditions
 \end{itemize}
@@ -71,7 +72,8 @@ The data structure of an \egamma object (bits 27..31 are not defined yet, reserv
 \end{bytefield}
 \end{center}
 
-The data structure of a jet object (bits 30..31 are spare bits):
+The data structure of a jet object:\\
+\tiny{Remark: "D" means DISP bit (displaced jet) - "qu" means quality flags - "sp" means spare bits.}\normalsize
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,10,11,18,19,26,27,27,28,29,30,31} \\
@@ -83,7 +85,6 @@ The data structure of a jet object (bits 30..31 are spare bits):
         \bitbox {11}    {\texttt{\et}} \\
 \end{bytefield}
 \end{center}
-D = DISP bit, qu = quality flags, sp = spare bits.
 
 The data structure of a tau object (bits 27..31 are not defined yet, reserved for quality, ...):
 \begin{center}
@@ -166,13 +167,13 @@ The data structure of "Missing Ht including HF" (HT$_{miss}^{HF}$) quantity [inc
 \subsubsection{\gmt optical interfaces}
 \label{sec:gtl:gmt_optical_interfaces}
 
-The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = charge valid, bit 61 is a spare bit, bit 63..62 = impact parameter):
-
+The data structure of a muon object (64 bits):\\
+\tiny{Remark: "extrapol." means extrapolated - "qual" means quality bits - "iso" means isolation bits - "ch" means charge bits (bit 34 = charge sign, bit 35 = charge valid) - "m" means muon shower bit (on MU0 [MUS0], MU2 [MUS1], MU4 [MUSOOT0] and MU6 [MUSOOT1]) spare on MU1, MU3, MU5 and MU7 - "imp" = impact parameter.}\normalsize
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
         \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
         \bitbox {2}     {\small  \texttt{imp}}       &
-        \bitbox {1}     {\small  \texttt{s}}       &
+        \bitbox {1}     {\small  \texttt{m}}       &
         \bitbox {8}     {\texttt{unconst.\pt}}       &
         \bitbox {10}    {\texttt{$\varphi$} (out)}
         \bitbox {7}     {\texttt{index bits}}
@@ -186,7 +187,6 @@ The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = ch
         \bitbox {10}    {\texttt{$\varphi$} (extrapol.)} \\
 \end{bytefield}
 \end{center}
-ch = charge bits, s = muon shower bit (on MU0, MU2, MU4 and MU6), imp = impact parameter.
 
 \clearpage
 

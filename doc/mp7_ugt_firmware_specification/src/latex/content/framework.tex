@@ -198,14 +198,14 @@ Listing~\ref{lst:framework:spytrigger_vhd} contains the entity-declaration of th
 
 \lstinputlisting[label=lst:framework:spytrigger_vhd, language=VHDL,caption=SPY trigger interface specification]{interfaces/spytrig.vhd}
 
-When the SPY trigger receives a spy12 command (next or once) over the software register interface it asserts the $spy1$ and $spy2$ signals for the appropriate orbit.
+When the SPY trigger receives a "spy12" command (next or once) over the software register interface, it asserts the $spy1$ and $spy2$ signals for the appropriate orbit.
 This means that the $spy$ signals go high with the bunch crossing counter reaching the value zero and stay high until it reaches zero again (overflow).
 
 \subparagraph{SPY memory I}
 SPY memory I stores data from LMP (coming from GTHs) to check the alignment of the data, for simulation and test purposes. It is composed of 72 4096x32 bits memories (to cover 3564 bunch crossings with 32 bits datawidth) for all input data. The 4096x32 memory has an input port for 32 bits data at the 40MHz clock domain and an IPBus interface to read the content. Memory address is given by bunch crossing counter (40MHz clock domain).
 
 \subparagraph{SPY memory II}
-SPY memory II is divided into two subcomponents, to store the $algos$ and $finor$ outputs of the \ufdl, where memory for $algos$ has 16 4096x32 bits memories (16x32=512 algos) and $finor$ is made of only one (for finor with veto). Both have the same architecture as SPY memory I.
+SPY memory II is divided into two subcomponents, to store the "algos" and "finor" outputs of the \ufdl, where memory for "algos" has 16 4096x32 bits memories (16x32=512 algos) and "finor" is made of only one (for finor with veto). Both have the same architecture as SPY memory I.
 
 %------------------------------------------------------------------------------
 %

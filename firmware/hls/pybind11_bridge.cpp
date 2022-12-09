@@ -387,27 +387,31 @@ PYBIND11_MODULE(anomaly_detection_emulation, m){
     .def_readwrite("eta_extrapolated", &Muon::eta_extrapolated)
     .def_readwrite("phi_extrapolated", &Muon::phi_extrapolated)
     .def("initFromHWInt", &Muon::initFromHWInt)
-    .def("pack", &Muon::pack);
+    .def("pack", &Muon::pack)
+    .def("unpack", &Muon::unpack);
 
   py::class_<EGamma>(m, "EGamma")
     .def_readwrite("et", &EGamma::et)
     .def_readwrite("eta", &EGamma::eta)
     .def_readwrite("phi", &EGamma::phi)
     .def("initFromHWInt", &EGamma::initFromHWInt)
-    .def("pack", &EGamma::pack);
+    .def("pack", &EGamma::pack)
+    .def("unpack", &EGamma::unpack);
 
   py::class_<Jet>(m, "Jet")
     .def_readwrite("et", &Jet::et)
     .def_readwrite("eta", &Jet::eta)
     .def_readwrite("phi", &Jet::phi)
     .def("initFromHWInt", &Jet::initFromHWInt)
-    .def("pack", &Jet::pack);
+    .def("pack", &Jet::pack)
+    .def("unpack", &Jet::unpack);
 
   py::class_<ETMiss>(m, "ETMiss")
     .def_readwrite("et", &ETMiss::et)
     .def_readwrite("phi", &ETMiss::phi)
     .def("initFromHWInt", &ETMiss::initFromHWInt)
-    .def("pack", &ETMiss::pack);
+    .def("pack", &ETMiss::pack)
+    .def("unpack", &ETMiss::unpack);
 
   m.attr("AD_NMUONS") = &AD_NMUONS;
   m.attr("AD_NJETS") = &AD_NJETS;

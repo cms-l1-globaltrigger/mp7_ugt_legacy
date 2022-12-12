@@ -367,7 +367,7 @@ bits [26..25] & definition \\\hline\hline
 \subsubsection{Definitions of Energy sum quantities data}
 
 See also \ref{sec:gtl:optical_interfaces}.\\
-\textbf{\Esums}:\\ Consists of following quantities (naming convention see in "Glossary"):
+\textbf{\Esums}:\\ Consists of following quantities (for naming convention see "Glossary" \ref{sec:glossary}):
 \begin{itemize}
 \item \textbf{\ett}
 \item \textbf{\htt}
@@ -423,7 +423,7 @@ Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data stru
 \item 7 index bits
 \item 10 bits azimuth angle ($\varphi$) position, raw data
 \item 8 bits unconstrained \pt, range = 0..255 GeV (HW index = 0..0xFF), step = 1.0, the highest bin will mark an overflow (HW index 0xFF)
-\item 1 spare bit
+\item 1 hadronic (muon) shower bit
 \item 2 bits impact parameter
 \end{itemize}
 
@@ -498,6 +498,23 @@ bits [33..32] & definition \\\hline\hline
 \end{tabular}
 \label{tab:gtl:muon_iso_bits}
 \end{table}
+
+Muon shower bits definition is shown in Table~\ref{tab:gtl:tab_muon_shower_bits}.\\
+
+\begin{table}[ht]
+\caption{Definition of hadronic (muon) shower bits on bit 61 of muon objects}
+\vspace{5mm}
+\centering
+\begin{tabular}{|c|c|}\hline
+object & definition \\\hline\hline
+0 & MUS0 \\
+2 & MUS1 \\
+4 & MUSOOT0 \\
+6 & MUSOOT1 \\\hline
+\end{tabular}
+\label{tab:gtl:tab_muon_shower_bits}
+\end{table}
+
 
 The representation of the 2 bits for impact parameter is expected as shown in Table~\ref{tab:gtl:muon_iso_bits}.\\
 

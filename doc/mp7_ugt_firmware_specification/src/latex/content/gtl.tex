@@ -21,9 +21,9 @@ Definitions are based on document~\cite{interface}.
 \begin{itemize}
 \item Calo-Layer2 data
 \begin{itemize}
-\item Electron/$\gamma$ objects
-\item Jet objects
-\item Tau objects
+\item Electron/$\gamma$ objects (EG0..EG11)
+\item Jet objects (JET0..JET11)
+\item Tau objects (TAU0..TAU11)
 \item Energy summary information:
 \begin{itemize}
 \item Total Et (\ett)
@@ -35,14 +35,14 @@ Definitions are based on document~\cite{interface}.
 \item Missing Ht including HF (HT$_{miss}^{HF}$)
 \item "Asymmetry" information (ASYMET, ASYMHT, ASYMETHF, ASYMHTHF)
 \end{itemize}
-\item Minimum bias HF bits (included in energy summary information data structure)
-\item Towercount bits (number of firing HCAL towers, included in energy summary information data structure)
-\item "Centrality" bits
+\item Minimum bias HF bits (MBT0HFP, MBT0HFM, MBT1HFP and MBT1HFM; part of energy summary information data structure)
+\item Towercount bits (TOWERCOUNT, number of firing HCAL towers; part of energy summary information data structure)
+\item "Centrality" bits (CENT0..CENT7; part of energy summary information data structure)
 \end{itemize}
 \item \gmt data
 \begin{itemize}
-\item Muon objects
-\item Muon shower bits
+\item Muon objects (MU0..MU7)
+\item Muon shower bits (bit 61 on MU0, MU2, MU3, MU4, MU4)
 \end{itemize}
 \item External conditions
 \end{itemize}
@@ -168,7 +168,7 @@ The data structure of "Missing Ht including HF" (HT$_{miss}^{HF}$) quantity [inc
 \label{sec:gtl:gmt_optical_interfaces}
 
 The data structure of a muon object (64 bits):\\
-\tiny{Remark: "extrapol." means extrapolated - "qual" means quality bits - "iso" means isolation bits - "ch" means charge bits (bit 34 = charge sign, bit 35 = charge valid) - "m" means muon shower bit (on MU0 [MUS0], MU2 [MUS1], MU4 [MUSOOT0] and MU6 [MUSOOT1]) spare on MU1, MU3, MU5 and MU7 - "imp" = impact parameter.}\normalsize
+\tiny{Remark: "extrapol." means extrapolated - "qual" means quality bits - "iso" means isolation bits - "ch" means charge bits (bit 34 = charge sign, bit 35 = charge valid) - "m" means muon shower bit (on MU0 [MUS0], MU2 [MUS1], MU4 [MUSOOT0] and MU6 [MUSOOT1]; spare on MU1, MU3, MU5 and MU7) - "imp" = impact parameter.}\normalsize
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
         \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
@@ -367,7 +367,7 @@ bits [26..25] & definition \\\hline\hline
 \subsubsection{Definitions of Energy sum quantities data}
 
 See also \ref{sec:gtl:optical_interfaces}.\\
-\textbf{\Esums}:\\ Consists of following quantities (naming convention see in "Glossary"):
+\textbf{\Esums}:\\ Consists of following quantities (for naming convention see "Glossary" \ref{sec:glossary}):
 \begin{itemize}
 \item \textbf{\ett}
 \item \textbf{\htt}
@@ -423,7 +423,7 @@ Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data stru
 \item 7 index bits
 \item 10 bits azimuth angle ($\varphi$) position, raw data
 \item 8 bits unconstrained \pt, range = 0..255 GeV (HW index = 0..0xFF), step = 1.0, the highest bin will mark an overflow (HW index 0xFF)
-\item 1 spare bit
+\item 1 hadronic (muon) shower bit
 \item 2 bits impact parameter
 \end{itemize}
 
@@ -498,6 +498,23 @@ bits [33..32] & definition \\\hline\hline
 \end{tabular}
 \label{tab:gtl:muon_iso_bits}
 \end{table}
+
+Muon shower bits definition is shown in Table~\ref{tab:gtl:tab_muon_shower_bits}.\\
+
+\begin{table}[ht]
+\caption{Definition of hadronic (muon) shower bits on bit 61 of muon objects}
+\vspace{5mm}
+\centering
+\begin{tabular}{|c|c|}\hline
+object & definition \\\hline\hline
+0 & MUS0 \\
+2 & MUS1 \\
+4 & MUSOOT0 \\
+6 & MUSOOT1 \\\hline
+\end{tabular}
+\label{tab:gtl:tab_muon_shower_bits}
+\end{table}
+
 
 The representation of the 2 bits for impact parameter is expected as shown in Table~\ref{tab:gtl:muon_iso_bits}.\\
 
@@ -1202,7 +1219,7 @@ Asymmetry data are interpreted as counts.
 \subsubsection{Muon shower bits}
 \label{sec:gtl:muon_shower_bits}
 
-Muon shower bits MUS0, MUS1, MUSOOT0 (muon shower out of time), MUSOOT1 (muon bit 61 on MU0, MU2, MU4 and MU6) can be selected by TME to an algo or combined with other conditions to an algo.
+Muon shower bits MUS0 (MUon Shower, bit 61 on MU0), MUS1 (bit 61 on MU2), MUSOOT0 (MUon Shower Out Of Time, bit 61 on MU4), MUSOOT1 (bit 61 on MU6) can be selected by TME to an algo or combined with other conditions to an algo.
 
 \subsubsection{Minimum bias trigger conditions}
 \label{sec:gtl:min_bias_conditions}

@@ -12,7 +12,7 @@ Data from the GTH interfaces are demultiplexed (from 240 MHz clock domain to LHC
 \subsection{Implementation in firmware}
 \label{sec:framework:implementation_firmware}
 
-Listing~\ref{lst:framework:frame_vhd} contains the entity-declaration of \href{\gitbranch/firmware/hdl/payload/frame.vhd}{\texttt{\textquotesingle frame.vhd\textquotesingle }}.\\
+Listing~\ref{lst:framework:frame_vhd} contains the entity declaration of \href{\gitbranch/firmware/hdl/payload/frame.vhd}{\texttt{\textquotesingle frame.vhd\textquotesingle }}.\\
 
 \lstinputlisting[label=lst:framework:frame_vhd,language=VHDL,caption=Entity declaration of \texttt{frame.vhd}]{interfaces/frame.vhd}
 
@@ -194,7 +194,7 @@ The memory subsystem consists of four three parts, which will be discussed in mo
 \subparagraph{SPY Trigger}\label{sec:framework:spy_trigger}
 The SPY trigger controls the SPY memories and decides when data is recorded. It can be configured and controlled using software registers \ref{spy_trig_obrit_nr_reg} and \ref{spy_trig_cfg_reg}.
 
-Listing~\ref{lst:framework:spytrigger_vhd} contains the entity-declaration of the \href{\gitbranch/firmware/hdl/payload/frame/spytrig.vhd}{\texttt{\textquotesingle spytrig.vhd\textquotesingle }}.\\
+Listing~\ref{lst:framework:spytrigger_vhd} contains the entity declaration of the \href{\gitbranch/firmware/hdl/payload/frame/spytrig.vhd}{\texttt{\textquotesingle spytrig.vhd\textquotesingle }}.\\
 
 \lstinputlisting[label=lst:framework:spytrigger_vhd, language=VHDL,caption=SPY trigger interface specification]{interfaces/spytrig.vhd}
 

@@ -2,6 +2,8 @@
 -- Global Trigger Logic module.
 
 -- Version history:
+-- HB 2022-11-29: v1.17.6: Bug fix in algo_pre_scaler_fractional_float.vhd.
+-- HB 2022-11-16: v1.17.5: Bug fix in correlation_conditions.vhd.
 -- HB 2022-09-23: v1.17.4: Used "delay_pipeline" for condition output in esums_conditions.vhd, min_bias_hf_conditions.vhd and towercount_condition.vhd.
 -- HB 2022-09-05: v1.17.3: Cleaned up.
 -- HB 2022-02-16: v1.17.2: Bug fixed in comb_conditions.vhd.

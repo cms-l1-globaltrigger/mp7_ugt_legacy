@@ -12,6 +12,8 @@
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
 -- HB 2022-09-20: v1.22.0 - Changed top_decl.vhd to 10 REGIONs. Changed output_mux.vhd and lmp.vhd (frame: v1.4.0).
+-- HB 2022-11-23: v1.21.6 - Updated doc/scales_inputs_2_ugt (added definition of muon shower bits).
+-- HB 2022-09-26: v1.21.4 - Used "demux" in formatter for algo outputs to enable "orbit header" for scouting in top_decl.vhd (therefore MP7 FW v3.2.2. or newer needed).
 -- HB 2022-09-26: v1.21.3 - Added script run_latex_w_versions.py (extract versions from gt_mp7_core_pkg.vhd, creates versions.tex and run latex ['make']).
 -- HB 2022-09-20: v1.21.1 - Updated scripts for MP7 patch in run_synth_ipbb.py.
 -- HB 2022-08-16: v1.21.0 - Signal start_sync_bc0_int used for reset of prescale counter (instead of begin_lumi_section). Removed sres signals for counters in FDL, not used anymore.
@@ -31,6 +33,8 @@
 --
 -- gtl history:
 -- HB 2022-10-08: v1.18.0: Added ZDC 10G optical on link 11, conversion from ZDC 5G to 10G done with ZDC 5G input on GTH region 9.
+-- HB 2022-11-29: v1.17.6: Bug fix in algo_pre_scaler_fractional_float.vhd.
+-- HB 2022-11-16: v1.17.5: Bug fix in correlation_conditions.vhd.
 -- HB 2022-09-23: v1.17.4: Used "delay_pipeline" for condition output in esums_conditions.vhd, min_bias_hf_conditions.vhd and towercount_condition.vhd.
 -- HB 2022-09-02: v1.17.3: Cleaned up.
 -- HB 2022-02-16: v1.17.2: Bug fixed in comb_conditions.vhd.

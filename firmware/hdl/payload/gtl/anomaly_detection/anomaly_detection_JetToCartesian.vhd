@@ -21,9 +21,9 @@ port (
     x_et : IN STD_LOGIC_VECTOR (10 downto 0);
     x_eta : IN STD_LOGIC_VECTOR (7 downto 0);
     x_phi : IN STD_LOGIC_VECTOR (7 downto 0);
-    ap_return_0 : OUT STD_LOGIC_VECTOR (15 downto 0);
-    ap_return_1 : OUT STD_LOGIC_VECTOR (15 downto 0);
-    ap_return_2 : OUT STD_LOGIC_VECTOR (15 downto 0) );
+    ap_return_0 : OUT STD_LOGIC_VECTOR (16 downto 0);
+    ap_return_1 : OUT STD_LOGIC_VECTOR (16 downto 0);
+    ap_return_2 : OUT STD_LOGIC_VECTOR (16 downto 0) );
 end;
 
 
@@ -38,11 +38,11 @@ architecture behav of anomaly_detection_JetToCartesian is
     constant ap_const_lv8_0 : STD_LOGIC_VECTOR (7 downto 0) := "00000000";
     constant ap_const_lv1_0 : STD_LOGIC_VECTOR (0 downto 0) := "0";
     constant ap_const_lv8_24 : STD_LOGIC_VECTOR (7 downto 0) := "00100100";
-    constant ap_const_lv9_0 : STD_LOGIC_VECTOR (8 downto 0) := "000000000";
+    constant ap_const_lv13_0 : STD_LOGIC_VECTOR (12 downto 0) := "0000000000000";
     constant ap_const_lv32_5 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000101";
     constant ap_const_lv32_12 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000010010";
     constant ap_const_lv32_4 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000100";
-    constant ap_const_lv32_13 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000010011";
+    constant ap_const_lv32_14 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000010100";
 
 attribute shreg_extract : string;
     signal ap_CS_fsm : STD_LOGIC_VECTOR (0 downto 0) := "1";
@@ -64,7 +64,7 @@ attribute shreg_extract : string;
     signal sin_table_2_q1 : STD_LOGIC_VECTOR (7 downto 0);
     signal sinh_table_3_address0 : STD_LOGIC_VECTOR (10 downto 0);
     signal sinh_table_3_ce0 : STD_LOGIC;
-    signal sinh_table_3_q0 : STD_LOGIC_VECTOR (8 downto 0);
+    signal sinh_table_3_q0 : STD_LOGIC_VECTOR (12 downto 0);
     signal x_et_read_reg_276 : STD_LOGIC_VECTOR (10 downto 0);
     signal ap_block_pp0_stage0_11001 : BOOLEAN;
     signal p_Result_s_fu_118_p3 : STD_LOGIC_VECTOR (0 downto 0);
@@ -77,24 +77,24 @@ attribute shreg_extract : string;
     signal p_Result_848_fu_132_p4 : STD_LOGIC_VECTOR (7 downto 0);
     signal phi_V_fu_155_p2 : STD_LOGIC_VECTOR (7 downto 0);
     signal eta_V_fu_142_p3 : STD_LOGIC_VECTOR (7 downto 0);
-    signal sub_ln712_fu_171_p2 : STD_LOGIC_VECTOR (8 downto 0);
+    signal sub_ln712_fu_171_p2 : STD_LOGIC_VECTOR (12 downto 0);
     signal r_V_fu_194_p0 : STD_LOGIC_VECTOR (10 downto 0);
     signal zext_ln1171_21_fu_191_p1 : STD_LOGIC_VECTOR (18 downto 0);
     signal r_V_fu_194_p2 : STD_LOGIC_VECTOR (18 downto 0);
     signal trunc_ln_fu_200_p4 : STD_LOGIC_VECTOR (13 downto 0);
     signal r_V_491_fu_218_p0 : STD_LOGIC_VECTOR (10 downto 0);
     signal r_V_491_fu_218_p2 : STD_LOGIC_VECTOR (18 downto 0);
-    signal trunc_ln717_1_fu_224_p4 : STD_LOGIC_VECTOR (13 downto 0);
-    signal select_ln168_fu_177_p3 : STD_LOGIC_VECTOR (8 downto 0);
-    signal r_V_492_fu_242_p0 : STD_LOGIC_VECTOR (10 downto 0);
-    signal r_V_492_fu_242_p2 : STD_LOGIC_VECTOR (19 downto 0);
-    signal sext_ln717_1_fu_234_p1 : STD_LOGIC_VECTOR (15 downto 0);
-    signal sext_ln717_fu_210_p1 : STD_LOGIC_VECTOR (15 downto 0);
+    signal trunc_ln717_s_fu_224_p4 : STD_LOGIC_VECTOR (13 downto 0);
+    signal select_ln168_fu_177_p3 : STD_LOGIC_VECTOR (12 downto 0);
+    signal mul_ln1171_fu_242_p1 : STD_LOGIC_VECTOR (10 downto 0);
+    signal mul_ln1171_fu_242_p2 : STD_LOGIC_VECTOR (23 downto 0);
+    signal sext_ln717_3_fu_234_p1 : STD_LOGIC_VECTOR (16 downto 0);
+    signal sext_ln717_fu_210_p1 : STD_LOGIC_VECTOR (16 downto 0);
     signal ap_NS_fsm : STD_LOGIC_VECTOR (0 downto 0);
     signal ap_idle_pp0_0to0 : STD_LOGIC;
     signal ap_reset_idle_pp0 : STD_LOGIC;
     signal ap_enable_pp0 : STD_LOGIC;
-    signal r_V_492_fu_242_p00 : STD_LOGIC_VECTOR (19 downto 0);
+    signal mul_ln1171_fu_242_p10 : STD_LOGIC_VECTOR (23 downto 0);
     signal ap_ce_reg : STD_LOGIC;
 
     component anomaly_detection_mul_11ns_8s_19_1_1 IS
@@ -111,7 +111,7 @@ attribute shreg_extract : string;
     end component;
 
 
-    component anomaly_detection_mul_11ns_9s_20_1_1 IS
+    component anomaly_detection_mul_13s_11ns_24_1_1 IS
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -119,9 +119,9 @@ attribute shreg_extract : string;
         din1_WIDTH : INTEGER;
         dout_WIDTH : INTEGER );
     port (
-        din0 : IN STD_LOGIC_VECTOR (10 downto 0);
-        din1 : IN STD_LOGIC_VECTOR (8 downto 0);
-        dout : OUT STD_LOGIC_VECTOR (19 downto 0) );
+        din0 : IN STD_LOGIC_VECTOR (12 downto 0);
+        din1 : IN STD_LOGIC_VECTOR (10 downto 0);
+        dout : OUT STD_LOGIC_VECTOR (23 downto 0) );
     end component;
 
 
@@ -152,7 +152,7 @@ attribute shreg_extract : string;
         reset : IN STD_LOGIC;
         address0 : IN STD_LOGIC_VECTOR (10 downto 0);
         ce0 : IN STD_LOGIC;
-        q0 : OUT STD_LOGIC_VECTOR (8 downto 0) );
+        q0 : OUT STD_LOGIC_VECTOR (12 downto 0) );
     end component;
 
 
@@ -175,7 +175,7 @@ begin
 
     sinh_table_3_U : component anomaly_detection_JetToCartesian_sinh_table_3_ROM_AUTO_1R
     generic map (
-        DataWidth => 9,
+        DataWidth => 13,
         AddressRange => 2048,
         AddressWidth => 11)
     port map (
@@ -209,17 +209,17 @@ begin
         din1 => sin_table_2_q0,
         dout => r_V_491_fu_218_p2);
 
-    mul_11ns_9s_20_1_1_U3 : component anomaly_detection_mul_11ns_9s_20_1_1
+    mul_13s_11ns_24_1_1_U3 : component anomaly_detection_mul_13s_11ns_24_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
-        din0_WIDTH => 11,
-        din1_WIDTH => 9,
-        dout_WIDTH => 20)
+        din0_WIDTH => 13,
+        din1_WIDTH => 11,
+        dout_WIDTH => 24)
     port map (
-        din0 => r_V_492_fu_242_p0,
-        din1 => select_ln168_fu_177_p3,
-        dout => r_V_492_fu_242_p2);
+        din0 => select_ln168_fu_177_p3,
+        din1 => mul_ln1171_fu_242_p1,
+        dout => mul_ln1171_fu_242_p2);
 
 
 
@@ -342,12 +342,14 @@ begin
         end if; 
     end process;
 
-    ap_return_0 <= sext_ln717_1_fu_234_p1;
+    ap_return_0 <= sext_ln717_3_fu_234_p1;
     ap_return_1 <= sext_ln717_fu_210_p1;
-    ap_return_2 <= r_V_492_fu_242_p2(19 downto 4);
+    ap_return_2 <= mul_ln1171_fu_242_p2(20 downto 4);
     eta_V_fu_142_p3 <= 
         p_Result_848_fu_132_p4 when (p_Result_s_fu_118_p3(0) = '1') else 
         x_eta;
+    mul_ln1171_fu_242_p1 <= mul_ln1171_fu_242_p10(11 - 1 downto 0);
+    mul_ln1171_fu_242_p10 <= std_logic_vector(IEEE.numeric_std.resize(unsigned(x_et_read_reg_276),24));
     
     p_Result_848_fu_132_p4_proc : process(p_Val2_s_fu_126_p2)
     begin
@@ -359,17 +361,15 @@ begin
     p_Val2_s_fu_126_p2 <= std_logic_vector(unsigned(ap_const_lv8_0) - unsigned(x_eta));
     phi_V_fu_155_p2 <= std_logic_vector(unsigned(x_phi) + unsigned(ap_const_lv8_24));
     r_V_491_fu_218_p0 <= zext_ln1171_21_fu_191_p1(11 - 1 downto 0);
-    r_V_492_fu_242_p0 <= r_V_492_fu_242_p00(11 - 1 downto 0);
-    r_V_492_fu_242_p00 <= std_logic_vector(IEEE.numeric_std.resize(unsigned(x_et_read_reg_276),20));
     r_V_fu_194_p0 <= zext_ln1171_21_fu_191_p1(11 - 1 downto 0);
     select_ln168_fu_177_p3 <= 
         sub_ln712_fu_171_p2 when (p_Result_s_reg_282(0) = '1') else 
         sinh_table_3_q0;
         sext_ln587_fu_166_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(eta_V_fu_142_p3),64));
 
-        sext_ln717_1_fu_234_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(trunc_ln717_1_fu_224_p4),16));
+        sext_ln717_3_fu_234_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(trunc_ln717_s_fu_224_p4),17));
 
-        sext_ln717_fu_210_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(trunc_ln_fu_200_p4),16));
+        sext_ln717_fu_210_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(trunc_ln_fu_200_p4),17));
 
     sin_table_2_address0 <= zext_ln587_3_fu_161_p1(11 - 1 downto 0);
     sin_table_2_address1 <= zext_ln587_fu_150_p1(11 - 1 downto 0);
@@ -404,8 +404,8 @@ begin
         end if; 
     end process;
 
-    sub_ln712_fu_171_p2 <= std_logic_vector(unsigned(ap_const_lv9_0) - unsigned(sinh_table_3_q0));
-    trunc_ln717_1_fu_224_p4 <= r_V_491_fu_218_p2(18 downto 5);
+    sub_ln712_fu_171_p2 <= std_logic_vector(unsigned(ap_const_lv13_0) - unsigned(sinh_table_3_q0));
+    trunc_ln717_s_fu_224_p4 <= r_V_491_fu_218_p2(18 downto 5);
     trunc_ln_fu_200_p4 <= r_V_fu_194_p2(18 downto 5);
     zext_ln1171_21_fu_191_p1 <= std_logic_vector(IEEE.numeric_std.resize(unsigned(x_et_read_reg_276),19));
     zext_ln587_3_fu_161_p1 <= std_logic_vector(IEEE.numeric_std.resize(unsigned(phi_V_fu_155_p2),64));

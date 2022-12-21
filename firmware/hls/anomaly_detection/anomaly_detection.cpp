@@ -19,8 +19,8 @@ AD_NN_OUT_SQ_T computeLoss(AD_NN_OUT_T score[AD_NNNOUTPUTS]){
     squares[i] = sq;
   }
 
-  nnet::Op_max<AD_NN_OUT_SQ_T> op;
-  square_sum = nnet::reduce<AD_NN_OUT_SQ_T, AD_NNNOUTPUTS, nnet::Op_max<AD_NN_OUT_SQ_T>>(squares, op);
+  nnet::Op_add<AD_NN_OUT_SQ_T> op;
+  square_sum = nnet::reduce<AD_NN_OUT_SQ_T, AD_NNNOUTPUTS, nnet::Op_add<AD_NN_OUT_SQ_T>>(squares, op);
   return square_sum;
 }
 
@@ -31,9 +31,9 @@ void scaleNNInputs(pxpypz_t unscaled[AD_NNNINPUTS], AD_NN_IN_T scaled[AD_NNNINPU
   //#pragma HLS inline off
   for(int i = 0; i < AD_NNNINPUTS; i++){
     #pragma HLS unroll
-    AD_NN_IN_T tmp0 = unscaled[i] - ad_offsets[i];
-    AD_NN_IN_T tmp1 = tmp0 * ad_scales[i];
-    #pragma hls bind_op variable=tmp1 op=mul impl=fabric
+    pxpypz_t tmp0 = unscaled[i] - ad_offsets[i];
+    AD_NN_IN_T tmp1 = tmp0 >> ad_shift[i];
+    //#pragma hls bind_op variable=tmp1 op=shl impl=fabric
     scaled[i] = tmp1;
   }
 }

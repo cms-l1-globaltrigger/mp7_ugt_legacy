@@ -423,7 +423,7 @@ static const int NTAUS = 12;
  * TODO: this is a first implementation, to be improved & expanded
  * TODO: these data types for px, py, pz are not optimized
  * --- */
-typedef ap_fixed<17,14> pxpypz_t;
+typedef ap_fixed<15,14> pxpypz_t;
 struct PxPyPz{
 
   pxpypz_t px;

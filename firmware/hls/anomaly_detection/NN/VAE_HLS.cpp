@@ -22,26 +22,26 @@
 #include "parameters.h"
 
 void VAE_HLS(
-    input_t input_1[N_INPUT_1_1],
-    result_t layer8_out[N_LAYER_7]
+    input_t input_3[N_INPUT_1_1],
+    result_t layer7_out[N_LAYER_6]
 ) {
 
     //hls-fpga-machine-learning insert IO
-    #pragma HLS ARRAY_RESHAPE variable=input_1 complete dim=0
-    #pragma HLS ARRAY_PARTITION variable=layer8_out complete dim=0
-    #pragma HLS INTERFACE ap_vld port=input_1,layer8_out 
+    #pragma HLS ARRAY_RESHAPE variable=input_3 complete dim=0
+    #pragma HLS ARRAY_PARTITION variable=layer7_out complete dim=0
+    #pragma HLS INTERFACE ap_vld port=input_3,layer7_out 
     #pragma HLS PIPELINE 
 
 #ifndef __SYNTHESIS__
     static bool loaded_weights = false;
     if (!loaded_weights) {
         //hls-fpga-machine-learning insert load weights
-        nnet::load_weights_from_txt<weight3_t, 1824>(w3, "w3.txt");
-        nnet::load_weights_from_txt<bias3_t, 32>(b3, "b3.txt");
-        nnet::load_weights_from_txt<weight5_t, 512>(w5, "w5.txt");
-        nnet::load_weights_from_txt<bias5_t, 16>(b5, "b5.txt");
-        nnet::load_weights_from_txt<weight7_t, 208>(w7, "w7.txt");
-        nnet::load_weights_from_txt<bias7_t, 13>(b7, "b7.txt");
+        nnet::load_weights_from_txt<weight2_t, 1824>(w2, "w2.txt");
+        nnet::load_weights_from_txt<bias2_t, 32>(b2, "b2.txt");
+        nnet::load_weights_from_txt<weight4_t, 512>(w4, "w4.txt");
+        nnet::load_weights_from_txt<bias4_t, 16>(b4, "b4.txt");
+        nnet::load_weights_from_txt<weight6_t, 208>(w6, "w6.txt");
+        nnet::load_weights_from_txt<bias6_t, 13>(b6, "b6.txt");
         loaded_weights = true;
     }
 #endif
@@ -52,30 +52,26 @@ void VAE_HLS(
 
     //hls-fpga-machine-learning insert layers
 
-    layer2_t layer2_out[N_INPUT_1_1];
+    layer2_t layer2_out[N_LAYER_2];
     #pragma HLS ARRAY_PARTITION variable=layer2_out complete dim=0
-    nnet::linear<input_t, layer2_t, linear_config2>(input_1, layer2_out); // q_activation
+    nnet::dense<input_t, layer2_t, config2>(input_3, layer2_out, w2, b2); // q_dense
 
-    layer3_t layer3_out[N_LAYER_3];
+    layer3_t layer3_out[N_LAYER_2];
     #pragma HLS ARRAY_PARTITION variable=layer3_out complete dim=0
-    nnet::dense<layer2_t, layer3_t, config3>(layer2_out, layer3_out, w3, b3); // q_dense
+    nnet::relu<layer2_t, layer3_t, relu_config3>(layer2_out, layer3_out); // q_dense_quantized_relu
 
-    layer4_t layer4_out[N_LAYER_3];
+    layer4_t layer4_out[N_LAYER_4];
     #pragma HLS ARRAY_PARTITION variable=layer4_out complete dim=0
-    nnet::relu<layer3_t, layer4_t, relu_config4>(layer3_out, layer4_out); // q_dense_quantized_relu
+    nnet::dense<layer3_t, layer4_t, config4>(layer3_out, layer4_out, w4, b4); // q_dense_1
 
-    layer5_t layer5_out[N_LAYER_5];
+    layer5_t layer5_out[N_LAYER_4];
     #pragma HLS ARRAY_PARTITION variable=layer5_out complete dim=0
-    nnet::dense<layer4_t, layer5_t, config5>(layer4_out, layer5_out, w5, b5); // q_dense_1
+    nnet::relu<layer4_t, layer5_t, relu_config5>(layer4_out, layer5_out); // q_dense_1_quantized_relu
 
-    layer6_t layer6_out[N_LAYER_5];
+    layer6_t layer6_out[N_LAYER_6];
     #pragma HLS ARRAY_PARTITION variable=layer6_out complete dim=0
-    nnet::relu<layer5_t, layer6_t, relu_config6>(layer5_out, layer6_out); // q_dense_1_quantized_relu
+    nnet::dense<layer5_t, layer6_t, config6>(layer5_out, layer6_out, w6, b6); // mu
 
-    layer7_t layer7_out[N_LAYER_7];
-    #pragma HLS ARRAY_PARTITION variable=layer7_out complete dim=0
-    nnet::dense<layer6_t, layer7_t, config7>(layer6_out, layer7_out, w7, b7); // mu
-
-    nnet::linear<layer7_t, result_t, linear_config8>(layer7_out, layer8_out); // mu_quantized_bits
+    nnet::linear<layer6_t, result_t, linear_config7>(layer6_out, layer7_out); // mu_quantized_bits
 
 }

@@ -17,7 +17,7 @@ port (
     ap_done : OUT STD_LOGIC;
     ap_idle : OUT STD_LOGIC;
     ap_ready : OUT STD_LOGIC;
-    p_read : IN STD_LOGIC_VECTOR (740 downto 0);
+    p_read : IN STD_LOGIC_VECTOR (739 downto 0);
     ap_return_0 : OUT STD_LOGIC_VECTOR (9 downto 0);
     ap_return_1 : OUT STD_LOGIC_VECTOR (9 downto 0);
     ap_return_2 : OUT STD_LOGIC_VECTOR (9 downto 0);
@@ -348,7 +348,7 @@ attribute shreg_extract : string;
     component anomaly_detection_linear_ap_fixed_13_8_5_3_0_ap_fixed_10_6_4_0_0_linear_config2_s IS
     port (
         ap_ready : OUT STD_LOGIC;
-        p_read : IN STD_LOGIC_VECTOR (740 downto 0);
+        p_read : IN STD_LOGIC_VECTOR (739 downto 0);
         ap_return_0 : OUT STD_LOGIC_VECTOR (9 downto 0);
         ap_return_1 : OUT STD_LOGIC_VECTOR (9 downto 0);
         ap_return_2 : OUT STD_LOGIC_VECTOR (9 downto 0);

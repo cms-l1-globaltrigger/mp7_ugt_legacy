@@ -136,6 +136,15 @@ struct Muon{
     return ret;
   }
 
+  inline static Muon initFromHWInt(int pt, int eta, int phi){
+      Muon muon;
+      muon.clear();
+      muon.pt.V = pt;
+      muon.eta_extrapolated.V = eta;
+      muon.phi_extrapolated.V = phi;
+      return muon;
+  }
+
 }; // struct Muon
 
 /* ---
@@ -197,6 +206,15 @@ struct Jet{
     return ret;
   }
 
+  inline static Jet initFromHWInt(const int et, const int eta, const int phi){
+    Jet ret;
+    ret.clear();
+    ret.et.V = et;
+    ret.eta.V = eta;
+    ret.phi.V = phi;
+    return ret;
+  }
+
 }; // struct Jet
 
 /* ---
@@ -254,6 +272,15 @@ struct CaloCommon{
     return ret;
   }
 
+  inline static CaloCommon initFromHWInt(const int et, const int eta, const int phi){
+    CaloCommon ret;
+    ret.clear();
+    ret.et.V = et;
+    ret.eta.V = eta;
+    ret.phi.V = phi;
+    return ret;
+  }
+
 }; // struct CaloCommon
 
 typedef CaloCommon EGamma;
@@ -308,6 +335,14 @@ struct ET{
     ret.ettem = ettem;
     return ret;
   }
+
+  inline static ET initFromHWInt(const int et, const int ettem){
+    ET ret;
+    ret.clear();
+    ret.et.V = et;
+    ret.ettem.V = ettem;
+    return ret;
+  }
 }; // struct ET
 
 struct HT{
@@ -353,6 +388,13 @@ struct HT{
     HT ret;
     ret.clear();
     ret.et = et;
+    return ret;
+  }
+
+  inline static HT initFromHWInt(const int et){
+    HT ret;
+    ret.clear();
+    ret.et.V = et;
     return ret;
   }
 }; // struct HT
@@ -404,6 +446,14 @@ struct VectorSumsCommon{
     ret.clear();
     ret.et = et;
     ret.phi = round(phi / Scales::CALO_PHI_LSB);
+    return ret;
+  } 
+
+  inline static VectorSumsCommon initFromHWInt(const int et, const int phi){
+    VectorSumsCommon ret;
+    ret.clear();
+    ret.et.V = et;
+    ret.phi.V = phi;
     return ret;
   }  
 }; // struct VectorSumsCommon

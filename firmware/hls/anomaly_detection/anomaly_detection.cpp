@@ -104,6 +104,7 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
     nn_inputs_unscaled[3*i + 2] = cartesians[i].pz;
   }
 
+
   scaleNNInputs(nn_inputs_unscaled, nn_inputs);
 
   AD_NN_OUT_T nnout[AD_NNNOUTPUTS];

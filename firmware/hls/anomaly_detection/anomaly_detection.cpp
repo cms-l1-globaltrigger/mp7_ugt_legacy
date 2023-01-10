@@ -19,8 +19,8 @@ AD_NN_OUT_SQ_T computeLoss(AD_NN_OUT_T score[AD_NNNOUTPUTS]){
     squares[i] = sq;
   }
 
-  nnet::Op_max<AD_NN_OUT_SQ_T> op;
-  square_sum = nnet::reduce<AD_NN_OUT_SQ_T, AD_NNNOUTPUTS, nnet::Op_max<AD_NN_OUT_SQ_T>>(squares, op);
+  nnet::Op_add<AD_NN_OUT_SQ_T> op;
+  square_sum = nnet::reduce<AD_NN_OUT_SQ_T, AD_NNNOUTPUTS, nnet::Op_add<AD_NN_OUT_SQ_T>>(squares, op);
   return square_sum;
 }
 
@@ -31,9 +31,9 @@ void scaleNNInputs(pxpypz_t unscaled[AD_NNNINPUTS], AD_NN_IN_T scaled[AD_NNNINPU
   //#pragma HLS inline off
   for(int i = 0; i < AD_NNNINPUTS; i++){
     #pragma HLS unroll
-    AD_NN_IN_T tmp0 = unscaled[i] * ad_scales[i];
-    #pragma hls bind_op variable=tmp0 op=mul impl=fabric
-    AD_NN_IN_T tmp1 = tmp0 + ad_offsets[i];
+    pxpypz_t tmp0 = unscaled[i] - ad_offsets[i];
+    AD_NN_IN_T tmp1 = tmp0 >> ad_shift[i];
+    //#pragma hls bind_op variable=tmp1 op=shl impl=fabric
     scaled[i] = tmp1;
   }
 }
@@ -70,11 +70,8 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
   for(int i = 0; i < AD_NNNPARTICLES; i++){
     cartesians[i].clear();
   }
-  int iNNIn = 0;
-  for(int i = 0; i < AD_NJETS; i++, iNNIn++){
-    #pragma HLS unroll
-    cartesians[iNNIn] = JetToCartesian(jets[i]);
-  }
+  int iNNIn = 1;
+  cartesians[0] = METToCartesian(etmiss);
   for(int i = 0; i < AD_NEGAMMAS; i++, iNNIn++){
     #pragma HLS unroll
     cartesians[iNNIn] = EGammaToCartesian(egammas[i]);
@@ -83,12 +80,15 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
     #pragma HLS unroll
     cartesians[iNNIn] = MuonToCartesian(muons[i]);
   }
+  for(int i = 0; i < AD_NJETS; i++, iNNIn++){
+    #pragma HLS unroll
+    cartesians[iNNIn] = JetToCartesian(jets[i]);
+  }
   // TODO include taus in training
   // for(int i = 0; i < AD_NTAUS; i++, iNNIn++){
   //   #pragma HLS unroll
   //   cartesians[iNNIn] = TauToCartesian(taus[i]);
   // }
-   cartesians[AD_NNNPARTICLES-1] = METToCartesian(etmiss);
 
   // 'unroll' particles (px, py, pz) to flat array of NN inputs
   pxpypz_t nn_inputs_unscaled[AD_NNNINPUTS];
@@ -103,6 +103,7 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
     nn_inputs_unscaled[3*i + 1] = cartesians[i].py;
     nn_inputs_unscaled[3*i + 2] = cartesians[i].pz;
   }
+
 
   scaleNNInputs(nn_inputs_unscaled, nn_inputs);
 

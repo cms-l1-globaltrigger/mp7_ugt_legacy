@@ -475,14 +475,20 @@ namespace pybind11 { namespace detail {                                         
 typedef ap_ufixed<9,8> ap_uf_9_8;
 typedef ap_ufixed<11,10> ap_uf_11_10;
 typedef ap_ufixed<12,11> ap_uf_12_11;
+typedef ap_ufixed<16,14> ap_uf_16_14;
 BIND_AP_TYPE_THRU_DOUBLE(ap_uf_9_8, "ap_ufixed<9,8>");
 BIND_AP_TYPE_THRU_DOUBLE(ap_uf_11_10, "ap_ufixed<11,10>");
 BIND_AP_TYPE_THRU_DOUBLE(ap_uf_12_11, "ap_ufixed<12,11>");
+BIND_AP_TYPE_THRU_DOUBLE(ap_uf_16_14, "ap_ufixed<16,14>");
 
+typedef ap_fixed<8,6,AP_RND_CONV,AP_SAT> ap_f_8_6_RND_CONV_SAT;
+typedef ap_fixed<10,7> ap_f_10_7;
 typedef ap_fixed<10,7,AP_RND_CONV,AP_SAT> ap_f_10_7_RND_CONV_SAT;
 typedef ap_fixed<13,8> ap_f_13_8;
 typedef ap_fixed<16,13> ap_f_16_13;
 typedef ap_fixed<16,15,AP_TRN,AP_SAT> ap_f_16_15_TRN_SAT;
+BIND_AP_TYPE_THRU_DOUBLE(ap_f_8_6_RND_CONV_SAT, "ap_fixed<8,6,AP_RND_CONV,AP_SAT>")
+BIND_AP_TYPE_THRU_DOUBLE(ap_f_10_7, "ap_fixed<10,7>")
 BIND_AP_TYPE_THRU_DOUBLE(ap_f_10_7_RND_CONV_SAT, "ap_fixed<10,7,AP_RND_CONV,AP_SAT>")
 BIND_AP_TYPE_THRU_DOUBLE(ap_f_13_8, "ap_fixed<13,8>")
 BIND_AP_TYPE_THRU_DOUBLE(ap_f_16_13, "ap_fixed<16,13>")

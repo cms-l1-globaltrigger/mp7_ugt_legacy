@@ -3,14 +3,21 @@
 -- Wrapper for "anomaly detection".
 
 -- Version history:
+-- HB 2022-11-11: added comparator and delay for simulation.
 -- HB 2022-08-29: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
-
+use ieee.numeric_std.all;
+ 
 use work.gtl_pkg.all;
 
 entity adt_wrapper is
+    generic	(
+        sim_mode: boolean := true;
+        threshold: integer := 4150
+--        threshold: std_logic_vector(15 downto 0) := X"0136"
+   );
     port(
         lhc_clk: in std_logic;
         mu: in muon_objects_array;
@@ -33,6 +40,7 @@ architecture rtl of adt_wrapper is
     signal anomaly_score: std_logic_vector(15 downto 0);
     signal ap_rst: std_logic := '0';
     signal ap_start: std_logic := '1';
+    signal adt, adt_sim: std_logic_vector(0 downto 0) := "0";
     
 begin
 
@@ -62,14 +70,23 @@ begin
             anomaly_score,
             open
         );
-        
-    adt_out <= anomaly_score(0);
 
---     adt_p: process(lhc_clk, adt_o)
---         begin
---         if (lhc_clk'event and lhc_clk = '1') then
---             adt_out <= adt_o;
---         end if;
---     end process;
+    adt(0) <= '1' when to_integer(unsigned(anomaly_score)) >= threshold else '0';
+
+    synth_mode_i: if not sim_mode generate
+        adt_out <= adt(0);
+    end generate synth_mode_i;
+
+    sim_mode_i: if sim_mode generate
+        sim_delay_i: entity work.delay_pipeline
+            generic map(
+                DATA_WIDTH => 1,
+                STAGES => ADT_SIM_DEL
+            )
+            port map(
+                lhc_clk, adt, adt_sim
+            );
+        adt_out <= adt_sim(0);        
+    end generate sim_mode_i;
 
 end architecture rtl;

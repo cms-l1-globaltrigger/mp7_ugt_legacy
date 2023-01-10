@@ -1,6 +1,17 @@
-\section{Readout-Process}
+\section{Readout process}\label{sec:rop:rop}
 
-Data for readout are collected in \href{\gitbranch/firmware/hdl/payload/frame/output_mux.vhd}{\texttt{output\_mux.vhd}} (part of \texttt{frame.vhd}).
-The readout of Global Trigger data is done via GTH transmitter of MP7 to AMC13.
+Data for readout are collected in \href{\gitbranch/firmware/hdl/payload/frame/output_mux.vhd}{\texttt{\textquotesingle output\_mux.vhd\textquotesingle }} (part of \href{\gitbranch/firmware/hdl/payload/frame.vhd}{\texttt{\textquotesingle frame.vhd\textquotesingle }}).\\
+The readout contains:
+\begin{itemize}
+\item algorithm outputs of \ugtl (algo\_after\_gtLogic)
+\item algorithms after bunch crossing mask (algo\_after\_bxmask)
+\item algorithms after prescale logic (algo\_after\_prescaler)
+\item finor and veto bits
+\item prescale factor index
+\item bunch counters
+\item hash values for menu name and firmware UUID
+\end{itemize}
+For details see \ref{sec:app:app_c}.\\
+The readout process of Global Trigger data is done via GTH transmitter of MP7 to AMC13.
 
 \clearpage

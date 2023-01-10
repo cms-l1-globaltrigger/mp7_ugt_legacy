@@ -4,15 +4,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.21.4] - 2022-010-10
+## [v1.21.8] - 2022-11-29
 ### Comment
 
-- mp7_ugt firmware release v1.21.4
+- mp7_ugt firmware release v1.21.8
 - test version for "anomaly detection trigger (ADT)"
 
 ### Changed
 - source files:
   - ../payload/gtl_module_tpl.vhd
+
+## [v1.21.7] - 2022-11-29
+### Comment
+
+- mp7_ugt firmware release v1.21.7
+- bug fix in algo_pre_scaler_fractional_float.vhd (reset counter with factor=0)
+
+### Changed
+- source files:
+  - ../payload/fdl/algo_pre_scaler_fractional_float.vhd
+- simulation file:
+  - ../sim/scripts/algo_pre_scaler_fractional_float.do
+  - ../sim/scripts/algo_pre_scaler_fractional_float_wave.do
+  - ../sim/testbench/algo_pre_scaler_fractional_float_tb.vhd
+
+## [v1.21.6] - 2022-11-23
+### Comment
+
+- mp7_ugt firmware release v1.21.6
+- updated doc/scales_inputs_2_ugt (added definition of muon shower bits)
+
+### Changed
+- tex file:
+  - doc/scales_inputs_2_ugt/src/latex/scales_inputs_2_ugt.tex
+
+## [v1.21.5] - 2022-11-16
+### Comment
+
+- mp7_ugt firmware release v1.21.5
+- bug fix in correlation_conditions.vhd
+
+### Changed
+- source files:
+  - ../payload/gtl/correlation_conditions.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+
+## [v1.21.4] - 2022-10-04
+### Comment
+
+- mp7_ugt firmware release v1.21.4
+- updated top_decl.vhd: used "demux" in formatter for algo outputs to enable "orbit header" for scouting (therefore MP7 FW v3.2.2 or newer needed)
+
+### Changed
+- source files:
+  - ../packages/top_decl.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+- script files:
+  - scripts/run_synth_ipbb.py
+  - scripts/run_simulation_questa.py
 
 ## [v1.21.3] - 2022-09-29
 ### Comment

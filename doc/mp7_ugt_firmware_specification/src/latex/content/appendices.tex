@@ -28,18 +28,245 @@ List of useful TDF routines and commands for hardware tests:
 \item ... (other routines are available in /nfshome0/ugtdev/software/tdf/etc/routines)
 \end{itemize}
 
+\subsubsection{Handling of timing errors in synthesis}\label{sec:app:synth_timing_errors}
+
+Sometimes synthesis finish with timing errors on modules and no bit files are generated for those modules.
+Most of the time the errors are low or not relevant and can be ignored. In this case generation
+of a bit file could be done on the platform of synthesis with the following command in an environment where
+vivado is running (see \href{\gitbranch/README.md}{\texttt{README}}):\\
+\begin{itemize}
+\item Generate bit file\\
+\greybox{\$ vivado -mode batch -source <local path to mp7\_ugt\_legacy>/}\\
+\greybox{scripts/vivado\_write\_bitstream.tcl -tclargs}\\
+\greybox{<path to synth dir> <module number>}
+\end{itemize}
+
+\subsection{GTH I/Os}\label{sec:app:gth_io}
+
+\subsubsection{GTH input connections}\label{sec:app:gth_i_conn}
+
+Table~\ref{tab:app:gth_i_conn} contains the GTH input connections from MP7 MTP front connectors\footnote{"ch." means "channel", "pp conn." means "optical patch panel connector number"}:
+
+\begin{longtable}{|l|c|c|c|c|l|}
+\caption{GTH input connections}
+    \label{tab:app:gth_i_conn}\\
+\hline
+\textbf{MTP48}& \textbf{minipod}& \textbf{GTH ch.}& \textbf{MP7 ch.} &\textbf{pp conn.}& \textbf{data}\\
+\hline
+\hline
+\endhead
+RX1/1  & rx3/1  & X1Y35 & 0x00 & 1  & muon\\\hline
+RX1/2  & rx3/2  & X1Y34 & 0x02 & 2  & muon\\\hline
+RX1/3  & rx3/3  & X1Y33 & 0x04 & 3  & muon\\\hline
+RX1/4  & rx3/4  & X1Y32 & 0x06 & 4  & muon\\\hline
+RX1/5  & rx3/5  & X1Y31 & 0x08 & 5  & eg\\\hline
+RX1/6  & rx3/6  & X1Y30 & 0x0A & 6  & eg\\\hline
+RX1/7  & rx3/7  & X1Y29 & 0x0C & 7  & jet\\\hline
+RX1/8  & rx3/8  & X1Y28 & 0x0E & 8  & jet\\\hline
+RX1/9  & rx3/9  & X1Y27 & 0x10 & 9  & tau\\\hline
+RX1/10 & rx3/10 & X1Y26 & 0x12 & 10 & tau\\\hline
+RX1/11 & rx3/11 & X1Y25 & 0x14 & 11 & esums\\\hline
+RX1/12 & rx3/12 & X1Y24 & 0x16 & 12 & free\\\hline
+RX1/13 & rx4/1  & X1Y23 & 0x18 & 13 & external conditions\\\hline
+RX1/14 & rx4/2  & X1Y22 & 0x1A & 14 & external conditions\\\hline
+RX1/15 & rx4/3  & X1Y21 & 0x1C & 15 & external conditions\\\hline
+RX1/16 & rx4/4  & X1Y20 & 0x1E & 16 & external conditions\\\hline
+RX1/17 & rx4/5  & X1Y19 & 0x20 & 17 & free\\\hline
+RX1/18 & rx4/6  & X1Y18 & 0x22 & 18 & free\\\hline
+RX1/19 & rx4/7  & X1Y17 & 0x24 & 19 & free\\\hline
+RX1/20 & rx4/8  & X1Y16 & 0x26 & 20 & free\\\hline
+RX1/21 & rx4/9  & X1Y15 & 0x28 & 21 & free\\\hline
+RX1/22 & rx4/10 & X1Y14 & 0x2A & 22 & free\\\hline
+RX1/23 & rx4/11 & X1Y13 & 0x2C & 23 & free\\\hline
+RX1/24 & rx4/12 & X1Y12 & 0x2E & 24 & free\\\hline
+RX1/25 & rx5/1  & X1Y11 & 0x30 & nc & -\\\hline
+RX1/26 & rx5/2  & X1Y10 & 0x32 & nc & -\\\hline
+RX1/27 & rx5/3  & X1Y09 & 0x34 & nc & -\\\hline
+RX1/28 & rx5/4  & X1Y08 & 0x36 & nc & -\\\hline
+RX1/29 & rx5/5  & X1Y07 & 0x38 & nc & -\\\hline
+RX1/30 & rx5/6  & X1Y06 & 0x3A & nc & -\\\hline
+RX1/31 & rx5/7  & X1Y05 & 0x3C & nc & -\\\hline
+RX1/32 & rx5/8  & X1Y04 & 0x3E & nc & -\\\hline
+RX1/33 & rx5/9  & X1Y03 & 0x40 & nc & -\\\hline
+RX1/34 & rx5/10 & X1Y02 & 0x42 & nc & -\\\hline
+RX1/35 & rx5/11 & X1Y01 & 0x44 & nc & -\\\hline
+RX1/36 & rx5/12 & X1Y00 & 0x46 & nc & -\\\hline
+RX2/1  & rx0/1  & X0Y35 & 0x48 & nc & -\\\hline
+RX2/2  & rx0/2  & X0Y34 & 0x4A & nc & -\\\hline
+RX2/3  & rx0/3  & X0Y33 & 0x4C & nc & -\\\hline
+RX2/4  & rx0/4  & X0Y32 & 0x4E & nc & -\\\hline
+RX2/5  & rx0/5  & X0Y31 & 0x50 & nc & -\\\hline
+RX2/6  & rx0/6  & X0Y30 & 0x52 & nc & -\\\hline
+RX2/7  & rx0/7  & X0Y29 & 0x54 & nc & -\\\hline
+RX2/8  & rx0/8  & X0Y28 & 0x56 & nc & -\\\hline
+RX2/9  & rx0/9  & X0Y27 & 0x58 & nc & -\\\hline
+RX2/10 & rx0/10 & X0Y26 & 0x5A & nc & -\\\hline
+RX2/11 & rx0/11 & X0Y25 & 0x5C & nc & -\\\hline
+RX2/12 & rx0/12 & X0Y24 & 0x5E & nc & -\\\hline
+RX2/13 & rx1/1  & X0Y23 & 0x60 & nc & -\\\hline
+RX2/14 & rx1/2  & X0Y22 & 0x62 & nc & -\\\hline
+RX2/15 & rx1/3  & X0Y21 & 0x64 & nc & -\\\hline
+RX2/16 & rx1/4  & X0Y20 & 0x66 & nc & -\\\hline
+RX2/17 & rx1/5  & X0Y19 & 0x68 & nc & -\\\hline
+RX2/18 & rx1/6  & X0Y18 & 0x6A & nc & -\\\hline
+RX2/19 & rx1/7  & X0Y17 & 0x6C & nc & -\\\hline
+RX2/20 & rx1/8  & X0Y16 & 0x6E & nc & -\\\hline
+RX2/21 & rx1/9  & X0Y15 & 0x70 & nc & -\\\hline
+RX2/22 & rx1/10 & X0Y14 & 0x72 & nc & -\\\hline
+RX2/23 & rx1/11 & X0Y13 & 0x74 & nc & -\\\hline
+RX2/24 & rx1/12 & X0Y12 & 0x76 & nc & -\\\hline
+RX2/25 & rx2/1  & X0Y11 & 0x78 & nc & -\\\hline
+RX2/26 & rx2/2  & X0Y10 & 0x7A & nc & -\\\hline
+RX2/27 & rx2/3  & X0Y09 & 0x7C & nc & -\\\hline
+RX2/28 & rx2/4  & X0Y08 & 0x7E & nc & -\\\hline
+RX2/29 & rx2/5  & X0Y07 & 0x80 & nc & -\\\hline
+RX2/30 & rx2/6  & X0Y06 & 0x82 & nc & -\\\hline
+RX2/31 & rx2/7  & X0Y05 & 0x84 & nc & -\\\hline
+RX2/32 & rx2/8  & X0Y04 & 0x86 & nc & -\\\hline
+RX2/33 & rx2/9  & X0Y03 & 0x88 & nc & -\\\hline
+RX2/34 & rx2/10 & X0Y02 & 0x8A & nc & -\\\hline
+RX2/35 & rx2/11 & X0Y01 & 0x8C & nc & -\\\hline
+RX2/36 & rx2/12 & X0Y00 & 0x8E & nc & -\\\hline
+\end{longtable}
+
 \clearpage
-\subsection{Configuration of GTHs}\label{sec:app:app_a}
+
+\subsubsection{GTH output connections}\label{sec:app:gth_o_conn}
+
+Table~\ref{tab:app:gth_o_conn} contains the GTH output connections to MP7 MTP front connectors:
+
+\begin{longtable}{|l|c|c|c|c|l|}
+\caption{GTH output connections}
+    \label{tab:app:gth_o_conn}\\
+\hline
+\textbf{MTP48}& \textbf{minipod}& \textbf{GTH ch.}& \textbf{MP7 ch.} &\textbf{pp conn.}& \textbf{data}\\
+\hline
+\hline
+\endhead
+TX1/1  & tx3/1  & X1Y35 & 0x01 & nc & -\\\hline
+TX1/2  & tx3/2  & X1Y34 & 0x03 & nc & -\\\hline
+TX1/3  & tx3/3  & X1Y33 & 0x05 & nc & -\\\hline
+TX1/4  & tx3/4  & X1Y32 & 0x07 & nc & -\\\hline
+TX1/5  & tx3/5  & X1Y31 & 0x09 & nc & -\\\hline
+TX1/6  & tx3/6  & X1Y30 & 0x0b & nc & -\\\hline
+TX1/7  & tx3/7  & X1Y29 & 0x0d & nc & -\\\hline
+TX1/8  & tx3/8  & X1Y28 & 0x0f & nc & -\\\hline
+TX1/9  & tx3/9  & X1Y27 & 0x11 & nc & -\\\hline
+TX1/10 & tx3/10 & X1Y26 & 0x13 & nc & -\\\hline
+TX1/11 & tx3/11 & X1Y25 & 0x15 & nc & -\\\hline
+TX1/12 & tx3/12 & X1Y24 & 0x17 & nc & -\\\hline
+TX1/13 & tx4/1  & X1Y23 & 0x19 & nc & -\\\hline
+TX1/14 & tx4/2  & X1Y22 & 0x1b & nc & -\\\hline
+TX1/15 & tx4/3  & X1Y21 & 0x1d & nc & -\\\hline
+TX1/16 & tx4/4  & X1Y20 & 0x1f & nc & -\\\hline
+TX1/17 & tx4/5  & X1Y19 & 0x21 & nc & readout (AMC13)\\\hline
+TX1/18 & tx4/6  & X1Y18 & 0x23 & nc & readout (AMC13)\\\hline
+TX1/19 & tx4/7  & X1Y17 & 0x25 & nc & readout (AMC13)\\\hline
+TX1/20 & tx4/8  & X1Y16 & 0x27 & nc & readout (AMC13)\\\hline
+TX1/21 & tx4/9  & X1Y15 & 0x29 & nc & readout (AMC13)\\\hline
+TX1/22 & tx4/10 & X1Y14 & 0x2b & nc & readout (AMC13)\\\hline
+TX1/23 & tx4/11 & X1Y13 & 0x2d & nc & readout (AMC13)\\\hline
+TX1/24 & tx4/12 & X1Y12 & 0x2f & nc & readout (AMC13)\\\hline
+TX1/25 & tx5/1  & X1Y11 & 0x31 & nc & readout (AMC13)\\\hline
+TX1/26 & tx5/2  & X1Y10 & 0x33 & nc & readout (AMC13)\\\hline
+TX1/27 & tx5/3  & X1Y09 & 0x35 & nc & -\\\hline
+TX1/28 & tx5/4  & X1Y08 & 0x37 & nc & -\\\hline
+TX1/29 & tx5/5  & X1Y07 & 0x39 & nc & -\\\hline
+TX1/30 & tx5/6  & X1Y06 & 0x3b & nc & -\\\hline
+TX1/31 & tx5/7  & X1Y05 & 0x3d & nc & -\\\hline
+TX1/32 & tx5/8  & X1Y04 & 0x3f & nc & -\\\hline
+TX1/33 & tx5/9  & X1Y03 & 0x41 & nc & -\\\hline
+TX1/34 & tx5/10 & X1Y02 & 0x43 & nc & -\\\hline
+TX1/35 & tx5/11 & X1Y01 & 0x45 & nc & -\\\hline
+TX1/36 & tx5/12 & X1Y00 & 0x47 & nc & -\\\hline
+TX2/1  & tx0/1  & X0Y35 & 0x49 & nc & -\\\hline
+TX2/2  & tx0/2  & X0Y34 & 0x4b & nc & -\\\hline
+TX2/3  & tx0/3  & X0Y33 & 0x4d & nc & -\\\hline
+TX2/4  & tx0/4  & X0Y32 & 0x4f & nc & -\\\hline
+TX2/5  & tx0/5  & X0Y31 & 0x51 & nc & -\\\hline
+TX2/6  & tx0/6  & X0Y30 & 0x53 & nc & -\\\hline
+TX2/7  & tx0/7  & X0Y29 & 0x55 & nc & -\\\hline
+TX2/8  & tx0/8  & X0Y28 & 0x57 & nc & -\\\hline
+TX2/9  & tx0/9  & X0Y27 & 0x59 & nc & -\\\hline
+TX2/10 & tx0/10 & X0Y26 & 0x5b & nc & -\\\hline
+TX2/11 & tx0/11 & X0Y25 & 0x5d & nc & -\\\hline
+TX2/12 & tx0/12 & X0Y24 & 0x5f & nc & -\\\hline
+TX2/13 & tx1/1  & X0Y23 & 0x61 & nc & -\\\hline
+TX2/14 & tx1/2  & X0Y22 & 0x63 & nc & -\\\hline
+TX2/15 & tx1/3  & X0Y21 & 0x65 & nc & -\\\hline
+TX2/16 & tx1/4  & X0Y20 & 0x67 & nc & -\\\hline
+TX2/17 & tx1/5  & X0Y19 & 0x69 & nc & -\\\hline
+TX2/18 & tx1/6  & X0Y18 & 0x6b & nc & -\\\hline
+TX2/19 & tx1/7  & X0Y17 & 0x6d & nc & -\\\hline
+TX2/20 & tx1/8  & X0Y16 & 0x6f & nc & -\\\hline
+TX2/21 & tx1/9  & X0Y15 & 0x71 & nc & -\\\hline
+TX2/22 & tx1/10 & X0Y14 & 0x73 & nc & -\\\hline
+TX2/23 & tx1/11 & X0Y13 & 0x75 & nc & -\\\hline
+TX2/24 & tx1/12 & X0Y12 & 0x77 & nc & -\\\hline
+TX2/25 & tx2/1  & X0Y11 & 0x79 & nc & -\\\hline
+TX2/26 & tx2/2  & X0Y10 & 0x7b & nc & -\\\hline
+TX2/27 & tx2/3  & X0Y09 & 0x7d & nc & -\\\hline
+TX2/28 & tx2/4  & X0Y08 & 0x7f & nc & -\\\hline
+TX2/29 & tx2/5  & X0Y07 & 0x81 & nc & -\\\hline
+TX2/30 & tx2/6  & X0Y06 & 0x83 & nc & -\\\hline
+TX2/31 & tx2/7  & X0Y05 & 0x85 & nc & -\\\hline
+TX2/32 & tx2/8  & X0Y04 & 0x87 & nc & -\\\hline
+TX2/33 & tx2/9  & X0Y03 & 0x89 & nc & -\\\hline
+TX2/34 & tx2/10 & X0Y02 & 0x8b & nc & -\\\hline
+TX2/35 & tx2/11 & X0Y01 & 0x8d & nc & -\\\hline
+TX2/36 & tx2/12 & X0Y00 & 0x8f & nc & -\\\hline
+\end{longtable}
+
+\clearpage
+
+\subsection{Configuration of GTHs}\label{sec:app:gth_conf_table}
 
 The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
-In Figure~\ref{fig:app:gth_conf} configuration of GTHs~\cite{GTHs} for Global Trigger is shown.
+In Table~\ref{tab:app:gth_conf} configuration of GTHs~\cite{GTHs} for Global Trigger is shown\footnote{"MGT" means "MGT\_BANK", "GTHE2" means "GTHE2\_CHANNEL", "RX" means "GTH receiver", "TX" means "GTH transmitter"}.
 
-\begin{figure}[htb]
-\centering
-\includegraphics[width=15cm]{figures/gth_xc7v690t_ffg1927}
+\begin{longtable}{|l|c|c|c|c|c|}
 \caption{Configuration of GTHs}
-\label{fig:app:gth_conf}
-\end{figure}
+    \label{tab:app:gth_conf}\\
+\hline
+\textbf{Objects}& \textbf{Link}& \textbf{MGT}& \textbf{GTHE2}& \textbf{RX}& \textbf{TX}\\
+\hline
+\hline
+\endhead
+MU0..MU1  & 0  & 118 & X1Y35 & x &   \\\hline
+MU2..MU3  & 1  & 118 & X1Y34 & x &   \\\hline
+MU4..MU5  & 2  & 118 & X1Y33 & x &   \\\hline
+MU6..MU7  & 3  & 118 & X1Y32 & x &   \\\hline
+EG0..EG5  & 4  & 117 & X1Y31 & x &   \\\hline
+EG6..EG11 & 5  & 117 & X1Y30 & x &   \\\hline
+JET0..JET5  & 6  & 117 & X1Y29 & x &   \\\hline
+JET6..JET11 & 7  & 117 & X1Y28 & x &   \\\hline
+TAU0..TAU5  & 8  & 116 & X1Y27 & x &   \\\hline
+TAU6..TAU11 & 9  & 116 & X1Y26 & x &   \\\hline
+ESUMS  & 10  & 116 & X1Y25 & x &   \\\hline
+free & 11  & 116 & X1Y24 & x &   \\\hline
+EXT\_COND[0:63] & 12  & 115 & X1Y23 & x &   \\\hline
+EXT\_COND[64:127] & 13  & 115 & X1Y22 & x &   \\\hline
+EXT\_COND[128:191] & 14  & 115 & X1Y21 & x &   \\\hline
+EXT\_COND[192:255] & 15  & 115 & X1Y20 & x &   \\\hline
+free & 16  & 114 & X1Y19 & x &   \\\hline
+free & 17  & 114 & X1Y18 & x &   \\\hline
+free & 18  & 114 & X1Y17 & x &   \\\hline
+free & 19  & 114 & X1Y16 & x &   \\\hline
+free & 20  & 113 & X1Y15 & x &   \\\hline
+free & 21  & 113 & X1Y14 & x &   \\\hline
+free & 22  & 113 & X1Y13 & x &   \\\hline
+free & 23  & 113 & X1Y12 & x &   \\\hline\hline
+ALGO\_AFTER\_GTLOGIC[0:191] & 16  & 114 & X1Y19 &   & x \\\hline
+ALGO\_AFTER\_GTLOGIC[192:383] & 17  & 114 & X1Y18 &   & x \\\hline
+ALGO\_AFTER\_GTLOGIC[383:511] & 18  & 114 & X1Y17 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[0:191] & 19  & 114 & X1Y16 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[192:383] & 20  & 113 & X1Y15 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[383:511] & 21  & 113 & X1Y14 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[0:191] & 22  & 113 & X1Y13 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[192:383] & 23  & 113 & X1Y12 &   & x \\\hline
+ALGO\_AFTER\_BXMASK[383:511] & 24  & 112 & X1Y11 &   & x \\\hline
+Bunchcounters, ... & 25  & 112 & X1Y10 &   & x \\\hline
+\end{longtable}
 
 \clearpage
 
@@ -72,6 +299,178 @@ Links 16..24 contains algo data (after GTL, after BX mask and after prescalers),
 
 \subsection{Optical patch panel}\label{sec:app:app_d}
 
+The following Table~\ref{tab:app:ugt_opt_pp_1} contains the optical patch panel ("uGT Patchpanel \#1") connections for production crate\footnote{"source" means "source of MTP48 cable to uGT", "uGMT" means "microTCA Global Muon Trigger module", "demux" means "Calo-Layer2 demux module", "ext\_cond" means "External condition AMC502 module", "fibre" means "fibre number of a MTP48 cable", "LC" means "LC number of optical patch panel", "slot" means "destination MP7 slot number of microTCA crate".\label{note_ugt_opt_pp_1}}:
+
+\begin{longtable}{|l|c|l|c|l|}
+\caption{uGT Patchpanel \#1}
+    \label{tab:app:ugt_opt_pp_1}\\
+\hline
+\textbf{source}& \textbf{fibre}& \textbf{data}& \textbf{LC}& \textbf{slot}\\
+\hline
+\hline
+\endhead
+uGMT  & 1   & MU[0..1]   & 1/a  & 1..2 \\\hline
+uGMT  & 2   & MU[2..3]   & 1/b  & 1..2 \\\hline
+uGMT  & 3   & MU[4..5]   & 1/c  & 1..2 \\\hline
+uGMT  & 4   & MU[6..7]   & 1/d  & 1..2 \\\hline
+demux & 4b  & EG[0..5]   & 2/a  & 1..2 \\\hline
+demux & 4a  & EG[6..11]  & 2/b  & 1..2 \\\hline
+demux & 3b  & JET[0..5]  & 2/c  & 1..2 \\\hline
+demux & 3a  & JET[6..11] & 2/d  & 1..2 \\\hline
+demux & 2b  & TAU[0..5]  & 3/a  & 1..2 \\\hline
+demux & 2a  & TAU[6..11] & 3/b  & 1..2 \\\hline
+demux & 1b  & Esums      & 3/c  & 1..2 \\\hline
+demux & 1a  & free      & 3/d  & 1..2 \\\hline
+ext\_cond &     & ExtCond[0..63]    & 4/a  & 1..2 \\\hline
+ext\_cond &     & ExtCond[64..127]  & 4/b  & 1..2 \\\hline
+ext\_cond &     & ExtCond[128..191] & 4/c  & 1..2 \\\hline
+ext\_cond &     & ExtCond[192..255] & 4/d  & 1..2 \\\hline
+- & - & free & 5/a  & 1..2 \\\hline
+- & - & free & 5/b  & 1..2 \\\hline
+- & - & free & 5/c  & 1..2 \\\hline
+- & - & free & 5/d  & 1..2 \\\hline
+- & - & free & 6/a  & 1..2 \\\hline
+- & - & free & 6/b  & 1..2 \\\hline
+- & - & free & 6/c  & 1..2 \\\hline
+- & - & free & 6/d  & 1..2 \\\hline
+\hline
+uGMT  & 5   & MU[0..1]   & 7/a  & 3..4 \\\hline
+uGMT  & 6   & MU[2..3]   & 7/b  & 3..4 \\\hline
+uGMT  & 7   & MU[4..5]   & 7/c  & 3..4 \\\hline
+uGMT  & 8   & MU[6..7]   & 7/d  & 3..4 \\\hline
+demux & 12b & EG[0..5]   & 8/a  & 3..4 \\\hline
+demux & 12a & EG[6..11]  & 8/b  & 3..4 \\\hline
+demux & 11b & JET[0..5]  & 8/c  & 3..4 \\\hline
+demux & 11a & JET[6..11] & 8/d  & 3..4 \\\hline
+demux & 10b & TAU[0..5]  & 9/a  & 3..4 \\\hline
+demux & 10a & TAU[6..11] & 9/b  & 3..4 \\\hline
+demux & 9b  & Esums      & 9/c  & 3..4 \\\hline
+demux & 9a  & free      & 9/d  & 3..4 \\\hline
+ext\_cond &     & ExtCond[0..63]    & 10/a & 3..4 \\\hline
+ext\_cond &     & ExtCond[64..127]  & 10/b & 3..4 \\\hline
+ext\_cond &     & ExtCond[128..191] & 10/c & 3..4 \\\hline
+ext\_cond &     & ExtCond[192..255] & 10/d & 3..4 \\\hline
+- & - & free & 11/a & 3..4 \\\hline
+- & - & free & 11/b & 3..4 \\\hline
+- & - & free & 11/c & 3..4 \\\hline
+- & - & free & 11/d & 3..4 \\\hline
+- & - & free & 12/a & 3..4 \\\hline
+- & - & free & 12/b & 3..4 \\\hline
+- & - & free & 12/c & 3..4 \\\hline
+- & - & free & 12/d & 3..4 \\\hline
+\hline
+uGMT  & 9   & MU[0..1]   & 13/a & 5..6 \\\hline
+uGMT  & 10  & MU[2..3]   & 13/b & 5..6 \\\hline
+uGMT  & 11  & MU[4..5]   & 13/c & 5..6 \\\hline
+uGMT  & 12  & MU[6..7]   & 13/d & 5..6 \\\hline
+demux & 8b  & EG[0..5]   & 14/a & 5..6 \\\hline
+demux & 8a  & EG[6..11]  & 14/b & 5..6 \\\hline
+demux & 7b  & JET[0..5]  & 14/c & 5..6 \\\hline
+demux & 7a  & JET[6..11] & 14/d & 5..6 \\\hline
+demux & 18b & TAU[0..5]  & 15/a & 5..6 \\\hline
+demux & 18a & TAU[6..11] & 15/b & 5..6 \\\hline
+demux & 17b & Esums      & 15/c & 5..6 \\\hline
+demux & 17a & free      & 15/d & 5..6 \\\hline
+ext\_cond &     & ExtCond[0..63]    & 16/a & 5..6 \\\hline
+ext\_cond &     & ExtCond[64..127]  & 16/b & 5..6 \\\hline
+ext\_cond &     & ExtCond[128..191] & 16/c & 5..6 \\\hline
+ext\_cond &     & ExtCond[192..255] & 16/d & 5..6 \\\hline
+- & - & free & 17/a & 5..6 \\\hline
+- & - & free & 17/b & 5..6 \\\hline
+- & - & free & 17/c & 5..6 \\\hline
+- & - & free & 17/d & 5..6 \\\hline
+- & - & free & 18/a & 5..6 \\\hline
+- & - & free & 18/b & 5..6 \\\hline
+- & - & free & 18/c & 5..6 \\\hline
+- & - & free & 18/d & 5..6 \\\hline
+\end{longtable}
+
+The following Table~\ref{tab:app:ugt_opt_pp_2} contains the optical patch panel ("uGT Patchpanel \#3") connections for test crate\footref{note_ugt_opt_pp_1}:
+
+\begin{longtable}{|l|c|l|c|l|}
+\caption{uGT Patchpanel \#3}
+    \label{tab:app:ugt_opt_pp_2}\\
+\hline
+\textbf{source}& \textbf{fibre}& \textbf{data}& \textbf{LC}& \textbf{slot}\\
+\hline
+\hline
+\endhead
+uGMT  & 13  & MU[0..1]   & 1/a  & 5..6 \\\hline
+uGMT  & 14  & MU[2..3]   & 1/b  & 5..6 \\\hline
+uGMT  & 15  & MU[4..5]   & 1/c  & 5..6 \\\hline
+uGMT  & 16  & MU[6..7]   & 1/d  & 5..6 \\\hline
+demux & 16b & EG[0..5]   & 2/a  & 5..6 \\\hline
+demux & 16a & EG[6..11]  & 2/b  & 5..6 \\\hline
+demux & 15b & JET[0..5]  & 2/c  & 5..6 \\\hline
+demux & 15a & JET[6..11] & 2/d  & 5..6 \\\hline
+demux & 14b & TAU[0..5]  & 3/a  & 5..6 \\\hline
+demux & 14a & TAU[6..11] & 3/b  & 5..6 \\\hline
+demux & 13b & Esums      & 3/c  & 5..6 \\\hline
+demux & 13a & free      & 3/d  & 5..6 \\\hline
+ext\_cond &     & ExtCond[0..63]    & 4/a  & 5..6 \\\hline
+ext\_cond &     & ExtCond[64..127]  & 4/b  & 5..6 \\\hline
+ext\_cond &     & ExtCond[128..191] & 4/c  & 5..6 \\\hline
+ext\_cond &     & ExtCond[192..255] & 4/d  & 5..6 \\\hline
+- & - & free & 5/a  & 5..6 \\\hline
+- & - & free & 5/b  & 5..6 \\\hline
+- & - & free & 5/c  & 5..6 \\\hline
+- & - & free & 5/d  & 5..6 \\\hline
+- & - & free & 6/a  & 5..6 \\\hline
+- & - & free & 6/b  & 5..6 \\\hline
+- & - & free & 6/c  & 5..6 \\\hline
+- & - & free & 6/d  & 5..6 \\\hline
+\hline
+uGMT  & 17  & MU[0..1]   & 7/a  & 1..2 \\\hline
+uGMT  & 18  & MU[2..3]   & 7/b  & 1..2 \\\hline
+uGMT  & 19  & MU[4..5]   & 7/c  & 1..2 \\\hline
+uGMT  & 20  & MU[6..7]   & 7/d  & 1..2 \\\hline
+demux & 26  & EG[0..5]   & 8/a  & 1..2 \\\hline
+demux & 25  & EG[6..11]  & 8/b  & 1..2 \\\hline
+demux & 28  & JET[0..5]  & 8/c  & 1..2 \\\hline
+demux & 27  & JET[6..11] & 8/d  & 1..2 \\\hline
+demux & 30  & TAU[0..5]  & 9/a  & 1..2 \\\hline
+demux & 29  & TAU[6..11] & 9/b  & 1..2 \\\hline
+demux & 32  & Esums      & 9/c  & 1..2 \\\hline
+demux & 31  & free      & 9/d  & 1..2 \\\hline
+ext\_cond &     & ExtCond[0..63]    & 10/a & 1..2 \\\hline
+ext\_cond &     & ExtCond[64..127]  & 10/b & 1..2 \\\hline
+ext\_cond &     & ExtCond[128..191] & 10/c & 1..2 \\\hline
+ext\_cond &     & ExtCond[192..255] & 10/d & 1..2 \\\hline
+- & - & free & 11/a & 1..2 \\\hline
+- & - & free & 11/b & 1..2 \\\hline
+- & - & free & 11/c & 1..2 \\\hline
+- & - & free & 11/d & 1..2 \\\hline
+- & - & free & 12/a & 1..2 \\\hline
+- & - & free & 12/b & 1..2 \\\hline
+- & - & free & 12/c & 1..2 \\\hline
+- & - & free & 12/d & 1..2 \\\hline
+\hline
+uGMT  & 21  & MU[0..1]   & 13/a & 3..4 \\\hline
+uGMT  & 22  & MU[2..3]   & 13/b & 3..4 \\\hline
+uGMT  & 23  & MU[4..5]   & 13/c & 3..4 \\\hline
+uGMT  & 24  & MU[6..7]   & 13/d & 3..4 \\\hline
+demux & 34  & EG[0..5]   & 14/a & 3..4 \\\hline
+demux & 33  & EG[6..11]  & 14/b & 3..4 \\\hline
+demux & 35  & JET[0..5]  & 14/c & 3..4 \\\hline
+demux & 36  & JET[6..11] & 14/d & 3..4 \\\hline
+demux & 14  & TAU[0..5]  & 15/a & 3..4 \\\hline
+demux & 13  & TAU[6..11] & 15/b & 3..4 \\\hline
+demux & 16  & Esums      & 15/c & 3..4 \\\hline
+demux & 15  & free      & 15/d & 3..4 \\\hline
+ext\_cond &     & ExtCond[0..63]    & 16/a & 3..4 \\\hline
+ext\_cond &     & ExtCond[64..127]  & 16/b & 3..4 \\\hline
+ext\_cond &     & ExtCond[128..191] & 16/c & 3..4 \\\hline
+ext\_cond &     & ExtCond[192..255] & 16/d & 3..4 \\\hline
+- & - & free & 17/a & 3..4 \\\hline
+- & - & free & 17/b & 3..4 \\\hline
+- & - & free & 17/c & 3..4 \\\hline
+- & - & free & 17/d & 3..4 \\\hline
+- & - & free & 18/a & 3..4 \\\hline
+- & - & free & 18/b & 3..4 \\\hline
+- & - & free & 18/c & 3..4 \\\hline
+- & - & free & 18/d & 3..4 \\\hline
+\end{longtable}
+
 Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panel for optical links.
 
 \begin{figure}[htb]
@@ -80,33 +479,5 @@ Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panel 
 \caption{Global Trigger patch panel for optical link}
 \label{fig:app:ugt_pp}
 \end{figure}
-
-\subsection{Description of simulation, synthesis and hardware tests}\label{sec:app:app_e}
-
-Workflow for simulation and synthesis of firmware is described in \href{\gitbranch/README.md}{\texttt{README}} file.\\\\
-List of useful TDF routines and commands for hardware tests:
-\begin{itemize}
-\item Check crate status\\
-\greybox{\$ tdf run crate\_status}
-\item Enable TTC signals on AMC13 for all MP7 modules\\
-\greybox{\$ tdf run ttc\_enable}
-\item Check lock of BC0 and LHC clock\\
-\greybox{\$ tdf unittest <module> default}
-\item Reset module\\
-\greybox{\$ tdf mp7butler reset <module> --clksrc external --clkcfg default-ext}
-\item Load firmware to scansd card on all MP7 modules [and load it into FPGAs]\\
-\greybox{\$ tdf run uploadfw\_gt <tar file path> [--rebootfpga]}
-\item Load firmware from scansd card into FPGAs\\
-\greybox{\$ tdf run loadfw\_gt <fw build nr> <nr modules>}
-\item Compare hardware results with test vector pattern (for a certain firmware build)\\
-\greybox{\$ tdf run multiboard\_function\_test -h}
-\item Setup links (GTHs)\\
-\greybox{\$ tdf mp7butler rxmgts <module> -e <links>}
-\item Align links (GTHs)\\
-\greybox{\$ tdf mp7butler rxalign <module> -e <links> [--to-bx <alignment point>]}
-\item Check minipods\\
-\greybox{\$ tdf mp7butler minipods <module>}
-\item ... (other routines are available in /nfshome0/ugtdev/software/tdf/etc/routines)
-\end{itemize}
 
 \clearpage

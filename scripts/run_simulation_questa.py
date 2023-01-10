@@ -54,8 +54,8 @@ DefaultIpbFwTag = 'v1.4'
 DefaultGitlabUrlMP7 = 'https://gitlab.cern.ch/cms-cactus/firmware/mp7'
 """Default URL MP7 FW repo."""
 
-## HB 2022-09-21: using tag of MP7 firmware "original" repo
-DefaultMP7Tag = 'v3.0.0'
+## HB 2022-10-04: using tag of MP7 firmware "original" repo
+DefaultMP7Tag = 'v3.2.2'
 """Default tag MP7 FW repo."""
 
 vhdl_snippets_names = [
@@ -65,6 +65,7 @@ vhdl_snippets_names = [
     'ugt_constants'
 ]
 
+DO_FILE_TMP = 'gtl_fdl_wrapper_tmp.do'
 DO_FILE = 'gtl_fdl_wrapper.do'
 TB_FILE_TPL = os.path.join('testbench', 'templates', 'gtl_fdl_wrapper_tb_tpl.vhd')
 TB_FILE = os.path.join('testbench', 'gtl_fdl_wrapper_tb.vhd')
@@ -216,7 +217,7 @@ class Module(object):
     def make_files(self, sim_dir, view_wave, mp7_tag, menu_path, ipb_fw_dir):  # makes files for simulation
         render_template(
             os.path.join(sim_dir, DO_FILE_TPL),
-            os.path.join(self.path, DO_FILE),
+            os.path.join(self.path, DO_FILE_TMP),
             {
                 '{{MP7_TAG}}': mp7_tag,
                 '{{VIEW_WAVE}}': format(view_wave),
@@ -259,6 +260,25 @@ class Module(object):
             os.path.join(uGTalgosPath, 'hdl', 'payload', 'gtl_module_tpl.vhd'),
             os.path.join(self.path, 'vhdl', 'gtl_module.vhd'),
             replace_map
+        )
+
+        # Create 'anomaly_detection.txt' from 'anomaly_detection.dep'
+        adt_dep_file = os.path.join(uGTalgosPath, 'cfg', 'anomaly_detection.dep')
+        adt_repl = os.path.join(uGTalgosPath, 'cfg', 'anomaly_detection.txt')
+        
+        with open(adt_dep_file) as fp:
+            adt_vhd = fp.read()
+        adt_vhd = adt_vhd.replace('src ', 'vcom -93 -work work $HDL_DIR/')
+        with open(adt_repl, 'w') as fp:
+            fp.write(adt_vhd)
+                        
+        # Insert content of 'anomaly_detection.txt' into DO_FILE
+        render_template(
+            os.path.join(self.path, DO_FILE_TMP),
+            os.path.join(self.path, DO_FILE),
+            {
+                '{{adt_vhd}}': read_file(os.path.join(uGTalgosPath, 'cfg', 'anomaly_detection.txt')),
+            }
         )
 
 def download_file_from_url(url, filename):
@@ -546,6 +566,12 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
     if os.path.exists(os.path.join(sim_dir, "temp_dir")):
         shutil.rmtree(os.path.join(sim_dir, "temp_dir"))
 
+    # remove 'anomaly_detection.txt'
+    cfg_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'firmware', 'cfg')
+    adt_txt = os.path.join(cfg_dir, 'anomaly_detection.txt')
+    command = f'bash -c "rm {adt_txt}"'
+    run_command(command)
+        
     if not success:
         logging.info("===========================================================================")
         logging.error(mismatches_exit_red)

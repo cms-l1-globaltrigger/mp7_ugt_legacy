@@ -3,14 +3,16 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.21.4
+-- mp7_ugt (=FRAME_VERSION): v1.21.8
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.21.4
+-- gt: v1.21.8
 -- frame: v1.3.1 (see frame.vhd)
 -- gtl: v1.18.0 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
+-- HB 2022-11-23: v1.21.6 - Updated doc/scales_inputs_2_ugt (added definition of muon shower bits).
+-- HB 2022-09-26: v1.21.4 - Used "demux" in formatter for algo outputs to enable "orbit header" for scouting in top_decl.vhd (therefore MP7 FW v3.2.2. or newer needed).
 -- HB 2022-09-26: v1.21.3 - Added script run_latex_w_versions.py (extract versions from gt_mp7_core_pkg.vhd, creates versions.tex and run latex ['make']).
 -- HB 2022-09-20: v1.21.1 - Updated scripts for MP7 patch in run_synth_ipbb.py.
 -- HB 2022-08-16: v1.21.0 - Signal start_sync_bc0_int used for reset of prescale counter (instead of begin_lumi_section). Removed sres signals for counters in FDL, not used anymore.
@@ -29,8 +31,9 @@
 -- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
 -- gtl history:
-
--- HB 2022-09-12: v1.18.0: Module for "anomaly detection trigger (ADT)" test.
+-- HB 2022-11-29: v1.18.0: Module for "anomaly detection trigger (ADT)" test.
+-- HB 2022-11-29: v1.17.6: Bug fix in algo_pre_scaler_fractional_float.vhd.
+-- HB 2022-11-16: v1.17.5: Bug fix in correlation_conditions.vhd.
 -- HB 2022-09-23: v1.17.4: Used "delay_pipeline" for condition output in esums_conditions.vhd, min_bias_hf_conditions.vhd and towercount_condition.vhd.
 -- HB 2022-09-02: v1.17.3: Cleaned up.
 -- HB 2022-02-16: v1.17.2: Bug fixed in comb_conditions.vhd.
@@ -84,8 +87,7 @@ package gt_mp7_core_pkg is
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GT_MINOR_VERSION      : integer range 0 to 255 := 21;
-    constant GT_REV_VERSION        : integer range 0 to 255 := 4;
-
+    constant GT_REV_VERSION        : integer range 0 to 255 := 8;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &

@@ -65,7 +65,7 @@ For every Algorithm there is a rate-counter before prescaler and after prescaler
 if the Algorithm and the L1A-signal are true at the same bunch-crossing.
 Algorithms after GTLogic, after algo-bx-masks, after prescalers, the local \finor- and local Veto-signal are provided for read-out-record.\\
 If there are not enough firmware resources in one \ugt board, more boards could be used. Therefore the 512 Algorithms are partitioned by TME. TME will set the number of Algorithms as
-constant in the package module \texttt{gtl\_pkg.vhd}. This means \ugtl and \ufdl firmware considered as a unit for synthesis. In the case of more \ugt boards, the local \finor and local veto are routed via
+constant in the package module \href{\gitbranch/firmware/hdl/packages/gtl_pkg.vhd}{\texttt{\textquotesingle gtl\_pkg.vhd\textquotesingle }}. This means \ugtl and \ufdl firmware considered as a unit for synthesis. In the case of more \ugt boards, the local \finor and local veto are routed via
 a mezzanine board on MP7 (located on "General Purpose I/O connector") to the FINOR-AMC502 module, where the total \finor is created and send to TCDS.\\
 A mapping for Algorithms is provided, to give flexibility for setting the index of Algorithms:
 \begin {itemize}
@@ -81,9 +81,9 @@ A mapping for Algorithms is provided, to give flexibility for setting the index 
 \subsection{Implementation in firmware}
 \label{sec:fdl:implementation_firmware}
 
-The entity-declaration of \href{\gitbranch/firmware/hdl/payload/fdl_module.vhd}{\texttt{fdl\_module.vhd}} is shown in \ref{sec:fdl:data_flow}.\\
+The entity declaration of \href{\gitbranch/firmware/hdl/payload/fdl_module.vhd}{\texttt{\textquotesingle fdl\_module.vhd\textquotesingle }} is shown in \ref{sec:fdl:data_flow}.\\
 
-Listing~\ref{lst:fdl:fdl_module_vhd} contains the entity-declaration of the \texttt{fdl\_module.vhd}.\\
+Listing~\ref{lst:fdl:fdl_module_vhd} contains the entity declaration of \href{\gitbranch/firmware/hdl/payload/fdl_module.vhd}{\texttt{\textquotesingle fdl\_module.vhd\textquotesingle }}.\\
 
 \lstinputlisting[label=lst:fdl:fdl_module_vhd,language=VHDL,caption=Entity declaration of \texttt{fdl\_module.vhd}]{interfaces/fdl_module.vhd}
 
@@ -138,7 +138,7 @@ Listing~\ref{lst:fdl:fdl_module_vhd} contains the entity-declaration of the \tex
 
 \subsection{Main parts}
 
-The top-of-hierarchy module (\href{\gitbranch/firmware/hdl/payload/fdl_module.vhd}{\texttt{fdl\_module.vhd}}) contains
+The top-of-hierarchy module (\href{\gitbranch/firmware/hdl/payload/fdl_module.vhd}{\texttt{\textquotesingle fdl\_module.vhd\textquotesingle }}) contains
 \begin {itemize}
 \item version registers
 \item a command pulse register

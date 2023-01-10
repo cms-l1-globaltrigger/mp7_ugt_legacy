@@ -21,9 +21,9 @@ Definitions are based on document~\cite{interface}.
 \begin{itemize}
 \item Calo-Layer2 data
 \begin{itemize}
-\item Electron/$\gamma$ objects
-\item Jet objects
-\item Tau objects
+\item Electron/$\gamma$ objects (EG0..EG11)
+\item Jet objects (JET0..JET11)
+\item Tau objects (TAU0..TAU11)
 \item Energy summary information:
 \begin{itemize}
 \item Total Et (\ett)
@@ -35,11 +35,15 @@ Definitions are based on document~\cite{interface}.
 \item Missing Ht including HF (HT$_{miss}^{HF}$)
 \item "Asymmetry" information (ASYMET, ASYMHT, ASYMETHF, ASYMHTHF)
 \end{itemize}
-\item Minimum bias HF bits (included in energy summary information data structure)
-\item Towercount bits (number of firing HCAL towers, included in energy summary information data structure)
-\item "Centrality" bits
+\item Minimum bias HF bits (MBT0HFP, MBT0HFM, MBT1HFP and MBT1HFM; part of energy summary information data structure)
+\item Towercount bits (TOWERCOUNT, number of firing HCAL towers; part of energy summary information data structure)
+\item "Centrality" bits (CENT0..CENT7; part of energy summary information data structure)
 \end{itemize}
 \item \gmt data
+\begin{itemize}
+\item Muon objects (MU0..MU7)
+\item Muon shower bits (bit 61 on MU0, MU2, MU4, MU6)
+\end{itemize}
 \item External conditions
 \end{itemize}
 \textbf{Outputs:}
@@ -53,7 +57,7 @@ Definitions are based on document~\cite{interface}.
 \textbf{Remark:}\\
 All definitions for scales in the following chapters are from a CMS Detector Note: "Scales for inputs to $\mu$GT" (see~\cite{interface}).
 
-\subsubsection{Calo-Layer2 optical interfaces}
+\subsubsection{Calo-Layer2 optical interface}
 \label{sec:gtl:gct_optical_interfaces}
 
 The data structure of an \egamma object (bits 27..31 are not defined yet, reserved for quality, ...):
@@ -68,7 +72,8 @@ The data structure of an \egamma object (bits 27..31 are not defined yet, reserv
 \end{bytefield}
 \end{center}
 
-The data structure of a jet object (bits 30..31 are spare bits):
+The data structure of a jet object:\\
+\tiny{Remark: "D" means DISP bit (displaced jet) - "qu" means quality flags - "sp" means spare bits.}\normalsize
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,10,11,18,19,26,27,27,28,29,30,31} \\
@@ -80,7 +85,6 @@ The data structure of a jet object (bits 30..31 are spare bits):
         \bitbox {11}    {\texttt{\et}} \\
 \end{bytefield}
 \end{center}
-D = DISP bit, qu = quality flags, sp = spare bits.
 
 The data structure of a tau object (bits 27..31 are not defined yet, reserved for quality, ...):
 \begin{center}
@@ -160,16 +164,16 @@ The data structure of "Missing Ht including HF" (HT$_{miss}^{HF}$) quantity [inc
 \end{bytefield}
 \end{center}
 
-\subsubsection{\gmt optical interfaces}
+\subsubsection{\gmt optical interface}
 \label{sec:gtl:gmt_optical_interfaces}
 
-The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = charge valid, bit 61 is a spare bit, bit 63..62 = impact parameter):
-
+The data structure of a muon object (64 bits):\\
+\tiny{Remark: "extrapol." means extrapolated - "qual" means quality bits - "iso" means isolation bits - "ch" means charge bits (bit 34 = charge sign, bit 35 = charge valid) - "m" means muon shower bit (on MU0 [MUS0], MU2 [MUS1], MU4 [MUSOOT0] and MU6 [MUSOOT1]; spare on MU1, MU3, MU5 and MU7) - "imp" = impact parameter.}\normalsize
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
         \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
         \bitbox {2}     {\small  \texttt{imp}}       &
-        \bitbox {1}     {\small  \texttt{s}}       &
+        \bitbox {1}     {\small  \texttt{m}}       &
         \bitbox {8}     {\texttt{unconst.\pt}}       &
         \bitbox {10}    {\texttt{$\varphi$} (out)}
         \bitbox {7}     {\texttt{index bits}}
@@ -183,7 +187,6 @@ The data structure of a muon object (64 bits - bit 34 = charge sign, bit 35 = ch
         \bitbox {10}    {\texttt{$\varphi$} (extrapol.)} \\
 \end{bytefield}
 \end{center}
-ch = charge bits, s = muon shower bit (on MU0, MU2, MU4 and MU6), imp = impact parameter.
 
 \clearpage
 
@@ -192,12 +195,12 @@ ch = charge bits, s = muon shower bit (on MU0, MU2, MU4 and MU6), imp = impact p
 
 The firmware of \ugtl consists of two main parts:
 \begin{itemize}
-\item A top-of-hierarchy file (\texttt{gtl\_module.vhd}), which contains the pipeline for $\pm$2bx data, the instantiations of calculators for differences in $\eta$ and $\varphi$, the instantiations of conditions, the instantiations of charge correlation logic of muons and the Algorithms logic for 512 Algorithms, as well as a package file (\href{\gitbranch/tree/master/firmware/hdl/packages/gtl_pkg.vhd}{\texttt{gtl\_pkg.vhd}}) for declarations.
+\item A top-of-hierarchy file \href{\gitbranch/firmware/hdl/payload/gtl\_module\_tpl.vhd}{\texttt{\textquotesingle gtl\_module.vhd\textquotesingle }}, which contains the pipeline for $\pm$2bx data, the instantiations of calculators for differences in $\eta$ and $\varphi$, the instantiations of conditions, the instantiations of charge correlation logic of muons and the Algorithms logic for 512 Algorithms, as well as a package file (\href{\gitbranch/firmware/hdl/packages/gtl\_pkg.vhd}{\texttt{\textquotesingle gtl\_pkg.vhd\textquotesingle }}) for declarations.
 Currently 6 AMC (MP7) boards are used to contain Algorithms.\\
 A software tool called Trigger Menu Editor (TME)~\cite{TME_repo} is available to create a L1Menu with up to 512 Algorithms, which are partitioned by VHDL Producer~\cite{VHDL_Producer} to the 6 MP7 boards.\\
-The VHDL Producer for every Trigger Menu creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}).\\
-These snippets are inserted into templates for \texttt{gtl\_module.vhd} (\href{\gitbranch/tree/master/firmware/hdl/payload/gtl/gtl_module_tpl.vhd}{\texttt{gtl\_module\_tpl.vhd}}), \texttt{algo\_mapping\_rop.vhd} (\href{\gitbranch/tree/master/firmware/hdl/payload/fdl/algo_mapping_rop_tpl.vhd}{\texttt{algo\_mapping\_rop\_tpl.vhd}}) and \texttt{fdl\_pkg.vhd} (\href{\gitbranch/tree/master/firmware/hdl/packages/fdl_pkg_tpl.vhd}{\texttt{fdl\_pkg\_tpl.vhd}}) during simulation and synthesis (see Figure \ref{fig:gtl:tme_gtl}).
-\item A set of VHDL-files exists for all the modules instantiated in top-of-hierarchy and the modules in the hierarchy. These files, called the "fixed part", are not influenced by VHDL Producer.
+The VHDL Producer creates VHDL snippets files (\texttt{algo\_index.vhd}, \texttt{gtl\_module\_instances.vhd}, \texttt{gtl\_module\_signals.vhd}, \texttt{ugt\_constants.vhd}) for a certain Trigger Menu.\\
+These snippets are inserted into templates for \href{\gitbranch/firmware/hdl/payload/gtl\_module\_tpl.vhd}{\texttt{\textquotesingle gtl\_module\_tpl.vhd\textquotesingle }}, \href{\gitbranch/firmware/hdl/payload/fdl/algo_mapping_rop_tpl.vhd}{\texttt{\textquotesingle algo\_mapping\_rop\_tpl.vhd\textquotesingle }} and \href{\gitbranch/firmware/hdl/packages/fdl_pkg_tpl.vhd}{\texttt{\textquotesingle fdl\_pkg\_tpl.vhd\textquotesingle }} during simulation and synthesis (see Figure \ref{fig:gtl:tme_gtl}).
+\item A set of VHDL files exists for all the modules instantiated in top-of-hierarchy and the modules in the hierarchy. These files, called the "fixed part", are not influenced by VHDL Producer.
 \end{itemize}
 
 \begin{figure}[htb]
@@ -210,25 +213,27 @@ These snippets are inserted into templates for \texttt{gtl\_module.vhd} (\href{\
 The latency of \ugtl is fixed to 5 bunch-crossings,
 2 bunch-crossings for the pipeline of $\pm$2bx data (for data with +2bx and +1bx), 2 bunch-crossings for conditions (fixed), also for the conditions requested in the future, 1 bunch-crossing for the logic of Algorithms (see Figure \ref{fig:gtl:gtl_pipeline}).\\
 
-\subsubsection{Top-of-hierarchy module}
+\subsubsection{Top-of-hierarchy module of \ugtl}
 \label{sec:gtl:top_module}
 
-The top-of-hierarchy module (\texttt{gtl\_module.vhd}) contains
+The top-of-hierarchy module of \ugtl (\href{\gitbranch/firmware/hdl/payload/gtl\_module\_tpl.vhd}{\texttt{\textquotesingle gtl\_module\_tpl.vhd\textquotesingle }}) contains
 \begin {itemize}
-\item the pipeline for $\pm$2bx data
-\item the instantiations of charge correlation logic of muons (generated by VHDL Producer)
-\item the instantiations of calculators for differences in $\eta$ and $\varphi$ (generated by VHDL Producer)
-\item the instantiations of conditions (generated by VHDL Producer)
-\item a boolean logic for Algorithms (generated by VHDL Producer)
+\item pipeline for $\pm$2bx data
+\item instantiations of charge correlation logic of muons (generated by VHDL Producer)
+\item instantiations of calculators for differences in $\eta$ and $\varphi$ (generated by VHDL Producer)
+\item instantiations of calculators for $\Delta\eta$ and $\Delta\varphi$ cuts  (generated by VHDL Producer)
+\item instantiations of calculators for mass, $\Delta$R and two-body pt cuts  (generated by VHDL Producer)
+\item instantiations of conditions (generated by VHDL Producer)
+\item boolean logic for Algorithms (generated by VHDL Producer)
 \end {itemize}
 
-Listing~\ref{lst:gtl:gtl_module_vhd} contains the entity-declaration of the top-of-hierarchy file (\texttt{gtl\_module.vhd}).
+Listing~\ref{lst:gtl:gtl_module_vhd} contains the entity declaration of the top-of-hierarchy file of \ugtl.
 
-All the declarations for arrays ('type'), parameters ('constant') and look-up-tables ('constant') used in modules are available in \href{\gitbranch/tree/master/firmware/hdl/packages/gtl_pkg.vhd}{\texttt{gtl\_pkg.vhd}} package-file.
+All the declarations for arrays (\textquotesingle type\textquotesingle ), parameters (\textquotesingle constant\textquotesingle ) and look-up-tables (\textquotesingle constant\textquotesingle ) used in modules are available in \href{\gitbranch/firmware/hdl/packages/gtl_pkg.vhd}{\texttt{\textquotesingle gtl\_pkg.vhd\textquotesingle }} package-file.
 
 \clearpage
 
-\lstinputlisting[label=lst:gtl:gtl_module_vhd,language=VHDL,caption=Entity declaration of \texttt{gtl\_module.vhd}]{interfaces/gtl_module_tpl.vhd}
+\lstinputlisting[label=lst:gtl:gtl_module_vhd,language=VHDL,caption=Entity declaration of \texttt{gtl\_module\_tpl.vhd}]{interfaces/gtl_module_tpl.vhd}
 
 \medskip
 \begin{table}
@@ -273,10 +278,10 @@ on latency, because coming before data for a certain bunch-crossing.
 \subsubsection{Definitions of Calorimeter data}
 \label{sec:gtl:calorimeter_data}
 
-The calorimeter trigger processing identifies \textbf{\egamma, jet and tau} objects and \textbf{\esums}.\\
+The calorimeter trigger processing identifies \textbf{\egamma, jet} and \textbf{tau} objects and \textbf{\esums}.\\
 See also \ref{sec:gtl:optical_interfaces}.\\
 
-\textbf{\egamma}:\\ Twelve objects are passed to the \ugt for each event.\\
+\textbf{\Egamma}:\\ Twelve objects are passed to the \ugt for each event.\\
 For each selected object, the Calo-Layer2 sends parameters for \pt and for position and isolation - encoded in 32 bits:
 \begin{itemize}
 \item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
@@ -286,18 +291,18 @@ For each selected object, the Calo-Layer2 sends parameters for \pt and for posit
 \item 5 bits spare
 \end{itemize}
 
-\textbf{jet}:\\ Twelve objects are passed to the \ugt for each event.\\
+\textbf{Jet}:\\ Twelve objects are passed to the \ugt for each event.\\
 For each selected object, the Calo-Layer2 sends parameters: \pt, for position information, a DISP bit and quality information - encoded in 32 bits:
 \begin{itemize}
 \item 11 bits \pt, range = 0..1023 GeV (HW index = 0..0x7FF), step = 0.5, the highest bin will mark an overflow (HW index 0x7FF): meaning has to be defined
 \item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
-\item 1 DISP bit (will be used to flag a jet as delayed / displaced based on HCAL timing and depth profiles that are indicative of a LLP decay. If this bit is set to 1, then the jet has been tagged as an LLP jet.)
+\item 1 DISP bit (will be used to flag a jet as delayed / displaced based on HCAL timing and depth profiles that are indicative of a "long lived particle" (LLP) decay. If this bit is set to 1, then the jet has been tagged as a LLP jet.)
 \item 2 bits for "quality flags" - currently not used.
 \item 2 bits spare
 \end{itemize}
 
-\textbf{tau}:\\ Twelve objects are passed to the \ugt for each event.\\
+\textbf{Tau}:\\ Twelve objects are passed to the \ugt for each event.\\
 For each selected object, the Calo-Layer2 sends parameters for \pt and for position information and isolation - encoded in 32 bits:
 \begin{itemize}
 \item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
@@ -363,23 +368,21 @@ bits [26..25] & definition \\\hline\hline
 
 \subsubsection{Definitions of Energy sum quantities data}
 
-See also \ref{sec:gtl:optical_interfaces}.\\
-\textbf{\esums}:\\ Consists of following quantities (naming convention see in "Glossary"):
+See \ref{sec:gtl:optical_interfaces} for data structure.\\
+{\Esums} consist of following quantities (for naming convention see \ref{sec:glossary}):
 \begin{itemize}
-\item \textbf{\ett}
-\item \textbf{\htt}
-\item \textbf{\etm}
-\item \textbf{\htm}
-\item \textbf{ETTEM}
-\item \textbf{ET$_{miss}^{HF}$}
-\item \textbf{HT$_{miss}^{HF}$}
-\item \textbf{ASYMET}
-\item \textbf{ASYMHT}
-\item \textbf{ASYMETHF}
-\item \textbf{ASYMHTHF}
-\item \textbf{CENT0}
-\item \textbf..
-\item \textbf{CENT7}
+\item {\ett}
+\item {\htt}
+\item {\etm}
+\item {\htm}
+\item {ETTEM}
+\item {ET$_{miss}^{HF}$}
+\item {HT$_{miss}^{HF}$}
+\item {ASYMET}
+\item {ASYMHT}
+\item {ASYMETHF}
+\item {ASYMHTHF}
+\item {CENT[0..7]}
 \end{itemize}
 
 Calo-Layer2 sends 6 frames (each 32 bits) with Energy sum quantities containing the following information:
@@ -389,7 +392,7 @@ Calo-Layer2 sends 6 frames (each 32 bits) with Energy sum quantities containing 
 \item "Towercount", 13 bits, range = 0..8191
 \item "Minimum bias", 4 bits, range = 0..15
 \item "Asymmetry", 8 bits, range = 0..255 (used 0..100)
-\item "Centrality", 8 bits, used as signals
+\item "Centrality", 8 single bits, used as signals
 \end{itemize}
 
 Frame 0: The data structure of "Total Et" (\ett) quantity [including "Total Et from ECAL only" (ETTEM) and "minimum bias HF+ threshold 0" bits].
@@ -420,7 +423,7 @@ Eight Muon objects are provided by \gmt. One Muon object has a 64 bits data stru
 \item 7 index bits
 \item 10 bits azimuth angle ($\varphi$) position, raw data
 \item 8 bits unconstrained \pt, range = 0..255 GeV (HW index = 0..0xFF), step = 1.0, the highest bin will mark an overflow (HW index 0xFF)
-\item 1 spare bit
+\item 1 hadronic (muon) shower bit
 \item 2 bits impact parameter
 \end{itemize}
 
@@ -496,6 +499,23 @@ bits [33..32] & definition \\\hline\hline
 \label{tab:gtl:muon_iso_bits}
 \end{table}
 
+Muon shower bits definition is shown in Table~\ref{tab:gtl:tab_muon_shower_bits}.\\
+
+\begin{table}[ht]
+\caption{Definition of hadronic (muon) shower bits on bit 61 of muon objects}
+\vspace{5mm}
+\centering
+\begin{tabular}{|c|c|}\hline
+object & definition \\\hline\hline
+0 & MUS0 \\
+2 & MUS1 \\
+4 & MUSOOT0 \\
+6 & MUSOOT1 \\\hline
+\end{tabular}
+\label{tab:gtl:tab_muon_shower_bits}
+\end{table}
+
+
 The representation of the 2 bits for impact parameter is expected as shown in Table~\ref{tab:gtl:muon_iso_bits}.\\
 
 \begin{table}[ht]
@@ -523,7 +543,7 @@ List of object cuts:
 \item $\eta$
 \item $\varphi$
 \item isolation
-\item DISP
+\item DISP (displaced = "long lived particle" jet)
 \item charge
 \item quality
 \item unconstrained \pt
@@ -555,7 +575,7 @@ Only one of the required ranges ("windows") must be fulfilled by $\eta$ and $\va
 
 The comparisons for isolation, quality and impact parameter are done with LUTs.\\
 The comparison for charge is done with requested charge.\\
-If DISP bit is set to 1, then the jet has been tagged as an LLP jet. A one bit requirement is given for DISP for comparison.\\
+If DISP bit is set to 1, then the jet has been tagged as a "long lived particle" (LLP) jet. A one bit requirement is given for DISP for comparison.\\
 
 \begin{figure}[htb]
 \centering
@@ -743,7 +763,7 @@ Due the limited number of available BRAMs there are some restrictions for creati
 \item The values of LUTs are only valid for current definitions and restrictions. Every change might cause a recalculation of the values and a regeneration of IPs (representing LUTs in BRAMs) in Vivado (firmware generation tool)
 \end{itemize}
 
-The values of LUTs in firmware are listed in coe files of ROMs (created by same scripts mentioned above), currently 5 ROMs for "calo calo" and 6 ROMs for "muon muon" (see \href{\gitbranch/tree/master/firmware/ngc/lut_calo_inv_dr_sq_rom1.coe}{\texttt{lut\_calo\_inv\_dr\_sq\_rom1.coe}}, etc. and \href{\gitbranch/tree/master/firmware/ngc/lut_muon_inv_dr_sq_rom1.coe}{\texttt{lut\_muon\_inv\_dr\_sq\_rom1.coe}}, etc.). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. All ROMs for calos have 4096 addresses, for muons 8192 addresses. The data width of ROMs is different depending on the highest LUT value in ROM. Because of these different data widths, the partitioning of several ROMs was done to save BRAM resources. Currently 873 BRAMs (36kb) are available per Virtex chip.
+The values of LUTs in firmware are listed in coe files of ROMs (created by same scripts mentioned above), currently 5 ROMs for "calo calo" and 6 ROMs for "muon muon" (see \href{\gitbranch/firmware/ngc/lut_calo_inv_dr_sq_rom1.coe}{\texttt{\textquotesingle lut\_calo\_inv\_dr\_sq\_rom1.coe\textquotesingle }}, etc. and \href{\gitbranch/firmware/ngc/lut_muon_inv_dr_sq_rom1.coe}{\texttt{\textquotesingle lut\_muon\_inv\_dr\_sq\_rom1.coe\textquotesingle }}, etc.). The addresses of the BRAMs are given by $\Delta\eta$ and $\Delta\varphi$. All ROMs for calos have 4096 addresses, for muons 8192 addresses. The data width of ROMs is different depending on the highest LUT value in ROM. Because of these different data widths, the partitioning of several ROMs was done to save BRAM resources. Currently 873 BRAMs (36kb) are available per Virtex chip.
 Following numbers of BRAMs (36kb) are needed for:
 \begin{itemize}
 \item "calo calo": 660
@@ -773,13 +793,29 @@ The calculation of ${pt^2}$ in VHDL (no square root in VHDL) using LUTs for pt1,
 \label{sec:gtl:muon_charge_correlation_module}
 
 For definition of muon charge, see \ref{sec:gtl:muon_data}.\\
-In the muon charge correlation module (\href{\gitbranch/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd}{\texttt{muon\_charge\_correlations.vhd}}), the charge correlations are made for different muon conditions-types. The module is instantiated in the top-of-hierarchy module (\texttt{gtl\_module.vhd})
+In the muon charge correlation module (\href{\gitbranch/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd}{\texttt{\textquotesingle muon\_charge\_correlations.vhd\textquotesingle }}), the charge correlations are made for different muon conditions types. The module is instantiated in the top-of-hierarchy module (\href{\gitbranch/firmware/hdl/payload/gtl\_module\_tpl.vhd}{\texttt{\textquotesingle gtl\_module.vhd\textquotesingle }})
 and not inside of a muon conditions module.
 The charges of objects (number of objects depends on muon condition type) are compared to get "like sign charge" ("LS") or "opposite sign charge" ("0S"), "LS" means that the charges (charge sign)
 of objects are the same, "0S" means that at least one object has different charge than the others. This information is used in all instatiated muon conditions.
 There is no charge correlation for single type conditions.\\
 In all cases the "charge valid" bit of the objects must be set.\\
 In TME one can select "LS", "0S" or ignore for charge correlation in muon conditions.\\
+
+% \begin{table}[ht]
+% \caption{Muon charge correlation - Double Muon}
+% \vspace{5mm}
+% \centering
+% \begin{tabular}{|c|l|}\hline
+% \verb|x x| & I ignore (charge x = +, -, I) \\
+% \verb|+ +| & LS both positive muons \\
+% \verb|- -| & LS both negative muons \\
+% \verb|I I| & LS both muons with the same sign, positive or negative \\
+% \verb|+ -| & OS two muons of opposite sign \\
+% \verb|- +| & OS idem \\
+% \verb|I I| & OS idem \\\hline
+% \end{tabular}
+% \label{tab:gtl:muon_charge_corr_double}
+% \end{table}
 
 \begin{table}[ht]
 \caption{Muon charge correlation - Double Muon}
@@ -789,13 +825,27 @@ In TME one can select "LS", "0S" or ignore for charge correlation in muon condit
 \verb|x x| & I ignore (charge x = +, -, I) \\
 \verb|+ +| & LS both positive muons \\
 \verb|- -| & LS both negative muons \\
-\verb|I I| & LS both muons with the same sign, positive or negative \\
-\verb|+ -| & OS two muons of opposite sign \\
-\verb|- +| & OS idem \\
-\verb|I I| & OS idem \\\hline
+\verb|+ -| & OS two muons of opposite sign (a pair) \\
+\verb|- +| & OS two muons of opposite sign (a pair) \\\hline
 \end{tabular}
 \label{tab:gtl:muon_charge_corr_double}
 \end{table}
+
+% \begin{table}[ht]
+% \caption{Muon charge correlation - Triple Muon}
+% \vspace{5mm}
+% \centering
+% \begin{tabular}{|c|l|}\hline
+% \verb|x x x| & I  ignore (charge x = +, -, I) \\
+% \verb|+ + +| & LS three muons of positive charge \\
+% \verb|- - -| & LS three muons of negative charge \\
+% \verb|I I I| & LS three muons of the same sign (positive or negative) \\
+% \verb|+ + -| & OS a pair plus a positive muon \\
+% \verb|+ - -| & OS a pair plus a negative muon \\
+% \verb|+ - I| & OS a pair plus a negative or positive muon \\\hline
+% \end{tabular}
+% \label{tab:gtl:muon_charge_corr_triple}
+% \end{table}
 
 \begin{table}[ht]
 \caption{Muon charge correlation - Triple Muon}
@@ -805,13 +855,32 @@ In TME one can select "LS", "0S" or ignore for charge correlation in muon condit
 \verb|x x x| & I  ignore (charge x = +, -, I) \\
 \verb|+ + +| & LS three muons of positive charge \\
 \verb|- - -| & LS three muons of negative charge \\
-\verb|I I I| & LS three muons of the same sign (positive or negative) \\
+\verb|- + +| & OS a pair plus a positive muon \\
+\verb|+ - +| & OS a pair plus a positive muon \\
 \verb|+ + -| & OS a pair plus a positive muon \\
 \verb|+ - -| & OS a pair plus a negative muon \\
-\verb|+ - I| & OS a pair plus a negative or positive muon \\\hline
+\verb|- + -| & OS a pair plus a negative muon \\
+\verb|- - +| & OS a pair plus a negative muon \\\hline
 \end{tabular}
 \label{tab:gtl:muon_charge_corr_triple}
 \end{table}
+
+% \begin{table}[ht]
+% \caption{Muon charge correlation - Quad Muon}
+% \vspace{5mm}
+% \centering
+% \begin{tabular}{|c|l|}\hline
+% \verb|x x x x| & I  ignore (charge x = +, -, I) \\
+% \verb|+ + + +| & LS four muons of positive charge \\
+% \verb|- - - -| & LS four muons of negative charge \\
+% \verb|I I I I| & LS four muons of the same sign (positive or negative) \\
+% \verb|+ + + -| & OS a pair plus two positive muons \\
+% \verb|+ + - -| & OS two pairs \\
+% \verb|+ - - -| & OS a pair plus two negative muons \\
+% \verb|+ - I I| & OS a pair plus two negative or positive muons \\\hline
+% \end{tabular}
+% \label{tab:gtl:muon_charge_corr_quad}
+% \end{table}
 
 \begin{table}[ht]
 \caption{Muon charge correlation - Quad Muon}
@@ -821,11 +890,20 @@ In TME one can select "LS", "0S" or ignore for charge correlation in muon condit
 \verb|x x x x| & I  ignore (charge x = +, -, I) \\
 \verb|+ + + +| & LS four muons of positive charge \\
 \verb|- - - -| & LS four muons of negative charge \\
-\verb|I I I I| & LS four muons of the same sign (positive or negative) \\
+\verb|- + + +| & OS a pair plus two positive muons \\
+\verb|+ - + +| & OS a pair plus two positive muons \\
+\verb|+ + - +| & OS a pair plus two positive muons \\
 \verb|+ + + -| & OS a pair plus two positive muons \\
 \verb|+ + - -| & OS two pairs \\
+\verb|+ - + -| & OS two pairs \\
+\verb|+ - - +| & OS two pairs \\
+\verb|- - + +| & OS two pairs \\
+\verb|- + - +| & OS two pairs \\
+\verb|- + + -| & OS two pairs \\
 \verb|+ - - -| & OS a pair plus two negative muons \\
-\verb|+ - I I| & OS a pair plus two negative or positive muons \\\hline
+\verb|- + - -| & OS a pair plus two negative muons \\
+\verb|- - + -| & OS a pair plus two negative muons \\
+\verb|- - - +| & OS a pair plus two negative muons \\\hline
 \end{tabular}
 \label{tab:gtl:muon_charge_corr_quad}
 \end{table}
@@ -999,11 +1077,11 @@ TAU-TAU-InverseDeltaRMath\\
 MU-MU-InverseDeltaRMath\\
 
 The LUTs are located in BRAMs.\\
-For calo-calo mass over deltaR 5 ROMs are needed to represend the LUT. The content of the LUT one can see in \href{\gitbranch/tree/master/firmware/hdl/ngc/blk_mem_gen_v8_4_4/lut_calo_inv_dr_sq_rom1.coe}{\texttt{lut\_calo\_inv\_dr\_sq\_rom1.coe}} (and so on).\\
-For muon-muon mass over deltaR 6 ROMs are needed to represend the LUT. The content of the LUT one can see in \href{\gitbranch/tree/master/firmware/hdl/ngc/blk_mem_gen_v8_4_4/lut_muon_inv_dr_sq_rom1.coe}{\texttt{lut\_muon\_inv\_dr\_sq\_rom1.coe}} (and so on).\\
-The access to a certain ROM depends on the values of $\Delta\eta$ and $\Delta\varphi$ (see \href{\gitbranch/tree/master/test_rom_lut_calo_inv_dr_sq_all/doc/description_rom_lut_calo_inv_dr_sq.txt}{\texttt{description\_rom\_lut\_calo\_inv\_dr\_sq.txt}} and \href{\gitbranch/tree/master/firmware/hdl/payload/gtl/common/rom_lut_calo_inv_dr_sq_all.vhd}{\texttt{rom\_lut\_calo\_inv\_dr\_sq\_all.vhd}}, respectively\\ 
-\href{\gitbranch/tree/master/test_rom_lut_muon_inv_dr_sq_all/doc/description_rom_lut_muon_inv_dr_sq.txt}{\texttt{description\_rom\_lut\_muon\_inv\_dr\_sq.txt}} and\\
-\href{\gitbranch/tree/master/firmware/hdl/payload/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd}{\texttt{rom\_lut\_muon\_inv\_dr\_sq\_all.vhd}}).\\
+For calo-calo mass over deltaR 5 ROMs are needed to represend the LUT. The content of the LUT one can see in \href{\gitbranch/firmware/hdl/ngc/blk_mem_gen_v8_4_4/lut_calo_inv_dr_sq_rom1.coe}{\texttt{\textquotesingle lut\_calo\_inv\_dr\_sq\_rom1.coe\textquotesingle }} (and so on).\\
+For muon-muon mass over deltaR 6 ROMs are needed to represend the LUT. The content of the LUT one can see in \href{\gitbranch/firmware/hdl/ngc/blk_mem_gen_v8_4_4/lut_muon_inv_dr_sq_rom1.coe}{\texttt{\textquotesingle lut\_muon\_inv\_dr\_sq\_rom1.coe\textquotesingle }} (and so on).\\
+The access to a certain ROM depends on the values of $\Delta\eta$ and $\Delta\varphi$ (see \href{\gitbranch/test_rom_lut_calo_inv_dr_sq_all/doc/description_rom_lut_calo_inv_dr_sq.txt}{\texttt{\textquotesingle description\_rom\_lut\_calo\_inv\_dr\_sq.txt\textquotesingle }} and \href{\gitbranch/firmware/hdl/payload/gtl/common/rom_lut_calo_inv_dr_sq_all.vhd}{\texttt{\textquotesingle rom\_lut\_calo\_inv\_dr\_sq\_all.vhd\textquotesingle }}, respectively\\
+\href{\gitbranch/test_rom_lut_muon_inv_dr_sq_all/doc/description_rom_lut_muon_inv_dr_sq.txt}{\texttt{\textquotesingle description\_rom\_lut\_muon\_inv\_dr\_sq.txt\textquotesingle }} and\\
+\href{\gitbranch/firmware/hdl/payload/gtl/common/rom_lut_muon_inv_dr_sq_all.vhd}{\texttt{\textquotesingle rom\_lut\_muon\_inv\_dr\_sq\_all.vhd\textquotesingle }}).\\
 
 \textbf{LUTs for $\cos($$\varphi$$)$ used in two-body pt calculations}
 \label{sec:gtl:calc_luts_cos_phi}
@@ -1094,7 +1172,19 @@ Additionally charge correlation cuts with "Double objects requirements condition
 
 \paragraph{Energy sum quantities conditions module (including Asymmetry conditions)}
 
-For the entity-declaration of \href{\gitbranch/tree/master/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd}{\texttt{esums\_conditions.vhd}}, see Listing~\ref{lst:gtl:esums_conditions_vhd}.
+A comparator between \et and a threshold (et\_threshold) and, depending on object type, a comparison in $\varphi$ with
+two "window"-comparators is done in this module.
+The value for \et threshold, the \textquotesingle mode-selection\textquotesingle\  for the \et comparator and the limits for the "window"-comparators are given in the generic interface list of the module.
+The selection whether a comparison in $\varphi$ is part of the condition is done with the value of the generic parameter \textquotesingle obj\_type\textquotesingle\
+(\textquotesingle ETM\_TYPE\textquotesingle\ , \textquotesingle ETMHF\_TYPE\textquotesingle\ , \textquotesingle HTM\_TYPE\textquotesingle\ and \textquotesingle HTMHF\_TYPE\textquotesingle\ force a comparison).
+The comparison in $\varphi$ is done in the same way as for calorimeter conditions.
+Additionally the data structure of input data (data\_i in port interface list) is provided
+as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
+Data for Asymmetry trigger are received on 4 frames on bits 27..20 (8 bits). For every type a comparision with an 8-bit threshold (greater-equal [or equal]) is done.
+Asymmetry data are interpreted as counts.\\
+For the entity declaration of \href{\gitbranch/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/esums_conditions.vhd}{\texttt{\textquotesingle esums\_conditions.vhd\textquotesingle }}, see Listing~\ref{lst:gtl:esums_conditions_vhd}.
+
+\clearpage
 
 \lstinputlisting[label=lst:gtl:esums_conditions_vhd,language=VHDL,caption=Entity declaration of \texttt{esums\_conditions.vhd}]{interfaces/esums_conditions.vhd}
 
@@ -1108,8 +1198,8 @@ For the entity-declaration of \href{\gitbranch/tree/master/firmware/hdl/gt_mp7_c
 \toprule
 {Item} & {Explanation}\\
 \midrule
-\verb|et_ge_mode| & 'mode-selection' for the \et comparator. Valid strings are 'true' and 'false' (type is boolean), 'true' means comparator works on greater/equal, 'false' means equal (for tests only)\\
-\verb|obj_type| &  valid strings are 'ETT\_TYPE', 'HTT\_TYPE', 'ETM\_TYPE', 'HTM\_TYPE' and 'ETMHF\_TYPE'.\\
+\verb|et_ge_mode| & "mode-selection" for the \et comparator. Valid strings are "true" and "false" (type is boolean), "true" means comparator works on greater/equal, "false" means equal (for tests only)\\
+\verb|obj_type| &  valid strings are "ETT\_TYPE", "HTT\_TYPE", "ETM\_TYPE", "HTM\_TYPE" and "ETMHF\_TYPE".\\
 \verb|et_threshold| & threshold value for comparison in \et. The size of the std\_logic\_vector depends on the number of \et bits.\\
 \verb|phi_full_range| & boolean to set full range of $\varphi$.\\
 \verb|phi_w1_upper_limits| & "upper limit" of "window"-comparator 1 for $\varphi$.\\
@@ -1125,23 +1215,12 @@ For the entity-declaration of \href{\gitbranch/tree/master/firmware/hdl/gt_mp7_c
 \label{tab:gtl:explanation_esums_conditions_vhd}
 \end{table}
 
-A comparator between \et and a threshold (et\_threshold) and, depending on object type, a comparison in $\varphi$ with
-two "window"-comparators is done in this module.
-The value for \et threshold, the 'mode-selection' for the \et comparator and the limits for the "window"-comparators are given in the generic interface list of the module.
-The selection whether a comparison in $\varphi$ is part of the condition is done with the value of the generic parameter 'obj\_type'
-('ETM\_TYPE', 'ETMHF\_TYPE', 'HTM\_TYPE' and 'HTMHF\_TYPE' force a comparison).
-The comparison in $\varphi$ is done in the same way as for calorimeter conditions.
-Additionally the data-structure of input data (data\_i in port interface list) is provided
-as a record in this list. The output signal of the module is in high state, if all comparisons are true.\\
-Data for Asymmetry trigger are received on 4 frames on bits 27..20 (8 bits). For every type a comparision with an 8-bit threshold (greater-equal [or equal]) is done.
-Asymmetry data are interpreted as counts.
-
 \clearpage
 
 \subsubsection{Muon shower bits}
 \label{sec:gtl:muon_shower_bits}
 
-Muon shower bits MUS0, MUS1, MUSOOT0 (muon shower out of time), MUSOOT1 (muon bit 61 on MU0, MU2, MU4 and MU6) can be selected by TME to an algo or combined with other conditions to an algo.
+Muon shower bits MUS0 (MUon Shower, bit 61 on MU0), MUS1 (bit 61 on MU2), MUSOOT0 (MUon Shower Out Of Time, bit 61 on MU4), MUSOOT1 (bit 61 on MU6) (see \ref{sec:gtl:muon_data} and Table~\ref{tab:gtl:tab_muon_shower_bits}) can be selected by TME to an algo or combined with other conditions to an algo .
 
 \subsubsection{Minimum bias trigger conditions}
 \label{sec:gtl:min_bias_conditions}
@@ -1297,7 +1376,7 @@ There are two correlations for mass with three objects:
 \item Correlation condition for mass with three objects with muon objects\\
 \end{itemize}
 
-In correlation condition with calorimeter and muons objects we have different scales of calorimeter and muon objects in $\eta$ and $\varphi$, therefore LUTs for conversion of the calorimeter bins to muon bins are used (in \texttt{gtl\_pkg.vhd}:
+In correlation condition with calorimeter and muons objects we have different scales of calorimeter and muon objects in $\eta$ and $\varphi$, therefore LUTs for conversion of the calorimeter bins to muon bins are used (in \href{\gitbranch/firmware/hdl/packages/gtl_pkg.vhd}{\texttt{\textquotesingle gtl\_pkg.vhd\textquotesingle }}:
  e.g. \small{EG\_ETA\_CONV\_2\_MUON\_ETA\_LUT}\normalsize  and \small{EG\_PHI\_CONV\_2\_MUON\_PHI\_LUT}\normalsize).\\\\
 \textbf{Remark:}\\
 The center value of bins are used as reference value for conversion.
@@ -1329,7 +1408,7 @@ Definitions of scales (see Tables \ref{tab:gtl:calo_eta_scale_new}, \ref{tab:gtl
 
 \subsubsection{Anomaly Detection Trigger}
 \label{sec:gtl:adt}
-The possibility of implementing "Anomaly detection Trigger" is forseen in this version of \ugtl. Therefore a VHDL entity is defined. The VHDL code for "Anomaly detection Trigger" is provided by groups outside of \gt for synthesis of firmware.
+The possibility of implementing "Anomaly detection Trigger" is forseen in this version of \ugtl. The VHDL code is given by "Anomaly detection Trigger" group in ../firmware/hdl/payload/gtl/anomaly\_detection with \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/anomaly_detection.vhd}{\texttt{anomaly\_detection.vhd}} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/adt_wrapper.vhd}{\texttt{adt\_wrapper.vhd}} module anomaly\_detection.vhd is instantiated and a comparison of the output of anomaly\_detection.vhd ("anomaly\_score") with a given threshold is implemented to get an "Anomaly detection Trigger". External condition bits are used as placeholder for the definition of thresholds for "Anomaly detection Trigger" (e.g.: EXT\_ADT\_25, which mean threshold=25). External condition bits 192..223 are reserved for "Anomaly detection Trigger" thresholds.
 
 \subsubsection{External Conditions}
 \label{sec:gtl:external_conditions}

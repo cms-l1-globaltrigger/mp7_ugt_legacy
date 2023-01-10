@@ -75,7 +75,6 @@ src payload/gtl/min_bias_hf_conditions.vhd
 src payload/gtl/towercount_condition.vhd
 src payload/gtl/correlation_cuts_calculation.vhd
 src payload/gtl/correlation_conditions.vhd
-src payload/gtl/anomaly_detection/anomaly_detection.vhd
 src payload/gtl/anomaly_detection/adt_wrapper.vhd
 #
 ### modules of BRAMs used for mass over DeltaR

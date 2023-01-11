@@ -17,8 +17,8 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef MYPROJECT_H_
-#define MYPROJECT_H_
+#ifndef VAE_HLS_H_
+#define VAE_HLS_H_
 
 #include "ap_int.h"
 #include "ap_fixed.h"
@@ -27,9 +27,9 @@
 #include "defines.h"
 
 // Prototype of top level function for C-synthesis
-void myproject(
-    input_t input_7[N_INPUT_1_1],
-    result_t layer12_out[KL_LOSS_12]
+void VAE_HLS(
+    input_t input_3[N_INPUT_1_1],
+    result_t layer6_out[N_LAYER_6]
 );
 
 #endif

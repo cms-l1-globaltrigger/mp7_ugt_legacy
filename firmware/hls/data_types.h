@@ -10,7 +10,7 @@
 // https://github.com/cms-sw/cmssw/tree/master/DataFormats/L1TParticleFlow/interface
 
 typedef ap_fixed<9,2> cossin_t;
-typedef ap_fixed<9,3> sinh_t;
+typedef ap_fixed<13,7> sinh_t;
 
 static constexpr int N_TABLE = 2048;
 
@@ -26,6 +26,11 @@ namespace Scales{
 
   static const double MUON_PT_LSB = 0.5;
   static const double CALO_PT_LSB = 0.5;
+  
+  const int INTPHI_PI = 720;
+
+  static const int MUON_HALF_PI = 144;
+  static const int CALO_HALF_PI = 36;
 }; // namespace Scales
 
 /* ---
@@ -131,6 +136,15 @@ struct Muon{
     return ret;
   }
 
+  inline static Muon initFromHWInt(int pt, int eta, int phi){
+      Muon muon;
+      muon.clear();
+      muon.pt.V = pt;
+      muon.eta_extrapolated.V = eta;
+      muon.phi_extrapolated.V = phi;
+      return muon;
+  }
+
 }; // struct Muon
 
 /* ---
@@ -192,6 +206,15 @@ struct Jet{
     return ret;
   }
 
+  inline static Jet initFromHWInt(const int et, const int eta, const int phi){
+    Jet ret;
+    ret.clear();
+    ret.et.V = et;
+    ret.eta.V = eta;
+    ret.phi.V = phi;
+    return ret;
+  }
+
 }; // struct Jet
 
 /* ---
@@ -249,6 +272,15 @@ struct CaloCommon{
     return ret;
   }
 
+  inline static CaloCommon initFromHWInt(const int et, const int eta, const int phi){
+    CaloCommon ret;
+    ret.clear();
+    ret.et.V = et;
+    ret.eta.V = eta;
+    ret.phi.V = phi;
+    return ret;
+  }
+
 }; // struct CaloCommon
 
 typedef CaloCommon EGamma;
@@ -303,6 +335,14 @@ struct ET{
     ret.ettem = ettem;
     return ret;
   }
+
+  inline static ET initFromHWInt(const int et, const int ettem){
+    ET ret;
+    ret.clear();
+    ret.et.V = et;
+    ret.ettem.V = ettem;
+    return ret;
+  }
 }; // struct ET
 
 struct HT{
@@ -348,6 +388,13 @@ struct HT{
     HT ret;
     ret.clear();
     ret.et = et;
+    return ret;
+  }
+
+  inline static HT initFromHWInt(const int et){
+    HT ret;
+    ret.clear();
+    ret.et.V = et;
     return ret;
   }
 }; // struct HT
@@ -400,6 +447,14 @@ struct VectorSumsCommon{
     ret.et = et;
     ret.phi = round(phi / Scales::CALO_PHI_LSB);
     return ret;
+  } 
+
+  inline static VectorSumsCommon initFromHWInt(const int et, const int phi){
+    VectorSumsCommon ret;
+    ret.clear();
+    ret.et.V = et;
+    ret.phi.V = phi;
+    return ret;
   }  
 }; // struct VectorSumsCommon
 
@@ -418,11 +473,13 @@ static const int NTAUS = 12;
  * TODO: this is a first implementation, to be improved & expanded
  * TODO: these data types for px, py, pz are not optimized
  * --- */
-typedef ap_fixed<16,13> pxpypz_t;
+typedef ap_fixed<15,14> pxpypz_t;
 struct PxPyPz{
+
   pxpypz_t px;
   pxpypz_t py;
   pxpypz_t pz;
+
 
   static const int BITWIDTH = 36;
 

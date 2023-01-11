@@ -1,5 +1,6 @@
 #include "anomaly_detection.h"
 #include <math.h> 
+#include "NN/VAE_HLS.h"
 
 #define NTEST 1
 
@@ -26,10 +27,9 @@ PxPyPz_float ObjToCartesian(float pt_in,float eta_in,float phi_in)
     vec.pt  = pt_in;
     vec.eta = eta_in;
     vec.phi = phi_in;
-    vec.px = pt_in * cos(phi_in); //phi in radians
-    vec.py = pt_in * sin(phi_in); //phi in radians
-    vec.pz = pt_in * sinh(eta_in); //eta in radians
-
+    vec.px = pt_in * std::cos(phi_in); //phi in radians
+    vec.py = pt_in * std::sin(phi_in); //phi in radians
+    vec.pz = pt_in * std::sinh(eta_in); //eta in radians
     return vec;
     
 }
@@ -107,6 +107,25 @@ int main() {
       cartesians_truth[AD_NNNPARTICLES-1] = ObjToCartesian(met.et, 0., phi_in*Scales::CALO_PHI_LSB);
       obj_name[AD_NNNPARTICLES-1] = "MET";
       
+      // 'unroll' particles (px, py, pz) to flat array of NN inputs
+      AD_NN_IN_T nn_inputs[AD_NNNINPUTS];
+      // TODO Vitis HLS complains if the array_partition pragma is left in. Why?
+      //#pragma HLS array_partition variable=nn_inputs complete
+
+      for(int i = 0; i < AD_NNNPARTICLES; i++){
+        #pragma HLS unroll
+        nn_inputs[3*i + 0] = cartesians[i].px;
+        nn_inputs[3*i + 1] = cartesians[i].py;
+        nn_inputs[3*i + 2] = cartesians[i].pz;
+      }
+
+      AD_NN_OUT_T nnetout[AD_NNNOUTPUTS];
+      AD_NN_OUT_T anomaly_score;
+      #pragma HLS array_partition variable=score complete
+      VAE_HLS(nn_inputs, nnetout);
+      anomaly_score = computeLoss(nnetout);
+      
+      
       std::cout << "TEST : " << test << std::endl;
       for(int i = 0; i < AD_NNNPARTICLES; i++){
         std::cout <<"INPUT: " << obj_name[i] <<  std::endl;
@@ -115,6 +134,7 @@ int main() {
         std::cout <<obj_name[i] << ": py TRUTH = " << cartesians_truth[i].py << "      HLS = " << cartesians[i].py << std::endl;
         std::cout <<obj_name[i] << ": pz TRUTH = " << cartesians_truth[i].pz << "      HLS = " << cartesians[i].pz << "\n" << std::endl;
       }
+      std::cout <<" ANOMALY SCORE = " << anomaly_score  << "\n" << std::endl; //TODO! Add Keras score from Binder
     }
 
 

@@ -22,14 +22,14 @@
 #include "parameters.h"
 
 void VAE_HLS(
-    input_t input_3[N_INPUT_1_1],
+    input_t input_1[N_INPUT_1_1],
     result_t layer6_out[N_LAYER_6]
 ) {
 
     //hls-fpga-machine-learning insert IO
-    #pragma HLS ARRAY_RESHAPE variable=input_3 complete dim=0
+    #pragma HLS ARRAY_RESHAPE variable=input_1 complete dim=0
     #pragma HLS ARRAY_PARTITION variable=layer6_out complete dim=0
-    #pragma HLS INTERFACE ap_vld port=input_3,layer6_out 
+    #pragma HLS INTERFACE ap_vld port=input_1,layer6_out 
     #pragma HLS PIPELINE 
 
 #ifndef __SYNTHESIS__
@@ -54,7 +54,7 @@ void VAE_HLS(
 
     layer2_t layer2_out[N_LAYER_2];
     #pragma HLS ARRAY_PARTITION variable=layer2_out complete dim=0
-    nnet::dense<input_t, layer2_t, config2>(input_3, layer2_out, w2, b2); // q_dense
+    nnet::dense<input_t, layer2_t, config2>(input_1, layer2_out, w2, b2); // q_dense
 
     layer3_t layer3_out[N_LAYER_2];
     #pragma HLS ARRAY_PARTITION variable=layer3_out complete dim=0

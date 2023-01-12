@@ -29,8 +29,8 @@ struct config2 : nnet::dense_config {
     static const unsigned io_type = nnet::io_parallel;
     static const unsigned strategy = nnet::latency;
     static const unsigned reuse_factor = 1;
-    static const unsigned n_zeros = 904;
-    static const unsigned n_nonzeros = 920;
+    static const unsigned n_zeros = 1087;
+    static const unsigned n_nonzeros = 737;
     static const bool store_weights_in_bram = false;
     typedef q_dense_accum_t accum_t;
     typedef bias2_t bias_t;
@@ -56,8 +56,8 @@ struct config4 : nnet::dense_config {
     static const unsigned io_type = nnet::io_parallel;
     static const unsigned strategy = nnet::latency;
     static const unsigned reuse_factor = 1;
-    static const unsigned n_zeros = 166;
-    static const unsigned n_nonzeros = 346;
+    static const unsigned n_zeros = 139;
+    static const unsigned n_nonzeros = 373;
     static const bool store_weights_in_bram = false;
     typedef q_dense_1_accum_t accum_t;
     typedef bias4_t bias_t;
@@ -83,8 +83,8 @@ struct config6 : nnet::dense_config {
     static const unsigned io_type = nnet::io_parallel;
     static const unsigned strategy = nnet::latency;
     static const unsigned reuse_factor = 1;
-    static const unsigned n_zeros = 51;
-    static const unsigned n_nonzeros = 157;
+    static const unsigned n_zeros = 113;
+    static const unsigned n_nonzeros = 95;
     static const bool store_weights_in_bram = false;
     typedef mu_accum_t accum_t;
     typedef bias6_t bias_t;
@@ -92,6 +92,15 @@ struct config6 : nnet::dense_config {
     typedef layer6_index index_t;
     template<class x_T, class y_T>
     using product = nnet::product::mult<x_T, y_T>;
+};
+
+// mu_quantized_bits
+struct linear_config7 : nnet::activ_config {
+    static const unsigned n_in = 13;
+    static const unsigned table_size = 1024;
+    static const unsigned io_type = nnet::io_parallel;
+    static const unsigned reuse_factor = 1;
+    typedef mu_quantized_bits_table_t table_t;
 };
 
 

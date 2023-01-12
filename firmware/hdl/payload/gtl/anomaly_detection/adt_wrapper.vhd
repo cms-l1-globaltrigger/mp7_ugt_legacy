@@ -73,20 +73,22 @@ begin
 
     adt(0) <= '1' when to_integer(unsigned(anomaly_score)) >= threshold else '0';
 
-    synth_mode_i: if not sim_mode generate
-        adt_out <= adt(0);
-    end generate synth_mode_i;
+    adt_out <= adt(0);
 
-    sim_mode_i: if sim_mode generate
-        sim_delay_i: entity work.delay_pipeline
-            generic map(
-                DATA_WIDTH => 1,
-                STAGES => ADT_SIM_DEL
-            )
-            port map(
-                lhc_clk, adt, adt_sim
-            );
-        adt_out <= adt_sim(0);        
-    end generate sim_mode_i;
+--     synth_mode_i: if not sim_mode generate
+--         adt_out <= adt(0);
+--     end generate synth_mode_i;
+-- 
+--     sim_mode_i: if sim_mode generate
+--         sim_delay_i: entity work.delay_pipeline
+--             generic map(
+--                 DATA_WIDTH => 1,
+--                 STAGES => ADT_SIM_DEL
+--             )
+--             port map(
+--                 lhc_clk, adt, adt_sim
+--             );
+--         adt_out <= adt_sim(0);        
+--     end generate sim_mode_i;
 
 end architecture rtl;

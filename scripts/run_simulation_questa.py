@@ -455,9 +455,16 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
 
     algos_sim = {}
     algos_tv = {}
+    error_jsonf = {}
+    for i in range(menu.n_modules):
+        error_jsonf[i] = False
 
     for module in modules:  # steps through all modules and makes a list with trigger count and module
         jsonf = json.load(open(module.results_json))
+        errors_jsonf = jsonf['errors']
+        for err in errors_jsonf:
+            if err != "":
+                error_jsonf[module._id] = True
         counts = jsonf['counts']
         for count in counts:
             index = count['algo_index']
@@ -518,6 +525,15 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
 
     sum_log.info("|-----|-----|------------------------------------------------------------------|--------|--------|--------|")
 
+    json_err_msg = True
+    for i in range(len(error_jsonf)):
+        if error_jsonf[i]:
+            if json_err_msg:
+                sum_log.info("\033[1;31m ERROR: mismatches of algos or finor @ certain bx-nr in: \033[0m ".format(i))
+                json_err_msg = False
+            json_file = os.path.join(base_dir, 'results_module_{}.json').format(i)
+            sum_log.info("\033[1;31m {} \033[0m ".format(json_file))
+
     trigger_liste = trigger_list(testvector_filepath)  # gets a list: index is algorithm index and content is the trigger count in the testvector file
 
     # prints bits which are present in the testvector but have no corresponding algo in the menu
@@ -556,10 +572,10 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
 
     print("")
 
-    if success:
-        logging.info(success_green)
+    if not json_err_msg or not success:
+        logging.info(failed_red)
     else:
-        logging.error(failed_red)
+        logging.error(success_green)
 
     logging.info("===========================================================================")
     logging.info("removed temporary directory ('temp_dir') ...")

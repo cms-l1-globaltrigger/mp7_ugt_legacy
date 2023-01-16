@@ -2,7 +2,6 @@ open_project -reset prj_anomaly_detection
 set_top anomaly_detection
 add_files anomaly_detection.cpp -cflags "-std=c++0x -I../"
 add_files NN/VAE_HLS.cpp -cflags "-std=c++0x -INN/"
-add_files ../conversions.cpp -cflags "-std=c++11 -I../"
 
 open_solution -reset "solution1"
 

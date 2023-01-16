@@ -2,7 +2,6 @@
 #define L1GT_ANOMALY_DETECTION
 
 #include "data_types.h"
-#include "conversions.h"
 #include "ap_fixed.h"
 
 // Only the top N of each object are taken

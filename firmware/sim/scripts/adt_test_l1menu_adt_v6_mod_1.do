@@ -23,7 +23,7 @@ set GT_SRC ./../hdl
 set HDL_DIR ./../hdl
 set NGC_DIR ./../ngc
 set TB_DIR ./testbench
-set TEST_DIR ./adt_test/l1menu_adt_v6/module_2
+set TEST_DIR ./adt_test/l1menu_adt_v6/module_1
 
 ## Create and map work directory
 vlib work
@@ -144,14 +144,14 @@ vcom -93 -work work $TEST_DIR/gtl_module.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl_data_mapping.vhd
 
 ##TB_DIR
-vcom -93 -work work $TB_DIR/adt_test_l1menu_adt_v6_mod_2_tb.vhd
+vcom -93 -work work $TB_DIR/adt_test_l1menu_adt_v6_mod_1_tb.vhd
 
 ##Load Design
-vsim -t 1ps work.adt_test_l1menu_adt_v6_mod_2_tb
+vsim -t 1ps work.adt_test_l1menu_adt_v6_mod_1_tb
 
 ##Load signals in wave window
 view wave
-do $TB_DIR/../scripts/adt_test_l1menu_adt_v6_mod_2_wave.do
+do $TB_DIR/../scripts/adt_test_l1menu_adt_v6_mod_1_wave.do
 
 ##Run simulation
 run 91000 ns

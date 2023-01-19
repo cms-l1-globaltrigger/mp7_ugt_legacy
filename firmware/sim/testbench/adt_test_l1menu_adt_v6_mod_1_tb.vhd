@@ -8,17 +8,10 @@ use ieee.std_logic_unsigned.all;
 -- use ieee.std_logic_textio.all;
 use ieee.numeric_std.all;
 
--- library UNISIM;
--- use UNISIM.VCOMPONENTS.ALL;
-
 library std;                  -- for Printing
 use std.textio.all;
 
 use work.txt_util.all;
-
--- use work.ipbus.all;
--- use work.ipbus_trans_decl.all;
--- use work.mp7_data_types.all;
 
 use work.lhc_data_pkg.all;
 use work.lhc_data_debug_util_pkg.all;
@@ -28,10 +21,10 @@ use work.gt_mp7_core_pkg.all;
 use work.gtl_pkg.all;
 use work.fdl_pkg.all;
 
-entity adt_test_l1menu_adt_v6_tb is
-end adt_test_l1menu_adt_v6_tb;
+entity adt_test_l1menu_adt_v6_mod_1_tb is
+end adt_test_l1menu_adt_v6_mod_1_tb;
 
-architecture rtl of adt_test_l1menu_adt_v6_tb is
+architecture rtl of adt_test_l1menu_adt_v6_mod_1_tb is
 
     type lhc_data_t_array is array(integer range <>) of lhc_data_t;
     type algo_vector_string_array is array(integer range <>) of string(1 to 128);
@@ -53,9 +46,11 @@ architecture rtl of adt_test_l1menu_adt_v6_tb is
     signal lhc_data : lhc_data_t := LHC_DATA_NULL;
     signal gtl_data : gtl_data_record;
     signal algo : std_logic_vector(NR_ALGOS-1 downto 0);
-
+    signal algo_log : std_logic;
+    
     signal stop : boolean := false;
-    signal bx_nr : string(1 to 4);
+    signal anomaly_score: std_logic_vector(15 downto 0);
+    signal anomaly_score_tmp, anomaly_score_int: integer;
 
 --*********************************Main Body of Code**********************************
 begin
@@ -95,8 +90,8 @@ begin
         variable algo_vector_data_occur : algo_occur_array(MAX_NR_ALGOS-1 downto 0) := (others => 0);
         variable diff_occur, algo_mismatch : integer := 0;
 
-        file testvector_file : text open read_mode is "./adt_test/l1menu_adt_v6/module_0/TestVector_L1Menu_adt_v6_orig_3564.txt";
---         file error_file : text open write_mode is "{{RESULTS_FILE}}";
+        file testvector_file : text open read_mode is "./adt_test/l1menu_adt_v6/module_1/TestVector_L1Menu_adt_v6_orig_3564.txt";
+        file err_file : text open write_mode is "./adt_test/l1menu_adt_v6/module_1/error_file_L1_ADT_400.txt";
 
         function str_to_slv(str : string) return std_logic_vector is
             alias str_norm : string(1 to str'length) is str;
@@ -135,6 +130,12 @@ begin
         for i in 0 to LHC_BUNCH_COUNT+GTL_FDL_LATENCY-1 loop
             if i < LHC_BUNCH_COUNT then
                 lhc_data <= testdata(i);                        
+                if i >= GTL_FDL_LATENCY then
+                    if algo_log /= algo_vector_data(i - GTL_FDL_LATENCY)(2) then
+                        write(write_l, string'(bx_nr_vector_data(i - GTL_FDL_LATENCY) & " " & integer'image(anomaly_score_int) & " " & str(algo_log) & " " & str(algo_vector_data(i - GTL_FDL_LATENCY)(2))));
+                        writeline(err_file, write_l);
+                    end if;
+                end if;
             end if;
             wait for CLK40_PERIOD;
         end loop;
@@ -157,7 +158,24 @@ begin
         port map(
             lhc_clk,
             gtl_data,
-            algo
+            algo,
+            anomaly_score
         );
+        
+-- delays for anomaly_score and algo(0) for err_file
+    del1_p: process(lhc_clk, anomaly_score, algo(0))
+    begin
+        if (lhc_clk'event and lhc_clk = '1') then
+            anomaly_score_tmp <= CONV_INTEGER(anomaly_score);
+            algo_log <= algo(0);
+        end if;
+    end process;
+
+    del2_p: process(lhc_clk, anomaly_score, algo(0))
+    begin
+        if (lhc_clk'event and lhc_clk = '1') then
+            anomaly_score_int <= anomaly_score_tmp;
+        end if;
+    end process;
 
 end rtl;

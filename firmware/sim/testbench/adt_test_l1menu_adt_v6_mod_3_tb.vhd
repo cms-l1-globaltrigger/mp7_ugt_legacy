@@ -1,11 +1,7 @@
-
--- Desription:
-
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
--- use ieee.std_logic_textio.all;
 use ieee.numeric_std.all;
 
 library std;                  -- for Printing
@@ -26,6 +22,10 @@ end adt_test_l1menu_adt_v6_mod_3_tb;
 
 architecture rtl of adt_test_l1menu_adt_v6_mod_3_tb is
 
+    constant ADT_ALGO_BIT: integer := 3;
+    constant TV_FILE_LOC: string := "./adt_test/l1menu_adt_v6/module_3/TestVector_L1Menu_adt_v6_orig_3564.txt";
+    constant ERROR_FILE_LOC: string := "./adt_test/l1menu_adt_v6/module_3/error_file_L1_ADT_80.txt";
+
     type lhc_data_t_array is array(integer range <>) of lhc_data_t;
     type algo_vector_string_array is array(integer range <>) of string(1 to 128);
     type algo_vector_data_array is array(integer range <>) of std_logic_vector(MAX_NR_ALGOS-1 downto 0);
@@ -39,6 +39,8 @@ architecture rtl of adt_test_l1menu_adt_v6_mod_3_tb is
     constant OFFSET_LHC_DATA  : time :=  7 ns;
 
     constant LHC_BUNCH_COUNT: integer := 3564;
+    
+    constant GTL_FDL_LATENCY_ADT: integer := 7;
 
     signal clk160 : std_logic;
     signal lhc_clk : std_logic;
@@ -90,8 +92,8 @@ begin
         variable algo_vector_data_occur : algo_occur_array(MAX_NR_ALGOS-1 downto 0) := (others => 0);
         variable diff_occur, algo_mismatch : integer := 0;
 
-        file testvector_file : text open read_mode is "./adt_test/l1menu_adt_v6/module_3/TestVector_L1Menu_adt_v6_orig_3564.txt";
-        file err_file : text open write_mode is "./adt_test/l1menu_adt_v6/module_3/error_file_L1_ADT_80.txt";
+        file testvector_file : text open read_mode is TV_FILE_LOC;
+        file err_file : text open write_mode is ERROR_FILE_LOC;
 
         function str_to_slv(str : string) return std_logic_vector is
             alias str_norm : string(1 to str'length) is str;
@@ -130,11 +132,11 @@ begin
         for i in 0 to LHC_BUNCH_COUNT+GTL_FDL_LATENCY+1 loop
             if i < LHC_BUNCH_COUNT then
                 lhc_data <= testdata(i);                        
-                if i >= GTL_FDL_LATENCY then
-                    if algo_log /= algo_vector_data(i - GTL_FDL_LATENCY)(3) then
-                        write(write_l, string'(bx_nr_vector_data(i - GTL_FDL_LATENCY) & " " & integer'image(anomaly_score_int) & " " & str(algo_log) & " " & str(algo_vector_data(i - GTL_FDL_LATENCY)(3))));
-                        writeline(err_file, write_l);
-                    end if;
+            end if;
+            if i >= GTL_FDL_LATENCY_ADT and i < LHC_BUNCH_COUNT+GTL_FDL_LATENCY_ADT-1 then
+                if algo_log /= algo_vector_data(i - GTL_FDL_LATENCY_ADT)(ADT_ALGO_BIT) then
+                    write(write_l, string'(bx_nr_vector_data(i - GTL_FDL_LATENCY_ADT) & " " & integer'image(anomaly_score_int) & " " & str(algo_log) & " " & str(algo_vector_data(i - GTL_FDL_LATENCY_ADT)(ADT_ALGO_BIT))));
+                    writeline(err_file, write_l);
                 end if;
             end if;
             wait for CLK40_PERIOD;

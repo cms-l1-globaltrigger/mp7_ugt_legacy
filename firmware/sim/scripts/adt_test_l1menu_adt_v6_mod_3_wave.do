@@ -4,11 +4,11 @@ add wave -noupdate /adt_test_l1menu_adt_v6_mod_3_tb/lhc_clk
 add wave -noupdate /adt_test_l1menu_adt_v6_mod_3_tb/lhc_data
 add wave -noupdate /adt_test_l1menu_adt_v6_mod_3_tb/gtl_data
 add wave -noupdate /adt_test_l1menu_adt_v6_mod_3_tb/gtl_module_i/bx_data
-add wave -noupdate /adt_test_l1menu_adt_v6_mod_3_tb/gtl_module_i/cond_ext_adt_80_i/mu
-add wave -noupdate /adt_test_l1menu_adt_v6_mod_3_tb/gtl_module_i/cond_ext_adt_80_i/eg
-add wave -noupdate /adt_test_l1menu_adt_v6_mod_3_tb/gtl_module_i/cond_ext_adt_80_i/jet
-add wave -noupdate /adt_test_l1menu_adt_v6_mod_3_tb/gtl_module_i/cond_ext_adt_80_i/etm_i
-add wave -noupdate -radix decimal /adt_test_l1menu_adt_v6_mod_3_tb/gtl_module_i/cond_ext_adt_80_i/anomaly_score
+add wave -noupdate /adt_test_l1menu_adt_v6_mod_3_tb/gtl_data.mu
+add wave -noupdate /adt_test_l1menu_adt_v6_mod_3_tb/gtl_data.eg
+add wave -noupdate /adt_test_l1menu_adt_v6_mod_3_tb/gtl_data.jet
+add wave -noupdate /adt_test_l1menu_adt_v6_mod_3_tb/gtl_data.etm
+add wave -noupdate -radix decimal /adt_test_l1menu_adt_v6_mod_3_tb/anomaly_score
 add wave -noupdate -radix binary /adt_test_l1menu_adt_v6_mod_3_tb/gtl_module_i/algo
 add wave -noupdate -radix binary /adt_test_l1menu_adt_v6_mod_3_tb/gtl_module_i/algo_o
 TreeUpdate [SetDefaultTree]

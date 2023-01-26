@@ -23,13 +23,13 @@
 
 void VAE_HLS(
     input_t input_1[N_INPUT_1_1],
-    result_t layer6_out[N_LAYER_6]
+    result_t layer7_out[N_LAYER_6]
 ) {
 
     //hls-fpga-machine-learning insert IO
     #pragma HLS ARRAY_RESHAPE variable=input_1 complete dim=0
-    #pragma HLS ARRAY_PARTITION variable=layer6_out complete dim=0
-    #pragma HLS INTERFACE ap_vld port=input_1,layer6_out 
+    #pragma HLS ARRAY_PARTITION variable=layer7_out complete dim=0
+    #pragma HLS INTERFACE ap_vld port=input_1,layer7_out 
     #pragma HLS PIPELINE 
 
 #ifndef __SYNTHESIS__
@@ -68,6 +68,10 @@ void VAE_HLS(
     #pragma HLS ARRAY_PARTITION variable=layer5_out complete dim=0
     nnet::relu<layer4_t, layer5_t, relu_config5>(layer4_out, layer5_out); // q_dense_1_quantized_relu
 
-    nnet::dense<layer5_t, result_t, config6>(layer5_out, layer6_out, w6, b6); // mu
+    layer6_t layer6_out[N_LAYER_6];
+    #pragma HLS ARRAY_PARTITION variable=layer6_out complete dim=0
+    nnet::dense<layer5_t, layer6_t, config6>(layer5_out, layer6_out, w6, b6); // mu
+
+    nnet::linear<layer6_t, result_t, linear_config7>(layer6_out, layer7_out); // mu_quantized_bits
 
 }

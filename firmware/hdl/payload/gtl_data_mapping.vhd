@@ -89,4 +89,12 @@ begin
 
     gtl_data.ext_cond <= lhc_data.external_conditions(NR_EXTERNAL_CONDITIONS-1 downto 0);
 
+-- ****************************************************************************************
+
+    gtl_data.bjet(0)[7:0] <= lhc_data.cicada(0)(MAX_CALO_BITS-1 downto 0)[29:22]; -- bjet 0 phi
+    gtl_data.bjet(0)[9:8] <= lhc_data.cicada(0)(MAX_CALO_BITS-1 downto 0)[31:30]; -- bjet 0 eta
+    gtl_data.bjet(0)[15:10] <= lhc_data.cicada(1)(MAX_CALO_BITS-1 downto 0)[5:0]; -- bjet 0 eta
+    gtl_data.bjet(0)[26:16] <= lhc_data.cicada(1)(MAX_CALO_BITS-1 downto 0)[20:10]; -- bjet 0 Et
+-- continue with other bjet objects
+        
 end architecture rtl;

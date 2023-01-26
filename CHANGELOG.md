@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.22.0] - 2023-01-26
+### Comment
+
+- mp7_ugt firmware release v1.22.0
+- version for calo anomaly algorithm (CICADA) implementation
+
+### Changed
+- source files:
+  - ../packages/gtl_pkg.vhd
+  - ../packages/lhc_data_pkg.vhd
+  - ../payload/gtl_data_mapping.vhd
+
 ## [v1.21.7] - 2022-11-29
 ### Comment
 

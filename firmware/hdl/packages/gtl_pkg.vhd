@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2023-01-26: inserted calo anomaly algorithm (CICADA) definitions.
 -- HB 2022-09-23: added constants ESUMS_COND_STAGES, MB_COND_STAGES and TC_COND_STAGES.
 -- HB 2022-09-02: cleaned up.
 -- HB 2021-10-19: inserted jet DISP (displaced) bit 27 (and all dependencies on this bit).
@@ -103,7 +104,9 @@ constant ASYMET_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYP
 constant ASYMHT_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+8;
 constant ASYMETHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+9;
 constant ASYMHTHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+10;
-constant MU_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES+0;
+constant NR_MU_TYPE : natural := 1;
+constant MU_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES;
+constant BJET_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES+NR_MU_TYPE;
 
 -- ==== MUONs - begin ============================================================
 -- MUONs
@@ -371,6 +374,22 @@ constant MBT1HFM_COUNT_LOW : natural := 0;
 constant MBT1HFM_COUNT_HIGH : natural := 3;
 
 -- *******************************************************************************************************
+-- HB 2023-01-26: calo anomaly algorithm (CICADA) data from Calo-Layer1
+constant NR_BJET_OBJECTS : positive := BJET_ARRAY_LENGTH; -- number bjet objects, from lhc_data_pkg.vhd
+type bjet_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO_BITS-1 downto 0);
+type bx_bjet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_BJET_OBJECTS-1);
+
+constant BJET_PHI_LOW : natural := 0;
+constant BJET_PHI_HIGH : natural := 7;
+constant BJET_PHI_BITS : natural := BJET_PHI_HIGH-BJET_PHI_LOW+1;
+constant BJET_ETA_LOW : natural := 8;
+constant BJET_ETA_HIGH : natural := 15;
+constant BJET_ETA_BITS : natural := BJET_ETA_HIGH-BJET_ETA_LOW+1;
+constant BJET_ET_LOW : natural := 16;
+constant BJET_ET_HIGH : natural := 26;
+constant BJET_ET_BITS : natural := BJET_ET_HIGH-BJET_ET_LOW+1;
+
+-- *******************************************************************************************************
 -- max bits for comparators.vhd
 constant MAX_PT_BITS_1 : positive := max(MUON_PT_BITS, MAX_CALO_ET_BITS, MAX_ESUMS_ET_BITS);
 constant MAX_PT_BITS : positive := max(MAX_PT_BITS_1, MAX_ASYM_BITS);
@@ -415,6 +434,7 @@ type gtl_data_record is record
     towercount : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
     centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
+    bjet : bjet_objects_array(0 to NR_BJET_OBJECTS-1);
 end record gtl_data_record;
 
 type bx_data_record is record
@@ -448,6 +468,7 @@ type bx_data_record is record
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
     mus0, mus1, musoot0, musoot1 : mus_bit_array;
+    bjet : bx_bjet_objects_array;
 end record bx_data_record;
 
 -- ==== Correlations - begin ============================================================

@@ -188,6 +188,147 @@ The data structure of a muon object (64 bits):\\
 \end{bytefield}
 \end{center}
 
+\subsubsection{Calo-Layer1 optical interface}
+\label{sec:gtl:calo1_optical_interfaces}
+
+The link from Calo-Layer1 contains calo anomaly algorithm (CICADA) data. The main part of this data
+are parameters of bjets.\\
+
+The data structure of a bjet object:\\
+\tiny{Remark: "S" means side (eta sign bit).}\normalsize
+\begin{center}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{27}
+        \bitheader{0,7,8,14,15,15,16,26} \\
+        \bitbox {11}    {\texttt{\et}}
+        \bitbox {1}     {\texttt{S}} &
+        \bitbox {7}     {\texttt{$\eta$}}  &
+        \bitbox {8}     {\texttt{$\varphi$}} \\
+\end{bytefield}
+\end{center}
+
+The link provides 6 frames in a 240MHz domain, each with 32 bits (192 total).
+
+\paragraph{Structure of the link}
+
+Overview of frames (from frame 0 ascending to 5):\\
+\tiny{Remark: "H" means heavy ion bit, "*" means bjet 4 (cont.), "**" means bjet 6.}\normalsize
+\begin{center}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,7,8,20,21,21,22,31} \\
+        \bitbox {10}    {\texttt{bjet 1}} &
+        \bitbox {1}     {\texttt{H}} &
+        \bitbox {13}    {\texttt{Anomaly Detection}} &
+        \bitbox {8}     {\texttt{Alignment, CRC}} \\
+\end{bytefield}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,16,17,31} \\
+        \bitbox {15}    {\texttt{bjet 2}} &
+        \bitbox {17}    {\texttt{bjet 1 (cont.)}} \\
+\end{bytefield}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,11,12,31} \\
+        \bitbox {20}    {\texttt{bjet 3}} &
+        \bitbox {12}    {\texttt{bjet 2 (cont.)}} \\
+\end{bytefield}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,6,7,31} \\
+        \bitbox {25}    {\texttt{bjet 4}} &
+        \bitbox {7}     {\texttt{bjet 3 (c.)}} \\
+\end{bytefield}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,1,2,28,29,31} \\
+        \bitbox {3}     {\texttt{**}} &
+        \bitbox {27}    {\texttt{bjet 5}} &
+        \bitbox {2}     {\texttt{*}} \\
+\end{bytefield}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,23,24,31} \\
+        \bitbox {8}     {\texttt{Alignment, CRC}} &
+        \bitbox {24}    {\texttt{bjet 6 (cont.)}} \\
+\end{bytefield}
+\end{center}
+
+Definition of frame 0:\\
+\tiny{Remark: "H" means heavy ion bit, "*" means bjet 1 eta[1:0].}\normalsize
+\begin{center}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,7,8,14,15,20,21,21,22,29,30,31} \\
+        \bitbox {2}     {\texttt{*}} &
+        \bitbox {8}     {\texttt{bjet 1 phi}} &
+        \bitbox {1}     {\texttt{H}} &
+        \bitbox {6}     {\texttt{AD integer}} &
+        \bitbox {7}     {\texttt{AD decimal}} &
+        \bitbox {8}     {\texttt{Alignment, CRC}} \\
+\end{bytefield}
+\end{center}
+
+Definition of frame 1:\\
+\tiny{Remark: "bjet 1*" means bjet 3 eta[6:2], "S" bjet 1 eta sign bit.}\normalsize
+\begin{center}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,4,5,5,6,16,17,24,25,31} \\
+        \bitbox {7}     {\texttt{bjet 2 eta}} &
+        \bitbox {8}     {\texttt{bjet 2 phi}} &
+        \bitbox {11}    {\texttt{bjet 1 \et}} &
+        \bitbox {1}     {\texttt{S}} &
+        \bitbox {5}     {\texttt{bjet 1*}} \\
+\end{bytefield}
+\end{center}
+
+Definition of frame 2:\\
+\tiny{Remark: "S" means bjet 2 and 3 eta sign bits, "bjet 3*" means bjet 3 \et[3:0].}\normalsize
+\begin{center}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,0,1,11,12,19,20,26,27,27,28,31} \\
+        \bitbox {4}     {\texttt{bjet 3*}} &
+        \bitbox {1}     {\texttt{S}} &
+        \bitbox {7}     {\texttt{bjet 3 eta}} &
+        \bitbox {8}     {\texttt{bjet 3 phi}} &
+        \bitbox {11}    {\texttt{bjet 2 \et}} &
+        \bitbox {1}     {\texttt{S}} \\
+\end{bytefield}
+\end{center}
+
+Definition of frame 3:\\
+\tiny{Remark: "bjet 3*" means bjet 3 \et[10:4], "S" means bjet 4 eta sign bit.}\normalsize
+\begin{center}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,6,7,14,15,21,22,22,23,31} \\
+        \bitbox {9}     {\texttt{bjet 4 \et[8:0]}} &
+        \bitbox {1}     {\texttt{S}} &
+        \bitbox {7}     {\texttt{bjet 4 eta}} &
+        \bitbox {8}     {\texttt{bjet 4 phi}} &
+        \bitbox {7}     {\texttt{bjet 3*}} \\
+\end{bytefield}
+\end{center}
+
+Definition of frame 4:\\
+\tiny{Remark: "*" means bjet 4 \et[10:9], "S" means bjet 5 eta sign bit, "**" means bjet 6 phi[2:0].}\normalsize
+\begin{center}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,1,2,9,10,16,17,17,18,28,29,31} \\
+        \bitbox {3}     {\texttt{**}} &
+        \bitbox {11}    {\texttt{bjet 5 \et}} &
+        \bitbox {1}     {\texttt{S}} &
+        \bitbox {7}     {\texttt{bjet 5 eta}} &
+        \bitbox {8}     {\texttt{bjet 5 phi}} &
+        \bitbox {2}     {\texttt{*}} \\
+\end{bytefield}
+\end{center}
+
+Definition of frame 5:\\
+\tiny{Remark: "S" means bjet 6 eta sign bit.}\normalsize
+\begin{center}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,4,5,11,12,12,13,23,24,31} \\
+        \bitbox {8}     {\texttt{Alignment, CRC}} &
+        \bitbox {11}    {\texttt{bjet 6 \et}} &
+        \bitbox {1}     {\texttt{S}} &
+        \bitbox {7}     {\texttt{bjet 6 eta}} &
+        \bitbox {5}     {\texttt{bjet 6 phi[7:3]}} \\
+\end{bytefield}
+\end{center}
+
 \clearpage
 
 \subsection{Implementation in firmware}
@@ -548,6 +689,24 @@ bits [63..62] & definition \\\hline\hline
 \end{tabular}
 \label{tab:gtl:muon_ip_bits}
 \end{table}
+
+\clearpage
+
+\subsubsection{Definitions of CICADA data}
+\label{sec:gtl:calorimeter_data}
+
+The calorimeter layer 1 trigger processing identifies \textbf{bjets}, \textbf{anomaly detection} and a \textbf{heavy ion bit}.\\
+See also \ref{sec:gtl:calo1_optical_interfaces}.\\
+
+Six objects and some additional bits are passed to the \ugt for each event.\\
+For each selected bjet object, the Calo-1 sends parameters for \pt and for position and isolation - encoded in 32 bits:
+\begin{itemize}
+\item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
+\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
+\item 11 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
+\end{itemize}
+
+The anomaly detection value is represented by a 6 bits integer part and a 7 bits decimal part. 
 
 \clearpage
 

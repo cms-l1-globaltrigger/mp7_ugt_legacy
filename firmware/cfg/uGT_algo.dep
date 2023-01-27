@@ -29,6 +29,7 @@ src payload/fdl/algo_slice.vhd
 #
 ## GTL modules
 ### common modules
+src payload/gtl/common/reg.vhd
 src payload/gtl/common/delay_pipeline.vhd
 src payload/gtl/common/pt_comp.vhd
 src payload/gtl/common/upt_comp.vhd

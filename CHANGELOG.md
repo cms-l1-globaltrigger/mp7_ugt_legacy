@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.21.9] - 2023-01-27
+### Comment
+
+- mp7_ugt firmware release v1.21.9
+- algo out register in gtl_module.vhd instantiated by VHDL Producer
+
+### Added
+- source files:
+  - ../payload/gtl/common/reg.vhd
+
+### Changed
+- source files:
+  - ../payload/gtl_module_tpl.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+- dep file:
+  - ../cfg/uGT_algo.dep
+
 ## [v1.21.8] - 2022-11-29
 ### Comment
 
@@ -79,9 +98,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
 
-### Added
-- source files:
-  - ../packages/gt_mp7_top_pkg_sim.vhd
+
 
 ## [v1.21.2] - 2022-09-28
 ### Comment

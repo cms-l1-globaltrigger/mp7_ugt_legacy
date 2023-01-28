@@ -168,7 +168,7 @@ double anomaly_score(std::vector<int> in){
     // convert EGamma
     EGamma egamma[NEGAMMAS];
     for(int i = 0; i < AD_NEGAMMAS; i++){
-        egamma[i].et = in[3*(1 + i) + 0];
+        egamma[i].et.V = in[3*(1 + i) + 0];
         egamma[i].eta.V = in[3*(1 + i) + 1];
         egamma[i].phi.V = in[3*(1 + i) + 2];
     }
@@ -176,7 +176,7 @@ double anomaly_score(std::vector<int> in){
     // convert Muon
     Muon muon[NMUONS];
     for(int i = 0; i < AD_NMUONS; i++){
-        muon[i].pt = in[3*(1+AD_NEGAMMAS+i) + 0];
+        muon[i].pt.V = in[3*(1+AD_NEGAMMAS+i) + 0];
         muon[i].eta_extrapolated.V = in[3*(1+AD_NEGAMMAS+i) + 1];
         muon[i].phi_extrapolated.V = in[3*(1+AD_NEGAMMAS+i) + 2];
     }
@@ -184,7 +184,7 @@ double anomaly_score(std::vector<int> in){
     // convert Jet
     Jet jet[NJETS];
     for(int i = 0; i < AD_NJETS; i++){
-        jet[i].et = in[3*(1+AD_NEGAMMAS+AD_NMUONS+i) + 0];
+        jet[i].et.V = in[3*(1+AD_NEGAMMAS+AD_NMUONS+i) + 0];
         jet[i].eta.V = in[3*(1+AD_NEGAMMAS+AD_NMUONS+i) + 1];
         jet[i].phi.V = in[3*(1+AD_NEGAMMAS+AD_NMUONS+i) + 2];
     }

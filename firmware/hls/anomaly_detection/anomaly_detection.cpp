@@ -64,42 +64,13 @@ void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAM
 // pipeline everything
 #pragma HLS pipeline II = 1
 
+// ask for 2 cycles latency
+#pragma HLS latency min=2 max=2
+
 // inline everything so there are no function call overheads
 #pragma HLS inline recursive
 
-  //   PxPyPz cartesians[AD_NNNPARTICLES];
-  // #pragma HLS array_partition variable = cartesians complete
-
-  // TODO: implement all these ObjToCartesian functions
-  //   for (int i = 0; i < AD_NNNPARTICLES; i++)
-  //   {
-  //     cartesians[i].clear();
-  //   }
-  //   int iNNIn = 1;
-  //   cartesians[0] = METToCartesian(etmiss);
-  //   for (int i = 0; i < AD_NEGAMMAS; i++, iNNIn++)
-  //   {
-  // #pragma HLS unroll
-  //     cartesians[iNNIn] = EGammaToCartesian(egammas[i]);
-  //   }
-  //   for (int i = 0; i < AD_NMUONS; i++, iNNIn++)
-  //   {
-  // #pragma HLS unroll
-  //     cartesians[iNNIn] = MuonToCartesian(muons[i]);
-  //   }
-  //   for (int i = 0; i < AD_NJETS; i++, iNNIn++)
-  //   {
-  // #pragma HLS unroll
-  //     cartesians[iNNIn] = JetToCartesian(jets[i]);
-  //   }
-  // TODO include taus in training
-  //   for (int i = 0; i < AD_NTAUS; i++, iNNIn++)
-  //   {
-  // #pragma HLS unroll
-  //     cartesians[iNNIn] = TauToCartesian(taus[i]);
-  //   }
-
-  // 'unroll' particles (px, py, pz) to flat array of NN inputs
+  // 'unroll' particles to flat array of NN inputs
   unscaled_t nn_inputs_unscaled[AD_NNNINPUTS];
   AD_NN_IN_T nn_inputs[AD_NNNINPUTS];
   // TODO Vitis HLS complains if the array_partition pragma is left in. Why?

@@ -175,6 +175,7 @@ package gt_mp7_core_pkg is
 --------------------------------------------------------------------------------
 -- HB, 12-11-2013: GTL_FDL_LATENCY = 6 with fixed pipeline structure (2 = +/- 2bx, 3 = conditions and algos, 1 = FDL)
     constant GTL_FDL_LATENCY : integer := 6;
+--     constant GTL_FDL_LATENCY : integer := 7;
 
 --------------------------------------------------------------------------------
 -- ADDRESS DECODER

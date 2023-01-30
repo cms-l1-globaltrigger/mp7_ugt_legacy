@@ -167,7 +167,7 @@ cond_ext_adt_20000_i: entity work.adt_wrapper
 
 -- 0 L1_ADT_20000 : EXT_ADT_20000
 l1_adt_20000 <= single_ext_i0;
-algo(0) <= l1_adt_20000;
+algo_o(0) <= l1_adt_20000;
 
 -- ========================================================
 -- Instantiations conversions, calculations, etc.
@@ -202,13 +202,5 @@ algo(0) <= l1_adt_20000;
 
 -- ========================================================
 
-
--- One pipeline stages for algorithms
-algo_pipeline_p: process(lhc_clk, algo)
-    begin
-    if (lhc_clk'event and lhc_clk = '1') then
-        algo_o <= algo;
-    end if;
-end process;
 
 end architecture rtl;

@@ -167,7 +167,7 @@ cond_ext_adt_80_i: entity work.adt_wrapper
 
 -- 3 L1_ADT_80 : EXT_ADT_80
 l1_adt_80 <= single_ext_i3;
-algo(0) <= l1_adt_80;
+algo_o(0) <= l1_adt_80;
 
 -- ========================================================
 -- Instantiations conversions, calculations, etc.
@@ -201,14 +201,5 @@ algo(0) <= l1_adt_80;
 
 
 -- ========================================================
-
-
--- One pipeline stages for algorithms
-algo_pipeline_p: process(lhc_clk, algo)
-    begin
-    if (lhc_clk'event and lhc_clk = '1') then
-        algo_o <= algo;
-    end if;
-end process;
 
 end architecture rtl;

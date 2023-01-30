@@ -38,8 +38,6 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--menu', default=L1MENU_DEF, help="menu name of L1Menu for adt test (default is '{}')".format(L1MENU_DEF))
     parser.add_argument('--test_dir', default=TEST_DIR_DEF, help="dir name for adt test data (default is '{}')".format(TEST_DIR_DEF))
-    #parser.add_argument('--algo_bits', help="algo bits (in module order)")
-    #parser.add_argument('--algo_names', help="algo names (in module order)")
     return parser.parse_args()
 
 def main():

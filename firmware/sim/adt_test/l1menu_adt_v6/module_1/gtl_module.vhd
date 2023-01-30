@@ -167,7 +167,7 @@ cond_ext_adt_400_i: entity work.adt_wrapper
 
 -- 2 L1_ADT_400 : EXT_ADT_400
 l1_adt_400 <= single_ext_i2;
-algo(0) <= l1_adt_400;
+algo_o(0) <= l1_adt_400;
 
 -- ========================================================
 -- Instantiations conversions, calculations, etc.
@@ -202,13 +202,5 @@ algo(0) <= l1_adt_400;
 
 -- ========================================================
 
-
--- One pipeline stages for algorithms
-algo_pipeline_p: process(lhc_clk, algo)
-    begin
-    if (lhc_clk'event and lhc_clk = '1') then
-        algo_o <= algo;
-    end if;
-end process;
 
 end architecture rtl;

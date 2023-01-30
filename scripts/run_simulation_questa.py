@@ -531,7 +531,7 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
             if json_err_msg:
                 sum_log.info("\033[1;31m ERROR: mismatches of algos or finor @ certain bx-nr in: \033[0m ".format(i))
                 json_err_msg = False
-            json_file = os.path.join(base_dir, 'results_module_{}.json').format(i)
+            json_file = os.path.join(base_dir, 'module_{}', 'results_module_{}.json').format(i, i)
             sum_log.info("\033[1;31m {} \033[0m ".format(json_file))
 
     trigger_liste = trigger_list(testvector_filepath)  # gets a list: index is algorithm index and content is the trigger count in the testvector file

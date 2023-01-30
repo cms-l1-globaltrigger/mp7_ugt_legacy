@@ -222,19 +222,14 @@ double objects_to_anomaly_score(ETMiss etMiss, std::vector<EGamma> egammas, std:
     return (double) score;
 }
 
-std::vector<AD_NN_IN_T> scale_nn_inputs(std::vector<PxPyPz> pxpypz){
-    assert((void("Wrong number of inputs"), pxpypz.size() == AD_NNNPARTICLES));
-    pxpypz_t unscaled[AD_NNNINPUTS];
+/*std::vector<AD_NN_IN_T> scale_nn_inputs(std::vector<unscaled_t> unscaled){
+    assert((void("Wrong number of inputs"), unscaled.size() == AD_NNNPARTICLES));
     AD_NN_IN_T scaled[AD_NNNINPUTS];
-    for(int i = 0; i < AD_NNNPARTICLES; i++){
-        unscaled[3*i+0] = pxpypz[i].px;
-        unscaled[3*i+1] = pxpypz[i].py;
-        unscaled[3*i+2] = pxpypz[i].pz;
-    }
-    scaleNNInputs(unscaled, scaled);
+    unscaled_t* unscaled_arr = unscaled.data();
+    scaleNNInputs(unscaled_arr, scaled);
     std::vector<AD_NN_IN_T> out(std::begin(scaled), std::end(scaled));
     return out;
-}
+}*/
 
 std::vector<AD_NN_OUT_T> nn(std::vector<AD_NN_IN_T> in){
     assert((void("Wrong number of inputs"), in.size() == AD_NNNINPUTS));
@@ -266,7 +261,7 @@ PYBIND11_MODULE(anomaly_detection_emulation, m){
   m.def("packed_to_hwint", &packed_to_hwint, "Packed into GT inputs to (pt, eta, phi)");
   m.def("hwint_to_anomaly_score", &hwint_to_anomaly_score, "GT inputs (in integer hardware units) to anomaly score");
   m.def("objects_to_anomaly_score", &objects_to_anomaly_score, "GT inputs (in integer hardware units) to anomaly score");
-  m.def("scale_nn_inputs", &scale_nn_inputs, "inputs to scaled NN inputs (in doubles");
+  //m.def("scale_nn_inputs", &scale_nn_inputs, "inputs to scaled NN inputs (in doubles");
   m.def("nn", &nn, "Scaled NN inputs (in doubles) to NN outputs (in doubles)");
   m.def("nn_loss", &nn_loss, "NN outputs (in doubles) to NN loss score from computeLoss (in doubles)");
   

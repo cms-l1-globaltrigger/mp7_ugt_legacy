@@ -473,12 +473,12 @@ static const int NTAUS = 12;
  * TODO: this is a first implementation, to be improved & expanded
  * TODO: these data types for px, py, pz are not optimized
  * --- */
-typedef ap_fixed<15,14> pxpypz_t;
+typedef ap_fixed<18,13> unscaled_t;
 struct PxPyPz{
 
-  pxpypz_t px;
-  pxpypz_t py;
-  pxpypz_t pz;
+  unscaled_t px;
+  unscaled_t py;
+  unscaled_t pz;
 
 
   static const int BITWIDTH = 36;

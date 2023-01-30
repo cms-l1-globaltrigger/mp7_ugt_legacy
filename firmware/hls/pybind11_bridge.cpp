@@ -1,4 +1,3 @@
-#include "conversions.h"
 #include "anomaly_detection/anomaly_detection.h"
 #include "anomaly_detection/NN/VAE_HLS.h"
 #include "ap_fixed.h"
@@ -8,45 +7,6 @@
 #include <pybind11/stl.h>
 
 // 'bridge' function for Python binding (not for firmware)
-std::vector<PxPyPz> physical_to_pxpypz(std::vector<double> in){
-
-    assert((void("Wrong number of inputs"), in.size() == 3*(AD_NEGAMMAS+AD_NMUONS+AD_NJETS+1)));
-    // read (pT, eta, phi) for each of (in order): MET, electrons, muons, jets
-    std::vector<PxPyPz> pxpypz;
-    pxpypz.resize(AD_NEGAMMAS+AD_NMUONS+AD_NJETS+1);
-
-    // convert ETMiss
-    // note ETMiss eta expected at in[1], but not used
-    ETMiss etMiss = ETMiss::initFromPhysicalDoubles(in[0], in[2]);
-    pxpypz[0] = METToCartesian(etMiss);
-
-    // convert EGamma
-    for(int i = 0; i < AD_NEGAMMAS; i++){
-        EGamma egamma = EGamma::initFromPhysicalDoubles(in[1 + i + 0],
-                                                        in[1 + i + 1],
-                                                        in[1 + i + 2]);
-        pxpypz[1+i] = EGammaToCartesian(egamma);
-    }
-
-    // convert Muon
-    for(int i = 0; i < AD_NMUONS; i++){
-        Muon muon = Muon::initFromPhysicalDoubles(in[(1+AD_NEGAMMAS) + i + 0],
-                                                  in[(1+AD_NEGAMMAS) + i + 1],
-                                                  in[(1+AD_NEGAMMAS) + i + 2]);
-        pxpypz[1 + AD_NEGAMMAS + i] = MuonToCartesian(muon);
-    }
-
-    // convert Jet
-    for(int i = 0; i < AD_NJETS; i++){
-        Jet jet = Jet::initFromPhysicalDoubles(in[(1+AD_NEGAMMAS+AD_NMUONS) + i + 0],
-                                               in[(1+AD_NEGAMMAS+AD_NMUONS) + i + 1],
-                                               in[(1+AD_NEGAMMAS+AD_NMUONS) + i + 2]);
-        pxpypz[1 + AD_NEGAMMAS + AD_NMUONS + i] = JetToCartesian(jet);
-    }
-
-    return pxpypz;
-}
-
 
 void hwint_to_GTobjects(std::vector<int> in, ETMiss& etMiss, EGamma egammas[AD_NEGAMMAS], Muon muons[AD_NMUONS], Jet jets[AD_NJETS]){
     assert((void("Wrong number of inputs"), in.size() == 3*(AD_NEGAMMAS+AD_NMUONS+AD_NJETS+1)));
@@ -92,70 +52,6 @@ void packed_to_GTObjects(std::vector<uint64_t> in, ETMiss& etMiss, EGamma egamma
     for(int i = 0; i < AD_NJETS; i++){
         jets[i].initFromBits(in[1+AD_NEGAMMAS+AD_NMUONS+i]);
     }
-}
-
-// 'bridge' function for Python binding (not for firmware)
-std::vector<PxPyPz> hwint_to_pxpypz(std::vector<int> in){
-
-    assert((void("Wrong number of inputs"), in.size() == 3*(AD_NEGAMMAS+AD_NMUONS+AD_NJETS+1)));
-    // read (pT, eta, phi) for each of (in order): MET, electrons, muons, jets
-    std::vector<PxPyPz> pxpypz;
-    pxpypz.resize(AD_NEGAMMAS+AD_NMUONS+AD_NJETS+1);
-
-    // Convert ints to GT objects
-    ETMiss etMiss;
-    EGamma egammas[AD_NEGAMMAS];
-    Muon muons[AD_NMUONS];
-    Jet jets[AD_NJETS];
-    hwint_to_GTobjects(in, etMiss, egammas, muons, jets);
-
-    pxpypz[0] = METToCartesian(etMiss);
-
-    // convert EGamma
-    for(int i = 0; i < AD_NEGAMMAS; i++){
-        pxpypz[1+i] = EGammaToCartesian(egammas[i]);
-    }
-
-    // convert Muon
-    for(int i = 0; i < AD_NMUONS; i++){
-        pxpypz[1 + AD_NEGAMMAS + i] = MuonToCartesian(muons[i]);
-    }
-
-    // convert Jet
-    for(int i = 0; i < AD_NJETS; i++){
-        pxpypz[1 + AD_NEGAMMAS + AD_NMUONS + i] = JetToCartesian(jets[i]);
-    }
-
-    return pxpypz;
-}
-
-// 'bridge' function for Python binding (not for firmware)
-std::vector<PxPyPz> objects_to_pxpypz(ETMiss etMiss, std::vector<EGamma> egammas, std::vector<Muon> muons, std::vector<Jet> jets){
-
-    assert((void("Wrong number of inputs"), egammas.size() == AD_NEGAMMAS));
-    assert((void("Wrong number of inputs"), muons.size() == AD_NMUONS));
-    assert((void("Wrong number of inputs"), jets.size() == AD_NJETS));
-    std::vector<PxPyPz> pxpypz;
-    pxpypz.resize(AD_NEGAMMAS+AD_NMUONS+AD_NJETS+1);
-
-    pxpypz[0] = METToCartesian(etMiss);
-
-    // convert EGamma
-    for(int i = 0; i < AD_NEGAMMAS; i++){
-        pxpypz[1+i] = EGammaToCartesian(egammas[i]);
-    }
-
-    // convert Muon
-    for(int i = 0; i < AD_NMUONS; i++){
-        pxpypz[1 + AD_NEGAMMAS + i] = MuonToCartesian(muons[i]);
-    }
-
-    // convert Jet
-    for(int i = 0; i < AD_NJETS; i++){
-        pxpypz[1 + AD_NEGAMMAS + AD_NMUONS + i] = JetToCartesian(jets[i]);
-    }
-
-    return pxpypz;
 }
 
 // 'bridge' function for Python binding (not for firmware)
@@ -365,16 +261,13 @@ AD_NN_OUT_SQ_T nn_loss(std::vector<AD_NN_OUT_T> in){
 namespace py = pybind11;
 PYBIND11_MODULE(anomaly_detection_emulation, m){
   m.doc() = "Python bindings for Anomaly Detection at L1T HLS for emulation. Most methods assume an object ordering: ETMiss, 4*EGamma, 4*Muon, 10*Jet";
-  m.def("physical_to_pxpypz", &physical_to_pxpypz, "GT inputs (in physical units) to PxPyPz (objects)");
-  m.def("hwint_to_pxpypz", &hwint_to_pxpypz, "GT inputs (in integer hardware units) to PxPyPz (objects)");
-  m.def("objects_to_pxpypz", &objects_to_pxpypz, "GT inputs (objects) to PxPyPz (objects)");
   m.def("hwint_to_physical", &hwint_to_physical, "GT inputs (in integer hardware units) to physical units");
   m.def("hwint_to_packed", &hwint_to_packed, "GT inputs to packed integers");
   m.def("packed_to_hwint", &packed_to_hwint, "Packed into GT inputs to (pt, eta, phi)");
   m.def("hwint_to_anomaly_score", &hwint_to_anomaly_score, "GT inputs (in integer hardware units) to anomaly score");
   m.def("objects_to_anomaly_score", &objects_to_anomaly_score, "GT inputs (in integer hardware units) to anomaly score");
-  m.def("scale_nn_inputs", &scale_nn_inputs, "(px, py, pz) to scaled NN inputs (in doubles");
-  m.def("nn", &nn, "Scaled (px, py, pz) NN inputs (in doubles) to NN outputs (in doubles)");
+  m.def("scale_nn_inputs", &scale_nn_inputs, "inputs to scaled NN inputs (in doubles");
+  m.def("nn", &nn, "Scaled NN inputs (in doubles) to NN outputs (in doubles)");
   m.def("nn_loss", &nn_loss, "NN outputs (in doubles) to NN loss score from computeLoss (in doubles)");
   
   py::class_<PxPyPz>(m, "PxPyPz")

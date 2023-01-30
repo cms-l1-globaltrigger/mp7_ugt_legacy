@@ -1,6 +1,6 @@
 \section{Global Trigger System overview}\label{sec:fw:gt_system}
 
-The Global Trigger System is based on MicroTCA technology and 10 Gbps optical links. A set of 6 MP7 boards (for MP7 documentation see~\cite{MP7}, for MP7 firmware see~\cite{MP7 firmware}) with FPGAs of the powerful Xilinx Virtex-7 family is available. The Global Trigger firmware is implemented on these FPGAs. Every FPGA contains a part of the VHDL representation of a L1 Menu, the partitioning is done by VHDL Producer tool. The trigger decision of every MP7 board is collected on an AMC502 board to generate the "final OR" signal which triggers the readout of the detector.
+The Global Trigger System is based on MicroTCA technology and 10 Gbps optical links. A set of 6 MP7 boards (for MP7 documentation see~\cite{MP7}, for MP7 firmware see~\cite{MP7 firmware}) with a FPGA of the powerful Xilinx Virtex-7 family (XC7VX690TFFG1927-2, see~\cite{Virtex7}) is available. The Global Trigger firmware is implemented on these FPGAs. Every FPGA contains a part of the VHDL representation of a L1 Menu, the partitioning is done by VHDL Producer tool. The trigger decision of every MP7 board is collected on an AMC502 board to generate the "final OR" signal which triggers the readout of the detector.
 
 \section{Firmware overview}\label{sec:fw:fw}
 The figure \ref{fig:mgt} shows the architecture of \ugt payload. It consists of framework and the algorithm logic which consists of the following modules:

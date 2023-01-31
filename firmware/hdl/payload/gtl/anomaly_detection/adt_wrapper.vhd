@@ -32,14 +32,14 @@ entity adt_wrapper is
         etmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 --         htmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         adt_out: out std_logic;
-        anomaly_score_o: out std_logic_vector(15 downto 0)
+        anomaly_score_o: out std_logic_vector(17 downto 0)
     );
 end adt_wrapper;
 
 architecture rtl of adt_wrapper is
 
     signal ett_i, htt_i, etm_i, htm_i, etmhf_i, htmhf_i: std_logic_vector(31 downto 0) := X"00000000";
-    signal anomaly_score: std_logic_vector(15 downto 0);
+    signal anomaly_score: std_logic_vector(17 downto 0);
     signal ap_rst: std_logic := '0';
     signal ap_start: std_logic := '1';
     signal adt: std_logic_vector(0 downto 0) := "0";
@@ -54,7 +54,6 @@ begin
     
     anomaly_detection_i: entity work.anomaly_detection
         port map(
-            open, open,
             lhc_clk, ap_rst, ap_start,
             open, open, open,
             mu(0),mu(1),mu(2),mu(3),

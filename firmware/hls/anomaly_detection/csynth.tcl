@@ -1,8 +1,7 @@
 open_project -reset prj_anomaly_detection
 set_top anomaly_detection
-add_files anomaly_detection.cpp -cflags "-std=c++11 -I../"
-add_files NN/VAE_HLS.cpp -cflags "-std=c++11 -INN/"
-add_files ../conversions.cpp -cflags "-std=c++11 -I../"
+add_files anomaly_detection.cpp -cflags "-std=c++0x -I../"
+add_files NN/VAE_HLS.cpp -cflags "-std=c++0x -INN/"
 
 open_solution -reset "solution1"
 
@@ -23,7 +22,7 @@ set f [open ../../cfg/anomaly_detection.dep "w"]
 foreach filepath [glob -dir prj_anomaly_detection/solution1/syn/vhdl/ *] {
   set filename [file tail $filepath];
   file copy -force prj_anomaly_detection/solution1/syn/vhdl/$filename ../../hdl/payload/gtl/anomaly_detection/$filename;
-  puts $f "src payload/anomaly_detection/$filename"
+  puts $f "src payload/gtl/anomaly_detection/$filename"
 }
 close $f
 

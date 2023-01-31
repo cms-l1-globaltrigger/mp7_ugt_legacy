@@ -2,6 +2,7 @@
 -- Data mapping for GTL
 
 -- Version-history:
+-- HB 2023-01-31: implemented logic for CICADA (bjets).
 -- HB 2022-09-05: cleaned up.
 -- HB 2021-06-01: first design.
 

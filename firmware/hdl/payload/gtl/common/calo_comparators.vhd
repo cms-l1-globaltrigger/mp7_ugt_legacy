@@ -3,6 +3,7 @@
 -- Comparators for energy, pseudorapidity, azimuth angle and isolation of calo objects
 
 -- Version history:
+-- HB 2023-01-31: updated for CICADA bjets.
 -- HB 2022-09-06: cleaned up.
 -- HB 2021-12-09: updated DISP logic for jets.
 -- HB 2021-10-19: added DISP cut for jets.
@@ -166,6 +167,46 @@ begin
 
     end generate jet_sel;
 
+    -- HB 2023-01-31: implemented comp for bjets
+    bjet_sel: if obj_type=BJET_TYPE generate
+        et(BJET_ET_HIGH-BJET_ET_LOW downto 0) <= data_i(BJET_ET_HIGH downto BJET_ET_LOW);
+        eta(BJET_ETA_HIGH-BJET_ETA_LOW downto 0) <= data_i(BJET_ETA_HIGH downto BJET_ETA_LOW);
+        phi(BJET_PHI_HIGH-BJET_PHI_LOW downto 0) <= data_i(BJET_PHI_HIGH downto BJET_PHI_LOW);
+
+        bjet_eta_windows_comp_i: entity work.eta_windows_comp
+            generic map(
+                nr_eta_windows,
+                eta_w1_upper_limit(BJET_ETA_HIGH-BJET_ETA_LOW downto 0),
+                eta_w1_lower_limit(BJET_ETA_HIGH-BJET_ETA_LOW downto 0),
+                eta_w2_upper_limit(BJET_ETA_HIGH-BJET_ETA_LOW downto 0),
+                eta_w2_lower_limit(BJET_ETA_HIGH-BJET_ETA_LOW downto 0),
+                eta_w3_upper_limit(BJET_ETA_HIGH-BJET_ETA_LOW downto 0),
+                eta_w3_lower_limit(BJET_ETA_HIGH-BJET_ETA_LOW downto 0),
+                eta_w4_upper_limit(BJET_ETA_HIGH-BJET_ETA_LOW downto 0),
+                eta_w4_lower_limit(BJET_ETA_HIGH-BJET_ETA_LOW downto 0),
+                eta_w5_upper_limit(BJET_ETA_HIGH-BJET_ETA_LOW downto 0),
+                eta_w5_lower_limit(BJET_ETA_HIGH-BJET_ETA_LOW downto 0)
+            )
+            port map(
+                eta => eta(BJET_ETA_HIGH-BJET_ETA_LOW downto 0),
+                eta_comp_o => eta_comp
+            );
+
+        bjet_phi_windows_comp_i: entity work.phi_windows_comp
+            generic map(
+                nr_phi_windows => nr_phi_windows,
+                phi_w1_upper_limit => phi_w1_upper_limit(BJET_PHI_HIGH-BJET_PHI_LOW downto 0),
+                phi_w1_lower_limit => phi_w1_lower_limit(BJET_PHI_HIGH-BJET_PHI_LOW downto 0),
+                phi_w2_upper_limit => phi_w2_upper_limit(BJET_PHI_HIGH-BJET_PHI_LOW downto 0),
+                phi_w2_lower_limit => phi_w2_lower_limit(BJET_PHI_HIGH-BJET_PHI_LOW downto 0)
+            )
+            port map(
+                phi => phi(BJET_PHI_HIGH-BJET_PHI_LOW downto 0),
+                phi_comp_o => phi_comp
+            );
+
+    end generate bjet_sel;
+
     tau_sel: if obj_type=TAU_TYPE generate
         et(TAU_ET_HIGH-TAU_ET_LOW downto 0) <= data_i(TAU_ET_HIGH downto TAU_ET_LOW);
         eta(TAU_ETA_HIGH-TAU_ETA_LOW downto 0) <= data_i(TAU_ETA_HIGH downto TAU_ETA_LOW);
@@ -252,6 +293,11 @@ begin
             comp_int <= et_comp and disp_comp and eta_comp and phi_comp; -- equation, if DISP cut is required
         end generate disp_cut_i;
     end generate comp_int_jet_i;
+
+-- HB 2023-01-31: comparators out for bjet
+    comp_int_bjet_i: if obj_type=BJET_TYPE generate
+            comp_int <= et_comp and eta_comp and phi_comp;
+    end generate comp_int_bjet_i;
 
     pipeline_p: process(lhc_clk, comp_int)
         begin

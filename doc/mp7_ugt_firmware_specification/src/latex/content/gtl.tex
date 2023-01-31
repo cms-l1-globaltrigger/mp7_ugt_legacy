@@ -317,7 +317,7 @@ Definition of frame 4:\\
 \end{center}
 
 Definition of frame 5:\\
-\tiny{Remark: "S" means bjet 6 eta sign bit.}\normalsize
+\tiny{Remark: "S" means bjet 6 eta sign bit, "*" means bjet 6 phi[7:3]}\normalsize
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,4,5,11,12,12,13,23,24,31} \\
@@ -325,7 +325,7 @@ Definition of frame 5:\\
         \bitbox {11}    {\texttt{bjet 6 \et}} &
         \bitbox {1}     {\texttt{S}} &
         \bitbox {7}     {\texttt{bjet 6 eta}} &
-        \bitbox {5}     {\texttt{bjet 6 phi[7:3]}} \\
+        \bitbox {5}     {\texttt{*}} \\
 \end{bytefield}
 \end{center}
 

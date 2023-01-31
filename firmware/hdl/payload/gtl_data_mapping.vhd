@@ -91,10 +91,33 @@ begin
 
 -- ****************************************************************************************
 
-    gtl_data.bjet(0)[7:0] <= lhc_data.cicada(0)(MAX_CALO_BITS-1 downto 0)[29:22]; -- bjet 0 phi
-    gtl_data.bjet(0)[9:8] <= lhc_data.cicada(0)(MAX_CALO_BITS-1 downto 0)[31:30]; -- bjet 0 eta
-    gtl_data.bjet(0)[15:10] <= lhc_data.cicada(1)(MAX_CALO_BITS-1 downto 0)[5:0]; -- bjet 0 eta
-    gtl_data.bjet(0)[26:16] <= lhc_data.cicada(1)(MAX_CALO_BITS-1 downto 0)[20:10]; -- bjet 0 Et
--- continue with other bjet objects
+    gtl_data.bjet(0)(BJET_PHI_HIGH downto BJET_PHI_LOW) <= lhc_data.cicada(0)(29 downto 22); -- bjet 1 phi
+    gtl_data.bjet(0)(BJET_ETA_LOW+1 downto BJET_ETA_LOW) <= lhc_data.cicada(0)(31 downto 30); -- bjet 1 eta "low"
+    gtl_data.bjet(0)(BJET_ETA_HIGH downto BJET_ETA_HIGH-5) <= lhc_data.cicada(1)(5 downto 0); -- bjet 1 eta "high"
+    gtl_data.bjet(0)(BJET_ET_HIGH downto BJET_ET_LOW) <= lhc_data.cicada(1)(16 downto 6); -- bjet 1 Et
+    
+    gtl_data.bjet(1)(BJET_PHI_HIGH downto BJET_PHI_LOW) <= lhc_data.cicada(1)(24 downto 17); -- bjet 2 phi
+    gtl_data.bjet(1)(BJET_ETA_LOW+6 downto BJET_ETA_LOW) <= lhc_data.cicada(1)(31 downto 25); -- bjet 2 eta "low"
+    gtl_data.bjet(1)(BJET_ETA_HIGH downto BJET_ETA_HIGH) <= lhc_data.cicada(2)(0 downto 0); -- bjet 2 eta "high"
+    gtl_data.bjet(1)(BJET_ET_HIGH downto BJET_ET_LOW) <= lhc_data.cicada(2)(11 downto 1); -- bjet 2 Et
+        
+    gtl_data.bjet(2)(BJET_PHI_HIGH downto BJET_PHI_LOW) <= lhc_data.cicada(2)(19 downto 12); -- bjet 3 phi
+    gtl_data.bjet(2)(BJET_ETA_LOW downto BJET_ETA_LOW) <= lhc_data.cicada(2)(27 downto 20); -- bjet 3 eta
+    gtl_data.bjet(2)(BJET_ET_LOW+3 downto BJET_ET_LOW) <= lhc_data.cicada(2)(31 downto 28); -- bjet 3 Et "low"
+    gtl_data.bjet(2)(BJET_ET_HIGH downto BJET_ET_HIGH-6) <= lhc_data.cicada(3)(6 downto 0); -- bjet 3 Et "high"
+        
+    gtl_data.bjet(3)(BJET_PHI_HIGH downto BJET_PHI_LOW) <= lhc_data.cicada(3)(14 downto 7); -- bjet 4 phi
+    gtl_data.bjet(3)(BJET_ETA_LOW downto BJET_ETA_LOW) <= lhc_data.cicada(3)(22 downto 15); -- bjet 4 eta
+    gtl_data.bjet(3)(BJET_ET_LOW+8 downto BJET_ET_LOW) <= lhc_data.cicada(3)(31 downto 23); -- bjet 4 Et "low"
+    gtl_data.bjet(3)(BJET_ET_HIGH downto BJET_ET_HIGH-1) <= lhc_data.cicada(4)(1 downto 0); -- bjet 4 Et "high"
+        
+    gtl_data.bjet(4)(BJET_PHI_HIGH downto BJET_PHI_LOW) <= lhc_data.cicada(4)(9 downto 2); -- bjet 5 phi
+    gtl_data.bjet(4)(BJET_ETA_LOW downto BJET_ETA_LOW) <= lhc_data.cicada(4)(17 downto 10); -- bjet 5 eta
+    gtl_data.bjet(4)(BJET_ET_HIGH downto BJET_ET_LOW) <= lhc_data.cicada(4)(28 downto 18); -- bjet 5 Et
+        
+    gtl_data.bjet(5)(BJET_PHI_LOW+2 downto BJET_PHI_LOW) <= lhc_data.cicada(4)(31 downto 29); -- bjet 6 phi "low"
+    gtl_data.bjet(5)(BJET_PHI_HIGH downto BJET_PHI_HIGH-4) <= lhc_data.cicada(5)(4 downto 0); -- bjet 6 phi "high"
+    gtl_data.bjet(5)(BJET_ETA_LOW downto BJET_ETA_LOW) <= lhc_data.cicada(5)(12 downto 5); -- bjet 6 eta
+    gtl_data.bjet(5)(BJET_ET_HIGH downto BJET_ET_LOW) <= lhc_data.cicada(5)(23 downto 13); -- bjet 6 Et
         
 end architecture rtl;

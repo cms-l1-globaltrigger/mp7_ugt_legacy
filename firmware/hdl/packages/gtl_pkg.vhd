@@ -217,6 +217,23 @@ constant TAU_ISO_LOW : natural := 25;
 constant TAU_ISO_HIGH : natural := 26;
 constant TAU_ISO_BITS : natural := TAU_ISO_HIGH-TAU_ISO_LOW+1;
 
+-- *******************************************************************************************************
+-- HB 2023-01-26: calo anomaly algorithm (CICADA) data from Calo-Layer1
+constant NR_BJET_OBJECTS : positive := BJET_ARRAY_LENGTH; -- number bjet objects, from lhc_data_pkg.vhd
+type bjet_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO_BITS-1 downto 0);
+type bx_bjet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_BJET_OBJECTS-1);
+
+constant BJET_ET_LOW : natural := 0;
+constant BJET_ET_HIGH : natural := 10;
+constant BJET_ET_BITS : natural := BJET_ET_HIGH-BJET_ET_LOW+1;
+constant BJET_ETA_LOW : natural := 11;
+constant BJET_ETA_HIGH : natural := 18;
+constant BJET_ETA_BITS : natural := BJET_ETA_HIGH-BJET_ETA_LOW+1;
+constant BJET_PHI_LOW : natural := 19;
+constant BJET_PHI_HIGH : natural := 26;
+constant BJET_PHI_BITS : natural := BJET_PHI_HIGH-BJET_PHI_LOW+1;
+-- *******************************************************************************************************
+
 type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO_BITS-1 downto 0);
 type bx_eg_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_EG_OBJECTS-1);
 type bx_jet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_JET_OBJECTS-1);
@@ -372,22 +389,6 @@ constant MBT1HFP_COUNT_HIGH : natural := 3;
 
 constant MBT1HFM_COUNT_LOW : natural := 0;
 constant MBT1HFM_COUNT_HIGH : natural := 3;
-
--- *******************************************************************************************************
--- HB 2023-01-26: calo anomaly algorithm (CICADA) data from Calo-Layer1
-constant NR_BJET_OBJECTS : positive := BJET_ARRAY_LENGTH; -- number bjet objects, from lhc_data_pkg.vhd
-type bjet_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO_BITS-1 downto 0);
-type bx_bjet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_BJET_OBJECTS-1);
-
-constant BJET_PHI_LOW : natural := 0;
-constant BJET_PHI_HIGH : natural := 7;
-constant BJET_PHI_BITS : natural := BJET_PHI_HIGH-BJET_PHI_LOW+1;
-constant BJET_ETA_LOW : natural := 8;
-constant BJET_ETA_HIGH : natural := 15;
-constant BJET_ETA_BITS : natural := BJET_ETA_HIGH-BJET_ETA_LOW+1;
-constant BJET_ET_LOW : natural := 16;
-constant BJET_ET_HIGH : natural := 26;
-constant BJET_ET_BITS : natural := BJET_ET_HIGH-BJET_ET_LOW+1;
 
 -- *******************************************************************************************************
 -- max bits for comparators.vhd

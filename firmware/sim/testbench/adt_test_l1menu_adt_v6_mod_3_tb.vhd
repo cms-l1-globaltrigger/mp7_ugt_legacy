@@ -40,8 +40,6 @@ architecture rtl of adt_test_l1menu_adt_v6_mod_3_tb is
 
     constant LHC_BUNCH_COUNT: integer := 3564;
     
-    constant GTL_FDL_LATENCY_ADT: integer := 7;
-
     signal clk160 : std_logic;
     signal lhc_clk : std_logic;
 
@@ -133,9 +131,9 @@ begin
             if i < LHC_BUNCH_COUNT then
                 lhc_data <= testdata(i);                        
             end if;
-            if i >= GTL_FDL_LATENCY_ADT and i < LHC_BUNCH_COUNT+GTL_FDL_LATENCY_ADT-1 then
-                if algo_log /= algo_vector_data(i - GTL_FDL_LATENCY_ADT)(ADT_ALGO_BIT) then
-                    write(write_l, string'(bx_nr_vector_data(i - GTL_FDL_LATENCY_ADT) & " " & integer'image(anomaly_score_int) & " " & str(algo_log) & " " & str(algo_vector_data(i - GTL_FDL_LATENCY_ADT)(ADT_ALGO_BIT))));
+            if i >= GTL_FDL_LATENCY and i < LHC_BUNCH_COUNT+GTL_FDL_LATENCY-1 then
+                if algo_log /= algo_vector_data(i - GTL_FDL_LATENCY)(ADT_ALGO_BIT) then
+                    write(write_l, string'(bx_nr_vector_data(i - GTL_FDL_LATENCY) & " " & integer'image(anomaly_score_int) & " " & str(algo_log) & " " & str(algo_vector_data(i - GTL_FDL_LATENCY)(ADT_ALGO_BIT))));
                     writeline(err_file, write_l);
                 end if;
             end if;

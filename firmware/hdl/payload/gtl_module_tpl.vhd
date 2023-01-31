@@ -1,9 +1,7 @@
 -- Description:
 -- Global Trigger Logic module.
 
--- Version-history:
--- HB 2023-01-26: v1.18.1: Removed algo out register. Algo out register will be instantiated by VHDL Producer, except for ADT algos.
--- HB 2022-09-12: v1.18.0: Module for "anomaly detection trigger (ADT)" test.
+-- Version history:
 -- HB 2022-11-29: v1.17.6: Bug fix in algo_pre_scaler_fractional_float.vhd.
 -- HB 2022-11-16: v1.17.5: Bug fix in correlation_conditions.vhd.
 -- HB 2022-09-23: v1.17.4: Used "delay_pipeline" for condition output in esums_conditions.vhd, min_bias_hf_conditions.vhd and towercount_condition.vhd.
@@ -64,8 +62,16 @@ entity gtl_module is
 end gtl_module;
 
 architecture rtl of gtl_module is
+    COMPONENT rom_lut_calo_inv_dr_sq
+    PORT(
+        clka : IN STD_LOGIC;
+        addra : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        douta : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+    END COMPONENT;
 
     signal bx_data : bx_data_record;
+
     signal algo : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
 
 {{gtl_module_signals}}
@@ -80,5 +86,13 @@ bx_pipeline_i: entity work.bx_pipeline
     );
 
 {{gtl_module_instances}}
+
+-- One pipeline stages for algorithms
+algo_pipeline_p: process(lhc_clk, algo)
+    begin
+    if (lhc_clk'event and lhc_clk = '1') then
+        algo_o <= algo;
+    end if;
+end process;
 
 end architecture rtl;

@@ -3,10 +3,10 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.21.9
+-- mp7_ugt (=FRAME_VERSION): v1.21.8
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.21.9
+-- gt: v1.21.8
 -- frame: v1.3.1 (see frame.vhd)
 -- gtl: v1.18.1 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
@@ -31,7 +31,6 @@
 -- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
 -- gtl history:
--- HB 2023-01-26: v1.18.1: Removed algo out register instantiated by VHDL Producer, except for ADT algos.
 -- HB 2022-09-12: v1.18.0: Module for "anomaly detection trigger (ADT)" test.
 -- HB 2022-11-29: v1.17.6: Bug fix in algo_pre_scaler_fractional_float.vhd.
 -- HB 2022-11-16: v1.17.5: Bug fix in correlation_conditions.vhd.
@@ -88,7 +87,7 @@ package gt_mp7_core_pkg is
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GT_MINOR_VERSION      : integer range 0 to 255 := 21;
-    constant GT_REV_VERSION        : integer range 0 to 255 := 9;
+    constant GT_REV_VERSION        : integer range 0 to 255 := 8;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &
@@ -100,7 +99,7 @@ package gt_mp7_core_pkg is
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 18;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 1;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 0;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 4;
@@ -175,7 +174,6 @@ package gt_mp7_core_pkg is
 --------------------------------------------------------------------------------
 -- HB, 12-11-2013: GTL_FDL_LATENCY = 6 with fixed pipeline structure (2 = +/- 2bx, 3 = conditions and algos, 1 = FDL)
     constant GTL_FDL_LATENCY : integer := 6;
---     constant GTL_FDL_LATENCY : integer := 7;
 
 --------------------------------------------------------------------------------
 -- ADDRESS DECODER

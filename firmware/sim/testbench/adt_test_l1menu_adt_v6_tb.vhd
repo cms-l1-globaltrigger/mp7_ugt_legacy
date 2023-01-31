@@ -23,9 +23,6 @@ end adt_test_l1menu_adt_v6_tb;
 
 architecture rtl of adt_test_l1menu_adt_v6_tb is
 
---     constant ADT_ALGO_BIT: integer := 3;
---     constant TV_FILE_LOC: string := "./adt_test/l1menu_adt_v6/module_3/TestVector_L1Menu_adt_v6_orig_3564.txt";
---     constant ERROR_FILE_LOC: string := "./adt_test/l1menu_adt_v6/module_3/error_file_L1_ADT_80.txt";
     constant TV_FILE_LOC: string := "./adt_test/l1menu_adt_v6/TestVector_L1Menu_adt_v6_01.txt";
 
     type lhc_data_t_array is array(integer range <>) of lhc_data_t;
@@ -42,8 +39,6 @@ architecture rtl of adt_test_l1menu_adt_v6_tb is
 
     constant LHC_BUNCH_COUNT: integer := 3564;
     
---     constant GTL_FDL_LATENCY_ADT: integer := 7;
-
     signal clk160 : std_logic;
     signal lhc_clk : std_logic;
 

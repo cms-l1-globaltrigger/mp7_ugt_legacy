@@ -219,9 +219,9 @@ constant TAU_ISO_BITS : natural := TAU_ISO_HIGH-TAU_ISO_LOW+1;
 
 -- *******************************************************************************************************
 -- HB 2023-01-26: calo anomaly algorithm (CICADA) data from Calo-Layer1
-constant NR_BJET_OBJECTS : positive := BJET_ARRAY_LENGTH; -- number bjet objects, from lhc_data_pkg.vhd
-type bjet_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO_BITS-1 downto 0);
-type bx_bjet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_BJET_OBJECTS-1);
+-- bjets definition
+-- constant NR_BJET_OBJECTS : positive := CICADA_ARRAY_LENGTH; -- number bjet objects, from lhc_data_pkg.vhd
+constant NR_BJET_OBJECTS : positive := 6; -- number bjet objects, from lhc_data_pkg.vhd
 
 constant BJET_ET_LOW : natural := 0;
 constant BJET_ET_HIGH : natural := 10;
@@ -232,12 +232,25 @@ constant BJET_ETA_BITS : natural := BJET_ETA_HIGH-BJET_ETA_LOW+1;
 constant BJET_PHI_LOW : natural := 19;
 constant BJET_PHI_HIGH : natural := 26;
 constant BJET_PHI_BITS : natural := BJET_PHI_HIGH-BJET_PHI_LOW+1;
+
+-- anomaly detection (ad) definition - decimal (dec) and integer (int) part 
+constant NR_AD_OBJECTS : positive := 1;
+
+constant AD_DEC_LOW : natural := 0;
+constant AD_DEC_HIGH : natural := 6;
+constant AD_DEC_BITS : natural := AD_DEC_HIGH-AD_DEC_LOW+1;
+constant AD_INT_LOW : natural := 7;
+constant AD_INT_HIGH : natural := 12;
+constant AD_INT_BITS : natural := AD_INT_HIGH-AD_INT_LOW+1;
+
 -- *******************************************************************************************************
 
 type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO_BITS-1 downto 0);
 type bx_eg_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_EG_OBJECTS-1);
 type bx_jet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_JET_OBJECTS-1);
 type bx_tau_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_TAU_OBJECTS-1);
+type bx_bjet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_BJET_OBJECTS-1);
+type bx_ad_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(AD_DEC_BITS+AD_INT_BITS-1 downto 0);
 constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
 type calo_templates_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 constant MAX_CALO_ET_BITS : positive := max(EG_ET_BITS, JET_ET_BITS, TAU_ET_BITS);
@@ -435,7 +448,8 @@ type gtl_data_record is record
     towercount : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
     centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
-    bjet : bjet_objects_array(0 to NR_BJET_OBJECTS-1);
+    bjet : calo_objects_array(0 to NR_BJET_OBJECTS-1);
+    ad : std_logic_vector(AD_DEC_BITS+AD_INT_BITS-1 downto 0);
 end record gtl_data_record;
 
 type bx_data_record is record
@@ -470,6 +484,7 @@ type bx_data_record is record
     ext_cond : bx_ext_cond_array;
     mus0, mus1, musoot0, musoot1 : mus_bit_array;
     bjet : bx_bjet_objects_array;
+    ad : bx_ad_array;
 end record bx_data_record;
 
 -- ==== Correlations - begin ============================================================

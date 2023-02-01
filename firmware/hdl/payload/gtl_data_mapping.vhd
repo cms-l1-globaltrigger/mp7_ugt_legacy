@@ -103,22 +103,24 @@ begin
     gtl_data.bjet(1)(BJET_ET_HIGH downto BJET_ET_LOW) <= lhc_data.cicada(2)(11 downto 1); -- bjet 2 Et
         
     gtl_data.bjet(2)(BJET_PHI_HIGH downto BJET_PHI_LOW) <= lhc_data.cicada(2)(19 downto 12); -- bjet 3 phi
-    gtl_data.bjet(2)(BJET_ETA_LOW downto BJET_ETA_LOW) <= lhc_data.cicada(2)(27 downto 20); -- bjet 3 eta
+    gtl_data.bjet(2)(BJET_ETA_HIGH downto BJET_ETA_LOW) <= lhc_data.cicada(2)(27 downto 20); -- bjet 3 eta
     gtl_data.bjet(2)(BJET_ET_LOW+3 downto BJET_ET_LOW) <= lhc_data.cicada(2)(31 downto 28); -- bjet 3 Et "low"
     gtl_data.bjet(2)(BJET_ET_HIGH downto BJET_ET_HIGH-6) <= lhc_data.cicada(3)(6 downto 0); -- bjet 3 Et "high"
         
     gtl_data.bjet(3)(BJET_PHI_HIGH downto BJET_PHI_LOW) <= lhc_data.cicada(3)(14 downto 7); -- bjet 4 phi
-    gtl_data.bjet(3)(BJET_ETA_LOW downto BJET_ETA_LOW) <= lhc_data.cicada(3)(22 downto 15); -- bjet 4 eta
+    gtl_data.bjet(3)(BJET_ETA_HIGH downto BJET_ETA_LOW) <= lhc_data.cicada(3)(22 downto 15); -- bjet 4 eta
     gtl_data.bjet(3)(BJET_ET_LOW+8 downto BJET_ET_LOW) <= lhc_data.cicada(3)(31 downto 23); -- bjet 4 Et "low"
     gtl_data.bjet(3)(BJET_ET_HIGH downto BJET_ET_HIGH-1) <= lhc_data.cicada(4)(1 downto 0); -- bjet 4 Et "high"
         
     gtl_data.bjet(4)(BJET_PHI_HIGH downto BJET_PHI_LOW) <= lhc_data.cicada(4)(9 downto 2); -- bjet 5 phi
-    gtl_data.bjet(4)(BJET_ETA_LOW downto BJET_ETA_LOW) <= lhc_data.cicada(4)(17 downto 10); -- bjet 5 eta
+    gtl_data.bjet(4)(BJET_ETA_HIGH downto BJET_ETA_LOW) <= lhc_data.cicada(4)(17 downto 10); -- bjet 5 eta
     gtl_data.bjet(4)(BJET_ET_HIGH downto BJET_ET_LOW) <= lhc_data.cicada(4)(28 downto 18); -- bjet 5 Et
         
     gtl_data.bjet(5)(BJET_PHI_LOW+2 downto BJET_PHI_LOW) <= lhc_data.cicada(4)(31 downto 29); -- bjet 6 phi "low"
     gtl_data.bjet(5)(BJET_PHI_HIGH downto BJET_PHI_HIGH-4) <= lhc_data.cicada(5)(4 downto 0); -- bjet 6 phi "high"
-    gtl_data.bjet(5)(BJET_ETA_LOW downto BJET_ETA_LOW) <= lhc_data.cicada(5)(12 downto 5); -- bjet 6 eta
-    gtl_data.bjet(5)(BJET_ET_HIGH downto BJET_ET_LOW) <= lhc_data.cicada(5)(23 downto 13); -- bjet 6 Et
+    gtl_data.bjet(5)(BJET_ETA_HIGH downto BJET_ETA_LOW) <= lhc_data.cicada(5)(12 downto 5); -- bjet 6 eta
+    
+    gtl_data.ad(AD_DEC_HIGH downto AD_DEC_LOW) <= lhc_data.cicada(0)(14 downto 8); -- anomaly detection decimal part
+    gtl_data.ad(AD_INT_HIGH downto AD_INT_LOW) <= lhc_data.cicada(0)(20 downto 15); -- anomaly detection integer part
         
 end architecture rtl;

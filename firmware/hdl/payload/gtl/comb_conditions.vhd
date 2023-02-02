@@ -3,6 +3,7 @@
 -- Condition module for all combination conditions.
 
 -- Version history:
+-- HB 2023-02-02: updated for CICADA.
 -- HB 2022-09-02: cleaned up.
 -- HB 2022-02-17: bug fixed in orm and cleaned up.
 -- HB 2021-12-09: updated for DISP of jets.
@@ -55,6 +56,10 @@ entity comb_conditions is
         upt_upper_limits_obj1: common_templates_array := (others => (others => '0'));
         upt_lower_limits_obj1: common_templates_array := (others => (others => '0'));
         ip_luts_obj1: common_templates_ip_array := (others => (others => '1'));
+        hi_bit_requ : boolean := false;
+        ad_requ : boolean := false;
+        ad_dec_thr : std_logic_vector(AD_DEC_BITS-1 downto 0) := (others => '0');
+        ad_int_thr : std_logic_vector(AD_INT_BITS-1 downto 0) := (others => '0');
 
         requested_charge_correlation: string(1 to 2) := "ig";
 
@@ -120,6 +125,9 @@ entity comb_conditions is
         os_charcorr_triple: in std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
         ls_charcorr_quad: in std_logic_4dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => (others => '0'))));
         os_charcorr_quad: in std_logic_4dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => (others => '0'))));
+        hi_bit_i : in std_logic := '0';
+        ad_dec_i : in std_logic_vector(AD_DEC_BITS-1 downto 0) := (others => '0');
+        ad_int_i : in std_logic_vector(AD_INT_BITS-1 downto 0) := (others => '0');
         deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dphi_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dr_orm: in dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
@@ -181,11 +189,16 @@ begin
                 phi_w2_upper_limits_obj1, phi_w2_lower_limits_obj1,
                 iso_luts_obj1,
                 disp_cuts_obj1,
-                disp_requs_obj1
+                disp_requs_obj1,
+                hi_bit_requ,
+                ad_requ,
+                ad_dec_thr,
+                ad_int_thr
             )
             port map(
                 lhc_clk,
-                obj1_calo, obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe
+                obj1_calo, hi_bit_i, ad_dec_i, ad_int_i,
+                obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe
             );
 
         no_orm_i: if not (deta_orm_cut or dphi_orm_cut or dr_orm_cut) generate
@@ -228,10 +241,14 @@ begin
                         phi_w2_lower_limit_obj2,
                         iso_lut_obj2,
                         disp_cut_obj2,
-                        disp_requ_obj2
+                        disp_requ_obj2,
+                        hi_bit_requ,
+                        ad_requ,
+                        ad_dec_thr,
+                        ad_int_thr
                     )
                     port map(
-                        lhc_clk, obj2(i), obj2_vs_templ_pipe(i,1)
+                        lhc_clk, obj2(i), hi_bit_i, ad_dec_i, ad_int_i, obj2_vs_templ_pipe(i,1)
                     );
             end generate obj2_l;
 

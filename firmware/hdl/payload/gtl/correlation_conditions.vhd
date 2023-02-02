@@ -3,6 +3,7 @@
 -- Correlation Condition module (for all possible correlation conditions)
 
 -- Version history:
+-- HB 2023-02-02: updated for CICADA.
 -- HB 2022-11-16: bug fix in "mass_3_obj_i/matrix_corr_cond_i": added missing generic parameter.
 -- HB 2022-09-05: cleaned up.
 -- HB 2021-12-09: updated for DISP of jets.
@@ -46,6 +47,10 @@ entity correlation_conditions is
         upt_upper_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         upt_lower_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         ip_lut_obj1: std_logic_vector(2**(MUON_IP_HIGH-MUON_IP_LOW+1)-1 downto 0) := (others => '1');
+        hi_bit_requ : boolean := false;
+        ad_requ : boolean := false;
+        ad_dec_thr : std_logic_vector(AD_DEC_BITS-1 downto 0) := (others => '0');
+        ad_int_thr : std_logic_vector(AD_INT_BITS-1 downto 0) := (others => '0');
 
         slice_low_obj2: natural := 0;
         slice_high_obj2: natural := NR_EG_OBJECTS-1;
@@ -180,6 +185,9 @@ entity correlation_conditions is
         ls_charcorr_triple: in std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
         os_charcorr_triple: in std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
         esums: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0) := (others => '0');
+        hi_bit_i : in std_logic := '0';
+        ad_dec_i : in std_logic_vector(AD_DEC_BITS-1 downto 0) := (others => '0');
+        ad_int_i : in std_logic_vector(AD_INT_BITS-1 downto 0) := (others => '0');        
         deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
         dphi_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
         dr_orm: in dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj3-1) := (others => (others => (others => '0')));
@@ -240,9 +248,13 @@ begin
                     phi_w2_lower_limit_obj1,
                     iso_lut_obj1,
                     disp_cut_obj1,
-                    disp_requ_obj1
+                    disp_requ_obj1,
+                    hi_bit_requ,
+                    ad_requ,
+                    ad_dec_thr,
+                    ad_int_thr
                 )
-                port map(lhc_clk, calo_obj1(i), obj1_vs_templ_pipe(i,1));
+                port map(lhc_clk, calo_obj1(i), hi_bit_i, ad_dec_i, ad_int_i, obj1_vs_templ_pipe(i,1));
         end generate obj1_l;
     end generate calo_obj1_sel;
 
@@ -306,9 +318,13 @@ begin
                         phi_w2_lower_limit_obj2,
                         iso_lut_obj2,
                         disp_cut_obj2,
-                        disp_requ_obj2
+                        disp_requ_obj2,
+                        hi_bit_requ,
+                        ad_requ,
+                        ad_dec_thr,
+                        ad_int_thr
                     )
-                    port map(lhc_clk, calo_obj2(i), obj2_vs_templ_pipe(i,1));
+                    port map(lhc_clk, calo_obj2(i), hi_bit_i, ad_dec_i, ad_int_i, obj2_vs_templ_pipe(i,1));
             end generate obj2_l;
         end generate calo_obj2_i;
 
@@ -467,9 +483,13 @@ begin
                             phi_w2_lower_limit_obj3,
                             iso_lut_obj3,
                             disp_cut_obj3,
-                            disp_requ_obj3
+                            disp_requ_obj3,
+                            hi_bit_requ,
+                            ad_requ,
+                            ad_dec_thr,
+                            ad_int_thr
                         )
-                        port map(lhc_clk, calo_obj3(i), obj3_vs_templ_pipe(i,1));
+                        port map(lhc_clk, calo_obj3(i), hi_bit_i, ad_dec_i, ad_int_i, obj3_vs_templ_pipe(i,1));
                 end generate obj3_l;
             end generate calo_obj3_sel;
 

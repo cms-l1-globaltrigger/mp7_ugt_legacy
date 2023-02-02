@@ -3,7 +3,7 @@
 -- Comparators for energy, pseudorapidity, azimuth angle and isolation of calo objects
 
 -- Version history:
--- HB 2023-01-31: updated for CICADA bjets.
+-- HB 2023-02-02: updated for CICADA.
 -- HB 2022-09-06: cleaned up.
 -- HB 2021-12-09: updated DISP logic for jets.
 -- HB 2021-10-19: added DISP cut for jets.
@@ -45,11 +45,18 @@ entity calo_comparators is
         phi_w2_lower_limit : std_logic_vector;
         iso_lut : std_logic_vector;
         disp_cut : boolean := false;
-        disp_requ : boolean := false
+        disp_requ : boolean := false;
+        hi_bit_requ : boolean := false;
+        ad_requ : boolean := false;
+        ad_dec_thr : std_logic_vector;
+        ad_int_thr : std_logic_vector
     );
     port(
         lhc_clk : in std_logic;
         data_i : in std_logic_vector;
+        hi_bit_i : in std_logic;
+        ad_dec_i : in std_logic_vector;
+        ad_int_i : in std_logic_vector;
         comp_o : out std_logic
     );
 end calo_comparators;
@@ -67,6 +74,7 @@ architecture rtl of calo_comparators is
     signal iso_comp : std_logic := '1';
     signal comp_int : std_logic;
     signal disp_comp : std_logic;
+    signal ad_comp : std_logic;
 
 begin
 
@@ -296,7 +304,30 @@ begin
 
 -- HB 2023-01-31: comparators out for bjet
     comp_int_bjet_i: if obj_type=BJET_TYPE generate
+        ad_p: process(ad_int_i, ad_dec_i)
+        begin
+            if ad_int_i >= ad_int_thr then
+                if ad_dec_i >= ad_dec_thr then
+                    ad_comp <= '1';
+                else
+                    ad_comp <= '0';
+                end if;
+            else
+                ad_comp <= '0';
+            end if;
+        end process;
+        no_ad_no_hi_i: if not hi_bit_requ and not ad_requ generate
             comp_int <= et_comp and eta_comp and phi_comp;
+        end generate no_ad_no_hi_i;
+        no_ad_hi_i: if hi_bit_requ and not ad_requ generate
+            comp_int <= et_comp and eta_comp and phi_comp and hi_bit_i;
+        end generate no_ad_hi_i;
+        ad_no_hi_i: if not hi_bit_requ and ad_requ generate
+            comp_int <= et_comp and eta_comp and phi_comp and ad_comp;
+        end generate ad_no_hi_i;
+        ad_hi_i: if not hi_bit_requ and ad_requ generate
+            comp_int <= et_comp and eta_comp and phi_comp and hi_bit_i and ad_comp;
+        end generate ad_hi_i;
     end generate comp_int_bjet_i;
 
     pipeline_p: process(lhc_clk, comp_int)

@@ -3,7 +3,7 @@
 -- Condition module for all combination conditions.
 
 -- Version history:
--- HB 2023-02-02: updated for CICADA.
+-- HB 2023-02-03: updated for CICADA.
 -- HB 2022-09-02: cleaned up.
 -- HB 2022-02-17: bug fixed in orm and cleaned up.
 -- HB 2021-12-09: updated for DISP of jets.
@@ -165,8 +165,21 @@ architecture rtl of comb_conditions is
 
     signal twobody_pt_comp_pipe, twobody_upt_comp_pipe :
     std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_1_low_obj1 to slice_1_high_obj1) := (others => (others => '1'));
+    
+    signal ad_comp_pipe, hi_comp_pipe : std_logic := '1';
 
 begin
+
+    -- CICADA Anomaly Detection and Heavy Ion Bit calo_comparators
+    cicada_if: if (type_obj1 = BJET_TYPE) or (type_obj2 = BJET_TYPE) generate
+        cicada_i: entity work.cicada_ad_hi_comp
+            generic map(hi_bit_requ, ad_requ, ad_dec_thr, ad_int_thr)
+            port map(
+                lhc_clk,
+                hi_bit_i, ad_dec_i, ad_int_i,
+                hi_comp_pipe, ad_comp_pipe
+            );
+    end generate cicada_if;
 
     calo_i: if type_obj1 /= MU_TYPE generate
         -- Instantiation of object cuts for obj1.
@@ -189,16 +202,11 @@ begin
                 phi_w2_upper_limits_obj1, phi_w2_lower_limits_obj1,
                 iso_luts_obj1,
                 disp_cuts_obj1,
-                disp_requs_obj1,
-                hi_bit_requ,
-                ad_requ,
-                ad_dec_thr,
-                ad_int_thr
+                disp_requs_obj1
             )
             port map(
                 lhc_clk,
-                obj1_calo, hi_bit_i, ad_dec_i, ad_int_i,
-                obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe
+                obj1_calo, obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe
             );
 
         no_orm_i: if not (deta_orm_cut or dphi_orm_cut or dr_orm_cut) generate
@@ -216,6 +224,7 @@ begin
                     lhc_clk,
                     obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe,
                     twobody_pt_comp_pipe,
+                    hi_comp_pipe, ad_comp_pipe,
                     condition_o
                 );
         end generate no_orm_i;
@@ -241,14 +250,10 @@ begin
                         phi_w2_lower_limit_obj2,
                         iso_lut_obj2,
                         disp_cut_obj2,
-                        disp_requ_obj2,
-                        hi_bit_requ,
-                        ad_requ,
-                        ad_dec_thr,
-                        ad_int_thr
+                        disp_requ_obj2
                     )
                     port map(
-                        lhc_clk, obj2(i), hi_bit_i, ad_dec_i, ad_int_i, obj2_vs_templ_pipe(i,1)
+                        lhc_clk, obj2(i), obj2_vs_templ_pipe(i,1)
                     );
             end generate obj2_l;
 

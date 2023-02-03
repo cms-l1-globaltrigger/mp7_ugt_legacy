@@ -2,7 +2,6 @@
 -- Calo objects cuts
 
 -- Version history:
--- HB 2023-02-02: updated for CICADA.
 -- HB 2021-12-09: updated for DISP of jets.
 -- HB 2021-10-19: inserted cut for DISP of jets.
 -- HB 2021-02-19: updated for intermediate pipelines in calo_comparators.
@@ -47,18 +46,11 @@ entity calo_obj_cuts is
         phi_w2_lower_limits: common_templates_array;
         iso_luts: common_templates_iso_array;
         disp_cuts: common_templates_boolean_array;
-        disp_requs: common_templates_boolean_array;
-        hi_bit_requ : boolean := false;
-        ad_requ : boolean := false;
-        ad_dec_thr : std_logic_vector(AD_DEC_BITS-1 downto 0) := (others => '0');
-        ad_int_thr : std_logic_vector(AD_INT_BITS-1 downto 0) := (others => '0')
+        disp_requs: common_templates_boolean_array
     );
     port(
         lhc_clk: in std_logic;
         data_i: in calo_objects_array;
-        hi_bit_i : in std_logic := '0';
-        ad_dec_i : in std_logic_vector(AD_DEC_BITS-1 downto 0) := (others => '0');
-        ad_int_i : in std_logic_vector(AD_INT_BITS-1 downto 0) := (others => '0');
         obj_slice_1_vs_templ: out std_logic_2dim_array;
         obj_slice_2_vs_templ: out std_logic_2dim_array;
         obj_slice_3_vs_templ: out std_logic_2dim_array;
@@ -95,13 +87,9 @@ begin
                 phi_w2_lower_limits(1),
                 iso_luts(1),
                 disp_cuts(1),
-                disp_requs(1),
-                hi_bit_requ,
-                ad_requ,
-                ad_dec_thr,
-                ad_int_thr
+                disp_requs(1)
             )
-            port map(lhc_clk, data_i(i), hi_bit_i, ad_dec_i, ad_int_i, obj_slice_1_vs_templ(i,1));
+            port map(lhc_clk, data_i(i), obj_slice_1_vs_templ(i,1));
     end generate obj_slice_1_l;
 
     obj_slice_2_l: for i in calo_object_slice_2_low to calo_object_slice_2_high generate
@@ -127,13 +115,9 @@ begin
                 phi_w2_lower_limits(2),
                 iso_luts(2),
                 disp_cuts(2),
-                disp_requs(2),
-                hi_bit_requ,
-                ad_requ,
-                ad_dec_thr,
-                ad_int_thr
+                disp_requs(2)
             )
-            port map(lhc_clk, data_i(i), hi_bit_i, ad_dec_i, ad_int_i, obj_slice_2_vs_templ(i,1));
+            port map(lhc_clk, data_i(i), obj_slice_2_vs_templ(i,1));
     end generate obj_slice_2_l;
 
     obj_slice_3_l: for i in calo_object_slice_3_low to calo_object_slice_3_high generate
@@ -159,13 +143,9 @@ begin
                 phi_w2_lower_limits(3),
                 iso_luts(3),
                 disp_cuts(3),
-                disp_requs(3),
-                hi_bit_requ,
-                ad_requ,
-                ad_dec_thr,
-                ad_int_thr
+                disp_requs(3)
             )
-            port map(lhc_clk, data_i(i), hi_bit_i, ad_dec_i, ad_int_i, obj_slice_3_vs_templ(i,1));
+            port map(lhc_clk, data_i(i), obj_slice_3_vs_templ(i,1));
     end generate obj_slice_3_l;
 
     obj_slice_4_l: for i in calo_object_slice_4_low to calo_object_slice_4_high generate
@@ -191,13 +171,9 @@ begin
                 phi_w2_lower_limits(4),
                 iso_luts(4),
                 disp_cuts(4),
-                disp_requs(4),
-                hi_bit_requ,
-                ad_requ,
-                ad_dec_thr,
-                ad_int_thr
+                disp_requs(4)
             )
-            port map(lhc_clk, data_i(i), hi_bit_i, ad_dec_i, ad_int_i, obj_slice_4_vs_templ(i,1));
+            port map(lhc_clk, data_i(i), obj_slice_4_vs_templ(i,1));
     end generate obj_slice_4_l;
 
 end Behavioral;

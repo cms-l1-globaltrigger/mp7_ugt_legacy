@@ -3,7 +3,7 @@
 -- Correlation Condition module (for all possible correlation conditions)
 
 -- Version history:
--- HB 2023-02-02: updated for CICADA.
+-- HB 2023-02-03: updated for CICADA.
 -- HB 2022-11-16: bug fix in "mass_3_obj_i/matrix_corr_cond_i": added missing generic parameter.
 -- HB 2022-09-05: cleaned up.
 -- HB 2021-12-09: updated for DISP of jets.
@@ -221,7 +221,20 @@ architecture rtl of correlation_conditions is
     signal mass_3_obj_comp_pipe : std_logic_3dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => (others => '0')));
     signal condition_and_or : std_logic;
 
+    signal ad_comp_pipe, hi_comp_pipe : std_logic := '1';
+
 begin
+
+    -- CICADA Anomaly Detection and Heavy Ion Bit calo_comparators
+    cicada_if: if (type_obj1 = BJET_TYPE) or (type_obj2 = BJET_TYPE) generate
+        cicada_i: entity work.cicada_ad_hi_comp
+            generic map(hi_bit_requ, ad_requ, ad_dec_thr, ad_int_thr)
+            port map(
+                lhc_clk,
+                hi_bit_i, ad_dec_i, ad_int_i,
+                hi_comp_pipe, ad_comp_pipe
+            );
+    end generate cicada_if;
 
     calo_obj1_sel: if type_obj1 /= MU_TYPE generate
         obj1_l: for i in slice_low_obj1 to slice_high_obj1 generate
@@ -248,13 +261,9 @@ begin
                     phi_w2_lower_limit_obj1,
                     iso_lut_obj1,
                     disp_cut_obj1,
-                    disp_requ_obj1,
-                    hi_bit_requ,
-                    ad_requ,
-                    ad_dec_thr,
-                    ad_int_thr
+                    disp_requ_obj1
                 )
-                port map(lhc_clk, calo_obj1(i), hi_bit_i, ad_dec_i, ad_int_i, obj1_vs_templ_pipe(i,1));
+                port map(lhc_clk, calo_obj1(i), obj1_vs_templ_pipe(i,1));
         end generate obj1_l;
     end generate calo_obj1_sel;
 
@@ -318,13 +327,9 @@ begin
                         phi_w2_lower_limit_obj2,
                         iso_lut_obj2,
                         disp_cut_obj2,
-                        disp_requ_obj2,
-                        hi_bit_requ,
-                        ad_requ,
-                        ad_dec_thr,
-                        ad_int_thr
+                        disp_requ_obj2
                     )
-                    port map(lhc_clk, calo_obj2(i), hi_bit_i, ad_dec_i, ad_int_i, obj2_vs_templ_pipe(i,1));
+                    port map(lhc_clk, calo_obj2(i), obj2_vs_templ_pipe(i,1));
             end generate obj2_l;
         end generate calo_obj2_i;
 
@@ -450,6 +455,8 @@ begin
                     mass_div_dr_comp => mass_div_dr_comp_pipe,
                     tbpt_comp => tbpt_comp_pipe,
                     charge_comp_double => charge_comp_double_pipe,
+                    hi_comp => hi_comp_pipe,
+                    ad_comp => ad_comp_pipe,
                     condition_and_or => condition_and_or
                 );
 
@@ -483,13 +490,9 @@ begin
                             phi_w2_lower_limit_obj3,
                             iso_lut_obj3,
                             disp_cut_obj3,
-                            disp_requ_obj3,
-                            hi_bit_requ,
-                            ad_requ,
-                            ad_dec_thr,
-                            ad_int_thr
+                            disp_requ_obj3
                         )
-                        port map(lhc_clk, calo_obj3(i), hi_bit_i, ad_dec_i, ad_int_i, obj3_vs_templ_pipe(i,1));
+                        port map(lhc_clk, calo_obj3(i), obj3_vs_templ_pipe(i,1));
                 end generate obj3_l;
             end generate calo_obj3_sel;
 
@@ -618,6 +621,8 @@ begin
                         dphi_orm_comp_23 => dphi_orm_comp_23_pipe,
                         dr_orm_comp_13 => dr_orm_comp_13_pipe,
                         dr_orm_comp_23 => dr_orm_comp_23_pipe,
+                        hi_comp => hi_comp_pipe,
+                        ad_comp => ad_comp_pipe,
                         condition_and_or => condition_and_or
                     );
 
@@ -677,6 +682,8 @@ begin
                         deta_orm_comp_12 => deta_orm_comp_12_pipe,
                         dphi_orm_comp_12 => dphi_orm_comp_12_pipe,
                         dr_orm_comp_12 => dr_orm_comp_12_pipe,
+                        hi_comp => hi_comp_pipe,
+                        ad_comp => ad_comp_pipe,
                         condition_and_or => condition_and_or
                     );
 
@@ -740,6 +747,8 @@ begin
                     obj3_vs_templ => obj3_vs_templ_pipe,
                     mass_3_obj_comp => mass_3_obj_comp_pipe,
                     charge_comp_triple => charge_comp_triple_pipe,
+                    hi_comp => hi_comp_pipe,
+                    ad_comp => ad_comp_pipe,
                     condition_and_or => condition_and_or
                 );
 

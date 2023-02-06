@@ -145,7 +145,7 @@ package lhc_data_pkg is
             htm => (others=>'0'),
             etmhf => (others=>'0'),
             htmhf => (others=>'0'),
-            cicada => (others=>'0'),
+            cicada => (others=>(others=>'0')),
             external_conditions => (others=>'0')
         );
 

@@ -47,7 +47,6 @@ entity calo_obj_cuts is
         iso_luts: common_templates_iso_array;
         disp_cuts: common_templates_boolean_array;
         disp_requs: common_templates_boolean_array
-
     );
     port(
         lhc_clk: in std_logic;

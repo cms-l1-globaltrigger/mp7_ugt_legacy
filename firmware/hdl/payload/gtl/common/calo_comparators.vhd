@@ -3,7 +3,7 @@
 -- Comparators for energy, pseudorapidity, azimuth angle and isolation of calo objects
 
 -- Version history:
--- HB 2023-01-31: updated for CICADA bjets.
+-- HB 2023-02-02: updated for CICADA.
 -- HB 2022-09-06: cleaned up.
 -- HB 2021-12-09: updated DISP logic for jets.
 -- HB 2021-10-19: added DISP cut for jets.
@@ -67,6 +67,7 @@ architecture rtl of calo_comparators is
     signal iso_comp : std_logic := '1';
     signal comp_int : std_logic;
     signal disp_comp : std_logic;
+    signal ad_comp : std_logic;
 
 begin
 
@@ -296,7 +297,7 @@ begin
 
 -- HB 2023-01-31: comparators out for bjet
     comp_int_bjet_i: if obj_type=BJET_TYPE generate
-            comp_int <= et_comp and eta_comp and phi_comp;
+        comp_int <= et_comp and eta_comp and phi_comp;
     end generate comp_int_bjet_i;
 
     pipeline_p: process(lhc_clk, comp_int)

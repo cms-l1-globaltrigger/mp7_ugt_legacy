@@ -66,8 +66,10 @@ begin
         bx_data.asymht(i) <= data_tmp(i).asymht;
         bx_data.asymethf(i) <= data_tmp(i).asymethf;
         bx_data.asymhthf(i) <= data_tmp(i).asymhthf;
+        bx_data.bjet(i) <= data_tmp(i).bjet;
+        bx_data.ad(i) <= data_tmp(i).ad;
 
--- Additional delay for centrality and ext_cond (no comparators and conditions)
+-- Additional delay for centrality, ext_cond and mus (no comparators and conditions)
 
         centrality_pipe_i: entity work.delay_pipeline
             generic map(

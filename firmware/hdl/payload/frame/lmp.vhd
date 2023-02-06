@@ -33,9 +33,7 @@ architecture arch of lmp is
 --     constant OFFSET_JET_LANES : natural := 6;
 --     constant OFFSET_TAU_LANES : natural := 8;
 --     constant OFFSET_ESUMS_LANES : natural := 10;
--- -- HB 2106-05-31: proposal for memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd)
---     constant OFFSET_LINK_11_LANES : natural := 11;
--- -- BR 2015-05-01: added external-conditions.
+--     constant OFFSET_CICADA_LANES : natural := 11;
 --     constant OFFSET_EXT_COND_LANES : natural := 12;
 begin
 
@@ -115,12 +113,12 @@ begin
     lhc_data_o.etmhf <= demux_data_i(OFFSET_ESUMS_LANES)(4);
     lhc_data_o.htmhf <= demux_data_i(OFFSET_ESUMS_LANES)(5);
 
-    lhc_data_o.link_11_fr_0_data <= demux_data_i(OFFSET_LINK_11_LANES)(0);
-    lhc_data_o.link_11_fr_1_data <= demux_data_i(OFFSET_LINK_11_LANES)(1);
-    lhc_data_o.link_11_fr_2_data <= demux_data_i(OFFSET_LINK_11_LANES)(2);
-    lhc_data_o.link_11_fr_3_data <= demux_data_i(OFFSET_LINK_11_LANES)(3);
-    lhc_data_o.link_11_fr_4_data <= demux_data_i(OFFSET_LINK_11_LANES)(4);
-    lhc_data_o.link_11_fr_5_data <= demux_data_i(OFFSET_LINK_11_LANES)(5);
+    lhc_data_o.cicada(0) <= demux_data_i(OFFSET_CICADA_LANES)(0);
+    lhc_data_o.cicada(1) <= demux_data_i(OFFSET_CICADA_LANES)(1);
+    lhc_data_o.cicada(2) <= demux_data_i(OFFSET_CICADA_LANES)(2);
+    lhc_data_o.cicada(3) <= demux_data_i(OFFSET_CICADA_LANES)(3);
+    lhc_data_o.cicada(4) <= demux_data_i(OFFSET_CICADA_LANES)(4);
+    lhc_data_o.cicada(5) <= demux_data_i(OFFSET_CICADA_LANES)(5);
 
 -- HEPHY 2015-05-01: added external-conditions.
     lhc_data_o.external_conditions(31 downto 0) <= demux_data_i(OFFSET_EXT_COND_LANES+0)(0);

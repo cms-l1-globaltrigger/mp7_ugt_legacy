@@ -195,14 +195,15 @@ The link from Calo-Layer1 contains calo anomaly algorithm (CICADA) data. The mai
 are parameters of bjets.\\
 
 The data structure of a bjet object:\\
-\tiny{Remark: "S" means side (eta sign bit).}\normalsize
+\tiny{Remark: "S" means side (eta sign bit), "F" means flag.}\normalsize
 \begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{27}
-        \bitheader{0,7,8,14,15,15,16,26} \\
-        \bitbox {11}    {\texttt{\et}}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{28}
+        \bitheader{0,10,11,17,18,18,19,26,27,27} \\
+        \bitbox {1}     {\texttt{F}} &
+        \bitbox {8}     {\texttt{$\varphi$}} &
         \bitbox {1}     {\texttt{S}} &
         \bitbox {7}     {\texttt{$\eta$}}  &
-        \bitbox {8}     {\texttt{$\varphi$}} \\
+        \bitbox {11}    {\texttt{\et}} \\
 \end{bytefield}
 \end{center}
 
@@ -214,121 +215,118 @@ Overview of frames (from frame 0 ascending to 5):\\
 \tiny{Remark: "H" means heavy ion bit, "*" means bjet 4 (cont.), "**" means bjet 6.}\normalsize
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,7,8,20,21,21,22,31} \\
-        \bitbox {10}    {\texttt{bjet 1}} &
-        \bitbox {1}     {\texttt{H}} &
-        \bitbox {13}    {\texttt{Anomaly Detection}} &
-        \bitbox {8}     {\texttt{Alignment, CRC}} \\
+        \bitheader{0,27,28,31} \\
+        \bitbox {4}      {\texttt{AD I l}} &
+        \bitbox {28}     {\texttt{bjet 1}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,16,17,31} \\
-        \bitbox {15}    {\texttt{bjet 2}} &
-        \bitbox {17}    {\texttt{bjet 1 (cont.)}} \\
+        \bitheader{0,27,28,31} \\
+        \bitbox {4}      {\texttt{AD I h}} &
+        \bitbox {28}     {\texttt{bjet 2}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,11,12,31} \\
-        \bitbox {20}    {\texttt{bjet 3}} &
-        \bitbox {12}    {\texttt{bjet 2 (cont.)}} \\
+        \bitheader{0,27,28,31} \\
+        \bitbox {4}      {\texttt{AD D l}} &
+        \bitbox {28}     {\texttt{bjet 3}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,6,7,31} \\
-        \bitbox {25}    {\texttt{bjet 4}} &
-        \bitbox {7}     {\texttt{bjet 3 (c.)}} \\
+        \bitheader{0,27,28,31} \\
+        \bitbox {4}      {\texttt{AD D h}} &
+        \bitbox {28}     {\texttt{bjet 4}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,1,2,28,29,31} \\
-        \bitbox {3}     {\texttt{**}} &
-        \bitbox {27}    {\texttt{bjet 5}} &
-        \bitbox {2}     {\texttt{*}} \\
+        \bitheader{0,27,28,31} \\
+        \bitbox {4}      {\texttt{HI low}} &
+        \bitbox {28}     {\texttt{bjet 5}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,23,24,31} \\
-        \bitbox {8}     {\texttt{Alignment, CRC}} &
-        \bitbox {24}    {\texttt{bjet 6 (cont.)}} \\
+        \bitheader{0,27,28,31} \\
+        \bitbox {4}      {\texttt{HI high}} &
+        \bitbox {28}     {\texttt{bjet 6}} \\
 \end{bytefield}
 \end{center}
 
-Definition of frame 0:\\
-\tiny{Remark: "H" means heavy ion bit, "*" means bjet 1 eta[1:0].}\normalsize
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,7,8,14,15,20,21,21,22,29,30,31} \\
-        \bitbox {2}     {\texttt{*}} &
-        \bitbox {8}     {\texttt{bjet 1 phi}} &
-        \bitbox {1}     {\texttt{H}} &
-        \bitbox {6}     {\texttt{AD integer}} &
-        \bitbox {7}     {\texttt{AD decimal}} &
-        \bitbox {8}     {\texttt{Alignment, CRC}} \\
-\end{bytefield}
-\end{center}
-
-Definition of frame 1:\\
-\tiny{Remark: "bjet 1*" means bjet 3 eta[6:2], "S" bjet 1 eta sign bit.}\normalsize
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,4,5,5,6,16,17,24,25,31} \\
-        \bitbox {7}     {\texttt{bjet 2 eta}} &
-        \bitbox {8}     {\texttt{bjet 2 phi}} &
-        \bitbox {11}    {\texttt{bjet 1 \et}} &
-        \bitbox {1}     {\texttt{S}} &
-        \bitbox {5}     {\texttt{bjet 1*}} \\
-\end{bytefield}
-\end{center}
-
-Definition of frame 2:\\
-\tiny{Remark: "S" means bjet 2 and 3 eta sign bits, "bjet 3*" means bjet 3 \et[3:0].}\normalsize
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,0,1,11,12,19,20,26,27,27,28,31} \\
-        \bitbox {4}     {\texttt{bjet 3*}} &
-        \bitbox {1}     {\texttt{S}} &
-        \bitbox {7}     {\texttt{bjet 3 eta}} &
-        \bitbox {8}     {\texttt{bjet 3 phi}} &
-        \bitbox {11}    {\texttt{bjet 2 \et}} &
-        \bitbox {1}     {\texttt{S}} \\
-\end{bytefield}
-\end{center}
-
-Definition of frame 3:\\
-\tiny{Remark: "bjet 3*" means bjet 3 \et[10:4], "S" means bjet 4 eta sign bit.}\normalsize
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,6,7,14,15,21,22,22,23,31} \\
-        \bitbox {9}     {\texttt{bjet 4 \et[8:0]}} &
-        \bitbox {1}     {\texttt{S}} &
-        \bitbox {7}     {\texttt{bjet 4 eta}} &
-        \bitbox {8}     {\texttt{bjet 4 phi}} &
-        \bitbox {7}     {\texttt{bjet 3*}} \\
-\end{bytefield}
-\end{center}
-
-Definition of frame 4:\\
-\tiny{Remark: "*" means bjet 4 \et[10:9], "S" means bjet 5 eta sign bit, "**" means bjet 6 phi[2:0].}\normalsize
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,1,2,9,10,16,17,17,18,28,29,31} \\
-        \bitbox {3}     {\texttt{**}} &
-        \bitbox {11}    {\texttt{bjet 5 \et}} &
-        \bitbox {1}     {\texttt{S}} &
-        \bitbox {7}     {\texttt{bjet 5 eta}} &
-        \bitbox {8}     {\texttt{bjet 5 phi}} &
-        \bitbox {2}     {\texttt{*}} \\
-\end{bytefield}
-\end{center}
-
-Definition of frame 5:\\
-\tiny{Remark: "S" means bjet 6 eta sign bit, "*" means bjet 6 phi[7:3]}\normalsize
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,4,5,11,12,12,13,23,24,31} \\
-        \bitbox {8}     {\texttt{Alignment, CRC}} &
-        \bitbox {11}    {\texttt{bjet 6 \et}} &
-        \bitbox {1}     {\texttt{S}} &
-        \bitbox {7}     {\texttt{bjet 6 eta}} &
-        \bitbox {5}     {\texttt{*}} \\
-\end{bytefield}
-\end{center}
-
+% Definition of frame 0:\\
+% \tiny{Remark: "H" means heavy ion bit, "*" means bjet 1 eta[1:0].}\normalsize
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,7,8,14,15,20,21,21,22,29,30,31} \\
+%         \bitbox {2}     {\texttt{*}} &
+%         \bitbox {8}     {\texttt{bjet 1 phi}} &
+%         \bitbox {1}     {\texttt{H}} &
+%         \bitbox {6}     {\texttt{AD integer}} &
+%         \bitbox {7}     {\texttt{AD decimal}} &
+%         \bitbox {8}     {\texttt{Alignment, CRC}} \\
+% \end{bytefield}
+% \end{center}
+% 
+% Definition of frame 1:\\
+% \tiny{Remark: "bjet 1*" means bjet 3 eta[6:2], "S" bjet 1 eta sign bit.}\normalsize
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,4,5,5,6,16,17,24,25,31} \\
+%         \bitbox {7}     {\texttt{bjet 2 eta}} &
+%         \bitbox {8}     {\texttt{bjet 2 phi}} &
+%         \bitbox {11}    {\texttt{bjet 1 \et}} &
+%         \bitbox {1}     {\texttt{S}} &
+%         \bitbox {5}     {\texttt{bjet 1*}} \\
+% \end{bytefield}
+% \end{center}
+% 
+% Definition of frame 2:\\
+% \tiny{Remark: "S" means bjet 2 and 3 eta sign bits, "bjet 3*" means bjet 3 \et[3:0].}\normalsize
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,0,1,11,12,19,20,26,27,27,28,31} \\
+%         \bitbox {4}     {\texttt{bjet 3*}} &
+%         \bitbox {1}     {\texttt{S}} &
+%         \bitbox {7}     {\texttt{bjet 3 eta}} &
+%         \bitbox {8}     {\texttt{bjet 3 phi}} &
+%         \bitbox {11}    {\texttt{bjet 2 \et}} &
+%         \bitbox {1}     {\texttt{S}} \\
+% \end{bytefield}
+% \end{center}
+% 
+% Definition of frame 3:\\
+% \tiny{Remark: "bjet 3*" means bjet 3 \et[10:4], "S" means bjet 4 eta sign bit.}\normalsize
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,6,7,14,15,21,22,22,23,31} \\
+%         \bitbox {9}     {\texttt{bjet 4 \et[8:0]}} &
+%         \bitbox {1}     {\texttt{S}} &
+%         \bitbox {7}     {\texttt{bjet 4 eta}} &
+%         \bitbox {8}     {\texttt{bjet 4 phi}} &
+%         \bitbox {7}     {\texttt{bjet 3*}} \\
+% \end{bytefield}
+% \end{center}
+% 
+% Definition of frame 4:\\
+% \tiny{Remark: "*" means bjet 4 \et[10:9], "S" means bjet 5 eta sign bit, "**" means bjet 6 phi[2:0].}\normalsize
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,1,2,9,10,16,17,17,18,28,29,31} \\
+%         \bitbox {3}     {\texttt{**}} &
+%         \bitbox {11}    {\texttt{bjet 5 \et}} &
+%         \bitbox {1}     {\texttt{S}} &
+%         \bitbox {7}     {\texttt{bjet 5 eta}} &
+%         \bitbox {8}     {\texttt{bjet 5 phi}} &
+%         \bitbox {2}     {\texttt{*}} \\
+% \end{bytefield}
+% \end{center}
+% 
+% Definition of frame 5:\\
+% \tiny{Remark: "S" means bjet 6 eta sign bit, "*" means bjet 6 phi[7:3]}\normalsize
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+%         \bitheader{0,4,5,11,12,12,13,23,24,31} \\
+%         \bitbox {8}     {\texttt{Alignment, CRC}} &
+%         \bitbox {11}    {\texttt{bjet 6 \et}} &
+%         \bitbox {1}     {\texttt{S}} &
+%         \bitbox {7}     {\texttt{bjet 6 eta}} &
+%         \bitbox {5}     {\texttt{*}} \\
+% \end{bytefield}
+% \end{center}
+% 
 \clearpage
 
 \subsection{Implementation in firmware}

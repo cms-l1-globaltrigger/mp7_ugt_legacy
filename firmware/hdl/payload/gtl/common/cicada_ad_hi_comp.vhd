@@ -40,7 +40,9 @@ begin
     ad_i: if ad_requ generate
         ad_p: process(ad_int_i, ad_dec_i)
         begin
-            if ad_int_i >= ad_int_thr then
+            if ad_int_i > ad_int_thr then
+                ad_comp <= '1';
+            elsif ad_int_i = ad_int_thr then
                 if ad_dec_i >= ad_dec_thr then
                     ad_comp <= '1';
                 else

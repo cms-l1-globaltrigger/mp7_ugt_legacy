@@ -46,7 +46,8 @@ entity calo_obj_cuts is
         phi_w2_lower_limits: common_templates_array;
         iso_luts: common_templates_iso_array;
         disp_cuts: common_templates_boolean_array;
-        disp_requs: common_templates_boolean_array
+        disp_requs: common_templates_boolean_array;
+        bjet_flag_requs: common_templates_boolean_array
     );
     port(
         lhc_clk: in std_logic;
@@ -87,7 +88,8 @@ begin
                 phi_w2_lower_limits(1),
                 iso_luts(1),
                 disp_cuts(1),
-                disp_requs(1)
+                disp_requs(1),
+                bjet_flag_requs(1)
             )
             port map(lhc_clk, data_i(i), obj_slice_1_vs_templ(i,1));
     end generate obj_slice_1_l;
@@ -115,7 +117,8 @@ begin
                 phi_w2_lower_limits(2),
                 iso_luts(2),
                 disp_cuts(2),
-                disp_requs(2)
+                disp_requs(2),
+                bjet_flag_requs(2)
             )
             port map(lhc_clk, data_i(i), obj_slice_2_vs_templ(i,1));
     end generate obj_slice_2_l;
@@ -143,7 +146,8 @@ begin
                 phi_w2_lower_limits(3),
                 iso_luts(3),
                 disp_cuts(3),
-                disp_requs(3)
+                disp_requs(3),
+                bjet_flag_requs(3)
             )
             port map(lhc_clk, data_i(i), obj_slice_3_vs_templ(i,1));
     end generate obj_slice_3_l;
@@ -171,7 +175,8 @@ begin
                 phi_w2_lower_limits(4),
                 iso_luts(4),
                 disp_cuts(4),
-                disp_requs(4)
+                disp_requs(4),
+                bjet_flag_requs(4)
             )
             port map(lhc_clk, data_i(i), obj_slice_4_vs_templ(i,1));
     end generate obj_slice_4_l;

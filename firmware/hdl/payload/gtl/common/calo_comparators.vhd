@@ -3,7 +3,7 @@
 -- Comparators for energy, pseudorapidity, azimuth angle and isolation of calo objects
 
 -- Version history:
--- HB 2023-02-02: updated for CICADA.
+-- HB 2023-02-07: updated for CICADA.
 -- HB 2022-09-06: cleaned up.
 -- HB 2021-12-09: updated DISP logic for jets.
 -- HB 2021-10-19: added DISP cut for jets.
@@ -45,7 +45,8 @@ entity calo_comparators is
         phi_w2_lower_limit : std_logic_vector;
         iso_lut : std_logic_vector;
         disp_cut : boolean := false;
-        disp_requ : boolean := false
+        disp_requ : boolean := false;
+        bjet_flag_requ : boolean := false
     );
     port(
         lhc_clk : in std_logic;
@@ -61,13 +62,13 @@ architecture rtl of calo_comparators is
     signal phi : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
     signal iso : std_logic_vector(MAX_CALO_BITS-1 downto 0) := (others => '0');
     signal disp : std_logic := '0';
+    signal bjet_flag : std_logic := '0';
     signal et_comp : std_logic := '1';
     signal eta_comp : std_logic := '1';
     signal phi_comp : std_logic := '1';
     signal iso_comp : std_logic := '1';
     signal comp_int : std_logic;
     signal disp_comp : std_logic;
-    signal ad_comp : std_logic;
 
 begin
 
@@ -173,6 +174,7 @@ begin
         et(BJET_ET_HIGH-BJET_ET_LOW downto 0) <= data_i(BJET_ET_HIGH downto BJET_ET_LOW);
         eta(BJET_ETA_HIGH-BJET_ETA_LOW downto 0) <= data_i(BJET_ETA_HIGH downto BJET_ETA_LOW);
         phi(BJET_PHI_HIGH-BJET_PHI_LOW downto 0) <= data_i(BJET_PHI_HIGH downto BJET_PHI_LOW);
+        bjet_flag <= data_i(BJET_FLAG_BIT);
 
         bjet_eta_windows_comp_i: entity work.eta_windows_comp
             generic map(
@@ -295,9 +297,14 @@ begin
         end generate disp_cut_i;
     end generate comp_int_jet_i;
 
--- HB 2023-01-31: comparators out for bjet
+-- HB 2023-02-07: comparators out for bjet
     comp_int_bjet_i: if obj_type=BJET_TYPE generate
-        comp_int <= et_comp and eta_comp and phi_comp;
+        no_flag_requ_i: if not bjet_flag_requ generate
+            comp_int <= et_comp and eta_comp and phi_comp;
+        end generate no_flag_requ_i;
+        flag_requ_i: if bjet_flag_requ generate
+            comp_int <= et_comp and eta_comp and phi_comp and bjet_flag;
+        end generate flag_requ_i;
     end generate comp_int_bjet_i;
 
     pipeline_p: process(lhc_clk, comp_int)

@@ -232,16 +232,23 @@ constant BJET_ETA_BITS : natural := BJET_ETA_HIGH-BJET_ETA_LOW+1;
 constant BJET_PHI_LOW : natural := 19;
 constant BJET_PHI_HIGH : natural := 26;
 constant BJET_PHI_BITS : natural := BJET_PHI_HIGH-BJET_PHI_LOW+1;
+constant BJET_FLAG_BIT : natural := 27;
 
--- anomaly detection (ad) definition - decimal (dec) and integer (int) part 
+-- CICADA anomaly detection (ad) definition - decimal (dec) and integer (int) part 
 constant NR_AD_OBJECTS : positive := 1;
 
 constant AD_DEC_LOW : natural := 0;
-constant AD_DEC_HIGH : natural := 6;
+constant AD_DEC_HIGH : natural := 7;
 constant AD_DEC_BITS : natural := AD_DEC_HIGH-AD_DEC_LOW+1;
-constant AD_INT_LOW : natural := 7;
-constant AD_INT_HIGH : natural := 12;
+constant AD_INT_LOW : natural := 8;
+constant AD_INT_HIGH : natural := 15;
 constant AD_INT_BITS : natural := AD_INT_HIGH-AD_INT_LOW+1;
+
+-- CICADA heavy ion bits
+constant NR_HI_OBJECTS : positive := 1;
+constant HI_LOW : natural := 0;
+constant HI_HIGH : natural := 7;
+constant HI_BITS : natural := HI_HIGH-HI_LOW+1;
 
 -- *******************************************************************************************************
 
@@ -251,6 +258,7 @@ type bx_jet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_a
 type bx_tau_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_TAU_OBJECTS-1);
 type bx_bjet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_BJET_OBJECTS-1);
 type bx_ad_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(AD_DEC_BITS+AD_INT_BITS-1 downto 0);
+type bx_hi_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(HI_BITS-1 downto 0);
 constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
 type calo_templates_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 constant MAX_CALO_ET_BITS : positive := max(EG_ET_BITS, JET_ET_BITS, TAU_ET_BITS);
@@ -449,7 +457,8 @@ type gtl_data_record is record
     centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
     bjet : calo_objects_array(0 to NR_BJET_OBJECTS-1);
-    ad : std_logic_vector(AD_DEC_BITS+AD_INT_BITS-1 downto 0);
+    cicada_ad : std_logic_vector(AD_DEC_BITS+AD_INT_BITS-1 downto 0);
+    cicada_hi : std_logic_vector(HI_BITS-1 downto 0);
 end record gtl_data_record;
 
 type bx_data_record is record
@@ -484,7 +493,8 @@ type bx_data_record is record
     ext_cond : bx_ext_cond_array;
     mus0, mus1, musoot0, musoot1 : mus_bit_array;
     bjet : bx_bjet_objects_array;
-    ad : bx_ad_array;
+    cicada_ad : bx_ad_array;
+    cicada_hi : bx_hi_array;
 end record bx_data_record;
 
 -- ==== Correlations - begin ============================================================

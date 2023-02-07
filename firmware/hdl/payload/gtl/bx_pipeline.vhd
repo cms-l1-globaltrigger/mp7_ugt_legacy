@@ -67,7 +67,8 @@ begin
         bx_data.asymethf(i) <= data_tmp(i).asymethf;
         bx_data.asymhthf(i) <= data_tmp(i).asymhthf;
         bx_data.bjet(i) <= data_tmp(i).bjet;
-        bx_data.ad(i) <= data_tmp(i).ad;
+        bx_data.cicada_ad(i) <= data_tmp(i).cicada_ad;
+        bx_data.cicada_hi(i) <= data_tmp(i).cicada_hi;
 
 -- Additional delay for centrality, ext_cond and mus (no comparators and conditions)
 

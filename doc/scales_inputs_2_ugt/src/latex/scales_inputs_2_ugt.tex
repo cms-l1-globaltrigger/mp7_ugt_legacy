@@ -153,6 +153,14 @@ jet	&	1 * 12	&	$E_t$	&	0..1024 GeV	&	0.5	&	11                    \\
 	&		&	TOTAL	&		&		&	32                    \\
 % 	&		&		&		&		&	                    \\
 \hline
+bjet	&	1 * 6	&	$E_t$	&	0..1024 GeV	&	0.5	&	11                    \\
+	&		&	$\eta$	&	-5..5	&	0.0870/2=0.0435	&	7+1 = 8                    \\
+	&		&	$\varphi$	&	2$\pi$	&	2$\pi$/144$\sim$0.044	&	8                    \\
+	&		&	flag	&		&		&	1                    \\
+	&		&	AD an HI bits	&		&		&	4                    \\
+	&		&	TOTAL	&		&		&	32                    \\
+% 	&		&		&		&		&	                    \\
+\hline
 e/$\gamma$	&	1 * 12	&	$E_t$	&	0..256 GeV	&	0.5	&	9                    \\
 	&		&	$\eta$	&	-5..5	&	0.0870/2=0.0435	&	7+1 = 8                    \\
 	&		&	$\varphi$	&	2$\pi$	&	2$\pi$/144$\sim$0.044	&	8                    \\
@@ -240,32 +248,34 @@ The following pages contain tables for data structure of objects and the data fl
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|p{2.4cm}|}\hline
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|p{1.2cm}|}\hline
 % \begin{tabular}{|c|l|l|l|l|l|l|l|l|l|l|p{2.4cm}|}\hline
- & \multicolumn{11}{ c| }{link} \\\hline
+ & \multicolumn{12}{ c| }{link} \\\hline
 % link & 0 & 1 & 2 & 3 & 4  & 5 & 6 & 7 & 8 & 9 & 10 \\\cline{1-1}
-frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \makebox[2.4cm][c]{10} \\\hline\hline
+frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & \makebox[1.2cm][c]{11} \\\hline\hline
 % frame &  & & & & & & & & & & \\\hline\hline
-0 & free & free & free & free & EG0 & EG6  & JET0 & JET6 & TAU0 & TAU6 & ET, \\
- &  &  &  &  &  &  &  &  &  &  & ETTEM, \\
- &  &  &  &  &  &  &  &  &  &  & MBT0HFP \\
-1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7 & HT, \\
- & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & & & TOWERCOUNT, \\
- & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & & & MBT0HFM \\
- & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & & & \\
- &  &  &  &  &  &  &  &  &  &  & \\
-2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8  & ET$_{miss}$, \\
- &  &  &  &  &  &  &  &  &  &  & ASYMET, \\
- &  &  &  &  &  &  &  &  &  &  & MBT1HFP \\
-3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9  & HT$_{miss}$, \\
- &  &  &  &  &  &  &  &  &  &  & ASYMHT, \\
- &  &  &  &  &  &  &  &  &  &  & MBT1HFM \\
-4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10 & ET$_{miss}^{HF}$ \\
- &  &  &  &  &  &  &  &  &  &  & ASYMETHF, \\
- &  &  &  &  &  &  &  &  &  &  & CENT[3:0] \\
-5 & MU1 [63:32] & MU3 [63:32] & MU5 [63:32] & MU7 [63:32] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11 & HT$_{miss}^{HF}$ \\
- &  &  &  &  &  &  &  &  &  &  & ASYMHTHF, \\
- &  &  &  &  &  &  &  &  &  &  & CENT[7:4] \\\hline
+0 & free & free & free & free & EG0 & EG6 & JET0 & JET6 & TAU0 & TAU6 & ET, & BJET0,\\
+ &  &  &  &  &  &  &  &  &  &  & ETTEM, & AD\\
+ &  &  &  &  &  &  &  &  &  &  & MBT0HFP & Integer low\\
+1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7 & HT, & BJET1,\\
+ & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & & & TOWERCOUNT, & AD\\
+ & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & & & MBT0HFM & Integer\\
+ & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & & & & high\\
+%  &  &  &  &  &  &  &  &  &  &  &  &\\
+2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8  & ET$_{miss}$, & BJET2,\\
+ &  &  &  &  &  &  &  &  &  &  & ASYMET, & AD\\
+ &  &  &  &  &  &  &  &  &  &  & MBT1HFP  & Decimal \\
+ &  &  &  &  &  &  &  &  &  &  &  & low\\
+3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9  & HT$_{miss}$, & BJET3,\\
+ &  &  &  &  &  &  &  &  &  &  & ASYMHT, & AD\\
+ &  &  &  &  &  &  &  &  &  &  & MBT1HFM  & Decimal \\
+ &  &  &  &  &  &  &  &  &  &  &  & gugh\\
+4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10 & ET$_{miss}^{HF}$ & BJET4,\\
+ &  &  &  &  &  &  &  &  &  &  & ASYMETHF, & HI\\
+ &  &  &  &  &  &  &  &  &  &  & CENT[3:0]  & low \\
+5 & MU1 [63:32] & MU3 [63:32] & MU5 [63:32] & MU7 [63:32] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11 & HT$_{miss}^{HF}$ & BJET4,\\
+ &  &  &  &  &  &  &  &  &  &  & ASYMHTHF, & HI\\
+ &  &  &  &  &  &  &  &  &  &  & CENT[7:4]  & high \\\hline
 \end{tabular}
 }
 \label{table:sum_opt_links}
@@ -424,6 +434,7 @@ frame & objects\\\hline\hline
 
 \begin{itemize}
 \item The data structure of a jet object is shown in Table~\ref{table:jet_object} (bits 31..30 spare bits)
+\item The data structure of a bjet object is shown in Table~\ref{table:bjet_object} (bits 31..28 used for Anomaly Detection and Heavy Ion bits)
 \item The data structure of an e/$\gamma$ object is shown in Table~\ref{table:egamma_object} (bits 31..27 are not defined yet)
 \item The data structure of a tau object is shown in Table~\ref{table:tau_object} (bits 31..27 are not defined yet)
 \item The definition of isolation bits for e/$\gamma$ and tau is shown in Table~\ref{table:eg_tau_iso_bits}.
@@ -446,6 +457,21 @@ bit(s) & parameter \\\hline\hline
 10..0 & $E_t$ \\\hline
 \end{tabular}
 \label{table:jet_object}
+\end{table}
+
+\begin{table}[ht]
+\caption{\bf Data structure of a bjet object}
+\vspace{5mm}
+\centering
+\begin{tabular}{|c|c|}\hline
+bit(s) & parameter \\\hline\hline
+31..28 & Anomaly Detection and Heavy Ion bits \\
+27..27 & flag \\
+26..19 & $\varphi$ \\
+18..11 & $\eta$ \\
+10..0 & $E_t$ \\\hline
+\end{tabular}
+\label{table:bjet_object}
 \end{table}
 
 \begin{table}[ht]

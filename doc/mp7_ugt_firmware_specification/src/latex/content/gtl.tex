@@ -51,6 +51,8 @@ Definitions are based on document~\cite{interface}.
 \item Algorithms
 \end{itemize}
 
+\clearpage
+
 \subsection{Definition of optical interfaces}
 \label{sec:gtl:optical_interfaces}
 
@@ -164,11 +166,12 @@ The data structure of "Missing Ht including HF" (HT$_{miss}^{HF}$) quantity [inc
 \end{bytefield}
 \end{center}
 
+\clearpage
+
 \subsubsection{\gmt optical interface}
 \label{sec:gtl:gmt_optical_interfaces}
 
 The data structure of a muon object (64 bits):\\
-\tiny{Remark: "extrapol." means extrapolated - "qual" means quality bits - "iso" means isolation bits - "ch" means charge bits (bit 34 = charge sign, bit 35 = charge valid) - "m" means muon shower bit (on MU0 [MUS0], MU2 [MUS1], MU4 [MUSOOT0] and MU6 [MUSOOT1]; spare on MU1, MU3, MU5 and MU7) - "imp" = impact parameter.}\normalsize
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
         \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
@@ -187,32 +190,20 @@ The data structure of a muon object (64 bits):\\
         \bitbox {10}    {\texttt{$\varphi$} (extrapol.)} \\
 \end{bytefield}
 \end{center}
+\tiny{Remark: "extrapol." means extrapolated - "qual" means quality bits - "iso" means isolation bits - "ch" means charge bits (bit 34 = charge sign, bit 35 = charge valid) - "m" means muon shower bit (on MU0 [MUS0], MU2 [MUS1], MU4 [MUSOOT0] and MU6 [MUSOOT1]; spare on MU1, MU3, MU5 and MU7) - "imp" = impact parameter.}\normalsize
+
+\clearpage
 
 \subsubsection{Calo-Layer1 optical interface}
 \label{sec:gtl:calo1_optical_interfaces}
 
-The link from Calo-Layer1 contains calo anomaly algorithm (CICADA) data. The main part of this data
-are parameters of bjets.\\
+The optical link from Calo-Layer1 provides calo anomaly algorithm (CICADA) data.\\
+The main part of this data contains Boosted jets (bjets). Calo-Layer1 sends
+6 bjets (28 bits), each on one of the 6 frames in a 240MHz domain.
+In addition Anomaly Detection with an integer and a decimal part and Heavy Ion bits
+are provided.\\
 
-The data structure of a bjet object:\\
-\tiny{Remark: "S" means side (eta sign bit), "F" means flag.}\normalsize
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{28}
-        \bitheader{0,10,11,17,18,18,19,26,27,27} \\
-        \bitbox {1}     {\texttt{F}} &
-        \bitbox {8}     {\texttt{$\varphi$}} &
-        \bitbox {1}     {\texttt{S}} &
-        \bitbox {7}     {\texttt{$\eta$}}  &
-        \bitbox {11}    {\texttt{\et}} \\
-\end{bytefield}
-\end{center}
-
-The link provides 6 frames in a 240MHz domain, each with 32 bits (192 total).
-
-\paragraph{Structure of the link}
-
-Overview of frames (from frame 0 ascending to 5):\\
-\tiny{Remark: "H" means heavy ion bit, "*" means bjet 4 (cont.), "**" means bjet 6.}\normalsize
+Overview (frame 0 ascending to 5):\\
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,27,28,31} \\
@@ -245,88 +236,21 @@ Overview of frames (from frame 0 ascending to 5):\\
         \bitbox {28}     {\texttt{bjet 6}} \\
 \end{bytefield}
 \end{center}
+\tiny{Remark: "AD I" means Anomaly Detection Integer part, "AD D" means Anomaly Detection Decimal part, "l" means least significant bits, "h" means most significant bits, "HI" means Heavy Ion bits}\normalsize
 
-% Definition of frame 0:\\
-% \tiny{Remark: "H" means heavy ion bit, "*" means bjet 1 eta[1:0].}\normalsize
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,7,8,14,15,20,21,21,22,29,30,31} \\
-%         \bitbox {2}     {\texttt{*}} &
-%         \bitbox {8}     {\texttt{bjet 1 phi}} &
-%         \bitbox {1}     {\texttt{H}} &
-%         \bitbox {6}     {\texttt{AD integer}} &
-%         \bitbox {7}     {\texttt{AD decimal}} &
-%         \bitbox {8}     {\texttt{Alignment, CRC}} \\
-% \end{bytefield}
-% \end{center}
-% 
-% Definition of frame 1:\\
-% \tiny{Remark: "bjet 1*" means bjet 3 eta[6:2], "S" bjet 1 eta sign bit.}\normalsize
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,4,5,5,6,16,17,24,25,31} \\
-%         \bitbox {7}     {\texttt{bjet 2 eta}} &
-%         \bitbox {8}     {\texttt{bjet 2 phi}} &
-%         \bitbox {11}    {\texttt{bjet 1 \et}} &
-%         \bitbox {1}     {\texttt{S}} &
-%         \bitbox {5}     {\texttt{bjet 1*}} \\
-% \end{bytefield}
-% \end{center}
-% 
-% Definition of frame 2:\\
-% \tiny{Remark: "S" means bjet 2 and 3 eta sign bits, "bjet 3*" means bjet 3 \et[3:0].}\normalsize
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,0,1,11,12,19,20,26,27,27,28,31} \\
-%         \bitbox {4}     {\texttt{bjet 3*}} &
-%         \bitbox {1}     {\texttt{S}} &
-%         \bitbox {7}     {\texttt{bjet 3 eta}} &
-%         \bitbox {8}     {\texttt{bjet 3 phi}} &
-%         \bitbox {11}    {\texttt{bjet 2 \et}} &
-%         \bitbox {1}     {\texttt{S}} \\
-% \end{bytefield}
-% \end{center}
-% 
-% Definition of frame 3:\\
-% \tiny{Remark: "bjet 3*" means bjet 3 \et[10:4], "S" means bjet 4 eta sign bit.}\normalsize
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,6,7,14,15,21,22,22,23,31} \\
-%         \bitbox {9}     {\texttt{bjet 4 \et[8:0]}} &
-%         \bitbox {1}     {\texttt{S}} &
-%         \bitbox {7}     {\texttt{bjet 4 eta}} &
-%         \bitbox {8}     {\texttt{bjet 4 phi}} &
-%         \bitbox {7}     {\texttt{bjet 3*}} \\
-% \end{bytefield}
-% \end{center}
-% 
-% Definition of frame 4:\\
-% \tiny{Remark: "*" means bjet 4 \et[10:9], "S" means bjet 5 eta sign bit, "**" means bjet 6 phi[2:0].}\normalsize
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,1,2,9,10,16,17,17,18,28,29,31} \\
-%         \bitbox {3}     {\texttt{**}} &
-%         \bitbox {11}    {\texttt{bjet 5 \et}} &
-%         \bitbox {1}     {\texttt{S}} &
-%         \bitbox {7}     {\texttt{bjet 5 eta}} &
-%         \bitbox {8}     {\texttt{bjet 5 phi}} &
-%         \bitbox {2}     {\texttt{*}} \\
-% \end{bytefield}
-% \end{center}
-% 
-% Definition of frame 5:\\
-% \tiny{Remark: "S" means bjet 6 eta sign bit, "*" means bjet 6 phi[7:3]}\normalsize
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-%         \bitheader{0,4,5,11,12,12,13,23,24,31} \\
-%         \bitbox {8}     {\texttt{Alignment, CRC}} &
-%         \bitbox {11}    {\texttt{bjet 6 \et}} &
-%         \bitbox {1}     {\texttt{S}} &
-%         \bitbox {7}     {\texttt{bjet 6 eta}} &
-%         \bitbox {5}     {\texttt{*}} \\
-% \end{bytefield}
-% \end{center}
-% 
+The data structure of a bjet object:\\
+\begin{center}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{28}
+        \bitheader{0,10,11,17,18,18,19,26,27,27} \\
+        \bitbox {1}     {\texttt{F}} &
+        \bitbox {8}     {\texttt{$\varphi$}} &
+        \bitbox {1}     {\texttt{S}} &
+        \bitbox {7}     {\texttt{$\eta$}}  &
+        \bitbox {11}    {\texttt{\et}} \\
+\end{bytefield}
+\end{center}
+\tiny{Remark: "S" means side (eta sign bit), "F" means flag.}\normalsize
+
 \clearpage
 
 \subsection{Implementation in firmware}

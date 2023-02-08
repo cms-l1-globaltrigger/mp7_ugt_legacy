@@ -273,7 +273,7 @@ Bunchcounters, ... & 25  & 112 & X1Y10 &   & x \\\hline
 \subsection{Configuration of optical input links}\label{sec:app:app_b}
 
 Figure~\ref{fig:app:ugt_inputs} shows the configuration of optical links to Global Trigger.\\
-Links 0..3 contains muon data from GMT, links 4..11 data from GCT and links 12..15 external conditions
+Links 0..3 contains muon data from uGMT, links 4..11 data from Calo-Layer2 and links 12..15 external conditions
 from AMC502 boards.
 
 \begin{figure}[htb]
@@ -282,6 +282,75 @@ from AMC502 boards.
 \caption{Optical link inputs to Global Trigger}
 \label{fig:app:ugt_inputs}
 \end{figure}
+
+\begin{table}[ht]
+\caption{\bf Summary of optical links (part 1)}
+\vspace{5mm}
+\scalebox{0.8}{
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|p{1.2cm}|}\hline
+% \begin{tabular}{|c|l|l|l|l|l|l|l|l|l|l|p{2.4cm}|}\hline
+ & \multicolumn{10}{ c| }{link} \\\hline
+frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
+% frame &  & & & & & & & & & & \\\hline\hline
+0 & free & free & free & free & EG0 & EG6 & JET0 & JET6 & TAU0 & TAU6\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7\\
+ & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & &\\
+ & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & &\\
+ & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & &\\
+2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+5 & MU1 [63:32] & MU3 [63:32] & MU5 [63:32] & MU7 [63:32] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\\hline
+\end{tabular}
+}
+\label{table:sum_opt_links}
+\end{table}
+
+\begin{table}[ht]
+\caption{\bf Summary of optical links (part 2)}
+\vspace{5mm}
+\scalebox{0.8}{
+\centering
+\begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
+ & \multicolumn{6}{ c| }{link} \\\hline
+frame & 10 & 11 & 12 & 13 & 14 &\makebox[1.5cm][c]{15} \\\hline\hline
+0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & ETTEM, & & [31:0] & [95:64] & [159:128] & [223:192]\\
+ & MBT0HFP & & & & &\\
+1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & TOWERCOUNT, & & [63:32] & [127:96] & [191:160] & [255:224]\\
+ & MBT0HFM & & & & &\\
+2 & ET$_{miss}$, & free & free & free & free & free\\
+ & ASYMET,& & & & &\\
+ & MBT1HFP  & & & & &\\
+3 & HT$_{miss}$, & free & free & free & free & free\\
+ & ASYMHT,& & & & &\\
+ & MBT1HFM & & & & &\\
+4 & ET$_{miss}^{HF}$ & free & free & free & free & free\\
+ & ASYMETHF, & & & & &\\
+ & CENT[3:0] & & & & &\\
+5 & HT$_{miss}^{HF}$ & free & free & free & free & free\\
+ & ASYMHTHF, & & & & &\\
+ & CENT[7:4] & & & & &\\\hline
+\end{tabular}
+}
+\label{table:sum_opt_links2}
+\end{table}
+
+\clearpage
 
 \subsection{Configuration of links to AMC13 (readout)}\label{sec:app:app_c}
 

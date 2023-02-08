@@ -1,15 +1,12 @@
 
--- Desription:
+-- Description:
+-- Testbench for simulation of gtl_data_mapping, gtl_module and fdl_module
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
--- use ieee.std_logic_textio.all;
 use ieee.numeric_std.all;
-
--- library UNISIM;
--- use UNISIM.VCOMPONENTS.ALL;
 
 library std;                  -- for Printing
 use std.textio.all;
@@ -33,6 +30,25 @@ end gtl_fdl_wrapper_TB;
 
 architecture rtl of gtl_fdl_wrapper_TB is
 
+-- ***************************************************************
+-- TV data structure
+    constant bx_str_w : positive := 4;
+    constant muon_str_w : positive := 16*8+8; -- 8 obj 64 bits (16 hex digits) + 8 blancs
+    constant calo_str_w : positive := 8*48+48; -- 48 obj 32 bits (8 hex digits) + 48 blancs
+    constant ext_cond_str_w : positive := 64+1; -- 256 bits (64 hex digits) + 1 blanc
+    constant cicada_str_w : positive := 8*6+5; -- 6 obj 32 bits (8 hex digits) + 5 blancs
+    constant data_str_w : positive := muon_str_w+calo_str_w+ext_cond_str_w+cicada_str_w;
+    constant algo_str_w : positive := MAX_NR_ALGOS/4;
+   
+    constant bx_beg : positive := 1;
+    constant bx_end : positive := bx_beg+bx_str_w-1;
+    constant data_beg : positive := bx_end+2;
+    constant data_end : positive := data_beg+data_str_w-1;
+    constant algo_beg : positive := data_end+2;
+    constant algo_end : positive := algo_beg+algo_str_w-1;
+    constant finor_beg : positive := algo_end+2;
+-- ***************************************************************
+            
     type lhc_data_t_array is array(integer range <>) of lhc_data_t;
     type algo_vector_string_array is array(integer range <>) of string(1 to 128);
     type algo_vector_data_array is array(integer range <>) of std_logic_vector(MAX_NR_ALGOS-1 downto 0);
@@ -127,12 +143,12 @@ begin
         temp_counter := 0;
         while not endfile(testvector_file) loop
             readline(testvector_file, l);
-            bx_nr_vector_data(temp_counter) := l(1 to 4); -- bx nr
-            testdata(temp_counter) := string_to_lhc_data_t(l(6 to 638)); -- without bx_nr, algos and finor
-            algo_vector_string(temp_counter) := l(639 to 766); -- algo strings
-            algo_vector_data(temp_counter) := str_to_slv(l(639 to 766)); -- algos
-            finor_vector_data(temp_counter) := str_to_slv(l(768 to 768)); -- finor
-            finor_vector_string(temp_counter) := l(768 to 768); -- finor string
+            bx_nr_vector_data(temp_counter) := l(bx_beg to bx_end); -- bx nr
+            testdata(temp_counter) := string_to_lhc_data_t(l(data_beg to data_end)); -- without bx_nr, algos and finor
+            algo_vector_string(temp_counter) := l(algo_beg to algo_end); -- algo strings
+            algo_vector_data(temp_counter) := str_to_slv(l(algo_beg to algo_end)); -- algos
+            finor_vector_data(temp_counter) := str_to_slv(l(finor_beg to finor_beg)); -- finor
+            finor_vector_string(temp_counter) := l(finor_beg to finor_beg); -- finor string
             temp_counter := temp_counter + 1;
         end loop;
 

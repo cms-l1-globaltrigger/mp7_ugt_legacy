@@ -615,20 +615,21 @@ bits [63..62] & definition \\\hline\hline
 \clearpage
 
 \subsubsection{Definitions of CICADA data}
-\label{sec:gtl:calorimeter_data}
+\label{sec:gtl:def_cicada}
 
-The calorimeter layer 1 trigger processing identifies \textbf{bjets}, \textbf{anomaly detection} and a \textbf{heavy ion bit}.\\
+The calorimeter layer 1 trigger processing identifies \textbf{Boosted jets (bjet)}, \textbf{Anomaly Detection} and a \textbf{Heavy Ion bits}.\\
 See also \ref{sec:gtl:calo1_optical_interfaces}.\\
 
-Six objects and some additional bits are passed to the \ugt for each event.\\
-For each selected bjet object, the Calo-1 sends parameters for \pt and for position and isolation - encoded in 32 bits:
+Six bjet objects, one value for Anomaly Detection and 8 Heavy Ion bits are passed to the \ugt for each event.\\
+For each selected bjet object, the Calo-Layer1 sends parameters for \pt, for position and a flag - encoded in 28 bits:
 \begin{itemize}
-\item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
-\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
 \item 11 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
+\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
+\item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
+\item 1 bit as a flag
 \end{itemize}
 
-The anomaly detection value is represented by a 6 bits integer part and a 7 bits decimal part. 
+The Anomaly Detection value is represented by an 8 bits integer part and an 8 bits decimal part. There are 8 Heavy Ion bits.
 
 \clearpage
 

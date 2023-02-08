@@ -21,7 +21,7 @@ Following software tool versions used to create L1Menu and menu depended VHDL fi
 
 | utm | TME | VHDL Producer |
 |:-:|:-:|:-:|
-| 0.10.0 | 0.14.0 | 2.13.0 |
+| 0.10.0 | 0.14.0 | 2.13.1 |
 
 Following dependencies exist for uGT firmware:
 

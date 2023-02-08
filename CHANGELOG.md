@@ -4,11 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.22.0] - 2023-01-31
+## [v1.22.0] - 2023-02-08
 ### Comment
 
 - mp7_ugt firmware release v1.22.0
-- version for calo anomaly algorithm (CICADA, bjets) implementation
+- version for calo anomaly algorithm (CICADA, bjets) implementation on link 16
 
 ### Changed
 - source files:
@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/lhc_data_pkg.vhd
   - ../payload/gtl_data_mapping.vhd
   - ../payload/gtl/common/calo_comparators.vhd
+  - ../payload/gtl/common/calo_obj_cuts.vhd
+  - ../payload/gtl/comb_conditions.vhd
+  - ../payload/gtl/correlation_conditions.vhd
+- simulation file:
+  - ../sim/testbench/lhc_data_debug_util_pkg.vhd
+  - ../sim/testbench/templates/gtl_fdl_wrapper_tb_tpl.vhd
 
 ## [v1.21.7] - 2022-11-29
 ### Comment

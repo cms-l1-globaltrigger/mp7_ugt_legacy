@@ -283,6 +283,75 @@ from AMC502 boards. On link 16 CICADA data are received from Calo-Layer1 (not in
 \label{fig:app:ugt_inputs}
 \end{figure}
 
+\begin{table}[ht]
+\caption{\bf Summary of optical links (part 1)}
+\vspace{5mm}
+\scalebox{0.8}{
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|p{1.2cm}|}\hline
+% \begin{tabular}{|c|l|l|l|l|l|l|l|l|l|l|p{2.4cm}|}\hline
+ & \multicolumn{10}{ c| }{link} \\\hline
+frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
+% frame &  & & & & & & & & & & \\\hline\hline
+0 & free & free & free & free & EG0 & EG6 & JET0 & JET6 & TAU0 & TAU6\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7\\
+ & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & &\\
+ & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & &\\
+ & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & &\\
+2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+5 & MU1 [63:32] & MU3 [63:32] & MU5 [63:32] & MU7 [63:32] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\\hline
+\end{tabular}
+}
+\label{table:sum_opt_links}
+\end{table}
+
+\begin{table}[ht]
+\caption{\bf Summary of optical links (part 2)}
+\vspace{5mm}
+\scalebox{0.8}{
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|p{3.0cm}|}\hline
+ & \multicolumn{7}{ c| }{link} \\\hline
+frame & 10 & 11 & 12 & 13 & 14 & 15 &\makebox[3.0cm][c]{16} \\\hline\hline
+0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond & BJET0,\\
+ & ETTEM, & & [31:0] & [95:64] & [159:128] & [223:192] & Anomaly Detection -\\
+ & MBT0HFP & & & & & & Integer low\\
+1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond & BJET1,\\
+ & TOWERCOUNT, & & [63:32] & [127:96] & [191:160] & [255:224] & Anomaly Detection -\\
+ & MBT0HFM & & & & & &Integer high\\
+2 & ET$_{miss}$, & free & free & free & free & free & BJET2,\\
+ & ASYMET,& & & & & & Anomaly Detection -\\
+ & MBT1HFP  & & & & & & Decimal low\\
+3 & HT$_{miss}$, & free & free & free & free & free & BJET3,\\
+ & ASYMHT,& & & & & & Anomaly Detection -\\
+ & MBT1HFM & & & & & & Decimal high\\
+4 & ET$_{miss}^{HF}$ & free & free & free & free & free &  BJET4,\\
+ & ASYMETHF, & & & & & & Heavy Ion -\\
+ & CENT[3:0] & & & & & & low \\
+5 & HT$_{miss}^{HF}$ & free & free & free & free & free & BJET5,\\
+ & ASYMHTHF, & & & & & & Heavy Ion -\\
+ & CENT[7:4] & & & & & & high \\\hline
+\end{tabular}
+}
+\label{table:sum_opt_links2}
+\end{table}
+
+\clearpage
+
 \subsection{Configuration of links to AMC13 (readout)}\label{sec:app:app_c}
 
 Figure~\ref{fig:app:ugt_outputs} shows the configuration of links from Global Trigger to AMC13 (readout).\\

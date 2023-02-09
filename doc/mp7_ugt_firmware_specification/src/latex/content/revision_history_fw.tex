@@ -7,105 +7,108 @@ Doc Rev & Description of Change & Revision Date\\
 \hline
 \hline
 \endhead
-8.7 & Cleaned up text and layout. & 2022/12/13\\
-8.6 & Added chapter "Handling of timing errors in synthesis" (\ref{sec:app:synth_timing_errors}). & 2022/12/01\\
-8.5 & Cleaned up (used "textquotesingle"). & 2022/11/30\\
-8.4 & Updated "Configuration of GTHs" (\ref{sec:app:gth_conf_table}). & 2022/11/24\\
-8.3 & Inserted chapter "ZDC 5G to 10G conversion scheme" to "Appendices" (\ref{sec:app:zdc_5g_10g_conv}). Replaced picture with Table in "Configuration of GTHs" (\ref{sec:app:app_a}). & 2022/10/14\\
-8.2 & Inserted chapter "GTH I/Os" to "Appendices" (\ref{sec:app:gth_io}). & 2022/10/14\\
-8.1 & Added table "Firmware versions" (\ref{tab:fw:versions}). & 2022/09/27\\
-8.0 & Updated "Appendices" (\ref{sec:app:app}). & 2022/09/26\\
-7.9 & Updated text in "LUTs for 1/$\Delta$$R^2$" (\ref{sec:gtl:calc_luts_corr_cuts}), added new chapter "Muon shower bits" (\ref{sec:gtl:muon_shower_bits}). & 2022/09/13\\
-7.8 & Updated text for \finor-mask and veto-mask (\ref{sec:fdl:finor_masks} and \ref{sec:fdl:veto_masks}). Updated \href{\gitbranch/tree/master/doc/mp7_ugt_firmware_specification/src/latex/content/versions.tex}{\texttt{versions.tex}}. & 2022/09/09\\
-7.7 & Updated text for "fractional prescale", reset prescaler with "start" (\ref{sec:fdl:pre_scalers}). & 2022/08/17\\
-7.6 & Updated text for "fractional prescale" values (\ref{sec:fdl:pre_scalers}). & 2022/07/11\\
-7.5 & Inserted "Description of tests" to "Appendices" (\ref{sec:app:app_e}). & 2022/03/25\\
-7.4 & Cleaned up text and tables in section "Framework" (\ref{sec:framework:framework}). Changed links to firmware modules (git branch name set in versions.tex). & 2022/03/23\\
-7.3 & Added "Configuration of optical input links" and "Configuration of links to AMC13 (readout)" to "Appendices" (\ref{sec:app:app_b} and \ref{sec:app:app_c}). & 2022/02/28\\
-7.2 & Inserted "Appendices" (\ref{sec:app:app}) and added references. & 2022/02/25\\
-7.1 & Inserted "Simulation and build of firmware" and "Testing firmware" (\ref{sec:fw:sim_build_firmware} and \ref{sec:fw:testing_firmware}). & 2022/02/15\\
-7.0 & Bug fixed in labels. Updated labels. & 2022/02/14\\
-6.9 & Inserted "Implementation in firmware" for top-of-hierarchy of VHDL code (\ref{sec:fw:implementation_firmware}). Updated labels. & 2022/02/11\\
-6.8 & Updated text of section "Implementation in firmware" for Framework (\ref{sec:framework:implementation_firmware}), GTL (\ref{sec:gtl:implementation_firmware_gtl}) and FDL (\ref{sec:fdl:implementation_firmware}). & 2022/02/10\\
-6.7 & Inserted references and updated text in \ref{sec:fw:dir_struct_gt_fw}. & 2022/02/09\\
-6.6 & Updated text in "Implementation in firmware" (\ref{sec:gtl:implementation_firmware_gtl}). & 2022/01/10\\
-6.5 & Bug fixed in definition of calo eta ranges (\ref{sec:gtl:calorimeter_data}). & 2021/11/30\\
-6.4 & Updated data structure for jets with DISP bit (\ref{sec:gtl:gct_optical_interfaces}). & 2021/11/17\\
-6.3 & Inserted "Calculation of look-up-tables (LUTs) for correlation cuts" (\ref{sec:gtl:calc_luts_corr_cuts}). & 2021/11/10\\
-6.2 & Removed "VHDL-Templates for VHDL-Producer". & 2021/09/24\\
-6.1 & Updated (and renamed) description of "Invariant mass over delta R calculation" (see \ref{sec:gtl:inv_mass_div_dr_calculation}). & 2021/09/14\\
-6.0 & New structure of document for firmware versions 1.12.x and higher. & 2021/02/10\\
-5.7 & Fixed typo in section "Invariant mass calculation for three objects" \ref{sec:gtl:inv_mass_3_obj_calculation}. & 2020/12/03\\
-5.6 & Updated text in section "VHDL-Templates for VHDL-Producer". & 2020/09/31\\
-5.5 & Inserted links to VHDL modules. & 2020/09/18\\
-5.4 & Updated text in section "Correlation conditions" \ref{sec:gtl:correlation_conditions}. Description is for v1.10.0 of Global Trigger Logic. & 2020/09/17\\
-5.3 & Inserted description of "Invariant mass divided by delta R calculation" (see \ref{sec:gtl:inv_mass_div_dr_calculation}). & 2020/09/10\\
-5.2 & Fixed typo (unconstrained pt). & 2020/09/09\\
-5.1 & Inserted text for new muon structure in sections \ref{sec:gtl:gmt_optical_interfaces}, \ref{sec:gtl:muon_data} and \ref{sec:gtl:correlation_condition_modules}. Added subsections in section "VHDL-Templates for VHDL-Producer" & 2020/08/04\\
-5.0 & Additional text in section for calo calo overlap remover condition module. & 2020/05/25\\
-4.9 & Inserted text in section Calorimeter Overlap Remover conditions and Calo Calo Overlap Remover Correlation conditions. & 2020/04/16\\
-4.8 & Updated text in sections Calorimeter conditions, Muon conditions and Correlation conditions for changes which have been done for GTL VHDL version 1.8.0 (module names without version number, "five eta cuts"). & 2019/08/13\\
-4.7 & Inserted "Asymmetry" and "Centrality" of "Energy sums" (GTL VHDL version 1.6.0). Therefore updated sections \ref{sec:gtl:ugtl_interface}, \ref{sec:gtl:gct_optical_interfaces},
+2.28 & Added tables (\ref{table:app:sum_opt_links}) and (\ref{table:app:sum_opt_links2}), removed figure "Optical link inputs to Global Trigger". Removed chapter "GTH I/Os" from "Appendices" & 2023/02/09\\
+2.27 & Added table for muon charge bits (\ref{tab:gtl:muon_charge_bits}). & 2023/01/16\\
+2.26 & Updated figure (\ref{fig:gtl:tme_gtl}), references and text (\ref{sec:fw:gt_system} and \ref{sec:gtl:implementation_firmware_gtl}). Renumbered "Revision History". & 2023/01/10\\
+2.25 & Updated text "LUTs for 1/deltaR**2 used in mass over deltaR calculations" (\ref{sec:gtl:calc_luts_inverse_deltaR}). & 2023/01/09\\
+2.24 & Cleaned up text and layout. & 2022/12/15\\
+2.23 & Added chapter "Handling of timing errors in synthesis" (\ref{sec:app:synth_timing_errors}). & 2022/12/01\\
+2.22 & Cleaned up (used "textquotesingle"). & 2022/11/30\\
+2.21 & Updated "Configuration of GTHs" (\ref{sec:app:gth_conf_table}). & 2022/11/24\\
+2.20 & Inserted chapter "GTH I/Os" to "Appendices". & 2022/10/12\\
+2.19 & Added table "Firmware versions" (\ref{tab:fw:versions}). & 2022/09/27\\
+2.18 & Updated "Appendices" (\ref{sec:app:app}). & 2022/09/26\\
+2.17 & Updated text in "LUTs for 1/$\Delta$$R^2$" (\ref{sec:gtl:calc_luts_corr_cuts}), added new chapter "Muon shower bits" (\ref{sec:gtl:muon_shower_bits}). & 2022/09/13\\
+2.16 & Updated text for \finor-mask and veto-mask (\ref{sec:fdl:finor_masks} and \ref{sec:fdl:veto_masks}). Updated \href{\gitbranch/tree/master/doc/mp7_ugt_firmware_specification/src/latex/content/versions.tex}{\texttt{versions.tex}}. & 2022/09/09\\
+2.15 & Updated text for "fractional prescale", reset prescaler with "start" (\ref{sec:fdl:pre_scalers}). & 2022/08/17\\
+2.14 & Updated text for "fractional prescale" values (\ref{sec:fdl:pre_scalers}). & 2022/07/11\\
+2.13 & Inserted "Description of tests" to "Appendices" (\ref{sec:app:app_e}). & 2022/03/25\\
+2.12 & Cleaned up text and tables in section "Framework" (\ref{sec:framework:framework}). Changed links to firmware modules (git branch name set in versions.tex). & 2022/03/23\\
+2.11 & Added "Configuration of optical input links" and "Configuration of links to AMC13 (readout)" to "Appendices" (\ref{sec:app:app_b} and \ref{sec:app:app_c}). & 2022/02/28\\
+2.10 & Inserted "Appendices" (\ref{sec:app:app}) and added references. & 2022/02/25\\
+2.9 & Inserted "Simulation and build of firmware" and "Testing firmware" (\ref{sec:fw:sim_build_firmware} and \ref{sec:fw:testing_firmware}). & 2022/02/15\\
+2.8.1 & Bug fixed in labels. Updated labels. & 2022/02/14\\
+2.8 & Inserted "Implementation in firmware" for top-of-hierarchy of VHDL code (\ref{sec:fw:implementation_firmware}). Updated labels. & 2022/02/11\\
+2.7 & Updated text of section "Implementation in firmware" for Framework (\ref{sec:framework:implementation_firmware}), GTL (\ref{sec:gtl:implementation_firmware_gtl}) and FDL (\ref{sec:fdl:implementation_firmware}). & 2022/02/10\\
+2.6 & Inserted references and updated text in \ref{sec:fw:dir_struct_gt_fw}. & 2022/02/09\\
+2.5 & Updated text in "Implementation in firmware" (\ref{sec:gtl:implementation_firmware_gtl}). & 2022/01/10\\
+2.4.1 & Bug fixed in definition of calo eta ranges (\ref{sec:gtl:calorimeter_data}). & 2021/11/30\\
+2.4 & Updated data structure for jets with DISP bit (\ref{sec:gtl:gct_optical_interfaces}). & 2021/11/17\\
+2.3 & Inserted "Calculation of look-up-tables (LUTs) for correlation cuts" (\ref{sec:gtl:calc_luts_corr_cuts}). & 2021/11/10\\
+2.2 & Removed "VHDL-Templates for VHDL-Producer". & 2021/09/24\\
+2.1 & Updated (and renamed) description of "Invariant mass over delta R calculation" (see \ref{sec:gtl:inv_mass_div_dr_calculation}). & 2021/09/14\\
+2.0 & New structure of document for firmware versions 1.12.x and higher. & 2021/02/10\\
+1.53.1 & Fixed typo in section "Invariant mass calculation for three objects" \ref{sec:gtl:inv_mass_3_obj_calculation}. & 2020/12/03\\
+1.53 & Updated text in section "VHDL-Templates for VHDL-Producer". & 2020/09/31\\
+1.52 & Inserted links to VHDL modules. & 2020/09/18\\
+1.51 & Updated text in section "Correlation conditions" \ref{sec:gtl:correlation_conditions}. Description is for v1.10.0 of Global Trigger Logic. & 2020/09/17\\
+1.50 & Inserted description of "Invariant mass divided by delta R calculation" (see \ref{sec:gtl:inv_mass_div_dr_calculation}). & 2020/09/10\\
+1.49.1 & Fixed typo (unconstrained pt). & 2020/09/09\\
+1.49 & Inserted text for new muon structure in sections \ref{sec:gtl:gmt_optical_interfaces}, \ref{sec:gtl:muon_data} and \ref{sec:gtl:correlation_condition_modules}. Added subsections in section "VHDL-Templates for VHDL-Producer" & 2020/08/04\\
+1.48 & Additional text in section for calo calo overlap remover condition module. & 2020/05/25\\
+1.47 & Inserted text in section Calorimeter Overlap Remover conditions and Calo Calo Overlap Remover Correlation conditions. & 2020/04/16\\
+1.46 & Updated text in sections Calorimeter conditions, Muon conditions and Correlation conditions for changes which have been done for GTL VHDL version 1.8.0 (module names without version number, "five eta cuts"). & 2019/08/13\\
+1.45 & Inserted "Asymmetry" and "Centrality" of "Energy sums" (GTL VHDL version 1.6.0). Therefore updated sections \ref{sec:gtl:ugtl_interface}, \ref{sec:gtl:gct_optical_interfaces},
 \ref{sec:gtl:esums_conditions} added section "Centrality condition" \ref{sec:gtl:centrality_cond} and updated Table \ref{tab:framework:tab_configuration_optical_conn} & 2018/08/13\\
-4.6 & Updated text in section "Global Trigger Logic" (\ref{sec:gtl:global_trigger_logic}) according to firmware version v1.5.0 of gtl\_module.vhd. & 2018/02/21\\
-4.5 & Updated text in section "Framework" (\ref{sec:framework:framework}) according to firmware version v1.2.3 of frame.vhd. & 2018/01/19\\
-4.4 & New "icons" ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$ in Table~\ref{tab:framework:tab_configuration_optical_conn} and Section \ref{sec:gtl:global_trigger_logic}. Updated glossary. & 2016/11/11\\
-4.3 & Updated table "\ufdl register map" (\ref{tab:fdl:ufdl_register_map}) and section "Register map" (\ref{sec:fdl:reg_map}). Moved "List of Tables" and "List of Figures" to the end of document.
+1.44 & Updated text in section "Global Trigger Logic" (\ref{sec:gtl:global_trigger_logic}) according to firmware version v1.5.0 of gtl\_module.vhd. & 2018/02/21\\
+1.43 & Updated text in section "Framework" (\ref{sec:framework:framework}) according to firmware version v1.2.3 of frame.vhd. & 2018/01/19\\
+1.42 & New "icons" ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$ in Table~\ref{tab:framework:tab_configuration_optical_conn} and Section \ref{sec:gtl:global_trigger_logic}. Updated glossary. & 2016/11/11\\
+1.41 & Updated table "\ufdl register map" (\ref{tab:fdl:ufdl_register_map}) and section "Register map" (\ref{sec:fdl:reg_map}). Moved "List of Tables" and "List of Figures" to the end of document.
 Inserted link to "Scales for inputs to $\mu$GT" (\ref{sec:gtl:implementation_firmware_gtl}). Moved section "Software reset" to section "Framework" as subsection (\ref{sec:framework:software_reset}).
 Removed empty sections "IPBus", "Firmware Configuration" and "Bibliography". & 2016/11/03\\
-4.2 & Updated sections "Calo-Layer2 optical interfaces" (\ref{sec:gtl:gct_optical_interfaces}) and "Energy sum quantities conditions" (\ref{sec:gtl:esums_conditions})
+1.40 & Updated sections "Calo-Layer2 optical interfaces" (\ref{sec:gtl:gct_optical_interfaces}) and "Energy sum quantities conditions" (\ref{sec:gtl:esums_conditions})
 for towercount trigger bits. Inserted section "Towercount condition" (\ref{sec:gtl:towercount_cond}). & 2016/10/25\\
-4.1 & Updated section "Calo-Layer2 optical interfaces" (\ref{sec:gtl:gct_optical_interfaces}) for new energy sum quantities and minimum bias trigger bits.
+1.39 & Updated section "Calo-Layer2 optical interfaces" (\ref{sec:gtl:gct_optical_interfaces}) for new energy sum quantities and minimum bias trigger bits.
 Updated sections "Firmware" (\ref{sec:fw:fw}), "Framework" (\ref{sec:framework:framework}) and "Final Desicion Logic" (\ref{sec:fdl:ufdl}). & 2016/06/09\\
-4.0 & Updated Text in section "Muon Muon Correlation condition module". & 2016/01/15\\
-3.9 & Removed "Double objects requirements condition with spatial correlation", because not used anymore in the future, replaced by Correlation conditions. & 2016/01/08\\
-3.8 & Minor changes in text and updated Figure \ref{fig:gtl:gtl_pipeline}. & 2016/01/08\\
-3.7 & Changed colour in Figure \ref{fig:gtl:phi_windows_comparator} and updated text for correlation conditions (see section~\ref{sec:gtl:correlation_conditions}. & 2016/01/07\\
-3.6 & Updated Figures \ref{fig:gtl:gtl_pipeline} and \ref{fig:gtl:tme_gtl} and text in calo calo correlation condition module. & 2015/12/21\\
-3.5 & Inserted drawing of VHDL structure of cuts for correlation conditions (see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}). & 2015/11/18\\
-3.4 & Updated muon $\eta$ ranges (Table~\ref{tab:gtl:muon_eta_scale}) and inserted correlation conditions.
+1.38 & Updated Text in section "Muon Muon Correlation condition module". & 2016/01/15\\
+1.37 & Removed "Double objects requirements condition with spatial correlation", because not used anymore in the future, replaced by Correlation conditions. & 2016/01/08\\
+1.36 & Minor changes in text and updated Figure \ref{fig:gtl:gtl_pipeline}. & 2016/01/08\\
+1.35 & Changed colour in Figure \ref{fig:gtl:phi_windows_comparator} and updated text for correlation conditions (see section~\ref{sec:gtl:correlation_conditions}. & 2016/01/07\\
+1.34 & Updated Figures \ref{fig:gtl:gtl_pipeline} and \ref{fig:gtl:tme_gtl} and text in calo calo correlation condition module. & 2015/12/21\\
+1.33 & Inserted drawing of VHDL structure of cuts for correlation conditions (see Figure~\ref{fig:gtl:scheme_vhdl_cuts_correllation_condition}). & 2015/11/18\\
+1.32 & Updated muon $\eta$ ranges (Table~\ref{tab:gtl:muon_eta_scale}) and inserted correlation conditions.
 Created scheme for conversion of calorimeter $\eta$ and $\varphi$ to muon scale for calo-muon-correlation conditions. & 2015/11/17\\
-3.3 & Added Text in sections calo comparator module and muon comparator module. & 2015/10/08\\
-3.2 & Updated Text in section "Final Desicion Logic" (\ref{sec:fdl:ufdl}). & 2015/10/06\\
-3.1 & Updated Figure \ref{fig:fdl:mFDL_firmware} and Tables \ref{tab:fdl:ufdl_register_map}. Remaned
+1.31 & Added Text in sections calo comparator module and muon comparator module. & 2015/10/08\\
+1.30 & Updated Text in section "Final Desicion Logic" (\ref{sec:fdl:ufdl}). & 2015/10/06\\
+1.29 & Updated Figure \ref{fig:fdl:mFDL_firmware} and Tables \ref{tab:fdl:ufdl_register_map}. Remaned
 section "Calorimeter conditions module - version 2" to "Calorimeter conditions module - version 3", section "Muon conditions module" to "Muon conditions module - version 2"
 and section "Muon comparators module" to "Muon comparators module - version 2". & 2015/10/02\\
-3.0 & Updated text and tables of $\eta$ ranges for Calorimeter objects (see \ref{sec:gtl:calorimeter_data}). & 2015/09/22\\
-2.9 & Renewed Figures in GTL and FDL (see Figure~\ref{fig:gtl:mGTL_firmware}, \ref{fig:gtl:tme_gtl} and \ref{fig:gtl:gtl_pipeline})
+1.28 & Updated text and tables of $\eta$ ranges for Calorimeter objects (see \ref{sec:gtl:calorimeter_data}). & 2015/09/22\\
+1.27 & Renewed Figures in GTL and FDL (see Figure~\ref{fig:gtl:mGTL_firmware}, \ref{fig:gtl:tme_gtl} and \ref{fig:gtl:gtl_pipeline})
 and FDL(see Figure~\ref{fig:fdl:mFDL_firmware} and \ref{fig:fdl:mFDL_pipeline}). Added register bits description of FDL Register map (see section~\ref{sec:fdl:reg_map}). & 2015/09/16\\
-2.8 & Updated text, tables and listings of section "VHDL-Templates for VHDL-Producer". & 2015/09/15\\
-2.7 & Corrected calculation of muon $\eta$ step width (see \ref{sec:gtl:muon_data}). & 2015/09/10\\
-2.6 & Edited text in Table \ref{tab:gtl:muon_lut_qual}. & 2015/08/28\\
-2.5 & Updated definition of $\eta$ ranges for Calorimeter objects and Muon objects. & 2015/08/20\\
-2.4 & Added section Calo Muon Correlation condition. & 2015/08/19\\
-2.3 & Added section "Register map" (\ref{sec:fdl:reg_map}) for \ufdl. & 2015/06/26\\
-2.2 & Updated figures (\ref{fig:gtl:mGTL_firmware}, \ref{fig:gtl:tme_gtl} and \ref{fig:gtl:gtl_pipeline}) for GTL and edited section
+1.26 & Updated text, tables and listings of section "VHDL-Templates for VHDL-Producer". & 2015/09/15\\
+1.25 & Corrected calculation of muon $\eta$ step width (see \ref{sec:gtl:muon_data}). & 2015/09/10\\
+1.24 & Edited text in Table \ref{tab:gtl:muon_lut_qual}. & 2015/08/28\\
+1.23 & Updated definition of $\eta$ ranges for Calorimeter objects and Muon objects. & 2015/08/20\\
+1.22 & Added section Calo Muon Correlation condition. & 2015/08/19\\
+1.21 & Added section "Register map" (\ref{sec:fdl:reg_map}) for \ufdl. & 2015/06/26\\
+1.20 & Updated figures (\ref{fig:gtl:mGTL_firmware}, \ref{fig:gtl:tme_gtl} and \ref{fig:gtl:gtl_pipeline}) for GTL and edited section
 "Correlation conditions" (see \ref{sec:gtl:correlation_conditions}). & 2015/05/08\\
-2.1 & Added tables for calorimeter isolation-bits and for muon quality- and isolation-bits definition (\ref{tab:gtl:eg_tau_iso_bits}, \ref{tab:gtl:muon_quality_bits} and \ref{tab:gtl:muon_iso_bits}).
+1.19 & Added tables for calorimeter isolation-bits and for muon quality- and isolation-bits definition (\ref{tab:gtl:eg_tau_iso_bits}, \ref{tab:gtl:muon_quality_bits} and \ref{tab:gtl:muon_iso_bits}).
 Edited section glossary and acronyms. & 2015/05/07\\
-2.0 & Added text for "Energy sum conditions" (\ref{sec:gtl:esums_conditions}) and updated chapters for "Calorimeter conditions" for version 2. Inserted isolation bits for \egamma and tau objects
+1.18 & Added text for "Energy sum conditions" (\ref{sec:gtl:esums_conditions}) and updated chapters for "Calorimeter conditions" for version 2. Inserted isolation bits for \egamma and tau objects
 (\ref{sec:gtl:calorimeter_data}). & 2015/05/06\\
-1.9 & Minor changes "Demux Lane Data" (see \ref{sec:framework:demux_lane_data}) and "Muon data" (see \ref{sec:gtl:muon_data}). & 2014/11/06\\
-1.8 & Edited Section "Energy sum quantities conditions" (see \ref{sec:gtl:esums_conditions}). & 2014/10/08\\
-1.7 & Added sections "Configuration of optical connections" (\ref{sec:framework:sec_configuration_optical_conn}), "Demux Lane Data" (\ref{sec:framework:demux_lane_data})
+1.17 & Minor changes "Demux Lane Data" (see \ref{sec:framework:demux_lane_data}) and "Muon data" (see \ref{sec:gtl:muon_data}). & 2014/11/06\\
+1.16 & Edited Section "Energy sum quantities conditions" (see \ref{sec:gtl:esums_conditions}). & 2014/10/08\\
+1.15 & Added sections "Configuration of optical connections" (\ref{sec:framework:sec_configuration_optical_conn}), "Demux Lane Data" (\ref{sec:framework:demux_lane_data})
 and "Lane Mapping Process" (\ref{sec:framework:lmp}) to framework. Removed tables of optical interfaces from gtl and referenced to tables in framework. & 2014/10/07\\
-1.6 & Minor changes in "Calorimeter conditions" and "Muon conditions" . & 2014/07/01\\
-1.5 & Updated with minor changes in "Muon conditions". & 2014/06/17\\
-1.4 & Fixed bug in Figure \ref{fig:gtl:phi_windows_comparator}. & 2014/04/30\\
-1.3 & Updated section "Muon conditions". & 2014/04/22\\
-1.2 & Removed section "Muon charge module" and added new section "Muon charge correlation module" (see \ref{sec:gtl:muon_charge_correlation_module}).
+1.14 & Minor changes in "Calorimeter conditions" and "Muon conditions" . & 2014/07/01\\
+1.13 & Updated with minor changes in "Muon conditions". & 2014/06/17\\
+1.12.1 & Fixed bug in Figure \ref{fig:gtl:phi_windows_comparator}. & 2014/04/30\\
+1.12 & Updated section "Muon conditions". & 2014/04/22\\
+1.11 & Removed section "Muon charge module" and added new section "Muon charge correlation module" (see \ref{sec:gtl:muon_charge_correlation_module}).
 Edited text in section and subsections "Muon conditions definition". & 2014/04/15\\
-1.1 & Changed Figure~\ref{fig:gtl:phi_windows_comparator} and minor changes in text for anti-clockwise behaviour in $\varphi$. & 2014/04/04\\
-1.0 & Added definition for "calorimeter conditions over bx", see section. & 2014/03/12\\
-0.9 & Changed text of condition description in subsections Calo conditions definition and Muon conditions definition. & 2014/02/12\\
-0.8 & Updated calorimeter data structure in \ref{sec:gtl:gct_optical_interfaces}. & 2013/12/03\\
-0.7 & Updated muon data structure in \ref{sec:gtl:gmt_optical_interfaces} & 2013/12/02\\
-0.6 & Moved decription of VHDL templates for TME to "VHDL-Templates for VHDL-Producer". & 2013/11/18\\
-0.5 & Subsection~\ref{sec:gtl:optical_interfaces} added to section \ref{sec:gtl:global_trigger_logic}. & 2013/11/11\\
-0.4 & GTL and FDL firmware implemented for new data structure (GTL firmware version v1.0.0 [fix part of GTL], FDL firmware version v1.0.0) & 2013/11/06\\
-0.3 & New framework implementation based on new object types definition. Additionally, the ROP is implemented based on production requirements. & 2013/10/13\\
-0.2 & First framework implementation + ROP . & 2012/07/01\\
-0.1 & Document created. & 2012/02/22\\
+1.10 & Changed Figure~\ref{fig:gtl:phi_windows_comparator} and minor changes in text for anti-clockwise behaviour in $\varphi$. & 2014/04/04\\
+1.9 & Added definition for "calorimeter conditions over bx", see section. & 2014/03/12\\
+1.8 & Changed text of condition description in subsections Calo conditions definition and Muon conditions definition. & 2014/02/12\\
+1.7 & Updated calorimeter data structure in \ref{sec:gtl:gct_optical_interfaces}. & 2013/12/03\\
+1.6 & Updated muon data structure in \ref{sec:gtl:gmt_optical_interfaces} & 2013/12/02\\
+1.5 & Moved decription of VHDL templates for TME to "VHDL-Templates for VHDL-Producer". & 2013/11/18\\
+1.4 & Subsection~\ref{sec:gtl:optical_interfaces} added to section \ref{sec:gtl:global_trigger_logic}. & 2013/11/11\\
+1.3 & GTL and FDL firmware implemented for new data structure (GTL firmware version v1.0.0 [fix part of GTL], FDL firmware version v1.0.0) & 2013/11/06\\
+1.2 & New framework implementation based on new object types definition. Additionally, the ROP is implemented based on production requirements. & 2013/10/13\\
+1.1 & First framework implementation and ROP. & 2012/07/01\\
+1.0 & Document created. & 2012/02/22\\
 \hline
 \end{longtable}
 

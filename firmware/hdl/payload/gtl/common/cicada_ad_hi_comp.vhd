@@ -1,8 +1,9 @@
 
 -- Description:
--- Comparator for cicada Anomaly Detection and HI bit
+-- Comparator for cicada Anomaly Detection and HI bits
 
 -- Version history:
+-- HB 2022-02-09: updated for 2 HI bits.
 -- HB 2022-02-03: first design.
 
 library ieee;
@@ -12,14 +13,15 @@ use work.gtl_pkg.all;
 
 entity cicada_ad_hi_comp is
     generic	(
-        hi_bit_requ : boolean := false;
+        hi_bits_requ : boolean := false;
+        hi_bits_val : std_logic_vector(HI_BITS-1 downto 0) := (others => '0');
         ad_requ : boolean := false;
         ad_dec_thr : std_logic_vector(AD_DEC_BITS-1 downto 0) := (others => '0');
         ad_int_thr : std_logic_vector(AD_INT_BITS-1 downto 0) := (others => '0')
     );
     port(
         lhc_clk: in std_logic;
-        hi_bit_i : in std_logic := '0';
+        hi_bits_i : in std_logic_vector(HI_BITS-1 downto 0) := (others => '0');
         ad_dec_i : in std_logic_vector(AD_DEC_BITS-1 downto 0) := (others => '0');
         ad_int_i : in std_logic_vector(AD_INT_BITS-1 downto 0) := (others => '0');
         hi_comp_o : out std_logic := '1';
@@ -33,8 +35,15 @@ architecture rtl of cicada_ad_hi_comp is
 
 begin
 
-    hi_i: if hi_bit_requ generate
-        hi_comp <= hi_bit_i;
+    hi_i: if hi_bits_requ generate
+        hi_p: process(hi_bits_i)
+        begin
+            if hi_bits_i = hi_bits_val then
+                hi_comp <= '1';
+            else
+                hi_comp <= '0';
+            end if;
+        end process;
     end generate hi_i;
     
     ad_i: if ad_requ generate

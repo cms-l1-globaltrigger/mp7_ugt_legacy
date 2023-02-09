@@ -57,7 +57,8 @@ entity comb_conditions is
         upt_upper_limits_obj1: common_templates_array := (others => (others => '0'));
         upt_lower_limits_obj1: common_templates_array := (others => (others => '0'));
         ip_luts_obj1: common_templates_ip_array := (others => (others => '1'));
-        hi_bit_requ : boolean := false;
+        hi_bits_requ : boolean := false;
+        hi_bits_val : std_logic_vector(HI_BITS-1 downto 0) := (others => '0');
         ad_requ : boolean := false;
         ad_dec_thr : std_logic_vector(AD_DEC_BITS-1 downto 0) := (others => '0');
         ad_int_thr : std_logic_vector(AD_INT_BITS-1 downto 0) := (others => '0');
@@ -127,7 +128,7 @@ entity comb_conditions is
         os_charcorr_triple: in std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
         ls_charcorr_quad: in std_logic_4dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => (others => '0'))));
         os_charcorr_quad: in std_logic_4dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => (others => '0'))));
-        hi_bit_i : in std_logic := '0';
+        hi_bits_i : in std_logic_vector(HI_BITS-1 downto 0) := (others => '0');
         ad_dec_i : in std_logic_vector(AD_DEC_BITS-1 downto 0) := (others => '0');
         ad_int_i : in std_logic_vector(AD_INT_BITS-1 downto 0) := (others => '0');
         deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
@@ -172,13 +173,13 @@ architecture rtl of comb_conditions is
 
 begin
 
-    -- CICADA Anomaly Detection and Heavy Ion Bit calo_comparators
+    -- CICADA Anomaly Detection and Heavy Ion Bits comparators
     cicada_if: if (type_obj1 = BJET_TYPE) or (type_obj2 = BJET_TYPE) generate
         cicada_i: entity work.cicada_ad_hi_comp
-            generic map(hi_bit_requ, ad_requ, ad_dec_thr, ad_int_thr)
+            generic map(hi_bits_requ, hi_bits_val, ad_requ, ad_dec_thr, ad_int_thr)
             port map(
                 lhc_clk,
-                hi_bit_i, ad_dec_i, ad_int_i,
+                hi_bits_i, ad_dec_i, ad_int_i,
                 hi_comp_pipe, ad_comp_pipe
             );
     end generate cicada_if;

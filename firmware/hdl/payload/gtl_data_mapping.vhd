@@ -2,6 +2,7 @@
 -- Data mapping for GTL
 
 -- Version-history:
+-- HB 2023-02-09: updated comments.
 -- HB 2022-10-10: inserted ZDC.
 -- HB 2022-09-05: cleaned up.
 -- HB 2021-06-01: first design.
@@ -92,6 +93,7 @@ begin
 
 -- ****************************************************************************************
 
+-- HB 2023-02-09: ZDC data (10G) on link 11 (after conversion from 5G to 10G).
     gtl_data.zdc(0) <= lhc_data.zdc10g_0(ZDC10G_0_WIDTH-1 downto 0);
     gtl_data.zdc(1) <= lhc_data.zdc10g_1(ZDC10G_1_WIDTH-1 downto 0);
     gtl_data.zdc(2) <= lhc_data.zdc10g_2(ZDC10G_2_WIDTH-1 downto 0);

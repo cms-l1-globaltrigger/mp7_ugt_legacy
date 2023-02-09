@@ -2,6 +2,7 @@
 -- Package for definitions of lhc data.
 
 -- Version history:
+-- HB 2023-02-09: updated comments.
 -- HB 2022-10-08: zdc10g on link 11.
 -- HB 2022-09-08: cleaned up.
 -- HB 2016-09-16: updated for new esums and 12 tau objects
@@ -23,7 +24,7 @@
 -- tau                 6 (5..0)        1        8
 -- tau                 6 (11..6)       1        9
 -- esums               6               1       10
--- spare               6               1       11
+-- zdc                 6               1       11
 -- ext-cond(63..0)     2               1       12
 -- ext-cond(127..64)   2               1       13
 -- ext-cond(191..128)  2               1       14
@@ -45,6 +46,7 @@
 -- tau         5      4     3    2    1      0
 -- tau         11     10    9    8    7      6
 -- esums       HTmHF  ETmHF HTm* ETm* HT,TC* ET,ETTEM*
+-- zdc (10G)   5      4     3    2    1      0     
 -- ext-cond    x      x     x    x    1      0
 -- ext-cond    x      x     x    x    3      2
 -- ext-cond    x      x     x    x    5      4
@@ -54,7 +56,7 @@
 -- muon        5h     5l    4h   4l   x      x
 -- muon        7h     7l    6h   6l   x      x
 --
--- *) in addition 4 MSBs for Minimum Bias bits. TC means "TOWERCNT" (ECAL sum)
+-- *) in addition 4 MSBs for Minimum Bias bits. TC means "TOWERCOUNT" (ECAL sum)
 
 --===============================================================================================--
 

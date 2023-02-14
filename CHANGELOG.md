@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - mp7_ugt firmware release v1.21.8
 - implemented cut for muon index bits
 
+### Changed
+- source files:
+  - ../payload/gtl/muon_comparators.vhd
+  - ../payload/gtl/muon_obj_cuts.vhd
+  - ../payload/gtl/comb_conditions.vhd
+  - ../payload/gtl/correlation_conditions.vhd
+
 ## [v1.21.7] - 2022-11-29
 ### Comment
 

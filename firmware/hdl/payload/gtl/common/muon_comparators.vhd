@@ -3,6 +3,7 @@
 -- Comparators for transverse momentum, pseudorapidity, azimuth angle, quality and isolation of muon objects
 
 -- Version history:
+-- HB 2023-02-14: inserted cut for index bits.
 -- HB 2022-09-06: cleaned up.
 -- HB 2021-05-18: changed slice parameter.
 -- HB 2021-03-06: removed "invalid_muon".
@@ -36,6 +37,17 @@ entity muon_comparators is
         eta_w4_lower_limit : std_logic_vector;
         eta_w5_upper_limit : std_logic_vector;
         eta_w5_lower_limit : std_logic_vector;
+        nr_idx_windows : natural;
+        idx_w1_upper_limit : std_logic_vector;
+        idx_w1_lower_limit : std_logic_vector;
+        idx_w2_upper_limit : std_logic_vector;
+        idx_w2_lower_limit : std_logic_vector;
+        idx_w3_upper_limit : std_logic_vector;
+        idx_w3_lower_limit : std_logic_vector;
+        idx_w4_upper_limit : std_logic_vector;
+        idx_w4_lower_limit : std_logic_vector;
+        idx_w5_upper_limit : std_logic_vector;
+        idx_w5_lower_limit : std_logic_vector;
         nr_phi_windows : natural;
         phi_w1_upper_limit : std_logic_vector;
         phi_w1_lower_limit : std_logic_vector;
@@ -66,6 +78,7 @@ architecture rtl of muon_comparators is
     signal charge : std_logic_vector(MUON_CHARGE_HIGH downto MUON_CHARGE_LOW);
     signal upt : std_logic_vector(MUON_UPT_HIGH downto MUON_UPT_LOW);
     signal ip : std_logic_vector(MUON_IP_HIGH downto MUON_IP_LOW);
+    signal idx : std_logic_vector(MUON_IDX_BITS_HIGH downto MUON_IDX_BITS_LOW);
 
     signal pt_comp : std_logic := '1';
     signal eta_comp : std_logic := '1';
@@ -75,6 +88,7 @@ architecture rtl of muon_comparators is
     signal ch_comp : std_logic := '1';
     signal upt_comp : std_logic := '1';
     signal ip_comp : std_logic := '1';
+    signal idx_comp : std_logic := '1';
 
     signal comp_int : std_logic;
 
@@ -114,6 +128,7 @@ begin
     charge <= data_i(MUON_CHARGE_HIGH downto MUON_CHARGE_LOW);
     upt <= data_i(MUON_UPT_HIGH downto MUON_UPT_LOW);
     ip <= data_i(MUON_IP_HIGH downto MUON_IP_LOW);
+    idx <= data_i(MUON_IDX_BITS_HIGH downto MUON_IDX_BITS_LOW);
 
 -- HB 2021-03-08: implemented pt_comp for better modularity
     pt_comp_i: entity work.pt_comp
@@ -151,6 +166,26 @@ begin
         port map(
             eta => eta(MUON_ETA_HIGH downto MUON_ETA_LOW),
             eta_comp_o => eta_comp
+        );
+
+-- HB 2023-02-14: inserted cut for index bits.
+    idx_windows_comp_i: entity work.eta_windows_comp
+        generic map(
+            nr_idx_windows,
+            idx_w1_upper_limit(MUON_IDX_BITS_HIGH-MUON_IDX_BITS_LOW downto 0),
+            idx_w1_LOWer_limit(MUON_IDX_BITS_HIGH-MUON_IDX_BITS_LOW downto 0),
+            idx_w2_upper_limit(MUON_IDX_BITS_HIGH-MUON_IDX_BITS_LOW downto 0),
+            idx_w2_LOWer_limit(MUON_IDX_BITS_HIGH-MUON_IDX_BITS_LOW downto 0),
+            idx_w3_upper_limit(MUON_IDX_BITS_HIGH-MUON_IDX_BITS_LOW downto 0),
+            idx_w3_LOWer_limit(MUON_IDX_BITS_HIGH-MUON_IDX_BITS_LOW downto 0),
+            idx_w4_upper_limit(MUON_IDX_BITS_HIGH-MUON_IDX_BITS_LOW downto 0),
+            idx_w4_LOWer_limit(MUON_IDX_BITS_HIGH-MUON_IDX_BITS_LOW downto 0),
+            idx_w5_upper_limit(MUON_IDX_BITS_HIGH-MUON_IDX_BITS_LOW downto 0),
+            idx_w5_LOWer_limit(MUON_IDX_BITS_HIGH-MUON_IDX_BITS_LOW downto 0)
+        )
+        port map(
+            idx(MUON_IDX_BITS_HIGH downto MUON_IDX_BITS_LOW),
+            idx_comp
         );
 
 -- HB 2015-04-23: implemented phi_windows_comp for better modularity
@@ -226,7 +261,7 @@ begin
         );
 
 -- Comparators AND
-    comp_int <= pt_comp and eta_comp and phi_comp and qual_comp and iso_comp and ch_comp and upt_comp and ip_comp;
+    comp_int <= pt_comp and eta_comp and phi_comp and qual_comp and iso_comp and ch_comp and upt_comp and ip_comp and idx_comp;
 
     pipeline_p: process(lhc_clk, comp_int)
         begin

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.21.8] - 2022-02-14
+### Comment
+
+- mp7_ugt firmware release v1.21.8
+- implemented cut for muon index bits
+
 ## [v1.21.7] - 2022-11-29
 ### Comment
 

@@ -21,7 +21,7 @@ Following software tool versions used to create L1Menu and menu depended VHDL fi
 
 | utm | TME | VHDL Producer |
 |:-:|:-:|:-:|
-| 0.10.0 | 0.14.0 | 2.13.0 |
+| 0.10.0 | 0.14.0 | 2.13.1 |
 
 Following dependencies exist for uGT firmware:
 
@@ -134,7 +134,7 @@ The firmware uses the ipbb build tool, and requires the ipbus system firmware. I
   - added [ugt_strategy.tcl](firmware/ucf/ugt_strategy.tcl) for ugt specific strategy and inserted it into [top.dep](firmware/cfg/top.dep).
   - added [add_l1menu_blkmem_files.tcl](firmware/cfg/add_l1menu_blkmem_files.tcl) for adding L1Menu VHDL files and inserted it into [top.dep](firmware/cfg/top.dep).
 
-* Following scripts are available for firmware sythesis, checking used fpga resources and packing firmware files:
+* Following scripts are available for firmware sythesis, checking used FPGA resources and packing firmware files:
   - script [runIpbbSynth.py](scripts/runIpbbSynth.py) for IPBB synthesis (all 6 mp7_ugt modules).
   - script [checkIpbbSynth.py](scripts/checkIpbbSynth.py) for checking used FPGA resources.
   - script [fwpackerIpbb.py](scripts/fwpackerIpbb.py) for packing firmware files in a tar file.

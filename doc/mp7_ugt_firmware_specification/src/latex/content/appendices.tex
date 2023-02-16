@@ -277,19 +277,20 @@ Bunchcounters, ... & 25  & 112 & X1Y10 &   & x \\\hline
 
 \subsection{Configuration of optical input links}\label{sec:app:app_b}
 
-Figure~\ref{fig:app:ugt_inputs} shows the configuration of optical links to Global Trigger.\\
-Links 0..3 contains muon data from uGMT, links 4..11 data from Calo-Layer2 and links 12..15 external conditions
-from AMC502 boards. On link 16 CICADA data are received from Calo-Layer1 (not in figure).
+% Figure~\ref{fig:app:ugt_inputs} shows the configuration of optical links to Global Trigger.\\
+Tables~\ref{table:app:sum_opt_links} and \ref{table:app:sum_opt_links2} show the configuration of optical links to Global Trigger.\\
+Links 0..3 contain muon data from uGMT, links 4..10 data from Calo-Layer2, link 11 is reserved for ZDC data and links 12..15 external conditions
+from AMC502 boards. On link 16 CICADA data are received from Calo-Layer1.
 
-\begin{figure}[htb]
-\centering
-\includegraphics[width=15cm]{figures/ugt_inputs}
-\caption{Optical link inputs to Global Trigger}
-\label{fig:app:ugt_inputs}
-\end{figure}
+% \begin{figure}[htb]
+% \centering
+% \includegraphics[width=15cm]{figures/ugt_inputs}
+% \caption{Optical link inputs to Global Trigger}
+% \label{fig:app:ugt_inputs}
+% \end{figure}
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 1)}
+\caption{\bf Overview optical input links (part 1)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
@@ -323,31 +324,31 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \end{table}
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 2)}
+\caption{\bf Overview optical input links (part 2)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|p{3.0cm}|}\hline
+\begin{tabular}{|c|c|c|c|c|c|c|p{4.0cm}|}\hline
  & \multicolumn{7}{ c| }{link} \\\hline
-frame & 10 & 11 & 12 & 13 & 14 & 15 &\makebox[3.0cm][c]{16} \\\hline\hline
-0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond & BJET0,\\
- & ETTEM, & & [31:0] & [95:64] & [159:128] & [223:192] & Anomaly Detection -\\
- & MBT0HFP & & & & & & Integer low\\
-1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond & BJET1,\\
- & TOWERCOUNT, & & [63:32] & [127:96] & [191:160] & [255:224] & Anomaly Detection -\\
- & MBT0HFM & & & & & &Integer high\\
-2 & ET$_{miss}$, & free & free & free & free & free & BJET2,\\
- & ASYMET,& & & & & & Anomaly Detection -\\
- & MBT1HFP  & & & & & & Decimal low\\
-3 & HT$_{miss}$, & free & free & free & free & free & BJET3,\\
- & ASYMHT,& & & & & & Anomaly Detection -\\
- & MBT1HFM & & & & & & Decimal high\\
-4 & ET$_{miss}^{HF}$ & free & free & free & free & free &  BJET4,\\
- & ASYMETHF, & & & & & & Heavy Ion -\\
- & CENT[3:0] & & & & & & low \\
-5 & HT$_{miss}^{HF}$ & free & free & free & free & free & BJET5,\\
- & ASYMHTHF, & & & & & & Heavy Ion -\\
- & CENT[7:4] & & & & & & high \\\hline
+frame & 10 & 11 & 12 & 13 & 14 & 15 &\makebox[4.0cm][c]{16} \\\hline\hline
+0 & ET, & res & ExtCond & ExtCond & ExtCond & ExtCond & BJET0,\\
+ & ETTEM, & (ZDC) & [31:0] & [95:64] & [159:128] & [223:192] & Anomaly Detection -\\
+ & MBT0HFP & & & & & & Integer high\\
+1 & HT, & res & ExtCond & ExtCond & ExtCond & ExtCond & BJET1,\\
+ & TOWERCOUNT, & (ZDC) & [63:32] & [127:96] & [191:160] & [255:224] & Anomaly Detection -\\
+ & MBT0HFM & & & & & &Integer low\\
+2 & ET$_{miss}$, & res & free & free & free & free & BJET2,\\
+ & ASYMET,& (ZDC) & & & & & Anomaly Detection -\\
+ & MBT1HFP  & & & & & & Decimal high\\
+3 & HT$_{miss}$, & res & free & free & free & free & BJET3,\\
+ & ASYMHT,& (ZDC) & & & & & Anomaly Detection -\\
+ & MBT1HFM & & & & & & Decimal low\\
+4 & ET$_{miss}^{HF}$ & res & free & free & free & free &  BJET4,\\
+ & ASYMETHF, & (ZDC) & & & & & Heavy Ion -\\
+ & CENT[3:0] & & & & & & high \\
+5 & HT$_{miss}^{HF}$ & res & free & free & free & free & BJET5,\\
+ & ASYMHTHF, & (ZDC) & & & & & Heavy Ion -\\
+ & CENT[7:4] & & & & & & low \\\hline
 \end{tabular}
 }
 \label{table:app:sum_opt_links2}

@@ -76,7 +76,7 @@ RX1/13 & rx4/0  & 115 & X1Y23 & 10G & 0x18 & 13 & 12 & external conditions\\\hli
 RX1/14 & rx4/1  &     & X1Y22 & 10G & 0x1A & 14 & 13 & external conditions\\\hline
 RX1/15 & rx4/2  &     & X1Y21 & 10G & 0x1C & 15 & 14 & external conditions\\\hline
 RX1/16 & rx4/3  &     & X1Y20 & 10G & 0x1E & 16 & 15 & external conditions\\\hline
-RX1/17 & rx4/4  & 114 & X1Y19 & 10G & 0x20 & 17 & 16 & free\\\hline
+RX1/17 & rx4/4  & 114 & X1Y19 & 10G & 0x20 & 17 & 16 & CICADA\\\hline
 RX1/18 & rx4/5  &     & X1Y18 & 10G & 0x22 & 18 & 17 & free\\\hline
 RX1/19 & rx4/6  &     & X1Y17 & 10G & 0x24 & 19 & 18 & free\\\hline
 RX1/20 & rx4/7  &     & X1Y16 & 10G & 0x26 & 20 & 19 & free\\\hline
@@ -224,9 +224,8 @@ TX2/12 & tx0/11 & 218 & X0Y35 &  x  & 0x8f & nc & 71 & -\\\hline
 
 \clearpage
 
-\subsection{Configuration of GTHs}\label{sec:app:gth_conf_table}
+\subsubsection{Data on GTHs}\label{sec:app:gth_conf_table}
 
-The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
 In Table~\ref{tab:app:gth_conf} configuration of GTHs~\cite{GTHs} for Global Trigger is shown\footnote{"MGT" means "MGT\_BANK", "GTHE2" means "GTHE2\_CHANNEL", "RX" means "GTH receiver", "TX" means "GTH transmitter"}.
 
 \begin{longtable}{|l|c|c|c|c|c|}
@@ -277,20 +276,12 @@ Bunchcounters, ... & 25  & 112 & X1Y10 &   & x \\\hline
 
 \subsection{Configuration of optical input links}\label{sec:app:app_b}
 
-% Figure~\ref{fig:app:ugt_inputs} shows the configuration of optical links to Global Trigger.\\
-Tables~\ref{table:app:sum_opt_links} and \ref{table:app:sum_opt_links2} show the configuration of optical links to Global Trigger.\\
-Links 0..3 contain muon data from uGMT, links 4..10 data from Calo-Layer2, link 11 is reserved for ZDC data and links 12..15 external conditions
-from AMC502 boards. On link 16 CICADA data are received from Calo-Layer1.
-
-% \begin{figure}[htb]
-% \centering
-% \includegraphics[width=15cm]{figures/ugt_inputs}
-% \caption{Optical link inputs to Global Trigger}
-% \label{fig:app:ugt_inputs}
-% \end{figure}
+Tables ~\ref{table:app:sum_opt_links} and ~\ref{table:app:sum_opt_links2} show the configuration of optical links to Global Trigger.\\
+Links 0..3 contains muon data from GMT, links 4..10 data from Calo-Layer2, link 11 data from ZDC and links 12..15 external conditions
+from AMC502 boards.
 
 \begin{table}[ht]
-\caption{\bf Overview optical input links (part 1)}
+\caption{\bf Summary of optical links (part 1)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
@@ -298,26 +289,14 @@ from AMC502 boards. On link 16 CICADA data are received from Calo-Layer1.
  & \multicolumn{10}{ c| }{link} \\\hline
 frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 0 & free & free & free & free & EG0 & EG6 & JET0 & JET6 & TAU0 & TAU6\\
- &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\
 1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7\\
  & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & &\\
  & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & &\\
  & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & &\\
 2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8\\
- &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\
 3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9\\
- &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\
 4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10\\
- &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\
-5 & MU1 [63:32] & MU3 [63:32] & MU5 [63:32] & MU7 [63:32] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11\\
- &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\\hline
+5 & MU1 [63:32] & MU3 [63:32] & MU5 [63:32] & MU7 [63:32] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11\\\hline
 \end{tabular}
 }
 \label{table:app:sum_opt_links}
@@ -372,7 +351,7 @@ Links 16..24 contains algo data (after GTL, after BX mask and after prescalers),
 
 \subsection{Optical patch panel}\label{sec:app:app_d}
 
-The following Table~\ref{tab:app:ugt_opt_pp_1} contains the optical patch panel ("uGT Patchpanel \#1") connections for production crate\footnote{"source" means "source of MTP48 cable to uGT", "uGMT" means "microTCA Global Muon Trigger module", "demux" means "Calo-Layer2 demux module", "ext\_cond" means "External condition AMC502 module", "fibre" means "fibre number of a MTP48 cable", "LC" means "LC number of optical patch panel", "slot" means "destination MP7 slot number of microTCA crate".\label{note_ugt_opt_pp_1}}:
+The following Table~\ref{tab:app:ugt_opt_pp_1} contains the optical patch panel ("uGT Patchpanel \#1") connections for production crate\footnote{"source" means "source of MTP48 cable to uGT", "uGMT" means "microTCA Global Muon Trigger module", "demux" means "Calo-Layer2 demux module", "uGT" means "microTCA Global Trigger module", "ext\_cond" means "External condition AMC502 module", "fibre" means "fibre number of a MTP48 cable", "LC" means "LC number of optical patch panel", "slot" means "destination MP7 slot number of microTCA crate".\label{note_ugt_opt_pp_1}}:
 
 \begin{longtable}{|l|c|l|c|l|}
 \caption{uGT Patchpanel \#1}
@@ -549,7 +528,7 @@ Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panel 
 \begin{figure}[htb]
 \centering
 \includegraphics[width=15cm]{figures/ugt_patchpanel}
-\caption{Global Trigger patch panel for optical link}
+\caption{Global Trigger patch panel for optical links}
 \label{fig:app:ugt_pp}
 \end{figure}
 

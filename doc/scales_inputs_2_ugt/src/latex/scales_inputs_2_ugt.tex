@@ -16,7 +16,7 @@
 
 \begin{titlepage}
 
-\date{17 November 2021}
+\date{15 February 2023}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -236,39 +236,70 @@ The following pages contain tables for data structure of objects and the data fl
 \end{itemize}
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links}
+\caption{\bf Summary of optical links (part 1)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|p{2.4cm}|}\hline
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|p{1.2cm}|}\hline
 % \begin{tabular}{|c|l|l|l|l|l|l|l|l|l|l|p{2.4cm}|}\hline
- & \multicolumn{11}{ c| }{link} \\\hline
-% link & 0 & 1 & 2 & 3 & 4  & 5 & 6 & 7 & 8 & 9 & 10 \\\cline{1-1}
-frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \makebox[2.4cm][c]{10} \\\hline\hline
+ & \multicolumn{10}{ c| }{link} \\\hline
+frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 % frame &  & & & & & & & & & & \\\hline\hline
-0 & free & free & free & free & EG0 & EG6  & JET0 & JET6 & TAU0 & TAU6 & ET, \\
- &  &  &  &  &  &  &  &  &  &  & ETTEM, \\
- &  &  &  &  &  &  &  &  &  &  & MBT0HFP \\
-1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7 & HT, \\
- & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & & & TOWERCOUNT, \\
- & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & & & MBT0HFM \\
- & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & & & \\
- &  &  &  &  &  &  &  &  &  &  & \\
-2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8  & ET$_{miss}$, \\
- &  &  &  &  &  &  &  &  &  &  & ASYMET, \\
- &  &  &  &  &  &  &  &  &  &  & MBT1HFP \\
-3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9  & HT$_{miss}$, \\
- &  &  &  &  &  &  &  &  &  &  & ASYMHT, \\
- &  &  &  &  &  &  &  &  &  &  & MBT1HFM \\
-4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10 & ET$_{miss}^{HF}$ \\
- &  &  &  &  &  &  &  &  &  &  & ASYMETHF, \\
- &  &  &  &  &  &  &  &  &  &  & CENT[3:0] \\
-5 & MU1 [63:32] & MU3 [63:32] & MU5 [63:32] & MU7 [63:32] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11 & HT$_{miss}^{HF}$ \\
- &  &  &  &  &  &  &  &  &  &  & ASYMHTHF, \\
- &  &  &  &  &  &  &  &  &  &  & CENT[7:4] \\\hline
+0 & free & free & free & free & EG0 & EG6 & JET0 & JET6 & TAU0 & TAU6\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7\\
+ & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & &\\
+ & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & &\\
+ & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & &\\
+2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\
+5 & MU1 [63:32] & MU3 [63:32] & MU5 [63:32] & MU7 [63:32] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11\\
+ &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\\hline
 \end{tabular}
 }
 \label{table:sum_opt_links}
+\end{table}
+
+\begin{table}[ht]
+\caption{\bf Summary of optical links (part 2)}
+\vspace{5mm}
+\scalebox{0.8}{
+\centering
+\begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
+ & \multicolumn{6}{ c| }{link} \\\hline
+frame & 10 & 11 & 12 & 13 & 14 &\makebox[1.5cm][c]{15} \\\hline\hline
+0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & ETTEM, & & [31:0] & [95:64] & [159:128] & [223:192]\\
+ & MBT0HFP & & & & &\\
+1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & TOWERCOUNT, & & [63:32] & [127:96] & [191:160] & [255:224]\\
+ & MBT0HFM & & & & &\\
+2 & ET$_{miss}$, & free & free & free & free & free\\
+ & ASYMET,& & & & &\\
+ & MBT1HFP  & & & & &\\
+3 & HT$_{miss}$, & free & free & free & free & free\\
+ & ASYMHT,& & & & &\\
+ & MBT1HFM & & & & &\\
+4 & ET$_{miss}^{HF}$ & free & free & free & free & free\\
+ & ASYMETHF, & & & & &\\
+ & CENT[3:0] & & & & &\\
+5 & HT$_{miss}^{HF}$ & free & free & free & free & free\\
+ & ASYMHTHF, & & & & &\\
+ & CENT[7:4] & & & & &\\\hline
+\end{tabular}
+}
+\label{table:sum_opt_links2}
 \end{table}
 
 \begin{itemize}
@@ -498,14 +529,14 @@ bits [26..25] & definition \\\hline\hline
 \centering
 \begin{tabular}{|c|l|l|c|}\hline
 HW index & $\eta$ range &  & $\eta$ bin \\\hline\hline
-0x72 & 4.959 to 5.0 & 114$*$0.087/2 to 115$*$0.087/2 & 114\\\hline
+0x72 & 4.959 to 5.0025 & 114$*$0.087/2 to 115$*$0.087/2 & 114\\\hline
 ... & ... & ... & ...\\\hline
 0x01 & 0.0435 to 0.087 & 0.087/2 to 2$*$0.087/2 & 1\\\hline
 0x00 & 0.0 to 0.0435 & 0 to 0.087/2 & 0\\\hline
 0xFF & -0.0435 to 0.0 & -0.087/2 to 0 & -1\\\hline
 0xFE & -0.087 to -0.0435  & -2$*$0.087/2 to -0.087/2 & -2\\\hline
 ... & ... & ... & ...\\\hline
-0x8E & -5.0 to -4.959 & -115$*$0.087/2 to -114$*$0.087/2 & -115\\\hline
+0x8D & -5.0025 to -4.959 & -115$*$0.087/2 to -114$*$0.087/2 & -115\\\hline
 \end{tabular}
 \label{table:calo_eta_scale}
 \end{table}

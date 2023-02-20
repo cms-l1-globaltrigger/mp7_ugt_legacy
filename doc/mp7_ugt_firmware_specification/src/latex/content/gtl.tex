@@ -326,7 +326,7 @@ The representation of the 8 bits (called "hardware index [HW index]") in $\eta$ 
 0xFF & 0 to -0.087/2 & -1\\\hline
 0xFE & -0.087/2 to -2$*$0.087/2 & -2\\\hline
 ... & ... & ...\\\hline
-0x8E & -114$*$0.087/2 to -115$*$0.087/2 & -115\\\hline
+0x8D & -114$*$0.087/2 to -115$*$0.087/2 & -115\\\hline
 \end{tabular}
 \label{tab:gtl:calo_eta_scale_new}
 \end{table}
@@ -449,6 +449,8 @@ HW index & $\eta$ range & $\eta$ bin\\\hline\hline
 \label{tab:gtl:muon_eta_scale}
 \end{table}
 
+The 7 index bits cover a range from 0 to 107 (e.g. index 0-17 is EMTF+ and index 90-107 is EMTF-). 
+
 The representation of the 10 bits in $\varphi$ is expected as shown in Table~\ref{tab:gtl:muon_phi_scale}.\\
 
 \begin{table}[ht]
@@ -558,6 +560,7 @@ List of object cuts:
 \begin{itemize}
 \item \pt
 \item $\eta$
+\item index bits
 \item $\varphi$
 \item isolation
 \item DISP (displaced = "long lived particle" jet)
@@ -572,6 +575,7 @@ List of object cuts:
 The comparisons for objects cuts are done by:\\
 A comparator between the energy (\pt) and a threshold (pt\_threshold) with 'mode-selection'. Similar for unconstrained \pt.\\
 The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
+The comparison with index bits is done similar to $\eta$ with five "window"-comparators. The index bits value (HW index) is in the range from 0 to 107. Number of windows is given for index bits.\\
 The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. Number of windows is given for $\varphi$.\\
 There are two cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator}):
 \begin{itemize}

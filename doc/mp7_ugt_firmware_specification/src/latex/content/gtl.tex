@@ -284,7 +284,7 @@ See also \ref{sec:gtl:optical_interfaces}.\\
 For each selected object, the Calo-Layer2 sends parameters for \pt and for position and isolation - encoded in 32 bits:
 \begin{itemize}
 \item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
-\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
+\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8D..0x72)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
 \item 2 bits isolation
 \item 5 bits spare
@@ -294,7 +294,7 @@ For each selected object, the Calo-Layer2 sends parameters for \pt and for posit
 For each selected object, the Calo-Layer2 sends parameters: \pt, for position information, a DISP bit and quality information - encoded in 32 bits:
 \begin{itemize}
 \item 11 bits \pt, range = 0..1023 GeV (HW index = 0..0x7FF), step = 0.5, the highest bin will mark an overflow (HW index 0x7FF): meaning has to be defined
-\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
+\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8D..0x72)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
 \item 1 DISP bit (will be used to flag a jet as delayed / displaced based on HCAL timing and depth profiles that are indicative of a "long lived particle" (LLP) decay. If this bit is set to 1, then the jet has been tagged as a LLP jet.)
 \item 2 bits for "quality flags" - currently not used.
@@ -305,7 +305,7 @@ For each selected object, the Calo-Layer2 sends parameters: \pt, for position in
 For each selected object, the Calo-Layer2 sends parameters for \pt and for position information and isolation - encoded in 32 bits:
 \begin{itemize}
 \item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
-\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
+\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8D..0x72)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
 \item 2 bits isolation
 \item 5 bits spare
@@ -326,7 +326,7 @@ The representation of the 8 bits (called "hardware index [HW index]") in $\eta$ 
 0xFF & 0 to -0.087/2 & -1\\\hline
 0xFE & -0.087/2 to -2$*$0.087/2 & -2\\\hline
 ... & ... & ...\\\hline
-0x8E & -114$*$0.087/2 to -115$*$0.087/2 & -115\\\hline
+0x8D & -114$*$0.087/2 to -115$*$0.087/2 & -115\\\hline
 \end{tabular}
 \label{tab:gtl:calo_eta_scale_new}
 \end{table}

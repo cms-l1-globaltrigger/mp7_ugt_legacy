@@ -236,7 +236,7 @@ The following pages contain tables for data structure of objects and the data fl
 \end{itemize}
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 1)}
+\caption{\bf Overview optical links (part 1)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
@@ -272,34 +272,34 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \end{table}
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 2)}
+\caption{\bf Overview optical links (part 2)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
 \begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
  & \multicolumn{6}{ c| }{link} \\\hline
 frame & 10 & 11 & 12 & 13 & 14 &\makebox[1.5cm][c]{15} \\\hline\hline
-0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
- & ETTEM, & & [31:0] & [95:64] & [159:128] & [223:192]\\
+0 & ET, & ZDC & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & ETTEM, & [31:0] & [31:0] & [95:64] & [159:128] & [223:192]\\
  & MBT0HFP & & & & &\\
-1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
- & TOWERCOUNT, & & [63:32] & [127:96] & [191:160] & [255:224]\\
+1 & HT, & ZDC & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & TOWERCOUNT, & [63:32] & [63:32] & [127:96] & [191:160] & [255:224]\\
  & MBT0HFM & & & & &\\
-2 & ET$_{miss}$, & free & free & free & free & free\\
- & ASYMET,& & & & &\\
+2 & ET$_{miss}$, & ZDC & free & free & free & free\\
+ & ASYMET,& [95:64] & & & &\\
  & MBT1HFP  & & & & &\\
-3 & HT$_{miss}$, & free & free & free & free & free\\
- & ASYMHT,& & & & &\\
+3 & HT$_{miss}$, & ZDC & free & free & free & free\\
+ & ASYMHT,& [127:96] & & & &\\
  & MBT1HFM & & & & &\\
-4 & ET$_{miss}^{HF}$ & free & free & free & free & free\\
- & ASYMETHF, & & & & &\\
+4 & ET$_{miss}^{HF}$ & ZDC & free & free & free & free\\
+ & ASYMETHF, & [159:128] & & & &\\
  & CENT[3:0] & & & & &\\
-5 & HT$_{miss}^{HF}$ & free & free & free & free & free\\
- & ASYMHTHF, & & & & &\\
+5 & HT$_{miss}^{HF}$ & ZDC & free & free & free & free\\
+ & ASYMHTHF, & [191:160] & & & &\\
  & CENT[7:4] & & & & &\\\hline
 \end{tabular}
 }
-\label{table:sum_opt_links2}
+\label{table:app:sum_opt_links2}
 \end{table}
 
 \begin{itemize}

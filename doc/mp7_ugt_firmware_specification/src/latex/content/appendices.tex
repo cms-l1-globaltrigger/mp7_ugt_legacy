@@ -263,7 +263,7 @@ JET6..JET11 & 7  & 117 & X1Y28 & x &   \\\hline
 TAU0..TAU5  & 8  & 116 & X1Y27 & x &   \\\hline
 TAU6..TAU11 & 9  & 116 & X1Y26 & x &   \\\hline
 ESUMS  & 10  & 116 & X1Y25 & x &   \\\hline
-free & 11  & 116 & X1Y24 & x &   \\\hline
+ZDC & 11  & 116 & X1Y24 & x &   \\\hline
 EXT\_COND[0:63] & 12  & 115 & X1Y23 & x &   \\\hline
 EXT\_COND[64:127] & 13  & 115 & X1Y22 & x &   \\\hline
 EXT\_COND[128:191] & 14  & 115 & X1Y21 & x &   \\\hline
@@ -309,7 +309,7 @@ Links 0..3 contains muon data from GMT, links 4..10 data from Calo-Layer2, link 
 from AMC502 boards.
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 1)}
+\caption{\bf Overview optical links (part 1)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
@@ -331,30 +331,30 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \end{table}
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 2)}
+\caption{\bf Overview optical links (part 2)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
 \begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
  & \multicolumn{6}{ c| }{link} \\\hline
 frame & 10 & 11 & 12 & 13 & 14 &\makebox[1.5cm][c]{15} \\\hline\hline
-0 & ET, & ZDC0 & ExtCond & ExtCond & ExtCond & ExtCond\\
- & ETTEM, & & [31:0] & [95:64] & [159:128] & [223:192]\\
+0 & ET, & ZDC & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & ETTEM, & [31:0] & [31:0] & [95:64] & [159:128] & [223:192]\\
  & MBT0HFP & & & & &\\
-1 & HT, & ZDC1 & ExtCond & ExtCond & ExtCond & ExtCond\\
- & TOWERCOUNT, & & [63:32] & [127:96] & [191:160] & [255:224]\\
+1 & HT, & ZDC & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & TOWERCOUNT, & [63:32] & [63:32] & [127:96] & [191:160] & [255:224]\\
  & MBT0HFM & & & & &\\
-2 & ET$_{miss}$, & ZDC2 & free & free & free & free\\
- & ASYMET,& & & & &\\
+2 & ET$_{miss}$, & ZDC & free & free & free & free\\
+ & ASYMET,& [95:64] & & & &\\
  & MBT1HFP  & & & & &\\
-3 & HT$_{miss}$, & ZDC3 & free & free & free & free\\
- & ASYMHT,& & & & &\\
+3 & HT$_{miss}$, & ZDC & free & free & free & free\\
+ & ASYMHT,& [127:96] & & & &\\
  & MBT1HFM & & & & &\\
-4 & ET$_{miss}^{HF}$ & ZDC4 & free & free & free & free\\
- & ASYMETHF, & & & & &\\
+4 & ET$_{miss}^{HF}$ & ZDC & free & free & free & free\\
+ & ASYMETHF, & [159:128] & & & &\\
  & CENT[3:0] & & & & &\\
-5 & HT$_{miss}^{HF}$ & ZDC5 & free & free & free & free\\
- & ASYMHTHF, & & & & &\\
+5 & HT$_{miss}^{HF}$ & ZDC & free & free & free & free\\
+ & ASYMHTHF, & [191:160] & & & &\\
  & CENT[7:4] & & & & &\\\hline
 \end{tabular}
 }

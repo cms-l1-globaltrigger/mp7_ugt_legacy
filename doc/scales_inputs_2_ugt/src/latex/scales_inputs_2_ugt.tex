@@ -16,7 +16,7 @@
 
 \begin{titlepage}
 
-\date{15 February 2023}
+\date{21 February 2023}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -287,24 +287,24 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \begin{tabular}{|c|c|c|c|c|c|c|p{3.0cm}|}\hline
  & \multicolumn{7}{ c| }{link} \\\hline
 frame & 10 & 11 & 12 & 13 & 14 & 15 &\makebox[3.0cm][c]{16} \\\hline\hline
-0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond & BJET0,\\
- & ETTEM, & & [31:0] & [95:64] & [159:128] & [223:192] & Anomaly Detection -\\
- & MBT0HFP & & & & & & Integer low\\
-1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond & BJET1,\\
- & TOWERCOUNT, & & [63:32] & [127:96] & [191:160] & [255:224] & Anomaly Detection -\\
- & MBT0HFM & & & & & &Integer high\\
-2 & ET$_{miss}$, & free & free & free & free & free & BJET2,\\
- & ASYMET,& & & & & & Anomaly Detection -\\
- & MBT1HFP  & & & & & & Decimal low\\
-3 & HT$_{miss}$, & free & free & free & free & free & BJET3,\\
- & ASYMHT,& & & & & & Anomaly Detection -\\
- & MBT1HFM & & & & & & Decimal high\\
-4 & ET$_{miss}^{HF}$ & free & free & free & free & free &  BJET4,\\
- & ASYMETHF, & & & & & & Heavy Ion -\\
- & CENT[3:0] & & & & & & low \\
-5 & HT$_{miss}^{HF}$ & free & free & free & free & free & BJET5,\\
- & ASYMHTHF, & & & & & & Heavy Ion -\\
- & CENT[7:4] & & & & & & high \\\hline
+0 & ET, & res. & ExtCond & ExtCond & ExtCond & ExtCond & BJET0,\\
+ & ETTEM, & (ZDC) & [31:0] & [95:64] & [159:128] & [223:192] & Anomaly Detection -\\
+ & MBT0HFP & & & & & & Integer high\\
+1 & HT, & res. & ExtCond & ExtCond & ExtCond & ExtCond & BJET1,\\
+ & TOWERCOUNT, & (ZDC) & [63:32] & [127:96] & [191:160] & [255:224] & Anomaly Detection -\\
+ & MBT0HFM & & & & & &Integer low\\
+2 & ET$_{miss}$, & res. & free & free & free & free & BJET2,\\
+ & ASYMET,& (ZDC) & & & & & Anomaly Detection -\\
+ & MBT1HFP  & & & & & & Decimal high\\
+3 & HT$_{miss}$, & res. & free & free & free & free & BJET3,\\
+ & ASYMHT,& (ZDC) & & & & & Anomaly Detection -\\
+ & MBT1HFM & & & & & & Decimal low\\
+4 & ET$_{miss}^{HF}$ & res. & free & free & free & free &  BJET4,\\
+ & ASYMETHF, & (ZDC) & & & & & Heavy Ion bits -\\
+ & CENT[3:0] & & & & & & high \\
+5 & HT$_{miss}^{HF}$ & res. & free & free & free & free & BJET5,\\
+ & ASYMHTHF, & (ZDC) & & & & & Heavy Ion bits -\\
+ & CENT[7:4] & & & & & & low \\\hline
 \end{tabular}
 }
 \label{table:sum_opt_links2}

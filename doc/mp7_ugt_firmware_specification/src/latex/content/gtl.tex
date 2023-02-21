@@ -44,6 +44,13 @@ Definitions are based on document~\cite{interface}.
 \item Muon objects (MU0..MU7)
 \item Muon shower bits (bit 61 on MU0, MU2, MU4, MU6)
 \end{itemize}
+\item Calo-Layer1 data
+\begin{itemize}
+\item Boosted jet objects (BJET0..BJET5)
+\item Anomaly Detection Integer part
+\item Anomaly Detection Decimal part
+\item Heavy Ion bit(s0
+\end{itemize}
 \item External conditions
 \end{itemize}
 \textbf{Outputs:}
@@ -207,32 +214,32 @@ Overview (frame 0 ascending to 5):\\
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,27,28,31} \\
-        \bitbox {4}      {\texttt{AD I l}} &
+        \bitbox {4}      {\texttt{AD I h}} &
         \bitbox {28}     {\texttt{bjet 1}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,27,28,31} \\
-        \bitbox {4}      {\texttt{AD I h}} &
+        \bitbox {4}      {\texttt{AD I l}} &
         \bitbox {28}     {\texttt{bjet 2}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,27,28,31} \\
-        \bitbox {4}      {\texttt{AD D l}} &
+        \bitbox {4}      {\texttt{AD D h}} &
         \bitbox {28}     {\texttt{bjet 3}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,27,28,31} \\
-        \bitbox {4}      {\texttt{AD D h}} &
+        \bitbox {4}      {\texttt{AD D l}} &
         \bitbox {28}     {\texttt{bjet 4}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,27,28,31} \\
-        \bitbox {4}      {\texttt{HI low}} &
+        \bitbox {4}      {\texttt{HI high}} &
         \bitbox {28}     {\texttt{bjet 5}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,27,28,31} \\
-        \bitbox {4}      {\texttt{HI high}} &
+        \bitbox {4}      {\texttt{HI low}} &
         \bitbox {28}     {\texttt{bjet 6}} \\
 \end{bytefield}
 \end{center}
@@ -347,7 +354,7 @@ See also \ref{sec:gtl:optical_interfaces}.\\
 For each selected object, the Calo-Layer2 sends parameters for \pt and for position and isolation - encoded in 32 bits:
 \begin{itemize}
 \item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
-\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
+\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8D..0x72)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
 \item 2 bits isolation
 \item 5 bits spare
@@ -357,7 +364,7 @@ For each selected object, the Calo-Layer2 sends parameters for \pt and for posit
 For each selected object, the Calo-Layer2 sends parameters: \pt, for position information, a DISP bit and quality information - encoded in 32 bits:
 \begin{itemize}
 \item 11 bits \pt, range = 0..1023 GeV (HW index = 0..0x7FF), step = 0.5, the highest bin will mark an overflow (HW index 0x7FF): meaning has to be defined
-\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
+\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8D..0x72)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
 \item 1 DISP bit (will be used to flag a jet as delayed / displaced based on HCAL timing and depth profiles that are indicative of a "long lived particle" (LLP) decay. If this bit is set to 1, then the jet has been tagged as a LLP jet.)
 \item 2 bits for "quality flags" - currently not used.
@@ -368,7 +375,7 @@ For each selected object, the Calo-Layer2 sends parameters: \pt, for position in
 For each selected object, the Calo-Layer2 sends parameters for \pt and for position information and isolation - encoded in 32 bits:
 \begin{itemize}
 \item 9 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
-\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
+\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8D..0x72)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
 \item 2 bits isolation
 \item 5 bits spare
@@ -389,7 +396,7 @@ The representation of the 8 bits (called "hardware index [HW index]") in $\eta$ 
 0xFF & 0 to -0.087/2 & -1\\\hline
 0xFE & -0.087/2 to -2$*$0.087/2 & -2\\\hline
 ... & ... & ...\\\hline
-0x8E & -114$*$0.087/2 to -115$*$0.087/2 & -115\\\hline
+0x8D & -114$*$0.087/2 to -115$*$0.087/2 & -115\\\hline
 \end{tabular}
 \label{tab:gtl:calo_eta_scale_new}
 \end{table}
@@ -624,7 +631,7 @@ Six bjet objects, one value for Anomaly Detection and 8 Heavy Ion bits are passe
 For each selected bjet object, the Calo-Layer1 sends parameters for \pt, for position and a flag - encoded in 28 bits:
 \begin{itemize}
 \item 11 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
-\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8E..0x72)
+\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, step = 0.087/2, linear scale, 230 bins (HW index = 0x8D..0x72)
 \item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
 \item 1 bit as a flag
 \end{itemize}

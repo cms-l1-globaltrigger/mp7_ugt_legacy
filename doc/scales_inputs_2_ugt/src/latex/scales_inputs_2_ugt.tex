@@ -16,7 +16,7 @@
 
 \begin{titlepage}
 
-\date{15 February 2023}
+\date{28 February 2023}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -227,6 +227,21 @@ definition)	&		&	ASYMHTHF	&	0..255 &	1 &	8                    \\
 \label{table:scales_table_2}
 \end{table}
 
+\begin{table}[ht]
+\caption{\bf Scales (ZDC)}
+\vspace{5mm}
+\centering
+\begin{tabular}{|p{2.0cm}| l | p{2.0cm} | p{2.0cm} | p{2.0cm} | l |}
+\hline
+object	&	collections $\times$ instances	&	parameter	&	range	&	step	&	bits \\
+\hline\hline
+ZDC	       &	1 * 2	& EN\_MINUS	    &	0..1023	   &	1 (?)	  &	10  \\
+           &	        & EN\_PLUS	    &	0..1023	   &	1 (?)	  &	10  \\
+\hline
+\end{tabular}
+\label{table:scales_table_3}
+\end{table}
+
 \clearpage
 
 The following pages contain tables for data structure of objects and the data flow of objects on the optical links.
@@ -279,23 +294,23 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
  & \multicolumn{6}{ c| }{link} \\\hline
 frame & 10 & 11 & 12 & 13 & 14 &\makebox[1.5cm][c]{15} \\\hline\hline
-0 & ET, & ZDC & ExtCond & ExtCond & ExtCond & ExtCond\\
- & ETTEM, & [31:0] & [31:0] & [95:64] & [159:128] & [223:192]\\
- & MBT0HFP & & & & &\\
-1 & HT, & ZDC & ExtCond & ExtCond & ExtCond & ExtCond\\
- & TOWERCOUNT, & [63:32] & [63:32] & [127:96] & [191:160] & [255:224]\\
- & MBT0HFM & & & & &\\
-2 & ET$_{miss}$, & ZDC & free & free & free & free\\
- & ASYMET,& [95:64] & & & &\\
+0 & ET, & EN\_MINUS & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & ETTEM, & (ZDC[25:16]) & [31:0] & [95:64] & [159:128] & [223:192]\\
+ & MBT0HFP &  & & & &\\
+1 & HT, & EN\_PLUS & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & TOWERCOUNT, & (ZDC[41:32]) & [63:32] & [127:96] & [191:160] & [255:224]\\
+ & MBT0HFM &  & & & &\\
+2 & ET$_{miss}$, & & free & free & free & free\\
+ & ASYMET,& & & & &\\
  & MBT1HFP  & & & & &\\
-3 & HT$_{miss}$, & ZDC & free & free & free & free\\
- & ASYMHT,& [127:96] & & & &\\
+3 & HT$_{miss}$, & & free & free & free & free\\
+ & ASYMHT,& & & & &\\
  & MBT1HFM & & & & &\\
-4 & ET$_{miss}^{HF}$ & ZDC & free & free & free & free\\
- & ASYMETHF, & [159:128] & & & &\\
+4 & ET$_{miss}^{HF}$ & & free & free & free & free\\
+ & ASYMETHF, & & & & &\\
  & CENT[3:0] & & & & &\\
-5 & HT$_{miss}^{HF}$ & ZDC & free & free & free & free\\
- & ASYMHTHF, & [191:160] & & & &\\
+5 & HT$_{miss}^{HF}$ & & free & free & free & free\\
+ & ASYMHTHF, & & & & &\\
  & CENT[7:4] & & & & &\\\hline
 \end{tabular}
 }
@@ -603,6 +618,7 @@ and HT$_{miss}^{HF}$
 is shown in Tables~\ref{table:ett_object}, ~\ref{table:ht_object}, ~\ref{table:etm_object}, ~\ref{table:htm_object}, ~\ref{table:etmhf_object} and ~\ref{table:htmhf_object}.
 \item The definition of minimum bias HF, ETTEM, TOWERCOUNT, Asymmetry and Centrality bits is shown in ~\ref{table:min_bias_def}, ~\ref{table:ettem_def}, ~\ref{table:tower_count_def}
 ~\ref{table:asymmetry_def} and ~\ref{table:centrality_def}.
+\item The data structure of ZDC is shown in Table~\ref{table:zdc_struct}
 \end{itemize}
 
 \begin{table}[ht]
@@ -765,6 +781,18 @@ Centrality bits [3:0] & CENT[3:0] & 4 & ET$_{miss}^{HF}$ & 31..28 \\
 Centrality bits [7:4] & CENT[7:4] & 5 & HT$_{miss}^{HF}$ & 31..28 \\\hline
 \end{tabular}
 \label{table:centrality_def}
+\end{table}
+
+\begin{table}[ht]
+\caption{\bf Data structure ZDC}
+\vspace{5mm}
+\centering
+\begin{tabular}{|c|c|}\hline
+bit(s) & parameter \\\hline\hline
+25..16 & EN\_MINUS \\
+41..32 & EN\_PLUS \\\hline
+\end{tabular}
+\label{table:zdc_struct}
 \end{table}
 
 \clearpage

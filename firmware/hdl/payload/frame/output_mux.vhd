@@ -3,6 +3,7 @@
 -- Multiplexer for read-out record data.
 
 -- Version-history:
+-- HB 2023-03-01: updated zdc5g type.
 -- HB 2022-10-10: ZDC 10G outputs on quad 7 and 8. Removed orbit counter to quad 6 for "scouting".
 -- HB 2022-09-06: cleaned up.
 -- HB 2022-03-22: Port bx_nr_fdl removed, contains same data as bx_nr (because bcres_d and bcres_d_FDL are the same signal: delayed bc0 [bc0_d_int in frame.vhd]).
@@ -46,7 +47,7 @@ entity output_mux is
         valid_hi    : in std_logic_vector(15 downto 0);
         start       : in std_logic;
         strobe      : in std_logic;
-        zdc5g       : in zdc_array;
+        zdc5g       : in zdc_5g_array;
         lane_out    : out ldata(NR_LANES-1 downto 0)
     );
 end output_mux;

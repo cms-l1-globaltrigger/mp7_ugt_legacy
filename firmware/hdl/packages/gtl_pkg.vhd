@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2023-03-01: updated constants for ZDC.
 -- HB 2022-10-17: added constant NR_INPUT_LANES (for reduced NR_LANES in frame.vhd).
 -- HB 2022-10-10: added ZDC definitions. Removed constant SCOUTING.
 -- HB 2022-09-23: added constants ESUMS_COND_STAGES, MB_COND_STAGES and TC_COND_STAGES.
@@ -67,6 +68,7 @@ package gtl_pkg is
 -- Definition of input lanes
 -- NR_LANES = NR_REGIONS * 4 => 72
 constant NR_INPUT_LANES : natural := 24; -- max. input links from optical patch panel
+constant LINK_FRAMES : natural := 6;
 
 -- Fixed pipeline structure
 constant BX_PIPELINE_STAGES: natural := 5; -- +/- 2bx pipeline
@@ -377,12 +379,17 @@ constant MBT1HFM_COUNT_LOW : natural := 0;
 constant MBT1HFM_COUNT_HIGH : natural := 3;
 
 -- *******************************************************************************************************
--- HB 2016-09-16: inserted ZDC
+-- HB 2022-10-10: inserted ZDC
 constant NR_ZDC_OBJECTS : positive := 6;
+constant EN_MINUS_BIT_LOW : natural := 16; -- EN_MINUS (ZDC-) on frame 0 of ZDC link
+constant EN_MINUS_BIT_HIGH : natural := 25;
+constant EN_PLUS_BIT_LOW : natural := 0; -- EN_PLUS (ZDC+) on frame 1 of ZDC link
+constant EN_PLUS_BIT_HIGH : natural := 9;
 constant ZDC_BIT_LOW : natural := 0;
 constant ZDC_BIT_HIGH : natural := 9;
 constant MAX_ZDC_BITS : natural := 32;
-type zdc_array is array (0 to NR_ZDC_OBJECTS-1) of std_logic_vector(MAX_ZDC_BITS-1 downto 0);
+type zdc_5g_array is array (0 to LINK_FRAMES-1) of std_logic_vector(SW_DATA_WIDTH-1 downto 0);
+type zdc_array is array (0 to NR_ZDC_OBJECTS-1) of std_logic_vector(ZDC_BIT_HIGH-ZDC_BIT_LOW downto 0);
 type bx_zdc_array is array (0 to BX_PIPELINE_STAGES-1) of zdc_array;
 
 -- *******************************************************************************************************

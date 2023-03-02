@@ -6,6 +6,8 @@
 \usepackage{cite}
 \tolerance=1000
 
+\input{versions.tex}
+
 \begin{document}
 \topmargin = 30mm
 \textheight = 225mm
@@ -16,7 +18,7 @@
 
 \begin{titlepage}
 
-\date{28 February 2023}
+\date{2 March 2023}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -50,10 +52,6 @@ J.Brooke
 G.Iles, A.Tapper
 \Instfoot{Imperial}
 {Imperial College, London, UK}
-
-%A.Heister
-%\Instfoot{Boston}
-%{Boston University, USA}
 
 D.Acosta, I.Furic, A.Madorsky
 \Instfoot{Florida}
@@ -119,7 +117,8 @@ The $p_t$ scale for muon objects starts from 0 (zero), but HW index=0 indicates 
 
 14) The "Asymmetry" and "Centrality" bits (introduced for Heavy-Ion running) are part of the ET$_{miss}$, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$ data structure.
 
-The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2} ) show the  bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.
+The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2}) show the bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.\\
+Table~\ref{table:scales_table_3} shows the bits for ZDC objects, see ~\cite{ZDC}.
 
 \begin{table}[ht]
 \caption{\bf Scales (muon and calorimeter)}
@@ -235,8 +234,8 @@ definition)	&		&	ASYMHTHF	&	0..255 &	1 &	8                    \\
 \hline
 object	&	collections $\times$ instances	&	parameter	&	range	&	step	&	bits \\
 \hline\hline
-ZDC	       &	1 * 2	& EN\_MINUS	    &	0..1023	   &	1 (?)	  &	10  \\
-           &	        & EN\_PLUS	    &	0..1023	   &	1 (?)	  &	10  \\
+ZDC	       &	1 * 2	& EN\_MINUS (ZDC-)	    &	0..1023	   &	1 (?)	  &	10  \\
+           &	        & EN\_PLUS (ZDC+)	    &	0..1023	   &	1 (?)	  &	10  \\
 \hline
 \end{tabular}
 \label{table:scales_table_3}
@@ -295,11 +294,11 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
  & \multicolumn{6}{ c| }{link} \\\hline
 frame & 10 & 11 & 12 & 13 & 14 &\makebox[1.5cm][c]{15} \\\hline\hline
 0 & ET, & EN\_MINUS & ExtCond & ExtCond & ExtCond & ExtCond\\
- & ETTEM, & (ZDC[25:16]) & [31:0] & [95:64] & [159:128] & [223:192]\\
- & MBT0HFP &  & & & &\\
+ & ETTEM, & (ZDC-) & [31:0] & [95:64] & [159:128] & [223:192]\\
+ & MBT0HFP & [25:16] & & & &\\
 1 & HT, & EN\_PLUS & ExtCond & ExtCond & ExtCond & ExtCond\\
- & TOWERCOUNT, & (ZDC[41:32]) & [63:32] & [127:96] & [191:160] & [255:224]\\
- & MBT0HFM &  & & & &\\
+ & TOWERCOUNT, & (ZDC+) & [63:32] & [127:96] & [191:160] & [255:224]\\
+ & MBT0HFM & [9:0] & & & &\\
 2 & ET$_{miss}$, & & free & free & free & free\\
  & ASYMET,& & & & &\\
  & MBT1HFP  & & & & &\\
@@ -787,10 +786,10 @@ Centrality bits [7:4] & CENT[7:4] & 5 & HT$_{miss}^{HF}$ & 31..28 \\\hline
 \caption{\bf Data structure ZDC}
 \vspace{5mm}
 \centering
-\begin{tabular}{|c|c|}\hline
-bit(s) & parameter \\\hline\hline
-25..16 & EN\_MINUS \\
-41..32 & EN\_PLUS \\\hline
+\begin{tabular}{|c|c|c|}\hline
+frame & bit(s) & parameter \\\hline\hline
+0 & 25..16 & EN\_MINUS (ZDC-)\\
+1 & 9..0 & EN\_PLUS (ZDC+)\\\hline
 \end{tabular}
 \label{table:zdc_struct}
 \end{table}
@@ -799,14 +798,17 @@ bit(s) & parameter \\\hline\hline
 
 \begin{thebibliography}{00}
 
-\bibitem {Darin} https://indico.cern.ch/getFile.py/access?contribId=4\&sessionId=0\&resId=0\&materialId=slides\&confId=206223
+\bibitem {Darin} 
+\url{https://indico.cern.ch/getFile.py/access?contribId=4\&sessionId=0\&resId=0\&materialId=slides\&confId=206223}
 
 \bibitem {muon}
-http://www.hephy.at/project/cms/trigger/globalMuonTrigger/notes/in04\_006.pdf
+\url{http://www.hephy.at/project/cms/trigger/globalMuonTrigger/notes/in04\_006.pdf}
 
 \bibitem {calo}
-http://www.hephy.at/project/electronic1/GlobalTrigger/doc/InterfaceDesc/CMS\_NOTE\_2002\_069\_29\_Nov\_2010.htm
+\url{http://www.hephy.at/project/electronic1/GlobalTrigger/doc/InterfaceDesc/CMS\_NOTE\_2002\_069\_29\_Nov\_2010.htm}
 
+\bibitem {ZDC}
+\href{\gitbranch/doc/scales_inputs_2_ugt/ZDC_uhtr_spec.pdf}{\texttt{Description of ZDC structure (ZDC\_uhtr\_spec.pdf)}}
 
 \end{thebibliography}
 

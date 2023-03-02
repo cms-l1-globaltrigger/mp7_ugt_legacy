@@ -16,7 +16,7 @@
 
 \begin{titlepage}
 
-\date{21 February 2023}
+\date{2 March 2023}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -51,10 +51,6 @@ G.Iles, A.Tapper
 \Instfoot{Imperial}
 {Imperial College, London, UK}
 
-%A.Heister
-%\Instfoot{Boston}
-%{Boston University, USA}
-
 D.Acosta, I.Furic, A.Madorsky
 \Instfoot{Florida}
 {University of Florida, Gainesville, USA}
@@ -71,7 +67,7 @@ P.Klabbers, W.H.Smith
 
 \end{titlepage}
 
-With respect to the ``legacy" system, the upgraded GT (uGT or $\mu$GT) has higher requirements concerning precision and amount of data (more input objects of each kind, additional bits for isolation, quality etc.) and also more input bandwidth and computing resources. The additional resources  allow to make the system more uniform and transparent as well as easier to use. The interfaces between uGMT (or $\mu$GMT, replacing GMT) and "Calo Trigger Layer-2" (replacing GCT) have to be defined accordingly.
+With respect to the "legacy" system, the upgraded GT (uGT or $\mu$GT) has higher requirements concerning precision and amount of data (more input objects of each kind, additional bits for isolation, quality etc.) and also more input bandwidth and computing resources. The additional resources  allow to make the system more uniform and transparent as well as easier to use. The interfaces between uGMT (or $\mu$GMT, replacing GMT) and "Calo Trigger Layer-2" (replacing GCT) have to be defined accordingly.
 
 We are using the new resources as described below (see also proposal~\cite{Darin}; the legacy system's connections are documented in~\cite{muon} for muons and in~\cite{calo} for calo objects) and have introduced the following new features:
 
@@ -118,6 +114,8 @@ The $p_t$ scale for muon objects starts from 0 (zero), but HW index=0 indicates 
 13) The "Towercount" bits (introduced for Heavy-Ion running) are part of the HT data structure (bits 24..12).
 
 14) The "Asymmetry" and "Centrality" bits (introduced for Heavy-Ion running) are part of the ET$_{miss}$, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$ data structure.
+
+15) The "CICADA" data structure with 6 "Boosted jets" (bjets) and values for Anomaly Detection and Heavy Ion bits~\cite{CICADA}.
 
 The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2} ) show the  bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.
 
@@ -627,6 +625,7 @@ and HT$_{miss}^{HF}$
 is shown in Tables~\ref{table:ett_object}, ~\ref{table:ht_object}, ~\ref{table:etm_object}, ~\ref{table:htm_object}, ~\ref{table:etmhf_object} and ~\ref{table:htmhf_object}.
 \item The definition of minimum bias HF, ETTEM, TOWERCOUNT, Asymmetry and Centrality bits is shown in ~\ref{table:min_bias_def}, ~\ref{table:ettem_def}, ~\ref{table:tower_count_def}
 ~\ref{table:asymmetry_def} and ~\ref{table:centrality_def}.
+\item The definition of CICADA bits is shown in ~\ref{table:opt_link_cicada} and ~\ref{table:bjet_object}.
 \end{itemize}
 
 \begin{table}[ht]
@@ -791,18 +790,37 @@ Centrality bits [7:4] & CENT[7:4] & 5 & HT$_{miss}^{HF}$ & 31..28 \\\hline
 \label{table:centrality_def}
 \end{table}
 
+\begin{table}[ht]
+\caption{\bf CICADA data on optical link}
+\vspace{5mm}
+\centering
+\begin{tabular}{|c|l|l|}\hline
+frame & 31..28 & 27..0\\\hline\hline
+0 & Anomaly Detection Integer MSB & Boosted jet (bjet)  1\\\hline
+1 & Anomaly Detection Integer LSB & Boosted jet (bjet)  2\\\hline
+2 & Anomaly Detection Decimal MSB & Boosted jet (bjet)  3\\\hline
+3 & Anomaly Detection Decimal LSB & Boosted jet (bjet)  4\\\hline
+4 & Heavy Ion MSB & Boosted jet (bjet)  5\\\hline
+5 & Heavy Ion LSB & Boosted jet (bjet)  6\\\hline
+\end{tabular}
+\label{table:opt_link_cicada}
+\end{table}
+
 \clearpage
 
 \begin{thebibliography}{00}
 
-\bibitem {Darin} https://indico.cern.ch/getFile.py/access?contribId=4\&sessionId=0\&resId=0\&materialId=slides\&confId=206223
+\bibitem {Darin} 
+\url{https://indico.cern.ch/getFile.py/access?contribId=4\&sessionId=0\&resId=0\&materialId=slides\&confId=206223}
 
 \bibitem {muon}
-http://www.hephy.at/project/cms/trigger/globalMuonTrigger/notes/in04\_006.pdf
+\url{http://www.hephy.at/project/cms/trigger/globalMuonTrigger/notes/in04\_006.pdf}
 
 \bibitem {calo}
-http://www.hephy.at/project/electronic1/GlobalTrigger/doc/InterfaceDesc/CMS\_NOTE\_2002\_069\_29\_Nov\_2010.htm
+\url{http://www.hephy.at/project/electronic1/GlobalTrigger/doc/InterfaceDesc/CMS\_NOTE\_2002\_069\_29\_Nov\_2010.htm}
 
+\bibitem {CICADA}
+\url{https://docs.google.com/presentation/d/1Zk2oDbnxUZilnWXC\_HyWYbNJ8F41MiBso4D49bN-js4/edit\#slide=id.g129a5c5a910\_0\_197}
 
 \end{thebibliography}
 

@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2023-03-06: added hadronic shower trigger bit MUS2.
 -- HB 2022-09-23: added constants ESUMS_COND_STAGES, MB_COND_STAGES and TC_COND_STAGES.
 -- HB 2022-09-02: cleaned up.
 -- HB 2021-10-19: inserted jet DISP (displaced) bit 27 (and all dependencies on this bit).
@@ -157,9 +158,10 @@ constant MUON_OBJ_MUS0 : natural := 0;
 constant MUON_OBJ_MUS1 : natural := 2;
 constant MUON_OBJ_MUSOOT0 : natural := 4;
 constant MUON_OBJ_MUSOOT1 : natural := 6;
--- new MUS2 bit
--- MUS0 => muon obj 7, bit 61
-constant MUON_OBJ_MUS2 : natural := 7; -- ANNAHME, NOCH NICHT FIXIERT, DEFINIEREN MIT GMT
+-- HB 2023-03-06: added hadronic shower trigger bit MUS2 
+-- MUS2 bit
+-- MUS2 => muon obj 3, bit 61
+constant MUON_OBJ_MUS2 : natural := 3;
 type mus_bit_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic;
 
 type muon_objects_array is array (natural range <>) of std_logic_vector(MAX_MUON_BITS-1 downto 0);
@@ -451,7 +453,7 @@ type bx_data_record is record
     cent6 : bx_cent_array;
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
-    mus0, mus1, musoot0, musoot1 : mus_bit_array;
+    mus0, mus1, mus2, musoot0, musoot1 : mus_bit_array;
 end record bx_data_record;
 
 -- ==== Correlations - begin ============================================================

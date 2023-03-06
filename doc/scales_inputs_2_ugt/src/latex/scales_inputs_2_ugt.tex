@@ -101,7 +101,7 @@ The $p_t$ scale for muon objects starts from 0 (zero), but HW index=0 indicates 
 7) The new muon structure contains:\\
 - "unconstrained $p_t$" scale (8 bits) in steps of 1.0 GeV starting from 0 (zero), HW index=0 indicates an invalid muon, the highest bin 0xff marks an overflow.\\
 - "impact parameter" with 2 bits.\\
-- "hadronic shower trigger (mus)" bits on bit 31 of MU0, MU2, MU4 and MU6 objects.
+- "hadronic shower trigger (mus)" bits on bit 31 of MU0, MU2, MU3, MU4 and MU6 objects.
 
 8) The new jet structure contains:\\
 - bit 27 will be used to flag a jet as delayed / displaced based on HCAL timing and depth profiles that are indicative of a LLP decay. This bit is referred to as “DISP”. If this bit is set to 1, then the jet has been tagged as an LLP jet.
@@ -320,7 +320,7 @@ bins are "narrower" than other bins.
 \begin{tabular}{|c|c|}\hline
 bit(s) & parameter \\\hline\hline
 63..62 & impact parameter \\
-61 & hadronic shower (mus), on MU0, MU2, MU4 and MU6 \\
+61 & hadronic shower (mus), on MU0, MU2, MU3, MU4 and MU6 \\
 60..53 & unconstrained $p_t$ \\
 52..43 & $\varphi$ (out) \\
 42..36 & index bits \\
@@ -416,6 +416,7 @@ bits [33..32] & definition \\\hline\hline
 muon object & hadronic shower (on bit 61)\\\hline\hline
 0 & MUS0 \\
 2 & MUS1 \\
+3 & MUS2 \\
 4 & MUSOOT0 \\
 6 & MUSOOT1 \\\hline
 \end{tabular}

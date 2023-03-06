@@ -4,12 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-<<<<<<< HEAD
 ## [v1.22.0] - 2023-03-06
 ### Comment
 
 - mp7_ugt firmware release v1.22.0
 - development for "MUS2" (email: "New 2Loose HMT configuration", 3.12.2022)
+- implemented cut for muon index bits
+- implemented "anomaly detection trigger (ADT)"
+
+### Added
+- source files:
+  - ../payload/gtl/anomaly_detection
 
 ### Changed
 - source files:
@@ -17,30 +22,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/gt_core_pkg.vhd
   - ../payload/gtl/bx_pipeline.vhd
   - ../payload/gtl_module_tpl.vhd
-
-## [v1.21.8] - 2023-03-06
-### Comment
-
-- mp7_ugt firmware release v1.21.8
-- implemented cut for muon index bits
-
-### Changed
-- source files:
   - ../payload/gtl/muon_comparators.vhd
   - ../payload/gtl/muon_obj_cuts.vhd
   - ../payload/gtl/comb_conditions.vhd
   - ../payload/gtl/correlation_conditions.vhd
-=======
-## [v1.21.8] - 2022-11-29
-### Comment
-
-- mp7_ugt firmware release v1.21.8
-- test version for "anomaly detection trigger (ADT)"
-
-### Changed
-- source files:
-  - ../payload/gtl_module_tpl.vhd
->>>>>>> anomaly_detection_trigger
 
 ## [v1.21.7] - 2022-11-29
 ### Comment

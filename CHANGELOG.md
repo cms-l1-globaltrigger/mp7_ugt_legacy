@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.21.8] - 2022-02-14
+## [v1.21.8] - 2023-03-06
 ### Comment
 
 - mp7_ugt firmware release v1.21.8

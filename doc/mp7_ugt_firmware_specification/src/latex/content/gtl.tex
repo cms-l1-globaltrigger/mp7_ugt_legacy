@@ -1428,6 +1428,10 @@ Definitions of scales (see Tables \ref{tab:gtl:calo_eta_scale_new}, \ref{tab:gtl
 
 \clearpage
 
+\subsubsection{Anomaly Detection Trigger}
+\label{sec:gtl:adt}
+The possibility of implementing "Anomaly detection Trigger" is forseen in this version of \ugtl. The VHDL code is given by "Anomaly detection Trigger" group in ../firmware/hdl/payload/gtl/anomaly\_detection with \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/anomaly_detection.vhd}{\texttt{anomaly\_detection.vhd}} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/adt_wrapper.vhd}{\texttt{adt\_wrapper.vhd}} module anomaly\_detection.vhd is instantiated and a comparison of the output of anomaly\_detection.vhd ("anomaly\_score") with a given threshold is implemented to get an "Anomaly detection Trigger". External condition bits are used as placeholder for the definition of thresholds for "Anomaly detection Trigger" (e.g.: EXT\_ADT\_25, which mean threshold=25). External condition bits 192..223 are reserved for "Anomaly detection Trigger" thresholds.
+
 \subsubsection{External Conditions}
 \label{sec:gtl:external_conditions}
 Maximal 256 External Conditions are possible in \gt. They are provided as inputs in the Algorithms logic of \ugtl.

@@ -8,7 +8,7 @@
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
 -- gt: v1.22.0
 -- frame: v1.3.1 (see frame.vhd)
--- gtl: v1.18.0 (see gtl_module_tpl.vhd)
+-- gtl: v1.18.1 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
 -- HB 2022-11-23: v1.21.6 - Updated doc/scales_inputs_2_ugt (added definition of muon shower bits).
@@ -31,6 +31,7 @@
 -- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
 -- gtl history:
+-- HB 2023-03-06: v1.18.1: Module for "anomaly detection trigger (ADT)" test.
 -- HB 2023-03-06: v1.18.0: Implemented "MUS2" (new hadronic shower bit).
 -- HB 2023-02-14: v1.17.7: Inserted cut for muon index bits.
 -- HB 2022-11-29: v1.17.6: Bug fix in algo_pre_scaler_fractional_float.vhd.
@@ -100,7 +101,7 @@ package gt_mp7_core_pkg is
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 18;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 0;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 1;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 4;

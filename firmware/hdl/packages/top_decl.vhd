@@ -42,7 +42,7 @@ package top_decl is
                 4 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 4, 11), -- 4 / 114*
                 5 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 4, 11), -- 5 / 113
                 6 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 5, 12), -- 6 / 112
-                7 => (gth_10g_std_lat, u_crc32, buf, demux, buf, u_crc32, gth_10g_std_lat, 5, 12) -- 7 / 111*
+                7 => (gth_10g_std_lat, u_crc32, buf, demux, buf, u_crc32, gth_10g_std_lat, 5, 12), -- 7 / 111*
                 8 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 5, 12), -- 8 / 110
                 9 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 0, 7), -- 9 / 210
                 10 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 0, 7), -- 10 / 211*

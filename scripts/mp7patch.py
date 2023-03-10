@@ -86,8 +86,8 @@ def patch_all(projectpath):
     #script_writer_path = 'scripts/firmware/dep_tree/VivadoScriptWriter.py'
 
     #append_vivado_rules(os.path.join(root_path, script_writer_path))
-    replace_area_constraints(os.path.join(root_path, area_constraints_path))
-    replace_brd_decl(os.path.join(root_path, brd_decl_path))
+    #replace_area_constraints(os.path.join(root_path, area_constraints_path))
+    #replace_brd_decl(os.path.join(root_path, brd_decl_path))
     insert_l1a_ttc(os.path.join(root_path, mp7xe_690_path))
 
 def parse_args():

@@ -394,9 +394,10 @@ constant EN_PLUS_BIT_HIGH : natural := 9;
 constant ZDC_BIT_LOW : natural := 0;
 constant ZDC_BIT_HIGH : natural := 9;
 constant MAX_ZDC_BITS : natural := 32;
+constant ZDC_THR_BITS : natural := 16;
 type zdc_5g_array is array (0 to LINK_FRAMES-1) of std_logic_vector(SW_DATA_WIDTH-1 downto 0);
 type zdc_array is array (0 to NR_ZDC_OBJECTS-1) of std_logic_vector(ZDC_BIT_HIGH-ZDC_BIT_LOW downto 0);
-type bx_zdc_array is array (0 to BX_PIPELINE_STAGES-1) of zdc_array;
+type bx_zdc_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(ZDC_BIT_HIGH-ZDC_BIT_LOW downto 0);
 
 -- *******************************************************************************************************
 -- max bits for comparators.vhd
@@ -477,7 +478,8 @@ type bx_data_record is record
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
     mus0, mus1, mus2, musoot0, musoot1 : mus_bit_array;
-    zdc : bx_zdc_array;
+    zdcp : bx_zdc_array;
+    zdcm : bx_zdc_array;
 end record bx_data_record;
 
 -- ==== Correlations - begin ============================================================

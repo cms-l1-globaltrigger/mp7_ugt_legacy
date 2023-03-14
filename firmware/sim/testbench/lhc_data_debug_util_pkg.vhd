@@ -1,4 +1,4 @@
-
+-- HB 2022-10-08: zdc10g on link 11.
 -- HB 2016-05-31: inserted all frames of calo links for extended format structure of test-vector-file
 
 library IEEE;
@@ -162,12 +162,12 @@ package body lhc_data_debug_util_pkg is
 			slv_to_hex(data_in.htm) & spacer_char &
 			slv_to_hex(data_in.etmhf) & spacer_char &
 			slv_to_hex(data_in.htmhf) & spacer_char &
-			slv_to_hex(data_in.link_11_fr_0_data) & spacer_char &
-			slv_to_hex(data_in.link_11_fr_1_data) & spacer_char &			
-			slv_to_hex(data_in.link_11_fr_2_data) & spacer_char &
-			slv_to_hex(data_in.link_11_fr_3_data) & spacer_char &
-			slv_to_hex(data_in.link_11_fr_4_data) & spacer_char &
-			slv_to_hex(data_in.link_11_fr_5_data) & spacer_char &						
+			slv_to_hex(data_in.zdc10g_0) & spacer_char &
+			slv_to_hex(data_in.zdc10g_1) & spacer_char &			
+			slv_to_hex(data_in.zdc10g_2) & spacer_char &
+			slv_to_hex(data_in.zdc10g_3) & spacer_char &
+			slv_to_hex(data_in.zdc10g_4) & spacer_char &
+			slv_to_hex(data_in.zdc10g_5) & spacer_char &						
 			slv_to_hex(data_in.external_conditions) & spacer_char ;
 	end function;
 
@@ -210,21 +210,20 @@ package body lhc_data_debug_util_pkg is
 		next_range(start_index, end_index, hexstring);
 		ret_value.htmhf := hex_to_slv("" & hexstring(start_index to end_index), HTMHF_DATA_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.link_11_fr_0_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_0_WIDTH);
+		ret_value.zdc10g_0 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_0_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.link_11_fr_1_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_1_WIDTH);
+		ret_value.zdc10g_1 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_1_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.link_11_fr_2_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_2_WIDTH);
+		ret_value.zdc10g_2 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_2_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.link_11_fr_3_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_3_WIDTH);
+		ret_value.zdc10g_3 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_3_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.link_11_fr_4_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_4_WIDTH);
+		ret_value.zdc10g_4 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_4_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.link_11_fr_5_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_5_WIDTH);
+		ret_value.zdc10g_5 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_5_WIDTH);
 
 		next_range(start_index, end_index, hexstring);
 		ret_value.external_conditions := hex_to_slv("" & hexstring(start_index to end_index), EXTERNAL_CONDITIONS_DATA_WIDTH );
 		return ret_value;
 	end function;
-
 end;

@@ -41,9 +41,25 @@ vivado is running (see \href{\gitbranch/README.md}{\texttt{README}}):\\
 \greybox{<path to synth dir> <module number>}
 \end{itemize}
 
+\clearpage
+
 \subsection{Configuration of GTHs}\label{sec:app:app_a}
 
 The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
+
+\subsubsection{ZDC 5G to 10G conversion scheme}\label{sec:app:zdc_5g_10g_conv}
+
+ZDC data are provided on a 5 GHz link, therefore a conversion from 5 GHz to 10 GHz is implemented in \ugt firmware.
+Figure~\ref{fig:app:zdc_5G_10G_conv_scheme} shows ZDC 5G link to 10G link conversion scheme on a MP7 module in one slot of \ugt system.\\
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/zdc_5G_10G_conv_scheme}
+\caption{ZDC 5G link to 10G link conversion scheme}
+\label{fig:app:zdc_5G_10G_conv_scheme}
+\end{figure}
+
+\clearpage
 
 \subsubsection{GTH input connections}\label{sec:app:gth_i_conn}
 
@@ -71,7 +87,7 @@ RX1/8  & rx3/7  &     & X1Y28 & 10G & 0x0E & 8  & 7  & jet\\\hline
 RX1/9  & rx3/8  & 116 & X1Y27 & 10G & 0x10 & 9  & 8  & tau\\\hline
 RX1/10 & rx3/9  &     & X1Y26 & 10G & 0x12 & 10 & 9  & tau\\\hline
 RX1/11 & rx3/10 &     & X1Y25 & 10G & 0x14 & 11 & 10 & esums\\\hline
-RX1/12 & rx3/11 &     & X1Y24 & 10G & 0x16 & 12 & 11 & free\\\hline
+RX1/12 & rx3/11 &     & X1Y24 & 10G & 0x16 & 12 & 11 & zdc\\\hline
 RX1/13 & rx4/0  & 115 & X1Y23 & 10G & 0x18 & 13 & 12 & external conditions\\\hline
 RX1/14 & rx4/1  &     & X1Y22 & 10G & 0x1A & 14 & 13 & external conditions\\\hline
 RX1/15 & rx4/2  &     & X1Y21 & 10G & 0x1C & 15 & 14 & external conditions\\\hline
@@ -247,7 +263,7 @@ JET6..JET11 & 7  & 117 & X1Y28 & x &   \\\hline
 TAU0..TAU5  & 8  & 116 & X1Y27 & x &   \\\hline
 TAU6..TAU11 & 9  & 116 & X1Y26 & x &   \\\hline
 ESUMS  & 10  & 116 & X1Y25 & x &   \\\hline
-free & 11  & 116 & X1Y24 & x &   \\\hline
+ZDC & 11  & 116 & X1Y24 & x &   \\\hline
 EXT\_COND[0:63] & 12  & 115 & X1Y23 & x &   \\\hline
 EXT\_COND[64:127] & 13  & 115 & X1Y22 & x &   \\\hline
 EXT\_COND[128:191] & 14  & 115 & X1Y21 & x &   \\\hline
@@ -276,12 +292,24 @@ Bunchcounters, ... & 25  & 112 & X1Y10 &   & x \\\hline
 
 \subsection{Configuration of optical input links}\label{sec:app:app_b}
 
+% Figure~\ref{fig:app:ugt_inputs} shows the configuration of optical links to Global Trigger.\\
+% Links 0..3 contains muon data from GMT, links 4..10 data from Calo-Layer2, link 11 data from ZDC and links 12..15 external conditions
+% from AMC502 boards.
+% 
+% \begin{figure}[htb]
+% \centering
+% \includegraphics[width=15cm]{figures/ugt_inputs}
+% \caption{Optical link inputs to Global Trigger}
+% \label{fig:app:ugt_inputs}
+% \end{figure}
+% 
+
 Tables ~\ref{table:app:sum_opt_links} and ~\ref{table:app:sum_opt_links2} show the configuration of optical links to Global Trigger.\\
 Links 0..3 contains muon data from GMT, links 4..10 data from Calo-Layer2, link 11 data from ZDC and links 12..15 external conditions
 from AMC502 boards.
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 1)}
+\caption{\bf Overview optical links (part 1)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
@@ -303,30 +331,30 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \end{table}
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 2)}
+\caption{\bf Overview optical links (part 2)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
 \begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
  & \multicolumn{6}{ c| }{link} \\\hline
 frame & 10 & 11 & 12 & 13 & 14 &\makebox[1.5cm][c]{15} \\\hline\hline
-0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
- & ETTEM, & & [31:0] & [95:64] & [159:128] & [223:192]\\
+0 & ET, & ZDC & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & ETTEM, & [31:0] & [31:0] & [95:64] & [159:128] & [223:192]\\
  & MBT0HFP & & & & &\\
-1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
- & TOWERCOUNT, & & [63:32] & [127:96] & [191:160] & [255:224]\\
+1 & HT, & ZDC & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & TOWERCOUNT, & [63:32] & [63:32] & [127:96] & [191:160] & [255:224]\\
  & MBT0HFM & & & & &\\
-2 & ET$_{miss}$, & free & free & free & free & free\\
- & ASYMET,& & & & &\\
+2 & ET$_{miss}$, & ZDC & free & free & free & free\\
+ & ASYMET,& [95:64] & & & &\\
  & MBT1HFP  & & & & &\\
-3 & HT$_{miss}$, & free & free & free & free & free\\
- & ASYMHT,& & & & &\\
+3 & HT$_{miss}$, & ZDC & free & free & free & free\\
+ & ASYMHT,& [127:96] & & & &\\
  & MBT1HFM & & & & &\\
-4 & ET$_{miss}^{HF}$ & free & free & free & free & free\\
- & ASYMETHF, & & & & &\\
+4 & ET$_{miss}^{HF}$ & ZDC & free & free & free & free\\
+ & ASYMETHF, & [159:128] & & & &\\
  & CENT[3:0] & & & & &\\
-5 & HT$_{miss}^{HF}$ & free & free & free & free & free\\
- & ASYMHTHF, & & & & &\\
+5 & HT$_{miss}^{HF}$ & ZDC & free & free & free & free\\
+ & ASYMHTHF, & [191:160] & & & &\\
  & CENT[7:4] & & & & &\\\hline
 \end{tabular}
 }
@@ -533,3 +561,4 @@ Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panel 
 \end{figure}
 
 \clearpage
+

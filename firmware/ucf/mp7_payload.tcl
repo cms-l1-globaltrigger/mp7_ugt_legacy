@@ -1,15 +1,16 @@
+## HB 2022-10-12: rearranged payload 
 ## HB 2016-08-17: increase limit for better placement performance (set_param place.sliceLegEffortLimit 4000)
 ## HB 2016-08-31: removed "limit setting"
 ## HB 2016-08-31: ../ucf/algo_constraints.xdc not used anymore (see uGT_algo.dep)
 ## JW 2017-10-06: Added payload area constraints
 
-# HB 2017-10-13: Extended payload region to former left quad regions(quad_9 to quad_17)
+# HB 2017-10-13: Extended payload region to former left quad regions(quad_9 to quad_14)
 # JW 2017-10-06: Extended payload region to use space of unused GTHs (Greg's suggestion)
-resize_pblock [get_pblocks payload] -add {SLICE_X0Y0:SLICE_X29Y449}
-resize_pblock [get_pblocks payload] -add {RAMB18_X0Y0:RAMB18_X1Y179}
-resize_pblock [get_pblocks payload] -add {RAMB36_X0Y0:RAMB36_X1Y89}
+resize_pblock [get_pblocks payload] -add {SLICE_X0Y0:SLICE_X29Y399}
+resize_pblock [get_pblocks payload] -add {RAMB18_X0Y0:RAMB18_X1Y119}
+resize_pblock [get_pblocks payload] -add {RAMB36_X0Y0:RAMB36_X1Y59}
 # HB 2017-10-13: DSPs into payload region
-resize_pblock [get_pblocks payload] -add {DSP48_X0Y0:DSP48_X1Y179}
+resize_pblock [get_pblocks payload] -add {DSP48_X0Y0:DSP48_X1Y119}
 
 # HB 2017-10-13: Extended payload region to former right bottom quad regions (quad_7 and quad_8)
 resize_pblock [get_pblocks payload] -add {SLICE_X192Y0:SLICE_X221Y99}

@@ -2,6 +2,12 @@
 
 The Global Trigger System is based on MicroTCA technology and 10 Gbps optical links. A set of 6 MP7 boards (for MP7 documentation see~\cite{MP7}, for MP7 firmware see~\cite{MP7 firmware}) with a FPGA of the powerful Xilinx Virtex-7 family (XC7VX690TFFG1927-2, see~\cite{Virtex7}) is available. The Global Trigger firmware is implemented on these FPGAs. Every FPGA contains a part of the VHDL representation of a L1 Menu, the partitioning is done by VHDL Producer tool. The trigger decision of every MP7 board is collected on an AMC502 board to generate the "final OR" signal which triggers the readout of the detector.
 
+\begin{figure}[h!]
+   \centering
+    \includegraphics[width=1.0\textwidth]{figures/prodcrate_DSC09437.jpeg}
+    \caption{\ugt crate}\label{fig:fw:mgt_crate}
+\end{figure}
+
 \section{Firmware overview}\label{sec:fw:fw}
 The figure \ref{fig:mgt} shows the architecture of \ugt payload. It consists of framework and the algorithm logic which consists of the following modules:
 \begin{enumerate}
@@ -16,8 +22,8 @@ The IPBus system allows the control of hardware via a ‘virtual bus’, using a
 \begin{figure}[h!]
    \centering
     \includegraphics[width=1.0\textwidth]{figures/mGT_payload}
-    \caption{\ugt payload}\label{fig:mgt}
- \end{figure}
+    \caption{\ugt payload}\label{fig:fw:mgt}
+\end{figure}
 
 \subsection{Firmware versions}\label{sec:fw:fw_version}
 

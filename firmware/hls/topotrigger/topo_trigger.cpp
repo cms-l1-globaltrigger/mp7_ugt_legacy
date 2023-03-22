@@ -5,23 +5,23 @@
 #include "scales.h"
 
 // TODO
-void scaleNNInputs(unscaled_t unscaled[AD_NNNINPUTS], AD_NN_IN_T scaled[AD_NNNINPUTS])
+void scaleNNInputs(unscaled_t unscaled[TPT_NNNINPUTS], AD_NN_IN_T scaled[TPT_NNNINPUTS])
 {
 #pragma HLS pipeline
   // #pragma HLS array_partition variable=unscaled complete
   // #pragma HLS array_partition variable=scaled complete
   // #pragma HLS inline off
-  for (int i = 0; i < AD_NNNINPUTS; i++)
+  for (int i = 0; i < TPT_NNNINPUTS; i++)
   {
 #pragma HLS unroll
-    unscaled_t tmp0 = unscaled[i] - ad_offsets[i];
-    AD_NN_IN_T tmp1 = tmp0 >> ad_shift[i];
+    unscaled_t tmp0 = unscaled[i] - tpt_offsets[i];
+    TPT_NN_IN_T tmp1 = tmp0 >> tpt_shift[i];
     // #pragma hls bind_op variable=tmp1 op=shl impl=fabric
     scaled[i] = tmp1;
   }
 }
 
-void anomaly_detection(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS], Tau taus[NTAUS],
+void topo_trigger(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS], Tau taus[NTAUS],
                        ET et, HT ht, ETMiss etmiss, HTMiss htmiss, ETHFMiss ethfmiss, HTHFMiss hthfmiss,
                        AD_NN_OUT_SQ_T &nn_score)
 {

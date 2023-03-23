@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.22.1] - 2023-03-23
+### Comment
+
+- mp7_ugt firmware release v1.22.1
+- development for topological trigger (topo_trigger)
+
+### Added
+- source files:
+  - ../payload/gtl/topo_trigger/topo_wrapper.vhd
+
+### Changed
+- source files:
+  - ../packages/gt_core_pkg.vhd
+  - ../payload/gtl_module_tpl.vhd
+
 ## [v1.22.0] - 2023-03-14
 ### Comment
 

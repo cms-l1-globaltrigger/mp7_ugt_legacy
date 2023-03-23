@@ -6,9 +6,9 @@
 -- mp7_ugt (=FRAME_VERSION): v1.22.0
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.22.0
+-- gt: v1.22.1
 -- frame: v1.3.1 (see frame.vhd)
--- gtl: v1.18.0 (see gtl_module_tpl.vhd)
+-- gtl: v1.18.1 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
 -- HB 2022-09-20: v1.22.0 - Changed top_decl.vhd to 10 REGIONs. Changed output_mux.vhd and lmp.vhd (frame: v1.4.0).
@@ -32,6 +32,7 @@
 -- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
 -- gtl history:
+-- HB 2023-03-14: v1.18.1: Implemented topological trigger.
 -- HB 2023-03-14: v1.18.0: Implemented "MUS2" (new hadronic shower bit). Module for "anomaly detection trigger (ADT)". Added ZDC 10G optical on link 11.
 -- HB 2023-02-14: v1.17.7: Inserted cut for muon index bits.
 -- HB 2022-11-29: v1.17.6: Bug fix in algo_pre_scaler_fractional_float.vhd.
@@ -89,7 +90,7 @@ package gt_mp7_core_pkg is
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GT_MINOR_VERSION      : integer range 0 to 255 := 22;
-    constant GT_REV_VERSION        : integer range 0 to 255 := 0;
+    constant GT_REV_VERSION        : integer range 0 to 255 := 1;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &
@@ -101,7 +102,7 @@ package gt_mp7_core_pkg is
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 18;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 0;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 1;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 4;

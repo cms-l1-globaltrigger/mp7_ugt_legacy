@@ -5,8 +5,8 @@ import re
 
 import toolbox as tb
 
-#def replace_area_constraints(filename):
-    #content = tb.read_file(filename)
+def replace_area_constraints(filename):
+    content = tb.read_file(filename)
 
     #expr_forloop = re.compile(r"(for\s+{\s*set\s*i\s*0\s*}\s+{\s*\$i\s*<\s*)(\d+)(\s*}\s+{\s*incr\s+i\s*})")
     #expr_cells = re.compile(r"(add_cells_to_pblock\s+\[\s*get_pblocks\s+payload_)(\d+)(\s*]\s*\[get_cells\s+(?:-\w+\s+)?datapath/rgen\[)(\d+)(]\.region/pgen\.\*])")
@@ -18,11 +18,19 @@ import toolbox as tb
     #content, count = expr_cells.subn(r"\g<1>7\g<3>7\g<5>", content)
     #if count != 1:
         #raise RuntimeError("Could not replace add_cells_to_pblock line.")
-
-    #with open(filename, "w") as fp:
-        #fp.write(content)
-        #logging.info("Successfully patched area_constraints file '{}'".format(filename))
-
+    
+    text = "resize_pblock [get_pblocks payload] -add {SLICE_X30Y0:SLICE_X191Y449}"
+    subs = "resize_pblock [get_pblocks payload] -add {SLICE_X0Y0:SLICE_X191Y449}"
+    flags = 0
+    
+    with open( filename, "r+" ) as file:
+        fileContents = file.read()
+        textPattern = re.compile( re.escape( text ), flags )
+        fileContents = textPattern.sub( subs, fileContents )
+        file.seek( 0 )
+        file.truncate()
+        file.write( fileContents )
+        
 #def replace_brd_decl(filename):
     #content = tb.read_file(filename)
 
@@ -80,7 +88,7 @@ def patch_all(projectpath):
     """Batch patch all firmware files."""
     root_path = os.path.abspath(projectpath)
 
-    brd_decl_path = 'boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7_brd_decl.vhd'
+    #brd_decl_path = 'boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7_brd_decl.vhd'
     area_constraints_path = 'boards/mp7/base_fw/common/firmware/ucf/area_constraints.tcl'
     mp7xe_690_path = 'boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7xe_690.vhd'
     #script_writer_path = 'scripts/firmware/dep_tree/VivadoScriptWriter.py'

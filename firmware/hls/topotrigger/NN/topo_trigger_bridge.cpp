@@ -1,7 +1,7 @@
-#ifndef MYPROJECT_BRIDGE_H_
-#define MYPROJECT_BRIDGE_H_
+#ifndef TOPO_TRIGGER_BRIDGE_H_
+#define TOPO_TRIGGER_BRIDGE_H_
 
-#include "firmware/myproject.h"
+#include "firmware/topo_trigger.h"
 #include "firmware/nnet_utils/nnet_helpers.h"
 #include <algorithm>
 #include <map>
@@ -49,7 +49,7 @@ void collect_trace_output(struct trace_data *c_trace_outputs) {
 }
 
 // Wrapper of top level function for Python bridge
-void myproject_float(
+void topo_trigger_float(
     float onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_input[N_INPUT_1_1],
     float layer7_out[N_LAYER_5],
     unsigned short &const_size_in_1,
@@ -61,12 +61,12 @@ void myproject_float(
 
     result_t layer7_out_ap[N_LAYER_5];
 
-    myproject(onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_input_ap,layer7_out_ap,const_size_in_1,const_size_out_1);
+    topo_trigger(onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_input_ap,layer7_out_ap,const_size_in_1,const_size_out_1);
 
     nnet::convert_data<result_t, float, N_LAYER_5>(layer7_out_ap, layer7_out);
 }
 
-void myproject_double(
+void topo_trigger_double(
     double onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_input[N_INPUT_1_1],
     double layer7_out[N_LAYER_5],
     unsigned short &const_size_in_1,
@@ -77,7 +77,7 @@ void myproject_double(
 
     result_t layer7_out_ap[N_LAYER_5];
 
-    myproject(onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_input_ap,layer7_out_ap,const_size_in_1,const_size_out_1);
+    topo_trigger(onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_input_ap,layer7_out_ap,const_size_in_1,const_size_out_1);
 
     nnet::convert_data<result_t, double, N_LAYER_5>(layer7_out_ap, layer7_out);
 }

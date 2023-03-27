@@ -35,6 +35,6 @@ InputData: null
 KerasModel: !keras_model 'models/onlymu_small_compressed_4folds_hw_bitshiftscaler_hls/model_0/keras_model.h5'
 OutputDir: models/onlymu_small_compressed_4folds_hw_bitshiftscaler_hls/model_0
 OutputPredictions: null
-ProjectName: myproject
-Stamp: C31C9cD8
+ProjectName: topo_trigger
+Stamp: 4Ef4BD6B
 XilinxPart: xcvu9p-flga2104-2L-e

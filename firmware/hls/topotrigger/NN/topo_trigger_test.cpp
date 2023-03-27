@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "firmware/myproject.h"
+#include "firmware/topo_trigger.h"
 #include "firmware/nnet_utils/nnet_helpers.h"
 
 //hls-fpga-machine-learning insert bram
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 
       //hls-fpga-machine-learning insert top-level-function
       unsigned short size_in1,size_out1;
-      myproject(onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_input,layer7_out,size_in1,size_out1);
+      topo_trigger(onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_input,layer7_out,size_in1,size_out1);
 
       if (e % CHECKPOINT == 0) {
         std::cout << "Predictions" << std::endl;
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
 
     //hls-fpga-machine-learning insert top-level-function
     unsigned short size_in1,size_out1;
-    myproject(onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_input,layer7_out,size_in1,size_out1);
+    topo_trigger(onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_input,layer7_out,size_in1,size_out1);
 
     //hls-fpga-machine-learning insert output
     nnet::print_result<result_t, N_LAYER_5>(layer7_out, std::cout, true);

@@ -50,13 +50,13 @@ set CSIM_RESULTS "./tb_data/csim_results.log"
 set RTL_COSIM_RESULTS "./tb_data/rtl_cosim_results.log"
 
 if {$opt(reset)} {
-  open_project -reset myproject_prj
+  open_project -reset topo_trigger_prj
 } else {
-  open_project myproject_prj
+  open_project topo_trigger_prj
 }
-set_top myproject
-add_files firmware/myproject.cpp -cflags "-std=c++0x"
-add_files -tb myproject_test.cpp -cflags "-std=c++0x"
+set_top topo_trigger
+add_files firmware/topo_trigger.cpp -cflags "-std=c++0x"
+add_files -tb topo_trigger_test.cpp -cflags "-std=c++0x"
 add_files -tb firmware/weights
 add_files -tb tb_data
 if {$opt(reset)} {
@@ -89,12 +89,12 @@ if {$opt(synth)} {
 if {$opt(cosim)} {
   puts "***** C/RTL SIMULATION *****"
   # TODO: This is a workaround (Xilinx defines __RTL_SIMULATION__ only for SystemC testbenches).
-  add_files -tb myproject_test.cpp -cflags "-std=c++0x -DRTL_SIM"
+  add_files -tb topo_trigger_test.cpp -cflags "-std=c++0x -DRTL_SIM"
   set time_start [clock clicks -milliseconds]
   cosim_design -trace_level all
   set time_end [clock clicks -milliseconds]
   puts "INFO:"
-  puts [read [open myproject_prj/solution1/sim/report/myproject_cosim.rpt r]]
+  puts [read [open topo_trigger_prj/solution1/sim/report/topo_trigger_cosim.rpt r]]
   report_time "C/RTL SIMULATION" $time_start $time_end
 }
 
@@ -120,7 +120,7 @@ if {$opt(export)} {
 
 if {$opt(vsynth)} {
   puts "***** VIVADO SYNTHESIS *****"
-  if {[file exist myproject_prj/solution1/syn/vhdl]} {
+  if {[file exist topo_trigger_prj/solution1/syn/vhdl]} {
     set time_start [clock clicks -milliseconds]
     exec vivado -mode batch -source vivado_synth.tcl >@ stdout
     set time_end [clock clicks -milliseconds]

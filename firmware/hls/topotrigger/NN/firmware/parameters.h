@@ -26,8 +26,8 @@ struct config2 : nnet::dense_config {
     static const unsigned io_type = nnet::io_parallel;
     static const unsigned strategy = nnet::latency;
     static const unsigned reuse_factor = 1;
-    static const unsigned n_zeros = 1340;
-    static const unsigned n_nonzeros = 324;
+    static const unsigned n_zeros = 1347;
+    static const unsigned n_nonzeros = 317;
     static const bool store_weights_in_bram = false;
     typedef ap_fixed<16,6> accum_t;
     typedef bias2_t bias_t;
@@ -35,6 +35,15 @@ struct config2 : nnet::dense_config {
     typedef ap_uint<1> index_t;
     template<class x_T, class y_T, class res_T>
     using product = nnet::product::mult<x_T, y_T, res_T>;
+};
+
+// onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_linear
+struct linear_config3 : nnet::activ_config {
+    static const unsigned n_in = N_LAYER_2;
+    static const unsigned table_size = 1024;
+    static const unsigned io_type = nnet::io_parallel;
+    static const unsigned reuse_factor = 1;
+    typedef ap_fixed<18,8> table_t;
 };
 
 // onlymu_small_compressed_4folds_hw_bitshiftscaler0_activation1
@@ -62,6 +71,15 @@ struct config5 : nnet::dense_config {
     typedef ap_uint<1> index_t;
     template<class x_T, class y_T, class res_T>
     using product = nnet::product::mult<x_T, y_T, res_T>;
+};
+
+// onlymu_small_compressed_4folds_hw_bitshiftscaler0_output_linear
+struct linear_config6 : nnet::activ_config {
+    static const unsigned n_in = N_LAYER_5;
+    static const unsigned table_size = 1024;
+    static const unsigned io_type = nnet::io_parallel;
+    static const unsigned reuse_factor = 1;
+    typedef ap_fixed<18,8> table_t;
 };
 
 // onlymu_small_compressed_4folds_hw_bitshiftscaler0_sigmoid

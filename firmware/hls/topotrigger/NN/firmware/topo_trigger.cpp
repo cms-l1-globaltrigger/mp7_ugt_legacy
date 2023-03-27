@@ -18,10 +18,10 @@
 //
 #include <iostream>
 
-#include "myproject.h"
+#include "topo_trigger.h"
 #include "parameters.h"
 
-void myproject(
+void topo_trigger(
     input_t onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_input[N_INPUT_1_1],
     result_t layer7_out[N_LAYER_5],
     unsigned short &const_size_in_1,
@@ -59,14 +59,22 @@ void myproject(
     #pragma HLS ARRAY_PARTITION variable=layer2_out complete dim=0
     nnet::dense<input_t, layer2_t, config2>(onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_input, layer2_out, w2, b2); // onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1
 
+    layer3_t layer3_out[N_LAYER_2];
+    #pragma HLS ARRAY_PARTITION variable=layer3_out complete dim=0
+    nnet::linear<layer2_t, layer3_t, linear_config3>(layer2_out, layer3_out); // onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_linear
+
     layer4_t layer4_out[N_LAYER_2];
     #pragma HLS ARRAY_PARTITION variable=layer4_out complete dim=0
-    nnet::relu<layer2_t, layer4_t, relu_config4>(layer2_out, layer4_out); // onlymu_small_compressed_4folds_hw_bitshiftscaler0_activation1
+    nnet::relu<layer3_t, layer4_t, relu_config4>(layer3_out, layer4_out); // onlymu_small_compressed_4folds_hw_bitshiftscaler0_activation1
 
     layer5_t layer5_out[N_LAYER_5];
     #pragma HLS ARRAY_PARTITION variable=layer5_out complete dim=0
     nnet::dense<layer4_t, layer5_t, config5>(layer4_out, layer5_out, w5, b5); // onlymu_small_compressed_4folds_hw_bitshiftscaler0_output
 
-    nnet::sigmoid<layer5_t, result_t, sigmoid_config7>(layer5_out, layer7_out); // onlymu_small_compressed_4folds_hw_bitshiftscaler0_sigmoid
+    layer6_t layer6_out[N_LAYER_5];
+    #pragma HLS ARRAY_PARTITION variable=layer6_out complete dim=0
+    nnet::linear<layer5_t, layer6_t, linear_config6>(layer5_out, layer6_out); // onlymu_small_compressed_4folds_hw_bitshiftscaler0_output_linear
+
+    nnet::sigmoid<layer6_t, result_t, sigmoid_config7>(layer6_out, layer7_out); // onlymu_small_compressed_4folds_hw_bitshiftscaler0_sigmoid
 
 }

@@ -280,7 +280,7 @@ std::vector<TPT_NN_OUT_T> nn_topo(std::vector<TPT_NN_IN_T> in){
         nn_inputs[i] = in[i];
     }
     TPT_NN_OUT_T nn_outputs[TPT_NNNOUTPUTS];
-    VAE_HLS(nn_inputs, nn_outputs);
+    topo_trigger(nn_inputs, nn_outputs);
     std::vector<TPT_NN_OUT_T> out(std::begin(nn_outputs), std::end(nn_outputs));
     return out;
 }
@@ -295,7 +295,7 @@ AD_NN_OUT_SQ_T nn_loss(std::vector<AD_NN_OUT_T> in){
     return loss;
 }
 
-TPT_NN_OUT_SQ_T nn_loss(std::vector<TPT_NN_OUT_T> in){
+TPT_NN_OUT_SQ_T nn_loss_topo(std::vector<TPT_NN_OUT_T> in){
     assert((void("Wrong number of inputs"), in.size() == TPT_NNNOUTPUTS));
     TPT_NN_OUT_T nn_outputs[TPT_NNNOUTPUTS];
     for(int i = 0; i < TPT_NNNOUTPUTS; i++){

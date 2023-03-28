@@ -17,8 +17,8 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef TOPO_TRIGGER_H_
-#define TOPO_TRIGGER_H_
+#ifndef TOPO_HLS_H_
+#define TOPO_HLS_H_
 
 #include "ap_int.h"
 #include "ap_fixed.h"
@@ -27,7 +27,7 @@
 #include "defines.h"
 
 // Prototype of top level function for C-synthesis
-void topo_trigger(
+void TOPO_HLS(
     input_t bothchannel_small_compressed_hw_bitshiftscaler0_fc1_input[N_INPUT_1_1],
     result_t layer7_out[N_LAYER_5],
     unsigned short &const_size_in_1,

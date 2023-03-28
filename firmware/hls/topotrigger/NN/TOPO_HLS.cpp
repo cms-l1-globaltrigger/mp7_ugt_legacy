@@ -18,10 +18,10 @@
 //
 #include <iostream>
 
-#include "topo_trigger.h"
+#include "TOPO_HLS.h"
 #include "parameters.h"
 
-void topo_trigger(
+void TOPO_HLS(
     input_t bothchannel_small_compressed_hw_bitshiftscaler0_fc1_input[N_INPUT_1_1],
     result_t layer7_out[N_LAYER_5],
     unsigned short &const_size_in_1,

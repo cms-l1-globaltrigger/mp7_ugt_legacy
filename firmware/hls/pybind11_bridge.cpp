@@ -222,6 +222,35 @@ double objects_to_anomaly_score(ETMiss etMiss, std::vector<EGamma> egammas, std:
     return (double) score;
 }
 
+double objects_to_topo_trigger_score(ETMiss etMiss, std::vector<EGamma> egammas, std::vector<Muon> muons, std::vector<Jet> jets){
+
+    assert((void("Wrong number of inputs"), egammas.size() == TPT_NEGAMMAS));
+    assert((void("Wrong number of inputs"), muons.size() == TPT_NMUONS));
+    assert((void("Wrong number of inputs"), jets.size() == TPT_NJETS));
+    // Convert ints to GT objects
+    EGamma egammas_int[NEGAMMAS];
+    Muon muons_int[NMUONS];
+    Jet jets_int[NJETS];
+    for(int i = 0; i < NEGAMMAS; i++){
+        if(i < TPT_NEGAMMAS){ egammas_int[i] = egammas[i]; }
+        else{ egammas_int[i].clear(); }
+    }
+    for(int i = 0; i < NMUONS; i++){
+        if(i < TPT_NMUONS){ muons_int[i] = muons[i]; }
+        else{ muons_int[i].clear(); }
+    }
+    for(int i = 0; i < NJETS; i++){
+        if(i < TPT_NJETS){ jets_int[i] = jets[i]; }
+        else{ jets_int[i].clear(); }
+    }
+
+    // the unused inputs
+    Tau taus[NTAUS]; ET et; HT ht; HTMiss htmiss; ETHFMiss ethfmiss; HTHFMiss hthfmiss; 
+    TPT_NN_OUT_SQ_T score;
+    topo_trigger(muons_int, jets_int, egammas_int, taus, et, ht, etMiss, htmiss, ethfmiss, hthfmiss, score);
+    return (double) score;
+}
+
 /*std::vector<AD_NN_IN_T> scale_nn_inputs(std::vector<unscaled_t> unscaled){
     assert((void("Wrong number of inputs"), unscaled.size() == AD_NNNPARTICLES));
     AD_NN_IN_T scaled[AD_NNNINPUTS];

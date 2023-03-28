@@ -1,7 +1,7 @@
 open_project -reset prj_topo_trigger
 set_top topo_trigger
 add_files topo_trigger.cpp -cflags "-std=c++0x -I../"
-add_files NN/VAE_HLS.cpp -cflags "-std=c++0x -INN/"
+add_files NN/firmware/topo_trigger.cpp -cflags "-std=c++0x -INN/"
 
 open_solution -reset "solution1"
 

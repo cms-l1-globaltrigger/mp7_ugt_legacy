@@ -1,6 +1,7 @@
 #include "anomaly_detection/anomaly_detection.h"
 #include "anomaly_detection/NN/VAE_HLS.h"
 #include "topotrigger/topo_trigger.h"
+#include "topotrigger/NN/TOPO_HLS.h"
 #include "ap_fixed.h"
 #include <vector>
 #include <cassert>
@@ -280,7 +281,7 @@ std::vector<TPT_NN_OUT_T> nn_topo(std::vector<TPT_NN_IN_T> in){
         nn_inputs[i] = in[i];
     }
     TPT_NN_OUT_T nn_outputs[TPT_NNNOUTPUTS];
-    topo_trigger(nn_inputs, nn_outputs);
+    TOPO_HLS(nn_inputs, nn_outputs);
     std::vector<TPT_NN_OUT_T> out(std::begin(nn_outputs), std::end(nn_outputs));
     return out;
 }
@@ -292,16 +293,6 @@ AD_NN_OUT_SQ_T nn_loss(std::vector<AD_NN_OUT_T> in){
         nn_outputs[i] = in[i];
     }
     AD_NN_OUT_SQ_T loss = computeLoss(nn_outputs);
-    return loss;
-}
-
-TPT_NN_OUT_SQ_T nn_loss_topo(std::vector<TPT_NN_OUT_T> in){
-    assert((void("Wrong number of inputs"), in.size() == TPT_NNNOUTPUTS));
-    TPT_NN_OUT_T nn_outputs[TPT_NNNOUTPUTS];
-    for(int i = 0; i < TPT_NNNOUTPUTS; i++){
-        nn_outputs[i] = in[i];
-    }
-    TPT_NN_OUT_SQ_T loss = computeLoss(nn_outputs);
     return loss;
 }
 
@@ -360,6 +351,14 @@ PYBIND11_MODULE(anomaly_detection_emulation, m){
   m.attr("AD_NNNPARTICLES") = &AD_NNNPARTICLES;
   m.attr("AD_NNNINPUTS") = &AD_NNNINPUTS;
   m.attr("AD_NNNOUTPUTS") = &AD_NNNOUTPUTS;
+
+  m.attr("TPT_NMUONS") = &TPT_NMUONS;
+  m.attr("TPT_NJETS") = &TPT_NJETS;
+  m.attr("TPT_NEGAMMAS") = &TPT_NEGAMMAS;
+  m.attr("TPT_NTAUS") = &TPT_NTAUS;
+  m.attr("TPT_NNNPARTICLES") = &TPT_NNNPARTICLES;
+  m.attr("TPT_NNNINPUTS") = &TPT_NNNINPUTS;
+  m.attr("TPT_NNNOUTPUTS") = &TPT_NNNOUTPUTS;
 }
 
 /* 

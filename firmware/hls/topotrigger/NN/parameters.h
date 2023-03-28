@@ -19,15 +19,15 @@
 #include "weights/b5.h"
 
 //hls-fpga-machine-learning insert layer-config
-// onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1
+// bothchannel_small_compressed_hw_bitshiftscaler0_fc1
 struct config2 : nnet::dense_config {
     static const unsigned n_in = N_INPUT_1_1;
     static const unsigned n_out = N_LAYER_2;
     static const unsigned io_type = nnet::io_parallel;
     static const unsigned strategy = nnet::latency;
     static const unsigned reuse_factor = 1;
-    static const unsigned n_zeros = 1347;
-    static const unsigned n_nonzeros = 317;
+    static const unsigned n_zeros = 1337;
+    static const unsigned n_nonzeros = 327;
     static const bool store_weights_in_bram = false;
     typedef ap_fixed<16,6> accum_t;
     typedef bias2_t bias_t;
@@ -37,7 +37,7 @@ struct config2 : nnet::dense_config {
     using product = nnet::product::mult<x_T, y_T, res_T>;
 };
 
-// onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_linear
+// bothchannel_small_compressed_hw_bitshiftscaler0_fc1_linear
 struct linear_config3 : nnet::activ_config {
     static const unsigned n_in = N_LAYER_2;
     static const unsigned table_size = 1024;
@@ -46,7 +46,7 @@ struct linear_config3 : nnet::activ_config {
     typedef ap_fixed<18,8> table_t;
 };
 
-// onlymu_small_compressed_4folds_hw_bitshiftscaler0_activation1
+// bothchannel_small_compressed_hw_bitshiftscaler0_activation1
 struct relu_config4 : nnet::activ_config {
     static const unsigned n_in = N_LAYER_2;
     static const unsigned table_size = 1024;
@@ -55,7 +55,7 @@ struct relu_config4 : nnet::activ_config {
     typedef ap_fixed<18,8> table_t;
 };
 
-// onlymu_small_compressed_4folds_hw_bitshiftscaler0_output
+// bothchannel_small_compressed_hw_bitshiftscaler0_output
 struct config5 : nnet::dense_config {
     static const unsigned n_in = N_LAYER_2;
     static const unsigned n_out = N_LAYER_5;
@@ -73,7 +73,7 @@ struct config5 : nnet::dense_config {
     using product = nnet::product::mult<x_T, y_T, res_T>;
 };
 
-// onlymu_small_compressed_4folds_hw_bitshiftscaler0_output_linear
+// bothchannel_small_compressed_hw_bitshiftscaler0_output_linear
 struct linear_config6 : nnet::activ_config {
     static const unsigned n_in = N_LAYER_5;
     static const unsigned table_size = 1024;
@@ -82,7 +82,7 @@ struct linear_config6 : nnet::activ_config {
     typedef ap_fixed<18,8> table_t;
 };
 
-// onlymu_small_compressed_4folds_hw_bitshiftscaler0_sigmoid
+// bothchannel_small_compressed_hw_bitshiftscaler0_sigmoid
 struct sigmoid_config7 : nnet::activ_config {
     static const unsigned n_in = N_LAYER_5;
     static const unsigned table_size = 1024;

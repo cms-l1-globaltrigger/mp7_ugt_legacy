@@ -24,7 +24,7 @@ typedef ap_fixed<16,6> layer5_t;
 typedef ap_fixed<6,2> weight5_t;
 typedef ap_fixed<6,2> bias5_t;
 typedef ap_fixed<16,6,AP_RND,AP_SAT> layer6_t;
-typedef ap_fixed<16,6> onlymu_small_compressed_4folds_hw_bitshiftscaler0_sigmoid_default_t;
+typedef ap_fixed<16,6> bothchannel_small_compressed_hw_bitshiftscaler0_sigmoid_default_t;
 typedef ap_fixed<16,6,AP_RND,AP_SAT> result_t;
 
 #endif

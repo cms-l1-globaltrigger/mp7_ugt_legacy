@@ -28,7 +28,7 @@
 
 // Prototype of top level function for C-synthesis
 void topo_trigger(
-    input_t onlymu_small_compressed_4folds_hw_bitshiftscaler0_fc1_input[N_INPUT_1_1],
+    input_t bothchannel_small_compressed_hw_bitshiftscaler0_fc1_input[N_INPUT_1_1],
     result_t layer7_out[N_LAYER_5],
     unsigned short &const_size_in_1,
     unsigned short &const_size_out_1

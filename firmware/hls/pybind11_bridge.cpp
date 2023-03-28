@@ -195,6 +195,27 @@ double hwint_to_anomaly_score(std::vector<int> in){
 }
 
 // 'bridge' function for Python binding (not for firmware)
+double hwint_to_topo_trigger_score(std::vector<int> in){
+
+    assert((void("Wrong number of inputs"), in.size() == 3*(AD_NEGAMMAS+AD_NMUONS+AD_NJETS) + 2));
+    // read (pT, eta, phi) for each of (in order): MET, jets, muons, egs
+    // met does not use eta!
+
+    // Convert ints to GT objects
+    ETMiss etMiss;
+    EGamma egammas[NEGAMMAS];
+    Muon muons[NMUONS];
+    Jet jets[NJETS];
+    hwint_to_GTobjects(in, etMiss, egammas, muons, jets);
+
+    // the unused inputs
+    Tau taus[NTAUS]; ET et; HT ht; HTMiss htmiss; ETHFMiss ethfmiss; HTHFMiss hthfmiss; 
+    TPT_NN_OUT_SQ_T score;
+    topo_trigger(muons, jets, egammas, taus, et, ht, etMiss, htmiss, ethfmiss, hthfmiss, score);
+    return (double) score;
+}
+
+// 'bridge' function for Python binding (not for firmware)
 double objects_to_anomaly_score(ETMiss etMiss, std::vector<EGamma> egammas, std::vector<Muon> muons, std::vector<Jet> jets){
 
     assert((void("Wrong number of inputs"), egammas.size() == AD_NEGAMMAS));

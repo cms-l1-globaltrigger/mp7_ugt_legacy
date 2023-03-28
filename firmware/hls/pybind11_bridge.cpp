@@ -1,6 +1,6 @@
 #include "anomaly_detection/anomaly_detection.h"
 #include "anomaly_detection/NN/VAE_HLS.h"
-#include "topo_trigger/anomaly_detection.h"
+#include "topotrigger/topo_trigger.h"
 #include "ap_fixed.h"
 #include <vector>
 #include <cassert>

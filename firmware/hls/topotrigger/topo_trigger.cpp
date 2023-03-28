@@ -1,11 +1,10 @@
 #include "topo_trigger.h"
 #include <stddef.h>
-#include "NN/VAE_HLS.h"
+#include "NN/TOPO_HLS.h"
 #include "NN/nnet_utils/nnet_common.h"
 #include "scales.h"
 
-// TODO
-void scaleNNInputs(unscaled_t unscaled[TPT_NNNINPUTS], AD_NN_IN_T scaled[TPT_NNNINPUTS])
+void scaleNNInputs(unscaled_t unscaled[TPT_NNNINPUTS], TPT_NN_IN_T scaled[TPT_NNNINPUTS])
 {
 #pragma HLS pipeline
   // #pragma HLS array_partition variable=unscaled complete
@@ -61,19 +60,19 @@ void topo_trigger(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS],
     int iNNIn = 0;
     for (int i = 0; i < AD_NJETS; ++i, ++iNNIn) {
 #pragma HLS unroll
-        nn_inputs_unscaled[3 * iNNIn + 2] = jets[i].et;                 // TODO check order
+        nn_inputs_unscaled[3 * iNNIn + 2] = jets[i].et;
         nn_inputs_unscaled[3 * iNNIn + 3] = jets[i].eta;
         nn_inputs_unscaled[3 * iNNIn + 4] = jets[i].phi;
     }
     for (int i = 0; i < AD_NMUONS; ++i, ++iNNIn) {
 #pragma HLS unroll
-        nn_inputs_unscaled[3 * iNNIn + 2] = muons[i].pt;                // TODO check order
+        nn_inputs_unscaled[3 * iNNIn + 2] = muons[i].pt;
         nn_inputs_unscaled[3 * iNNIn + 3] = muons[i].eta_extrapolated;
         nn_inputs_unscaled[3 * iNNIn + 4] = muons[i].phi_extrapolated;
     }
     for (int i = 0; i < AD_NEGAMMAS; ++i, ++iNNIn) {
 #pragma HLS unroll
-        nn_inputs_unscaled[3 * iNNIn + 2] = egammas[i].et;              // TODO check order
+        nn_inputs_unscaled[3 * iNNIn + 2] = egammas[i].et;
         nn_inputs_unscaled[3 * iNNIn + 3] = egammas[i].eta;
         nn_inputs_unscaled[3 * iNNIn + 4] = egammas[i].phi;
     }
@@ -81,7 +80,7 @@ void topo_trigger(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS],
     scaleNNInputs(nn_inputs_unscaled, nn_inputs);
     TPT_NN_OUT_T nnout[TPT_NNNOUTPUT];
 #pragma HLS array_partition variable = nnout complete
-    VAE_HLS(nn_inputs, nnout);
+    TOPO_HLS(nn_inputs, nnout);
     nn_score = nnout[0];                                                // TODO double-check this
 
 }

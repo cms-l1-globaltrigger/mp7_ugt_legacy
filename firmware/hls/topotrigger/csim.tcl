@@ -1,7 +1,7 @@
 open_project -reset prj_topo_trigger_sim
 set_top topo_trigger
 add_files  -tb topo_trigger.cpp -cflags "-std=c++11 -I../"
-add_files NN/VAE_HLS.cpp -cflags "-std=c++0x -INN/"
+add_files NN/TOPO_HLS.cpp -cflags "-std=c++0x -INN/"
 add_files -tb topo_trigger_test.cpp -cflags "-std=c++11 -I../"
 add_files -tb test_input.txt
 

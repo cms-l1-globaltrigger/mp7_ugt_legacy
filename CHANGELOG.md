@@ -4,11 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.22.1] - 2023-03-24
+## [v1.22.1] - 2023-03-29
 ### Comment
 
 - mp7_ugt firmware release v1.22.1
-- all 72 links
+- all 72 links with 5G to 10G conversion for ZDC input
 - scouting outputs on links 28-31
 
 ### Changed

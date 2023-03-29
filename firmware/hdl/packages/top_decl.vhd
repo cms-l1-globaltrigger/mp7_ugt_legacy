@@ -35,24 +35,24 @@ package top_decl is
 -- HB 2016-11-24: N_REGION = 7 (no more needed for ugt in- and outputs - see mp7_brd_decl.vhd)
 -- HB 2022-10-04: used "demux" in formatter for algo outputs to enable "orbit header" for scouting
         constant REGION_CONF: region_conf_array_t := (
-                0 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 3, 10), -- 0 / 118
-                1 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 3, 10), -- 1 / 117*
-                2 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 3, 10), -- 2 / 116
-                3 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 4, 11), -- 3 / 115
-                4 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 4, 11), -- 4 / 114*
-                5 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 4, 11), -- 5 / 113
-                6 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 5, 12), -- 6 / 112
-                7 => (gth_10g_std_lat, u_crc32, buf, demux, buf, u_crc32, gth_10g_std_lat, 5, 12), -- 7 / 111*
-                8 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 5, 12), -- 8 / 110
-                9 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 0, 7), -- 9 / 210
-                10 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 0, 7), -- 10 / 211*
-                11 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 0, 7), -- 11 / 212
-                12 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 1, 8), -- 12 / 213
-                13 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 1, 8), -- 13 / 214*
-                14 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 1, 8), -- 14 / 215
-                15 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 2, 9), -- 15 / 216
-                16 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 2, 9), -- 16 / 217*
-                17 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 2, 9) -- 17 / 218
+            0 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 3, 10), -- 0 / 118
+            1 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 3, 10), -- 1 / 117*
+            2 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 3, 10), -- 2 / 116
+            3 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 4, 11), -- 3 / 115
+            4 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 4, 11), -- 4 / 114*
+            5 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 4, 11), -- 5 / 113
+            6 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 5, 12), -- 6 / 112
+            7 => (gth_10g_std_lat, u_crc32, buf, demux, buf, u_crc32, gth_10g_std_lat, 5, 12), -- 7 / 111*
+            8 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 5, 12), -- 8 / 110
+            9 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 0, 7), -- 9 / 210
+            10 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 0, 7), -- 10 / 211*
+            11 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 0, 7), -- 11 / 212
+            12 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 1, 8), -- 12 / 213
+            13 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 1, 8), -- 13 / 214*
+            14 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 1, 8), -- 14 / 215
+            15 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 2, 9), -- 15 / 216 --> 2x ZDC 10G outputs to patch panel
+            16 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 2, 9), -- 16 / 217* --> 4x ZDC 10G outputs to patch panel
+            17 => (gth_5g, u_crc32, buf, no_fmt, buf, u_crc32, gth_5g, 2, 9) -- 17 / 218 --> inputs from ZDC 5G optical
         );
 
 end top_decl;

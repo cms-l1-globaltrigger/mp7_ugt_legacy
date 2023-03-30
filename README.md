@@ -21,7 +21,7 @@ Following software tool versions used to create L1Menu and menu depended VHDL fi
 
 | utm | TME | VHDL Producer |
 |:-:|:-:|:-:|
-| 0.10.0 | 0.14.0 | 2.14.0 |
+| 0.11.0 | 0.15.1 | 2.14.0 |
 
 Following dependencies exist for uGT firmware:
 
@@ -125,6 +125,7 @@ python3 scripts/run_simulation_questa.py <local path>/github/herbberg/l1menus/20
 ## Build `mp7_ugt` firmware using IPBus builder (IPBB) [for 6 modules]
 
 *Remarks:*
+- FW versions greater or equal 0x1150 are used with 2loose muon shower bit (MUS2).
 - FW versions greater or equal 0x1130 are used for uGMT v6.1.0 and unpacker (with bug fix for shifted raw eta).
 - FW versions greater or equal 0x1120 and lower 0x1130 are used for uGMT v6.0.0_patch1 and unpacker (with bug: shifted raw eta).
 

@@ -3,14 +3,15 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.22.1
+-- mp7_ugt (=FRAME_VERSION): v1.22.2
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.2.1
+-- gt: v1.22.2
 -- frame: v1.4.0 (see frame.vhd)
 -- gtl: v1.18.0 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
+-- HB 2023-03-31: v1.22.2 - Used link 71 for ZDC 5G input.
 -- HB 2023-03-10: v1.22.1 - Used all 72 links.
 -- HB 2023-03-07: v1.22.0 - Used Tx links 28-31 for scouting (frame/output_mux.vhd).
 -- HB 2022-11-23: v1.21.6 - Updated doc/scales_inputs_2_ugt (added definition of muon shower bits).

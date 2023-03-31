@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.22.2] - 2023-03-31
+### Comment
+
+- mp7_ugt firmware release v1.22.2
+- all 72 links with ZDC 5G input on link 71 (no conversion to 10G)
+
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/top_decl.vhd
+- script files:
+  - scripts/mp7_patch.py
+
 ## [v1.22.1] - 2023-03-29
 ### Comment
 

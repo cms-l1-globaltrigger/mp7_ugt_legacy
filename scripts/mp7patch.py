@@ -6,35 +6,27 @@ import re
 import toolbox as tb
 
 def replace_area_constraints(filename):
-    cross_region = 7
-
     content = tb.read_file(filename)
 
-    expr_cells = re.compile(r"(add_cells_to_pblock\s+\[\s*get_pblocks\s+payload_)(\d+)(\s*]\s*\[get_cells\s+(?:-\w+\s+)?datapath/rgen\[)(\d+)(]\.region/pgen\.\*])")
-
-    content, count = expr_cells.subn(r"\g<1>{cross_region}\g<3>{cross_region}\g<5>", content)
-    if count != 1:
-        raise RuntimeError("Could not replace add_cells_to_pblock line.")
-    
-    text = "resize_pblock [get_pblocks payload] -add {SLICE_X30Y0:SLICE_X191Y449}"
-    subs = "resize_pblock [get_pblocks payload] -add {SLICE_X0Y0:SLICE_X191Y449}"
+    text = ["resize_pblock [get_pblocks payload] -add {SLICE_X30Y0:SLICE_X191Y449}", "add_cells_to_pblock [get_pblocks payload_8] [get_cells -quiet datapath/rgen[8].region/pgen.*]"]
+    subs = ["resize_pblock [get_pblocks payload] -add {SLICE_X0Y0:SLICE_X191Y449}", "add_cells_to_pblock [get_pblocks payload_7] [get_cells -quiet datapath/rgen[7].region/pgen.*]"]
     flags = 0
     
-    with open( filename, "r+" ) as file:
-        fileContents = file.read()
-        textPattern = re.compile( re.escape( text ), flags )
-        fileContents = textPattern.sub( subs, fileContents )
-        file.seek( 0 )
-        file.truncate()
-        file.write( fileContents )
+    for i in range(0,2):
+        with open( filename, "r+" ) as file:
+            fileContents = file.read()
+            textPattern = re.compile( re.escape( text[i] ), flags )
+            fileContents = textPattern.sub( subs[i], fileContents )
+            file.seek( 0 )
+            file.truncate()
+            file.write( fileContents )
         
 def replace_brd_decl(filename):
-    cross_region = 7
     content = tb.read_file(filename)
 
     expr_crossregion = re.compile(r"(constant\s+CROSS_REGION\s*:\s*integer\s*:=\s*)(\d+)(\s*;)")
 
-    content, count = expr_crossregion.subn(r"\g<1>{cross_region}\g<3>", content)
+    content, count = expr_crossregion.subn(r"\g<1>7\g<3>", content)
     if count != 1:
         raise RuntimeError("Could not replace the CROSS_REGION value.")
 

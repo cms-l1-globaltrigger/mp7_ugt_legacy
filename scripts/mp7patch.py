@@ -5,9 +5,9 @@ import re
 
 import toolbox as tb
 
-cross_region = 7
-
 def replace_area_constraints(filename):
+    cross_region = 7
+
     content = tb.read_file(filename)
 
     expr_cells = re.compile(r"(add_cells_to_pblock\s+\[\s*get_pblocks\s+payload_)(\d+)(\s*]\s*\[get_cells\s+(?:-\w+\s+)?datapath/rgen\[)(\d+)(]\.region/pgen\.\*])")
@@ -29,6 +29,7 @@ def replace_area_constraints(filename):
         file.write( fileContents )
         
 def replace_brd_decl(filename):
+    cross_region = 7
     content = tb.read_file(filename)
 
     expr_crossregion = re.compile(r"(constant\s+CROSS_REGION\s*:\s*integer\s*:=\s*)(\d+)(\s*;)")

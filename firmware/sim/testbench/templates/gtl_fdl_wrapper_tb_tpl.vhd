@@ -239,6 +239,8 @@ begin
 
         write(write_l, string'("  ],"));
         writeline(error_file, write_l);
+        write(write_l, string'("  ""algo_error_count"": ["& str(algo_error_cnt) &"],"));
+        writeline(error_file, write_l);
         write(write_l, string'("  ""counts"": ["));
         writeline(error_file, write_l);
         report "***************************************************************************************************************************************************";

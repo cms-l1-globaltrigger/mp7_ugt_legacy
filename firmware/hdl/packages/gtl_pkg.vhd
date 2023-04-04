@@ -2,6 +2,10 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2023-03-06: added hadronic shower trigger bit MUS2.
+-- HB 2023-03-01: updated constants for ZDC.
+-- HB 2022-10-17: added constant NR_INPUT_LANES (for reduced NR_LANES in frame.vhd).
+-- HB 2022-10-10: added ZDC definitions. Removed constant SCOUTING.
 -- HB 2022-09-23: added constants ESUMS_COND_STAGES, MB_COND_STAGES and TC_COND_STAGES.
 -- HB 2022-09-02: cleaned up.
 -- HB 2021-10-19: inserted jet DISP (displaced) bit 27 (and all dependencies on this bit).
@@ -62,6 +66,11 @@ use work.gt_mp7_core_pkg.all;
 
 package gtl_pkg is
 
+-- Definition of input lanes
+-- NR_LANES = NR_REGIONS * 4 => 72
+constant NR_INPUT_LANES : natural := 24; -- max. input links from optical patch panel
+constant LINK_FRAMES : natural := 6;
+
 -- Fixed pipeline structure
 constant BX_PIPELINE_STAGES: natural := 5; -- +/- 2bx pipeline
 constant ESUMS_COND_STAGES: natural := 2; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
@@ -70,11 +79,12 @@ constant TC_COND_STAGES: natural := 2; -- pipeline stages for "Towercount condit
 constant EXT_COND_STAGES: natural := 2; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
 constant CENTRALITY_STAGES: natural := 2; -- pipeline stages for "Centrality" to get same pipeline to algos as conditions
 constant MUS_STAGES: natural := 2; -- pipeline stages for "Hadronic shower triggers (muon)" to get same pipeline to algos as conditions
+constant ADT_SIM_DEL: natural := 2; -- delay of ADT for simulation 
+constant ZDC_STAGES: natural := 2; -- pipeline stages for "ZDC condition" to get same pipeline to algos as conditions
 constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
 constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
 
 -- Selector for options
-constant SCOUTING: boolean := false; -- selector for scouting
 constant SPYMEM: boolean := true; -- selector for input spymem
 
 -- Definition of general types
@@ -151,11 +161,15 @@ constant MUON_IP_BITS : natural := MUON_IP_HIGH-MUON_IP_LOW+1;
 -- MUSOOT0 => muon obj 4, bit 61
 -- MUSOOT1 => muon obj 6, bit 61
 constant MUS_BIT : natural := 61;
-constant NR_MUS_BITS: natural := 4;
+constant NR_MUS_BITS: natural := 5;
 constant MUON_OBJ_MUS0 : natural := 0;
 constant MUON_OBJ_MUS1 : natural := 2;
 constant MUON_OBJ_MUSOOT0 : natural := 4;
 constant MUON_OBJ_MUSOOT1 : natural := 6;
+-- HB 2023-03-06: added hadronic shower trigger bit MUS2 
+-- MUS2 bit
+-- MUS2 => muon obj 3, bit 61
+constant MUON_OBJ_MUS2 : natural := 3;
 type mus_bit_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic;
 
 type muon_objects_array is array (natural range <>) of std_logic_vector(MAX_MUON_BITS-1 downto 0);
@@ -238,7 +252,6 @@ constant NR_ETM_OBJECTS : positive := 1;
 constant NR_HTM_OBJECTS : positive := 1;
 constant NR_ETMHF_OBJECTS : positive := 1;
 constant NR_HTMHF_OBJECTS : positive := 1;
-constant NR_TOWERCOUNT_OBJECTS : positive := 1;
 
 constant ETT_ET_LOW : natural := 0;
 constant ETT_ET_HIGH : natural := 11;
@@ -330,6 +343,7 @@ type bx_cent_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic;
 
 -- *******************************************************************************************************
 -- HB 2016-09-16: inserted TOWERCOUNT
+constant NR_TOWERCOUNT_OBJECTS : positive := 1;
 constant TOWERCOUNT_IN_HTT_LOW : natural := 12;
 constant TOWERCOUNT_IN_HTT_HIGH : natural := 24;
 constant TOWERCOUNT_COUNT_LOW : natural := 0;
@@ -369,6 +383,21 @@ constant MBT1HFP_COUNT_HIGH : natural := 3;
 
 constant MBT1HFM_COUNT_LOW : natural := 0;
 constant MBT1HFM_COUNT_HIGH : natural := 3;
+
+-- *******************************************************************************************************
+-- HB 2022-10-10: inserted ZDC
+constant NR_ZDC_OBJECTS : positive := 6;
+constant EN_MINUS_BIT_LOW : natural := 16; -- EN_MINUS (ZDC-) on frame 0 of ZDC link
+constant EN_MINUS_BIT_HIGH : natural := 25;
+constant EN_PLUS_BIT_LOW : natural := 0; -- EN_PLUS (ZDC+) on frame 1 of ZDC link
+constant EN_PLUS_BIT_HIGH : natural := 9;
+constant ZDC_BIT_LOW : natural := 0;
+constant ZDC_BIT_HIGH : natural := 9;
+constant MAX_ZDC_BITS : natural := 32;
+constant ZDC_THR_BITS : natural := 16;
+type zdc_5g_array is array (0 to LINK_FRAMES-1) of std_logic_vector(SW_DATA_WIDTH-1 downto 0);
+type zdc_array is array (0 to NR_ZDC_OBJECTS-1) of std_logic_vector(ZDC_BIT_HIGH-ZDC_BIT_LOW downto 0);
+type bx_zdc_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(ZDC_BIT_HIGH-ZDC_BIT_LOW downto 0);
 
 -- *******************************************************************************************************
 -- max bits for comparators.vhd
@@ -415,6 +444,7 @@ type gtl_data_record is record
     towercount : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
     centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
+    zdc : zdc_array;
 end record gtl_data_record;
 
 type bx_data_record is record
@@ -447,7 +477,9 @@ type bx_data_record is record
     cent6 : bx_cent_array;
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
-    mus0, mus1, musoot0, musoot1 : mus_bit_array;
+    mus0, mus1, mus2, musoot0, musoot1 : mus_bit_array;
+    zdcp : bx_zdc_array;
+    zdcm : bx_zdc_array;
 end record bx_data_record;
 
 -- ==== Correlations - begin ============================================================

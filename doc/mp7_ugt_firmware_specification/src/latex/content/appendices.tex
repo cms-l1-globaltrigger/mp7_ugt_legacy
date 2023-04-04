@@ -41,9 +41,25 @@ vivado is running (see \href{\gitbranch/README.md}{\texttt{README}}):\\
 \greybox{<path to synth dir> <module number>}
 \end{itemize}
 
+\clearpage
+
 \subsection{Configuration of GTHs}\label{sec:app:app_a}
 
 The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
+
+\subsubsection{ZDC 5G to 10G conversion scheme}\label{sec:app:zdc_5g_10g_conv}
+
+ZDC data are provided on a 5 GHz link, therefore a conversion from 5 GHz to 10 GHz is implemented in \ugt firmware.
+Figure~\ref{fig:app:zdc_5G_10G_conv_scheme} shows ZDC 5G link to 10G link conversion scheme on a MP7 module in one slot of \ugt system.\\
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/zdc_5G_10G_conv_scheme}
+\caption{ZDC 5G link to 10G link conversion scheme}
+\label{fig:app:zdc_5G_10G_conv_scheme}
+\end{figure}
+
+\clearpage
 
 \subsubsection{GTH input connections}\label{sec:app:gth_i_conn}
 
@@ -71,7 +87,7 @@ RX1/8  & rx3/7  &     & X1Y28 & 10G & 0x0E & 8  & 7  & jet\\\hline
 RX1/9  & rx3/8  & 116 & X1Y27 & 10G & 0x10 & 9  & 8  & tau\\\hline
 RX1/10 & rx3/9  &     & X1Y26 & 10G & 0x12 & 10 & 9  & tau\\\hline
 RX1/11 & rx3/10 &     & X1Y25 & 10G & 0x14 & 11 & 10 & esums\\\hline
-RX1/12 & rx3/11 &     & X1Y24 & 10G & 0x16 & 12 & 11 & free\\\hline
+RX1/12 & rx3/11 &     & X1Y24 & 10G & 0x16 & 12 & 11 & zdc\\\hline
 RX1/13 & rx4/0  & 115 & X1Y23 & 10G & 0x18 & 13 & 12 & external conditions\\\hline
 RX1/14 & rx4/1  &     & X1Y22 & 10G & 0x1A & 14 & 13 & external conditions\\\hline
 RX1/15 & rx4/2  &     & X1Y21 & 10G & 0x1C & 15 & 14 & external conditions\\\hline
@@ -96,43 +112,43 @@ RX1/33 & rx5/8  & 110 & X1Y03 &  x  & 0x40 & nc & 32 & -\\\hline
 RX1/34 & rx5/9  &     & X1Y02 &  x  & 0x42 & nc & 33 & -\\\hline
 RX1/35 & rx5/10 &     & X1Y01 &  x  & 0x44 & nc & 34 & -\\\hline
 RX1/36 & rx5/11 &     & X1Y00 &  x  & 0x46 & nc & 35 & -\\\hline
-RX2/26 & rx2/1  &     & X0Y00 &  x  & 0x48 & nc & 36 & -\\\hline
-RX2/25 & rx2/0  &     & X0Y01 &  x  & 0x4A & nc & 37 & -\\\hline
-RX2/28 & rx2/3  &     & X0Y02 &  x  & 0x4C & nc & 38 & -\\\hline
-RX2/27 & rx2/2  & 210 & X0Y03 &  x  & 0x4E & nc & 39 & -\\\hline
-RX2/30 & rx2/5  &     & X0Y04 &  x  & 0x50 & nc & 40 & -\\\hline
-RX2/29 & rx2/4  &     & X0Y05 &  x  & 0x52 & nc & 41 & -\\\hline
-RX2/31 & rx2/7  &     & X0Y06 &  x  & 0x54 & nc & 42 & -\\\hline
-RX2/32 & rx2/6  & 211 & X0Y07 &  x  & 0x56 & nc & 43 & -\\\hline
-RX2/33 & rx2/8  &     & X0Y08 &  x  & 0x58 & nc & 44 & -\\\hline
-RX2/35 & rx2/10 &     & X0Y09 &  x  & 0x5A & nc & 45 & -\\\hline
-RX2/34 & rx2/9  &     & X0Y10 &  x  & 0x5C & nc & 46 & -\\\hline
-RX2/36 & rx2/11 & 212 & X0Y11 &  x  & 0x5E & nc & 47 & -\\\hline
-RX2/14 & rx1/1  &     & X0Y12 &  x  & 0x60 & nc & 48 & -\\\hline
-RX2/13 & rx1/0  &     & X0Y13 &  x  & 0x62 & nc & 49 & -\\\hline
-RX2/16 & rx1/3  &     & X0Y14 &  x  & 0x64 & nc & 50 & -\\\hline
-RX2/15 & rx1/2  & 213 & X0Y15 &  x  & 0x66 & nc & 51 & -\\\hline
-RX2/18 & rx1/5  &     & X0Y16 &  x  & 0x68 & nc & 52 & -\\\hline
-RX2/17 & rx1/4  &     & X0Y17 &  x  & 0x6A & nc & 53 & -\\\hline
-RX2/20 & rx1/7  &     & X0Y18 &  x  & 0x6C & nc & 54 & -\\\hline
-RX2/19 & rx1/6  & 214 & X0Y19 &  x  & 0x6E & nc & 55 & -\\\hline
-RX2/22 & rx1/9  &     & X0Y20 &  x  & 0x70 & nc & 56 & -\\\hline
-RX2/21 & rx1/8  &     & X0Y21 &  x  & 0x72 & nc & 57 & -\\\hline
-RX2/23 & rx1/10 &     & X0Y22 &  x  & 0x74 & nc & 58 & -\\\hline
-RX2/24 & rx1/11 & 215 & X0Y23 &  x  & 0x76 & nc & 59 & -\\\hline
-RX2/2  & rx0/1  &     & X0Y24 & 10G & 0x78 & nc & 60 & -\\\hline
-RX2/1  & rx0/0  &     & X0Y25 & 10G & 0x7A & nc & 61 & -\\\hline
-RX2/4  & rx0/3  &     & X0Y26 & 10G & 0x7C & nc & 62 & -\\\hline
-RX2/3  & rx0/2  & 216 & X0Y27 & 10G & 0x7E & nc & 63 & -\\\hline
-RX2/6  & rx0/5  &     & X0Y28 & 10G & 0x80 & nc & 64 & -\\\hline
-RX2/5  & rx0/4  &     & X0Y29 & 10G & 0x82 & nc & 65 & -\\\hline
-RX2/8  & rx0/7  &     & X0Y30 & 10G & 0x84 & nc & 66 & -\\\hline
-RX2/7  & rx0/6  & 217 & X0Y31 & 10G & 0x86 & nc & 67 & -\\\hline
-RX2/10 & rx0/9  &     & X0Y32 &  5G & 0x88 & nc & 68 & -\\\hline
-RX2/9  & rx0/8  &     & X0Y33 &  5G & 0x8A & nc & 69 & -\\\hline
-RX2/11 & rx0/10 &     & X0Y34 &  5G & 0x8C & nc & 70 & -\\\hline
-RX2/12 & rx0/11 & 218 & X0Y35 &  5G & 0x8E & nc & 71 & -\\\hline
-\end{longtable}
+RX2/26 & rx2/1  & 210 & X0Y00 &  x  & 0x48 & nc & 36 & -\\\hline        
+RX2/25 & rx2/0  &     & X0Y01 &  x  & 0x4A & nc & 37 & -\\\hline        
+RX2/28 & rx2/3  &     & X0Y02 &  x  & 0x4C & nc & 38 & -\\\hline        
+RX2/27 & rx2/2  &     & X0Y03 &  x  & 0x4E & nc & 39 & -\\\hline   
+RX2/30 & rx2/5  & 211 & X0Y04 &  x  & 0x50 & nc & 40 & -\\\hline   
+RX2/29 & rx2/4  &     & X0Y05 &  x  & 0x52 & nc & 41 & -\\\hline   
+RX2/31 & rx2/7  &     & X0Y06 &  x  & 0x54 & nc & 42 & -\\\hline   
+RX2/32 & rx2/6  &     & X0Y07 &  x  & 0x56 & nc & 43 & -\\\hline   
+RX2/33 & rx2/8  & 212 & X0Y08 &  x  & 0x58 & nc & 44 & -\\\hline   
+RX2/35 & rx2/10 &     & X0Y09 &  x  & 0x5A & nc & 45 & -\\\hline   
+RX2/34 & rx2/9  &     & X0Y10 &  x  & 0x5C & nc & 46 & -\\\hline   
+RX2/36 & rx2/11 &     & X0Y11 &  x  & 0x5E & nc & 47 & -\\\hline   
+RX2/14 & rx1/1  & 213 & X0Y12 &  x  & 0x60 & nc & 48 & -\\\hline   
+RX2/13 & rx1/0  &     & X0Y13 &  x  & 0x62 & nc & 49 & -\\\hline   
+RX2/16 & rx1/3  &     & X0Y14 &  x  & 0x64 & nc & 50 & -\\\hline   
+RX2/15 & rx1/2  &     & X0Y15 &  x  & 0x66 & nc & 51 & -\\\hline   
+RX2/18 & rx1/5  & 214 & X0Y16 &  x  & 0x68 & nc & 52 & -\\\hline   
+RX2/17 & rx1/4  &     & X0Y17 &  x  & 0x6A & nc & 53 & -\\\hline   
+RX2/20 & rx1/7  &     & X0Y18 &  x  & 0x6C & nc & 54 & -\\\hline   
+RX2/19 & rx1/6  &     & X0Y19 &  x  & 0x6E & nc & 55 & -\\\hline   
+RX2/22 & rx1/9  & 215 & X0Y20 &  x  & 0x70 & nc & 56 & -\\\hline   
+RX2/21 & rx1/8  &     & X0Y21 &  x  & 0x72 & nc & 57 & -\\\hline   
+RX2/23 & rx1/10 &     & X0Y22 &  x  & 0x74 & nc & 58 & -\\\hline   
+RX2/24 & rx1/11 &     & X0Y23 &  x  & 0x76 & nc & 59 & -\\\hline   
+RX2/2  & rx0/1  & 216 & X0Y24 &  x  & 0x78 & nc & 60 & -\\\hline   
+RX2/1  & rx0/0  &     & X0Y25 &  x  & 0x7A & nc & 61 & -\\\hline   
+RX2/4  & rx0/3  &     & X0Y26 &  x  & 0x7C & nc & 62 & -\\\hline   
+RX2/3  & rx0/2  &     & X0Y27 &  x  & 0x7E & nc & 63 & -\\\hline   
+RX2/6  & rx0/5  & 217 & X0Y28 &  x  & 0x80 & nc & 64 & -\\\hline   
+RX2/5  & rx0/4  &     & X0Y29 &  x  & 0x82 & nc & 65 & -\\\hline   
+RX2/8  & rx0/7  &     & X0Y30 &  x  & 0x84 & nc & 66 & -\\\hline   
+RX2/7  & rx0/6  &     & X0Y31 &  x  & 0x86 & nc & 67 & -\\\hline   
+RX2/10 & rx0/9  & 218 & X0Y32 &  x  & 0x88 & nc & 68 & -\\\hline   
+RX2/9  & rx0/8  &     & X0Y33 &  x  & 0x8A & nc & 69 & -\\\hline   
+RX2/11 & rx0/10 &     & X0Y34 &  x  & 0x8C & nc & 70 & -\\\hline   
+RX2/12 & rx0/11 &     & X0Y35 &  x  & 0x8E & nc & 71 & -\\\hline   
+\end{longtable}                  
 
 \clearpage
 
@@ -184,42 +200,42 @@ TX1/33 & tx5/8  & 110 & X1Y03 &  x  & 0x41 & nc & 32 & -\\\hline
 TX1/34 & tx5/9  &     & X1Y02 &  x  & 0x43 & nc & 33 & -\\\hline
 TX1/35 & tx5/10 &     & X1Y01 &  x  & 0x45 & nc & 34 & -\\\hline
 TX1/36 & tx5/11 &     & X1Y00 &  x  & 0x47 & nc & 35 & -\\\hline
-TX2/26 & tx2/1  &     & X0Y00 &  x  & 0x49 & nc & 36 & -\\\hline
+TX2/26 & tx2/1  & 210 & X0Y00 &  x  & 0x49 & nc & 36 & -\\\hline
 TX2/25 & tx2/0  &     & X0Y01 &  x  & 0x4b & nc & 37 & -\\\hline
 TX2/28 & tx2/3  &     & X0Y02 &  x  & 0x4d & nc & 38 & -\\\hline
-TX2/27 & tx2/2  & 210 & X0Y03 &  x  & 0x4f & nc & 39 & -\\\hline
-TX2/30 & tx2/5  &     & X0Y04 &  x  & 0x51 & nc & 40 & -\\\hline
+TX2/27 & tx2/2  &     & X0Y03 &  x  & 0x4f & nc & 39 & -\\\hline
+TX2/30 & tx2/5  & 211 & X0Y04 &  x  & 0x51 & nc & 40 & -\\\hline
 TX2/29 & tx2/4  &     & X0Y05 &  x  & 0x53 & nc & 41 & -\\\hline
 TX2/32 & tx2/7  &     & X0Y06 &  x  & 0x55 & nc & 42 & -\\\hline
-TX2/31 & tx2/6  & 211 & X0Y07 &  x  & 0x57 & nc & 43 & -\\\hline
-TX2/34 & tx2/8  &     & X0Y08 &  x  & 0x59 & nc & 44 & -\\\hline
+TX2/31 & tx2/6  &     & X0Y07 &  x  & 0x57 & nc & 43 & -\\\hline
+TX2/34 & tx2/8  & 212 & X0Y08 &  x  & 0x59 & nc & 44 & -\\\hline
 TX2/33 & tx2/10 &     & X0Y09 &  x  & 0x5b & nc & 45 & -\\\hline
 TX2/35 & tx2/9  &     & X0Y10 &  x  & 0x5d & nc & 46 & -\\\hline
-TX2/36 & tx2/11 & 212 & X0Y11 &  x  & 0x5f & nc & 47 & -\\\hline
-TX2/14 & tx1/1  &     & X0Y12 &  x  & 0x61 & nc & 48 & -\\\hline
+TX2/36 & tx2/11 &     & X0Y11 &  x  & 0x5f & nc & 47 & -\\\hline
+TX2/14 & tx1/1  & 213 & X0Y12 &  x  & 0x61 & nc & 48 & -\\\hline
 TX2/13 & tx1/0  &     & X0Y13 &  x  & 0x63 & nc & 49 & -\\\hline
 TX2/16 & tx1/3  &     & X0Y14 &  x  & 0x65 & nc & 50 & -\\\hline
-TX2/15 & tx1/2  & 213 & X0Y15 &  x  & 0x67 & nc & 51 & -\\\hline
-TX2/18 & tx1/5  &     & X0Y16 &  x  & 0x69 & nc & 52 & -\\\hline
+TX2/15 & tx1/2  &     & X0Y15 &  x  & 0x67 & nc & 51 & -\\\hline
+TX2/18 & tx1/5  & 214 & X0Y16 &  x  & 0x69 & nc & 52 & -\\\hline
 TX2/17 & tx1/4  &     & X0Y17 &  x  & 0x6b & nc & 53 & -\\\hline
 TX2/20 & tx1/7  &     & X0Y18 &  x  & 0x6d & nc & 54 & -\\\hline
-TX2/19 & tx1/6  & 214 & X0Y19 &  x  & 0x6f & nc & 55 & -\\\hline
-TX2/22 & tx1/9  &     & X0Y20 &  x  & 0x71 & nc & 56 & -\\\hline
+TX2/19 & tx1/6  &     & X0Y19 &  x  & 0x6f & nc & 55 & -\\\hline
+TX2/22 & tx1/9  & 215 & X0Y20 &  x  & 0x71 & nc & 56 & -\\\hline
 TX2/21 & tx1/8  &     & X0Y21 &  x  & 0x73 & nc & 57 & -\\\hline
 TX2/23 & tx1/10 &     & X0Y22 &  x  & 0x75 & nc & 58 & -\\\hline
-TX2/24 & tx1/11 & 215 & X0Y23 &  x  & 0x77 & nc & 59 & -\\\hline
-TX2/2  & tx0/1  &     & X0Y24 & 10G & 0x79 & nc & 60 & -\\\hline
-TX2/1  & tx0/0  &     & X0Y25 & 10G & 0x7b & nc & 61 & -\\\hline
-TX2/4  & tx0/3  &     & X0Y26 & 10G & 0x7d & nc & 62 & -\\\hline
-TX2/3  & tx0/2  & 216 & X0Y27 & 10G & 0x7f & nc & 63 & -\\\hline
-TX2/6  & tx0/5  &     & X0Y28 & 10G & 0x81 & nc & 64 & -\\\hline
-TX2/5  & tx0/4  &     & X0Y29 & 10G & 0x83 & nc & 65 & -\\\hline
-TX2/8  & tx0/7  &     & X0Y30 & 10G & 0x85 & nc & 66 & -\\\hline
-TX2/7  & tx0/6  & 217 & X0Y31 & 10G & 0x87 & nc & 67 & -\\\hline
-TX2/10 & tx0/9  &     & X0Y32 &  5G & 0x89 & nc & 68 & -\\\hline
-TX2/9  & tx0/8  &     & X0Y33 &  5G & 0x8b & nc & 69 & -\\\hline
-TX2/11 & tx0/10 &     & X0Y34 &  5G & 0x8d & nc & 70 & -\\\hline
-TX2/12 & tx0/11 & 218 & X0Y35 &  5G & 0x8f & nc & 71 & -\\\hline
+TX2/24 & tx1/11 &     & X0Y23 &  x  & 0x77 & nc & 59 & -\\\hline
+TX2/2  & tx0/1  & 216 & X0Y24 &  x  & 0x79 & nc & 60 & -\\\hline
+TX2/1  & tx0/0  &     & X0Y25 &  x  & 0x7b & nc & 61 & -\\\hline
+TX2/4  & tx0/3  &     & X0Y26 &  x  & 0x7d & nc & 62 & -\\\hline
+TX2/3  & tx0/2  &     & X0Y27 &  x  & 0x7f & nc & 63 & -\\\hline
+TX2/6  & tx0/5  & 217 & X0Y28 &  x  & 0x81 & nc & 64 & -\\\hline
+TX2/5  & tx0/4  &     & X0Y29 &  x  & 0x83 & nc & 65 & -\\\hline
+TX2/8  & tx0/7  &     & X0Y30 &  x  & 0x85 & nc & 66 & -\\\hline
+TX2/7  & tx0/6  &     & X0Y31 &  x  & 0x87 & nc & 67 & -\\\hline
+TX2/10 & tx0/9  & 218 & X0Y32 &  x  & 0x89 & nc & 68 & -\\\hline
+TX2/9  & tx0/8  &     & X0Y33 &  x  & 0x8b & nc & 69 & -\\\hline
+TX2/11 & tx0/10 &     & X0Y34 &  x  & 0x8d & nc & 70 & -\\\hline
+TX2/12 & tx0/11 &     & X0Y35 &  x  & 0x8f & nc & 71 & -\\\hline
 \end{longtable}
 
 \clearpage
@@ -247,7 +263,7 @@ JET6..JET11 & 7  & 117 & X1Y28 & x &   \\\hline
 TAU0..TAU5  & 8  & 116 & X1Y27 & x &   \\\hline
 TAU6..TAU11 & 9  & 116 & X1Y26 & x &   \\\hline
 ESUMS  & 10  & 116 & X1Y25 & x &   \\\hline
-free & 11  & 116 & X1Y24 & x &   \\\hline
+ZDC & 11  & 116 & X1Y24 & x &   \\\hline
 EXT\_COND[0:63] & 12  & 115 & X1Y23 & x &   \\\hline
 EXT\_COND[64:127] & 13  & 115 & X1Y22 & x &   \\\hline
 EXT\_COND[128:191] & 14  & 115 & X1Y21 & x &   \\\hline
@@ -276,12 +292,24 @@ Bunchcounters, ... & 25  & 112 & X1Y10 &   & x \\\hline
 
 \subsection{Configuration of optical input links}\label{sec:app:app_b}
 
+% Figure~\ref{fig:app:ugt_inputs} shows the configuration of optical links to Global Trigger.\\
+% Links 0..3 contains muon data from GMT, links 4..10 data from Calo-Layer2, link 11 data from ZDC and links 12..15 external conditions
+% from AMC502 boards.
+% 
+% \begin{figure}[htb]
+% \centering
+% \includegraphics[width=15cm]{figures/ugt_inputs}
+% \caption{Optical link inputs to Global Trigger}
+% \label{fig:app:ugt_inputs}
+% \end{figure}
+% 
+
 Tables ~\ref{table:app:sum_opt_links} and ~\ref{table:app:sum_opt_links2} show the configuration of optical links to Global Trigger.\\
 Links 0..3 contains muon data from GMT, links 4..10 data from Calo-Layer2, link 11 data from ZDC and links 12..15 external conditions
 from AMC502 boards.
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 1)}
+\caption{\bf Overview optical links (part 1)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
@@ -303,30 +331,30 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \end{table}
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 2)}
+\caption{\bf Overview optical links (part 2)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
 \begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
  & \multicolumn{6}{ c| }{link} \\\hline
 frame & 10 & 11 & 12 & 13 & 14 &\makebox[1.5cm][c]{15} \\\hline\hline
-0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
- & ETTEM, & & [31:0] & [95:64] & [159:128] & [223:192]\\
+0 & ET, & ZDC & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & ETTEM, & [31:0] & [31:0] & [95:64] & [159:128] & [223:192]\\
  & MBT0HFP & & & & &\\
-1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
- & TOWERCOUNT, & & [63:32] & [127:96] & [191:160] & [255:224]\\
+1 & HT, & ZDC & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & TOWERCOUNT, & [63:32] & [63:32] & [127:96] & [191:160] & [255:224]\\
  & MBT0HFM & & & & &\\
-2 & ET$_{miss}$, & free & free & free & free & free\\
- & ASYMET,& & & & &\\
+2 & ET$_{miss}$, & ZDC & free & free & free & free\\
+ & ASYMET,& [95:64] & & & &\\
  & MBT1HFP  & & & & &\\
-3 & HT$_{miss}$, & free & free & free & free & free\\
- & ASYMHT,& & & & &\\
+3 & HT$_{miss}$, & ZDC & free & free & free & free\\
+ & ASYMHT,& [127:96] & & & &\\
  & MBT1HFM & & & & &\\
-4 & ET$_{miss}^{HF}$ & free & free & free & free & free\\
- & ASYMETHF, & & & & &\\
+4 & ET$_{miss}^{HF}$ & ZDC & free & free & free & free\\
+ & ASYMETHF, & [159:128] & & & &\\
  & CENT[3:0] & & & & &\\
-5 & HT$_{miss}^{HF}$ & free & free & free & free & free\\
- & ASYMHTHF, & & & & &\\
+5 & HT$_{miss}^{HF}$ & ZDC & free & free & free & free\\
+ & ASYMHTHF, & [191:160] & & & &\\
  & CENT[7:4] & & & & &\\\hline
 \end{tabular}
 }
@@ -373,10 +401,10 @@ demux & 2b  & TAU[0..5]  & 3/a  & 1..2 \\\hline
 demux & 2a  & TAU[6..11] & 3/b  & 1..2 \\\hline
 demux & 1b  & Esums      & 3/c  & 1..2 \\\hline
 demux & 1a  & free       & 3/d  & 1..2 \\\hline
-ext\_cond &     & ExtCond[0..63]    & 4/a  & 1..2 \\\hline
-ext\_cond &     & ExtCond[64..127]  & 4/b  & 1..2 \\\hline
-ext\_cond &     & ExtCond[128..191] & 4/c  & 1..2 \\\hline
-ext\_cond &     & ExtCond[192..255] & 4/d  & 1..2 \\\hline
+ext\_cond & Mod0 EXT0 & ExtCond[0..63]    & 4/a  & 1..2 \\\hline
+ext\_cond & Mod0 EXT1 & ExtCond[64..127]  & 4/b  & 1..2 \\\hline
+ext\_cond & Mod0 EXT2 & ExtCond[128..191] & 4/c  & 1..2 \\\hline
+ext\_cond & Mod0 EXT3 & ExtCond[192..255] & 4/d  & 1..2 \\\hline
 - & - & free & 5/a  & 1..2 \\\hline
 - & - & free & 5/b  & 1..2 \\\hline
 - & - & free & 5/c  & 1..2 \\\hline
@@ -398,10 +426,10 @@ demux & 10b & TAU[0..5]  & 9/a  & 3..4 \\\hline
 demux & 10a & TAU[6..11] & 9/b  & 3..4 \\\hline
 demux & 9b  & Esums      & 9/c  & 3..4 \\\hline
 demux & 9a  & free       & 9/d  & 3..4 \\\hline
-ext\_cond &     & ExtCond[0..63]    & 10/a & 3..4 \\\hline
-ext\_cond &     & ExtCond[64..127]  & 10/b & 3..4 \\\hline
-ext\_cond &     & ExtCond[128..191] & 10/c & 3..4 \\\hline
-ext\_cond &     & ExtCond[192..255] & 10/d & 3..4 \\\hline
+ext\_cond & Mod1 EXT0 & ExtCond[0..63]    & 10/a & 3..4 \\\hline
+ext\_cond & Mod1 EXT1 & ExtCond[64..127]  & 10/b & 3..4 \\\hline
+ext\_cond & Mod1 EXT2 & ExtCond[128..191] & 10/c & 3..4 \\\hline
+ext\_cond & Mod1 EXT3 & ExtCond[192..255] & 10/d & 3..4 \\\hline
 - & - & free & 11/a & 3..4 \\\hline
 - & - & free & 11/b & 3..4 \\\hline
 - & - & free & 11/c & 3..4 \\\hline
@@ -423,10 +451,10 @@ demux & 18b & TAU[0..5]  & 15/a & 5..6 \\\hline
 demux & 18a & TAU[6..11] & 15/b & 5..6 \\\hline
 demux & 17b & Esums      & 15/c & 5..6 \\\hline
 demux & 17a & free       & 15/d & 5..6 \\\hline
-ext\_cond &     & ExtCond[0..63]    & 16/a & 5..6 \\\hline
-ext\_cond &     & ExtCond[64..127]  & 16/b & 5..6 \\\hline
-ext\_cond &     & ExtCond[128..191] & 16/c & 5..6 \\\hline
-ext\_cond &     & ExtCond[192..255] & 16/d & 5..6 \\\hline
+ext\_cond & Mod2 EXT0 & ExtCond[0..63]    & 16/a & 5..6 \\\hline
+ext\_cond & Mod2 EXT1 & ExtCond[64..127]  & 16/b & 5..6 \\\hline
+ext\_cond & Mod2 EXT2 & ExtCond[128..191] & 16/c & 5..6 \\\hline
+ext\_cond & Mod2 EXT3 & ExtCond[192..255] & 16/d & 5..6 \\\hline
 - & - & free & 17/a & 5..6 \\\hline
 - & - & free & 17/b & 5..6 \\\hline
 - & - & free & 17/c & 5..6 \\\hline
@@ -459,10 +487,10 @@ demux & 14b & TAU[0..5]  & 3/a  & 5..6 \\\hline
 demux & 14a & TAU[6..11] & 3/b  & 5..6 \\\hline
 demux & 13b & Esums      & 3/c  & 5..6 \\\hline
 demux & 13a & free       & 3/d  & 5..6 \\\hline
-ext\_cond &     & ExtCond[0..63]    & 4/a  & 5..6 \\\hline
-ext\_cond &     & ExtCond[64..127]  & 4/b  & 5..6 \\\hline
-ext\_cond &     & ExtCond[128..191] & 4/c  & 5..6 \\\hline
-ext\_cond &     & ExtCond[192..255] & 4/d  & 5..6 \\\hline
+ext\_cond & Mod3 EXT0 & ExtCond[0..63]    & 4/a  & 5..6 \\\hline
+ext\_cond & Mod3 EXT1 & ExtCond[64..127]  & 4/b  & 5..6 \\\hline
+ext\_cond & Mod3 EXT2 & ExtCond[128..191] & 4/c  & 5..6 \\\hline
+ext\_cond & Mod3 EXT3 & ExtCond[192..255] & 4/d  & 5..6 \\\hline
 - & - & free & 5/a  & 5..6 \\\hline
 - & - & free & 5/b  & 5..6 \\\hline
 - & - & free & 5/c  & 5..6 \\\hline
@@ -484,10 +512,10 @@ demux & 30  & TAU[0..5]  & 9/a  & 1..2 \\\hline
 demux & 29  & TAU[6..11] & 9/b  & 1..2 \\\hline
 demux & 32  & Esums      & 9/c  & 1..2 \\\hline
 demux & 31  & free       & 9/d  & 1..2 \\\hline
-ext\_cond &     & ExtCond[0..63]    & 10/a & 1..2 \\\hline
-ext\_cond &     & ExtCond[64..127]  & 10/b & 1..2 \\\hline
-ext\_cond &     & ExtCond[128..191] & 10/c & 1..2 \\\hline
-ext\_cond &     & ExtCond[192..255] & 10/d & 1..2 \\\hline
+ext\_cond & Mod4 EXT0 & ExtCond[0..63]    & 10/a & 1..2 \\\hline
+ext\_cond & Mod4 EXT1 & ExtCond[64..127]  & 10/b & 1..2 \\\hline
+ext\_cond & Mod4 EXT2 & ExtCond[128..191] & 10/c & 1..2 \\\hline
+ext\_cond & Mod4 EXT3 & ExtCond[192..255] & 10/d & 1..2 \\\hline
 - & - & free & 11/a & 1..2 \\\hline
 - & - & free & 11/b & 1..2 \\\hline
 - & - & free & 11/c & 1..2 \\\hline
@@ -509,10 +537,10 @@ demux & 14  & TAU[0..5]  & 15/a & 3..4 \\\hline
 demux & 13  & TAU[6..11] & 15/b & 3..4 \\\hline
 demux & 16  & Esums      & 15/c & 3..4 \\\hline
 demux & 15  & free       & 15/d & 3..4 \\\hline
-ext\_cond &     & ExtCond[0..63]    & 16/a & 3..4 \\\hline
-ext\_cond &     & ExtCond[64..127]  & 16/b & 3..4 \\\hline
-ext\_cond &     & ExtCond[128..191] & 16/c & 3..4 \\\hline
-ext\_cond &     & ExtCond[192..255] & 16/d & 3..4 \\\hline
+ext\_cond & Mod5 EXT0 & ExtCond[0..63]    & 16/a & 3..4 \\\hline
+ext\_cond & Mod5 EXT1 & ExtCond[64..127]  & 16/b & 3..4 \\\hline
+ext\_cond & Mod5 EXT2 & ExtCond[128..191] & 16/c & 3..4 \\\hline
+ext\_cond & Mod5 EXT3 & ExtCond[192..255] & 16/d & 3..4 \\\hline
 - & - & free & 17/a & 3..4 \\\hline
 - & - & free & 17/b & 3..4 \\\hline
 - & - & free & 17/c & 3..4 \\\hline
@@ -533,3 +561,4 @@ Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panel 
 \end{figure}
 
 \clearpage
+

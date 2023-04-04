@@ -4,6 +4,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.22.1] - 2023-03-24
+### Comment
+
+- mp7_ugt firmware release v1.22.1
+- all 72 links
+- scouting outputs on links 28-31
+
+### Changed
+- source files:
+  - ../payload/frame/output_mux.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/top_decl.vhd
+- script files:
+  - scripts/mp7_patch.py
+
+## [v1.22.0] - 2023-03-14
+### Comment
+
+- mp7_ugt firmware release v1.22.0
+- development for "MUS2" (email: "New 2Loose HMT configuration", 3.12.2022)
+- implemented cut for muon index bits
+- implemented "anomaly detection trigger (ADT)"
+- changes for 10G ZDC on link 11
+
+### Added
+- source files:
+  - ../payload/gtl/anomaly_detection
+
+### Changed
+- source files:
+  - ../packages/gtl_pkg.vhd
+  - ../packages/gt_core_pkg.vhd
+  - ../payload/gtl/bx_pipeline.vhd
+  - ../payload/gtl_module_tpl.vhd
+  - ../payload/gtl/muon_comparators.vhd
+  - ../payload/gtl/muon_obj_cuts.vhd
+  - ../payload/gtl/comb_conditions.vhd
+  - ../payload/gtl/correlation_conditions.vhd
+  - ../payload/gtl/zdc_condition.vhd
+
 ## [v1.21.7] - 2022-11-29
 ### Comment
 
@@ -69,9 +109,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
 
-### Added
-- source files:
-  - ../packages/gt_mp7_top_pkg_sim.vhd
+
 
 ## [v1.21.2] - 2022-09-28
 ### Comment
@@ -95,6 +133,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
+>>>>>>> master
 
 ## [v1.21.0] - 2022-09-14
 ### Comment

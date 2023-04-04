@@ -6,6 +6,8 @@
 \usepackage{cite}
 \tolerance=1000
 
+\input{gitbranch.tex}
+
 \begin{document}
 \topmargin = 30mm
 \textheight = 225mm
@@ -50,10 +52,6 @@ J.Brooke
 G.Iles, A.Tapper
 \Instfoot{Imperial}
 {Imperial College, London, UK}
-
-%A.Heister
-%\Instfoot{Boston}
-%{Boston University, USA}
 
 D.Acosta, I.Furic, A.Madorsky
 \Instfoot{Florida}
@@ -101,7 +99,7 @@ The $p_t$ scale for muon objects starts from 0 (zero), but HW index=0 indicates 
 7) The new muon structure contains:\\
 - "unconstrained $p_t$" scale (8 bits) in steps of 1.0 GeV starting from 0 (zero), HW index=0 indicates an invalid muon, the highest bin 0xff marks an overflow.\\
 - "impact parameter" with 2 bits.\\
-- "hadronic shower trigger (mus)" bits on bit 31 of MU0, MU2, MU4 and MU6 objects.
+- "hadronic shower trigger (mus)" bits on bit 31 of MU0, MU2, MU3, MU4 and MU6 objects.
 
 8) The new jet structure contains:\\
 - bit 27 will be used to flag a jet as delayed / displaced based on HCAL timing and depth profiles that are indicative of a LLP decay. This bit is referred to as “DISP”. If this bit is set to 1, then the jet has been tagged as an LLP jet.
@@ -119,7 +117,8 @@ The $p_t$ scale for muon objects starts from 0 (zero), but HW index=0 indicates 
 
 14) The "Asymmetry" and "Centrality" bits (introduced for Heavy-Ion running) are part of the ET$_{miss}$, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$ data structure.
 
-The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2} ) show the  bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.
+The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2}) show the bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.\\
+Table~\ref{table:scales_table_3} shows the bits for ZDC objects, see ~\cite{ZDC}.
 
 \begin{table}[ht]
 \caption{\bf Scales (muon and calorimeter)}
@@ -227,6 +226,21 @@ definition)	&		&	ASYMHTHF	&	0..255 &	1 &	8                    \\
 \label{table:scales_table_2}
 \end{table}
 
+\begin{table}[ht]
+\caption{\bf Scales (ZDC)}
+\vspace{5mm}
+\centering
+\begin{tabular}{|p{2.0cm}| l | p{2.0cm} | p{2.0cm} | p{2.0cm} | l |}
+\hline
+object	&	collections $\times$ instances	&	parameter	&	range	&	step	&	bits \\
+\hline\hline
+ZDC	       &	1 * 2	& EN\_MINUS (ZDC-)	    &	0..1023	   &	1 (?)	  &	10  \\
+           &	        & EN\_PLUS (ZDC+)	    &	0..1023	   &	1 (?)	  &	10  \\
+\hline
+\end{tabular}
+\label{table:scales_table_3}
+\end{table}
+
 \clearpage
 
 The following pages contain tables for data structure of objects and the data flow of objects on the optical links.
@@ -236,7 +250,7 @@ The following pages contain tables for data structure of objects and the data fl
 \end{itemize}
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 1)}
+\caption{\bf Overview optical links (part 1)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
@@ -272,40 +286,41 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \end{table}
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 2)}
+\caption{\bf Overview optical links (part 2)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
 \begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
  & \multicolumn{6}{ c| }{link} \\\hline
 frame & 10 & 11 & 12 & 13 & 14 &\makebox[1.5cm][c]{15} \\\hline\hline
-0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
- & ETTEM, & & [31:0] & [95:64] & [159:128] & [223:192]\\
- & MBT0HFP & & & & &\\
-1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
- & TOWERCOUNT, & & [63:32] & [127:96] & [191:160] & [255:224]\\
- & MBT0HFM & & & & &\\
-2 & ET$_{miss}$, & free & free & free & free & free\\
+0 & ET, & EN\_MINUS & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & ETTEM, & (ZDC-) & [31:0] & [95:64] & [159:128] & [223:192]\\
+ & MBT0HFP & [25:16] & & & &\\
+1 & HT, & EN\_PLUS & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & TOWERCOUNT, & (ZDC+) & [63:32] & [127:96] & [191:160] & [255:224]\\
+ & MBT0HFM & [9:0] & & & &\\
+2 & ET$_{miss}$, & & free & free & free & free\\
  & ASYMET,& & & & &\\
  & MBT1HFP  & & & & &\\
-3 & HT$_{miss}$, & free & free & free & free & free\\
+3 & HT$_{miss}$, & & free & free & free & free\\
  & ASYMHT,& & & & &\\
  & MBT1HFM & & & & &\\
-4 & ET$_{miss}^{HF}$ & free & free & free & free & free\\
+4 & ET$_{miss}^{HF}$ & & free & free & free & free\\
  & ASYMETHF, & & & & &\\
  & CENT[3:0] & & & & &\\
-5 & HT$_{miss}^{HF}$ & free & free & free & free & free\\
+5 & HT$_{miss}^{HF}$ & & free & free & free & free\\
  & ASYMHTHF, & & & & &\\
  & CENT[7:4] & & & & &\\\hline
 \end{tabular}
 }
-\label{table:sum_opt_links2}
+\label{table:app:sum_opt_links2}
 \end{table}
 
 \begin{itemize}
 \item The data structure of a muon object is shown in Table~\ref{table:muon_object}.
 \item The definition of the muon $\eta$ scale shown in Table~\ref{table:muon_eta_scale}. The minimum value is -2.45, the maximum +2.45, so the the highest and lowest
 bins are "narrower" than other bins.
+\item The 7 muon index bits cover a range from 0 to 107 (e.g. index 0-17 is EMTF+ and index 90-107 is EMTF-).
 \item The definition of the muon $\varphi$ scale shown in Table~\ref{table:muon_phi_scale}.
 \item The definition of the muon quality bits is shown in Table~\ref{table:muon_quality_bits}. It is preliminary, quality ``level x" should be replaced by reliable terms.
 \item The definition of the muon isolation bits is shown in Table~\ref{table:muon_iso_bits}. It is preliminary and should be updated when agreed upon.
@@ -319,7 +334,7 @@ bins are "narrower" than other bins.
 \begin{tabular}{|c|c|}\hline
 bit(s) & parameter \\\hline\hline
 63..62 & impact parameter \\
-61 & hadronic shower (mus), on MU0, MU2, MU4 and MU6 \\
+61 & hadronic shower (mus), on MU0, MU2, MU3, MU4 and MU6 \\
 60..53 & unconstrained $p_t$ \\
 52..43 & $\varphi$ (out) \\
 42..36 & index bits \\
@@ -415,6 +430,7 @@ bits [33..32] & definition \\\hline\hline
 muon object & hadronic shower (on bit 61)\\\hline\hline
 0 & MUS0 \\
 2 & MUS1 \\
+3 & MUS2 \\
 4 & MUSOOT0 \\
 6 & MUSOOT1 \\\hline
 \end{tabular}
@@ -603,6 +619,7 @@ and HT$_{miss}^{HF}$
 is shown in Tables~\ref{table:ett_object}, ~\ref{table:ht_object}, ~\ref{table:etm_object}, ~\ref{table:htm_object}, ~\ref{table:etmhf_object} and ~\ref{table:htmhf_object}.
 \item The definition of minimum bias HF, ETTEM, TOWERCOUNT, Asymmetry and Centrality bits is shown in ~\ref{table:min_bias_def}, ~\ref{table:ettem_def}, ~\ref{table:tower_count_def}
 ~\ref{table:asymmetry_def} and ~\ref{table:centrality_def}.
+\item The data structure of ZDC is shown in Table~\ref{table:zdc_struct}
 \end{itemize}
 
 \begin{table}[ht]
@@ -767,6 +784,18 @@ Centrality bits [7:4] & CENT[7:4] & 5 & HT$_{miss}^{HF}$ & 31..28 \\\hline
 \label{table:centrality_def}
 \end{table}
 
+\begin{table}[ht]
+\caption{\bf Data structure ZDC}
+\vspace{5mm}
+\centering
+\begin{tabular}{|c|c|c|}\hline
+frame & bit(s) & parameter \\\hline\hline
+0 & 25..16 & EN\_MINUS (ZDC-)\\
+1 & 9..0 & EN\_PLUS (ZDC+)\\\hline
+\end{tabular}
+\label{table:zdc_struct}
+\end{table}
+
 \clearpage
 
 \begin{thebibliography}{00}
@@ -780,6 +809,8 @@ Centrality bits [7:4] & CENT[7:4] & 5 & HT$_{miss}^{HF}$ & 31..28 \\\hline
 \bibitem {calo}
 \url{https://cds.cern.ch/record/1364214/files/in02_069.pdf}
 
+\bibitem {ZDC}
+\href{\gitbranch/doc/scales_inputs_2_ugt/ZDC_uhtr_spec.pdf}{\texttt{Description of ZDC structure (ZDC\_uhtr\_spec.pdf)}}
 
 \end{thebibliography}
 

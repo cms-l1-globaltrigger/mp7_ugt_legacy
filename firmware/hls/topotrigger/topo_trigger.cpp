@@ -22,7 +22,7 @@ void scaleNNInputs(unscaled_t unscaled[TPT_NNNINPUTS], TPT_NN_IN_T scaled[TPT_NN
 
 void topo_trigger(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS], Tau taus[NTAUS],
                        ET et, HT ht, ETMiss etmiss, HTMiss htmiss, ETHFMiss ethfmiss, HTHFMiss hthfmiss,
-                       AD_NN_OUT_SQ_T &nn_score)
+                       TPT_NN_OUT_T &nn_score)
 {
 
 // define the interface
@@ -52,25 +52,25 @@ void topo_trigger(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS],
 
     // 'unroll' particles to flat array of NN inputs
     unscaled_t nn_inputs_unscaled[TPT_NNNINPUTS];
-    AD_NN_IN_T nn_inputs[TPT_NNNINPUTS];
+    TPT_NN_IN_T nn_inputs[TPT_NNNINPUTS];
 
     nn_inputs_unscaled[0] = etmiss.et;
     nn_inputs_unscaled[1] = etmiss.phi;
 
     int iNNIn = 0;
-    for (int i = 0; i < AD_NJETS; ++i, ++iNNIn) {
+    for (int i = 0; i < TPT_NJETS; ++i, ++iNNIn) {
 #pragma HLS unroll
         nn_inputs_unscaled[3 * iNNIn + 2] = jets[i].et;
         nn_inputs_unscaled[3 * iNNIn + 3] = jets[i].eta;
         nn_inputs_unscaled[3 * iNNIn + 4] = jets[i].phi;
     }
-    for (int i = 0; i < AD_NMUONS; ++i, ++iNNIn) {
+    for (int i = 0; i < TPT_NMUONS; ++i, ++iNNIn) {
 #pragma HLS unroll
         nn_inputs_unscaled[3 * iNNIn + 2] = muons[i].pt;
         nn_inputs_unscaled[3 * iNNIn + 3] = muons[i].eta_extrapolated;
         nn_inputs_unscaled[3 * iNNIn + 4] = muons[i].phi_extrapolated;
     }
-    for (int i = 0; i < AD_NEGAMMAS; ++i, ++iNNIn) {
+    for (int i = 0; i < TPT_NEGAMMAS; ++i, ++iNNIn) {
 #pragma HLS unroll
         nn_inputs_unscaled[3 * iNNIn + 2] = egammas[i].et;
         nn_inputs_unscaled[3 * iNNIn + 3] = egammas[i].eta;
@@ -80,7 +80,7 @@ void topo_trigger(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS],
     scaleNNInputs(nn_inputs_unscaled, nn_inputs);
     TPT_NN_OUT_T nnout[TPT_NNNOUTPUT];
 #pragma HLS array_partition variable = nnout complete
-    TOPO_HLS(nn_inputs, nnout);
+    TOPO_HLS(nn_inputs, nnout, TPT_SIZE_IN, TPT_SIZE_OUT);
     nn_score = nnout[0];                                                // TODO double-check this
 
 }

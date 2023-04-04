@@ -1,7 +1,5 @@
 #include "anomaly_detection/anomaly_detection.h"
 #include "anomaly_detection/NN/VAE_HLS.h"
-#include "topotrigger/topo_trigger.h"
-#include "topotrigger/NN/TOPO_HLS.h"
 #include "ap_fixed.h"
 #include <vector>
 #include <cassert>
@@ -195,27 +193,6 @@ double hwint_to_anomaly_score(std::vector<int> in){
 }
 
 // 'bridge' function for Python binding (not for firmware)
-double hwint_to_topo_trigger_score(std::vector<int> in){
-
-    assert((void("Wrong number of inputs"), in.size() == 3*(AD_NEGAMMAS+AD_NMUONS+AD_NJETS) + 2));
-    // read (pT, eta, phi) for each of (in order): MET, jets, muons, egs
-    // met does not use eta!
-
-    // Convert ints to GT objects
-    ETMiss etMiss;
-    EGamma egammas[NEGAMMAS];
-    Muon muons[NMUONS];
-    Jet jets[NJETS];
-    hwint_to_GTobjects(in, etMiss, egammas, muons, jets);
-
-    // the unused inputs
-    Tau taus[NTAUS]; ET et; HT ht; HTMiss htmiss; ETHFMiss ethfmiss; HTHFMiss hthfmiss; 
-    TPT_NN_OUT_SQ_T score;
-    topo_trigger(muons, jets, egammas, taus, et, ht, etMiss, htmiss, ethfmiss, hthfmiss, score);
-    return (double) score;
-}
-
-// 'bridge' function for Python binding (not for firmware)
 double objects_to_anomaly_score(ETMiss etMiss, std::vector<EGamma> egammas, std::vector<Muon> muons, std::vector<Jet> jets){
 
     assert((void("Wrong number of inputs"), egammas.size() == AD_NEGAMMAS));
@@ -245,35 +222,6 @@ double objects_to_anomaly_score(ETMiss etMiss, std::vector<EGamma> egammas, std:
     return (double) score;
 }
 
-double objects_to_topo_trigger_score(ETMiss etMiss, std::vector<EGamma> egammas, std::vector<Muon> muons, std::vector<Jet> jets){
-
-    assert((void("Wrong number of inputs"), egammas.size() == TPT_NEGAMMAS));
-    assert((void("Wrong number of inputs"), muons.size() == TPT_NMUONS));
-    assert((void("Wrong number of inputs"), jets.size() == TPT_NJETS));
-    // Convert ints to GT objects
-    EGamma egammas_int[NEGAMMAS];
-    Muon muons_int[NMUONS];
-    Jet jets_int[NJETS];
-    for(int i = 0; i < NEGAMMAS; i++){
-        if(i < TPT_NEGAMMAS){ egammas_int[i] = egammas[i]; }
-        else{ egammas_int[i].clear(); }
-    }
-    for(int i = 0; i < NMUONS; i++){
-        if(i < TPT_NMUONS){ muons_int[i] = muons[i]; }
-        else{ muons_int[i].clear(); }
-    }
-    for(int i = 0; i < NJETS; i++){
-        if(i < TPT_NJETS){ jets_int[i] = jets[i]; }
-        else{ jets_int[i].clear(); }
-    }
-
-    // the unused inputs
-    Tau taus[NTAUS]; ET et; HT ht; HTMiss htmiss; ETHFMiss ethfmiss; HTHFMiss hthfmiss; 
-    TPT_NN_OUT_SQ_T score;
-    topo_trigger(muons_int, jets_int, egammas_int, taus, et, ht, etMiss, htmiss, ethfmiss, hthfmiss, score);
-    return (double) score;
-}
-
 /*std::vector<AD_NN_IN_T> scale_nn_inputs(std::vector<unscaled_t> unscaled){
     assert((void("Wrong number of inputs"), unscaled.size() == AD_NNNPARTICLES));
     AD_NN_IN_T scaled[AD_NNNINPUTS];
@@ -281,7 +229,7 @@ double objects_to_topo_trigger_score(ETMiss etMiss, std::vector<EGamma> egammas,
     scaleNNInputs(unscaled_arr, scaled);
     std::vector<AD_NN_IN_T> out(std::begin(scaled), std::end(scaled));
     return out;
-}*/
+    }*/
 
 std::vector<AD_NN_OUT_T> nn(std::vector<AD_NN_IN_T> in){
     assert((void("Wrong number of inputs"), in.size() == AD_NNNINPUTS));
@@ -292,18 +240,6 @@ std::vector<AD_NN_OUT_T> nn(std::vector<AD_NN_IN_T> in){
     AD_NN_OUT_T nn_outputs[AD_NNNOUTPUTS];
     VAE_HLS(nn_inputs, nn_outputs);
     std::vector<AD_NN_OUT_T> out(std::begin(nn_outputs), std::end(nn_outputs));
-    return out;
-}
-
-std::vector<TPT_NN_OUT_T> nn_topo(std::vector<TPT_NN_IN_T> in){
-    assert((void("Wrong number of inputs"), in.size() == TPT_NNNINPUTS));
-    TPT_NN_IN_T nn_inputs[TPT_NNNINPUTS];
-    for(int i = 0; i < TPT_NNNINPUTS; i++){
-        nn_inputs[i] = in[i];
-    }
-    TPT_NN_OUT_T nn_outputs[TPT_NNNOUTPUTS];
-    TOPO_HLS(nn_inputs, nn_outputs);
-    std::vector<TPT_NN_OUT_T> out(std::begin(nn_outputs), std::end(nn_outputs));
     return out;
 }
 
@@ -319,67 +255,59 @@ AD_NN_OUT_SQ_T nn_loss(std::vector<AD_NN_OUT_T> in){
 
 namespace py = pybind11;
 PYBIND11_MODULE(anomaly_detection_emulation, m){
-  m.doc() = "Python bindings for Anomaly Detection at L1T HLS for emulation. Most methods assume an object ordering: ETMiss, 4*EGamma, 4*Muon, 10*Jet";
-  m.def("hwint_to_physical", &hwint_to_physical, "GT inputs (in integer hardware units) to physical units");
-  m.def("hwint_to_packed", &hwint_to_packed, "GT inputs to packed integers");
-  m.def("packed_to_hwint", &packed_to_hwint, "Packed into GT inputs to (pt, eta, phi)");
-  m.def("hwint_to_anomaly_score", &hwint_to_anomaly_score, "GT inputs (in integer hardware units) to anomaly score");
-  m.def("objects_to_anomaly_score", &objects_to_anomaly_score, "GT inputs (in integer hardware units) to anomaly score");
-  //m.def("scale_nn_inputs", &scale_nn_inputs, "inputs to scaled NN inputs (in doubles");
-  m.def("nn", &nn, "Scaled NN inputs (in doubles) to NN outputs (in doubles)");
-  m.def("nn_loss", &nn_loss, "NN outputs (in doubles) to NN loss score from computeLoss (in doubles)");
+    m.doc() = "Python bindings for Anomaly Detection at L1T HLS for emulation. Most methods assume an object ordering: ETMiss, 4*EGamma, 4*Muon, 10*Jet";
+    m.def("hwint_to_physical", &hwint_to_physical, "GT inputs (in integer hardware units) to physical units");
+    m.def("hwint_to_packed", &hwint_to_packed, "GT inputs to packed integers");
+    m.def("packed_to_hwint", &packed_to_hwint, "Packed into GT inputs to (pt, eta, phi)");
+    m.def("hwint_to_anomaly_score", &hwint_to_anomaly_score, "GT inputs (in integer hardware units) to anomaly score");
+    m.def("objects_to_anomaly_score", &objects_to_anomaly_score, "GT inputs (in integer hardware units) to anomaly score");
+    //m.def("scale_nn_inputs", &scale_nn_inputs, "inputs to scaled NN inputs (in doubles");
+    m.def("nn", &nn, "Scaled NN inputs (in doubles) to NN outputs (in doubles)");
+    m.def("nn_loss", &nn_loss, "NN outputs (in doubles) to NN loss score from computeLoss (in doubles)");
   
-  py::class_<PxPyPz>(m, "PxPyPz")
-    .def_readwrite("px", &PxPyPz::px)
-    .def_readwrite("py", &PxPyPz::py)
-    .def_readwrite("pz", &PxPyPz::pz);
+    py::class_<PxPyPz>(m, "PxPyPz")
+	.def_readwrite("px", &PxPyPz::px)
+	.def_readwrite("py", &PxPyPz::py)
+	.def_readwrite("pz", &PxPyPz::pz);
 
-  py::class_<Muon>(m, "Muon")
-    .def_readwrite("pt", &Muon::pt)
-    .def_readwrite("eta_extrapolated", &Muon::eta_extrapolated)
-    .def_readwrite("phi_extrapolated", &Muon::phi_extrapolated)
-    .def("initFromHWInt", &Muon::initFromHWInt)
-    .def("pack", &Muon::pack)
-    .def("unpack", &Muon::unpack);
+    py::class_<Muon>(m, "Muon")
+	.def_readwrite("pt", &Muon::pt)
+	.def_readwrite("eta_extrapolated", &Muon::eta_extrapolated)
+	.def_readwrite("phi_extrapolated", &Muon::phi_extrapolated)
+	.def("initFromHWInt", &Muon::initFromHWInt)
+	.def("pack", &Muon::pack)
+	.def("unpack", &Muon::unpack);
 
-  py::class_<EGamma>(m, "EGamma")
-    .def_readwrite("et", &EGamma::et)
-    .def_readwrite("eta", &EGamma::eta)
-    .def_readwrite("phi", &EGamma::phi)
-    .def("initFromHWInt", &EGamma::initFromHWInt)
-    .def("pack", &EGamma::pack)
-    .def("unpack", &EGamma::unpack);
+    py::class_<EGamma>(m, "EGamma")
+	.def_readwrite("et", &EGamma::et)
+	.def_readwrite("eta", &EGamma::eta)
+	.def_readwrite("phi", &EGamma::phi)
+	.def("initFromHWInt", &EGamma::initFromHWInt)
+	.def("pack", &EGamma::pack)
+	.def("unpack", &EGamma::unpack);
 
-  py::class_<Jet>(m, "Jet")
-    .def_readwrite("et", &Jet::et)
-    .def_readwrite("eta", &Jet::eta)
-    .def_readwrite("phi", &Jet::phi)
-    .def("initFromHWInt", &Jet::initFromHWInt)
-    .def("pack", &Jet::pack)
-    .def("unpack", &Jet::unpack);
+    py::class_<Jet>(m, "Jet")
+	.def_readwrite("et", &Jet::et)
+	.def_readwrite("eta", &Jet::eta)
+	.def_readwrite("phi", &Jet::phi)
+	.def("initFromHWInt", &Jet::initFromHWInt)
+	.def("pack", &Jet::pack)
+	.def("unpack", &Jet::unpack);
 
-  py::class_<ETMiss>(m, "ETMiss")
-    .def_readwrite("et", &ETMiss::et)
-    .def_readwrite("phi", &ETMiss::phi)
-    .def("initFromHWInt", &ETMiss::initFromHWInt)
-    .def("pack", &ETMiss::pack)
-    .def("unpack", &ETMiss::unpack);
+    py::class_<ETMiss>(m, "ETMiss")
+	.def_readwrite("et", &ETMiss::et)
+	.def_readwrite("phi", &ETMiss::phi)
+	.def("initFromHWInt", &ETMiss::initFromHWInt)
+	.def("pack", &ETMiss::pack)
+	.def("unpack", &ETMiss::unpack);
 
-  m.attr("AD_NMUONS") = &AD_NMUONS;
-  m.attr("AD_NJETS") = &AD_NJETS;
-  m.attr("AD_NEGAMMAS") = &AD_NEGAMMAS;
-  m.attr("AD_NTAUS") = &AD_NTAUS;
-  m.attr("AD_NNNPARTICLES") = &AD_NNNPARTICLES;
-  m.attr("AD_NNNINPUTS") = &AD_NNNINPUTS;
-  m.attr("AD_NNNOUTPUTS") = &AD_NNNOUTPUTS;
-
-  m.attr("TPT_NMUONS") = &TPT_NMUONS;
-  m.attr("TPT_NJETS") = &TPT_NJETS;
-  m.attr("TPT_NEGAMMAS") = &TPT_NEGAMMAS;
-  m.attr("TPT_NTAUS") = &TPT_NTAUS;
-  m.attr("TPT_NNNPARTICLES") = &TPT_NNNPARTICLES;
-  m.attr("TPT_NNNINPUTS") = &TPT_NNNINPUTS;
-  m.attr("TPT_NNNOUTPUTS") = &TPT_NNNOUTPUTS;
+    m.attr("AD_NMUONS") = &AD_NMUONS;
+    m.attr("AD_NJETS") = &AD_NJETS;
+    m.attr("AD_NEGAMMAS") = &AD_NEGAMMAS;
+    m.attr("AD_NTAUS") = &AD_NTAUS;
+    m.attr("AD_NNNPARTICLES") = &AD_NNNPARTICLES;
+    m.attr("AD_NNNINPUTS") = &AD_NNNINPUTS;
+    m.attr("AD_NNNOUTPUTS") = &AD_NNNOUTPUTS;
 }
 
 /* 
@@ -387,48 +315,48 @@ PYBIND11_MODULE(anomaly_detection_emulation, m){
  * This is a shortcut to expose ap_fixed types through double 
  */
 #define BIND_AP_TYPE_THRU_DOUBLE(type, name)                                                        \
-namespace pybind11 { namespace detail {                                                             \
+    namespace pybind11 { namespace detail {                                                             \
     template <> struct type_caster<type> {                                                          \
-    public:                                                                                         \
-        PYBIND11_TYPE_CASTER(type, _(name));                                                        \
-        bool load(handle src, bool) {                                                               \
-            PyObject *source = src.ptr();                                                           \
-            PyObject *tmp = PyNumber_Float(source);                                                 \
-            if (!tmp)                                                                               \
-                return false;                                                                       \
-            value = PyFloat_AsDouble(tmp);                                                          \
-            Py_DECREF(tmp);                                                                         \
-            return !PyErr_Occurred();                                                               \
-        }                                                                                           \
-        static handle cast(type src, return_value_policy /* policy */, handle /* parent */) {       \
-            return PyFloat_FromDouble(src.to_double());                                             \
-        }                                                                                           \
-    };                                                                                              \
-}} // namespace PYBIND11_NAMESPACE::detail
+public:                                                                                         \
+PYBIND11_TYPE_CASTER(type, _(name));                                                        \
+bool load(handle src, bool) {                                                               \
+    PyObject *source = src.ptr();                                                           \
+    PyObject *tmp = PyNumber_Float(source);                                                 \
+    if (!tmp)                                                                               \
+	return false;                                                                       \
+    value = PyFloat_AsDouble(tmp);                                                          \
+    Py_DECREF(tmp);                                                                         \
+    return !PyErr_Occurred();                                                               \
+}                                                                                           \
+static handle cast(type src, return_value_policy /* policy */, handle /* parent */) {       \
+    return PyFloat_FromDouble(src.to_double());                                             \
+}                                                                                           \
+};                                                                                              \
+    }} // namespace PYBIND11_NAMESPACE::detail
 
 /* 
  * Functions must return Python native types (int, float, double, etc) to be bound
  * This is a shortcut to expose ap_fixed types through long 
  */
 #define BIND_AP_TYPE_THRU_LONG(type, name)                                                          \
-namespace pybind11 { namespace detail {                                                             \
+    namespace pybind11 { namespace detail {                                                             \
     template <> struct type_caster<type> {                                                          \
-    public:                                                                                         \
-        PYBIND11_TYPE_CASTER(type, _(name));                                                        \
-        bool load(handle src, bool) {                                                               \
-            PyObject *source = src.ptr();                                                           \
-            PyObject *tmp = PyNumber_Long(source);                                                  \
-            if (!tmp)                                                                               \
-                return false;                                                                       \
-            value = PyLong_AsLong(tmp);                                                             \
-            Py_DECREF(tmp);                                                                         \
-            return !PyErr_Occurred();                                                               \
-        }                                                                                           \
-        static handle cast(type src, return_value_policy /* policy */, handle /* parent */) {       \
-            return PyLong_FromLong(src);                                                            \
-        }                                                                                           \
+public:                                                                                         \
+PYBIND11_TYPE_CASTER(type, _(name));                                                        \
+bool load(handle src, bool) {                                                               \
+    PyObject *source = src.ptr();                                                           \
+    PyObject *tmp = PyNumber_Long(source);                                                  \
+    if (!tmp)                                                                               \
+	return false;                                                                       \
+    value = PyLong_AsLong(tmp);                                                             \
+    Py_DECREF(tmp);                                                                         \
+    return !PyErr_Occurred();                                                               \
+}                                                                                           \
+static handle cast(type src, return_value_policy /* policy */, handle /* parent */) {       \
+    return PyLong_FromLong(src);                                                            \
+}                                                                                           \
     };                                                                                              \
-}} // namespace PYBIND11_NAMESPACE::detail 
+	}} // namespace PYBIND11_NAMESPACE::detail 
 
 // these types are used in data_types
 // not sure why BIND_AP_TYPE_THRU_DOUBLE doesn't like ap_ufixed argument, but it doesn't

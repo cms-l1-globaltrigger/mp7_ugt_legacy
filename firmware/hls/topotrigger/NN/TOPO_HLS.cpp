@@ -22,16 +22,16 @@
 #include "parameters.h"
 
 void TOPO_HLS(
-    input_t bothchannel_small_compressed_hw_bitshiftscaler0_fc1_input[N_INPUT_1_1],
+    input_t newfwkbothchannel_small_compressed0_fc1_input[N_INPUT_1_1],
     result_t layer7_out[N_LAYER_5],
     unsigned short &const_size_in_1,
     unsigned short &const_size_out_1
 ) {
 
     //hls-fpga-machine-learning insert IO
-    #pragma HLS ARRAY_RESHAPE variable=bothchannel_small_compressed_hw_bitshiftscaler0_fc1_input complete dim=0
+    #pragma HLS ARRAY_RESHAPE variable=newfwkbothchannel_small_compressed0_fc1_input complete dim=0
     #pragma HLS ARRAY_PARTITION variable=layer7_out complete dim=0
-    #pragma HLS INTERFACE ap_vld port=bothchannel_small_compressed_hw_bitshiftscaler0_fc1_input,layer7_out 
+    #pragma HLS INTERFACE ap_vld port=newfwkbothchannel_small_compressed0_fc1_input,layer7_out 
     #pragma HLS PIPELINE 
 
     const_size_in_1 = N_INPUT_1_1;
@@ -57,24 +57,24 @@ void TOPO_HLS(
 
     layer2_t layer2_out[N_LAYER_2];
     #pragma HLS ARRAY_PARTITION variable=layer2_out complete dim=0
-    nnet::dense<input_t, layer2_t, config2>(bothchannel_small_compressed_hw_bitshiftscaler0_fc1_input, layer2_out, w2, b2); // bothchannel_small_compressed_hw_bitshiftscaler0_fc1
+    nnet::dense<input_t, layer2_t, config2>(newfwkbothchannel_small_compressed0_fc1_input, layer2_out, w2, b2); // newfwkbothchannel_small_compressed0_fc1
 
     layer3_t layer3_out[N_LAYER_2];
     #pragma HLS ARRAY_PARTITION variable=layer3_out complete dim=0
-    nnet::linear<layer2_t, layer3_t, linear_config3>(layer2_out, layer3_out); // bothchannel_small_compressed_hw_bitshiftscaler0_fc1_linear
+    nnet::linear<layer2_t, layer3_t, linear_config3>(layer2_out, layer3_out); // newfwkbothchannel_small_compressed0_fc1_linear
 
     layer4_t layer4_out[N_LAYER_2];
     #pragma HLS ARRAY_PARTITION variable=layer4_out complete dim=0
-    nnet::relu<layer3_t, layer4_t, relu_config4>(layer3_out, layer4_out); // bothchannel_small_compressed_hw_bitshiftscaler0_activation1
+    nnet::relu<layer3_t, layer4_t, relu_config4>(layer3_out, layer4_out); // newfwkbothchannel_small_compressed0_activation1
 
     layer5_t layer5_out[N_LAYER_5];
     #pragma HLS ARRAY_PARTITION variable=layer5_out complete dim=0
-    nnet::dense<layer4_t, layer5_t, config5>(layer4_out, layer5_out, w5, b5); // bothchannel_small_compressed_hw_bitshiftscaler0_output
+    nnet::dense<layer4_t, layer5_t, config5>(layer4_out, layer5_out, w5, b5); // newfwkbothchannel_small_compressed0_output
 
     layer6_t layer6_out[N_LAYER_5];
     #pragma HLS ARRAY_PARTITION variable=layer6_out complete dim=0
-    nnet::linear<layer5_t, layer6_t, linear_config6>(layer5_out, layer6_out); // bothchannel_small_compressed_hw_bitshiftscaler0_output_linear
+    nnet::linear<layer5_t, layer6_t, linear_config6>(layer5_out, layer6_out); // newfwkbothchannel_small_compressed0_output_linear
 
-    nnet::sigmoid<layer6_t, result_t, sigmoid_config7>(layer6_out, layer7_out); // bothchannel_small_compressed_hw_bitshiftscaler0_sigmoid
+    nnet::sigmoid<layer6_t, result_t, sigmoid_config7>(layer6_out, layer7_out); // newfwkbothchannel_small_compressed0_sigmoid
 
 }

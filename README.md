@@ -99,7 +99,7 @@ be created for the selected Questasim version with script [run_compile_simlib.py
 ```bash
 python scripts/run_compile_simlib.py \
  --vivado <vivado_version (e.g. 2019.2)> \
- --questasim <Questasim version (e.g. 10.7c)> \
+ --questasim <path to Questasim (e.g. /opt/mentor/10.7c/questasim)> \
  --output <output directory for generated libraries>
 ```
 

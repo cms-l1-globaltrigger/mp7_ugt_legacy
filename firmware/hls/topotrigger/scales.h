@@ -3,10 +3,9 @@
 
 #include "topo_trigger.h"
 
-static const int32_t tpt_shift[TPT_NNNINPUTS] = {7,5,6,5,5,6,5,5,5,5,5,4,5,5,5,5,7,3,5,6,5,4,5,3,4,5};
+static const int32_t tpt_shift[TPT_NNNINPUTS] = {8,5,7,5,5,6,5,5,5,5,5,5,5,5,5,6,7,3,5,6,6,4,5,4,4,5};
 
-typedef ap_fixed<8, 7> tpt_offset_t;
-static const tpt_offset_t tpt_offsets[TPT_NNNINPUTS] = {56,72,89, 0,70,60, 0,67,43, 0,62,32, 0,55,14, 0,57, 1, 0,16,13, 0,60, 5,
-  0,44};
+static const int32_t tpt_offsets[TPT_NNNINPUTS] = { 90, 72,138,  0, 71, 89,  0, 68, 61,  0, 64, 44,  0, 58, 15,  0, 71,  1,
+   0, 20, 29,  0, 62,  9,  0, 49};
 
 #endif

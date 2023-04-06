@@ -25,4 +25,8 @@ void topo_trigger( Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS]
                         Tau taus[NTAUS], ET et, HT ht, ETMiss etmiss, HTMiss htmiss,
                         ETHFMiss ethfmiss, HTHFMiss hthfmiss, TPT_NN_OUT_T &nn_score);
 
+void scaleNNInputs(unscaled_t unscaled[TPT_NNNINPUTS], TPT_NN_IN_T scaled[TPT_NNNINPUTS]);
+
+void unroll_particles(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS], Tau taus[NTAUS], ET et, HT ht, ETMiss etmiss, HTMiss htmiss, ETHFMiss ethfmiss, HTHFMiss hthfmiss, unscaled_t nn_inputs_unscaled[TPT_NNNINPUTS]);
+
 #endif

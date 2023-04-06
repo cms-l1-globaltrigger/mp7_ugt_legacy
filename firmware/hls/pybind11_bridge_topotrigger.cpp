@@ -94,6 +94,7 @@ std::vector<double> hwint_to_physical(std::vector<int> in){
         phys.push_back(muons[i].eta_extrapolated * Scales::MUON_ETA_LSB);
         phys.push_back(muons[i].phi_extrapolated * Scales::MUON_PHI_LSB);
     }
+
     // convert EGamma
     for(int i = 0; i < TPT_NEGAMMAS; i++){
         phys.push_back(egammas[i].et);
@@ -107,6 +108,7 @@ std::vector<double> hwint_to_physical(std::vector<int> in){
 
 // 'bridge' function for Python binding (not for firmware)
 std::vector<uint64_t> hwint_to_packed(std::vector<int> in){
+
 
     assert((void("Wrong number of inputs"), in.size() == 2 + 3 * (TPT_NEGAMMAS + TPT_NMUONS + TPT_NJETS)  ));
 
@@ -177,7 +179,6 @@ std::vector<int> packed_to_hwint(std::vector<uint64_t> in){
         out.push_back(muons[i].eta_extrapolated.V);
         out.push_back(muons[i].phi_extrapolated.V);
     }
-
     // write EGamma
     for(int i = 0; i < TPT_NEGAMMAS; i++){
         out.push_back(egammas[i].et.V);
@@ -268,7 +269,6 @@ double objects_to_topo_score(ETMiss etMiss, std::vector<EGamma> egammas, std::ve
         else{ egammas_int[i].clear(); }
     }
 
-
     // the unused inputs
     Tau taus[NTAUS]; ET et; HT ht; HTMiss htmiss; ETHFMiss ethfmiss; HTHFMiss hthfmiss; 
     
@@ -303,7 +303,7 @@ PYBIND11_MODULE(topotrigger_emulation, m){
   //m.def("scale_nn_inputs", &scale_nn_inputs, "inputs to scaled NN inputs (in doubles");
   m.def("nn", &nn, "Scaled NN inputs (in doubles) to NN outputs (in doubles)");
   m.def("hwint_scaling", &hwint_scaling, "hwints normalization");
-  
+
   py::class_<PxPyPz>(m, "PxPyPz")
     .def_readwrite("px", &PxPyPz::px)
     .def_readwrite("py", &PxPyPz::py)
@@ -423,7 +423,7 @@ BIND_AP_TYPE_THRU_DOUBLE(ap_f_16_13, "ap_fixed<16,13>")
 BIND_AP_TYPE_THRU_DOUBLE(ap_f_16_15_TRN_SAT, "ap_fixed<16,15,AP_TRN,AP_SAT>")
 BIND_AP_TYPE_THRU_DOUBLE(ap_f_16_6, "ap_fixed<16, 6>")
 BIND_AP_TYPE_THRU_DOUBLE(ap_f_16_6_RND_SAT, "ap_fixed<16, 6, AP_RND, AP_SAT>")
-    
+
 BIND_AP_TYPE_THRU_DOUBLE(ap_uint<4>, "ap_uint<4>");
 BIND_AP_TYPE_THRU_DOUBLE(ap_uint<8>, "ap_uint<8>");
 BIND_AP_TYPE_THRU_DOUBLE(ap_uint<9>, "ap_uint<9>");

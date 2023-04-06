@@ -85,12 +85,12 @@ void topo_trigger(Muon muons[NMUONS], Jet jets[NJETS], EGamma egammas[NEGAMMAS],
     unroll_particles(muons, jets, egammas, taus, et, ht, etmiss, htmiss, ethfmiss, hthfmiss, nn_inputs_unscaled);
     
     TPT_NN_IN_T nn_inputs[TPT_NNNINPUTS];
+
     scaleNNInputs(nn_inputs_unscaled, nn_inputs);
     
     TPT_NN_OUT_T nnout[TPT_NNNOUTPUT];
 #pragma HLS array_partition variable = nnout complete
     TOPO_HLS(nn_inputs, nnout, TPT_SIZE_IN, TPT_SIZE_OUT);
-        
     nn_score = nnout[0];
 
 }

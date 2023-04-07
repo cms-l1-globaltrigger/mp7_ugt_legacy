@@ -8,16 +8,16 @@ import toolbox as tb
 def replace_area_constraints(filename):
     content = tb.read_file(filename)
 
-    #expr_forloop = re.compile(r"(for\s+{\s*set\s*i\s*0\s*}\s+{\s*\$i\s*<\s*)(\d+)(\s*}\s+{\s*incr\s+i\s*})")
-    #expr_cells = re.compile(r"(add_cells_to_pblock\s+\[\s*get_pblocks\s+payload_)(\d+)(\s*]\s*\[get_cells\s+(?:-\w+\s+)?datapath/rgen\[)(\d+)(]\.region/pgen\.\*])")
+    expr_forloop = re.compile(r"(for\s+{\s*set\s*i\s*0\s*}\s+{\s*\$i\s*<\s*)(\d+)(\s*}\s+{\s*incr\s+i\s*})")
+    expr_cells = re.compile(r"(add_cells_to_pblock\s+\[\s*get_pblocks\s+payload_)(\d+)(\s*]\s*\[get_cells\s+(?:-\w+\s+)?datapath/rgen\[)(\d+)(]\.region/pgen\.\*])")
 
-    #content, count = expr_forloop.subn(r"\g<1>8\g<3>", content)
-    #if count != 1:
-        #raise RuntimeError("Could not replace the for-loop value.")
+    content, count = expr_forloop.subn(r"\g<1>8\g<3>", content)
+    if count != 1:
+        raise RuntimeError("Could not replace the for-loop value.")
 
-    #content, count = expr_cells.subn(r"\g<1>7\g<3>7\g<5>", content)
-    #if count != 1:
-        #raise RuntimeError("Could not replace add_cells_to_pblock line.")
+    content, count = expr_cells.subn(r"\g<1>7\g<3>7\g<5>", content)
+    if count != 1:
+        raise RuntimeError("Could not replace add_cells_to_pblock line.")
     
     text = "resize_pblock [get_pblocks payload] -add {SLICE_X30Y0:SLICE_X191Y449}"
     subs = "resize_pblock [get_pblocks payload] -add {SLICE_X0Y0:SLICE_X191Y449}"

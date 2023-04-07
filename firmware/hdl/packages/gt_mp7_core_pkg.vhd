@@ -3,14 +3,15 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.22.0
+-- mp7_ugt (=FRAME_VERSION): v1.22.1
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.22.0
+-- gt: v1.22.1
 -- frame: v1.4.0 (see frame.vhd)
 -- gtl: v1.18.0 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
+-- HB 2023-04-07: v1.22.1 - Used Tx links 28-31 for scouting (frame/output_mux.vhd without links 32..71.
 -- HB 2023-03-10: v1.22.0 - Used Tx links 28-31 for scouting (frame/output_mux.vhd). Used all 72 links.
 -- HB 2022-11-23: v1.21.6 - Updated doc/scales_inputs_2_ugt (added definition of muon shower bits).
 -- HB 2022-09-26: v1.21.4 - Used "demux" in formatter for algo outputs to enable "orbit header" for scouting in top_decl.vhd (therefore MP7 FW v3.2.2. or newer needed).
@@ -89,7 +90,7 @@ package gt_mp7_core_pkg is
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GT_MINOR_VERSION      : integer range 0 to 255 := 22;
-    constant GT_REV_VERSION        : integer range 0 to 255 := 0;
+    constant GT_REV_VERSION        : integer range 0 to 255 := 1;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &

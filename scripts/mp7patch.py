@@ -35,7 +35,7 @@ def replace_area_constraints(filename):
 
     content = tb.read_file(filename)
     
-    t_pblock = "resize_pblock [get_pblocks payload] -add {SLICE_X30Y0:SLICE_X191Y449}"
+    t_pblock = "resize_pblock [get_pblocks payload] -add {SLICE_X30Y0:SLICE_X161Y449}"
     s_pblock = "resize_pblock [get_pblocks payload] -add {SLICE_X0Y0:SLICE_X161Y449}"
     t_loop = "for {set i 0} {$i < 18} {incr i} {"
     s_loop = "for {set i 0} {$i < 8} {incr i} {"

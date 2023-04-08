@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.22.2] - 2023-04-08
+### Comment
+
+- mp7_ugt firmware release v1.22.2
+- bug fixed in scripts/mp7_patch.py
+
+### Changed
+- script files:
+  - scripts/mp7_patch.py
+
 ## [v1.22.1] - 2023-04-07
 ### Comment
 

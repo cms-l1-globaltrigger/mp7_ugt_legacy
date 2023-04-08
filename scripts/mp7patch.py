@@ -6,7 +6,6 @@ import re
 import toolbox as tb
 
 def replace_area_constraints(filename):
-    content = tb.read_file(filename)
 
     #expr_forloop = re.compile(r"(for\s+{\s*set\s*i\s*0\s*}\s+{\s*\$i\s*<\s*)(\d+)(\s*}\s+{\s*incr\s+i\s*})")
     #expr_cells = re.compile(r"(add_cells_to_pblock\s+\[\s*get_pblocks\s+payload_)(\d+)(\s*]\s*\[get_cells\s+(?:-\w+\s+)?datapath/rgen\[)(\d+)(]\.region/pgen\.\*])")
@@ -19,8 +18,25 @@ def replace_area_constraints(filename):
     #if count != 1:
         #raise RuntimeError("Could not replace add_cells_to_pblock line.")
         
+    fin = open(filename, "rt")
+    #read file contents to string
+    data = fin.read()
+    #replace all occurrences of the required string
+    data = data.replace('X191', 'X161')
+    data = data.replace('X192', 'X162')
+    #close the input file
+    fin.close()
+    #open the input file in write mode
+    fin = open(filename, "wt")
+    #overrite the input file with the resulting data
+    fin.write(data)
+    #close the file
+    fin.close()
+
+    content = tb.read_file(filename)
+    
     t_pblock = "resize_pblock [get_pblocks payload] -add {SLICE_X30Y0:SLICE_X191Y449}"
-    s_pblock = "resize_pblock [get_pblocks payload] -add {SLICE_X0Y0:SLICE_X191Y449}"
+    s_pblock = "resize_pblock [get_pblocks payload] -add {SLICE_X0Y0:SLICE_X161Y449}"
     t_loop = "for {set i 0} {$i < 18} {incr i} {"
     s_loop = "for {set i 0} {$i < 8} {incr i} {"
     t_cell = "add_cells_to_pblock [get_pblocks payload_8] [get_cells -quiet datapath/rgen[8].region/pgen.*]"
@@ -37,18 +53,6 @@ def replace_area_constraints(filename):
             file.seek( 0 )
             file.truncate()
             file.write( fileContents )
-
-    #text = "resize_pblock [get_pblocks payload] -add {SLICE_X30Y0:SLICE_X191Y449}"
-    #subs = "resize_pblock [get_pblocks payload] -add {SLICE_X0Y0:SLICE_X191Y449}"
-    #flags = 0
-    
-    #with open( filename, "r+" ) as file:
-        #fileContents = file.read()
-        #textPattern = re.compile( re.escape( text ), flags )
-        #fileContents = textPattern.sub( subs, fileContents )
-        #file.seek( 0 )
-        #file.truncate()
-        #file.write( fileContents )
         
 def replace_brd_decl(filename):
     content = tb.read_file(filename)

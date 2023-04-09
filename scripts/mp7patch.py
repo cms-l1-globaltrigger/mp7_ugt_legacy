@@ -7,22 +7,11 @@ import toolbox as tb
 
 def replace_area_constraints(filename):
 
-    #expr_forloop = re.compile(r"(for\s+{\s*set\s*i\s*0\s*}\s+{\s*\$i\s*<\s*)(\d+)(\s*}\s+{\s*incr\s+i\s*})")
-    #expr_cells = re.compile(r"(add_cells_to_pblock\s+\[\s*get_pblocks\s+payload_)(\d+)(\s*]\s*\[get_cells\s+(?:-\w+\s+)?datapath/rgen\[)(\d+)(]\.region/pgen\.\*])")
-
-    #content, count = expr_forloop.subn(r"\g<1>8\g<3>", content)
-    #if count != 1:
-        #raise RuntimeError("Could not replace the for-loop value.")
-
-    #content, count = expr_cells.subn(r"\g<1>7\g<3>7\g<5>", content)
-    #if count != 1:
-        #raise RuntimeError("Could not replace add_cells_to_pblock line.")
-        
     fin = open(filename, "rt")
     #read file contents to string
     data = fin.read()
     #replace all occurrences of the required string
-    data = data.replace('X191', 'X161')
+    data = data.replace('X191', 'X181')
     data = data.replace('X192', 'X162')
     #close the input file
     fin.close()
@@ -35,8 +24,8 @@ def replace_area_constraints(filename):
 
     content = tb.read_file(filename)
     
-    t_pblock = "resize_pblock [get_pblocks payload] -add {SLICE_X30Y0:SLICE_X161Y449}"
-    s_pblock = "resize_pblock [get_pblocks payload] -add {SLICE_X0Y0:SLICE_X161Y449}"
+    t_pblock = "resize_pblock [get_pblocks payload] -add {SLICE_X30Y0:SLICE_X181Y449}"
+    s_pblock = "resize_pblock [get_pblocks payload] -add {SLICE_X0Y0:SLICE_X181Y449}"
     t_loop = "for {set i 0} {$i < 18} {incr i} {"
     s_loop = "for {set i 0} {$i < 8} {incr i} {"
     t_cell = "add_cells_to_pblock [get_pblocks payload_8] [get_cells -quiet datapath/rgen[8].region/pgen.*]"
@@ -85,27 +74,6 @@ def insert_l1a_ttc(filename):
     with open(filename, "w") as fp:
         fp.write(content)
         logging.info("Successfully patched l1a_ttc file '{}'".format(filename))
-
-## HB 2022-09-16: with IPBB 0.5.2 'scripts/firmware/dep_tree/VivadoScriptWriter.py' does not exist anymore in environment "ipbb-0.5.2".
-## Statements "set_property ..." are now located in '../mp7_ugt_legacy/firmware/ucf/ugt_strategy.tcl'. No need for patch anymore.
-
-#def append_vivado_rules(filename):
-    #rules = [
-        #"      ## HB 2017-04-06: inserted -assert = 1, which means \"Enable VHDL assert statements to be evaluated\"",
-        #"      ## (see UG901 (v2016.3) October 21, 2016, page 12)",
-        #"      write( \'set_property \"steps.synth_design.args.assert\" 1 [get_runs synth_1]\' )",
-
-        #"      ## HB 2017-04-06: for timimg optimisation",
-        #"      write( \'set_property strategy Performance_ExplorePostRoutePhysOpt [get_runs impl_1]\' )",
-
-        #"      ## EOF",
-    #]
-
-    #with open(filename, "a") as fp:
-        #for rule in rules:
-            #fp.write(rule)
-            #fp.write("\n")
-        #logging.info("Successfully patched VivadoScriptWriter file '{}'".format(filename))
 
 def patch_all(projectpath):
     """Batch patch all firmware files."""

@@ -12,7 +12,7 @@ def replace_area_constraints(filename):
     data = fin.read()
     #replace all occurrences of the required string
     data = data.replace('X191', 'X181')
-    data = data.replace('X192', 'X162')
+    data = data.replace('X192', 'X182')
     #close the input file
     fin.close()
     #open the input file in write mode

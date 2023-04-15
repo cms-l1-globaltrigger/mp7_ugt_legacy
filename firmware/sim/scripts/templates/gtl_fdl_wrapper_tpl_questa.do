@@ -75,6 +75,8 @@ vcom -93 -work work $HDL_DIR/payload/gtl/common/charge_comp.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/phi_windows_comp.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/eta_comp_signed.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/eta_windows_comp.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/common/muon_index_comp.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/common/muon_index_windows_comp.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/calo_comparators.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/esums_comparators.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/muon_comparators.vhd

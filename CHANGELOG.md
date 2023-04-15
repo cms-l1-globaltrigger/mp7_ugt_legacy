@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.22.3] - 2023-04-15
+### Comment
+
+- mp7_ugt firmware release v1.22.3
+- bug fixed for muon index
+
+### Added
+- source files:
+  - ../payload/gtl/common/muon_index_comp.vhd
+  - ../payload/gtl/common/muon_index_windows_comp.vhd
+
+### Changed
+- source files:
+  - ../payload/gtl/common/muon_comparators.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+- dep file:
+  - ../cfg/uGT_algo.dep
+
 ## [v1.22.2] - 2023-04-09
 ### Comment
 
@@ -137,7 +157,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
->>>>>>> master
 
 ## [v1.21.0] - 2022-09-14
 ### Comment

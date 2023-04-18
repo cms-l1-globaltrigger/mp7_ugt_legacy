@@ -34,7 +34,7 @@ end topo_wrapper;
 architecture rtl of topo_wrapper is
 
     signal ett_i, htt_i, etm_i, htm_i, etmhf_i, htmhf_i: std_logic_vector(31 downto 0) := X"00000000";
-    signal topo_score: std_logic_vector(17 downto 0);
+    signal topo_score: std_logic_vector(15 downto 0);
     signal ap_rst: std_logic := '0';
     signal ap_start: std_logic := '1';
     signal topo: std_logic_vector(0 downto 0) := "0";
@@ -71,6 +71,6 @@ begin
 
     topo_out <= topo(0);
     
-    topo_score_o <= topo_score;
+    topo_score_o(15 downto 0) <= topo_score;
 
 end architecture rtl;

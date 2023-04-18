@@ -56,6 +56,9 @@ vcom -93 -work work $TB_DIR/txt_util_pkg.vhd
 ## GT packages
 vcom -93 -work work $HDL_DIR/packages/math_pkg.vhd
 ## HB 2022-09-21: used gt_mp7_top_pkg_sim.vhd for simulation
+vcom -93 -work work $HDL_DIR/packages/gt_mp7_top_pkg_sim.vhd
+vcom -93 -work work $HDL_DIR/packages/top_decl.vhd
+vcom -93 -work work $MP7/components/mp7_ttc/firmware/hdl/mp7_ttc_decl.vhd
 vcom -93 -work work $HDL_DIR/packages/gt_mp7_core_pkg.vhd
 vcom -93 -work work $MENU_DIR/fdl_pkg.vhd
 vcom -93 -work work $HDL_DIR/packages/fdl_addr_decode.vhd
@@ -109,6 +112,7 @@ vcom -93 -work work $HDL_DIR/payload/gtl/comb_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/esums_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/min_bias_hf_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/towercount_condition.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/zdc_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
 #### inserted from anomaly_detection.dep
 {{adt_vhd}}
@@ -170,7 +174,6 @@ vcom -93 -work work $HDL_DIR/payload/frame.vhd
 vcom -93 -work work $HDL_DIR/payload/bgo_sync.vhd
 vcom -93 -work work $HDL_DIR/packages/gt_mp7_core_addr_decode.vhd
 vcom -93 -work work $IPB_DIR/components/ipbus_core/firmware/hdl/ipbus_fabric_sel.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl_data_mapping.vhd
 vcom -93 -work work $HDL_DIR/mp7_payload.vhd
 
 ##TB_DIR

@@ -4,15 +4,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.21.8] - 2022-11-29
+## [v1.22.1] - 2023-03-23
 ### Comment
 
-- mp7_ugt firmware release v1.21.8
-- test version for "anomaly detection trigger (ADT)"
+- mp7_ugt firmware release v1.22.1
+- development for topological trigger (topo_trigger)
+
+### Added
+- source files:
+  - ../payload/gtl/topo_trigger/topo_wrapper.vhd
 
 ### Changed
 - source files:
+  - ../packages/gt_core_pkg.vhd
   - ../payload/gtl_module_tpl.vhd
+
+## [v1.22.0] - 2023-03-14
+### Comment
+
+- mp7_ugt firmware release v1.22.0
+- development for "MUS2" (email: "New 2Loose HMT configuration", 3.12.2022)
+- implemented cut for muon index bits
+- implemented "anomaly detection trigger (ADT)"
+- changes for 10G ZDC on link 11
+
+### Added
+- source files:
+  - ../payload/gtl/anomaly_detection
+
+### Changed
+- source files:
+  - ../packages/gtl_pkg.vhd
+  - ../packages/gt_core_pkg.vhd
+  - ../payload/gtl/bx_pipeline.vhd
+  - ../payload/gtl_module_tpl.vhd
+  - ../payload/gtl/muon_comparators.vhd
+  - ../payload/gtl/muon_obj_cuts.vhd
+  - ../payload/gtl/comb_conditions.vhd
+  - ../payload/gtl/correlation_conditions.vhd
+  - ../payload/gtl/zdc_condition.vhd
 
 ## [v1.21.7] - 2022-11-29
 ### Comment

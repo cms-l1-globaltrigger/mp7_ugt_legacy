@@ -292,19 +292,8 @@ begin
     s_in0_mux9   <=   (X"00000" & bx_nr, sValid, start, strobe);           -- frame 0   -> frame bx_nr
     s_in1_mux9   <=   (X"00000" & ctrs(6).bctr, sValid, start, strobe);    -- frame 1   -> mp7 ttc bc cntr for Quad 6!
     s_in2_mux9   <=   (X"00000" & bx_nr, sValid, start, strobe);       -- frame 2   -> frame bx_nr (kept for same read-out structure)
-
-    -- HB 2021-06-16: inserted orbit counter for scouting
-    scouting_p: process (orbit_nr, sValid, start, strobe)
-    begin
-        if SCOUTING then
-            s_in3_mux9   <=   (X"0000" & orbit_nr(47 downto 32), sValid, start, strobe); -- frame 3   -> orbit counter 47..32
-            s_in4_mux9   <=   (orbit_nr(31 downto 0), sValid, start, strobe);            -- frame 4   -> orbit counter 31..0
-        else
-            s_in3_mux9   <=   ((others => '0'), sValid, start, strobe);        -- frame 3   -> free
-            s_in4_mux9   <=   ((others => '0'), sValid, start, strobe);        -- frame 4   -> free
-        end if;
-    end process scouting_p;
-
+    s_in3_mux9   <=   (X"0000" & orbit_nr(47 downto 32), sValid, start, strobe); -- frame 3   -> orbit counter 47..32
+    s_in4_mux9   <=   (orbit_nr(31 downto 0), sValid, start, strobe);            -- frame 4   -> orbit counter 31..0
     s_in5_mux9   <=   ((others => '0'), sValid, start, strobe);            -- frame 5   -> free
 
     mux9_i: entity work.mux
@@ -315,8 +304,8 @@ begin
             in0     =>  s_in0_mux9,    -- frame 0   -> bx_nr
             in1     =>  s_in1_mux9,    -- frame 1   -> mp7 ttc bc cntr
             in2     =>  s_in2_mux9,    -- frame 2   -> bx_nr
-            in3     =>  s_in3_mux9,    -- frame 3   -> free / orbit counter 47..32
-            in4     =>  s_in4_mux9,    -- frame 4   -> free / orbit counter 31..0
+            in3     =>  s_in3_mux9,    -- frame 3   -> orbit counter 47..32
+            in4     =>  s_in4_mux9,    -- frame 4   -> orbit counter 31..0
             in5     =>  s_in5_mux9,    -- frame 5   -> free
             mux_out =>  lane_out(25)
         );

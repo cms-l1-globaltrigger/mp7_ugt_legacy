@@ -32,6 +32,17 @@ entity correlation_conditions is
         eta_w4_lower_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        nr_idx_windows_obj1 : natural := 0;
+        idx_w1_upper_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w1_lower_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w2_upper_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w2_lower_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w3_upper_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w3_lower_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w4_upper_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w4_lower_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w5_upper_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w5_lower_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_phi_windows_obj1: natural := 0;
         phi_w1_upper_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_obj1: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -62,6 +73,17 @@ entity correlation_conditions is
         eta_w4_lower_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        nr_idx_windows_obj2 : natural := 0;
+        idx_w1_upper_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w1_lower_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w2_upper_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w2_lower_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w3_upper_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w3_lower_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w4_upper_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w4_lower_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w5_upper_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w5_lower_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_phi_windows_obj2: natural := 0;
         phi_w1_upper_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_obj2: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -92,6 +114,17 @@ entity correlation_conditions is
         eta_w4_lower_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_upper_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         eta_w5_lower_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        nr_idx_windows_obj3 : natural := 0;
+        idx_w1_upper_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w1_lower_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w2_upper_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w2_lower_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w3_upper_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w3_lower_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w4_upper_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w4_lower_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w5_upper_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        idx_w5_lower_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         nr_phi_windows_obj3: natural := 0;
         phi_w1_upper_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         phi_w1_lower_limit_obj3: std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
@@ -263,6 +296,17 @@ begin
                     eta_w4_lower_limit_obj1,
                     eta_w5_upper_limit_obj1,
                     eta_w5_lower_limit_obj1,
+                    nr_idx_windows_obj1,
+                    idx_w1_upper_limit_obj1,
+                    idx_w1_lower_limit_obj1,
+                    idx_w2_upper_limit_obj1,
+                    idx_w2_lower_limit_obj1,
+                    idx_w3_upper_limit_obj1,
+                    idx_w3_lower_limit_obj1,
+                    idx_w4_upper_limit_obj1,
+                    idx_w4_lower_limit_obj1,
+                    idx_w5_upper_limit_obj1,
+                    idx_w5_lower_limit_obj1,
                     nr_phi_windows_obj1,
                     phi_w1_upper_limit_obj1,
                     phi_w1_lower_limit_obj1,
@@ -329,6 +373,17 @@ begin
                         eta_w4_lower_limit_obj2,
                         eta_w5_upper_limit_obj2,
                         eta_w5_lower_limit_obj2,
+                        nr_idx_windows_obj2,
+                        idx_w1_upper_limit_obj2,
+                        idx_w1_lower_limit_obj2,
+                        idx_w2_upper_limit_obj2,
+                        idx_w2_lower_limit_obj2,
+                        idx_w3_upper_limit_obj2,
+                        idx_w3_lower_limit_obj2,
+                        idx_w4_upper_limit_obj2,
+                        idx_w4_lower_limit_obj2,
+                        idx_w5_upper_limit_obj2,
+                        idx_w5_lower_limit_obj2,
                         nr_phi_windows_obj2,
                         phi_w1_upper_limit_obj2,
                         phi_w1_lower_limit_obj2,
@@ -490,6 +545,17 @@ begin
                             eta_w4_lower_limit_obj3,
                             eta_w5_upper_limit_obj3,
                             eta_w5_lower_limit_obj3,
+                            nr_idx_windows_obj3,
+                            idx_w1_upper_limit_obj3,
+                            idx_w1_lower_limit_obj3,
+                            idx_w2_upper_limit_obj3,
+                            idx_w2_lower_limit_obj3,
+                            idx_w3_upper_limit_obj3,
+                            idx_w3_lower_limit_obj3,
+                            idx_w4_upper_limit_obj3,
+                            idx_w4_lower_limit_obj3,
+                            idx_w5_upper_limit_obj3,
+                            idx_w5_lower_limit_obj3,
                             nr_phi_windows_obj3,
                             phi_w1_upper_limit_obj3,
                             phi_w1_lower_limit_obj3,

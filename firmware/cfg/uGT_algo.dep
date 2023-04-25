@@ -36,6 +36,8 @@ src payload/gtl/common/lut_comp.vhd
 src payload/gtl/common/charge_comp.vhd
 src payload/gtl/common/eta_comp_signed.vhd
 src payload/gtl/common/eta_windows_comp.vhd
+src payload/gtl/common/muon_index_comp.vhd
+src payload/gtl/common/muon_index_windows_comp.vhd
 src payload/gtl/common/phi_windows_comp.vhd
 src payload/gtl/common/calo_comparators.vhd
 src payload/gtl/common/matrix_calo_cond.vhd

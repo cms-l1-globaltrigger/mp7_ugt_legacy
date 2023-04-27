@@ -2,7 +2,8 @@
 -- Global Trigger Logic module.
 
 -- Version history:
--- HB 2023-03-14: v1.18.1: Implemented topological trigger.
+-- HB 2023-04-27: v1.18.2: Implemented topological trigger.
+-- HB 2023-04-15: v1.18.1: Bug fix muon index bits.
 -- HB 2023-03-14: v1.18.0: Implemented "MUS2" (new hadronic shower bit), Anomaly Detection Trigger, ZDC conditions and cuts for muon index bits.
 -- HB 2022-11-29: v1.17.6: Bug fix in algo_pre_scaler_fractional_float.vhd.
 -- HB 2022-11-16: v1.17.5: Bug fix in correlation_conditions.vhd.

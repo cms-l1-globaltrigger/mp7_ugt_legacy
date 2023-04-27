@@ -4,10 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.22.1] - 2023-03-23
+## [v1.22.4] - 2023-04-27
 ### Comment
 
-- mp7_ugt firmware release v1.22.1
+- mp7_ugt firmware release v1.22.4
 - development for topological trigger (topo_trigger)
 
 ### Added
@@ -19,7 +19,43 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/gt_core_pkg.vhd
   - ../payload/gtl_module_tpl.vhd
 
-## [v1.22.0] - 2023-03-14
+## [v1.22.3] - 2023-04-15
+### Comment
+
+- mp7_ugt firmware release v1.22.3
+- bug fixed for muon index
+
+### Added
+- source files:
+  - ../payload/gtl/common/muon_index_comp.vhd
+  - ../payload/gtl/common/muon_index_windows_comp.vhd
+
+### Changed
+- source files:
+  - ../payload/gtl/common/muon_comparators.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+- dep file:
+  - ../cfg/uGT_algo.dep
+
+## [v1.22.2] - 2023-04-09
+### Comment
+
+- mp7_ugt firmware release v1.22.2
+- bug fixed in scripts/mp7_patch.py
+
+### Changed
+- script files:
+  - scripts/mp7_patch.py
+
+## [v1.22.1] - 2023-04-07
+### Comment
+
+- mp7_ugt firmware release v1.22.1
+- based on v1.22.0, but without links 32..71
+
+## [v1.22.0] - 2023-03-24
 ### Comment
 
 - mp7_ugt firmware release v1.22.0
@@ -27,13 +63,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - implemented cut for muon index bits
 - implemented "anomaly detection trigger (ADT)"
 - changes for 10G ZDC on link 11
-
-### Added
-- source files:
-  - ../payload/gtl/anomaly_detection
+- all 72 links
+- scouting outputs on links 28-31
 
 ### Changed
 - source files:
+  - ../payload/frame/output_mux.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/top_decl.vhd
   - ../packages/gtl_pkg.vhd
   - ../packages/gt_core_pkg.vhd
   - ../payload/gtl/bx_pipeline.vhd
@@ -43,6 +80,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/gtl/comb_conditions.vhd
   - ../payload/gtl/correlation_conditions.vhd
   - ../payload/gtl/zdc_condition.vhd
+- script files:
+  - scripts/mp7_patch.py
 
 ## [v1.21.7] - 2022-11-29
 ### Comment
@@ -133,7 +172,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
->>>>>>> master
 
 ## [v1.21.0] - 2022-09-14
 ### Comment

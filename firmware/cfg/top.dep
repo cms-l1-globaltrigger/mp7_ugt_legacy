@@ -1,3 +1,4 @@
+include topo_trigger.dep
 include anomaly_detection.dep
 include uGT_algo.dep
 ## HB 2016-11-16: uGT_gtl.dep not used anymore, VHDL files of L1Menu in uGT_algo.dep now

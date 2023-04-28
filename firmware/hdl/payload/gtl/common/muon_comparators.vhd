@@ -168,8 +168,8 @@ begin
             eta_comp_o => eta_comp
         );
 
--- HB 2023-02-14: inserted cut for index bits.
-    idx_windows_comp_i: entity work.eta_windows_comp
+-- HB 2023-04-15: inserted cut for index bits.
+    idx_windows_comp_i: entity work.muon_index_windows_comp
         generic map(
             nr_idx_windows,
             idx_w1_upper_limit(MUON_IDX_BITS_HIGH-MUON_IDX_BITS_LOW downto 0),

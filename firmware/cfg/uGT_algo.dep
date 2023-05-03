@@ -79,6 +79,7 @@ src payload/gtl/correlation_cuts_calculation.vhd
 src payload/gtl/correlation_conditions.vhd
 src payload/gtl/anomaly_detection/adt_wrapper.vhd
 src payload/gtl/zdc_condition.vhd
+src payload/gtl/topo_trigger/topo_wrapper.vhd
 #
 ### modules of BRAMs used for mass over DeltaR
 ## XCI files of blk_mem_gen for rom_lut_calo_inv_dr_sq and rom_lut_muon_inv_dr_sq moved to 'add_l1menu_blkmem_files.tcl'

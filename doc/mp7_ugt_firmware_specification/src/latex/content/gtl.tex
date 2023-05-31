@@ -168,7 +168,7 @@ The data structure of "Missing Ht including HF" (HT$_{miss}^{HF}$) quantity [inc
 \label{sec:gtl:gmt_optical_interfaces}
 
 The data structure of a muon object (64 bits):\\
-\tiny{Remark: "extrapol." means extrapolated - "qual" means quality bits - "iso" means isolation bits - "ch" means charge bits (bit 34 = charge sign, bit 35 = charge valid) - "m" means muon shower bit (on MU0 [MUS0], MU2 [MUS1], MU3 [MUS2], MU4 [MUSOOT0] and MU6 [MUSOOT1]; spare on MU1, MU5 and MU7) - "imp" = impact parameter.}\normalsize
+\tiny{Remark: "extrapol." means extrapolated - "qual" means quality bits - "iso" means isolation bits - "ch" means charge bits (bit 34 = charge sign, bit 35 = charge valid) - "m" means muon shower bit (on MU0 [MUS0], MU2 [MUS1], MU3 [MUS2 (two loose muon shower)], MU4 [MUSOOT0] and MU6 [MUSOOT1]; spare on MU1, MU5 and MU7) - "imp" = impact parameter.}\normalsize
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
         \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
@@ -1242,7 +1242,7 @@ For the entity declaration of \href{\gitbranch/firmware/hdl/gt_mp7_core/gtl_fdl_
 \subsubsection{Muon shower bits}
 \label{sec:gtl:muon_shower_bits}
 
-Muon shower bits MUS0 (MUon Shower, bit 61 on MU0), MUS1 (bit 61 on MU2), MUS2 (bit 61 on MU3), MUSOOT0 (MUon Shower Out Of Time, bit 61 on MU4), MUSOOT1 (bit 61 on MU6) (see \ref{sec:gtl:muon_data} and Table~\ref{tab:gtl:tab_muon_shower_bits}) can be selected by TME to an algo or combined with other conditions to an algo.
+Muon shower bits MUS0 (MUon Shower, bit 61 on MU0), MUS1 (bit 61 on MU2), MUS2 (two loose muon shower - bit 61 on MU3), MUSOOT0 (MUon Shower Out Of Time, bit 61 on MU4), MUSOOT1 (bit 61 on MU6) (see \ref{sec:gtl:muon_data} and Table~\ref{tab:gtl:tab_muon_shower_bits}) can be selected by TME to an algo or combined with other conditions to an algo.
 
 \subsubsection{Minimum bias trigger conditions}
 \label{sec:gtl:min_bias_conditions}

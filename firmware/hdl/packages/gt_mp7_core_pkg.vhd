@@ -3,14 +3,15 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.23.0
+-- mp7_ugt (=FRAME_VERSION): v1.23.1
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.23.0
+-- gt: v1.23.1
 -- frame: v1.4.0 (see frame.vhd)
 -- gtl: v1.18.1 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
+-- HB 2023-03-31: v1.23.1 - Used link 36..71 for ZDC 5G input for tests.
 -- HB 2023-03-31: v1.23.0 - Used link 71 for ZDC 5G input.
 -- HB 2023-04-08: v1.22.2 - Changed in scripts/mp7_patch.py (for area_constraints.tcl).
 -- HB 2023-04-07: v1.22.1 - Used Tx links 28-31 for scouting (frame/output_mux.vhd) without links 32..71.
@@ -93,7 +94,7 @@ package gt_mp7_core_pkg is
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GT_MINOR_VERSION      : integer range 0 to 255 := 23;
-    constant GT_REV_VERSION        : integer range 0 to 255 := 0;
+    constant GT_REV_VERSION        : integer range 0 to 255 := 1;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &

@@ -257,7 +257,6 @@ package body lhc_data_pkg is
         variable ret_value : std_logic_vector(LHC_DATA_WIDTH-1 downto 0);
         variable index : natural := 0;
     begin
-    constant OFFSET_ZDC5G_LANES : natural := 71;
         for i in 0 to MUON_ARRAY_LENGTH-1 loop
             ret_value(index+(i+1)*MUON_DATA_WIDTH-1 downto index+(i*MUON_DATA_WIDTH)) := data_in.muon(i);
         end loop;

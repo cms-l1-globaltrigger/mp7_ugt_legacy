@@ -5,13 +5,14 @@ import argparse
 blk_size = 30 # Block length for +/-2bx (and 6 frames with 32 bit data)
 fed_marker = "FED#"
 fed_nr_def = "1404" # FED number of production crate
-line_nr_o = 11 # Length of AMC13 and AMC #1 headers !!!!
+line_nr_o = 2+6+3 # 2 AMC13 header lines, 6 lines for MP7s in AMC13 header and 3 AMC #1 header lines !!!!
 
-length_o = 1
-line_split_o = " "
+idx = 0
 valid_data = False
 valid_data_idx = 0
-idx = 0
+length_o = 1
+line_split_0_o = " "
+line_split_1_o = " "
 
 # fixed differences between blocks (in lines):
 diff_0 = 0 # first difference

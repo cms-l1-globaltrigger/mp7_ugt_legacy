@@ -64,12 +64,12 @@ architecture arch of output_mux is
     signal s_in4_mux0,s_in4_mux1,s_in4_mux2,s_in4_mux3,s_in4_mux4,s_in4_mux5,s_in4_mux6,s_in4_mux7,s_in4_mux8,s_in4_mux9 : lword;
     signal s_in5_mux0,s_in5_mux1,s_in5_mux2,s_in5_mux3,s_in5_mux4,s_in5_mux5,s_in5_mux6,s_in5_mux7,s_in5_mux8,s_in5_mux9 : lword;
 
-    signal s_in0_mux10,s_in0_mux11,s_in0_mux12,s_in0_mux13 : lword;
-    signal s_in1_mux10,s_in1_mux11,s_in1_mux12,s_in1_mux13 : lword;
-    signal s_in2_mux10,s_in2_mux11,s_in2_mux12,s_in2_mux13 : lword;
-    signal s_in3_mux10,s_in3_mux11,s_in3_mux12,s_in3_mux13 : lword;
-    signal s_in4_mux10,s_in4_mux11,s_in4_mux12,s_in4_mux13 : lword;
-    signal s_in5_mux10,s_in5_mux11,s_in5_mux12,s_in5_mux13 : lword;
+    signal s_in0_mux20,s_in0_mux21,s_in0_mux22,s_in0_mux23 : lword;
+    signal s_in1_mux20,s_in1_mux21,s_in1_mux22,s_in1_mux23 : lword;
+    signal s_in2_mux20,s_in2_mux21,s_in2_mux22,s_in2_mux23 : lword;
+    signal s_in3_mux20,s_in3_mux21,s_in3_mux22,s_in3_mux23 : lword;
+    signal s_in4_mux20,s_in4_mux21,s_in4_mux22,s_in4_mux23 : lword;
+    signal s_in5_mux20,s_in5_mux21,s_in5_mux22,s_in5_mux23 : lword;
 
 begin
 
@@ -379,88 +379,89 @@ begin
         );
 
 -- HB 2023-06-07: used link 68-71 for 5G output for loopback tests (ZDC)
-    s_in0_mux0 <= (lmp_lhc_data.eg(0), sValid, start, strobe);
-    s_in1_mux0 <= (lmp_lhc_data.eg(1), sValid, start, strobe);
-    s_in2_mux0 <= (lmp_lhc_data.eg(2), sValid, start, strobe);
-    s_in3_mux0 <= (lmp_lhc_data.eg(3), sValid, start, strobe);
-    s_in4_mux0 <= (lmp_lhc_data.eg(4), sValid, start, strobe);
-    s_in5_mux0 <= (lmp_lhc_data.eg(5), sValid, start, strobe);
+    s_in0_mux20 <= (lmp_lhc_data.eg(0), sValid, start, strobe);
+    s_in1_mux20 <= (lmp_lhc_data.eg(1), sValid, start, strobe);
+    s_in2_mux20 <= (lmp_lhc_data.eg(2), sValid, start, strobe);
+    s_in3_mux20 <= (lmp_lhc_data.eg(3), sValid, start, strobe);
+    s_in4_mux20 <= (lmp_lhc_data.eg(4), sValid, start, strobe);
+    s_in5_mux20 <= (lmp_lhc_data.eg(5), sValid, start, strobe);
 
-    mux0_i: entity work.mux
+    mux20_i: entity work.mux
         port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(17).ttc_cmd(0), --bcres for quad 17
-            in0     =>  s_in0_mux10,
-            in1     =>  s_in1_mux10,
-            in2     =>  s_in2_mux10,
-            in3     =>  s_in3_mux10,
-            in4     =>  s_in4_mux10,
-            in5     =>  s_in5_mux10,
+            in0     =>  s_in0_mux20,
+            in1     =>  s_in1_mux20,
+            in2     =>  s_in2_mux20,
+            in3     =>  s_in3_mux20,
+            in4     =>  s_in4_mux20,
+            in5     =>  s_in5_mux20,
             mux_out =>  lane_out(68)
         );
 
-    s_in0_mux1 <= (lmp_lhc_data.eg(6), sValid, start, strobe);
-    s_in1_mux1 <= (lmp_lhc_data.eg(7), sValid, start, strobe);
-    s_in2_mux1 <= (lmp_lhc_data.eg(8), sValid, start, strobe);
-    s_in3_mux1 <= (lmp_lhc_data.eg(9), sValid, start, strobe);
-    s_in4_mux1 <= (lmp_lhc_data.eg(10), sValid, start, strobe);
-    s_in5_mux1 <= (lmp_lhc_data.eg(11), sValid, start, strobe);
+    s_in0_mux21 <= (lmp_lhc_data.eg(6), sValid, start, strobe);
+    s_in1_mux21 <= (lmp_lhc_data.eg(7), sValid, start, strobe);
+    s_in2_mux21 <= (lmp_lhc_data.eg(8), sValid, start, strobe);
+    s_in3_mux21 <= (lmp_lhc_data.eg(9), sValid, start, strobe);
+    s_in4_mux21 <= (lmp_lhc_data.eg(10), sValid, start, strobe);
+    s_in5_mux21 <= (lmp_lhc_data.eg(11), sValid, start, strobe);
 
-    mux1_i: entity work.mux
+    mux21_i: entity work.mux
         port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(17).ttc_cmd(0), --bcres for quad 17
-            in0     =>  s_in0_mux11,
-            in1     =>  s_in1_mux11,
-            in2     =>  s_in2_mux11,
-            in3     =>  s_in3_mux11,
-            in4     =>  s_in4_mux11,
-            in5     =>  s_in5_mux11,
+            in0     =>  s_in0_mux21,
+            in1     =>  s_in1_mux21,
+            in2     =>  s_in2_mux21,
+            in3     =>  s_in3_mux21,
+            in4     =>  s_in4_mux21,
+            in5     =>  s_in5_mux21,
             mux_out =>  lane_out(69)
         );
 
-    s_in0_mux2 <= (lmp_lhc_data.jet(0), sValid, start, strobe);
-    s_in1_mux2 <= (lmp_lhc_data.jet(1), sValid, start, strobe);
-    s_in2_mux2 <= (lmp_lhc_data.jet(2), sValid, start, strobe);
-    s_in3_mux2 <= (lmp_lhc_data.jet(3), sValid, start, strobe);
-    s_in4_mux2 <= (lmp_lhc_data.jet(4), sValid, start, strobe);
-    s_in5_mux2 <= (lmp_lhc_data.jet(5), sValid, start, strobe);
+    s_in0_mux22 <= (lmp_lhc_data.jet(0), sValid, start, strobe);
+    s_in1_mux22 <= (lmp_lhc_data.jet(1), sValid, start, strobe);
+    s_in2_mux22 <= (lmp_lhc_data.jet(2), sValid, start, strobe);
+    s_in3_mux22 <= (lmp_lhc_data.jet(3), sValid, start, strobe);
+    s_in4_mux22 <= (lmp_lhc_data.jet(4), sValid, start, strobe);
+    s_in5_mux22 <= (lmp_lhc_data.jet(5), sValid, start, strobe);
 
-    mux2_i: entity work.mux
+    mux22_i: entity work.mux
         port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(17).ttc_cmd(0), --bcres for quad 17
-            in0     =>  s_in0_mux12,
-            in1     =>  s_in1_mux12,
-            in2     =>  s_in2_mux12,
-            in3     =>  s_in3_mux12,
-            in4     =>  s_in4_mux12,
-            in5     =>  s_in5_mux12,
+            in0     =>  s_in0_mux22,
+            in1     =>  s_in1_mux22,
+            in2     =>  s_in2_mux22,
+            in3     =>  s_in3_mux22,
+            in4     =>  s_in4_mux22,
+            in5     =>  s_in5_mux22,
             -- sel     =>  frame_cntr,
             mux_out =>  lane_out(70)
         );
 
-    s_in0_mux3 <= (lmp_lhc_data.jet(6), sValid, start, strobe);
-    s_in1_mux3 <= (lmp_lhc_data.jet(7), sValid, start, strobe);
-    s_in2_mux3 <= (lmp_lhc_data.jet(8), sValid, start, strobe);
-    s_in3_mux3 <= (lmp_lhc_data.jet(9), sValid, start, strobe);
-    s_in4_mux3 <= (lmp_lhc_data.jet(10), sValid, start, strobe);
-    s_in5_mux3 <= (lmp_lhc_data.jet(11), sValid, start, strobe);
+    s_in0_mux23 <= (lmp_lhc_data.jet(6), sValid, start, strobe);
+    s_in1_mux23 <= (lmp_lhc_data.jet(7), sValid, start, strobe);
+    s_in2_mux23 <= (lmp_lhc_data.jet(8), sValid, start, strobe);
+    s_in3_mux23 <= (lmp_lhc_data.jet(9), sValid, start, strobe);
+    s_in4_mux23 <= (lmp_lhc_data.jet(10), sValid, start, strobe);
+    s_in5_mux23 <= (lmp_lhc_data.jet(11), sValid, start, strobe);
 
-    mux3_i: entity work.mux
+    mux23_i: entity work.mux
         port map(
             clk     =>  clk240,
             res     =>  lhc_rst,
             bcres   =>  ctrs(17).ttc_cmd(0), --bcres for quad 17
-            in0     =>  s_in0_mux13,
-            in1     =>  s_in1_mux13,
-            in2     =>  s_in2_mux13,
-            in3     =>  s_in3_mux13,
-            in4     =>  s_in4_mux13,
-            in5     =>  s_in5_mux13,
+            in0     =>  s_in0_mux23,
+            in1     =>  s_in1_mux23,
+            in2     =>  s_in2_mux23,
+            in3     =>  s_in3_mux23,
+            in4     =>  s_in4_mux23,
+            in5     =>  s_in5_mux23,
             mux_out =>  lane_out(71)
         );
+        
 end architecture;

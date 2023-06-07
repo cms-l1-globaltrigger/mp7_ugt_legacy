@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
   - ../payload/frame/output_mux.vhd
+  - ../payload/frame.vhd
+- simulation file:
+  - ../sim/testbench/lhc_data_debug_util_pkg.vhd
 
 ## [v1.23.1] - 2023-06-01
 ### Comment

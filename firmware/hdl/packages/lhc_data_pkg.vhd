@@ -290,6 +290,19 @@ package body lhc_data_pkg is
         ret_value(index + HTMHF_DATA_WIDTH-1 downto index) := data_in.htmhf;
         index := index + HTMHF_DATA_WIDTH;
 
+        ret_value(index + LINK_11_FR_0_WIDTH-1 downto index) := data_in.htmhf;
+        index := index + LINK_11_FR_0_WIDTH;
+        ret_value(index + LINK_11_FR_1_WIDTH-1 downto index) := data_in.htmhf;
+        index := index + LINK_11_FR_1_WIDTH;
+        ret_value(index + LINK_11_FR_2_WIDTH-1 downto index) := data_in.htmhf;
+        index := index + LINK_11_FR_2_WIDTH;
+        ret_value(index + LINK_11_FR_3_WIDTH-1 downto index) := data_in.htmhf;
+        index := index + LINK_11_FR_3_WIDTH;
+        ret_value(index + LINK_11_FR_4_WIDTH-1 downto index) := data_in.htmhf;
+        index := index + LINK_11_FR_4_WIDTH;
+        ret_value(index + LINK_11_FR_5_WIDTH-1 downto index) := data_in.htmhf;
+        index := index + LINK_11_FR_5_WIDTH;
+
         ret_value(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index) := data_in.external_conditions;
         index := index + EXTERNAL_CONDITIONS_DATA_WIDTH;
         
@@ -347,6 +360,19 @@ package body lhc_data_pkg is
         index := index + ETMHF_DATA_WIDTH;
         ret_value.htmhf := data_in(index + HTMHF_DATA_WIDTH-1 downto index);
         index := index + HTMHF_DATA_WIDTH;
+        
+        ret_value.htmhf := data_in(index + LINK_11_FR_0_WIDTH-1 downto index);
+        index := index + LINK_11_FR_0_WIDTH;
+        ret_value.htmhf := data_in(index + LINK_11_FR_1_WIDTH-1 downto index);
+        index := index + LINK_11_FR_1_WIDTH;
+        ret_value.htmhf := data_in(index + LINK_11_FR_2_WIDTH-1 downto index);
+        index := index + LINK_11_FR_2_WIDTH;
+        ret_value.htmhf := data_in(index + LINK_11_FR_3_WIDTH-1 downto index);
+        index := index + LINK_11_FR_3_WIDTH;
+        ret_value.htmhf := data_in(index + LINK_11_FR_4_WIDTH-1 downto index);
+        index := index + LINK_11_FR_4_WIDTH;
+        ret_value.htmhf := data_in(index + LINK_11_FR_5_WIDTH-1 downto index);
+        index := index + LINK_11_FR_5_WIDTH;
         
         ret_value.external_conditions := data_in(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index);
         index := index + EXTERNAL_CONDITIONS_DATA_WIDTH;

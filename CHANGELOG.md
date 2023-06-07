@@ -8,16 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - mp7_ugt firmware release v1.23.2
-- all 72 links with ZDC 5G input on links 36..71, outputs on links 68-71 for loopback
-
-### Added
-- source files:
-  - ../payload/mgt_output_test.vhd
+- all 72 links with ZDC 5G input on links 36..71, 5G outputs on links 68-71 for loopback
 
 ### Changed
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
-  - ../payload/payload.vhd
+  - ../payload/frame/output_mux.vhd
 
 ## [v1.23.1] - 2023-06-01
 ### Comment

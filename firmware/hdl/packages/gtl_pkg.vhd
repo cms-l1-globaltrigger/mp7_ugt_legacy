@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2023-06-23: inserted calo anomaly algorithm (CICADA) definitions.
 -- HB 2023-03-06: added hadronic shower trigger bit MUS2.
 -- HB 2023-03-01: updated constants for ZDC.
 -- HB 2022-10-17: added constant NR_INPUT_LANES (for reduced NR_LANES in frame.vhd).
@@ -113,7 +114,9 @@ constant ASYMET_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYP
 constant ASYMHT_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+8;
 constant ASYMETHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+9;
 constant ASYMHTHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+10;
-constant MU_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES+0;
+constant NR_MU_TYPE : natural := 1;
+constant MU_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES;
+constant BJET_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES+NR_MU_TYPE;
 
 -- ==== MUONs - begin ============================================================
 -- MUONs
@@ -228,10 +231,48 @@ constant TAU_ISO_LOW : natural := 25;
 constant TAU_ISO_HIGH : natural := 26;
 constant TAU_ISO_BITS : natural := TAU_ISO_HIGH-TAU_ISO_LOW+1;
 
+-- *******************************************************************************************************
+-- HB 2023-01-26: calo anomaly algorithm (CICADA) data from Calo-Layer1
+-- bjets definition
+-- constant NR_BJET_OBJECTS : positive := CICADA_ARRAY_LENGTH; -- number bjet objects, from lhc_data_pkg.vhd
+constant NR_BJET_OBJECTS : positive := 6; -- number bjet objects, from lhc_data_pkg.vhd
+
+constant BJET_ET_LOW : natural := 0;
+constant BJET_ET_HIGH : natural := 10;
+constant BJET_ET_BITS : natural := BJET_ET_HIGH-BJET_ET_LOW+1;
+constant BJET_ETA_LOW : natural := 11;
+constant BJET_ETA_HIGH : natural := 18;
+constant BJET_ETA_BITS : natural := BJET_ETA_HIGH-BJET_ETA_LOW+1;
+constant BJET_PHI_LOW : natural := 19;
+constant BJET_PHI_HIGH : natural := 26;
+constant BJET_PHI_BITS : natural := BJET_PHI_HIGH-BJET_PHI_LOW+1;
+constant BJET_FLAG_BIT : natural := 27;
+
+-- CICADA anomaly detection (ad) definition - decimal (dec) and integer (int) part 
+constant NR_AD_OBJECTS : positive := 1;
+
+constant AD_DEC_LOW : natural := 0;
+constant AD_DEC_HIGH : natural := 7;
+constant AD_DEC_BITS : natural := AD_DEC_HIGH-AD_DEC_LOW+1;
+constant AD_INT_LOW : natural := 8;
+constant AD_INT_HIGH : natural := 15;
+constant AD_INT_BITS : natural := AD_INT_HIGH-AD_INT_LOW+1;
+
+-- CICADA heavy ion bits
+constant NR_HI_OBJECTS : positive := 1;
+constant HI_LOW : natural := 0;
+constant HI_HIGH : natural := 7;
+constant HI_BITS : natural := HI_HIGH-HI_LOW+1;
+
+-- *******************************************************************************************************
+
 type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO_BITS-1 downto 0);
 type bx_eg_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_EG_OBJECTS-1);
 type bx_jet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_JET_OBJECTS-1);
 type bx_tau_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_TAU_OBJECTS-1);
+type bx_bjet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_BJET_OBJECTS-1);
+type bx_ad_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(AD_DEC_BITS+AD_INT_BITS-1 downto 0);
+type bx_hi_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(HI_BITS-1 downto 0);
 constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
 type calo_templates_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 constant MAX_CALO_ET_BITS : positive := max(EG_ET_BITS, JET_ET_BITS, TAU_ET_BITS);
@@ -444,6 +485,9 @@ type gtl_data_record is record
     towercount : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
     centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
+    bjet : calo_objects_array(0 to NR_BJET_OBJECTS-1);
+    cicada_ad : std_logic_vector(AD_DEC_BITS+AD_INT_BITS-1 downto 0);
+    cicada_hi : std_logic_vector(HI_BITS-1 downto 0);
     zdc : zdc_array;
 end record gtl_data_record;
 
@@ -477,6 +521,10 @@ type bx_data_record is record
     cent6 : bx_cent_array;
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
+    mus0, mus1, musoot0, musoot1 : mus_bit_array;
+    bjet : bx_bjet_objects_array;
+    cicada_ad : bx_ad_array;
+    cicada_hi : bx_hi_array;
     mus0, mus1, mus2, musoot0, musoot1 : mus_bit_array;
     zdcp : bx_zdc_array;
     zdcm : bx_zdc_array;

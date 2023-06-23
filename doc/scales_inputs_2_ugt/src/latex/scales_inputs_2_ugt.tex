@@ -18,7 +18,7 @@
 
 \begin{titlepage}
 
-\date{31 May 2023}
+\date{23 June 2023}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -69,7 +69,7 @@ P.Klabbers, W.H.Smith
 
 \end{titlepage}
 
-With respect to the ``legacy" system, the upgraded GT (uGT or $\mu$GT) has higher requirements concerning precision and amount of data (more input objects of each kind, additional bits for isolation, quality etc.) and also more input bandwidth and computing resources. The additional resources  allow to make the system more uniform and transparent as well as easier to use. The interfaces between uGMT (or $\mu$GMT, replacing GMT) and "Calo Trigger Layer-2" (replacing GCT) have to be defined accordingly.
+With respect to the "legacy" system, the upgraded GT (uGT or $\mu$GT) has higher requirements concerning precision and amount of data (more input objects of each kind, additional bits for isolation, quality etc.) and also more input bandwidth and computing resources. The additional resources  allow to make the system more uniform and transparent as well as easier to use. The interfaces between uGMT (or $\mu$GMT, replacing GMT) and "Calo Trigger Layer-2" (replacing GCT) have to be defined accordingly.
 
 We are using the new resources as described below (see also proposal~\cite{Darin}; the legacy system's connections are documented in~\cite{muon} for muons and in~\cite{calo} for calo objects) and have introduced the following new features:
 
@@ -117,8 +117,14 @@ The $p_t$ scale for muon objects starts from 0 (zero), but HW index=0 indicates 
 
 14) The "Asymmetry" and "Centrality" bits (introduced for Heavy-Ion running) are part of the ET$_{miss}$, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$ data structure.
 
+<<<<<<< HEAD
+15) The "CICADA" data structure with 6 "Boosted jets" (bjets) and values for Anomaly Detection and Heavy Ion bits~\cite{CICADA}.
+
+The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2} ) show the  bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.
+=======
 The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2}) show the bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.\\
 Table~\ref{table:scales_table_3} shows the bits for ZDC objects, see ~\cite{ZDC}.
+>>>>>>> master
 
 \begin{table}[ht]
 \caption{\bf Scales (muon and calorimeter)}
@@ -149,6 +155,14 @@ jet	&	1 * 12	&	$E_t$	&	0..1024 GeV	&	0.5	&	11                    \\
 	&		&	DISP	&		&		&	1                    \\
 	&		&	quality flags	&		&		&	2                    \\
 	&		&	spare	&		&		&	2                    \\
+	&		&	TOTAL	&		&		&	32                    \\
+% 	&		&		&		&		&	                    \\
+\hline
+bjet	&	1 * 6	&	$E_t$	&	0..1024 GeV	&	0.5	&	11                    \\
+	&		&	$\eta$	&	-5..5	&	0.0870/2=0.0435	&	7+1 = 8                    \\
+	&		&	$\varphi$	&	2$\pi$	&	2$\pi$/144$\sim$0.044	&	8                    \\
+	&		&	flag	&		&		&	1                    \\
+	&		&	AD value, HI bits	&		&		&	4                    \\
 	&		&	TOTAL	&		&		&	32                    \\
 % 	&		&		&		&		&	                    \\
 \hline
@@ -290,27 +304,27 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-\begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
- & \multicolumn{6}{ c| }{link} \\\hline
-frame & 10 & 11 & 12 & 13 & 14 &\makebox[1.5cm][c]{15} \\\hline\hline
-0 & ET, & EN\_MINUS & ExtCond & ExtCond & ExtCond & ExtCond\\
- & ETTEM, & (ZDC-) & [31:0] & [95:64] & [159:128] & [223:192]\\
- & MBT0HFP & [25:16] & & & &\\
-1 & HT, & EN\_PLUS & ExtCond & ExtCond & ExtCond & ExtCond\\
- & TOWERCOUNT, & (ZDC+) & [63:32] & [127:96] & [191:160] & [255:224]\\
- & MBT0HFM & [9:0] & & & &\\
-2 & ET$_{miss}$, & & free & free & free & free\\
- & ASYMET,& & & & &\\
- & MBT1HFP  & & & & &\\
-3 & HT$_{miss}$, & & free & free & free & free\\
- & ASYMHT,& & & & &\\
- & MBT1HFM & & & & &\\
-4 & ET$_{miss}^{HF}$ & & free & free & free & free\\
- & ASYMETHF, & & & & &\\
- & CENT[3:0] & & & & &\\
-5 & HT$_{miss}^{HF}$ & & free & free & free & free\\
- & ASYMHTHF, & & & & &\\
- & CENT[7:4] & & & & &\\\hline
+\begin{tabular}{|c|c|c|c|c|c|c|p{3.0cm}|}\hline
+ & \multicolumn{7}{ c| }{link} \\\hline
+frame & 10 & 11 & 12 & 13 & 14 & 15 &\makebox[3.0cm][c]{16} \\\hline\hline
+0 & ET, & res. & ExtCond & ExtCond & ExtCond & ExtCond & BJET0,\\
+ & ETTEM, & CICADA(0) & [31:0] & [95:64] & [159:128] & [223:192] & Anomaly Detection -\\
+ & MBT0HFP & & & & & & Integer high\\
+1 & HT, & res. & ExtCond & ExtCond & ExtCond & ExtCond & BJET1,\\
+ & TOWERCOUNT, & CICADA(1) & [63:32] & [127:96] & [191:160] & [255:224] & Anomaly Detection -\\
+ & MBT0HFM & & & & & &Integer low\\
+2 & ET$_{miss}$, & res. & free & free & free & free & BJET2,\\
+ & ASYMET,& CICADA(2) & & & & & Anomaly Detection -\\
+ & MBT1HFP  & & & & & & Decimal high\\
+3 & HT$_{miss}$, & res. & free & free & free & free & BJET3,\\
+ & ASYMHT,& CICADA(3) & & & & & Anomaly Detection -\\
+ & MBT1HFM & & & & & & Decimal low\\
+4 & ET$_{miss}^{HF}$ & res. & free & free & free & free &  BJET4,\\
+ & ASYMETHF, & CICADA(4) & & & & & Heavy Ion bits -\\
+ & CENT[3:0] & & & & & & high \\
+5 & HT$_{miss}^{HF}$ & res. & free & free & free & free & BJET5,\\
+ & ASYMHTHF, & CICADA(5) & & & & & Heavy Ion bits -\\
+ & CENT[7:4] & & & & & & low \\\hline
 \end{tabular}
 }
 \label{table:app:sum_opt_links2}
@@ -471,6 +485,7 @@ frame & objects\\\hline\hline
 
 \begin{itemize}
 \item The data structure of a jet object is shown in Table~\ref{table:jet_object} (bits 31..30 spare bits)
+\item The data structure of a bjet object is shown in Table~\ref{table:bjet_object} (bits 31..28 used for Anomaly Detection and Heavy Ion bits)
 \item The data structure of an e/$\gamma$ object is shown in Table~\ref{table:egamma_object} (bits 31..27 are not defined yet)
 \item The data structure of a tau object is shown in Table~\ref{table:tau_object} (bits 31..27 are not defined yet)
 \item The definition of isolation bits for e/$\gamma$ and tau is shown in Table~\ref{table:eg_tau_iso_bits}.
@@ -493,6 +508,21 @@ bit(s) & parameter \\\hline\hline
 10..0 & $E_t$ \\\hline
 \end{tabular}
 \label{table:jet_object}
+\end{table}
+
+\begin{table}[ht]
+\caption{\bf Data structure of a bjet object}
+\vspace{5mm}
+\centering
+\begin{tabular}{|c|c|}\hline
+bit(s) & parameter \\\hline\hline
+31..28 & Anomaly Detection and Heavy Ion bits \\
+27..27 & flag \\
+26..19 & $\varphi$ \\
+18..11 & $\eta$ \\
+10..0 & $E_t$ \\\hline
+\end{tabular}
+\label{table:bjet_object}
 \end{table}
 
 \begin{table}[ht]
@@ -619,7 +649,7 @@ and HT$_{miss}^{HF}$
 is shown in Tables~\ref{table:ett_object}, ~\ref{table:ht_object}, ~\ref{table:etm_object}, ~\ref{table:htm_object}, ~\ref{table:etmhf_object} and ~\ref{table:htmhf_object}.
 \item The definition of minimum bias HF, ETTEM, TOWERCOUNT, Asymmetry and Centrality bits is shown in ~\ref{table:min_bias_def}, ~\ref{table:ettem_def}, ~\ref{table:tower_count_def}
 ~\ref{table:asymmetry_def} and ~\ref{table:centrality_def}.
-\item The data structure of ZDC is shown in Table~\ref{table:zdc_struct}
+\item The definition of CICADA bits is shown in ~\ref{table:opt_link_cicada} and ~\ref{table:bjet_object}.
 \end{itemize}
 
 \begin{table}[ht]
@@ -785,15 +815,19 @@ Centrality bits [7:4] & CENT[7:4] & 5 & HT$_{miss}^{HF}$ & 31..28 \\\hline
 \end{table}
 
 \begin{table}[ht]
-\caption{\bf Data structure ZDC}
+\caption{\bf CICADA data on optical link}
 \vspace{5mm}
 \centering
-\begin{tabular}{|c|c|c|}\hline
-frame & bit(s) & parameter \\\hline\hline
-0 & 25..16 & EN\_MINUS (ZDC-)\\
-1 & 9..0 & EN\_PLUS (ZDC+)\\\hline
+\begin{tabular}{|c|l|l|}\hline
+frame & 31..28 & 27..0\\\hline\hline
+0 & Anomaly Detection Integer MSB & Boosted jet (bjet)  1\\\hline
+1 & Anomaly Detection Integer LSB & Boosted jet (bjet)  2\\\hline
+2 & Anomaly Detection Decimal MSB & Boosted jet (bjet)  3\\\hline
+3 & Anomaly Detection Decimal LSB & Boosted jet (bjet)  4\\\hline
+4 & Heavy Ion MSB & Boosted jet (bjet)  5\\\hline
+5 & Heavy Ion LSB & Boosted jet (bjet)  6\\\hline
 \end{tabular}
-\label{table:zdc_struct}
+\label{table:opt_link_cicada}
 \end{table}
 
 \clearpage
@@ -804,13 +838,13 @@ frame & bit(s) & parameter \\\hline\hline
 \url{https://indico.cern.ch/getFile.py/access?contribId=4\&sessionId=0\&resId=0\&materialId=slides\&confId=206223}
 
 \bibitem {muon}
-\url{https://cds.cern.ch/record/1364673/files/in04_006.pdf}
+\url{http://www.hephy.at/project/cms/trigger/globalMuonTrigger/notes/in04\_006.pdf}
 
 \bibitem {calo}
 \url{https://cds.cern.ch/record/1364214/files/in02_069.pdf}
 
-\bibitem {ZDC}
-\href{\gitbranch/doc/scales_inputs_2_ugt/ZDC_uhtr_spec.pdf}{\texttt{Description of ZDC structure (ZDC\_uhtr\_spec.pdf)}}
+\bibitem {CICADA}
+\url{https://docs.google.com/presentation/d/1Zk2oDbnxUZilnWXC\_HyWYbNJ8F41MiBso4D49bN-js4/edit\#slide=id.g129a5c5a910\_0\_197}
 
 \end{thebibliography}
 

@@ -2,6 +2,7 @@
 -- Calo condition matrix
 
 -- Version history:
+-- HB 2023-02-03: updated for CICADA.
 -- HB 2021-04-15: minor update. Changed name.
 -- HB 2021-02-19: updated condition output pipeline.
 -- HB 2019-04-30: first version (updated Dinyar/Hannes proposal).
@@ -30,6 +31,8 @@ entity matrix_calo_cond is
         obj_slice_3_vs_templ : in std_logic_2dim_array(calo_object_slice_3_low to calo_object_slice_3_high, 1 to 1);
         obj_slice_4_vs_templ : in std_logic_2dim_array(calo_object_slice_4_low to calo_object_slice_4_high, 1 to 1);
         twobody_pt_comp : in std_logic_2dim_array(calo_object_slice_1_low to calo_object_slice_1_high, calo_object_slice_1_low to calo_object_slice_1_high);
+        hi_comp : in std_logic;
+        ad_comp : in std_logic;
         condition_o : out std_logic
     );
 end matrix_calo_cond;
@@ -59,7 +62,7 @@ begin
             for i in calo_object_slice_1_low to calo_object_slice_1_high loop
                 condition_and_or_tmp := condition_and_or_tmp or obj_slice_1_vs_templ(i,1);
             end loop;
-            condition_and_or <= condition_and_or_tmp;
+            condition_and_or <= condition_and_or_tmp and hi_comp and ad_comp;
         end process matrix_single_p;
     end generate matrix_single_i;
 
@@ -84,7 +87,7 @@ begin
             for i in 1 to index loop
                 condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
             end loop;
-            condition_and_or <= condition_and_or_tmp;
+            condition_and_or <= condition_and_or_tmp and hi_comp and ad_comp;
         end process matrix_double_p;
     end generate matrix_double_i;
 
@@ -111,7 +114,7 @@ begin
             for i in 1 to index loop
                 condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
             end loop;
-            condition_and_or <= condition_and_or_tmp;
+            condition_and_or <= condition_and_or_tmp and hi_comp and ad_comp;
         end process matrix_triple_p;
     end generate matrix_triple_i;
 
@@ -176,7 +179,7 @@ begin
             condition_and_or_sig2 <= condition_and_or_tmp2;
             condition_and_or_sig3 <= condition_and_or_tmp3;
         end process matrix_quad_p_2;
-        condition_and_or <= condition_and_or_sig1 or condition_and_or_sig2 or condition_and_or_sig3;
+        condition_and_or <= (condition_and_or_sig1 or condition_and_or_sig2 or condition_and_or_sig3) and hi_comp and ad_comp;
     end generate matrix_quad_i;
 
 -- Pipeline stage for condition output.

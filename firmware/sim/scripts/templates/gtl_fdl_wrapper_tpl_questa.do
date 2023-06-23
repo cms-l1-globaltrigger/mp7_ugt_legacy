@@ -67,6 +67,7 @@ vcom -93 -work work $HDL_DIR/packages/gtl_luts_pkg.vhd
 #
 ## GTL modules
 ### common modules
+vcom -93 -work work $HDL_DIR/payload/gtl/common/cicada_ad_hi_comp.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/delay_pipeline.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/pt_comp.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/upt_comp.vhd

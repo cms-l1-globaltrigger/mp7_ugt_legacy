@@ -2,6 +2,7 @@
 -- Data mapping for GTL
 
 -- Version-history:
+-- HB 2023-06-23: cicada on link 11 (removed zdc10g on link 11).
 -- HB 2023-03-01: updated for ZDC.
 -- HB 2023-02-09: updated comments.
 -- HB 2022-10-10: inserted ZDC.
@@ -94,12 +95,20 @@ begin
 
 -- ****************************************************************************************
 
--- HB 2023-03-01: ZDC data (10G) on link 11 (after conversion from 5G to 10G).
-    gtl_data.zdc(0) <= lhc_data.zdc10g_0(EN_MINUS_BIT_HIGH downto EN_MINUS_BIT_LOW);
-    gtl_data.zdc(1) <= lhc_data.zdc10g_1(EN_PLUS_BIT_HIGH downto EN_PLUS_BIT_LOW);
-    gtl_data.zdc(2) <= "0000000000"; -- not defined for ZDC, but 6 frames forseen in "lhc_data_pkg.vhd"
-    gtl_data.zdc(3) <= "0000000000";
-    gtl_data.zdc(4) <= "0000000000";
-    gtl_data.zdc(5) <= "0000000000";
+-- HB 2023-02-09: CICADA data mapping
+    bjet_l: for i in 0 to NR_BJET_OBJECTS-1 generate
+        gtl_data.bjet(i)(BJET_ET_HIGH downto BJET_ET_LOW) <= lhc_data.cicada(i)(10 downto 0); -- bjet Et
+        gtl_data.bjet(i)(BJET_ETA_HIGH downto BJET_ETA_LOW) <= lhc_data.cicada(i)(18 downto 11); -- bjet eta
+        gtl_data.bjet(i)(BJET_PHI_HIGH downto BJET_PHI_LOW) <= lhc_data.cicada(i)(26 downto 19); -- bjet phi
+        gtl_data.bjet(i)(BJET_FLAG_BIT) <= lhc_data.cicada(i)(27); -- bjet flag (currently unused)
+    end generate;
     
+    gtl_data.cicada_ad(AD_INT_HIGH downto AD_INT_HIGH-3) <= lhc_data.cicada(0)(31 downto 28); -- anomaly detection integer part high
+    gtl_data.cicada_ad(AD_INT_LOW+3 downto AD_INT_LOW) <= lhc_data.cicada(1)(31 downto 28); -- anomaly detection integer part low
+    gtl_data.cicada_ad(AD_DEC_HIGH downto AD_DEC_HIGH-3) <= lhc_data.cicada(2)(31 downto 28); -- anomaly detection decimal part high
+    gtl_data.cicada_ad(AD_DEC_LOW+3 downto AD_DEC_LOW) <= lhc_data.cicada(3)(31 downto 28); -- anomaly detection decimal part low
+        
+    gtl_data.cicada_hi(HI_HIGH downto HI_HIGH-3) <= lhc_data.cicada(4)(31 downto 28); -- heavy ion bits high
+    gtl_data.cicada_hi(HI_LOW+3 downto HI_LOW) <= lhc_data.cicada(5)(31 downto 28); -- heavy ion bits low
+        
 end architecture rtl;

@@ -2,6 +2,7 @@
 -- Lane mapping process.
 
 -- Version-history:
+-- HB 2023-06-23: cicada on link 11 (removed zdc10g on link 11).
 -- HB 2022-10-08: zdc10g on link 11.
 -- HB 2022-09-06: cleaned up.
 -- HB 2106-05-31: lane mapping for all frames of calo links (for extended test-vector-file structure - see lhc_data_pkg.vhd)
@@ -38,9 +39,7 @@ architecture arch of lmp is
 --     constant OFFSET_JET_LANES : natural := 6;
 --     constant OFFSET_TAU_LANES : natural := 8;
 --     constant OFFSET_ESUMS_LANES : natural := 10;
--- -- HB 2106-05-31: proposal for memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg.vhd)
---     constant OFFSET_ZDC10G_LANES : natural := 11;
--- -- BR 2015-05-01: added external-conditions.
+--     constant OFFSET_CICADA_LANES : natural := 11;
 --     constant OFFSET_EXT_COND_LANES : natural := 12;
 
 begin
@@ -121,12 +120,12 @@ begin
     lhc_data_o.etmhf <= demux_data_i(OFFSET_ESUMS_LANES)(4);
     lhc_data_o.htmhf <= demux_data_i(OFFSET_ESUMS_LANES)(5);
 
-    lhc_data_o.zdc10g_0 <= demux_data_i(OFFSET_ZDC10G_LANES)(0);
-    lhc_data_o.zdc10g_1 <= demux_data_i(OFFSET_ZDC10G_LANES)(1);
-    lhc_data_o.zdc10g_2 <= demux_data_i(OFFSET_ZDC10G_LANES)(2);
-    lhc_data_o.zdc10g_3 <= demux_data_i(OFFSET_ZDC10G_LANES)(3);
-    lhc_data_o.zdc10g_4 <= demux_data_i(OFFSET_ZDC10G_LANES)(4);
-    lhc_data_o.zdc10g_5 <= demux_data_i(OFFSET_ZDC10G_LANES)(5);
+    lhc_data_o.cicada(0) <= demux_data_i(OFFSET_CICADA_LANES)(0);
+    lhc_data_o.cicada(1) <= demux_data_i(OFFSET_CICADA_LANES)(1);
+    lhc_data_o.cicada(2) <= demux_data_i(OFFSET_CICADA_LANES)(2);
+    lhc_data_o.cicada(3) <= demux_data_i(OFFSET_CICADA_LANES)(3);
+    lhc_data_o.cicada(4) <= demux_data_i(OFFSET_CICADA_LANES)(4);
+    lhc_data_o.cicada(5) <= demux_data_i(OFFSET_CICADA_LANES)(5);
 
 -- HEPHY 2015-05-01: added external-conditions.
     lhc_data_o.external_conditions(31 downto 0) <= demux_data_i(OFFSET_EXT_COND_LANES+0)(0);
@@ -137,13 +136,6 @@ begin
     lhc_data_o.external_conditions(191 downto 160) <= demux_data_i(OFFSET_EXT_COND_LANES+2)(1);
     lhc_data_o.external_conditions(223 downto 192) <= demux_data_i(OFFSET_EXT_COND_LANES+3)(0);
     lhc_data_o.external_conditions(255 downto 224) <= demux_data_i(OFFSET_EXT_COND_LANES+3)(1);
-
---     zdc5g(0) <= demux_data_i(ZDC5G_LANE_NR)(0);
---     zdc5g(1) <= demux_data_i(ZDC5G_LANE_NR)(1);
---     zdc5g(2) <= demux_data_i(ZDC5G_LANE_NR)(2);
---     zdc5g(3) <= demux_data_i(ZDC5G_LANE_NR)(3);
---     zdc5g(4) <= demux_data_i(ZDC5G_LANE_NR)(4);
---     zdc5g(5) <= demux_data_i(ZDC5G_LANE_NR)(5);
 
 end architecture;
 

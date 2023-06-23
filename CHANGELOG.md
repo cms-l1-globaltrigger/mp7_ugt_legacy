@@ -8,7 +8,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - mp7_ugt firmware release v1.24.0
-- implementation of CICADA
+- implementation of CICADA on link 11
+
+### Changed
+- source files:
+  - ../packages/gtl_pkg.vhd
+  - ../packages/lhc_data_pkg.vhd
+  - ../payload/gtl_data_mapping.vhd
+  - ../payload/gtl/bx_pipeline.vhd
+  - ../payload/gtl/common/calo_comparators.vhd
+  - ../payload/gtl/common/calo_obj_cuts.vhd
+  - ../payload/gtl/comb_conditions.vhd
+  - ../payload/gtl/correlation_conditions.vhd
+  - ../payload/frame/lmp.vhd
+- simulation file:
+  - ../sim/testbench/lhc_data_debug_util_pkg.vhd
 
 ## [v1.22.3] - 2023-04-15
 ### Comment
@@ -73,6 +87,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/gtl/zdc_condition.vhd
 - script files:
   - scripts/mp7_patch.py
+>>>>>>> master
 
 ## [v1.21.7] - 2022-11-29
 ### Comment

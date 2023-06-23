@@ -162,12 +162,12 @@ package body lhc_data_debug_util_pkg is
 			slv_to_hex(data_in.htm) & spacer_char &
 			slv_to_hex(data_in.etmhf) & spacer_char &
 			slv_to_hex(data_in.htmhf) & spacer_char &
-			slv_to_hex(data_in.zdc10g_0) & spacer_char &
-			slv_to_hex(data_in.zdc10g_1) & spacer_char &			
-			slv_to_hex(data_in.zdc10g_2) & spacer_char &
-			slv_to_hex(data_in.zdc10g_3) & spacer_char &
-			slv_to_hex(data_in.zdc10g_4) & spacer_char &
-			slv_to_hex(data_in.zdc10g_5) & spacer_char &						
+			slv_to_hex(data_in.cicada(0)) & spacer_char &
+			slv_to_hex(data_in.cicada(1)) & spacer_char &
+			slv_to_hex(data_in.cicada(2)) & spacer_char &
+			slv_to_hex(data_in.cicada(3)) & spacer_char &
+			slv_to_hex(data_in.cicada(4)) & spacer_char &
+			slv_to_hex(data_in.cicada(5)) & spacer_char &
 			slv_to_hex(data_in.external_conditions) & spacer_char ;
 	end function;
 
@@ -198,32 +198,26 @@ package body lhc_data_debug_util_pkg is
 			ret_value.jet(i) := hex_to_slv("" & hexstring(start_index to end_index), JET_DATA_WIDTH);
 		end loop;
 		next_range(start_index, end_index, hexstring);
-		ret_value.ett := hex_to_slv("" & hexstring(start_index to end_index), ETT_DATA_WIDTH );
+		ret_value.ett := hex_to_slv("" & hexstring(start_index to end_index), ETT_DATA_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.ht := hex_to_slv("" & hexstring(start_index to end_index), HT_DATA_WIDTH );
+		ret_value.ht := hex_to_slv("" & hexstring(start_index to end_index), HT_DATA_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.etm := hex_to_slv("" & hexstring(start_index to end_index), ETM_DATA_WIDTH );
+		ret_value.etm := hex_to_slv("" & hexstring(start_index to end_index), ETM_DATA_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.htm := hex_to_slv("" & hexstring(start_index to end_index), HTM_DATA_WIDTH );
+		ret_value.htm := hex_to_slv("" & hexstring(start_index to end_index), HTM_DATA_WIDTH);
 		next_range(start_index, end_index, hexstring);
 		ret_value.etmhf := hex_to_slv("" & hexstring(start_index to end_index), ETMHF_DATA_WIDTH);
 		next_range(start_index, end_index, hexstring);
 		ret_value.htmhf := hex_to_slv("" & hexstring(start_index to end_index), HTMHF_DATA_WIDTH);
-		next_range(start_index, end_index, hexstring);
-		ret_value.zdc10g_0 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_0_WIDTH);
-		next_range(start_index, end_index, hexstring);
-		ret_value.zdc10g_1 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_1_WIDTH);
-		next_range(start_index, end_index, hexstring);
-		ret_value.zdc10g_2 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_2_WIDTH);
-		next_range(start_index, end_index, hexstring);
-		ret_value.zdc10g_3 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_3_WIDTH);
-		next_range(start_index, end_index, hexstring);
-		ret_value.zdc10g_4 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_4_WIDTH);
-		next_range(start_index, end_index, hexstring);
-		ret_value.zdc10g_5 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_5_WIDTH);
+
+		for i in 0 to CICADA_ARRAY_LENGTH-1 loop
+			next_range(start_index, end_index, hexstring);
+			ret_value.cicada(i) := hex_to_slv("" & hexstring(start_index to end_index), CICADA_DATA_WIDTH);
+		end loop;
 
 		next_range(start_index, end_index, hexstring);
 		ret_value.external_conditions := hex_to_slv("" & hexstring(start_index to end_index), EXTERNAL_CONDITIONS_DATA_WIDTH );
+
 		return ret_value;
 	end function;
 end;

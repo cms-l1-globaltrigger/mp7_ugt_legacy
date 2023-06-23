@@ -1,0 +1,36 @@
+\textbf{\texttt{UNDER CONSTRUCTION !!!!}}
+
+
+0000  5186f41899f57c08 AMC13 header --> 0x5, Evt\_ty=1, LV1\_id(24)=0x86f418 (8844312), BXId(12)=0x99f (2463), Source\_id(12)=0x57c (1404 [FED \#]), FOV=0, Hx\$\$=8 (H=1) => OK\\
+0001  10604240512ff300 AMC13 header --> uFOV=1, Res=0, nAMC=6, Reserved=0x0424 ??, OrN(32)=0x0512ff30 (85131056), 0x0 => OK, but "Reserved" should be 0\\
+0002  0f00014a00010000 AMC13 header --> 0LMSEPVC=0x0f (???), AMC1\_size=0x14a (330), Blk\_No=0, AmcNo=1, BoardID=0 => OK (but some bits are unclear)\\
+0003  0f00009000020000 AMC13 header --> 0LMSEPVC=0x0f (???), AMC1\_size=0x90 (144), Blk\_No=0, AmcNo=2, BoardID=0 => OK (but some bits are unclear)\\ 
+0004  0f00009000030000 AMC13 header --> ...\\
+0005  0f00009000040000 AMC13 header --> ...\\
+0006  0f00009000050000 AMC13 header --> ...\\
+0007  0f00009000060000 AMC13 header --> ...\\
+0008  0186f41899f0014a AMC \#1 header --> 0x0, AmcNo=1, LV1\_id(24)=0x86f418 (8844312), BXId(12)=0x99f (2463), Data\_lgth(20)=0x14a (330) => OK\\ 
+0009  000000c0ff300000 AMC \#1 header --> User=0xc (12) [reserved(16), FW vers(8), Evt\_ty(8)] ???, OrN(16)=0xff30, BoardID=0 => OK, "User" unclear [definition "MP7 readout"]\\
+000a  0000115200030202 AMC \#1 payload --> bits 63..32 => uGT build (0x1152) ???, bits 31..0 => MP7 FW version (3.2.2) ???\\
+000b  00000000001e0200 AMC \#1 block header (input data) --> (63..32) => data, BlockID(31..24)=0, Block size(23..16)=0x1e (30), reserved(15..0)=0x200 (512) ?? => ok\\
+
+
+\begin{center}
+\begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
+        \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
+        \bitbox {2}     {\small  \texttt{imp}}       &
+        \bitbox {1}     {\small  \texttt{m}}       &
+        \bitbox {8}     {\texttt{unconst.\pt}}       &
+        \bitbox {10}    {\texttt{$\varphi$} (out)}
+        \bitbox {7}     {\texttt{index bits}}
+        \bitbox {2}     {\small  \texttt{ch}}       &
+        \bitbox {2}     {\small \texttt{iso}} \\
+        [3ex]
+        \bitheader{0,9,10,18,19,22,23,31} \\
+        \bitbox {9}     {\texttt{$\eta$} (extrapol.)}       &
+        \bitbox {4}     {\texttt{qual}}       &
+        \bitbox {9}     {\texttt{\pt}}    &
+        \bitbox {10}    {\texttt{$\varphi$} (extrapol.)} \\
+\end{bytefield}
+\end{center}
+\clearpage

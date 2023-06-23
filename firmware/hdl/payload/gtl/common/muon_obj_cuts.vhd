@@ -36,6 +36,17 @@ entity muon_obj_cuts is
         eta_w4_lower_limits: common_templates_array;
         eta_w5_upper_limits: common_templates_array;
         eta_w5_lower_limits: common_templates_array;
+        nr_idx_windows : common_templates_natural_array;
+        idx_w1_upper_limits: common_templates_array;
+        idx_w1_lower_limits: common_templates_array;
+        idx_w2_upper_limits: common_templates_array;
+        idx_w2_lower_limits: common_templates_array;
+        idx_w3_upper_limits: common_templates_array;
+        idx_w3_lower_limits: common_templates_array;
+        idx_w4_upper_limits: common_templates_array;
+        idx_w4_lower_limits: common_templates_array;
+        idx_w5_upper_limits: common_templates_array;
+        idx_w5_lower_limits: common_templates_array;
         nr_phi_windows : common_templates_natural_array;
         phi_w1_upper_limits: common_templates_array;
         phi_w1_lower_limits: common_templates_array;
@@ -81,6 +92,17 @@ begin
                 eta_w4_lower_limits(1),
                 eta_w5_upper_limits(1),
                 eta_w5_lower_limits(1),
+                nr_idx_windows(1),
+                idx_w1_upper_limits(1),
+                idx_w1_lower_limits(1),
+                idx_w2_upper_limits(1),
+                idx_w2_lower_limits(1),
+                idx_w3_upper_limits(1),
+                idx_w3_lower_limits(1),
+                idx_w4_upper_limits(1),
+                idx_w4_lower_limits(1),
+                idx_w5_upper_limits(1),
+                idx_w5_lower_limits(1),
                 nr_phi_windows(1),
                 phi_w1_upper_limits(1),
                 phi_w1_lower_limits(1),
@@ -112,6 +134,17 @@ begin
                 eta_w4_lower_limits(2),
                 eta_w5_upper_limits(2),
                 eta_w5_lower_limits(2),
+                nr_idx_windows(2),
+                idx_w1_upper_limits(2),
+                idx_w1_lower_limits(2),
+                idx_w2_upper_limits(2),
+                idx_w2_lower_limits(2),
+                idx_w3_upper_limits(2),
+                idx_w3_lower_limits(2),
+                idx_w4_upper_limits(2),
+                idx_w4_lower_limits(2),
+                idx_w5_upper_limits(2),
+                idx_w5_lower_limits(2),
                 nr_phi_windows(2),
                 phi_w1_upper_limits(2),
                 phi_w1_lower_limits(2),
@@ -143,6 +176,17 @@ begin
                 eta_w4_lower_limits(3),
                 eta_w5_upper_limits(3),
                 eta_w5_lower_limits(3),
+                nr_idx_windows(3),
+                idx_w1_upper_limits(3),
+                idx_w1_lower_limits(3),
+                idx_w2_upper_limits(3),
+                idx_w2_lower_limits(3),
+                idx_w3_upper_limits(3),
+                idx_w3_lower_limits(3),
+                idx_w4_upper_limits(3),
+                idx_w4_lower_limits(3),
+                idx_w5_upper_limits(3),
+                idx_w5_lower_limits(3),
                 nr_phi_windows(3),
                 phi_w1_upper_limits(3),
                 phi_w1_lower_limits(3),
@@ -174,6 +218,17 @@ begin
                 eta_w4_lower_limits(4),
                 eta_w5_upper_limits(4),
                 eta_w5_lower_limits(4),
+                nr_idx_windows(4),
+                idx_w1_upper_limits(4),
+                idx_w1_lower_limits(4),
+                idx_w2_upper_limits(4),
+                idx_w2_lower_limits(4),
+                idx_w3_upper_limits(4),
+                idx_w3_lower_limits(4),
+                idx_w4_upper_limits(4),
+                idx_w4_lower_limits(4),
+                idx_w5_upper_limits(4),
+                idx_w5_lower_limits(4),
                 nr_phi_windows(4),
                 phi_w1_upper_limits(4),
                 phi_w1_lower_limits(4),

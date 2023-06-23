@@ -1,5 +1,9 @@
+-- Description:
+-- Lane mapping process.
 
 -- Version-history:
+-- HB 2023-06-23: cicada on link 11 (removed zdc10g on link 11).
+-- HB 2022-10-08: zdc10g on link 11.
 -- HB 2022-09-06: cleaned up.
 -- HB 2106-05-31: lane mapping for all frames of calo links (for extended test-vector-file structure - see lhc_data_pkg.vhd)
 -- HEPHY 2014-05-20: changed lane mapping for muons from 0,1,2,3 to 2,3,4,5 of 240MHz objects -
@@ -9,6 +13,7 @@ use IEEE.std_logic_1164.all;
 
 use work.gt_mp7_core_pkg.all;
 use work.lhc_data_pkg.all;
+use work.gtl_pkg.all;
 
 entity lmp is
     generic
@@ -21,6 +26,7 @@ entity lmp is
         demux_data_valid_i : in demux_lanes_data_objects_array_valid_t(NR_LANES-1 downto 0);
         lhc_data_o : out lhc_data_t;
         lhc_data_valid_o : out std_logic
+--         zdc5g : out zdc_array
     );
 end;
 
@@ -35,6 +41,7 @@ architecture arch of lmp is
 --     constant OFFSET_ESUMS_LANES : natural := 10;
 --     constant OFFSET_CICADA_LANES : natural := 11;
 --     constant OFFSET_EXT_COND_LANES : natural := 12;
+
 begin
 
     lhc_data_valid_o <= '1';

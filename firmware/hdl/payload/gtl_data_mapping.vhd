@@ -2,7 +2,10 @@
 -- Data mapping for GTL
 
 -- Version-history:
--- HB 2023-01-31: implemented logic for CICADA (bjets).
+-- HB 2023-06-23: cicada on link 11 (removed zdc10g on link 11).
+-- HB 2023-03-01: updated for ZDC.
+-- HB 2023-02-09: updated comments.
+-- HB 2022-10-10: inserted ZDC.
 -- HB 2022-09-05: cleaned up.
 -- HB 2021-06-01: first design.
 

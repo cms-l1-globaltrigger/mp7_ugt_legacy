@@ -179,6 +179,7 @@ The data structure of "Missing Ht including HF" (HT$_{miss}^{HF}$) quantity [inc
 \label{sec:gtl:gmt_optical_interfaces}
 
 The data structure of a muon object (64 bits):\\
+\tiny{Remark: "extrapol." means extrapolated - "qual" means quality bits - "iso" means isolation bits - "ch" means charge bits (bit 34 = charge sign, bit 35 = charge valid) - "m" means muon shower bit (on MU0 [MUS0], MU2 [MUS1], MU3 [MUS2 (two loose muon shower)], MU4 [MUSOOT0] and MU6 [MUSOOT1]; spare on MU1, MU5 and MU7) - "imp" = impact parameter.}\normalsize
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
         \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
@@ -519,6 +520,8 @@ HW index & $\eta$ range & $\eta$ bin\\\hline\hline
 \label{tab:gtl:muon_eta_scale}
 \end{table}
 
+The 7 index bits cover a range from 0 to 107 (e.g. index 0-17 is EMTF+ and index 90-107 is EMTF-). 
+
 The representation of the 10 bits in $\varphi$ is expected as shown in Table~\ref{tab:gtl:muon_phi_scale}.\\
 
 \begin{table}[ht]
@@ -647,6 +650,7 @@ List of object cuts:
 \begin{itemize}
 \item \pt
 \item $\eta$
+\item index bits
 \item $\varphi$
 \item isolation
 \item DISP (displaced = "long lived particle" jet)
@@ -661,6 +665,7 @@ List of object cuts:
 The comparisons for objects cuts are done by:\\
 A comparator between the energy (\pt) and a threshold (pt\_threshold) with 'mode-selection'. Similar for unconstrained \pt.\\
 The comparison in $\eta$ is done with five "window"-comparators, so one gets max. five ranges for $\eta$. The $\eta$ value (HW index) has a Two's Complement notation, the comparisons is done signed. Number of windows is given for $\eta$.\\
+The comparison with index bits is done similar to $\eta$ with five "window"-comparators. The index bits value (HW index) is in the range from 0 to 107. Number of windows is given for index bits.\\
 The comparison in $\varphi$ is done with two "window"-comparators, so one gets two ranges for $\varphi$. The comparisons is done unsigned. Number of windows is given for $\varphi$.\\
 There are two cases how the limits of one "window"-comparator could be set (see also Figure~\ref{fig:gtl:phi_windows_comparator}):
 \begin{itemize}
@@ -1327,7 +1332,7 @@ For the entity declaration of \href{\gitbranch/firmware/hdl/gt_mp7_core/gtl_fdl_
 \subsubsection{Muon shower bits}
 \label{sec:gtl:muon_shower_bits}
 
-Muon shower bits MUS0 (MUon Shower, bit 61 on MU0), MUS1 (bit 61 on MU2), MUSOOT0 (MUon Shower Out Of Time, bit 61 on MU4), MUSOOT1 (bit 61 on MU6) (see \ref{sec:gtl:muon_data} and Table~\ref{tab:gtl:tab_muon_shower_bits}) can be selected by TME to an algo or combined with other conditions to an algo .
+Muon shower bits MUS0 (MUon Shower, bit 61 on MU0), MUS1 (bit 61 on MU2), MUS2 (two loose muon shower - bit 61 on MU3), MUSOOT0 (MUon Shower Out Of Time, bit 61 on MU4), MUSOOT1 (bit 61 on MU6) (see \ref{sec:gtl:muon_data} and Table~\ref{tab:gtl:tab_muon_shower_bits}) can be selected by TME to an algo or combined with other conditions to an algo.
 
 \subsubsection{Minimum bias trigger conditions}
 \label{sec:gtl:min_bias_conditions}
@@ -1512,6 +1517,10 @@ Definitions of scales (see Tables \ref{tab:gtl:calo_eta_scale_new}, \ref{tab:gtl
 \end{figure}
 
 \clearpage
+
+\subsubsection{Anomaly Detection Trigger}
+\label{sec:gtl:adt}
+The possibility of implementing "Anomaly detection Trigger" is forseen in this version of \ugtl. The VHDL code is given by "Anomaly detection Trigger" group in ../firmware/hdl/payload/gtl/anomaly\_detection with \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/anomaly_detection.vhd}{\texttt{anomaly\_detection.vhd}} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/adt_wrapper.vhd}{\texttt{adt\_wrapper.vhd}} module anomaly\_detection.vhd is instantiated and a comparison of the output of anomaly\_detection.vhd ("anomaly\_score") with a given threshold is implemented to get an "Anomaly detection Trigger". External condition bits are used as placeholder for the definition of thresholds for "Anomaly detection Trigger" (e.g.: EXT\_ADT\_25, which mean threshold=25). External condition bits 192..223 are reserved for "Anomaly detection Trigger" thresholds.
 
 \subsubsection{External Conditions}
 \label{sec:gtl:external_conditions}

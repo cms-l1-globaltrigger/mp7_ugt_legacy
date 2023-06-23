@@ -4,10 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.22.0] - 2023-02-08
+## [v1.24.0] - 2023-06-23
 ### Comment
 
-- mp7_ugt firmware release v1.22.0
+- mp7_ugt firmware release v1.24.0
 - version for calo anomaly algorithm (CICADA, bjets) implementation on link 16
 
 ### Changed
@@ -15,13 +15,79 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/gtl_pkg.vhd
   - ../packages/lhc_data_pkg.vhd
   - ../payload/gtl_data_mapping.vhd
+  - ../payload/gtl/bx_pipeline.vhd
   - ../payload/gtl/common/calo_comparators.vhd
   - ../payload/gtl/common/calo_obj_cuts.vhd
   - ../payload/gtl/comb_conditions.vhd
   - ../payload/gtl/correlation_conditions.vhd
+  - ../payload/frame/lmp.vhd
 - simulation file:
   - ../sim/testbench/lhc_data_debug_util_pkg.vhd
-  - ../sim/testbench/templates/gtl_fdl_wrapper_tb_tpl.vhd
+
+## [v1.22.3] - 2023-04-15
+### Comment
+
+- mp7_ugt firmware release v1.22.3
+- bug fixed for muon index
+
+### Added
+- source files:
+  - ../payload/gtl/common/muon_index_comp.vhd
+  - ../payload/gtl/common/muon_index_windows_comp.vhd
+
+### Changed
+- source files:
+  - ../payload/gtl/common/muon_comparators.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+- dep file:
+  - ../cfg/uGT_algo.dep
+
+## [v1.22.2] - 2023-04-09
+### Comment
+
+- mp7_ugt firmware release v1.22.2
+- bug fixed in scripts/mp7_patch.py
+
+### Changed
+- script files:
+  - scripts/mp7_patch.py
+
+## [v1.22.1] - 2023-04-07
+### Comment
+
+- mp7_ugt firmware release v1.22.1
+- based on v1.22.0, but without links 32..71
+
+## [v1.22.0] - 2023-03-24
+### Comment
+
+- mp7_ugt firmware release v1.22.0
+- development for "MUS2" (email: "New 2Loose HMT configuration", 3.12.2022)
+- implemented cut for muon index bits
+- implemented "anomaly detection trigger (ADT)"
+- changes for 10G ZDC on link 11
+- all 72 links
+- scouting outputs on links 28-31
+
+### Changed
+- source files:
+  - ../payload/frame/output_mux.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/top_decl.vhd
+  - ../packages/gtl_pkg.vhd
+  - ../packages/gt_core_pkg.vhd
+  - ../payload/gtl/bx_pipeline.vhd
+  - ../payload/gtl_module_tpl.vhd
+  - ../payload/gtl/muon_comparators.vhd
+  - ../payload/gtl/muon_obj_cuts.vhd
+  - ../payload/gtl/comb_conditions.vhd
+  - ../payload/gtl/correlation_conditions.vhd
+  - ../payload/gtl/zdc_condition.vhd
+- script files:
+  - scripts/mp7_patch.py
+>>>>>>> master
 
 ## [v1.21.7] - 2022-11-29
 ### Comment
@@ -88,9 +154,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
 
-### Added
-- source files:
-  - ../packages/gt_mp7_top_pkg_sim.vhd
+
 
 ## [v1.21.2] - 2022-09-28
 ### Comment

@@ -6,6 +6,8 @@
 \usepackage{cite}
 \tolerance=1000
 
+\input{gitbranch.tex}
+
 \begin{document}
 \topmargin = 30mm
 \textheight = 225mm
@@ -16,7 +18,7 @@
 
 \begin{titlepage}
 
-\date{2 March 2023}
+\date{23 June 2023}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -97,7 +99,7 @@ The $p_t$ scale for muon objects starts from 0 (zero), but HW index=0 indicates 
 7) The new muon structure contains:\\
 - "unconstrained $p_t$" scale (8 bits) in steps of 1.0 GeV starting from 0 (zero), HW index=0 indicates an invalid muon, the highest bin 0xff marks an overflow.\\
 - "impact parameter" with 2 bits.\\
-- "hadronic shower trigger (mus)" bits on bit 31 of MU0, MU2, MU4 and MU6 objects.
+- "hadronic shower trigger (mus)" bits on bit 31 of MU0, MU2, MU3, MU4 and MU6 objects.
 
 8) The new jet structure contains:\\
 - bit 27 will be used to flag a jet as delayed / displaced based on HCAL timing and depth profiles that are indicative of a LLP decay. This bit is referred to as “DISP”. If this bit is set to 1, then the jet has been tagged as an LLP jet.
@@ -115,9 +117,14 @@ The $p_t$ scale for muon objects starts from 0 (zero), but HW index=0 indicates 
 
 14) The "Asymmetry" and "Centrality" bits (introduced for Heavy-Ion running) are part of the ET$_{miss}$, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$ data structure.
 
+<<<<<<< HEAD
 15) The "CICADA" data structure with 6 "Boosted jets" (bjets) and values for Anomaly Detection and Heavy Ion bits~\cite{CICADA}.
 
 The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2} ) show the  bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.
+=======
+The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2}) show the bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.\\
+Table~\ref{table:scales_table_3} shows the bits for ZDC objects, see ~\cite{ZDC}.
+>>>>>>> master
 
 \begin{table}[ht]
 \caption{\bf Scales (muon and calorimeter)}
@@ -233,6 +240,21 @@ definition)	&		&	ASYMHTHF	&	0..255 &	1 &	8                    \\
 \label{table:scales_table_2}
 \end{table}
 
+\begin{table}[ht]
+\caption{\bf Scales (ZDC)}
+\vspace{5mm}
+\centering
+\begin{tabular}{|p{2.0cm}| l | p{2.0cm} | p{2.0cm} | p{2.0cm} | l |}
+\hline
+object	&	collections $\times$ instances	&	parameter	&	range	&	step	&	bits \\
+\hline\hline
+ZDC	       &	1 * 2	& EN\_MINUS (ZDC-)	    &	0..1023	   &	1 (?)	  &	10  \\
+           &	        & EN\_PLUS (ZDC+)	    &	0..1023	   &	1 (?)	  &	10  \\
+\hline
+\end{tabular}
+\label{table:scales_table_3}
+\end{table}
+
 \clearpage
 
 The following pages contain tables for data structure of objects and the data flow of objects on the optical links.
@@ -242,7 +264,7 @@ The following pages contain tables for data structure of objects and the data fl
 \end{itemize}
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 1)}
+\caption{\bf Overview optical links (part 1)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
@@ -278,7 +300,7 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \end{table}
 
 \begin{table}[ht]
-\caption{\bf Summary of optical links (part 2)}
+\caption{\bf Overview optical links (part 2)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
@@ -286,32 +308,33 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
  & \multicolumn{7}{ c| }{link} \\\hline
 frame & 10 & 11 & 12 & 13 & 14 & 15 &\makebox[3.0cm][c]{16} \\\hline\hline
 0 & ET, & res. & ExtCond & ExtCond & ExtCond & ExtCond & BJET0,\\
- & ETTEM, & (ZDC) & [31:0] & [95:64] & [159:128] & [223:192] & Anomaly Detection -\\
+ & ETTEM, & CICADA(0) & [31:0] & [95:64] & [159:128] & [223:192] & Anomaly Detection -\\
  & MBT0HFP & & & & & & Integer high\\
 1 & HT, & res. & ExtCond & ExtCond & ExtCond & ExtCond & BJET1,\\
- & TOWERCOUNT, & (ZDC) & [63:32] & [127:96] & [191:160] & [255:224] & Anomaly Detection -\\
+ & TOWERCOUNT, & CICADA(1) & [63:32] & [127:96] & [191:160] & [255:224] & Anomaly Detection -\\
  & MBT0HFM & & & & & &Integer low\\
 2 & ET$_{miss}$, & res. & free & free & free & free & BJET2,\\
- & ASYMET,& (ZDC) & & & & & Anomaly Detection -\\
+ & ASYMET,& CICADA(2) & & & & & Anomaly Detection -\\
  & MBT1HFP  & & & & & & Decimal high\\
 3 & HT$_{miss}$, & res. & free & free & free & free & BJET3,\\
- & ASYMHT,& (ZDC) & & & & & Anomaly Detection -\\
+ & ASYMHT,& CICADA(3) & & & & & Anomaly Detection -\\
  & MBT1HFM & & & & & & Decimal low\\
 4 & ET$_{miss}^{HF}$ & res. & free & free & free & free &  BJET4,\\
- & ASYMETHF, & (ZDC) & & & & & Heavy Ion bits -\\
+ & ASYMETHF, & CICADA(4) & & & & & Heavy Ion bits -\\
  & CENT[3:0] & & & & & & high \\
 5 & HT$_{miss}^{HF}$ & res. & free & free & free & free & BJET5,\\
- & ASYMHTHF, & (ZDC) & & & & & Heavy Ion bits -\\
+ & ASYMHTHF, & CICADA(5) & & & & & Heavy Ion bits -\\
  & CENT[7:4] & & & & & & low \\\hline
 \end{tabular}
 }
-\label{table:sum_opt_links2}
+\label{table:app:sum_opt_links2}
 \end{table}
 
 \begin{itemize}
 \item The data structure of a muon object is shown in Table~\ref{table:muon_object}.
 \item The definition of the muon $\eta$ scale shown in Table~\ref{table:muon_eta_scale}. The minimum value is -2.45, the maximum +2.45, so the the highest and lowest
 bins are "narrower" than other bins.
+\item The 7 muon index bits cover a range from 0 to 107 (e.g. index 0-17 is EMTF+ and index 90-107 is EMTF-).
 \item The definition of the muon $\varphi$ scale shown in Table~\ref{table:muon_phi_scale}.
 \item The definition of the muon quality bits is shown in Table~\ref{table:muon_quality_bits}. It is preliminary, quality ``level x" should be replaced by reliable terms.
 \item The definition of the muon isolation bits is shown in Table~\ref{table:muon_iso_bits}. It is preliminary and should be updated when agreed upon.
@@ -325,7 +348,7 @@ bins are "narrower" than other bins.
 \begin{tabular}{|c|c|}\hline
 bit(s) & parameter \\\hline\hline
 63..62 & impact parameter \\
-61 & hadronic shower (mus), on MU0, MU2, MU4 and MU6 \\
+61 & hadronic shower (mus), on MU0, MU2, MU3, MU4 and MU6 \\
 60..53 & unconstrained $p_t$ \\
 52..43 & $\varphi$ (out) \\
 42..36 & index bits \\
@@ -421,6 +444,7 @@ bits [33..32] & definition \\\hline\hline
 muon object & hadronic shower (on bit 61)\\\hline\hline
 0 & MUS0 \\
 2 & MUS1 \\
+3 & MUS2 (two loose muon shower)\\
 4 & MUSOOT0 \\
 6 & MUSOOT1 \\\hline
 \end{tabular}
@@ -817,7 +841,7 @@ frame & 31..28 & 27..0\\\hline\hline
 \url{http://www.hephy.at/project/cms/trigger/globalMuonTrigger/notes/in04\_006.pdf}
 
 \bibitem {calo}
-\url{http://www.hephy.at/project/electronic1/GlobalTrigger/doc/InterfaceDesc/CMS\_NOTE\_2002\_069\_29\_Nov\_2010.htm}
+\url{https://cds.cern.ch/record/1364214/files/in02_069.pdf}
 
 \bibitem {CICADA}
 \url{https://docs.google.com/presentation/d/1Zk2oDbnxUZilnWXC\_HyWYbNJ8F41MiBso4D49bN-js4/edit\#slide=id.g129a5c5a910\_0\_197}

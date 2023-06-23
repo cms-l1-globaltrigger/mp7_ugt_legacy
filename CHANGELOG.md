@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.24.0] - 2023-06-23
+### Comment
+
+- mp7_ugt firmware release v1.24.0
+- implementation of CICADA
+
 ## [v1.22.3] - 2023-04-15
 ### Comment
 

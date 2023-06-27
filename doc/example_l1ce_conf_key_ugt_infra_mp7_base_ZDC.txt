@@ -1,0 +1,259 @@
+<infra id="uGT">
+  <context id="uGtProcessor">
+    <param cmd="uGtTriggerMenuCommand" id="Xml file path" type="string"></param>
+
+    <param cmd="reset" id="clockConfig" type="string">default-ext</param>
+    <param cmd="reset" id="clockSource" type="string">external</param>
+    <param cmd="reset" id="ttcConfig" type="string">external</param>
+
+    <param ns="cfgRxMGTs_Muon" cmd="cfgRxMGTs" id="ids" type="string">MuonRx[00:04]</param>
+    <param ns="cfgRxMGTs_Muon" cmd="cfgRxMGTs" id="masks" type="string">apply</param>
+    <param ns="cfgRxMGTs_Muon" cmd="cfgRxMGTs" id="orbitTag" type="bool">false</param>
+    <param ns="cfgRxMGTs_Muon" cmd="cfgRxMGTs" id="polarity" type="bool">true</param>
+
+    <param ns="alignMGTs_Muon" cmd="alignMGTs" id="bx" type="uint">3526</param>
+    <param ns="alignMGTs_Muon" cmd="alignMGTs" id="cycle" type="uint">5</param>
+    <param ns="alignMGTs_Muon" cmd="alignMGTs" id="ids" type="string">MuonRx[00:04]</param>
+    <param ns="alignMGTs_Muon" cmd="alignMGTs" id="masks" type="string">apply</param>
+
+    <param ns="cfgRxMGTs_Calo" cmd="cfgRxMGTs" id="ids" type="string">CaloRx[00:07]</param>
+    <param ns="cfgRxMGTs_Calo" cmd="cfgRxMGTs" id="masks" type="string">apply</param>
+    <param ns="cfgRxMGTs_Calo" cmd="cfgRxMGTs" id="orbitTag" type="bool">false</param>
+    <param ns="cfgRxMGTs_Calo" cmd="cfgRxMGTs" id="polarity" type="bool">true</param>
+
+    <param ns="alignMGTs_Calo" cmd="alignMGTs" id="bx" type="uint">3526</param>
+    <param ns="alignMGTs_Calo" cmd="alignMGTs" id="cycle" type="uint">5</param>
+    <param ns="alignMGTs_Calo" cmd="alignMGTs" id="ids" type="string">CaloRx[00:07]</param>
+    <param ns="alignMGTs_Calo" cmd="alignMGTs" id="masks" type="string">apply</param>
+
+    <param ns="cfgRxMGTs_ExtCond" cmd="cfgRxMGTs" id="ids" type="string">ExtCondRx[00:01]</param>
+    <param ns="cfgRxMGTs_ExtCond" cmd="cfgRxMGTs" id="masks" type="string">apply</param>
+    <param ns="cfgRxMGTs_ExtCond" cmd="cfgRxMGTs" id="orbitTag" type="bool">false</param>
+    <param ns="cfgRxMGTs_ExtCond" cmd="cfgRxMGTs" id="polarity" type="bool">true</param>
+
+    <param ns="alignMGTs_ExtCond" cmd="alignMGTs" id="bx" type="uint">3526</param>
+    <param ns="alignMGTs_ExtCond" cmd="alignMGTs" id="cycle" type="uint">5</param>
+    <param ns="alignMGTs_ExtCond" cmd="alignMGTs" id="ids" type="string">ExtCondRx[00:01]</param>
+    <param ns="alignMGTs_ExtCond" cmd="alignMGTs" id="masks" type="string">apply</param>
+
+    <param ns="cfgRxBuffers_ExtCond" cmd="cfgRxBuffers" id="mode" type="string">Zeroes</param>
+    <param ns="cfgRxBuffers_ExtCond" cmd="cfgRxBuffers" id="payload" type="string"></param>
+    <param ns="cfgRxBuffers_ExtCond" cmd="cfgRxBuffers" id="ids" type="string">ExtCondRx[00:01]</param>
+    <param ns="cfgRxBuffers_ExtCond" cmd="cfgRxBuffers" id="startBx" type="uint">0</param>
+    <param ns="cfgRxBuffers_ExtCond" cmd="cfgRxBuffers" id="startCycle" type="uint">0</param>
+    <param ns="cfgRxBuffers_ExtCond" cmd="cfgRxBuffers" id="stopBx" type="uint"></param>
+    <param ns="cfgRxBuffers_ExtCond" cmd="cfgRxBuffers" id="stopCycle" type="uint"></param>
+    <param ns="cfgRxBuffers_ExtCond" cmd="cfgRxBuffers" id="masks" type="string">ignore</param>
+
+    <param ns="cfgRxBuffers_Muon" cmd="cfgRxBuffers" id="mode" type="string">Zeroes</param>
+    <param ns="cfgRxBuffers_Muon" cmd="cfgRxBuffers" id="payload" type="string"></param>
+    <param ns="cfgRxBuffers_Muon" cmd="cfgRxBuffers" id="ids" type="string">MuonRx[00:04]</param>
+    <param ns="cfgRxBuffers_Muon" cmd="cfgRxBuffers" id="startBx" type="uint">0</param>
+    <param ns="cfgRxBuffers_Muon" cmd="cfgRxBuffers" id="startCycle" type="uint">0</param>
+    <param ns="cfgRxBuffers_Muon" cmd="cfgRxBuffers" id="stopBx" type="uint"></param>
+    <param ns="cfgRxBuffers_Muon" cmd="cfgRxBuffers" id="stopCycle" type="uint"></param>
+    <param ns="cfgRxBuffers_Muon" cmd="cfgRxBuffers" id="masks" type="string">invert</param>
+
+    <param ns="cfgRxBuffers_Calo" cmd="cfgRxBuffers" id="mode" type="string">Zeroes</param>
+    <param ns="cfgRxBuffers_Calo" cmd="cfgRxBuffers" id="payload" type="string"></param>
+    <param ns="cfgRxBuffers_Calo" cmd="cfgRxBuffers" id="ids" type="string">CaloRx[00:07]</param>
+    <param ns="cfgRxBuffers_Calo" cmd="cfgRxBuffers" id="startBx" type="uint">0</param>
+    <param ns="cfgRxBuffers_Calo" cmd="cfgRxBuffers" id="startCycle" type="uint">0</param>
+    <param ns="cfgRxBuffers_Calo" cmd="cfgRxBuffers" id="stopBx" type="uint"></param>
+    <param ns="cfgRxBuffers_Calo" cmd="cfgRxBuffers" id="stopCycle" type="uint"></param>
+    <param ns="cfgRxBuffers_Calo" cmd="cfgRxBuffers" id="masks" type="string">invert</param>
+
+    <!-- configuration for scouting -->
+    <param ns="cfgTxMGTs_Scouting" cmd="cfgTxMGTs" id="orbitTag" type="bool">false</param>
+    <param ns="cfgTxMGTs_Scouting" cmd="cfgTxMGTs" id="loopback" type="bool">false</param>
+    <param ns="cfgTxMGTs_Scouting" cmd="cfgTxMGTs" id="polarity" type="bool">true</param>
+    <param ns="cfgTxMGTs_Scouting" cmd="cfgTxMGTs" id="ids" type="string">ScoutingTx[28:32]</param>
+
+    <!-- configure link header for scouting outputs -->
+    <param ns="cfgHdrFormatter_Scouting" cmd="cfgHdrFormatter" id="ids" type="string">ScoutingTx[28:32]</param>
+    <param ns="cfgHdrFormatter_Scouting" cmd="cfgHdrFormatter" id="strip" type="bool">false</param>
+    <param ns="cfgHdrFormatter_Scouting" cmd="cfgHdrFormatter" id="insert" type="bool">true</param>
+
+    <!-- common settings for easyRxLatency and easyTxLatency -->
+    <param id="algoLatency" type="uint">45</param>
+    <param id="internalLatency" type="uint">32</param>
+    <param id="masterLatency" type="uint">163</param>
+    <!--
+    <param id="rxExtraBxs" type="uint">12</param>
+    <param id="txExtraBxs" type="uint">12</param>
+    -->
+    <param id="rxExtraFrames" type="uint">12</param>
+    <param id="txExtraFrames" type="uint">12</param>
+
+    <!-- easyRxLatency -->
+    <param cmd="easyRxLatency" id="ids" type="string"/>
+    <param cmd="easyRxLatency" id="masks" type="string">apply</param>
+    <param cmd="easyRxLatency" id="bankId" type="uint">2</param>
+
+    <!-- easyTxLatency -->
+    <param cmd="easyTxLatency" id="ids" type="string">Tx[16:25]</param>
+    <param cmd="easyTxLatency" id="bankId" type="uint">1</param>
+
+    <param cmd="roSetup" id="bufferHWM" type="uint">32</param>
+    <param cmd="roSetup" id="bufferLWM" type="uint">16</param>
+    <param cmd="roSetup" id="bxOffset" type="uint">2</param>
+    <param cmd="roSetup" id="drain" type="uint"></param>
+    <param cmd="roSetup" id="fake" type="uint"></param>
+    <param cmd="roSetup" id="internal" type="bool">false</param>
+
+    <!-- ReadOut Menu config -->
+    <param cmd="roLoadMenu" id="bank0:wordsPerBx" type="uint">6</param>
+    <param cmd="roLoadMenu" id="bank1:wordsPerBx" type="uint">6</param>
+    <param cmd="roLoadMenu" id="bank2:wordsPerBx" type="uint">6</param>
+    <param cmd="roLoadMenu" id="bank3:wordsPerBx" type="uint">6</param>
+
+    <!-- RO Menu mode 0 -->
+    <param cmd="roLoadMenu" id="mode0:eventSize" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode0:eventToTrigger" type="uint">107</param>
+    <param cmd="roLoadMenu" id="mode0:eventType" type="uint">0xc1</param>
+    <param cmd="roLoadMenu" id="mode0:tokenDelay" type="uint">70</param>
+    <!-- RO Menu mode 0 capture 0 -->
+    <param cmd="roLoadMenu" id="mode0:capture0:enable" type="bool">true</param>
+    <param cmd="roLoadMenu" id="mode0:capture0:id" type="uint">1</param>
+    <param cmd="roLoadMenu" id="mode0:capture0:bankId" type="uint">1</param>
+    <param cmd="roLoadMenu" id="mode0:capture0:length" type="uint">5</param>
+    <param cmd="roLoadMenu" id="mode0:capture0:delay" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode0:capture0:readoutLength" type="uint">30</param>
+    <!-- RO Menu mode 0 capture 1 -->
+    <param cmd="roLoadMenu" id="mode0:capture1:enable" type="bool">true</param>
+    <param cmd="roLoadMenu" id="mode0:capture1:id" type="uint">2</param>
+    <param cmd="roLoadMenu" id="mode0:capture1:bankId" type="uint">2</param>
+    <param cmd="roLoadMenu" id="mode0:capture1:length" type="uint">5</param>
+    <param cmd="roLoadMenu" id="mode0:capture1:delay" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode0:capture1:readoutLength" type="uint">30</param>
+    <!-- RO Menu mode 0 capture 2 -->
+    <param cmd="roLoadMenu" id="mode0:capture2:enable" type="bool">false</param>
+    <param cmd="roLoadMenu" id="mode0:capture2:id" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode0:capture2:bankId" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode0:capture2:length" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode0:capture2:delay" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode0:capture2:readoutLength" type="uint">0</param>
+    <!-- RO Menu mode 0 capture 3 -->
+    <param cmd="roLoadMenu" id="mode0:capture3:enable" type="bool">false</param>
+    <param cmd="roLoadMenu" id="mode0:capture3:id" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode0:capture3:bankId" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode0:capture3:length" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode0:capture3:delay" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode0:capture3:readoutLength" type="uint">0</param>
+
+    <!-- RO Menu mode 1 -->
+    <param cmd="roLoadMenu" id="mode1:eventSize" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode1:eventToTrigger" type="uint">1</param>
+    <param cmd="roLoadMenu" id="mode1:eventType" type="uint">0xc0</param>
+    <param cmd="roLoadMenu" id="mode1:tokenDelay" type="uint">70</param>
+    <!-- RO Menu mode 1 capture 0 -->
+    <param cmd="roLoadMenu" id="mode1:capture0:enable" type="bool">true</param>
+    <param cmd="roLoadMenu" id="mode1:capture0:id" type="uint">1</param>
+    <param cmd="roLoadMenu" id="mode1:capture0:bankId" type="uint">1</param>
+    <param cmd="roLoadMenu" id="mode1:capture0:length" type="uint">5</param>
+    <param cmd="roLoadMenu" id="mode1:capture0:delay" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode1:capture0:readoutLength" type="uint">30</param>
+    <!-- RO Menu mode 1 capture 1 -->
+    <param cmd="roLoadMenu" id="mode1:capture1:enable" type="bool">false</param>
+    <param cmd="roLoadMenu" id="mode1:capture1:id" type="uint">2</param>
+    <param cmd="roLoadMenu" id="mode1:capture1:bankId" type="uint">2</param>
+    <param cmd="roLoadMenu" id="mode1:capture1:length" type="uint">5</param>
+    <param cmd="roLoadMenu" id="mode1:capture1:delay" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode1:capture1:readoutLength" type="uint">30</param>
+    <!-- RO Menu mode 1 capture 2 -->
+    <param cmd="roLoadMenu" id="mode1:capture2:enable" type="bool">false</param>
+    <param cmd="roLoadMenu" id="mode1:capture2:id" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode1:capture2:bankId" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode1:capture2:length" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode1:capture2:delay" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode1:capture2:readoutLength" type="uint">0</param>
+    <!-- RO Menu mode 1 capture 3 -->
+    <param cmd="roLoadMenu" id="mode1:capture3:enable" type="bool">false</param>
+    <param cmd="roLoadMenu" id="mode1:capture3:id" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode1:capture3:bankId" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode1:capture3:length" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode1:capture3:delay" type="uint">0</param>
+    <param cmd="roLoadMenu" id="mode1:capture3:readoutLength" type="uint">0</param>
+
+    <param cmd="uGtDelay" id="l1a_latency" type="uint">21</param>
+
+    <!-- Calibration Trigger Suppression -->
+    <param cmd="uGtCalTrigSuppression" id="begin" type="uint">3480</param>
+    <param cmd="uGtCalTrigSuppression" id="end" type="uint">3505</param>
+
+    <!-- Prescale Preview -->
+    <param cmd="uGtPreparePreviewPrescale" id="initPreview" type="bool">true</param>
+    <param cmd="uGtPreparePrescale" id="otf" type="uint">0</param>
+    <param cmd="uGtPreparePreviewPrescale" id="otf" type="uint">0</param>
+    
+    <!-- Firmware auto load parameter -->
+    <param cmd="uGtSmartReboot" id="autoloadfw" type="bool">true</param> 
+    <!-- uGT firmware build version -->
+    <param cmd="uGtSmartReboot" id="FWBuildVersion" type="string">e00a</param>
+    
+    <!-- menu UUID -->
+    <param cmd="uGtVersion" id="uuid" type="string">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</param>
+  </context>
+
+  <context id="MP7_slot1">
+    <param id="sdfile" type="string">gt_mp7_xe_vxxxx_module_0.bin</param>
+    <param cmd="uGtVersion" id="module_id" type="uint">0</param>    
+    <param cmd="roLoadMenu" id="mode1:capture1:enable" type="bool">true</param>
+    
+    <!-- additional receiver settings for ZDC input (on MP7_slot1) -->
+    <param ns="cfgRxMGTs_Zdc" cmd="cfgRxMGTs" id="ids" type="string">ZdcRx[00:01]</param>
+    <param ns="cfgRxMGTs_Zdc" cmd="cfgRxMGTs" id="masks" type="string">apply</param>
+    <param ns="cfgRxMGTs_Zdc" cmd="cfgRxMGTs" id="orbitTag" type="bool">false</param>
+    <param ns="cfgRxMGTs_Zdc" cmd="cfgRxMGTs" id="polarity" type="bool">true</param>
+
+    <!-- alignment point has to be set for ZDC input (not fixed to 3526,5) -->
+    <param ns="alignMGTs_Zdc" cmd="alignMGTs" id="bx" type="uint">3526</param>
+    <param ns="alignMGTs_Zdc" cmd="alignMGTs" id="cycle" type="uint">5</param>
+    <param ns="alignMGTs_Zdc" cmd="alignMGTs" id="ids" type="string">ZdcRx[00:01]</param>
+    <param ns="alignMGTs_Zdc" cmd="alignMGTs" id="masks" type="string">apply</param>
+
+    <param ns="cfgRxBuffers_Zdc" cmd="cfgRxBuffers" id="mode" type="string">Zeroes</param>
+    <param ns="cfgRxBuffers_Zdc" cmd="cfgRxBuffers" id="payload" type="string"></param>
+    <param ns="cfgRxBuffers_Zdc" cmd="cfgRxBuffers" id="ids" type="string">ZdcRx[00:01]</param>
+    <param ns="cfgRxBuffers_Zdc" cmd="cfgRxBuffers" id="startBx" type="uint">0</param>
+    <param ns="cfgRxBuffers_Zdc" cmd="cfgRxBuffers" id="startCycle" type="uint">0</param>
+    <param ns="cfgRxBuffers_Zdc" cmd="cfgRxBuffers" id="stopBx" type="uint"></param>
+    <param ns="cfgRxBuffers_Zdc" cmd="cfgRxBuffers" id="stopCycle" type="uint"></param>
+    <param ns="cfgRxBuffers_Zdc" cmd="cfgRxBuffers" id="masks" type="string">ignore</param>
+  </context>
+
+  <context id="MP7_slot2">
+    <param id="sdfile" type="string">gt_mp7_xe_vxxxx_module_1.bin</param>
+    <param cmd="uGtVersion" id="module_id" type="uint">1</param>
+  </context>
+
+  <context id="MP7_slot3">
+    <param id="sdfile" type="string">gt_mp7_xe_vxxxx_module_2.bin</param>
+    <param cmd="uGtVersion" id="module_id" type="uint">2</param>
+  </context>
+  
+  <context id="MP7_slot4">
+    <param id="sdfile" type="string">gt_mp7_xe_vxxxx_module_3.bin</param>
+    <param cmd="uGtVersion" id="module_id" type="uint">3</param>
+  </context>
+  
+  <context id="MP7_slot5">
+    <param id="sdfile" type="string">gt_mp7_xe_vxxxx_module_4.bin</param>
+    <param cmd="uGtVersion" id="module_id" type="uint">4</param>
+  </context>
+  
+  <context id="MP7_slot6">
+    <param id="sdfile" type="string">gt_mp7_xe_vxxxx_module_5.bin</param>
+    <param cmd="uGtVersion" id="module_id" type="uint">5</param>
+  </context>
+
+  <context id="daqttcs">
+  	<param cmd="reboot" id="timeout" type="uint">90</param>
+    <param cmd="configDAQ" id="bcnOffset" type="uint">3541</param>
+    <param cmd="configDAQ" id="slinkMask" type="uint">1</param>
+    <param cmd="configTCC" id="localTTC" type="bool">false</param>
+    <param cmd="configTCC" id="ocrCmd" type="uint">8</param>
+    <param cmd="configTCC" id="resyncCmd" type="uint">4</param>
+  </context>
+
+</infra>

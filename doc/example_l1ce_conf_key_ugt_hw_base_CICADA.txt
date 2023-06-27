@@ -1,0 +1,194 @@
+<system id="uGT">
+  <creator>ugt::uGtSystem</creator>
+  <crates>
+    <crate id="uGT_CRATE">
+      <description>VadaTech Crate for uGT</description>
+      <location>Point5, S1E04-32</location>
+    </crate>
+  </crates>
+  <processors>
+    <processor id="MP7_slot1">
+      <creator>ugt::uGtProcessor</creator>
+      <hw-type>MP7-XE</hw-type>
+      <role>uGtProcessor</role>
+      <uri>chtcp-2.0://bridge-ugt.cms:10203?target=amc-s1e04-32-01.cms:50001</uri>
+      <address-table>file:///nfshome0/ugtts/CellConfig/mp7_ugt/mp7xe_infra.xml</address-table>
+      <crate>uGT_CRATE</crate>
+      <slot>1</slot>
+      <rx-port pid="[00:04]" name="MuonRx[00:04]"/>
+      <rx-port pid="[04:12]" name="CaloRx[00:08]"/>
+      <rx-port pid="[12:13]" name="ExtCondRx[00:01]"/>
+      <tx-port pid="[16:25]" name="Tx[16:25]"/>
+      <tx-port pid="[28:32]" name="ScoutingTx[28:32]"/>
+    </processor>
+    <processor id="MP7_slot2">
+      <creator>ugt::uGtProcessor</creator>
+      <hw-type>MP7-XE</hw-type>
+      <role>uGtProcessor</role>
+      <uri>chtcp-2.0://bridge-ugt.cms:10203?target=amc-s1e04-32-02.cms:50001</uri>
+      <address-table>file:///nfshome0/ugtts/CellConfig/mp7_ugt/mp7xe_infra.xml</address-table>
+      <crate>uGT_CRATE</crate>
+      <slot>2</slot>
+      <rx-port pid="[00:04]" name="MuonRx[00:04]"/>
+      <rx-port pid="[04:12]" name="CaloRx[00:08]"/>
+      <rx-port pid="[12:13]" name="ExtCondRx[00:01]"/>
+      <tx-port pid="[16:25]" name="Tx[16:25]"/>
+      <tx-port pid="[28:32]" name="ScoutingTx[28:32]"/>
+    </processor>
+    <processor id="MP7_slot3">
+      <creator>ugt::uGtProcessor</creator>
+      <hw-type>MP7-XE</hw-type>
+      <role>uGtProcessor</role>
+      <uri>chtcp-2.0://bridge-ugt.cms:10203?target=amc-s1e04-32-03.cms:50001</uri>
+      <address-table>file:///nfshome0/ugtts/CellConfig/mp7_ugt/mp7xe_infra.xml</address-table>
+      <crate>uGT_CRATE</crate>
+      <slot>3</slot>
+      <rx-port pid="[00:04]" name="MuonRx[00:04]"/>
+      <rx-port pid="[04:12]" name="CaloRx[00:08]"/>
+      <rx-port pid="[12:13]" name="ExtCondRx[00:01]"/>
+      <tx-port pid="[16:25]" name="Tx[16:25]"/>
+      <tx-port pid="[28:32]" name="ScoutingTx[28:32]"/>
+    </processor>
+    <processor id="MP7_slot4">
+      <creator>ugt::uGtProcessor</creator>
+      <hw-type>MP7-XE</hw-type>
+      <role>uGtProcessor</role>
+      <uri>chtcp-2.0://bridge-ugt.cms:10203?target=amc-s1e04-32-04.cms:50001</uri>
+      <address-table>file:///nfshome0/ugtts/CellConfig/mp7_ugt/mp7xe_infra.xml</address-table>
+      <crate>uGT_CRATE</crate>
+      <slot>4</slot>
+      <rx-port pid="[00:04]" name="MuonRx[00:04]"/>
+      <rx-port pid="[04:12]" name="CaloRx[00:08]"/>
+      <rx-port pid="[12:13]" name="ExtCondRx[00:01]"/>
+      <tx-port pid="[16:25]" name="Tx[16:25]"/>
+      <tx-port pid="[28:32]" name="ScoutingTx[28:32]"/>
+    </processor>
+    <processor id="MP7_slot5">
+      <creator>ugt::uGtProcessor</creator>
+      <hw-type>MP7-XE</hw-type>
+      <role>uGtProcessor</role>
+      <uri>chtcp-2.0://bridge-ugt.cms:10203?target=amc-s1e04-32-05.cms:50001</uri>
+      <address-table>file:///nfshome0/ugtts/CellConfig/mp7_ugt/mp7xe_infra.xml</address-table>
+      <crate>uGT_CRATE</crate>
+      <slot>5</slot>
+      <rx-port pid="[00:04]" name="MuonRx[00:04]"/>
+      <rx-port pid="[04:12]" name="CaloRx[00:08]"/>
+      <rx-port pid="[12:13]" name="ExtCondRx[00:01]"/>
+      <tx-port pid="[16:25]" name="Tx[16:25]"/>
+      <tx-port pid="[28:32]" name="ScoutingTx[28:32]"/>
+    </processor>
+    <processor id="MP7_slot6">
+      <creator>ugt::uGtProcessor</creator>
+      <hw-type>MP7-XE</hw-type>
+      <role>uGtProcessor</role>
+      <uri>chtcp-2.0://bridge-ugt.cms:10203?target=amc-s1e04-32-06.cms:50001</uri>
+      <address-table>file:///nfshome0/ugtts/CellConfig/mp7_ugt/mp7xe_infra.xml</address-table>
+      <crate>uGT_CRATE</crate>
+      <slot>6</slot>
+      <rx-port pid="[00:04]" name="MuonRx[00:04]"/>
+      <rx-port pid="[04:12]" name="CaloRx[00:08]"/>
+      <rx-port pid="[12:13]" name="ExtCondRx[00:01]"/>
+      <tx-port pid="[16:25]" name="Tx[16:25]"/>
+      <tx-port pid="[28:32]" name="ScoutingTx[28:32]"/>
+    </processor>
+    <processor id="Finor_slot07">
+      <creator>ugt::uGtFinorProcessor</creator>
+      <hw-type>AMC502</hw-type>
+      <role>uGtFinorProcessor</role>
+      <uri>chtcp-2.0://bridge-ugt.cms:10203?target=amc-s1e04-32-07.cms:50001</uri>
+      <address-table>file:///nfshome0/ugtts/CellConfig/amc502_finor/mp7xe_infra.xml</address-table>
+      <crate>uGT_CRATE</crate>
+      <slot>7</slot>
+    </processor>
+    <processor id="FinorPreview_slot08">
+      <creator>ugt::uGtFinorPreviewProc</creator>
+      <hw-type>AMC502</hw-type>
+      <role>uGtFinorPreviewProc</role>
+      <uri>chtcp-2.0://bridge-ugt.cms:10203?target=amc-s1e04-32-08.cms:50001</uri>
+      <address-table>file:///nfshome0/ugtts/CellConfig/amc502_finor_pre/mp7xe_infra.xml</address-table>
+      <crate>uGT_CRATE</crate>
+      <slot>8</slot>
+    </processor>
+    <processor id="ExtCond_slot12">
+      <creator>ugt::uGtExtCondProcessor</creator>
+      <hw-type>AMC502</hw-type>
+      <role>uGtExtCondProcessor</role>
+      <uri>chtcp-2.0://bridge-ugt.cms:10203?target=amc-s1e04-32-12.cms:50001</uri>
+      <address-table>file:///nfshome0/ugtts/CellConfig/amc502_extcond/mp7xe_infra.xml</address-table>
+      <crate>uGT_CRATE</crate>
+      <slot>12</slot>
+      <tx-port pid="[00:08]" name="ExtCondTx[00:08]"/>
+    </processor>
+  </processors>
+  <daqttc-mgrs>
+    <daqttc-mgr id="AMC13">
+      <creator>swatch::amc13::AMC13Manager</creator>
+      <role>daqttc</role>
+      <crate>uGT_CRATE</crate>
+      <slot>13</slot>
+      <uri id="t1">chtcp-2.0://bridge-ugt.cms:10203?target=amc-s1e04-32-13-t1.cms:50001</uri>
+      <uri id="t2">chtcp-2.0://bridge-ugt.cms:10203?target=amc-s1e04-32-13-t2.cms:50001</uri>
+      <address-table id="t1">file:///opt/cactus/etc/amc13/AMC13XG_T1.xml</address-table>
+      <address-table id="t2">file:///opt/cactus/etc/amc13/AMC13XG_T2.xml</address-table>
+      <fed-id>1404</fed-id>
+    </daqttc-mgr>
+  </daqttc-mgrs>
+  <links>
+    <link id="link1_[00:01]">
+      <from>ExtCond_slot12</from>
+      <tx-port>ExtCondTx[00:01]</tx-port>
+      <to>MP7_slot1</to>
+      <rx-port>ExtCondRx[00:01]</rx-port>
+    </link>
+    <link id="link2_[00:01]">
+      <from>ExtCond_slot12</from>
+      <tx-port>ExtCondTx[01:02]</tx-port>
+      <to>MP7_slot2</to>
+      <rx-port>ExtCondRx[00:01]</rx-port>
+    </link>
+    <link id="link3_[00:01]">
+      <from>ExtCond_slot12</from>
+      <tx-port>ExtCondTx[02:03]</tx-port>
+      <to>MP7_slot3</to>
+      <rx-port>ExtCondRx[00:01]</rx-port>
+    </link>
+    <link id="link4_[00:01]">
+      <from>ExtCond_slot12</from>
+      <tx-port>ExtCondTx[03:04]</tx-port>
+      <to>MP7_slot4</to>
+      <rx-port>ExtCondRx[00:01]</rx-port>
+    </link>
+    <link id="link5_[00:01]">
+      <from>ExtCond_slot12</from>
+      <tx-port>ExtCondTx[04:05]</tx-port>
+      <to>MP7_slot5</to>
+      <rx-port>ExtCondRx[00:01]</rx-port>
+    </link>
+    <link id="link6_[00:01]">
+      <from>ExtCond_slot12</from>
+      <tx-port>ExtCondTx[05:06]</tx-port>
+      <to>MP7_slot6</to>
+      <rx-port>ExtCondRx[00:01]</rx-port>
+    </link>
+  </links>
+  <connected-feds>
+    <connected-fed id="1402">
+      <port id="MP7_slot1.inputPorts.MuonRx[00:04]"/>
+      <port id="MP7_slot2.inputPorts.MuonRx[00:04]"/>
+      <port id="MP7_slot3.inputPorts.MuonRx[00:04]"/>
+      <port id="MP7_slot4.inputPorts.MuonRx[00:04]"/>
+      <port id="MP7_slot5.inputPorts.MuonRx[00:04]"/>
+      <port id="MP7_slot6.inputPorts.MuonRx[00:04]"/>
+    </connected-fed>
+    <!-- changed for CICADA input on link 11 -->
+    <connected-fed id="1360">
+      <port id="MP7_slot1.inputPorts.CaloRx[00:08]"/>
+      <port id="MP7_slot2.inputPorts.CaloRx[00:08]"/>
+      <port id="MP7_slot3.inputPorts.CaloRx[00:08]"/>
+      <port id="MP7_slot4.inputPorts.CaloRx[00:08]"/>
+      <port id="MP7_slot5.inputPorts.CaloRx[00:08]"/>
+      <port id="MP7_slot6.inputPorts.CaloRx[00:08]"/>
+    </connected-fed>
+  </connected-feds>
+  <excluded-boards/>
+</system>

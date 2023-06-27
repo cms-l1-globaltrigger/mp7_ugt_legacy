@@ -1,6 +1,5 @@
 \textbf{\texttt{UNDER CONSTRUCTION !!!!}}
 
-
 % 0000  5186f41899f57c08 AMC13 header --> 0x5, Evt\_ty=1, LV1\_id(24)=0x86f418 (8844312), BXId(12)=0x99f (2463), Source\_id(12)=0x57c (1404 [FED \#]), FOV=0, Hx\$\$=8 (H=1) => OK\\
 % 0001  10604240512ff300 AMC13 header --> uFOV=1, Res=0, nAMC=6, Reserved=0x0424 ??, OrN(32)=0x0512ff30 (85131056), 0x0 => OK, but "Reserved" should be 0\\
 % 0002  0f00014a00010000 AMC13 header --> 0LMSEPVC=0x0f (???), AMC1\_size=0x14a (330), Blk\_No=0, AmcNo=1, BoardID=0 => OK (but some bits are unclear)\\
@@ -151,3 +150,92 @@
 \end{center}
 
 \clearpage
+
+Example of a readout record dump:
+
+\texttt{5186f41767557c08}\\
+\texttt{10604240512ff300}\\
+\texttt{0f00014a00010000}\\
+\texttt{0f00009000020000}\\
+\texttt{0f00009000030000}\\
+\texttt{0f00009000040000}\\
+\texttt{0f00009000050000}\\
+\texttt{0f00009000060000}\\
+\texttt{\textcolor{black}{0}\textcolor{blue}{\textbf{1}}\textcolor{red}{\textbf{86f417}}\textcolor{green}{\textbf{675}}\textcolor{orange}{\textbf{0014a}} - \textcolor{blue}{AMC\#}, \textcolor{red}{LV1 id}, \textcolor{green}{BX id}, \textcolor{orange}{Data\_lgth}}\\
+\texttt{000000c0ff300000}\\
+\texttt{\textcolor{black}{0000}\textcolor{blue}{\textbf{1152}}\textcolor{black}{00}\textcolor{red}{\textbf{030202}} - \textcolor{blue}{uGT FW build}, \textcolor{red}{MP7 FW version}}\\
+\texttt{\textcolor{black}{00000000}\textcolor{blue}{\textbf{00}}\textcolor{red}{\textbf{1e}}\textcolor{black}{0200} - \textcolor{blue}{Block ID}, \textcolor{red}{Block size}}\\
+\texttt{... muon input data}\\
+\texttt{\textcolor{blue}{\textbf{02}}\textcolor{red}{\textbf{1e}}\textcolor{black}{020000000000} - \textcolor{blue}{Block ID}, \textcolor{red}{Block size}}\\
+\texttt{... muon input data}\\
+\texttt{00000000041e0200}\\
+\texttt{... muon input data}\\
+\texttt{061e020000000000}\\
+\texttt{... muon input data}\\
+\texttt{06000200081e0200}\\
+\texttt{... e/gamma input data}\\
+\texttt{0a1e020006000200}\\
+\texttt{... e/gamma input data}\\
+\texttt{000008000c1e0200}\\
+\texttt{... jet input data}\\
+\texttt{0e1e020000000800}\\
+\texttt{... jet input data}\\
+\texttt{02000200101e0200}\\
+\texttt{... tau input data}\\
+\texttt{121e020002000200}\\
+\texttt{... tau input data}\\
+\texttt{0002a02a141e0200}\\
+\texttt{... esums data }\\
+\texttt{181e02000006f000}\\
+\texttt{... ext cond input data}\\
+\texttt{00000000211e0100}\\
+\texttt{... algo output data AMC1}\\
+\texttt{231e010000000000}\\
+\texttt{... algo output data AMC1}\\
+\texttt{00000000251e0100}\\
+\texttt{... algo output data AMC1}\\
+\texttt{271e01005ca70bcc}\\
+\texttt{... algo output data AMC1}\\
+\texttt{00000000291e0100}\\
+\texttt{... algo output data AMC1}\\
+\texttt{2b1e010000000000}\\
+\texttt{... algo output data AMC1}\\
+\texttt{000000002d1e0100}\\
+\texttt{... algo output data AMC1}\\
+\texttt{2f1e010000000000}\\
+\texttt{... algo output data AMC1}\\
+\texttt{00000000311e0100}\\
+\texttt{... algo output data AMC1}\\
+\texttt{9ac23b761700014a}\\
+\texttt{0286f41767500090}\\
+\texttt{000000c0ff300000}\\
+\texttt{0000115200030202}\\
+\texttt{00000000211e0100}\\
+\texttt{... algo output data AMC2}\\
+\texttt{231e010000000000}\\
+\texttt{... algo output data AMC2}\\
+\texttt{00000000251e0100}\\
+\texttt{... algo output data AMC2}\\
+\texttt{271e01005ca70bcc}\\
+\texttt{... algo output data AMC2}\\
+\texttt{00000000291e0100}\\
+\texttt{... algo output data AMC2}\\
+\texttt{2b1e010000000000}\\
+\texttt{... algo output data AMC2}\\
+\texttt{000000002d1e0100}\\
+\texttt{... algo output data AMC2}\\
+\texttt{2f1e010000000000}\\
+\texttt{... algo output data AMC2}\\
+\texttt{00000000311e0100}\\
+\texttt{... algo output data AMC2}\\
+\texttt{cb79a76317000090}\\
+\texttt{0386f41767500090}\\
+\texttt{000000c0ff300000}\\
+\texttt{0000115200030202}\\
+\texttt{00000000211e0100}\\
+\texttt{...}\\
+\texttt{... AMC3 - AMC6}\\
+\texttt{...}\\
+\texttt{36cb696317000090}\\
+\texttt{f6b9461200017675}\\
+\texttt{a000042484680000}\\

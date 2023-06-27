@@ -153,18 +153,17 @@
 
 Example of a readout record dump:
 
-\texttt{5186f41767557c08}\\
-\texttt{10604240512ff300}\\
-\texttt{0f00014a00010000}\\
-\texttt{0f00009000020000}\\
+\texttt{\textcolor{brown}{\textbf{5}}\textcolor{blue}{\textbf{1}}\textcolor{red}{\textbf{86f417}}\textcolor{green}{\textbf{675}}\textcolor{orange}{\textbf{57c}}\textcolor{black}{08} - AMC13 header: \textcolor{blue}{Event type}, \textcolor{red}{LV1 id}, \textcolor{green}{BX id}, \textcolor{orange}{FED\#}}\\
+\texttt{\textcolor{black}{0f0}\textcolor{orange}{\textbf{0014a}}\texttt{000}\textcolor{blue}{\textbf{1}}\textcolor{black}{0000} - AMC13 header: \textcolor{orange}{Data length}, \textcolor{blue}{AMC\#1}}\\
+\texttt{\textcolor{black}{0f0}\textcolor{orange}{\textbf{00090}}\texttt{000}\textcolor{blue}{\textbf{2}}\textcolor{black}{0000} - AMC13 header: \textcolor{orange}{Data length}, \textcolor{blue}{AMC\#2}}\\
 \texttt{0f00009000030000}\\
 \texttt{0f00009000040000}\\
 \texttt{0f00009000050000}\\
 \texttt{0f00009000060000}\\
-\texttt{\textcolor{black}{0}\textcolor{blue}{\textbf{1}}\textcolor{red}{\textbf{86f417}}\textcolor{green}{\textbf{675}}\textcolor{orange}{\textbf{0014a}} - \textcolor{blue}{AMC\#}, \textcolor{red}{LV1 id}, \textcolor{green}{BX id}, \textcolor{orange}{Data\_lgth}}\\
-\texttt{000000c0ff300000}\\
-\texttt{\textcolor{black}{0000}\textcolor{blue}{\textbf{1152}}\textcolor{black}{00}\textcolor{red}{\textbf{030202}} - \textcolor{blue}{uGT FW build}, \textcolor{red}{MP7 FW version}}\\
-\texttt{\textcolor{black}{00000000}\textcolor{blue}{\textbf{00}}\textcolor{red}{\textbf{1e}}\textcolor{black}{0200} - \textcolor{blue}{Block ID}, \textcolor{red}{Block size}}\\
+\texttt{\textcolor{black}{0}\textcolor{blue}{\textbf{1}}\textcolor{red}{\textbf{86f417}}\textcolor{green}{\textbf{675}}\textcolor{orange}{\textbf{0014a}} - AMC\#1 header: \textcolor{blue}{AMC\#1}, \textcolor{red}{LV1 id}, \textcolor{green}{BX id}, \textcolor{orange}{Data length}}\\
+\texttt{\textcolor{black}{000000}\textcolor{blue}{\textbf{c0}}\textcolor{red}{\textbf{ff30}}\textcolor{black}{0000} - AMC\#1 header: \textcolor{blue}{Ev. type *)}, \textcolor{red}{Orbit nr. (16 bits)}}\\
+\texttt{\textcolor{black}{0000}\textcolor{blue}{\textbf{1152}}\textcolor{black}{00}\textcolor{red}{\textbf{030202}} - AMC\#1 header: \textcolor{blue}{uGT FW build}, \textcolor{red}{MP7 FW version}}\\
+\texttt{\textcolor{black}{00000000}\textcolor{blue}{\textbf{00}}\textcolor{red}{\textbf{1e}}\textcolor{black}{0200} - AMC\#1 input data: \textcolor{blue}{Block ID}, \textcolor{red}{Block size}}\\
 \texttt{... muon input data}\\
 \texttt{\textcolor{blue}{\textbf{02}}\textcolor{red}{\textbf{1e}}\textcolor{black}{020000000000} - \textcolor{blue}{Block ID}, \textcolor{red}{Block size}}\\
 \texttt{... muon input data}\\
@@ -188,54 +187,57 @@ Example of a readout record dump:
 \texttt{... esums data }\\
 \texttt{181e02000006f000}\\
 \texttt{... ext cond input data}\\
-\texttt{00000000211e0100}\\
-\texttt{... algo output data AMC1}\\
+\texttt{\textcolor{black}{00000000}\textcolor{blue}{\textbf{21}}\textcolor{red}{\textbf{1e}}\textcolor{black}{0100} - AMC\#1 output data: \textcolor{blue}{Block ID}, \textcolor{red}{Block size}}\\
+\texttt{... algo output data AMC\#1}\\
 \texttt{231e010000000000}\\
-\texttt{... algo output data AMC1}\\
+\texttt{... algo output data AMC\#1}\\
 \texttt{00000000251e0100}\\
-\texttt{... algo output data AMC1}\\
+\texttt{... algo output data AMC\#1}\\
 \texttt{271e01005ca70bcc}\\
-\texttt{... algo output data AMC1}\\
+\texttt{... algo output data AMC\#1}\\
 \texttt{00000000291e0100}\\
-\texttt{... algo output data AMC1}\\
+\texttt{... algo output data AMC\#1}\\
 \texttt{2b1e010000000000}\\
-\texttt{... algo output data AMC1}\\
+\texttt{... algo output data AMC\#1}\\
 \texttt{000000002d1e0100}\\
-\texttt{... algo output data AMC1}\\
+\texttt{... algo output data AMC\#1}\\
 \texttt{2f1e010000000000}\\
-\texttt{... algo output data AMC1}\\
+\texttt{... algo output data AMC\#1}\\
 \texttt{00000000311e0100}\\
-\texttt{... algo output data AMC1}\\
-\texttt{9ac23b761700014a}\\
-\texttt{0286f41767500090}\\
-\texttt{000000c0ff300000}\\
-\texttt{0000115200030202}\\
+\texttt{... algo output data AMC\#1}\\
+\texttt{\textcolor{blue}{\textbf{9ac23b76}}\textcolor{red}{\textbf{17}}\textcolor{black}{0}\textcolor{orange}{\textbf{0014a}} - AMC\#1 trailer: \textcolor{blue}{CRC}, \textcolor{red}{LV1 id (8 bits)}, \textcolor{orange}{Data length}}\\
+\texttt{0286f41767500090 - AMC\#2 header} \\
+\texttt{000000c0ff300000 - AMC\#2 header} \\
+\texttt{0000115200030202 - AMC\#2 header} \\
 \texttt{00000000211e0100}\\
-\texttt{... algo output data AMC2}\\
+\texttt{... algo output data AMC\#2}\\
 \texttt{231e010000000000}\\
-\texttt{... algo output data AMC2}\\
+\texttt{... algo output data AMC\#2}\\
 \texttt{00000000251e0100}\\
-\texttt{... algo output data AMC2}\\
+\texttt{... algo output data AMC\#2}\\
 \texttt{271e01005ca70bcc}\\
-\texttt{... algo output data AMC2}\\
+\texttt{... algo output data AMC\#2}\\
 \texttt{00000000291e0100}\\
-\texttt{... algo output data AMC2}\\
+\texttt{... algo output data AMC\#2}\\
 \texttt{2b1e010000000000}\\
-\texttt{... algo output data AMC2}\\
+\texttt{... algo output data AMC\#2}\\
 \texttt{000000002d1e0100}\\
-\texttt{... algo output data AMC2}\\
+\texttt{... algo output data AMC\#2}\\
 \texttt{2f1e010000000000}\\
-\texttt{... algo output data AMC2}\\
+\texttt{... algo output data AMC\#2}\\
 \texttt{00000000311e0100}\\
-\texttt{... algo output data AMC2}\\
-\texttt{cb79a76317000090}\\
-\texttt{0386f41767500090}\\
-\texttt{000000c0ff300000}\\
-\texttt{0000115200030202}\\
+\texttt{... algo output data AMC\#2}\\
+\texttt{cb79a76317000090 - AMC\#2 trailer}\\
+\texttt{0386f41767500090 - AMC\#3 header}\\
+\texttt{000000c0ff300000 - AMC\#3 header}\\
+\texttt{0000115200030202 - AMC\#3 header}\\
 \texttt{00000000211e0100}\\
 \texttt{...}\\
-\texttt{... AMC3 - AMC6}\\
+\texttt{... AMC\#3 - AMC\#6}\\
 \texttt{...}\\
-\texttt{36cb696317000090}\\
-\texttt{f6b9461200017675}\\
-\texttt{a000042484680000}\\
+\texttt{36cb696317000090 - AMC\#6 trailer}\\
+\texttt{\textcolor{blue}{\textbf{f6b94612}}\textcolor{black}{000}\textcolor{red}{\textbf{17}}\textcolor{green}{\textbf{675}} - AMC13 trailer: \textcolor{blue}{CRC}, \textcolor{red}{LV1 id (8 bits)}, \textcolor{green}{BX id}}\\
+\texttt{\textcolor{brown}{\textbf{a}}\textcolor{black}{0}\textcolor{red}{\textbf{000424}}\textcolor{blue}{\textbf{8468}}\textcolor{black}{0000} - AMC13 trailer: \textcolor{red}{Ev. length}, \textcolor{blue}{CRC (16 bits)}}\\
+
+Remark:
+*) Event type set in configuration key: "ugt infra mp7 base" by "<param cmd="roLoadMenu" id="mode1:eventType" type="uint">0xc0</param>"

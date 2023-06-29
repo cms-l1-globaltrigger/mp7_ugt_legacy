@@ -1,15 +1,34 @@
-\textbf{\texttt{UNDER CONSTRUCTION !!!!}}
+% \textbf{\texttt{UNDER CONSTRUCTION !!!!}}
 
-The following description is a copy from ~\cite{AMC13}:
+% The following description is a copy from ~\cite{AMC13}:
+% 
+% \texttt{The AMC13 DAQ path builds events from 12 AMC cards in a MicroTCA crate,
+% and transmits the completed events to a central DAQ system over a fiber-optic link.}\\
+% \texttt{Events may also be stored in on-board SDRAM for testing or diagnostic purposes.}\\
+% \texttt{In response to a trigger signal, each enabled AMC transmits an event fragment to the AMC13. 
+% The AMC13 packages these fragments into a single event record. AMC13 firmware supports a maximum of 4k bytes from each
+% AMC card. This document describes a revision to the event builder to support very large event fragments.}\\
+% \texttt{Large blocks (> 32kB) from one AMC are broken into smaller blocks by the AMC13. Each 32kB from each AMC are read across the backplane in parallel,
+% then concatenated to form blocks, each with it's own header and sent to the output stream. The entire event is wrapped with header and trailer.}
+% The following description is a copy from ~\cite{AMC13}:
 
-\texttt{The AMC13 DAQ path builds events from 12 AMC cards in a MicroTCA crate,
-and transmits the completed events to a central DAQ system over a fiber-optic link.}\\
-\texttt{Events may also be stored in on-board SDRAM for testing or diagnostic purposes.}\\
-\texttt{In response to a trigger signal, each enabled AMC transmits an event fragment to the AMC13. 
-The AMC13 packages these fragments into a single event record. AMC13 firmware supports a maximum of 4k bytes from each
-AMC card. This document describes a revision to the event builder to support very large event fragments.}\\
-\texttt{Large blocks (> 32kB) from one AMC are broken into smaller blocks by the AMC13. Each 32kB from each AMC are read across the backplane in parallel,
-then concatenated to form blocks, each with it's own header and sent to the output stream. The entire event is wrapped with header and trailer.}
+\section{Definition uGT readout record}
+
+This document is a description of the structure of a uGT readout record.
+
+In chapter "Event Builder Overview" of document~\cite{AMC13} one can find a description about building a uGT readout record on AMC13.\\
+The following description and explanations are based on documents~\cite{AMC13} and~\cite{MP7}.
+
+\subsection{Overview of structure}
+In the following table the structure of the uGT readout record is shown:
+\begin{itemize}
+\item the first 8 lines contain AMC13 header information, 
+\item followed by 3 AMC\#1 header lines.
+\item Then the first block of input data (of AMC\#1), containing a block header and 30 data words (32 bits), is shown.
+\item A certain number of input data blocks and output data blocks (each with the same block size) and a AMC\#1 trailer line finish AMC\#1 readout record.
+\item Data of AMC\#2 to AMC\#6 with output data blocks only
+\item and 2 AMC13 trailer lines fill up the readout record.
+\end{itemize}
 
 \clearpage
 
@@ -78,8 +97,8 @@ then concatenated to form blocks, each with it's own header and sent to the outp
         \bitbox {32} {\tiny\texttt{MP7 FW version}} \\        
         \bitbox {32} {\tiny\texttt{input data}}     &        
         \bitbox {8}  {\tiny\texttt{BlockID=0x00}}   &        
-        \bitbox {8}  {\tiny\texttt{Block size *)}}  &        
-        \bitbox {16} {\tiny\texttt{reserved **)}}    \\        
+        \bitbox {8}  {\tiny\texttt{Block size [0]}}  &        
+        \bitbox {16} {\tiny\texttt{reserved [1]}}    \\        
         \bitbox {32} {\tiny\texttt{input data}}     &        
         \bitbox {32} {\tiny\texttt{input data}}     \\       
         \bitbox {64} {\tiny\texttt{...}}            \\
@@ -143,16 +162,13 @@ then concatenated to form blocks, each with it's own header and sent to the outp
         \bitbox {1}  {\tiny\texttt{T}}              &
         \bitbox {1}  {\tiny\texttt{R}}              &
         \bitbox {1}  {\tiny\texttt{\$}}             &
-        \bitbox {1}  {\tiny\texttt{\$}}             \\
+        \bitbox {1}  {\tiny\texttt{\$}}             
 \end{bytefield}
 \end{center}
-
-Remarks:\\
-
-*) "Event type" is set in configuration key: "ugt infra mp7 base" with\\ 
+[0]: "Event type" is set in configuration key: "ugt infra mp7 base" with\\ 
 \texttt{\small{<param cmd="roLoadMenu" id="mode1:eventType" type="uint">0xc0</param>}}.\\
 
-**) Contains probably the "bank id" which is set in configuration key: "ugt infra mp7 base" with\\
+[1]: Contains probably the "bank id" which is set in configuration key: "ugt infra mp7 base" with\\
 \texttt{\small{<param cmd="roLoadMenu" id="mode1:capture1:bankId" type="uint">2</param>}} \\ 
 for input data and \\ 
 \texttt{\small{<param cmd="roLoadMenu" id="mode1:capture0:bankId" type="uint">1</param>}} \\
@@ -160,6 +176,7 @@ for output data.
 
 \clearpage
 
+\subsection{Readout record dump}
 Example of a readout record dump (with description):
 
 \texttt{\textcolor{brown}{\textbf{5}}\textcolor{blue}{\textbf{1}}\textcolor{red}{\textbf{86f417}}\textcolor{green}{\textbf{675}}\textcolor{orange}{\textbf{57c}}\textcolor{black}{08} - AMC13 header: \textcolor{blue}{Event type}, \textcolor{red}{LV1 id}, \textcolor{green}{BX id}, \textcolor{orange}{FED\#}}\\
@@ -171,11 +188,11 @@ Example of a readout record dump (with description):
 \texttt{0f00009000050000}\\
 \texttt{0f00009000060000}\\
 \texttt{\textcolor{black}{0}\textcolor{blue}{\textbf{1}}\textcolor{red}{\textbf{86f417}}\textcolor{green}{\textbf{675}}\textcolor{orange}{\textbf{0014a}} - AMC\#1 header: \textcolor{blue}{AMC\#1}, \textcolor{red}{LV1 id}, \textcolor{green}{BX id}, \textcolor{orange}{Data length}}\\
-\texttt{\textcolor{black}{000000}\textcolor{blue}{\textbf{c0}}\textcolor{red}{\textbf{ff30}}\textcolor{black}{0000} - AMC\#1 header: \textcolor{blue}{Ev. type *)}, \textcolor{red}{Orbit nr (16 bits)}}\\
+\texttt{\textcolor{black}{000000}\textcolor{blue}{\textbf{c0}}\textcolor{red}{\textbf{ff30}}\textcolor{black}{0000} - AMC\#1 header: \textcolor{blue}{Ev. type [0]}, \textcolor{red}{Orbit nr (16 bits)}}\\
 \texttt{\textcolor{black}{0000}\textcolor{blue}{\textbf{1152}}\textcolor{black}{00}\textcolor{red}{\textbf{030202}} - AMC\#1 header: \textcolor{blue}{uGT FW build}, \textcolor{red}{MP7 FW version}}\\
 \texttt{\textcolor{black}{00000000}\textcolor{blue}{\textbf{00}}\textcolor{red}{\textbf{1e}}\textcolor{black}{0}\textcolor{green}{\textbf{2}}\textcolor{black}{00} - AMC\#1 input: \textcolor{blue}{Block ID}, \textcolor{red}{Block size}, \textcolor{green}{"bankId"=input}}\\
 \texttt{... muon input data}\\
-\texttt{\textcolor{blue}{\textbf{02}}\textcolor{red}{\textbf{1e}}\textcolor{black}{0}\textcolor{green}{\textbf{2}}\textcolor{black}{0000000000} - \textcolor{blue}{Block ID}, \textcolor{red}{Block size}, \textcolor{green}{"bankId"=input **)}}\\
+\texttt{\textcolor{blue}{\textbf{02}}\textcolor{red}{\textbf{1e}}\textcolor{black}{0}\textcolor{green}{\textbf{2}}\textcolor{black}{0000000000} - \textcolor{blue}{Block ID}, \textcolor{red}{Block size}, \textcolor{green}{"bankId"=input [1]}}\\
 \texttt{... muon input data AMC\#1}\\
 \texttt{00000000041e0200}\\
 \texttt{... muon input data AMC\#1}\\
@@ -251,6 +268,7 @@ Example of a readout record dump (with description):
 
 \clearpage
 
+\subsection{Data block}
 Description of a block with "block size" = 0x1e (6 frames [32 bits] @ +/-2 bx = 30) of a certain "Block ID" (0x00, 0x02, ..., 0x21, 0x23, ...):
 
 \texttt{\textcolor{blue}{\textbf{00000000}}\textcolor{black}{001e0200} - \textcolor{black}{bx-2:} \textcolor{blue}{frame 0}}\\

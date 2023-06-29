@@ -47,24 +47,7 @@ vivado is running (see \href{\gitbranch/README.md}{\texttt{README}}):\\
 
 The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
 
-\subsubsection{ZDC 5G to 10G conversion scheme}\label{sec:app:zdc_5g_10g_conv}
-
-ZDC data are provided on a 5 GHz link, therefore a conversion from 5 GHz to 10 GHz is implemented in \ugt firmware.
-Figure~\ref{fig:app:zdc_5G_10G_conv_scheme} shows ZDC 5G link to 10G link conversion scheme on a MP7 module in one slot of \ugt system.\\
-
-\begin{figure}[htb]
-\centering
-\includegraphics[width=15cm]{figures/zdc_5G_10G_conv_scheme}
-\caption{ZDC 5G link to 10G link conversion scheme}
-\label{fig:app:zdc_5G_10G_conv_scheme}
-\end{figure}
-
-\clearpage
-
 \subsubsection{GTH input connections}\label{sec:app:gth_i_conn}
-
-\textbf{Remark}:
-Connections of RX2 and TX2 must be checked and confirmed!!!
 
 Table~\ref{tab:app:gth_i_conn} contains the GTH input connections from MP7 MTP front connectors\footnote{"ch." means "channel", "pp conn." means "optical patch panel connector number"}:
 
@@ -87,7 +70,7 @@ RX1/8  & rx3/7  &     & X1Y28 & 10G & 0x0E & 8  & 7  & jet\\\hline
 RX1/9  & rx3/8  & 116 & X1Y27 & 10G & 0x10 & 9  & 8  & tau\\\hline
 RX1/10 & rx3/9  &     & X1Y26 & 10G & 0x12 & 10 & 9  & tau\\\hline
 RX1/11 & rx3/10 &     & X1Y25 & 10G & 0x14 & 11 & 10 & esums\\\hline
-RX1/12 & rx3/11 &     & X1Y24 & 10G & 0x16 & 12 & 11 & zdc\\\hline
+RX1/12 & rx3/11 &     & X1Y24 & 10G & 0x16 & 12 & 11 & free\\\hline
 RX1/13 & rx4/0  & 115 & X1Y23 & 10G & 0x18 & 13 & 12 & external conditions\\\hline
 RX1/14 & rx4/1  &     & X1Y22 & 10G & 0x1A & 14 & 13 & external conditions\\\hline
 RX1/15 & rx4/2  &     & X1Y21 & 10G & 0x1C & 15 & 14 & external conditions\\\hline
@@ -192,10 +175,10 @@ TX1/25 & tx5/0  & 112 & X1Y11 & 10G & 0x31 & nc & 24 & readout (AMC13)\\\hline
 TX1/26 & tx5/1  &     & X1Y10 & 10G & 0x33 & nc & 25 & readout (AMC13)\\\hline
 TX1/27 & tx5/2  &     & X1Y09 & 10G & 0x35 & nc & 26 & -\\\hline
 TX1/28 & tx5/3  &     & X1Y08 & 10G & 0x37 & nc & 27 & -\\\hline
-TX1/29 & tx5/4  & 111 & X1Y07 &  x  & 0x39 & nc & 28 & -\\\hline
-TX1/30 & tx5/5  &     & X1Y06 &  x  & 0x3b & nc & 29 & -\\\hline
-TX1/31 & tx5/6  &     & X1Y05 &  x  & 0x3d & nc & 30 & -\\\hline
-TX1/32 & tx5/7  &     & X1Y04 &  x  & 0x3f & nc & 31 & -\\\hline
+TX1/29 & tx5/4  & 111 & X1Y07 & 10G & 0x39 & nc & 28 & scouting\\\hline
+TX1/30 & tx5/5  &     & X1Y06 & 10G & 0x3b & nc & 29 & scouting\\\hline
+TX1/31 & tx5/6  &     & X1Y05 & 10G & 0x3d & nc & 30 & scouting\\\hline
+TX1/32 & tx5/7  &     & X1Y04 & 10G & 0x3f & nc & 31 & scouting\\\hline
 TX1/33 & tx5/8  & 110 & X1Y03 &  x  & 0x41 & nc & 32 & -\\\hline
 TX1/34 & tx5/9  &     & X1Y02 &  x  & 0x43 & nc & 33 & -\\\hline
 TX1/35 & tx5/10 &     & X1Y01 &  x  & 0x45 & nc & 34 & -\\\hline
@@ -263,7 +246,7 @@ JET6..JET11 & 7  & 117 & X1Y28 & x &   \\\hline
 TAU0..TAU5  & 8  & 116 & X1Y27 & x &   \\\hline
 TAU6..TAU11 & 9  & 116 & X1Y26 & x &   \\\hline
 ESUMS  & 10  & 116 & X1Y25 & x &   \\\hline
-ZDC & 11  & 116 & X1Y24 & x &   \\\hline
+free & 11  & 116 & X1Y24 & x &   \\\hline
 EXT\_COND[0:63] & 12  & 115 & X1Y23 & x &   \\\hline
 EXT\_COND[64:127] & 13  & 115 & X1Y22 & x &   \\\hline
 EXT\_COND[128:191] & 14  & 115 & X1Y21 & x &   \\\hline
@@ -305,25 +288,29 @@ Bunchcounters, ... & 25  & 112 & X1Y10 &   & x \\\hline
 % 
 
 Tables ~\ref{table:app:sum_opt_links} and ~\ref{table:app:sum_opt_links2} show the configuration of optical links to Global Trigger.\\
-Links 0..3 contains muon data from GMT, links 4..10 data from Calo-Layer2, link 11 data from ZDC and links 12..15 external conditions
-from AMC502 boards.
+Links 0..3 contains muon data from GMT, links 4..10 data from Calo-Layer2 and links 12..15 external conditions from AMC502 boards.
 
 \begin{table}[ht]
-\caption{\bf Overview optical links (part 1)}
+% \caption{\bf Overview optical links (part 1)}
+\caption{Overview optical input links (part 1)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|p{1.2cm}|}\hline
+% \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|p{1.2cm}|}\hline
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
  & \multicolumn{10}{ c| }{link} \\\hline
-frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
+ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\\hline
+ch. -> & 0x00 & 0x02 & 0x04 & 0x06 & 0x08 & 0x0a & 0x0c & 0x0e & 0x10 & 0x12 \\\hline\hline
+% frame &  &  &  &  &  &  &  &  &  &\makebox[1.2cm][c]{ } \\\hline\hline
+frame &  &  &  &  &  &  &  &  &  & \\\hline
 0 & free & free & free & free & EG0 & EG6 & JET0 & JET6 & TAU0 & TAU6\\
-1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7\\
+1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7\\\hline
  & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & &\\
  & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & &\\
- & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & &\\
-2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8\\
-3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9\\
-4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10\\
+ & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & &\\\hline
+2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8\\\hline
+3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9\\\hline
+4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10\\\hline
 5 & MU1 [63:32] & MU3 [63:32] & MU5 [63:32] & MU7 [63:32] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11\\\hline
 \end{tabular}
 }
@@ -331,29 +318,33 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \end{table}
 
 \begin{table}[ht]
-\caption{\bf Overview optical links (part 2)}
+\caption{Overview optical input links (part 2)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-\begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
+% \begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
+\begin{tabular}{|c|c|c|c|c|c|c|}\hline
  & \multicolumn{6}{ c| }{link} \\\hline
-frame & 10 & 11 & 12 & 13 & 14 &\makebox[1.5cm][c]{15} \\\hline\hline
-0 & ET, & ZDC & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & 10 & 11 & 12 & 13 & 14 & 15 \\\hline
+ch. -> & 0x14 & 0x16 & 0x18 & 0x1a & 0x1c & 0x1e \\\hline\hline
+% frame &   &   &   &   &   &\makebox[1.5cm][c]{ } \\\hline\hline
+frame &   &   &   &   &   & \\\hline
+0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
  & ETTEM, & [31:0] & [31:0] & [95:64] & [159:128] & [223:192]\\
- & MBT0HFP & & & & &\\
-1 & HT, & ZDC & ExtCond & ExtCond & ExtCond & ExtCond\\
+ & MBT0HFP & & & & &\\\hline
+1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
  & TOWERCOUNT, & [63:32] & [63:32] & [127:96] & [191:160] & [255:224]\\
- & MBT0HFM & & & & &\\
-2 & ET$_{miss}$, & ZDC & free & free & free & free\\
+ & MBT0HFM & & & & &\\\hline
+2 & ET$_{miss}$, & free & free & free & free & free\\
  & ASYMET,& [95:64] & & & &\\
- & MBT1HFP  & & & & &\\
-3 & HT$_{miss}$, & ZDC & free & free & free & free\\
+ & MBT1HFP  & & & & &\\\hline
+3 & HT$_{miss}$, & free & free & free & free & free\\
  & ASYMHT,& [127:96] & & & &\\
- & MBT1HFM & & & & &\\
-4 & ET$_{miss}^{HF}$ & ZDC & free & free & free & free\\
+ & MBT1HFM & & & & &\\\hline
+4 & ET$_{miss}^{HF}$ & free & free & free & free & free\\
  & ASYMETHF, & [159:128] & & & &\\
- & CENT[3:0] & & & & &\\
-5 & HT$_{miss}^{HF}$ & ZDC & free & free & free & free\\
+ & CENT[3:0] & & & & &\\\hline
+5 & HT$_{miss}^{HF}$ & free & free & free & free & free\\
  & ASYMHTHF, & [191:160] & & & &\\
  & CENT[7:4] & & & & &\\\hline
 \end{tabular}
@@ -365,15 +356,65 @@ frame & 10 & 11 & 12 & 13 & 14 &\makebox[1.5cm][c]{15} \\\hline\hline
 
 \subsection{Configuration of links to AMC13 (readout)}\label{sec:app:app_c}
 
-Figure~\ref{fig:app:ugt_outputs} shows the configuration of links from Global Trigger to AMC13 (readout).\\
-Links 16..24 contains algo data (after GTL, after BX mask and after prescalers), link 25 contains several counter values.
+% Figure~\ref{fig:app:ugt_outputs} shows the configuration of links from Global Trigger to AMC13 (readout).\\
+% Links 16..24 contains algo data (after GTL, after BX mask and after prescalers), link 25 contains several counter values (currently not in readout record).
 
-\begin{figure}[htb]
+% \begin{figure}[htb]
+% \centering
+% \includegraphics[width=15cm]{figures/ugt_outputs}
+% \caption{Outputs from Global Trigger to AMC13}
+% \label{fig:app:ugt_outputs}
+% \end{figure}
+
+Table~\ref{table:app:output_links} shows the configuration of links from Global Trigger to AMC13 (readout).\\
+Links 16..24 contains algo data (after GTL, after BX mask and after prescalers), link 25 contains several counter values (currently not in readout record).
+
+\begin{table}[ht]
+\caption{Outputs to AMC13}
+\vspace{5mm}
+\scalebox{0.8}{
 \centering
-\includegraphics[width=15cm]{figures/ugt_outputs}
-\caption{Outputs from Global Trigger to AMC13}
-\label{fig:app:ugt_outputs}
-\end{figure}
+% \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|p{1.2cm}|}\hline
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
+ & \multicolumn{10}{ c| }{link} \\\hline
+ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\\hline
+ch. -> & 0x21 & 0x23 & 0x25 & 0x27 & 0x29 & 0x2b & 0x2d & 0x2f & 0x31 & 0x33 \\\hline\hline
+frame &  &  &  &  &  &  &  &  &  & \\\hline
+0 & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & tcm      \\
+  & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & bunch    \\
+  & gtlogic   & gtlogic   & gtlogic   & bxmask    & bxmask    & bxmask    & prescaler & prescaler & prescaler & counter  \\
+  & [31:0]    & [223:192] & [415:384] & [31:0]    & [223:192] & [415:384] & [31:0]    & [223:192] & [415:384] &          \\\hline
+1 & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & mp7 ttc  \\
+  & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & bunch    \\
+  & gtlogic   & gtlogic   & gtlogic   & bxmask    & bxmask    & bxmask    & prescaler & prescaler & prescaler & counter  \\
+  & [63:32]   & [255:224] & [447:416] & [63:32]   & [255:224] & [447:416] & [63:32]   & [255:224] & [447:416] & tcm      \\\hline
+2 & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & bunch    \\
+  & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & counter  \\
+  & gtlogic   & gtlogic   & gtlogic   & bxmask    & bxmask    & bxmask    & prescaler & prescaler & prescaler & for FDL  \\
+  & [95:64]   & [287:256] & [479:448] & [95:64]   & [287:256] & [479:448] & [95:64]   & [287:256] & [479:448] &          \\\hline
+3 & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    & algo\_    &          \\
+  & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & after\_   & spare    \\
+  & gtlogic   & gtlogic   & gtlogic   & bxmask    & bxmask    & bxmask    & prescaler & prescaler & prescaler &          \\
+  & [127:96]  & [319:288] & [511:480] & [127:96]  & [319:288] & [511:480] & [127:96]  & [319:288] & [511:480] &          \\\hline
+4 & algo\_    & algo\_    & 32 bit    & algo\_    & algo\_    &           & algo\_    & algo\_    &           &          \\
+  & after\_   & after\_   & hash of   & after\_   & after\_   & spare     & after\_   & after\_   & veto +    & spare    \\
+  & gtlogic   & gtlogic   & menu name & bxmask    & bxmask    &           & prescaler & prescaler & finor [0] &          \\
+  & [159:128] & [351:320] &           & [159:128] & [351:320] &           & [159:128] & [351:320] &           &          \\\hline
+5 & algo\_    & algo\_    & 32 bit    & algo\_    & algo\_    &           & algo\_    & algo\_    & precale   &          \\
+  & after\_   & after\_   & hash of   & after\_   & after\_   & spare     & after\_   & after\_   & factor    & spare    \\
+  & gtlogic   & gtlogic   & firmware  & bxmask    & bxmask    &           & prescaler & prescaler & index [1] &          \\
+  & [191:160] & [383:352] & uuid      & [191:160] & [383:352] &           & [191:160] & [383:352] &           &          \\\hline
+\end{tabular}
+}
+\label{table:app:output_links} 
+\end{table}
+                                                                                                                                                         
+[0]: In this field, the finor and veto information is stored (1 bit each):\\
+\texttt{\small{"00000000000000000000000" \& "0000000" \& local\_veto \& "0000000" \& local\_finor.}}\\
+The local\_finor \& local\_veto are the values from the local MP7 uGT module.  
+
+[1]: In this field, the 8 bit prescale factor index is stored:\\
+\texttt{\small{"000000000000000000000000" \& prescale\_factor\_index.}}\\
 
 \clearpage
 

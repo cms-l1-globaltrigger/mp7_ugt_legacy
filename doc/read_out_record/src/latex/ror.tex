@@ -1,36 +1,292 @@
-\textbf{\texttt{UNDER CONSTRUCTION !!!!}}
+% \textbf{\texttt{UNDER CONSTRUCTION !!!!}}
 
+% The following description is a copy from ~\cite{AMC13}:
+% 
+% \texttt{The AMC13 DAQ path builds events from 12 AMC cards in a MicroTCA crate,
+% and transmits the completed events to a central DAQ system over a fiber-optic link.}\\
+% \texttt{Events may also be stored in on-board SDRAM for testing or diagnostic purposes.}\\
+% \texttt{In response to a trigger signal, each enabled AMC transmits an event fragment to the AMC13. 
+% The AMC13 packages these fragments into a single event record. AMC13 firmware supports a maximum of 4k bytes from each
+% AMC card. This document describes a revision to the event builder to support very large event fragments.}\\
+% \texttt{Large blocks (> 32kB) from one AMC are broken into smaller blocks by the AMC13. Each 32kB from each AMC are read across the backplane in parallel,
+% then concatenated to form blocks, each with it's own header and sent to the output stream. The entire event is wrapped with header and trailer.}
+% The following description is a copy from ~\cite{AMC13}:
 
-0000  5186f41899f57c08 AMC13 header --> 0x5, Evt\_ty=1, LV1\_id(24)=0x86f418 (8844312), BXId(12)=0x99f (2463), Source\_id(12)=0x57c (1404 [FED \#]), FOV=0, Hx\$\$=8 (H=1) => OK\\
-0001  10604240512ff300 AMC13 header --> uFOV=1, Res=0, nAMC=6, Reserved=0x0424 ??, OrN(32)=0x0512ff30 (85131056), 0x0 => OK, but "Reserved" should be 0\\
-0002  0f00014a00010000 AMC13 header --> 0LMSEPVC=0x0f (???), AMC1\_size=0x14a (330), Blk\_No=0, AmcNo=1, BoardID=0 => OK (but some bits are unclear)\\
-0003  0f00009000020000 AMC13 header --> 0LMSEPVC=0x0f (???), AMC1\_size=0x90 (144), Blk\_No=0, AmcNo=2, BoardID=0 => OK (but some bits are unclear)\\ 
-0004  0f00009000030000 AMC13 header --> ...\\
-0005  0f00009000040000 AMC13 header --> ...\\
-0006  0f00009000050000 AMC13 header --> ...\\
-0007  0f00009000060000 AMC13 header --> ...\\
-0008  0186f41899f0014a AMC \#1 header --> 0x0, AmcNo=1, LV1\_id(24)=0x86f418 (8844312), BXId(12)=0x99f (2463), Data\_lgth(20)=0x14a (330) => OK\\ 
-0009  000000c0ff300000 AMC \#1 header --> User=0xc (12) [reserved(16), FW vers(8), Evt\_ty(8)] ???, OrN(16)=0xff30, BoardID=0 => OK, "User" unclear [definition "MP7 readout"]\\
-000a  0000115200030202 AMC \#1 payload --> bits 63..32 => uGT build (0x1152) ???, bits 31..0 => MP7 FW version (3.2.2) ???\\
-000b  00000000001e0200 AMC \#1 block header (input data) --> (63..32) => data, BlockID(31..24)=0, Block size(23..16)=0x1e (30), reserved(15..0)=0x200 (512) ?? => ok\\
+\section{Definition uGT readout record}
 
+This document is a description of the structure of a uGT readout record.
+
+In chapter "Event Builder Overview" of document~\cite{AMC13} one can find a description about building a uGT readout record on AMC13.\\
+The following description and explanations are based on documents~\cite{AMC13} and~\cite{MP7}.
+
+\subsection{Overview of structure}
+In the following table the structure of the uGT readout record is shown:
+\begin{itemize}
+\item the first 8 lines contain AMC13 header information, 
+\item followed by 3 AMC\#1 header lines.
+\item Then the first block of input data (of AMC\#1), containing a block header and 30 data words (32 bits), is shown.
+\item A certain number of input data blocks and output data blocks (each with the same block size) and a AMC\#1 trailer line finish AMC\#1 readout record.
+\item Data of AMC\#2 to AMC\#6 with output data blocks only
+\item and 2 AMC13 trailer lines fill up the readout record.
+\end{itemize}
+
+\clearpage
 
 \begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=1.2em]{32}
-        \bitheader[lsb=32]{32,33,34,35,36,42,43,52,53,60,61,61,62,63} \\
-        \bitbox {2}     {\small  \texttt{imp}}       &
-        \bitbox {1}     {\small  \texttt{m}}       &
-        \bitbox {8}     {\texttt{unconst.\pt}}       &
-        \bitbox {10}    {\texttt{$\varphi$} (out)}
-        \bitbox {7}     {\texttt{index bits}}
-        \bitbox {2}     {\small  \texttt{ch}}       &
-        \bitbox {2}     {\small \texttt{iso}} \\
-        [3ex]
-        \bitheader{0,9,10,18,19,22,23,31} \\
-        \bitbox {9}     {\texttt{$\eta$} (extrapol.)}       &
-        \bitbox {4}     {\texttt{qual}}       &
-        \bitbox {9}     {\texttt{\pt}}    &
-        \bitbox {10}    {\texttt{$\varphi$} (extrapol.)} \\
+% \begin{bytefield}[boxformatting={\centering\itshape}, endianness=big, bitwidth=0.6em]{64}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=0.6em]{64}
+        \bitheader[lsb=0]{0,4,8,12,16,20,24,28,32,36,40,44,48,52,56,60,63} \\
+        \bitbox {4}  {\tiny\texttt{0x5}}            &
+        \bitbox {4}  {\tiny\texttt{Ev\_t}}          &
+        \bitbox {24} {\tiny\texttt{LV1\_id}}        &
+        \bitbox {12} {\tiny\texttt{BXId}}           &
+        \bitbox {12} {\tiny\texttt{Source\_id}}     &
+        \bitbox {4}  {\tiny\texttt{FOV}}            &
+        \bitbox {1}  {\tiny\texttt{H}}              &
+        \bitbox {1}  {\tiny\texttt{x}}              &
+        \bitbox {1}  {\tiny\texttt{\$}}             &
+        \bitbox {1}  {\tiny\texttt{\$}}             \\
+        \bitbox {4}  {\tiny\texttt{uFOV}}           &
+        \bitbox {4}  {\tiny\texttt{Res}}            &
+        \bitbox {4}  {\tiny\texttt{nAMC}}           &
+        \bitbox {16} {\tiny\texttt{Reserved}}       &
+        \bitbox {32} {\tiny\texttt{OrN}}            &
+        \bitbox {4}  {\tiny\texttt{0x0}}            \\        
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{L}}              &
+        \bitbox {1}  {\tiny\texttt{M}}              &
+        \bitbox {1}  {\tiny\texttt{S}}              &
+        \bitbox {1}  {\tiny\texttt{E}}              &
+        \bitbox {1}  {\tiny\texttt{P}}              &
+        \bitbox {1}  {\tiny\texttt{V}}              &
+        \bitbox {1}  {\tiny\texttt{C}}              &        
+        \bitbox {24} {\tiny\texttt{AMC1\_size}}     &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {8}  {\tiny\texttt{Blk\_No}}        &
+        \bitbox {4}  {\tiny\texttt{AmcNo}}          &
+        \bitbox {16} {\tiny\texttt{BoardID}}        \\
+        \bitbox {64} {\tiny\texttt{...}}            \\
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{L}}              &
+        \bitbox {1}  {\tiny\texttt{M}}              &
+        \bitbox {1}  {\tiny\texttt{S}}              &
+        \bitbox {1}  {\tiny\texttt{E}}              &
+        \bitbox {1}  {\tiny\texttt{P}}              &
+        \bitbox {1}  {\tiny\texttt{V}}              &
+        \bitbox {1}  {\tiny\texttt{C}}              &        
+        \bitbox {24} {\tiny\texttt{AMC6\_size}}     &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {8}  {\tiny\texttt{Blk\_No}}        &
+        \bitbox {4}  {\tiny\texttt{AmcNo}}          &
+        \bitbox {16} {\tiny\texttt{BoardID}}        \\
+        \bitbox {4}  {\tiny\texttt{0x0}}            &        
+        \bitbox {4}  {\tiny\texttt{AmcNo AMC1}}     &
+        \bitbox {24} {\tiny\texttt{LV1\_id}}        &
+        \bitbox {12} {\tiny\texttt{BXId}}           &
+        \bitbox {20} {\tiny\texttt{Data\_lgth}}     \\
+        \bitbox {32} {\tiny\texttt{User}}           &        
+        \bitbox {16} {\tiny\texttt{OrN}}            &        
+        \bitbox {16} {\tiny\texttt{BoardID}}        \\        
+        \bitbox {32} {\tiny\texttt{uGT build}}      &        
+        \bitbox {32} {\tiny\texttt{MP7 FW version}} \\        
+        \bitbox {32} {\tiny\texttt{input data}}     &        
+        \bitbox {8}  {\tiny\texttt{BlockID=0x00}}   &        
+        \bitbox {8}  {\tiny\texttt{Block size [0]}}  &        
+        \bitbox {16} {\tiny\texttt{reserved [1]}}    \\        
+        \bitbox {32} {\tiny\texttt{input data}}     &        
+        \bitbox {32} {\tiny\texttt{input data}}     \\       
+        \bitbox {64} {\tiny\texttt{...}}            \\
+        \bitbox {8}  {\tiny\texttt{BlockID=0x02}}   &        
+        \bitbox {8}  {\tiny\texttt{Block size}}     &        
+        \bitbox {16} {\tiny\texttt{reserved}}       &        
+        \bitbox {32} {\tiny\texttt{input data}}     \\        
+        \bitbox {64} {\tiny\texttt{additional 11 input data blocks AMC1}}     \\        
+        \bitbox {32} {\tiny\texttt{output data}}    &        
+        \bitbox {8}  {\tiny\texttt{BlockID=0x21}}   &        
+        \bitbox {8}  {\tiny\texttt{Block size}}     &        
+        \bitbox {16} {\tiny\texttt{reserved}}    \\        
+        \bitbox {32} {\tiny\texttt{output data}}    &        
+        \bitbox {32} {\tiny\texttt{output data}}    \\       
+        \bitbox {64} {\tiny\texttt{...}}            \\
+        \bitbox {8}  {\tiny\texttt{BlockID=0x23}}   &        
+        \bitbox {8}  {\tiny\texttt{Block size}}     &        
+        \bitbox {16} {\tiny\texttt{reserved}}       &        
+        \bitbox {32} {\tiny\texttt{output data}}     \\        
+        \bitbox {64} {\tiny\texttt{additional 8 output data blocks AMC1}}     \\        
+        \bitbox {4}  {\tiny\texttt{0x0}}            &        
+        \bitbox {4}  {\tiny\texttt{AmcNo AMC2}}     &
+        \bitbox {24} {\tiny\texttt{LV1\_id}}        &
+        \bitbox {12} {\tiny\texttt{BXId}}           &
+        \bitbox {20} {\tiny\texttt{Data\_lgth}}     \\
+        \bitbox {32} {\tiny\texttt{User}}           &        
+        \bitbox {16} {\tiny\texttt{OrN}}            &        
+        \bitbox {16} {\tiny\texttt{BoardID}}        \\        
+        \bitbox {32} {\tiny\texttt{uGT build}}      &        
+        \bitbox {32} {\tiny\texttt{MP7 FW version}} \\        
+        \bitbox {64} {\tiny\texttt{9 output data blocks AMC2}}     \\        
+        \bitbox {64} {\tiny\texttt{blocks for AMC3 ... AMC6}}  \\        
+        \bitbox {32} {\tiny\texttt{CRC 32 (AMCs)}}  &        
+        \bitbox {8}  {\tiny\texttt{LV1\_id}}        &        
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {20} {\tiny\texttt{Data\_lgth}}     \\        
+        \bitbox {32} {\tiny\texttt{CRC 32}}         &        
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {1}  {\tiny\texttt{0}}              &
+        \bitbox {8}  {\tiny\texttt{Blk\_No}}        &        
+        \bitbox {8}  {\tiny\texttt{LV1\_id}}        &        
+        \bitbox {12} {\tiny\texttt{BXId}}           \\        
+        \bitbox {4}  {\tiny\texttt{0xA}}            &        
+        \bitbox {1}  {\tiny\texttt{ }}              &
+        \bitbox {1}  {\tiny\texttt{ }}              &
+        \bitbox {1}  {\tiny\texttt{ }}              &
+        \bitbox {1}  {\tiny\texttt{ }}              &
+        \bitbox {24} {\tiny\texttt{Evt\_lgth}}      &        
+        \bitbox {16} {\tiny\texttt{CRC}}            &        
+        \bitbox {1}  {\tiny\texttt{C}}              &
+        \bitbox {1}  {\tiny\texttt{F}}              &
+        \bitbox {1}  {\tiny\texttt{x}}              &
+        \bitbox {1}  {\tiny\texttt{x}}              &
+        \bitbox {4}  {\tiny\texttt{Ev stat}}        &        
+        \bitbox {4}  {\tiny\texttt{TTS}}            &        
+        \bitbox {1}  {\tiny\texttt{T}}              &
+        \bitbox {1}  {\tiny\texttt{R}}              &
+        \bitbox {1}  {\tiny\texttt{\$}}             &
+        \bitbox {1}  {\tiny\texttt{\$}}             
 \end{bytefield}
 \end{center}
+[0]: "Event type" is set in configuration key: "ugt infra mp7 base" with\\ 
+\texttt{\small{<param cmd="roLoadMenu" id="mode1:eventType" type="uint">0xc0</param>}}.\\
+
+[1]: Contains probably the "bank id" which is set in configuration key: "ugt infra mp7 base" with\\
+\texttt{\small{<param cmd="roLoadMenu" id="mode1:capture1:bankId" type="uint">2</param>}} \\ 
+for input data and \\ 
+\texttt{\small{<param cmd="roLoadMenu" id="mode1:capture0:bankId" type="uint">1</param>}} \\
+for output data.
+
 \clearpage
+
+\subsection{Readout record dump}
+Example of a readout record dump (with description):
+
+\texttt{\textcolor{brown}{\textbf{5}}\textcolor{blue}{\textbf{1}}\textcolor{red}{\textbf{86f417}}\textcolor{green}{\textbf{675}}\textcolor{orange}{\textbf{57c}}\textcolor{black}{08} - AMC13 header: \textcolor{blue}{Event type}, \textcolor{red}{LV1 id}, \textcolor{green}{BX id}, \textcolor{orange}{FED\#}}\\
+\texttt{\textcolor{black}{10}\textcolor{blue}{\textbf{6}}\textcolor{black}{0424}\textcolor{red}{\textbf{0512ff30}}\textcolor{black}{0} - AMC13 header: \textcolor{blue}{AMCs}, \textcolor{red}{Orbit nr (32 bits)}}\\
+\texttt{\textcolor{black}{0f0}\textcolor{orange}{\textbf{0014a}}\texttt{000}\textcolor{blue}{\textbf{1}}\textcolor{black}{0000} - AMC13 header: \textcolor{orange}{Data length}, \textcolor{blue}{AMC\#1}}\\
+\texttt{\textcolor{black}{0f0}\textcolor{orange}{\textbf{00090}}\texttt{000}\textcolor{blue}{\textbf{2}}\textcolor{black}{0000} - AMC13 header: \textcolor{orange}{Data length}, \textcolor{blue}{AMC\#2}}\\
+\texttt{0f00009000030000}\\
+\texttt{0f00009000040000}\\
+\texttt{0f00009000050000}\\
+\texttt{0f00009000060000}\\
+\texttt{\textcolor{black}{0}\textcolor{blue}{\textbf{1}}\textcolor{red}{\textbf{86f417}}\textcolor{green}{\textbf{675}}\textcolor{orange}{\textbf{0014a}} - AMC\#1 header: \textcolor{blue}{AMC\#1}, \textcolor{red}{LV1 id}, \textcolor{green}{BX id}, \textcolor{orange}{Data length}}\\
+\texttt{\textcolor{black}{000000}\textcolor{blue}{\textbf{c0}}\textcolor{red}{\textbf{ff30}}\textcolor{black}{0000} - AMC\#1 header: \textcolor{blue}{Ev. type [0]}, \textcolor{red}{Orbit nr (16 bits)}}\\
+\texttt{\textcolor{black}{0000}\textcolor{blue}{\textbf{1152}}\textcolor{black}{00}\textcolor{red}{\textbf{030202}} - AMC\#1 header: \textcolor{blue}{uGT FW build}, \textcolor{red}{MP7 FW version}}\\
+\texttt{\textcolor{black}{00000000}\textcolor{blue}{\textbf{00}}\textcolor{red}{\textbf{1e}}\textcolor{black}{0}\textcolor{green}{\textbf{2}}\textcolor{black}{00} - AMC\#1 input: \textcolor{blue}{Block ID}, \textcolor{red}{Block size}, \textcolor{green}{"bankId"=input}}\\
+\texttt{... muon input data}\\
+\texttt{\textcolor{blue}{\textbf{02}}\textcolor{red}{\textbf{1e}}\textcolor{black}{0}\textcolor{green}{\textbf{2}}\textcolor{black}{0000000000} - \textcolor{blue}{Block ID}, \textcolor{red}{Block size}, \textcolor{green}{"bankId"=input [1]}}\\
+\texttt{... muon input data AMC\#1}\\
+\texttt{00000000041e0200}\\
+\texttt{... muon input data AMC\#1}\\
+\texttt{061e020000000000}\\
+\texttt{... muon input data AMC\#1}\\
+\texttt{06000200081e0200}\\
+\texttt{... e/gamma input data AMC\#1}\\
+\texttt{0a1e020006000200}\\
+\texttt{... e/gamma input data AMC\#1}\\
+\texttt{000008000c1e0200}\\
+\texttt{... jet input data AMC\#1}\\
+\texttt{0e1e020000000800}\\
+\texttt{... jet input data AMC\#1}\\
+\texttt{02000200101e0200}\\
+\texttt{... tau input data AMC\#1}\\
+\texttt{121e020002000200}\\
+\texttt{... tau input data AMC\#1}\\
+\texttt{0002a02a141e0200}\\
+\texttt{... esums data AMC\#1}\\
+\texttt{181e02000006f000}\\
+\texttt{... ext cond input data AMC\#1}\\
+\texttt{\textcolor{black}{00000000}\textcolor{blue}{\textbf{21}}\textcolor{red}{\textbf{1e}}\textcolor{black}{0}\textcolor{green}{\textbf{1}}\textcolor{black}{00} - AMC\#1 output: \textcolor{blue}{Block ID}, \textcolor{red}{Block size}, \textcolor{green}{"bankId"=output}}\\
+\texttt{... algo output data AMC\#1}\\
+\texttt{231e010000000000}\\
+\texttt{... algo output data AMC\#1}\\
+\texttt{00000000251e0100}\\
+\texttt{... algo output data AMC\#1}\\
+\texttt{271e01005ca70bcc}\\
+\texttt{... algo output data AMC\#1}\\
+\texttt{00000000291e0100}\\
+\texttt{... algo output data AMC\#1}\\
+\texttt{2b1e010000000000}\\
+\texttt{... algo output data AMC\#1}\\
+\texttt{000000002d1e0100}\\
+\texttt{... algo output data AMC\#1}\\
+\texttt{2f1e010000000000}\\
+\texttt{... algo output data AMC\#1}\\
+\texttt{00000000311e0100}\\
+\texttt{... algo output data AMC\#1}\\
+\texttt{\textcolor{blue}{\textbf{9ac23b76}}\textcolor{red}{\textbf{17}}\textcolor{black}{0}\textcolor{orange}{\textbf{0014a}} - AMC\#1 trailer: \textcolor{blue}{CRC}, \textcolor{red}{LV1 id (8 bits)}, \textcolor{orange}{Data length}}\\
+\texttt{0286f41767500090 - AMC\#2 header} \\
+\texttt{000000c0ff300000 - AMC\#2 header} \\
+\texttt{0000115200030202 - AMC\#2 header} \\
+\texttt{00000000211e0100}\\
+\texttt{... algo output data AMC\#2}\\
+\texttt{231e010000000000}\\
+\texttt{... algo output data AMC\#2}\\
+\texttt{00000000251e0100}\\
+\texttt{... algo output data AMC\#2}\\
+\texttt{271e01005ca70bcc}\\
+\texttt{... algo output data AMC\#2}\\
+\texttt{00000000291e0100}\\
+\texttt{... algo output data AMC\#2}\\
+\texttt{2b1e010000000000}\\
+\texttt{... algo output data AMC\#2}\\
+\texttt{000000002d1e0100}\\
+\texttt{... algo output data AMC\#2}\\
+\texttt{2f1e010000000000}\\
+\texttt{... algo output data AMC\#2}\\
+\texttt{00000000311e0100}\\
+\texttt{... algo output data AMC\#2}\\
+\texttt{cb79a76317000090 - AMC\#2 trailer}\\
+\texttt{0386f41767500090 - AMC\#3 header}\\
+\texttt{000000c0ff300000 - AMC\#3 header}\\
+\texttt{0000115200030202 - AMC\#3 header}\\
+\texttt{00000000211e0100}\\
+\texttt{...}\\
+\texttt{... AMC\#3 - AMC\#6}\\
+\texttt{...}\\
+\texttt{36cb696317000090 - AMC\#6 trailer}\\
+\texttt{\textcolor{blue}{\textbf{f6b94612}}\textcolor{black}{000}\textcolor{red}{\textbf{17}}\textcolor{green}{\textbf{675}} - AMC13 trailer: \textcolor{blue}{CRC}, \textcolor{red}{LV1 id (8 bits)}, \textcolor{green}{BX id}}\\
+\texttt{\textcolor{brown}{\textbf{a}}\textcolor{black}{0}\textcolor{red}{\textbf{000424}}\textcolor{blue}{\textbf{8468}}\textcolor{black}{0000} - AMC13 trailer: \textcolor{red}{Ev. length}, \textcolor{blue}{CRC (16 bits)}}\\
+
+\clearpage
+
+\subsection{Data block}
+Description of a block with "block size" = 0x1e (6 frames [32 bits] @ +/-2 bx = 30) of a certain "Block ID" (0x00, 0x02, ..., 0x21, 0x23, ...):
+
+\texttt{\textcolor{blue}{\textbf{00000000}}\textcolor{black}{001e0200} - \textcolor{black}{bx-2:} \textcolor{blue}{frame 0}}\\
+\texttt{\textcolor{red}{\textbf{00000000}}\textcolor{green}{\textbf{00000000}} - \textcolor{black}{bx-2:} \textcolor{red}{frame 2}, \textcolor{green}{frame 1}}\\
+\texttt{\textcolor{orange}{\textbf{00000000}}\textcolor{brown}{\textbf{00000000}} - \textcolor{black}{bx-2:} \textcolor{orange}{frame 4}, \textcolor{brown}{frame 3}}\\
+\texttt{\textcolor{blue}{\textbf{00000000}}\textcolor{violet}{\textbf{00000000}} - \textcolor{black}{bx-1:} \textcolor{blue}{frame 0}, \textcolor{black}{bx-2:} \textcolor{violet}{frame 5}}\\
+\texttt{\textcolor{red}{\textbf{00000000}}\textcolor{green}{\textbf{00000000}} - \textcolor{black}{bx-1:} \textcolor{red}{frame 2}, \textcolor{green}{frame 1}}\\
+\texttt{\textcolor{orange}{\textbf{00000000}}\textcolor{brown}{\textbf{00000000}} - \textcolor{black}{bx-1:} \textcolor{orange}{frame 4}, \textcolor{brown}{frame 3}}\\
+\texttt{\textcolor{blue}{\textbf{00000000}}\textcolor{violet}{\textbf{00000000}} - \textcolor{black}{bx:} \textcolor{blue}{frame 0}, \textcolor{black}{bx-1:} \textcolor{violet}{frame 5}}\\
+\texttt{\textcolor{red}{\textbf{00000000}}\textcolor{green}{\textbf{00000000}} - \textcolor{black}{bx:} \textcolor{red}{frame 2}, \textcolor{green}{frame 1}}\\
+\texttt{\textcolor{orange}{\textbf{00000000}}\textcolor{brown}{\textbf{00000000}} - \textcolor{black}{bx:} \textcolor{orange}{frame 4}, \textcolor{brown}{frame 3}}\\
+\texttt{\textcolor{blue}{\textbf{00000000}}\textcolor{violet}{\textbf{00000000}} - \textcolor{black}{bx+1:} \textcolor{blue}{frame 0}, \textcolor{black}{bx:} \textcolor{violet}{frame 5}}\\
+\texttt{\textcolor{red}{\textbf{00000000}}\textcolor{green}{\textbf{00000000}} - \textcolor{black}{bx+1:} \textcolor{red}{frame 2}, \textcolor{green}{frame 1}}\\
+\texttt{\textcolor{orange}{\textbf{00000000}}\textcolor{brown}{\textbf{00000000}} - \textcolor{black}{bx+1:} \textcolor{orange}{frame 4}, \textcolor{brown}{frame 3}}\\
+\texttt{\textcolor{blue}{\textbf{00000000}}\textcolor{violet}{\textbf{00000000}} - \textcolor{black}{bx+2:} \textcolor{blue}{frame 0}, \textcolor{black}{bx+1:} \textcolor{violet}{frame 5}}\\
+\texttt{\textcolor{red}{\textbf{00000000}}\textcolor{green}{\textbf{00000000}} - \textcolor{black}{bx+2:} \textcolor{red}{frame 2}, \textcolor{green}{frame 1}}\\
+\texttt{\textcolor{orange}{\textbf{00000000}}\textcolor{brown}{\textbf{00000000}} - \textcolor{black}{bx+2:} \textcolor{orange}{frame 4}, \textcolor{brown}{frame 3}}\\
+\texttt{\textcolor{black}{021e0200}\textcolor{violet}{\textbf{00000000}} - \textcolor{black}{bx+2:} \textcolor{violet}{frame 5}}\\
+
+Remark:\\
+The order of +/-2 bx has to be verified!

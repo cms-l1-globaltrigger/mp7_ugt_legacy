@@ -176,6 +176,92 @@ for output data.
 
 \clearpage
 
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=0.6em]{64}
+        \bitheader[lsb=0]{0,3,4,7,8,19,20,31,32,55,56,59,60,63} \\
+        \bitbox {4}  {\small\texttt{0x5}}            &
+        \bitbox {4}  {\small\texttt{Ev\_t}}          &
+        \bitbox {24} {\small\texttt{LV1\_id}}        &
+        \bitbox {12} {\small\texttt{BXId}}           &
+        \bitbox {12} {\small\texttt{Source\_id}}     &
+        \bitbox {4}  {\small\texttt{FOV}}            &
+        \bitbox {4}  {\small\texttt{Hx\$\$}}         
+\end{bytefield}
+\end{center}
+
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=0.6em]{64}
+        \bitheader[lsb=0]{0,3,4,35,36,55,56,59,60,63} \\
+        \bitbox {4}  {\small\texttt{uFOV}}           &
+        \bitbox {4}  {\small\texttt{Res}}            &
+        \bitbox {4}  {\small\texttt{nAMC}}           &
+        \bitbox {16} {\small\texttt{Reserved}}       &
+        \bitbox {32} {\small\texttt{OrN}}            &
+        \bitbox {4}  {\small\texttt{0x0}}                    
+\end{bytefield}
+\end{center}
+
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=0.6em]{64}
+        \bitheader[lsb=0]{0,15,16,19,20,27,28,31,32,55,56,63} \\
+        \bitbox {8}  {\small\texttt{[2]}}            &        
+        \bitbox {24} {\small\texttt{AMC1\_size}}     &
+        \bitbox {4}  {\small\texttt{0x0}}            &
+        \bitbox {8}  {\small\texttt{Blk\_No}}        &
+        \bitbox {4}  {\small\texttt{AmcNo}}          &
+        \bitbox {16} {\small\texttt{BoardID}}        
+\end{bytefield}
+\end{center}
+[2]: 8 bits with leading 0 and 7 bits for L, M, S, E, P, V, C. See~\cite{AMC13} pg. 5 for details.\\
+                
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=0.6em]{64}
+        \bitheader[lsb=0]{0,19,20,31,32,55,56,59,60,63} \\
+        \bitbox {4}  {\small\texttt{0x0}}            &        
+        \bitbox {4}  {\small\texttt{AmcNo AMC1}}     &
+        \bitbox {24} {\small\texttt{LV1\_id}}        &
+        \bitbox {12} {\small\texttt{BXId}}           &
+        \bitbox {20} {\small\texttt{Data\_lgth}}     
+\end{bytefield}
+\end{center}
+
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=0.6em]{64}
+        \bitheader[lsb=0]{0,15,16,31,32,63} \\
+        \bitbox {32} {\small\texttt{User}}           &        
+        \bitbox {16} {\small\texttt{OrN}}            &        
+        \bitbox {16} {\small\texttt{BoardID}}               
+\end{bytefield}
+\end{center}
+
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=0.6em]{64}
+        \bitheader[lsb=0]{0,31,32,63} \\
+        \bitbox {32} {\small\texttt{uGT build}}      &        
+        \bitbox {32} {\small\texttt{MP7 FW version}}         
+\end{bytefield}
+\end{center}
+
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=0.6em]{64}
+        \bitheader[lsb=0]{0,15,16,23,24,31,32,63} \\
+        \bitbox {32} {\small\texttt{input data}}     &        
+        \bitbox {8}  {\small\texttt{BlockID=0x00}}   &        
+        \bitbox {8}  {\small\texttt{Block size [0]}} &        
+        \bitbox {16} {\small\texttt{reserved [1]}}            
+\end{bytefield}
+\end{center}
+
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=0.6em]{64}
+        \bitheader[lsb=0]{0,31,32,63} \\
+        \bitbox {32} {\small\texttt{input data}}     &        
+        \bitbox {32} {\small\texttt{input data}}             
+\end{bytefield}
+\end{center}
+
+\clearpage
+
 \subsection{Readout record dump}
 Example of a readout record dump (with description):
 

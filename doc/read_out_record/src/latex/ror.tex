@@ -494,13 +494,102 @@ for output data
 
 See an example for such a data block (line 12 - 27) in \ref{sec:data_block}.
 
-Blocks for other input data and output data fill up the readout record of AMC\#1.
+\textbf{Blocks for additional input data and output data fill up the readout record of AMC\#1.}\\
 
-\textbf{MISSING}:\\
--- AMC\#1 trailer descr.\\
--- AMC\#2 - AMC\#6 output data only.\\
--- AMC13 trailer.\\
--- AMC13 trailer ("CDF trailer").
+\textbf{AMC\#1 trailer:}
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=1.2em]{32}
+        \bitheader[lsb=32]{32,63} \\
+        \bitbox {32} {\small\texttt{CRC}}         
+\end{bytefield}
+\end{center}
+
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=1.2em]{32}
+        \bitheader[lsb=0]{0,19,20,23,24,31} \\
+        \bitbox {8} {\small\texttt{LV1\_id}}         &          
+        \bitbox {4} {0x0}                        &
+        \bitbox {20} {\small\texttt{Data\_lgth}}            
+\end{bytefield}
+\end{center}
+
+[63:32] = "CRC" (32) 32 bits CRC summary (of AMC \#1 data)
+
+[31:24] = "LV1\_id" (8) means "Level 1 ID" (hardware event number)
+
+[23:20] = 0x0
+
+[19:0] = "Data\_lgth" (20) means readout record length of AMC \#1\\
+
+\textbf{Readout records for AMC\#2 - AMC\#6, with output data only, fill up the readout record.}\\
+
+\textbf{Last line - 1, AMC13 trailer:}
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=1.2em]{32}
+        \bitheader[lsb=32]{32,63} \\
+        \bitbox {32} {\small\texttt{CRC}}         
+\end{bytefield}
+\end{center}
+
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=1.2em]{32}
+        \bitheader[lsb=0]{0,11,12,19,20,31} \\
+        \bitbox {12} {0x000}                     &
+        \bitbox {8} {\small\texttt{LV1\_id}}     &          
+        \bitbox {12} {\small\texttt{BXId}}            
+\end{bytefield}
+\end{center}
+
+[63:32] = "CRC" (32) 32 bits CRC summary of data in entire record.
+
+[31:20] = 0x000
+
+[19:12] = "LV1\_id" (8) means "Level 1 ID" (hardware event number)
+
+[11:0] = "BXId" (12) means bunch crossing number @ L1A\\
+
+\textbf{Last line, AMC13 trailer ("CDF trailer"):}
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=1.2em]{32}
+        \bitheader[lsb=32]{32,55,56,59,60,63} \\
+        \bitbox {4} {\small\texttt{0xa}} &        
+        \bitbox {4} {\small\texttt{0x0}} &        
+        \bitbox {24} {\small\texttt{Evt\_lgth}}         
+\end{bytefield}
+\end{center}
+
+\begin{center}
+\begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=1.2em]{32}
+        \bitheader[lsb=0]{0,0,1,1,2,2,3,3,4,7,8,11,12,12,13,13,14,14,15,15,16,31} \\
+        \bitbox {16} {CRC}                          &
+        \bitbox {1} {\small\texttt{C}}              &          
+        \bitbox {1} {\small\texttt{F}}              &          
+        \bitbox {1} {\small\texttt{x}}              &          
+        \bitbox {1} {\small\texttt{x}}              &          
+        \bitbox {4} {\small\texttt{Evt\_stat}}       &          
+        \bitbox {4} {\small\texttt{TTS}}            &          
+        \bitbox {1} {\small\texttt{T}}              &            
+        \bitbox {1} {\small\texttt{R}}              &            
+        \bitbox {1} {\small\texttt{\$}}             &            
+        \bitbox {1} {\small\texttt{\$}}               
+\end{bytefield}
+\end{center}
+
+[63:60] = fixed marker 0xa (end of readout record)
+
+[59:56] = 0x0
+
+[55:32] = "Evt\_lgth" (24) length of readout record (in 64 bits lines)
+
+[31:16] = "CRC" (16) 16 bits CRC summary ?
+
+[15:12] = "C, F, x, x" 4 bits ?
+
+[11:8] = "Evt\_stat" (4) ?
+
+[7:4] = "TTS" (4) ?
+
+[3:0] = "T, R, \$, \$" 4 bits ?
 
 \clearpage
 
@@ -597,7 +686,7 @@ Example of a readout record dump (with description):
 
 \subsection{Data block}
 \label{sec:data_block}
-Description of a block with "block size" = 0x1e (6 frames [32 bits] @ +/-2 bx = 30) of a certain "Block ID" (0x00, 0x02, ..., 0x21, 0x23, ...):
+Description of a block with "block size" = 0x1e (6 frames [32 bits] @ +/-2 bx = 30) of a certain "Block ID" (0x00, 0x02, ..., 0x21, 0x23, ...):\\
 
 \texttt{\textcolor{blue}{\textbf{00000000}}\textcolor{black}{001e0200} - \textcolor{black}{bx-2:} \textcolor{blue}{frame 0}}\\
 \texttt{\textcolor{red}{\textbf{00000000}}\textcolor{green}{\textbf{00000000}} - \textcolor{black}{bx-2:} \textcolor{red}{frame 2}, \textcolor{green}{frame 1}}\\
@@ -616,5 +705,5 @@ Description of a block with "block size" = 0x1e (6 frames [32 bits] @ +/-2 bx = 
 \texttt{\textcolor{orange}{\textbf{00000000}}\textcolor{brown}{\textbf{00000000}} - \textcolor{black}{bx+2:} \textcolor{orange}{frame 4}, \textcolor{brown}{frame 3}}\\
 \texttt{\textcolor{black}{021e0200}\textcolor{violet}{\textbf{00000000}} - \textcolor{black}{bx+2:} \textcolor{violet}{frame 5}}\\
 
-Remark:\\
-The order of +/-2 bx has to be verified!
+\textbf{Remark:}\\
+The order of frames and +/-2 bx has to be verified!

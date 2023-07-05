@@ -100,26 +100,22 @@ In the following table the structure of the uGT readout record is shown:
         \bitbox {8}  {\tiny\texttt{BlockID=0x00}}   &        
         \bitbox {8}  {\tiny\texttt{Block size}}     &        
         \bitbox {16} {\tiny\texttt{reserved}}       \\        
-        \bitbox {32} {\tiny\texttt{input data}}     &        
-        \bitbox {32} {\tiny\texttt{input data}}     \\       
         \bitbox {64} {\tiny\texttt{...}}            \\
         \bitbox {8}  {\tiny\texttt{BlockID=0x02}}   &        
         \bitbox {8}  {\tiny\texttt{Block size}}     &        
         \bitbox {16} {\tiny\texttt{reserved}}       &        
         \bitbox {32} {\tiny\texttt{input data}}     \\        
-        \bitbox {64} {\tiny\texttt{additional 11 input data blocks AMC1}}     \\        
+        \bitbox {64} {\tiny\texttt{additional 11 input data blocks of AMC \#1}}     \\        
         \bitbox {32} {\tiny\texttt{output data}}    &        
         \bitbox {8}  {\tiny\texttt{BlockID=0x21}}   &        
         \bitbox {8}  {\tiny\texttt{Block size}}     &        
         \bitbox {16} {\tiny\texttt{reserved}}    \\        
-        \bitbox {32} {\tiny\texttt{output data}}    &        
-        \bitbox {32} {\tiny\texttt{output data}}    \\       
         \bitbox {64} {\tiny\texttt{...}}            \\
         \bitbox {8}  {\tiny\texttt{BlockID=0x23}}   &        
         \bitbox {8}  {\tiny\texttt{Block size}}     &        
         \bitbox {16} {\tiny\texttt{reserved}}       &        
         \bitbox {32} {\tiny\texttt{output data}}     \\        
-        \bitbox {64} {\tiny\texttt{additional 8 output data blocks AMC1}}     \\        
+        \bitbox {64} {\tiny\texttt{additional 8 output data blocks of AMC \#1}}     \\        
         \bitbox {4}  {\tiny\texttt{0x0}}            &        
         \bitbox {4}  {\tiny\texttt{AmcNo AMC2}}     &
         \bitbox {24} {\tiny\texttt{LV1\_id}}        &
@@ -130,8 +126,8 @@ In the following table the structure of the uGT readout record is shown:
         \bitbox {16} {\tiny\texttt{BoardID}}        \\        
         \bitbox {32} {\tiny\texttt{uGT build}}      &        
         \bitbox {32} {\tiny\texttt{MP7 FW version}} \\        
-        \bitbox {64} {\tiny\texttt{9 output data blocks AMC2}}     \\        
-        \bitbox {64} {\tiny\texttt{blocks for AMC3 ... AMC6}}  \\        
+        \bitbox {64} {\tiny\texttt{9 output data blocks  of AMC \#2}}     \\        
+        \bitbox {64} {\tiny\texttt{blocks for AMC \#3 ... AMC \#6}}  \\        
         \bitbox {32} {\tiny\texttt{CRC 32 (AMCs)}}  &        
         \bitbox {8}  {\tiny\texttt{LV1\_id}}        &        
         \bitbox {1}  {\tiny\texttt{0}}              &
@@ -204,7 +200,7 @@ In the following table the structure of the uGT readout record is shown:
 
 [63:60] = fixed marker 0x5 (begin of readout record)
 
-[59:56] = "Ev\_t" (4) means event type (1 = physic events ?)
+[59:56] = "Ev\_t" (4) means event type (0x1 = physic events ?)
 
 [55:32] = "LV1\_id" (24) means "Level 1 ID" (hardware event number)
 
@@ -212,9 +208,9 @@ In the following table the structure of the uGT readout record is shown:
 
 [19:8] = "Source\_id" (12) is FED \#
 
-[7:4] = "FOV" (4) means "Format version" ?
+[7:4] = 0x0 ["FOV" (4) means "Format version" ?]
 
-[3:0] = "Hx\$\$" (4) ?\\
+[3:0] = 0x0 ["Hx\$\$" (4) ?]\\
 
 \textbf{Line 2} - AMC13 header:
 \begin{center}
@@ -300,11 +296,11 @@ In the following table the structure of the uGT readout record is shown:
 
 [31:28] = 0x0
 
-[27:20] = "Blk\_No" (8) ?
+[27:20] = 0x00 ["Blk\_No" (8) ?]
 
 [19:16] = "AmcNo" (4) number of first AMC in record
 
-[15:0] = "BoardID" (16) ?
+[15:0] = 0x0000 ["BoardID" (16) ?]
                 
 \textbf{Line 4} - AMC13 header for AMC \#2\\
 \textbf{Line 5} - AMC13 header for AMC \#3\\
@@ -371,7 +367,7 @@ In the following table the structure of the uGT readout record is shown:
 %         \bitbox {16} {\small\texttt{BoardID}}               
 % \end{bytefield}
 % \end{center}
-[63:40] = "User" (24) ?
+[63:40] = 0x000000 ["User" (24) ?]
 
 [39:32] = "Event type" (8) is set in configuration key: "ugt infra mp7 base" with
 
@@ -379,7 +375,7 @@ In the following table the structure of the uGT readout record is shown:
 
 [31:16] = "OrN" (16) least significant 16 bits of orbit number @ L1A
 
-[15:0] = "BoardID" (16) ?\\
+[15:0] = 0x0000 ["BoardID" (16) ?]\\
 
 \textbf{Line 11} - AMC\#1 header:
 \begin{center}
@@ -406,7 +402,7 @@ In the following table the structure of the uGT readout record is shown:
 
 [47:32] = "uGT build" (16) uGT firmware build number
 
-[31:0] = "MP7 FW version" (32) (e.g.: 0x00030202 means versin 3.2.2)\\
+[31:0] = "MP7 FW version" (32) (e.g.: 0x00030202 means version 3.2.2)\\
 
 \textbf{Line 12} - AMC\#1 uGT input data (in readout record):
 \begin{center}
@@ -437,7 +433,7 @@ In the following table the structure of the uGT readout record is shown:
 % \end{bytefield}
 % \end{center}
 
-[63:32] = "input data" - muon data, link1, mgt channel 0x00, frame 0 (free), bx-2)
+[63:32] = "input data" - muon data, link 1, mgt channel 0x00, frame 0 (free), bx-2)
 
 [31:24] = "BlockID" (8) mgt channel number of the link (=0x00, marker of first block of "input data")
 
@@ -453,45 +449,78 @@ which is 0x1e. (Similar commands for other modes and captures)
 
 \texttt{\small{<param cmd="roLoadMenu" id="mode1:capture1:bankId" type="uint">2</param>}}
 
-for input data and
+=0x2 for input data and
 
 \texttt{\small{<param cmd="roLoadMenu" id="mode1:capture0:bankId" type="uint">1</param>}}
 
-for output data
+=0x1 for output data
 
 [7:0] = "reserved" (8)\\
 
-\textbf{Line 13} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 2 (MU0[31:0]), bx-2\\
-\textbf{Line 13} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 1 (MU0 \& MU1 eta raw), bx-2\\
-\textbf{Line 14} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 4 (MU1[31:0]), bx-2\\
-\textbf{Line 14} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 3 (MU0[63:32]), bx-2\\
-\textbf{Line 15} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 0 (free), bx-1\\
-\textbf{Line 15} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 5 (MU1[63:32]), bx-2\\
-\textbf{Line 16} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 2 (MU0[31:0]), bx-1\\
-\textbf{Line 16} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 1 (MU0 \& MU1 eta raw), bx-1\\
-\textbf{Line 17} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 4 (MU1[31:0]), bx-1\\
-\textbf{Line 17} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 3 (MU0[63:32]), bx-1\\
-\textbf{Line 18} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 0 (free), bx\\
-\textbf{Line 18} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 5 (MU1[63:32]), bx-1\\
-\textbf{Line 19} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 2 (MU0[31:0]), bx\\
-\textbf{Line 19} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 1 (MU0 \& MU1 eta raw), bx\\
-\textbf{Line 20} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 4 (MU1[31:0]), bx\\
-\textbf{Line 20} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 3 (MU0[63:32]), bx\\
-\textbf{Line 21} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 0 (free), bx+1\\
-\textbf{Line 21} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 5 (MU1[63:32]), bx\\
-\textbf{Line 22} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 2 (MU0[31:0]), bx+1\\
-\textbf{Line 22} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 1 (MU0 \& MU1 eta raw), bx+1\\
-\textbf{Line 23} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 4 (MU1[31:0]), bx+1\\
-\textbf{Line 23} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 3 (MU0[63:32]), bx+1\\
-\textbf{Line 24} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 0 (free), bx+2\\
-\textbf{Line 24} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 5 (MU1[63:32]), bx+1\\
-\textbf{Line 25} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 2 (MU0[31:0]), bx+2\\
-\textbf{Line 25} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 1 (MU0 \& MU1 eta raw), bx+2\\
-\textbf{Line 26} [63:32] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 4 (MU1[31:0]), bx+2\\
-\textbf{Line 26} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 3 (MU0[63:32]), bx+2\\
-\textbf{Line 27} [63:32] - AMC\#1 uGT input data - "BlockID=0x02 (8), "Block size" (8), "res" (4), "bank id=0x2" (4), "reserved" (8)\\
-\textbf{Line 27} [31:24] - AMC\#1 uGT input data - muon data, link1, channel 0x00, frame 5 (MU1[63:32]), bx+2
+% \textbf{Line 13} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 2 (MU0[31:0]), bx-2\\
+% \textbf{Line 13} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 1 (MU0 \& MU1 eta raw), bx-2\\
+% \textbf{Line 14} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 4 (MU1[31:0]), bx-2\\
+% \textbf{Line 14} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 3 (MU0[63:32]), bx-2\\
+% \textbf{Line 15} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 0 (free), bx-1\\
+% \textbf{Line 15} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 5 (MU1[63:32]), bx-2\\
+% \textbf{Line 16} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 2 (MU0[31:0]), bx-1\\
+% \textbf{Line 16} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 1 (MU0 \& MU1 eta raw), bx-1\\
+% \textbf{Line 17} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 4 (MU1[31:0]), bx-1\\
+% \textbf{Line 17} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 3 (MU0[63:32]), bx-1\\
+% \textbf{Line 18} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 0 (free), bx\\
+% \textbf{Line 18} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 5 (MU1[63:32]), bx-1\\
+% \textbf{Line 19} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 2 (MU0[31:0]), bx\\
+% \textbf{Line 19} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 1 (MU0 \& MU1 eta raw), bx\\
+% \textbf{Line 20} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 4 (MU1[31:0]), bx\\
+% \textbf{Line 20} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 3 (MU0[63:32]), bx\\
+% \textbf{Line 21} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 0 (free), bx+1\\
+% \textbf{Line 21} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 5 (MU1[63:32]), bx\\
+% \textbf{Line 22} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 2 (MU0[31:0]), bx+1\\
+% \textbf{Line 22} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 1 (MU0 \& MU1 eta raw), bx+1\\
+% \textbf{Line 23} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 4 (MU1[31:0]), bx+1\\
+% \textbf{Line 23} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 3 (MU0[63:32]), bx+1\\
+% \textbf{Line 24} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 0 (free), bx+2\\
+% \textbf{Line 24} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 5 (MU1[63:32]), bx+1\\
+% \textbf{Line 25} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 2 (MU0[31:0]), bx+2\\
+% \textbf{Line 25} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 1 (MU0 \& MU1 eta raw), bx+2\\
+% \textbf{Line 26} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 4 (MU1[31:0]), bx+2\\
+% \textbf{Line 26} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 3 (MU0[63:32]), bx+2\\
+% \textbf{Line 27} [63:32] - AMC\#1 uGT input data - "BlockID=0x02 (8), "Block size" (8), "res" (4), "bank id=0x2" (4), "reserved" (8)\\
+% \textbf{Line 27} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 5 (MU1[63:32]), bx+2
 
+\textbf{Line 13} [63:32] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 2 (MU0[31:0]), bx-2\\
+\textbf{Line 13} [31:24] - ... frame 1 (MU0 \& MU1 eta raw), bx-2\\
+\textbf{Line 14} [63:32] - ... frame 4 (MU1[31:0]), bx-2\\
+\textbf{Line 14} [31:24] - ... frame 3 (MU0[63:32]), bx-2\\
+\textbf{Line 15} [63:32] - ... frame 0 (free), bx-1\\
+\textbf{Line 15} [31:24] - ... frame 5 (MU1[63:32]), bx-2\\
+\textbf{Line 16} [63:32] - ... frame 2 (MU0[31:0]), bx-1\\
+\textbf{Line 16} [31:24] - ... frame 1 (MU0 \& MU1 eta raw), bx-1\\
+\textbf{Line 17} [63:32] - ... frame 4 (MU1[31:0]), bx-1\\
+\textbf{Line 17} [31:24] - ... frame 3 (MU0[63:32]), bx-1\\
+\textbf{Line 18} [63:32] - ... frame 0 (free), bx\\
+\textbf{Line 18} [31:24] - ... frame 5 (MU1[63:32]), bx-1\\
+\textbf{Line 19} [63:32] - ... frame 2 (MU0[31:0]), bx\\
+\textbf{Line 19} [31:24] - ... frame 1 (MU0 \& MU1 eta raw), bx\\
+\textbf{Line 20} [63:32] - ... frame 4 (MU1[31:0]), bx\\
+\textbf{Line 20} [31:24] - ... frame 3 (MU0[63:32]), bx\\
+\textbf{Line 21} [63:32] - ... frame 0 (free), bx+1\\
+\textbf{Line 21} [31:24] - ... frame 5 (MU1[63:32]), bx\\
+\textbf{Line 22} [63:32] - ... frame 2 (MU0[31:0]), bx+1\\
+\textbf{Line 22} [31:24] - ... frame 1 (MU0 \& MU1 eta raw), bx+1\\
+\textbf{Line 23} [63:32] - ... frame 4 (MU1[31:0]), bx+1\\
+\textbf{Line 23} [31:24] - ... frame 3 (MU0[63:32]), bx+1\\
+\textbf{Line 24} [63:32] - ... frame 0 (free), bx+2\\
+\textbf{Line 24} [31:24] - ... frame 5 (MU1[63:32]), bx+1\\
+\textbf{Line 25} [63:32] - ... frame 2 (MU0[31:0]), bx+2\\
+\textbf{Line 25} [31:24] - ... frame 1 (MU0 \& MU1 eta raw), bx+2\\
+\textbf{Line 26} [63:32] - ... frame 4 (MU1[31:0]), bx+2\\
+\textbf{Line 26} [31:24] - ... frame 3 (MU0[63:32]), bx+2\\
+\textbf{Line 27} [63:32] - AMC\#1 uGT input data - "BlockID=0x02 (8), "Block size" (8), "res" (4), "bank id=0x2" (4), "reserved" (8)\\
+\textbf{Line 27} [31:24] - AMC\#1 uGT input data - muon data, link 1, channel 0x00, frame 5 (MU1[63:32]), bx+2
+
+\textbf{Remark:}\\
+The order of frames and +/-2 bx has to be verified!\\
 See an example for such a data block (line 12 - 27) in \ref{sec:data_block}.
 
 \textbf{Blocks for additional input data and output data fill up the readout record of AMC\#1.}\\
@@ -508,7 +537,7 @@ See an example for such a data block (line 12 - 27) in \ref{sec:data_block}.
 \begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=1.2em]{32}
         \bitheader[lsb=0]{0,19,20,23,24,31} \\
         \bitbox {8} {\small\texttt{LV1\_id}}         &          
-        \bitbox {4} {0x0}                        &
+        \bitbox {4} {\small\texttt{0x0}}             &
         \bitbox {20} {\small\texttt{Data\_lgth}}            
 \end{bytefield}
 \end{center}
@@ -534,7 +563,7 @@ See an example for such a data block (line 12 - 27) in \ref{sec:data_block}.
 \begin{center}
 \begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=1.2em]{32}
         \bitheader[lsb=0]{0,11,12,19,20,31} \\
-        \bitbox {12} {0x000}                     &
+        \bitbox {12} {\small\texttt{0x000}}                     &
         \bitbox {8} {\small\texttt{LV1\_id}}     &          
         \bitbox {12} {\small\texttt{BXId}}            
 \end{bytefield}
@@ -561,12 +590,12 @@ See an example for such a data block (line 12 - 27) in \ref{sec:data_block}.
 \begin{center}
 \begin{bytefield}[boxformatting={\centering}, endianness=big, bitwidth=1.2em]{32}
         \bitheader[lsb=0]{0,0,1,1,2,2,3,3,4,7,8,11,12,12,13,13,14,14,15,15,16,31} \\
-        \bitbox {16} {CRC}                          &
+        \bitbox {16} {\small\texttt{CRC}}           &
         \bitbox {1} {\small\texttt{C}}              &          
         \bitbox {1} {\small\texttt{F}}              &          
         \bitbox {1} {\small\texttt{x}}              &          
         \bitbox {1} {\small\texttt{x}}              &          
-        \bitbox {4} {\small\texttt{Evt\_stat}}       &          
+        \bitbox {4} {\small\texttt{Evt\_stat}}      &          
         \bitbox {4} {\small\texttt{TTS}}            &          
         \bitbox {1} {\small\texttt{T}}              &            
         \bitbox {1} {\small\texttt{R}}              &            
@@ -583,13 +612,13 @@ See an example for such a data block (line 12 - 27) in \ref{sec:data_block}.
 
 [31:16] = "CRC" (16) 16 bits CRC summary ?
 
-[15:12] = "C, F, x, x" 4 bits ?
+[15:12] = 0x0 ["C, F, x, x" 4 bits ?]
 
-[11:8] = "Evt\_stat" (4) ?
+[11:8] = 0x0 ["Evt\_stat" (4) ?]
 
-[7:4] = "TTS" (4) ?
+[7:4] = 0x0 ["TTS" (4) ?]
 
-[3:0] = "T, R, \$, \$" 4 bits ?
+[3:0] = 0x0 ["T, R, \$, \$" 4 bits ?]
 
 \clearpage
 

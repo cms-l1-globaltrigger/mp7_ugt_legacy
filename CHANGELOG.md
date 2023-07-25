@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.24.0] - 2023-07-25
+### Comment
+
+- mp7_ugt firmware release v1.24.0
+- based on v1.23.2, but ZDC data with 16 bits only (on 5G link)
+
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/gtl_pkg.vhd
+  - ../payload/gtl_module_tpl.vhd
+  - ../payload/gtl_data_mapping.vhd
+  - ../payload/gtl/bx_pipeline.vhd
+
 ## [v1.23.2] - 2023-06-07
 ### Comment
 

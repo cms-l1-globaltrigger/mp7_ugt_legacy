@@ -2,6 +2,7 @@
 -- Data mapping for GTL
 
 -- Version-history:
+-- HB 2023-07-25: updated for new ZDC data structure.
 -- HB 2023-03-01: updated for ZDC.
 -- HB 2023-02-09: updated comments.
 -- HB 2022-10-10: inserted ZDC.
@@ -94,12 +95,21 @@ begin
 
 -- ****************************************************************************************
 
--- HB 2023-03-01: ZDC data (10G) on link 11 (after conversion from 5G to 10G).
-    gtl_data.zdc(0) <= lhc_data.zdc5g_0(EN_MINUS_BIT_HIGH downto EN_MINUS_BIT_LOW);
-    gtl_data.zdc(1) <= lhc_data.zdc5g_1(EN_PLUS_BIT_HIGH downto EN_PLUS_BIT_LOW);
-    gtl_data.zdc(2) <= "0000000000"; -- not defined for ZDC, but 6 frames forseen in "lhc_data_pkg.vhd"
-    gtl_data.zdc(3) <= "0000000000";
-    gtl_data.zdc(4) <= "0000000000";
-    gtl_data.zdc(5) <= "0000000000";
+-- Email Jeremy Mans 24.7.2023:
+-- Definition of ZDC data (16 bits on 5G link):
+
+-- [8 bits of zero] [3c or 7c]
+-- [6 bits of zero] [10 bit energy from ZDC-]
+-- [6 bits of zero] [10 bit energy from ZDC+]
+-- [16 bits of zero]
+-- [4 bits of zero] [12 bits of counter]
+-- [16 bits of zero]
+
+    gtl_data.zdc(0) <= lhc_data.zdc5g_0;
+    gtl_data.zdc(1) <= lhc_data.zdc5g_1;
+    gtl_data.zdc(2) <= lhc_data.zdc5g_2;
+    gtl_data.zdc(3) <= lhc_data.zdc5g_3;
+    gtl_data.zdc(4) <= lhc_data.zdc5g_4;
+    gtl_data.zdc(5) <= lhc_data.zdc5g_5;
     
 end architecture rtl;

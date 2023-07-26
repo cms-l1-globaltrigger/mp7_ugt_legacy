@@ -95,16 +95,6 @@ begin
 
 -- ****************************************************************************************
 
--- Email Jeremy Mans 24.7.2023:
--- Definition of ZDC data (16 bits on 5G link):
-
--- [8 bits of zero] [3c or 7c]
--- [6 bits of zero] [10 bit energy from ZDC-]
--- [6 bits of zero] [10 bit energy from ZDC+]
--- [16 bits of zero]
--- [4 bits of zero] [12 bits of counter]
--- [16 bits of zero]
-
     gtl_data.zdc(0) <= lhc_data.zdc5g_0;
     gtl_data.zdc(1) <= lhc_data.zdc5g_1;
     gtl_data.zdc(2) <= lhc_data.zdc5g_2;

@@ -68,8 +68,8 @@ begin
         bx_data.asymht(i) <= data_tmp(i).asymht;
         bx_data.asymethf(i) <= data_tmp(i).asymethf;
         bx_data.asymhthf(i) <= data_tmp(i).asymhthf;
-        bx_data.zdcm(i) <= data_tmp(i).zdc(1)(ZDC_BIT_HIGH downto ZDC_BIT_LOW);
-        bx_data.zdcp(i) <= data_tmp(i).zdc(2)(ZDC_BIT_HIGH downto ZDC_BIT_LOW);
+        bx_data.zdcm(i) <= data_tmp(i).zdc(EN_MINUS_FRAME)(ZDC_BIT_HIGH downto ZDC_BIT_LOW);
+        bx_data.zdcp(i) <= data_tmp(i).zdc(EN_PLUS_FRAME)(ZDC_BIT_HIGH downto ZDC_BIT_LOW);
 
 -- Additional delay for centrality and ext_cond (no comparators and conditions)
 

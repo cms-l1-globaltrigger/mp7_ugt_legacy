@@ -390,7 +390,7 @@ constant MBT1HFM_COUNT_HIGH : natural := 3;
 constant NR_ZDC_OBJECTS : positive := 6;
 
 -- Email Jeremy Mans 24.7.2023:
--- Definition of ZDC data (16 bits on 5G link):
+-- Definition of ZDC data (lower 16 bits on 5G link frames):
 
 -- [8 bits of zero] [3c or 7c]
 -- [6 bits of zero] [10 bit energy from ZDC-]
@@ -399,9 +399,11 @@ constant NR_ZDC_OBJECTS : positive := 6;
 -- [4 bits of zero] [12 bits of counter]
 -- [16 bits of zero]
 
-constant EN_MINUS_BIT_LOW : natural := 0; -- EN_MINUS (ZDC-) on frame 1 of ZDC link
+constant EN_MINUS_FRAME : natural := 1; -- EN_MINUS (ZDC-) on frame 1 of ZDC link
+constant EN_MINUS_BIT_LOW : natural := 0;
 constant EN_MINUS_BIT_HIGH : natural := 9;
-constant EN_PLUS_BIT_LOW : natural := 0; -- EN_PLUS (ZDC+) on frame 2 of ZDC link
+constant EN_PLUS_FRAME : natural := 2; -- EN_PLUS (ZDC+) on frame 2 of ZDC link
+constant EN_PLUS_BIT_LOW : natural := 0;
 constant EN_PLUS_BIT_HIGH : natural := 9;
 constant ZDC_BIT_LOW : natural := 0;
 constant ZDC_BIT_HIGH : natural := 9;

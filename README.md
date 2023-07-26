@@ -31,13 +31,8 @@ Following dependencies exist for uGT firmware:
 
 | Repo | Tag |
 |:-:|:-:|
-<<<<<<< HEAD
-| [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) | mp7-5g-links
-| [IPBB](https://github.com/ipbus/ipbb) | v0.5.2
-=======
-| [MP7](https://gitlab.cern.ch/cms-l1-globaltrigger/mp7) | v3.2.2_Vivado2021+_ugt
+| [MP7](https://gitlab.cern.ch/cms-l1-globaltrigger/mp7) | mp7-5g-links_Vivado2021+_ugt
 | [IPBB](https://github.com/ipbus/ipbb) | dev/2023a
->>>>>>> master
 | [IPB_FW](https://github.com/ipbus/ipbus-firmware) | v1.4
 
 

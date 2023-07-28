@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2023-07-28: bug fixed "type zdc_array ...".
 -- HB 2023-07-25: new ZDC data structure.
 -- HB 2023-03-06: added hadronic shower trigger bit MUS2.
 -- HB 2023-03-01: updated constants for ZDC.
@@ -409,8 +410,8 @@ constant ZDC_BIT_LOW : natural := 0;
 constant ZDC_BIT_HIGH : natural := 9;
 constant MAX_ZDC_BITS : natural := 16;
 constant ZDC_THR_BITS : natural := 16;
-type zdc_5g_array is array (0 to LINK_FRAMES-1) of std_logic_vector(SW_DATA_WIDTH-1 downto 0);
-type zdc_array is array (0 to NR_ZDC_OBJECTS-1) of std_logic_vector(ZDC_BIT_HIGH-ZDC_BIT_LOW downto 0);
+-- type zdc_5g_array is array (0 to LINK_FRAMES-1) of std_logic_vector(SW_DATA_WIDTH-1 downto 0);
+type zdc_array is array (0 to NR_ZDC_OBJECTS-1) of std_logic_vector(SW_DATA_WIDTH-1 downto 0);
 type bx_zdc_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(ZDC_BIT_HIGH-ZDC_BIT_LOW downto 0);
 
 -- *******************************************************************************************************

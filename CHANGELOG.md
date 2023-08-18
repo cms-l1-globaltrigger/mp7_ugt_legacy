@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.22.4] - 2023-08-18
+### Comment
+
+- mp7_ugt firmware release v1.22.4
+- all MGTs, removed ZDC
+
+### Changed
+- source files:
+  - ../payload/gtl/gtl_data_mapping.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/gt_pkg.vhd
+  - ../packages/lhc_data_pkg.vhd
+  - ../packages/top_decl.vhd
+
 ## [v1.22.3] - 2023-04-15
 ### Comment
 

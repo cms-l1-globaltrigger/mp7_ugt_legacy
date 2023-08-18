@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- -- HB 2023-08-18: removed constants for ZDC.
 -- HB 2023-03-06: added hadronic shower trigger bit MUS2.
 -- HB 2023-03-01: updated constants for ZDC.
 -- HB 2022-10-17: added constant NR_INPUT_LANES (for reduced NR_LANES in frame.vhd).
@@ -80,7 +81,7 @@ constant EXT_COND_STAGES: natural := 2; -- pipeline stages for "External conditi
 constant CENTRALITY_STAGES: natural := 2; -- pipeline stages for "Centrality" to get same pipeline to algos as conditions
 constant MUS_STAGES: natural := 2; -- pipeline stages for "Hadronic shower triggers (muon)" to get same pipeline to algos as conditions
 constant ADT_SIM_DEL: natural := 2; -- delay of ADT for simulation 
-constant ZDC_STAGES: natural := 2; -- pipeline stages for "ZDC condition" to get same pipeline to algos as conditions
+--constant ZDC_STAGES: natural := 2; -- pipeline stages for "ZDC condition" to get same pipeline to algos as conditions
 constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
 constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
 
@@ -386,18 +387,18 @@ constant MBT1HFM_COUNT_HIGH : natural := 3;
 
 -- *******************************************************************************************************
 -- HB 2022-10-10: inserted ZDC
-constant NR_ZDC_OBJECTS : positive := 6;
-constant EN_MINUS_BIT_LOW : natural := 16; -- EN_MINUS (ZDC-) on frame 0 of ZDC link
-constant EN_MINUS_BIT_HIGH : natural := 25;
-constant EN_PLUS_BIT_LOW : natural := 0; -- EN_PLUS (ZDC+) on frame 1 of ZDC link
-constant EN_PLUS_BIT_HIGH : natural := 9;
-constant ZDC_BIT_LOW : natural := 0;
-constant ZDC_BIT_HIGH : natural := 9;
-constant MAX_ZDC_BITS : natural := 32;
-constant ZDC_THR_BITS : natural := 16;
-type zdc_5g_array is array (0 to LINK_FRAMES-1) of std_logic_vector(SW_DATA_WIDTH-1 downto 0);
-type zdc_array is array (0 to NR_ZDC_OBJECTS-1) of std_logic_vector(ZDC_BIT_HIGH-ZDC_BIT_LOW downto 0);
-type bx_zdc_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(ZDC_BIT_HIGH-ZDC_BIT_LOW downto 0);
+-- constant NR_ZDC_OBJECTS : positive := 6;
+-- constant EN_MINUS_BIT_LOW : natural := 16; -- EN_MINUS (ZDC-) on frame 0 of ZDC link
+-- constant EN_MINUS_BIT_HIGH : natural := 25;
+-- constant EN_PLUS_BIT_LOW : natural := 0; -- EN_PLUS (ZDC+) on frame 1 of ZDC link
+-- constant EN_PLUS_BIT_HIGH : natural := 9;
+-- constant ZDC_BIT_LOW : natural := 0;
+-- constant ZDC_BIT_HIGH : natural := 9;
+-- constant MAX_ZDC_BITS : natural := 32;
+-- constant ZDC_THR_BITS : natural := 16;
+-- type zdc_5g_array is array (0 to LINK_FRAMES-1) of std_logic_vector(SW_DATA_WIDTH-1 downto 0);
+-- type zdc_array is array (0 to NR_ZDC_OBJECTS-1) of std_logic_vector(ZDC_BIT_HIGH-ZDC_BIT_LOW downto 0);
+-- type bx_zdc_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(ZDC_BIT_HIGH-ZDC_BIT_LOW downto 0);
 
 -- *******************************************************************************************************
 -- max bits for comparators.vhd
@@ -444,7 +445,6 @@ type gtl_data_record is record
     towercount : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
     centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
-    zdc : zdc_array;
 end record gtl_data_record;
 
 type bx_data_record is record
@@ -478,8 +478,6 @@ type bx_data_record is record
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
     mus0, mus1, mus2, musoot0, musoot1 : mus_bit_array;
-    zdcp : bx_zdc_array;
-    zdcm : bx_zdc_array;
 end record bx_data_record;
 
 -- ==== Correlations - begin ============================================================

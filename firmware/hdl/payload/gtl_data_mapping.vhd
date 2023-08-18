@@ -2,6 +2,7 @@
 -- Data mapping for GTL
 
 -- Version-history:
+-- HB 2023-08-18: removed ZDC.
 -- HB 2023-03-01: updated for ZDC.
 -- HB 2023-02-09: updated comments.
 -- HB 2022-10-10: inserted ZDC.
@@ -94,12 +95,4 @@ begin
 
 -- ****************************************************************************************
 
--- HB 2023-03-01: ZDC data (10G) on link 11 (after conversion from 5G to 10G).
-    gtl_data.zdc(0) <= lhc_data.zdc10g_0(EN_MINUS_BIT_HIGH downto EN_MINUS_BIT_LOW);
-    gtl_data.zdc(1) <= lhc_data.zdc10g_1(EN_PLUS_BIT_HIGH downto EN_PLUS_BIT_LOW);
-    gtl_data.zdc(2) <= "0000000000"; -- not defined for ZDC, but 6 frames forseen in "lhc_data_pkg.vhd"
-    gtl_data.zdc(3) <= "0000000000";
-    gtl_data.zdc(4) <= "0000000000";
-    gtl_data.zdc(5) <= "0000000000";
-    
 end architecture rtl;

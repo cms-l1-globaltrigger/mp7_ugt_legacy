@@ -43,16 +43,16 @@ package top_decl is
             5 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 4, 11), -- 5 / 113
             6 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 5, 12), -- 6 / 112
             7 => (gth_10g_std_lat, u_crc32, buf, demux, buf, u_crc32, gth_10g_std_lat, 5, 12), -- 7 / 111* --> scouting outputs
-            8 => (gth_5g, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_5g, 5, 12), -- 8 / 110
-            9 => (gth_5g, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_5g, 0, 7), -- 9 / 210
-            10 => (gth_5g, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_5g, 0, 7), -- 10 / 211*
-            11 => (gth_5g, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_5g, 0, 7), -- 11 / 212
-            12 => (gth_5g, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_5g, 1, 8), -- 12 / 213
-            13 => (gth_5g, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_5g, 1, 8), -- 13 / 214*
-            14 => (gth_5g, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_5g, 1, 8), -- 14 / 215
-            15 => (gth_5g, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_5g, 2, 9), -- 15 / 216
-            16 => (gth_5g, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_5g, 2, 9), -- 16 / 217*
-            17 => (gth_5g, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_5g, 2, 9) -- 17 / 218
+            8 => (gth_10g_std_lat, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_10g_std_lat, 5, 12), -- 8 / 110
+            9 => (gth_10g_std_lat, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_10g_std_lat, 0, 7), -- 9 / 210
+            10 => (gth_10g_std_lat, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_10g_std_lat, 0, 7), -- 10 / 211*
+            11 => (gth_10g_std_lat, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_10g_std_lat, 0, 7), -- 11 / 212
+            12 => (gth_10g_std_lat, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_10g_std_lat, 1, 8), -- 12 / 213
+            13 => (gth_10g_std_lat, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_10g_std_lat, 1, 8), -- 13 / 214*
+            14 => (gth_10g_std_lat, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_10g_std_lat, 1, 8), -- 14 / 215
+            15 => (gth_10g_std_lat, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_10g_std_lat, 2, 9), -- 15 / 216
+            16 => (gth_10g_std_lat, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_10g_std_lat, 2, 9), -- 16 / 217*
+            17 => (gth_10g_std_lat, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_10g_std_lat, 2, 9) -- 17 / 218
         );
 
 end top_decl;

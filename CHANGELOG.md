@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - source files:
+  - ../payload/frame/lmp.vhd
   - ../payload/gtl/gtl_data_mapping.vhd
   - ../packages/gt_mp7_core_pkg.vhd
   - ../packages/gt_pkg.vhd

@@ -52,7 +52,7 @@ package top_decl is
             14 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 1, 8), -- 14 / 215
             15 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 2, 9), -- 15 / 216
             16 => (no_mgt, no_chk, no_buf, no_fmt, no_buf, no_chk, no_mgt, 2, 9), -- 16 / 217*
-            17 => (gth_5g, no_chk, buf, no_fmt, buf, no_chk, gth_5g, 2, 9) -- 17 / 218
+            17 => (gth_5g, u_crc32, buf, no_fmt, buf, u_crc32, gth_5g, 2, 9) -- 17 / 218
         );
 
 end top_decl;

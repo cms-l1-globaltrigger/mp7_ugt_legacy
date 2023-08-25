@@ -2,7 +2,7 @@
 -- Package for definitions of lhc data.
 
 -- Version history:
--- HB 2023-08-18: removed zdv10g from link 11.
+-- HB 2023-08-25: ZDC 5G on link 71.
 -- HB 2023-02-09: updated comments.
 -- HB 2022-10-08: zdc10g on link 11.
 -- HB 2022-09-08: cleaned up.
@@ -25,7 +25,7 @@
 -- tau                 6 (5..0)        1        8
 -- tau                 6 (11..6)       1        9
 -- esums               6               1       10
--- spare               6               1       11
+-- free                6               1       11
 -- ext-cond(63..0)     2               1       12
 -- ext-cond(127..64)   2               1       13
 -- ext-cond(191..128)  2               1       14
@@ -35,6 +35,7 @@
 -- muon                2 (3..2)        1        1
 -- muon                2 (5..4)        1        2
 -- muon                2 (7..6)        1        3
+-- zdc                 6               1       71
 -- __________________________________________________________
 -- Summary             72 (32 bits)    16
 --
@@ -47,6 +48,7 @@
 -- tau         5      4     3    2    1      0
 -- tau         11     10    9    8    7      6
 -- esums       HTmHF  ETmHF HTm* ETm* HT,TC* ET,ETTEM*
+-- free        5      4     3    2    1      0     
 -- ext-cond    x      x     x    x    1      0
 -- ext-cond    x      x     x    x    3      2
 -- ext-cond    x      x     x    x    5      4
@@ -55,6 +57,7 @@
 -- muon        3h     3l    2h   2l   x      x
 -- muon        5h     5l    4h   4l   x      x
 -- muon        7h     7l    6h   6l   x      x
+-- zdc (5G)    5      4     3    2    1      0     
 --
 -- *) in addition 4 MSBs for Minimum Bias bits. TC means "TOWERCNT" (ECAL sum)
 
@@ -76,6 +79,7 @@ package lhc_data_pkg is
 -- HB 2106-05-31: proposal for memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg_all_frames.vhd)
     constant OFFSET_LINK_11_LANES : natural := 11;
     constant OFFSET_EXT_COND_LANES : natural := 12;
+    constant OFFSET_ZDC5G_LANES : natural := 71;
 
 --  for simspy memory (test with ipb_dpmem_4096_32)
     constant SW_DATA_WIDTH : integer := 32;
@@ -101,6 +105,12 @@ package lhc_data_pkg is
     constant LINK_11_FR_4_WIDTH : integer := SW_DATA_WIDTH;
     constant LINK_11_FR_5_WIDTH : integer := SW_DATA_WIDTH;
     constant EXTERNAL_CONDITIONS_DATA_WIDTH : integer := SW_DATA_WIDTH*8;
+    constant ZDC5G_0_WIDTH : integer := SW_DATA_WIDTH;
+    constant ZDC5G_1_WIDTH : integer := SW_DATA_WIDTH;
+    constant ZDC5G_2_WIDTH : integer := SW_DATA_WIDTH;
+    constant ZDC5G_3_WIDTH : integer := SW_DATA_WIDTH;
+    constant ZDC5G_4_WIDTH : integer := SW_DATA_WIDTH;
+    constant ZDC5G_5_WIDTH : integer := SW_DATA_WIDTH;
 
     constant LHC_DATA_WIDTH : integer :=
         (
@@ -117,7 +127,10 @@ package lhc_data_pkg is
             LINK_11_FR_0_WIDTH + LINK_11_FR_1_WIDTH +
             LINK_11_FR_2_WIDTH + LINK_11_FR_3_WIDTH +
             LINK_11_FR_4_WIDTH + LINK_11_FR_5_WIDTH +
-            EXTERNAL_CONDITIONS_DATA_WIDTH
+            EXTERNAL_CONDITIONS_DATA_WIDTH +
+            ZDC5G_0_WIDTH + ZDC5G_1_WIDTH +
+            ZDC5G_2_WIDTH + ZDC5G_3_WIDTH +
+            ZDC5G_4_WIDTH + ZDC5G_5_WIDTH
         );
 
     type muon_array_t is array(0 to MUON_ARRAY_LENGTH-1) of std_logic_vector(MUON_DATA_WIDTH-1 downto 0);
@@ -143,6 +156,12 @@ package lhc_data_pkg is
         link_11_fr_4_data : std_logic_vector(LINK_11_FR_4_WIDTH-1 downto 0);
         link_11_fr_5_data : std_logic_vector(LINK_11_FR_5_WIDTH-1 downto 0);
         external_conditions : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
+        ZDC5G_0 : std_logic_vector(ZDC5G_0_WIDTH-1 downto 0);
+        ZDC5G_1 : std_logic_vector(ZDC5G_1_WIDTH-1 downto 0);
+        ZDC5G_2 : std_logic_vector(ZDC5G_2_WIDTH-1 downto 0);
+        ZDC5G_3 : std_logic_vector(ZDC5G_3_WIDTH-1 downto 0);
+        ZDC5G_4 : std_logic_vector(ZDC5G_4_WIDTH-1 downto 0);
+        ZDC5G_5 : std_logic_vector(ZDC5G_5_WIDTH-1 downto 0);
     end record;
 
     constant LHC_DATA_NULL : lhc_data_t :=
@@ -163,10 +182,16 @@ package lhc_data_pkg is
             link_11_fr_3_data => (others=>'0'),
             link_11_fr_4_data => (others=>'0'),
             link_11_fr_5_data => (others=>'0'),
-            external_conditions => (others=>'0')
+            external_conditions => (others=>'0'),
+            ZDC5G_0 => (others=>'0'),
+            ZDC5G_1 => (others=>'0'),
+            ZDC5G_2 => (others=>'0'),
+            ZDC5G_3 => (others=>'0'),
+            ZDC5G_4 => (others=>'0'),
+            ZDC5G_5 => (others=>'0')
         );
 
-    constant LHC_DATA_OBJECT_COUNT : integer :=17;
+    constant LHC_DATA_OBJECT_COUNT : integer :=23;
     constant INDEX_MUON : integer := 0;
     constant INDEX_EG : integer := 1;
     constant INDEX_TAU : integer := 2;
@@ -184,6 +209,12 @@ package lhc_data_pkg is
     constant INDEX_LINK_11_FR_4 : integer := 14;
     constant INDEX_LINK_11_FR_5 : integer := 15;
     constant INDEX_EXTERNAL_CONDITIONS : integer := 16;
+    constant INDEX_ZDC5G_0 : integer := 17;
+    constant INDEX_ZDC5G_1 : integer := 18;
+    constant INDEX_ZDC5G_2 : integer := 19;
+    constant INDEX_ZDC5G_3 : integer := 20;
+    constant INDEX_ZDC5G_4 : integer := 21;
+    constant INDEX_ZDC5G_5 : integer := 22;
     type lhc_data_slv_property_t is array (0 to LHC_DATA_OBJECT_COUNT-1) of natural;
 
     constant LHC_DATA_SLV_OBJECT_WIDTH : lhc_data_slv_property_t :=
@@ -201,7 +232,10 @@ package lhc_data_pkg is
             LINK_11_FR_0_WIDTH, LINK_11_FR_1_WIDTH,
             LINK_11_FR_2_WIDTH, LINK_11_FR_3_WIDTH,
             LINK_11_FR_4_WIDTH, LINK_11_FR_5_WIDTH,
-            EXTERNAL_CONDITIONS_DATA_WIDTH
+            EXTERNAL_CONDITIONS_DATA_WIDTH,
+            ZDC5G_0_WIDTH, ZDC5G_1_WIDTH,
+            ZDC5G_2_WIDTH, ZDC5G_3_WIDTH,
+            ZDC5G_4_WIDTH, ZDC5G_5_WIDTH
         );
 
     constant LHC_DATA_SLV_START_INDICES : lhc_data_slv_property_t; -- see body
@@ -271,6 +305,20 @@ package body lhc_data_pkg is
 
         ret_value(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index) := data_in.external_conditions;
         index := index + EXTERNAL_CONDITIONS_DATA_WIDTH;
+        
+        ret_value(index + ZDC5G_0_WIDTH-1 downto index) := data_in.ZDC5G_0;
+        index := index + ZDC5G_0_WIDTH;
+        ret_value(index + ZDC5G_1_WIDTH-1 downto index) := data_in.ZDC5G_1;
+        index := index + ZDC5G_1_WIDTH;
+        ret_value(index + ZDC5G_2_WIDTH-1 downto index) := data_in.ZDC5G_2;
+        index := index + ZDC5G_2_WIDTH;
+        ret_value(index + ZDC5G_3_WIDTH-1 downto index) := data_in.ZDC5G_3;
+        index := index + ZDC5G_3_WIDTH;
+        ret_value(index + ZDC5G_4_WIDTH-1 downto index) := data_in.ZDC5G_4;
+        index := index + ZDC5G_4_WIDTH;
+        ret_value(index + ZDC5G_5_WIDTH-1 downto index) := data_in.ZDC5G_5;
+        index := index + ZDC5G_5_WIDTH;
+
         return ret_value;
     end function;
 
@@ -328,6 +376,20 @@ package body lhc_data_pkg is
 
         ret_value.external_conditions := data_in(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index);
         index := index + EXTERNAL_CONDITIONS_DATA_WIDTH;
+
+        ret_value.ZDC5G_0 := data_in(index + ZDC5G_0_WIDTH-1 downto index);
+        index := index + ZDC5G_0_WIDTH;
+        ret_value.ZDC5G_1 := data_in(index + ZDC5G_1_WIDTH-1 downto index);
+        index := index + ZDC5G_1_WIDTH;
+        ret_value.ZDC5G_2 := data_in(index + ZDC5G_2_WIDTH-1 downto index);
+        index := index + ZDC5G_2_WIDTH;
+        ret_value.ZDC5G_3 := data_in(index + ZDC5G_3_WIDTH-1 downto index);
+        index := index + ZDC5G_3_WIDTH;
+        ret_value.ZDC5G_4 := data_in(index + ZDC5G_4_WIDTH-1 downto index);
+        index := index + ZDC5G_4_WIDTH;
+        ret_value.ZDC5G_5 := data_in(index + ZDC5G_5_WIDTH-1 downto index);
+        index := index + ZDC5G_5_WIDTH;
+
         return ret_value;
     end function;
 

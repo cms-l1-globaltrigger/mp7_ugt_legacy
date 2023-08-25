@@ -31,7 +31,7 @@ Following dependencies exist for uGT firmware:
 
 | Repo | Tag |
 |:-:|:-:|
-| [MP7](https://gitlab.cern.ch/cms-l1-globaltrigger/mp7) | v3.2.2_Vivado2021+_ugt
+| [MP7](https://gitlab.cern.ch/cms-l1-globaltrigger/mp7) | mp7-5g-links_Vivado2021+_ugt
 | [IPBB](https://github.com/ipbus/ipbb) | dev/2023a
 | [IPB_FW](https://github.com/ipbus/ipbus-firmware) | v1.4
 
@@ -155,9 +155,9 @@ python scripts/run_simulation_questa.py ./cms-l1-menu/2022/L1Menu_Collisions2022
 ## Build all modules
 
 *Remarks:*
-- FW versions greater or equal `0x1150` used for muon scouting.
-- FW versions greater or equal `0x1130` are used for uGMT v6.1.0 and unpacker (with bug fix for shifted raw eta).
-- FW versions greater or equal `0x1120` and lower `0x1130` are used for uGMT v6.0.0_patch1 and unpacker (with bug: shifted raw eta).
+- FW versions greater or equal 0x1150 are used with 2loose muon shower bit (MUS2).
+- FW versions greater or equal 0x1130 are used for uGMT v6.1.0 and unpacker (with bug fix for shifted raw eta).
+- FW versions greater or equal 0x1120 and lower 0x1130 are used for uGMT v6.0.0_patch1 and unpacker (with bug: shifted raw eta).
 
 The firmware uses the ipbb build tool, and requires the ipbus system firmware.
 If you are going to build on a computer outside of the CERN network, then you

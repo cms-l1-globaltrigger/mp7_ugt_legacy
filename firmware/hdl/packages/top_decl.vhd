@@ -7,6 +7,9 @@
 --
 -- Dave Newbold, June 2014
 
+-- Version-history:
+-- HB 2023-08-25: updated for new ZDC input.
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
@@ -33,7 +36,7 @@ package top_decl is
         constant CLOCK_AUX_RATIO: clock_ratio_array_t := (1, 1, 1);
 
 -- HB 2022-10-04: used "demux" in formatter for algo outputs to enable "orbit header" for scouting
--- HB 2023-08-18: used all quads for test
+-- HB 2023-08-25: used quad 17 for ZDC 5G input on link 71
         constant REGION_CONF: region_conf_array_t := (
             0 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 3, 10), -- 0 / 118
             1 => (gth_10g_std_lat, u_crc32, buf, no_fmt, buf, u_crc32, gth_10g_std_lat, 3, 10), -- 1 / 117*
@@ -52,7 +55,7 @@ package top_decl is
             14 => (gth_5g, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_5g, 1, 8), -- 14 / 215
             15 => (gth_5g, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_5g, 2, 9), -- 15 / 216
             16 => (gth_5g, no_chk, no_buf, no_fmt, no_buf, no_chk, gth_5g, 2, 9), -- 16 / 217*
-            17 => (gth_5g, u_crc32, buf, no_fmt, buf, u_crc32, gth_5g, 2, 9) -- 17 / 218
+            17 => (gth_5g, u_crc32, buf, no_fmt, buf, u_crc32, gth_5g, 2, 9) -- 17 / 218 --> ZDC 5G optical input
         );
 
 end top_decl;

@@ -2,8 +2,7 @@
 -- Global Trigger Logic module.
 
 -- Version history:
--- HB 2023-08-24: v1.18.3: Updated top_decl.vhd on link 71.
--- HB 2023-08-18: v1.18.2: Used all MGTs (see top_decl.vhd).
+-- HB 2023-08-25: v1.19.0: Used link 71 as ZDC 5G input. ZDC data structure changed (16 bits only on 5G link). Updated top_decl.vhd.
 -- HB 2023-04-15: v1.18.1: Bug fix muon index bits.
 -- HB 2023-03-14: v1.18.0: Implemented "MUS2" (new hadronic shower bit), Anomaly Detection Trigger, ZDC conditions and cuts for muon index bits.
 -- HB 2022-11-29: v1.17.6: Bug fix in algo_pre_scaler_fractional_float.vhd.

@@ -18,7 +18,7 @@
 
 \begin{titlepage}
 
-\date{31 May 2023}
+\date{28 July 2023}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -234,8 +234,8 @@ definition)	&		&	ASYMHTHF	&	0..255 &	1 &	8                    \\
 \hline
 object	&	collections $\times$ instances	&	parameter	&	range	&	step	&	bits \\
 \hline\hline
-ZDC	       &	1 * 2	& EN\_MINUS (ZDC-)	    &	0..1023	   &	1 (?)	  &	10  \\
-           &	        & EN\_PLUS (ZDC+)	    &	0..1023	   &	1 (?)	  &	10  \\
+ZDC	       &	1 * 2	& EN\_MINUS (ZDC-)	    &	0..1023	   &	1	  &	10  \\
+           &	        & EN\_PLUS (ZDC+)	    &	0..1023	   &	1	  &	10  \\
 \hline
 \end{tabular}
 \label{table:scales_table_3}
@@ -290,27 +290,27 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-\begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
- & \multicolumn{6}{ c| }{link} \\\hline
-frame & 10 & 11 & 12 & 13 & 14 &\makebox[1.5cm][c]{15} \\\hline\hline
-0 & ET, & EN\_MINUS & ExtCond & ExtCond & ExtCond & ExtCond\\
- & ETTEM, & (ZDC-) & [31:0] & [95:64] & [159:128] & [223:192]\\
- & MBT0HFP & [25:16] & & & &\\
-1 & HT, & EN\_PLUS & ExtCond & ExtCond & ExtCond & ExtCond\\
- & TOWERCOUNT, & (ZDC+) & [63:32] & [127:96] & [191:160] & [255:224]\\
- & MBT0HFM & [9:0] & & & &\\
-2 & ET$_{miss}$, & & free & free & free & free\\
- & ASYMET,& & & & &\\
- & MBT1HFP  & & & & &\\
-3 & HT$_{miss}$, & & free & free & free & free\\
- & ASYMHT,& & & & &\\
- & MBT1HFM & & & & &\\
-4 & ET$_{miss}^{HF}$ & & free & free & free & free\\
- & ASYMETHF, & & & & &\\
- & CENT[3:0] & & & & &\\
-5 & HT$_{miss}^{HF}$ & & free & free & free & free\\
- & ASYMHTHF, & & & & &\\
- & CENT[7:4] & & & & &\\\hline
+\begin{tabular}{|c|c|c|c|c|c|c|p{1.5cm}|}\hline
+ & \multicolumn{7}{ c| }{link} \\\hline
+frame & 10 & 11 & 12 & 13 & 14 & 15 &\makebox[1.5cm][c]{71} \\\hline\hline
+0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond & 0x3C/0x7C\\
+ & ETTEM, & & [31:0] & [95:64] & [159:128] & [223:192] & (8 bits)\\
+ & MBT0HFP & & & & & &\\
+1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond & ZDC-\\
+ & TOWERCOUNT, & & [63:32] & [127:96] & [191:160] & [255:224] & (10 bits)\\
+ & MBT0HFM & & & & & &\\
+2 & ET$_{miss}$, & free & free & free & free & free & ZDC+\\
+ & ASYMET,& & & & & & (10 bits)\\
+ & MBT1HFP  & & & & & &\\
+3 & HT$_{miss}$, & free & free & free & free & free &  0\\
+ & ASYMHT,& & & & & & (32 bits)\\
+ & MBT1HFM & & & & & &\\
+4 & ET$_{miss}^{HF}$ & free & free & free & free & free & counter\\
+ & ASYMETHF, & & & & & & (12 bits)\\
+ & CENT[3:0] & & & & & &\\
+5 & HT$_{miss}^{HF}$ & free & free & free & free & free &  0\\
+ & ASYMHTHF, & & & & & & (32 bits)\\
+ & CENT[7:4] & & & & & &\\\hline
 \end{tabular}
 }
 \label{table:app:sum_opt_links2}
@@ -784,14 +784,28 @@ Centrality bits [7:4] & CENT[7:4] & 5 & HT$_{miss}^{HF}$ & 31..28 \\\hline
 \label{table:centrality_def}
 \end{table}
 
+% -- Email Jeremy Mans 24.7.2023:
+% -- Definition of ZDC data (lower 16 bits on 5G link frames):
+% 
+% -- [8 bits of zero] [3c or 7c]
+% -- [6 bits of zero] [10 bit energy from ZDC-]
+% -- [6 bits of zero] [10 bit energy from ZDC+]
+% -- [16 bits of zero]
+% -- [4 bits of zero] [12 bits of counter]
+% -- [16 bits of zero]
+
 \begin{table}[ht]
 \caption{\bf Data structure ZDC}
 \vspace{5mm}
 \centering
-\begin{tabular}{|c|c|c|}\hline
-frame & bit(s) & parameter \\\hline\hline
-0 & 25..16 & EN\_MINUS (ZDC-)\\
-1 & 9..0 & EN\_PLUS (ZDC+)\\\hline
+\begin{tabular}{|c|c|c|l|}\hline
+frame & bit(s)=0 & bit(s) & parameter \\\hline\hline
+0 & 31..8 & 7..0 & 0x3C or 0x7C\\
+1 & 31..10 & 9..0 & EN\_MINUS (ZDC-)\\
+2 & 31..10 & 9..0 & EN\_PLUS (ZDC+)\\
+3 & 31..0 & &\\
+4 & 31..12 & 11..0 & counter (12bits), not used in uGT\\
+5 & 31..0 & &\\\hline
 \end{tabular}
 \label{table:zdc_struct}
 \end{table}
@@ -811,6 +825,9 @@ frame & bit(s) & parameter \\\hline\hline
 
 \bibitem {ZDC}
 \href{\gitbranch/doc/scales_inputs_2_ugt/ZDC_uhtr_spec.pdf}{\texttt{Description of ZDC structure (ZDC\_uhtr\_spec.pdf)}}
+
+\bibitem {ZDC updated}
+\href{\gitbranch/doc/scales_inputs_2_ugt/ZDC_uhtr_spec_email_24_7_2023.txt}{\texttt{Updated description of ZDC structure (ZDC\_uhtr\_spec\_email\_24\_7\_2023.txt)}}
 
 \end{thebibliography}
 

@@ -4,27 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.22.5] - 2023-08-18
+## [v1.23.0] - 2023-08-25
 ### Comment
 
-- mp7_ugt firmware release v1.22.5
-- updated top.decl
-
-### Changed
-- source files:
-  - ../packages/gt_mp7_core_pkg.vhd
-  - ../packages/top_decl.vhd
-
-## [v1.22.4] - 2023-08-18
-### Comment
-
-- mp7_ugt firmware release v1.22.4
-- all MGTs, removed ZDC
+- mp7_ugt firmware release v1.23.0
+- all MGTs in top_decl.vhd
+- ZDC 5G input on link 71
 
 ### Changed
 - source files:
   - ../payload/frame/lmp.vhd
-  - ../payload/gtl/gtl_data_mapping.vhd
+  - ../payload/gtl_data_mapping.vhd
+  - ../payload/gtl/bx_pipeline.vhd
   - ../packages/gt_mp7_core_pkg.vhd
   - ../packages/gt_pkg.vhd
   - ../packages/lhc_data_pkg.vhd

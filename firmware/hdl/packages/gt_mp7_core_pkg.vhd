@@ -3,12 +3,12 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.22.5
+-- mp7_ugt (=FRAME_VERSION): v1.23.0
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.22.5
--- frame: v1.4.0 (see frame.vhd)
--- gtl: v1.18.3 (see gtl_module_tpl.vhd)
+-- gt: v1.23.0
+-- frame: v1.4.1 (see frame.vhd)
+-- gtl: v1.19.0 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
 -- HB 2023-04-08: v1.22.2 - Changed in scripts/mp7_patch.py (for area_constraints.tcl).
@@ -34,8 +34,7 @@
 -- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
 -- gtl history:
--- HB 2023-08-24: v1.18.3: Updated top_decl.vhd on link 71.
--- HB 2023-08-18: v1.18.2: Used all MGTs (see top_decl.vhd).
+-- HB 2023-08-25: v1.19.0: Used link 71 as ZDC 5G input. ZDC data structure changed (16 bits only on 5G link). Updated top_decl.vhd.
 -- HB 2023-04-15: v1.18.1: Bug fix muon index bits.
 -- HB 2023-03-14: v1.18.0: Implemented "MUS2" (new hadronic shower bit). Module for "anomaly detection trigger (ADT)". Added ZDC 10G optical on link 11.
 -- HB 2023-02-14: v1.17.7: Inserted cut for muon index bits.
@@ -93,8 +92,8 @@ package gt_mp7_core_pkg is
 -- ==================================================================================================
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant GT_MINOR_VERSION      : integer range 0 to 255 := 22;
-    constant GT_REV_VERSION        : integer range 0 to 255 := 4;
+    constant GT_MINOR_VERSION      : integer range 0 to 255 := 23;
+    constant GT_REV_VERSION        : integer range 0 to 255 := 0;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &
@@ -102,11 +101,11 @@ package gt_mp7_core_pkg is
 -- FRAME firmware version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 4;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 0;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 1;
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 18;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 2;
+    constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 19;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 0;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 4;

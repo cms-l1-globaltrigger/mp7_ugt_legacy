@@ -47,9 +47,23 @@ vivado is running (see \href{\gitbranch/README.md}{\texttt{README}}):\\
 
 The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
 
+\subsubsection{ZDC 5G scheme}\label{sec:app:zdc_5g_scheme}
+
+ZDC data are provided on a 5 GHz link.
+Figure~\ref{fig:app:zdc_5G_scheme} shows ZDC 5G link connection to \ugt system.\\
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/zdc_5G_scheme}
+\caption{ZDC 5G link connection}
+\label{fig:app:zdc_5G_scheme}
+\end{figure}
+
+\clearpage
+
 \subsubsection{GTH input connections}\label{sec:app:gth_i_conn}
 
-Table~\ref{tab:app:gth_i_conn} contains the GTH input connections from MP7 MTP front connectors\footnote{"ch." means "channel", "pp conn." means "optical patch panel connector number"}:
+Table~\ref{tab:app:gth_i_conn} contains the GTH input connections from MP7 MTP48 front connectors\footnote{"ch." means "channel", "pp conn." means "optical patch panel connector number"}:
 
 \begin{longtable}{|l|c|c|c|c|c|c|c|l|}
 \caption{GTH input connections}
@@ -130,7 +144,7 @@ RX2/7  & rx0/6  &     & X0Y31 &  x  & 0x86 & nc & 67 & -\\\hline
 RX2/10 & rx0/9  & 218 & X0Y32 &  x  & 0x88 & nc & 68 & -\\\hline   
 RX2/9  & rx0/8  &     & X0Y33 &  x  & 0x8A & nc & 69 & -\\\hline   
 RX2/11 & rx0/10 &     & X0Y34 &  x  & 0x8C & nc & 70 & -\\\hline   
-RX2/12 & rx0/11 &     & X0Y35 &  x  & 0x8E & nc & 71 & -\\\hline   
+RX2/12 & rx0/11 &     & X0Y35 &  5G  & 0x8E & nc & 71 & zdc\\\hline   
 \end{longtable}                  
 
 \clearpage
@@ -269,6 +283,11 @@ ALGO\_AFTER\_BXMASK[0:191] & 22  & 113 & X1Y13 &   & x \\\hline
 ALGO\_AFTER\_BXMASK[192:383] & 23  & 113 & X1Y12 &   & x \\\hline
 ALGO\_AFTER\_BXMASK[383:511] & 24  & 112 & X1Y11 &   & x \\\hline
 Bunchcounters, ... & 25  & 112 & X1Y10 &   & x \\\hline
+SCOUTING & 28  & 111 & X1Y07 &   & x \\\hline
+SCOUTING & 29  & 111 & X1Y06 &   & x \\\hline
+SCOUTING & 30  & 111 & X1Y05 &   & x \\\hline
+SCOUTING & 31  & 111 & X1Y04 &   & x \\\hline
+ZDC & 71  & 218 & X0Y35 &   & x \\\hline
 \end{longtable}
 
 \clearpage
@@ -345,6 +364,7 @@ frame &   &   &   &   &   & \\\hline
 4 & ET$_{miss}^{HF}$ & free & free & free & free & free\\
  & ASYMETHF, & [159:128] & & & &\\
  & CENT[3:0] & & & & &\\\hline
+
 5 & HT$_{miss}^{HF}$ & free & free & free & free & free\\
  & ASYMHTHF, & [191:160] & & & &\\
  & CENT[7:4] & & & & &\\\hline

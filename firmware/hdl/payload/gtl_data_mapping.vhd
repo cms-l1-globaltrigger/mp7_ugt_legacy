@@ -2,7 +2,7 @@
 -- Data mapping for GTL
 
 -- Version-history:
--- HB 2023-08-18: removed ZDC.
+-- HB 2023-08-25: updated for new ZDC data structure.
 -- HB 2023-03-01: updated for ZDC.
 -- HB 2023-02-09: updated comments.
 -- HB 2022-10-10: inserted ZDC.
@@ -95,4 +95,11 @@ begin
 
 -- ****************************************************************************************
 
+    gtl_data.zdc(0) <= lhc_data.zdc5g_0;
+    gtl_data.zdc(1) <= lhc_data.zdc5g_1;
+    gtl_data.zdc(2) <= lhc_data.zdc5g_2;
+    gtl_data.zdc(3) <= lhc_data.zdc5g_3;
+    gtl_data.zdc(4) <= lhc_data.zdc5g_4;
+    gtl_data.zdc(5) <= lhc_data.zdc5g_5;
+    
 end architecture rtl;

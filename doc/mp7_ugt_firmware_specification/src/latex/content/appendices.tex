@@ -50,7 +50,7 @@ The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
 \subsubsection{ZDC 5G scheme}\label{sec:app:zdc_5g_scheme}
 
 ZDC data are provided on a 5 GHz link.
-Figure~\ref{fig:app:zdc_5G_scheme} shows ZDC 5G link connection to \ugt system.\\
+Figure~\ref{fig:app:zdc_5G_scheme} shows ZDC 5G link connection to \ugt system. (Currently only MP7 in slot 1 has a connection with ZDC.)\\
 
 \begin{figure}[htb]
 \centering
@@ -141,10 +141,10 @@ RX2/6  & rx0/5  & 217 & X0Y28 &  x  & 0x80 & nc & 64 & -\\\hline
 RX2/5  & rx0/4  &     & X0Y29 &  x  & 0x82 & nc & 65 & -\\\hline   
 RX2/8  & rx0/7  &     & X0Y30 &  x  & 0x84 & nc & 66 & -\\\hline   
 RX2/7  & rx0/6  &     & X0Y31 &  x  & 0x86 & nc & 67 & -\\\hline   
-RX2/10 & rx0/9  & 218 & X0Y32 &  x  & 0x88 & nc & 68 & -\\\hline   
-RX2/9  & rx0/8  &     & X0Y33 &  x  & 0x8A & nc & 69 & -\\\hline   
-RX2/11 & rx0/10 &     & X0Y34 &  x  & 0x8C & nc & 70 & -\\\hline   
-RX2/12 & rx0/11 &     & X0Y35 &  5G  & 0x8E & nc & 71 & zdc\\\hline   
+RX2/10 & rx0/9  & 218 & X0Y32 &  5G & 0x88 & nc & 68 & -\\\hline   
+RX2/9  & rx0/8  &     & X0Y33 &  5G & 0x8A & nc & 69 & -\\\hline   
+RX2/11 & rx0/10 &     & X0Y34 &  5G & 0x8C & nc & 70 & -\\\hline   
+RX2/12 & rx0/11 &     & X0Y35 &  5G & 0x8E & nc & 71 & zdc\\\hline   
 \end{longtable}                  
 
 \clearpage
@@ -286,8 +286,8 @@ Bunchcounters, ... & 25  & 112 & X1Y10 &   & x \\\hline
 SCOUTING & 28  & 111 & X1Y07 &   & x \\\hline
 SCOUTING & 29  & 111 & X1Y06 &   & x \\\hline
 SCOUTING & 30  & 111 & X1Y05 &   & x \\\hline
-SCOUTING & 31  & 111 & X1Y04 &   & x \\\hline
-ZDC & 71  & 218 & X0Y35 &   & x \\\hline
+SCOUTING & 31  & 111 & X1Y04 &   & x \\\hline\hline
+ZDC & 71  & 218 & X0Y35 & x & \\\hline
 \end{longtable}
 
 \clearpage
@@ -343,31 +343,30 @@ frame &  &  &  &  &  &  &  &  &  & \\\hline
 \scalebox{0.8}{
 \centering
 % \begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
-\begin{tabular}{|c|c|c|c|c|c|c|}\hline
- & \multicolumn{6}{ c| }{link} \\\hline
- & 10 & 11 & 12 & 13 & 14 & 15 \\\hline
-ch. -> & 0x14 & 0x16 & 0x18 & 0x1a & 0x1c & 0x1e \\\hline\hline
+\begin{tabular}{|c|c|c|c|c|c|c|c|}\hline
+ & \multicolumn{7}{ c| }{link} \\\hline
+ & 10 & 11 & 12 & 13 & 14 & 15 & 71 \\\hline
+ch. -> & 0x14 & 0x16 & 0x18 & 0x1a & 0x1c & 0x1e & 0x8e \\\hline\hline
 % frame &   &   &   &   &   &\makebox[1.5cm][c]{ } \\\hline\hline
-frame &   &   &   &   &   & \\\hline
-0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
- & ETTEM, & [31:0] & [31:0] & [95:64] & [159:128] & [223:192]\\
- & MBT0HFP & & & & &\\\hline
-1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond\\
- & TOWERCOUNT, & [63:32] & [63:32] & [127:96] & [191:160] & [255:224]\\
- & MBT0HFM & & & & &\\\hline
-2 & ET$_{miss}$, & free & free & free & free & free\\
- & ASYMET,& [95:64] & & & &\\
- & MBT1HFP  & & & & &\\\hline
-3 & HT$_{miss}$, & free & free & free & free & free\\
- & ASYMHT,& [127:96] & & & &\\
- & MBT1HFM & & & & &\\\hline
-4 & ET$_{miss}^{HF}$ & free & free & free & free & free\\
- & ASYMETHF, & [159:128] & & & &\\
- & CENT[3:0] & & & & &\\\hline
-
-5 & HT$_{miss}^{HF}$ & free & free & free & free & free\\
- & ASYMHTHF, & [191:160] & & & &\\
- & CENT[7:4] & & & & &\\\hline
+frame &   &   &   &   &   & & \\\hline
+0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond & ZDC \\
+ & ETTEM, & [31:0] & [31:0] & [95:64] & [159:128] & [223:192] & frame 0\\
+ & MBT0HFP & & & & & & 0x7c/0x3c\\\hline
+1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond & ZDC-\\
+ & TOWERCOUNT, & [63:32] & [63:32] & [127:96] & [191:160] & [255:224] & 10 bits\\
+ & MBT0HFM & & & & & & \\\hline
+2 & ET$_{miss}$, & free & free & free & free & free &  ZDC+\\
+ & ASYMET,& [95:64] & & & & & 10 bits\\
+ & MBT1HFP  & & & & & & \\\hline
+3 & HT$_{miss}$, & free & free & free & free & free & ZDC \\
+ & ASYMHT,& [127:96] & & & & & frame 3\\
+ & MBT1HFM & & & & & & 0x0000\\\hline
+4 & ET$_{miss}^{HF}$ & free & free & free & free & free & ZDC \\
+ & ASYMETHF, & [159:128] & & & & & counter\\
+ & CENT[3:0] & & & & & & 12 bits\\\hline
+5 & HT$_{miss}^{HF}$ & free & free & free & free & free & ZDC \\
+ & ASYMHTHF, & [191:160] & & & & & frame 5\\
+ & CENT[7:4] & & & & & & 0x0000\\\hline
 \end{tabular}
 }
 \label{table:app:sum_opt_links2}

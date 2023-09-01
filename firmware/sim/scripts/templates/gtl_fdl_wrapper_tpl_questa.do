@@ -114,6 +114,7 @@ vcom -93 -work work $HDL_DIR/payload/gtl/comb_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/esums_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/min_bias_hf_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/towercount_condition.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/zdc_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
 #### inserted from anomaly_detection.dep
 {{adt_vhd}}

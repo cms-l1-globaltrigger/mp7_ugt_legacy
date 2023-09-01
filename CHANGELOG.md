@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.23.2] - 2023-09-01
+### Comment
+
+- mp7_ugt firmware release v1.23.2
+- updated sim and dep file
+
+### Changed
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+- dep file:
+  - ../cfg/uGT_algo.dep
+
+## [v1.23.1] - 2023-08-31
+### Comment
+
+- mp7_ugt firmware release v1.23.1
+- added zdc_condition.vhd (was missing)
+
+### Added
+- source files:
+  - ../payload/gtl/zdc_condition.vhd
+
 ## [v1.23.0] - 2023-08-25
 ### Comment
 

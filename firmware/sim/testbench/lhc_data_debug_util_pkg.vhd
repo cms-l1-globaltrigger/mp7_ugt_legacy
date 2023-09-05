@@ -1,4 +1,5 @@
--- HB 2022-10-08: zdc10g on link 11.
+-- HB 2023-06-07: cleaned up.
+-- HB 2022-10-08: zdc5g on link 71.
 -- HB 2016-05-31: inserted all frames of calo links for extended format structure of test-vector-file
 
 library IEEE;
@@ -9,8 +10,8 @@ use work.lhc_data_pkg.all;
 
 package lhc_data_debug_util_pkg is 
 
-	function lhc_data_t_to_string (data_in : lhc_data_t; spacer_char : character )
-		return string;
+-- 	function lhc_data_t_to_string (data_in : lhc_data_t; spacer_char : character )
+-- 		return string;
 
 	function string_to_lhc_data_t (data_in : string )
 		return lhc_data_t;
@@ -108,68 +109,68 @@ package body lhc_data_debug_util_pkg is
 		end loop;
 		end_index := end_index - 1;
 	end procedure;
-	function lhc_data_t_to_string (data_in : lhc_data_t; spacer_char : character)
-		return string
-	is
-	begin
-	return 		slv_to_hex(data_in.muon(0)) & spacer_char &
-			slv_to_hex(data_in.muon(1)) & spacer_char &
-			slv_to_hex(data_in.muon(2)) & spacer_char &
-			slv_to_hex(data_in.muon(3)) & spacer_char &
-			slv_to_hex(data_in.muon(4)) & spacer_char &
-			slv_to_hex(data_in.muon(5)) & spacer_char &
-			slv_to_hex(data_in.muon(6)) & spacer_char &
-			slv_to_hex(data_in.muon(7)) & spacer_char &
-			slv_to_hex(data_in.eg(0)) & spacer_char &
-			slv_to_hex(data_in.eg(1)) & spacer_char &
-			slv_to_hex(data_in.eg(2)) & spacer_char &
-			slv_to_hex(data_in.eg(3)) & spacer_char &
-			slv_to_hex(data_in.eg(4)) & spacer_char &
-			slv_to_hex(data_in.eg(5)) & spacer_char &
-			slv_to_hex(data_in.eg(6)) & spacer_char &
-			slv_to_hex(data_in.eg(7)) & spacer_char &
-			slv_to_hex(data_in.eg(8)) & spacer_char &
-			slv_to_hex(data_in.eg(9)) & spacer_char &
-			slv_to_hex(data_in.eg(10)) & spacer_char &
-			slv_to_hex(data_in.eg(11)) & spacer_char &
-			slv_to_hex(data_in.tau(0)) & spacer_char &
-			slv_to_hex(data_in.tau(1)) & spacer_char &
-			slv_to_hex(data_in.tau(2)) & spacer_char &
-			slv_to_hex(data_in.tau(3)) & spacer_char &
-			slv_to_hex(data_in.tau(4)) & spacer_char &
-			slv_to_hex(data_in.tau(5)) & spacer_char &
-			slv_to_hex(data_in.tau(6)) & spacer_char &
-			slv_to_hex(data_in.tau(7)) & spacer_char &
-			slv_to_hex(data_in.tau(8)) & spacer_char &
-			slv_to_hex(data_in.tau(9)) & spacer_char &
-			slv_to_hex(data_in.tau(10)) & spacer_char &
-			slv_to_hex(data_in.tau(11)) & spacer_char &
-			slv_to_hex(data_in.jet(0)) & spacer_char &
-			slv_to_hex(data_in.jet(1)) & spacer_char &
-			slv_to_hex(data_in.jet(2)) & spacer_char &
-			slv_to_hex(data_in.jet(3)) & spacer_char &
-			slv_to_hex(data_in.jet(4)) & spacer_char &
-			slv_to_hex(data_in.jet(5)) & spacer_char &
-			slv_to_hex(data_in.jet(6)) & spacer_char &
-			slv_to_hex(data_in.jet(7)) & spacer_char &
-			slv_to_hex(data_in.jet(8)) & spacer_char &
-			slv_to_hex(data_in.jet(9)) & spacer_char &
-			slv_to_hex(data_in.jet(10)) & spacer_char &
-			slv_to_hex(data_in.jet(11)) & spacer_char &
-			slv_to_hex(data_in.ett) & spacer_char &
-			slv_to_hex(data_in.ht) & spacer_char &
-			slv_to_hex(data_in.etm) & spacer_char &
-			slv_to_hex(data_in.htm) & spacer_char &
-			slv_to_hex(data_in.etmhf) & spacer_char &
-			slv_to_hex(data_in.htmhf) & spacer_char &
-			slv_to_hex(data_in.zdc10g_0) & spacer_char &
-			slv_to_hex(data_in.zdc10g_1) & spacer_char &			
-			slv_to_hex(data_in.zdc10g_2) & spacer_char &
-			slv_to_hex(data_in.zdc10g_3) & spacer_char &
-			slv_to_hex(data_in.zdc10g_4) & spacer_char &
-			slv_to_hex(data_in.zdc10g_5) & spacer_char &						
-			slv_to_hex(data_in.external_conditions) & spacer_char ;
-	end function;
+-- 	function lhc_data_t_to_string (data_in : lhc_data_t; spacer_char : character)
+-- 		return string
+-- 	is
+-- 	begin
+-- 	return 		slv_to_hex(data_in.muon(0)) & spacer_char &
+-- 			slv_to_hex(data_in.muon(1)) & spacer_char &
+-- 			slv_to_hex(data_in.muon(2)) & spacer_char &
+-- 			slv_to_hex(data_in.muon(3)) & spacer_char &
+-- 			slv_to_hex(data_in.muon(4)) & spacer_char &
+-- 			slv_to_hex(data_in.muon(5)) & spacer_char &
+-- 			slv_to_hex(data_in.muon(6)) & spacer_char &
+-- 			slv_to_hex(data_in.muon(7)) & spacer_char &
+-- 			slv_to_hex(data_in.eg(0)) & spacer_char &
+-- 			slv_to_hex(data_in.eg(1)) & spacer_char &
+-- 			slv_to_hex(data_in.eg(2)) & spacer_char &
+-- 			slv_to_hex(data_in.eg(3)) & spacer_char &
+-- 			slv_to_hex(data_in.eg(4)) & spacer_char &
+-- 			slv_to_hex(data_in.eg(5)) & spacer_char &
+-- 			slv_to_hex(data_in.eg(6)) & spacer_char &
+-- 			slv_to_hex(data_in.eg(7)) & spacer_char &
+-- 			slv_to_hex(data_in.eg(8)) & spacer_char &
+-- 			slv_to_hex(data_in.eg(9)) & spacer_char &
+-- 			slv_to_hex(data_in.eg(10)) & spacer_char &
+-- 			slv_to_hex(data_in.eg(11)) & spacer_char &
+-- 			slv_to_hex(data_in.tau(0)) & spacer_char &
+-- 			slv_to_hex(data_in.tau(1)) & spacer_char &
+-- 			slv_to_hex(data_in.tau(2)) & spacer_char &
+-- 			slv_to_hex(data_in.tau(3)) & spacer_char &
+-- 			slv_to_hex(data_in.tau(4)) & spacer_char &
+-- 			slv_to_hex(data_in.tau(5)) & spacer_char &
+-- 			slv_to_hex(data_in.tau(6)) & spacer_char &
+-- 			slv_to_hex(data_in.tau(7)) & spacer_char &
+-- 			slv_to_hex(data_in.tau(8)) & spacer_char &
+-- 			slv_to_hex(data_in.tau(9)) & spacer_char &
+-- 			slv_to_hex(data_in.tau(10)) & spacer_char &
+-- 			slv_to_hex(data_in.tau(11)) & spacer_char &
+-- 			slv_to_hex(data_in.jet(0)) & spacer_char &
+-- 			slv_to_hex(data_in.jet(1)) & spacer_char &
+-- 			slv_to_hex(data_in.jet(2)) & spacer_char &
+-- 			slv_to_hex(data_in.jet(3)) & spacer_char &
+-- 			slv_to_hex(data_in.jet(4)) & spacer_char &
+-- 			slv_to_hex(data_in.jet(5)) & spacer_char &
+-- 			slv_to_hex(data_in.jet(6)) & spacer_char &
+-- 			slv_to_hex(data_in.jet(7)) & spacer_char &
+-- 			slv_to_hex(data_in.jet(8)) & spacer_char &
+-- 			slv_to_hex(data_in.jet(9)) & spacer_char &
+-- 			slv_to_hex(data_in.jet(10)) & spacer_char &
+-- 			slv_to_hex(data_in.jet(11)) & spacer_char &
+-- 			slv_to_hex(data_in.ett) & spacer_char &
+-- 			slv_to_hex(data_in.ht) & spacer_char &
+-- 			slv_to_hex(data_in.etm) & spacer_char &
+-- 			slv_to_hex(data_in.htm) & spacer_char &
+-- 			slv_to_hex(data_in.etmhf) & spacer_char &
+-- 			slv_to_hex(data_in.htmhf) & spacer_char &
+-- 			slv_to_hex(data_in.link_11_fr_0_data) & spacer_char &
+-- 			slv_to_hex(data_in.link_11_fr_1_data) & spacer_char &
+-- 			slv_to_hex(data_in.link_11_fr_2_data) & spacer_char &
+-- 			slv_to_hex(data_in.link_11_fr_3_data) & spacer_char &
+-- 			slv_to_hex(data_in.link_11_fr_4_data) & spacer_char &
+-- 			slv_to_hex(data_in.link_11_fr_5_data) & spacer_char &
+-- 			slv_to_hex(data_in.external_conditions) & spacer_char;
+-- 	end function;
 
 
 	function string_to_lhc_data_t (data_in : string)
@@ -210,20 +211,20 @@ package body lhc_data_debug_util_pkg is
 		next_range(start_index, end_index, hexstring);
 		ret_value.htmhf := hex_to_slv("" & hexstring(start_index to end_index), HTMHF_DATA_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.zdc10g_0 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_0_WIDTH);
+		ret_value.link_11_fr_0_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_0_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.zdc10g_1 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_1_WIDTH);
+		ret_value.link_11_fr_1_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_1_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.zdc10g_2 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_2_WIDTH);
+		ret_value.link_11_fr_2_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_2_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.zdc10g_3 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_3_WIDTH);
+		ret_value.link_11_fr_3_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_3_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.zdc10g_4 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_4_WIDTH);
+		ret_value.link_11_fr_4_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_4_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.zdc10g_5 := hex_to_slv("" & hexstring(start_index to end_index), ZDC10G_5_WIDTH);
-
+		ret_value.link_11_fr_5_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_5_WIDTH);
 		next_range(start_index, end_index, hexstring);
 		ret_value.external_conditions := hex_to_slv("" & hexstring(start_index to end_index), EXTERNAL_CONDITIONS_DATA_WIDTH );
+
 		return ret_value;
 	end function;
 end;

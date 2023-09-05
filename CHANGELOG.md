@@ -4,10 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.22.4] - 2023-04-27
+## [v1.24.0] - 2023-09-05
 ### Comment
 
-- mp7_ugt firmware release v1.22.4
+- mp7_ugt firmware release v1.24.0
 - development for topological trigger (topo_trigger)
 
 ### Added
@@ -18,6 +18,45 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../packages/gt_core_pkg.vhd
   - ../payload/gtl_module_tpl.vhd
+
+## [v1.23.2] - 2023-09-01
+### Comment
+
+- mp7_ugt firmware release v1.23.2
+- updated sim and dep file
+
+### Changed
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+- dep file:
+  - ../cfg/uGT_algo.dep
+
+## [v1.23.1] - 2023-08-31
+### Comment
+
+- mp7_ugt firmware release v1.23.1
+- added zdc_condition.vhd (was missing)
+
+### Added
+- source files:
+  - ../payload/gtl/zdc_condition.vhd
+
+## [v1.23.0] - 2023-08-25
+### Comment
+
+- mp7_ugt firmware release v1.23.0
+- all MGTs in top_decl.vhd
+- ZDC 5G input on link 71
+
+### Changed
+- source files:
+  - ../payload/frame/lmp.vhd
+  - ../payload/gtl_data_mapping.vhd
+  - ../payload/gtl/bx_pipeline.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/gt_pkg.vhd
+  - ../packages/lhc_data_pkg.vhd
+  - ../packages/top_decl.vhd
 
 ## [v1.22.3] - 2023-04-15
 ### Comment

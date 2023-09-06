@@ -18,7 +18,7 @@
 
 \begin{titlepage}
 
-\date{23 June 2023}
+\date{6 September 2023}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -117,14 +117,10 @@ The $p_t$ scale for muon objects starts from 0 (zero), but HW index=0 indicates 
 
 14) The "Asymmetry" and "Centrality" bits (introduced for Heavy-Ion running) are part of the ET$_{miss}$, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$ data structure.
 
-<<<<<<< HEAD
 15) The "CICADA" data structure with 6 "Boosted jets" (bjets) and values for Anomaly Detection and Heavy Ion bits~\cite{CICADA}.
 
-The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2} ) show the  bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.
-=======
 The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2}) show the bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.\\
 Table~\ref{table:scales_table_3} shows the bits for ZDC objects, see ~\cite{ZDC}.
->>>>>>> master
 
 \begin{table}[ht]
 \caption{\bf Scales (muon and calorimeter)}
@@ -248,8 +244,8 @@ definition)	&		&	ASYMHTHF	&	0..255 &	1 &	8                    \\
 \hline
 object	&	collections $\times$ instances	&	parameter	&	range	&	step	&	bits \\
 \hline\hline
-ZDC	       &	1 * 2	& EN\_MINUS (ZDC-)	    &	0..1023	   &	1 (?)	  &	10  \\
-           &	        & EN\_PLUS (ZDC+)	    &	0..1023	   &	1 (?)	  &	10  \\
+ZDC	       &	1 * 2	& EN\_MINUS (ZDC-)	    &	0..1023	   &	1	  &	10  \\
+           &	        & EN\_PLUS (ZDC+)	    &	0..1023	   &	1	  &	10  \\
 \hline
 \end{tabular}
 \label{table:scales_table_3}
@@ -304,27 +300,27 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|p{3.0cm}|}\hline
+\begin{tabular}{|c|c|c|c|c|c|c|p{1.5cm}|}\hline
  & \multicolumn{7}{ c| }{link} \\\hline
-frame & 10 & 11 & 12 & 13 & 14 & 15 &\makebox[3.0cm][c]{16} \\\hline\hline
-0 & ET, & res. & ExtCond & ExtCond & ExtCond & ExtCond & BJET0,\\
- & ETTEM, & CICADA(0) & [31:0] & [95:64] & [159:128] & [223:192] & Anomaly Detection -\\
- & MBT0HFP & & & & & & Integer high\\
-1 & HT, & res. & ExtCond & ExtCond & ExtCond & ExtCond & BJET1,\\
- & TOWERCOUNT, & CICADA(1) & [63:32] & [127:96] & [191:160] & [255:224] & Anomaly Detection -\\
- & MBT0HFM & & & & & &Integer low\\
-2 & ET$_{miss}$, & res. & free & free & free & free & BJET2,\\
- & ASYMET,& CICADA(2) & & & & & Anomaly Detection -\\
- & MBT1HFP  & & & & & & Decimal high\\
-3 & HT$_{miss}$, & res. & free & free & free & free & BJET3,\\
- & ASYMHT,& CICADA(3) & & & & & Anomaly Detection -\\
- & MBT1HFM & & & & & & Decimal low\\
-4 & ET$_{miss}^{HF}$ & res. & free & free & free & free &  BJET4,\\
- & ASYMETHF, & CICADA(4) & & & & & Heavy Ion bits -\\
- & CENT[3:0] & & & & & & high \\
-5 & HT$_{miss}^{HF}$ & res. & free & free & free & free & BJET5,\\
- & ASYMHTHF, & CICADA(5) & & & & & Heavy Ion bits -\\
- & CENT[7:4] & & & & & & low \\\hline
+frame & 10 & 11 & 12 & 13 & 14 & 15 &\makebox[1.5cm][c]{71} \\\hline\hline
+0 & ET, & CICADA(0) & ExtCond & ExtCond & ExtCond & ExtCond & 0x3C/0x7C\\
+ & ETTEM, & & [31:0] & [95:64] & [159:128] & [223:192] & (8 bits)\\
+ & MBT0HFP & & & & & &\\
+1 & HT, & CICADA(1) & ExtCond & ExtCond & ExtCond & ExtCond & ZDC-\\
+ & TOWERCOUNT, & & [63:32] & [127:96] & [191:160] & [255:224] & (10 bits)\\
+ & MBT0HFM & & & & & &\\
+2 & ET$_{miss}$, & CICADA(2) & free & free & free & free & ZDC+\\
+ & ASYMET,& & & & & & (10 bits)\\
+ & MBT1HFP  & & & & & &\\
+3 & HT$_{miss}$, & CICADA(3) & free & free & free & free &  0\\
+ & ASYMHT,& & & & & & (32 bits)\\
+ & MBT1HFM & & & & & &\\
+4 & ET$_{miss}^{HF}$ & CICADA(4) & free & free & free & free & counter\\
+ & ASYMETHF, & & & & & & (12 bits)\\
+ & CENT[3:0] & & & & & &\\
+5 & HT$_{miss}^{HF}$ & CICADA(5) & free & free & free & free &  0\\
+ & ASYMHTHF, & & & & & & (32 bits)\\
+ & CENT[7:4] & & & & & &\\\hline
 \end{tabular}
 }
 \label{table:app:sum_opt_links2}
@@ -830,6 +826,33 @@ frame & 31..28 & 27..0\\\hline\hline
 \label{table:opt_link_cicada}
 \end{table}
 
+% -- Email Jeremy Mans 24.7.2023:
+% -- Definition of ZDC data (lower 16 bits on 5G link frames):
+% 
+% -- [8 bits of zero] [3c or 7c]
+% -- [6 bits of zero] [10 bit energy from ZDC-]
+% -- [6 bits of zero] [10 bit energy from ZDC+]
+% -- [16 bits of zero]
+% -- [4 bits of zero] [12 bits of counter]
+% -- [16 bits of zero]
+
+\begin{table}[ht]
+\caption{\bf ZDC data on optical link}
+\vspace{5mm}
+\centering
+\begin{tabular}{|c|c|c|l|}\hline
+frame & bit(s)=0 & bit(s) & parameter \\\hline\hline
+0 & 31..8 & 7..0 & 0x3C or 0x7C\\
+1 & 31..10 & 9..0 & EN\_MINUS (ZDC-)\\
+2 & 31..10 & 9..0 & EN\_PLUS (ZDC+)\\
+3 & 31..0 & &\\
+4 & 31..12 & 11..0 & counter (12bits), not used in uGT\\
+5 & 31..0 & &\\\hline
+
+\end{tabular}
+\label{table:zdc_link_cicada}
+\end{table}
+
 \clearpage
 
 \begin{thebibliography}{00}
@@ -845,6 +868,9 @@ frame & 31..28 & 27..0\\\hline\hline
 
 \bibitem {CICADA}
 \url{https://docs.google.com/presentation/d/1Zk2oDbnxUZilnWXC\_HyWYbNJ8F41MiBso4D49bN-js4/edit\#slide=id.g129a5c5a910\_0\_197}
+
+\bibitem {ZDC updated}
+\href{\gitbranch/doc/scales_inputs_2_ugt/ZDC_uhtr_spec_email_24_7_2023.txt}{\texttt{Updated description of ZDC structure (ZDC\_uhtr\_spec\_email\_24\_7\_2023.txt)}}
 
 \end{thebibliography}
 

@@ -106,6 +106,7 @@ The configuration of the optical connections from GMT, Calo-Layer2 and External 
 \multicolumn{1}{|c|}{13} & external-conditions [64..95] & external-conditions [96..127] & reserved & reserved & reserved & reserved \\\hline
 \multicolumn{1}{|c|}{14} & external-conditions [128..159] & external-conditions [160..191] & reserved & reserved & reserved & reserved \\\hline
 \multicolumn{1}{|c|}{15} & external-conditions [192..223] & external-conditions [224..255] & reserved & reserved & reserved & reserved \\\hline
+\multicolumn{1}{|c|}{71} & 0x7c/0x3c & ZDC- & ZDC+ & 0x0000 & counter & 0x0000 \\\hline
 \end{tabular}
 \label{tab:framework:tab_configuration_optical_conn}
 \end{table}
@@ -155,6 +156,7 @@ Currently lane mapping is "fixed" in \href{\gitbranch/firmware/hdl/payload/frame
 13 & external-conditions [64..127] \\\hline
 14 & external-conditions [128..191] \\\hline
 15 & external-conditions [192..255] \\\hline
+71 & zdc- / zdc+ \\\hline
 \end{tabular}
 \label{tab:framework:current_lane_mapping}
 \end{table}

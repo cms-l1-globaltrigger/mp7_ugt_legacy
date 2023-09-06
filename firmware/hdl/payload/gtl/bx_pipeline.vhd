@@ -2,7 +2,9 @@
 -- Pipeline for +/-2 bx data.
 
 -- Version-history:
--- HB 2023-06-23: cicada on link 11 (removed zdc10g on link 11).
+
+-- HB 2023-09-06: cicada on link 11 (removed zdc10g on link 11).
+-- HB 2023-08-25: updated for new ZDC data structure.
 -- HB 2022-10-10: updated for ZDC (on link 11).
 -- HB 2021-06-10: updated for hadronic shower trigger (mus).
 -- HB 2021-05-21: first design.
@@ -69,6 +71,8 @@ begin
         bx_data.bjet(i) <= data_tmp(i).bjet;
         bx_data.cicada_ad(i) <= data_tmp(i).cicada_ad;
         bx_data.cicada_hi(i) <= data_tmp(i).cicada_hi;
+        bx_data.zdcm(i) <= data_tmp(i).zdc(EN_MINUS_FRAME)(ZDC_BIT_HIGH downto ZDC_BIT_LOW);
+        bx_data.zdcp(i) <= data_tmp(i).zdc(EN_PLUS_FRAME)(ZDC_BIT_HIGH downto ZDC_BIT_LOW);
 
 -- Additional delay for centrality, ext_cond and mus (no comparators and conditions)
 

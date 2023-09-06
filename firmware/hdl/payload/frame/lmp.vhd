@@ -2,7 +2,8 @@
 -- Lane mapping process.
 
 -- Version-history:
--- HB 2023-06-23: cicada on link 11 (removed zdc10g on link 11).
+-- HB 2023-09-06: cicada on link 11 (removed zdc10g on link 11).
+-- HB 2023-08-25: zdc5g on link 71, no zdc10g.
 -- HB 2022-10-08: zdc10g on link 11.
 -- HB 2022-09-06: cleaned up.
 -- HB 2106-05-31: lane mapping for all frames of calo links (for extended test-vector-file structure - see lhc_data_pkg.vhd)
@@ -13,7 +14,6 @@ use IEEE.std_logic_1164.all;
 
 use work.gt_mp7_core_pkg.all;
 use work.lhc_data_pkg.all;
-use work.gtl_pkg.all;
 
 entity lmp is
     generic
@@ -26,7 +26,6 @@ entity lmp is
         demux_data_valid_i : in demux_lanes_data_objects_array_valid_t(NR_LANES-1 downto 0);
         lhc_data_o : out lhc_data_t;
         lhc_data_valid_o : out std_logic
---         zdc5g : out zdc_array
     );
 end;
 
@@ -41,6 +40,8 @@ architecture arch of lmp is
 --     constant OFFSET_ESUMS_LANES : natural := 10;
 --     constant OFFSET_CICADA_LANES : natural := 11;
 --     constant OFFSET_EXT_COND_LANES : natural := 12;
+--     constant OFFSET_LINK_11_LANES : natural := 11;
+--     constant OFFSET_ZDC5G_LANES : natural := 71;
 
 begin
 
@@ -127,6 +128,13 @@ begin
     lhc_data_o.cicada(4) <= demux_data_i(OFFSET_CICADA_LANES)(4);
     lhc_data_o.cicada(5) <= demux_data_i(OFFSET_CICADA_LANES)(5);
 
+    lhc_data_o.zdc5g_0 <= demux_data_i(OFFSET_ZDC5G_LANES)(0);
+    lhc_data_o.zdc5g_1 <= demux_data_i(OFFSET_ZDC5G_LANES)(1);
+    lhc_data_o.zdc5g_2 <= demux_data_i(OFFSET_ZDC5G_LANES)(2);
+    lhc_data_o.zdc5g_3 <= demux_data_i(OFFSET_ZDC5G_LANES)(3);
+    lhc_data_o.zdc5g_4 <= demux_data_i(OFFSET_ZDC5G_LANES)(4);
+    lhc_data_o.zdc5g_5 <= demux_data_i(OFFSET_ZDC5G_LANES)(5);
+
 -- HEPHY 2015-05-01: added external-conditions.
     lhc_data_o.external_conditions(31 downto 0) <= demux_data_i(OFFSET_EXT_COND_LANES+0)(0);
     lhc_data_o.external_conditions(63 downto 32) <= demux_data_i(OFFSET_EXT_COND_LANES+0)(1);
@@ -138,4 +146,3 @@ begin
     lhc_data_o.external_conditions(255 downto 224) <= demux_data_i(OFFSET_EXT_COND_LANES+3)(1);
 
 end architecture;
-

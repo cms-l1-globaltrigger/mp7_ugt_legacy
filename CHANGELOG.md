@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.24.0] - 2023-06-23
+## [v1.24.0] - 2023-09-05
 ### Comment
 
 - mp7_ugt firmware release v1.24.0
@@ -23,6 +23,45 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/frame/lmp.vhd
 - simulation file:
   - ../sim/testbench/lhc_data_debug_util_pkg.vhd
+
+## [v1.23.2] - 2023-09-01
+### Comment
+
+- mp7_ugt firmware release v1.23.2
+- updated sim and dep file
+
+### Changed
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+- dep file:
+  - ../cfg/uGT_algo.dep
+
+## [v1.23.1] - 2023-08-31
+### Comment
+
+- mp7_ugt firmware release v1.23.1
+- added zdc_condition.vhd (was missing)
+
+### Added
+- source files:
+  - ../payload/gtl/zdc_condition.vhd
+
+## [v1.23.0] - 2023-08-25
+### Comment
+
+- mp7_ugt firmware release v1.23.0
+- all MGTs in top_decl.vhd
+- ZDC 5G input on link 71
+
+### Changed
+- source files:
+  - ../payload/frame/lmp.vhd
+  - ../payload/gtl_data_mapping.vhd
+  - ../payload/gtl/bx_pipeline.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/gt_pkg.vhd
+  - ../packages/lhc_data_pkg.vhd
+  - ../packages/top_decl.vhd
 
 ## [v1.22.3] - 2023-04-15
 ### Comment
@@ -87,7 +126,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/gtl/zdc_condition.vhd
 - script files:
   - scripts/mp7_patch.py
->>>>>>> master
 
 ## [v1.21.7] - 2022-11-29
 ### Comment

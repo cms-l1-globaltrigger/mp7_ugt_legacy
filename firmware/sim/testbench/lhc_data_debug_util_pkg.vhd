@@ -1,4 +1,5 @@
--- HB 2022-10-08: zdc10g on link 11.
+-- HB 2023-06-07: cleaned up.
+-- HB 2022-10-08: zdc5g on link 71.
 -- HB 2016-05-31: inserted all frames of calo links for extended format structure of test-vector-file
 
 library IEEE;
@@ -9,8 +10,8 @@ use work.lhc_data_pkg.all;
 
 package lhc_data_debug_util_pkg is 
 
-	function lhc_data_t_to_string (data_in : lhc_data_t; spacer_char : character )
-		return string;
+-- 	function lhc_data_t_to_string (data_in : lhc_data_t; spacer_char : character )
+-- 		return string;
 
 	function string_to_lhc_data_t (data_in : string )
 		return lhc_data_t;
@@ -108,6 +109,7 @@ package body lhc_data_debug_util_pkg is
 		end loop;
 		end_index := end_index - 1;
 	end procedure;
+
 	function lhc_data_t_to_string (data_in : lhc_data_t; spacer_char : character)
 		return string
 	is

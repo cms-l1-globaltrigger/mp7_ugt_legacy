@@ -213,7 +213,7 @@ begin
 
 
     -- algo_after_prescaler_mask 0-191 mux
-    s_in0_mux6 <= ((algo_after_prescaler(31 downto 0), sValid, start, strobe),
+    s_in_mux6 <= ((algo_after_prescaler(31 downto 0), sValid, start, strobe),
                   (algo_after_prescaler(63 downto 32), sValid, start, strobe),
                   (algo_after_prescaler(95 downto 64), sValid, start, strobe),
                   (algo_after_prescaler(127 downto 96), sValid, start, strobe),
@@ -231,7 +231,7 @@ begin
 
 
     -- algo_after_prescaler_mask 192-383 mux
-    s_in0_mux7 <= ((algo_after_prescaler(223 downto 192), sValid, start, strobe),
+    s_in_mux7 <= ((algo_after_prescaler(223 downto 192), sValid, start, strobe),
                   (algo_after_prescaler(255 downto 224), sValid, start, strobe),
                   (algo_after_prescaler(287 downto 256), sValid, start, strobe),
                   (algo_after_prescaler(319 downto 288), sValid, start, strobe),
@@ -250,7 +250,7 @@ begin
 
     -- algo_after_prescaler_mask 384-511 + finor mux
     readout_finor <=  "000000000000000" & local_finor_veto_in & "0000000" & local_veto_in & "0000000" & local_finor_in;
-    s_in0_mux8 <= ((algo_after_prescaler(415 downto 384), sValid, start, strobe),
+    s_in_mux8 <= ((algo_after_prescaler(415 downto 384), sValid, start, strobe),
                   (algo_after_prescaler(447 downto 416), sValid, start, strobe),
                   (algo_after_prescaler(479 downto 448), sValid, start, strobe),
                   (algo_after_prescaler(511 downto 480), sValid, start, strobe),
@@ -269,7 +269,7 @@ begin
     -- JW 2015-08-24: added local and mp7 bc_cntr to output
     -- bc cntr output
 
-    s_in0_mux9 <= ((X"00000" & bx_nr, sValid, start, strobe),                 
+    s_in_mux9 <= ((X"00000" & bx_nr, sValid, start, strobe),                 
                   (X"00000" & ctrs(6).bctr, sValid, start, strobe),          
                   (X"00000" & bx_nr, sValid, start, strobe),                 
                   (X"0000" & orbit_nr(47 downto 32), sValid, start, strobe), 

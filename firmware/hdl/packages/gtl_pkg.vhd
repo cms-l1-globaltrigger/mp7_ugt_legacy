@@ -2,7 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
--- HB 2023-09-07: NR_INPUT_LANES not used anymore. Added type lword_array (for output_mux.vhd and mux.vhd)
+-- HB 2023-09-13: NR_INPUT_LANES not used anymore. Added type lword_array (for output_mux.vhd and mux.vhd)
 -- HB 2023-07-28: bug fixed "type zdc_array ...".
 -- HB 2023-07-25: new ZDC data structure.
 -- HB 2023-03-06: added hadronic shower trigger bit MUS2.
@@ -76,7 +76,7 @@ package gtl_pkg is
 -- HB 2023-09-07: NR_INPUT_LANES not used anymore
 --constant NR_INPUT_LANES : natural := 24; -- max. input links from optical patch panel
 constant LINK_FRAMES : natural := 6;
-type lword_array is array ((0 to LINK_FRAMES-1)) of lword;
+type lword_array is array (0 to LINK_FRAMES-1) of lword;
 
 -- Fixed pipeline structure
 constant BX_PIPELINE_STAGES: natural := 5; -- +/- 2bx pipeline

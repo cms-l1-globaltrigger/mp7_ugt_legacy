@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.23.3] - 2023-09-13
+### Comment
+
+- mp7_ugt firmware release v1.23.3
+- removed unused files "demux_lane_validation.vhd" and "reg.vhd"
+- cleaned up files "output_mux.vhd" and "mux.vhd"
+
+### Changed
+- source files:
+  - ../payload/frame/output_mux.vhd
+  - ../payload/frame/mux.vhd
+  - ../packages/gt_pkg.vhd
+  
+### Deleted
+- source files:
+  - ../payload/frame/demux_lane_validation.vhd
+  - ../payload/gtl/common/reg.vhd
+  
 ## [v1.23.2] - 2023-09-01
 ### Comment
 

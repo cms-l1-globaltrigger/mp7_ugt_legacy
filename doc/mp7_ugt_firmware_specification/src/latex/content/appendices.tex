@@ -623,55 +623,57 @@ Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panel 
 
 \subsection{External condition patch panel}\label{sec:app:ext_cond_pp}
 
+The connections of external conditions (technical trigger) on patchpanel are listed below. Currently only AMC502 slot 12 is used for conversion to optical, therefore only 64 bits (of 256) are possible.
+
 \begin{itemize}
-\item PP \#0:
+\item \small Patch panel \#0:
 \begin{itemize}
-\item CON0:
+\item \small CON0:
 \begin{itemize}
-    \item RJ45 1: TRIG1 LOGS1
-    \item RJ45 2: ?
-    \item RJ45 3: TECH TRIG? (FST COL BCH?)
-    \item RJ45 4: TRIG0 LOG?
-    \item RJ45 5: ?
-    \item RJ45 6: TRIG2 PRE?
-    \item RJ45 7: empty
-    \item RJ45 8: empty
+    \item \small RJ45 \#1: TRIG 4 beamgas \\\tiny{(1-2: BPTX\_BeamGas\_Ref1\_VME, 3-4: BPTX\_BeamGas\_Ref2\_VME, 5-6: BPTX\_BeamGas\_B1\_VME, 7-8: BPTX\_BeamGas\_B2\_VME)}\normalsize
+    \item \small RJ45 \#2: TRIG0 LOGS0 \\\tiny{(1-2: ZeroBias\_BPTX\_AND\_VME, 3-4: BPTX\_B1\_VME, 5-6: BPTX\_B2\_VME, 7-8: BPTX\_OR\_VME)}\normalsize
+    \item \small RJ45 \#3: TRIG1 LOGS1 \\\tiny{(1-2: BPTX\_AND\_Ref1\_VME, 3-4: BPTX\_B1NotB2\_VME, 5-6: BPTX\_B2NotB1\_VME, 7-8: BPTX\_NotOR\_VME)}\normalsize
+    \item \small RJ45 \#4: empty
+    \item \small RJ45 \#5: FST COL BCH  / TECH TRG \\\tiny{(1-2: BPTX\_AND\_Ref3\_VME, 3-4: BPTX\_OR\_Ref3\_VME, 5-6: BPTX\_RefAND\_VME, 7-8: BPTX\_FirstCollidingBunch\_VME)}\normalsize
+    \item \small RJ45 \#6: TRIG2 PRECOLL \\\tiny{(1-2: BPTX\_AND\_Ref4\_VME, 3-4: BPTX\_OR\_Ref4\_VME, 5-6: BPTX\_LastCollisionInTrain, 7-8: BPTX\_FirstCollisionInTrain)}\normalsize
+    \item \small RJ45 \#7: empty
+    \item \small RJ45 \#8: empty
 \end{itemize}
-\item CON1:
+\item \small CON1: (AMC502 slot 11 not used currently)
 \begin{itemize}
     \item all empty
 \end{itemize}
-\item CON2:
+\item \small CON2: (AMC502 slot 10 not used currently)
 \begin{itemize}
     \item all empty
 \end{itemize}
-\item CON3:
+\item \small CON3: (AMC502 slot 9 not used currently)
 \begin{itemize}
     \item all empty
 \end{itemize}
 \end{itemize}
-\item PP \#1:
+\item \small Patch panel \#1:
 \begin{itemize}
-\item CON0:
+\item \small CON0:
 \begin{itemize}
-    \item RJ45 1: HCAL
-    \item RJ45 2: empty
-    \item RJ45 3: ?
-    \item RJ45 4: empty
-    \item RJ45 5: empty
-    \item RJ45 6: empty
-    \item RJ45 7: ?
-    \item RJ45 8: empty
+    \item \small RJ45 \#1: HCAL Laser \\\tiny{(1-2: HCAL\_LaserMon\_1, 3-4: HCAL\_LaserMon\_2, 5-6: HCAL\_LaserMon\_3, 7-8: HCAL\_LaserMon\_4)}\normalsize
+    \item \small RJ45 \#2: \textbf{reserved for ZDC} \\\tiny{(1-2: ZDC1nM, 3-4: not used, 5-6: not used, 7-8: ZDC1nP)}\normalsize
+    \item \small RJ45 \#3: TOT trigger to CMS \\\tiny{(1-2: TOTEM\_1, 3-4: TOTEM\_2, 5-6: TOTEM\_3, 7-8: TOTEM\_4)}\normalsize
+    \item \small RJ45 \#4: \textbf{reserved for ZDC} \\\tiny{(1-2: ZDC2nM, 3-4: not used, 5-6: not used, 7-8: ZDC2nP)}\normalsize
+    \item \small RJ45 \#5: empty
+    \item \small RJ45 \#6: \textbf{reserved for ZDC} \\\tiny{(1-2: ZDC3nM, 3-4: not used, 5-6: not used, 7-8: ZDC3nP)}\normalsize
+    \item \small RJ45 \#7: CASTOR (obsolete) \\\tiny{(1-2: CASTOR\_1, 3-4: CASTOR\_2, 5-6: CASTOR\_3, 7-8: CASTOR\_4)}\normalsize
+    \item \small RJ45 \#8: empty
 \end{itemize}
-\item CON1:
+\item \small CON1: (AMC502 slot 11 not used currently)
 \begin{itemize}
     \item all empty
 \end{itemize}
-\item CON2:
+\item \small CON2: (AMC502 slot 10 not used currently)
 \begin{itemize}
     \item all empty
 \end{itemize}
-\item CON3:
+\item \small CON3: (AMC502 slot 9 not used currently)
 \begin{itemize}
     \item all empty
 \end{itemize}

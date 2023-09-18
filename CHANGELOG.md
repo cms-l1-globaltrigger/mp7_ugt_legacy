@@ -4,6 +4,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.25.0] - 2023-09-18
+### Comment
+
+- mp7_ugt firmware release v1.25.0
+- removed unused files "demux_lane_validation.vhd" and "reg.vhd"
+- cleaned up files "output_mux.vhd" and "mux.vhd"
+
+### Changed
+- source files:
+  - ../payload/frame/output_mux.vhd
+  - ../payload/frame/mux.vhd
+  - ../packages/gt_pkg.vhd
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+- dep file:
+  - ../cfg/uGT_algo.dep
+
+### Deleted
+- source files:
+  - ../payload/frame/demux_lane_validation.vhd
+  - ../payload/gtl/common/reg.vhd
+
+## [v1.24.0] - 2023-07-25
+### Comment
+
+- mp7_ugt firmware release v1.24.0
+- all 72 links with ZDC 5G input on links 36..71, 5G outputs on links 68-71 for loopback
+- ZDC data with 16 bits only (on 5G link)
+
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/gtl_pkg.vhd
+  - ../payload/gtl_module_tpl.vhd
+  - ../payload/gtl_data_mapping.vhd
+  - ../payload/gtl/bx_pipeline.vhd
+  - ../payload/frame/output_mux.vhd
+  - ../payload/frame.vhd
+  - ../packages/top_decl.vhd
+- script files:
+  - scripts/mp7_patch.py
+- simulation file:
+  - ../sim/testbench/lhc_data_debug_util_pkg.vhd
+
 ## [v1.23.2] - 2023-09-01
 ### Comment
 

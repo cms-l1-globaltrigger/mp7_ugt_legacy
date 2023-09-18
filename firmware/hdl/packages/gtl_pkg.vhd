@@ -67,6 +67,8 @@ use work.lhc_data_pkg.all;
 use work.math_pkg.all;
 use work.gt_mp7_core_pkg.all;
 
+use work.mp7_data_types.all;
+
 package gtl_pkg is
 
 -- Definition of input lanes

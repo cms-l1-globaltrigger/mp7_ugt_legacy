@@ -1,7 +1,6 @@
 -- Description:
 -- Contains the "framework" of GT-logic (all parts, except GTL and FDL).
 
--- HB 2023-09-19: v1.4.2 - changed type (lword_array) of port in_mux of mux.vhd and updated output_mux.vhd.
 -- HB 2023-06-07: v1.4.1 - added 5G outputs on links 68-71 for loopback tests in output_mux.vhd.
 -- HB 2023-03-07: v1.4.0 - used Tx links 28-31 for scouting (output_mux.vhd).
 -- HB 2022-09-02: v1.3.1 - cleaned up.

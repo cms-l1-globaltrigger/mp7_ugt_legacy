@@ -10,13 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - mp7_ugt firmware release v1.25.0
 - changed quads 8..16, inserted with gth_5g, but without checksum and buffers
 - removed unused files "demux_lane_validation.vhd" and "reg.vhd"
-- cleaned up files "output_mux.vhd" and "mux.vhd"
 
 ### Changed
 - source files:
-  - ../payload/frame/output_mux.vhd
-  - ../payload/frame/mux.vhd
-  - ../payload/frame.vhd
   - ../packages/gt_mp7_core_pkg.vhd
   - ../packages/gt_pkg.vhd
   - ../packages/top_decl.vhd

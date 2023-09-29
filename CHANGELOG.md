@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.25.2] - 2023-09-29
+### Comment
+
+- mp7_ugt firmware release v1.25.2
+- changed quads 8..16 to "no_mgt" (top_decl.vhd)
+
+### Changed
+- source files:
+  - ../packages/top_decl.vhd
+  - ../payload/gtl_module_tpl.vhd
+  - ../packages/gt_mp7_core_pkg.vhd
+  
 ## [v1.25.1] - 2023-09-28
 ### Comment
 

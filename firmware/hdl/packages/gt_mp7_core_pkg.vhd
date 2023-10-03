@@ -3,13 +3,14 @@
 
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
--- mp7_ugt (=FRAME_VERSION): v1.24.0
+
+-- mp7_ugt (=FRAME_VERSION): v1.26.0
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.24.0
+-- gt: v1.26.0
 -- frame: v1.4.1 (see frame.vhd)
--- gtl: v1.12.0 (see gtl_module_tpl.vhd)
--- mp7_ugt (=FRAME_VERSION): v1.23.2
+-- gtl: v1.20.0 (see gtl_module_tpl.vhd)
+-- fdl: v1.4.1 (see fdl_module.vhd)
 
 -- HB 2023-04-08: v1.22.2 - Changed in scripts/mp7_patch.py (for area_constraints.tcl).
 -- HB 2023-04-07: v1.22.1 - Used Tx links 28-31 for scouting (frame/output_mux.vhd) without links 32..71.
@@ -34,7 +35,11 @@
 -- v1.15.2: Added tcl script for "manualy" bit file generation (after timing errors)
 --
 -- gtl history:
--- HB 2023-09-05: v1.20.0: Implemented topological trigger.
+
+-- HB 2023-10-03: v1.20.0: Implemented topological trigger.
+-- HB 2023-09-29: v1.19.4: Used "no_mgt" at quads 8..16 (top_decl.vhd).
+-- HB 2023-09-28: v1.19.3: Used "no_chk" and "no_buf" at quads 8..16 (top_decl.vhd).
+-- HB 2023-09-25: v1.19.2: Removed unused files "demux_lane_validation.vhd" and "reg.vhd". Changed quads 8..16, inserted with gth_5g, but without checksum and buffers.
 -- HB 2023-09-01: v1.19.1: Added zdc_condition.vhd (was missing) and updated sim and dep file.
 -- HB 2023-08-25: v1.19.0: Used link 71 as ZDC 5G input. ZDC data structure changed (16 bits only on 5G link). Updated top_decl.vhd.
 -- HB 2023-04-15: v1.18.1: Bug fix muon index bits.
@@ -94,7 +99,7 @@ package gt_mp7_core_pkg is
 -- ==================================================================================================
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant GT_MINOR_VERSION      : integer range 0 to 255 := 24;
+    constant GT_MINOR_VERSION      : integer range 0 to 255 := 26;
     constant GT_REV_VERSION        : integer range 0 to 255 := 0;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &

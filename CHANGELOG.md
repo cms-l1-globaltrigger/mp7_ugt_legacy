@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - mp7_ugt firmware release v1.26.0
 - implementation of CICADA on link 11
 
+### Added
+- source files:
+  - ../payload/gtl/common/cicada_ad_hi_comp.vhd
+
 ### Changed
 - source files:
   - ../packages/gtl_pkg.vhd
@@ -86,7 +90,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/top_decl.vhd
 - script files:
   - scripts/mp7_patch.py
->>>>>>> master
 - simulation file:
   - ../sim/testbench/lhc_data_debug_util_pkg.vhd
 

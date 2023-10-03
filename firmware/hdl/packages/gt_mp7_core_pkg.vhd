@@ -8,7 +8,7 @@
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
 -- gt: v1.26.0
--- frame: v1.4.1 (see frame.vhd)
+-- frame: v1.4.2 (see frame.vhd)
 -- gtl: v1.20.0 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
@@ -107,7 +107,7 @@ package gt_mp7_core_pkg is
 -- FRAME firmware version
     constant FRAME_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FRAME_MINOR_VERSION      : integer range 0 to 255 := 4;
-    constant FRAME_REV_VERSION        : integer range 0 to 255 := 1;
+    constant FRAME_REV_VERSION        : integer range 0 to 255 := 2;
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 20;

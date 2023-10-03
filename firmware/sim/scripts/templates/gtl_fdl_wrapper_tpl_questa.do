@@ -164,7 +164,6 @@ vcom -93 -work work $HDL_DIR/payload/fdl_module.vhd
 vcom -93 -work work $HDL_DIR/packages/frame_addr_decode.vhd
 vcom -93 -work work $HDL_DIR/packages/frame_rb_pkg.vhd
 vcom -93 -work work $HDL_DIR/payload/frame/demux_lane_data.vhd
-vcom -93 -work work $HDL_DIR/payload/frame/demux_lane_validation.vhd
 vcom -93 -work work $HDL_DIR/payload/frame/frame_module_info.vhd
 vcom -93 -work work $HDL_DIR/payload/frame/frame_fabric.vhd
 vcom -93 -work work $HDL_DIR/payload/frame/lmp.vhd

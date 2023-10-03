@@ -2,7 +2,8 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
--- HB 2023-09-06: inserted calo anomaly algorithm (CICADA) definitions.
+-- HB 2023-10-03: inserted calo anomaly algorithm (CICADA) definitions.
+-- HB 2023-09-13: NR_INPUT_LANES not used anymore. Added type lword_array (for output_mux.vhd and mux.vhd)
 -- HB 2023-07-28: bug fixed "type zdc_array ...".
 -- HB 2023-07-25: new ZDC data structure.
 -- HB 2023-03-06: added hadronic shower trigger bit MUS2.
@@ -67,12 +68,16 @@ use work.lhc_data_pkg.all;
 use work.math_pkg.all;
 use work.gt_mp7_core_pkg.all;
 
+use work.mp7_data_types.all;
+
 package gtl_pkg is
 
 -- Definition of input lanes
 -- NR_LANES = NR_REGIONS * 4 => 72
-constant NR_INPUT_LANES : natural := 24; -- max. input links from optical patch panel
+-- HB 2023-09-07: NR_INPUT_LANES not used anymore
+--constant NR_INPUT_LANES : natural := 24; -- max. input links from optical patch panel
 constant LINK_FRAMES : natural := 6;
+type lword_array is array (0 to LINK_FRAMES-1) of lword;
 
 -- Fixed pipeline structure
 constant BX_PIPELINE_STAGES: natural := 5; -- +/- 2bx pipeline

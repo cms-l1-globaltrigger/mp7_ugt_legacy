@@ -2,7 +2,10 @@
 -- Global Trigger Logic module.
 
 -- Version history:
--- HB 2023-09-06: v1.20.0: Implemented logic for CICADA (bjets) on link 11.
+-- HB 2023-10-03: v1.20.0: Implemented logic for CICADA (bjets) on link 11.
+-- HB 2023-09-29: v1.19.4: Used "no_mgt" at quads 8..16 (top_decl.vhd).
+-- HB 2023-09-28: v1.19.3: Used "no_chk" and "no_buf" at quads 8..16.
+-- HB 2023-09-25: v1.19.2: Removed unused files "demux_lane_validation.vhd" and "reg.vhd". Changed quads 8..16, inserted with gth_5g, but without checksum and buffers.
 -- HB 2023-09-01: v1.19.1: Added zdc_condition.vhd (was missing) and updated sim and dep file.
 -- HB 2023-08-25: v1.19.0: Used link 71 as ZDC 5G input. ZDC data structure changed (16 bits only on 5G link). Updated top_decl.vhd.
 -- HB 2023-04-15: v1.18.1: Bug fix muon index bits.

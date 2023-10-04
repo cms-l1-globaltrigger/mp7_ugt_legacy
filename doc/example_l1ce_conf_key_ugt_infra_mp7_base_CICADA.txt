@@ -45,20 +45,20 @@
     <param ns="cfgRxBuffers_Calo" cmd="cfgRxBuffers" id="masks" type="string">invert</param>
 
     <!-- additional receiver settings for CICADA input (on link 11) -->
-    <param ns="cfgRxMGTs_Cicada" cmd="cfgRxMGTs" id="ids" type="string">CaloRx[07:08]</param>
+    <param ns="cfgRxMGTs_Cicada" cmd="cfgRxMGTs" id="ids" type="string">Cicada[00:01]</param>
     <param ns="cfgRxMGTs_Cicada" cmd="cfgRxMGTs" id="masks" type="string">apply</param>
     <param ns="cfgRxMGTs_Cicada" cmd="cfgRxMGTs" id="orbitTag" type="bool">false</param>
     <param ns="cfgRxMGTs_Cicada" cmd="cfgRxMGTs" id="polarity" type="bool">true</param>
 
-    <!-- alignment point has to be set for Cicada input (not fixed to 3526,5) -->
+    <!-- alignment point for CICADA input (on link 11) -->
     <param ns="alignMGTs_Cicada" cmd="alignMGTs" id="bx" type="uint">3526</param>
     <param ns="alignMGTs_Cicada" cmd="alignMGTs" id="cycle" type="uint">5</param>
-    <param ns="alignMGTs_Cicada" cmd="alignMGTs" id="ids" type="string">CaloRx[07:08]</param>
+    <param ns="alignMGTs_Cicada" cmd="alignMGTs" id="ids" type="string">Cicada[00:01]</param>
     <param ns="alignMGTs_Cicada" cmd="alignMGTs" id="masks" type="string">apply</param>
 
     <param ns="cfgRxBuffers_Cicada" cmd="cfgRxBuffers" id="mode" type="string">Zeroes</param>
     <param ns="cfgRxBuffers_Cicada" cmd="cfgRxBuffers" id="payload" type="string"></param>
-    <param ns="cfgRxBuffers_Cicada" cmd="cfgRxBuffers" id="ids" type="string">CaloRx[07:08]</param>
+    <param ns="cfgRxBuffers_Cicada" cmd="cfgRxBuffers" id="ids" type="string">Cicada[00:01]</param>
     <param ns="cfgRxBuffers_Cicada" cmd="cfgRxBuffers" id="startBx" type="uint">0</param>
     <param ns="cfgRxBuffers_Cicada" cmd="cfgRxBuffers" id="startCycle" type="uint">0</param>
     <param ns="cfgRxBuffers_Cicada" cmd="cfgRxBuffers" id="stopBx" type="uint"></param>

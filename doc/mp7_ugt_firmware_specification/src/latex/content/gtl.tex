@@ -528,6 +528,7 @@ Muon shower bits definition is shown in Table~\ref{tab:gtl:tab_muon_shower_bits}
 object & definition \\\hline\hline
 0 & MUS0 \\
 2 & MUS1 \\
+3 & MUS2 (two loose muon shower) \\
 4 & MUSOOT0 \\
 6 & MUSOOT1 \\\hline
 \end{tabular}
@@ -816,11 +817,11 @@ The calculation of ${pt^2}$ in VHDL (no square root in VHDL) using LUTs for pt1,
 For definition of muon charge, see \ref{sec:gtl:muon_data}.\\
 In the muon charge correlation module (\href{\gitbranch/firmware/hdl/gt_mp7_core/gtl_fdl_wrapper/gtl/muon_charge_correlations.vhd}{\texttt{\textquotesingle muon\_charge\_correlations.vhd\textquotesingle }}), the charge correlations are made for different muon conditions types. The module is instantiated in the top-of-hierarchy module (\href{\gitbranch/firmware/hdl/payload/gtl\_module\_tpl.vhd}{\texttt{\textquotesingle gtl\_module.vhd\textquotesingle }})
 and not inside of a muon conditions module.
-The charges of objects (number of objects depends on muon condition type) are compared to get "like sign charge" ("LS") or "opposite sign charge" ("0S"), "LS" means that the charges (charge sign)
-of objects are the same, "0S" means that at least one object has different charge than the others. This information is used in all instatiated muon conditions.
+The charges of objects (number of objects depends on muon condition type) are compared to get "like sign charge" ("LS") or "opposite sign charge" ("OS"), "LS" means that the charges (charge sign)
+of objects are the same, "OS" means that at least one object has different charge than the others. This information is used in all instatiated muon conditions.
 There is no charge correlation for single type conditions.\\
 In all cases the "charge valid" bit of the objects must be set.\\
-In TME one can select "LS", "0S" or ignore for charge correlation in muon conditions.
+In TME one can select "LS", "OS" or ignore for charge correlation in muon conditions.
 
 % \begin{table}[ht]
 % \caption{Muon charge correlation - Double Muon}
@@ -1430,7 +1431,7 @@ Definitions of scales (see Tables \ref{tab:gtl:calo_eta_scale_new}, \ref{tab:gtl
 
 \subsubsection{Anomaly Detection Trigger}
 \label{sec:gtl:adt}
-The possibility of implementing "Anomaly detection Trigger" is forseen in this version of \ugtl. The VHDL code is given by "Anomaly detection Trigger" group in ../firmware/hdl/payload/gtl/anomaly\_detection with \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/anomaly_detection.vhd}{\texttt{anomaly\_detection.vhd}} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/adt_wrapper.vhd}{\texttt{adt\_wrapper.vhd}} module anomaly\_detection.vhd is instantiated and a comparison of the output of anomaly\_detection.vhd ("anomaly\_score") with a given threshold is implemented to get an "Anomaly detection Trigger". External condition bits are used as placeholder for the definition of thresholds for "Anomaly detection Trigger" (e.g.: EXT\_ADT\_25, which mean threshold=25). External condition bits 192..223 are reserved for "Anomaly detection Trigger" thresholds.
+The possibility of implementing "Anomaly Detection Trigger" is forseen in this version of \ugtl. The VHDL code is given by "Anomaly Detection trigger" group in ../firmware/hdl/payload/gtl/anomaly\_detection with \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/anomaly_detection.vhd}{\texttt{anomaly\_detection.vhd}} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/adt_wrapper.vhd}{\texttt{adt\_wrapper.vhd}} module anomaly\_detection.vhd is instantiated and a comparison of the output of anomaly\_detection.vhd ("anomaly\_score") with a given threshold is implemented to get an "Anomaly Detection Trigger".
 
 \subsubsection{External Conditions}
 \label{sec:gtl:external_conditions}

@@ -3,6 +3,7 @@
 
 -- Version-history:
 
+-- HB 2023-10-10: CICADA definition changed: no bjets.
 -- HB 2023-09-06: cicada on link 11 (removed zdc10g on link 11).
 -- HB 2023-08-25: updated for new ZDC data structure.
 -- HB 2022-10-10: updated for ZDC (on link 11).
@@ -68,7 +69,7 @@ begin
         bx_data.asymht(i) <= data_tmp(i).asymht;
         bx_data.asymethf(i) <= data_tmp(i).asymethf;
         bx_data.asymhthf(i) <= data_tmp(i).asymhthf;
-        bx_data.bjet(i) <= data_tmp(i).bjet;
+        --bx_data.bjet(i) <= data_tmp(i).bjet;
         bx_data.cicada_ad(i) <= data_tmp(i).cicada_ad;
         bx_data.cicada_hi(i) <= data_tmp(i).cicada_hi;
         bx_data.zdcm(i) <= data_tmp(i).zdc(EN_MINUS_FRAME)(ZDC_BIT_HIGH downto ZDC_BIT_LOW);

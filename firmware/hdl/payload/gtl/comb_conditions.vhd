@@ -3,6 +3,7 @@
 -- Condition module for all combination conditions.
 
 -- Version history:
+-- HB 2023-10-19: bjets not used in CICADA - but code still in this module.
 -- HB 2023-02-03: updated for CICADA.
 -- HB 2022-09-02: cleaned up.
 -- HB 2022-02-17: bug fixed in orm and cleaned up.
@@ -110,7 +111,7 @@ entity comb_conditions is
         iso_lut_obj2: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
         disp_cut_obj2: boolean := false;
         disp_requ_obj2: boolean := false;
-        bjet_flag_requ_obj2 : boolean := false;
+        bjet_flag_requ_obj2 : boolean := false; -- HB, 2023-10-19: bjets not used in CICADA
 
         tbpt_cut: boolean := false;
         tbpt_vector_width: positive := 2+EG_PT_VECTOR_WIDTH+EG_PT_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH;

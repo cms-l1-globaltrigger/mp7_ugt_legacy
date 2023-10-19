@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2023-10-10: CICADA definition changed: no bjets.
 -- HB 2023-10-03: inserted calo anomaly algorithm (CICADA) definitions.
 -- HB 2023-09-13: NR_INPUT_LANES not used anymore. Added type lword_array (for output_mux.vhd and mux.vhd)
 -- HB 2023-07-28: bug fixed "type zdc_array ...".
@@ -240,20 +241,21 @@ constant TAU_ISO_BITS : natural := TAU_ISO_HIGH-TAU_ISO_LOW+1;
 
 -- *******************************************************************************************************
 -- HB 2023-01-26: calo anomaly algorithm (CICADA) data from Calo-Layer1
+-- HB 2023-10-10: CICADA definition changed: no bjets
 -- bjets definition
 -- constant NR_BJET_OBJECTS : positive := CICADA_ARRAY_LENGTH; -- number bjet objects, from lhc_data_pkg.vhd
-constant NR_BJET_OBJECTS : positive := 6; -- number bjet objects, from lhc_data_pkg.vhd
+--constant NR_BJET_OBJECTS : positive := 6; -- number bjet objects, from lhc_data_pkg.vhd
 
-constant BJET_ET_LOW : natural := 0;
-constant BJET_ET_HIGH : natural := 10;
-constant BJET_ET_BITS : natural := BJET_ET_HIGH-BJET_ET_LOW+1;
-constant BJET_ETA_LOW : natural := 11;
-constant BJET_ETA_HIGH : natural := 18;
-constant BJET_ETA_BITS : natural := BJET_ETA_HIGH-BJET_ETA_LOW+1;
-constant BJET_PHI_LOW : natural := 19;
-constant BJET_PHI_HIGH : natural := 26;
-constant BJET_PHI_BITS : natural := BJET_PHI_HIGH-BJET_PHI_LOW+1;
-constant BJET_FLAG_BIT : natural := 27;
+--constant BJET_ET_LOW : natural := 0;
+--constant BJET_ET_HIGH : natural := 10;
+--constant BJET_ET_BITS : natural := BJET_ET_HIGH-BJET_ET_LOW+1;
+--constant BJET_ETA_LOW : natural := 11;
+--constant BJET_ETA_HIGH : natural := 18;
+--constant BJET_ETA_BITS : natural := BJET_ETA_HIGH-BJET_ETA_LOW+1;
+--constant BJET_PHI_LOW : natural := 19;
+--constant BJET_PHI_HIGH : natural := 26;
+--constant BJET_PHI_BITS : natural := BJET_PHI_HIGH-BJET_PHI_LOW+1;
+--constant BJET_FLAG_BIT : natural := 27;
 
 -- CICADA anomaly detection (ad) definition - decimal (dec) and integer (int) part 
 constant NR_AD_OBJECTS : positive := 1;
@@ -487,6 +489,7 @@ type common_objects_array is array (natural range <>) of std_logic_vector(MAX_OB
 constant NR_EXTERNAL_CONDITIONS : positive := EXTERNAL_CONDITIONS_DATA_WIDTH;
 type bx_ext_cond_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
 
+-- HB 2023-10-10: CICADA definition changed: no bjets
 -- data records
 type gtl_data_record is record
     mu : muon_objects_array(0 to NR_MUON_OBJECTS-1);
@@ -505,7 +508,7 @@ type gtl_data_record is record
     towercount : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
     centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
-    bjet : calo_objects_array(0 to NR_BJET_OBJECTS-1);
+    --bjet : calo_objects_array(0 to NR_BJET_OBJECTS-1);
     cicada_ad : std_logic_vector(AD_DEC_BITS+AD_INT_BITS-1 downto 0);
     cicada_hi : std_logic_vector(HI_BITS-1 downto 0);
     zdc : zdc_array;
@@ -542,7 +545,7 @@ type bx_data_record is record
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
     mus0, mus1, musoot0, musoot1 : mus_bit_array;
-    bjet : bx_bjet_objects_array;
+    --bjet : bx_bjet_objects_array;
     cicada_ad : bx_ad_array;
     cicada_hi : bx_hi_array;
     mus0, mus1, mus2, musoot0, musoot1 : mus_bit_array;

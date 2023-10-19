@@ -3,6 +3,7 @@
 -- Correlation Condition module (for all possible correlation conditions)
 
 -- Version history:
+-- HB 2023-10-19: bjets not used in CICADA - but code still in this module.
 -- HB 2023-02-03: updated for CICADA.
 -- HB 2022-11-16: bug fix in "mass_3_obj_i/matrix_corr_cond_i": added missing generic parameter.
 -- HB 2022-09-05: cleaned up.
@@ -99,7 +100,7 @@ entity correlation_conditions is
         iso_lut_obj2: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
         disp_cut_obj2: boolean := false;
         disp_requ_obj2: boolean := false;
-        bjet_flag_requ_obj2 : boolean := false;
+        bjet_flag_requ_obj2 : boolean := false; -- HB, 2023-10-19: bjets not used in CICADA
         requested_charge_obj2: string(1 to 3) := "ign";
         qual_lut_obj2: std_logic_vector(2**(MUON_QUAL_HIGH-MUON_QUAL_LOW+1)-1 downto 0) := (others => '1');
         upt_cut_obj2: boolean := false;
@@ -141,7 +142,7 @@ entity correlation_conditions is
         iso_lut_obj3: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
         disp_cut_obj3: boolean := false;
         disp_requ_obj3: boolean := false;
-        bjet_flag_requ_obj3 : boolean := false;
+        bjet_flag_requ_obj3 : boolean := false; -- HB, 2023-10-19: bjets not used in CICADA
         requested_charge_obj3: string(1 to 3) := "ign";
         qual_lut_obj3: std_logic_vector(2**(MUON_QUAL_HIGH-MUON_QUAL_LOW+1)-1 downto 0) := (others => '1');
         upt_cut_obj3: boolean := false;

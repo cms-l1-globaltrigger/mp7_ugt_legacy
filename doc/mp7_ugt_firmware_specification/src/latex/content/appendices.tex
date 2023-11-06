@@ -441,212 +441,207 @@ The local\_finor \& local\_veto are the values from the local MP7 uGT module.
 
 \subsection{Optical patch panel}\label{sec:app:app_d}
 
-The following Table~\ref{tab:app:ugt_opt_pp_1} contains the optical patch panel ("uGT Patchpanel \#1") connections for production crate\footnote{"source" means "source of MTP48 cable to uGT", "uGMT" means "microTCA Global Muon Trigger module", "demux" means "Calo-Layer2 demux module", "uGT" means "microTCA Global Trigger module", "ext\_cond" means "External condition AMC502 module", "fibre" means "fibre number of a MTP48 cable", "LC" means "LC number of optical patch panel", "slot" means "destination MP7 slot number of microTCA crate".\label{note_ugt_opt_pp_1}}:
+% The following Table~\ref{tab:app:ugt_opt_pp_1} contains the optical patch panel ("uGT Patchpanel \#1") connections for production crate\footnote{"source" means "source of MTP48 cable to uGT", "uGMT" means "microTCA Global Muon Trigger module", "demux" means "Calo-Layer2 demux module", "uGT" means "microTCA Global Trigger module", "ext\_cond" means "External condition AMC502 module", "fibre" means "fibre number of a MTP48 cable", "LC" means "LC number of optical patch panel", "slot" means "destination MP7 slot number of microTCA crate".\label{note_ugt_opt_pp_1}}:
+% 
+% \begin{longtable}{|l|c|l|c|l|}
+% \caption{uGT Patchpanel \#1}
+%     \label{tab:app:ugt_opt_pp_1}\\
+% \hline
+% \textbf{source}& \textbf{fibre}& \textbf{data}& \textbf{LC}& \textbf{slot}\\
+% \hline
+% \hline
+% \endhead
+% uGMT  & 1   & MU[0..1]   & 1/a  & 1..2 \\\hline
+% uGMT  & 2   & MU[2..3]   & 1/b  & 1..2 \\\hline
+% uGMT  & 3   & MU[4..5]   & 1/c  & 1..2 \\\hline
+% uGMT  & 4   & MU[6..7]   & 1/d  & 1..2 \\\hline
+% calo-layer2 (demux) & 4b  & EG[0..5]   & 2/a  & 1..2 \\\hline
+% calo-layer2 (demux) & 4a  & EG[6..11]  & 2/b  & 1..2 \\\hline
+% calo-layer2 (demux) & 3b  & JET[0..5]  & 2/c  & 1..2 \\\hline
+% calo-layer2 (demux) & 3a  & JET[6..11] & 2/d  & 1..2 \\\hline
+% calo-layer2 (demux) & 2b  & TAU[0..5]  & 3/a  & 1..2 \\\hline
+% calo-layer2 (demux) & 2a  & TAU[6..11] & 3/b  & 1..2 \\\hline
+% calo-layer2 (demux) & 1b  & Esums      & 3/c  & 1..2 \\\hline
+% calo-layer1 & 1a  & CICADA & 3/d  & 1..2 \\\hline
+% ext\_cond & Mod0 EXT0 & ExtCond[0..63]    & 4/a  & 1..2 \\\hline
+% ext\_cond & Mod0 EXT1 & ExtCond[64..127]  & 4/b  & 1..2 \\\hline
+% ext\_cond & Mod0 EXT2 & ExtCond[128..191] & 4/c  & 1..2 \\\hline
+% ext\_cond & Mod0 EXT3 & ExtCond[192..255] & 4/d  & 1..2 \\\hline
+% - & - & free & 5/a  & 1..2 \\\hline
+% - & - & free & 5/b  & 1..2 \\\hline
+% - & - & free & 5/c  & 1..2 \\\hline
+% - & - & free & 5/d  & 1..2 \\\hline
+% - & - & free & 6/a  & 1..2 \\\hline
+% - & - & free & 6/b  & 1..2 \\\hline
+% - & - & free & 6/c  & 1..2 \\\hline
+% - & - & free & 6/d  & 1..2 \\\hline
+% \hline
+% uGMT  & 5   & MU[0..1]   & 7/a  & 3..4 \\\hline
+% uGMT  & 6   & MU[2..3]   & 7/b  & 3..4 \\\hline
+% uGMT  & 7   & MU[4..5]   & 7/c  & 3..4 \\\hline
+% uGMT  & 8   & MU[6..7]   & 7/d  & 3..4 \\\hline
+% calo-layer2 (demux) & 12b & EG[0..5]   & 8/a  & 3..4 \\\hline
+% calo-layer2 (demux) & 12a & EG[6..11]  & 8/b  & 3..4 \\\hline
+% calo-layer2 (demux) & 11b & JET[0..5]  & 8/c  & 3..4 \\\hline
+% calo-layer2 (demux) & 11a & JET[6..11] & 8/d  & 3..4 \\\hline
+% calo-layer2 (demux) & 10b & TAU[0..5]  & 9/a  & 3..4 \\\hline
+% calo-layer2 (demux) & 10a & TAU[6..11] & 9/b  & 3..4 \\\hline
+% calo-layer2 (demux) & 9b  & Esums      & 9/c  & 3..4 \\\hline
+% calo-layer1 & 9a  & CICADA & 9/d  & 3..4 \\\hline
+% ext\_cond & Mod1 EXT0 & ExtCond[0..63]    & 10/a & 3..4 \\\hline
+% ext\_cond & Mod1 EXT1 & ExtCond[64..127]  & 10/b & 3..4 \\\hline
+% ext\_cond & Mod1 EXT2 & ExtCond[128..191] & 10/c & 3..4 \\\hline
+% ext\_cond & Mod1 EXT3 & ExtCond[192..255] & 10/d & 3..4 \\\hline
+% - & - & free & 11/a & 3..4 \\\hline
+% - & - & free & 11/b & 3..4 \\\hline
+% - & - & free & 11/c & 3..4 \\\hline
+% - & - & free & 11/d & 3..4 \\\hline
+% - & - & free & 12/a & 3..4 \\\hline
+% - & - & free & 12/b & 3..4 \\\hline
+% - & - & free & 12/c & 3..4 \\\hline
+% - & - & free & 12/d & 3..4 \\\hline
+% \hline
+% uGMT  & 9   & MU[0..1]   & 13/a & 5..6 \\\hline
+% uGMT  & 10  & MU[2..3]   & 13/b & 5..6 \\\hline
+% uGMT  & 11  & MU[4..5]   & 13/c & 5..6 \\\hline
+% uGMT  & 12  & MU[6..7]   & 13/d & 5..6 \\\hline
+% calo-layer2 (demux) & 8b  & EG[0..5]   & 14/a & 5..6 \\\hline
+% calo-layer2 (demux) & 8a  & EG[6..11]  & 14/b & 5..6 \\\hline
+% calo-layer2 (demux) & 7b  & JET[0..5]  & 14/c & 5..6 \\\hline
+% calo-layer2 (demux) & 7a  & JET[6..11] & 14/d & 5..6 \\\hline
+% calo-layer2 (demux) & 18b & TAU[0..5]  & 15/a & 5..6 \\\hline
+% calo-layer2 (demux) & 18a & TAU[6..11] & 15/b & 5..6 \\\hline
+% calo-layer2 (demux) & 17b & Esums      & 15/c & 5..6 \\\hline
+% calo-layer1 & 17a & CICADA & 15/d & 5..6 \\\hline
+% ext\_cond & Mod2 EXT0 & ExtCond[0..63]    & 16/a & 5..6 \\\hline
+% ext\_cond & Mod2 EXT1 & ExtCond[64..127]  & 16/b & 5..6 \\\hline
+% ext\_cond & Mod2 EXT2 & ExtCond[128..191] & 16/c & 5..6 \\\hline
+% ext\_cond & Mod2 EXT3 & ExtCond[192..255] & 16/d & 5..6 \\\hline
+% - & - & free & 17/a & 5..6 \\\hline
+% - & - & free & 17/b & 5..6 \\\hline
+% - & - & free & 17/c & 5..6 \\\hline
+% - & - & free & 17/d & 5..6 \\\hline
+% - & - & free & 18/a & 5..6 \\\hline
+% - & - & free & 18/b & 5..6 \\\hline
+% - & - & free & 18/c & 5..6 \\\hline
+% - & - & free & 18/d & 5..6 \\\hline
+% \end{longtable}
+% 
+% The following Table~\ref{tab:app:ugt_opt_pp_2} contains the optical patch panel ("uGT Patchpanel \#3") connections for test crate\footref{note_ugt_opt_pp_1}:
+% 
+% \begin{longtable}{|l|c|l|c|l|}
+% \caption{uGT Patchpanel \#3}
+%     \label{tab:app:ugt_opt_pp_2}\\
+% \hline
+% \textbf{source}& \textbf{fibre}& \textbf{data}& \textbf{LC}& \textbf{slot}\\
+% \hline
+% \hline
+% \endhead
+% uGMT  & 13  & MU[0..1]   & 1/a  & 5..6 \\\hline
+% uGMT  & 14  & MU[2..3]   & 1/b  & 5..6 \\\hline
+% uGMT  & 15  & MU[4..5]   & 1/c  & 5..6 \\\hline
+% uGMT  & 16  & MU[6..7]   & 1/d  & 5..6 \\\hline
+% calo-layer2 (demux) & 16b & EG[0..5]   & 2/a  & 5..6 \\\hline
+% calo-layer2 (demux) & 16a & EG[6..11]  & 2/b  & 5..6 \\\hline
+% calo-layer2 (demux) & 15b & JET[0..5]  & 2/c  & 5..6 \\\hline
+% calo-layer2 (demux) & 15a & JET[6..11] & 2/d  & 5..6 \\\hline
+% calo-layer2 (demux) & 14b & TAU[0..5]  & 3/a  & 5..6 \\\hline
+% calo-layer2 (demux) & 14a & TAU[6..11] & 3/b  & 5..6 \\\hline
+% calo-layer2 (demux) & 13b & Esums      & 3/c  & 5..6 \\\hline
+% calo-layer1 & 13a & CICADA & 3/d  & 5..6 \\\hline
+% ext\_cond & Mod3 EXT0 & ExtCond[0..63]    & 4/a  & 5..6 \\\hline
+% ext\_cond & Mod3 EXT1 & ExtCond[64..127]  & 4/b  & 5..6 \\\hline
+% ext\_cond & Mod3 EXT2 & ExtCond[128..191] & 4/c  & 5..6 \\\hline
+% ext\_cond & Mod3 EXT3 & ExtCond[192..255] & 4/d  & 5..6 \\\hline
+% - & - & free & 5/a  & 5..6 \\\hline
+% - & - & free & 5/b  & 5..6 \\\hline
+% - & - & free & 5/c  & 5..6 \\\hline
+% - & - & free & 5/d  & 5..6 \\\hline
+% - & - & free & 6/a  & 5..6 \\\hline
+% - & - & free & 6/b  & 5..6 \\\hline
+% - & - & free & 6/c  & 5..6 \\\hline
+% - & - & free & 6/d  & 5..6 \\\hline
+% \hline
+% uGMT  & 17  & MU[0..1]   & 7/a  & 1..2 \\\hline
+% uGMT  & 18  & MU[2..3]   & 7/b  & 1..2 \\\hline
+% uGMT  & 19  & MU[4..5]   & 7/c  & 1..2 \\\hline
+% uGMT  & 20  & MU[6..7]   & 7/d  & 1..2 \\\hline
+% calo-layer2 (demux) & 26  & EG[0..5]   & 8/a  & 1..2 \\\hline
+% calo-layer2 (demux) & 25  & EG[6..11]  & 8/b  & 1..2 \\\hline
+% calo-layer2 (demux) & 28  & JET[0..5]  & 8/c  & 1..2 \\\hline
+% calo-layer2 (demux) & 27  & JET[6..11] & 8/d  & 1..2 \\\hline
+% calo-layer2 (demux) & 30  & TAU[0..5]  & 9/a  & 1..2 \\\hline
+% calo-layer2 (demux) & 29  & TAU[6..11] & 9/b  & 1..2 \\\hline
+% calo-layer2 (demux) & 32  & Esums      & 9/c  & 1..2 \\\hline
+% calo-layer1 & 31  & CICADA & 9/d  & 1..2 \\\hline
+% ext\_cond & Mod4 EXT0 & ExtCond[0..63]    & 10/a & 1..2 \\\hline
+% ext\_cond & Mod4 EXT1 & ExtCond[64..127]  & 10/b & 1..2 \\\hline
+% ext\_cond & Mod4 EXT2 & ExtCond[128..191] & 10/c & 1..2 \\\hline
+% ext\_cond & Mod4 EXT3 & ExtCond[192..255] & 10/d & 1..2 \\\hline
+% - & - & free & 11/a & 1..2 \\\hline
+% - & - & free & 11/b & 1..2 \\\hline
+% - & - & free & 11/c & 1..2 \\\hline
+% - & - & free & 11/d & 1..2 \\\hline
+% - & - & free & 12/a & 1..2 \\\hline
+% - & - & free & 12/b & 1..2 \\\hline
+% - & - & free & 12/c & 1..2 \\\hline
+% - & - & free & 12/d & 1..2 \\\hline
+% \hline
+% uGMT  & 21  & MU[0..1]   & 13/a & 3..4 \\\hline
+% uGMT  & 22  & MU[2..3]   & 13/b & 3..4 \\\hline
+% uGMT  & 23  & MU[4..5]   & 13/c & 3..4 \\\hline
+% uGMT  & 24  & MU[6..7]   & 13/d & 3..4 \\\hline
+% calo-layer2 (demux) & 34  & EG[0..5]   & 14/a & 3..4 \\\hline
+% calo-layer2 (demux) & 33  & EG[6..11]  & 14/b & 3..4 \\\hline
+% calo-layer2 (demux) & 35  & JET[0..5]  & 14/c & 3..4 \\\hline
+% calo-layer2 (demux) & 36  & JET[6..11] & 14/d & 3..4 \\\hline
+% calo-layer2 (demux) & 14  & TAU[0..5]  & 15/a & 3..4 \\\hline
+% calo-layer2 (demux) & 13  & TAU[6..11] & 15/b & 3..4 \\\hline
+% calo-layer2 (demux) & 16  & Esums      & 15/c & 3..4 \\\hline
+% calo-layer1 & 15  & CICADA  & 15/d & 3..4 \\\hline
+% ext\_cond & Mod5 EXT0 & ExtCond[0..63]    & 16/a & 3..4 \\\hline
+% ext\_cond & Mod5 EXT1 & ExtCond[64..127]  & 16/b & 3..4 \\\hline
+% ext\_cond & Mod5 EXT2 & ExtCond[128..191] & 16/c & 3..4 \\\hline
+% ext\_cond & Mod5 EXT3 & ExtCond[192..255] & 16/d & 3..4 \\\hline
+% - & - & free & 17/a & 3..4 \\\hline
+% - & - & free & 17/b & 3..4 \\\hline
+% - & - & free & 17/c & 3..4 \\\hline
+% - & - & free & 17/d & 3..4 \\\hline
+% - & - & free & 18/a & 3..4 \\\hline
+% - & - & free & 18/b & 3..4 \\\hline
+% - & - & free & 18/c & 3..4 \\\hline
+% - & - & free & 18/d & 3..4 \\\hline
+% \end{longtable}
 
-\begin{longtable}{|l|c|l|c|l|}
-\caption{uGT Patchpanel \#1}
-    \label{tab:app:ugt_opt_pp_1}\\
-\hline
-\textbf{source}& \textbf{fibre}& \textbf{data}& \textbf{LC}& \textbf{slot}\\
-\hline
-\hline
-\endhead
-uGMT  & 1   & MU[0..1]   & 1/a  & 1..2 \\\hline
-uGMT  & 2   & MU[2..3]   & 1/b  & 1..2 \\\hline
-uGMT  & 3   & MU[4..5]   & 1/c  & 1..2 \\\hline
-uGMT  & 4   & MU[6..7]   & 1/d  & 1..2 \\\hline
-calo-layer2 (demux) & 4b  & EG[0..5]   & 2/a  & 1..2 \\\hline
-calo-layer2 (demux) & 4a  & EG[6..11]  & 2/b  & 1..2 \\\hline
-calo-layer2 (demux) & 3b  & JET[0..5]  & 2/c  & 1..2 \\\hline
-calo-layer2 (demux) & 3a  & JET[6..11] & 2/d  & 1..2 \\\hline
-calo-layer2 (demux) & 2b  & TAU[0..5]  & 3/a  & 1..2 \\\hline
-calo-layer2 (demux) & 2a  & TAU[6..11] & 3/b  & 1..2 \\\hline
-calo-layer2 (demux) & 1b  & Esums      & 3/c  & 1..2 \\\hline
-calo-layer1 & 1a  & CICADA & 3/d  & 1..2 \\\hline
-ext\_cond & Mod0 EXT0 & ExtCond[0..63]    & 4/a  & 1..2 \\\hline
-ext\_cond & Mod0 EXT1 & ExtCond[64..127]  & 4/b  & 1..2 \\\hline
-ext\_cond & Mod0 EXT2 & ExtCond[128..191] & 4/c  & 1..2 \\\hline
-ext\_cond & Mod0 EXT3 & ExtCond[192..255] & 4/d  & 1..2 \\\hline
-- & - & free & 5/a  & 1..2 \\\hline
-- & - & free & 5/b  & 1..2 \\\hline
-- & - & free & 5/c  & 1..2 \\\hline
-- & - & free & 5/d  & 1..2 \\\hline
-- & - & free & 6/a  & 1..2 \\\hline
-- & - & free & 6/b  & 1..2 \\\hline
-- & - & free & 6/c  & 1..2 \\\hline
-- & - & free & 6/d  & 1..2 \\\hline
-\hline
-uGMT  & 5   & MU[0..1]   & 7/a  & 3..4 \\\hline
-uGMT  & 6   & MU[2..3]   & 7/b  & 3..4 \\\hline
-uGMT  & 7   & MU[4..5]   & 7/c  & 3..4 \\\hline
-uGMT  & 8   & MU[6..7]   & 7/d  & 3..4 \\\hline
-calo-layer2 (demux) & 12b & EG[0..5]   & 8/a  & 3..4 \\\hline
-calo-layer2 (demux) & 12a & EG[6..11]  & 8/b  & 3..4 \\\hline
-calo-layer2 (demux) & 11b & JET[0..5]  & 8/c  & 3..4 \\\hline
-calo-layer2 (demux) & 11a & JET[6..11] & 8/d  & 3..4 \\\hline
-calo-layer2 (demux) & 10b & TAU[0..5]  & 9/a  & 3..4 \\\hline
-calo-layer2 (demux) & 10a & TAU[6..11] & 9/b  & 3..4 \\\hline
-calo-layer2 (demux) & 9b  & Esums      & 9/c  & 3..4 \\\hline
-calo-layer1 & 9a  & CICADA & 9/d  & 3..4 \\\hline
-ext\_cond & Mod1 EXT0 & ExtCond[0..63]    & 10/a & 3..4 \\\hline
-ext\_cond & Mod1 EXT1 & ExtCond[64..127]  & 10/b & 3..4 \\\hline
-ext\_cond & Mod1 EXT2 & ExtCond[128..191] & 10/c & 3..4 \\\hline
-ext\_cond & Mod1 EXT3 & ExtCond[192..255] & 10/d & 3..4 \\\hline
-- & - & free & 11/a & 3..4 \\\hline
-- & - & free & 11/b & 3..4 \\\hline
-- & - & free & 11/c & 3..4 \\\hline
-- & - & free & 11/d & 3..4 \\\hline
-- & - & free & 12/a & 3..4 \\\hline
-- & - & free & 12/b & 3..4 \\\hline
-- & - & free & 12/c & 3..4 \\\hline
-- & - & free & 12/d & 3..4 \\\hline
-\hline
-uGMT  & 9   & MU[0..1]   & 13/a & 5..6 \\\hline
-uGMT  & 10  & MU[2..3]   & 13/b & 5..6 \\\hline
-uGMT  & 11  & MU[4..5]   & 13/c & 5..6 \\\hline
-uGMT  & 12  & MU[6..7]   & 13/d & 5..6 \\\hline
-calo-layer2 (demux) & 8b  & EG[0..5]   & 14/a & 5..6 \\\hline
-calo-layer2 (demux) & 8a  & EG[6..11]  & 14/b & 5..6 \\\hline
-calo-layer2 (demux) & 7b  & JET[0..5]  & 14/c & 5..6 \\\hline
-calo-layer2 (demux) & 7a  & JET[6..11] & 14/d & 5..6 \\\hline
-calo-layer2 (demux) & 18b & TAU[0..5]  & 15/a & 5..6 \\\hline
-calo-layer2 (demux) & 18a & TAU[6..11] & 15/b & 5..6 \\\hline
-calo-layer2 (demux) & 17b & Esums      & 15/c & 5..6 \\\hline
-calo-layer1 & 17a & CICADA & 15/d & 5..6 \\\hline
-ext\_cond & Mod2 EXT0 & ExtCond[0..63]    & 16/a & 5..6 \\\hline
-ext\_cond & Mod2 EXT1 & ExtCond[64..127]  & 16/b & 5..6 \\\hline
-ext\_cond & Mod2 EXT2 & ExtCond[128..191] & 16/c & 5..6 \\\hline
-ext\_cond & Mod2 EXT3 & ExtCond[192..255] & 16/d & 5..6 \\\hline
-- & - & free & 17/a & 5..6 \\\hline
-- & - & free & 17/b & 5..6 \\\hline
-- & - & free & 17/c & 5..6 \\\hline
-- & - & free & 17/d & 5..6 \\\hline
-- & - & free & 18/a & 5..6 \\\hline
-- & - & free & 18/b & 5..6 \\\hline
-- & - & free & 18/c & 5..6 \\\hline
-- & - & free & 18/d & 5..6 \\\hline
-\end{longtable}
-
-The following Table~\ref{tab:app:ugt_opt_pp_2} contains the optical patch panel ("uGT Patchpanel \#3") connections for test crate\footref{note_ugt_opt_pp_1}:
-
-\begin{longtable}{|l|c|l|c|l|}
-\caption{uGT Patchpanel \#3}
-    \label{tab:app:ugt_opt_pp_2}\\
-\hline
-\textbf{source}& \textbf{fibre}& \textbf{data}& \textbf{LC}& \textbf{slot}\\
-\hline
-\hline
-\endhead
-uGMT  & 13  & MU[0..1]   & 1/a  & 5..6 \\\hline
-uGMT  & 14  & MU[2..3]   & 1/b  & 5..6 \\\hline
-uGMT  & 15  & MU[4..5]   & 1/c  & 5..6 \\\hline
-uGMT  & 16  & MU[6..7]   & 1/d  & 5..6 \\\hline
-calo-layer2 (demux) & 16b & EG[0..5]   & 2/a  & 5..6 \\\hline
-calo-layer2 (demux) & 16a & EG[6..11]  & 2/b  & 5..6 \\\hline
-calo-layer2 (demux) & 15b & JET[0..5]  & 2/c  & 5..6 \\\hline
-calo-layer2 (demux) & 15a & JET[6..11] & 2/d  & 5..6 \\\hline
-calo-layer2 (demux) & 14b & TAU[0..5]  & 3/a  & 5..6 \\\hline
-calo-layer2 (demux) & 14a & TAU[6..11] & 3/b  & 5..6 \\\hline
-calo-layer2 (demux) & 13b & Esums      & 3/c  & 5..6 \\\hline
-calo-layer1 & 13a & CICADA & 3/d  & 5..6 \\\hline
-ext\_cond & Mod3 EXT0 & ExtCond[0..63]    & 4/a  & 5..6 \\\hline
-ext\_cond & Mod3 EXT1 & ExtCond[64..127]  & 4/b  & 5..6 \\\hline
-ext\_cond & Mod3 EXT2 & ExtCond[128..191] & 4/c  & 5..6 \\\hline
-ext\_cond & Mod3 EXT3 & ExtCond[192..255] & 4/d  & 5..6 \\\hline
-- & - & free & 5/a  & 5..6 \\\hline
-- & - & free & 5/b  & 5..6 \\\hline
-- & - & free & 5/c  & 5..6 \\\hline
-- & - & free & 5/d  & 5..6 \\\hline
-- & - & free & 6/a  & 5..6 \\\hline
-- & - & free & 6/b  & 5..6 \\\hline
-- & - & free & 6/c  & 5..6 \\\hline
-- & - & free & 6/d  & 5..6 \\\hline
-\hline
-uGMT  & 17  & MU[0..1]   & 7/a  & 1..2 \\\hline
-uGMT  & 18  & MU[2..3]   & 7/b  & 1..2 \\\hline
-uGMT  & 19  & MU[4..5]   & 7/c  & 1..2 \\\hline
-uGMT  & 20  & MU[6..7]   & 7/d  & 1..2 \\\hline
-calo-layer2 (demux) & 26  & EG[0..5]   & 8/a  & 1..2 \\\hline
-calo-layer2 (demux) & 25  & EG[6..11]  & 8/b  & 1..2 \\\hline
-calo-layer2 (demux) & 28  & JET[0..5]  & 8/c  & 1..2 \\\hline
-calo-layer2 (demux) & 27  & JET[6..11] & 8/d  & 1..2 \\\hline
-calo-layer2 (demux) & 30  & TAU[0..5]  & 9/a  & 1..2 \\\hline
-calo-layer2 (demux) & 29  & TAU[6..11] & 9/b  & 1..2 \\\hline
-calo-layer2 (demux) & 32  & Esums      & 9/c  & 1..2 \\\hline
-calo-layer1 & 31  & CICADA & 9/d  & 1..2 \\\hline
-ext\_cond & Mod4 EXT0 & ExtCond[0..63]    & 10/a & 1..2 \\\hline
-ext\_cond & Mod4 EXT1 & ExtCond[64..127]  & 10/b & 1..2 \\\hline
-ext\_cond & Mod4 EXT2 & ExtCond[128..191] & 10/c & 1..2 \\\hline
-ext\_cond & Mod4 EXT3 & ExtCond[192..255] & 10/d & 1..2 \\\hline
-- & - & free & 11/a & 1..2 \\\hline
-- & - & free & 11/b & 1..2 \\\hline
-- & - & free & 11/c & 1..2 \\\hline
-- & - & free & 11/d & 1..2 \\\hline
-- & - & free & 12/a & 1..2 \\\hline
-- & - & free & 12/b & 1..2 \\\hline
-- & - & free & 12/c & 1..2 \\\hline
-- & - & free & 12/d & 1..2 \\\hline
-\hline
-uGMT  & 21  & MU[0..1]   & 13/a & 3..4 \\\hline
-uGMT  & 22  & MU[2..3]   & 13/b & 3..4 \\\hline
-uGMT  & 23  & MU[4..5]   & 13/c & 3..4 \\\hline
-uGMT  & 24  & MU[6..7]   & 13/d & 3..4 \\\hline
-calo-layer2 (demux) & 34  & EG[0..5]   & 14/a & 3..4 \\\hline
-calo-layer2 (demux) & 33  & EG[6..11]  & 14/b & 3..4 \\\hline
-calo-layer2 (demux) & 35  & JET[0..5]  & 14/c & 3..4 \\\hline
-calo-layer2 (demux) & 36  & JET[6..11] & 14/d & 3..4 \\\hline
-calo-layer2 (demux) & 14  & TAU[0..5]  & 15/a & 3..4 \\\hline
-calo-layer2 (demux) & 13  & TAU[6..11] & 15/b & 3..4 \\\hline
-calo-layer2 (demux) & 16  & Esums      & 15/c & 3..4 \\\hline
-calo-layer1 & 15  & CICADA  & 15/d & 3..4 \\\hline
-ext\_cond & Mod5 EXT0 & ExtCond[0..63]    & 16/a & 3..4 \\\hline
-ext\_cond & Mod5 EXT1 & ExtCond[64..127]  & 16/b & 3..4 \\\hline
-ext\_cond & Mod5 EXT2 & ExtCond[128..191] & 16/c & 3..4 \\\hline
-ext\_cond & Mod5 EXT3 & ExtCond[192..255] & 16/d & 3..4 \\\hline
-- & - & free & 17/a & 3..4 \\\hline
-- & - & free & 17/b & 3..4 \\\hline
-- & - & free & 17/c & 3..4 \\\hline
-- & - & free & 17/d & 3..4 \\\hline
-- & - & free & 18/a & 3..4 \\\hline
-- & - & free & 18/b & 3..4 \\\hline
-- & - & free & 18/c & 3..4 \\\hline
-- & - & free & 18/d & 3..4 \\\hline
-\end{longtable}
-
-Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panel for optical links.
+Figure~\ref{fig:app:ugt_pp} shows the connections on Global Trigger patch panels for optical links.
 
 \begin{figure}[htb]
 \centering
 \includegraphics[width=15cm]{figures/ugt_patchpanel}
-\caption{Global Trigger patch panel for optical links}
+\caption{Global Trigger patch panels for optical links}
 \label{fig:app:ugt_pp}
 \end{figure}
 
-Figure~\ref{fig:app:opt_pp} and Table~\ref{table:app:opt_pp_tab} show the connections on Global Trigger patch panel for optical links.
+
+Figure~\ref{fig:app:opt_pp} shows the LC connectors on Global Trigger patch panels.
 
 \begin{figure}[htb]
 \centering
 \includegraphics[width=15cm]{figures/optical_pp}
-\caption{Global Trigger patch panel for optical links - LC connectors}
+\caption{LC connectors on Global Trigger patch panels}
 \label{fig:app:opt_pp}
 \end{figure}
 
+The following Table~\ref{tab:app:opt_pp_tab_1} contains the optical patch panel ("uGT Patchpanel \#1") connections for production crate\footnote{"source" means "source of MTP48 cable to uGT", "uGMT" means "microTCA Global Muon Trigger module", "calo-layer2 (demux)" means "Calo-Layer2 demux module", "ext\_cond" means "External condition AMC502 module", "fibre" means "fibre number of a MTP48 cable", "LC" means "LC number of optical patch panel", "MP7 slot" means "destination MP7 slot number of microTCA crate".\label{note_ugt_opt_pp_1}}:
+
 \begin{longtable}{|l|l|l|l|c|}
-\caption{uGT Patchpanel \#1}
-    \label{table:app:opt_pp_tab}\\
+\caption{uGT Patchpanel \#1 (for production crate)}
+    \label{tab:app:opt_pp_tab_1}\\
 \hline
 \textbf{LC} & \textbf{source} & \textbf{fiber} & \textbf{data} & \textbf{MP7 slot}\\
 \hline
 \hline
 \endhead
-% \begin{table}[ht]
-% \caption{Global Trigger patch panel for optical links - LC connectors}
-% \vspace{5mm}
-% \scalebox{0.8}{
-% \centering
-% \begin{tabular}{|l|l|l|l|}\hline
-% \textbf{LC} & \textbf{source} & \textbf{fiber} & \textbf{data}\\
-% \hline\hline
 1/a & uGMT & 1 & MU0..MU1 & 1..2\\
 1/b & uGMT & 2 & MU2..MU3 & 1..2\\
 1/c & uGMT & 3 & MU4..MU5 & 1..2\\
@@ -667,19 +662,19 @@ Figure~\ref{fig:app:opt_pp} and Table~\ref{table:app:opt_pp_tab} show the connec
 19/b & uGMT & 6 & MU2..MU3 & 3..4\\
 19/c & uGMT & 7 & MU4..MU5 & 3..4\\
 19/d & uGMT & 8 & MU6..MU7 & 3..4\\
-21/a & calo-layer2 (demux) & 12b & EG0..EG5 & 3..4\\
-21/b & calo-layer2 (demux) & 12a & EG6..EG11 & 3..4\\
-21/c & calo-layer2 (demux) & 11b & JET0..JET5 & 3..4\\
-21/d & calo-layer2 (demux) & 11a & JET6..JET11 & 3..4\\
-23/a & calo-layer2 (demux) & 10b & TAU0..TAU5 & 3..4\\
-23/b & calo-layer2 (demux) & 10a & TAU6..TAU11 & 3..4\\
-23/c & calo-layer2 (demux) & 9b & ESUMS & 3..4\\
+21/a & calo-layer2 (demux) & 12b & EG0..EG5 & 3..4\\       
+21/b & calo-layer2 (demux) & 12a & EG6..EG11 & 3..4\\      
+21/c & calo-layer2 (demux) & 11b & JET0..JET5 & 3..4\\     
+21/d & calo-layer2 (demux) & 11a & JET6..JET11 & 3..4\\    
+23/a & calo-layer2 (demux) & 10b & TAU0..TAU5 & 3..4\\     
+23/b & calo-layer2 (demux) & 10a & TAU6..TAU11 & 3..4\\    
+23/c & calo-layer2 (demux) & 9b  & ESUMS & 3..4\\          
 23/d & calo-layer1 &  & CICADA & 3..4\\
 25/a & ext\_cond & Mod1 EXT0 & ExtCond[0..63] & 3..4 \\
 25/b & ext\_cond & Mod1 EXT1 & ExtCond[64..127] & 3..4\\
 25/c & ext\_cond & Mod1 EXT2 & ExtCond[128..191] & 3..4\\
 25/d & ext\_cond & Mod1 EXT3 & ExtCond[192..255] & 3..4\\\hline
-37/a & uGMT & 9 & MU0..MU1 & 5..6\\
+37/a & uGMT & 9  & MU0..MU1 & 5..6\\
 37/b & uGMT & 10 & MU2..MU3 & 5..6\\
 37/c & uGMT & 11 & MU4..MU5 & 5..6\\
 37/d & uGMT & 12 & MU6..MU7 & 5..6\\
@@ -696,10 +691,66 @@ Figure~\ref{fig:app:opt_pp} and Table~\ref{table:app:opt_pp_tab} show the connec
 43/c & ext\_cond & Mod2 EXT2 & ExtCond[128..191] & 5..6\\
 43/d & ext\_cond & Mod2 EXT3 & ExtCond[192..255] & 5..6\\\hline
 \end{longtable}
-% \end{tabular}
-% }
-% \label{table:app:opt_pp_tab}
-% \end{table}
+
+The following Table~\ref{tab:app:opt_pp_tab_3} contains the optical patch panel ("uGT Patchpanel \#3") connections for test crate\footref{note_ugt_opt_pp_1}:
+
+\begin{longtable}{|l|l|l|l|c|}
+\caption{uGT Patchpanel \#3 (for test crate)}
+    \label{tab:app:opt_pp_tab_3}\\
+\hline
+\textbf{LC} & \textbf{source} & \textbf{fiber} & \textbf{data} & \textbf{MP7 slot}\\
+\hline
+\hline
+\endhead
+1/a & uGMT & 13 & MU0..MU1 & 5..6\\
+1/b & uGMT & 14 & MU2..MU3 & 5..6\\
+1/c & uGMT & 15 & MU4..MU5 & 5..6\\
+1/d & uGMT & 16 & MU6..MU7 & 5..6\\
+3/a & calo-layer2 (demux) & 16b & EG0..EG5 & 5..6\\
+3/b & calo-layer2 (demux) & 16a & EG6..EG11 & 5..6\\
+3/c & calo-layer2 (demux) & 15b & JET0..JET5 & 5..6\\
+3/d & calo-layer2 (demux) & 15a & JET6..JET11 & 5..6\\
+5/a & calo-layer2 (demux) & 14b & TAU0..TAU5 & 5..6\\
+5/b & calo-layer2 (demux) & 14a & TAU6..TAU11 & 5..6\\
+5/c & calo-layer2 (demux) & 13b & ESUMS & 5..6\\
+5/d & calo-layer1 &  & CICADA & 5..6\\
+7/a & ext\_cond & Mod3 EXT0 & ExtCond[0..63] & 5..6 \\
+7/b & ext\_cond & Mod3 EXT1 & ExtCond[64..127] & 5..6\\
+7/c & ext\_cond & Mod3 EXT2 & ExtCond[128..191] & 5..6\\
+7/d & ext\_cond & Mod3 EXT3 & ExtCond[192..255] & 5..6\\\hline
+19/a & uGMT & 17 & MU0..MU1 & 1..2\\
+19/b & uGMT & 18 & MU2..MU3 & 1..2\\
+19/c & uGMT & 19 & MU4..MU5 & 1..2\\
+19/d & uGMT & 20 & MU6..MU7 & 1..2\\
+21/a & calo-layer2 (demux) & 26 & EG0..EG5 & 1..2\\
+21/b & calo-layer2 (demux) & 25 & EG6..EG11 & 1..2\\
+21/c & calo-layer2 (demux) & 28 & JET0..JET5 & 1..2\\
+21/d & calo-layer2 (demux) & 27 & JET6..JET11 & 1..2\\
+23/a & calo-layer2 (demux) & 30 & TAU0..TAU5 & 1..2\\
+23/b & calo-layer2 (demux) & 29 & TAU6..TAU11 & 1..2\\
+23/c & calo-layer2 (demux) & 32 & ESUMS & 1..2\\
+23/d & calo-layer1 &  & CICADA & 1..2\\
+25/a & ext\_cond & Mod4 EXT0 & ExtCond[0..63] & 1..2 \\
+25/b & ext\_cond & Mod4 EXT1 & ExtCond[64..127] & 1..2\\
+25/c & ext\_cond & Mod4 EXT2 & ExtCond[128..191] & 1..2\\
+25/d & ext\_cond & Mod4 EXT3 & ExtCond[192..255] & 1..2\\\hline
+37/a & uGMT & 21 & MU0..MU1 & 3..4\\
+37/b & uGMT & 22 & MU2..MU3 & 3..4\\
+37/c & uGMT & 23 & MU4..MU5 & 3..4\\
+37/d & uGMT & 24 & MU6..MU7 & 3..4\\
+39/a & calo-layer2 (demux) & 34 & EG0..EG5 & 3..4\\
+39/b & calo-layer2 (demux) & 33 & EG6..EG11 & 3..4\\
+39/c & calo-layer2 (demux) & 35 & JET0..JET5 & 3..4\\
+39/d & calo-layer2 (demux) & 36 & JET6..JET11 & 3..4\\
+41/a & calo-layer2 (demux) & 14 & TAU0..TAU5 & 3..4\\
+41/b & calo-layer2 (demux) & 13 & TAU6..TAU11 & 3..4\\
+41/c & calo-layer2 (demux) & 16 & ESUMS & 3..4\\
+41/d & calo-layer1 &  & CICADA & 3..4\\
+43/a & ext\_cond & Mod5 EXT0 & ExtCond[0..63] & 3..4 \\
+43/b & ext\_cond & Mod5 EXT1 & ExtCond[64..127] & 3..4\\
+43/c & ext\_cond & Mod5 EXT2 & ExtCond[128..191] & 3..4\\
+43/d & ext\_cond & Mod5 EXT3 & ExtCond[192..255] & 3..4\\\hline
+\end{longtable}
 
 \clearpage
 

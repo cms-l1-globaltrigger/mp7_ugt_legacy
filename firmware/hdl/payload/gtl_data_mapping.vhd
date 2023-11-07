@@ -111,10 +111,10 @@ begin
         --gtl_data.bjet(i)(BJET_FLAG_BIT) <= lhc_data.cicada(i)(27); -- bjet flag (currently unused)
     --end generate;
 
-    gtl_data.cicada_ad(AD_INT_HIGH downto AD_INT_HIGH-3) <= lhc_data.cicada(0)(31 downto 28); -- anomaly detection integer part high
-    gtl_data.cicada_ad(AD_INT_LOW+3 downto AD_INT_LOW) <= lhc_data.cicada(1)(31 downto 28); -- anomaly detection integer part low
-    gtl_data.cicada_ad(AD_DEC_HIGH downto AD_DEC_HIGH-3) <= lhc_data.cicada(2)(31 downto 28); -- anomaly detection decimal part high
-    gtl_data.cicada_ad(AD_DEC_LOW+3 downto AD_DEC_LOW) <= lhc_data.cicada(3)(31 downto 28); -- anomaly detection decimal part low
+    gtl_data.cicada_ad_int(AD_INT_HIGH downto AD_INT_HIGH-3) <= lhc_data.cicada(0)(31 downto 28); -- anomaly detection integer part high
+    gtl_data.cicada_ad_int(AD_INT_LOW+3 downto AD_INT_LOW) <= lhc_data.cicada(1)(31 downto 28); -- anomaly detection integer part low
+    gtl_data.cicada_ad_dec(AD_DEC_HIGH downto AD_DEC_HIGH-3) <= lhc_data.cicada(2)(31 downto 28); -- anomaly detection decimal part high
+    gtl_data.cicada_ad_dec(AD_DEC_LOW+3 downto AD_DEC_LOW) <= lhc_data.cicada(3)(31 downto 28); -- anomaly detection decimal part low
         
     gtl_data.cicada_hi(HI_HIGH downto HI_HIGH-3) <= lhc_data.cicada(4)(31 downto 28); -- heavy ion bits high
     gtl_data.cicada_hi(HI_LOW+3 downto HI_LOW) <= lhc_data.cicada(5)(31 downto 28); -- heavy ion bits low

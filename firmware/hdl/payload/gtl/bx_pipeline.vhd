@@ -70,7 +70,8 @@ begin
         bx_data.asymethf(i) <= data_tmp(i).asymethf;
         bx_data.asymhthf(i) <= data_tmp(i).asymhthf;
         --bx_data.bjet(i) <= data_tmp(i).bjet;
-        bx_data.cicada_ad(i) <= data_tmp(i).cicada_ad;
+        bx_data.cicada_ad_dec(i) <= data_tmp(i).cicada_ad_dec;
+        bx_data.cicada_ad_int(i) <= data_tmp(i).cicada_ad_int;
         bx_data.cicada_hi(i) <= data_tmp(i).cicada_hi;
         bx_data.zdcm(i) <= data_tmp(i).zdc(EN_MINUS_FRAME)(ZDC_BIT_HIGH downto ZDC_BIT_LOW);
         bx_data.zdcp(i) <= data_tmp(i).zdc(EN_PLUS_FRAME)(ZDC_BIT_HIGH downto ZDC_BIT_LOW);

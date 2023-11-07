@@ -508,7 +508,8 @@ type gtl_data_record is record
     towercount : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
     centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
-    cicada_ad : std_logic_vector(AD_DEC_BITS+AD_INT_BITS-1 downto 0);
+    cicada_ad_dec : std_logic_vector(AD_DEC_BITS-1 downto 0);
+    cicada_ad_int : std_logic_vector(AD_INT_BITS-1 downto 0);
     cicada_hi : std_logic_vector(HI_BITS-1 downto 0);
     zdc : zdc_array;
 end record gtl_data_record;
@@ -544,7 +545,8 @@ type bx_data_record is record
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
     mus0, mus1, musoot0, musoot1 : mus_bit_array;
-    cicada_ad : bx_ad_array;
+    cicada_ad_dec : bx_ad_dec_array;
+    cicada_ad_int : bx_ad_int_array;
     cicada_hi : bx_hi_array;
     mus0, mus1, mus2, musoot0, musoot1 : mus_bit_array;
     zdcm : bx_zdc_array;

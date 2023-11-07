@@ -124,7 +124,7 @@ constant ASYMETHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_T
 constant ASYMHTHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+10;
 constant NR_MU_TYPE : natural := 1;
 constant MU_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES;
-constant BJET_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES+NR_MU_TYPE;
+--constant BJET_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES+NR_MU_TYPE;
 
 -- ==== MUONs - begin ============================================================
 -- MUONs
@@ -279,7 +279,7 @@ type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO
 type bx_eg_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_EG_OBJECTS-1);
 type bx_jet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_JET_OBJECTS-1);
 type bx_tau_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_TAU_OBJECTS-1);
-type bx_bjet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_BJET_OBJECTS-1);
+--type bx_bjet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_BJET_OBJECTS-1);
 type bx_ad_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(AD_DEC_BITS+AD_INT_BITS-1 downto 0);
 type bx_hi_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(HI_BITS-1 downto 0);
 constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
@@ -508,7 +508,6 @@ type gtl_data_record is record
     towercount : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
     centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
-    --bjet : calo_objects_array(0 to NR_BJET_OBJECTS-1);
     cicada_ad : std_logic_vector(AD_DEC_BITS+AD_INT_BITS-1 downto 0);
     cicada_hi : std_logic_vector(HI_BITS-1 downto 0);
     zdc : zdc_array;
@@ -545,7 +544,6 @@ type bx_data_record is record
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
     mus0, mus1, musoot0, musoot1 : mus_bit_array;
-    --bjet : bx_bjet_objects_array;
     cicada_ad : bx_ad_array;
     cicada_hi : bx_hi_array;
     mus0, mus1, mus2, musoot0, musoot1 : mus_bit_array;

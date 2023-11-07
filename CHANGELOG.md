@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.26.0] - 2023-10-03
+## [v1.26.0] - 2023-11-07
 ### Comment
 
 - mp7_ugt firmware release v1.26.0
@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - source files:
-  - ../payload/gtl/common/cicada_ad_hi_comp.vhd
+  - ../payload/gtl/cicada_ad_hi_comp.vhd
 
 ### Changed
 - source files:
@@ -20,10 +20,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/lhc_data_pkg.vhd
   - ../payload/gtl_data_mapping.vhd
   - ../payload/gtl/bx_pipeline.vhd
-  - ../payload/gtl/common/calo_comparators.vhd
-  - ../payload/gtl/common/calo_obj_cuts.vhd
-  - ../payload/gtl/comb_conditions.vhd
-  - ../payload/gtl/correlation_conditions.vhd
   - ../payload/frame/lmp.vhd
 
 ## [v1.25.2] - 2023-09-29

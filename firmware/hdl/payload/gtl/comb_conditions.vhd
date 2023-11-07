@@ -3,8 +3,6 @@
 -- Condition module for all combination conditions.
 
 -- Version history:
--- HB 2023-10-19: bjets not used in CICADA - but code still in this module.
--- HB 2023-02-03: updated for CICADA.
 -- HB 2022-09-02: cleaned up.
 -- HB 2022-02-17: bug fixed in orm and cleaned up.
 -- HB 2021-12-09: updated for DISP of jets.
@@ -69,11 +67,6 @@ entity comb_conditions is
         upt_upper_limits_obj1: common_templates_array := (others => (others => '0'));
         upt_lower_limits_obj1: common_templates_array := (others => (others => '0'));
         ip_luts_obj1: common_templates_ip_array := (others => (others => '1'));
-        hi_bits_requ : boolean := false;
-        hi_bits_val : std_logic_vector(HI_BITS-1 downto 0) := (others => '0');
-        ad_requ : boolean := false;
-        ad_dec_thr : std_logic_vector(AD_DEC_BITS-1 downto 0) := (others => '0');
-        ad_int_thr : std_logic_vector(AD_INT_BITS-1 downto 0) := (others => '0');
 
         requested_charge_correlation: string(1 to 2) := "ig";
 
@@ -111,7 +104,6 @@ entity comb_conditions is
         iso_lut_obj2: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
         disp_cut_obj2: boolean := false;
         disp_requ_obj2: boolean := false;
-        bjet_flag_requ_obj2 : boolean := false; -- HB, 2023-10-19: bjets not used in CICADA
 
         tbpt_cut: boolean := false;
         tbpt_vector_width: positive := 2+EG_PT_VECTOR_WIDTH+EG_PT_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH+CALO_SIN_COS_VECTOR_WIDTH;
@@ -151,9 +143,6 @@ entity comb_conditions is
         os_charcorr_triple: in std_logic_3dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => '0')));
         ls_charcorr_quad: in std_logic_4dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => (others => '0'))));
         os_charcorr_quad: in std_logic_4dim_array(0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1, 0 to NR_MU_OBJECTS-1) := (others => (others => (others => (others => '0'))));
-        hi_bits_i : in std_logic_vector(HI_BITS-1 downto 0) := (others => '0');
-        ad_dec_i : in std_logic_vector(AD_DEC_BITS-1 downto 0) := (others => '0');
-        ad_int_i : in std_logic_vector(AD_INT_BITS-1 downto 0) := (others => '0');
         deta_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dphi_orm: in deta_dphi_vector_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
         dr_orm: in dr_dim2_array(0 to nr_obj1-1, 0 to nr_obj2-1) := (others => (others => (others => '0')));
@@ -192,20 +181,7 @@ architecture rtl of comb_conditions is
     signal twobody_pt_comp_pipe, twobody_upt_comp_pipe :
     std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_1_low_obj1 to slice_1_high_obj1) := (others => (others => '1'));
     
-    signal ad_comp_pipe, hi_comp_pipe : std_logic := '1';
-
 begin
-
-    -- CICADA Anomaly Detection and Heavy Ion Bits comparators
-    cicada_if: if (type_obj1 = BJET_TYPE) or (type_obj2 = BJET_TYPE) generate
-        cicada_i: entity work.cicada_ad_hi_comp
-            generic map(hi_bits_requ, hi_bits_val, ad_requ, ad_dec_thr, ad_int_thr)
-            port map(
-                lhc_clk,
-                hi_bits_i, ad_dec_i, ad_int_i,
-                hi_comp_pipe, ad_comp_pipe
-            );
-    end generate cicada_if;
 
     calo_i: if type_obj1 /= MU_TYPE generate
         -- Instantiation of object cuts for obj1.
@@ -251,7 +227,6 @@ begin
                     lhc_clk,
                     obj1_slice_1_vs_templ_pipe, obj1_slice_2_vs_templ_pipe, obj1_slice_3_vs_templ_pipe, obj1_slice_4_vs_templ_pipe,
                     twobody_pt_comp_pipe,
-                    hi_comp_pipe, ad_comp_pipe,
                     condition_o
                 );
         end generate no_orm_i;

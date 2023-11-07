@@ -49,8 +49,6 @@ entity matrix_corr_cond is
         dr_orm_comp_12 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '0'));
         dr_orm_comp_13 : in std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
         dr_orm_comp_23 : in std_logic_2dim_array(slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => '0'));
-        hi_comp : in std_logic;
-        ad_comp : in std_logic;
         condition_and_or: out std_logic
     );
 end matrix_corr_cond;
@@ -94,7 +92,7 @@ begin
                 -- ORs for matrix
                 condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
             end loop;
-            condition_and_or <= condition_and_or_tmp and hi_comp and ad_comp;
+            condition_and_or <= condition_and_or_tmp;
         end process;
 
     end generate no_orm_i;
@@ -140,7 +138,7 @@ begin
                     -- ORs for matrix
                     condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_orm_idx_vec(i);
                 end loop;
-                condition_and_or <= condition_and_or_tmp and hi_comp and ad_comp;
+                condition_and_or <= condition_and_or_tmp;
             end process;
 
         end generate obj_2plus1_true_i;
@@ -168,7 +166,7 @@ begin
                     -- ORs for matrix
                     condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
                 end loop;
-                condition_and_or <= condition_and_or_tmp and hi_comp and ad_comp;
+                condition_and_or <= condition_and_or_tmp;
             end process;
 
         end generate obj_2plus1_false_i;
@@ -204,7 +202,7 @@ begin
                 -- ORs for matrix
                 condition_and_or_tmp := condition_and_or_tmp or obj_vs_templ_vec(i);
             end loop;
-            condition_and_or <= condition_and_or_tmp and hi_comp and ad_comp;
+            condition_and_or <= condition_and_or_tmp;
         end process matrix_p;
 
     end generate mass_3_obj_i;

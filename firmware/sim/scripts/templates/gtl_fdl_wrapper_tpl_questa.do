@@ -67,7 +67,6 @@ vcom -93 -work work $HDL_DIR/packages/gtl_luts_pkg.vhd
 #
 ## GTL modules
 ### common modules
-vcom -93 -work work $HDL_DIR/payload/gtl/common/cicada_ad_hi_comp.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/delay_pipeline.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/pt_comp.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/upt_comp.vhd
@@ -116,6 +115,7 @@ vcom -93 -work work $HDL_DIR/payload/gtl/esums_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/min_bias_hf_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/towercount_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/zdc_condition.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/cicada_ad_hi_comp.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
 #### inserted from anomaly_detection.dep
 {{adt_vhd}}

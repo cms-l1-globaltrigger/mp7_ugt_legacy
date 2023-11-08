@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.26.0] - 2023-11-07
+## [v1.26.0] - 2023-11-08
 ### Comment
 
 - mp7_ugt firmware release v1.26.0
@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - source files:
-  - ../payload/gtl/cicada_ad_hi_comp.vhd
+  - ../payload/gtl/cicada_ad_hi_condition.vhd
 
 ### Changed
 - source files:
@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/gtl_data_mapping.vhd
   - ../payload/gtl/bx_pipeline.vhd
   - ../payload/frame/lmp.vhd
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+- dep file:
+  - ../cfg/uGT_algo.dep
 
 ## [v1.25.2] - 2023-09-29
 ### Comment

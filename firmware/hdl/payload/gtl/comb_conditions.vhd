@@ -204,8 +204,7 @@ begin
                 phi_w2_upper_limits_obj1, phi_w2_lower_limits_obj1,
                 iso_luts_obj1,
                 disp_cuts_obj1,
-                disp_requs_obj1,
-                bjet_flag_requs_obj1
+                disp_requs_obj1
             )
             port map(
                 lhc_clk,
@@ -252,8 +251,7 @@ begin
                         phi_w2_lower_limit_obj2,
                         iso_lut_obj2,
                         disp_cut_obj2,
-                        disp_requ_obj2,
-                        bjet_flag_requ_obj2
+                        disp_requ_obj2
                     )
                     port map(
                         lhc_clk, obj2(i), obj2_vs_templ_pipe(i,1)

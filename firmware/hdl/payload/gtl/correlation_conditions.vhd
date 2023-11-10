@@ -275,8 +275,7 @@ begin
                     phi_w2_lower_limit_obj1,
                     iso_lut_obj1,
                     disp_cut_obj1,
-                    disp_requ_obj1,
-                    bjet_flag_requ_obj1
+                    disp_requ_obj1
                 )
                 port map(lhc_clk, calo_obj1(i), obj1_vs_templ_pipe(i,1));
         end generate obj1_l;
@@ -353,8 +352,7 @@ begin
                         phi_w2_lower_limit_obj2,
                         iso_lut_obj2,
                         disp_cut_obj2,
-                        disp_requ_obj2,
-                        bjet_flag_requ_obj2
+                        disp_requ_obj2
                     )
                     port map(lhc_clk, calo_obj2(i), obj2_vs_templ_pipe(i,1));
             end generate obj2_l;
@@ -526,8 +524,7 @@ begin
                             phi_w2_lower_limit_obj3,
                             iso_lut_obj3,
                             disp_cut_obj3,
-                            disp_requ_obj3,
-                            bjet_flag_requ_obj3
+                            disp_requ_obj3
                         )
                         port map(lhc_clk, calo_obj3(i), obj3_vs_templ_pipe(i,1));
                 end generate obj3_l;
@@ -669,8 +666,6 @@ begin
                         dphi_orm_comp_23 => dphi_orm_comp_23_pipe,
                         dr_orm_comp_13 => dr_orm_comp_13_pipe,
                         dr_orm_comp_23 => dr_orm_comp_23_pipe,
-                        hi_comp => hi_comp_pipe,
-                        ad_comp => ad_comp_pipe,
                         condition_and_or => condition_and_or
                     );
 
@@ -793,8 +788,6 @@ begin
                     obj3_vs_templ => obj3_vs_templ_pipe,
                     mass_3_obj_comp => mass_3_obj_comp_pipe,
                     charge_comp_triple => charge_comp_triple_pipe,
-                    hi_comp => hi_comp_pipe,
-                    ad_comp => ad_comp_pipe,
                     condition_and_or => condition_and_or
                 );
 

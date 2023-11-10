@@ -281,7 +281,8 @@ type bx_eg_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_ar
 type bx_jet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_JET_OBJECTS-1);
 type bx_tau_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_TAU_OBJECTS-1);
 --type bx_bjet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_BJET_OBJECTS-1);
-type bx_ad_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(AD_DEC_BITS+AD_INT_BITS-1 downto 0);
+type bx_ad_dec_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(AD_DEC_BITS-1 downto 0);
+type bx_ad_int_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(AD_INT_BITS-1 downto 0);
 type bx_hi_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(HI_BITS-1 downto 0);
 constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
 type calo_templates_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
@@ -545,7 +546,6 @@ type bx_data_record is record
     cent6 : bx_cent_array;
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
-    mus0, mus1, musoot0, musoot1 : mus_bit_array;
     cicada_ad_dec : bx_ad_dec_array;
     cicada_ad_int : bx_ad_int_array;
     cicada_hi : bx_hi_array;

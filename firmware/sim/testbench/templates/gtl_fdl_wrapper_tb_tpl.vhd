@@ -35,7 +35,7 @@ architecture rtl of gtl_fdl_wrapper_TB is
     constant bx_str_w : positive := 4;
     constant muon_str_w : positive := 16*8+8; -- 8 obj 64 bits (16 hex digits) + 8 blancs
     constant calo_str_w : positive := 8*48+48; -- 48 obj 32 bits (8 hex digits) + 48 blancs
-    constant ext_cond_str_w : positive := 64+1; -- 256 bits (64 hex digits) + 1 blanc
+    constant ext_cond_str_w : positive := 64; -- 256 bits (64 hex digits)
     constant data_str_w : positive := muon_str_w+calo_str_w+ext_cond_str_w;
     constant algo_str_w : positive := MAX_NR_ALGOS/4;
    

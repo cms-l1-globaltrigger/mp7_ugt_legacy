@@ -42,7 +42,7 @@ begin
         begin
             if ge_mode and (hi_bits_i >= hi_bits_val) then
                 hi_comp <= '1';
-            elsif (not ge_mode) and (hi_bits_i = hi_bits_val)
+            elsif (not ge_mode) and (hi_bits_i = hi_bits_val) then
                 hi_comp <= '1';
             else
                 hi_comp <= '0';

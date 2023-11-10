@@ -259,13 +259,13 @@ constant TAU_ISO_BITS : natural := TAU_ISO_HIGH-TAU_ISO_LOW+1;
 --constant BJET_FLAG_BIT : natural := 27;
 
 -- CICADA anomaly detection (ad) definition - decimal (dec) and integer (int) part 
-constant NR_AD_OBJECTS : positive := 1;
+constant NR_AD_OBJECTS : positive := 2;
 
 constant AD_DEC_LOW : natural := 0;
 constant AD_DEC_HIGH : natural := 7;
 constant AD_DEC_BITS : natural := AD_DEC_HIGH-AD_DEC_LOW+1;
-constant AD_INT_LOW : natural := 8;
-constant AD_INT_HIGH : natural := 15;
+constant AD_INT_LOW : natural := 0;
+constant AD_INT_HIGH : natural := 7;
 constant AD_INT_BITS : natural := AD_INT_HIGH-AD_INT_LOW+1;
 
 -- CICADA heavy ion bits

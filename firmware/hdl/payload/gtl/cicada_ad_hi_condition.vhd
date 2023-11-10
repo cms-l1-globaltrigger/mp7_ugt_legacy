@@ -38,7 +38,7 @@ architecture rtl of cicada_ad_hi_condition is
 begin
 
     hi_i: if hi_bits_requ generate
-        hi_p: process(hi_bits_i, ge_mode)
+        hi_p: process(hi_bits_i)
         begin
             if ge_mode and (hi_bits_i >= hi_bits_val) then
                 hi_comp <= '1';

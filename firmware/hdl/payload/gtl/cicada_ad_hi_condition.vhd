@@ -15,10 +15,10 @@ entity cicada_ad_hi_condition is
     generic	(
         ge_mode: boolean := true;
         hi_bits_requ : boolean := false;
-        hi_bits_val : std_logic_vector(HI_BITS-1 downto 0) := (others => '0');
+        hi_bits_val : std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
         ad_requ : boolean := false;
-        ad_dec_thr : std_logic_vector(AD_DEC_BITS-1 downto 0) := (others => '0');
-        ad_int_thr : std_logic_vector(AD_INT_BITS-1 downto 0) := (others => '0')
+        ad_dec_thr : std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0');
+        ad_int_thr : std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0')
     );
     port(
         lhc_clk: in std_logic;

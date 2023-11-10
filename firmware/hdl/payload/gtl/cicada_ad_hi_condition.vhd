@@ -83,7 +83,7 @@ begin
             STAGES => CICADA_COND_STAGES
         )
         port map(
-            clk, comp_v, comp_v_o
+            lhc_clk, comp_v, comp_v_o
         );
 
     hi_comp_o <= comp_v_o(1);

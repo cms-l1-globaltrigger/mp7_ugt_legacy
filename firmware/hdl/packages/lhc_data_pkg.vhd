@@ -124,7 +124,7 @@ package lhc_data_pkg is
             ETMHF_DATA_WIDTH +
             HTMHF_DATA_WIDTH +
             (CICADA_ARRAY_LENGTH*CICADA_DATA_WIDTH) +
-            EXTERNAL_CONDITIONS_DATA_WIDTH
+            EXTERNAL_CONDITIONS_DATA_WIDTH +
             EXTERNAL_CONDITIONS_DATA_WIDTH +
             ZDC5G_0_WIDTH + ZDC5G_1_WIDTH +
             ZDC5G_2_WIDTH + ZDC5G_3_WIDTH +
@@ -215,7 +215,7 @@ package lhc_data_pkg is
             ETMHF_DATA_WIDTH,
             HTMHF_DATA_WIDTH,
             CICADA_ARRAY_LENGTH * CICADA_DATA_WIDTH,         
-            EXTERNAL_CONDITIONS_DATA_WIDTH
+            EXTERNAL_CONDITIONS_DATA_WIDTH,
             ZDC5G_0_WIDTH, ZDC5G_1_WIDTH,
             ZDC5G_2_WIDTH, ZDC5G_3_WIDTH,
             ZDC5G_4_WIDTH, ZDC5G_5_WIDTH

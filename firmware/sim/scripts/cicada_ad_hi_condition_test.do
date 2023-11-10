@@ -23,23 +23,23 @@ set GT_SRC ./../hdl
 set HDL_DIR ./../hdl
 set NGC_DIR ./../ngc
 set TB_DIR ./testbench
-set TEST_DIR ./adt_test/l1menu_adt_v6
-set TEST_DIR_MOD ./adt_test/l1menu_adt_v6/module_0
+#set TEST_DIR ./adt_test/l1menu_adt_v6
+#set TEST_DIR_MOD ./adt_test/l1menu_adt_v6/module_0
 
 ## Create and map work directory
 vlib work
 vmap work work
 
 ## MP7 files
-vcom -93 -work work $TEST_DIR/mp7_data_types.vhd
-vcom -93 -work work $TEST_DIR/mp7_brd_decl.vhd
-vcom -93 -work work $TEST_DIR/mp7_top_decl.vhd
+#vcom -93 -work work $TEST_DIR/mp7_data_types.vhd
+#vcom -93 -work work $TEST_DIR/mp7_brd_decl.vhd
+#vcom -93 -work work $TEST_DIR/mp7_top_decl.vhd
 vcom -93 -work work $HDL_DIR/packages/gt_mp7_top_pkg_sim.vhd
 vcom -93 -work work $HDL_DIR/packages/top_decl.vhd
 vcom -93 -work work $HDL_DIR/packages/lhc_data_pkg.vhd
 vcom -93 -work work $TB_DIR/lhc_data_debug_util_pkg.vhd
 vcom -93 -work work $TB_DIR/txt_util_pkg.vhd
-vcom -93 -work work $TEST_DIR_MOD/adt_test_sim_pkg.vhd
+#vcom -93 -work work $TEST_DIR_MOD/adt_test_sim_pkg.vhd
 
 ## GT packages
 vcom -93 -work work $HDL_DIR/packages/math_pkg.vhd
@@ -49,7 +49,7 @@ vcom -93 -work work $HDL_DIR/packages/gtl_pkg.vhd
 #
 ## GTL modules
 #
-#vcom -93 -work work $HDL_DIR/payload/gtl/cicada_ad_hi_condition.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/cicada_ad_hi_condition.vhd
 #
 
 ##TB_DIR

@@ -54,10 +54,10 @@ begin
         ad_p: process(ad_int_i, ad_dec_i)
         begin
             if ge_mode then
-                if ad_int_i > ad_int_thr then
+                if ad_int_i > ad_int_thr(AD_INT_BITS-1 downto 0) then
                     ad_comp <= '1';
-                elsif ad_int_i = ad_int_thr then
-                    if ad_dec_i >= ad_dec_thr then
+                elsif ad_int_i = ad_int_thr(AD_INT_BITS-1 downto 0) then
+                    if ad_dec_i >= ad_dec_thr(AD_DEC_BITS-1 downto 0) then
                         ad_comp <= '1';
                     else
                         ad_comp <= '0';
@@ -66,7 +66,7 @@ begin
                     ad_comp <= '0';
                 end if;
             else
-                if (ad_int_i = ad_int_thr) and (ad_dec_i = ad_dec_thr) then
+                if (ad_int_i = ad_int_thr(AD_INT_BITS-1 downto 0)) and (ad_dec_i = ad_dec_thr(AD_DEC_BITS-1 downto 0)) then
                     ad_comp <= '1';
                 else
                     ad_comp <= '0';                

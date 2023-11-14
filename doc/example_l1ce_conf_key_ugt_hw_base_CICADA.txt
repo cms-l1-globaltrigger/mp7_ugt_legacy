@@ -201,7 +201,7 @@
       <port id="MP7_slot1.inputPorts.ZDCRx[00:01]"/>
     </connected-fed>
     <!-- additional FED for CICADA input ??? -->
-    <connected-fed id="????">
+    <connected-fed id="1354 or 1356 or 1358">
       <port id="MP7_slot1.inputPorts.Cicada[00:01]"/>
       <port id="MP7_slot2.inputPorts.Cicada[00:01]"/>
       <port id="MP7_slot3.inputPorts.Cicada[00:01]"/>

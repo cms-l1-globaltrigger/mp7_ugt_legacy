@@ -308,24 +308,21 @@ ZDC & 71  & 218 & X0Y35 & x & \\\hline
 % 
 
 Tables ~\ref{table:app:sum_opt_links} and ~\ref{table:app:sum_opt_links2} show the configuration of optical links to Global Trigger.\\
-Links 0..3 contains muon data from GMT, links 4..10 data from Calo-Layer2 and links 12..15 external conditions from AMC502 boards.\\
-Input data of links 0-10 (channels 0x00-0x14) and link 12 (channel 0x18) are part of the readout record of AMC \#1.
+Links 0..3 contains muon data from GMT, links 4..10 data from Calo-Layer2, link 11 data from Calo-Layer1 and links 12..15 external conditions from AMC502 boards.\\
+Input data of links 0-12 (channels 0x00-0x18) are part of the readout record of AMC \#1.
 
 \begin{table}[ht]
-% \caption{\bf Overview optical links (part 1)}
 \caption{Overview optical input links (part 1)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-% \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|p{1.2cm}|}\hline
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
  & \multicolumn{10}{ c| }{link} \\\hline
  & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\\hline
 ch. -> & 0x00 & 0x02 & 0x04 & 0x06 & 0x08 & 0x0a & 0x0c & 0x0e & 0x10 & 0x12 \\\hline\hline
-% frame &  &  &  &  &  &  &  &  &  &\makebox[1.2cm][c]{ } \\\hline\hline
 frame &  &  &  &  &  &  &  &  &  & \\\hline
-0 & free & free & free & free & EG0 & EG6 & JET0 & JET6 & TAU0 & TAU6\\
-1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7\\\hline
+0 & free & free & free & free & EG0 & EG6 & JET0 & JET6 & TAU0 & TAU6\\\hline
+1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7\\
  & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & &\\
  & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & &\\
  & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & &\\\hline
@@ -343,31 +340,29 @@ frame &  &  &  &  &  &  &  &  &  & \\\hline
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-% \begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
 \begin{tabular}{|c|c|c|c|c|c|c|c|}\hline
  & \multicolumn{7}{ c| }{link} \\\hline
  & 10 & 11 & 12 & 13 & 14 & 15 & 71 \\\hline
 ch. -> & 0x14 & 0x16 & 0x18 & 0x1a & 0x1c & 0x1e & 0x8e \\\hline\hline
-% frame &   &   &   &   &   &\makebox[1.5cm][c]{ } \\\hline\hline
 frame &   &   &   &   &   & & \\\hline
-0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond & ZDC \\
- & ETTEM, & [31:0] & [31:0] & [95:64] & [159:128] & [223:192] & frame 0\\
- & MBT0HFP & & & & & & 0x7c/0x3c\\\hline
-1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond & ZDC-\\
- & TOWERCOUNT, & [63:32] & [63:32] & [127:96] & [191:160] & [255:224] & 10 bits\\
- & MBT0HFM & & & & & & \\\hline
-2 & ET$_{miss}$, & free & free & free & free & free &  ZDC+\\
- & ASYMET,& [95:64] & & & & & 10 bits\\
- & MBT1HFP  & & & & & & \\\hline
-3 & HT$_{miss}$, & free & free & free & free & free & ZDC \\
- & ASYMHT,& [127:96] & & & & & frame 3\\
- & MBT1HFM & & & & & & 0x0000\\\hline
-4 & ET$_{miss}^{HF}$ & free & free & free & free & free & ZDC \\
- & ASYMETHF, & [159:128] & & & & & counter\\
- & CENT[3:0] & & & & & & 12 bits\\\hline
-5 & HT$_{miss}^{HF}$ & free & free & free & free & free & ZDC \\
- & ASYMHTHF, & [191:160] & & & & & frame 5\\
- & CENT[7:4] & & & & & & 0x0000\\\hline
+0 & ET, & CICADA & ExtCond & ExtCond & ExtCond & ExtCond & ZDC \\
+ & ETTEM, & AD INT MSB & [31:0] & [95:64] & [159:128] & [223:192] & frame 0\\
+ & MBT0HFP & on bits [31:28] & & & & & 0x7c/0x3c\\\hline
+1 & HT, & CICADA & ExtCond & ExtCond & ExtCond & ExtCond & ZDC-\\
+ & TOWERCOUNT, & AD INT LSB & [63:32] & [127:96] & [191:160] & [255:224] & 10 bits\\
+ & MBT0HFM & on bits [31:28] & & & & & \\\hline
+2 & ET$_{miss}$, & CICADA & free & free & free & free &  ZDC+\\
+ & ASYMET,& AD DEC MSB & & & & & 10 bits\\
+ & MBT1HFP & on bits [31:28] & & & & & \\\hline
+3 & HT$_{miss}$, & CICADA & free & free & free & free & ZDC \\
+ & ASYMHT,& AD DEC LSB & & & & & frame 3\\
+ & MBT1HFM & on bits [31:28] & & & & & 0x0000\\\hline
+4 & ET$_{miss}^{HF}$ & CICADA & free & free & free & free & ZDC \\
+ & ASYMETHF, & HI MSB & & & & & counter\\
+ & CENT[3:0] & on bits [31:28] & & & & & 12 bits\\\hline
+5 & HT$_{miss}^{HF}$ & CICADA & free & free & free & free & ZDC \\
+ & ASYMHTHF, & HI LSB & & & & & frame 5\\
+ & CENT[7:4] & on bits [31:28] & & & & & 0x0000\\\hline
 \end{tabular}
 }
 \label{table:app:sum_opt_links2}
@@ -395,7 +390,6 @@ Links 16..24 contains algo data (after GTL, after BX mask and after prescalers),
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-% \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|p{1.2cm}|}\hline
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
  & \multicolumn{10}{ c| }{link} \\\hline
  & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\\hline

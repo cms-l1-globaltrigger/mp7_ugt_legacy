@@ -11,7 +11,6 @@ print("      <minimum>+0.0000000000000000E+00</minimum>")
 print("      <maximum>+{:.16E}</maximum>".format(steps))
 print("      <step>+{:.16E}</step>".format(scale_step))
 print("      <n_bits>{}</n_bits>".format(n_bits))
-
 for i in range(0, 256):
     int_val = scale_step * i
     print("      <bin>")
@@ -19,5 +18,6 @@ for i in range(0, 256):
     print("        <minimum>+{:.16E}</minimum>".format(int_val))
     print("        <maximum>+{:.16E}</maximum>".format(int_val))
     print("      </bin>")
+print("    </scale>")
 
 

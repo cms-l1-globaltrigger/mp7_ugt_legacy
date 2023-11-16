@@ -18,7 +18,7 @@
 
 \begin{titlepage}
 
-\date{6 September 2023}
+\date{16 November 2023}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -117,10 +117,11 @@ The $p_t$ scale for muon objects starts from 0 (zero), but HW index=0 indicates 
 
 14) The "Asymmetry" and "Centrality" bits (introduced for Heavy-Ion running) are part of the ET$_{miss}$, HT$_{miss}$, ET$_{miss}^{HF}$ and HT$_{miss}^{HF}$ data structure.
 
-15) The "CICADA" data structure with 6 "Boosted jets" (bjets) and values for Anomaly Detection and Heavy Ion bits~\cite{CICADA}.
+15) The "CICADA" data structure with values for Anomaly Detection and Heavy Ion bits~\cite{CICADA}.
 
 The following tables (Table~\ref{table:scales_table_1} and ~\ref{table:scales_table_2}) show the bits/resolution per object instance for all objects, including the ones that will be implemented in 2017. "Collection" or "object types" are physical entities such as muons, jets, ET$_{miss}$ etc. "Instances" or "objects" are their individual representatives such as "first muon", "second jet", "third tau" etc.\\
-Table~\ref{table:scales_table_3} shows the bits for ZDC objects, see ~\cite{ZDC}.
+Table~\ref{table:scales_table_3} shows the bits for ZDC objects, see ~\cite{ZDC}.\\
+Table~\ref{table:scales_table_4} shows the bits for CICADA objects, see ~\cite{CICADA}.\\
 
 \begin{table}[ht]
 \caption{\bf Scales (muon and calorimeter)}
@@ -251,6 +252,22 @@ ZDC	       &	1 * 2	& EN\_MINUS (ZDC-)	    &	0..1023	   &	1	  &	10  \\
 \label{table:scales_table_3}
 \end{table}
 
+\begin{table}[ht]
+\caption{\bf Scales (CICADA)}
+\vspace{5mm}
+\centering
+\begin{tabular}{|p{2.0cm}| l | p{2.0cm} | p{2.0cm} | p{2.0cm} | l |}
+\hline
+object	&	collections $\times$ instances	&	parameter	&	range	&	step	&	bits \\
+\hline\hline
+AD 	   &	1 * 2	& AD INT	    &	0..255	   &	1	  &	8  \\
+	   &	        & AD DEC	    &	0..255	   &	1/256  &	8  \\
+HI 	   &	1   	& HI 	        &	0..255	   &	1	  &	8  \\
+\hline
+\end{tabular}
+\label{table:scales_table_4}
+\end{table}
+
 \clearpage
 
 The following pages contain tables for data structure of objects and the data flow of objects on the optical links.
@@ -271,22 +288,22 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 % frame &  & & & & & & & & & & \\\hline\hline
 0 & free & free & free & free & EG0 & EG6 & JET0 & JET6 & TAU0 & TAU6\\
  &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\\hline
 1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7\\
  & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & &\\
  & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & &\\
- & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & &\\
+ & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & &\\\hline
 2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8\\
  &  &  &  &  &  &  &  &  &  &\\
  &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\\hline
 3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9\\
  &  &  &  &  &  &  &  &  &  &\\
  &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\\hline
 4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10\\
  &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  &  &  &  &  &  &\\\hline
 5 & MU1 [63:32] & MU3 [63:32] & MU5 [63:32] & MU7 [63:32] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11\\
  &  &  &  &  &  &  &  &  &  &\\
  &  &  &  &  &  &  &  &  &  &\\\hline
@@ -303,24 +320,24 @@ frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 \begin{tabular}{|c|c|c|c|c|c|c|p{1.5cm}|}\hline
  & \multicolumn{7}{ c| }{link} \\\hline
 frame & 10 & 11 & 12 & 13 & 14 & 15 &\makebox[1.5cm][c]{71} \\\hline\hline
-0 & ET, & CICADA(0) & ExtCond & ExtCond & ExtCond & ExtCond & 0x3C/0x7C\\
- & ETTEM, & & [31:0] & [95:64] & [159:128] & [223:192] & (8 bits)\\
- & MBT0HFP & & & & & &\\
-1 & HT, & CICADA(1) & ExtCond & ExtCond & ExtCond & ExtCond & ZDC-\\
- & TOWERCOUNT, & & [63:32] & [127:96] & [191:160] & [255:224] & (10 bits)\\
- & MBT0HFM & & & & & &\\
-2 & ET$_{miss}$, & CICADA(2) & free & free & free & free & ZDC+\\
- & ASYMET,& & & & & & (10 bits)\\
- & MBT1HFP  & & & & & &\\
-3 & HT$_{miss}$, & CICADA(3) & free & free & free & free &  0\\
- & ASYMHT,& & & & & & (32 bits)\\
- & MBT1HFM & & & & & &\\
-4 & ET$_{miss}^{HF}$ & CICADA(4) & free & free & free & free & counter\\
- & ASYMETHF, & & & & & & (12 bits)\\
- & CENT[3:0] & & & & & &\\
+0 & ET, & CICADA & ExtCond & ExtCond & ExtCond & ExtCond & 0x3C/0x7C\\
+ & ETTEM, & AD INT MSB & [31:0] & [95:64] & [159:128] & [223:192] & (8 bits)\\
+ & MBT0HFP & on bits [31:28] & & & & &\\\hline
+1 & HT, & CICADA & ExtCond & ExtCond & ExtCond & ExtCond & ZDC-\\
+ & TOWERCOUNT, & AD INT LSB & [63:32] & [127:96] & [191:160] & [255:224] & (10 bits)\\
+ & MBT0HFM & on bits [31:28] & & & & &\\\hline
+2 & ET$_{miss}$, & CICADA & free & free & free & free & ZDC+\\
+ & ASYMET,& AD DEC MSB & & & & & (10 bits)\\
+ & MBT1HFP & on bits [31:28] & & & & &\\\hline
+3 & HT$_{miss}$, & CICADA & free & free & free & free &  0\\
+ & ASYMHT,& AD DEC LSB & & & & & (32 bits)\\
+ & MBT1HFM & on bits [31:28] & & & & &\\\hline
+4 & ET$_{miss}^{HF}$ & CICADA & free & free & free & free & counter\\
+ & ASYMETHF, & HI MSB & & & & & (12 bits)\\
+ & CENT[3:0] & on bits [31:28] & & & & &\\\hline
 5 & HT$_{miss}^{HF}$ & CICADA(5) & free & free & free & free &  0\\
- & ASYMHTHF, & & & & & & (32 bits)\\
- & CENT[7:4] & & & & & &\\\hline
+ & ASYMHTHF, & HI LSB & & & & & (32 bits)\\
+ & CENT[7:4] & on bits [31:28] & & & & &\\\hline
 \end{tabular}
 }
 \label{table:app:sum_opt_links2}
@@ -816,12 +833,12 @@ Centrality bits [7:4] & CENT[7:4] & 5 & HT$_{miss}^{HF}$ & 31..28 \\\hline
 \centering
 \begin{tabular}{|c|l|l|}\hline
 frame & 31..28 & 27..0\\\hline\hline
-0 & Anomaly Detection Integer MSB & Boosted jet (bjet)  1\\\hline
-1 & Anomaly Detection Integer LSB & Boosted jet (bjet)  2\\\hline
-2 & Anomaly Detection Decimal MSB & Boosted jet (bjet)  3\\\hline
-3 & Anomaly Detection Decimal LSB & Boosted jet (bjet)  4\\\hline
-4 & Heavy Ion MSB & Boosted jet (bjet)  5\\\hline
-5 & Heavy Ion LSB & Boosted jet (bjet)  6\\\hline
+0 & Anomaly Detection Integer MSB & free \\\hline
+1 & Anomaly Detection Integer LSB & free \\\hline
+2 & Anomaly Detection Decimal MSB & free \\\hline
+3 & Anomaly Detection Decimal LSB & free \\\hline
+4 & Heavy Ion MSB & free \\\hline
+5 & Heavy Ion LSB & free \\\hline
 \end{tabular}
 \label{table:opt_link_cicada}
 \end{table}
@@ -850,7 +867,7 @@ frame & bit(s)=0 & bit(s) & parameter \\\hline\hline
 5 & 31..0 & &\\\hline
 
 \end{tabular}
-\label{table:zdc_link_cicada}
+\label{table:opt_link_zdc}
 \end{table}
 
 \clearpage
@@ -858,18 +875,21 @@ frame & bit(s)=0 & bit(s) & parameter \\\hline\hline
 \begin{thebibliography}{00}
 
 \bibitem {Darin} 
-\url{https://indico.cern.ch/getFile.py/access?contribId=4\&sessionId=0\&resId=0\&materialId=slides\&confId=206223}
+\href{https://indico.cern.ch/getFile.py/access?contribId=4\&sessionId=0\&resId=0\&materialId=slides\&confId=206223}{\texttt{D. Acosta: "PROPOSAL FOR DATA
+FORMATS IN L1 UPGRADE"}}
 
 \bibitem {muon}
 \url{http://www.hephy.at/project/cms/trigger/globalMuonTrigger/notes/in04\_006.pdf}
 
 \bibitem {calo}
-\url{https://cds.cern.ch/record/1364214/files/in02_069.pdf}
+\href{https://cds.cern.ch/record/1364214/files/in02_069.pdf}{\texttt{CMS NOTE 2002/069: "CMS Level-1 Global Calorimeter Trigger to Global
+Trigger and Global Muon Trigger Interfaces"}}
 
 \bibitem {CICADA}
-\url{https://docs.google.com/presentation/d/1Zk2oDbnxUZilnWXC\_HyWYbNJ8F41MiBso4D49bN-js4/edit\#slide=id.g129a5c5a910\_0\_197}
+%\url{https://docs.google.com/presentation/d/1Zk2oDbnxUZilnWXC\_HyWYbNJ8F41MiBso4D49bN-js4/edit\#slide=id.g129a5c5a910\_0\_197}
+\href{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/cicada_link_11_v2/doc/CICADA_Bit_Reference_19_10_23.pdf}{\texttt{Updated description of CICADA structure (CICADA\_Bit\_Reference\_19\_10\_23.pdf)}}
 
-\bibitem {ZDC updated}
+\bibitem {ZDC}
 \href{\gitbranch/doc/scales_inputs_2_ugt/ZDC_uhtr_spec_email_24_7_2023.txt}{\texttt{Updated description of ZDC structure (ZDC\_uhtr\_spec\_email\_24\_7\_2023.txt)}}
 
 \end{thebibliography}

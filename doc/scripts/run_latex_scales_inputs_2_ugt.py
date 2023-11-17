@@ -6,9 +6,8 @@ from pathlib import Path
 
 dir_path = os.path.dirname(os.path.abspath(__file__))
 dir_path = dir_path.rsplit('/', 1)[0]
+dir_path = dir_path.rsplit('/', 1)[0]
 
-file_versions = os.path.join(dir_path, 'firmware', 'hdl',  'packages',  'gt_mp7_core_pkg.vhd') 
-    
 def run_command(*args):
     command = ' '.join(args)
     logging.info(">$ %s", command)

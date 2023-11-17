@@ -10,9 +10,9 @@ print("=========================================================================
 
 dir_path = os.path.dirname(os.path.abspath(__file__))
 dir_path = dir_path.rsplit('/', 1)[0]
-#print(dir_path)
+dir_path = dir_path.rsplit('/', 1)[0]
+
 file_versions = os.path.join(dir_path, 'firmware', 'hdl',  'packages',  'gt_mp7_core_pkg.vhd') 
-#print(filename)
 
 def get_versions(filename, text):
 
@@ -23,9 +23,7 @@ def get_versions(filename, text):
     for line in Lines:
         count += 1
         if line.find(text) != -1:
-            #print(line)
             value = ((line.split('=')[-1]).split(';')[0]).strip()
-            #print(value)
     return value
     
 def run_command(*args):
@@ -44,7 +42,7 @@ def get_active_branch_name(path):
 
 branch_name = get_active_branch_name(dir_path)
 branch_name = branch_name.strip()
-#print(branch_name)
+
 versions_list = [
     'constant GT_MAJOR_VERSION',
     'constant GT_MINOR_VERSION',
@@ -66,7 +64,6 @@ for version in versions_list:
     version_value = get_versions(file_versions, version)
     versions_values[idx] = version_value
     idx += 1
-#print(versions_values)
 
 versions_tex_file = os.path.join(dir_path, 'doc', 'mp7_ugt_firmware_specification', 'src', 'latex', 'content', 'versions.tex')
 nc = 'newcommand'

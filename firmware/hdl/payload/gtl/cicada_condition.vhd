@@ -1,8 +1,9 @@
 
 -- Description:
--- Comparator for cicada Anomaly Detection (16 bits)
+-- Comparator for CICADA (anomaly detection - 16 bits)
 
 -- Version history:
+-- HB 2023-12-11: updated names.
 -- HB 2023-12-06: first design.
 
 library ieee;
@@ -17,7 +18,7 @@ entity cicada_condition is
     );
     port(
         lhc_clk: in std_logic;
-        ad_i : in std_logic_vector(AD_BITS-1 downto 0) := (others => '0');
+        ad_i : in std_logic_vector(CICADA_BITS-1 downto 0) := (others => '0');
         ad_comp_o : out std_logic
     );
 end cicada_condition;
@@ -29,16 +30,16 @@ architecture rtl of cicada_ad_hi_condition is
 
 begin
 
-    ad_p: process(ad_int_i, ad_dec_i)
+    ad_p: process(ad_i)
     begin
         if ge_mode then
-            if ad_i >= ad_thr(AD_BITS-1 downto 0) then
+            if ad_i >= ad_thr(CICADA_BITS-1 downto 0) then
                 ad_comp <= '1';
             else
                 ad_comp <= '0';                
             end if;
         else
-            if ad_i = ad_thr(AD_BITS-1 downto 0)then
+            if ad_i = ad_thr(CICADA_BITS-1 downto 0)then
                 ad_comp <= '1';
             else
                 ad_comp <= '0';                

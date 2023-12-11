@@ -242,37 +242,25 @@ constant TAU_ISO_BITS : natural := TAU_ISO_HIGH-TAU_ISO_LOW+1;
 
 -- *******************************************************************************************************
 -- HB 2023-01-26: calo anomaly algorithm (CICADA) data from Calo-Layer1
--- HB 2023-10-10: CICADA definition changed: no bjets
+-- HB 2023-10-10: CICADA definition changed: no bjets, no cicada heavy ion bits
 -- bjets definition
--- constant NR_BJET_OBJECTS : positive := CICADA_ARRAY_LENGTH; -- number bjet objects, from lhc_data_pkg.vhd
---constant NR_BJET_OBJECTS : positive := 6; -- number bjet objects, from lhc_data_pkg.vhd
 
---constant BJET_ET_LOW : natural := 0;
---constant BJET_ET_HIGH : natural := 10;
---constant BJET_ET_BITS : natural := BJET_ET_HIGH-BJET_ET_LOW+1;
---constant BJET_ETA_LOW : natural := 11;
---constant BJET_ETA_HIGH : natural := 18;
---constant BJET_ETA_BITS : natural := BJET_ETA_HIGH-BJET_ETA_LOW+1;
---constant BJET_PHI_LOW : natural := 19;
---constant BJET_PHI_HIGH : natural := 26;
---constant BJET_PHI_BITS : natural := BJET_PHI_HIGH-BJET_PHI_LOW+1;
---constant BJET_FLAG_BIT : natural := 27;
-
--- CICADA anomaly detection (ad) definition - decimal (dec) and integer (int) part 
-constant NR_AD_OBJECTS : positive := 2;
-
+-- CICADA anomaly detection (16 bits)
+constant AD_INT_MSB_FRAME : natural := 0;
+constant AD_INT_LSB_FRAME : natural := 1;
+constant AD_DEC_MSB_FRAME : natural := 2;
+constant AD_DEC_LSB_FRAME : natural := 3;
+constant AD_DEC_LOW_FRAME : natural := 28;
+constant AD_DEC_HIGH_FRAME : natural := 31;
+constant AD_INT_LOW_FRAME : natural := 28;
+constant AD_INT_HIGH_FRAME : natural := 31;
 constant AD_DEC_LOW : natural := 0;
 constant AD_DEC_HIGH : natural := 7;
-constant AD_DEC_BITS : natural := AD_DEC_HIGH-AD_DEC_LOW+1;
-constant AD_INT_LOW : natural := 0;
-constant AD_INT_HIGH : natural := 7;
-constant AD_INT_BITS : natural := AD_INT_HIGH-AD_INT_LOW+1;
-
--- CICADA heavy ion bits
-constant NR_HI_OBJECTS : positive := 1;
-constant HI_LOW : natural := 0;
-constant HI_HIGH : natural := 7;
-constant HI_BITS : natural := HI_HIGH-HI_LOW+1;
+constant AD_INT_LOW : natural := 8;
+constant AD_INT_HIGH : natural := 15;
+constant CICADA_LOW : natural := AD_DEC_LOW;
+constant CICADA_HIGH : natural := AD_INT_HIGH;
+constant CICADA_BITS : natural := CICADA_HIGH-CICADA_LOW+1;
 
 -- *******************************************************************************************************
 
@@ -280,10 +268,7 @@ type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO
 type bx_eg_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_EG_OBJECTS-1);
 type bx_jet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_JET_OBJECTS-1);
 type bx_tau_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_TAU_OBJECTS-1);
---type bx_bjet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_BJET_OBJECTS-1);
-type bx_ad_dec_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(AD_DEC_BITS-1 downto 0);
-type bx_ad_int_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(AD_INT_BITS-1 downto 0);
-type bx_hi_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(HI_BITS-1 downto 0);
+type bx_cicada_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(CICADA_BITS-1 downto 0);
 constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
 type calo_templates_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 constant MAX_CALO_ET_BITS : positive := max(EG_ET_BITS, JET_ET_BITS, TAU_ET_BITS);
@@ -510,9 +495,7 @@ type gtl_data_record is record
     towercount : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
     centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
-    cicada_ad_dec : std_logic_vector(AD_DEC_BITS-1 downto 0);
-    cicada_ad_int : std_logic_vector(AD_INT_BITS-1 downto 0);
-    cicada_hi : std_logic_vector(HI_BITS-1 downto 0);
+    cicada : std_logic_vector(CICADA_BITS-1 downto 0);
     zdc : zdc_array;
 end record gtl_data_record;
 
@@ -546,9 +529,7 @@ type bx_data_record is record
     cent6 : bx_cent_array;
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
-    cicada_ad_dec : bx_ad_dec_array;
-    cicada_ad_int : bx_ad_int_array;
-    cicada_hi : bx_hi_array;
+    cicada : bx_cicada_array;
     mus0, mus1, mus2, musoot0, musoot1 : mus_bit_array;
     zdcm : bx_zdc_array;
     zdcp : bx_zdc_array;

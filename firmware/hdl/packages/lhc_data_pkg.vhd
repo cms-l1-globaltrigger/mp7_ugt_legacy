@@ -31,7 +31,6 @@
 -- ext-cond(127..64)   2               1       13
 -- ext-cond(191..128)  2               1       14
 -- ext-cond(255..192)  2               1       15
--- CICADA              6               1       16
 --                     (64 bits)
 -- muon                2 (1..0)        1        0
 -- muon                2 (3..2)        1        1
@@ -78,10 +77,8 @@ package lhc_data_pkg is
     constant OFFSET_JET_LANES : natural := 6;
     constant OFFSET_TAU_LANES : natural := 8;
     constant OFFSET_ESUMS_LANES : natural := 10;
--- HB 2106-05-31: proposal for memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg_all_frames.vhd)
-    constant OFFSET_LINK_11_LANES : natural := 11;
+    constant OFFSET_CICADA_LANES : natural := 11;
     constant OFFSET_EXT_COND_LANES : natural := 12;
-    constant OFFSET_CICADA_LANES : natural := 13;
     constant OFFSET_ZDC5G_LANES : natural := 71;
 
 --  for simspy memory (test with ipb_dpmem_4096_32)

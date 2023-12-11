@@ -8,11 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - mp7_ugt firmware release v1.26.0
-- implementation of CICADA on link 11
+- CICADA on link 11 with 16 bits cicada score 
 
 ### Added
 - source files:
-  - ../payload/gtl/cicada_ad_hi_condition.vhd
+  - ../payload/gtl/cicada_condition.vhd
 
 ### Changed
 - source files:

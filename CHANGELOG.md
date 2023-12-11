@@ -23,6 +23,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/frame/lmp.vhd
 - simulation file:
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+  - ../sim/scripts/cicada_condition_test.do
+  - ../sim/scripts/cicada_condition_wave.do
+  - ../sim/testbench/cicada_condition_tb.vhd
 - dep file:
   - ../cfg/uGT_algo.dep
 

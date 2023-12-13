@@ -33,13 +33,13 @@ begin
     ad_p: process(cicada_i)
     begin
         if ge_mode then
-            if cicada_i >= cicada_cut(CICADA_BITS-1 downto 0) then
+            if cicada_i >= cscore(CICADA_BITS-1 downto 0) then
                 c_comp <= '1';
             else
                 c_comp <= '0';                
             end if;
         else
-            if cicada_i = cicada_cut(CICADA_BITS-1 downto 0)then
+            if cicada_i = cscore(CICADA_BITS-1 downto 0)then
                 c_comp <= '1';
             else
                 c_comp <= '0';                

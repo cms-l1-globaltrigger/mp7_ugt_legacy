@@ -3,6 +3,7 @@
 
 -- Version-history:
 
+-- HB 2023-12-13: CICADA definition changed: only 16 bits, no HI bits.
 -- HB 2023-10-10: CICADA definition changed: no bjets.
 -- HB 2023-09-06: cicada on link 11 (removed zdc10g on link 11).
 -- HB 2023-08-25: updated for new ZDC data structure.
@@ -69,11 +70,7 @@ begin
         bx_data.asymht(i) <= data_tmp(i).asymht;
         bx_data.asymethf(i) <= data_tmp(i).asymethf;
         bx_data.asymhthf(i) <= data_tmp(i).asymhthf;
-        --bx_data.bjet(i) <= data_tmp(i).bjet;
-        --bx_data.cicada_ad_dec(i) <= data_tmp(i).cicada_ad_dec;
-        --bx_data.cicada_ad_int(i) <= data_tmp(i).cicada_ad_int;
         bx_data.cicada(i) <= data_tmp(i).cicada;
-        --bx_data.cicada_hi(i) <= data_tmp(i).cicada_hi;
         bx_data.zdcm(i) <= data_tmp(i).zdc(EN_MINUS_FRAME)(ZDC_BIT_HIGH downto ZDC_BIT_LOW);
         bx_data.zdcp(i) <= data_tmp(i).zdc(EN_PLUS_FRAME)(ZDC_BIT_HIGH downto ZDC_BIT_LOW);
 

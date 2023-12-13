@@ -3,7 +3,7 @@
 -- Comparator for CICADA (anomaly detection - 16 bits)
 
 -- Version history:
--- HB 2023-12-11: updated names.
+-- HB 2023-12-13: updated names.
 -- HB 2023-12-06: first design.
 
 library ieee;
@@ -14,40 +14,40 @@ use work.gtl_pkg.all;
 entity cicada_condition is
     generic	(
         ge_mode: boolean := true;
-        ad_thr : std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0')
+        cscore : std_logic_vector(MAX_TEMPLATES_BITS-1 downto 0) := (others => '0')
     );
     port(
         lhc_clk: in std_logic;
-        ad_i : in std_logic_vector(CICADA_BITS-1 downto 0) := (others => '0');
-        ad_comp_o : out std_logic
+        cicada_i : in std_logic_vector(CICADA_BITS-1 downto 0) := (others => '0');
+        c_comp_o : out std_logic
     );
 end cicada_condition;
 
 architecture rtl of cicada_ad_hi_condition is
 
-    signal ad_comp : std_logic := '0';
+    signal c_comp : std_logic := '0';
     signal comp_v, comp_v_o : std_logic_vector(0 downto 0);
 
 begin
 
-    ad_p: process(ad_i)
+    ad_p: process(cicada_i)
     begin
         if ge_mode then
-            if ad_i >= ad_thr(CICADA_BITS-1 downto 0) then
-                ad_comp <= '1';
+            if cicada_i >= cicada_cut(CICADA_BITS-1 downto 0) then
+                c_comp <= '1';
             else
-                ad_comp <= '0';                
+                c_comp <= '0';                
             end if;
         else
-            if ad_i = ad_thr(CICADA_BITS-1 downto 0)then
-                ad_comp <= '1';
+            if cicada_i = cicada_cut(CICADA_BITS-1 downto 0)then
+                c_comp <= '1';
             else
-                ad_comp <= '0';                
+                c_comp <= '0';                
             end if;
         end if;
     end process;
 
-    comp_v <= ad_comp;
+    comp_v <= c_comp;
     
     out_pipe_i: entity work.delay_pipeline
         generic map(
@@ -58,6 +58,6 @@ begin
             lhc_clk, comp_v, comp_v_o
         );
 
-    ad_comp_o <= comp_v_o(0);
+    c_comp_o <= comp_v_o(0);
 
 end architecture rtl;

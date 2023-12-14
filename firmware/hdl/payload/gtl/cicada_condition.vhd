@@ -23,7 +23,7 @@ entity cicada_condition is
     );
 end cicada_condition;
 
-architecture rtl of cicada_ad_hi_condition is
+architecture rtl of cicada_condition is
 
     signal c_comp : std_logic := '0';
     signal comp_v, comp_v_o : std_logic_vector(0 downto 0);

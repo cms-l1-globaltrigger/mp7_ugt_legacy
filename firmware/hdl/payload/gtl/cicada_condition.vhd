@@ -47,7 +47,7 @@ begin
         end if;
     end process;
 
-    comp_v <= c_comp;
+    comp_v(0) <= c_comp;
     
     out_pipe_i: entity work.delay_pipeline
         generic map(

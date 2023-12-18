@@ -52,7 +52,7 @@ begin
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
     
-    anomaly_detection_i: entity work.anomaly_detection
+    anomaly_detection_i: entity work.axol1tl_v3
         port map(
             lhc_clk, ap_rst, ap_start,
             open, open, open,

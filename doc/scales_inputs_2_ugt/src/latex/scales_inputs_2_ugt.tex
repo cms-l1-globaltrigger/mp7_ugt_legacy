@@ -18,7 +18,7 @@
 
 \begin{titlepage}
 
-\date{16 November 2023}
+\date{18 December 2023}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -99,7 +99,7 @@ The $p_t$ scale for muon objects starts from 0 (zero), but HW index=0 indicates 
 7) The new muon structure contains:\\
 - "unconstrained $p_t$" scale (8 bits) in steps of 1.0 GeV starting from 0 (zero), HW index=0 indicates an invalid muon, the highest bin 0xff marks an overflow.\\
 - "impact parameter" with 2 bits.\\
-- "hadronic shower trigger (mus)" bits on bit 31 of MU0, MU2, MU3, MU4 and MU6 objects.
+- "hadronic shower trigger (mus)" bits on bit 61 of MU0, MU2, MU3, MU4 and MU6 objects.
 
 8) The new jet structure contains:\\
 - bit 27 will be used to flag a jet as delayed / displaced based on HCAL timing and depth profiles that are indicative of a LLP decay. This bit is referred to as “DISP”. If this bit is set to 1, then the jet has been tagged as an LLP jet.

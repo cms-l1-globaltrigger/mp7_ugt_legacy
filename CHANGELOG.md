@@ -4,18 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.26.0] - 2023-11-08
+## [v1.26.0] - 2023-12-18
 ### Comment
 
 - mp7_ugt firmware release v1.26.0
 - CICADA on link 11 with 16 bits cicada score 
+- development for topological trigger (topo_trigger)
 
 ### Added
 - source files:
   - ../payload/gtl/cicada_condition.vhd
+  - ../payload/gtl/topo_trigger/topo_wrapper.vhd
 
 ### Changed
 - source files:
+  - ../packages/gt_mp7_core_pkg.vhd
   - ../packages/gtl_pkg.vhd
   - ../packages/lhc_data_pkg.vhd
   - ../payload/gtl_data_mapping.vhd

@@ -16,14 +16,15 @@ use work.gt_mp7_core_pkg.all;
 
 use work.gtl_pkg.all;
 use work.fdl_pkg.all;
-use work.adt_test_sim_pkg.all;
 
-entity adt_test_l1menu_adt_v6_tb is
-end adt_test_l1menu_adt_v6_tb;
+entity topo_test_l1menu_cicada_topo_test_v2_mod_1_tb is
+end topo_test_l1menu_cicada_topo_test_v2_mod_1_tb;
 
-architecture rtl of adt_test_l1menu_adt_v6_tb is
+architecture rtl of topo_test_l1menu_cicada_topo_test_v2_mod_1_tb is
 
-    constant TV_FILE_LOC: string := "./adt_test/l1menu_adt_v6/TestVector_L1Menu_adt_v6_01.txt";
+    constant ADT_ALGO_BIT: integer := 7;
+    constant TV_FILE_LOC: string := "./topo_test/l1menu_cicada_topo_test_v2/module_1/TestVector_L1Menu_Cicada_Topo_test_v2.txt";
+    constant ERROR_FILE_LOC: string := "./topo_test/l1menu_cicada_topo_test_v2/module_1/error_file_L1_TOPO_1000.txt";
 
     type lhc_data_t_array is array(integer range <>) of lhc_data_t;
     type algo_vector_string_array is array(integer range <>) of string(1 to 128);
@@ -45,11 +46,11 @@ architecture rtl of adt_test_l1menu_adt_v6_tb is
     signal lhc_data : lhc_data_t := LHC_DATA_NULL;
     signal gtl_data : gtl_data_record;
     signal algo : std_logic_vector(NR_ALGOS-1 downto 0);
-    signal algo_log, algo_log_tmp : std_logic;
+    signal algo_log : std_logic;
     
     signal stop : boolean := false;
-    signal anomaly_score: std_logic_vector(17 downto 0);
-    signal anomaly_score_tmp, anomaly_score_int: integer;
+    signal topo_score: std_logic_vector(17 downto 0);
+    signal topo_score_tmp, topo_score_int: integer;
 
 --*********************************Main Body of Code**********************************
 begin
@@ -132,7 +133,7 @@ begin
             end if;
             if i >= GTL_FDL_LATENCY and i < LHC_BUNCH_COUNT+GTL_FDL_LATENCY-1 then
                 if algo_log /= algo_vector_data(i - GTL_FDL_LATENCY)(ADT_ALGO_BIT) then
-                    write(write_l, string'(bx_nr_vector_data(i - GTL_FDL_LATENCY) & " " & integer'image(anomaly_score_int) & " " & str(algo_log) & " " & str(algo_vector_data(i - GTL_FDL_LATENCY)(ADT_ALGO_BIT))));
+                    write(write_l, string'(bx_nr_vector_data(i - GTL_FDL_LATENCY) & " " & integer'image(topo_score_int) & " " & str(algo_log) & " " & str(algo_vector_data(i - GTL_FDL_LATENCY)(ADT_ALGO_BIT))));
                     writeline(err_file, write_l);
                 end if;
             end if;
@@ -158,15 +159,22 @@ begin
             lhc_clk,
             gtl_data,
             algo,
-            anomaly_score
+            topo_score
         );
         
--- delays for anomaly_score and algo(0) for err_file
-    del1_p: process(lhc_clk, anomaly_score, algo(0))
+-- delays for topological_score and algo(0) for err_file
+    del1_p: process(lhc_clk, topo_score, algo(0))
     begin
         if (lhc_clk'event and lhc_clk = '1') then
-            anomaly_score_int <= CONV_INTEGER(anomaly_score);
+            topo_score_tmp <= CONV_INTEGER(topo_score);
             algo_log <= algo(0);
+        end if;
+    end process;
+
+    del2_p: process(lhc_clk, topo_score_tmp, algo(0))
+    begin
+        if (lhc_clk'event and lhc_clk = '1') then
+            topo_score_int <= topo_score_tmp;
         end if;
     end process;
 

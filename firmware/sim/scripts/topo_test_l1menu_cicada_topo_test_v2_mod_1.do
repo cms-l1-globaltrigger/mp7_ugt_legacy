@@ -23,8 +23,8 @@ set GT_SRC ./../hdl
 set HDL_DIR ./../hdl
 set NGC_DIR ./../ngc
 set TB_DIR ./testbench
-set TEST_DIR ./adt_test/l1menu_adt_v6
-set TEST_DIR_MOD ./adt_test/l1menu_adt_v6/module_1
+set TEST_DIR ./topo_test/l1menu_cicada_topo_test_v2
+set TEST_DIR_MOD ./topo_test/l1menu_cicada_topo_test_v2/module_1
 
 ## Create and map work directory
 vlib work
@@ -39,7 +39,7 @@ vcom -93 -work work $HDL_DIR/packages/top_decl.vhd
 vcom -93 -work work $HDL_DIR/packages/lhc_data_pkg.vhd
 vcom -93 -work work $TB_DIR/lhc_data_debug_util_pkg.vhd
 vcom -93 -work work $TB_DIR/txt_util_pkg.vhd
-vcom -93 -work work $TEST_DIR_MOD/adt_test_sim_pkg.vhd
+vcom -93 -work work $TEST_DIR_MOD/topo_test_sim_pkg.vhd
 
 ## GT packages
 vcom -93 -work work $HDL_DIR/packages/math_pkg.vhd
@@ -97,28 +97,16 @@ vcom -93 -work work $HDL_DIR/payload/gtl/bx_pipeline.vhd
 #vcom -93 -work work $HDL_DIR/payload/gtl/min_bias_hf_conditions.vhd
 #vcom -93 -work work $HDL_DIR/payload/gtl/towercount_condition.vhd
 #vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
-#### inserted from anomaly_detection.dep
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_10ns_2s_12_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_10ns_3ns_12_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_10ns_3s_13_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_10ns_4ns_13_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_10ns_4s_14_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_10ns_5ns_14_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_10ns_5s_15_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_10ns_6ns_15_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_10ns_6s_16_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_10s_10s_20_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_8s_2s_10_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_8s_3ns_11_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_8s_3s_11_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_8s_4ns_12_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_8s_4s_12_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_8s_5ns_13_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_8s_5s_13_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_8s_6ns_14_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3_mul_8s_6s_14_1_1.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/axol1tl_v3.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/adt_wrapper.vhd
+#### inserted from topo_trigger.dep
+vcom -93 -work work $HDL_DIR/payload/gtl/topo_trigger/topo_trigger_mul_15s_5s_20_1_1.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/topo_trigger/topo_trigger_mul_mul_15s_5ns_20_2_1.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/topo_trigger/topo_trigger_mul_16s_5ns_20_1_1.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/topo_trigger/topo_trigger_mul_8ns_6s_14_1_1.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/topo_trigger/topo_trigger_mul_14s_5s_19_1_1.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/topo_trigger/topo_trigger.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/topo_trigger/topo_trigger_mul_8ns_6ns_13_1_1.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/topo_trigger/topo_trigger_sigmoid_table_ROM_AUTO_1R.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/topo_trigger/topo_wrapper.vhd
 #
 ### modules of BRAMs used for mass over DeltaR
 #
@@ -139,14 +127,14 @@ vcom -93 -work work $TEST_DIR_MOD/gtl_module.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl_data_mapping.vhd
 
 ##TB_DIR
-vcom -93 -work work $TB_DIR/adt_test_l1menu_adt_v6_tb.vhd
+vcom -93 -work work $TB_DIR/topo_test_l1menu_cicada_topo_test_v2_mod_1_tb.vhd
 
 ##Load Design
-vsim -t 1ps work.adt_test_l1menu_adt_v6_TB
+vsim -t 1ps work.topo_test_l1menu_cicada_topo_test_v2_mod_1_tb
 
 ##Load signals in wave window
 view wave
-do $TB_DIR/../scripts/adt_test_l1menu_adt_v6_wave.do
+do $TB_DIR/../scripts/topo_test_l1menu_cicada_topo_test_v2_mod_1_wave.do
 
 ##Run simulation
 run 91000 ns

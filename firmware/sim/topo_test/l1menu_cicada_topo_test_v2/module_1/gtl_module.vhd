@@ -1,9 +1,15 @@
 -- Description:
 -- Global Trigger Logic module.
 
--- Version-history:
--- HB 2022-09-12: v1.18.0: Module for "anomaly detection trigger (ADT)" test.
 -- Version history:
+-- HB 2023-12-18: v1.20.0: Implemented topological and cicada trigger.
+-- HB 2023-09-29: v1.19.4: Used "no_mgt" at quads 8..16 (top_decl.vhd).
+-- HB 2023-09-28: v1.19.3: Used "no_chk" and "no_buf" at quads 8..16.
+-- HB 2023-09-25: v1.19.2: Removed unused files "demux_lane_validation.vhd" and "reg.vhd". Changed quads 8..16, inserted with gth_5g, but without checksum and buffers.
+-- HB 2023-09-01: v1.19.1: Added zdc_condition.vhd (was missing) and updated sim and dep file.
+-- HB 2023-08-25: v1.19.0: Used link 71 as ZDC 5G input. ZDC data structure changed (16 bits only on 5G link). Updated top_decl.vhd.
+-- HB 2023-04-15: v1.18.1: Bug fix muon index bits.
+-- HB 2023-03-14: v1.18.0: Implemented "MUS2" (new hadronic shower bit), Anomaly Detection Trigger, ZDC conditions and cuts for muon index bits.
 -- HB 2022-11-29: v1.17.6: Bug fix in algo_pre_scaler_fractional_float.vhd.
 -- HB 2022-11-16: v1.17.5: Bug fix in correlation_conditions.vhd.
 -- HB 2022-09-23: v1.17.4: Used "delay_pipeline" for condition output in esums_conditions.vhd, min_bias_hf_conditions.vhd and towercount_condition.vhd.
@@ -61,37 +67,45 @@ entity gtl_module is
         lhc_clk : in std_logic;
         gtl_data : in gtl_data_record;
         algo_o : out std_logic_vector(NR_ALGOS-1 downto 0);
-        anomaly_score_o: out std_logic_vector(17 downto 0)
-    );
+        topo_score_o : out std_logic_vector(17 downto 0)
+   );        
 end gtl_module;
 
 architecture rtl of gtl_module is
+    COMPONENT rom_lut_calo_inv_dr_sq
+    PORT(
+        clka : IN STD_LOGIC;
+        addra : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        douta : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+    END COMPONENT;
 
     signal bx_data : bx_data_record;
+
     signal algo : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
 
 -- ========================================================
 -- from VHDL producer:
 
--- Module ID: 3
+-- Module ID: 1
 
 -- Name of L1 Trigger Menu:
--- L1Menu_adt_v6
+-- L1Menu_Cicada_Topo_test_v2
 
 -- Unique ID of L1 Trigger Menu:
--- f91c4212-b199-4c73-a521-37070035039a
+-- e50b8093-a248-4fd5-baf6-5b197178654a
 
 -- Unique ID of firmware implementation:
--- 2c140004-e9ed-4c08-bbc4-854ed4f7e78d
+-- 63ec72cc-0abe-45b8-8547-f065da428dd1
 
 -- Scale set:
--- scales_2021_03_02
+-- scales_2023_12_14
 
 -- VHDL producer version
--- v2.14.0
+-- v2.17.0
 
 -- tmEventSetup version
--- v0.10.0
+-- v0.12.0
 
 -- Signal definition of pt, eta and phi for correlation conditions.
 
@@ -100,10 +114,10 @@ architecture rtl of gtl_module is
 -- Signal definition for muon charge correlations.
 
 -- Signal definition for conditions names
-    signal single_ext_i3 : std_logic;
+    signal topological_trigger_i8 : std_logic;
 
 -- Signal definition for algorithms names
-    signal l1_adt_80 : std_logic;
+    signal l1_topo_1000 : std_logic;
 
 -- ========================================================
 
@@ -119,33 +133,31 @@ bx_pipeline_i: entity work.bx_pipeline
 -- ========================================================
 -- from VHDL producer:
 
--- Module ID: 3
+-- Module ID: 1
 
 -- Name of L1 Trigger Menu:
--- L1Menu_adt_v6
+-- L1Menu_Cicada_Topo_test_v2
 
 -- Unique ID of L1 Trigger Menu:
--- f91c4212-b199-4c73-a521-37070035039a
+-- e50b8093-a248-4fd5-baf6-5b197178654a
 
 -- Unique ID of firmware implementation:
--- 2c140004-e9ed-4c08-bbc4-854ed4f7e78d
+-- 63ec72cc-0abe-45b8-8547-f065da428dd1
 
 -- Scale set:
--- scales_2021_03_02
+-- scales_2023_12_14
 
 -- VHDL producer version
--- v2.14.0
+-- v2.17.0
 
 -- tmEventSetup version
--- v0.10.0
+-- v0.12.0
 
 -- ========================================================
 -- Instantiations of conditions
 --
--- Anomaly detection instantiation
-
-cond_ext_adt_80_i: entity work.adt_wrapper
-    generic map(false, 80)
+cond_topological_trigger_i8_i: entity work.topo_wrapper
+    generic map(1000)
     port map(
         lhc_clk,
         bx_data.mu(2),
@@ -157,17 +169,17 @@ cond_ext_adt_80_i: entity work.adt_wrapper
         bx_data.etm(2),
         bx_data.htm(2),
         bx_data.etmhf(2),
-        single_ext_i3,
-        anomaly_score_o
+        topological_trigger_i8,
+        topo_score_o
     );
 
 
 -- ========================================================
 -- Instantiations of algorithms
 
--- 3 L1_ADT_80 : EXT_ADT_80
-l1_adt_80 <= single_ext_i3;
-algo_o(0) <= l1_adt_80;
+-- 7 L1_TOPO_1000 : TOPO[TOPO-TSCORE_1000]
+l1_topo_1000 <= topological_trigger_i8;
+algo(0) <= l1_topo_1000;
 
 -- ========================================================
 -- Instantiations conversions, calculations, etc.
@@ -201,5 +213,14 @@ algo_o(0) <= l1_adt_80;
 
 
 -- ========================================================
+
+
+-- One pipeline stages for algorithms
+algo_pipeline_p: process(lhc_clk, algo)
+    begin
+    if (lhc_clk'event and lhc_clk = '1') then
+        algo_o <= algo;
+    end if;
+end process;
 
 end architecture rtl;

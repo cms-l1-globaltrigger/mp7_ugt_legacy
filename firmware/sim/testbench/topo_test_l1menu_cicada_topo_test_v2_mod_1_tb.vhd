@@ -49,7 +49,7 @@ architecture rtl of topo_test_l1menu_cicada_topo_test_v2_mod_1_tb is
     signal algo_log : std_logic;
     
     signal stop : boolean := false;
-    signal topo_score: std_logic_vector(17 downto 0);
+    signal topo_score: std_logic_vector(15 downto 0);
     signal topo_score_tmp, topo_score_int: integer;
 
 --*********************************Main Body of Code**********************************

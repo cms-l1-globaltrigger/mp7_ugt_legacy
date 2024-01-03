@@ -27,7 +27,7 @@ entity topo_wrapper is
         htm: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         etmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         topo_out: out std_logic;
-        topo_score_o: out std_logic_vector(17 downto 0)
+        topo_score_o: out std_logic_vector(15 downto 0)
     );
 end topo_wrapper;
 

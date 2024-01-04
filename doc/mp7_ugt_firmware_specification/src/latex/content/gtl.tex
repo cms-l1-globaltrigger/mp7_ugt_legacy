@@ -206,58 +206,56 @@ The data structure of a muon object (64 bits):\\
 \label{sec:gtl:calo1_optical_interfaces}
 
 The optical link from Calo-Layer1 provides calo anomaly algorithm (CICADA) data.\\
-The main part of this data contains Boosted jets (bjets). Calo-Layer1 sends
-6 bjets (28 bits), each on one of the 6 frames in a 240MHz domain.
-In addition Anomaly Detection with an integer and a decimal part and Heavy Ion bits
-are provided.\\
+Calo-Layer1 sends 6 frames in a 240MHz domain.\\
+Anomaly Detection with an integer and a decimal part is provided.\\
+(No Boosted Jets and no Heavy Ion bits are currently transferred !).\\
 
 Overview (frame 0 ascending to 5):\\
 \begin{center}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,27,28,31} \\
         \bitbox {4}      {\texttt{AD I h}} &
-        \bitbox {28}     {\texttt{bjet 1}} \\
+        \bitbox {28}     {\texttt{free}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,27,28,31} \\
         \bitbox {4}      {\texttt{AD I l}} &
-        \bitbox {28}     {\texttt{bjet 2}} \\
+        \bitbox {28}     {\texttt{free}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,27,28,31} \\
         \bitbox {4}      {\texttt{AD D h}} &
-        \bitbox {28}     {\texttt{bjet 3}} \\
+        \bitbox {28}     {\texttt{free}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
         \bitheader{0,27,28,31} \\
         \bitbox {4}      {\texttt{AD D l}} &
-        \bitbox {28}     {\texttt{bjet 4}} \\
+        \bitbox {28}     {\texttt{free}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,27,28,31} \\
-        \bitbox {4}      {\texttt{HI high}} &
-        \bitbox {28}     {\texttt{bjet 5}} \\
+        \bitheader{0,31} \\
+        \bitbox {32}     {\texttt{free}} \\
 \end{bytefield}
 \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
-        \bitheader{0,27,28,31} \\
-        \bitbox {4}      {\texttt{HI low}} &
-        \bitbox {28}     {\texttt{bjet 6}} \\
+        \bitheader{0,31} \\
+        \bitbox {32}     {\texttt{free}} \\
 \end{bytefield}
 \end{center}
-\tiny{Remark: "AD I" means Anomaly Detection Integer part, "AD D" means Anomaly Detection Decimal part, "l" means least significant bits, "h" means most significant bits, "HI" means Heavy Ion bits}\normalsize
+% \tiny{Remark: "AD I" means Anomaly Detection Integer part, "AD D" means Anomaly Detection Decimal part, "l" means least significant bits, "h" means most significant bits, "HI" means Heavy Ion bits}\normalsize
+\tiny{Remark: "AD I" means Anomaly Detection Integer part, "AD D" means Anomaly Detection Decimal part, "l" means least significant bits, "h" means most significant bits}\normalsize
 
-The data structure of a bjet object:\\
-\begin{center}
-\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{28}
-        \bitheader{0,10,11,17,18,18,19,26,27,27} \\
-        \bitbox {1}     {\texttt{F}} &
-        \bitbox {8}     {\texttt{$\varphi$}} &
-        \bitbox {1}     {\texttt{S}} &
-        \bitbox {7}     {\texttt{$\eta$}}  &
-        \bitbox {11}    {\texttt{\et}} \\
-\end{bytefield}
-\end{center}
-\tiny{Remark: "S" means side (eta sign bit), "F" means flag.}\normalsize
+% The data structure of a bjet object:\\
+% \begin{center}
+% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{28}
+%         \bitheader{0,10,11,17,18,18,19,26,27,27} \\
+%         \bitbox {1}     {\texttt{F}} &
+%         \bitbox {8}     {\texttt{$\varphi$}} &
+%         \bitbox {1}     {\texttt{S}} &
+%         \bitbox {7}     {\texttt{$\eta$}}  &
+%         \bitbox {11}    {\texttt{\et}} \\
+% \end{bytefield}
+% \end{center}
+% \tiny{Remark: "S" means side (eta sign bit), "F" means flag.}\normalsize
 
 \clearpage
 
@@ -628,19 +626,14 @@ bits [63..62] & definition \\\hline\hline
 \subsubsection{Definitions of CICADA data}
 \label{sec:gtl:def_cicada}
 
-The calorimeter layer 1 trigger processing identifies \textbf{Boosted jets (bjet)}, \textbf{Anomaly Detection} and a \textbf{Heavy Ion bits}.\\
+% The calorimeter layer 1 trigger processing identifies \textbf{Boosted jets (bjet)}, \textbf{Anomaly Detection} and a \textbf{Heavy Ion bits}.\\
+% See also \ref{sec:gtl:calo1_optical_interfaces}.\\
+The calorimeter layer 1 trigger processing identifies \textbf{Anomaly Detection}.\\
 See also \ref{sec:gtl:calo1_optical_interfaces}.\\
-
-Six bjet objects, one value for Anomaly Detection and 8 Heavy Ion bits are passed to the \ugt for each event.\\
-For each selected bjet object, the Calo-Layer1 sends parameters for \pt, for position and a flag - encoded in 28 bits:
-\begin{itemize}
-\item 11 bits \pt, range = 0..255 GeV (HW index = 0..0x1FF), step = 0.5, the highest bin will mark an overflow (HW index 0x1FF): meaning has to be defined
-\item 8 (7+1 sign) bits pseudo-rapidity ($\eta$) position, range = -5.0 to 5.0, \textbf{non-linear scale, has to be transfered to linear by CICADA group}
-\item 8 bits azimuth angle ($\varphi$) position, range = 2$\pi$, step $\approx$ 2$\pi$/144 (\^=2.5°), 144 bins (HW index = 0..0x8F), HW index starting at 0° (anti-clockwise)
-\item 1 bit as a flag
-\end{itemize}
-
-The Anomaly Detection value is represented by an 8 bits integer part and an 8 bits decimal part. There are 8 Heavy Ion bits.
+% Six bjet objects, one value for Anomaly Detection and 8 Heavy Ion bits are passed to the \ugt for each event.\\
+% For each selected bjet object, the Calo-Layer1 sends parameters for \pt, for position and a flag - encoded in 28 bits:
+The value for Anomaly Detection (of CICADA) is passed to the \ugt for each event.\\
+The Anomaly Detection value (of CICADA) is represented by an 8 bits integer part and an 8 bits decimal part, which are combined to a 16 bits word for comparison with requested threshold ("cscore").
 
 \clearpage
 
@@ -911,7 +904,7 @@ The charges of objects (number of objects depends on muon condition type) are co
 of objects are the same, "OS" means that at least one object has different charge than the others. This information is used in all instatiated muon conditions.
 There is no charge correlation for single type conditions.\\
 In all cases the "charge valid" bit of the objects must be set.\\
-In TME one can select "LS", "OS" or ignore for charge correlation in muon conditions.
+In TME~\cite{TME_repo} one can select "LS", "OS" or ignore for charge correlation in muon conditions.
 
 % \begin{table}[ht]
 % \caption{Muon charge correlation - Double Muon}
@@ -1333,7 +1326,7 @@ For the entity declaration of \href{\gitbranch/firmware/hdl/gt_mp7_core/gtl_fdl_
 \subsubsection{Muon shower bits}
 \label{sec:gtl:muon_shower_bits}
 
-Muon shower bits MUS0 (MUon Shower, bit 61 on MU0), MUS1 (bit 61 on MU2), MUS2 (two loose muon shower - bit 61 on MU3), MUSOOT0 (MUon Shower Out Of Time, bit 61 on MU4), MUSOOT1 (bit 61 on MU6) (see \ref{sec:gtl:muon_data} and Table~\ref{tab:gtl:tab_muon_shower_bits}) can be selected by TME to an algo or combined with other conditions to an algo.
+Muon shower bits MUS0 (MUon Shower, bit 61 on MU0), MUS1 (bit 61 on MU2), MUS2 (two loose muon shower - bit 61 on MU3), MUSOOT0 (MUon Shower Out Of Time, bit 61 on MU4), MUSOOT1 (bit 61 on MU6) (see \ref{sec:gtl:muon_data} and Table~\ref{tab:gtl:tab_muon_shower_bits}) can be selected by TME~\cite{TME_repo} to an algo or combined with other conditions to an algo.
 
 \subsubsection{Minimum bias trigger conditions}
 \label{sec:gtl:min_bias_conditions}
@@ -1521,7 +1514,15 @@ Definitions of scales (see Tables \ref{tab:gtl:calo_eta_scale_new}, \ref{tab:gtl
 
 \subsubsection{Anomaly Detection Trigger}
 \label{sec:gtl:adt}
-The possibility of implementing "Anomaly Detection Trigger" is forseen in this version of \ugtl. The VHDL code is given by "Anomaly Detection trigger" group in ../firmware/hdl/payload/gtl/anomaly\_detection with \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/anomaly_detection.vhd}{\texttt{anomaly\_detection.vhd}} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/adt_wrapper.vhd}{\texttt{adt\_wrapper.vhd}} module anomaly\_detection.vhd is instantiated and a comparison of the output of anomaly\_detection.vhd ("anomaly\_score") with a given threshold is implemented to get an "Anomaly Detection Trigger".
+The possibility of implementing "Anomaly Detection Trigger" (AXOL1TL) is forseen in this version of \ugtl. The VHDL code is given by "Anomaly Detection Trigger" group in ../firmware/hdl/payload/gtl/anomaly\_detection with \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/axol1tl_v3.vhd}{\texttt{axol1tl\_v3.vhd}} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/anomaly_detection/adt_wrapper.vhd}{\texttt{adt\_wrapper.vhd}} module axol1tl\_v3.vhd is instantiated and a comparison of the output of axol1tl\_v3.vhd ("anomaly\_score") with a given threshold is implemented to get an "Anomaly Detection Trigger". The "anomaly\_score" consists of 18 bits, currently.
+
+\subsubsection{Topological Trigger}
+\label{sec:gtl:topo}
+Similar to "Anomaly Detection Trigger" a "Topological Trigger" is part of this version. The VHDL code is given by "Topological Trigger" group in ../firmware/hdl/payload/gtl/topo\_trigger with \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger/topo_trigger.vhd}{\texttt{topo\_trigger.vhd}} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger/topo_wrapper.vhd}{\texttt{topo\_wrapper.vhd}} module topo\_trigger.vhd is instantiated and a comparison of the output of topo\_trigger.vhd ("topo\_score") with a given threshold is implemented to get a "Topological Trigger". The "topo\_score" consists of 16 bits, currently.
+
+\subsubsection{CICADA Trigger}
+\label{sec:gtl:cicada}
+The Anomaly Detection value (of CICADA) is represented by an 8 bits integer part and an 8 bits decimal part, which are combined to a 16 bits word for comparison with requested threshold ("cscore"). In TME~\cite{TME_repo} the threshold can be selected with predefined values for the decimal part (x/2**8, for all x from 0 to 255) and values from 0 to 255 for the integer part. In VHDL Producer the threshold is converted to integer by multiplying with 2**cicada\_decimal\_precision (cicada\_decimal\_precision = number of bits of decimal part) for "cscore" value in VHDL module \href{\gitbranch/firmware/hdl/payload/gtl/cicada_condition.vhd}{\texttt{cicada\_condition.vhd}}. The trigger decision is made by comparison of 16 bits Anomaly Detection value (of CICADA) with "cscore".
 
 \subsubsection{External Conditions}
 \label{sec:gtl:external_conditions}

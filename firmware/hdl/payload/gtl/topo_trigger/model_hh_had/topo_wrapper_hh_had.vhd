@@ -1,11 +1,9 @@
 
 -- Description:
--- Wrapper for "anomaly detection".
+-- Wrapper for "topological trigger".
 
 -- Version history:
--- HB 2023-01-18: removed comparator and delay, added anomaly_score_o for simulation.
--- HB 2022-11-11: added comparator and delay for simulation.
--- HB 2022-08-29: first design.
+-- HB 2023-03-22: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -13,11 +11,9 @@ use ieee.numeric_std.all;
  
 use work.gtl_pkg.all;
 
-entity adt_wrapper is
+entity topo_wrapper_hh_had is
     generic	(
-        sim_mode: boolean := true;
         threshold: integer := 4150
---        threshold: std_logic_vector(15 downto 0) := X"0136"
    );
     port(
         lhc_clk: in std_logic;
@@ -30,19 +26,18 @@ entity adt_wrapper is
         etm: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         htm: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         etmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
---         htmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        adt_out: out std_logic;
-        anomaly_score_o: out std_logic_vector(17 downto 0)
+        topo_out: out std_logic;
+        topo_score_o: out std_logic_vector(15 downto 0)
     );
-end adt_wrapper;
+end topo_wrapper_hh_had;
 
-architecture rtl of adt_wrapper is
+architecture rtl of topo_wrapper_hh_had is
 
     signal ett_i, htt_i, etm_i, htm_i, etmhf_i, htmhf_i: std_logic_vector(31 downto 0) := X"00000000";
-    signal anomaly_score: std_logic_vector(17 downto 0);
+    signal topo_score: std_logic_vector(15 downto 0);
     signal ap_rst: std_logic := '0';
     signal ap_start: std_logic := '1';
-    signal adt: std_logic_vector(0 downto 0) := "0";
+    signal topo: std_logic_vector(0 downto 0) := "0";
     
 begin
 
@@ -52,7 +47,7 @@ begin
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
     
-    anomaly_detection_i: entity work.axol1tl_v3
+    anomaly_detection_i: entity work.topo_trigger_hh_had
         port map(
             lhc_clk, ap_rst, ap_start,
             open, open, open,
@@ -68,14 +63,14 @@ begin
             tau(4),tau(5),tau(6),tau(7),
             tau(8),tau(9),tau(10),tau(11),
             ett_i,htt_i,etm_i,htm_i,etmhf_i,htmhf_i,
-            anomaly_score,
+            topo_score,
             open
         );
 
-    adt(0) <= '1' when to_integer(unsigned(anomaly_score)) >= threshold else '0';
+    topo(0) <= '1' when to_integer(unsigned(topo_score)) >= threshold else '0';
 
-    adt_out <= adt(0);
+    topo_out <= topo(0);
     
-    anomaly_score_o <= anomaly_score;
+    topo_score_o(15 downto 0) <= topo_score;
 
 end architecture rtl;

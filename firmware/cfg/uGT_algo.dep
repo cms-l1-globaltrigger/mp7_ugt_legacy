@@ -80,9 +80,9 @@ src payload/gtl/correlation_conditions.vhd
 src payload/gtl/axol1tl_trigger/axol1tl_v3/axol1tl_v3_wrapper.vhd
 src payload/gtl/zdc_condition.vhd
 src payload/gtl/cicada_condition.vhd
-src payload/gtl/topo_trigger/model_hh_ele/topo_wrapper_hh_ele.vhd
-src payload/gtl/topo_trigger/model_hh_mu/topo_wrapper_hh_mu.vhd
-src payload/gtl/topo_trigger/model_hh_had/topo_wrapper_hh_had.vhd
+src payload/gtl/topo_trigger/model_hh_ele/topo_trigger_hh_ele_wrapper.vhd
+src payload/gtl/topo_trigger/model_hh_mu/topo_trigger_hh_mu_wrapper.vhd
+src payload/gtl/topo_trigger/model_hh_had/topo_trigger_hh_had_wrapper.vhd
 #
 ### modules of BRAMs used for mass over DeltaR
 ## XCI files of blk_mem_gen for rom_lut_calo_inv_dr_sq and rom_lut_muon_inv_dr_sq moved to 'add_l1menu_blkmem_files.tcl'

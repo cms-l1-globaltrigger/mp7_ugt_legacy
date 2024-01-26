@@ -11,7 +11,7 @@ use ieee.numeric_std.all;
  
 use work.gtl_pkg.all;
 
-entity topo_wrapper_hh_mu is
+entity topo_trigger_hh_ele_wrapper is
     generic	(
         threshold: integer := 4150
    );
@@ -29,9 +29,9 @@ entity topo_wrapper_hh_mu is
         topo_out: out std_logic;
         topo_score_o: out std_logic_vector(15 downto 0)
     );
-end topo_wrapper_hh_mu;
+end topo_trigger_hh_ele_wrapper;
 
-architecture rtl of topo_wrapper_hh_mu is
+architecture rtl of topo_trigger_hh_ele_wrapper is
 
     signal ett_i, htt_i, etm_i, htm_i, etmhf_i, htmhf_i: std_logic_vector(31 downto 0) := X"00000000";
     signal topo_score: std_logic_vector(15 downto 0);
@@ -47,7 +47,7 @@ begin
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
     
-    anomaly_detection_i: entity work.topo_trigger_hh_mu
+    anomaly_detection_i: entity work.topo_trigger_hh_ele
         port map(
             lhc_clk, ap_rst, ap_start,
             open, open, open,

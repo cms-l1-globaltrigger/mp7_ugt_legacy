@@ -47,7 +47,7 @@ begin
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
     
-    anomaly_detection_i: entity work.topo_trigger_hh_ele
+    topo_trigger_hh_ele_i: entity work.topo_trigger_hh_ele
         port map(
             lhc_clk, ap_rst, ap_start,
             open, open, open,

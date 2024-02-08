@@ -77,9 +77,10 @@ src payload/gtl/min_bias_hf_conditions.vhd
 src payload/gtl/towercount_condition.vhd
 src payload/gtl/correlation_cuts_calculation.vhd
 src payload/gtl/correlation_conditions.vhd
-src payload/gtl/axol1tl_trigger/model_v3/axol1tl_v3_wrapper.vhd
 src payload/gtl/zdc_condition.vhd
 src payload/gtl/cicada_condition.vhd
+src payload/gtl/axol1tl_trigger/axol1tl_v1_wrapper.vhd
+src payload/gtl/axol1tl_trigger/axol1tl_v3_wrapper.vhd
 src payload/gtl/topo_trigger/topo_trigger_hh_ele_v1_wrapper.vhd
 src payload/gtl/topo_trigger/topo_trigger_hh_mu_v1_wrapper.vhd
 src payload/gtl/topo_trigger/topo_trigger_hh_had_v1_wrapper.vhd

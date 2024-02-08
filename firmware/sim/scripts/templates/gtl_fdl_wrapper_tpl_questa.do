@@ -117,12 +117,15 @@ vcom -93 -work work $HDL_DIR/payload/gtl/towercount_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/zdc_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/cicada_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
-#### inserted from anomaly_detection.dep
+#### inserted from axol1tl_trigger.dep
 {{adt_vhd}}
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/adt_wrapper.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/axol1tl_trigger/axol1tl_v1_wrapper.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/axol1tl_trigger/axol1tl_v3_wrapper.vhd
 #### inserted from topo_trigger.dep
 {{topo_vhd}}
-vcom -93 -work work $HDL_DIR/payload/gtl/topo_trigger/topo_wrapper.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/topo_trigger/topo_trigger_hh_ele_v1_wrapper.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/topo_trigger/topo_trigger_hh_had_v1_wrapper.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/topo_trigger/topo_trigger_hh_mu_v1_wrapper.vhd
 #
 ### modules of BRAMs used for mass over DeltaR
 vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_calo_inv_dr_sq_1/synth/rom_lut_calo_inv_dr_sq_1.vhd

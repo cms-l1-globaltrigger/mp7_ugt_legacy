@@ -118,7 +118,7 @@ vcom -93 -work work $HDL_DIR/payload/gtl/zdc_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/cicada_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
 #### inserted from axol1tl_trigger.dep
-{{adt_vhd}}
+{{axol1tl_vhd}}
 vcom -93 -work work $HDL_DIR/payload/gtl/axol1tl_trigger/axol1tl_v1_wrapper.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/axol1tl_trigger/axol1tl_v3_wrapper.vhd
 #### inserted from topo_trigger.dep

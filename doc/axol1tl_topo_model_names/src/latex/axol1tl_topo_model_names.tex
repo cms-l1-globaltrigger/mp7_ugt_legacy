@@ -1,0 +1,53 @@
+%
+% Master LaTeX document.
+%
+% Define document type.
+\documentclass[11pt,a4paper,english,titlepage]{article}
+
+% Include packages.
+\usepackage{cite}
+\usepackage{gtupgrade}
+% \usepackage{footmisc} % for footnote references on different places
+\usepackage{xcolor}
+
+% Document information.
+\def\doctitle{Definition AXOL1TL and TOPO model names}
+\def\docauthor{Bernhard Arnold, Herbert Bergauer, Manfred Jeitler}
+\def\docdate{\today}
+
+% Begin document structure.
+\begin{document}
+
+    % Title page.
+    \doctitlepage{}
+
+    % Table of contents.
+    \doctoc{}
+
+    % Document content.
+    \input{model_names.tex}
+
+%     % List of tables.
+%     \doctables{}
+% 
+%     % List of figures.
+%     \docfigures{}
+
+    \clearpage
+
+%     \begin{thebibliography}{00}
+% 
+%     \bibitem {AMC13}
+%     AMC13 Event Builder:\\
+%     \url{http://ohm.bu.edu/~hazen/CMS/AMC13/UpdatedDAQPath_2014-07-10.pdf}
+% 
+%     \bibitem {MP7}
+%     MP7 Readout \& DAQ:\\
+%     \url{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/blob/master/doc/read_out_record/MP7Readout.pdf}
+% 
+%     \end{thebibliography}
+
+% End of document structure.
+\end{document}
+
+% eof

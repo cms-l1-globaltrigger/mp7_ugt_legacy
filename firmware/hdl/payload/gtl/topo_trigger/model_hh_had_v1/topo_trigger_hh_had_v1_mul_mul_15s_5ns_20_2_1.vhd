@@ -3,7 +3,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity topo_trigger_hh_mu_mul_mul_15s_5ns_20_2_1_DSP48_0 is
+entity topo_trigger_hh_had_v1_mul_mul_15s_5ns_20_2_1_DSP48_0 is
 port (
     clk: in std_logic;
     rst: in std_logic;
@@ -14,7 +14,7 @@ port (
 
 end entity;
 
-architecture behav of topo_trigger_hh_mu_mul_mul_15s_5ns_20_2_1_DSP48_0 is
+architecture behav of topo_trigger_hh_had_v1_mul_mul_15s_5ns_20_2_1_DSP48_0 is
     signal a_cvt: signed(15 - 1 downto 0);
     signal b_cvt: unsigned(5 - 1 downto 0);
     signal p_cvt: signed(20 - 1 downto 0);
@@ -42,7 +42,7 @@ end architecture;
 Library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity topo_trigger_hh_mu_mul_mul_15s_5ns_20_2_1 is
+entity topo_trigger_hh_had_v1_mul_mul_15s_5ns_20_2_1 is
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -58,8 +58,8 @@ entity topo_trigger_hh_mu_mul_mul_15s_5ns_20_2_1 is
         dout : OUT STD_LOGIC_VECTOR(dout_WIDTH - 1 DOWNTO 0));
 end entity;
 
-architecture arch of topo_trigger_hh_mu_mul_mul_15s_5ns_20_2_1 is
-    component topo_trigger_hh_mu_mul_mul_15s_5ns_20_2_1_DSP48_0 is
+architecture arch of topo_trigger_hh_had_v1_mul_mul_15s_5ns_20_2_1 is
+    component topo_trigger_hh_had_v1_mul_mul_15s_5ns_20_2_1_DSP48_0 is
         port (
             clk : IN STD_LOGIC;
             rst : IN STD_LOGIC;
@@ -72,7 +72,7 @@ architecture arch of topo_trigger_hh_mu_mul_mul_15s_5ns_20_2_1 is
 
 
 begin
-    topo_trigger_hh_mu_mul_mul_15s_5ns_20_2_1_DSP48_0_U :  component topo_trigger_hh_mu_mul_mul_15s_5ns_20_2_1_DSP48_0
+    topo_trigger_hh_had_v1_mul_mul_15s_5ns_20_2_1_DSP48_0_U :  component topo_trigger_hh_had_v1_mul_mul_15s_5ns_20_2_1_DSP48_0
     port map (
         clk => clk,
         rst => reset,

@@ -7,7 +7,7 @@ library ieee;
 use ieee.std_logic_1164.all; 
 use ieee.std_logic_unsigned.all;
 
-entity topo_trigger_hh_mu_sigmoid_table_ROM_AUTO_1R is 
+entity topo_trigger_hh_ele_v1_sigmoid_table_ROM_AUTO_1R is 
     generic(
              DataWidth     : integer := 10; 
              AddressWidth     : integer := 10; 
@@ -25,7 +25,7 @@ entity topo_trigger_hh_mu_sigmoid_table_ROM_AUTO_1R is
 end entity; 
 
 
-architecture rtl of topo_trigger_hh_mu_sigmoid_table_ROM_AUTO_1R is 
+architecture rtl of topo_trigger_hh_ele_v1_sigmoid_table_ROM_AUTO_1R is 
  
 signal address0_tmp : std_logic_vector(AddressWidth-1 downto 0); 
 

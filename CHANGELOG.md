@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.26.0] - 2024-02-08
+## [v1.26.0] - 2024-02-09
 ### Comment
 
 - mp7_ugt firmware release v1.26.0
@@ -15,7 +15,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - source files:
   - ../payload/gtl/cicada_condition.vhd
-  - ../payload/gtl/topo_trigger/topo_wrapper.vhd
+  - ../payload/gtl/axol1tl_trigger/axol1tl_v1_wrapper.vhd
+  - ../payload/gtl/axol1tl_trigger/axol1tl_v3_wrapper.vhd
+  - ../payload/gtl/topo_trigger/topo_trigger_hh_ele_v1_wrapper.vhd
+  - ../payload/gtl/topo_trigger/topo_trigger_hh_had_v1_wrapper.vhd
+  - ../payload/gtl/topo_trigger/topo_trigger_hh_mu_v1_wrapper.vhd
+- dep file:
+  - ../cfg/axol1tl_trigger.dep
+  - ../cfg/topo_trigger.dep
+- directories (with VHDL files for models):
+  - ../payload/gtl/axol1tl_trigger/model_v1
+  - ../payload/gtl/axol1tl_trigger/model_v3
+  - ../payload/gtl/topo_trigger/model_hh_ele_v1
+  - ../payload/gtl/topo_trigger/model_hh_had_v1
+  - ../payload/gtl/topo_trigger/model_hh_mu_v1
 
 ### Changed
 - source files:

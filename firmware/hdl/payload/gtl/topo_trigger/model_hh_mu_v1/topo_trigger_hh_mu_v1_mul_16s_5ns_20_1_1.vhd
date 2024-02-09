@@ -8,7 +8,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 
-entity topo_trigger_hh_had_mul_14s_5s_19_1_1 is
+entity topo_trigger_hh_mu_v1_mul_16s_5ns_20_1_1 is
 generic (
     ID : INTEGER := 1;
     NUM_STAGE : INTEGER := 0;
@@ -21,11 +21,11 @@ port (
     dout: out std_logic_vector(dout_WIDTH - 1 downto 0));
 end entity;
 
-architecture behav of topo_trigger_hh_had_mul_14s_5s_19_1_1 is
+architecture behav of topo_trigger_hh_mu_v1_mul_16s_5ns_20_1_1 is
     signal a_i : std_logic_vector(din0_WIDTH - 1 downto 0);
     signal b_i : std_logic_vector(din1_WIDTH - 1 downto 0);
 begin
     a_i <= din0;
     b_i <= din1;
-    dout <= std_logic_vector(resize(unsigned(std_logic_vector(signed(a_i) * signed(b_i))), dout_WIDTH));
+    dout <= std_logic_vector(resize(unsigned(std_logic_vector(signed(a_i) * signed('0' & b_i))), dout_WIDTH));
 end architecture;

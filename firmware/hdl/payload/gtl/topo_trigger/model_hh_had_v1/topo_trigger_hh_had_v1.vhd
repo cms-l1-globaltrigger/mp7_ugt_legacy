@@ -9,7 +9,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity topo_trigger_hh_had is
+entity topo_trigger_hh_had_v1 is
 port (
     ap_clk : IN STD_LOGIC;
     ap_rst : IN STD_LOGIC;
@@ -72,10 +72,10 @@ port (
 end;
 
 
-architecture behav of topo_trigger_hh_had is 
+architecture behav of topo_trigger_hh_had_v1 is 
     attribute CORE_GENERATION_INFO : STRING;
     attribute CORE_GENERATION_INFO of behav : architecture is
-    "topo_trigger_hh_had,hls_ip_2022_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7vx690t-ffg1927-2,HLS_INPUT_CLOCK=25.000000,HLS_INPUT_ARCH=pipeline,HLS_SYN_CLOCK=22.205437,HLS_SYN_LAT=2,HLS_SYN_TPT=1,HLS_SYN_MEM=1,HLS_SYN_DSP=0,HLS_SYN_FF=151,HLS_SYN_LUT=4998,HLS_VERSION=2022_2}";
+    "topo_trigger_hh_had_v1,hls_ip_2022_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7vx690t-ffg1927-2,HLS_INPUT_CLOCK=25.000000,HLS_INPUT_ARCH=pipeline,HLS_SYN_CLOCK=22.205437,HLS_SYN_LAT=2,HLS_SYN_TPT=1,HLS_SYN_MEM=1,HLS_SYN_DSP=0,HLS_SYN_FF=151,HLS_SYN_LUT=4998,HLS_VERSION=2022_2}";
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_logic_0 : STD_LOGIC := '0';
     constant ap_ST_fsm_pp0_stage0 : STD_LOGIC_VECTOR (0 downto 0) := "1";
@@ -1070,7 +1070,7 @@ architecture behav of topo_trigger_hh_had is
     signal r_V_68_fu_5358_p00 : STD_LOGIC_VECTOR (13 downto 0);
     signal ap_ce_reg : STD_LOGIC;
 
-    component topo_trigger_hh_had_mul_15s_5s_20_1_1 IS
+    component topo_trigger_hh_had_v1_mul_15s_5s_20_1_1 IS
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -1084,7 +1084,7 @@ architecture behav of topo_trigger_hh_had is
     end component;
 
 
-    component topo_trigger_hh_had_mul_14s_5s_19_1_1 IS
+    component topo_trigger_hh_had_v1_mul_14s_5s_19_1_1 IS
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -1098,7 +1098,7 @@ architecture behav of topo_trigger_hh_had is
     end component;
 
 
-    component topo_trigger_hh_had_mul_16s_5ns_20_1_1 IS
+    component topo_trigger_hh_had_v1_mul_16s_5ns_20_1_1 IS
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -1112,7 +1112,7 @@ architecture behav of topo_trigger_hh_had is
     end component;
 
 
-    component topo_trigger_hh_had_mul_8ns_6ns_13_1_1 IS
+    component topo_trigger_hh_had_v1_mul_8ns_6ns_13_1_1 IS
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -1126,7 +1126,7 @@ architecture behav of topo_trigger_hh_had is
     end component;
 
 
-    component topo_trigger_hh_had_mul_8ns_6s_14_1_1 IS
+    component topo_trigger_hh_had_v1_mul_8ns_6s_14_1_1 IS
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -1140,7 +1140,7 @@ architecture behav of topo_trigger_hh_had is
     end component;
 
 
-    component topo_trigger_hh_had_mul_mul_15s_5ns_20_2_1 IS
+    component topo_trigger_hh_had_v1_mul_mul_15s_5ns_20_2_1 IS
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -1157,7 +1157,7 @@ architecture behav of topo_trigger_hh_had is
     end component;
 
 
-    component topo_trigger_hh_had_sigmoid_table_ROM_AUTO_1R IS
+    component topo_trigger_hh_had_v1_sigmoid_table_ROM_AUTO_1R IS
     generic (
         DataWidth : INTEGER;
         AddressRange : INTEGER;
@@ -1173,7 +1173,7 @@ architecture behav of topo_trigger_hh_had is
 
 
 begin
-    sigmoid_table_U : component topo_trigger_hh_had_sigmoid_table_ROM_AUTO_1R
+    sigmoid_table_U : component topo_trigger_hh_had_v1_sigmoid_table_ROM_AUTO_1R
     generic map (
         DataWidth => 10,
         AddressRange => 1024,
@@ -1185,7 +1185,7 @@ begin
         ce0 => sigmoid_table_ce0,
         q0 => sigmoid_table_q0);
 
-    mul_15s_5s_20_1_1_U1 : component topo_trigger_hh_had_mul_15s_5s_20_1_1
+    mul_15s_5s_20_1_1_U1 : component topo_trigger_hh_had_v1_mul_15s_5s_20_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1197,7 +1197,7 @@ begin
         din1 => r_V_fu_868_p1,
         dout => r_V_fu_868_p2);
 
-    mul_15s_5s_20_1_1_U2 : component topo_trigger_hh_had_mul_15s_5s_20_1_1
+    mul_15s_5s_20_1_1_U2 : component topo_trigger_hh_had_v1_mul_15s_5s_20_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1209,7 +1209,7 @@ begin
         din1 => r_V_32_fu_1798_p1,
         dout => r_V_32_fu_1798_p2);
 
-    mul_14s_5s_19_1_1_U3 : component topo_trigger_hh_had_mul_14s_5s_19_1_1
+    mul_14s_5s_19_1_1_U3 : component topo_trigger_hh_had_v1_mul_14s_5s_19_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1221,7 +1221,7 @@ begin
         din1 => mul_ln1270_2_fu_1916_p1,
         dout => mul_ln1270_2_fu_1916_p2);
 
-    mul_16s_5ns_20_1_1_U4 : component topo_trigger_hh_had_mul_16s_5ns_20_1_1
+    mul_16s_5ns_20_1_1_U4 : component topo_trigger_hh_had_v1_mul_16s_5ns_20_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1233,7 +1233,7 @@ begin
         din1 => mul_ln1270_3_fu_2148_p1,
         dout => mul_ln1270_3_fu_2148_p2);
 
-    mul_8ns_6ns_13_1_1_U5 : component topo_trigger_hh_had_mul_8ns_6ns_13_1_1
+    mul_8ns_6ns_13_1_1_U5 : component topo_trigger_hh_had_v1_mul_8ns_6ns_13_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1245,7 +1245,7 @@ begin
         din1 => r_V_42_fu_5094_p1,
         dout => r_V_42_fu_5094_p2);
 
-    mul_8ns_6s_14_1_1_U6 : component topo_trigger_hh_had_mul_8ns_6s_14_1_1
+    mul_8ns_6s_14_1_1_U6 : component topo_trigger_hh_had_v1_mul_8ns_6s_14_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1257,7 +1257,7 @@ begin
         din1 => r_V_44_fu_5118_p1,
         dout => r_V_44_fu_5118_p2);
 
-    mul_8ns_6s_14_1_1_U7 : component topo_trigger_hh_had_mul_8ns_6s_14_1_1
+    mul_8ns_6s_14_1_1_U7 : component topo_trigger_hh_had_v1_mul_8ns_6s_14_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1269,7 +1269,7 @@ begin
         din1 => r_V_46_fu_5142_p1,
         dout => r_V_46_fu_5142_p2);
 
-    mul_8ns_6ns_13_1_1_U8 : component topo_trigger_hh_had_mul_8ns_6ns_13_1_1
+    mul_8ns_6ns_13_1_1_U8 : component topo_trigger_hh_had_v1_mul_8ns_6ns_13_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1281,7 +1281,7 @@ begin
         din1 => r_V_65_fu_5334_p1,
         dout => r_V_65_fu_5334_p2);
 
-    mul_8ns_6s_14_1_1_U9 : component topo_trigger_hh_had_mul_8ns_6s_14_1_1
+    mul_8ns_6s_14_1_1_U9 : component topo_trigger_hh_had_v1_mul_8ns_6s_14_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1293,7 +1293,7 @@ begin
         din1 => r_V_68_fu_5358_p1,
         dout => r_V_68_fu_5358_p2);
 
-    mul_8ns_6ns_13_1_1_U10 : component topo_trigger_hh_had_mul_8ns_6ns_13_1_1
+    mul_8ns_6ns_13_1_1_U10 : component topo_trigger_hh_had_v1_mul_8ns_6ns_13_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1305,7 +1305,7 @@ begin
         din1 => r_V_48_fu_5970_p1,
         dout => r_V_48_fu_5970_p2);
 
-    mul_8ns_6ns_13_1_1_U11 : component topo_trigger_hh_had_mul_8ns_6ns_13_1_1
+    mul_8ns_6ns_13_1_1_U11 : component topo_trigger_hh_had_v1_mul_8ns_6ns_13_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1317,7 +1317,7 @@ begin
         din1 => r_V_60_fu_6067_p1,
         dout => r_V_60_fu_6067_p2);
 
-    mul_mul_15s_5ns_20_2_1_U12 : component topo_trigger_hh_had_mul_mul_15s_5ns_20_2_1
+    mul_mul_15s_5ns_20_2_1_U12 : component topo_trigger_hh_had_v1_mul_mul_15s_5ns_20_2_1
     generic map (
         ID => 1,
         NUM_STAGE => 2,
@@ -1332,7 +1332,7 @@ begin
         ce => ap_const_logic_1,
         dout => grp_fu_6282_p2);
 
-    mul_mul_15s_5ns_20_2_1_U13 : component topo_trigger_hh_had_mul_mul_15s_5ns_20_2_1
+    mul_mul_15s_5ns_20_2_1_U13 : component topo_trigger_hh_had_v1_mul_mul_15s_5ns_20_2_1
     generic map (
         ID => 1,
         NUM_STAGE => 2,

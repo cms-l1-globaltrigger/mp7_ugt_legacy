@@ -9,7 +9,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity topo_trigger_hh_mu_v1 is
+entity topo_hh_had_v1 is
 port (
     ap_clk : IN STD_LOGIC;
     ap_rst : IN STD_LOGIC;
@@ -72,10 +72,10 @@ port (
 end;
 
 
-architecture behav of topo_trigger_hh_mu_v1 is 
+architecture behav of topo_hh_had_v1 is 
     attribute CORE_GENERATION_INFO : STRING;
     attribute CORE_GENERATION_INFO of behav : architecture is
-    "topo_trigger_hh_mu_v1,hls_ip_2022_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7vx690t-ffg1927-2,HLS_INPUT_CLOCK=25.000000,HLS_INPUT_ARCH=pipeline,HLS_SYN_CLOCK=22.205437,HLS_SYN_LAT=2,HLS_SYN_TPT=1,HLS_SYN_MEM=1,HLS_SYN_DSP=0,HLS_SYN_FF=151,HLS_SYN_LUT=4998,HLS_VERSION=2022_2}";
+    "topo_hh_had_v1,hls_ip_2022_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7vx690t-ffg1927-2,HLS_INPUT_CLOCK=25.000000,HLS_INPUT_ARCH=pipeline,HLS_SYN_CLOCK=22.205437,HLS_SYN_LAT=2,HLS_SYN_TPT=1,HLS_SYN_MEM=1,HLS_SYN_DSP=0,HLS_SYN_FF=151,HLS_SYN_LUT=4998,HLS_VERSION=2022_2}";
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_logic_0 : STD_LOGIC := '0';
     constant ap_ST_fsm_pp0_stage0 : STD_LOGIC_VECTOR (0 downto 0) := "1";
@@ -690,8 +690,8 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal Range1_all_zeros_fu_4036_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal Range1_all_ones_fu_4030_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Result_14_fu_3994_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln888_fu_4050_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal dmuted_zeros_fu_4058_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal shadct_ln888_fu_4050_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal dhadted_zeros_fu_4058_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal icmp_ln1649_fu_3978_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal layer4_out_V_fu_4066_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal layer2_out_V_13_fu_3240_p2 : STD_LOGIC_VECTOR (15 downto 0);
@@ -706,8 +706,8 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal Range1_all_zeros_1_fu_4140_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal Range1_all_ones_1_fu_4134_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Result_15_fu_4098_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln888_1_fu_4154_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal dmuted_zeros_1_fu_4162_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal shadct_ln888_1_fu_4154_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal dhadted_zeros_1_fu_4162_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal icmp_ln1649_1_fu_4082_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal layer4_out_V_1_fu_4170_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal layer2_out_V_14_fu_2682_p2 : STD_LOGIC_VECTOR (15 downto 0);
@@ -722,8 +722,8 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal Range1_all_zeros_2_fu_4244_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal Range1_all_ones_2_fu_4238_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Result_16_fu_4202_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln888_2_fu_4258_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal dmuted_zeros_2_fu_4266_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal shadct_ln888_2_fu_4258_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal dhadted_zeros_2_fu_4266_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal icmp_ln1649_2_fu_4186_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal layer4_out_V_2_fu_4274_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal layer2_out_V_16_fu_3350_p2 : STD_LOGIC_VECTOR (15 downto 0);
@@ -738,8 +738,8 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal Range1_all_zeros_4_fu_4348_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal Range1_all_ones_4_fu_4342_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Result_18_fu_4306_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln888_4_fu_4362_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal dmuted_zeros_4_fu_4370_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal shadct_ln888_4_fu_4362_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal dhadted_zeros_4_fu_4370_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal icmp_ln1649_4_fu_4290_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal layer4_out_V_4_fu_4378_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal layer2_out_V_18_fu_3518_p2 : STD_LOGIC_VECTOR (15 downto 0);
@@ -754,8 +754,8 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal Range1_all_zeros_6_fu_4452_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal Range1_all_ones_6_fu_4446_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Result_20_fu_4410_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln888_6_fu_4466_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal dmuted_zeros_6_fu_4474_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal shadct_ln888_6_fu_4466_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal dhadted_zeros_6_fu_4474_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal icmp_ln1649_6_fu_4394_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal layer4_out_V_6_fu_4482_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal layer2_out_V_19_fu_2282_p2 : STD_LOGIC_VECTOR (15 downto 0);
@@ -770,7 +770,7 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal Range1_all_zeros_7_fu_4556_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal Range1_all_ones_7_fu_4550_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Result_21_fu_4514_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln888_7_fu_4570_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal shadct_ln888_7_fu_4570_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal layer2_out_V_20_fu_2548_p2 : STD_LOGIC_VECTOR (15 downto 0);
     signal add_ln813_35_fu_2560_p2 : STD_LOGIC_VECTOR (9 downto 0);
     signal add_ln813_34_fu_2554_p2 : STD_LOGIC_VECTOR (1 downto 0);
@@ -783,8 +783,8 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal Range1_all_zeros_8_fu_4644_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal Range1_all_ones_8_fu_4638_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Result_22_fu_4602_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln888_8_fu_4658_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal dmuted_zeros_8_fu_4666_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal shadct_ln888_8_fu_4658_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal dhadted_zeros_8_fu_4666_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal icmp_ln1649_8_fu_4586_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal layer4_out_V_7_fu_4674_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal layer2_out_V_21_fu_3726_p2 : STD_LOGIC_VECTOR (15 downto 0);
@@ -799,7 +799,7 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal Range1_all_zeros_9_fu_4748_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal Range1_all_ones_9_fu_4742_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Result_23_fu_4706_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln888_9_fu_4762_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal shadct_ln888_9_fu_4762_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal layer2_out_V_22_fu_2390_p2 : STD_LOGIC_VECTOR (15 downto 0);
     signal add_ln813_15_fu_2402_p2 : STD_LOGIC_VECTOR (9 downto 0);
     signal add_ln813_14_fu_2396_p2 : STD_LOGIC_VECTOR (1 downto 0);
@@ -812,8 +812,8 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal Range1_all_zeros_10_fu_4836_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal Range1_all_ones_10_fu_4830_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Result_24_fu_4794_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln888_10_fu_4850_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal dmuted_zeros_10_fu_4858_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal shadct_ln888_10_fu_4850_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal dhadted_zeros_10_fu_4858_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal icmp_ln1649_10_fu_4778_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal layer4_out_V_8_fu_4866_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal layer2_out_V_23_fu_2916_p2 : STD_LOGIC_VECTOR (15 downto 0);
@@ -828,8 +828,8 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal Range1_all_zeros_11_fu_4940_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal Range1_all_ones_11_fu_4934_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Result_25_fu_4898_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln888_11_fu_4954_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal dmuted_zeros_11_fu_4962_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal shadct_ln888_11_fu_4954_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal dhadted_zeros_11_fu_4962_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal icmp_ln1649_11_fu_4882_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal layer4_out_V_9_fu_4970_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal layer2_out_V_24_fu_3960_p2 : STD_LOGIC_VECTOR (15 downto 0);
@@ -844,8 +844,8 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal Range1_all_zeros_12_fu_5044_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal Range1_all_ones_12_fu_5038_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Result_26_fu_5002_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln888_12_fu_5058_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal dmuted_zeros_12_fu_5066_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal shadct_ln888_12_fu_5058_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal dhadted_zeros_12_fu_5066_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal icmp_ln1649_12_fu_4986_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal layer4_out_V_10_fu_5074_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal a_V_18_fu_4074_p3 : STD_LOGIC_VECTOR (7 downto 0);
@@ -869,18 +869,18 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal zext_ln74_3_fu_5162_p1 : STD_LOGIC_VECTOR (12 downto 0);
     signal r_V_56_fu_5178_p2 : STD_LOGIC_VECTOR (12 downto 0);
     signal lshr_ln818_1_fu_5184_p4 : STD_LOGIC_VECTOR (10 downto 0);
-    signal dmuted_zeros_7_fu_4578_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal dhadted_zeros_7_fu_4578_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal icmp_ln1649_7_fu_4498_p2 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln302_fu_5198_p3 : STD_LOGIC_VECTOR (7 downto 0);
-    signal smuct_ln1649_fu_5206_p3 : STD_LOGIC_VECTOR (7 downto 0);
+    signal shadct_ln302_fu_5198_p3 : STD_LOGIC_VECTOR (7 downto 0);
+    signal shadct_ln1649_fu_5206_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal shl_ln1273_20_fu_5214_p3 : STD_LOGIC_VECTOR (12 downto 0);
     signal zext_ln1273_3_fu_5222_p1 : STD_LOGIC_VECTOR (13 downto 0);
     signal r_V_58_fu_5226_p2 : STD_LOGIC_VECTOR (13 downto 0);
     signal trunc_ln818_11_fu_5232_p4 : STD_LOGIC_VECTOR (11 downto 0);
-    signal dmuted_zeros_9_fu_4770_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal dhadted_zeros_9_fu_4770_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal icmp_ln1649_9_fu_4690_p2 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln302_1_fu_5246_p3 : STD_LOGIC_VECTOR (7 downto 0);
-    signal smuct_ln1649_11_fu_5254_p3 : STD_LOGIC_VECTOR (7 downto 0);
+    signal shadct_ln302_1_fu_5246_p3 : STD_LOGIC_VECTOR (7 downto 0);
+    signal shadct_ln1649_11_fu_5254_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal shl_ln1273_21_fu_5262_p3 : STD_LOGIC_VECTOR (12 downto 0);
     signal zext_ln1273_4_fu_5270_p1 : STD_LOGIC_VECTOR (13 downto 0);
     signal r_V_61_fu_5274_p2 : STD_LOGIC_VECTOR (13 downto 0);
@@ -978,8 +978,8 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal Range1_all_zeros_3_fu_5816_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal Range1_all_ones_3_fu_5810_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Result_17_fu_5774_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln888_3_fu_5830_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal dmuted_zeros_3_fu_5838_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal shadct_ln888_3_fu_5830_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal dhadted_zeros_3_fu_5838_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal icmp_ln1649_3_fu_5758_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal layer4_out_V_3_fu_5846_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal layer2_out_V_17_fu_5654_p2 : STD_LOGIC_VECTOR (15 downto 0);
@@ -994,8 +994,8 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal Range1_all_zeros_5_fu_5920_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal Range1_all_ones_5_fu_5914_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Result_19_fu_5878_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln888_5_fu_5934_p3 : STD_LOGIC_VECTOR (0 downto 0);
-    signal dmuted_zeros_5_fu_5942_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal shadct_ln888_5_fu_5934_p3 : STD_LOGIC_VECTOR (0 downto 0);
+    signal dhadted_zeros_5_fu_5942_p3 : STD_LOGIC_VECTOR (0 downto 0);
     signal icmp_ln1649_5_fu_5862_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal layer4_out_V_5_fu_5950_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal a_V_21_fu_5854_p3 : STD_LOGIC_VECTOR (7 downto 0);
@@ -1043,7 +1043,7 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal icmp_ln1003_fu_6184_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal ret_V_1_fu_6190_p2 : STD_LOGIC_VECTOR (12 downto 0);
     signal p_Result_s_fu_6170_p2 : STD_LOGIC_VECTOR (0 downto 0);
-    signal smuct_ln1002_fu_6196_p3 : STD_LOGIC_VECTOR (12 downto 0);
+    signal shadct_ln1002_fu_6196_p3 : STD_LOGIC_VECTOR (12 downto 0);
     signal ret_V_3_fu_6204_p3 : STD_LOGIC_VECTOR (12 downto 0);
     signal trunc_ln167_fu_6212_p1 : STD_LOGIC_VECTOR (11 downto 0);
     signal index_fu_6216_p2 : STD_LOGIC_VECTOR (12 downto 0);
@@ -1070,7 +1070,7 @@ architecture behav of topo_trigger_hh_mu_v1 is
     signal r_V_68_fu_5358_p00 : STD_LOGIC_VECTOR (13 downto 0);
     signal ap_ce_reg : STD_LOGIC;
 
-    component topo_trigger_hh_mu_v1_mul_15s_5s_20_1_1 IS
+    component topo_hh_had_v1_mul_15s_5s_20_1_1 IS
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -1084,7 +1084,7 @@ architecture behav of topo_trigger_hh_mu_v1 is
     end component;
 
 
-    component topo_trigger_hh_mu_v1_mul_14s_5s_19_1_1 IS
+    component topo_hh_had_v1_mul_14s_5s_19_1_1 IS
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -1098,7 +1098,7 @@ architecture behav of topo_trigger_hh_mu_v1 is
     end component;
 
 
-    component topo_trigger_hh_mu_v1_mul_16s_5ns_20_1_1 IS
+    component topo_hh_had_v1_mul_16s_5ns_20_1_1 IS
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -1112,7 +1112,7 @@ architecture behav of topo_trigger_hh_mu_v1 is
     end component;
 
 
-    component topo_trigger_hh_mu_v1_mul_8ns_6ns_13_1_1 IS
+    component topo_hh_had_v1_mul_8ns_6ns_13_1_1 IS
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -1126,7 +1126,7 @@ architecture behav of topo_trigger_hh_mu_v1 is
     end component;
 
 
-    component topo_trigger_hh_mu_v1_mul_8ns_6s_14_1_1 IS
+    component topo_hh_had_v1_mul_8ns_6s_14_1_1 IS
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -1140,7 +1140,7 @@ architecture behav of topo_trigger_hh_mu_v1 is
     end component;
 
 
-    component topo_trigger_hh_mu_v1_mul_mul_15s_5ns_20_2_1 IS
+    component topo_hh_had_v1_mul_mul_15s_5ns_20_2_1 IS
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -1157,7 +1157,7 @@ architecture behav of topo_trigger_hh_mu_v1 is
     end component;
 
 
-    component topo_trigger_hh_mu_v1_sigmoid_table_ROM_AUTO_1R IS
+    component topo_hh_had_v1_sigmoid_table_ROM_AUTO_1R IS
     generic (
         DataWidth : INTEGER;
         AddressRange : INTEGER;
@@ -1173,7 +1173,7 @@ architecture behav of topo_trigger_hh_mu_v1 is
 
 
 begin
-    sigmoid_table_U : component topo_trigger_hh_mu_v1_sigmoid_table_ROM_AUTO_1R
+    sigmoid_table_U : component topo_hh_had_v1_sigmoid_table_ROM_AUTO_1R
     generic map (
         DataWidth => 10,
         AddressRange => 1024,
@@ -1185,7 +1185,7 @@ begin
         ce0 => sigmoid_table_ce0,
         q0 => sigmoid_table_q0);
 
-    mul_15s_5s_20_1_1_U1 : component topo_trigger_hh_mu_v1_mul_15s_5s_20_1_1
+    mul_15s_5s_20_1_1_U1 : component topo_hh_had_v1_mul_15s_5s_20_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1197,7 +1197,7 @@ begin
         din1 => r_V_fu_868_p1,
         dout => r_V_fu_868_p2);
 
-    mul_15s_5s_20_1_1_U2 : component topo_trigger_hh_mu_v1_mul_15s_5s_20_1_1
+    mul_15s_5s_20_1_1_U2 : component topo_hh_had_v1_mul_15s_5s_20_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1209,7 +1209,7 @@ begin
         din1 => r_V_32_fu_1798_p1,
         dout => r_V_32_fu_1798_p2);
 
-    mul_14s_5s_19_1_1_U3 : component topo_trigger_hh_mu_v1_mul_14s_5s_19_1_1
+    mul_14s_5s_19_1_1_U3 : component topo_hh_had_v1_mul_14s_5s_19_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1221,7 +1221,7 @@ begin
         din1 => mul_ln1270_2_fu_1916_p1,
         dout => mul_ln1270_2_fu_1916_p2);
 
-    mul_16s_5ns_20_1_1_U4 : component topo_trigger_hh_mu_v1_mul_16s_5ns_20_1_1
+    mul_16s_5ns_20_1_1_U4 : component topo_hh_had_v1_mul_16s_5ns_20_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1233,7 +1233,7 @@ begin
         din1 => mul_ln1270_3_fu_2148_p1,
         dout => mul_ln1270_3_fu_2148_p2);
 
-    mul_8ns_6ns_13_1_1_U5 : component topo_trigger_hh_mu_v1_mul_8ns_6ns_13_1_1
+    mul_8ns_6ns_13_1_1_U5 : component topo_hh_had_v1_mul_8ns_6ns_13_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1245,7 +1245,7 @@ begin
         din1 => r_V_42_fu_5094_p1,
         dout => r_V_42_fu_5094_p2);
 
-    mul_8ns_6s_14_1_1_U6 : component topo_trigger_hh_mu_v1_mul_8ns_6s_14_1_1
+    mul_8ns_6s_14_1_1_U6 : component topo_hh_had_v1_mul_8ns_6s_14_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1257,7 +1257,7 @@ begin
         din1 => r_V_44_fu_5118_p1,
         dout => r_V_44_fu_5118_p2);
 
-    mul_8ns_6s_14_1_1_U7 : component topo_trigger_hh_mu_v1_mul_8ns_6s_14_1_1
+    mul_8ns_6s_14_1_1_U7 : component topo_hh_had_v1_mul_8ns_6s_14_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1269,7 +1269,7 @@ begin
         din1 => r_V_46_fu_5142_p1,
         dout => r_V_46_fu_5142_p2);
 
-    mul_8ns_6ns_13_1_1_U8 : component topo_trigger_hh_mu_v1_mul_8ns_6ns_13_1_1
+    mul_8ns_6ns_13_1_1_U8 : component topo_hh_had_v1_mul_8ns_6ns_13_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1281,7 +1281,7 @@ begin
         din1 => r_V_65_fu_5334_p1,
         dout => r_V_65_fu_5334_p2);
 
-    mul_8ns_6s_14_1_1_U9 : component topo_trigger_hh_mu_v1_mul_8ns_6s_14_1_1
+    mul_8ns_6s_14_1_1_U9 : component topo_hh_had_v1_mul_8ns_6s_14_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1293,7 +1293,7 @@ begin
         din1 => r_V_68_fu_5358_p1,
         dout => r_V_68_fu_5358_p2);
 
-    mul_8ns_6ns_13_1_1_U10 : component topo_trigger_hh_mu_v1_mul_8ns_6ns_13_1_1
+    mul_8ns_6ns_13_1_1_U10 : component topo_hh_had_v1_mul_8ns_6ns_13_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1305,7 +1305,7 @@ begin
         din1 => r_V_48_fu_5970_p1,
         dout => r_V_48_fu_5970_p2);
 
-    mul_8ns_6ns_13_1_1_U11 : component topo_trigger_hh_mu_v1_mul_8ns_6ns_13_1_1
+    mul_8ns_6ns_13_1_1_U11 : component topo_hh_had_v1_mul_8ns_6ns_13_1_1
     generic map (
         ID => 1,
         NUM_STAGE => 1,
@@ -1317,7 +1317,7 @@ begin
         din1 => r_V_60_fu_6067_p1,
         dout => r_V_60_fu_6067_p2);
 
-    mul_mul_15s_5ns_20_2_1_U12 : component topo_trigger_hh_mu_v1_mul_mul_15s_5ns_20_2_1
+    mul_mul_15s_5ns_20_2_1_U12 : component topo_hh_had_v1_mul_mul_15s_5ns_20_2_1
     generic map (
         ID => 1,
         NUM_STAGE => 2,
@@ -1332,7 +1332,7 @@ begin
         ce => ap_const_logic_1,
         dout => grp_fu_6282_p2);
 
-    mul_mul_15s_5ns_20_2_1_U13 : component topo_trigger_hh_mu_v1_mul_mul_15s_5ns_20_2_1
+    mul_mul_15s_5ns_20_2_1_U13 : component topo_hh_had_v1_mul_mul_15s_5ns_20_2_1
     generic map (
         ID => 1,
         NUM_STAGE => 2,
@@ -1725,44 +1725,44 @@ begin
         end if; 
     end process;
 
-    dmuted_zeros_10_fu_4858_p3 <= 
-        smuct_ln888_10_fu_4850_p3 when (p_Result_24_fu_4794_p3(0) = '1') else 
+    dhadted_zeros_10_fu_4858_p3 <= 
+        shadct_ln888_10_fu_4850_p3 when (p_Result_24_fu_4794_p3(0) = '1') else 
         Range1_all_zeros_10_fu_4836_p2;
-    dmuted_zeros_11_fu_4962_p3 <= 
-        smuct_ln888_11_fu_4954_p3 when (p_Result_25_fu_4898_p3(0) = '1') else 
+    dhadted_zeros_11_fu_4962_p3 <= 
+        shadct_ln888_11_fu_4954_p3 when (p_Result_25_fu_4898_p3(0) = '1') else 
         Range1_all_zeros_11_fu_4940_p2;
-    dmuted_zeros_12_fu_5066_p3 <= 
-        smuct_ln888_12_fu_5058_p3 when (p_Result_26_fu_5002_p3(0) = '1') else 
+    dhadted_zeros_12_fu_5066_p3 <= 
+        shadct_ln888_12_fu_5058_p3 when (p_Result_26_fu_5002_p3(0) = '1') else 
         Range1_all_zeros_12_fu_5044_p2;
-    dmuted_zeros_1_fu_4162_p3 <= 
-        smuct_ln888_1_fu_4154_p3 when (p_Result_15_fu_4098_p3(0) = '1') else 
+    dhadted_zeros_1_fu_4162_p3 <= 
+        shadct_ln888_1_fu_4154_p3 when (p_Result_15_fu_4098_p3(0) = '1') else 
         Range1_all_zeros_1_fu_4140_p2;
-    dmuted_zeros_2_fu_4266_p3 <= 
-        smuct_ln888_2_fu_4258_p3 when (p_Result_16_fu_4202_p3(0) = '1') else 
+    dhadted_zeros_2_fu_4266_p3 <= 
+        shadct_ln888_2_fu_4258_p3 when (p_Result_16_fu_4202_p3(0) = '1') else 
         Range1_all_zeros_2_fu_4244_p2;
-    dmuted_zeros_3_fu_5838_p3 <= 
-        smuct_ln888_3_fu_5830_p3 when (p_Result_17_fu_5774_p3(0) = '1') else 
+    dhadted_zeros_3_fu_5838_p3 <= 
+        shadct_ln888_3_fu_5830_p3 when (p_Result_17_fu_5774_p3(0) = '1') else 
         Range1_all_zeros_3_fu_5816_p2;
-    dmuted_zeros_4_fu_4370_p3 <= 
-        smuct_ln888_4_fu_4362_p3 when (p_Result_18_fu_4306_p3(0) = '1') else 
+    dhadted_zeros_4_fu_4370_p3 <= 
+        shadct_ln888_4_fu_4362_p3 when (p_Result_18_fu_4306_p3(0) = '1') else 
         Range1_all_zeros_4_fu_4348_p2;
-    dmuted_zeros_5_fu_5942_p3 <= 
-        smuct_ln888_5_fu_5934_p3 when (p_Result_19_fu_5878_p3(0) = '1') else 
+    dhadted_zeros_5_fu_5942_p3 <= 
+        shadct_ln888_5_fu_5934_p3 when (p_Result_19_fu_5878_p3(0) = '1') else 
         Range1_all_zeros_5_fu_5920_p2;
-    dmuted_zeros_6_fu_4474_p3 <= 
-        smuct_ln888_6_fu_4466_p3 when (p_Result_20_fu_4410_p3(0) = '1') else 
+    dhadted_zeros_6_fu_4474_p3 <= 
+        shadct_ln888_6_fu_4466_p3 when (p_Result_20_fu_4410_p3(0) = '1') else 
         Range1_all_zeros_6_fu_4452_p2;
-    dmuted_zeros_7_fu_4578_p3 <= 
-        smuct_ln888_7_fu_4570_p3 when (p_Result_21_fu_4514_p3(0) = '1') else 
+    dhadted_zeros_7_fu_4578_p3 <= 
+        shadct_ln888_7_fu_4570_p3 when (p_Result_21_fu_4514_p3(0) = '1') else 
         Range1_all_zeros_7_fu_4556_p2;
-    dmuted_zeros_8_fu_4666_p3 <= 
-        smuct_ln888_8_fu_4658_p3 when (p_Result_22_fu_4602_p3(0) = '1') else 
+    dhadted_zeros_8_fu_4666_p3 <= 
+        shadct_ln888_8_fu_4658_p3 when (p_Result_22_fu_4602_p3(0) = '1') else 
         Range1_all_zeros_8_fu_4644_p2;
-    dmuted_zeros_9_fu_4770_p3 <= 
-        smuct_ln888_9_fu_4762_p3 when (p_Result_23_fu_4706_p3(0) = '1') else 
+    dhadted_zeros_9_fu_4770_p3 <= 
+        shadct_ln888_9_fu_4762_p3 when (p_Result_23_fu_4706_p3(0) = '1') else 
         Range1_all_zeros_9_fu_4748_p2;
-    dmuted_zeros_fu_4058_p3 <= 
-        smuct_ln888_fu_4050_p3 when (p_Result_14_fu_3994_p3(0) = '1') else 
+    dhadted_zeros_fu_4058_p3 <= 
+        shadct_ln888_fu_4050_p3 when (p_Result_14_fu_3994_p3(0) = '1') else 
         Range1_all_zeros_fu_4036_p2;
     grp_fu_6282_p1 <= ap_const_lv20_15(5 - 1 downto 0);
     grp_fu_6291_p0 <= sext_ln1273_32_fu_1642_p1(15 - 1 downto 0);
@@ -1803,37 +1803,37 @@ begin
     layer2_out_V_24_fu_3960_p2 <= std_logic_vector(signed(sext_ln813_15_fu_3932_p1) + signed(add_ln813_143_fu_3860_p2));
     layer2_out_V_fu_3128_p2 <= std_logic_vector(unsigned(add_ln813_83_fu_3110_p2) + unsigned(add_ln813_79_fu_3050_p2));
     layer4_out_V_10_fu_5074_p3 <= 
-        p_Val2_38_fu_5022_p2 when (dmuted_zeros_12_fu_5066_p3(0) = '1') else 
+        p_Val2_38_fu_5022_p2 when (dhadted_zeros_12_fu_5066_p3(0) = '1') else 
         ap_const_lv8_FF;
     layer4_out_V_1_fu_4170_p3 <= 
-        p_Val2_5_fu_4118_p2 when (dmuted_zeros_1_fu_4162_p3(0) = '1') else 
+        p_Val2_5_fu_4118_p2 when (dhadted_zeros_1_fu_4162_p3(0) = '1') else 
         ap_const_lv8_FF;
     layer4_out_V_2_fu_4274_p3 <= 
-        p_Val2_8_fu_4222_p2 when (dmuted_zeros_2_fu_4266_p3(0) = '1') else 
+        p_Val2_8_fu_4222_p2 when (dhadted_zeros_2_fu_4266_p3(0) = '1') else 
         ap_const_lv8_FF;
     layer4_out_V_3_fu_5846_p3 <= 
-        p_Val2_11_fu_5794_p2 when (dmuted_zeros_3_fu_5838_p3(0) = '1') else 
+        p_Val2_11_fu_5794_p2 when (dhadted_zeros_3_fu_5838_p3(0) = '1') else 
         ap_const_lv8_FF;
     layer4_out_V_4_fu_4378_p3 <= 
-        p_Val2_14_fu_4326_p2 when (dmuted_zeros_4_fu_4370_p3(0) = '1') else 
+        p_Val2_14_fu_4326_p2 when (dhadted_zeros_4_fu_4370_p3(0) = '1') else 
         ap_const_lv8_FF;
     layer4_out_V_5_fu_5950_p3 <= 
-        p_Val2_17_fu_5898_p2 when (dmuted_zeros_5_fu_5942_p3(0) = '1') else 
+        p_Val2_17_fu_5898_p2 when (dhadted_zeros_5_fu_5942_p3(0) = '1') else 
         ap_const_lv8_FF;
     layer4_out_V_6_fu_4482_p3 <= 
-        p_Val2_20_fu_4430_p2 when (dmuted_zeros_6_fu_4474_p3(0) = '1') else 
+        p_Val2_20_fu_4430_p2 when (dhadted_zeros_6_fu_4474_p3(0) = '1') else 
         ap_const_lv8_FF;
     layer4_out_V_7_fu_4674_p3 <= 
-        p_Val2_26_fu_4622_p2 when (dmuted_zeros_8_fu_4666_p3(0) = '1') else 
+        p_Val2_26_fu_4622_p2 when (dhadted_zeros_8_fu_4666_p3(0) = '1') else 
         ap_const_lv8_FF;
     layer4_out_V_8_fu_4866_p3 <= 
-        p_Val2_32_fu_4814_p2 when (dmuted_zeros_10_fu_4858_p3(0) = '1') else 
+        p_Val2_32_fu_4814_p2 when (dhadted_zeros_10_fu_4858_p3(0) = '1') else 
         ap_const_lv8_FF;
     layer4_out_V_9_fu_4970_p3 <= 
-        p_Val2_35_fu_4918_p2 when (dmuted_zeros_11_fu_4962_p3(0) = '1') else 
+        p_Val2_35_fu_4918_p2 when (dhadted_zeros_11_fu_4962_p3(0) = '1') else 
         ap_const_lv8_FF;
     layer4_out_V_fu_4066_p3 <= 
-        p_Val2_2_fu_4014_p2 when (dmuted_zeros_fu_4058_p3(0) = '1') else 
+        p_Val2_2_fu_4014_p2 when (dhadted_zeros_fu_4058_p3(0) = '1') else 
         ap_const_lv8_FF;
     layer5_out_V_fu_6142_p2 <= std_logic_vector(signed(sext_ln813_13_fu_6134_p1) + signed(zext_ln813_6_fu_6130_p1));
     lshr_ln818_1_fu_5184_p4 <= r_V_56_fu_5178_p2(12 downto 2);
@@ -2039,61 +2039,61 @@ begin
     r_V_fu_868_p1 <= ap_const_lv20_FFFF5(5 - 1 downto 0);
     ret_V_1_fu_6190_p2 <= std_logic_vector(signed(sext_ln983_fu_6166_p1) + signed(ap_const_lv13_1));
     ret_V_3_fu_6204_p3 <= 
-        smuct_ln1002_fu_6196_p3 when (p_Result_s_fu_6170_p2(0) = '1') else 
+        shadct_ln1002_fu_6196_p3 when (p_Result_s_fu_6170_p2(0) = '1') else 
         sext_ln983_fu_6166_p1;
     ret_V_fu_6156_p4 <= layer5_out_V_fu_6142_p2(15 downto 4);
-    smuct_ln1002_fu_6196_p3 <= 
+    shadct_ln1002_fu_6196_p3 <= 
         sext_ln983_fu_6166_p1 when (icmp_ln1003_fu_6184_p2(0) = '1') else 
         ret_V_1_fu_6190_p2;
-    smuct_ln1649_11_fu_5254_p3 <= 
-        smuct_ln302_1_fu_5246_p3 when (icmp_ln1649_9_fu_4690_p2(0) = '1') else 
+    shadct_ln1649_11_fu_5254_p3 <= 
+        shadct_ln302_1_fu_5246_p3 when (icmp_ln1649_9_fu_4690_p2(0) = '1') else 
         ap_const_lv8_0;
-    smuct_ln1649_fu_5206_p3 <= 
-        smuct_ln302_fu_5198_p3 when (icmp_ln1649_7_fu_4498_p2(0) = '1') else 
+    shadct_ln1649_fu_5206_p3 <= 
+        shadct_ln302_fu_5198_p3 when (icmp_ln1649_7_fu_4498_p2(0) = '1') else 
         ap_const_lv8_0;
-    smuct_ln302_1_fu_5246_p3 <= 
-        p_Val2_29_fu_4726_p2 when (dmuted_zeros_9_fu_4770_p3(0) = '1') else 
+    shadct_ln302_1_fu_5246_p3 <= 
+        p_Val2_29_fu_4726_p2 when (dhadted_zeros_9_fu_4770_p3(0) = '1') else 
         ap_const_lv8_FF;
-    smuct_ln302_fu_5198_p3 <= 
-        p_Val2_23_fu_4534_p2 when (dmuted_zeros_7_fu_4578_p3(0) = '1') else 
+    shadct_ln302_fu_5198_p3 <= 
+        p_Val2_23_fu_4534_p2 when (dhadted_zeros_7_fu_4578_p3(0) = '1') else 
         ap_const_lv8_FF;
-    smuct_ln888_10_fu_4850_p3 <= 
+    shadct_ln888_10_fu_4850_p3 <= 
         Range1_all_zeros_10_fu_4836_p2 when (tmp_68_fu_4842_p3(0) = '1') else 
         Range1_all_ones_10_fu_4830_p2;
-    smuct_ln888_11_fu_4954_p3 <= 
+    shadct_ln888_11_fu_4954_p3 <= 
         Range1_all_zeros_11_fu_4940_p2 when (tmp_71_fu_4946_p3(0) = '1') else 
         Range1_all_ones_11_fu_4934_p2;
-    smuct_ln888_12_fu_5058_p3 <= 
+    shadct_ln888_12_fu_5058_p3 <= 
         Range1_all_zeros_12_fu_5044_p2 when (tmp_74_fu_5050_p3(0) = '1') else 
         Range1_all_ones_12_fu_5038_p2;
-    smuct_ln888_1_fu_4154_p3 <= 
+    shadct_ln888_1_fu_4154_p3 <= 
         Range1_all_zeros_1_fu_4140_p2 when (tmp_41_fu_4146_p3(0) = '1') else 
         Range1_all_ones_1_fu_4134_p2;
-    smuct_ln888_2_fu_4258_p3 <= 
+    shadct_ln888_2_fu_4258_p3 <= 
         Range1_all_zeros_2_fu_4244_p2 when (tmp_44_fu_4250_p3(0) = '1') else 
         Range1_all_ones_2_fu_4238_p2;
-    smuct_ln888_3_fu_5830_p3 <= 
+    shadct_ln888_3_fu_5830_p3 <= 
         Range1_all_zeros_3_fu_5816_p2 when (tmp_47_fu_5822_p3(0) = '1') else 
         Range1_all_ones_3_fu_5810_p2;
-    smuct_ln888_4_fu_4362_p3 <= 
+    shadct_ln888_4_fu_4362_p3 <= 
         Range1_all_zeros_4_fu_4348_p2 when (tmp_50_fu_4354_p3(0) = '1') else 
         Range1_all_ones_4_fu_4342_p2;
-    smuct_ln888_5_fu_5934_p3 <= 
+    shadct_ln888_5_fu_5934_p3 <= 
         Range1_all_zeros_5_fu_5920_p2 when (tmp_53_fu_5926_p3(0) = '1') else 
         Range1_all_ones_5_fu_5914_p2;
-    smuct_ln888_6_fu_4466_p3 <= 
+    shadct_ln888_6_fu_4466_p3 <= 
         Range1_all_zeros_6_fu_4452_p2 when (tmp_56_fu_4458_p3(0) = '1') else 
         Range1_all_ones_6_fu_4446_p2;
-    smuct_ln888_7_fu_4570_p3 <= 
+    shadct_ln888_7_fu_4570_p3 <= 
         Range1_all_zeros_7_fu_4556_p2 when (tmp_59_fu_4562_p3(0) = '1') else 
         Range1_all_ones_7_fu_4550_p2;
-    smuct_ln888_8_fu_4658_p3 <= 
+    shadct_ln888_8_fu_4658_p3 <= 
         Range1_all_zeros_8_fu_4644_p2 when (tmp_62_fu_4650_p3(0) = '1') else 
         Range1_all_ones_8_fu_4638_p2;
-    smuct_ln888_9_fu_4762_p3 <= 
+    shadct_ln888_9_fu_4762_p3 <= 
         Range1_all_zeros_9_fu_4748_p2 when (tmp_65_fu_4754_p3(0) = '1') else 
         Range1_all_ones_9_fu_4742_p2;
-    smuct_ln888_fu_4050_p3 <= 
+    shadct_ln888_fu_4050_p3 <= 
         Range1_all_zeros_fu_4036_p2 when (tmp_38_fu_4042_p3(0) = '1') else 
         Range1_all_ones_fu_4030_p2;
         sext_ln1273_10_fu_1082_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(tmp_4_fu_726_p3),16));
@@ -2303,8 +2303,8 @@ begin
     shl_ln1273_18_fu_6032_p3 <= (a_V_23_fu_5958_p3 & ap_const_lv5_0);
     shl_ln1273_19_fu_5166_p3 <= (a_V_24_fu_4490_p3 & ap_const_lv4_0);
     shl_ln1273_1_fu_916_p3 <= (tmp_2_fu_692_p4 & ap_const_lv7_0);
-    shl_ln1273_20_fu_5214_p3 <= (smuct_ln1649_fu_5206_p3 & ap_const_lv5_0);
-    shl_ln1273_21_fu_5262_p3 <= (smuct_ln1649_11_fu_5254_p3 & ap_const_lv5_0);
+    shl_ln1273_20_fu_5214_p3 <= (shadct_ln1649_fu_5206_p3 & ap_const_lv5_0);
+    shl_ln1273_21_fu_5262_p3 <= (shadct_ln1649_11_fu_5254_p3 & ap_const_lv5_0);
     shl_ln1273_22_fu_5298_p3 <= (a_V_26_fu_4874_p3 & ap_const_lv5_0);
     shl_ln1273_2_fu_948_p3 <= (tmp_2_fu_692_p4 & ap_const_lv6_0);
     shl_ln1273_3_fu_980_p3 <= (tmp_2_fu_692_p4 & ap_const_lv9_0);

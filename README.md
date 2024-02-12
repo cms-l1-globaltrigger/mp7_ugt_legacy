@@ -31,10 +31,14 @@ Following dependencies exist for uGT firmware:
 
 | Repo | Tag |
 |:-:|:-:|
-| [MP7](https://gitlab.cern.ch/cms-l1-globaltrigger/mp7) | v3.2.2_Vivado2021+_ugt_v2
+| [MP7](https://gitlab.cern.ch/cms-l1-globaltrigger/mp7) | v3.2.2_Vivado2021+_ugt_v4
 | [IPBB](https://github.com/ipbus/ipbb) | dev/2023a
 | [IPB_FW](https://github.com/ipbus/ipbus-firmware) | v1.4
 
+
+## NN trigger models naming convention 
+
+A description of NN trigger models naming convention is available in [axol1tl_topo_model_names.pdf](doc/axol1tl_topo_model_names/pdf/axol1tl_topo_model_names.pdf).
 
 ## Setup environment
 

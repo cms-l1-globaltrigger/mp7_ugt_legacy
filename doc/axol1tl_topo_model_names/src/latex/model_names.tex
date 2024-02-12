@@ -22,7 +22,26 @@ similar for AMODEL (Axol1tl model).
 
 \subsection{Implementation in uGT firmware}
 
-The uGT firmware will provide subdirectories for VHDL files of every available model.\\
-According to the model names listed in \url{https://globaltrigger.web.cern.ch/upgrade/tme/models}, we created a subdirectory structure as follows:
+The uGT firmware (\url{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy}) will provide subdirectories for VHDL files of every available model.\\
+According to the model names listed in \url{https://globaltrigger.web.cern.ch/upgrade/tme/models}, we created a subdirectory structure as follows (currently in branch "dev\_v1.26.0" - \url{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/dev_v1.26.0/firmware/hdl/payload/gtl}):
 
-../
+\texttt{../axol1tl\_trigger/model\_v1}\\
+containing VHDL files named 'axol1tl\_v1\_<hls file name>.vhd' and 'axol1tl\_v1.vhd'. (See example Figure \ref{fig:axol1tl_v1_files}).\\\\
+\texttt{../axol1tl\_trigger/model\_v3}\\
+containing VHDL files named 'axol1tl\_v3\_<hls file name>.vhd' and 'axol1tl\_v3.vhd'.\\\\
+\texttt{../topo\_trigger/model\_hh\_ele\_v1}\\
+containing VHDL files named 'topo\_hh\_ele\_v1\_<hls file name>.vhd' and 'topo\_hh\_ele\_v1.vhd'.\\\\
+\texttt{../topo\_trigger/model\_hh\_ele\_v1}\\
+containing VHDL files named 'topo\_hh\_had\_v1\_<hls file name>.vhd' and 'topo\_hh\_had\_v1.vhd'.\\\\
+\texttt{../topo\_trigger/model\_hh\_ele\_v1}\\
+containing VHDL files named 'topo\_hh\_mu\_v1\_<hls file name>.vhd' and 'topo\_hh\_mu\_v1.vhd'.\\
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/axol1tl_v1_files}
+\caption{AXOL1TL v1 files}
+\label{fig:axol1tl_v1_files}
+\end{figure}
+
+
+

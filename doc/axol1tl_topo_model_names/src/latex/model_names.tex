@@ -1,9 +1,9 @@
 
 \section{AXOL1TL and TOPO model names}
 
-This document is a description for the naming convetion of AXOL1TL and TOPO model names.
+This document is a description for the naming convention of AXOL1TL and TOPO model names.
 
-With the release of utm version 0.12, the possibility of setting cuts for different models of Axol1tl and Topological triggers is available.
+With the release of utm version 0.12, the possibility of setting cuts for different models of AXOL1TL and Topological triggers is available.
 To prevent changes in utm and TME, we created a structure which is open for upcoming new models without touching utm and TME!\\
 The uGT tool "VHDL Producer" and the uGT firmware (VHDL) code depend on the AXOL1TL and TOPO model names. Therefore a convention is necessary.\\
 A list of valid AXOL1TL and TOPO model names will be provided on a web page (an example is available \url{https://globaltrigger.web.cern.ch/upgrade/tme/models}).
@@ -11,7 +11,7 @@ A list of valid AXOL1TL and TOPO model names will be provided on a web page (an 
 \subsection{Implementation in Trigger Menu Editor (TME)}
 
 In TME "cut editor" a link to valid model names is available for L1Menu developers to set model names, see Figure \ref{fig:tme_model_cut} for TMODEL (Topological model),
-similar for AMODEL (Axol1tl model).
+similar for AMODEL (AXOL1TL model).
 
 \begin{figure}[htb]
 \centering
@@ -31,9 +31,9 @@ containing VHDL files named "axol1tl\_v1\_<hls file name>.vhd" and "axol1tl\_v1.
 containing VHDL files named "axol1tl\_v3\_<hls file name>.vhd" and "axol1tl\_v3.vhd".\\\\
 \texttt{../topo\_trigger/model\_hh\_ele\_v1}\\
 containing VHDL files named "topo\_hh\_ele\_v1\_<hls file name>.vhd" and "topo\_hh\_ele\_v1.vhd". (See example Figure \ref{fig:hh_ele_v1_files}).\\\\
-\texttt{../topo\_trigger/model\_hh\_ele\_v1}\\
+\texttt{../topo\_trigger/model\_hh\_had\_v1}\\
 containing VHDL files named "topo\_hh\_had\_v1\_<hls file name>.vhd" and "topo\_hh\_had\_v1.vhd".\\\\
-\texttt{../topo\_trigger/model\_hh\_ele\_v1}\\
+\texttt{../topo\_trigger/model\_hh\_mu\_v1}\\
 containing VHDL files named "topo\_hh\_mu\_v1\_<hls file name>.vhd" and "topo\_hh\_mu\_v1.vhd".\\
 
 VHDL file names and VHDL entity names of HLS generated files have to comply with this naming convention.\\

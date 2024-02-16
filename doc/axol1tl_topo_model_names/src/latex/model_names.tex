@@ -50,7 +50,7 @@ In Figure \ref{fig:topo_dep} an example for \texttt{topo\_trigger.dep} is shown.
 
 The current implementation for "Anomaly Detection Trigger" (ADT) will be available, too (it contains the logic of model "v3").\\
 
-The developer of AXOL1TL and Topological trigger firmware should make PR for their HLS generated VHDL files in the model directories in \url{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/dev_v1.26.0/firmware/hdl/payload/gtl} for first tests. In the case of new model please create a new subdirectory named \texttt{model\_<new model name>} with the new VHDL files and create a PR for it. All the new VHDL files of the new model must be appended to \texttt{axol1tl\_trigger.dep} or \texttt{topo\_trigger.dep}. The "wrapper" file (similar to e.g. \texttt{axol1tl\_v3\_wrapper.vhd}) will be created by uGT.\\
+Developers of AXOL1TL and Topological trigger firmware should make PR for their HLS generated VHDL files in the model directories at \url{https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy/tree/dev_v1.26.0/firmware/hdl/payload/gtl} for first tests. In the case of new model please create a new subdirectory named \texttt{model\_<new model name>} with the new VHDL files and create a PR for it. All the new VHDL files (path) of the new model must be appended to \texttt{axol1tl\_trigger.dep} or \texttt{topo\_trigger.dep}. The "wrapper" file (similar to e.g. \texttt{axol1tl\_v3\_wrapper.vhd}) will be created by uGT.\\
 
 \begin{figure}[htb]
 \centering

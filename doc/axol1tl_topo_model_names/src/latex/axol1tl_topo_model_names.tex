@@ -1,0 +1,41 @@
+%
+% Master LaTeX document.
+%
+% Define document type.
+\documentclass[11pt,a4paper,english,titlepage]{article}
+
+% Include packages.
+\usepackage{cite}
+\usepackage{gtupgrade}
+% \usepackage{footmisc} % for footnote references on different places
+\usepackage{xcolor}
+
+% Document information.
+\def\doctitle{Definition of AXOL1TL and TOPO model names}
+\def\docauthor{Bernhard Arnold, Herbert Bergauer, Manfred Jeitler}
+\def\docdate{\today}
+
+% Begin document structure.
+\begin{document}
+
+    % Title page.
+    \doctitlepage{}
+
+    % Table of contents.
+%     \doctoc{}
+
+    % Document content.
+    \input{model_names.tex}
+
+%     % List of tables.
+%     \doctables{}
+% 
+%     % List of figures.
+%     \docfigures{}
+
+    \clearpage
+
+% End of document structure.
+\end{document}
+
+% eof

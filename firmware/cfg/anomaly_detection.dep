@@ -18,3 +18,4 @@ src payload/gtl/anomaly_detection/axol1tl_v3_mul_8s_5s_13_1_1.vhd
 src payload/gtl/anomaly_detection/axol1tl_v3_mul_8s_6ns_14_1_1.vhd
 src payload/gtl/anomaly_detection/axol1tl_v3_mul_8s_6s_14_1_1.vhd
 src payload/gtl/anomaly_detection/axol1tl_v3.vhd
+src payload/gtl/anomaly_detection/adt_wrapper.vhd

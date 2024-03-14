@@ -4,13 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.26.0] - 2024-02-09
+## [v1.26.0] - 2024-03-14
 ### Comment
 
 - mp7_ugt firmware release v1.26.0
 - CICADA on link 11 with 16 bits cicada score 
 - development for axol1tl trigger (axol1tl_trigger) with models
-- development for topological trigger (topo_trigger) with models
+- no topological trigger (topo_trigger) - VHDL files of models missing
 
 ### Added
 - source files:

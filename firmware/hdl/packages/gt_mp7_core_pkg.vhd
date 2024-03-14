@@ -4,12 +4,12 @@
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
 
--- mp7_ugt (=FRAME_VERSION): v1.26.0
+-- mp7_ugt (=FRAME_VERSION): v1.27.0
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.26.0
+-- gt: v1.27.0
 -- frame: v1.4.2 (see frame.vhd)
--- gtl: v1.20.0 (see gtl_module_tpl.vhd)
+-- gtl: v1.21.0 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
 -- HB 2023-04-08: v1.22.2 - Changed in scripts/mp7_patch.py (for area_constraints.tcl).
@@ -36,6 +36,7 @@
 --
 -- gtl history:
 
+-- HB 2024-03-11: v1.21.0: Implemented VHDL files for topological trigger models.
 -- HB 2023-12-18: v1.20.0: Implemented topological and cicada trigger.
 -- HB 2023-09-29: v1.19.4: Used "no_mgt" at quads 8..16 (top_decl.vhd).
 -- HB 2023-09-28: v1.19.3: Used "no_chk" and "no_buf" at quads 8..16 (top_decl.vhd).
@@ -99,7 +100,7 @@ package gt_mp7_core_pkg is
 -- ==================================================================================================
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant GT_MINOR_VERSION      : integer range 0 to 255 := 26;
+    constant GT_MINOR_VERSION      : integer range 0 to 255 := 27;
     constant GT_REV_VERSION        : integer range 0 to 255 := 0;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
@@ -111,7 +112,7 @@ package gt_mp7_core_pkg is
     constant FRAME_REV_VERSION        : integer range 0 to 255 := 2;
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 20;
+    constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 21;
     constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 0;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;

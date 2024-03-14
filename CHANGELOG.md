@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.27.0] - 2024-03-14
+### Comment
+
+- mp7_ugt firmware release v1.27.0
+- branch for implementing VHDL files of TOPO models
+
+### Added
+- source files:
+  - VHDL files of TOPO models
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+- dep file:
+  - ../cfg/uGT_algo.dep
+
 ## [v1.26.0] - 2024-03-14
 ### Comment
 

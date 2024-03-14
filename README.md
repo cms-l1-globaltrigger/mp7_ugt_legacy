@@ -25,13 +25,13 @@ files:
 
 | utm | TME | VHDL Producer |
 |:-:|:-:|:-:|
-| 0.11.2 | 0.15.3 | 2.14.2 |
+| 0.12.0 | 0.16.0 | 2.17.1 |
 
 Following dependencies exist for uGT firmware:
 
 | Repo | Tag |
 |:-:|:-:|
-| [MP7](https://gitlab.cern.ch/cms-l1-globaltrigger/mp7) | v3.2.2_Vivado2021+_ugt_v2
+| [MP7](https://gitlab.cern.ch/cms-l1-globaltrigger/mp7) | v3.2.2_Vivado2021+_ugt_v4
 | [IPBB](https://github.com/ipbus/ipbb) | dev/2023a
 | [IPB_FW](https://github.com/ipbus/ipbus-firmware) | v1.4
 

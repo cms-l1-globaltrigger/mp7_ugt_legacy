@@ -115,10 +115,15 @@ vcom -93 -work work $HDL_DIR/payload/gtl/esums_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/min_bias_hf_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/towercount_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/zdc_condition.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/cicada_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
-#### inserted from anomaly_detection.dep
+#
+#### inserted from anomaly_detection.dep (wrapper in dep file)
 {{adt_vhd}}
-vcom -93 -work work $HDL_DIR/payload/gtl/anomaly_detection/adt_wrapper.vhd
+#### inserted from axol1tl_trigger.dep (wrapper in dep file)
+{{axol1tl_vhd}}
+#### inserted from topo_trigger.dep (wrapper in dep file)
+{{topo_vhd}}
 #
 ### modules of BRAMs used for mass over DeltaR
 vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_calo_inv_dr_sq_1/synth/rom_lut_calo_inv_dr_sq_1.vhd

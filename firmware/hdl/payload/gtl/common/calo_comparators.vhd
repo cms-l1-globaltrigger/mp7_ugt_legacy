@@ -166,6 +166,7 @@ begin
 
     end generate jet_sel;
 
+
     tau_sel: if obj_type=TAU_TYPE generate
         et(TAU_ET_HIGH-TAU_ET_LOW downto 0) <= data_i(TAU_ET_HIGH downto TAU_ET_LOW);
         eta(TAU_ETA_HIGH-TAU_ETA_LOW downto 0) <= data_i(TAU_ETA_HIGH downto TAU_ETA_LOW);

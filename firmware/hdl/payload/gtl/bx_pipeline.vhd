@@ -2,6 +2,10 @@
 -- Pipeline for +/-2 bx data.
 
 -- Version-history:
+
+-- HB 2023-12-13: CICADA definition changed: only 16 bits, no HI bits.
+-- HB 2023-10-10: CICADA definition changed: no bjets.
+-- HB 2023-09-06: cicada on link 11 (removed zdc10g on link 11).
 -- HB 2023-08-25: updated for new ZDC data structure.
 -- HB 2022-10-10: updated for ZDC (on link 11).
 -- HB 2021-06-10: updated for hadronic shower trigger (mus).
@@ -31,8 +35,6 @@ architecture rtl of bx_pipeline is
 
     type mus_tmp_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(NR_MUS_BITS-1 downto 0);
     signal mus_tmp, mus_tmp_del : mus_tmp_array;
-
---     signal mus0, mus1, musoot0, musoot1, mus2 : mus_bit_array;
 
 begin
 
@@ -68,10 +70,11 @@ begin
         bx_data.asymht(i) <= data_tmp(i).asymht;
         bx_data.asymethf(i) <= data_tmp(i).asymethf;
         bx_data.asymhthf(i) <= data_tmp(i).asymhthf;
+        bx_data.cicada(i) <= data_tmp(i).cicada;
         bx_data.zdcm(i) <= data_tmp(i).zdc(EN_MINUS_FRAME)(ZDC_BIT_HIGH downto ZDC_BIT_LOW);
         bx_data.zdcp(i) <= data_tmp(i).zdc(EN_PLUS_FRAME)(ZDC_BIT_HIGH downto ZDC_BIT_LOW);
 
--- Additional delay for centrality and ext_cond (no comparators and conditions)
+-- Additional delay for centrality, ext_cond and mus (no comparators and conditions)
 
         centrality_pipe_i: entity work.delay_pipeline
             generic map(

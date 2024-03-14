@@ -272,12 +272,23 @@ class Module(object):
         with open(adt_repl, 'w') as fp:
             fp.write(adt_vhd)
                         
+        # Create 'topo_trigger.txt' from 'topo_trigger.dep'
+        topo_dep_file = os.path.join(uGTalgosPath, 'cfg', 'topo_trigger.dep')
+        topo_repl = os.path.join(uGTalgosPath, 'cfg', 'topo_trigger.txt')
+        
+        with open(topo_dep_file) as fp:
+            topo_vhd = fp.read()
+        topo_vhd = topo_vhd.replace('src ', 'vcom -93 -work work $HDL_DIR/')
+        with open(topo_repl, 'w') as fp:
+            fp.write(topo_vhd)
+                        
         # Insert content of 'anomaly_detection.txt' into DO_FILE
         render_template(
             os.path.join(self.path, DO_FILE_TMP),
             os.path.join(self.path, DO_FILE),
             {
                 '{{adt_vhd}}': read_file(os.path.join(uGTalgosPath, 'cfg', 'anomaly_detection.txt')),
+                '{{topo_vhd}}': read_file(os.path.join(uGTalgosPath, 'cfg', 'topo_trigger.txt')),
             }
         )
 
@@ -585,7 +596,8 @@ def run_simulation_questa(a_mp7_url, a_mp7_tag, a_menu, a_url_menu, a_ipb_fw_dir
     # remove 'anomaly_detection.txt'
     cfg_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'firmware', 'cfg')
     adt_txt = os.path.join(cfg_dir, 'anomaly_detection.txt')
-    command = f'bash -c "rm {adt_txt}"'
+    topo_txt = os.path.join(cfg_dir, 'topo_trigger.txt')
+    command = f'bash -c "rm {adt_txt} {topo_txt}"'
     run_command(command)
         
     if not success:

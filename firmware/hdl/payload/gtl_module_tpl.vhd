@@ -2,6 +2,8 @@
 -- Global Trigger Logic module.
 
 -- Version history:
+-- HB 2023-12-18: v1.20.0: Implemented topological and cicada trigger.
+-- HB 2023-09-29: v1.19.4: Used "no_mgt" at quads 8..16 (top_decl.vhd).
 -- HB 2023-09-28: v1.19.3: Used "no_chk" and "no_buf" at quads 8..16.
 -- HB 2023-09-25: v1.19.2: Removed unused files "demux_lane_validation.vhd" and "reg.vhd". Changed quads 8..16, inserted with gth_5g, but without checksum and buffers.
 -- HB 2023-09-01: v1.19.1: Added zdc_condition.vhd (was missing) and updated sim and dep file.

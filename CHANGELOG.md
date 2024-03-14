@@ -4,6 +4,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.26.0] - 2024-03-14
+### Comment
+
+- mp7_ugt firmware release v1.26.0
+- CICADA on link 11 with 16 bits cicada score 
+- development for axol1tl trigger (axol1tl_trigger) with models
+- no topological trigger (topo_trigger) - VHDL files of models missing
+
+### Added
+- source files:
+  - ../payload/gtl/cicada_condition.vhd
+  - ../payload/gtl/axol1tl_trigger/axol1tl_v1_wrapper.vhd
+  - ../payload/gtl/axol1tl_trigger/axol1tl_v3_wrapper.vhd
+  - ../payload/gtl/topo_trigger/topo_trigger_hh_ele_v1_wrapper.vhd
+  - ../payload/gtl/topo_trigger/topo_trigger_hh_had_v1_wrapper.vhd
+  - ../payload/gtl/topo_trigger/topo_trigger_hh_mu_v1_wrapper.vhd
+- dep file:
+  - ../cfg/axol1tl_trigger.dep
+  - ../cfg/topo_trigger.dep
+- directories (with VHDL files for models):
+  - ../payload/gtl/axol1tl_trigger/model_v1
+  - ../payload/gtl/axol1tl_trigger/model_v3
+  - ../payload/gtl/topo_trigger/model_hh_ele_v1
+  - ../payload/gtl/topo_trigger/model_hh_had_v1
+  - ../payload/gtl/topo_trigger/model_hh_mu_v1
+
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/gtl_pkg.vhd
+  - ../packages/lhc_data_pkg.vhd
+  - ../payload/gtl_data_mapping.vhd
+  - ../payload/gtl/bx_pipeline.vhd
+  - ../payload/frame/lmp.vhd
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+  - ../sim/scripts/cicada_condition_test.do
+  - ../sim/scripts/cicada_condition_wave.do
+  - ../sim/testbench/cicada_condition_tb.vhd
+- dep file:
+  - ../cfg/uGT_algo.dep
+
 ## [v1.25.2] - 2023-09-29
 ### Comment
 

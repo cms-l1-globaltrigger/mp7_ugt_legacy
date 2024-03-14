@@ -133,6 +133,7 @@ entity correlation_conditions is
         iso_lut_obj3: std_logic_vector(2**MAX_ISO_BITS-1 downto 0) := (others => '1');
         disp_cut_obj3: boolean := false;
         disp_requ_obj3: boolean := false;
+        bjet_flag_requ_obj3 : boolean := false; -- HB, 2023-10-19: bjets not used in CICADA
         requested_charge_obj3: string(1 to 3) := "ign";
         qual_lut_obj3: std_logic_vector(2**(MUON_QUAL_HIGH-MUON_QUAL_LOW+1)-1 downto 0) := (others => '1');
         upt_cut_obj3: boolean := false;
@@ -245,6 +246,7 @@ architecture rtl of correlation_conditions is
     signal deta_comp_pipe, dphi_comp_pipe, dr_comp_pipe, mass_comp_pipe, tbpt_comp_pipe, mass_div_dr_comp_pipe : std_logic_2dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2) := (others => (others => '1'));
     signal mass_3_obj_comp_pipe : std_logic_3dim_array(slice_low_obj1 to slice_high_obj1, slice_low_obj2 to slice_high_obj2, slice_low_obj3 to slice_high_obj3) := (others => (others => (others => '0')));
     signal condition_and_or : std_logic;
+
 
 begin
 

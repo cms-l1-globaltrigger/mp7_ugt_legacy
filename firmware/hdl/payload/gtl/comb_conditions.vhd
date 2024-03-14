@@ -60,6 +60,7 @@ entity comb_conditions is
         iso_luts_obj1: common_templates_iso_array := (others => (others => '1'));
         disp_cuts_obj1: common_templates_boolean_array := (others => false);
         disp_requs_obj1: common_templates_boolean_array := (others => false);
+        bjet_flag_requs_obj1 : common_templates_boolean_array := (others => false);
         requested_charges_obj1: common_templates_string_array := (others => "ign");
         qual_luts_obj1: common_templates_quality_array := (others => (others => '1'));
         upt_cuts_obj1: common_templates_boolean_array := (others => false);
@@ -179,7 +180,7 @@ architecture rtl of comb_conditions is
 
     signal twobody_pt_comp_pipe, twobody_upt_comp_pipe :
     std_logic_2dim_array(slice_1_low_obj1 to slice_1_high_obj1, slice_1_low_obj1 to slice_1_high_obj1) := (others => (others => '1'));
-
+    
 begin
 
     calo_i: if type_obj1 /= MU_TYPE generate

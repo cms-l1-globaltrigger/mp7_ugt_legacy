@@ -2,6 +2,7 @@
 -- Data mapping for GTL
 
 -- Version-history:
+-- HB 2023-09-06: cicada on link 11.
 -- HB 2023-08-25: updated for new ZDC data structure.
 -- HB 2023-03-01: updated for ZDC.
 -- HB 2023-02-09: updated comments.
@@ -101,5 +102,11 @@ begin
     gtl_data.zdc(3) <= lhc_data.zdc5g_3;
     gtl_data.zdc(4) <= lhc_data.zdc5g_4;
     gtl_data.zdc(5) <= lhc_data.zdc5g_5;
+    
+-- HB 2023-12-11: new CICADA data mapping
+    gtl_data.cicada(AD_INT_HIGH downto AD_INT_HIGH-3) <= lhc_data.cicada(AD_INT_MSB_FRAME)(AD_INT_HIGH_FRAME downto AD_INT_LOW_FRAME); -- anomaly detection integer part high
+    gtl_data.cicada(AD_INT_LOW+3 downto AD_INT_LOW) <= lhc_data.cicada(AD_INT_LSB_FRAME)(AD_INT_HIGH_FRAME downto AD_INT_LOW_FRAME); -- anomaly detection integer part low
+    gtl_data.cicada(AD_DEC_HIGH downto AD_DEC_HIGH-3) <= lhc_data.cicada(AD_DEC_MSB_FRAME)(AD_DEC_HIGH_FRAME downto AD_DEC_LOW_FRAME); -- anomaly detection decimal part high
+    gtl_data.cicada(AD_DEC_LOW+3 downto AD_DEC_LOW) <= lhc_data.cicada(AD_DEC_LSB_FRAME)(AD_DEC_HIGH_FRAME downto AD_DEC_LOW_FRAME); -- anomaly detection decimal part low
     
 end architecture rtl;

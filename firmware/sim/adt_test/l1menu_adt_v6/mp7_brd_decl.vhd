@@ -16,7 +16,7 @@ package mp7_brd_decl is
 
 	constant BOARD_REV: std_logic_vector(7 downto 0) := X"12";
 
-	constant N_REGION: integer := 7;
+	constant N_REGION: integer := 18;
 
 	constant ALIGN_REGION: integer := 4;
 

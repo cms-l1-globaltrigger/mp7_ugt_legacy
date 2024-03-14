@@ -2,6 +2,7 @@
 -- Lane mapping process.
 
 -- Version-history:
+-- HB 2023-09-06: cicada on link 11 (removed zdc10g on link 11).
 -- HB 2023-08-25: zdc5g on link 71, no zdc10g.
 -- HB 2022-10-08: zdc10g on link 11.
 -- HB 2022-09-06: cleaned up.
@@ -37,7 +38,7 @@ architecture arch of lmp is
 --     constant OFFSET_JET_LANES : natural := 6;
 --     constant OFFSET_TAU_LANES : natural := 8;
 --     constant OFFSET_ESUMS_LANES : natural := 10;
--- -- BR 2015-05-01: added external-conditions.
+--     constant OFFSET_CICADA_LANES : natural := 11;
 --     constant OFFSET_EXT_COND_LANES : natural := 12;
 --     constant OFFSET_LINK_11_LANES : natural := 11;
 --     constant OFFSET_ZDC5G_LANES : natural := 71;
@@ -120,12 +121,12 @@ begin
     lhc_data_o.etmhf <= demux_data_i(OFFSET_ESUMS_LANES)(4);
     lhc_data_o.htmhf <= demux_data_i(OFFSET_ESUMS_LANES)(5);
 
-    lhc_data_o.link_11_fr_0_data <= demux_data_i(OFFSET_LINK_11_LANES)(0);
-    lhc_data_o.link_11_fr_1_data <= demux_data_i(OFFSET_LINK_11_LANES)(1);
-    lhc_data_o.link_11_fr_2_data <= demux_data_i(OFFSET_LINK_11_LANES)(2);
-    lhc_data_o.link_11_fr_3_data <= demux_data_i(OFFSET_LINK_11_LANES)(3);
-    lhc_data_o.link_11_fr_4_data <= demux_data_i(OFFSET_LINK_11_LANES)(4);
-    lhc_data_o.link_11_fr_5_data <= demux_data_i(OFFSET_LINK_11_LANES)(5);
+    lhc_data_o.cicada(0) <= demux_data_i(OFFSET_CICADA_LANES)(0);
+    lhc_data_o.cicada(1) <= demux_data_i(OFFSET_CICADA_LANES)(1);
+    lhc_data_o.cicada(2) <= demux_data_i(OFFSET_CICADA_LANES)(2);
+    lhc_data_o.cicada(3) <= demux_data_i(OFFSET_CICADA_LANES)(3);
+    lhc_data_o.cicada(4) <= demux_data_i(OFFSET_CICADA_LANES)(4);
+    lhc_data_o.cicada(5) <= demux_data_i(OFFSET_CICADA_LANES)(5);
 
     lhc_data_o.zdc5g_0 <= demux_data_i(OFFSET_ZDC5G_LANES)(0);
     lhc_data_o.zdc5g_1 <= demux_data_i(OFFSET_ZDC5G_LANES)(1);

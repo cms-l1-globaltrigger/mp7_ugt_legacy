@@ -2,6 +2,8 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2023-10-10: CICADA definition changed: no bjets.
+-- HB 2023-10-03: inserted calo anomaly algorithm (CICADA) definitions.
 -- HB 2023-09-13: NR_INPUT_LANES not used anymore. Added type lword_array (for output_mux.vhd and mux.vhd)
 -- HB 2023-07-28: bug fixed "type zdc_array ...".
 -- HB 2023-07-25: new ZDC data structure.
@@ -90,6 +92,7 @@ constant ADT_SIM_DEL: natural := 2; -- delay of ADT for simulation
 constant ZDC_STAGES: natural := 2; -- pipeline stages for "ZDC condition" to get same pipeline to algos as conditions
 constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
 constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
+constant CICADA_COND_STAGES: natural := 2; -- pipeline stages for "CICADA conditions" to get same pipeline to algos as conditions
 
 -- Selector for options
 constant SPYMEM: boolean := true; -- selector for input spymem
@@ -120,7 +123,9 @@ constant ASYMET_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYP
 constant ASYMHT_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+8;
 constant ASYMETHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+9;
 constant ASYMHTHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+10;
-constant MU_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES+0;
+constant NR_MU_TYPE : natural := 1;
+constant MU_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES;
+--constant BJET_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES+NR_MU_TYPE;
 
 -- ==== MUONs - begin ============================================================
 -- MUONs
@@ -235,10 +240,35 @@ constant TAU_ISO_LOW : natural := 25;
 constant TAU_ISO_HIGH : natural := 26;
 constant TAU_ISO_BITS : natural := TAU_ISO_HIGH-TAU_ISO_LOW+1;
 
+-- *******************************************************************************************************
+-- HB 2023-01-26: calo anomaly algorithm (CICADA) data from Calo-Layer1
+-- HB 2023-10-10: CICADA definition changed: no bjets, no cicada heavy ion bits
+-- bjets definition
+
+-- CICADA anomaly detection (16 bits)
+constant AD_INT_MSB_FRAME : natural := 0;
+constant AD_INT_LSB_FRAME : natural := 1;
+constant AD_DEC_MSB_FRAME : natural := 2;
+constant AD_DEC_LSB_FRAME : natural := 3;
+constant AD_DEC_LOW_FRAME : natural := 28;
+constant AD_DEC_HIGH_FRAME : natural := 31;
+constant AD_INT_LOW_FRAME : natural := 28;
+constant AD_INT_HIGH_FRAME : natural := 31;
+constant AD_DEC_LOW : natural := 0;
+constant AD_DEC_HIGH : natural := 7;
+constant AD_INT_LOW : natural := 8;
+constant AD_INT_HIGH : natural := 15;
+constant CICADA_LOW : natural := AD_DEC_LOW;
+constant CICADA_HIGH : natural := AD_INT_HIGH;
+constant CICADA_BITS : natural := CICADA_HIGH-CICADA_LOW+1;
+
+-- *******************************************************************************************************
+
 type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO_BITS-1 downto 0);
 type bx_eg_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_EG_OBJECTS-1);
 type bx_jet_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_JET_OBJECTS-1);
 type bx_tau_objects_array is array (0 to BX_PIPELINE_STAGES-1) of calo_objects_array(0 to NR_TAU_OBJECTS-1);
+type bx_cicada_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(CICADA_BITS-1 downto 0);
 constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
 type calo_templates_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 constant MAX_CALO_ET_BITS : positive := max(EG_ET_BITS, JET_ET_BITS, TAU_ET_BITS);
@@ -446,6 +476,7 @@ type common_objects_array is array (natural range <>) of std_logic_vector(MAX_OB
 constant NR_EXTERNAL_CONDITIONS : positive := EXTERNAL_CONDITIONS_DATA_WIDTH;
 type bx_ext_cond_array is array (0 to BX_PIPELINE_STAGES-1) of std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
 
+-- HB 2023-10-10: CICADA definition changed: no bjets
 -- data records
 type gtl_data_record is record
     mu : muon_objects_array(0 to NR_MUON_OBJECTS-1);
@@ -464,6 +495,7 @@ type gtl_data_record is record
     towercount : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
     centrality : std_logic_vector(NR_CENTRALITY_BITS-1 downto 0);
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
+    cicada : std_logic_vector(CICADA_BITS-1 downto 0);
     zdc : zdc_array;
 end record gtl_data_record;
 
@@ -497,6 +529,7 @@ type bx_data_record is record
     cent6 : bx_cent_array;
     cent7 : bx_cent_array;
     ext_cond : bx_ext_cond_array;
+    cicada : bx_cicada_array;
     mus0, mus1, mus2, musoot0, musoot1 : mus_bit_array;
     zdcm : bx_zdc_array;
     zdcp : bx_zdc_array;

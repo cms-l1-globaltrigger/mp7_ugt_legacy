@@ -176,7 +176,7 @@ begin
             condition_and_or_sig2 <= condition_and_or_tmp2;
             condition_and_or_sig3 <= condition_and_or_tmp3;
         end process matrix_quad_p_2;
-        condition_and_or <= condition_and_or_sig1 or condition_and_or_sig2 or condition_and_or_sig3;
+        condition_and_or <= (condition_and_or_sig1 or condition_and_or_sig2 or condition_and_or_sig3);
     end generate matrix_quad_i;
 
 -- Pipeline stage for condition output.

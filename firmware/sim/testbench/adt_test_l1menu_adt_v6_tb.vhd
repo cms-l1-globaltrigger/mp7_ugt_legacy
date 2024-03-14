@@ -48,7 +48,7 @@ architecture rtl of adt_test_l1menu_adt_v6_tb is
     signal algo_log, algo_log_tmp : std_logic;
     
     signal stop : boolean := false;
-    signal anomaly_score: std_logic_vector(15 downto 0);
+    signal anomaly_score: std_logic_vector(17 downto 0);
     signal anomaly_score_tmp, anomaly_score_int: integer;
 
 --*********************************Main Body of Code**********************************

@@ -2,6 +2,7 @@
 -- Package for definitions of lhc data.
 
 -- Version history:
+-- HB 2023-09-06: inserted calo anomaly algorithm (CICADA) data on link 11 (removed zdc10g on link 11).
 -- HB 2023-08-25: ZDC 5G on link 71.
 -- HB 2023-02-09: updated comments.
 -- HB 2022-10-08: zdc10g on link 11.
@@ -25,7 +26,7 @@
 -- tau                 6 (5..0)        1        8
 -- tau                 6 (11..6)       1        9
 -- esums               6               1       10
--- free                6               1       11
+-- cicada              6               1       11
 -- ext-cond(63..0)     2               1       12
 -- ext-cond(127..64)   2               1       13
 -- ext-cond(191..128)  2               1       14
@@ -48,7 +49,7 @@
 -- tau         5      4     3    2    1      0
 -- tau         11     10    9    8    7      6
 -- esums       HTmHF  ETmHF HTm* ETm* HT,TC* ET,ETTEM*
--- free        5      4     3    2    1      0     
+-- CICADA      5      4     3    2    1      0
 -- ext-cond    x      x     x    x    1      0
 -- ext-cond    x      x     x    x    3      2
 -- ext-cond    x      x     x    x    5      4
@@ -76,8 +77,7 @@ package lhc_data_pkg is
     constant OFFSET_JET_LANES : natural := 6;
     constant OFFSET_TAU_LANES : natural := 8;
     constant OFFSET_ESUMS_LANES : natural := 10;
--- HB 2106-05-31: proposal for memory structure with all frames of calo links for extended test-vector-file structure (see lhc_data_pkg_all_frames.vhd)
-    constant OFFSET_LINK_11_LANES : natural := 11;
+    constant OFFSET_CICADA_LANES : natural := 11;
     constant OFFSET_EXT_COND_LANES : natural := 12;
     constant OFFSET_ZDC5G_LANES : natural := 71;
 
@@ -98,12 +98,8 @@ package lhc_data_pkg is
     constant HTM_DATA_WIDTH : integer := SW_DATA_WIDTH;
     constant ETMHF_DATA_WIDTH : integer := SW_DATA_WIDTH;
     constant HTMHF_DATA_WIDTH : integer := SW_DATA_WIDTH;
-    constant LINK_11_FR_0_WIDTH : integer := SW_DATA_WIDTH;
-    constant LINK_11_FR_1_WIDTH : integer := SW_DATA_WIDTH;
-    constant LINK_11_FR_2_WIDTH : integer := SW_DATA_WIDTH;
-    constant LINK_11_FR_3_WIDTH : integer := SW_DATA_WIDTH;
-    constant LINK_11_FR_4_WIDTH : integer := SW_DATA_WIDTH;
-    constant LINK_11_FR_5_WIDTH : integer := SW_DATA_WIDTH;
+    constant CICADA_ARRAY_LENGTH : integer := 6;
+    constant CICADA_DATA_WIDTH : integer := SW_DATA_WIDTH;
     constant EXTERNAL_CONDITIONS_DATA_WIDTH : integer := SW_DATA_WIDTH*8;
     constant ZDC5G_0_WIDTH : integer := SW_DATA_WIDTH;
     constant ZDC5G_1_WIDTH : integer := SW_DATA_WIDTH;
@@ -124,9 +120,8 @@ package lhc_data_pkg is
             HTM_DATA_WIDTH +
             ETMHF_DATA_WIDTH +
             HTMHF_DATA_WIDTH +
-            LINK_11_FR_0_WIDTH + LINK_11_FR_1_WIDTH +
-            LINK_11_FR_2_WIDTH + LINK_11_FR_3_WIDTH +
-            LINK_11_FR_4_WIDTH + LINK_11_FR_5_WIDTH +
+            (CICADA_ARRAY_LENGTH*CICADA_DATA_WIDTH) +
+            EXTERNAL_CONDITIONS_DATA_WIDTH +
             EXTERNAL_CONDITIONS_DATA_WIDTH +
             ZDC5G_0_WIDTH + ZDC5G_1_WIDTH +
             ZDC5G_2_WIDTH + ZDC5G_3_WIDTH +
@@ -137,6 +132,7 @@ package lhc_data_pkg is
     type eg_array_t is array(0 to EG_ARRAY_LENGTH-1) of std_logic_vector(EG_DATA_WIDTH-1 downto 0);
     type tau_array_t is array(0 to TAU_ARRAY_LENGTH-1) of std_logic_vector(TAU_DATA_WIDTH-1 downto 0);
     type jet_array_t is array(0 to JET_ARRAY_LENGTH-1) of std_logic_vector(JET_DATA_WIDTH-1 downto 0);
+    type cicada_array_t is array(0 to CICADA_ARRAY_LENGTH-1) of std_logic_vector(CICADA_DATA_WIDTH-1 downto 0);
 
     type lhc_data_t is record
         muon : muon_array_t;
@@ -149,12 +145,7 @@ package lhc_data_pkg is
         htm : std_logic_vector(HTM_DATA_WIDTH-1 downto 0);
         etmhf : std_logic_vector(ETMHF_DATA_WIDTH-1 downto 0);
         htmhf : std_logic_vector(HTMHF_DATA_WIDTH-1 downto 0);
-        link_11_fr_0_data : std_logic_vector(LINK_11_FR_0_WIDTH-1 downto 0);
-        link_11_fr_1_data : std_logic_vector(LINK_11_FR_1_WIDTH-1 downto 0);
-        link_11_fr_2_data : std_logic_vector(LINK_11_FR_2_WIDTH-1 downto 0);
-        link_11_fr_3_data : std_logic_vector(LINK_11_FR_3_WIDTH-1 downto 0);
-        link_11_fr_4_data : std_logic_vector(LINK_11_FR_4_WIDTH-1 downto 0);
-        link_11_fr_5_data : std_logic_vector(LINK_11_FR_5_WIDTH-1 downto 0);
+        cicada : cicada_array_t;
         external_conditions : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
         ZDC5G_0 : std_logic_vector(ZDC5G_0_WIDTH-1 downto 0);
         ZDC5G_1 : std_logic_vector(ZDC5G_1_WIDTH-1 downto 0);
@@ -176,12 +167,7 @@ package lhc_data_pkg is
             htm => (others=>'0'),
             etmhf => (others=>'0'),
             htmhf => (others=>'0'),
-            link_11_fr_0_data => (others=>'0'),
-            link_11_fr_1_data => (others=>'0'),
-            link_11_fr_2_data => (others=>'0'),
-            link_11_fr_3_data => (others=>'0'),
-            link_11_fr_4_data => (others=>'0'),
-            link_11_fr_5_data => (others=>'0'),
+            cicada => (others=>(others=>'0')),
             external_conditions => (others=>'0'),
             ZDC5G_0 => (others=>'0'),
             ZDC5G_1 => (others=>'0'),
@@ -191,7 +177,7 @@ package lhc_data_pkg is
             ZDC5G_5 => (others=>'0')
         );
 
-    constant LHC_DATA_OBJECT_COUNT : integer :=23;
+    constant LHC_DATA_OBJECT_COUNT : integer :=18;
     constant INDEX_MUON : integer := 0;
     constant INDEX_EG : integer := 1;
     constant INDEX_TAU : integer := 2;
@@ -202,19 +188,15 @@ package lhc_data_pkg is
     constant INDEX_HTM : integer := 7;
     constant INDEX_ETMHF : integer := 8;
     constant INDEX_HTMHF : integer := 9;
-    constant INDEX_LINK_11_FR_0 : integer := 10;
-    constant INDEX_LINK_11_FR_1 : integer := 11;
-    constant INDEX_LINK_11_FR_2 : integer := 12;
-    constant INDEX_LINK_11_FR_3 : integer := 13;
-    constant INDEX_LINK_11_FR_4 : integer := 14;
-    constant INDEX_LINK_11_FR_5 : integer := 15;
-    constant INDEX_EXTERNAL_CONDITIONS : integer := 16;
-    constant INDEX_ZDC5G_0 : integer := 17;
-    constant INDEX_ZDC5G_1 : integer := 18;
-    constant INDEX_ZDC5G_2 : integer := 19;
-    constant INDEX_ZDC5G_3 : integer := 20;
-    constant INDEX_ZDC5G_4 : integer := 21;
-    constant INDEX_ZDC5G_5 : integer := 22;
+    constant INDEX_CICADA : integer := 10;
+    constant INDEX_EXTERNAL_CONDITIONS : integer := 11;
+    constant INDEX_ZDC5G_0 : integer := 12;
+    constant INDEX_ZDC5G_1 : integer := 13;
+    constant INDEX_ZDC5G_2 : integer := 14;
+    constant INDEX_ZDC5G_3 : integer := 15;
+    constant INDEX_ZDC5G_4 : integer := 16;
+    constant INDEX_ZDC5G_5 : integer := 17;
+    
     type lhc_data_slv_property_t is array (0 to LHC_DATA_OBJECT_COUNT-1) of natural;
 
     constant LHC_DATA_SLV_OBJECT_WIDTH : lhc_data_slv_property_t :=
@@ -229,9 +211,7 @@ package lhc_data_pkg is
             HTM_DATA_WIDTH,
             ETMHF_DATA_WIDTH,
             HTMHF_DATA_WIDTH,
-            LINK_11_FR_0_WIDTH, LINK_11_FR_1_WIDTH,
-            LINK_11_FR_2_WIDTH, LINK_11_FR_3_WIDTH,
-            LINK_11_FR_4_WIDTH, LINK_11_FR_5_WIDTH,
+            CICADA_ARRAY_LENGTH * CICADA_DATA_WIDTH,         
             EXTERNAL_CONDITIONS_DATA_WIDTH,
             ZDC5G_0_WIDTH, ZDC5G_1_WIDTH,
             ZDC5G_2_WIDTH, ZDC5G_3_WIDTH,
@@ -290,22 +270,14 @@ package body lhc_data_pkg is
         ret_value(index + HTMHF_DATA_WIDTH-1 downto index) := data_in.htmhf;
         index := index + HTMHF_DATA_WIDTH;
 
-        ret_value(index + LINK_11_FR_0_WIDTH-1 downto index) := data_in.link_11_fr_0_data;
-        index := index + LINK_11_FR_0_WIDTH;
-        ret_value(index + LINK_11_FR_1_WIDTH-1 downto index) := data_in.link_11_fr_1_data;
-        index := index + LINK_11_FR_1_WIDTH;
-        ret_value(index + LINK_11_FR_2_WIDTH-1 downto index) := data_in.link_11_fr_2_data;
-        index := index + LINK_11_FR_2_WIDTH;
-        ret_value(index + LINK_11_FR_3_WIDTH-1 downto index) := data_in.link_11_fr_3_data;
-        index := index + LINK_11_FR_3_WIDTH;
-        ret_value(index + LINK_11_FR_4_WIDTH-1 downto index) := data_in.link_11_fr_4_data;
-        index := index + LINK_11_FR_4_WIDTH;
-        ret_value(index + LINK_11_FR_5_WIDTH-1 downto index) := data_in.link_11_fr_5_data;
-        index := index + LINK_11_FR_5_WIDTH;
+        for i in 0 to CICADA_ARRAY_LENGTH-1 loop
+            ret_value(index+(i+1)*CICADA_DATA_WIDTH-1 downto index+(i*CICADA_DATA_WIDTH)) := data_in.cicada(i);
+        end loop;
+        index := index + (CICADA_ARRAY_LENGTH * CICADA_DATA_WIDTH);
 
         ret_value(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index) := data_in.external_conditions;
         index := index + EXTERNAL_CONDITIONS_DATA_WIDTH;
-        
+
         ret_value(index + ZDC5G_0_WIDTH-1 downto index) := data_in.ZDC5G_0;
         index := index + ZDC5G_0_WIDTH;
         ret_value(index + ZDC5G_1_WIDTH-1 downto index) := data_in.ZDC5G_1;
@@ -361,18 +333,10 @@ package body lhc_data_pkg is
         ret_value.htmhf := data_in(index + HTMHF_DATA_WIDTH-1 downto index);
         index := index + HTMHF_DATA_WIDTH;
 
-        ret_value.link_11_fr_0_data := data_in(index + LINK_11_FR_0_WIDTH-1 downto index);
-        index := index + LINK_11_FR_0_WIDTH;
-        ret_value.link_11_fr_1_data := data_in(index + LINK_11_FR_1_WIDTH-1 downto index);
-        index := index + LINK_11_FR_1_WIDTH;
-        ret_value.link_11_fr_2_data := data_in(index + LINK_11_FR_2_WIDTH-1 downto index);
-        index := index + LINK_11_FR_2_WIDTH;
-        ret_value.link_11_fr_3_data := data_in(index + LINK_11_FR_3_WIDTH-1 downto index);
-        index := index + LINK_11_FR_3_WIDTH;
-        ret_value.link_11_fr_4_data := data_in(index + LINK_11_FR_4_WIDTH-1 downto index);
-        index := index + LINK_11_FR_4_WIDTH;
-        ret_value.link_11_fr_5_data := data_in(index + LINK_11_FR_5_WIDTH-1 downto index);
-        index := index + LINK_11_FR_5_WIDTH;
+        for i in 0 to CICADA_ARRAY_LENGTH-1 loop
+            ret_value.jet(i) := data_in( index+(i+1)*CICADA_DATA_WIDTH-1 downto index+(i* CICADA_DATA_WIDTH));
+        end loop;
+        index := index + (CICADA_ARRAY_LENGTH * CICADA_DATA_WIDTH);
 
         ret_value.external_conditions := data_in(index + EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto index);
         index := index + EXTERNAL_CONDITIONS_DATA_WIDTH;

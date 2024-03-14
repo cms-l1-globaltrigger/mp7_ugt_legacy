@@ -84,7 +84,7 @@ RX1/8  & rx3/7  &     & X1Y28 & 10G & 0x0E & 8  & 7  & jet\\\hline
 RX1/9  & rx3/8  & 116 & X1Y27 & 10G & 0x10 & 9  & 8  & tau\\\hline
 RX1/10 & rx3/9  &     & X1Y26 & 10G & 0x12 & 10 & 9  & tau\\\hline
 RX1/11 & rx3/10 &     & X1Y25 & 10G & 0x14 & 11 & 10 & esums\\\hline
-RX1/12 & rx3/11 &     & X1Y24 & 10G & 0x16 & 12 & 11 & free\\\hline
+RX1/12 & rx3/11 &     & X1Y24 & 10G & 0x16 & 12 & 11 & CICADA\\\hline
 RX1/13 & rx4/0  & 115 & X1Y23 & 10G & 0x18 & 13 & 12 & external conditions\\\hline
 RX1/14 & rx4/1  &     & X1Y22 & 10G & 0x1A & 14 & 13 & external conditions\\\hline
 RX1/15 & rx4/2  &     & X1Y21 & 10G & 0x1C & 15 & 14 & external conditions\\\hline
@@ -144,7 +144,7 @@ RX2/7  & rx0/6  &     & X0Y31 &  x  & 0x86 & nc & 67 & -\\\hline
 RX2/10 & rx0/9  & 218 & X0Y32 &  5G & 0x88 & nc & 68 & -\\\hline   
 RX2/9  & rx0/8  &     & X0Y33 &  5G & 0x8A & nc & 69 & -\\\hline   
 RX2/11 & rx0/10 &     & X0Y34 &  5G & 0x8C & nc & 70 & -\\\hline   
-RX2/12 & rx0/11 &     & X0Y35 &  5G & 0x8E & nc & 71 & zdc\\\hline   
+RX2/12 & rx0/11 &     & X0Y35 &  5G & 0x8E & nc & 71 & ZDC\\\hline   
 \end{longtable}                  
 
 \clearpage
@@ -233,6 +233,7 @@ TX2/10 & tx0/9  & 218 & X0Y32 &  x  & 0x89 & nc & 68 & -\\\hline
 TX2/9  & tx0/8  &     & X0Y33 &  x  & 0x8b & nc & 69 & -\\\hline
 TX2/11 & tx0/10 &     & X0Y34 &  x  & 0x8d & nc & 70 & -\\\hline
 TX2/12 & tx0/11 &     & X0Y35 &  x  & 0x8f & nc & 71 & -\\\hline
+
 \end{longtable}
 
 \clearpage
@@ -260,7 +261,7 @@ JET6..JET11 & 7  & 117 & X1Y28 & x &   \\\hline
 TAU0..TAU5  & 8  & 116 & X1Y27 & x &   \\\hline
 TAU6..TAU11 & 9  & 116 & X1Y26 & x &   \\\hline
 ESUMS  & 10  & 116 & X1Y25 & x &   \\\hline
-free & 11  & 116 & X1Y24 & x &   \\\hline
+CICADA (BJET0..BJET5, ...)& 11  & 116 & X1Y24 & x &   \\\hline
 EXT\_COND[0:63] & 12  & 115 & X1Y23 & x &   \\\hline
 EXT\_COND[64:127] & 13  & 115 & X1Y22 & x &   \\\hline
 EXT\_COND[128:191] & 14  & 115 & X1Y21 & x &   \\\hline
@@ -307,24 +308,21 @@ ZDC & 71  & 218 & X0Y35 & x & \\\hline
 % 
 
 Tables ~\ref{table:app:sum_opt_links} and ~\ref{table:app:sum_opt_links2} show the configuration of optical links to Global Trigger.\\
-Links 0..3 contains muon data from GMT, links 4..10 data from Calo-Layer2 and links 12..15 external conditions from AMC502 boards.\\
-Input data of links 0-10 (channels 0x00-0x14) and link 12 (channel 0x18) are part of the readout record of AMC \#1.
+Links 0..3 contains muon data from GMT, links 4..10 data from Calo-Layer2, link 11 data from Calo-Layer1 and links 12..15 external conditions from AMC502 boards.\\
+Input data of links 0-12 (channels 0x00-0x18) are part of the readout record of AMC \#1.
 
 \begin{table}[ht]
-% \caption{\bf Overview optical links (part 1)}
 \caption{Overview optical input links (part 1)}
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-% \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|p{1.2cm}|}\hline
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
  & \multicolumn{10}{ c| }{link} \\\hline
  & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\\hline
 ch. -> & 0x00 & 0x02 & 0x04 & 0x06 & 0x08 & 0x0a & 0x0c & 0x0e & 0x10 & 0x12 \\\hline\hline
-% frame &  &  &  &  &  &  &  &  &  &\makebox[1.2cm][c]{ } \\\hline\hline
 frame &  &  &  &  &  &  &  &  &  & \\\hline
-0 & free & free & free & free & EG0 & EG6 & JET0 & JET6 & TAU0 & TAU6\\
-1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7\\\hline
+0 & free & free & free & free & EG0 & EG6 & JET0 & JET6 & TAU0 & TAU6\\\hline
+1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7\\
  & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & &\\
  & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & &\\
  & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & &\\\hline
@@ -342,31 +340,29 @@ frame &  &  &  &  &  &  &  &  &  & \\\hline
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-% \begin{tabular}{|c|c|c|c|c|c|p{1.5cm}|}\hline
 \begin{tabular}{|c|c|c|c|c|c|c|c|}\hline
  & \multicolumn{7}{ c| }{link} \\\hline
  & 10 & 11 & 12 & 13 & 14 & 15 & 71 \\\hline
 ch. -> & 0x14 & 0x16 & 0x18 & 0x1a & 0x1c & 0x1e & 0x8e \\\hline\hline
-% frame &   &   &   &   &   &\makebox[1.5cm][c]{ } \\\hline\hline
 frame &   &   &   &   &   & & \\\hline
-0 & ET, & free & ExtCond & ExtCond & ExtCond & ExtCond & ZDC \\
- & ETTEM, & [31:0] & [31:0] & [95:64] & [159:128] & [223:192] & frame 0\\
- & MBT0HFP & & & & & & 0x7c/0x3c\\\hline
-1 & HT, & free & ExtCond & ExtCond & ExtCond & ExtCond & ZDC-\\
- & TOWERCOUNT, & [63:32] & [63:32] & [127:96] & [191:160] & [255:224] & 10 bits\\
- & MBT0HFM & & & & & & \\\hline
-2 & ET$_{miss}$, & free & free & free & free & free &  ZDC+\\
- & ASYMET,& [95:64] & & & & & 10 bits\\
- & MBT1HFP  & & & & & & \\\hline
-3 & HT$_{miss}$, & free & free & free & free & free & ZDC \\
- & ASYMHT,& [127:96] & & & & & frame 3\\
- & MBT1HFM & & & & & & 0x0000\\\hline
-4 & ET$_{miss}^{HF}$ & free & free & free & free & free & ZDC \\
- & ASYMETHF, & [159:128] & & & & & counter\\
- & CENT[3:0] & & & & & & 12 bits\\\hline
-5 & HT$_{miss}^{HF}$ & free & free & free & free & free & ZDC \\
- & ASYMHTHF, & [191:160] & & & & & frame 5\\
- & CENT[7:4] & & & & & & 0x0000\\\hline
+0 & ET, & CICADA & ExtCond & ExtCond & ExtCond & ExtCond & ZDC \\
+ & ETTEM, & AD INT MSB & [31:0] & [95:64] & [159:128] & [223:192] & frame 0\\
+ & MBT0HFP & on bits [31:28] & & & & & 0x7c/0x3c\\\hline
+1 & HT, & CICADA & ExtCond & ExtCond & ExtCond & ExtCond & ZDC-\\
+ & TOWERCOUNT, & AD INT LSB & [63:32] & [127:96] & [191:160] & [255:224] & 10 bits\\
+ & MBT0HFM & on bits [31:28] & & & & & \\\hline
+2 & ET$_{miss}$, & CICADA & free & free & free & free &  ZDC+\\
+ & ASYMET,& AD DEC MSB & & & & & 10 bits\\
+ & MBT1HFP & on bits [31:28] & & & & & \\\hline
+3 & HT$_{miss}$, & CICADA & free & free & free & free & ZDC \\
+ & ASYMHT,& AD DEC LSB & & & & & frame 3\\
+ & MBT1HFM & on bits [31:28] & & & & & 0x0000\\\hline
+4 & ET$_{miss}^{HF}$ & CICADA & free & free & free & free & ZDC \\
+ & ASYMETHF, & HI MSB & & & & & counter\\
+ & CENT[3:0] & on bits [31:28] & & & & & 12 bits\\\hline
+5 & HT$_{miss}^{HF}$ & CICADA & free & free & free & free & ZDC \\
+ & ASYMHTHF, & HI LSB & & & & & frame 5\\
+ & CENT[7:4] & on bits [31:28] & & & & & 0x0000\\\hline
 \end{tabular}
 }
 \label{table:app:sum_opt_links2}
@@ -394,7 +390,6 @@ Links 16..24 contains algo data (after GTL, after BX mask and after prescalers),
 \vspace{5mm}
 \scalebox{0.8}{
 \centering
-% \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|p{1.2cm}|}\hline
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
  & \multicolumn{10}{ c| }{link} \\\hline
  & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\\hline
@@ -652,7 +647,7 @@ The following Table~\ref{tab:app:opt_pp_tab_1} contains the optical patch panel 
 5/a & calo-layer2 (demux) & 2b & TAU0..TAU5 & 1..2\\
 5/b & calo-layer2 (demux) & 2a & TAU6..TAU11 & 1..2\\
 5/c & calo-layer2 (demux) & 1b & ESUMS & 1..2\\
-5/d & free &  &  & 1..2\\
+5/d & calo-layer1 &  & CICADA & 1..2\\
 7/a & ext\_cond & Mod0 EXT0 & ExtCond[0..63] & 1..2 \\
 7/b & ext\_cond & Mod0 EXT1 & ExtCond[64..127] & 1..2\\
 7/c & ext\_cond & Mod0 EXT2 & ExtCond[128..191] & 1..2\\
@@ -668,7 +663,7 @@ The following Table~\ref{tab:app:opt_pp_tab_1} contains the optical patch panel 
 23/a & calo-layer2 (demux) & 10b & TAU0..TAU5 & 3..4\\     
 23/b & calo-layer2 (demux) & 10a & TAU6..TAU11 & 3..4\\    
 23/c & calo-layer2 (demux) & 9b  & ESUMS & 3..4\\          
-23/d & free &  &  & 3..4\\
+23/d & calo-layer1 &  & CICADA & 3..4\\
 25/a & ext\_cond & Mod1 EXT0 & ExtCond[0..63] & 3..4 \\
 25/b & ext\_cond & Mod1 EXT1 & ExtCond[64..127] & 3..4\\
 25/c & ext\_cond & Mod1 EXT2 & ExtCond[128..191] & 3..4\\
@@ -684,7 +679,7 @@ The following Table~\ref{tab:app:opt_pp_tab_1} contains the optical patch panel 
 41/a & calo-layer2 (demux) & 18b & TAU0..TAU5 & 5..6\\
 41/b & calo-layer2 (demux) & 18a & TAU6..TAU11 & 5..6\\
 41/c & calo-layer2 (demux) & 17b & ESUMS & 5..6\\
-41/d & free &  &  & 5..6\\
+41/d & calo-layer1 &  & CICADA & 5..6\\
 43/a & ext\_cond & Mod2 EXT0 & ExtCond[0..63] & 5..6 \\
 43/b & ext\_cond & Mod2 EXT1 & ExtCond[64..127] & 5..6\\
 43/c & ext\_cond & Mod2 EXT2 & ExtCond[128..191] & 5..6\\
@@ -712,7 +707,7 @@ The following Table~\ref{tab:app:opt_pp_tab_3} contains the optical patch panel 
 5/a & calo-layer2 (demux) & 14b & TAU0..TAU5 & 5..6\\
 5/b & calo-layer2 (demux) & 14a & TAU6..TAU11 & 5..6\\
 5/c & calo-layer2 (demux) & 13b & ESUMS & 5..6\\
-5/d & free &  &  & 5..6\\
+5/d & calo-layer1 &  & CICADA & 5..6\\
 7/a & ext\_cond & Mod3 EXT0 & ExtCond[0..63] & 5..6 \\
 7/b & ext\_cond & Mod3 EXT1 & ExtCond[64..127] & 5..6\\
 7/c & ext\_cond & Mod3 EXT2 & ExtCond[128..191] & 5..6\\
@@ -728,7 +723,7 @@ The following Table~\ref{tab:app:opt_pp_tab_3} contains the optical patch panel 
 23/a & calo-layer2 (demux) & 30 & TAU0..TAU5 & 1..2\\
 23/b & calo-layer2 (demux) & 29 & TAU6..TAU11 & 1..2\\
 23/c & calo-layer2 (demux) & 32 & ESUMS & 1..2\\
-23/d & free &  &  & 1..2\\
+23/d & calo-layer1 &  & CICADA & 1..2\\
 25/a & ext\_cond & Mod4 EXT0 & ExtCond[0..63] & 1..2 \\
 25/b & ext\_cond & Mod4 EXT1 & ExtCond[64..127] & 1..2\\
 25/c & ext\_cond & Mod4 EXT2 & ExtCond[128..191] & 1..2\\
@@ -744,12 +739,14 @@ The following Table~\ref{tab:app:opt_pp_tab_3} contains the optical patch panel 
 41/a & calo-layer2 (demux) & 14 & TAU0..TAU5 & 3..4\\
 41/b & calo-layer2 (demux) & 13 & TAU6..TAU11 & 3..4\\
 41/c & calo-layer2 (demux) & 16 & ESUMS & 3..4\\
-41/d & free &  &  & 3..4\\
+41/d & calo-layer1 &  & CICADA & 3..4\\
 43/a & ext\_cond & Mod5 EXT0 & ExtCond[0..63] & 3..4 \\
 43/b & ext\_cond & Mod5 EXT1 & ExtCond[64..127] & 3..4\\
 43/c & ext\_cond & Mod5 EXT2 & ExtCond[128..191] & 3..4\\
 43/d & ext\_cond & Mod5 EXT3 & ExtCond[192..255] & 3..4\\\hline
 \end{longtable}
+
+\clearpage
 
 \subsection{External condition patch panel}\label{sec:app:ext_cond_pp}
 

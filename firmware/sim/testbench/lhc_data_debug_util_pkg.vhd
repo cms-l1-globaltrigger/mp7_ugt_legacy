@@ -109,68 +109,69 @@ package body lhc_data_debug_util_pkg is
 		end loop;
 		end_index := end_index - 1;
 	end procedure;
--- 	function lhc_data_t_to_string (data_in : lhc_data_t; spacer_char : character)
--- 		return string
--- 	is
--- 	begin
--- 	return 		slv_to_hex(data_in.muon(0)) & spacer_char &
--- 			slv_to_hex(data_in.muon(1)) & spacer_char &
--- 			slv_to_hex(data_in.muon(2)) & spacer_char &
--- 			slv_to_hex(data_in.muon(3)) & spacer_char &
--- 			slv_to_hex(data_in.muon(4)) & spacer_char &
--- 			slv_to_hex(data_in.muon(5)) & spacer_char &
--- 			slv_to_hex(data_in.muon(6)) & spacer_char &
--- 			slv_to_hex(data_in.muon(7)) & spacer_char &
--- 			slv_to_hex(data_in.eg(0)) & spacer_char &
--- 			slv_to_hex(data_in.eg(1)) & spacer_char &
--- 			slv_to_hex(data_in.eg(2)) & spacer_char &
--- 			slv_to_hex(data_in.eg(3)) & spacer_char &
--- 			slv_to_hex(data_in.eg(4)) & spacer_char &
--- 			slv_to_hex(data_in.eg(5)) & spacer_char &
--- 			slv_to_hex(data_in.eg(6)) & spacer_char &
--- 			slv_to_hex(data_in.eg(7)) & spacer_char &
--- 			slv_to_hex(data_in.eg(8)) & spacer_char &
--- 			slv_to_hex(data_in.eg(9)) & spacer_char &
--- 			slv_to_hex(data_in.eg(10)) & spacer_char &
--- 			slv_to_hex(data_in.eg(11)) & spacer_char &
--- 			slv_to_hex(data_in.tau(0)) & spacer_char &
--- 			slv_to_hex(data_in.tau(1)) & spacer_char &
--- 			slv_to_hex(data_in.tau(2)) & spacer_char &
--- 			slv_to_hex(data_in.tau(3)) & spacer_char &
--- 			slv_to_hex(data_in.tau(4)) & spacer_char &
--- 			slv_to_hex(data_in.tau(5)) & spacer_char &
--- 			slv_to_hex(data_in.tau(6)) & spacer_char &
--- 			slv_to_hex(data_in.tau(7)) & spacer_char &
--- 			slv_to_hex(data_in.tau(8)) & spacer_char &
--- 			slv_to_hex(data_in.tau(9)) & spacer_char &
--- 			slv_to_hex(data_in.tau(10)) & spacer_char &
--- 			slv_to_hex(data_in.tau(11)) & spacer_char &
--- 			slv_to_hex(data_in.jet(0)) & spacer_char &
--- 			slv_to_hex(data_in.jet(1)) & spacer_char &
--- 			slv_to_hex(data_in.jet(2)) & spacer_char &
--- 			slv_to_hex(data_in.jet(3)) & spacer_char &
--- 			slv_to_hex(data_in.jet(4)) & spacer_char &
--- 			slv_to_hex(data_in.jet(5)) & spacer_char &
--- 			slv_to_hex(data_in.jet(6)) & spacer_char &
--- 			slv_to_hex(data_in.jet(7)) & spacer_char &
--- 			slv_to_hex(data_in.jet(8)) & spacer_char &
--- 			slv_to_hex(data_in.jet(9)) & spacer_char &
--- 			slv_to_hex(data_in.jet(10)) & spacer_char &
--- 			slv_to_hex(data_in.jet(11)) & spacer_char &
--- 			slv_to_hex(data_in.ett) & spacer_char &
--- 			slv_to_hex(data_in.ht) & spacer_char &
--- 			slv_to_hex(data_in.etm) & spacer_char &
--- 			slv_to_hex(data_in.htm) & spacer_char &
--- 			slv_to_hex(data_in.etmhf) & spacer_char &
--- 			slv_to_hex(data_in.htmhf) & spacer_char &
--- 			slv_to_hex(data_in.link_11_fr_0_data) & spacer_char &
--- 			slv_to_hex(data_in.link_11_fr_1_data) & spacer_char &
--- 			slv_to_hex(data_in.link_11_fr_2_data) & spacer_char &
--- 			slv_to_hex(data_in.link_11_fr_3_data) & spacer_char &
--- 			slv_to_hex(data_in.link_11_fr_4_data) & spacer_char &
--- 			slv_to_hex(data_in.link_11_fr_5_data) & spacer_char &
--- 			slv_to_hex(data_in.external_conditions) & spacer_char;
--- 	end function;
+
+	function lhc_data_t_to_string (data_in : lhc_data_t; spacer_char : character)
+		return string
+	is
+	begin
+	return 		slv_to_hex(data_in.muon(0)) & spacer_char &
+			slv_to_hex(data_in.muon(1)) & spacer_char &
+			slv_to_hex(data_in.muon(2)) & spacer_char &
+			slv_to_hex(data_in.muon(3)) & spacer_char &
+			slv_to_hex(data_in.muon(4)) & spacer_char &
+			slv_to_hex(data_in.muon(5)) & spacer_char &
+			slv_to_hex(data_in.muon(6)) & spacer_char &
+			slv_to_hex(data_in.muon(7)) & spacer_char &
+			slv_to_hex(data_in.eg(0)) & spacer_char &
+			slv_to_hex(data_in.eg(1)) & spacer_char &
+			slv_to_hex(data_in.eg(2)) & spacer_char &
+			slv_to_hex(data_in.eg(3)) & spacer_char &
+			slv_to_hex(data_in.eg(4)) & spacer_char &
+			slv_to_hex(data_in.eg(5)) & spacer_char &
+			slv_to_hex(data_in.eg(6)) & spacer_char &
+			slv_to_hex(data_in.eg(7)) & spacer_char &
+			slv_to_hex(data_in.eg(8)) & spacer_char &
+			slv_to_hex(data_in.eg(9)) & spacer_char &
+			slv_to_hex(data_in.eg(10)) & spacer_char &
+			slv_to_hex(data_in.eg(11)) & spacer_char &
+			slv_to_hex(data_in.tau(0)) & spacer_char &
+			slv_to_hex(data_in.tau(1)) & spacer_char &
+			slv_to_hex(data_in.tau(2)) & spacer_char &
+			slv_to_hex(data_in.tau(3)) & spacer_char &
+			slv_to_hex(data_in.tau(4)) & spacer_char &
+			slv_to_hex(data_in.tau(5)) & spacer_char &
+			slv_to_hex(data_in.tau(6)) & spacer_char &
+			slv_to_hex(data_in.tau(7)) & spacer_char &
+			slv_to_hex(data_in.tau(8)) & spacer_char &
+			slv_to_hex(data_in.tau(9)) & spacer_char &
+			slv_to_hex(data_in.tau(10)) & spacer_char &
+			slv_to_hex(data_in.tau(11)) & spacer_char &
+			slv_to_hex(data_in.jet(0)) & spacer_char &
+			slv_to_hex(data_in.jet(1)) & spacer_char &
+			slv_to_hex(data_in.jet(2)) & spacer_char &
+			slv_to_hex(data_in.jet(3)) & spacer_char &
+			slv_to_hex(data_in.jet(4)) & spacer_char &
+			slv_to_hex(data_in.jet(5)) & spacer_char &
+			slv_to_hex(data_in.jet(6)) & spacer_char &
+			slv_to_hex(data_in.jet(7)) & spacer_char &
+			slv_to_hex(data_in.jet(8)) & spacer_char &
+			slv_to_hex(data_in.jet(9)) & spacer_char &
+			slv_to_hex(data_in.jet(10)) & spacer_char &
+			slv_to_hex(data_in.jet(11)) & spacer_char &
+			slv_to_hex(data_in.ett) & spacer_char &
+			slv_to_hex(data_in.ht) & spacer_char &
+			slv_to_hex(data_in.etm) & spacer_char &
+			slv_to_hex(data_in.htm) & spacer_char &
+			slv_to_hex(data_in.etmhf) & spacer_char &
+			slv_to_hex(data_in.htmhf) & spacer_char &
+			slv_to_hex(data_in.cicada(0)) & spacer_char &
+			slv_to_hex(data_in.cicada(1)) & spacer_char &
+			slv_to_hex(data_in.cicada(2)) & spacer_char &
+			slv_to_hex(data_in.cicada(3)) & spacer_char &
+			slv_to_hex(data_in.cicada(4)) & spacer_char &
+			slv_to_hex(data_in.cicada(5)) & spacer_char &
+			slv_to_hex(data_in.external_conditions) & spacer_char ;
+	end function;
 
 
 	function string_to_lhc_data_t (data_in : string)
@@ -199,29 +200,23 @@ package body lhc_data_debug_util_pkg is
 			ret_value.jet(i) := hex_to_slv("" & hexstring(start_index to end_index), JET_DATA_WIDTH);
 		end loop;
 		next_range(start_index, end_index, hexstring);
-		ret_value.ett := hex_to_slv("" & hexstring(start_index to end_index), ETT_DATA_WIDTH );
+		ret_value.ett := hex_to_slv("" & hexstring(start_index to end_index), ETT_DATA_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.ht := hex_to_slv("" & hexstring(start_index to end_index), HT_DATA_WIDTH );
+		ret_value.ht := hex_to_slv("" & hexstring(start_index to end_index), HT_DATA_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.etm := hex_to_slv("" & hexstring(start_index to end_index), ETM_DATA_WIDTH );
+		ret_value.etm := hex_to_slv("" & hexstring(start_index to end_index), ETM_DATA_WIDTH);
 		next_range(start_index, end_index, hexstring);
-		ret_value.htm := hex_to_slv("" & hexstring(start_index to end_index), HTM_DATA_WIDTH );
+		ret_value.htm := hex_to_slv("" & hexstring(start_index to end_index), HTM_DATA_WIDTH);
 		next_range(start_index, end_index, hexstring);
 		ret_value.etmhf := hex_to_slv("" & hexstring(start_index to end_index), ETMHF_DATA_WIDTH);
 		next_range(start_index, end_index, hexstring);
 		ret_value.htmhf := hex_to_slv("" & hexstring(start_index to end_index), HTMHF_DATA_WIDTH);
-		next_range(start_index, end_index, hexstring);
-		ret_value.link_11_fr_0_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_0_WIDTH);
-		next_range(start_index, end_index, hexstring);
-		ret_value.link_11_fr_1_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_1_WIDTH);
-		next_range(start_index, end_index, hexstring);
-		ret_value.link_11_fr_2_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_2_WIDTH);
-		next_range(start_index, end_index, hexstring);
-		ret_value.link_11_fr_3_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_3_WIDTH);
-		next_range(start_index, end_index, hexstring);
-		ret_value.link_11_fr_4_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_4_WIDTH);
-		next_range(start_index, end_index, hexstring);
-		ret_value.link_11_fr_5_data := hex_to_slv("" & hexstring(start_index to end_index), LINK_11_FR_5_WIDTH);
+
+		for i in 0 to CICADA_ARRAY_LENGTH-1 loop
+			next_range(start_index, end_index, hexstring);
+			ret_value.cicada(i) := hex_to_slv("" & hexstring(start_index to end_index), CICADA_DATA_WIDTH);
+		end loop;
+
 		next_range(start_index, end_index, hexstring);
 		ret_value.external_conditions := hex_to_slv("" & hexstring(start_index to end_index), EXTERNAL_CONDITIONS_DATA_WIDTH );
 

@@ -8,11 +8,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - mp7_ugt firmware release v1.27.0
-- branch for implementing VHDL files of TOPO models
+- branch for implementing VHDL files of TOPO models (TBD)
+- added script for generating hash value of all files in a given directory (with all subdirectories)
 
 ### Added
 - source files:
-  - VHDL files of TOPO models
+  - VHDL files of TOPO models (TBD)
+- script files:
+  - scripts/generate_hash_value.py
 ### Changed
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd

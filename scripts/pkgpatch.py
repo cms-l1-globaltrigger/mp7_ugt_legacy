@@ -27,6 +27,8 @@ import argparse
 import os
 import sys
 import time
+import glob
+import hashlib
 
 from getpass import getuser  # for username
 from socket import gethostname  # for machines hostname
@@ -69,6 +71,27 @@ def hex_string(s, n=32):
     return 'X"{0:>0{1}}"'.format(''.join(['{0:x}'.format(ord(c)) for c in s[:n][::-1]]), n * 2)
 
 
+def calc_fw_hash(path: str) -> str:
+    """Calculate a SHA-256 hash value of the content of all source files at given path."""
+    filenames = []
+    # Collect all python modules and VHDL templates
+    for pattern in ["**/*.vhd", "**/*.dep", "**/*.xci", "**/*.mif", "**/*.tcl"]:
+        for filename in glob.glob(os.path.join(path, pattern), recursive=True):
+            filenames.append(filename)
+
+    hash_sha256 = hashlib.sha256()
+    # Sort filenames for deterministic hash
+    for filename in sorted(filenames):
+        with open(filename, "rb") as f:
+            while True:
+                # Reading is buffered, so we can read smaller chunks.
+                chunk = f.read(hash_sha256.block_size)
+                if not chunk:
+                    break
+                hash_sha256.update(chunk)
+    return hash_sha256.hexdigest()
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         prog=name,
@@ -77,8 +100,8 @@ def parse_args():
         epilog="Report bugs to <bernhard.arnold@cern.ch>.",
         add_help=True
     )
-    parser.add_argument('src', metavar='<src>', type=str, help='source template VHDL file eg. <target>_pkg.vhd')
-    parser.add_argument('dest', metavar='<dest>', type=str, help='destination VHDL synthesis file eg. <target>_pkg_syn.vhd')
+    parser.add_argument('src', metavar='<src>', type=str, help='source template VHDL file eg. <target>_pkg_tpl.vhd')
+    parser.add_argument('dest', metavar='<dest>', type=str, help='destination VHDL synthesis file eg. <target>_pkg.vhd')
     parser.add_argument('-t', '--timestamp', action="store", dest='timestamp', default=unix_timestamp(), type=int, help="UNIX timestamp (integer)")
     parser.add_argument('--username', action="store", dest='username', default=getuser(), type=str, help="overwrite machine username")
     parser.add_argument('--hostname', action="store", dest='hostname', default=gethostname(), type=str, help="overwrite machine hostname")
@@ -89,6 +112,9 @@ def parse_args():
 def main():
     args = parse_args()
 
+    fw_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', "firmware")
+    #print(calc_fw_hash(fw_dir))
+    
     if os.path.abspath(args.src) == os.path.abspath(args.dest):
         print("for safety reasons it is not allowed to overwrite the source template.")
         sys.exit(1)
@@ -99,6 +125,7 @@ def main():
             '{{IPBUS_USERNAME}}': hex_string(args.username),
             '{{IPBUS_HOSTNAME}}': hex_string(args.hostname),
             '{{IPBUS_BUILD_VERSION}}': hex_value(args.build),
+            '{{FW_HASH}}': calc_fw_hash(fw_dir),
         }
 
         # Read content of source file.

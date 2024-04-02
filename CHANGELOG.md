@@ -4,21 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.27.0] - 2024-03-14
+## [v1.27.0] - 2024-04-02
 ### Comment
 
 - mp7_ugt firmware release v1.27.0
 - branch for implementing VHDL files of TOPO models (TBD)
-- added script for generating hash value of all files in a given directory (with all subdirectories)
+- changed script pkgpatch.py (added function "calc_fw_hash" for patch in gt_mp7_top_pkg_tpl.vhd)
 
 ### Added
 - source files:
   - VHDL files of TOPO models (TBD)
 - script files:
-  - scripts/generate_hash_value.py
+  - scripts/pkgpatch.py
 ### Changed
+- script files:
+  - scripts/pkgpatch.py
 - source files:
   - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/gt_mp7_top_pkg_tpl.vhd
 - simulation file:
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
 - dep file:

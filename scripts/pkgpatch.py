@@ -75,7 +75,6 @@ def calc_fw_hash(path: str) -> str:
     """Calculate a SHA-256 hash value of the content of all source files at given path."""
     filenames = []
     # Collect all python modules and VHDL templates
-    #for pattern in ["**/*.vhd", "**/*.dep", "**/*.xci", "**/*.mif", "**/*.tcl"]:
     for pattern in ["**/*.vhd"]:
         for filename in glob.glob(os.path.join(path, pattern), recursive=True):
             fname = filename.split("/")[-1]
@@ -85,7 +84,6 @@ def calc_fw_hash(path: str) -> str:
     hash_sha256 = hashlib.sha256()
     # Sort filenames for deterministic hash
     for filename in sorted(filenames):
-        print(filename)
         with open(filename, "rb") as f:
             while True:
                 # Reading is buffered, so we can read smaller chunks.

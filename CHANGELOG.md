@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - mp7_ugt firmware release v1.27.0
 - branch for implementing VHDL files of TOPO models (TBD)
-- changed script pkgpatch.py (added function "calc_fw_hash" for patch in gt_mp7_top_pkg_tpl.vhd)
+- changed script pkgpatch.py (added function "calc_fw_hash" for repo branch version info, patched in gt_mp7_top_pkg_tpl.vhd)
 
 ### Added
 - source files:

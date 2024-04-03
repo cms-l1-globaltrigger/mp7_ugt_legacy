@@ -75,13 +75,17 @@ def calc_fw_hash(path: str) -> str:
     """Calculate a SHA-256 hash value of the content of all source files at given path."""
     filenames = []
     # Collect all python modules and VHDL templates
-    for pattern in ["**/*.vhd", "**/*.dep", "**/*.xci", "**/*.mif", "**/*.tcl"]:
+    #for pattern in ["**/*.vhd", "**/*.dep", "**/*.xci", "**/*.mif", "**/*.tcl"]:
+    for pattern in ["**/*.vhd"]:
         for filename in glob.glob(os.path.join(path, pattern), recursive=True):
-            filenames.append(filename)
+            fname = filename.split("/")[-1]
+            if fname != "gt_mp7_top_pkg.vhd":
+                filenames.append(filename)
 
     hash_sha256 = hashlib.sha256()
     # Sort filenames for deterministic hash
     for filename in sorted(filenames):
+        print(filename)
         with open(filename, "rb") as f:
             while True:
                 # Reading is buffered, so we can read smaller chunks.
@@ -112,41 +116,34 @@ def parse_args():
 def main():
     args = parse_args()
 
-    fw_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', "firmware")
-    #print(calc_fw_hash(fw_dir))
-    
     if os.path.abspath(args.src) == os.path.abspath(args.dest):
         print("for safety reasons it is not allowed to overwrite the source template.")
         sys.exit(1)
 
-    try:
-        replace_map = {
-            '{{IPBUS_TIMESTAMP}}': hex_timestamp(args.timestamp),
-            '{{IPBUS_USERNAME}}': hex_string(args.username),
-            '{{IPBUS_HOSTNAME}}': hex_string(args.hostname),
-            '{{IPBUS_BUILD_VERSION}}': hex_value(args.build),
-            '{{FW_HASH}}': calc_fw_hash(fw_dir),
-        }
+    fw_dir = os.path.join(os.path.dirname(os.path.abspath(args.src)), '../..', "hdl")
 
-        # Read content of source file.
-        with open(args.src) as src:
-            lines = src.readlines()
+    replace_map = {
+        '{{IPBUS_TIMESTAMP}}': hex_timestamp(args.timestamp),
+        '{{IPBUS_USERNAME}}': hex_string(args.username),
+        '{{IPBUS_HOSTNAME}}': hex_string(args.hostname),
+        '{{IPBUS_BUILD_VERSION}}': hex_value(args.build),
+        '{{FW_HASH}}': calc_fw_hash(fw_dir),
+    }
 
-        # Replace placeholders.
-        for key, value in list(replace_map.items()):
-            for i, line in enumerate(lines):
-                if not line.strip().startswith('--'):
-                    lines[i] = line.replace(key, value)
+    # Read content of source file.
+    with open(args.src) as src:
+        lines = src.readlines()
 
-        # Write content to destination file.
-        with open(args.dest, 'w') as dest:
-            dest.write(''.join(lines))
+    # Replace placeholders.
+    for key, value in list(replace_map.items()):
+        for i, line in enumerate(lines):
+            if not line.strip().startswith('--'):
+                lines[i] = line.replace(key, value)
 
-        return 0
-    except IOError as message:
-        print("{0}: {1}".format(name, message))
-    return 1
+    # Write content to destination file.
+    with open(args.dest, 'w') as dest:
+        dest.write(''.join(lines))
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    main()

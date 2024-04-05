@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.27.0] - 2024-04-02
+## [v1.27.0] - 2024-04-05
 ### Comment
 
 - mp7_ugt firmware release v1.27.0
@@ -14,8 +14,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - source files:
   - VHDL files of TOPO models (TBD)
-- script files:
-  - scripts/pkgpatch.py
 ### Changed
 - script files:
   - scripts/pkgpatch.py

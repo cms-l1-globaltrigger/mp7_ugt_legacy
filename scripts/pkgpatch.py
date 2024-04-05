@@ -74,7 +74,7 @@ def hex_string(s, n=32):
 def calc_fw_hash(path: str) -> str:
     """Calculate a SHA-256 hash value of the content of all source files at given path."""
     filenames = []
-    # Collect all VHDL files of <path/> (except gt_mp7_top_pkg.vhd) and all dep and tcl files from <path/cfg/> and mif and xci files from <path/ngc/>
+    # Collect all VHDL files of <path/> (except gt_mp7_top_pkg.vhd) and all dep and tcl files from <path/cfg/> and all mif and xci files from <path/ngc/>
     for pattern in ["**/*.vhd", "../cfg/**/*.dep", "../cfg/**/*.tcl", "../ngc/**/*.mif", "../ngc/**/*.xci"]:
         for filename in glob.glob(os.path.join(path, pattern), recursive=True):
             fname = filename.split("/")[-1]
@@ -135,6 +135,10 @@ def main():
     # Replace placeholders.
     for key, value in list(replace_map.items()):
         for i, line in enumerate(lines):
+    # Replace firmware hash value in a comment line starting with '-- FW_HASH'.
+            if line.strip().startswith('-- FW_HASH'):
+                lines[i] = line.replace(key, value)
+    # No replacing in other comment lines.
             if not line.strip().startswith('--'):
                 lines[i] = line.replace(key, value)
 

@@ -3,16 +3,16 @@ placeholder).
 
 How to patch with current execution timestamp:
 
-  $ pkgpatch src/sample_pkg.vhd src/sample_pkg_syn.vhd
+  $ pkgpatch src/sample_pkg_tpl.vhd src/sample_pkg.vhd
 
 How to use a given timestamp (eg. in makefiles):
 
   $ TIMESTAMP=`date +%s`
-  $ pkgpatch src/sample_pkg.vhd src/sample_pkg_syn.vhd -t $TIMESTAMP
+  $ pkgpatch src/sample_pkg_tpl.vhd src/sample_pkg.vhd -t $TIMESTAMP
 
 How to overwrite username and hostname (foo@bar):
 
-  $ pkgpatch src/sample_pkg.vhd src/sample_pkg_syn.vhd --username foo --hostname bar
+  $ pkgpatch src/sample_pkg_tpl.vhd src/sample_pkg.vhd --username foo --hostname bar
 
 Supported replacement parameters:
 
@@ -74,8 +74,8 @@ def hex_string(s, n=32):
 def calc_fw_hash(path: str) -> str:
     """Calculate a SHA-256 hash value of the content of all source files at given path."""
     filenames = []
-    # Collect all python modules and VHDL templates
-    for pattern in ["**/*.vhd"]:
+    # Collect all VHDL files of <path/> (except gt_mp7_top_pkg.vhd) and all dep and tcl files from <path/cfg/> and mif and xci files from <path/ngc/>
+    for pattern in ["**/*.vhd", "../cfg/**/*.dep", "../cfg/**/*.tcl", "../ngc/**/*.mif", "../ngc/**/*.xci"]:
         for filename in glob.glob(os.path.join(path, pattern), recursive=True):
             fname = filename.split("/")[-1]
             if fname != "gt_mp7_top_pkg.vhd":
@@ -118,14 +118,14 @@ def main():
         print("for safety reasons it is not allowed to overwrite the source template.")
         sys.exit(1)
 
-    fw_dir = os.path.join(os.path.dirname(os.path.abspath(args.src)), '../..', "hdl")
+    fw_hdl_dir = os.path.join(os.path.dirname(os.path.abspath(args.src)), '../..', "hdl")
 
     replace_map = {
         '{{IPBUS_TIMESTAMP}}': hex_timestamp(args.timestamp),
         '{{IPBUS_USERNAME}}': hex_string(args.username),
         '{{IPBUS_HOSTNAME}}': hex_string(args.hostname),
         '{{IPBUS_BUILD_VERSION}}': hex_value(args.build),
-        '{{FW_HASH}}': calc_fw_hash(fw_dir),
+        '{{FW_HASH}}': calc_fw_hash(fw_hdl_dir),
     }
 
     # Read content of source file.

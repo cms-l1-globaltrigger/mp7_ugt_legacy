@@ -241,21 +241,7 @@ Overview (frame 0 ascending to 5):\\
         \bitbox {32}     {\texttt{free}} \\
 \end{bytefield}
 \end{center}
-% \tiny{Remark: "AD I" means Anomaly Detection Integer part, "AD D" means Anomaly Detection Decimal part, "l" means least significant bits, "h" means most significant bits, "HI" means Heavy Ion bits}\normalsize
 \tiny{Remark: "AD I" means Anomaly Detection Integer part, "AD D" means Anomaly Detection Decimal part, "l" means least significant bits, "h" means most significant bits}\normalsize
-
-% The data structure of a bjet object:\\
-% \begin{center}
-% \begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{28}
-%         \bitheader{0,10,11,17,18,18,19,26,27,27} \\
-%         \bitbox {1}     {\texttt{F}} &
-%         \bitbox {8}     {\texttt{$\varphi$}} &
-%         \bitbox {1}     {\texttt{S}} &
-%         \bitbox {7}     {\texttt{$\eta$}}  &
-%         \bitbox {11}    {\texttt{\et}} \\
-% \end{bytefield}
-% \end{center}
-% \tiny{Remark: "S" means side (eta sign bit), "F" means flag.}\normalsize
 
 \clearpage
 
@@ -626,12 +612,8 @@ bits [63..62] & definition \\\hline\hline
 \subsubsection{Definitions of CICADA data}
 \label{sec:gtl:def_cicada}
 
-% The calorimeter layer 1 trigger processing identifies \textbf{Boosted jets (bjet)}, \textbf{Anomaly Detection} and a \textbf{Heavy Ion bits}.\\
-% See also \ref{sec:gtl:calo1_optical_interfaces}.\\
 The calorimeter layer 1 trigger processing identifies \textbf{Anomaly Detection}.\\
 See also \ref{sec:gtl:calo1_optical_interfaces}.\\
-% Six bjet objects, one value for Anomaly Detection and 8 Heavy Ion bits are passed to the \ugt for each event.\\
-% For each selected bjet object, the Calo-Layer1 sends parameters for \pt, for position and a flag - encoded in 28 bits:
 The value for Anomaly Detection (of CICADA) is passed to the \ugt for each event.\\
 The Anomaly Detection value (of CICADA) is represented by an 8 bits integer part and an 8 bits decimal part, which are combined to a 16 bits word for comparison with requested threshold ("cscore").
 
@@ -1524,11 +1506,11 @@ The possibility of implementing "AXOL1TL Trigger" (AXO) is forseen in this versi
 
 \paragraph{Topological Trigger}
 \label{sec:gtl:topo}
-Similar to "AXOL1TL Trigger" a "Topological Trigger" is part of this version. The VHDL code of HLS generated files is given by "Anomaly Detection Trigger" group in \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger}{\texttt{topo\_trigger}}. Because of the possibility using different models for "Topological Trigger", directories for the models are forseen. The directories are named \texttt{model\_<model name>}, e.g. \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger/model_hh_ele_v1}{\texttt{model\_hh\_ele\_v1}} with \texttt{topo\_hh\_ele\_v1.vhd} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger/model_hh_ele_v1/topo_hh_ele_v1_wrapper.vhd}{\texttt{topo\_hh\_ele\_v1\_wrapper.vhd}} module \texttt{topo\_hh\_ele\_v1.vhd} is instantiated and a comparison of the output of "score" with a given threshold is implemented to get an "Topological Trigger". The "score" consists of 16 bits, currently. "Topological Trigger" can use all input objects of \ugt, except CICADA data and external condition inputs, for calculating the "score" value.
+Similar to "AXOL1TL Trigger" a "Topological Trigger" is part of this version. The VHDL code is given by "Topological Trigger" group in \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger}{\texttt{topo\_trigger}}. Because of the possibility of using different models for "Topological Trigger", directories for the models are forseen. The directories are named \texttt{model\_<model name>}, e.g. \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger/model_hh_ele_v1}{\texttt{model\_hh\_ele\_v1}} with \texttt{topo\_hh\_ele\_v1.vhd} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger/model_hh_ele_v1/topo_hh_ele_v1_wrapper.vhd}{\texttt{topo\_hh\_ele\_v1\_wrapper.vhd}} module \texttt{topo\_hh\_ele\_v1.vhd} is instantiated and a comparison of the output of "score" with a given threshold is implemented to get an "Topological Trigger". The "score" consists of 16 bits, currently.
 
 \paragraph{CICADA Trigger}
 \label{sec:gtl:cicada}
-The Anomaly Detection value of CICADA is represented (currently) by an 8 bits integer part (cicada\_integer\_precision) and an 8 bits decimal part (cicada\_decimal\_precision), which are combined to a 16 bits word for comparison with requested threshold ("cscore"). In TME~\cite{TME_repo} the threshold can be selected with predefined values for the decimal part (x/2**cicada\_decimal\_precision, for all x from 0 to 2**cicada\_decimal\_precision) and values from 0 to cicada\_integer\_precision for the integer part. In VHDL Producer a function converts the threshold to integer for "cscore" value. In VHDL module \href{\gitbranch/firmware/hdl/payload/gtl/cicada_condition.vhd}{\texttt{cicada\_condition.vhd}} this "cscore" value is used. The trigger decision is made by comparison of 16 bits Anomaly Detection value of CICADA with "cscore". CICADA data are received in \ugt at input link 11 from Calo-Layer1 system (see chapter \ref{sec:gtl:calo1_optical_interfaces}).
+The Anomaly Detection value (of CICADA) is represented (currently) by an 8 bits integer part (cicada\_integer\_precision) and an 8 bits decimal part (cicada\_decimal\_precision), which are combined to a 16 bits word for comparison with requested threshold ("cscore"), see \ref{sec:gtl:calo1_optical_interfaces}. In TME~\cite{TME_repo} the threshold can be selected with predefined values for the decimal part (x/2**cicada\_decimal\_precision, for all x from 0 to 2**cicada\_decimal\_precision) and values from 0 to cicada\_integer\_precision for the integer part. In UTM grammar a function converts the threshold to integer for "cscore" value. In VHDL module \href{\gitbranch/firmware/hdl/payload/gtl/cicada_condition.vhd}{\texttt{cicada\_condition.vhd}} this "cscore" value is used. The trigger decision is made by comparison of 16 bits Anomaly Detection value (of CICADA) with "cscore".
 
 \subsubsection{External Conditions}
 \label{sec:gtl:external_conditions}

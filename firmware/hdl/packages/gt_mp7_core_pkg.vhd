@@ -36,7 +36,7 @@
 --
 -- gtl history:
 
--- HB 2024-03-11: v1.21.0: Implemented VHDL files for topological trigger models.
+-- HB 2024-03-11: v1.21.0: Implemented VHDL files for topological trigger models (TBD).
 -- HB 2023-12-18: v1.20.0: Implemented topological and cicada trigger.
 -- HB 2023-09-29: v1.19.4: Used "no_mgt" at quads 8..16 (top_decl.vhd).
 -- HB 2023-09-28: v1.19.3: Used "no_chk" and "no_buf" at quads 8..16 (top_decl.vhd).

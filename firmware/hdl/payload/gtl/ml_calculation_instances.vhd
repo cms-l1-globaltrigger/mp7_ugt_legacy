@@ -15,7 +15,7 @@ entity ml_calculation_instances is
     generic	(
         obj: natural := AXO_SEL;
         model: natural := AXO_MODEL_V3;
-        score_width: natural := 18
+        score_width: natural := AXO_SCORE_WIDTH
     );
     port(
         lhc_clk: in std_logic;

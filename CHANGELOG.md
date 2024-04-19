@@ -10,16 +10,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - mp7_ugt firmware release v1.27.0
 - branch for implementing VHDL files of TOPO models (TBD)
 - added TOPO models "base_v1" (this was used for the first TOPO tests)
+- added ML score width (gtl_pkg.vhd)
+- new files for ML calculations
 - changed script pkgpatch.py (added function "calc_fw_hash" for repo branch version info, patched in gt_mp7_top_pkg_tpl.vhd)
 
 ### Added
 - source files:
   - VHDL files of TOPO models (TBD)
   - directory ../topo_trigger/model_base_v1
+  - ../payload/../gtl/ml_comparison.vhd
+  - ../payload/../gtl/ml_calculation_instances.vhd
+  - ../payload/../gtl/axol1tl_trigger/model_v1/axol1tl_v1_instance.vhd
+  - ../payload/../gtl/axol1tl_trigger/model_v3/axol1tl_v3_instance.vhd
+  - ../payload/../gtl/topo_trigger/model_base_v1/topo_base_v1_instance.vhd
+  
 ### Changed
 - script files:
   - scripts/pkgpatch.py
 - source files:
+  - ../packages/gtl_pkg.vhd
   - ../packages/gt_mp7_core_pkg.vhd
   - ../packages/gt_mp7_top_pkg_tpl.vhd
 - simulation file:

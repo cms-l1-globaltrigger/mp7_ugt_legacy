@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2024-04-19: added constants for ML score width.
 -- HB 2023-10-10: CICADA definition changed: no bjets.
 -- HB 2023-10-03: inserted calo anomaly algorithm (CICADA) definitions.
 -- HB 2023-09-13: NR_INPUT_LANES not used anymore. Added type lword_array (for output_mux.vhd and mux.vhd)
@@ -239,6 +240,20 @@ constant TAU_PHI_BITS : natural := TAU_PHI_HIGH-TAU_PHI_LOW+1;
 constant TAU_ISO_LOW : natural := 25;
 constant TAU_ISO_HIGH : natural := 26;
 constant TAU_ISO_BITS : natural := TAU_ISO_HIGH-TAU_ISO_LOW+1;
+
+-- *******************************************************************************************************
+-- HB 2024-04-19: AXO and TOPO score width
+constant AXO_SCORE_WIDTH : natural := 18;
+constant AXO_SEL : natural := 0;
+constant AXO_MODEL_V1 : natural := 0;
+constant AXO_MODEL_V3 : natural := 1;
+
+constant TOPO_SCORE_WIDTH : natural := 16;
+constant TOPO_SEL : natural := 1;
+constant TOPO_MODEL_BASE_V1 : natural := 0;
+constant TOPO_MODEL_HH_ELE_V1 : natural := 1;
+constant TOPO_MODEL_HH_HAD_V1 : natural := 2;
+constant TOPO_MODEL_HH_MU_V1 : natural := 3;
 
 -- *******************************************************************************************************
 -- HB 2023-01-26: calo anomaly algorithm (CICADA) data from Calo-Layer1

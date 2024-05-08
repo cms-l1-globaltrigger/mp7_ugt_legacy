@@ -12,6 +12,8 @@ use std.textio.all;
 
 use work.math_pkg.all;
 
+use work.gtl_pkg.all;
+
 entity obj_x_pt_comp_TB is
 end obj_x_pt_comp_TB;
 

@@ -93,6 +93,7 @@ constant ZDC_STAGES: natural := 2; -- pipeline stages for "ZDC condition" to get
 constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
 constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
 constant CICADA_COND_STAGES: natural := 2; -- pipeline stages for "CICADA conditions" to get same pipeline to algos as conditions
+constant CALO_X_OBJ_STAGES: natural := 2; -- pipeline stages for obj_x_pt_comp.vhd
 
 -- Selector for options
 constant SPYMEM: boolean := true; -- selector for input spymem

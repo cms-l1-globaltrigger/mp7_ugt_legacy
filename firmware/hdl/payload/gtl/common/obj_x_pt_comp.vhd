@@ -10,6 +10,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
+use work.gtl_pkg.all;
+
 entity obj_x_pt_comp is
     generic	(
         obj_nr : natural := 5;

@@ -20,22 +20,22 @@ entity obj_x_pt_comp is
     );
     port(
         clk : in std_logic;
-        data_i: in calo_objects_array;
+        data_i: in calo_objects_array(0 to 11);
         condition_o : out std_logic
     );
 end obj_x_pt_comp;
 
 architecture rtl of obj_x_pt_comp is
 
-    signal pt : std_logic_vector(JET_ET_BITS-1 downto 0) := (others => '0');
+    signal pt : std_logic_vector(pt_width-1 downto 0) := (others => '0');
     signal comp : std_logic;
     signal comp_v, comp_v_o : std_logic_vector(0 downto 0);
 
 begin
 
-    pt <= data_i(obj_nr)(JET_ET_BITS-1 downto 0);
+    pt <= data_i(obj_nr)(pt_width-1 downto 0);
 
-    comp <= '1' when pt >= pt_threshold(JET_ET_BITS-1 downto 0) else '0';
+    comp <= '1' when pt >= pt_threshold(pt_width-1 downto 0) else '0';
 
     comp_v(0) <= comp;
 

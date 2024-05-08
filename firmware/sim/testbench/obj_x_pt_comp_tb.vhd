@@ -23,7 +23,7 @@ architecture rtl of obj_x_pt_comp_TB is
 
     signal lhc_clk : std_logic;
 
-    signal jet_data : calo_objects_array(0 downto 11) := (others => X"00000000");
+    signal jet_data : calo_objects_array(0 to 11) := (others => X"00000000");
 
 begin
 
@@ -50,7 +50,7 @@ begin
 
  ------------------- Instantiate  modules  -----------------
  
-    dut: entity work.cicada_condition
+    dut: entity work.obj_x_pt_comp
         generic map(
             obj_nr => 5,
             pt_width => JET_ET_BITS,

@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.27.0] - 2024-05-08
+### Comment
+
+- test for implementing calo comb trigger with more than 4 objects
+- created obj_x_pt_comp.vhd for a possible solution with a given object number and one pt threshold only
+
+### Added
+- source files:
+  - ../payload/gtl/common/obj_x_pt_comp.vhd
+
 ## [v1.26.0] - 2024-03-14
 ### Comment
 

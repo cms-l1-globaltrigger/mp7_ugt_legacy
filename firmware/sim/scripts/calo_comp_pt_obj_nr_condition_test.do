@@ -49,7 +49,7 @@ vcom -93 -work work $HDL_DIR/packages/gtl_pkg.vhd
 ## GTL modules
 #
 vcom -93 -work work $HDL_DIR/payload/gtl/common/delay_pipeline.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/obj_x_pt_comp.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/common/calo_comp_pt_obj_nr_condition.vhd
 #
 
 ##TB_DIR

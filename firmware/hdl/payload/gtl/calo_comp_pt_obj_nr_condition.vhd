@@ -20,7 +20,7 @@ entity calo_comp_pt_obj_nr_condition is
     );
     port(
         clk : in std_logic;
-        data_i: in calo_objects_array(0 to 11);
+        data_i: in calo_objects_array(0 to MAX_CALO_OBJECTS-1);
         condition_o : out std_logic
     );
 end calo_comp_pt_obj_nr_condition;
@@ -42,7 +42,7 @@ begin
     out_pipe_i: entity work.delay_pipeline
         generic map(
             DATA_WIDTH => 1,
-            STAGES => CALO_X_OBJ_STAGES
+            STAGES => COMMON_COND_STAGES
         )
         port map(
             clk, comp_v, comp_v_o

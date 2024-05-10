@@ -4,15 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.27.0] - 2024-05-08
+## [v1.27.0] - 2024-05-10
 ### Comment
 
 - test for implementing calo comb trigger with more than 4 objects
-- created obj_x_pt_comp.vhd for a possible solution with a given object number and one pt threshold only
+- created calo_comp_pt_obj_nr_condition.vhd for a possible solution with a given object number and one pt threshold only
 
 ### Added
 - source files:
-  - ../payload/gtl/common/obj_x_pt_comp.vhd
+  - ../payload/gtl/calo_comp_pt_obj_nr_condition.vhd
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+  - ../sim/scripts/calo_comp_pt_obj_nr_condition_test.do
+  - ../sim/scripts/calo_comp_pt_obj_nr_condition_wave.do
+  - ../sim/testbench/calo_comp_pt_obj_nr_condition_tb.vhd
+- dep file:
+  - ../cfg/uGT_algo.dep
 
 ## [v1.26.0] - 2024-03-14
 ### Comment

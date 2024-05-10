@@ -14,10 +14,10 @@ use work.math_pkg.all;
 
 use work.gtl_pkg.all;
 
-entity obj_x_pt_comp_TB is
-end obj_x_pt_comp_TB;
+entity calo_comp_pt_obj_nr_condition_TB is
+end calo_comp_pt_obj_nr_condition_TB;
 
-architecture rtl of obj_x_pt_comp_TB is
+architecture rtl of calo_comp_pt_obj_nr_condition_TB is
 
     constant LHC_CLK_PERIOD  : time :=  25.2 ns;
 
@@ -52,7 +52,7 @@ begin
 
  ------------------- Instantiate  modules  -----------------
  
-    dut: entity work.obj_x_pt_comp
+    dut: entity work.calo_comp_pt_obj_nr_condition
         generic map(
             obj_nr => 5,
             pt_width => JET_ET_BITS,

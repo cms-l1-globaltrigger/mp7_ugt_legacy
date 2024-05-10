@@ -2,14 +2,11 @@ onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /obj_x_pt_comp_tb/lhc_clk
 add wave -noupdate /obj_x_pt_comp_tb/dut/obj_nr
-add wave -noupdate /obj_x_pt_comp_tb/dut/pt_width
 add wave -noupdate /obj_x_pt_comp_tb/dut/pt_threshold
 add wave -noupdate /obj_x_pt_comp_tb/dut/data_i
-add wave -noupdate /obj_x_pt_comp_tb/dut/condition_o
 add wave -noupdate /obj_x_pt_comp_tb/dut/pt
 add wave -noupdate /obj_x_pt_comp_tb/dut/comp
-add wave -noupdate /obj_x_pt_comp_tb/dut/comp_v
-add wave -noupdate /obj_x_pt_comp_tb/dut/comp_v_o
+add wave -noupdate /obj_x_pt_comp_tb/dut/condition_o
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {100000 ps} 0} {{Cursor 2} {1632855000 ps} 0}
 quietly wave cursor active 2

@@ -35,7 +35,7 @@ begin
 
     pt <= data_i(obj_nr)(pt_width-1 downto 0);
 
-    comp <= '1' when pt >= pt_threshold(pt_width-1 downto 0) else '0';
+    comp <= '1' when pt >= pt_threshold else '0';
 
     comp_v(0) <= comp;
 

@@ -14,6 +14,7 @@ use work.gtl_pkg.all;
 
 entity calo_comp_pt_obj_nr_condition is
     generic	(
+        pt_ge_mode: boolean := true;
         obj_nr : natural := 5;
         pt_width : natural := JET_ET_BITS;
         pt_threshold: std_logic_vector
@@ -35,7 +36,8 @@ begin
 
     pt <= data_i(obj_nr)(pt_width-1 downto 0);
 
-    comp <= '1' when pt >= pt_threshold else '0';
+    comp <= '1' when pt >= pt_threshold and pt_ge_mode else
+            '1' when pt = pt_threshold and not pt_ge_mode else '0';
 
     comp_v(0) <= comp;
 

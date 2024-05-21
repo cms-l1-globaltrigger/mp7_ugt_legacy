@@ -4,10 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.27.0] - 2024-04-17
+## [v1.28.0] - 2024-04-21
 ### Comment
 
-- mp7_ugt firmware release v1.27.0
+- mp7_ugt firmware release v1.28.0
 - branch for implementing VHDL files of TOPO models (TBD)
 - added TOPO models "base_v1" (this was used for the first TOPO tests)
 - changed script pkgpatch.py (added function "calc_fw_hash" for repo branch version info, patched in gt_mp7_top_pkg_tpl.vhd)

@@ -1,12 +1,12 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
-add wave -noupdate /calo_comp_multi_condition_tb/lhc_clk
-add wave -noupdate /calo_comp_multi_condition_tb/dut/obj_nr
-add wave -noupdate /calo_comp_multi_condition_tb/dut/pt_threshold
-add wave -noupdate /calo_comp_multi_condition_tb/dut/data_i
-add wave -noupdate /calo_comp_multi_condition_tb/dut/pt
-add wave -noupdate /calo_comp_multi_condition_tb/dut/comp
-add wave -noupdate /calo_comp_multi_condition_tb/dut/condition_o
+add wave -noupdate /calo_comb_multi_condition_tb/lhc_clk
+add wave -noupdate /calo_comb_multi_condition_tb/dut/obj_nr
+add wave -noupdate /calo_comb_multi_condition_tb/dut/pt_threshold
+add wave -noupdate /calo_comb_multi_condition_tb/dut/data_i
+add wave -noupdate /calo_comb_multi_condition_tb/dut/pt
+add wave -noupdate /calo_comb_multi_condition_tb/dut/comp
+add wave -noupdate /calo_comb_multi_condition_tb/dut/condition_o
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {100000 ps} 0} {{Cursor 2} {1632855000 ps} 0}
 quietly wave cursor active 2

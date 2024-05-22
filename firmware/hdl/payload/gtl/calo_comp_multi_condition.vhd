@@ -12,7 +12,7 @@ use ieee.std_logic_unsigned.all;
 
 use work.gtl_pkg.all;
 
-entity calo_comp_pt_obj_nr_condition is
+entity calo_comp_multi_condition is
     generic	(
         pt_ge_mode: boolean := true;
         obj_nr : natural := 5;
@@ -24,9 +24,9 @@ entity calo_comp_pt_obj_nr_condition is
         data_i: in calo_objects_array(0 to MAX_CALO_OBJECTS-1);
         condition_o : out std_logic
     );
-end calo_comp_pt_obj_nr_condition;
+end calo_comp_multi_condition;
 
-architecture rtl of calo_comp_pt_obj_nr_condition is
+architecture rtl of calo_comp_multi_condition is
 
     signal pt : std_logic_vector(pt_width-1 downto 0) := (others => '0');
     signal comp : std_logic;

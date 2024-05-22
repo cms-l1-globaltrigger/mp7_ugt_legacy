@@ -8,16 +8,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - test for implementing calo comb trigger with more than 4 objects
-- created calo_comp_pt_obj_nr_condition.vhd for a possible solution with a given object number and one pt threshold only
+- created calo_comp_multi_condition.vhd for a possible solution with a given object number and one pt threshold only
 
 ### Added
 - source files:
-  - ../payload/gtl/calo_comp_pt_obj_nr_condition.vhd
+  - ../payload/gtl/calo_comp_multi_condition.vhd
 - simulation file:
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
-  - ../sim/scripts/calo_comp_pt_obj_nr_condition_test.do
-  - ../sim/scripts/calo_comp_pt_obj_nr_condition_wave.do
-  - ../sim/testbench/calo_comp_pt_obj_nr_condition_tb.vhd
+  - ../sim/scripts/calo_comp_multi_condition_test.do
+  - ../sim/scripts/calo_comp_multi_condition_wave.do
+  - ../sim/testbench/calo_comp_multi_condition_tb.vhd
 - dep file:
   - ../cfg/uGT_algo.dep
 

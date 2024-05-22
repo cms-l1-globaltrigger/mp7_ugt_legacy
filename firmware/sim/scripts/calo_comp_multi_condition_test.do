@@ -49,18 +49,18 @@ vcom -93 -work work $HDL_DIR/packages/gtl_pkg.vhd
 ## GTL modules
 #
 vcom -93 -work work $HDL_DIR/payload/gtl/common/delay_pipeline.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/calo_comp_pt_obj_nr_condition.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/calo_comp_multi_condition.vhd
 #
 
 ##TB_DIR
-vcom -93 -work work $TB_DIR/calo_comp_pt_obj_nr_condition_tb.vhd
+vcom -93 -work work $TB_DIR/calo_comp_multi_condition_tb.vhd
 
 ##Load Design
-vsim -t 1ps work.calo_comp_pt_obj_nr_condition_tb
+vsim -t 1ps work.calo_comp_multi_condition_tb
 
 ##Load signals in wave window
 view wave
-do $TB_DIR/../scripts/calo_comp_pt_obj_nr_condition_wave.do
+do $TB_DIR/../scripts/calo_comp_multi_condition_wave.do
 
 ##Run simulation
 run 400 ns

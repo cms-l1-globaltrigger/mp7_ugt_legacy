@@ -62,14 +62,7 @@ begin
  ------------------- Instantiate  modules  -----------------
  
     dut: entity work.calo_comb_multi_condition
-        generic map(
-            obj_nr => 6,
-            pt_width => JET_ET_BITS,
-            pt_threshold => X"002E"
-        )
-        port map(
-            clk => lhc_clk,
-            data_i => jet_data,
-            condition_o => open
-        );
+        generic map(6, JET_ET_BITS, X"002E")
+        port map(lhc_clk, jet_data, open);
+        
 end rtl;

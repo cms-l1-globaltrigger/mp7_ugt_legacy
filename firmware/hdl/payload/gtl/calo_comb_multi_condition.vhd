@@ -14,10 +14,10 @@ use work.gtl_pkg.all;
 
 entity calo_comb_multi_condition is
     generic	(
-        pt_ge_mode: boolean := true;
-        obj_nr : natural := 5;
+        nr_obj : natural := 6;
         pt_width : natural := JET_ET_BITS;
-        pt_threshold: std_logic_vector
+        pt_threshold: std_logic_vector;
+        pt_ge_mode: boolean := true
     );
     port(
         clk : in std_logic;
@@ -34,7 +34,7 @@ architecture rtl of calo_comb_multi_condition is
 
 begin
 
-    pt <= data_i(obj_nr)(pt_width-1 downto 0);
+    pt <= data_i(nr_obj-1)(pt_width-1 downto 0);
 
     comp <= '1' when pt >= pt_threshold and pt_ge_mode else
             '1' when pt = pt_threshold and not pt_ge_mode else '0';

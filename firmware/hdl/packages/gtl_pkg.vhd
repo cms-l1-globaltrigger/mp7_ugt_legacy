@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2024-05-10: added COMMON_COND_STAGES for condition with no intermediate pipeline.
 -- HB 2023-10-10: CICADA definition changed: no bjets.
 -- HB 2023-10-03: inserted calo anomaly algorithm (CICADA) definitions.
 -- HB 2023-09-13: NR_INPUT_LANES not used anymore. Added type lword_array (for output_mux.vhd and mux.vhd)
@@ -82,17 +83,18 @@ type lword_array is array (0 to LINK_FRAMES-1) of lword;
 
 -- Fixed pipeline structure
 constant BX_PIPELINE_STAGES: natural := 5; -- +/- 2bx pipeline
-constant ESUMS_COND_STAGES: natural := 2; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
-constant MB_COND_STAGES: natural := 2; -- pipeline stages for "Minimum Bias conditions" to get same pipeline to algos as conditions
-constant TC_COND_STAGES: natural := 2; -- pipeline stages for "Towercount condition" to get same pipeline to algos as conditions
-constant EXT_COND_STAGES: natural := 2; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
-constant CENTRALITY_STAGES: natural := 2; -- pipeline stages for "Centrality" to get same pipeline to algos as conditions
-constant MUS_STAGES: natural := 2; -- pipeline stages for "Hadronic shower triggers (muon)" to get same pipeline to algos as conditions
+constant COMMON_COND_STAGES: natural := 2; -- pipeline stages for condition with no intermediate pipeline
+constant ESUMS_COND_STAGES: natural := COMMON_COND_STAGES; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
+constant MB_COND_STAGES: natural := COMMON_COND_STAGES; -- pipeline stages for "Minimum Bias conditions" to get same pipeline to algos as conditions
+constant TC_COND_STAGES: natural := COMMON_COND_STAGES; -- pipeline stages for "Towercount condition" to get same pipeline to algos as conditions
+constant EXT_COND_STAGES: natural := COMMON_COND_STAGES; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
+constant CENTRALITY_STAGES: natural := COMMON_COND_STAGES; -- pipeline stages for "Centrality" to get same pipeline to algos as conditions
+constant MUS_STAGES: natural := COMMON_COND_STAGES; -- pipeline stages for "Hadronic shower triggers (muon)" to get same pipeline to algos as conditions
+constant ZDC_STAGES: natural := COMMON_COND_STAGES; -- pipeline stages for "ZDC condition" to get same pipeline to algos as conditions
+constant CICADA_COND_STAGES: natural := COMMON_COND_STAGES; -- pipeline stages for "CICADA conditions" to get same pipeline to algos as conditions
 constant ADT_SIM_DEL: natural := 2; -- delay of ADT for simulation 
-constant ZDC_STAGES: natural := 2; -- pipeline stages for "ZDC condition" to get same pipeline to algos as conditions
 constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
 constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
-constant CICADA_COND_STAGES: natural := 2; -- pipeline stages for "CICADA conditions" to get same pipeline to algos as conditions
 
 -- Selector for options
 constant SPYMEM: boolean := true; -- selector for input spymem

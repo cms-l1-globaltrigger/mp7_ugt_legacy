@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.28.0] - 2024-04-21
+## [v1.28.0] - 2024-05-28
 ### Comment
 
 - mp7_ugt firmware release v1.28.0
@@ -24,6 +24,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/gt_mp7_top_pkg_tpl.vhd
 - simulation file:
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+  
+## [v1.27.0] - 2024-05-28
+### Comment
+
+- implemention of calo comb trigger with more than 4 objects (with a given object number and one pt threshold only)
+
+### Added
+- source files:
+  - ../payload/gtl/calo_comp_multi_condition.vhd
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+  - ../sim/scripts/calo_comp_multi_condition_test.do
+  - ../sim/scripts/calo_comp_multi_condition_wave.do
+  - ../sim/testbench/calo_comp_multi_condition_tb.vhd
 - dep file:
   - ../cfg/uGT_algo.dep
 

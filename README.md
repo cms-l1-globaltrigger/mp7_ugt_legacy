@@ -25,7 +25,8 @@ files:
 
 | utm | TME | VHDL Producer |
 |:-:|:-:|:-:|
-| 0.12.0 | 0.16.0 | 2.17.1 |
+| 0.13.0 | 0.17.0 | 2.19.0 |
+
 
 Following dependencies exist for uGT firmware:
 
@@ -77,15 +78,15 @@ export MGLS_LICENSE_FILE=1234@license.server
 export UGT_GITLAB_USER_NAME=hbergaue
 export UGT_QUESTASIMLIBS_DIR=/opt/mentor
 export UGT_QUESTASIM_SIM_PATH=${MODELSIM_ROOT}
-export UGT_VIVADO_QUESTASIMLIBS_VERSION=2019.2
+export UGT_VIVADO_QUESTASIMLIBS_VERSION=2021.2
 export UGT_QUESTASIM_LIBS_PATH=${UGT_QUESTASIMLIBS_DIR}/questasimlibs_vivado_${UGT_VIVADO_QUESTASIMLIBS_VERSION}
-export UGT_BLK_MEM_GEN_VERSION_SIM=blk_mem_gen_v8_4_4
+export UGT_BLK_MEM_GEN_VERSION_SIM=blk_mem_gen_v8_4_5
 
 ## Synthesis (Vivado)
 export VIVADO_BASE_DIR=/opt/xilinx/Vivado
 export UGT_VIVADO_BASE_DIR=${VIVADO_BASE_DIR}
-export UGT_VIVADO_VERSION=2019.2
-export UGT_BLK_MEM_GEN_VERSION_SYNTH=blk_mem_gen_v8_4_4
+export UGT_VIVADO_VERSION=2021.2
+export UGT_BLK_MEM_GEN_VERSION_SYNTH=blk_mem_gen_v8_4_5
 source ${VIVADO_BASE_DIR}/${UGT_VIVADO_VERSION}/settings64.sh
 ```
 
@@ -93,12 +94,12 @@ source ${VIVADO_BASE_DIR}/${UGT_VIVADO_VERSION}/settings64.sh
 
 Simulation of VHDL module `gtl_fdl_wrapper.vhd` with Questa simulator for 6 ugt modules.
 
-* This is a description running script [run_simulation_questa.py](scripts/run_simulation_questa.py) for simulation.
+* This is a description running script simulation.py in [ugt-fwtools](https://github.com/cms-l1-globaltrigger/ugt-fwtools) with ugt-simulate for simulation.
 * If Questasim libraries for a certain Vivado version do not exist, they have to
-be created for the selected Questasim version with script [run_compile_simlib.py](scripts/run_compile_simlib.py):
+be created for the selected Questasim version with script [ugt-fwtools](https://github.com/cms-l1-globaltrigger/ugt-fwtools) with ugt-compile-simlib:
 ```bash
-python scripts/run_compile_simlib.py \
- --vivado <vivado_version (e.g. 2019.2)> \
+ugt-compile-simlib \
+ --vivado <vivado_version (e.g. 2021.2)> \
  --questasim <path to Questasim (e.g. /opt/mentor/10.7c/questasim)> \
  --output <output directory for generated libraries>
 ```
@@ -124,31 +125,22 @@ Run simulation using Questa.
 - MIF files (for mass over deltaR) are located in `mp7_ugt_legacy/firmware/sim`
 for simulation.
 
-Running script
-
-```bash
-python scripts/run_simulation_questa.py <xml_file> --tv <testvector_file> [--ignored]
-```
+Running script simulation.py in [ugt-fwtools](https://github.com/cms-l1-globaltrigger/ugt-fwtools) with ugt-simulate.
 
 *Note:* inspect for default values and other arguments
 
 ```bash
-python scripts/run_simulation_questa.py -h
+cd ../ugt-fwtools
+python3 -m venv env
+. env/bin/activate
+ugt-simulate <xml_file> --tv <testvector_file> --ugttag <ugt tag or branch> [--mp7_repo_tag <MP7 repo tag - default is v3.2.2_Vivado2021+_ugt_v4>] [--ignored]
 ```
 
-Example 1
+Example 
 
 ```bash
-python scripts/run_simulation_questa.py https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/master/2022/L1Menu_Collisions2022_v1_4_0-d1/xml/L1Menu_Collisions2022_v1_4_0-d1.xml \
- --tv https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/master/2022/L1Menu_Collisions2022_v1_4_0-d1/testvectors/TestVector_L1Menu_Collisions2022_v1_4_0_ttbar.txt \
- --ignored
-```
-
-Example 2
-
-```bash
-python scripts/run_simulation_questa.py ./cms-l1-menu/2022/L1Menu_Collisions2022_v1_4_0-d1/xml/L1Menu_Collisions2022_v1_4_0-d1.xml \
- --tv ./cms-l1-menu/2022/L1Menu_Collisions2022_v1_4_0-d1/testvectors/TestVector_L1Menu_Collisions2022_v1_4_0_ttbar.txt \
+ugt-simulate https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2024_v1_2_1-d1/2024/L1Menu_Collisions2024_v1_2_1-d1/xml/L1Menu_Collisions2024_v1_2_1-d1.xml \
+ --tv https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2024_v1_2_1-d1/2024/L1Menu_Collisions2024_v1_2_1-d1/testvectors/TestVector_L1Menu_Collisions2024_v1_2_1_ttBar.txt \
  --ignored
 ```
 
@@ -168,22 +160,22 @@ that you have your Xilinx Vivado licensing already setup for your enviroment.
   - added [ugt_strategy.tcl](firmware/ucf/ugt_strategy.tcl) for ugt specific strategy and inserted it into [top.dep](firmware/cfg/top.dep).
   - added [add_l1menu_blkmem_files.tcl](firmware/cfg/add_l1menu_blkmem_files.tcl) for adding L1Menu VHDL files and inserted it into [top.dep](firmware/cfg/top.dep).
 
-* Following scripts are available for firmware sythesis, checking used FPGA resources and packing firmware files:
-  - script [runIpbbSynth.py](scripts/runIpbbSynth.py) for IPBB synthesis (all 6 mp7_ugt modules).
-  - script [checkIpbbSynth.py](scripts/checkIpbbSynth.py) for checking used FPGA resources.
-  - script [fwpackerIpbb.py](scripts/fwpackerIpbb.py) for packing firmware files in a tar file.
+* Following scripts are available in [ugt_fwtools](https://github.com/cms-l1-globaltrigger/ugt-fwtools/ugt_fwtools) for firmware sythesis, checking used FPGA resources and packing firmware files:
+  - script synthesis.py for IPBB synthesis (all 6 mp7_ugt modules).
+  - script checksynth.py for checking used FPGA resources.
+  - script fwpacker.py for packing firmware files in a tar file.
 
 * The [MP7](https://gitlab.cern.ch/cms-cactus/firmware/mp7) firmware needs to be adapted for Global Trigger firmware.
-* A script [mp7patch.py](scripts/mp7patch.py) make this changes in the following MP7 files (tag v3.0.0):
-  - [area_constraints.tcl](https://gitlab.cern.ch/cms-cactus/firmware/mp7/-/blob/v3.0.0/boards/mp7/base_fw/common/firmware/ucf/area_constraints.tcl)
-  - [mp7_brd_decl.vhd](https://gitlab.cern.ch/cms-cactus/firmware/mp7/-/blob/v3.0.0/boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7_brd_decl.vhd)
-  - [mp7xe_690.vhd](https://gitlab.cern.ch/cms-cactus/firmware/mp7/-/blob/v3.0.0/boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7xe_690.vhd)
-* Additionally this script inserts L1A (port l1a) to [mp7_payload.vhd](firmware/hdl/mp7_payload.vhd)
-* In [run_simulation_questa.py](scripts/run_simulation_questa.py) and [runIpbbSynth.py](scripts/runIpbbSynth.py), [mp7patch.py](scripts/mp7patch.py) is implemented to patch files without using [MP7_for_uGT](https://gitlab.cern.ch/hbergaue/mp7) anymore.
+* A script makes this changes in the following MP7 files:
+  - [area_constraints.tcl](https://gitlab.cern.ch/cms-cactus/firmware/mp7/-/blob/v3.2.2_Vivado2021+_ugt_v4/boards/mp7/base_fw/common/firmware/ucf/area_constraints.tcl)
+  - [mp7_brd_decl.vhd](https://gitlab.cern.ch/cms-cactus/firmware/mp7/-/blob/v3.2.2_Vivado2021+_ugt_v4/boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7_brd_decl.vhd)
+  - [mp7xe_690.vhd](https://gitlab.cern.ch/cms-cactus/firmware/mp7/-/blob/v3.2.2_Vivado2021+_ugt_v4/boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7xe_690.vhd)
+* Additionally this script inserts L1A (port l1a) to [mp7_payload.vhd](firmware/hdl/mp7_payload.vhd).
+* This script is part of simulation and synthesis workflows (ugt-simulate, ugt-synthesize).
 
 ### Workflow
 
-Make sure to setup ypur local bash environment (see above).
+Make sure to setup your local bash environment (see above).
 
 Run kerberos for outside of CERN network.
 
@@ -193,44 +185,28 @@ kinit <username>@CERN.CH
 
 Run synthesis script (for all 6 modules).
 
-```bash
-python scripts/run_synth_ipbb.py <xml_file> \
- --ugturl <ugt_url_to_git_repo> \
- --ugt <ugt_tag_or_branch> \
- --build <build_version> \
- -p <working_dir>
-```
-
 *Note:* inspect default values for arguments using
 
 ```bash
-python scripts/run_synth_ipbb.py -h
-```
+cd ../ugt-fwtools
+python3 -m venv env
+. env/bin/activate
+ugt-synthesize <xml_file> --ugt <ugt tag or branch> --mp7tag <MP7 repo tag - default is v3.2.2_Vivado2021+_ugt_v4> --build <build_version> -p <working_dir>
+```bash
 
-Example 1
+Example
 
 ```bash
-python scripts/run_synth_ipbb.py https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/master/2022/L1Menu_Collisions2022_v1_4_0-d1/xml/L1Menu_Collisions2022_v1_4_0-d1.xml \
- --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy \
- --ugt master \
- --build 0x113d \
- -p ~/work_synth/production
-```
-
-Example 2
-
-```bash
-python scripts/run_synth_ipbb.py ./cms-l1-menu/2022/L1Menu_Collisions2022_v1_4_0-d1/xml/L1Menu_Collisions2022_v1_4_0-d1.xml \
- --ugturl https://github.com/cms-l1-globaltrigger/mp7_ugt_legacy \
- --ugt master \
- --build 0x113d \
+ugt-synthesize https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2024_v1_2_1-d1/2024/L1Menu_Collisions2024_v1_2_1-d1/xml/L1Menu_Collisions2024_v1_2_1-d1.xml \
+ --ugt v1.26.0 \
+ --build 0x118f \
  -p ~/work_synth/production
 ```
 
 After all syntheses have finished, check results:
 
 ```bash
-python scripts/check_synth_ipbb.py <path of build_xxxx.cfg>
+ugt-checksynth <path of build_xxxx.cfg>
 ```
 
 If timing errors occur (and bit files is not generated), check timing errors in file:
@@ -242,13 +218,13 @@ If timing errors occur (and bit files is not generated), check timing errors in 
 Afterwards execute the following command for every module with timing errors to generate bit file:
 
 ```bash
-vivado -mode batch -source <path to scripts/vivado_write_bitstream.tcl> -tclargs <project path> <module id (e.g.: 0)>
+vivado -mode batch -source <path to scripts/vivado_write_bitstream.tcl> -tclargs <project path> <module id>
 ```
 
 After successfully created bit files, execute the following command to create tar file for HW:
 
 ```bash
-python scripts/fwpacker_ipbb.py <path of build_xxxx.cfg>
+ugt-fwpacker <path of build_xxxx.cfg>
 ```
 
 ## Build single module

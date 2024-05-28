@@ -170,7 +170,7 @@ that you have your Xilinx Vivado licensing already setup for your enviroment.
   - [mp7_brd_decl.vhd](https://gitlab.cern.ch/cms-cactus/firmware/mp7/-/blob/v3.2.2_Vivado2021+_ugt_v4/boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7_brd_decl.vhd)
   - [mp7xe_690.vhd](https://gitlab.cern.ch/cms-cactus/firmware/mp7/-/blob/v3.2.2_Vivado2021+_ugt_v4/boards/mp7/base_fw/mp7xe_690/firmware/hdl/mp7xe_690.vhd)
 * Additionally this script inserts L1A (port l1a) to [mp7_payload.vhd](firmware/hdl/mp7_payload.vhd).
-* This scriptis part of simulation and synthesis workflows (ugt-simulate, ugt-synthesize).
+* This script is part of simulation and synthesis workflows (ugt-simulate, ugt-synthesize).
 
 ### Workflow
 
@@ -183,7 +183,9 @@ kinit <username>@CERN.CH
 ```
 
 Run synthesis script (for all 6 modules).
+
 *Note:* inspect default values for arguments using
+
 ```bash
 cd ../ugt-fwtools
 python3 -m venv env
@@ -191,7 +193,7 @@ python3 -m venv env
 ugt-synthesize <xml_file> --ugt <ugt tag or branch> --mp7tag <MP7 repo tag - default is v3.2.2_Vivado2021+_ugt_v4> --build <build_version> -p <working_dir>
 ```bash
 
-Example 1
+Example
 
 ```bash
 ugt-synthesize https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2024_v1_2_1-d1/2024/L1Menu_Collisions2024_v1_2_1-d1/xml/L1Menu_Collisions2024_v1_2_1-d1.xml \

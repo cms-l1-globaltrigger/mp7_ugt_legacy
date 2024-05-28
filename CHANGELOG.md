@@ -4,11 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.27.0] - 2024-05-10
+## [v1.27.0] - 2024-05-28
 ### Comment
 
-- test for implementing calo comb trigger with more than 4 objects
-- created calo_comp_multi_condition.vhd for a possible solution with a given object number and one pt threshold only
+- implemention of calo comb trigger with more than 4 objects (with a given object number and one pt threshold only)
 
 ### Added
 - source files:

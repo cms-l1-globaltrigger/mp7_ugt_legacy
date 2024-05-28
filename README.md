@@ -93,11 +93,11 @@ source ${VIVADO_BASE_DIR}/${UGT_VIVADO_VERSION}/settings64.sh
 
 Simulation of VHDL module `gtl_fdl_wrapper.vhd` with Questa simulator for 6 ugt modules.
 
-* This is a description running script [run_simulation_questa.py](scripts/run_simulation_questa.py) for simulation.
+* This is a description running script simulation.py in [ugt-fwtools](https://github.com/cms-l1-globaltrigger/ugt-fwtools) with ugt-simulate for simulation.
 * If Questasim libraries for a certain Vivado version do not exist, they have to
-be created for the selected Questasim version with script [run_compile_simlib.py](scripts/run_compile_simlib.py):
+be created for the selected Questasim version with script [ugt-fwtools](https://github.com/cms-l1-globaltrigger/ugt-fwtools) with ugt-compile-simlib:
 ```bash
-python scripts/run_compile_simlib.py \
+ugt-compile-simlib \
  --vivado <vivado_version (e.g. 2021.2)> \
  --questasim <path to Questasim (e.g. /opt/mentor/10.7c/questasim)> \
  --output <output directory for generated libraries>
@@ -125,6 +125,7 @@ Run simulation using Questa.
 for simulation.
 
 Running script simulation.py in [ugt-fwtools](https://github.com/cms-l1-globaltrigger/ugt-fwtools) with ugt-simulate.
+
 *Note:* inspect for default values and other arguments
 
 ```bash
@@ -134,9 +135,7 @@ python3 -m venv env
 ugt-simulate <xml_file> --tv <testvector_file> --ugttag <ugt tag or branch> [--mp7_repo_tag <MP7 repo tag - default is v3.2.2_Vivado2021+_ugt_v4>] [--ignored]
 ```
 
-*Note:* inspect for default values and other arguments
-
-Example 1
+Example 
 
 ```bash
 ugt-simulate https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2024_v1_2_1-d1/2024/L1Menu_Collisions2024_v1_2_1-d1/xml/L1Menu_Collisions2024_v1_2_1-d1.xml \

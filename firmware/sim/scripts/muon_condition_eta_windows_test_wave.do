@@ -24,10 +24,18 @@ add wave -noupdate /muon_condition_eta_windows_test_tb/dut/muon_i/obj_cuts_i/obj
 add wave -noupdate /muon_condition_eta_windows_test_tb/dut/muon_i/obj_cuts_i/obj_slice_2_l(1)/comp_i/eta_windows_comp_i/eta_comp_o
 add wave -noupdate /muon_condition_eta_windows_test_tb/dut/muon_i/obj_cuts_i/obj_slice_1_l(2)/comp_i/eta_windows_comp_i/eta_comp_o
 add wave -noupdate /muon_condition_eta_windows_test_tb/dut/muon_i/obj_cuts_i/obj_slice_2_l(2)/comp_i/eta_windows_comp_i/eta_comp_o
+add wave -noupdate /muon_condition_eta_windows_test_tb/dut/muon_i/obj_cuts_i/obj_slice_1_l(0)/comp_i/eta_windows_comp_i/eta_w1_sel_i/eta_comp_i/eta_upper_limit
+add wave -noupdate /muon_condition_eta_windows_test_tb/dut/muon_i/obj_cuts_i/obj_slice_1_l(0)/comp_i/eta_windows_comp_i/eta_w1_sel_i/eta_comp_i/eta_lower_limit
+add wave -noupdate /muon_condition_eta_windows_test_tb/dut/muon_i/obj_cuts_i/obj_slice_1_l(0)/comp_i/eta_windows_comp_i/eta_w1_sel_i/eta_comp_i/eta
+add wave -noupdate /muon_condition_eta_windows_test_tb/dut/muon_i/obj_cuts_i/obj_slice_1_l(0)/comp_i/eta_windows_comp_i/eta_w1_sel_i/eta_comp_i/eta_comp
+add wave -noupdate /muon_condition_eta_windows_test_tb/dut/muon_i/obj_cuts_i/obj_slice_2_l(0)/comp_i/eta_windows_comp_i/eta_w2_sel_i/eta_comp_i/eta_upper_limit
+add wave -noupdate /muon_condition_eta_windows_test_tb/dut/muon_i/obj_cuts_i/obj_slice_2_l(0)/comp_i/eta_windows_comp_i/eta_w2_sel_i/eta_comp_i/eta_lower_limit
+add wave -noupdate /muon_condition_eta_windows_test_tb/dut/muon_i/obj_cuts_i/obj_slice_2_l(0)/comp_i/eta_windows_comp_i/eta_w2_sel_i/eta_comp_i/eta
+add wave -noupdate /muon_condition_eta_windows_test_tb/dut/muon_i/obj_cuts_i/obj_slice_2_l(0)/comp_i/eta_windows_comp_i/eta_w2_sel_i/eta_comp_i/eta_comp
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {90158 ps} 0} {{Cursor 2} {1632855000 ps} 0}
 quietly wave cursor active 1
-configure wave -namecolwidth 737
+configure wave -namecolwidth 886
 configure wave -valuecolwidth 126
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
@@ -41,4 +49,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {0 ps} {510222 ps}
+WaveRestoreZoom {0 ps} {434047 ps}

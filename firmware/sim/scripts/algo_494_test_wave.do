@@ -1,6 +1,12 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /algo_494_test_tb/lhc_clk
+add wave -noupdate /algo_494_test_tb/dut/muon_obj1
+add wave -noupdate /algo_494_test_tb/dut/muon_obj2
+add wave -noupdate /algo_494_test_tb/dut/dphi
+add wave -noupdate /algo_494_test_tb/dut/not_esums_sel/corr_cuts_comp_i/dphi_comp
+add wave -noupdate /algo_494_test_tb/dut/condition_and_or
+add wave -noupdate /algo_494_test_tb/dut/condition_o
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {100000 ps} 0} {{Cursor 2} {1632855000 ps} 0}
 quietly wave cursor active 2

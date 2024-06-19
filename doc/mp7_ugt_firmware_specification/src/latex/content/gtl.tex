@@ -1253,6 +1253,19 @@ The input data objects have to be of same type and same bunch-crossing.
 With "Double objects requirements condition" a correlation cut of "two-body pt" can be required (calorimeter and muon objects).\\
 Additionally charge correlation cuts with "Double objects requirements condition", "Triple objects requirements condition" and "Quad objects requirements condition" of muon objects can be required.
 
+\paragraph{Calo combination conditions with more than 4 requirements}
+\label{sec:gtl:calo_comb_cond_more}
+
+The possibility of a combination condition for more than 4 requirements (up to 12) is implemented, but there are some restrictions:
+\begin{itemize}
+\item only for calo objects (Electron/$\gamma$, Jet and Tau)
+\item all requirements must have the same threshold and bx
+\item no cuts allowed for such conditions
+\end{itemize}
+
+Providing this type of conditions is based on the decreasing pt values of the calo objects. In VHDL producer the number of requirements and the common threshold is given to VHDL code.
+A pt comparision of the object given by the number of requirements with the threshold is made for a combination condition for more than 4 requirements.
+
 \clearpage
 
 \subsubsection{Energy sum quantities conditions}

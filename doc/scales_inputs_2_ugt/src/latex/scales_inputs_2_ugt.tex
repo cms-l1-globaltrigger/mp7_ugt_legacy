@@ -18,7 +18,7 @@
 
 \begin{titlepage}
 
-\date{18 December 2023}
+\date{8 May 2024}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -155,14 +155,6 @@ jet	&	1 * 12	&	$E_t$	&	0..1024 GeV	&	0.5	&	11                    \\
 	&		&	TOTAL	&		&		&	32                    \\
 % 	&		&		&		&		&	                    \\
 \hline
-bjet	&	1 * 6	&	$E_t$	&	0..1024 GeV	&	0.5	&	11                    \\
-	&		&	$\eta$	&	-5..5	&	0.0870/2=0.0435	&	7+1 = 8                    \\
-	&		&	$\varphi$	&	2$\pi$	&	2$\pi$/144$\sim$0.044	&	8                    \\
-	&		&	flag	&		&		&	1                    \\
-	&		&	AD value, HI bits	&		&		&	4                    \\
-	&		&	TOTAL	&		&		&	32                    \\
-% 	&		&		&		&		&	                    \\
-\hline
 e/$\gamma$	&	1 * 12	&	$E_t$	&	0..256 GeV	&	0.5	&	9                    \\
 	&		&	$\eta$	&	-5..5	&	0.0870/2=0.0435	&	7+1 = 8                    \\
 	&		&	$\varphi$	&	2$\pi$	&	2$\pi$/144$\sim$0.044	&	8                    \\
@@ -176,6 +168,11 @@ tau	&	1 * 12	&	$E_t$	&	0..256 GeV	&	0.5	&	9                    \\
 	&		&	$\varphi$	&	2$\pi$	&	2$\pi$/144$\sim$0.044	&	8                    \\
 	&		&	iso	&		&		&	2                    \\
 	&		&	spare	&		&		&	5                    \\
+	&		&	TOTAL	&		&		&	32                    \\
+% 	&		&		&		&		&	                    \\
+\hline
+cicada	&	1 * 6	&	spare	&		&		&	28                    \\
+	&		&	AD value, HI bits	&		&		&	4                    \\
 	&		&	TOTAL	&		&		&	32                    \\
 % 	&		&		&		&		&	                    \\
 \hline
@@ -498,7 +495,7 @@ frame & objects\\\hline\hline
 
 \begin{itemize}
 \item The data structure of a jet object is shown in Table~\ref{table:jet_object} (bits 31..30 spare bits)
-\item The data structure of a bjet object is shown in Table~\ref{table:bjet_object} (bits 31..28 used for Anomaly Detection and Heavy Ion bits)
+\item The data structure of a CICADA object is shown in Table~\ref{table:cicada_object} (bits 31..28 used for Anomaly Detection and Heavy Ion bits)
 \item The data structure of an e/$\gamma$ object is shown in Table~\ref{table:egamma_object} (bits 31..27 are not defined yet)
 \item The data structure of a tau object is shown in Table~\ref{table:tau_object} (bits 31..27 are not defined yet)
 \item The definition of isolation bits for e/$\gamma$ and tau is shown in Table~\ref{table:eg_tau_iso_bits}.
@@ -524,18 +521,15 @@ bit(s) & parameter \\\hline\hline
 \end{table}
 
 \begin{table}[ht]
-\caption{\bf Data structure of a bjet object}
+\caption{\bf Data structure of a CICADA object}
 \vspace{5mm}
 \centering
 \begin{tabular}{|c|c|}\hline
 bit(s) & parameter \\\hline\hline
 31..28 & Anomaly Detection and Heavy Ion bits \\
-27..27 & flag \\
-26..19 & $\varphi$ \\
-18..11 & $\eta$ \\
-10..0 & $E_t$ \\\hline
+27..0 & spare \\\hline
 \end{tabular}
-\label{table:bjet_object}
+\label{table:cicada_object}
 \end{table}
 
 \begin{table}[ht]
@@ -662,7 +656,7 @@ and HT$_{miss}^{HF}$
 is shown in Tables~\ref{table:ett_object}, ~\ref{table:ht_object}, ~\ref{table:etm_object}, ~\ref{table:htm_object}, ~\ref{table:etmhf_object} and ~\ref{table:htmhf_object}.
 \item The definition of minimum bias HF, ETTEM, TOWERCOUNT, Asymmetry and Centrality bits is shown in ~\ref{table:min_bias_def}, ~\ref{table:ettem_def}, ~\ref{table:tower_count_def}
 ~\ref{table:asymmetry_def} and ~\ref{table:centrality_def}.
-\item The definition of CICADA bits is shown in ~\ref{table:opt_link_cicada} and ~\ref{table:bjet_object}.
+\item The definition of CICADA bits is shown in ~\ref{table:opt_link_cicada} and ~\ref{table:cicada_object}.
 \end{itemize}
 
 \begin{table}[ht]

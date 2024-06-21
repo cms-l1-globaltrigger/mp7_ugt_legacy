@@ -4,25 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.27.0] - 2024-04-17
+## [v1.29.0] - 2024-06-21
 ### Comment
-
-- mp7_ugt firmware release v1.27.0
-- branch for implementing VHDL files of TOPO models (TBD)
-- added TOPO models "base_v1" (this was used for the first TOPO tests)
+- mp7_ugt firmware release v1.29.0
 - added ML score width (gtl_pkg.vhd)
 - new files for ML calculations
-- changed script pkgpatch.py (added function "calc_fw_hash" for repo branch version info, patched in gt_mp7_top_pkg_tpl.vhd)
 
 ### Added
 - source files:
-  - VHDL files of TOPO models (TBD)
-  - directory ../topo_trigger/model_base_v1
   - ../payload/../gtl/ml_comparison.vhd
   - ../payload/../gtl/ml_calculation_instances.vhd
-  - ../payload/../gtl/axol1tl_trigger/model_v1/axol1tl_v1_instance.vhd
-  - ../payload/../gtl/axol1tl_trigger/model_v3/axol1tl_v3_instance.vhd
-  - ../payload/../gtl/topo_trigger/model_base_v1/topo_base_v1_instance.vhd
   
 ### Changed
 - script files:
@@ -33,12 +24,45 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/gt_mp7_top_pkg_tpl.vhd
 - simulation file:
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+
+## [v1.28.0] - 2024-05-28
+### Comment
+    mp7_ugt firmware release v1.28.0
+    branch for implementing VHDL files of TOPO models (TBD)
+    added TOPO models "base_v1" (this was used for the first TOPO tests)
+    changed script pkgpatch.py (added function "calc_fw_hash" for repo branch version info, patched in gt_mp7_top_pkg_tpl.vhd)
+
+### Added
+    source files:
+        VHDL files of TOPO models (TBD)
+        directory ../topo_trigger/model_base_v1
+
+### Changed
+    script files:
+        scripts/pkgpatch.py
+    source files:
+        ../packages/gt_mp7_core_pkg.vhd
+        ../packages/gt_mp7_top_pkg_tpl.vhd
+    simulation file:
+        ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+
+## [v1.27.0] - 2024-05-28
+### Comment
+- implemention of calo comb trigger with more than 4 objects (with a given object number and one pt threshold only)
+
+### Added
+- source files:
+  - ../payload/gtl/calo_comp_multi_condition.vhd
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+  - ../sim/scripts/calo_comp_multi_condition_test.do
+  - ../sim/scripts/calo_comp_multi_condition_wave.do
+  - ../sim/testbench/calo_comp_multi_condition_tb.vhd
 - dep file:
   - ../cfg/uGT_algo.dep
 
 ## [v1.26.0] - 2024-03-14
 ### Comment
-
 - mp7_ugt firmware release v1.26.0
 - CICADA on link 11 with 16 bits cicada score 
 - development for axol1tl trigger (axol1tl_trigger) with models
@@ -80,7 +104,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v1.25.2] - 2023-09-29
 ### Comment
-
 - mp7_ugt firmware release v1.25.2
 - changed quads 8..16 to "no_mgt" (top_decl.vhd)
 

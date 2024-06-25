@@ -27,7 +27,7 @@ $ git commit -am "new menu added"
 $ git push --set-upstream origin <new menu name> 
 ```
 
-## Synthesis on srv-b1b07-10-01 or srv-b1b07-20-01
+## Synthesis on CERN server
 ```bash
 $ mkdir <dir for synthesis>
 $ cd <dir synthesis>

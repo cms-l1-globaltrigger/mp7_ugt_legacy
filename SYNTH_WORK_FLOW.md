@@ -98,7 +98,7 @@ $ scp /home/../synthesis_dir/synthesis_output/0x1192/<file name>.tar.gz /afs/cer
 $ scp <file name>.tar.gz <user>@cmsusr:.
 ```
 
-### login <user>@cmsusr and get XML and test vector file of new menu
+### login in cmsusr and get XML and test vector file of new menu
 ```bash
 $ wget https://raw.githubusercontent.com/cms-l1-globaltrigger/<new menu name>/2024/<new menu name>/xml/<new menu name>.xml
 ```

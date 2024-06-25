@@ -17,7 +17,7 @@ entity ml_comparison is
         score_width: integer := 18
     );
     port(
-        ml_score: out std_logic_vector(score_width-1 downto 0);
+        ml_score: in std_logic_vector(score_width-1 downto 0);
         ml_out: out std_logic
     );
 end ml_comparison;

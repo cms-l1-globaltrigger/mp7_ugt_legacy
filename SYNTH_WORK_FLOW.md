@@ -50,13 +50,13 @@ pip install git+https://github.com/cms-l1-globaltrigger/ugt-fwtools.git@0.6.0
 ### Create setup_env_synth.sh
 
 ```bash
-echo << EOF
+cat <<EOF > setup_env_synth.sh
 export VIVADO_BASE_DIR=/opt/xilinx/Vivado
 export UGT_VIVADO_BASE_DIR=${VIVADO_BASE_DIR}
 export UGT_VIVADO_VERSION=2021.2
 export UGT_BLK_MEM_GEN_VERSION_SYNTH=blk_mem_gen_v8_4_5
 source ${UGT_VIVADO_BASE_DIR}/${UGT_VIVADO_VERSION}/settings64.sh
-EOF > setup_env_synth.sh
+EOF
 ```
 
 ```bash

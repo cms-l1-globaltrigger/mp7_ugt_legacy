@@ -20,11 +20,11 @@ $ tm-vhdlproducer ~/L1Menu_Collisions2024_v1_4_0.xml -d 1 -o ~/vhdl_prod_out
 $ git clone https://github.com/cms-l1-globaltrigger/cms-l1-menu.git
 $ cd cms-l1-menu
 $ git checkout master
-$ git checkout -b <new menu name>
-$ cp -r ~/vhdl_prod_out 2024/.
-$ git add 2024/vhdl_prod_out/
+$ git checkout -b <new menu name>-d1
+$ cp -r <dir path producer output files>/<new menu XML file>-d1 2024/.
+$ git add 2024/<new menu XML file>-d1
 $ git commit -am "new menu added"
-$ git push --set-upstream origin <new menu name> 
+$ git push --set-upstream origin <new menu name>-d1 
 ```
 
 ## Synthesis on CERN server

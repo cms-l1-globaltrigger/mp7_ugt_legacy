@@ -66,7 +66,7 @@ EOF
 ```bash
 MENU_NAME=L1Menu_Collisions2024_v1_4_0  # replace
 XML_URL=https://raw.githubusercontent.com/cms-l1-globaltrigger/$MENU_NAME/2024/$MENU_NAME/xml/$MENU_NAME.xml
-BUILD_ID=0x8001  # replace accoring to bookkeeping
+BUILD_ID=0x8001  # replace according to bookkeeping
 ugt-synthesize $XML_URL --ugttag v1.27.0 --mp7tag v3.2.2_Vivado2021+_ugt_v4 --build $BUILD_ID --path synth
 ```
 

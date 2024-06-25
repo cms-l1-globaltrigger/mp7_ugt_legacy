@@ -1,7 +1,7 @@
 # Workflow creating uGT firmware
 
-- Download menu XML to local
-- Open new menu XML with TME 0.17.1 for checks, but you **MUST NOT save** the XML file!
+* Download menu XML to local
+* Open new menu XML with **TME 0.17.1** for checks, but you **MUST NOT save** the XML file!
 
 ## Create VHDL files of new menu with VHDL Producer 2.19.0
 ```bash
@@ -39,13 +39,15 @@ $ git checkout v1.27.0
 $ touch setup_env_synth.sh
 ```
 
-- Insert following lines in setup_env_synth.sh:
+### Insert following lines in setup_env_synth.sh:
+```bash
 ## Synthesis (Vivado)
 export VIVADO_BASE_DIR=/opt/xilinx/Vivado
 export UGT_VIVADO_BASE_DIR=${VIVADO_BASE_DIR}
 export UGT_VIVADO_VERSION=2021.2
 export UGT_BLK_MEM_GEN_VERSION_SYNTH=blk_mem_gen_v8_4_5
 source ${VIVADO_BASE_DIR}/${UGT_VIVADO_VERSION}/settings64.sh
+```
 
 ```bash
 $ . setup_env_synth.sh
@@ -91,12 +93,12 @@ Example:
 $ scp /home/../synthesis_dir/synthesis_output/0x1192/<file name>.tar.gz /afs/cern.ch/user/<>/<user>/.
 ```
 
-- login lxplus and copy TAR file
+### login lxplus and copy TAR file
 ```bash
 $ scp <file name>.tar.gz <user>@cmsusr:.
 ```
 
-- login <user>@cmsusr and get XML and test vector file of new menu
+### login <user>@cmsusr and get XML and test vector file of new menu
 ```bash
 $ wget https://raw.githubusercontent.com/cms-l1-globaltrigger/<new menu name>/2024/<new menu name>/xml/<new menu name>.xml
 ```
@@ -109,12 +111,12 @@ $ wget https://raw.githubusercontent.com/cms-l1-globaltrigger/L1Menu_Collisions2
 $ wget https://raw.githubusercontent.com/cms-l1-globaltrigger/<new menu name>/2024/<new menu name>/testvectors/<test vector file>.txt
 ```
 
-- login test crate and copy TAR file
+### login test crate and copy TAR file
 ```bash
 $ cp ../<user>/<file name>.tar.gz firmware/.
 ```
 
-## Upload FW
+## Upload FW on testcrate
 ```bash
 $ tdf run uploadfw_gt firmware/<file name>.tar.gz --rebootfpga
 $ tdf run crate_status

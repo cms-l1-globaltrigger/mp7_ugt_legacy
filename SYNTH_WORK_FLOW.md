@@ -75,7 +75,7 @@ ugt-synthesize $XML_URL --ugttag v1.27.0 --mp7tag v3.2.2_Vivado2021+_ugt_v4 --bu
 ugt-checksynth synth/$BUILD_ID/build_$BUILD_ID.cfg
 ```
 
-## Firemware packing (creating TAR file)
+## Firmware packing (creating TAR file)
 ```bash
 ugt-fwpacker synth/$BUILD_ID/build_$BUILD_ID.cfg
 ```

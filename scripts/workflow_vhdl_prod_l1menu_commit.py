@@ -15,26 +15,10 @@ DefaultDist = 1
 DefaultL1menuSubdir = '2024'
 """Default distribution number."""
 
-def run_command(*args):
-    command = ' '.join(args)
-    logging.info(">$ %s", command)
-    os.system(command)
-
-
-def download_file_from_url(url, filename):
-    """Download files from URL."""
-    # Remove existing file.
-    tb.remove(filename)
-    # Download file
-    logging.info("retrieving %s", url)
-    urllib.request.urlretrieve(url, filename)
-    tb.make_executable(filename)
-    # TODO!
-    with open(filename) as fp:
-        d = fp.read()
-    d = d.replace(', default=os.getlogin()', '')
-    with open(filename, 'w') as fp:
-        fp.write(d)
+#def run_command(*args):
+    #command = ' '.join(args)
+    #logging.info(">$ %s", command)
+    #os.system(command)
 
 
 def parse_args():

@@ -24,7 +24,7 @@ DefaultL1menuSubdir = '2024'
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('menu_xml', help="local menu xml file")
+    parser.add_argument('menu_xml', help="path to local menu xml file")
     parser.add_argument('--dist', default=DefaultDist, help="distribution (default is '{}')".format(DefaultDist))
     parser.add_argument('--repo', metavar='<path>', default=DefaultL1menuRepo, help="L1Menu repo path (default is '{}')".format(DefaultL1menuRepo))
     parser.add_argument('--subdir', default=DefaultL1menuSubdir, help="L1Menu repo sub dir name (default is '{}')".format(DefaultL1menuSubdir))
@@ -48,15 +48,14 @@ def main():
 
     logging.info("===========================================================================")
     logging.info("git checkout %s ...", args.repo)
-    #subprocess.check_call(['bash', '-c', 'cd; mkdir cms-l1-menu'])
 
     # Define local directory to clone into
     menu_repo_name = args.repo.split("/")[-1].split(".")[0]
     local_dir = os.path.join(os.path.expanduser("~"), menu_repo_name)
 
-    # Clone the remote repository
-    cmd = 'cd; git clone {0}'.format(args.repo)     
-    subprocess.check_call(['bash', '-c', cmd])
+    ## Clone the remote repository
+    #cmd = 'cd; git clone {0}'.format(args.repo)     
+    #subprocess.check_call(['bash', '-c', cmd])
 
     menu_repo_local = os.path.join(os.path.expanduser("~"), menu_repo_name, args.subdir)
     if not os.path.exists(menu_repo_local):
@@ -79,6 +78,8 @@ def main():
     ## Create a new branch and check it out
     cmd = 'cd {0}; git checkout -b {1}'.format(local_dir, new_branch_name)     
     subprocess.check_call(['bash', '-c', cmd])
+    
+    exit(0)
     
     cmd = 'cd {0}; pip install --upgrade pip; pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.19.0; tm-vhdlproducer {1} -d {2}'.format(menu_repo_local, args.menu_xml, args.dist)
     subprocess.check_call(['bash', '-c', cmd])

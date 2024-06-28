@@ -3,14 +3,18 @@
 * Download menu XML to local
 * Open new menu XML with **TME 0.17.1** for checks, but you **MUST NOT save** the XML file!
 * This workflow uses `L1Menu_Collisions2024_v1_4_0` as example.
+
+**Note:** the following instructions assume Pyhon 3.9 as interpreter, but newer versions (3.10 and 3.11) will work too. At the moment some tools do not support Python 3.12.
   
 ## Create a menu distribution and commit to menu repo
 
-Create VHDL code of a menu using VHDL Producer 2.19.0 and commit menu distribution to new menu repo branch.
+Create VHDL code of a menu using [VHDL Producer](https://github.com/cms-l1-globaltrigger/tm-vhdlproducer) 2.19.0 and commit menu distribution to new menu repo branch (ideally a fork of [cms-l1-menu](https://github.com/cms-l1-globaltrigger/cms-l1-menu)).
+
+Using a helper script for convenience:
 
 ```bash
-wget https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/synth_work_flow/scripts/workflow_vhdl_prod_l1menu_commit.sh ~/
-. ~/workflow_vhdl_prod_l1menu_commit.sh ~/L1Menu_Collisions2024_v1_4_0.xml https://github.com/mjeitler/cms-l1-menu.git
+wget https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/synth_work_flow/scripts/workflow_vhdl_prod_l1menu_commit.py
+python3.9 workflow_vhdl_prod_l1menu_commit.py ~/L1Menu_Collisions2024_v1_4_0.xml --repo https://github.com/<username>/cms-l1-menu.git
 ```
 
 ## Synthesis on CERN server

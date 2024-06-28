@@ -39,8 +39,8 @@ VHDLProducerUrl = f"git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.
 
 
 def validate_menu_name(name: str) -> str:
-    """XML name file name with distribution."""
-    if not re.match(r'^L1Menu_\w+\-{1}d[0-9]{1,2}$', name):
+    """L1menu XML name tag."""
+    if not re.match(r'^L1Menu_\w+', name):
         raise ValueError(f"not a valid menu name: '{name}'")
 
 

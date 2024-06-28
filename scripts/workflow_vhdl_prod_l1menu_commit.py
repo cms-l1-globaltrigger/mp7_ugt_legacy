@@ -2,11 +2,11 @@
 files to a remote git repository.
 
 What this script does:
- - select a proper python3 interpreter to work with (>= Python 3.9)
+ - verify python interpreter version (>= Python 3.9)
  - create a temporary directory
  - inside, create a python virtual environment
- - install tm-vhdlproducer
- - clone a remote git repository
+ - install tm-vhdlproducer inside virtual environment
+ - clone remote git repository
  - create a new menu distribution using tm-vhdlproducer
  - create a new git branch for the distribution
  - add the distribution files to the branch
@@ -96,10 +96,10 @@ def main():
 
         logging.info("git checkout %r ...", args.repo)
 
-        ## Define local directory to clone into
+        # Define local directory to clone into
         menu_repo_name = "cms-l1-menu"
 
-        ## Clone the remote repository
+        # Clone the remote repository
         subprocess.run(["git", "clone", args.repo, menu_repo_name], check=True)
 
         # Change into the repository

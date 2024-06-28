@@ -9,7 +9,7 @@
 Create VHDL code of a menu using VHDL Producer 2.19.0 and commit menu distribution to new menu repo branch.
 
 ```bash
-. ~/mp7_ugt_legacy/scripts/workflow_vhdl_prod_l1menu_commit.sh ~/L1Menu_Collisions2024_v1_4_0.xml
+. ~/mp7_ugt_legacy/scripts/workflow_vhdl_prod_l1menu_commit.sh ~/L1Menu_Collisions2024_v1_4_0.xml https://github.com/mjeitler/cms-l1-menu.git
 ```
 
 ## Synthesis on CERN server

@@ -19,12 +19,11 @@ import argparse
 import configparser
 import logging
 import os
+import re
 import subprocess
 import sys
 import tempfile
 import xml.etree.ElementTree as ET
-
-import toolbox as tb
 
 DefaultL1menuRepo = "https://github.com/mjeitler/cms-l1-menu.git"
 """Default URL L1Menu repo."""
@@ -37,6 +36,12 @@ DefaultL1menuSubdir = "2024"
 
 VHDLProsucerVersion = "2.19.0"
 VHDLProducerUrl = f"git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@{VHDLProsucerVersion}"
+
+
+def validate_menu_name(name: str) -> str:
+    """XML name file name with distribution."""
+    if not re.match(r'^L1Menu_\w+\-{1}d[0-9]{1,2}$', name):
+        raise ValueError(f"not a valid menu name: '{name}'")
 
 
 def check_interpreter_version() -> None:
@@ -80,7 +85,7 @@ def main():
     menu_name = parse_menu_name(menu_filename)
 
     # Validate menu name
-    tb.xmlname_t(menu_name)
+    validate_menu_name(menu_name)
 
     # Create temporary working dir
     with tempfile.TemporaryDirectory() as temp_dir:

@@ -15,11 +15,6 @@ DefaultDist = 1
 DefaultL1menuSubdir = '2024'
 """Default distribution number."""
 
-#def run_command(*args):
-    #command = ' '.join(args)
-    #logging.info(">$ %s", command)
-    #os.system(command)
-
 
 def parse_args():
     """Parse command line arguments."""
@@ -34,28 +29,33 @@ def parse_args():
 def main():
     """Main routine."""
 
-    # Parse command line arguments.
+    ## Parse command line arguments.
     args = parse_args()
     
     tree = ET.parse(args.menu_xml)
     root = tree.getroot()    
     menu_xml_name = root.find('name').text    
-    # check menu name
+    ## check menu name
     tb.xmlname_t(menu_xml_name)
         
-    # Setup console logging
+    ## Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
     logging.info("===========================================================================")
     logging.info("git checkout %s ...", args.repo)
 
-    # Define local directory to clone into
+    ## Define local directory to clone into
     menu_repo_name = args.repo.split("/")[-1].split(".")[0]
     local_dir = os.path.join(os.path.expanduser("~"), menu_repo_name)
 
+    ## Remove existing local menu repo if exists
+    if os.path.exists(os.path.join(os.path.expanduser("~"), menu_repo_name)):
+        cmd = 'rm -rf {0}'.format(os.path.join(os.path.expanduser("~"), menu_repo_name))     
+        subprocess.check_call(['bash', '-c', cmd])        
+    
     ## Clone the remote repository
-    #cmd = 'cd; git clone {0}'.format(args.repo)     
-    #subprocess.check_call(['bash', '-c', cmd])
+    cmd = 'cd; git clone {0}'.format(args.repo)     
+    subprocess.check_call(['bash', '-c', cmd])
 
     menu_repo_local = os.path.join(os.path.expanduser("~"), menu_repo_name, args.subdir)
     if not os.path.exists(menu_repo_local):
@@ -69,17 +69,13 @@ def main():
     branches = [token.strip() for token in result.stdout.decode().split()]
 
     for branch in branches:
-        #print(branch)
         branch = branch.split('/')[-1]
-        #print(branch)
         if branch == new_branch_name:
             raise RuntimeError("\033[1;31m Branch {} exists!!! \033[0m".format(new_branch_name))
 
     ## Create a new branch and check it out
     cmd = 'cd {0}; git checkout -b {1}'.format(local_dir, new_branch_name)     
     subprocess.check_call(['bash', '-c', cmd])
-    
-    exit(0)
     
     cmd = 'cd {0}; pip install --upgrade pip; pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.19.0; tm-vhdlproducer {1} -d {2}'.format(menu_repo_local, args.menu_xml, args.dist)
     subprocess.check_call(['bash', '-c', cmd])

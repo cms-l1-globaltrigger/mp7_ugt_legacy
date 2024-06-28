@@ -1,103 +1,157 @@
+"""Automated workflow for producing a new menu distributions and pushing the
+files to a remote git repository.
+
+What this script does:
+ - select a proper python3 interpreter to work with (>= Python 3.9)
+ - create a temporary directory
+ - inside, create a python virtual environment
+ - install tm-vhdlproducer
+ - clone a remote git repository
+ - create a new menu distribution using tm-vhdlproducer
+ - create a new git branch for the distribution
+ - add the distribution files to the branch
+ - pushes the branch to the remote git repository
+ - finally clean up all temporary files
+
+"""
+
 import argparse
 import configparser
 import logging
 import os
 import subprocess
+import sys
+import tempfile
+import xml.etree.ElementTree as ET
 
 import toolbox as tb
 
-import xml.etree.ElementTree as ET
-
-DefaultL1menuRepo = 'https://github.com/mjeitler/cms-l1-menu.git'
+DefaultL1menuRepo = "https://github.com/mjeitler/cms-l1-menu.git"
 """Default URL L1Menu repo."""
+
 DefaultDist = 1
 """Default distribution number."""
-DefaultL1menuSubdir = '2024'
+
+DefaultL1menuSubdir = "2024"
 """Default distribution number."""
+
+VHDLProsucerVersion = "2.19.0"
+VHDLProducerUrl = f"git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@{VHDLProsucerVersion}"
+
+
+def check_interpreter_version() -> None:
+    version_info = sys.version_info
+    if (version_info.major, version_info.minor) < (3, 9):
+        raise RuntimeError(f"Requires at least Python 3.9 (current is {version_info.major}.{version_info.minor})")
+
+
+def parse_menu_name(filename: str) -> str:
+    tree = ET.parse(filename)
+    root = tree.getroot()
+    return root.find("name").text  # TODO weak search
 
 
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('menu_xml', help="path to local menu xml file")
-    parser.add_argument('--dist', default=DefaultDist, help="distribution (default is '{}')".format(DefaultDist))
-    parser.add_argument('--repo', metavar='<path>', default=DefaultL1menuRepo, help="L1Menu repo path (default is '{}')".format(DefaultL1menuRepo))
-    parser.add_argument('--subdir', default=DefaultL1menuSubdir, help="L1Menu repo sub dir name (default is '{}')".format(DefaultL1menuSubdir))
+    parser.add_argument("menu_xml", help="path to local menu xml file")
+    parser.add_argument("-d", "--dist", default=DefaultDist, help=f"distribution (default is {DefaultDist!r})")
+    parser.add_argument("--repo", metavar="<path>", default=DefaultL1menuRepo, help=f"L1Menu repo path (default is {DefaultL1menuRepo!r})")
+    parser.add_argument("--subdir", default=DefaultL1menuSubdir, help=f"L1Menu repo sub dir name (default is {DefaultL1menuSubdir!r})")
+    parser.add_argument("-y", "--yes", "--assume-yes", action="store_true", help="automatically answer yes for all questions")
     return parser.parse_args()
 
 
 def main():
     """Main routine."""
 
-    ## Parse command line arguments.
+    # Parse command line arguments.
     args = parse_args()
-    
-    tree = ET.parse(args.menu_xml)
-    root = tree.getroot()    
-    menu_xml_name = root.find('name').text    
-    ## check menu name
-    tb.xmlname_t(menu_xml_name)
-        
-    ## Setup console logging
-    logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
-    logging.info("===========================================================================")
-    logging.info("git checkout %s ...", args.repo)
+    # Setup console logging
+    logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
 
-    ## Define local directory to clone into
-    menu_repo_name = args.repo.split("/")[-1].split(".")[0]
-    local_dir = os.path.join(os.path.expanduser("~"), menu_repo_name)
+    check_interpreter_version()
 
-    ## Remove existing local menu repo if exists
-    if os.path.exists(os.path.join(os.path.expanduser("~"), menu_repo_name)):
-        cmd = 'rm -rf {0}'.format(os.path.join(os.path.expanduser("~"), menu_repo_name))     
-        subprocess.check_call(['bash', '-c', cmd])        
-    
-    ## Clone the remote repository
-    cmd = 'cd; git clone {0}'.format(args.repo)     
-    subprocess.check_call(['bash', '-c', cmd])
+    # Absoulte path to input file
+    menu_filename = os.path.abspath(args.menu_xml)
 
-    menu_repo_local = os.path.join(os.path.expanduser("~"), menu_repo_name, args.subdir)
-    if not os.path.exists(menu_repo_local):
-        cmd = 'cd {0}; mkdir {1}'.format(local_dir, args.subdir)
-        subprocess.check_call(['bash', '-c', cmd])
+    # Extract menu name for new branch
+    menu_name = parse_menu_name(menu_filename)
 
-    new_branch_name = menu_xml_name + '-d' + str(args.dist)
+    # Validate menu name
+    tb.xmlname_t(menu_name)
 
-    cmd = 'cd {0}; git branch -a'.format(local_dir)     
-    result = subprocess.run(['bash', '-c', cmd], capture_output=True, check=True)
-    branches = [token.strip() for token in result.stdout.decode().split()]
+    # Create temporary working dir
+    with tempfile.TemporaryDirectory() as temp_dir:
+        logging.info("created temporary dir %r ...", temp_dir)
+        os.chdir(temp_dir)
 
-    for branch in branches:
-        branch = branch.split('/')[-1]
-        if branch == new_branch_name:
-            raise RuntimeError("\033[1;31m Branch {} exists!!! \033[0m".format(new_branch_name))
+        logging.info("creating virtual env ...")
 
-    ## Create a new branch and check it out
-    cmd = 'cd {0}; git checkout -b {1}'.format(local_dir, new_branch_name)     
-    subprocess.check_call(['bash', '-c', cmd])
-    
-    cmd = 'cd {0}; pip install --upgrade pip; pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.19.0; tm-vhdlproducer {1} -d {2}'.format(menu_repo_local, args.menu_xml, args.dist)
-    subprocess.check_call(['bash', '-c', cmd])
+        # Create virtual python environment usign current interpreter
+        subprocess.run([sys.executable, "-m", "venv", "env"], check=True)
 
-    ## Add files
-    cmd = 'cd {0}; git add {1}'.format(menu_repo_local, new_branch_name)     
-    subprocess.check_call(['bash', '-c', cmd])
+        env_activate = os.path.join(temp_dir, "env", "bin", "activate")
 
-    ## Commit the changes
-    cmd = 'cd {0}; git commit -am "Created new branch for new menu" '.format(menu_repo_local)     
-    subprocess.check_call(['bash', '-c', cmd])
+        logging.info("git checkout %r ...", args.repo)
 
-    ## Push the new branch to the remote repository
-    cmd = 'cd {0}; git push --set-upstream origin {1}'.format(menu_repo_local, new_branch_name)     
-    subprocess.check_call(['bash', '-c', cmd])
+        ## Define local directory to clone into
+        menu_repo_name = "cms-l1-menu"
 
-    logging.info("===========================================================================")
-    logging.info("New branch %s pushed to remote.", new_branch_name)
-    logging.info("===========================================================================")
-    
-    logging.info("done.")
+        ## Clone the remote repository
+        subprocess.run(["git", "clone", args.repo, menu_repo_name], check=True)
+
+        # Change into the repository
+        os.chdir(menu_repo_name)
+
+        new_branch_name = f"{menu_name}-d{args.dist:d}"
+
+        result = subprocess.run(["git", "branch", "-a"], capture_output=True, check=True)
+        branches = [token.strip() for token in result.stdout.decode().split()]
+
+        for branch in branches:
+            branch_name = branch.split("/")[-1]
+            if branch_name == new_branch_name:
+                raise RuntimeError(f"git branch already exists: {new_branch_name!r}")
+
+        if not os.path.exists(args.subdir):
+            os.makedirs(args.subdir)
+
+        # Change into the subdir
+        os.chdir(args.subdir)
+
+        ## Create a new branch and check it out
+        subprocess.run(["git", "checkout", "-b", new_branch_name], check=True)
+
+        cmd = f". {env_activate}; pip install --upgrade pip"
+        subprocess.run(["bash", "-c", cmd], check=True)
+
+        cmd = f". {env_activate}; pip install {VHDLProducerUrl}"
+        subprocess.run(["bash", "-c", cmd], check=True)
+
+        cmd = f". {env_activate}; tm-vhdlproducer {menu_filename} -d {args.dist}"
+        subprocess.run(["bash", "-c", cmd], check=True)
+
+        # Add files
+        subprocess.run(["git", "add", new_branch_name], check=True)
+
+        # Commit the changes
+        subprocess.run(["git", "commit", "-am", "Created new branch for new menu"], check=True)
+
+        logging.info("about to push changes to upstream origin [%s]", args.repo)
+
+        # Push the new branch to the remote repository
+        prompt = "Do you want to continue? (y/N): "
+        response = input(prompt).strip().lower()
+        if response != "y":
+            logging.info("aborted.")
+        else:
+            subprocess.run(["git", "push", "--set-upstream", "origin", new_branch_name], check=True)
+            logging.info("new branch %r pushed to remote origin", new_branch_name)
+
+            logging.info("done.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

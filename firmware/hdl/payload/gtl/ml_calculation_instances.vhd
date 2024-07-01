@@ -49,8 +49,8 @@ begin
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
     htmhf_i(MAX_ESUMS_BITS-1 downto 0) <= htmhf;
     
-    axo_i: if obj == AXO_SEL generate
-        v1_i: if model == AXO_MODEL_V1 generate
+    axo_i: if obj = AXO_SEL generate
+        v1_i: if model = AXO_MODEL_V1 generate
             axol1tl_v1_i: entity work.axol1tl_v1
                 port map(
                     lhc_clk, ap_rst, ap_start,
@@ -71,7 +71,7 @@ begin
                     open
                 );
         end generate v1_i;
-        v3_i: if model == AXO_MODEL_V3 generate
+        v3_i: if model = AXO_MODEL_V3 generate
             axol1tl_v3_i: entity work.axol1tl_v3
                 port map(
                     lhc_clk, ap_rst, ap_start,
@@ -93,8 +93,8 @@ begin
                 );
         end generate v3_i;
     end generate axo_i;
-    topo_i: if obj == TOPO_SEL generate
-        base_v1_i: if model == TOPO_MODEL_BASE_V1 generate
+    topo_i: if obj = TOPO_SEL generate
+        base_v1_i: if model = TOPO_MODEL_BASE_V1 generate
             base_v1_inst_i: entity work.topo_base_v1
                 port map(
                     lhc_clk, ap_rst, ap_start,

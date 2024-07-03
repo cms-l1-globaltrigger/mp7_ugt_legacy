@@ -17,7 +17,21 @@ wget https://raw.githubusercontent.com/cms-l1-globaltrigger/mp7_ugt_legacy/synth
 python3.9 workflow_vhdl_prod_l1menu_commit.py ~/L1Menu_Collisions2024_v1_4_0.xml --repo https://github.com/<username>/cms-l1-menu.git
 ```
 
-## Synthesis on CERN server
+
+## Synthesis with GitLab runner
+
+CI/CD build system for automated synthesizing uGT firmware in [ugt-build](https://gitlab.cern.ch/cms-l1-globaltrigger/ugt-build/).
+
+### Instructions
+
+In `build.yml` adjust parameters `BUILD_ID` and `MENU_URL`.
+
+In _Build_ -> _Pipelines_ start the pipeline manually.
+
+On success download the `fwpacker:archive` artifact containing the bundled firmware tarball.
+
+
+## Synthesis (step by step) on CERN server
 
 ### Install ugt-fwtools
 

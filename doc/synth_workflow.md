@@ -40,7 +40,7 @@ See [cms-l1-globaltrigger/ugt-fwtools](https://github.com/cms-l1-globaltrigger/u
 ```bash
 python3.9 -m venv env
 . env/bin/activate
-pip install git+https://github.com/cms-l1-globaltrigger/ugt-fwtools.git@0.6.0
+pip install git+https://github.com/cms-l1-globaltrigger/ugt-fwtools.git@0.7.0
 ```
 
 ### Create setup_env_synth.sh

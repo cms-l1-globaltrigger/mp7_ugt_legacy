@@ -48,6 +48,7 @@ begin
     etm_i(MAX_ESUMS_BITS-1 downto 0) <= etm;
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
+    htmhf_i(MAX_ESUMS_BITS-1 downto 0) <= htmhf;
     
     anomaly_detection_i: entity work.axol1tl_v4
         port map(

@@ -1,6 +1,6 @@
 
 -- Description:
--- Wrapper for "anomaly detection".
+-- Wrapper for "AXO model v4".
 
 -- Version history:
 -- HB 2024-07-04: first design.

@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - source files:
+  - ../payload/gtl/axol1tl_trigger/axol1tl_v4
 - dep file:
+  - ../cfg/axol1tl_trigger.dep
 
 ## [v1.27.0] - 2024-05-28
 ### Comment

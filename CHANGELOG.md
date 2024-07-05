@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v1.28.0] - 2024-07-04
 ### Comment
 
-- implemention of AXOL1TL model v4
+- implementation of AXOL1TL model v4
 
 ### Added
 - source files:

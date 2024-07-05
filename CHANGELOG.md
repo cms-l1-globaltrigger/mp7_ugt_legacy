@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.28.1] - 2024-07-05
+### Comment
+
+- added missing info in some files
+
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../payload/gtl_module_tpl.vhd
+
 ## [v1.28.0] - 2024-07-04
 ### Comment
 

@@ -19,7 +19,6 @@ entity axol1tl_v4_wrapper is
     generic	(
         sim_mode: boolean := true;
         threshold: integer := 4150
---        threshold: std_logic_vector(15 downto 0) := X"0136"
    );
     port(
         lhc_clk: in std_logic;
@@ -32,7 +31,7 @@ entity axol1tl_v4_wrapper is
         etm: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         htm: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         etmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
---         htmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        htmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         adt_out: out std_logic;
         anomaly_score_o: out std_logic_vector(17 downto 0)
     );
@@ -53,6 +52,7 @@ begin
     etm_i(MAX_ESUMS_BITS-1 downto 0) <= etm;
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
+    htmhf_i(MAX_ESUMS_BITS-1 downto 0) <= htmhf;
     
     anomaly_detection_i: entity work.axol1tl_v4
         port map(

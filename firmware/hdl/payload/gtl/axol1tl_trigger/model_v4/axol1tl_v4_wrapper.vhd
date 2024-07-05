@@ -1,9 +1,13 @@
 
 -- Description:
--- Wrapper for "AXO model v4".
+-- Wrapper for "anomaly detection".
 
 -- Version history:
--- HB 2024-07-04: first design.
+-- SPS 2024-07-24: copy to "axol1tl_v4"
+-- HB  2024-01-24: renamed "adt" to "axol1tl_v3"
+-- HB  2023-01-18: removed comparator and delay, added anomaly_score_o for simulation.
+-- HB  2022-11-11: added comparator and delay for simulation.
+-- HB  2022-08-29: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;

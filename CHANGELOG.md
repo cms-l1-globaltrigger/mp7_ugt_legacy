@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.28.0] - 2024-07-05
+### Comment
+
+- implementation of AXOL1TL model v4
+
+### Added
+- source files:
+  - ../payload/gtl/axol1tl_trigger/axol1tl_v4
+
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../payload/gtl_module_tpl.vhd
+- dep file:
+  - ../cfg/axol1tl_trigger.dep
+
 ## [v1.27.0] - 2024-05-28
 ### Comment
 

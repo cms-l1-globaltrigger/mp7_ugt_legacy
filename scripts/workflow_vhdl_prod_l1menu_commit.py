@@ -34,7 +34,7 @@ DefaultDist = 1
 DefaultL1menuSubdir = "2024"
 """Default distribution number."""
 
-VHDLProsucerVersion = "2.19.0"
+VHDLProsucerVersion = "2.20.0"
 VHDLProducerUrl = f"git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@{VHDLProsucerVersion}"
 
 

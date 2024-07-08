@@ -8,7 +8,7 @@
   
 ## Create a menu distribution and commit to menu repo
 
-Create VHDL code of a menu using [VHDL Producer](https://github.com/cms-l1-globaltrigger/tm-vhdlproducer) 2.19.0 and commit menu distribution to new menu repo branch (ideally a fork of [cms-l1-menu](https://github.com/cms-l1-globaltrigger/cms-l1-menu)).
+Create VHDL code of a menu using [VHDL Producer](https://github.com/cms-l1-globaltrigger/tm-vhdlproducer) 2.20.0 and commit menu distribution to new menu repo branch (ideally a fork of [cms-l1-menu](https://github.com/cms-l1-globaltrigger/cms-l1-menu)).
 
 Using a helper script for convenience:
 

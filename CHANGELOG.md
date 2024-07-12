@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.28.1] - 2024-07-12
+
+### Fixed
+- interface for axol1tl models v1 and v3 (#54).
+
 ## [v1.28.0] - 2024-07-05
 ### Comment
 
@@ -40,7 +45,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - mp7_ugt firmware release v1.26.0
-- CICADA on link 11 with 16 bits cicada score 
+- CICADA on link 11 with 16 bits cicada score
 - development for axol1tl trigger (axol1tl_trigger) with models
 - no topological trigger (topo_trigger) - VHDL files of models missing
 
@@ -89,7 +94,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/top_decl.vhd
   - ../payload/gtl_module_tpl.vhd
   - ../packages/gt_mp7_core_pkg.vhd
-  
+
 ## [v1.25.1] - 2023-09-28
 ### Comment
 

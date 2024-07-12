@@ -10,7 +10,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
- 
+
 use work.gtl_pkg.all;
 
 entity axol1tl_v1_wrapper is
@@ -30,7 +30,7 @@ entity axol1tl_v1_wrapper is
         etm: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         htm: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         etmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
---         htmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        htmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         adt_out: out std_logic;
         anomaly_score_o: out std_logic_vector(17 downto 0)
     );
@@ -43,7 +43,7 @@ architecture rtl of axol1tl_v1_wrapper is
     signal ap_rst: std_logic := '0';
     signal ap_start: std_logic := '1';
     signal adt: std_logic_vector(0 downto 0) := "0";
-    
+
 begin
 
     ett_i(MAX_ESUMS_BITS-1 downto 0) <= ett;
@@ -51,7 +51,7 @@ begin
     etm_i(MAX_ESUMS_BITS-1 downto 0) <= etm;
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
-    
+
     axol1tl_v1_i: entity work.axol1tl_v1
         port map(
             lhc_clk, ap_rst, ap_start,
@@ -75,7 +75,7 @@ begin
     adt(0) <= '1' when to_integer(unsigned(anomaly_score)) >= threshold else '0';
 
     adt_out <= adt(0);
-    
+
     anomaly_score_o <= anomaly_score;
 
 end architecture rtl;

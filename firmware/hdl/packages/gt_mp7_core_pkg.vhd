@@ -4,12 +4,12 @@
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
 
--- mp7_ugt (=FRAME_VERSION): v1.28.0
+-- mp7_ugt (=FRAME_VERSION): v1.28.1
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.28.0
+-- gt: v1.28.1
 -- frame: v1.4.2 (see frame.vhd)
--- gtl: v1.22.0 (see gtl_module_tpl.vhd)
+-- gtl: v1.22.1 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
 -- HB 2023-04-08: v1.22.2 - Changed in scripts/mp7_patch.py (for area_constraints.tcl).
@@ -36,6 +36,7 @@
 --
 -- gtl history:
 
+-- BA 2024-07-12: v1.22.1: Fixed interface of AXOL1TL models v1 and v3.
 -- HB 2024-07-05: v1.22.0: Implemented AXOL1TL model v4.
 -- HB 2024-05-23: v1.21.0: Implemented HTMHF and calo comb multi condition.
 -- HB 2023-12-18: v1.20.0: Implemented topological and cicada trigger.
@@ -102,7 +103,7 @@ package gt_mp7_core_pkg is
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GT_MINOR_VERSION      : integer range 0 to 255 := 28;
-    constant GT_REV_VERSION        : integer range 0 to 255 := 0;
+    constant GT_REV_VERSION        : integer range 0 to 255 := 1;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &
@@ -114,7 +115,7 @@ package gt_mp7_core_pkg is
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 22;
-    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 0;
+    constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 1;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant FDL_FW_MINOR_VERSION      : integer range 0 to 255 := 4;
@@ -220,6 +221,3 @@ package body gt_mp7_core_pkg is
     end function;
 
 end;
-
-
-

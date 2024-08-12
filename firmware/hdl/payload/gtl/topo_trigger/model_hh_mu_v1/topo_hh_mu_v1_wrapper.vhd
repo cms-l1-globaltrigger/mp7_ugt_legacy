@@ -26,6 +26,7 @@ entity topo_trigger_hh_mu_v1_wrapper is
         etm: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         htm: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         etmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        htmhf: in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         topo_out: out std_logic;
         topo_score_o: out std_logic_vector(15 downto 0)
     );
@@ -46,6 +47,7 @@ begin
     etm_i(MAX_ESUMS_BITS-1 downto 0) <= etm;
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
+    htmhf_i(MAX_ESUMS_BITS-1 downto 0) <= htmhf;
     
     topo_trigger_hh_mu_v1_i: entity work.topo_trigger_hh_mu_v1
         port map(

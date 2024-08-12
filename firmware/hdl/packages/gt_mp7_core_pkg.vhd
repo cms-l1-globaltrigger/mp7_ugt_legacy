@@ -37,6 +37,7 @@
 -- gtl history:
 
 -- HB 2024-07-08: v1.23.0: Implemented VHDL files for topological trigger models (TBD).
+-- BA 2024-07-12: v1.22.1: Fixed interface of AXOL1TL models v1 and v3.
 -- HB 2024-07-05: v1.22.0: Implemented AXOL1TL model v4.
 -- HB 2024-05-23: v1.21.0: Implemented HTMHF and calo comb multi condition.
 -- HB 2023-12-18: v1.20.0: Implemented topological and cicada trigger.
@@ -221,6 +222,3 @@ package body gt_mp7_core_pkg is
     end function;
 
 end;
-
-
-

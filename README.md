@@ -25,7 +25,7 @@ files:
 
 | utm | TME | VHDL Producer |
 |:-:|:-:|:-:|
-| 0.13.0 | 0.17.0 | 2.19.0 |
+| 0.13.0 | 0.17.1 | 2.19.0 |
 
 
 Following dependencies exist for uGT firmware:
@@ -136,7 +136,7 @@ python3 -m venv env
 ugt-simulate <xml_file> --tv <testvector_file> --ugttag <ugt tag or branch> [--mp7_repo_tag <MP7 repo tag - default is v3.2.2_Vivado2021+_ugt_v4>] [--ignored]
 ```
 
-Example 
+Example
 
 ```bash
 ugt-simulate https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2024_v1_2_1-d1/2024/L1Menu_Collisions2024_v1_2_1-d1/xml/L1Menu_Collisions2024_v1_2_1-d1.xml \

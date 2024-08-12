@@ -8,7 +8,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
- 
+
 use work.gtl_pkg.all;
 
 entity topo_trigger_hh_ele_v1_wrapper is
@@ -38,7 +38,7 @@ architecture rtl of topo_trigger_hh_ele_v1_wrapper is
     signal ap_rst: std_logic := '0';
     signal ap_start: std_logic := '1';
     signal topo: std_logic_vector(0 downto 0) := "0";
-    
+
 begin
 
     ett_i(MAX_ESUMS_BITS-1 downto 0) <= ett;
@@ -46,7 +46,7 @@ begin
     etm_i(MAX_ESUMS_BITS-1 downto 0) <= etm;
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
-    
+
     topo_trigger_hh_ele_v1_i: entity work.topo_trigger_hh_ele_v1
         port map(
             lhc_clk, ap_rst, ap_start,
@@ -70,7 +70,7 @@ begin
     topo(0) <= '1' when to_integer(unsigned(topo_score)) >= threshold else '0';
 
     topo_out <= topo(0);
-    
+
     topo_score_o(15 downto 0) <= topo_score;
 
 end architecture rtl;

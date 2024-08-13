@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.29.0] - 2024-08-12
+### Comment
+
+- mp7_ugt firmware release v1.29.0
+- branch for implementing VHDL files of TOPO models (#56) - TBD 
+- added TOPO models "base_v1" (this was used for the first TOPO tests)
+- added port "htmhf" in all topo wrapper files (e.g.: topo_trigger_hh_ele_v1_wrapper.vhd, ...)
+- changed script pkgpatch.py (added function "calc_fw_hash" for repo branch version info, patched in gt_mp7_top_pkg_tpl.vhd)
+
+### Added
+- source files:
+  - VHDL files of TOPO models
+  - directory ../topo_trigger/model_base_v1
+### Changed
+- script files:
+  - scripts/pkgpatch.py
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/gt_mp7_top_pkg_tpl.vhd
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+  
 ## [v1.28.1] - 2024-07-12
 
 ### Fixed

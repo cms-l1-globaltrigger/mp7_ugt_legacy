@@ -3,16 +3,16 @@ placeholder).
 
 How to patch with current execution timestamp:
 
-  $ pkgpatch src/sample_pkg.vhd src/sample_pkg_syn.vhd
+  $ pkgpatch src/sample_pkg_tpl.vhd src/sample_pkg.vhd
 
 How to use a given timestamp (eg. in makefiles):
 
   $ TIMESTAMP=`date +%s`
-  $ pkgpatch src/sample_pkg.vhd src/sample_pkg_syn.vhd -t $TIMESTAMP
+  $ pkgpatch src/sample_pkg_tpl.vhd src/sample_pkg.vhd -t $TIMESTAMP
 
 How to overwrite username and hostname (foo@bar):
 
-  $ pkgpatch src/sample_pkg.vhd src/sample_pkg_syn.vhd --username foo --hostname bar
+  $ pkgpatch src/sample_pkg_tpl.vhd src/sample_pkg.vhd --username foo --hostname bar
 
 Supported replacement parameters:
 
@@ -27,6 +27,8 @@ import argparse
 import os
 import sys
 import time
+import glob
+import hashlib
 
 from getpass import getuser  # for username
 from socket import gethostname  # for machines hostname
@@ -69,6 +71,29 @@ def hex_string(s, n=32):
     return 'X"{0:>0{1}}"'.format(''.join(['{0:x}'.format(ord(c)) for c in s[:n][::-1]]), n * 2)
 
 
+def calc_fw_hash(path: str) -> str:
+    """Calculate a SHA-256 hash value of the content of all source files at given path."""
+    filenames = []
+    # Collect all VHDL files of <path/> (except gt_mp7_top_pkg.vhd) and all dep and tcl files from <path/cfg/> and all mif and xci files from <path/ngc/>
+    for pattern in ["**/*.vhd", "../cfg/**/*.dep", "../cfg/**/*.tcl", "../ngc/**/*.mif", "../ngc/**/*.xci"]:
+        for filename in glob.glob(os.path.join(path, pattern), recursive=True):
+            fname = filename.split("/")[-1]
+            if fname != "gt_mp7_top_pkg.vhd":
+                filenames.append(filename)
+
+    hash_sha256 = hashlib.sha256()
+    # Sort filenames for deterministic hash
+    for filename in sorted(filenames):
+        with open(filename, "rb") as f:
+            while True:
+                # Reading is buffered, so we can read smaller chunks.
+                chunk = f.read(hash_sha256.block_size)
+                if not chunk:
+                    break
+                hash_sha256.update(chunk)
+    return hash_sha256.hexdigest()
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         prog=name,
@@ -77,8 +102,8 @@ def parse_args():
         epilog="Report bugs to <bernhard.arnold@cern.ch>.",
         add_help=True
     )
-    parser.add_argument('src', metavar='<src>', type=str, help='source template VHDL file eg. <target>_pkg.vhd')
-    parser.add_argument('dest', metavar='<dest>', type=str, help='destination VHDL synthesis file eg. <target>_pkg_syn.vhd')
+    parser.add_argument('src', metavar='<src>', type=str, help='source template VHDL file eg. <target>_pkg_tpl.vhd')
+    parser.add_argument('dest', metavar='<dest>', type=str, help='destination VHDL synthesis file eg. <target>_pkg.vhd')
     parser.add_argument('-t', '--timestamp', action="store", dest='timestamp', default=unix_timestamp(), type=int, help="UNIX timestamp (integer)")
     parser.add_argument('--username', action="store", dest='username', default=getuser(), type=str, help="overwrite machine username")
     parser.add_argument('--hostname', action="store", dest='hostname', default=gethostname(), type=str, help="overwrite machine hostname")
@@ -93,33 +118,34 @@ def main():
         print("for safety reasons it is not allowed to overwrite the source template.")
         sys.exit(1)
 
-    try:
-        replace_map = {
-            '{{IPBUS_TIMESTAMP}}': hex_timestamp(args.timestamp),
-            '{{IPBUS_USERNAME}}': hex_string(args.username),
-            '{{IPBUS_HOSTNAME}}': hex_string(args.hostname),
-            '{{IPBUS_BUILD_VERSION}}': hex_value(args.build),
-        }
+    fw_hdl_dir = os.path.join(os.path.dirname(os.path.abspath(args.src)), '../..', "hdl")
 
-        # Read content of source file.
-        with open(args.src) as src:
-            lines = src.readlines()
+    replace_map = {
+        '{{IPBUS_TIMESTAMP}}': hex_timestamp(args.timestamp),
+        '{{IPBUS_USERNAME}}': hex_string(args.username),
+        '{{IPBUS_HOSTNAME}}': hex_string(args.hostname),
+        '{{IPBUS_BUILD_VERSION}}': hex_value(args.build),
+        '{{FW_HASH}}': calc_fw_hash(fw_hdl_dir),
+    }
 
-        # Replace placeholders.
-        for key, value in list(replace_map.items()):
-            for i, line in enumerate(lines):
-                if not line.strip().startswith('--'):
-                    lines[i] = line.replace(key, value)
+    # Read content of source file.
+    with open(args.src) as src:
+        lines = src.readlines()
 
-        # Write content to destination file.
-        with open(args.dest, 'w') as dest:
-            dest.write(''.join(lines))
+    # Replace placeholders.
+    for key, value in list(replace_map.items()):
+        for i, line in enumerate(lines):
+    # Replace firmware hash value in a comment line starting with '-- FW_HASH'.
+            if line.strip().startswith('-- FW_HASH'):
+                lines[i] = line.replace(key, value)
+    # No replacing in other comment lines.
+            if not line.strip().startswith('--'):
+                lines[i] = line.replace(key, value)
 
-        return 0
-    except IOError as message:
-        print("{0}: {1}".format(name, message))
-    return 1
+    # Write content to destination file.
+    with open(args.dest, 'w') as dest:
+        dest.write(''.join(lines))
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    main()

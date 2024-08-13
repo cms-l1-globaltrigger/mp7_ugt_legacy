@@ -308,7 +308,7 @@ ZDC & 71  & 218 & X0Y35 & x & \\\hline
 % 
 
 Tables ~\ref{table:app:sum_opt_links} and ~\ref{table:app:sum_opt_links2} show the configuration of optical links to Global Trigger.\\
-Links 0..3 contains muon data from GMT, links 4..10 data from Calo-Layer2, link 11 data from Calo-Layer1 and links 12..15 external conditions from AMC502 boards.\\
+Links 0..3 contain muon data from GMT, links 4..10 data from Calo-Layer2, link 11 data from Calo-Layer1 and links 12..15 external conditions from AMC502 boards.\\
 Input data of links 0-12 (channels 0x00-0x18) are part of the readout record of AMC \#1.
 
 \begin{table}[ht]
@@ -323,9 +323,9 @@ ch. -> & 0x00 & 0x02 & 0x04 & 0x06 & 0x08 & 0x0a & 0x0c & 0x0e & 0x10 & 0x12 \\\
 frame &  &  &  &  &  &  &  &  &  & \\\hline
 0 & free & free & free & free & EG0 & EG6 & JET0 & JET6 & TAU0 & TAU6\\\hline
 1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7\\
- & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & &\\
+ & on bits [21:13] & on bits [21:13] & on bits [21:13] & on bits [21:13] & & & & & &\\
  & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & &\\
- & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & &\\\hline
+ & on bits [30:22] & on bits [30:22] & on bits [30:22] & on bits [30:22] & & & & & &\\\hline
 2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8\\\hline
 3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9\\\hline
 4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10\\\hline
@@ -357,12 +357,12 @@ frame &   &   &   &   &   & & \\\hline
 3 & HT$_{miss}$, & CICADA & free & free & free & free & ZDC \\
  & ASYMHT,& AD DEC LSB & & & & & frame 3\\
  & MBT1HFM & on bits [31:28] & & & & & 0x0000\\\hline
-4 & ET$_{miss}^{HF}$ & CICADA & free & free & free & free & ZDC \\
- & ASYMETHF, & HI MSB & & & & & counter\\
- & CENT[3:0] & on bits [31:28] & & & & & 12 bits\\\hline
-5 & HT$_{miss}^{HF}$ & CICADA & free & free & free & free & ZDC \\
- & ASYMHTHF, & HI LSB & & & & & frame 5\\
- & CENT[7:4] & on bits [31:28] & & & & & 0x0000\\\hline
+4 & ET$_{miss}^{HF}$ & free & free & free & free & free & ZDC \\
+ & ASYMETHF, & & & & & & counter\\
+ & CENT[3:0] & & & & & & 12 bits\\\hline
+5 & HT$_{miss}^{HF}$ & free & free & free & free & free & ZDC \\
+ & ASYMHTHF, & & & & & & frame 5\\
+ & CENT[7:4] & & & & & & 0x0000\\\hline
 \end{tabular}
 }
 \label{table:app:sum_opt_links2}

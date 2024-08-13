@@ -3,6 +3,7 @@
 -- Wrapper for "anomaly detection".
 
 -- Version history:
+-- HB 2024-08-13: added htmhf input.
 -- HB 2023-01-18: removed comparator and delay, added anomaly_score_o for simulation.
 -- HB 2022-11-11: added comparator and delay for simulation.
 -- HB 2022-08-29: first design.
@@ -17,7 +18,6 @@ entity axol1tl_v1_wrapper is
     generic	(
         sim_mode: boolean := true;
         threshold: integer := 4150
---        threshold: std_logic_vector(15 downto 0) := X"0136"
    );
     port(
         lhc_clk: in std_logic;
@@ -51,6 +51,7 @@ begin
     etm_i(MAX_ESUMS_BITS-1 downto 0) <= etm;
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
+    htmhf_i(MAX_ESUMS_BITS-1 downto 0) <= htmhf;
 
     axol1tl_v1_i: entity work.axol1tl_v1
         port map(

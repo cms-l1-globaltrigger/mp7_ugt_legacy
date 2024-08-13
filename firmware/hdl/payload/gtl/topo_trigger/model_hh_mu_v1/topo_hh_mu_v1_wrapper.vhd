@@ -14,7 +14,7 @@ use work.gtl_pkg.all;
 entity topo_trigger_hh_mu_v1_wrapper is
     generic	(
         threshold: integer := 4150
-   );
+    );
     port(
         lhc_clk: in std_logic;
         mu: in muon_objects_array;

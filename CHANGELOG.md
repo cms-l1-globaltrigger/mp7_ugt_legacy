@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - mp7_ugt firmware release v1.29.0
-- branch for implementing VHDL files of TOPO models (#56, TBD) 
+- branch for implementing VHDL files of TOPO models (#56) - TBD 
 - added TOPO models "base_v1" (this was used for the first TOPO tests)
 - added port "htmhf" in all topo wrapper files (e.g.: topo_trigger_hh_ele_v1_wrapper.vhd, ...)
 - changed script pkgpatch.py (added function "calc_fw_hash" for repo branch version info, patched in gt_mp7_top_pkg_tpl.vhd)

@@ -1515,11 +1515,39 @@ The possibility of implementing "Anomaly Detection Trigger" (ADT) is forseen in 
 
 \paragraph{AXOL1TL Trigger}
 \label{sec:gtl:adt}
-The possibility of implementing "AXOL1TL Trigger" (AXO) is forseen in this version of \ugtl. The VHDL of HLS generated files code is given by "Anomaly Detection Trigger" group in \href{\gitbranch/firmware/hdl/payload/gtl/axol1tl_trigger}{\texttt{axol1tl\_trigger}}. Because of the possibility using different models for "AXOL1TL Trigger", directories for the models are forseen. The directories are named \texttt{model\_<model name>}, e.g. \href{\gitbranch/firmware/hdl/payload/gtl/axol1tl_trigger/model_v3}{\texttt{model\_v3}} with \texttt{axol1tl\_v3.vhd} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/axol1tl_trigger/model_v3.vhd/axol1tl_v3_wrapper.vhd}{\texttt{axol1tl\_v3\_wrapper.vhd}} module \texttt{axol1tl\_v3.vhd} is instantiated and a comparison of the output of "score" with a given threshold is implemented to get an "AXOL1TL Trigger". The "score" consists of 18 bits, currently. "AXOL1TL Trigger" can use all input objects of \ugt, except CICADA data and external condition inputs, for calculating the "score" value.
+The possibility of implementing "AXOL1TL Trigger" (AXO) is forseen in this version of \ugtl. The VHDL of HLS generated files code is given by "Anomaly Detection Trigger" group in \href{\gitbranch/firmware/hdl/payload/gtl/axol1tl_trigger}{\texttt{axol1tl\_trigger}}. Because of the possibility using different models for "AXOL1TL Trigger" (see Table \ref{tab:gtl:axo_models}), directories for the models are forseen. The directories are named \texttt{model\_<model name>}, e.g. \href{\gitbranch/firmware/hdl/payload/gtl/axol1tl_trigger/model_v3}{\texttt{model\_v3}} with \texttt{axol1tl\_v3.vhd} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/axol1tl_trigger/model_v3.vhd/axol1tl_v3_wrapper.vhd}{\texttt{axol1tl\_v3\_wrapper.vhd}} module \texttt{axol1tl\_v3.vhd} is instantiated and a comparison of the output of "score" with a given threshold is implemented to get an "AXOL1TL Trigger". The "score" consists of 18 bits, currently. "AXOL1TL Trigger" can use all input objects of \ugt, except CICADA data and external condition inputs, for calculating the "score" value.
+
+\begin{table}[ht]
+\caption{AXOL1TL models}
+\vspace{5mm}
+\centering
+\begin{tabular}{|l|l|l|}\hline
+\textbf{Key}& \textbf{Description} & \textbf{Status}\\\hline\hline
+v1 & first version (docu missing) & implemented\\\hline
+v2 & - & not implemented\\\hline
+v3 & \href{https://gitlab.cern.ch/ssummers/run3_ugt_ml/-/merge_requests/4}{\texttt{AXOL1TL v3}} & implemented\\\hline
+v4 & current version (docu missing) & implemented\\\hline
+\end{tabular}
+\label{tab:gtl:axo_models}
+\end{table}
 
 \paragraph{Topological Trigger}
 \label{sec:gtl:topo}
-Similar to "AXOL1TL Trigger" a "Topological Trigger" is part of this version. The VHDL code of HLS generated files is given by "Anomaly Detection Trigger" group in \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger}{\texttt{topo\_trigger}}. Because of the possibility using different models for "Topological Trigger", directories for the models are forseen. The directories are named \texttt{model\_<model name>}, e.g. \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger/model_hh_ele_v1}{\texttt{model\_hh\_ele\_v1}} with \texttt{topo\_hh\_ele\_v1.vhd} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger/model_hh_ele_v1/topo_hh_ele_v1_wrapper.vhd}{\texttt{topo\_hh\_ele\_v1\_wrapper.vhd}} module \texttt{topo\_hh\_ele\_v1.vhd} is instantiated and a comparison of the output of "score" with a given threshold is implemented to get an "Topological Trigger". The "score" consists of 16 bits, currently. "Topological Trigger" can use all input objects of \ugt, except CICADA data and external condition inputs, for calculating the "score" value.
+Similar to "AXOL1TL Trigger" a "Topological Trigger" is part of this version. The VHDL code of HLS generated files is given by "Anomaly Detection Trigger" group in \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger}{\texttt{topo\_trigger}}. Because of the possibility using different models for "Topological Trigger" (see Table \ref{tab:gtl:topo_models}), directories for the models are forseen. The directories are named \texttt{model\_<model name>}, e.g. \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger/model_hh_ele_v1}{\texttt{model\_hh\_ele\_v1}} with \texttt{topo\_hh\_ele\_v1.vhd} as top module. In \href{\gitbranch/firmware/hdl/payload/gtl/topo_trigger/model_hh_ele_v1/topo_hh_ele_v1_wrapper.vhd}{\texttt{topo\_hh\_ele\_v1\_wrapper.vhd}} module \texttt{topo\_hh\_ele\_v1.vhd} is instantiated and a comparison of the output of "score" with a given threshold is implemented to get an "Topological Trigger". The "score" consists of 16 bits, currently. "Topological Trigger" can use all input objects of \ugt, except CICADA data and external condition inputs, for calculating the "score" value.
+
+\begin{table}[ht]
+\caption{TOPO models}
+\vspace{5mm}
+\centering
+\begin{tabular}{|l|l|l|}\hline
+\textbf{Key}& \textbf{Description} & \textbf{Status}\\\hline\hline
+base\_v1 & version used for TOPO tests (docu missing) & implemented\\\hline
+hh\_ele\_v1 &  & not implemented yet\\\hline
+hh\_had\_v1 &  & not implemented yet\\\hline
+hh\_mu\_v1 &  & not implemented yet\\\hline
+\end{tabular}
+\label{tab:gtl:topo_models}
+\end{table}
 
 \paragraph{CICADA Trigger}
 \label{sec:gtl:cicada}

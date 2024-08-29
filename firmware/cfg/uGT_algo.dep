@@ -1,7 +1,6 @@
 ## HB 2016-08-17: moved constraints from algo_constraints.xdc to mp7_payload.tcl
 ##?toolset=="Vivado"? src ../ucf/algo_constraints.xdc
 ?toolset=="Vivado"? src ../ucf/mp7_payload.tcl
-?toolset=="Vivado"? src ../ucf/mp7_fixed_cells.tcl
 
 #
 ## GT packages

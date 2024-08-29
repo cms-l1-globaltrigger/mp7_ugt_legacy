@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.30.0] - 2024-08-29
+### Comment
+
+- test: fixed cells in Vivado (MP7 readout)
+
+### Added
+- tcl file:
+  - ../ucf/mp7_fixed_cells.tcl
+
+### Changed
+- dep file:
+  - ../cfg/uGT_algo.dep
+  
 ## [v1.29.0] - 2024-08-12
 ### Comment
 

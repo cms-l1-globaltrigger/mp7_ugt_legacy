@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.30.0] - 2024-09-13
+### Comment
+
+- implemented possibility to fix cells in vivado (by ugt-fwtool synthesis.py)
+- vivado_fix_cells.tcl: script for vivado sequence to fix cells
+- constraints_fixed_cells.tcl: contains location of cells to fix
+
+### Added
+- script files:
+  - scripts/vivado_fix_cells.tcl
+  - ../firmware/ucf/constraints_fixed_cells.tcl
+
 ## [v1.29.0] - 2024-08-12
 ### Comment
 

@@ -41,6 +41,11 @@ vivado is running (see \href{\gitbranch/README.md}{\texttt{README}}):\\
 \greybox{<path to synth dir> <module number>}
 \end{itemize}
 
+\subsubsection{Preventing timing errors by fixing cells in Vivado}\label{sec:app:prevent_timing_errors}
+
+Timimg errors always occur in "readout" region. Therefore nodes and locations (of the nodes) are taken from an utilization of an implementation without errors (0x1192, module 0) and a constraints file was created which contains those information (\href{\gitbranch/firmware/ucf/constraints\_fixed\_cells.tcl}{\texttt{\textquotesingle constraints\_fixed\_cells.tcl\textquotesingle }}).
+A Vivado TCL-script (\href{\gitbranch/scripts/vivado\_fix\_cells.tcl}{\texttt{\textquotesingle vivado\_fix\_cells.tcl\textquotesingle }}) contains the sequence to fix cells in Vivado. It is executed by Vivado batch mode during synthesis (between "ipbb synth" and "ipbb impl").
+
 \clearpage
 
 \subsection{Configuration of GTHs}\label{sec:app:app_a}

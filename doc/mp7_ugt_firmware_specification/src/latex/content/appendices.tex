@@ -55,7 +55,9 @@ The FPGA on MP7 board receives and transmits data via GTH transceivers.\\
 \subsubsection{ZDC 5G scheme}\label{sec:app:zdc_5g_scheme}
 
 ZDC data are provided on a 5 GHz link.
-Figure~\ref{fig:app:zdc_5G_scheme} shows ZDC 5G link connection to \ugt system. (Currently only MP7 in slot 1 has a connection with ZDC.)\\
+Figure~\ref{fig:app:zdc_5G_scheme} shows ZDC 5G link connection to \ugt system. 
+
+\textbf{Remark}: Connection with \textbf{ZDC} is made on \textbf{MP7 in slot 1} (link 71), only!\\
 
 \begin{figure}[htb]
 \centering
@@ -266,7 +268,7 @@ JET6..JET11 & 7  & 117 & X1Y28 & x &   \\\hline
 TAU0..TAU5  & 8  & 116 & X1Y27 & x &   \\\hline
 TAU6..TAU11 & 9  & 116 & X1Y26 & x &   \\\hline
 ESUMS  & 10  & 116 & X1Y25 & x &   \\\hline
-CICADA (BJET0..BJET5, ...)& 11  & 116 & X1Y24 & x &   \\\hline
+CICADA & 11  & 116 & X1Y24 & x &   \\\hline
 EXT\_COND[0:63] & 12  & 115 & X1Y23 & x &   \\\hline
 EXT\_COND[64:127] & 13  & 115 & X1Y22 & x &   \\\hline
 EXT\_COND[128:191] & 14  & 115 & X1Y21 & x &   \\\hline

@@ -24,22 +24,40 @@ end update_process;
 architecture rtl of update_process is
    signal request_ff : std_logic := '0';
    signal data_int : std_logic_vector(WIDTH-1 downto 0) := INIT_VALUE(WIDTH-1 downto 0);
+   signal data_zero : std_logic_vector(WIDTH-1 downto 0) := (others => '0');
+   signal update_pulse_del_t : std_logic := '0';
+   signal update_pulse_del : std_logic := '0';
+   signal update_pulse_long : std_logic := '0';
 begin
 
-   request_ff_p: process (clk, request_update_pulse, update_pulse)
+   update_pulse_del_p: process (clk, update_pulse)
+   begin
+      if clk'event and clk = '0' then
+         update_pulse_del_t <= update_pulse;
+      end if;
+      if clk'event and clk = '1' then
+         update_pulse_del <= update_pulse_del_t;
+      end if;
+   end process update_pulse_del_p;
+
+   update_pulse_long <= update_pulse and update_pulse_del;
+
+   request_ff_p: process (clk, request_update_pulse, update_pulse, update_pulse_long)
    begin
       if clk'event and clk = '1' then
          if request_update_pulse = '1' then
             request_ff <= '1'; -- set if update is requested
-         elsif update_pulse = '1' then
+         elsif update_pulse_long = '1' then
             request_ff <= '0'; -- clear with "update" pulse (e.g.: begin of lumi-section)
          end if;
       end if;
    end process request_ff_p;
 
-   update_factor_p: process (clk, request_ff, update_pulse, data_i)
+   update_factor_p: process (clk, request_ff, update_pulse, update_pulse_del, data_i)
    begin
       if clk'event and clk = '1' and request_ff = '1' and update_pulse = '1' then
+         data_int <= data_zero;
+      elsif clk'event and clk = '1' and request_ff = '1' and update_pulse_del = '1' then
          data_int <= data_i; -- load data_i to data_int, if requested and "update" pulse (e.g.: begin of lumi-section)
       end if;
    end process update_factor_p;

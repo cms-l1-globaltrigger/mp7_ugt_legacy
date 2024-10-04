@@ -28,6 +28,7 @@ vmap work work
 
 #Top Entity the design
 vcom -93 -work work $TESTBENCH/fdl_pkg_prescale_float_sim.vhd
+vcom -93 -work work $TESTBENCH/check_shadow.vhd
 vcom -93 -work work $GT_SRC/payload/fdl/update_process.vhd
 vcom -93 -work work $GT_SRC/payload/fdl/algo_pre_scaler_fractional_float.vhd
 
@@ -42,8 +43,8 @@ view wave
 do $TESTBENCH/../scripts/algo_pre_scaler_fractional_float_wave.do
 
 ##Run simulation
-run 25000 ns
-#run 23300 ms
+run 50 us
+#run 2300 ms
 
 # eof
 

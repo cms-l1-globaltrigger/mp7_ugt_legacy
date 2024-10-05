@@ -25,6 +25,7 @@ src payload/fdl/algo_post_dead_time_counter.vhd
 src payload/fdl/fdl_fabric.vhd
 src payload/fdl/algo_pre_scaler_fractional_float.vhd
 src payload/fdl/update_process.vhd
+src payload/fdl/update_process_pre_scaler.vhd
 src payload/fdl/algo_slice.vhd
 #
 ## GTL modules

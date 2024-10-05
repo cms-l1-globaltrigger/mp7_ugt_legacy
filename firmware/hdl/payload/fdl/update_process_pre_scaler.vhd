@@ -1,12 +1,14 @@
+
 -- Description:
 -- Update process for prescalers for algorithms in FDL
 
+-- HB 2024-10-07: inserted data_o = 0 at update_pulse (begin limi) and new factor with update_pulse_del. This guarantees "shadowing" of algos with same logic, but different prescale factors with an integer ratio.
 -- HB 2022-09-06: cleaned up.
 
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity update_process is
+entity update_process_pre_scaler is
    generic( 
       WIDTH : integer := 24;
       INIT_VALUE : std_logic_vector(31 DOWNTO 0) := X"00000001"
@@ -18,27 +20,45 @@ entity update_process is
       data_i           : in std_logic_vector(WIDTH-1 downto 0);
       data_o           : out std_logic_vector(WIDTH-1 downto 0)
    );
-end update_process;
+end update_process_pre_scaler;
 
-architecture rtl of update_process is
+architecture rtl of update_process_pre_scaler is
    signal request_ff : std_logic := '0';
    signal data_int : std_logic_vector(WIDTH-1 downto 0) := INIT_VALUE(WIDTH-1 downto 0);
+   signal data_zero : std_logic_vector(WIDTH-1 downto 0) := (others => '0');
+   signal update_pulse_del_t : std_logic := '0';
+   signal update_pulse_del : std_logic := '0';
+   signal update_pulse_long : std_logic := '0';
 begin
 
-   request_ff_p: process (clk, request_update_pulse, update_pulse)
+   update_pulse_del_p: process (clk, update_pulse)
+   begin
+      if clk'event and clk = '0' then
+         update_pulse_del_t <= update_pulse;
+      end if;
+      if clk'event and clk = '1' then
+         update_pulse_del <= update_pulse_del_t;
+      end if;
+   end process update_pulse_del_p;
+
+   update_pulse_long <= update_pulse and update_pulse_del;
+
+   request_ff_p: process (clk, request_update_pulse, update_pulse, update_pulse_long)
    begin
       if clk'event and clk = '1' then
          if request_update_pulse = '1' then
             request_ff <= '1'; -- set if update is requested
-         elsif update_pulse = '1' then
+         elsif update_pulse_long = '1' then
             request_ff <= '0'; -- clear with "update" pulse (e.g.: begin of lumi-section)
          end if;
       end if;
    end process request_ff_p;
 
-   update_factor_p: process (clk, request_ff, update_pulse, data_i)
+   update_factor_p: process (clk, request_ff, update_pulse, update_pulse_del, data_i)
    begin
       if clk'event and clk = '1' and request_ff = '1' and update_pulse = '1' then
+         data_int <= data_zero;
+      elsif clk'event and clk = '1' and request_ff = '1' and update_pulse_del = '1' then
          data_int <= data_i; -- load data_i to data_int, if requested and "update" pulse (e.g.: begin of lumi-section)
       end if;
    end process update_factor_p;
@@ -46,3 +66,4 @@ begin
     data_o <= data_int;
 
 end architecture rtl;
+

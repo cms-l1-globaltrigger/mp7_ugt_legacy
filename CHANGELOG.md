@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.31.0] - 2024-10-07
+### Comment
+
+- implemented update_process_pre_scaler.vhd (guarantees "shadowing" of algos with same logic, but different prescale factors with an integer ratio) in algo_pre_scaler.vhd.
+
+### Added
+- source files:
+  - ../payload/fdl/update_process_pre_scaler.vhd
+### Changed
+- dep file:
+  - ../cfg/uGT_algo.dep
+- simulation file:
+  - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+  - ../sim/scripts/algo_pre_scaler_fractional_float.do
+  - ../sim/scripts/algo_pre_scaler_fractional_float_wave.do
+  - ../sim/testbench/algo_pre_scaler_fractional_float_tb.vhd
+ 
 ## [v1.30.0] - 2024-09-13
 ### Comment
 

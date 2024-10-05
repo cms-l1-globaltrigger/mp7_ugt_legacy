@@ -147,6 +147,7 @@ vcom -93 -work work $HDL_DIR/payload/frame/delay_element.vhd
 ## FDL modules
 vcom -93 -work work $MENU_DIR/algo_mapping_rop.vhd
 vcom -93 -work work $HDL_DIR/payload/fdl/update_process.vhd
+vcom -93 -work work $HDL_DIR/payload/fdl/update_process_pre_scaler.vhd
 vcom -93 -work work $HDL_DIR/payload/fdl/fdl_fabric.vhd
 vcom -93 -work work $HDL_DIR/payload/fdl/algo_pre_scaler_fractional_float.vhd
 vcom -93 -work work $HDL_DIR/payload/fdl/algo_rate_counter.vhd

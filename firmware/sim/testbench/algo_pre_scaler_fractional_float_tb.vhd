@@ -9,6 +9,7 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.math_real.all;    -- for uniform & trunc functions
 use ieee.std_logic_arith.all;
 
 use work.fdl_pkg.all;
@@ -46,7 +47,7 @@ architecture beh of algo_pre_scaler_fractional_TB is
     constant PRESCALE_FACTOR_VALUE_ALGO_1_INTEGER_3 : integer := integer(PRESCALE_FACTOR_VALUE_ALGO_1_3 * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
     constant PRESCALE_FACTOR_VALUE_ALGO_1_VEC_3 : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_VALUE_ALGO_1_INTEGER_3, PRESCALE_FACTOR_WIDTH);
 
-    constant PRESCALE_FACTOR_VALUE_ALGO_1_4 : real := 2.00;
+    constant PRESCALE_FACTOR_VALUE_ALGO_1_4 : real := 1.30;
     constant PRESCALE_FACTOR_VALUE_ALGO_1_INTEGER_4 : integer := integer(PRESCALE_FACTOR_VALUE_ALGO_1_4 * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
     constant PRESCALE_FACTOR_VALUE_ALGO_1_VEC_4 : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_VALUE_ALGO_1_INTEGER_4, PRESCALE_FACTOR_WIDTH);
 
@@ -62,7 +63,7 @@ architecture beh of algo_pre_scaler_fractional_TB is
     constant PRESCALE_FACTOR_VALUE_ALGO_2_INTEGER_3 : integer := integer(PRESCALE_FACTOR_VALUE_ALGO_2_3 * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
     constant PRESCALE_FACTOR_VALUE_ALGO_2_VEC_3 : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_VALUE_ALGO_2_INTEGER_3, PRESCALE_FACTOR_WIDTH);
 
-    constant PRESCALE_FACTOR_VALUE_ALGO_2_4 : real := 4.00;
+    constant PRESCALE_FACTOR_VALUE_ALGO_2_4 : real := 3.90;
     constant PRESCALE_FACTOR_VALUE_ALGO_2_INTEGER_4 : integer := integer(PRESCALE_FACTOR_VALUE_ALGO_2_4 * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
     constant PRESCALE_FACTOR_VALUE_ALGO_2_VEC_4 : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_VALUE_ALGO_2_INTEGER_4, PRESCALE_FACTOR_WIDTH);
 
@@ -80,15 +81,21 @@ begin
 
     -- Algo
     process
+        variable seed1: positive;    -- seed values for random generator
+        variable seed2: positive;    -- seed values for random generator
+        variable x : real;       -- random real-number value, range 0 - 1.0
+        variable interval: integer;            -- noise interval
     begin
-        wait for 6*LHC_CLK_PERIOD;
-        algo  <=  '1';
-        wait for LHC_CLK_PERIOD;
-        algo  <=  '0';
-        wait for 23*LHC_CLK_PERIOD;
-        algo  <=  '1';
-        wait for LHC_CLK_PERIOD;
-        algo  <=  '0';
+	    loop
+            uniform(seed1, seed2, x);
+            interval := integer(floor(x * 100.0));
+
+            wait for LHC_CLK_PERIOD;
+            algo <= '1';
+            wait for LHC_CLK_PERIOD;
+            algo <= '0';
+            wait for interval*LHC_CLK_PERIOD;
+        end loop;
     end process;
 
     process

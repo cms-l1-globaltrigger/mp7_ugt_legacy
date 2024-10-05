@@ -4,6 +4,7 @@
 
 -- Version-history:
 -- HB 2024-10-07: changed update_process to update_process_pre_scaler (guarantees "shadowing" of algos with same logic, but different prescale factors with an integer ratio).
+-- HB 2022-11-30: bug fixed (reset counter with factor=0).
 -- HB 2022-09-06: cleaned up.
 -- HB 2022-08-16: port signal start (start_sync_bc0_int) used for reset of prescale counter (instead of begin_lumi_section). Removed unused signal sres_counter.
 -- HB 2019-10-04: new file name for fractional prescale values in float notation.
@@ -12,8 +13,7 @@
 -- HB 2019-09-25: first design, based on proposal of A. Bocci (email: M. Jeitler, 25.9.2019, "Fwd: Fractional prescales")
 
 library ieee;
-use ieee.std-- HB 2022-11-30: bug fixed (reset counter with factor=0).
-_logic_1164.all;
+use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
 use work.fdl_pkg.ALL;

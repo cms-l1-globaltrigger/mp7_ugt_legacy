@@ -129,6 +129,17 @@ begin
             update_factor_pulse <= '1';
         wait for LHC_CLK_PERIOD;
             update_factor_pulse <= '0';
+        wait for 10000*LHC_CLK_PERIOD;
+            prescale_factor_algo_1 <= PRESCALE_FACTOR_VALUE_ALGO_1_VEC_1;
+            prescale_factor_algo_2 <= PRESCALE_FACTOR_VALUE_ALGO_2_VEC_1;
+        wait for 20*LHC_CLK_PERIOD;
+            request_update_factor_pulse <= '1';
+        wait for LHC_CLK_PERIOD;
+            request_update_factor_pulse <= '0';
+        wait for 30*LHC_CLK_PERIOD;
+            update_factor_pulse <= '1';
+        wait for LHC_CLK_PERIOD;
+            update_factor_pulse <= '0';
        wait;
     end process;
 
@@ -168,6 +179,28 @@ begin
             prescaled_algo_1 => prescaled_algo_1_o,
             prescaled_algo_2 => prescaled_algo_2_o,
             shadow => open
+        );
+
+    rate_cnt_1_i: entity work.algo_rate_counter
+        generic map( 
+            COUNTER_WIDTH => 32
+        )
+        port map( 
+            lhc_clk => lhc_clk,
+            store_cnt_value => update_factor_pulse,
+            algo_i => prescaled_algo_1_o,
+            counter_o => open
+        );
+
+    rate_cnt_2_i: entity work.algo_rate_counter
+        generic map( 
+            COUNTER_WIDTH => 32
+        )
+        port map( 
+            lhc_clk => lhc_clk,
+            store_cnt_value => update_factor_pulse,
+            algo_i => prescaled_algo_2_o,
+            counter_o => open
         );
 
 end beh;

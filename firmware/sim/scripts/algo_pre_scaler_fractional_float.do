@@ -30,6 +30,7 @@ vmap work work
 vcom -93 -work work $TESTBENCH/fdl_pkg_prescale_float_sim.vhd
 vcom -93 -work work $TESTBENCH/check_shadow.vhd
 vcom -93 -work work $GT_SRC/payload/fdl/update_process_pre_scaler.vhd
+vcom -93 -work work $GT_SRC/payload/fdl/algo_rate_counter.vhd
 vcom -93 -work work $GT_SRC/payload/fdl/algo_pre_scaler_fractional_float.vhd
 
 #Testbench
@@ -43,7 +44,7 @@ view wave
 do $TESTBENCH/../scripts/algo_pre_scaler_fractional_float_wave.do
 
 ##Run simulation
-run 500 us
+run 600 us
 #run 2300 ms
 
 # eof

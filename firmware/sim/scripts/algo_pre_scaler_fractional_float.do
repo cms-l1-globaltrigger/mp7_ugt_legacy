@@ -43,7 +43,7 @@ view wave
 do $TESTBENCH/../scripts/algo_pre_scaler_fractional_float_wave.do
 
 ##Run simulation
-run 50 us
+run 500 us
 #run 2300 ms
 
 # eof

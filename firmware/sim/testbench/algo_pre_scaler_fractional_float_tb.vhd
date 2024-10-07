@@ -35,37 +35,29 @@ architecture beh of algo_pre_scaler_fractional_TB is
     signal prescaled_algo_1_o : std_logic;
     signal prescaled_algo_2_o : std_logic;
 
-    constant PRESCALE_FACTOR_VALUE_ALGO_1_1 : real := 0.00;
+    constant PRESCALE_FACTOR_VALUE_ALGO_1_1 : real := 2.00;
     constant PRESCALE_FACTOR_VALUE_ALGO_1_INTEGER_1 : integer := integer(PRESCALE_FACTOR_VALUE_ALGO_1_1 * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
     constant PRESCALE_FACTOR_VALUE_ALGO_1_VEC_1 : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_VALUE_ALGO_1_INTEGER_1, PRESCALE_FACTOR_WIDTH);
 
-    constant PRESCALE_FACTOR_VALUE_ALGO_1_2 : real := 2.00;
+    constant PRESCALE_FACTOR_VALUE_ALGO_1_2 : real := 3.00;
     constant PRESCALE_FACTOR_VALUE_ALGO_1_INTEGER_2 : integer := integer(PRESCALE_FACTOR_VALUE_ALGO_1_2 * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
     constant PRESCALE_FACTOR_VALUE_ALGO_1_VEC_2 : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_VALUE_ALGO_1_INTEGER_2, PRESCALE_FACTOR_WIDTH);
 
-    constant PRESCALE_FACTOR_VALUE_ALGO_1_3 : real := 3.00;
+    constant PRESCALE_FACTOR_VALUE_ALGO_1_3 : real := 1.30;
     constant PRESCALE_FACTOR_VALUE_ALGO_1_INTEGER_3 : integer := integer(PRESCALE_FACTOR_VALUE_ALGO_1_3 * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
     constant PRESCALE_FACTOR_VALUE_ALGO_1_VEC_3 : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_VALUE_ALGO_1_INTEGER_3, PRESCALE_FACTOR_WIDTH);
 
-    constant PRESCALE_FACTOR_VALUE_ALGO_1_4 : real := 1.30;
-    constant PRESCALE_FACTOR_VALUE_ALGO_1_INTEGER_4 : integer := integer(PRESCALE_FACTOR_VALUE_ALGO_1_4 * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
-    constant PRESCALE_FACTOR_VALUE_ALGO_1_VEC_4 : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_VALUE_ALGO_1_INTEGER_4, PRESCALE_FACTOR_WIDTH);
-
-    constant PRESCALE_FACTOR_VALUE_ALGO_2_1 : real := 0.00;
+    constant PRESCALE_FACTOR_VALUE_ALGO_2_1 : real := 4.00;
     constant PRESCALE_FACTOR_VALUE_ALGO_2_INTEGER_1 : integer := integer(PRESCALE_FACTOR_VALUE_ALGO_2_1 * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
     constant PRESCALE_FACTOR_VALUE_ALGO_2_VEC_1 : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_VALUE_ALGO_2_INTEGER_1, PRESCALE_FACTOR_WIDTH);
 
-    constant PRESCALE_FACTOR_VALUE_ALGO_2_2 : real := 4.00;
+    constant PRESCALE_FACTOR_VALUE_ALGO_2_2 : real := 6.00;
     constant PRESCALE_FACTOR_VALUE_ALGO_2_INTEGER_2 : integer := integer(PRESCALE_FACTOR_VALUE_ALGO_2_2 * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
     constant PRESCALE_FACTOR_VALUE_ALGO_2_VEC_2 : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_VALUE_ALGO_2_INTEGER_2, PRESCALE_FACTOR_WIDTH);
 
-    constant PRESCALE_FACTOR_VALUE_ALGO_2_3 : real := 6.00;
+    constant PRESCALE_FACTOR_VALUE_ALGO_2_3 : real := 3.90;
     constant PRESCALE_FACTOR_VALUE_ALGO_2_INTEGER_3 : integer := integer(PRESCALE_FACTOR_VALUE_ALGO_2_3 * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
     constant PRESCALE_FACTOR_VALUE_ALGO_2_VEC_3 : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_VALUE_ALGO_2_INTEGER_3, PRESCALE_FACTOR_WIDTH);
-
-    constant PRESCALE_FACTOR_VALUE_ALGO_2_4 : real := 3.90;
-    constant PRESCALE_FACTOR_VALUE_ALGO_2_INTEGER_4 : integer := integer(PRESCALE_FACTOR_VALUE_ALGO_2_4 * real(10**PRESCALE_FACTOR_FRACTION_DIGITS));
-    constant PRESCALE_FACTOR_VALUE_ALGO_2_VEC_4 : std_logic_vector(31 downto 0) := CONV_STD_LOGIC_VECTOR(PRESCALE_FACTOR_VALUE_ALGO_2_INTEGER_4, PRESCALE_FACTOR_WIDTH);
 
 --*********************************Main Body of Code**********************************
 begin
@@ -115,7 +107,7 @@ begin
             update_factor_pulse <= '1';
         wait for LHC_CLK_PERIOD;
             update_factor_pulse <= '0';
-        wait for 87*LHC_CLK_PERIOD;
+        wait for 5000*LHC_CLK_PERIOD;
             prescale_factor_algo_1 <= PRESCALE_FACTOR_VALUE_ALGO_1_VEC_2;
             prescale_factor_algo_2 <= PRESCALE_FACTOR_VALUE_ALGO_2_VEC_2;
         wait for 36*LHC_CLK_PERIOD;
@@ -126,43 +118,10 @@ begin
             update_factor_pulse <= '1';
         wait for LHC_CLK_PERIOD;
             update_factor_pulse <= '0';
-        wait for 111*LHC_CLK_PERIOD;
-            prescale_factor_algo_1 <= PRESCALE_FACTOR_VALUE_ALGO_1_VEC_1;
-            prescale_factor_algo_2 <= PRESCALE_FACTOR_VALUE_ALGO_2_VEC_1;
-        wait for 20*LHC_CLK_PERIOD;
-            request_update_factor_pulse <= '1';
-        wait for LHC_CLK_PERIOD;
-            request_update_factor_pulse <= '0';
-        wait for 30*LHC_CLK_PERIOD;
-            update_factor_pulse <= '1';
-        wait for LHC_CLK_PERIOD;
-            update_factor_pulse <= '0';
-        wait for 56*LHC_CLK_PERIOD;
+        wait for 5000*LHC_CLK_PERIOD;
             prescale_factor_algo_1 <= PRESCALE_FACTOR_VALUE_ALGO_1_VEC_3;
             prescale_factor_algo_2 <= PRESCALE_FACTOR_VALUE_ALGO_2_VEC_3;
-        wait for 27*LHC_CLK_PERIOD;
-            request_update_factor_pulse <= '1';
-        wait for LHC_CLK_PERIOD;
-            request_update_factor_pulse <= '0';
-        wait for 30*LHC_CLK_PERIOD;
-            update_factor_pulse <= '1';
-        wait for LHC_CLK_PERIOD;
-            update_factor_pulse <= '0';
-        wait for 79*LHC_CLK_PERIOD;
-            prescale_factor_algo_1 <= PRESCALE_FACTOR_VALUE_ALGO_1_VEC_2;
-            prescale_factor_algo_2 <= PRESCALE_FACTOR_VALUE_ALGO_2_VEC_2;
-        wait for 38*LHC_CLK_PERIOD;
-            request_update_factor_pulse <= '1';
-        wait for LHC_CLK_PERIOD;
-            request_update_factor_pulse <= '0';
-        wait for 30*LHC_CLK_PERIOD;
-            update_factor_pulse <= '1';
-        wait for LHC_CLK_PERIOD;
-            update_factor_pulse <= '0';
-        wait for 79*LHC_CLK_PERIOD;
-            prescale_factor_algo_1 <= PRESCALE_FACTOR_VALUE_ALGO_1_VEC_4;
-            prescale_factor_algo_2 <= PRESCALE_FACTOR_VALUE_ALGO_2_VEC_4;
-        wait for 38*LHC_CLK_PERIOD;
+        wait for 20*LHC_CLK_PERIOD;
             request_update_factor_pulse <= '1';
         wait for LHC_CLK_PERIOD;
             request_update_factor_pulse <= '0';

@@ -1,6 +1,7 @@
 -- Description:
 -- Update process for prescalers for algorithms in FDL
 
+-- HB 2024-10-08: added output request_ff_o.
 -- HB 2022-09-06: cleaned up.
 
 library ieee;
@@ -12,11 +13,12 @@ entity update_process is
       INIT_VALUE : std_logic_vector(31 DOWNTO 0) := X"00000001"
    );
    port( 
-      clk              : in std_logic;
+      clk : in std_logic;
       request_update_pulse : in std_logic;
       update_pulse : in std_logic;
-      data_i           : in std_logic_vector(WIDTH-1 downto 0);
-      data_o           : out std_logic_vector(WIDTH-1 downto 0)
+      data_i : in std_logic_vector(WIDTH-1 downto 0);
+      data_o : out std_logic_vector(WIDTH-1 downto 0);
+      request_ff_o : out std_logic
    );
 end update_process;
 
@@ -43,6 +45,7 @@ begin
       end if;
    end process update_factor_p;
 
-    data_o <= data_int;
+   data_o <= data_int;
+   request_ff_o <= request_ff;
 
 end architecture rtl;

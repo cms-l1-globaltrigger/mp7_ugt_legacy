@@ -3,7 +3,7 @@
 -- Prescalers for algorithms in FDL with fractional prescale values in float notation
 
 -- Version-history:
--- HB 2024-10-07: changed update_process to update_process_pre_scaler (guarantees "shadowing" of algos with same logic, but different prescale factors with an integer ratio).
+-- HB 2024-10-08: changed reset logic for counters (guarantees "shadowing" of algos with same logic, but different prescale factors with an integer ratio).
 -- HB 2022-11-30: bug fixed (reset counter with factor=0).
 -- HB 2022-09-06: cleaned up.
 -- HB 2022-08-16: port signal start (start_sync_bc0_int) used for reset of prescale counter (instead of begin_lumi_section). Removed unused signal sres_counter.
@@ -47,10 +47,13 @@ architecture rtl of algo_pre_scaler is
     signal counter : std_logic_vector(PRESCALE_FACTOR_WIDTH-1 downto 0) := (others => '0');
     signal factor : std_logic_vector(PRESCALE_FACTOR_WIDTH-1 downto 0) := (others => '0');
     signal limit : std_logic := '0';
+    signal update : std_logic;
+    signal request_ff : std_logic;
+    signal request_ff_del : std_logic;
 
 begin
 
-    prescale_factor_update_i: entity work.update_process_pre_scaler
+    prescale_factor_update_i: entity work.update_process
         generic map(
             WIDTH => PRESCALE_FACTOR_WIDTH,
             INIT_VALUE => PRESCALE_FACTOR_INIT
@@ -60,11 +63,21 @@ begin
             request_update_pulse => request_update_factor_pulse,
             update_pulse => update_factor_pulse,
             data_i => prescale_factor(PRESCALE_FACTOR_WIDTH-1 downto 0),
-            data_o => prescale_factor_int(PRESCALE_FACTOR_WIDTH-1 downto 0)
+            data_o => prescale_factor_int(PRESCALE_FACTOR_WIDTH-1 downto 0),
+            request_ff_o => request_ff
         );
     
     factor <= prescale_factor_int(PRESCALE_FACTOR_WIDTH-1 downto 0);
     
+    request_ff_del_p: process (clk, request_ff)
+    begin
+       if clk'event and clk = '1' then
+           request_ff_del <= request_ff; 
+       end if;
+    end process request_ff_del_p;
+    
+    update <= request_ff_del and update_factor_pulse;
+
 -- Comparing counter and factor
     compare_p: process (counter, factor)
     begin
@@ -79,7 +92,7 @@ begin
     counter_p: process (clk, start, algo_i, limit)
     begin
         if clk'event and clk = '1' then
-            if start = '1' or factor = ZERO then
+            if start = '1' or factor = ZERO or update = '1' then
                 counter <= (others => '0');
             elsif limit = '1' and algo_i = '1' then
                 counter <= counter+INCR-factor;
@@ -93,7 +106,7 @@ begin
     prescaled_algo_p: process (clk, algo_i, limit, factor)
     begin
         if clk'event and clk = '0' then 
-            if factor = ZERO then
+            if factor = ZERO or update = '1' then
                 prescaled_algo_o <= '0';
             elsif limit = '1' and algo_i = '1' then
                 prescaled_algo_o <= '1';
@@ -110,7 +123,7 @@ begin
             variable prescaled_algo_cnt : natural := 0;
         begin
             if clk'event and clk = '0' then
-                if start = '1' or factor = ZERO then
+                if start = '1' or factor = ZERO or update = '1' then
                     prescaled_algo_cnt := 0;
                     algo_cnt := 0;
                 elsif limit = '0' and algo_i = '1' then

@@ -190,23 +190,39 @@ The “prescale factor set index” is loaded into the register by software and 
 the next lumi section (\ref{current_prescale_factor_set_index_updated_reg} and \ref{previous_prescale_factor_set_index_updated_reg}).
 
 \paragraph{Prescaler logic}
+\label{sec:fdl:prescaler_logic}
 
 With each trigger request of the Algorithm, a counter is incremented by 10\textsuperscript{\tiny{precision}} as long as the
 incremented counter is less than the prescale factor. If the incremented counter is greater or equal than the prescale
 factor, the trigger request of the prescaled Algorithm is forwarded to the Final Decision Logic (for one clock cycle)
 and the prescale factor is subtracted from the incremented counter during the next clock cycle.
 
+% \begin{figure}[htb]
+% \centering
+% \includegraphics[width=15cm]{figures/Screenshot_fractional_prescalers}
+% \caption{Fractional prescaler}
+% \label{fig:fdl:fractional_prescalers}
+% \end{figure}
+
 \begin{figure}[htb]
 \centering
-\includegraphics[width=15cm]{figures/Screenshot_fractional_prescalers}
-\caption{Fractional prescaler}
-\label{fig:fdl:fractional_prescalers}
+\includegraphics[width=15cm]{figures/fractional_prescaler_overview}
+\caption{Fractional prescaler (overview)}
+\label{fig:fdl:fractional_prescaler}
 \end{figure}
 
-In Figure (\ref{fig:fdl:fractional_prescalers}) one can see the simulation of a fractional prescaler. In this example the fractional prescale factor is 2.48 and the signal
-”prescale factor int” shows this value multiplied by 10\textsuperscript{\tiny{precision}}, i.e., currently by 100 (so, 248).
-The signal ”algo” is always true, in other words, without prescale this Algorithm would be firing (sending a trigger request) in every bunch crossing. Signal ”prescaled algo o” shows when the trigger request of the prescaled Algorithm is allowed to pass. Signals ”algo cnt sim” and ”prescaled algo cnt sim” show the number of this Algorithm’s trigger requests before and after the prescale logic. At the cursor point a factor 47/19 (\~{=} 2.4737) is reached. With ”algo cnt sim” reaching higher numbers, on average the effective prescale factor gets closer and closer to the requested value of 2.48.\\
-The prescaler is reseted with B-Go "start" signal, at the begin of a run.
+In Figure (\ref{fig:fdl:fractional_prescaler}) one can see the simulation of a fractional prescaler for an algo of a certain prescale factor and the same algo (a copy of the first one) with a higher prescale factor with an integer ratio. In this example the fractional prescale factors are 1.30 and 3.9, the signals ”prescale\_factor\_1” and ”prescale\_factor\_2” show these values multiplied by 10\textsuperscript{\tiny{precision}}, i.e., currently by 100 (so, 130 and 390).
+The pulses of signal ”algo” have intervals with random values. Signals ”prescaled\_algo\_1” and ”prescaled\_algo\_2” show when the trigger request of the prescaled Algorithm is allowed to pass. In signal "shadow" one can see, that pulses of ”prescaled\_algo\_2” are always in the shadow of pulses of ”prescaled\_algo\_1”, even for non interger prescale factor values.\\
+Signals ”algo\_counter”, ”prescaled\_algo\_1\_counter” and ”prescaled\_algo\_2\_counter” show the number of this Algorithm’s trigger requests after the prescale logic.\\
+The counters in the prescaler logic are reseted with B-Go "start" signal, at the begin of a run and with begin of lumi section signal ("begin\_lumi") after a "prescale\_factor\_rquest" occured.\\
+In Figure (\ref{fig:fdl:fractional_prescaler_begin_lumi}) one can see the reset logic at the begin of a lumi section after "prescale\_factor\_request" occured.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{figures/fractional_prescaler_begin_lumi}
+\caption{Fractional prescaler (begin of lumi section}
+\label{fig:fdl:fractional_prescaler_begin_lumi}
+\end{figure}
 
 \subsubsection{Finor-masks}
 \label{sec:fdl:finor_masks}

@@ -7,16 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v1.31.0] - 2024-10-07
 ### Comment
 
-- implemented update_process_pre_scaler.vhd (guarantees "shadowing" of algos with same logic, but different prescale factors with an integer ratio) in algo_pre_scaler.vhd.
+- changed reset logic for counters in algo_pre_scaler_fractional_float.vhd (guarantees "shadowing" of algos with same logic, but different prescale factors with an integer ratio).
 
-### Added
-- source files:
-  - ../payload/fdl/update_process_pre_scaler.vhd
 ### Changed
+- source files:
+  - ../payload/fdl/algo_pre_scaler_fractional_float.vhd
 - dep file:
   - ../cfg/uGT_algo.dep
 - simulation file:
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+  - ../payload/fdl/update_process.vhd
   - ../sim/scripts/algo_pre_scaler_fractional_float.do
   - ../sim/scripts/algo_pre_scaler_fractional_float_wave.do
   - ../sim/testbench/algo_pre_scaler_fractional_float_tb.vhd

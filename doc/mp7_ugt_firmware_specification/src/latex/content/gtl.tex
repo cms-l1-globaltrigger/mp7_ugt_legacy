@@ -46,10 +46,14 @@ Definitions are based on document~\cite{interface}.
 \end{itemize}
 \item Calo-Layer1 data
 \begin{itemize}
-\item Boosted jet objects (BJET0..BJET5)
 \item Anomaly Detection Integer part
 \item Anomaly Detection Decimal part
-\item Heavy Ion bit(s0
+\item Heavy Ion bits
+\end{itemize}
+\item ZDC data
+\begin{itemize}
+\item ZDC+ data
+\item ZDC- data
 \end{itemize}
 \item External conditions
 \end{itemize}
@@ -242,6 +246,48 @@ Overview (frame 0 ascending to 5):\\
 \end{bytefield}
 \end{center}
 \tiny{Remark: "AD I" means Anomaly Detection Integer part, "AD D" means Anomaly Detection Decimal part, "l" means least significant bits, "h" means most significant bits}\normalsize
+
+\clearpage
+
+\subsubsection{ZDC optical interface}
+\label{sec:gtl:zdc_optical_interfaces}
+
+Data from ZDC are received with a 5 GHz link on MP7 of slot 1 (RX2, link 71), only.
+Two 10 bits words contain the values of ZDC+ and ZDC- data.
+
+Overview (frame 0 ascending to 5):\\
+\begin{center}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,7,8,31} \\
+        \bitbox {24}      {\texttt{free}} &
+        \bitbox {8}       {\texttt{0x7c/0x3c}} \\
+\end{bytefield}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,9,10,31} \\
+        \bitbox {22}      {\texttt{free}} &
+        \bitbox {10}      {\texttt{ZDC+ data}} \\
+\end{bytefield}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,9,10,31} \\
+        \bitbox {22}      {\texttt{free}} &
+        \bitbox {10}      {\texttt{ZDC- data}} \\
+\end{bytefield}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,31} \\
+        \bitbox {32}     {\texttt{free}} \\
+\end{bytefield}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,11,12,31} \\
+        \bitbox {20}      {\texttt{free}} &
+        \bitbox {12}      {\texttt{12bit counter *}} \\
+\end{bytefield}
+\begin{bytefield}[boxformatting={\centering\itshape}, bitwidth=1.2em, endianness=big]{32}
+        \bitheader{0,31} \\
+        \bitbox {32}     {\texttt{free}} \\
+\end{bytefield}
+\end{center}
+
+*) ZDC 12bit counter not used in \gt.
 
 \clearpage
 
@@ -616,6 +662,11 @@ The calorimeter layer 1 trigger processing identifies \textbf{Anomaly Detection}
 See also \ref{sec:gtl:calo1_optical_interfaces}.\\
 The value for Anomaly Detection (of CICADA) is passed to the \ugt for each event.\\
 The Anomaly Detection value (of CICADA) is represented by an 8 bits integer part and an 8 bits decimal part, which are combined to a 16 bits word for comparison with requested threshold ("cscore").
+
+\subsubsection{Definitions of ZDC data}
+\label{sec:gtl:def_zdc}
+
+The ZDC system delivers two 10 bits words, one for ZDC+ and one for ZDC-. A comparison with requested threshold is implemented to trigger on ZDC data.
 
 \clearpage
 

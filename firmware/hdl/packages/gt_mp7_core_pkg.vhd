@@ -4,14 +4,15 @@
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
 
--- mp7_ugt (=FRAME_VERSION): v1.29.0
+-- mp7_ugt (=FRAME_VERSION): v1.31.0
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.29.0
+-- gt: v1.31.0
 -- frame: v1.4.2 (see frame.vhd)
--- gtl: v1.23.0 (see gtl_module_tpl.vhd)
+-- gtl: v1.24.0 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
+-- HB 2024-09-04: v1.30.0 - Added vivado_fix_cells_tpl.tcl and constraints_fixed_cells.tcl to ../scripts.
 -- HB 2023-04-08: v1.22.2 - Changed in scripts/mp7_patch.py (for area_constraints.tcl).
 -- HB 2023-04-07: v1.22.1 - Used Tx links 28-31 for scouting (frame/output_mux.vhd) without links 32..71.
 -- HB 2023-03-10: v1.22.0 - Used Tx links 28-31 for scouting (frame/output_mux.vhd). Used all 72 links.
@@ -36,8 +37,10 @@
 --
 -- gtl history:
 
--- HB 2024-05-28: v1.23.0: Added files for for common ML calculations (ml_comparison.vhd and ml_calculation_instances.vhd).
--- HB 2024-05-28: v1.22.0: Implemented VHDL files for topological trigger models (TBD).
+-- HB 2024-10-23: v1.24.0: Added files for for common ML calculations (ml_comparison.vhd and ml_calculation_instances.vhd).
+-- HB 2024-07-08: v1.23.0: Implemented VHDL files for topological trigger models (TBD).
+-- BA 2024-07-12: v1.22.1: Fixed interface of AXOL1TL models v1 and v3.
+-- HB 2024-07-05: v1.22.0: Implemented AXOL1TL model v4.
 -- HB 2024-05-23: v1.21.0: Implemented HTMHF and calo comb multi condition.
 -- HB 2023-12-18: v1.20.0: Implemented topological and cicada trigger.
 -- HB 2023-09-29: v1.19.4: Used "no_mgt" at quads 8..16 (top_decl.vhd).
@@ -102,7 +105,7 @@ package gt_mp7_core_pkg is
 -- ==================================================================================================
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant GT_MINOR_VERSION      : integer range 0 to 255 := 29;
+    constant GT_MINOR_VERSION      : integer range 0 to 255 := 31;
     constant GT_REV_VERSION        : integer range 0 to 255 := 0;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
@@ -114,7 +117,7 @@ package gt_mp7_core_pkg is
     constant FRAME_REV_VERSION        : integer range 0 to 255 := 2;
 -- GTL firmware (fix part) version
     constant GTL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
-    constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 23;
+    constant GTL_FW_MINOR_VERSION      : integer range 0 to 255 := 24;
     constant GTL_FW_REV_VERSION        : integer range 0 to 255 := 0;
 -- FDL firmware version
     constant FDL_FW_MAJOR_VERSION      : integer range 0 to 255 := 1;
@@ -221,6 +224,3 @@ package body gt_mp7_core_pkg is
     end function;
 
 end;
-
-
-

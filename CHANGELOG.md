@@ -4,9 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.29.0] - 2024-06-21
+## [v1.31.0] - 2024-10-23
 ### Comment
-- mp7_ugt firmware release v1.29.0
+- mp7_ugt firmware release v1.31.0
 - added ML score width (gtl_pkg.vhd)
 - new files for ML calculations
 
@@ -15,6 +15,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../payload/../gtl/ml_comparison.vhd
   - ../payload/../gtl/ml_calculation_instances.vhd
   
+## [v1.30.0] - 2024-09-13
+### Comment
+
+- implemented possibility to fix cells in vivado (by ugt-fwtool synthesis.py)
+- vivado_fix_cells.tcl: script for vivado sequence to fix cells
+- constraints_fixed_cells.tcl: contains location of cells to fix
+
+### Added
+- script files:
+  - scripts/vivado_fix_cells.tcl
+  - ../firmware/ucf/constraints_fixed_cells.tcl
+
+## [v1.29.0] - 2024-08-12
+### Comment
+
+- mp7_ugt firmware release v1.29.0
+- branch for implementing VHDL files of TOPO models (#56) - TBD 
+- added TOPO models "base_v1" (this was used for the first TOPO tests)
+- added port "htmhf" in all topo wrapper files (e.g.: topo_trigger_hh_ele_v1_wrapper.vhd, ...)
+- changed script pkgpatch.py (added function "calc_fw_hash" for repo branch version info, patched in gt_mp7_top_pkg_tpl.vhd)
+
+### Added
+- source files:
+  - VHDL files of TOPO models
+  - directory ../topo_trigger/model_base_v1
 ### Changed
 - script files:
   - scripts/pkgpatch.py
@@ -25,26 +50,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - simulation file:
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
 
-## [v1.28.0] - 2024-05-28
+## [v1.28.1] - 2024-07-12
+
+### Fixed
+- interface for axol1tl models v1 and v3 (#54).
+
+## [v1.28.0] - 2024-07-05
 ### Comment
-    mp7_ugt firmware release v1.28.0
-    branch for implementing VHDL files of TOPO models (TBD)
-    added TOPO models "base_v1" (this was used for the first TOPO tests)
-    changed script pkgpatch.py (added function "calc_fw_hash" for repo branch version info, patched in gt_mp7_top_pkg_tpl.vhd)
+
+- implementation of AXOL1TL model v4
 
 ### Added
-    source files:
-        VHDL files of TOPO models (TBD)
-        directory ../topo_trigger/model_base_v1
+- source files:
+  - ../payload/gtl/axol1tl_trigger/axol1tl_v4
 
 ### Changed
-    script files:
-        scripts/pkgpatch.py
-    source files:
-        ../packages/gt_mp7_core_pkg.vhd
-        ../packages/gt_mp7_top_pkg_tpl.vhd
-    simulation file:
-        ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../payload/gtl_module_tpl.vhd
+- dep file:
+  - ../cfg/axol1tl_trigger.dep
 
 ## [v1.27.0] - 2024-05-28
 ### Comment
@@ -64,7 +89,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v1.26.0] - 2024-03-14
 ### Comment
 - mp7_ugt firmware release v1.26.0
-- CICADA on link 11 with 16 bits cicada score 
+- CICADA on link 11 with 16 bits cicada score
 - development for axol1tl trigger (axol1tl_trigger) with models
 - no topological trigger (topo_trigger) - VHDL files of models missing
 
@@ -112,7 +137,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/top_decl.vhd
   - ../payload/gtl_module_tpl.vhd
   - ../packages/gt_mp7_core_pkg.vhd
-  
+
 ## [v1.25.1] - 2023-09-28
 ### Comment
 

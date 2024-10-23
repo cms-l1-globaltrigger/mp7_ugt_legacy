@@ -3,19 +3,19 @@
 -- Wrapper for "anomaly detection".
 
 -- Version history:
--- HB 2024-08-13: added htmhf input.
--- HB 2024-01-24: renamed "adt" to "axol1tl_v3"
--- HB 2023-01-18: removed comparator and delay, added anomaly_score_o for simulation.
--- HB 2022-11-11: added comparator and delay for simulation.
--- HB 2022-08-29: first design.
+-- SPS 2024-07-24: copy to "axol1tl_v4"
+-- HB  2024-01-24: renamed "adt" to "axol1tl_v3"
+-- HB  2023-01-18: removed comparator and delay, added anomaly_score_o for simulation.
+-- HB  2022-11-11: added comparator and delay for simulation.
+-- HB  2022-08-29: first design.
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-
+ 
 use work.gtl_pkg.all;
 
-entity axol1tl_v3_wrapper is
+entity axol1tl_v4_wrapper is
     generic	(
         sim_mode: boolean := true;
         threshold: integer := 4150
@@ -35,16 +35,16 @@ entity axol1tl_v3_wrapper is
         adt_out: out std_logic;
         anomaly_score_o: out std_logic_vector(17 downto 0)
     );
-end axol1tl_v3_wrapper;
+end axol1tl_v4_wrapper;
 
-architecture rtl of axol1tl_v3_wrapper is
+architecture rtl of axol1tl_v4_wrapper is
 
     signal ett_i, htt_i, etm_i, htm_i, etmhf_i, htmhf_i: std_logic_vector(31 downto 0) := X"00000000";
     signal anomaly_score: std_logic_vector(17 downto 0);
     signal ap_rst: std_logic := '0';
     signal ap_start: std_logic := '1';
     signal adt: std_logic_vector(0 downto 0) := "0";
-
+    
 begin
 
     ett_i(MAX_ESUMS_BITS-1 downto 0) <= ett;
@@ -53,8 +53,8 @@ begin
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
     htmhf_i(MAX_ESUMS_BITS-1 downto 0) <= htmhf;
-
-    anomaly_detection_i: entity work.axol1tl_v3
+    
+    anomaly_detection_i: entity work.axol1tl_v4
         port map(
             lhc_clk, ap_rst, ap_start,
             open, open, open,
@@ -77,7 +77,7 @@ begin
     adt(0) <= '1' when to_integer(unsigned(anomaly_score)) >= threshold else '0';
 
     adt_out <= adt(0);
-
+    
     anomaly_score_o <= anomaly_score;
 
 end architecture rtl;

@@ -2,8 +2,10 @@
 -- Global Trigger Logic module.
 
 -- Version history:
--- HB 2024-06-21: v1.23.0: Added files for for common ML calculations (ml_comparison.vhd and ml_calculation_instances.vhd).
--- HB 2024-05-28: v1.22.0: Implemented VHDL files for topological trigger models (TBD).
+-- HB 2024-10-23: v1.24.0: Added files for for common ML calculations (ml_comparison.vhd and ml_calculation_instances.vhd).
+-- HB 2024-07-08: v1.23.0: Implemented VHDL files for topological trigger models (TBD).
+-- BA 2024-07-05: v1.22.1: Fixed interface of AXOL1TL models v1 and v3.
+-- HB 2024-07-05: v1.22.0: Implemented AXOL1TL model v4.
 -- HB 2024-05-23: v1.21.0: Implemented HTMHF and calo comb multi condition.
 -- HB 2023-12-18: v1.20.0: Implemented topological and cicada trigger.
 -- HB 2023-09-29: v1.19.4: Used "no_mgt" at quads 8..16 (top_decl.vhd).

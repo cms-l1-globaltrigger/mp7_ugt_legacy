@@ -25,7 +25,7 @@ files:
 
 | utm | TME | VHDL Producer |
 |:-:|:-:|:-:|
-| 0.13.0 | 0.17.1 | 2.20.1 |
+| 0.13.0 | 0.17.1 | 2.20.2 |
 
 
 Following dependencies exist for uGT firmware:

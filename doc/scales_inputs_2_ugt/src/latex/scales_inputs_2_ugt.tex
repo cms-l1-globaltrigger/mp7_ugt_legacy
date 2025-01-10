@@ -18,7 +18,7 @@
 
 \begin{titlepage}
 
-\date{8 May 2024}
+\date{10 January 2025}
 \title{Scales for inputs to $\mu$GT
 ($\varphi$, $\eta$, $p_t$/$E_t$, and others)}
 
@@ -68,6 +68,12 @@ P.Klabbers, W.H.Smith
 \end{Authlist}
 
 \end{titlepage}
+
+\textbf{Remark:}\\
+This document contains a preliminary version of adding \textbf{ETT\_pos}, \textbf{ETT\_neg} and \textbf{minimum bias UPC} objects to the data structure of uGT inputs. Those objects are proposed by \textbf{Ivan Cali} in the document \textbf{"L1FWneedsPbPb2018run.docx"} in an email of 9th January 2025 (subject "Re: uGT available inputs for AXO").\\
+ETT\_pos and ETT\_neg have 12 bits each and will be located on the 4 MSB of e/$\gamma$ objects 0..5. There will be 4 objects of minimum bias UPC with 4 bits each, located on the 4 MSB of e/$\gamma$ objects 6..9.\\
+See Tables: \ref{table:scales_table_1}, \ref{table:sum_opt_links}, \ref{table:egamma_object} and \ref{table:bits_31_28_eg_object}.\\
+=================================================================================
 
 With respect to the "legacy" system, the upgraded GT (uGT or $\mu$GT) has higher requirements concerning precision and amount of data (more input objects of each kind, additional bits for isolation, quality etc.) and also more input bandwidth and computing resources. The additional resources  allow to make the system more uniform and transparent as well as easier to use. The interfaces between uGMT (or $\mu$GMT, replacing GMT) and "Calo Trigger Layer-2" (replacing GCT) have to be defined accordingly.
 
@@ -159,7 +165,8 @@ e/$\gamma$	&	1 * 12	&	$E_t$	&	0..256 GeV	&	0.5	&	9                    \\
 	&		&	$\eta$	&	-5..5	&	0.0870/2=0.0435	&	7+1 = 8                    \\
 	&		&	$\varphi$	&	2$\pi$	&	2$\pi$/144$\sim$0.044	&	8                    \\
 	&		&	iso	&		&		&	2                    \\
-	&		&	spare	&		&		&	5                    \\
+	&		&	ETT\_pos, ETT\_neg, minimum bias UPC	&		&		&	4                    \\
+	&		&	spare	&		&		&	1                    \\
 	&		&	TOTAL	&		&		&	32                    \\
 % 	&		&		&		&		&	                    \\
 \hline
@@ -284,26 +291,26 @@ The following pages contain tables for data structure of objects and the data fl
 frame & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 &\makebox[1.2cm][c]{9} \\\hline\hline
 % frame &  & & & & & & & & & & \\\hline\hline
 0 & free & free & free & free & EG0 & EG6 & JET0 & JET6 & TAU0 & TAU6\\
- &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\\hline
+ &  &  &  &  & ETT\_pos & MBT0P\_UPC &  &  &  &\\
+ &  &  &  &  & [3:0] &  &  &  &  &\\\hline
 1 & MU0 eta raw & MU2 eta raw & MU4 eta raw & MU6 eta raw & EG1 & EG7  & JET1 & JET7 & TAU1 & TAU7\\
- & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & & & & & &\\
- & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & & & & & &\\
+ & on bits 21:13 & on bits 21:13 & on bits 21:13 & on bits 21:13 & ETT\_pos & MBT0M\_UPC & & & &\\
+ & MU1 eta raw & MU3 eta raw & MU5 eta raw & MU7 eta raw & [7:4] & & & & &\\
  & on bits 30:22 & on bits 30:22 & on bits 30:22 & on bits 30:22 & & & & & &\\\hline
 2 & MU0 [31:00]  & MU2 [31:00]  & MU4 [31:00]  & MU6 [31:00]  & EG2 & EG8  & JET2 & JET8  & TAU2 & TAU8\\
- &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  & ETT\_pos & MBT1P\_UPC &  &  &  &\\
+ &  &  &  &  & [11:8] &  &  &  &  &\\
  &  &  &  &  &  &  &  &  &  &\\\hline
 3 & MU0 [63:32] & MU2 [63:32] & MU4 [63:32] & MU6 [63:32] & EG3 & EG9  & JET3 & JET9  & TAU3 & TAU9\\
- &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\
+ &  &  &  &  & ETT\_neg & MBT1M\_UPC &  &  &  &\\
+ &  &  &  &  & [3:0] &  &  &  &  &\\
  &  &  &  &  &  &  &  &  &  &\\\hline
 4 & MU1 [31:00]  & MU3 [31:00]  & MU5 [31:00]  & MU7 [31:00]  & EG4 & EG10 & JET4 & JET10 & TAU4 & TAU10\\
- &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\\hline
+ &  &  &  &  & ETT\_neg &  &  &  &  &\\
+ &  &  &  &  & [7:4] &  &  &  &  &\\\hline
 5 & MU1 [63:32] & MU3 [63:32] & MU5 [63:32] & MU7 [63:32] & EG5 & EG11 & JET5 & JET11 & TAU5 & TAU11\\
- &  &  &  &  &  &  &  &  &  &\\
- &  &  &  &  &  &  &  &  &  &\\\hline
+ &  &  &  &  & ETT\_neg &  &  &  &  &\\
+ &  &  &  &  & [11:8] &  &  &  &  &\\\hline
 \end{tabular}
 }
 \label{table:sum_opt_links}
@@ -538,13 +545,36 @@ bit(s) & parameter \\\hline\hline
 \centering
 \begin{tabular}{|c|c|}\hline
 bit(s) & parameter \\\hline\hline
-31..27 & spare \\
+31..28 & ETT\_pos, ETT\_neg, minimum bias UPC \\
+27..27 & spare \\
 26..25 & iso \\
 24..17 & $\varphi$ \\
 16..9 & $\eta$ \\
 8..0 & $E_t$ \\\hline
 \end{tabular}
 \label{table:egamma_object}
+\end{table}
+
+\begin{table}[ht]
+\caption{\bf ETT\_pos, ETT\_neg and minimum bias UPC on bits 31:28 of e/$\gamma$ objects}
+\vspace{5mm}
+\centering
+\begin{tabular}{|c|c|}\hline
+object & parameter \\\hline\hline
+0 & ETT\_pos[3:0] \\
+1 & ETT\_pos[7:4] \\
+2 & ETT\_pos[11:8] \\
+3 & ETT\_neg[3:0] \\
+4 & ETT\_neg[7:4] \\
+5 & ETT\_neg[11:8] \\
+6 & MBT0P\_UPC\\
+7 & MBT0M\_UPC\\
+8 & MBT1P\_UPC\\
+9 & MBT1P\_UPC\\
+10 & free\\
+11 & free\\\hline
+\end{tabular}
+\label{table:bits_31_28_eg_object}
 \end{table}
 
 \begin{table}[ht]

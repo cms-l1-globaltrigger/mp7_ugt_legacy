@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.31.0] - 2025-01-10
+### Comment
+
+- study for HIN 2018 PbPb run (email: Ivan Cali, 9.1.2025)
+
+### Added
+- doc files:
+  - doc/scales_inputs_2_ugt/src/latex/scales_inputs_2_ugt.tex
+
 ## [v1.30.0] - 2024-09-13
 ### Comment
 

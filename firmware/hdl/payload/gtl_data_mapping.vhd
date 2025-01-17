@@ -2,6 +2,7 @@
 -- Data mapping for GTL
 
 -- Version-history:
+-- HB 2025-01-13: added objects for HIN 2018 PbPb run (email: Ivan Cali, 9.1.2025).
 -- HB 2023-09-06: cicada on link 11.
 -- HB 2023-08-25: updated for new ZDC data structure.
 -- HB 2023-03-01: updated for ZDC.
@@ -55,6 +56,11 @@ begin
 -- HF- thresh 0 => MBT0HFM
 -- HF+ thresh 1 => MBT1HFP
 -- HF- thresh 1 => MBT1HFM
+-- HB 2025-01-13: objects for HIN 2018 PbPb run (email: Ivan Cali, 9.1.2025).
+-- UPC thresh 0 => MBT0P_UPC
+-- UPC thresh 0 => MBT0M_UPC
+-- UPC thresh 1 => MBT1P_UPC
+-- UPC thresh 1 => MBT1M_UPC
 
     gtl_data.ett(ETT_ET_HIGH downto ETT_ET_LOW) <= lhc_data.ett(ETT_ET_HIGH downto ETT_ET_LOW);
     gtl_data.htt(HTT_ET_high downto HTT_ET_LOW) <= lhc_data.ht(HTT_ET_high downto HTT_ET_LOW);
@@ -109,4 +115,21 @@ begin
     gtl_data.cicada(AD_DEC_HIGH downto AD_DEC_HIGH-3) <= lhc_data.cicada(AD_DEC_MSB_FRAME)(AD_DEC_HIGH_FRAME downto AD_DEC_LOW_FRAME); -- anomaly detection decimal part high
     gtl_data.cicada(AD_DEC_LOW+3 downto AD_DEC_LOW) <= lhc_data.cicada(AD_DEC_LSB_FRAME)(AD_DEC_HIGH_FRAME downto AD_DEC_LOW_FRAME); -- anomaly detection decimal part low
     
+-- ****************************************************************************************
+
+-- New objects for HIN 2018 PbPb run (email: Ivan Cali, 9.1.2025)
+-- Object ETT_POS (on eg frames) 
+    gtl_data.ett_pos(ETT_POS_3 downto ETT_POS_0) <= lhc_data.eg(FR_0)(ETT_POS_IN_EG_HIGH downto ETT_POS_IN_EG_LOW);
+    gtl_data.ett_pos(ETT_POS_7 downto ETT_POS_4) <= lhc_data.eg(FR_1)(ETT_POS_IN_EG_HIGH downto ETT_POS_IN_EG_LOW);
+    gtl_data.ett_pos(ETT_POS_11 downto ETT_POS_8) <= lhc_data.eg(FR_3)(ETT_POS_IN_EG_HIGH downto ETT_POS_IN_EG_LOW);
+-- Object ETT_NEG (on eg frames) 
+    gtl_data.ett_neg(ETT_NEG_3 downto ETT_NEG_0) <= lhc_data.eg(FR_3)(ETT_NEG_IN_EG_HIGH downto ETT_NEG_IN_EG_LOW);
+    gtl_data.ett_neg(ETT_NEG_7 downto ETT_NEG_4) <= lhc_data.eg(FR_4)(ETT_NEG_IN_EG_HIGH downto ETT_NEG_IN_EG_LOW);
+    gtl_data.ett_neg(ETT_NEG_11 downto ETT_NEG_8) <= lhc_data.eg(FR_5)(ETT_NEG_IN_EG_HIGH downto ETT_NEG_IN_EG_LOW);
+-- Object minimum bias UPC (on eg frames) 
+    gtl_data.mbt0p_upc(MBT0P_UPC_HIGH downto MBT0P_UPC_LOW) <= lhc_data.eg(FR_6)(MBT0P_IN_EG_HIGH downto MBT0P_IN_EG_LOW);
+    gtl_data.mbt0m_upc(MBT0M_UPC_HIGH downto MBT0M_UPC_LOW) <= lhc_data.eg(FR_7)(MBT0M_IN_EG_HIGH downto MBT0M_IN_EG_LOW);
+    gtl_data.mbt1p_upc(MBT1P_UPC_HIGH downto MBT1P_UPC_LOW) <= lhc_data.eg(FR_8)(MBT1P_IN_EG_HIGH downto MBT1P_IN_EG_LOW);
+    gtl_data.mbt1m_upc(MBT1M_UPC_HIGH downto MBT1M_UPC_LOW) <= lhc_data.eg(FR_9)(MBT1M_IN_EG_HIGH downto MBT1M_IN_EG_LOW);
+
 end architecture rtl;

@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - doc files:
   - doc/scales_inputs_2_ugt/src/latex/scales_inputs_2_ugt.tex
+- source files:
+  - ../payload/gtl_data_mapping.vhd
 
 ## [v1.30.0] - 2024-09-13
 ### Comment

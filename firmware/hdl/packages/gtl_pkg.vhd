@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2025-01-13: added constants for HIN 2018 PbPb run (email: Ivan Cali, 9.1.2025). New objects on eg links!
 -- HB 2024-05-10: added COMMON_COND_STAGES for condition with no intermediate pipeline.
 -- HB 2023-10-10: CICADA definition changed: no bjets.
 -- HB 2023-10-03: inserted calo anomaly algorithm (CICADA) definitions.
@@ -125,6 +126,9 @@ constant ASYMET_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYP
 constant ASYMHT_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+8;
 constant ASYMETHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+9;
 constant ASYMHTHF_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+10;
+-- constants for HIN 2018 PbPb run (email: Ivan Cali, 9.1.2025).
+constant ETT_POS_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+11;
+constant ETT_NEG_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+12;
 constant NR_MU_TYPE : natural := 1;
 constant MU_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES;
 --constant BJET_TYPE : natural := NR_CALO_TYPES+NR_ESUMS_TYPES+NR_MU_TYPE;
@@ -217,6 +221,35 @@ constant EG_PHI_BITS : natural := EG_PHI_HIGH-EG_PHI_LOW+1;
 constant EG_ISO_LOW : natural := 25;
 constant EG_ISO_HIGH : natural := 26;
 constant EG_ISO_BITS : natural := EG_ISO_HIGH-EG_ISO_LOW+1;
+-- constants for HIN 2018 PbPb run (email: Ivan Cali, 9.1.2025).
+constant ETT_POS_IN_EG_HIGH : natural := 31;
+constant ETT_POS_IN_EG_LOW : natural := 28;
+constant ETT_NEG_IN_EG_HIGH : natural := 31;
+constant ETT_NEG_IN_EG_LOW : natural := 28;
+constant MBT0P_IN_EG_HIGH : natural := 31;
+constant MBT0P_IN_EG_LOW : natural := 28;
+constant MBT0M_IN_EG_HIGH : natural := 31;
+constant MBT0M_IN_EG_LOW : natural := 28;
+constant MBT1P_IN_EG_HIGH : natural := 31;
+constant MBT1P_IN_EG_LOW : natural := 28;
+constant MBT1M_IN_EG_HIGH : natural := 31;
+constant MBT1M_IN_EG_LOW : natural := 28;
+constant ETT_POS_0 : natural := 0;
+constant ETT_POS_3 : natural := 3;
+constant ETT_POS_4 : natural := 4;
+constant ETT_POS_7 : natural := 7;
+constant ETT_POS_8 : natural := 8;
+constant ETT_POS_11 : natural := 11;
+constant FR_0 : natural := 0;
+constant FR_1 : natural := 1;
+constant FR_2 : natural := 2;
+constant FR_3 : natural := 3;
+constant FR_4 : natural := 4;
+constant FR_5 : natural := 5;
+constant FR_6 : natural := 6;
+constant FR_7 : natural := 7;
+constant FR_8 : natural := 8;
+constant FR_9 : natural := 9;
 
 constant JET_ET_LOW : natural := 0;
 constant JET_ET_HIGH : natural := 10;
@@ -291,10 +324,21 @@ constant NR_ETM_OBJECTS : positive := 1;
 constant NR_HTM_OBJECTS : positive := 1;
 constant NR_ETMHF_OBJECTS : positive := 1;
 constant NR_HTMHF_OBJECTS : positive := 1;
+-- constants for HIN 2018 PbPb run (email: Ivan Cali, 9.1.2025).
+constant NR_ETT_POS_OBJECTS : positive := 1;
+constant NR_ETT_NEG_OBJECTS : positive := 1;
 
 constant ETT_ET_LOW : natural := 0;
 constant ETT_ET_HIGH : natural := 11;
 constant ETT_ET_BITS : natural := ETT_ET_HIGH-ETT_ET_LOW+1;
+
+-- constants for HIN 2018 PbPb run (email: Ivan Cali, 9.1.2025).
+constant ETT_POS_ET_LOW : natural := 0;
+constant ETT_POS_ET_HIGH : natural := 11;
+constant ETT_POS_ET_BITS : natural := ETT_POS_ET_HIGH-ETT_POS_ET_LOW+1;
+constant ETT_NEG_ET_LOW : natural := 0;
+constant ETT_NEG_ET_HIGH : natural := 11;
+constant ETT_NEG_ET_BITS : natural := ETT_NEG_ET_HIGH-ETT_NEG_ET_LOW+1;
 
 constant HTT_ET_LOW : natural := 0;
 constant HTT_ET_HIGH : natural := 11;
@@ -423,6 +467,21 @@ constant MBT1HFP_COUNT_HIGH : natural := 3;
 constant MBT1HFM_COUNT_LOW : natural := 0;
 constant MBT1HFM_COUNT_HIGH : natural := 3;
 
+-- constants for HIN 2018 PbPb run (email: Ivan Cali, 9.1.2025).
+-- minimum bias UPC objects
+constant MBT0P_UPC_TYPE : natural range 4 to 7 := 4;
+constant MBT0M_UPC_TYPE : natural range 4 to 7 := 5;
+constant MBT1P_UPC_TYPE : natural range 4 to 7 := 6;
+constant MBT1M_UPC_TYPE : natural range 4 to 7 := 7;
+
+constant MBT0P_UPC_HIGH : natural := 3;
+constant MBT0P_UPC_LOW : natural := 0;
+constant MBT0M_UPC_HIGH : natural := 3;
+constant MBT0P_UPC_LOW : natural := 0;
+constant MBT1P_UPC_HIGH : natural := 3;
+constant MBT1P_UPC_LOW : natural := 0;
+constant MBT1M_UPC_HIGH : natural := 3;
+constant MBT1P_UPC_LOW : natural := 0;
 -- *******************************************************************************************************
 -- HB 2022-10-10: inserted ZDC
 constant NR_ZDC_OBJECTS : positive := 6;
@@ -499,6 +558,9 @@ type gtl_data_record is record
     ext_cond : std_logic_vector(EXTERNAL_CONDITIONS_DATA_WIDTH-1 downto 0);
     cicada : std_logic_vector(CICADA_BITS-1 downto 0);
     zdc : zdc_array;
+    ett_pos : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    ett_neg : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    mbt1p_upc, mbt1m_upc, mbt0p_upc, mbt0m_upc : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 end record gtl_data_record;
 
 type bx_data_record is record
@@ -535,6 +597,12 @@ type bx_data_record is record
     mus0, mus1, mus2, musoot0, musoot1 : mus_bit_array;
     zdcm : bx_zdc_array;
     zdcp : bx_zdc_array;
+    ett_pos : bx_esums_array;
+    ett_neg : bx_esums_array;
+    mbt1p_upc : bx_esums_array;
+    mbt1m_upc : bx_esums_array;
+    mbt0p_upc : bx_esums_array;
+    mbt0m_upc : bx_esums_array;
 end record bx_data_record;
 
 -- ==== Correlations - begin ============================================================

@@ -45,6 +45,7 @@ vcom -93 -work work $HDL_DIR/packages/math_pkg.vhd
 ## HB 2022-09-21: used gt_mp7_top_pkg_sim.vhd for simulation
 vcom -93 -work work $HDL_DIR/packages/gt_mp7_core_pkg.vhd
 vcom -93 -work work $HDL_DIR/packages/gtl_pkg.vhd
+vcom -93 -work work $HDL_DIR/packages/gtl_luts_pkg.vhd
 #
 ## GTL modules
 #

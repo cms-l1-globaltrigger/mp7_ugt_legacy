@@ -114,7 +114,7 @@ constant NR_CALO_TYPES : natural := 3;
 constant EG_TYPE : natural range 0 to NR_CALO_TYPES-1 := 0;
 constant JET_TYPE : natural range 0 to NR_CALO_TYPES-1 := 1;
 constant TAU_TYPE : natural range 0 to NR_CALO_TYPES-1 := 2;
-constant NR_ESUMS_TYPES : natural := 11;
+constant NR_ESUMS_TYPES : natural := 13;
 constant ETT_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+0;
 constant HTT_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+1;
 constant ETM_TYPE : natural range NR_CALO_TYPES to NR_CALO_TYPES+NR_ESUMS_TYPES-1 := NR_CALO_TYPES+2;
@@ -477,11 +477,11 @@ constant MBT1M_UPC_TYPE : natural range 4 to 7 := 7;
 constant MBT0P_UPC_HIGH : natural := 3;
 constant MBT0P_UPC_LOW : natural := 0;
 constant MBT0M_UPC_HIGH : natural := 3;
-constant MBT0P_UPC_LOW : natural := 0;
+constant MBT0M_UPC_LOW : natural := 0;
 constant MBT1P_UPC_HIGH : natural := 3;
 constant MBT1P_UPC_LOW : natural := 0;
 constant MBT1M_UPC_HIGH : natural := 3;
-constant MBT1P_UPC_LOW : natural := 0;
+constant MBT1M_UPC_LOW : natural := 0;
 -- *******************************************************************************************************
 -- HB 2022-10-10: inserted ZDC
 constant NR_ZDC_OBJECTS : positive := 6;

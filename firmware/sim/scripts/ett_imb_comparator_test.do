@@ -50,7 +50,7 @@ vcom -93 -work work $HDL_DIR/packages/gtl_luts_pkg.vhd
 ## GTL modules
 #
 vcom -93 -work work $HDL_DIR/payload/gtl/common/delay_pipeline.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/ett_imb_comparator.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/ett_imb_comparator.vhd
 #
 
 ##TB_DIR

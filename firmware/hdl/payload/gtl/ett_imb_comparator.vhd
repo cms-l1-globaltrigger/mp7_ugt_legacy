@@ -31,21 +31,23 @@ end ett_imb_comparator;
 
 architecture rtl of ett_imb_comparator is
 
-    constant inv_ett_tot_comma_digits : integer := 8;
-    constant factor : real := 100000000.0;
-    constant inv_ett_tot_max_value_len : integer := 28; -- (10**8) = 0x5F5E100
-    signal thresold_i : std_logic_vector(ETT_POS_ET_BITS+inv_ett_tot_max_value_len-1 downto 0) := (others => '0'); 
+    --constant inv_ett_tot_comma_digits : integer := 8;
+    --constant factor : real := 100000000.0;
+    --constant inv_ett_tot_len : integer := 28; -- (10**8) = 0x5F5E100
+    constant factor : integer := 10**INV_ETT_TOTAL_PRECISION; -- 10**8 = 0x5F5E100
+    
+    signal thresold_i : std_logic_vector(ETT_P_N_ET_BITS+factor'length-1 downto 0) := (others => '0'); 
     signal ett_pos_i : std_logic_vector(ETT_POS_ET_BITS-1 downto 0) := (others => '0');
     signal ett_neg_i : std_logic_vector(ETT_NEG_ET_BITS-1 downto 0) := (others => '0');
-    signal ett_minus, ett_minus_d : std_logic_vector(ETT_POS_ET_BITS-1 downto 0) := (others => '0');
-    signal ett_total, ett_total_d : std_logic_vector(ETT_POS_ET_BITS-1 downto 0) := (others => '0');
-    signal inv_ett_tot_lut_value : std_logic_vector(inv_ett_tot_max_value_len-1 downto 0) := (others => '0');
-    signal imb : std_logic_vector(ETT_POS_ET_BITS+inv_ett_tot_max_value_len-1 downto 0) := (others => '0');
+    signal ett_minus, ett_minus_d : std_logic_vector(ETT_P_N_ET_BITS-1 downto 0) := (others => '0');
+    signal ett_total, ett_total_d : std_logic_vector(ETT_P_N_ET_BITS-1 downto 0) := (others => '0');
+    signal inv_ett_tot_lut_value : std_logic_vector(factor'length-1 downto 0) := (others => '0');
+    signal imb : std_logic_vector(ETT_P_N_ET_BITS+factor'length-1 downto 0) := (others => '0');
     signal comp, comp_d : std_logic_vector(0 downto 0);
     
 begin
    
-    thresold_i <= CONV_STD_LOGIC_VECTOR(integer(et_threshold * factor),inv_ett_tot_max_value_len+ETT_POS_ET_BITS); 
+    thresold_i <= CONV_STD_LOGIC_VECTOR((et_threshold * factor),(ETT_POS_ET_BITS+factor'length)); 
     ett_minus <= ett_pos_i - ett_neg_i;
     ett_total <= ett_pos_i + ett_neg_i;
     
@@ -67,7 +69,7 @@ begin
         clk, ett_total, ett_total_d
     );
 
-    inv_ett_tot_lut_value <= CONV_STD_LOGIC_VECTOR(INV_ETT_TOT_LUT(CONV_INTEGER(ett_total_d)),inv_ett_tot_max_value_len);   
+    inv_ett_tot_lut_value <= CONV_STD_LOGIC_VECTOR(INV_ETT_TOT_LUT(CONV_INTEGER(ett_total_d)),factor'length);   
     imb <= ett_minus_d * inv_ett_tot_lut_value;
     comp(0) <= '1' when (imb >= thresold_i) else '0';
 

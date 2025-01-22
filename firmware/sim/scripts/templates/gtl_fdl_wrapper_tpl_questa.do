@@ -118,6 +118,7 @@ vcom -93 -work work $HDL_DIR/payload/gtl/zdc_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/cicada_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/calo_comb_multi_condition.vhd
+vcom -93 -work work $HDL_DIR/payload/gtl/ett_imb_comparator.vhd
 #
 #### inserted from anomaly_detection.dep (wrapper in dep file)
 {{adt_vhd}}

@@ -70,20 +70,20 @@ Example for `setup_env_sim_synth.sh`
 
 ```bash
 ## Simulation (Questasim)
-export MODELSIM_ROOT=/opt/mentor
+export MODELSIM_ROOT=/opt/mentor/questa/2021.1_2
 export MODELSIM_PATH=${MODELSIM_ROOT}/questasim/bin
 export PATH=${MODELSIM_PATH}:${PATH}
 export MTI_VCO_MODE=64
 export MGLS_LICENSE_FILE=1234@license.server
-export UGT_GITLAB_USER_NAME=hbergaue
-export UGT_QUESTASIMLIBS_DIR=/opt/mentor
+export UGT_GITLAB_USER_NAME=<user name>
+export UGT_QUESTASIMLIBS_DIR=<home dir>
 export UGT_QUESTASIM_SIM_PATH=${MODELSIM_ROOT}
 export UGT_VIVADO_QUESTASIMLIBS_VERSION=2021.2
-export UGT_QUESTASIM_LIBS_PATH=${UGT_QUESTASIMLIBS_DIR}/questasimlibs_vivado_${UGT_VIVADO_QUESTASIMLIBS_VERSION}
+export UGT_QUESTASIM_LIBS_PATH=<home dir>/questasimlibs
 export UGT_BLK_MEM_GEN_VERSION_SIM=blk_mem_gen_v8_4_5
 
 ## Synthesis (Vivado)
-export VIVADO_BASE_DIR=/opt/xilinx/Vivado
+export VIVADO_BASE_DIR=/opt/Xilinx/Vivado
 export UGT_VIVADO_BASE_DIR=${VIVADO_BASE_DIR}
 export UGT_VIVADO_VERSION=2021.2
 export UGT_BLK_MEM_GEN_VERSION_SYNTH=blk_mem_gen_v8_4_5
@@ -98,10 +98,8 @@ Simulation of VHDL module `gtl_fdl_wrapper.vhd` with Questa simulator for 6 ugt 
 * If Questasim libraries for a certain Vivado version do not exist, they have to
 be created for the selected Questasim version with script [ugt-fwtools](https://github.com/cms-l1-globaltrigger/ugt-fwtools) with ugt-compile-simlib:
 ```bash
-ugt-compile-simlib \
- --vivado <vivado_version (e.g. 2021.2)> \
- --questasim <path to Questasim (e.g. /opt/mentor/10.7c/questasim)> \
- --output <output directory for generated libraries>
+ugt-compile-simlib --questasim $UGT_QUESTASIM_SIM_PATH/questasim --output $UGT_QUESTASIM_LIBS_PATH
+
 ```
 
 Following table shows which Questasim libraries for a certain Vivado version
@@ -133,7 +131,7 @@ Running script simulation.py in [ugt-fwtools](https://github.com/cms-l1-globaltr
 cd ../ugt-fwtools
 python3 -m venv env
 . env/bin/activate
-ugt-simulate <xml_file> --tv <testvector_file> --ugttag <ugt tag or branch> [--mp7_repo_tag <MP7 repo tag - default is v3.2.2_Vivado2021+_ugt_v4>] [--ignored]
+ugt-simulate <xml_file> --tv <testvector_file> [--ugttag <ugt tag or branch> --mp7_repo_tag <MP7 repo tag - default is v3.2.2_Vivado2021+_ugt_v4>] [--ignored]
 ```
 
 Example

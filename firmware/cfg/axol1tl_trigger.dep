@@ -54,3 +54,23 @@ src payload/gtl/axol1tl_trigger/model_v4/axol1tl_v4_mul_8s_4s_12_1_1.vhd
 src payload/gtl/axol1tl_trigger/model_v4/axol1tl_v4_mul_8s_5ns_13_1_1.vhd
 src payload/gtl/axol1tl_trigger/model_v4/axol1tl_v4.vhd
 src payload/gtl/axol1tl_trigger/model_v4/axol1tl_v4_wrapper.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_10ns_2s_12_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_10ns_3ns_12_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_10ns_3s_13_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_10ns_4ns_13_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_10ns_4s_14_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_10ns_5ns_14_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_10ns_5s_15_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_14s_2s_16_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_14s_3ns_17_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_14s_3s_17_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_14s_4s_18_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_16s_16s_32_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_16s_2s_18_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_16s_3ns_19_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_16s_3s_19_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_16s_4ns_20_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_mul_16s_4s_20_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5.vhd
+src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_wrapper.vhd
+

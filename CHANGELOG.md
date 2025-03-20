@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.31.1] - 2025-03-20
+### Comment
+
+- merged pull request from Maciej Glowacki, 20.3.2025 which added AXO model_v5 payload
+- updated axol1tl_trigger.dep for model_v5
+
+### Added
+- source files:
+  - ../payload/gtl/axol1tl_trigger/model_v5/*vhd
+  - ../cfg/axol1tl_trigger.dep
+  
+## [v1.31.0] - 2025-01-07
+### Comment
+
+- implementation of AXOL1TL model v5 (re-trained v4) - email Maciej Glowacki, 7.1.2025
+
+### Added
+- source files:
+  - ../payload/gtl/axol1tl_trigger/model_v5
+
 ## [v1.30.0] - 2024-09-13
 ### Comment
 

@@ -137,8 +137,8 @@ ugt-simulate <xml_file> --tv <testvector_file> [--ugttag <ugt tag or branch> --m
 Example
 
 ```bash
-ugt-simulate https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2024_v1_2_1-d1/2024/L1Menu_Collisions2024_v1_2_1-d1/xml/L1Menu_Collisions2024_v1_2_1-d1.xml \
- --tv https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2024_v1_2_1-d1/2024/L1Menu_Collisions2024_v1_2_1-d1/testvectors/TestVector_L1Menu_Collisions2024_v1_2_1_ttBar.txt \
+ugt-simulate https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2024_v1_3_0-d1/2024/L1Menu_Collisions2024_v1_3_0-d1/xml/L1Menu_Collisions2024_v1_3_0-d1.xml \
+ --tv https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2024_v1_3_0-d1/2024/L1Menu_Collisions2024_v1_3_0-d1/testvectors/L1menu_2024_v1_3_0_ttBar_TestVector_003.txt \
  --ignored
 ```
 
@@ -195,9 +195,9 @@ ugt-synthesize <xml_file> --ugt <ugt tag or branch> --mp7tag <MP7 repo tag - def
 Example
 
 ```bash
-ugt-synthesize https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2024_v1_2_1-d1/2024/L1Menu_Collisions2024_v1_2_1-d1/xml/L1Menu_Collisions2024_v1_2_1-d1.xml \
- --ugt v1.26.0 \
- --build 0x118f \
+ugt-synthesize https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2024_v1_3_0-d1/2024/L1Menu_Collisions2024_v1_3_0-d1/xml/L1Menu_Collisions2024_v1_3_0-d1.xml \
+ --ugt v1.30.0 \
+ --build 0x1192 \
  -p ~/work_synth/production
 ```
 
@@ -281,5 +281,5 @@ deactivate
 ## Contact
 
 Bernhard Arnold [<bernhard.arnold@cern.ch>]<br>
-Herbert Bergauer (Developer) [<herbert.bergauer@oeaw.ac.at>]<br>
+Herbert Bergauer (Developer - retirement on July 1st 2025) [<herbert.bergauer@oeaw.ac.at>]<br>
 Manfred Jeitler [<Manfred.Jeitler@cern.ch>]

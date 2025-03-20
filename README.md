@@ -96,7 +96,7 @@ Simulation of VHDL module `gtl_fdl_wrapper.vhd` with Questa simulator for 6 ugt 
 
 * This is a description running script simulation.py in [ugt-fwtools](https://github.com/cms-l1-globaltrigger/ugt-fwtools) with ugt-simulate for simulation.
 * If Questasim libraries for a certain Vivado version do not exist, they have to
-be created for the selected Questasim version with script [ugt-fwtools](https://github.com/cms-l1-globaltrigger/ugt-fwtools) with ugt-compile-simlib:
+be created for the selected Questasim version with script ugt-compile-simlib in [ugt-fwtools](https://github.com/cms-l1-globaltrigger/ugt-fwtools):
 ```bash
 ugt-compile-simlib --questasim $UGT_QUESTASIM_SIM_PATH/questasim --output $UGT_QUESTASIM_LIBS_PATH
 

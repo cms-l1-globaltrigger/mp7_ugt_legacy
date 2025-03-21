@@ -20,8 +20,10 @@ parts of uGT:
 * Global Trigger Logic ([gtl_module.vhd](firmware/hdl/payload/gtl_module_tpl.vhd))
 * Final Decision Logic ([fdl_module.vhd](firmware/hdl/payload/fdl_module.vhd))
 
+Current versions:
+
 | entity | version |
-|:-:|:-:|:-:|
+|:-:|:-:|
 | uGT FW | v1.31.1 |
 | framework | v1.4.2 |
 | gt logic | v1.24.1 |

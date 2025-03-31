@@ -199,7 +199,7 @@ cd ../ugt-fwtools
 python3 -m venv env
 . env/bin/activate
 ugt-synthesize <xml_file> --ugt <ugt tag or branch> --mp7tag <MP7 repo tag - default is v3.2.2_Vivado2021+_ugt_v4> --build <build_version> -p <working_dir>
-```bash
+```
 
 Example
 

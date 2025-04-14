@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.31.2] - 2025-04-14
+### Comment
+
+- updated as requested by Maciej Glowacki, 14.4.2025 which added new AXO model_v5 payload
+- updated axol1tl_trigger.dep for model_v5
+
 ## [v1.31.1] - 2025-03-20
 ### Comment
 

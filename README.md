@@ -24,9 +24,9 @@ Current versions:
 
 | entity | version |
 |:-:|:-:|
-| uGT FW | v1.31.1 |
+| uGT FW | v1.31.2 |
 | framework | v1.4.2 |
-| gt logic | v1.24.1 |
+| gt logic | v1.24.2 |
 | final decision logic | v1.4.1 |
 
 Following software tool versions used to create L1Menu and menu depended VHDL

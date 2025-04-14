@@ -10,6 +10,6 @@ set_property strategy Performance_ExplorePostRoutePhysOpt [get_runs impl_1]
 ## HB 2025-04-14: changed strategies for test (AXO v5)
 set_property "steps.synth_design.Directive" PerformanceOptimized [get_runs synth_1]
 set_property "steps.opt_design.Directive" ExploreSequentialArea [get_runs impl_1]
-set_property "steps.post_place_phys_opt_design.Directive" AggressiveFanoutOpt [get_runs impl_1]
+#set_property "steps.post_place_phys_opt_design.Directive" AggressiveFanoutOpt [get_runs impl_1]
 set_property "steps.place_design.Directive" ExtraNetDelay_high [get_runs impl_1]
 set_property "steps.route_design.Directive" AggressiveExplore [get_runs impl_1]

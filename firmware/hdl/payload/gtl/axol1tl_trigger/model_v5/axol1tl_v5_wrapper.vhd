@@ -1,4 +1,4 @@
-
+ 
 -- Description:
 -- Wrapper for "anomaly detection".
 
@@ -55,7 +55,7 @@ begin
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
     htmhf_i(MAX_ESUMS_BITS-1 downto 0) <= htmhf;
     
-    anomaly_detection_i: entity work.axol1tl_v5
+    anomaly_detection_i: entity work.axol1tl_v5_da
         port map(
             lhc_clk, ap_rst, ap_start,
             open, open, open,

@@ -2,6 +2,7 @@
 -- Global Trigger Logic module.
 
 -- Version history:
+-- HB 2025-04-14: v1.24.2: Added AXOL1TL new model v5 payload.
 -- HB 2025-03-21: v1.24.1: Added AXOL1TL model v5 payload.
 -- HB 2025-01-07: v1.24.0: Implemented AXOL1TL model v5.
 -- HB 2024-07-08: v1.23.0: Implemented VHDL files for topological trigger models (TBD).

@@ -1,0 +1,370 @@
+-- Description:
+-- Global Trigger Logic module.
+
+-- Version history:
+-- HB 2025-04-14: v1.24.2: Added AXOL1TL new model v5 payload.
+-- HB 2025-03-21: v1.24.1: Added AXOL1TL model v5 payload.
+-- HB 2025-01-07: v1.24.0: Implemented AXOL1TL model v5.
+-- HB 2024-07-08: v1.23.0: Implemented VHDL files for topological trigger models (TBD).
+-- BA 2024-07-05: v1.22.1: Fixed interface of AXOL1TL models v1 and v3.
+-- HB 2024-07-05: v1.22.0: Implemented AXOL1TL model v4.
+-- HB 2024-05-23: v1.21.0: Implemented HTMHF and calo comb multi condition.
+-- HB 2023-12-18: v1.20.0: Implemented topological and cicada trigger.
+-- HB 2023-09-29: v1.19.4: Used "no_mgt" at quads 8..16 (top_decl.vhd).
+-- HB 2023-09-28: v1.19.3: Used "no_chk" and "no_buf" at quads 8..16.
+-- HB 2023-09-25: v1.19.2: Removed unused files "demux_lane_validation.vhd" and "reg.vhd". Changed quads 8..16, inserted with gth_5g, but without checksum and buffers.
+-- HB 2023-09-01: v1.19.1: Added zdc_condition.vhd (was missing) and updated sim and dep file.
+-- HB 2023-08-25: v1.19.0: Used link 71 as ZDC 5G input. ZDC data structure changed (16 bits only on 5G link). Updated top_decl.vhd.
+-- HB 2023-04-15: v1.18.1: Bug fix muon index bits.
+-- HB 2023-03-14: v1.18.0: Implemented "MUS2" (new hadronic shower bit), Anomaly Detection Trigger, ZDC conditions and cuts for muon index bits.
+-- HB 2022-11-29: v1.17.6: Bug fix in algo_pre_scaler_fractional_float.vhd.
+-- HB 2022-11-16: v1.17.5: Bug fix in correlation_conditions.vhd.
+-- HB 2022-09-23: v1.17.4: Used "delay_pipeline" for condition output in esums_conditions.vhd, min_bias_hf_conditions.vhd and towercount_condition.vhd.
+-- HB 2022-09-05: v1.17.3: Cleaned up.
+-- HB 2022-02-16: v1.17.2: Bug fixed in comb_conditions.vhd.
+-- HB 2021-10-23: v1.17.1: Updated logic for jet DISP cut.
+-- HB 2021-10-23: v1.17.0: Implemented logic for jet DISP (displaced) cut [DISP = bit 27 of jet data] in calo_comparators.vhd. Bug fixed in correlation_cuts_wrapper.vhd.
+-- HB 2021-10-27: v1.16.2: Bug fix in matrix_corr_cond.vhd.
+-- HB 2021-10-18: v1.16.1: Bug fix in calo_comparators.vhd.
+-- HB 2021-08-31: v1.16.0: Changed logic for ROMs (mass over DR) [regenerated IPs for ROMs].
+-- HB 2021-06-10: v1.15.1: Added hadronic shower triggers.
+-- HB 2021-05-21: v1.15.0: Added fdl_pkg use clause. Added bx_pipeline (to simplify code).
+-- HB 2021-05-05: v1.14.1: Bug fixed in sum_mass.vhd (comparison for mass 3 body).
+-- HB 2021-04-16: v1.14.0: Added modules for correlation cuts calculations outside of conditions (correlation_cuts_calculation.vhd). Renamed files (differences.vhd => deta_dphi_calculations.vhd, ...). Added new modules for all and-or matrix instantiations (matrix_corr_cond.vhd, matrix_calo_cond.vhd, ...).
+-- HB 2021-02-18: v1.13.0: Changed directory structure in gtl (created sub dir "common" for modules, which are not instantiated in gtl_module.vhd). Added new modules: conv_eta_phi.vhd, obj_parameter.vhd, differences.vhd and cosh_deta_cos_dphi.vhd. Cleaned up comments.
+-- HB 2021-03-18: v1.12.1: Bug fix in  correlation_conditions_muon.vhd.
+-- HB 2021-02-05: v1.12.0: Implemented comb_conditions.vhd, correlation_conditions_calo.vhd and correlation_conditions_muon.vhd instead of calo_conditions.vhd, muon_conditions.vhd and calo_calo_correlation_condition.vhd, muon_muon_correlation_condition.vhd, etc.
+-- HB 2020-12-14: v1.11.0: Changes logic for phi cuts (similar to eta cuts). Same order in generics calo and muon conditions and for all correlation conditions (simplifies templates of VHDL Producer).
+-- HB 2020-10-09: v1.10.1: Added module pipelines (including modules for ext_cond_pipe and centrality_pipe processes).
+-- HB 2020-08-25: v1.10.0: Implemented new muon structure with "unconstraint pt" and "impact parameter". Added files for "invariant mass with 3 objects" and "invariant mass divided by delta R".
+-- HB 2020-02-03: v1.9.4: Changed output pipeline code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
+-- HB 2020-01-30: v1.9.3: Cleaned up code in esums_comparators.vhd and min_bias_hf_conditions.vhd.
+-- HB 2020-01-28: v1.9.2: Bug fixed in calo_calo_calo_correlation_orm_condition.vhd and calo_cond_matrix_orm.vhd.
+-- HB 2019-10-21: v1.9.1: Bug fixed in calo_conditions.vhd (input ports).
+-- HB 2019-10-17: v1.9.0: Added overlap removal for muon combinatorial conditions (muon_conditions_orm.vhd).
+-- HB 2019-06-14: v1.8.0: Added possibility for "five eta cuts" in conditions.
+-- HB 2019-05-02: v1.7.0: Added new modules (calo_cond_matrix.vhd, calo_cuts.vhd), changed calo_condition_v6_quad.vhd and calo_condition_v7_no_quad.vhd.
+-- HB 2018-08-06: v1.6.0: Added ports and pipelines for "Asymmetry" (asymet_data, ...) and "Centrality" (centrality_data).
+-- HB 2017-10-06: v1.5.0: Used new modules for use of std_logic_vector for limits of correlation cuts
+-- HB 2017-09-15: v1.4.1: Bug fix in calo_calo_correlation_condition_v3.vhd
+-- HB 2017-09-08: v1.4.0: Updated modules for correct use of object slices
+-- HB 2017-07-03: v1.3.3: Charge correlation comparison inserted for different bx data (bug fix) in muon_muon_correlation_condition_v2.vhd
+-- HB 2017-06-26: v1.3.2: Changed port order for muon_conditions_v5.vhd and updated gtl_pkg_tpl.vhd (and gtl_pkg_sim.vhd) for muon-esums precisions
+-- HB 2017-05-15: v1.3.1: Used calo_calo_calo_correlation_orm_condition.vhd instead of calo_1plus1_orm_condition.vhd and calo_2plus1_orm_condition.vhd
+-- HB 2017-04-07: v1.3.0: Prepared for using ORM conditions (calo_conditions_orm.vhd, calo_1plus1_orm_condition.vhd and calo_2plus1_orm_condition.vhd)
+-- HB 2017-04-05: v1.2.1: Created new VHDL module: twobody_pt_calculator
+-- HB 2016-09-16: v1.2.0: Implemented "slices" for object range in all condition types.
+--                        Created new VHDL modules: mass_cuts, dr_calculator_v2, calo_conditions_v4, muon_conditions_v4,
+--                        calo_calo_correlation_condition_v2, calo_esums_correlation_condition_v2, calo_muon_correlation_condition_v2
+--                        muon_muon_correlation_condition_v2, muon_esums_correlation_condition_v2, calo_muon_muon_b_tagging_condition
+-- HB 2016-09-16: v1.1.0: Implemented new esums with ETTEM, "TOWERCNT" (ECAL sum), ETMHF and HTMHF.
+-- HB 2016-08-31: v1.0.0: Same version as v0.0.10
+-- HB 2016-04-22: v0.0.10: Implemented min_bias_hf_conditions.vhd for minimum bias trigger conditions for low-pileup-run in May 2016.
+--                         Updated gtl_fdl_wrapper.vhd and p_m_2_bx_pipeline.vhd for minimum bias trigger objects.
+-- HB 2016-04-07: v0.0.9: Cleaned-up typing in muon_muon_correlation_condition.vhd (D_S_I_MUON_V2 instead of D_S_I_MUON in some lines).
+
+library ieee;
+use ieee.std_logic_1164.all;
+
+use work.fdl_pkg.all;
+use work.gtl_pkg.all;
+
+entity gtl_module is
+    port(
+        lhc_clk : in std_logic;
+        gtl_data : in gtl_data_record;
+        algo_o : out std_logic_vector(NR_ALGOS-1 downto 0));
+end gtl_module;
+
+architecture rtl of gtl_module is
+    COMPONENT rom_lut_calo_inv_dr_sq
+    PORT(
+        clka : IN STD_LOGIC;
+        addra : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        douta : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+    END COMPONENT;
+
+    signal bx_data : bx_data_record;
+
+    signal algo : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
+
+-- ========================================================
+-- from VHDL producer:
+
+-- Module ID: 0
+
+-- Name of L1 Trigger Menu:
+-- L1Menu_axo_v5_test
+
+-- Unique ID of L1 Trigger Menu:
+-- 4c1609a0-428f-46f5-a369-968c99708bd3
+
+-- Unique ID of firmware implementation:
+-- a58250c3-60db-4ace-8eee-6dcab8307a8f
+
+-- Scale set:
+-- scales_2024_05_15
+
+-- VHDL producer
+-- version: 2.21.0
+-- hash value: 75fafcd9f3ecfd946f75bb50ac42c198ee0a825140f50f33282d67107651cba6
+
+-- tmEventSetup
+-- version: 0.13.0
+
+-- Signal definition of pt, eta and phi for correlation conditions.
+
+-- Signal definition for cuts of correlation conditions.
+
+-- Signal definition for muon charge correlations.
+
+-- Signal definition for conditions names
+    signal axol1tl_trigger_i0 : std_logic;
+    signal axol1tl_trigger_i1 : std_logic;
+    signal axol1tl_trigger_i2 : std_logic;
+    signal axol1tl_trigger_i3 : std_logic;
+    signal axol1tl_trigger_i4 : std_logic;
+    signal axol1tl_trigger_i5 : std_logic;
+    signal axol1tl_trigger_i6 : std_logic;
+
+-- Signal definition for algorithms names
+    signal l1_axo_v_loose : std_logic;
+    signal l1_axo_loose : std_logic;
+    signal l1_axo_tight : std_logic;
+    signal l1_axo_v_tight : std_logic;
+    signal l1_axo_medium : std_logic;
+    signal l1_axo_vv_tight : std_logic;
+    signal l1_axo_vvv_tight : std_logic;
+
+-- ========================================================
+
+begin
+
+bx_pipeline_i: entity work.bx_pipeline
+    port map(
+        lhc_clk,
+        gtl_data,
+        bx_data
+    );
+
+-- ========================================================
+-- from VHDL producer:
+
+-- Module ID: 0
+
+-- Name of L1 Trigger Menu:
+-- L1Menu_axo_v5_test
+
+-- Unique ID of L1 Trigger Menu:
+-- 4c1609a0-428f-46f5-a369-968c99708bd3
+
+-- Unique ID of firmware implementation:
+-- a58250c3-60db-4ace-8eee-6dcab8307a8f
+
+-- Scale set:
+-- scales_2024_05_15
+
+-- VHDL producer
+-- version: 2.21.0
+-- hash value: 75fafcd9f3ecfd946f75bb50ac42c198ee0a825140f50f33282d67107651cba6
+
+-- tmEventSetup
+-- version: 0.13.0
+
+-- ========================================================
+-- Instantiations of conditions
+--
+cond_axol1tl_trigger_i0: entity work.axol1tl_v5_wrapper
+    generic map(false, 2010)
+    port map(
+        lhc_clk,
+        bx_data.mu(2),
+        bx_data.eg(2),
+        bx_data.jet(2),
+        bx_data.tau(2),
+        bx_data.ett(2),
+        bx_data.htt(2),
+        bx_data.etm(2),
+        bx_data.htm(2),
+        bx_data.etmhf(2),
+        bx_data.htmhf(2),
+        axol1tl_trigger_i0
+    );
+
+cond_axol1tl_trigger_i1: entity work.axol1tl_v5_wrapper
+    generic map(false, 2375)
+    port map(
+        lhc_clk,
+        bx_data.mu(2),
+        bx_data.eg(2),
+        bx_data.jet(2),
+        bx_data.tau(2),
+        bx_data.ett(2),
+        bx_data.htt(2),
+        bx_data.etm(2),
+        bx_data.htm(2),
+        bx_data.etmhf(2),
+        bx_data.htmhf(2),
+        axol1tl_trigger_i1
+    );
+
+cond_axol1tl_trigger_i2: entity work.axol1tl_v5_wrapper
+    generic map(false, 3318)
+    port map(
+        lhc_clk,
+        bx_data.mu(2),
+        bx_data.eg(2),
+        bx_data.jet(2),
+        bx_data.tau(2),
+        bx_data.ett(2),
+        bx_data.htt(2),
+        bx_data.etm(2),
+        bx_data.htm(2),
+        bx_data.etmhf(2),
+        bx_data.htmhf(2),
+        axol1tl_trigger_i2
+    );
+
+cond_axol1tl_trigger_i3: entity work.axol1tl_v5_wrapper
+    generic map(false, 4762)
+    port map(
+        lhc_clk,
+        bx_data.mu(2),
+        bx_data.eg(2),
+        bx_data.jet(2),
+        bx_data.tau(2),
+        bx_data.ett(2),
+        bx_data.htt(2),
+        bx_data.etm(2),
+        bx_data.htm(2),
+        bx_data.etmhf(2),
+        bx_data.htmhf(2),
+        axol1tl_trigger_i3
+    );
+
+cond_axol1tl_trigger_i4: entity work.axol1tl_v5_wrapper
+    generic map(false, 2801)
+    port map(
+        lhc_clk,
+        bx_data.mu(2),
+        bx_data.eg(2),
+        bx_data.jet(2),
+        bx_data.tau(2),
+        bx_data.ett(2),
+        bx_data.htt(2),
+        bx_data.etm(2),
+        bx_data.htm(2),
+        bx_data.etmhf(2),
+        bx_data.htmhf(2),
+        axol1tl_trigger_i4
+    );
+
+cond_axol1tl_trigger_i5: entity work.axol1tl_v5_wrapper
+    generic map(false, 22628)
+    port map(
+        lhc_clk,
+        bx_data.mu(2),
+        bx_data.eg(2),
+        bx_data.jet(2),
+        bx_data.tau(2),
+        bx_data.ett(2),
+        bx_data.htt(2),
+        bx_data.etm(2),
+        bx_data.htm(2),
+        bx_data.etmhf(2),
+        bx_data.htmhf(2),
+        axol1tl_trigger_i5
+    );
+
+cond_axol1tl_trigger_i6: entity work.axol1tl_v5_wrapper
+    generic map(false, 26375)
+    port map(
+        lhc_clk,
+        bx_data.mu(2),
+        bx_data.eg(2),
+        bx_data.jet(2),
+        bx_data.tau(2),
+        bx_data.ett(2),
+        bx_data.htt(2),
+        bx_data.etm(2),
+        bx_data.htm(2),
+        bx_data.etmhf(2),
+        bx_data.htmhf(2),
+        axol1tl_trigger_i6
+    );
+
+
+-- ========================================================
+-- Instantiations of algorithms
+
+-- 0 L1_AXO_VLoose : AXO[AXO-MODEL_v5,AXO-SCORE_VLoose]
+l1_axo_v_loose <= axol1tl_trigger_i0;
+algo(3) <= l1_axo_v_loose;
+
+-- 1 L1_AXO_Loose : AXO[AXO-MODEL_v5,AXO-SCORE_Loose]
+l1_axo_loose <= axol1tl_trigger_i1;
+algo(0) <= l1_axo_loose;
+
+-- 2 L1_AXO_Tight : AXO[AXO-MODEL_v5,AXO-SCORE_Tight]
+l1_axo_tight <= axol1tl_trigger_i2;
+algo(2) <= l1_axo_tight;
+
+-- 3 L1_AXO_VTight : AXO[AXO-MODEL_v5,AXO-SCORE_VTight]
+l1_axo_v_tight <= axol1tl_trigger_i3;
+algo(4) <= l1_axo_v_tight;
+
+-- 4 L1_AXO_Medium : AXO[AXO-MODEL_v5,AXO-SCORE_Medium]
+l1_axo_medium <= axol1tl_trigger_i4;
+algo(1) <= l1_axo_medium;
+
+-- 5 L1_AXO_VVTight : AXO[AXO-MODEL_v5,AXO-SCORE_VVTight]
+l1_axo_vv_tight <= axol1tl_trigger_i5;
+algo(5) <= l1_axo_vv_tight;
+
+-- 6 L1_AXO_VVVTight : AXO[AXO-MODEL_v5,AXO-SCORE_VVVTight]
+l1_axo_vvv_tight <= axol1tl_trigger_i6;
+algo(6) <= l1_axo_vvv_tight;
+
+-- ========================================================
+-- Instantiations conversions, calculations, etc.
+-- eta and phi conversion to muon scale for calo-muon and muon-esums correlation conditions (used for DETA, DPHI, DR and mass)
+
+-- pt, eta, phi, cosine phi and sine phi for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and two-body pt)
+
+-- deta and dphi calculations for correlation conditions (used for DETA, DPHI)
+
+-- eta, dphi, cosh deta and cos dphi LUTs for correlation conditions (used for DR and mass)
+--
+-- Instantiations of correlation cuts calculations
+--
+-- Instantiations of DeltaEta LUTs
+
+-- Instantiations of DeltaPhi LUTs
+
+-- Instantiations of DeltaR calculation
+
+-- Instantiations of Invariant mass calculation
+
+-- Instantiations of Invariant mass divided DeltaR calculation
+
+-- Instantiations of Invariant mass unconstrained pt calculation
+
+-- Instantiations of Transverse mass calculation
+
+-- Instantiations of Two-body pt calculation
+
+-- muon charge correlations
+
+
+-- ========================================================
+
+-- One pipeline stages for algorithms
+algo_pipeline_p: process(lhc_clk, algo)
+    begin
+    if (lhc_clk'event and lhc_clk = '1') then
+        algo_o <= algo;
+    end if;
+end process;
+
+end architecture rtl;

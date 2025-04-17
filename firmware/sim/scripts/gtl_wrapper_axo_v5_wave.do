@@ -1,8 +1,9 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /gtl_wrapper_axo_v5_tb/lhc_clk
-add wave -noupdate /gtl_wrapper_axo_v5_tb/gtl_data
-add wave -noupdate /gtl_wrapper_axo_v5_tb/algo
+add wave -noupdate -expand /gtl_wrapper_axo_v5_tb/gtl_data
+add wave -noupdate -expand /gtl_wrapper_axo_v5_tb/algo
+add wave -noupdate /gtl_wrapper_axo_v5_tb/gtl_module_i/axol1tl_score
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {100000 ps} 0} {{Cursor 2} {1632855000 ps} 0}
 quietly wave cursor active 2

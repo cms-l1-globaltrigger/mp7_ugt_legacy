@@ -73,7 +73,9 @@ entity gtl_module is
     port(
         lhc_clk : in std_logic;
         gtl_data : in gtl_data_record;
-        algo_o : out std_logic_vector(NR_ALGOS-1 downto 0));
+        algo_o : out std_logic_vector(NR_ALGOS-1 downto 0);
+        axol1tl_score_o : out std_logic_vector(17 downto 0)
+    );
 end gtl_module;
 
 architecture rtl of gtl_module is
@@ -127,6 +129,8 @@ architecture rtl of gtl_module is
     signal axol1tl_trigger_i4 : std_logic;
     signal axol1tl_trigger_i5 : std_logic;
     signal axol1tl_trigger_i6 : std_logic;
+    
+    signal axol1tl_score : std_logic_vector(17 downto 0);
 
 -- Signal definition for algorithms names
     signal l1_axo_v_loose : std_logic;
@@ -189,7 +193,8 @@ cond_axol1tl_trigger_i0: entity work.axol1tl_v5_wrapper
         bx_data.htm(2),
         bx_data.etmhf(2),
         bx_data.htmhf(2),
-        axol1tl_trigger_i0
+        axol1tl_trigger_i0,
+        axol1tl_score
     );
 
 cond_axol1tl_trigger_i1: entity work.axol1tl_v5_wrapper
@@ -359,12 +364,14 @@ algo(6) <= l1_axo_vvv_tight;
 
 -- ========================================================
 
--- One pipeline stages for algorithms
-algo_pipeline_p: process(lhc_clk, algo)
+-- One pipeline stages for algorithms and score
+algo_pipeline_p: process(lhc_clk, algo, axol1tl_score)
     begin
     if (lhc_clk'event and lhc_clk = '1') then
         algo_o <= algo;
+        axol1tl_score_o <= axol1tl_score;
     end if;
 end process;
 
 end architecture rtl;
+

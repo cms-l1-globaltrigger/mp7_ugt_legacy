@@ -134,14 +134,15 @@ begin
             temp_counter := temp_counter + 1;
         end loop;
 
---        for i in 0 to LHC_BUNCH_COUNT-1 loop
---            lhc_data <= testdata(i);
---       end loop;
+        wait for CLK40_PERIOD;
+        for i in 0 to LHC_BUNCH_COUNT-1 loop
+            lhc_data <= testdata(i);
+            wait for CLK40_PERIOD;
+        end loop;
 
-        wait for CLK40_PERIOD;
-        lhc_data <= testdata(5);
-        wait for CLK40_PERIOD;
-        lhc_data <= testdata(0);
+--        lhc_data <= testdata(5);
+--        wait for CLK40_PERIOD;
+--        lhc_data <= testdata(0);
 
         wait;
 

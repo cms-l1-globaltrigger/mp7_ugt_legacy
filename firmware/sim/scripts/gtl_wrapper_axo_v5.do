@@ -53,56 +53,9 @@ vcom -93 -work work $HDL_DIR/packages/gtl_luts_pkg.vhd
 ## GTL modules
 ### common modules
 vcom -93 -work work $HDL_DIR/payload/gtl/common/delay_pipeline.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/pt_comp.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/upt_comp.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/lut_comp.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/charge_comp.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/phi_windows_comp.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/eta_comp_signed.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/eta_windows_comp.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/muon_index_comp.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/muon_index_windows_comp.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/calo_comparators.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/esums_comparators.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/muon_comparators.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/matrix_calo_cond.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/matrix_calo_cond_orm.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/matrix_muon_cond.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/matrix_muon_charge_corr.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/matrix_corr_cond.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/deta_calc.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/dphi_calc.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/deta_cosh_deta_luts.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/dphi_cos_dphi_luts.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/dr_calc.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/mass_calc.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/sum_mass_calc.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/sum_mass.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/mass_over_dr_calc.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/tbpt_calc.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/calo_obj_cuts.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/muon_obj_cuts.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/charge_correlation_comp.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/correlation_cut_comp.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/correlation_cuts_wrapper.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/orm_cuts.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/common/esums_4_corr_cond.vhd
 #
 ### modules of instances in gtl_module.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/bx_pipeline.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/muon_charge_correlations.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/conv_eta_phi.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/obj_parameter.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/deta_dphi_calculations.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/correlation_cuts_calculation.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/comb_conditions.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/esums_conditions.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/min_bias_hf_conditions.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/towercount_condition.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/zdc_condition.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/cicada_condition.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
-vcom -93 -work work $HDL_DIR/payload/gtl/calo_comb_multi_condition.vhd
 #
 vcom -93 -work work $HDL_DIR/payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_da_mul_15s_15s_30_1_1.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_da_mul_16s_16s_32_1_1.vhd
@@ -128,7 +81,8 @@ view wave
 do $TB_DIR/../scripts/gtl_wrapper_axo_v5_wave.do
 
 ##Run simulation
-run 91000 ns
+run 2000 ns
+#run 91000 ns
 
 # eof
 

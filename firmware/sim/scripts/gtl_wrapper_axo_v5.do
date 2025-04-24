@@ -6,9 +6,6 @@
 ## the unisim libraries will be loaded from the paths set up by compxlib in
 ## your modelsim.ini file
 
-## HB 2019-04-12: setting of XILINX not clear! Not needed, removed!
-#set XILINX   $env(XILINX)
-
 if [info exists env(MTI_LIBS)] {
     set MTI_LIBS $env(MTI_LIBS)
     vlib UNISIM
@@ -24,8 +21,6 @@ set HDL_DIR ./../hdl
 set NGC_DIR ./../ngc
 set TB_DIR ./testbench
 set TEST_DIR ./axo_v5_score_test
-
-#set BLK_MEM_GEN_VERSION $env(UGT_BLK_MEM_GEN_VERSION_SIM)
 
 ## Create and map work directory
 vlib work

@@ -1,5 +1,6 @@
 
 -- Description:
+-- Simulation of "./axo_v5_score_test/gtl_module_axo_v5_test.vhd" with "./axo_v5_score_test/L1Menu_Collisions2025_v1_0_0_TestVector_ttBar_000.txt"
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -49,7 +50,7 @@ architecture rtl of gtl_wrapper_axo_v5_tb is
 
     constant LHC_BUNCH_COUNT: integer := 3564;
 
-    constant CONST_DELAY: integer := 2;
+    constant CONST_DELAY: integer := 5; -- delay for proper listing in "result_file"
 
     signal clk160 : std_logic;
     signal lhc_clk : std_logic;
@@ -85,7 +86,7 @@ begin
         variable write_l : line;
         variable testdata : lhc_data_t_array(0 to LHC_BUNCH_COUNT-1) := (others => LHC_DATA_NULL);
         variable bx_nr_vector_data : bx_nr_vector_data_array(0 to LHC_BUNCH_COUNT-1) := (others => (others => '0'));
-        variable bx_nr : bx_nr_vector_data_array(0 to LHC_BUNCH_COUNT+2-1) := (others => (others => '0'));
+        variable bx_nr : bx_nr_vector_data_array(0 to LHC_BUNCH_COUNT+CONST_DELAY-1) := (others => (others => '0'));
         variable temp_counter : integer := 0;
 
         file testvector_file : text open read_mode is "./axo_v5_score_test/L1Menu_Collisions2025_v1_0_0_TestVector_ttBar_000.txt";
@@ -100,16 +101,17 @@ begin
             temp_counter := temp_counter + 1;
         end loop;
 
-        write(write_l, string'("bx   score algos  mu(0)            eg(0)"));
+        write(write_l, string'("-------------------------------|-------|   score"));
+        writeline(result_file, write_l);
+        write(write_l, string'("bx   mu(0)            eg(0)    | algos | hex     dec"));
         writeline(result_file, write_l);
 
---        wait for CLK40_PERIOD;
         wait for 5 ns;
         for i in 0 to LHC_BUNCH_COUNT-1 loop
             lhc_data <= testdata(i);
             bx_nr(i+CONST_DELAY) := bx_nr_vector_data(i);
             if i >= CONST_DELAY then
-                write(write_l, string'(bx_nr(i) & " " & hstr(axol1tl_score) & " " & hstr(algo) & "     " & hstr(gtl_data_del.mu(0)) & " " & hstr(gtl_data_del.eg(0))));
+                write(write_l, string'(bx_nr(i) & " " & hstr(gtl_data_del.mu(0)) & " " & hstr(gtl_data_del.eg(0)) & " | " & hstr(algo) & "    | " & hstr(axol1tl_score) &  "   " & str(CONV_INTEGER(axol1tl_score))));
                 writeline(result_file, write_l);
             end if;
 
@@ -122,6 +124,7 @@ begin
 
  ------------------- Instantiate  modules  -----------------
 
+-- Delays of input data for proper listing in "result_file" (for checks)
     eg_del_i: entity work.delay_pipeline
         generic map(
             DATA_WIDTH => 32,
@@ -140,6 +143,7 @@ begin
             lhc_clk, gtl_data.mu(0), gtl_data_del.mu(0)
         );
 
+-- DUTs:
     gtl_data_mapping_i: entity work.gtl_data_mapping
         port map(
             lhc_data,

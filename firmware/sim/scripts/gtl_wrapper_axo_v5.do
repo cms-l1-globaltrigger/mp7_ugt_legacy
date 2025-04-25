@@ -76,8 +76,8 @@ view wave
 do $TB_DIR/../scripts/gtl_wrapper_axo_v5_wave.do
 
 ##Run simulation
-run 2000 ns
-#run 91000 ns
+#run 2000 ns
+run 91000 ns
 
 # eof
 

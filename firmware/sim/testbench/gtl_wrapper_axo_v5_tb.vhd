@@ -91,6 +91,7 @@ begin
 
         file testvector_file : text open read_mode is "./axo_v5_score_test/L1Menu_Collisions2025_v1_0_0_TestVector_ttBar_000.txt";
         file result_file : text open write_mode is "./axo_v5_score_test/result_axo_v5_scores.txt";
+        file fw_score_file : text open write_mode is "./axo_v5_score_test/axo_v5_scores_fw.txt";
 
     begin
         temp_counter := 0;
@@ -113,6 +114,8 @@ begin
             if i >= CONST_DELAY then
                 write(write_l, string'(bx_nr(i) & " " & hstr(gtl_data_del.mu(0)) & " " & hstr(gtl_data_del.eg(0)) & " | " & hstr(algo) & "    | " & hstr(axol1tl_score) &  "   " & str(CONV_INTEGER(axol1tl_score))));
                 writeline(result_file, write_l);
+                write(write_l, string'(bx_nr(i) & " " & hstr(axol1tl_score)));
+                writeline(fw_score_file, write_l);
             end if;
 
             wait for CLK40_PERIOD;

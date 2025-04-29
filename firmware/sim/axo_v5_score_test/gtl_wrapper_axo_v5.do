@@ -66,14 +66,14 @@ vcom -93 -work work $HDL_DIR/payload/gtl_data_mapping.vhd
 vcom -93 -work work $TEST_DIR/gtl_module_axo_v5_test.vhd
 
 ##TB_DIR
-vcom -93 -work work $TB_DIR/gtl_wrapper_axo_v5_tb.vhd
+vcom -93 -work work $TEST_DIR/gtl_wrapper_axo_v5_tb.vhd
 
 ##Load Design
 vsim -t 1ps work.gtl_wrapper_axo_v5_tb
 
 ##Load signals in wave window
 view wave
-do $TB_DIR/../scripts/gtl_wrapper_axo_v5_wave.do
+do $TEST_DIR/gtl_wrapper_axo_v5_wave.do
 
 ##Run simulation
 #run 2000 ns

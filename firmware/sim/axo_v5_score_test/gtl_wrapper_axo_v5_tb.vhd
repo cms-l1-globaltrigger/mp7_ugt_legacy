@@ -1,6 +1,6 @@
 
 -- Description:
--- Simulation of "./axo_v5_score_test/gtl_module_axo_v5_test.vhd" with "./axo_v5_score_test/L1Menu_Collisions2025_v1_0_0_TestVector_ttBar_000.txt"
+-- Simulation of "./axo_v5_score_test/gtl_module_axo_v5_test.vhd" with "./axo_v5_score_test/L1Menu_Collisions2025_v1_0_0_TestVector_ttBar_000_emu_score.txt"
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -103,7 +103,6 @@ begin
         file testvector_file : text open read_mode is "./axo_v5_score_test/L1Menu_Collisions2025_v1_0_0_TestVector_ttBar_000_emu_score.txt";
 --        file testvector_file : text open read_mode is "./axo_v5_score_test/L1Menu_Collisions2025_v1_0_0_TestVector_ttBar_000.txt";
         file result_file : text open write_mode is "./axo_v5_score_test/result_axo_v5_scores.txt";
-        file fw_score_file : text open write_mode is "./axo_v5_score_test/axo_v5_scores_fw.txt";
         file error_file : text open write_mode is "./axo_v5_score_test/axo_v5_scores_error.txt";
 
         function str_to_slv(str : string) return std_logic_vector is
@@ -135,13 +134,15 @@ begin
             temp_counter := temp_counter + 1;
         end loop;
 
-        write(write_l, string'("-------------------------------|-------|   score"));
+--        writeline(result_file, write_l);
+--        write(write_l, string'("bx   mu(0)            eg(0)    | algos | FW      EMU"));
+        write(write_l, string'("------------ | scores[hex]       scores[dec]"));
         writeline(result_file, write_l);
-        write(write_l, string'("bx   mu(0)            eg(0)    | algos | hex     dec"));
+        write(write_l, string'("bx   | algos | FW      EMU        FW     EMU"));
         writeline(result_file, write_l);
-        write(write_l, string'("Error  scores"));
+        write(write_l, string'("Error:  scores"));
         writeline(error_file, write_l);
-        write(write_l, string'("bx   FW    EMU"));
+        write(write_l, string'("bx    FW    EMU"));
         writeline(error_file, write_l);
 
         wait for 5 ns;
@@ -150,13 +151,17 @@ begin
             bx_nr(i+CONST_DELAY) := bx_nr_vector_data(i);
             axo_score_emu_d(i+CONST_DELAY) := axo_score_emu(i);
             if i >= CONST_DELAY then
-                write(write_l, string'(bx_nr(i) & " " & hstr(gtl_data_del.mu(0)) & " " & hstr(gtl_data_del.eg(0)) & " | " & hstr(algo) & "    | " & hstr(axol1tl_score) &  "   " & str(CONV_INTEGER(axol1tl_score))));
-                writeline(result_file, write_l);
-                write(write_l, string'(bx_nr(i) & " " & hstr(axol1tl_score) & "--" & hstr(axo_score_emu_d(i))));
-                writeline(fw_score_file, write_l);
+--                write(write_l, string'(bx_nr(i) & " " & hstr(gtl_data_del.mu(0)) & " " & hstr(gtl_data_del.eg(0)) & " | " & hstr(algo) & "    | " & hstr(axol1tl_score) &  "   " & hstr(axo_score_emu_d(i))));
+                write(write_l, string'(bx_nr(i) & " | " & hstr(algo) & "    | " & hstr(axol1tl_score) &  "   " & hstr(axo_score_emu_d(i))));
+                write(write_l, str(CONV_INTEGER(axol1tl_score)), justified => right, field => 8);
+                write(write_l, str(CONV_INTEGER(axo_score_emu_d(i))), justified => right, field => 8);
                 if axol1tl_score_lead0 /= axo_score_emu_d(i) then
-                    write(write_l, string'(bx_nr(i) & " " & hstr(axol1tl_score) & " " & hstr(axo_score_emu_d(i))));
+                    write(write_l, string'(" => Score mismatches!"));
+                    writeline(result_file, write_l);
+                    write(write_l, string'(bx_nr(i) & "  " & hstr(axol1tl_score) & " " & hstr(axo_score_emu_d(i))));
                     writeline(error_file, write_l);
+                else
+                    writeline(result_file, write_l);
                 end if;    
             end if;
 

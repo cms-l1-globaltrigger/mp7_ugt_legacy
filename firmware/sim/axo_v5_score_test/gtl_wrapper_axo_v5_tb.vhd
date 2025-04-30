@@ -51,6 +51,7 @@ architecture rtl of gtl_wrapper_axo_v5_tb is
     type lhc_data_t_array is array(integer range <>) of lhc_data_t;
     type bx_nr_vector_data_array is array(integer range <>) of string(1 to 4);
     type axo_score_emu_array is array(integer range <>) of std_logic_vector(19 downto 0);
+    type algo_emu_array is array(integer range <>) of std_logic_vector(511 downto 0);
 
 
     constant CLK40_PERIOD  : time :=  24 ns; -- LHC_CLK_PERIOD
@@ -98,12 +99,14 @@ begin
         variable bx_nr : bx_nr_vector_data_array(0 to LHC_BUNCH_COUNT+CONST_DELAY-1) := (others => (others => '0'));
         variable axo_score_emu : axo_score_emu_array(0 to LHC_BUNCH_COUNT-1) := (others => (others => '0'));
         variable axo_score_emu_d : axo_score_emu_array(0 to LHC_BUNCH_COUNT+CONST_DELAY-1) := (others => (others => '0'));
+        variable algo_emu : algo_emu_array(0 to LHC_BUNCH_COUNT-1) := (others => (others => '0'));
+        variable algo_emu_d : algo_emu_array(0 to LHC_BUNCH_COUNT+CONST_DELAY-1) := (others => (others => '0'));
         variable temp_counter : integer := 0;
 
         file testvector_file : text open read_mode is "./axo_v5_score_test/L1Menu_Collisions2025_v1_0_0_TestVector_ttBar_000_emu_score.txt";
 --        file testvector_file : text open read_mode is "./axo_v5_score_test/L1Menu_Collisions2025_v1_0_0_TestVector_ttBar_000.txt";
-        file result_file : text open write_mode is "./axo_v5_score_test/result_axo_v5_scores.txt";
-        file error_file : text open write_mode is "./axo_v5_score_test/axo_v5_scores_error.txt";
+        file result_file : text open write_mode is "./axo_v5_score_test/results/result_axo_v5_scores.txt";
+        file error_file : text open write_mode is "./axo_v5_score_test/results/axo_v5_scores_error.txt";
 
         function str_to_slv(str : string) return std_logic_vector is
             alias str_norm : string(1 to str'length) is str;
@@ -131,14 +134,15 @@ begin
             bx_nr_vector_data(temp_counter) := l(bx_beg to bx_end); -- bx nr
             testdata(temp_counter) := string_to_lhc_data_t(l(data_beg to data_end)); -- without bx_nr, algos and finor
             axo_score_emu(temp_counter) := str_to_slv(l(score_beg to score_end));
+            algo_emu(temp_counter) := str_to_slv(l(algo_beg to algo_end));
             temp_counter := temp_counter + 1;
         end loop;
 
 --        writeline(result_file, write_l);
 --        write(write_l, string'("bx   mu(0)            eg(0)    | algos | FW      EMU"));
-        write(write_l, string'("------------ | scores[hex]       scores[dec]"));
+        write(write_l, string'("-----|  algos | scores[hex]       scores[dec]"));
         writeline(result_file, write_l);
-        write(write_l, string'("bx   | algos | FW      EMU        FW     EMU"));
+        write(write_l, string'("bx   | FW EMU | FW      EMU        FW     EMU"));
         writeline(result_file, write_l);
         write(write_l, string'("Error:  scores"));
         writeline(error_file, write_l);
@@ -150,9 +154,10 @@ begin
             lhc_data <= testdata(i);
             bx_nr(i+CONST_DELAY) := bx_nr_vector_data(i);
             axo_score_emu_d(i+CONST_DELAY) := axo_score_emu(i);
+            algo_emu_d(i+CONST_DELAY)(7 downto 0) := algo_emu(i)(7 downto 0);
             if i >= CONST_DELAY then
 --                write(write_l, string'(bx_nr(i) & " " & hstr(gtl_data_del.mu(0)) & " " & hstr(gtl_data_del.eg(0)) & " | " & hstr(algo) & "    | " & hstr(axol1tl_score) &  "   " & hstr(axo_score_emu_d(i))));
-                write(write_l, string'(bx_nr(i) & " | " & hstr(algo) & "    | " & hstr(axol1tl_score) &  "   " & hstr(axo_score_emu_d(i))));
+                write(write_l, string'(bx_nr(i) & " | " & hstr(algo) & "  " & hstr(algo_emu_d(i)(7 downto 0)) & " | " & hstr(axol1tl_score) &  "   " & hstr(axo_score_emu_d(i))));
                 write(write_l, str(CONV_INTEGER(axol1tl_score)), justified => right, field => 8);
                 write(write_l, str(CONV_INTEGER(axo_score_emu_d(i))), justified => right, field => 8);
                 if axol1tl_score_lead0 /= axo_score_emu_d(i) then

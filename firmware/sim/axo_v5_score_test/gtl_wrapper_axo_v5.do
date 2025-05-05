@@ -16,11 +16,12 @@ if [info exists env(MTI_LIBS)] {
 
 ## set your src files directory for your design
 
-set GT_SRC ./../hdl
-set HDL_DIR ./../hdl
-set NGC_DIR ./../ngc
-set TB_DIR ./testbench
-set TEST_DIR ./axo_v5_score_test
+set GT_SRC ./../../hdl
+set HDL_DIR ./../../hdl
+set NGC_DIR ./../../ngc
+set TB_DIR ./../testbench
+#set TEST_DIR ./axo_v5_score_test
+set TEST_DIR .
 
 ## Create and map work directory
 vlib work
@@ -72,8 +73,8 @@ vcom -93 -work work $TEST_DIR/gtl_wrapper_axo_v5_tb.vhd
 vsim -t 1ps work.gtl_wrapper_axo_v5_tb
 
 ##Load signals in wave window
-view wave
-do $TEST_DIR/gtl_wrapper_axo_v5_wave.do
+#view wave
+#do $TEST_DIR/gtl_wrapper_axo_v5_wave.do
 
 ##Run simulation
 #run 2000 ns

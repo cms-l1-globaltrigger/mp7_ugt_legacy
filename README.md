@@ -88,7 +88,7 @@ export UGT_GITLAB_USER_NAME=<user name>
 export UGT_QUESTASIMLIBS_DIR=<home dir>
 export UGT_QUESTASIM_SIM_PATH=${MODELSIM_ROOT}
 export UGT_VIVADO_QUESTASIMLIBS_VERSION=2021.2
-export UGT_QUESTASIM_LIBS_PATH=<home dir>/questasimlibs
+export UGT_QUESTASIM_LIBS_PATH=${UGT_QUESTASIMLIBS_DIR}/questasimlibs
 export UGT_BLK_MEM_GEN_VERSION_SIM=blk_mem_gen_v8_4_5
 
 ## Synthesis (Vivado)

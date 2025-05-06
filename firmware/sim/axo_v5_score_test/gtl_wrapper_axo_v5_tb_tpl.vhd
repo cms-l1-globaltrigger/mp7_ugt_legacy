@@ -106,6 +106,7 @@ begin
         file testvector_file : text open read_mode is "{{TESTVECTOR_FILENAME}}";
         file result_file : text open write_mode is "results/axo_v5_scores.txt";
         file error_file : text open write_mode is "results/axo_v5_scores_error.txt";
+        file algo_error_file : text open write_mode is "results/algo_error.txt";
 
         function str_to_slv(str : string) return std_logic_vector is
             alias str_norm : string(1 to str'length) is str;
@@ -137,14 +138,24 @@ begin
             temp_counter := temp_counter + 1;
         end loop;
 
+        write(write_l, string'("TV file: {{TESTVECTOR_FILENAME}}"));
+        writeline(result_file, write_l);
         write(write_l, string'("-----|  algos | scores[hex]       scores[dec]"));
         writeline(result_file, write_l);
         write(write_l, string'("bx   | FW EMU | FW      EMU        FW     EMU"));
         writeline(result_file, write_l);
+        write(write_l, string'("TV file: {{TESTVECTOR_FILENAME}}"));
+        writeline(error_file, write_l);
         write(write_l, string'("Error:  scores"));
         writeline(error_file, write_l);
         write(write_l, string'("bx    FW    EMU"));
         writeline(error_file, write_l);
+        write(write_l, string'("TV file: {{TESTVECTOR_FILENAME}}"));
+        writeline(algo_error_file, write_l);
+        write(write_l, string'("Error: algos"));
+        writeline(algo_error_file, write_l);
+        write(write_l, string'("bx    FW   EMU"));
+        writeline(algo_error_file, write_l);
 
         wait for 5 ns;
         for i in 0 to LHC_BUNCH_COUNT-1 loop
@@ -156,11 +167,23 @@ begin
                 write(write_l, string'(bx_nr(i) & " | " & hstr(algo) & "  " & hstr(algo_emu_d(i)(7 downto 0)) & " | " & hstr(axol1tl_score) &  "   " & hstr(axo_score_emu_d(i))));
                 write(write_l, str(CONV_INTEGER(axol1tl_score)), justified => right, field => 8);
                 write(write_l, str(CONV_INTEGER(axo_score_emu_d(i))), justified => right, field => 8);
-                if axol1tl_score_lead0 /= axo_score_emu_d(i) then
+                if axol1tl_score_lead0 /= axo_score_emu_d(i) and algo /= algo_emu_d(i) then
+                    write(write_l, string'(" => Algo and score mismatches!"));
+                    writeline(result_file, write_l);
+                    write(write_l, string'(bx_nr(i) & "  " & hstr(axol1tl_score) & " " & hstr(axo_score_emu_d(i))));
+                    writeline(error_file, write_l);
+                    write(write_l, string'(bx_nr(i) & "  " & hstr(algo) & "   " & hstr(algo_emu_d(i)(NR_ALGOS-1 downto 0))));
+                    writeline(algo_error_file, write_l);
+                elsif axol1tl_score_lead0 /= axo_score_emu_d(i) then
                     write(write_l, string'(" => Score mismatches!"));
                     writeline(result_file, write_l);
                     write(write_l, string'(bx_nr(i) & "  " & hstr(axol1tl_score) & " " & hstr(axo_score_emu_d(i))));
                     writeline(error_file, write_l);
+                elsif algo /= algo_emu_d(i) then
+                    write(write_l, string'(" => Algo mismatches!"));
+                    writeline(result_file, write_l);
+                    write(write_l, string'(bx_nr(i) & "  " & hstr(algo) & "   " & hstr(algo_emu_d(i)(NR_ALGOS-1 downto 0))));
+                    writeline(algo_error_file, write_l);
                 else
                     writeline(result_file, write_l);
                 end if;    

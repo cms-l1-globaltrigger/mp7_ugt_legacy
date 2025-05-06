@@ -104,9 +104,8 @@ begin
         variable temp_counter : integer := 0;
 
         file testvector_file : text open read_mode is "{{TESTVECTOR_FILENAME}}";
---        file testvector_file : text open read_mode is "./axo_v5_score_test/L1Menu_Collisions2025_v1_0_0_TestVector_ttBar_000.txt";
-        file result_file : text open write_mode is "./axo_v5_score_test/results/result_axo_v5_scores.txt";
-        file error_file : text open write_mode is "./axo_v5_score_test/results/axo_v5_scores_error.txt";
+        file result_file : text open write_mode is "results/axo_v5_scores.txt";
+        file error_file : text open write_mode is "results/axo_v5_scores_error.txt";
 
         function str_to_slv(str : string) return std_logic_vector is
             alias str_norm : string(1 to str'length) is str;
@@ -138,8 +137,6 @@ begin
             temp_counter := temp_counter + 1;
         end loop;
 
---        writeline(result_file, write_l);
---        write(write_l, string'("bx   mu(0)            eg(0)    | algos | FW      EMU"));
         write(write_l, string'("-----|  algos | scores[hex]       scores[dec]"));
         writeline(result_file, write_l);
         write(write_l, string'("bx   | FW EMU | FW      EMU        FW     EMU"));
@@ -156,7 +153,6 @@ begin
             axo_score_emu_d(i+CONST_DELAY) := axo_score_emu(i);
             algo_emu_d(i+CONST_DELAY)(7 downto 0) := algo_emu(i)(7 downto 0);
             if i >= CONST_DELAY then
---                write(write_l, string'(bx_nr(i) & " " & hstr(gtl_data_del.mu(0)) & " " & hstr(gtl_data_del.eg(0)) & " | " & hstr(algo) & "    | " & hstr(axol1tl_score) &  "   " & hstr(axo_score_emu_d(i))));
                 write(write_l, string'(bx_nr(i) & " | " & hstr(algo) & "  " & hstr(algo_emu_d(i)(7 downto 0)) & " | " & hstr(axol1tl_score) &  "   " & hstr(axo_score_emu_d(i))));
                 write(write_l, str(CONV_INTEGER(axol1tl_score)), justified => right, field => 8);
                 write(write_l, str(CONV_INTEGER(axo_score_emu_d(i))), justified => right, field => 8);

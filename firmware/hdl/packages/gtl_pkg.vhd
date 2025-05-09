@@ -85,6 +85,9 @@ type lword_array is array (0 to LINK_FRAMES-1) of lword;
 -- AXO
 constant AXO_SCORE_WIDTH: natural := 18;
 constant AXO_SEL: natural := 1;
+constant AXO_MODEL_V1: natural := 1;
+constant AXO_MODEL_V3: natural := 3;
+constant AXO_MODEL_V4: natural := 4;
 constant AXO_MODEL_V5: natural := 5;
 
 -- Fixed pipeline structure

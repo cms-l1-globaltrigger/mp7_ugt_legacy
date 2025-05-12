@@ -75,10 +75,10 @@ entity gtl_module is
         lhc_clk : in std_logic;
         gtl_data : in gtl_data_record;
         algo_o : out std_logic_vector(NR_ALGOS-1 downto 0);
-        axo_v1_score_o : out std_logic_vector(AXO_SCORE_WIDTH-1 downto 0) := "00"&"0000";
-        axo_v3_score_o : out std_logic_vector(AXO_SCORE_WIDTH-1 downto 0) := "00"&"0000";
-        axo_v4_score_o : out std_logic_vector(AXO_SCORE_WIDTH-1 downto 0) := "00"&"0000";
-        axo_v5_score_o : out std_logic_vector(AXO_SCORE_WIDTH-1 downto 0) := "00"&"0000"
+        axo_v1_score_o : out std_logic_vector(AXO_SCORE_WIDTH-1 downto 0) := "00" & X"0000";
+        axo_v3_score_o : out std_logic_vector(AXO_SCORE_WIDTH-1 downto 0) := "00" & X"0000";
+        axo_v4_score_o : out std_logic_vector(AXO_SCORE_WIDTH-1 downto 0) := "00" & X"0000";
+        axo_v5_score_o : out std_logic_vector(AXO_SCORE_WIDTH-1 downto 0) := "00" & X"0000"
     );
 end gtl_module;
 

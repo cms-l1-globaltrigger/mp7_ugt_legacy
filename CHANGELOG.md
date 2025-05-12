@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.32.0] - 2025-05-12
+### Comment
+
+- updated gtl_module_tpl.vhd for Axo score output portsY
+
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../payload/gtl_module_tpl.vhd
+
 ## [v1.31.2] - 2025-04-14
 ### Comment
 

@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/gtl_pkg.vhd
   - ../payload/gtl/ml_calculation_instances
   - ../payload/gtl/ml_comparison
+- dep file:
+  - ../cfg/uGT_algo.dep
 
 ## [v1.31.2] - 2025-04-14
 ### Comment

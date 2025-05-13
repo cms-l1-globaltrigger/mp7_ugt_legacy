@@ -93,7 +93,7 @@ begin
                 );
         end generate v3_i;
         v4_i: if model = AXO_MODEL_V4 generate
-            axol1tl_v3_i: entity work.axol1tl_v4
+            axol1tl_v4_i: entity work.axol1tl_v4
                 port map(
                     lhc_clk, ap_rst, ap_start,
                     open, open, open,
@@ -114,7 +114,7 @@ begin
                 );
         end generate v4_i;
         v5_i: if model = AXO_MODEL_V5 generate
-            axol1tl_v3_i: entity work.axol1tl_v5
+            axol1tl_v5_i: entity work.axol1tl_v5_da
                 port map(
                     lhc_clk, ap_rst, ap_start,
                     open, open, open,

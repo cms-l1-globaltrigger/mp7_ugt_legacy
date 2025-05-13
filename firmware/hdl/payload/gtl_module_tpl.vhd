@@ -2,7 +2,7 @@
 -- Global Trigger Logic module.
 
 -- Version history:
--- HB 2025-05-12: v1.25.0: Added output ports for AXO score value, moved "algo_pipeline_p" to VHDL Producer template.
+-- HB 2025-05-13: v1.25.0: Added modules for ML calculations and comparisons.
 -- HB 2025-04-14: v1.24.2: Added AXOL1TL new model v5 payload.
 -- HB 2025-03-21: v1.24.1: Added AXOL1TL model v5 payload.
 -- HB 2025-01-07: v1.24.0: Implemented AXOL1TL model v5.
@@ -74,12 +74,7 @@ entity gtl_module is
     port(
         lhc_clk : in std_logic;
         gtl_data : in gtl_data_record;
-        algo_o : out std_logic_vector(NR_ALGOS-1 downto 0);
-        axo_v1_score_o : out std_logic_vector(AXO_SCORE_WIDTH-1 downto 0) := "00" & X"0000";
-        axo_v3_score_o : out std_logic_vector(AXO_SCORE_WIDTH-1 downto 0) := "00" & X"0000";
-        axo_v4_score_o : out std_logic_vector(AXO_SCORE_WIDTH-1 downto 0) := "00" & X"0000";
-        axo_v5_score_o : out std_logic_vector(AXO_SCORE_WIDTH-1 downto 0) := "00" & X"0000"
-    );
+        algo_o : out std_logic_vector(NR_ALGOS-1 downto 0));
 end gtl_module;
 
 architecture rtl of gtl_module is

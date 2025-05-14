@@ -2,6 +2,7 @@
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- Version history:
+-- HB 2025-05-09: added constants for ml_calculation_instances.
 -- HB 2024-05-10: added COMMON_COND_STAGES for condition with no intermediate pipeline.
 -- HB 2023-10-10: CICADA definition changed: no bjets.
 -- HB 2023-10-03: inserted calo anomaly algorithm (CICADA) definitions.
@@ -80,6 +81,16 @@ package gtl_pkg is
 --constant NR_INPUT_LANES : natural := 24; -- max. input links from optical patch panel
 constant LINK_FRAMES : natural := 6;
 type lword_array is array (0 to LINK_FRAMES-1) of lword;
+
+-- AXO
+constant AXO_SCORE_WIDTH: natural := 18;
+constant AXO_SEL: natural := 1;
+constant TOPO_SEL: natural := 2;
+constant AXO_MODEL_V1: natural := 1;
+constant AXO_MODEL_V3: natural := 3;
+constant AXO_MODEL_V4: natural := 4;
+constant AXO_MODEL_V5: natural := 5;
+constant TOPO_MODEL_BASE_V1: natural := 100;
 
 -- Fixed pipeline structure
 constant BX_PIPELINE_STAGES: natural := 5; -- +/- 2bx pipeline

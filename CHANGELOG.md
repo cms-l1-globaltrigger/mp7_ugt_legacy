@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.32.0] - 2025-05-13
+### Comment
+
+- added modules for ML calculations and comparisons
+
+### Changed
+- source files:
+  - ../packages/gt_mp7_core_pkg.vhd
+  - ../packages/gtl_pkg.vhd
+  - ../payload/gtl/ml_calculation_instances
+  - ../payload/gtl/ml_comparison
+- dep file:
+  - ../cfg/uGT_algo.dep
+
 ## [v1.31.2] - 2025-04-14
 ### Comment
 

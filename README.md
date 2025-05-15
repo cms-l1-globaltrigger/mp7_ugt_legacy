@@ -29,12 +29,12 @@ Current versions:
 | gt logic | v1.25.0 |
 | final decision logic | v1.4.1 |
 
-Following software tool versions used to create L1Menu and menu depended VHDL
+Following software tool versions (and higher) used to create L1Menu and menu depended VHDL
 files:
 
 | utm | TME | VHDL Producer |
 |:-:|:-:|:-:|
-| 0.13.0 | 0.17.2 | 2.21.0 |
+| 0.13.0 | 0.17.2 | 2.22.0 |
 
 
 Following dependencies exist for uGT firmware:

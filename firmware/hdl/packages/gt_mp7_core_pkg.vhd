@@ -4,14 +4,15 @@
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
 
--- mp7_ugt (=FRAME_VERSION): v1.32.0
+-- mp7_ugt (=FRAME_VERSION): v1.32.1
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.32.0
+-- gt: v1.32.1
 -- frame: v1.4.2 (see frame.vhd)
 -- gtl: v1.25.0 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
+-- HB 2024-09-04: v1.32.1 - Updated constraints_fixed_cells.tcl.
 -- HB 2024-09-04: v1.30.0 - Added vivado_fix_cells_tpl.tcl and constraints_fixed_cells.tcl to ../scripts.
 -- HB 2023-04-08: v1.22.2 - Changed in scripts/mp7_patch.py (for area_constraints.tcl).
 -- HB 2023-04-07: v1.22.1 - Used Tx links 28-31 for scouting (frame/output_mux.vhd) without links 32..71.
@@ -109,7 +110,7 @@ package gt_mp7_core_pkg is
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GT_MINOR_VERSION      : integer range 0 to 255 := 32;
-    constant GT_REV_VERSION        : integer range 0 to 255 := 0;
+    constant GT_REV_VERSION        : integer range 0 to 255 := 1;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &

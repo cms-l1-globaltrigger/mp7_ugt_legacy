@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.32.1] - 2025-05-16
+### Comment
+
+- updated constraints_fixed_cells.tcl
+
+### Changed
+- ucf file:
+  - ../udf/constraints_fixed_cells.tcl
+
 ## [v1.32.0] - 2025-05-13
 ### Comment
 

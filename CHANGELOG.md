@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.32.1] - 2025-05-16
+## [v1.32.1] - 2025-05-26
 ### Comment
 
 - updated constraints_fixed_cells.tcl

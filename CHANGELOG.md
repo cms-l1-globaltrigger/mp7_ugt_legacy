@@ -8,10 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - updated constraints_fixed_cells.tcl
-
+- bug fixed in gtl_fdl_wrapper_tpl_questa.do
 ### Changed
 - ucf file:
-  - ../udf/constraints_fixed_cells.tcl
+  - ../ucf/constraints_fixed_cells.tcl
+- sim file:
+  - ../scripts/templates/gtl_fdl_wrapper_tpl_questa.do
 
 ## [v1.32.0] - 2025-05-13
 ### Comment

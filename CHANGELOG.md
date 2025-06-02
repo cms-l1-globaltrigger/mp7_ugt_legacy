@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.32.1] - 2025-05-26
+### Comment
+
+- updated constraints_fixed_cells.tcl
+- bug fixed in gtl_fdl_wrapper_tpl_questa.do
+### Changed
+- ucf file:
+  - ../ucf/constraints_fixed_cells.tcl
+- sim file:
+  - ../scripts/templates/gtl_fdl_wrapper_tpl_questa.do
+
 ## [v1.32.0] - 2025-05-13
 ### Comment
 

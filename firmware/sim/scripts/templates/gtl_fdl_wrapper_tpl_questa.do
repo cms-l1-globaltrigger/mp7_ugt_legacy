@@ -103,6 +103,13 @@ vcom -93 -work work $HDL_DIR/payload/gtl/common/correlation_cuts_wrapper.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/orm_cuts.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/common/esums_4_corr_cond.vhd
 #
+#### inserted from anomaly_detection.dep (wrapper in dep file)
+{{adt_vhd}}
+#### inserted from axol1tl_trigger.dep (wrapper in dep file)
+{{axol1tl_vhd}}
+#### inserted from topo_trigger.dep (wrapper in dep file)
+{{topo_vhd}}
+#
 ### modules of instances in gtl_module.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/bx_pipeline.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/muon_charge_correlations.vhd
@@ -120,13 +127,6 @@ vcom -93 -work work $HDL_DIR/payload/gtl/correlation_conditions.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/calo_comb_multi_condition.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/ml_comparison.vhd
 vcom -93 -work work $HDL_DIR/payload/gtl/ml_calculation_instances.vhd
-#
-#### inserted from anomaly_detection.dep (wrapper in dep file)
-{{adt_vhd}}
-#### inserted from axol1tl_trigger.dep (wrapper in dep file)
-{{axol1tl_vhd}}
-#### inserted from topo_trigger.dep (wrapper in dep file)
-{{topo_vhd}}
 #
 ### modules of BRAMs used for mass over DeltaR
 vcom -93 -work work $NGC_DIR/$BLK_MEM_GEN_VERSION/rom_lut_calo_inv_dr_sq_1/synth/rom_lut_calo_inv_dr_sq_1.vhd

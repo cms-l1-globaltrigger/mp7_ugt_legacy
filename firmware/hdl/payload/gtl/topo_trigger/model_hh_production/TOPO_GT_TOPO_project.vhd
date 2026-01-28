@@ -16,7 +16,7 @@ port (
     ap_done : OUT STD_LOGIC;
     ap_idle : OUT STD_LOGIC;
     ap_ready : OUT STD_LOGIC;
-    dropout_input_val1 : IN STD_LOGIC_VECTOR (320 downto 0);
+    dropout_input_val1 : IN STD_LOGIC_VECTOR (329 downto 0);
     ap_return : OUT STD_LOGIC_VECTOR (9 downto 0) );
 end;
 
@@ -346,7 +346,7 @@ attribute shreg_extract : string;
     component TOPO_GT_dense_latency_ap_fixed_16_6_5_3_0_ap_fixed_38_19_5_3_0_config2_s IS
     port (
         ap_ready : OUT STD_LOGIC;
-        data_val : IN STD_LOGIC_VECTOR (320 downto 0);
+        data_val : IN STD_LOGIC_VECTOR (329 downto 0);
         ap_return_0 : OUT STD_LOGIC_VECTOR (37 downto 0);
         ap_return_1 : OUT STD_LOGIC_VECTOR (37 downto 0);
         ap_return_2 : OUT STD_LOGIC_VECTOR (37 downto 0);

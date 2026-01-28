@@ -66,8 +66,8 @@ port (
     htmiss : IN STD_LOGIC_VECTOR (31 downto 0);
     ethfmiss : IN STD_LOGIC_VECTOR (31 downto 0);
     hthfmiss : IN STD_LOGIC_VECTOR (31 downto 0);
-    layer10_out : OUT STD_LOGIC_VECTOR (15 downto 0);
-    layer10_out_ap_vld : OUT STD_LOGIC );
+    topo_score : OUT STD_LOGIC_VECTOR (15 downto 0);
+    topo_score_ap_vld : OUT STD_LOGIC );
 end;
 
 
@@ -410,17 +410,6 @@ begin
     input_unscaled_8_fu_488_p3 <= (trunc_ln109_3_fu_484_p1 & ap_const_lv9_0);
     input_unscaled_9_fu_386_p3 <= (tmp_89_fu_376_p4 & ap_const_lv9_0);
     input_unscaled_fu_312_p3 <= (trunc_ln64_fu_308_p1 & ap_const_lv9_0);
-    layer10_out <= std_logic_vector(IEEE.numeric_std.resize(unsigned(grp_TOPO_project_fu_301_ap_return),16));
-
-    layer10_out_ap_vld_assign_proc : process(ap_enable_reg_pp0_iter2, ap_block_pp0_stage0_11001)
-    begin
-        if (((ap_const_boolean_0 = ap_block_pp0_stage0_11001) and (ap_enable_reg_pp0_iter2 = ap_const_logic_1))) then 
-            layer10_out_ap_vld <= ap_const_logic_1;
-        else 
-            layer10_out_ap_vld <= ap_const_logic_0;
-        end if; 
-    end process;
-
         sext_ln20_10_fu_746_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(tmp1_10_fu_738_p3),16));
 
         sext_ln20_11_fu_766_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(tmp1_11_fu_756_p4),16));
@@ -499,6 +488,17 @@ begin
     tmp_97_fu_638_p4 <= muons_1(28 downto 23);
     tmp_98_fu_706_p4 <= add_ln19_5_fu_700_p2(15 downto 10);
     tmp_99_fu_728_p4 <= jets_0(24 downto 19);
+    topo_score <= std_logic_vector(IEEE.numeric_std.resize(unsigned(grp_TOPO_project_fu_301_ap_return),16));
+
+    topo_score_ap_vld_assign_proc : process(ap_enable_reg_pp0_iter2, ap_block_pp0_stage0_11001)
+    begin
+        if (((ap_const_boolean_0 = ap_block_pp0_stage0_11001) and (ap_enable_reg_pp0_iter2 = ap_const_logic_1))) then 
+            topo_score_ap_vld <= ap_const_logic_1;
+        else 
+            topo_score_ap_vld <= ap_const_logic_0;
+        end if; 
+    end process;
+
     trunc_ln109_1_fu_420_p1 <= jets_1(7 - 1 downto 0);
     trunc_ln109_2_fu_452_p1 <= jets_2(7 - 1 downto 0);
     trunc_ln109_3_fu_484_p1 <= jets_3(7 - 1 downto 0);

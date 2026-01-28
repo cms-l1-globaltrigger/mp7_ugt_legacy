@@ -3,6 +3,7 @@
 -- Wrapper for "anomaly detection".
 
 -- Version history:
+-- MJ 2026-01-28: wrapper for "axol1tl_v6"
 -- HB  2025-01-07: wrapper for "axol1tl_v5"
 -- SPS 2024-07-24: copy to "axol1tl_v4"
 -- HB  2024-01-24: renamed "adt" to "axol1tl_v3"
@@ -16,7 +17,7 @@ use ieee.numeric_std.all;
  
 use work.gtl_pkg.all;
 
-entity axol1tl_v5_wrapper is
+entity axol1tl_v6_wrapper is
     generic	(
         sim_mode: boolean := true;
         threshold: integer := 4150
@@ -36,9 +37,9 @@ entity axol1tl_v5_wrapper is
         adt_out: out std_logic;
         anomaly_score_o: out std_logic_vector(17 downto 0)
     );
-end axol1tl_v5_wrapper;
+end axol1tl_v6_wrapper;
 
-architecture rtl of axol1tl_v5_wrapper is
+architecture rtl of axol1tl_v6_wrapper is
 
     signal ett_i, htt_i, etm_i, htm_i, etmhf_i, htmhf_i: std_logic_vector(31 downto 0) := X"00000000";
     signal anomaly_score: std_logic_vector(17 downto 0);
@@ -54,6 +55,9 @@ begin
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
     htmhf_i(MAX_ESUMS_BITS-1 downto 0) <= htmhf;
+
+
+-- Note: HLS entity still named v5_da but contains v6 algorithm (this was a routine re-training)
     
     anomaly_detection_i: entity work.axol1tl_v5_da
         port map(

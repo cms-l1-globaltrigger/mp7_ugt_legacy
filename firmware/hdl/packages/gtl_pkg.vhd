@@ -90,6 +90,7 @@ constant AXO_MODEL_V1: natural := 1;
 constant AXO_MODEL_V3: natural := 3;
 constant AXO_MODEL_V4: natural := 4;
 constant AXO_MODEL_V5: natural := 5;
+constant AXO_MODEL_V6: natural := 5;
 constant TOPO_MODEL_BASE_V1: natural := 100;
 
 -- Fixed pipeline structure
@@ -103,7 +104,7 @@ constant CENTRALITY_STAGES: natural := COMMON_COND_STAGES; -- pipeline stages fo
 constant MUS_STAGES: natural := COMMON_COND_STAGES; -- pipeline stages for "Hadronic shower triggers (muon)" to get same pipeline to algos as conditions
 constant ZDC_STAGES: natural := COMMON_COND_STAGES; -- pipeline stages for "ZDC condition" to get same pipeline to algos as conditions
 constant CICADA_COND_STAGES: natural := COMMON_COND_STAGES; -- pipeline stages for "CICADA conditions" to get same pipeline to algos as conditions
-constant ADT_SIM_DEL: natural := 2; -- delay of ADT for simulation 
+constant ADT_SIM_DEL: natural := 2; -- delay of ADT for simulation
 constant INTERMEDIATE_PIPELINE: boolean := true; -- intermediate pipeline
 constant CONDITIONS_PIPELINE: boolean := true; -- pipeline at output of conditions
 
@@ -191,7 +192,7 @@ constant MUON_OBJ_MUS0 : natural := 0;
 constant MUON_OBJ_MUS1 : natural := 2;
 constant MUON_OBJ_MUSOOT0 : natural := 4;
 constant MUON_OBJ_MUSOOT1 : natural := 6;
--- HB 2023-03-06: added hadronic shower trigger bit MUS2 
+-- HB 2023-03-06: added hadronic shower trigger bit MUS2
 -- MUS2 bit
 -- MUS2 => muon obj 3, bit 61
 constant MUON_OBJ_MUS2 : natural := 3;

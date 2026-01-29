@@ -1,4 +1,4 @@
- 
+
 -- Description:
 -- Wrapper for "anomaly detection".
 
@@ -14,7 +14,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
- 
+
 use work.gtl_pkg.all;
 
 entity axol1tl_v6_wrapper is
@@ -46,7 +46,7 @@ architecture rtl of axol1tl_v6_wrapper is
     signal ap_rst: std_logic := '0';
     signal ap_start: std_logic := '1';
     signal adt: std_logic_vector(0 downto 0) := "0";
-    
+
 begin
 
     ett_i(MAX_ESUMS_BITS-1 downto 0) <= ett;
@@ -56,10 +56,7 @@ begin
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
     htmhf_i(MAX_ESUMS_BITS-1 downto 0) <= htmhf;
 
-
--- Note: HLS entity still named v5_da but contains v6 algorithm (this was a routine re-training)
-    
-    anomaly_detection_i: entity work.axol1tl_v5_da
+    anomaly_detection_i: entity work.axol1tl_v6_da
         port map(
             lhc_clk, ap_rst, ap_start,
             open, open, open,
@@ -82,7 +79,7 @@ begin
     adt(0) <= '1' when to_integer(unsigned(anomaly_score)) >= threshold else '0';
 
     adt_out <= adt(0);
-    
+
     anomaly_score_o <= anomaly_score;
 
 end architecture rtl;

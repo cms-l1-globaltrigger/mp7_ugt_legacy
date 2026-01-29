@@ -8,7 +8,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
- 
+
 use work.gtl_pkg.all;
 
 entity ml_calculation_instances is
@@ -39,7 +39,7 @@ architecture rtl of ml_calculation_instances is
     signal ml_score: std_logic_vector(score_width-1 downto 0);
     signal ap_rst: std_logic := '0';
     signal ap_start: std_logic := '1';
-    
+
 begin
 
     ett_i(MAX_ESUMS_BITS-1 downto 0) <= ett;
@@ -48,7 +48,7 @@ begin
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
     htmhf_i(MAX_ESUMS_BITS-1 downto 0) <= htmhf;
-    
+
     axo_i: if obj = AXO_SEL generate
         v1_i: if model = AXO_MODEL_V1 generate
             axol1tl_v1_i: entity work.axol1tl_v1
@@ -134,6 +134,27 @@ begin
                     open
                 );
         end generate v5_i;
+        v6_i: if model = AXO_MODEL_V6 generate
+            axol1tl_v6_i: entity work.axol1tl_v6_da
+                port map(
+                    lhc_clk, ap_rst, ap_start,
+                    open, open, open,
+                    mu(0),mu(1),mu(2),mu(3),
+                    mu(4),mu(5),mu(6),mu(7),
+                    jet(0),jet(1),jet(2),jet(3),
+                    jet(4),jet(5),jet(6),jet(7),
+                    jet(8),jet(9),jet(10),jet(11),
+                    eg(0),eg(1),eg(2),eg(3),
+                    eg(4),eg(5),eg(6),eg(7),
+                    eg(8),eg(9),eg(10),eg(11),
+                    tau(0),tau(1),tau(2),tau(3),
+                    tau(4),tau(5),tau(6),tau(7),
+                    tau(8),tau(9),tau(10),tau(11),
+                    ett_i,htt_i,etm_i,htm_i,etmhf_i,htmhf_i,
+                    ml_score(score_width-1 downto 0),
+                    open
+                );
+        end generate v6_i;
     end generate axo_i;
     topo_i: if obj = TOPO_SEL generate
         base_v1_i: if model = TOPO_MODEL_BASE_V1 generate
@@ -158,7 +179,7 @@ begin
                 );
         end generate base_v1_i;
     end generate topo_i;
-    
+
     ml_score_o(score_width-1 downto 0) <= ml_score(score_width-1 downto 0);
 
 end architecture rtl;

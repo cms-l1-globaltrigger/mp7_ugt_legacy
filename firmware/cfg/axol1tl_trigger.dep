@@ -59,4 +59,8 @@ src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_da_mul_16s_16s_32_1_1.vhd
 src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_da_mul_17s_17s_34_1_1.vhd
 src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_da.vhd
 src payload/gtl/axol1tl_trigger/model_v5/axol1tl_v5_wrapper.vhd
-
+src payload/gtl/axol1tl_trigger/model_v6/axol1tl_v6_da_mul_15s_15s_30_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v6/axol1tl_v6_da_mul_16s_16s_32_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v6/axol1tl_v6_da_mul_17s_17s_34_1_1.vhd
+src payload/gtl/axol1tl_trigger/model_v6/axol1tl_v6_da.vhd
+src payload/gtl/axol1tl_trigger/model_v6/axol1tl_v6_wrapper.vhd

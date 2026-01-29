@@ -84,6 +84,7 @@ type lword_array is array (0 to LINK_FRAMES-1) of lword;
 
 -- AXO
 constant AXO_SCORE_WIDTH: natural := 18;
+constant TOPO_SCORE_WIDTH: natural := 18; -- TODO: was missing
 constant AXO_SEL: natural := 1;
 constant TOPO_SEL: natural := 2;
 constant AXO_MODEL_V1: natural := 1;

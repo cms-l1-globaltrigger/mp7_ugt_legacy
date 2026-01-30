@@ -91,9 +91,9 @@ constant AXO_MODEL_V1: natural := 1;
 constant AXO_MODEL_V3: natural := 3;
 constant AXO_MODEL_V4: natural := 4;
 constant AXO_MODEL_V5: natural := 5;
-constant AXO_MODEL_V6: natural := 5;
+constant AXO_MODEL_V6: natural := 6;
 constant TOPO_MODEL_BASE_V1: natural := 100;
-constant TOPO_MODEL_HHBBWW_1MU_V5: natural := 105;
+constant TOPO_MODEL_HHBBWW_1MU_V5: natural := 101;
 
 -- Fixed pipeline structure
 constant BX_PIPELINE_STAGES: natural := 5; -- +/- 2bx pipeline

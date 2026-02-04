@@ -24,7 +24,7 @@ Current versions:
 
 | entity | version |
 |:-:|:-:|
-| uGT FW | v1.32.1 |
+| uGT FW | v1.33.1 |
 | framework | v1.4.2 |
 | gt logic | v1.25.0 |
 | final decision logic | v1.4.1 |
@@ -205,7 +205,7 @@ Example
 
 ```bash
 ugt-synthesize https://raw.githubusercontent.com/cms-l1-globaltrigger/cms-l1-menu/L1Menu_Collisions2024_v1_3_0-d1/2024/L1Menu_Collisions2024_v1_3_0-d1/xml/L1Menu_Collisions2024_v1_3_0-d1.xml \
- --ugt v1.30.0 \
+ --ugt v1.33.1 \
  --build 0x1192 \
  -p ~/work_synth/production
 ```

@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.33.1] - 2026-02-04
+
+### Changed
+
+- HHbbWW_1mu_v5 with removed sigmoid.
+
+## [v1.33.0] - 2026-01-30
+
+### Added
+
+- axol1tl_v6 model.
+- HHbbWW_1mu_v5 model.
+
 ## [v1.32.1] - 2025-05-26
 ### Comment
 

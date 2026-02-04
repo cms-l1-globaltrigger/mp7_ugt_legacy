@@ -8,10 +8,10 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-
+ 
 use work.gtl_pkg.all;
 
-entity topo_HHbbWW_1mu_v5_wrapper is
+entity HHbbWW_1mu_v5_wrapper is
     generic	(
         threshold: integer := 4150
     );
@@ -30,16 +30,16 @@ entity topo_HHbbWW_1mu_v5_wrapper is
         topo_out: out std_logic;
         topo_score_o: out std_logic_vector(15 downto 0)
     );
-end topo_HHbbWW_1mu_v5_wrapper;
+end HHbbWW_1mu_v5_wrapper;
 
-architecture rtl of topo_HHbbWW_1mu_v5_wrapper is
+architecture rtl of HHbbWW_1mu_v5_wrapper is
 
     signal ett_i, htt_i, etm_i, htm_i, etmhf_i, htmhf_i: std_logic_vector(31 downto 0) := X"00000000";
     signal topo_score: std_logic_vector(15 downto 0);
     signal ap_rst: std_logic := '0';
     signal ap_start: std_logic := '1';
     signal topo: std_logic_vector(0 downto 0) := "0";
-
+    
 begin
 
     ett_i(MAX_ESUMS_BITS-1 downto 0) <= ett;
@@ -48,8 +48,8 @@ begin
     htm_i(MAX_ESUMS_BITS-1 downto 0) <= htm;
     etmhf_i(MAX_ESUMS_BITS-1 downto 0) <= etmhf;
     htmhf_i(MAX_ESUMS_BITS-1 downto 0) <= htmhf;
-
-    topo_HHbbWW_1mu_v5_i: entity work.topo_HHbbWW_1mu_v5
+    
+    HHbbWW_1mu_v5_i: entity work.topo_HHbbWW_1mu_v5
         port map(
             lhc_clk, ap_rst, ap_start,
             open, open, open,
@@ -72,7 +72,7 @@ begin
     topo(0) <= '1' when to_integer(unsigned(topo_score)) >= threshold else '0';
 
     topo_out <= topo(0);
-
+    
     topo_score_o(15 downto 0) <= topo_score;
 
 end architecture rtl;

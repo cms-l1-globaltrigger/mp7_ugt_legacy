@@ -135,7 +135,7 @@ port (
 end;
 
 
-architecture behav of topo_HHbbWW_1mu_v5_dense_latency_ap_fixed_16_6_5_3_0_ap_fixed_38_19_5_3_0_config2_s is
+architecture behav of topo_HHbbWW_1mu_v5_dense_latency_ap_fixed_16_6_5_3_0_ap_fixed_38_19_5_3_0_config2_s is 
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_boolean_1 : BOOLEAN := true;
     constant ap_const_lv25_BA : STD_LOGIC_VECTOR (24 downto 0) := "0000000000000000010111010";
@@ -2093,7 +2093,7 @@ attribute shreg_extract : string;
     signal mul_ln73_670_fu_1031_p2 : STD_LOGIC_VECTOR (24 downto 0);
     signal mul_ln73_671_fu_1143_p2 : STD_LOGIC_VECTOR (24 downto 0);
     signal mul_ln73_672_fu_1255_p2 : STD_LOGIC_VECTOR (24 downto 0);
-    signal tmp_4_fu_979495_p4 : STD_LOGIC_VECTOR (9 downto 0);
+    signal tmp_1_fu_979495_p4 : STD_LOGIC_VECTOR (9 downto 0);
     signal mul_ln73_673_fu_1034_p2 : STD_LOGIC_VECTOR (18 downto 0);
     signal tmp_950_fu_979539_p4 : STD_LOGIC_VECTOR (9 downto 0);
     signal mul_ln73_674_fu_1035_p2 : STD_LOGIC_VECTOR (18 downto 0);
@@ -6984,7 +6984,7 @@ begin
         din1_WIDTH => 7,
         dout_WIDTH => 17)
     port map (
-        din0 => tmp_4_fu_979495_p4,
+        din0 => tmp_1_fu_979495_p4,
         din1 => mul_ln73_683_fu_1176_p1,
         dout => mul_ln73_683_fu_1176_p2);
 
@@ -11499,7 +11499,7 @@ begin
 
         sext_ln70_40_fu_979191_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(a_19_fu_979166_p4),25));
 
-        sext_ln70_42_fu_979510_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(tmp_4_fu_979495_p4),18));
+        sext_ln70_42_fu_979510_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(tmp_1_fu_979495_p4),18));
 
         sext_ln70_4_fu_973668_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(a_2_fu_973653_p4),24));
 
@@ -11611,7 +11611,7 @@ begin
 
         sext_ln73_53_fu_979373_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(tmp_949_fu_979365_p3),23));
 
-        sext_ln73_54_fu_979517_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(tmp_4_fu_979495_p4),19));
+        sext_ln73_54_fu_979517_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(tmp_1_fu_979495_p4),19));
 
         sext_ln73_55_fu_979771_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(tmp_966_fu_979763_p3),19));
 
@@ -11793,7 +11793,7 @@ begin
     sub_ln73_98_fu_977618_p2 <= std_logic_vector(unsigned(ap_const_lv24_0) - unsigned(sext_ln73_38_fu_977614_p1));
     sub_ln73_99_fu_977636_p2 <= std_logic_vector(unsigned(sub_ln73_98_fu_977618_p2) - unsigned(sext_ln73_39_fu_977632_p1));
     sub_ln73_fu_973013_p2 <= std_logic_vector(signed(sext_ln73_fu_972997_p1) - signed(sext_ln73_1_fu_973009_p1));
-    tmp_4_fu_979495_p4 <= data_val(329 downto 320);
+    tmp_1_fu_979495_p4 <= data_val(329 downto 320);
     tmp_904_fu_973001_p3 <= (a_fu_972923_p1 & ap_const_lv2_0);
     tmp_905_fu_973073_p3 <= (a_fu_972923_p1 & ap_const_lv6_0);
     tmp_906_fu_973353_p3 <= (a_1_fu_973243_p4 & ap_const_lv8_0);
@@ -11856,13 +11856,13 @@ begin
     tmp_963_fu_979721_p4 <= mul_ln73_686_fu_1313_p2(18 downto 9);
     tmp_964_fu_979735_p4 <= mul_ln73_687_fu_1080_p2(18 downto 9);
     tmp_965_fu_979749_p4 <= mul_ln73_688_fu_1192_p2(17 downto 9);
-    tmp_966_fu_979763_p3 <= (tmp_4_fu_979495_p4 & ap_const_lv8_0);
-    tmp_967_fu_979775_p3 <= (tmp_4_fu_979495_p4 & ap_const_lv6_0);
+    tmp_966_fu_979763_p3 <= (tmp_1_fu_979495_p4 & ap_const_lv8_0);
+    tmp_967_fu_979775_p3 <= (tmp_1_fu_979495_p4 & ap_const_lv6_0);
     tmp_968_fu_979793_p4 <= sub_ln73_112_fu_979787_p2(18 downto 9);
     tmp_969_fu_979807_p4 <= mul_ln73_689_fu_1105_p2(18 downto 9);
     tmp_970_fu_979821_p4 <= mul_ln73_690_fu_1217_p2(18 downto 9);
-    tmp_971_fu_979835_p3 <= (tmp_4_fu_979495_p4 & ap_const_lv7_0);
-    tmp_972_fu_979853_p3 <= (tmp_4_fu_979495_p4 & ap_const_lv5_0);
+    tmp_971_fu_979835_p3 <= (tmp_1_fu_979495_p4 & ap_const_lv7_0);
+    tmp_972_fu_979853_p3 <= (tmp_1_fu_979495_p4 & ap_const_lv5_0);
     tmp_973_fu_979871_p4 <= sub_ln73_114_fu_979865_p2(18 downto 9);
     tmp_974_fu_979885_p4 <= mul_ln73_691_fu_1157_p2(18 downto 9);
     tmp_975_fu_979899_p4 <= mul_ln73_692_fu_1278_p2(18 downto 9);

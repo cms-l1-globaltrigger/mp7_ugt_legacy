@@ -4,14 +4,16 @@
 -- actual versions:
 -- use "FRAME_VERSION" as mp7_ugt release fw version (used for tag name).
 
--- mp7_ugt (=FRAME_VERSION): v1.33.0
+-- mp7_ugt (=FRAME_VERSION): v1.33.2
 
 -- use "GT_VERSION" as mp7_ugt release fw version (used for tag name).
--- gt: v1.33.0
+-- gt: v1.33.2
 -- frame: v1.4.2 (see frame.vhd)
 -- gtl: v1.25.0 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
+-- BA 2026-02-17: v1.33.0 - HHbbWW_1mu_v5 model MW to GeV conversion, internal bit widths.
+-- BA 2026-02-12: v1.33.1 - HHbbWW_1mu_v5 model removed sigmoid.
 -- BA 2026-01-29: v1.33.0 - Added axol1tl_v6 and HHbbWW_1mu_v5 models.
 -- HB 2024-09-04: v1.32.1 - Updated constraints_fixed_cells.tcl.
 -- HB 2024-09-04: v1.30.0 - Added vivado_fix_cells_tpl.tcl and constraints_fixed_cells.tcl to ../scripts.
@@ -111,7 +113,7 @@ package gt_mp7_core_pkg is
 -- GT firmware version
     constant GT_MAJOR_VERSION      : integer range 0 to 255 := 1;
     constant GT_MINOR_VERSION      : integer range 0 to 255 := 33;
-    constant GT_REV_VERSION        : integer range 0 to 255 := 0;
+    constant GT_REV_VERSION        : integer range 0 to 255 := 2;
 	constant GT_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(GT_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(GT_MINOR_VERSION, 8)) &

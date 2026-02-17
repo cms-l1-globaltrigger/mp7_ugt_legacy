@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.33.2] - 2026-02-17
+### Fixed
+- topo HHbbWW_1mu_v5 model with HW to GeV conversion, bit widths (#68).
+
+## [v1.33.1] - 2016-02-12
+### Fixed
+- topo HHbbWW_1mu_v5 model with removed sigmoid.
+
+## [v1.33.0] - 2026-01-30
+### Added
+- topo HHbbWW_1mu_v5 model (#67).
+- axol1tle v6 model (#66).
+### Fixed
+- missing TOPO_SCORE_WIDTH
+- set TOPO_SCORE_WIDTH to 16 bit
+- AXO_MODEL_V6 index and TOPO_MODEL_HHBBWW_1MU_V5 index
+
 ## [v1.32.1] - 2025-05-26
 ### Comment
 

@@ -24,26 +24,26 @@ architecture behav of topo_HHbbWW_1mu_v5_mul_8ns_9s_17_1_1 is
     signal tmp_product : std_logic_vector(dout_WIDTH - 1 downto 0);
     signal a_i : std_logic_vector(din0_WIDTH - 1 downto 0);
     signal b_i : std_logic_vector(din1_WIDTH - 1 downto 0);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+              
 begin
     a_i <= din0;
     b_i <= din1;

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.33.3] - 2026-02-19
+### Fixed
+- topo HHbbWW_1mu_v5 model siged to unsigned score (#69).
+
 ## [v1.33.2] - 2026-02-17
 ### Fixed
 - topo HHbbWW_1mu_v5 model with HW to GeV conversion, bit widths (#68).

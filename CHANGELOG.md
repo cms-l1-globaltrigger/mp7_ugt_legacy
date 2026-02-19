@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v1.33.3] - 2026-02-19
 ### Fixed
 - topo HHbbWW_1mu_v5 model siged to unsigned score (#69).
+- topo HHbbWW_1mu_v5 model change unscaled type to accomodate fractional bits (#70).
 
 ## [v1.33.2] - 2026-02-17
 ### Fixed
@@ -66,7 +67,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - source files:
   - ../payload/gtl/axol1tl_trigger/model_v5/*vhd
   - ../cfg/axol1tl_trigger.dep
-  
+
 ## [v1.31.0] - 2025-01-07
 ### Comment
 
@@ -92,7 +93,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Comment
 
 - mp7_ugt firmware release v1.29.0
-- branch for implementing VHDL files of TOPO models (#56) - TBD 
+- branch for implementing VHDL files of TOPO models (#56) - TBD
 - added TOPO models "base_v1" (this was used for the first TOPO tests)
 - added port "htmhf" in all topo wrapper files (e.g.: topo_trigger_hh_ele_v1_wrapper.vhd, ...)
 - changed script pkgpatch.py (added function "calc_fw_hash" for repo branch version info, patched in gt_mp7_top_pkg_tpl.vhd)
@@ -109,7 +110,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - ../packages/gt_mp7_top_pkg_tpl.vhd
 - simulation file:
   - ../sim/scripts/templates/gtl_fdl_wrapper_tpl_questa.do
-  
+
 ## [v1.28.1] - 2024-07-12
 
 ### Fixed

@@ -12,7 +12,7 @@
 -- gtl: v1.25.0 (see gtl_module_tpl.vhd)
 -- fdl: v1.4.1 (see fdl_module.vhd)
 
--- BA 2026-02-19: v1.33.3 - HHbbWW_1mu_v5 model signed to unsigend score.
+-- BA 2026-02-19: v1.33.3 - HHbbWW_1mu_v5 model signed to unsigend score, change unscaled type to accomodate fractional bits
 -- BA 2026-02-17: v1.33.2 - HHbbWW_1mu_v5 model MW to GeV conversion, internal bit widths.
 -- BA 2026-02-12: v1.33.1 - HHbbWW_1mu_v5 model removed sigmoid.
 -- BA 2026-01-29: v1.33.0 - Added axol1tl_v6 and HHbbWW_1mu_v5 models.

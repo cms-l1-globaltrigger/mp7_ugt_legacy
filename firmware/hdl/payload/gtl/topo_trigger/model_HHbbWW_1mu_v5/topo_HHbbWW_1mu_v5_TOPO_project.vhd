@@ -321,10 +321,10 @@ attribute shreg_extract : string;
     signal call_ret3_relu_ap_fixed_32_15_5_3_0_ap_ufixed_8_0_4_0_0_relu_config7_s_fu_282_ap_return_10 : STD_LOGIC_VECTOR (7 downto 0);
     signal call_ret3_relu_ap_fixed_32_15_5_3_0_ap_ufixed_8_0_4_0_0_relu_config7_s_fu_282_ap_return_11 : STD_LOGIC_VECTOR (7 downto 0);
     signal call_ret3_relu_ap_fixed_32_15_5_3_0_ap_ufixed_8_0_4_0_0_relu_config7_s_fu_282_ap_return_12 : STD_LOGIC_VECTOR (7 downto 0);
-    signal layer8_out_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_16_6_4_0_0_config8_s_fu_299_ap_ready : STD_LOGIC;
-    signal layer8_out_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_16_6_4_0_0_config8_s_fu_299_ap_return : STD_LOGIC_VECTOR (15 downto 0);
-    signal topo_score_linear_ap_fixed_16_6_4_0_0_ap_fixed_16_6_5_3_0_linear_config9_s_fu_316_ap_ready : STD_LOGIC;
-    signal topo_score_linear_ap_fixed_16_6_4_0_0_ap_fixed_16_6_5_3_0_linear_config9_s_fu_316_ap_return : STD_LOGIC_VECTOR (15 downto 0);
+    signal layer8_out_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_31_14_5_3_0_config8_s_fu_299_ap_ready : STD_LOGIC;
+    signal layer8_out_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_31_14_5_3_0_config8_s_fu_299_ap_return : STD_LOGIC_VECTOR (22 downto 0);
+    signal topo_score_relu_ap_fixed_31_14_5_3_0_ap_fixed_16_6_4_0_0_relu_config10_s_fu_316_ap_ready : STD_LOGIC;
+    signal topo_score_relu_ap_fixed_31_14_5_3_0_ap_fixed_16_6_4_0_0_relu_config10_s_fu_316_ap_return : STD_LOGIC_VECTOR (15 downto 0);
     signal ap_block_pp0_stage0_ignoreCallOp4 : BOOLEAN;
     signal ap_block_pp0_stage0_ignoreCallOp124 : BOOLEAN;
     signal ap_block_pp0_stage0_ignoreCallOp244 : BOOLEAN;
@@ -882,7 +882,7 @@ attribute shreg_extract : string;
     end component;
 
 
-    component topo_HHbbWW_1mu_v5_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_16_6_4_0_0_config8_s IS
+    component topo_HHbbWW_1mu_v5_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_31_14_5_3_0_config8_s IS
     port (
         ap_ready : OUT STD_LOGIC;
         data_0_val : IN STD_LOGIC_VECTOR (7 downto 0);
@@ -898,15 +898,15 @@ attribute shreg_extract : string;
         data_44_val : IN STD_LOGIC_VECTOR (7 downto 0);
         data_61_val : IN STD_LOGIC_VECTOR (7 downto 0);
         data_63_val : IN STD_LOGIC_VECTOR (7 downto 0);
-        ap_return : OUT STD_LOGIC_VECTOR (15 downto 0);
+        ap_return : OUT STD_LOGIC_VECTOR (22 downto 0);
         ap_rst : IN STD_LOGIC );
     end component;
 
 
-    component topo_HHbbWW_1mu_v5_linear_ap_fixed_16_6_4_0_0_ap_fixed_16_6_5_3_0_linear_config9_s IS
+    component topo_HHbbWW_1mu_v5_relu_ap_fixed_31_14_5_3_0_ap_fixed_16_6_4_0_0_relu_config10_s IS
     port (
         ap_ready : OUT STD_LOGIC;
-        data_val : IN STD_LOGIC_VECTOR (15 downto 0);
+        data_val : IN STD_LOGIC_VECTOR (22 downto 0);
         ap_return : OUT STD_LOGIC_VECTOR (15 downto 0);
         ap_rst : IN STD_LOGIC );
     end component;
@@ -1450,9 +1450,9 @@ begin
         ap_return_12 => call_ret3_relu_ap_fixed_32_15_5_3_0_ap_ufixed_8_0_4_0_0_relu_config7_s_fu_282_ap_return_12,
         ap_rst => ap_rst);
 
-    layer8_out_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_16_6_4_0_0_config8_s_fu_299 : component topo_HHbbWW_1mu_v5_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_16_6_4_0_0_config8_s
+    layer8_out_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_31_14_5_3_0_config8_s_fu_299 : component topo_HHbbWW_1mu_v5_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_31_14_5_3_0_config8_s
     port map (
-        ap_ready => layer8_out_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_16_6_4_0_0_config8_s_fu_299_ap_ready,
+        ap_ready => layer8_out_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_31_14_5_3_0_config8_s_fu_299_ap_ready,
         data_0_val => call_ret3_relu_ap_fixed_32_15_5_3_0_ap_ufixed_8_0_4_0_0_relu_config7_s_fu_282_ap_return_0,
         data_2_val => call_ret3_relu_ap_fixed_32_15_5_3_0_ap_ufixed_8_0_4_0_0_relu_config7_s_fu_282_ap_return_1,
         data_11_val => call_ret3_relu_ap_fixed_32_15_5_3_0_ap_ufixed_8_0_4_0_0_relu_config7_s_fu_282_ap_return_2,
@@ -1466,14 +1466,14 @@ begin
         data_44_val => call_ret3_relu_ap_fixed_32_15_5_3_0_ap_ufixed_8_0_4_0_0_relu_config7_s_fu_282_ap_return_10,
         data_61_val => call_ret3_relu_ap_fixed_32_15_5_3_0_ap_ufixed_8_0_4_0_0_relu_config7_s_fu_282_ap_return_11,
         data_63_val => call_ret3_relu_ap_fixed_32_15_5_3_0_ap_ufixed_8_0_4_0_0_relu_config7_s_fu_282_ap_return_12,
-        ap_return => layer8_out_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_16_6_4_0_0_config8_s_fu_299_ap_return,
+        ap_return => layer8_out_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_31_14_5_3_0_config8_s_fu_299_ap_return,
         ap_rst => ap_rst);
 
-    topo_score_linear_ap_fixed_16_6_4_0_0_ap_fixed_16_6_5_3_0_linear_config9_s_fu_316 : component topo_HHbbWW_1mu_v5_linear_ap_fixed_16_6_4_0_0_ap_fixed_16_6_5_3_0_linear_config9_s
+    topo_score_relu_ap_fixed_31_14_5_3_0_ap_fixed_16_6_4_0_0_relu_config10_s_fu_316 : component topo_HHbbWW_1mu_v5_relu_ap_fixed_31_14_5_3_0_ap_fixed_16_6_4_0_0_relu_config10_s
     port map (
-        ap_ready => topo_score_linear_ap_fixed_16_6_4_0_0_ap_fixed_16_6_5_3_0_linear_config9_s_fu_316_ap_ready,
-        data_val => layer8_out_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_16_6_4_0_0_config8_s_fu_299_ap_return,
-        ap_return => topo_score_linear_ap_fixed_16_6_4_0_0_ap_fixed_16_6_5_3_0_linear_config9_s_fu_316_ap_return,
+        ap_ready => topo_score_relu_ap_fixed_31_14_5_3_0_ap_fixed_16_6_4_0_0_relu_config10_s_fu_316_ap_ready,
+        data_val => layer8_out_dense_latency_ap_ufixed_8_0_4_0_0_ap_fixed_31_14_5_3_0_config8_s_fu_299_ap_return,
+        ap_return => topo_score_relu_ap_fixed_31_14_5_3_0_ap_fixed_16_6_4_0_0_relu_config10_s_fu_316_ap_return,
         ap_rst => ap_rst);
 
 
@@ -1607,5 +1607,5 @@ begin
         end if; 
     end process;
 
-    ap_return <= topo_score_linear_ap_fixed_16_6_4_0_0_ap_fixed_16_6_5_3_0_linear_config9_s_fu_316_ap_return;
+    ap_return <= topo_score_relu_ap_fixed_31_14_5_3_0_ap_fixed_16_6_4_0_0_relu_config10_s_fu_316_ap_return;
 end behav;

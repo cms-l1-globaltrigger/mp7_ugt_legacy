@@ -4,7 +4,7 @@
 
 -- Version history:
 -- MJ 2026-01-28: wrapper for "axol1tl_v6"
--- HB  2025-01-07: wrapper for "axol1tl_v5"
+-- HB  2025-01-07: wrapper for "axol1tl_v6"
 -- SPS 2024-07-24: copy to "axol1tl_v4"
 -- HB  2024-01-24: renamed "adt" to "axol1tl_v3"
 -- HB  2023-01-18: removed comparator and delay, added anomaly_score_o for simulation.

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.33.4] - 2026-03-19
+### Fixed
+- patched axol1tle v6 model for seconds L1T menu (#72).
+
 ## [v1.33.3] - 2026-02-19
 ### Fixed
 - topo HHbbWW_1mu_v5 model siged to unsigned score (#69).

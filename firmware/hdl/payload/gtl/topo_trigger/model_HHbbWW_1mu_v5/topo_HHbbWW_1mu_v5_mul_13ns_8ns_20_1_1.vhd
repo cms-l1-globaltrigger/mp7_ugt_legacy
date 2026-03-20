@@ -4,7 +4,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 
-entity topo_HHbbWW_1mu_v5_mul_13s_7ns_23_1_1 is
+entity topo_HHbbWW_1mu_v5_mul_13ns_8ns_20_1_1 is
 generic (
     ID : INTEGER := 1;
     NUM_STAGE : INTEGER := 0;
@@ -20,7 +20,7 @@ port (
 
 end entity;
 
-architecture behav of topo_HHbbWW_1mu_v5_mul_13s_7ns_23_1_1 is
+architecture behav of topo_HHbbWW_1mu_v5_mul_13ns_8ns_20_1_1 is
     signal tmp_product : std_logic_vector(dout_WIDTH - 1 downto 0);
     signal a_i : std_logic_vector(din0_WIDTH - 1 downto 0);
     signal b_i : std_logic_vector(din1_WIDTH - 1 downto 0);
@@ -50,9 +50,9 @@ begin
 
 
 
+    tmp_product <= std_logic_vector(resize(unsigned(a_i) * unsigned(b_i), dout_WIDTH));
 
 
-    tmp_product <= std_logic_vector(resize(unsigned(std_logic_vector(signed(a_i) * signed('0' & b_i))), dout_WIDTH));
 
 
 

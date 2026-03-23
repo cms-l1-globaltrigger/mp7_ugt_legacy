@@ -24,7 +24,7 @@ Current versions:
 
 | entity | version |
 |:-:|:-:|
-| uGT FW | v1.33.4 |
+| uGT FW | v1.33.5 |
 | framework | v1.4.2 |
 | gt logic | v1.25.0 |
 | final decision logic | v1.4.1 |
